@@ -25,8 +25,6 @@ use PHPUnit\Framework\TestCase;
 class DataTest extends TestCase
 {
     /**
-     * Helper
-     *
      * @var Data
      */
     private $helper;

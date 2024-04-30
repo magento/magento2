@@ -23,7 +23,7 @@
     <extensions>
         <bootstrap class="Qameta\Allure\PHPUnit\AllureExtension">
             <!-- Path to config file (default is config/allure.config.php) -->
-            <parameter name="config" value="dev/tests/integration/allure/allure.config.php"/>
+            <parameter name="config" value="../../../allure/allure.config.php"/>
         </bootstrap>
     </extensions>
 </phpunit>

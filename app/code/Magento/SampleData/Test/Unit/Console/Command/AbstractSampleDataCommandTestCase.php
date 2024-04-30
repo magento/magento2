@@ -73,7 +73,7 @@ abstract class AbstractSampleDataCommandTestCase extends TestCase
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->sampleDataDependencyMock = $this->createMock(Dependency::class);
         $this->arrayInputFactoryMock = $this->createMock(ArrayInputFactory::class);
-        $this->applicationMock = $this->createMock(Application::class);
+        $this->applicationMock = $this->getMockBuilder(Application::class)->getMock();
         $this->applicationFactoryMock = $this->createPartialMock(ApplicationFactory::class, ['create']);
     }
 

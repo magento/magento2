@@ -37,31 +37,31 @@ use Zend_Cache_Core;
 class DobTest extends TestCase
 {
     /** Constants used in the unit tests */
-    const MIN_DATE = '01/01/2010';
+    public const MIN_DATE = '01/01/2010';
 
-    const MAX_DATE = '01/01/2020';
+    public const MAX_DATE = '01/01/2020';
 
-    const DATE = '01/01/2014';
+    public const DATE = '01/01/2014';
 
-    const DAY = '01';
+    public const DAY = '01';
 
     // Value of date('d', strtotime(self::DATE))
-    const MONTH = '01';
+    public const MONTH = '01';
 
     // Value of date('m', strtotime(self::DATE))
-    const YEAR = '2014';
+    public const YEAR = '2014';
 
     // Value of date('Y', strtotime(self::DATE))
-    const DATE_FORMAT = 'M/dd/y';
+    public const DATE_FORMAT = 'M/dd/y';
 
     /** Constants used by Dob::setDateInput($code, $html) */
-    const DAY_HTML =
+    public const DAY_HTML =
         '<div><label for="day"><span>d</span></label><input type="text" id="day" name="Day" value="1"></div>';
 
-    const MONTH_HTML =
+    public const MONTH_HTML =
         '<div><label for="month"><span>M</span></label><input type="text" id="month" name="Month" value="jan"></div>';
 
-    const YEAR_HTML =
+    public const YEAR_HTML =
         '<div><label for="year"><span>yy</span></label><input type="text" id="year" name="Year" value="14"></div>';
 
     /** @var MockObject|AttributeMetadataInterface */

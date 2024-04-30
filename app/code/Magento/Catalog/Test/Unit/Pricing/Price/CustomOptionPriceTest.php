@@ -300,8 +300,12 @@ class CustomOptionPriceTest extends TestCase
         $optionMaxValue = $option2MaxPrice + $option1MaxPrice;
         $this->priceCurrencyMock
             ->method('convertAndRound')
-            ->willReturnCallback(function ($arg1)
-            use ($option1MinPrice, $convertMinValue, $optionMaxValue, $convertedMaxValue) {
+            ->willReturnCallback(function ($arg1) use (
+                $option1MinPrice,
+                $convertMinValue,
+                $optionMaxValue,
+                $convertedMaxValue
+            ) {
                 if ($arg1 == $option1MinPrice) {
                     return $convertMinValue;
                 } elseif ($arg1 == $optionMaxValue) {

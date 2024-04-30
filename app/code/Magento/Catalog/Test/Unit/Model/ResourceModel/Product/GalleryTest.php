@@ -137,34 +137,7 @@ class GalleryTest extends TestCase
         $whereCondition = null;
         $getTableReturnValue = 'table';
         $this->connection->expects($this->once())->method('select')->willReturn($this->select);
-        $this->select
-            ->method('from')
-            ->with(
-                [
-                    'main' => $getTableReturnValue,
-                ],
-                [
-                    'value_id' => 'value_id',
-                    'video_provider_default' => 'provider',
-                    'video_url_default' => 'url',
-                    'video_title_default' => 'title',
-                    'video_description_default' => 'description',
-                    'video_metadata_default' => 'metadata'
-                ]
-            )
-            ->willReturn($this->select);
-        $this->select
-            ->method('where')
-            ->willReturnCallback(
-                function ($arg1, $arg2) use ($ids, $storeId) {
-                    if ($arg1 == 'main.value_id IN(?)' && $arg2 == $ids) {
-                        return $this->select;
-                    } elseif ($arg1 == 'main.store_id = ?' && $arg2 == $storeId) {
-                        return $this->select;
-                    }
-                }
-            );
-
+        $this->select = $this->seletForTableByValueId($getTableReturnValue, $ids, $storeId);
         $resultRow = [
             [
                 'value_id' => '4',
@@ -211,6 +184,44 @@ class GalleryTest extends TestCase
     }
 
     /**
+     * @param $getTableReturnValue
+     * @param $ids
+     * @param $storeId
+     * @return Select
+     */
+    protected function seletForTableByValueId($getTableReturnValue, $ids, $storeId)
+    {
+        $this->select
+            ->method('from')
+            ->with(
+                [
+                    'main' => $getTableReturnValue,
+                ],
+                [
+                    'value_id' => 'value_id',
+                    'video_provider_default' => 'provider',
+                    'video_url_default' => 'url',
+                    'video_title_default' => 'title',
+                    'video_description_default' => 'description',
+                    'video_metadata_default' => 'metadata'
+                ]
+            )
+            ->willReturn($this->select);
+        $this->select
+            ->method('where')
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($ids, $storeId) {
+                    if ($arg1 == 'main.value_id IN(?)' && $arg2 == $ids) {
+                        return $this->select;
+                    } elseif ($arg1 == 'main.store_id = ?' && $arg2 == $storeId) {
+                        return $this->select;
+                    }
+                }
+            );
+        return $this->select;
+    }
+
+    /**
      * @return void
      */
     public function testLoadDataFromTableByValueIdNoColsWithWhere(): void
@@ -251,7 +262,7 @@ class GalleryTest extends TestCase
         $this->select
             ->method('where')
             ->willReturnCallback(
-                function ($arg1, $arg2, $arg3) use ($ids, $storeId, $whereCondition) {
+                function ($arg1, $arg2) use ($ids, $storeId, $whereCondition) {
                     if ($arg1 == 'main.value_id IN(?)' && $arg2 == $ids) {
                         return $this->select;
                     } elseif ($arg1 == 'main.store_id = ?' && $arg2 == $storeId) {

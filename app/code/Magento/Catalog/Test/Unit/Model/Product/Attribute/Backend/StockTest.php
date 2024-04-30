@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class StockTest extends TestCase
 {
-    const ATTRIBUTE_NAME = 'quantity_and_stock_status';
+    public const ATTRIBUTE_NAME = 'quantity_and_stock_status';
 
     /**
      * @var Stock

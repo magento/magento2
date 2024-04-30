@@ -19,14 +19,29 @@ use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
 {
+    /**
+     * @var ProductResource|MockObject
+     */
     private $productResourceMock;
 
+    /**
+     * @var EavConfig|MockObject
+     */
     private $eavConfigMock;
 
+    /**
+     * @var CustomConditionInterface|MockObject
+     */
     private $eavAttrConditionBuilderMock;
 
+    /**
+     * @var CustomConditionInterface|MockObject
+     */
     private $nativeAttrConditionBuilderMock;
 
+    /**
+     * @var Factory
+     */
     private $conditionBuilderFactory;
 
     protected function setUp(): void

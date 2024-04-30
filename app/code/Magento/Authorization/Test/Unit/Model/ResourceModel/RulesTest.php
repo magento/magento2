@@ -35,7 +35,7 @@ class RulesTest extends TestCase
     /**
      * Test constants
      */
-    const TEST_ROLE_ID = 13;
+    public const TEST_ROLE_ID = 13;
 
     /**
      * @var Rules

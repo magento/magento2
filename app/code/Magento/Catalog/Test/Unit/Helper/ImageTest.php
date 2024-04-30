@@ -98,8 +98,6 @@ class ImageTest extends TestCase
 
         $this->catalogMediaConfigMock = $this->createPartialMock(CatalogMediaConfig::class, ['getMediaUrlFormat']);
         $this->catalogMediaConfigMock->method('getMediaUrlFormat')->willReturn(CatalogMediaConfig::HASH);
-
-
         $this->helper = new Image(
             $this->context,
             $this->imageFactory,
@@ -164,7 +162,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function initDataProvider()
+    public static function initDataProvider()
     {
         return [
             [
@@ -224,7 +222,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function initKeepFrameDataProvider()
+    public static function initKeepFrameDataProvider()
     {
         return [
             // when frame defined explicitly, it wins
@@ -439,7 +437,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function getHeightDataProvider()
+    public static function getHeightDataProvider()
     {
         return [
             'data' => [
@@ -479,7 +477,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function getFrameDataProvider()
+    public static function getFrameDataProvider()
     {
         return [
             'data' => [
@@ -524,7 +522,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function getLabelDataProvider()
+    public static function getLabelDataProvider()
     {
         return [
             [
@@ -614,7 +612,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function getResizedImageInfoDataProvider()
+    public static function getResizedImageInfoDataProvider()
     {
         return [
             [

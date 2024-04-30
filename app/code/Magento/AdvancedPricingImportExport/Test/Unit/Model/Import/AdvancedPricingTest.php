@@ -137,7 +137,11 @@ class AdvancedPricingTest extends AbstractImportTestCase
      * @var ProcessingErrorAggregatorInterface
      */
     protected $errorAggregator;
-    private MockObject|CurrencyResolver $currencyResolver;
+
+    /**
+     * @var MockObject|CurrencyResolver
+     */
+    private $currencyResolver;
 
     /**
      * @inheritDoc
