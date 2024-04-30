@@ -36,7 +36,7 @@ class Revoker implements UserTokenRevokerInterface
     {
         //Invalidating all tokens issued before current datetime.
         $this->revokedRepo->saveRevoked(
-            new Revoked((int) $userContext->getUserType(), (int) $userContext->getUserId(), time())
+            new Revoked((int) $userContext->getUserType(), (int) $userContext->getUserId(), time()-1)
         );
     }
 }
