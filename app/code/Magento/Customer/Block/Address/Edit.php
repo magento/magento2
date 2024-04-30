@@ -240,6 +240,8 @@ class Edit extends \Magento\Directory\Block\Data
     /**
      * Return the Url for saving.
      *
+     * @param int $defaultShipping Default shipping flag
+     * @param int $defaultBilling Default billing flag
      * @return string
      */
     public function getSaveUrl($defaultShipping = 0, $defaultBilling = 0)
