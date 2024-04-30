@@ -126,8 +126,8 @@ class AwsS3Factory implements DriverFactoryInterface
             $config['http_handler'] = $this->objectManager->create($config['http_handler'])($config);
         }
 
-        if (!empty($config['path_style'])) {
-            $config['use_path_style_endpoint'] = boolval($config['path_style']);
+        if (!empty($config['path-style'])) {
+            $config['use_path_style_endpoint'] = boolval($config['path-style']);
         }
 
         return $config;
