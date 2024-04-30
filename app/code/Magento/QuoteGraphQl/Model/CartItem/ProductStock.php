@@ -9,7 +9,6 @@ namespace Magento\QuoteGraphQl\Model\CartItem;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote\Item;
 
@@ -29,19 +28,12 @@ class ProductStock
     private const PRODUCT_TYPE_CONFIGURABLE = "configurable";
 
     /**
-     * Simple product type code
-     */
-    private const PRODUCT_TYPE_SIMPLE = "simple";
-
-    /**
      * ProductStock constructor
      *
-     * @param StockStatusRepositoryInterface $stockStatusRepository
      * @param ProductRepositoryInterface $productRepositoryInterface
      */
     public function __construct(
-        private readonly StockStatusRepositoryInterface $stockStatusRepository,
-        private readonly ProductRepositoryInterface $productRepositoryInterface
+        private readonly ProductRepositoryInterface $productRepositoryInterface,
     ) {
     }
 
@@ -57,7 +49,7 @@ class ProductStock
         $requestedQty = 0;
         $previousQty = 0;
         /**
-         * @var  ProductInterface $variantProduct
+         * @var ProductInterface $variantProduct
          * Configurable products cannot have stock, only its variants can. If the user adds a configurable product
          * using its SKU and the selected options, we need to get the variant it refers to from the quote.
          */
@@ -81,24 +73,10 @@ class ProductStock
         }
 
         $requiredItemQty =  $requestedQty + $previousQty;
-        $productId = (int) $cartItem->getProduct()->getId();
         if ($variantProduct !== null) {
-            $productId = (int)$variantProduct->getId();
+            return $this->isStockQtyAvailable($variantProduct, $requiredItemQty);
         }
-        return $this->isStockAvailable($productId, $requiredItemQty);
-    }
-
-    /**
-     * Check if is required product available in stock
-     *
-     * @param int $productId
-     * @param float $requiredQuantity
-     * @return bool
-     */
-    private function isStockAvailable(int $productId, float $requiredQuantity): bool
-    {
-        $stock = $this->stockStatusRepository->get($productId);
-        return $stock->getQty() >= $requiredQuantity;
+        return $this->isStockQtyAvailable($cartItem->getProduct(), $requiredItemQty);
     }
 
     /**
@@ -114,15 +92,34 @@ class ProductStock
         $qtyOptions = $cartItem->getQtyOptions();
         $totalRequestedQty = $previousQty + $requestedQty;
         foreach ($qtyOptions as $qtyOption) {
-            $productId = (int)$qtyOption->getProductId();
             $requiredItemQty = $qtyOption->getValue();
             if ($totalRequestedQty) {
                 $requiredItemQty = $requiredItemQty * $totalRequestedQty;
             }
-            if (!$this->isStockAvailable($productId, $requiredItemQty)) {
+            if (!$this->isStockQtyAvailable($qtyOption->getProduct(), $requiredItemQty)) {
                 return false;
             }
         }
         return true;
+    }
+
+    /**
+     * Check if product is available in stock using quantity from Catalog Inventory Stock Item
+     *
+     * @param ProductInterface $product
+     * @param float $requiredQuantity
+     * @throws NoSuchEntityException
+     * @return bool
+     */
+    private function isStockQtyAvailable(ProductInterface $product, float $requiredQuantity): bool
+    {
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        if ($stockItem === null) {
+            return true;
+        }
+        if ((int) $stockItem->getProductId() !== (int) $product->getId()) {
+            throw new NoSuchEntityException(__('Stock item\'s product ID does not match requested product ID'));
+        }
+        return $stockItem->getQty() >= $requiredQuantity;
     }
 }
