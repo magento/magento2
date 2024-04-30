@@ -127,7 +127,7 @@ class AwsS3Factory implements DriverFactoryInterface
         }
 
         if (!empty($config['path-style'])) {
-            $config['use_path_style_endpoint'] = boolval($config['path-style']);
+            $config['use_path_style_endpoint'] = (bool) $config['path-style'];
         }
 
         return $config;
