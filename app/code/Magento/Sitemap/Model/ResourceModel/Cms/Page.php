@@ -109,19 +109,9 @@ class Page extends AbstractDb
             'main_table.is_active = 1'
         )->where(
             'main_table.identifier NOT IN (?)',
-            array_map(
-                // When two CMS pages have the same URL key (in different
-                // stores), the value stored in configuration is 'url-key|ID'.
-                // This function strips the trailing '|ID' so that this where()
-                // matches the url-key configured.
-                // See https://github.com/magento/magento2/issues/35001
-                static function ($urlKey) {
-                    return explode('|', $urlKey, 2)[0];
-                },
-                $this->getUtilityPageIdentifiers->execute()
-            )
+            $this->getUtilityPageIdentifiers->execute()
         )->where(
-            'store_table.store_id IN(?)',
+            'store_table.store_id IN (?)',
             [0, $storeId]
         );
 
