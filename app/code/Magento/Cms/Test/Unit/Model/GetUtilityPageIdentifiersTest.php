@@ -69,8 +69,14 @@ class GetUtilityPageIdentifiersTest extends TestCase
     public function webDefaultPages(): array
     {
         return [
-            [['testCmsHomePage', 'testCmsNoRoute', 'testCmsNoCookies'], ['testCmsHomePage', 'testCmsNoRoute', 'testCmsNoCookies']],
-            [['testCmsHomePage|1', 'testCmsNoRoute|1', 'testCmsNoCookies|1'], ['testCmsHomePage', 'testCmsNoRoute', 'testCmsNoCookies']]
+            [
+                ['testCmsHomePage', 'testCmsNoRoute', 'testCmsNoCookies'],
+                ['testCmsHomePage', 'testCmsNoRoute', 'testCmsNoCookies']
+            ],
+            [
+                ['testCmsHomePage|1', 'testCmsNoRoute|1', 'testCmsNoCookies|1'],
+                ['testCmsHomePage', 'testCmsNoRoute', 'testCmsNoCookies']
+            ]
         ];
     }
 }
