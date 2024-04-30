@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class SalableProcessorTest extends TestCase
 {
-    public const STOCK_FLAG = 'has_stock_status_filter';
+    private const STOCK_FLAG = 'has_stock_status_filter';
 
     /** @var ObjectManager */
     private $objectManager;

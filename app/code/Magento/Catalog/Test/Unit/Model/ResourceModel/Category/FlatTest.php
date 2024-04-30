@@ -25,12 +25,12 @@ use PHPUnit\Framework\TestCase;
  */
 class FlatTest extends TestCase
 {
-    public const STORE_ID = 1;
-    public const TABLE_NAME = 'test_table';
-    public const PARENT_PATH = '1';
-    public const SORTED = false;
-    public const PARENT = 1;
-    public const RECURSION_LEVEL = 0;
+    private const STORE_ID = 1;
+    private const TABLE_NAME = 'test_table';
+    private const PARENT_PATH = '1';
+    private const SORTED = false;
+    private const PARENT = 1;
+    private const RECURSION_LEVEL = 0;
 
     /**
      * @var CollectionFactory|MockObject
