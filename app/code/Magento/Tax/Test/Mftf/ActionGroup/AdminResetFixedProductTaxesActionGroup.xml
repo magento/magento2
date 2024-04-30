@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminResetFixedProductTaxesActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page via the Admin Side Menu. Reset 'Fixed Product Taxes' values to default.</description>
+        </annotations>
+        <!-- change shopping cart display setting configurations -->
+        <waitForElementVisible selector="{{AdminConfigureTaxSection.systemValueEnableFpt}}" stepKey="waitToClickSystemValueEnableFptCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueEnableFpt}}" dependentSelector="{{AdminConfigureTaxSection.systemValueEnableFpt}}" visible="true" stepKey="clickSystemValueEnableFptCheckBox"/>
+        <waitForElementVisible selector="{{AdminConfigureTaxSection.systemValueDisplayPricesProducts}}" stepKey="waitToClickSystemValueDisplayPricesProductsCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueDisplayPricesProducts}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDisplayPricesProducts}}" visible="true" stepKey="clickSystemValueDisplayPricesProductsCheckBox"/>
+        <waitForElementVisible selector="{{AdminConfigureTaxSection.displayPricesOnProductViewPageCheckbox}}" stepKey="waitToClickDisplayPricesOnProductViewPageCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.displayPricesOnProductViewPageCheckbox}}" dependentSelector="{{AdminConfigureTaxSection.displayPricesOnProductViewPageCheckbox}}" visible="true" stepKey="clickDisplayPricesOnProductViewPageCheckBox"/>
+        <waitForElementVisible selector="{{AdminConfigureTaxSection.displayPricesInSaleModuleCheckbox}}" stepKey="waitToClickDisplayPricesInSaleModuleCheckbox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.displayPricesInSaleModuleCheckbox}}" dependentSelector="{{AdminConfigureTaxSection.displayPricesInSaleModuleCheckbox}}" visible="true" stepKey="clickDisplayPricesInSaleModuleCheckbox"/>
+        <waitForElementVisible selector="{{AdminConfigureTaxSection.displayPricesInEmailCheckbox}}" stepKey="waitToClickDisplayPricesInEmailCheckbox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.displayPricesInEmailCheckbox}}" dependentSelector="{{AdminConfigureTaxSection.displayPricesInEmailCheckbox}}" visible="true" stepKey="clickDisplayPricesInEmailCheckbox"/>
+        <waitForElementVisible selector="{{AdminConfigureTaxSection.systemValueApplyTaxToFpt}}" stepKey="waitToClicksystemValueApplyTaxToFptCheckbox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueApplyTaxToFpt}}" dependentSelector="{{AdminConfigureTaxSection.includeFPTInSubtotalCheckbox}}" visible="true" stepKey="clicksystemValueApplyTaxToFptCheckbox"/>
+        <waitForElementVisible selector="{{AdminConfigureTaxSection.includeFPTInSubtotalCheckbox}}" stepKey="waitToClickIncludeFPTInSubtotalCheckbox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.includeFPTInSubtotalCheckbox}}" dependentSelector="{{AdminConfigureTaxSection.includeFPTInSubtotalCheckbox}}" visible="true" stepKey="clickIncludeFPTInSubtotalCheckbox"/>
+        <waitForElementVisible selector="{{AdminConfigureTaxSection.fixedProductTaxes}}" stepKey="waitToCloseOixedProductTaxesSettings"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.fixedProductTaxes}}" dependentSelector="{{AdminConfigureTaxSection.fixedProductTaxes}}" visible="true" stepKey="closeOixedProductTaxesSettings"/>
+    </actionGroup>
+</actionGroups>
