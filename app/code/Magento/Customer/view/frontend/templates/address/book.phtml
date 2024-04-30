@@ -20,7 +20,7 @@
                     </address>
                 </div>
                 <div class="box-actions">
-                    <a class="action edit" href="<?= $block->escapeUrl($block->getAddressEditUrl($_pAddsses)) ?>">
+                    <a class="action edit" href="<?= $block->escapeUrl($block->getAddressEditUrl($_pAddsses) . '?billingAddress')?>">
                         <span><?= $block->escapeHtml(__('Change Billing Address')) ?></span>
                     </a>
                 </div>
@@ -45,7 +45,7 @@
                     </address>
                 </div>
                 <div class="box-actions">
-                    <a class="action edit" href="<?= $block->escapeUrl($block->getAddressEditUrl($_pAddsses)) ?>">
+                    <a class="action edit" href="<?= $block->escapeUrl($block->getAddressEditUrl($_pAddsses) . '?shippingAddress') ?>">
                         <span><?= $block->escapeHtml(__('Change Shipping Address')) ?></span>
                     </a>
                 </div>
