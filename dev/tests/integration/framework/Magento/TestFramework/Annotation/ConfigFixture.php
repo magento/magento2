@@ -272,11 +272,14 @@ class ConfigFixture
      */
     public function startTest(TestCase $test)
     {
-        $eventObj = Magento::getCurrentEventObject();
-        $testData = $eventObj->test()->testData();
-        if($testData->hasDataFromDataProvider()){
-            $dataSetName = $testData->dataFromDataProvider()->dataSetName();
-            $test->setData($dataSetName, ['']);
+        if ($eventObj = Magento::getCurrentEventObject()) {
+            $testData = $eventObj->test()->testData();
+
+            if ($testData->hasDataFromDataProvider()) {
+                $dataFromDataProvider = $testData->dataFromDataProvider();
+                $dataSetName = $dataFromDataProvider->dataSetName();
+                $test->setData($dataSetName, ['']);
+            }
         }
 
         $this->_currentTest = $test;
