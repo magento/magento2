@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="BillingAddressShownOnSecondCheckoutIfUPSEnabledTest">
+    <test name="StorefrontBillingAddressShownOnSecondCheckoutIfUPSEnabledTest">
         <annotations>
             <features value="Shipping"/>
             <stories value="Test Billing address in checkout with UPS carrier"/>
