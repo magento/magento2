@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Sales\Model;
 
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Catalog\Test\Fixture\Virtual as ProductVirtualFixture;
 use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrderFixture;
 use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
 use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
@@ -18,6 +19,7 @@ use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Sales\Test\Fixture\Creditmemo as CreditmemoFixture;
 use Magento\Sales\Test\Fixture\Invoice as InvoiceFixture;
+use Magento\Sales\Test\Fixture\Shipment as ShipmentFixture;
 use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Test\Fixture\Rule as RuleFixture;
 use Magento\TestFramework\Fixture\Config as Config;
@@ -90,4 +92,66 @@ class OrderTest extends TestCase
             'Should be possible to create second credit memo for zero total order if not all items are refunded yet'
         );
     }
+
+    /**
+     * Tests that an order with mixed product types in cart and with physical items either shipped or refunded cannot be shipped
+     */
+    #[
+        Config('carriers/freeshipping/active', '1', 'store', 'default'),
+        Config('payment/free/active', '1', 'store', 'default'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(ProductVirtualFixture::class, as: 'virtual'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'simple_action' => Rule::BY_PERCENT_ACTION,
+                'discount_amount' => 100,
+                'apply_to_shipping' => 0,
+                'stop_rules_processing' => 0,
+                'sort_order' => 1,
+            ]
+        ),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 2]
+        ),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$virtual.id$', 'qty' => 2]
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(
+            SetDeliveryMethodFixture::class,
+            ['cart_id' => '$cart.id$', 'carrier_code' => 'freeshipping', 'method_code' => 'freeshipping']
+        ),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$', 'method' => 'free']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
+        DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], 'invoice'),
+        DataFixture(
+            CreditmemoFixture::class,
+            ['order_id' => '$order.id$', 'items' => [['qty' => 1, 'product_id' => '$product.id$']]],
+            'creditmemo'
+        ),
+        DataFixture(
+            ShipmentFixture::class,
+            ['order_id' => '$order.id$', 'items' => [['qty' => 1, 'product_id' => '$product.id$']]],
+            'shipment'
+        )
+    ]
+    public function testOrderWithPartialShipmentAndPartialRefundAndMixedCartItems()
+    {
+        $order = $this->fixtures->get('order');
+        $this->assertFalse(
+            $order->canShip(),
+            'All items are shipped or refunded or virtual'
+        );
+        $this->assertEquals(
+            Order::STATE_COMPLETE,
+            $order->getStatus()
+        );
+    }
 }
+

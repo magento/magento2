@@ -881,8 +881,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $qtyToShip = !$item->getParentItem() || $item->getParentItem()->getProductType() !== Type::TYPE_BUNDLE ?
                 $item->getQtyToShip() : $item->getSimpleQtyToShip();
 
-            $qtyToShip -= $item->getQtyRefunded();
-
             if ($qtyToShip > 0 && !$item->getIsVirtual() &&
                 !$item->getLockedDoShip() && !$this->isRefunded($item)) {
                 return true;
