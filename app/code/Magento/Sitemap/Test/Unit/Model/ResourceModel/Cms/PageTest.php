@@ -1,10 +1,8 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Sitemap\Test\Unit\Model\ResourceModel\Cms;
@@ -44,7 +42,7 @@ class PageTest extends TestCase
 
     private GetUtilityPageIdentifiers|MockObject $getUtilityPageIdentifiers;
 
-    private  ResourceConnection|MockObject $resource;
+    private ResourceConnection|MockObject $resource;
 
     private ScopeConfigInterface|MockObject $scopeConfig;
 
