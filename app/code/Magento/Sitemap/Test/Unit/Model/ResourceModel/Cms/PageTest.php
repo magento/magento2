@@ -32,18 +32,41 @@ use PHPUnit\Framework\TestCase;
  */
 class PageTest extends TestCase
 {
+    /**
+     * Test subject.
+     *
+     * @var Page
+     */
     private Page $model;
 
+    /**
+     * @var Context|MockObject
+     */
     private Context|MockObject $context;
 
+    /**
+     * @var MetadataPool|MockObject
+     */
     private MetadataPool|MockObject $metadataPool;
 
+    /**
+     * @var EntityManager|MockObject
+     */
     private EntityManager|MockObject $entityManager;
 
-    private GetUtilityPageIdentifiers|MockObject $getUtilityPageIdentifiers;
+    /**
+     * @var GetUtilityPageIdentifiers
+     */
+    private GetUtilityPageIdentifiers $getUtilityPageIdentifiers;
 
+    /**
+     * @var ResourceConnection|MockObject
+     */
     private ResourceConnection|MockObject $resource;
 
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
     private ScopeConfigInterface|MockObject $scopeConfig;
 
     /**
