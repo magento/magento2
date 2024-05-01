@@ -3,6 +3,8 @@
         "actionGroupArguments",
         "deprecatedEntityUsage",
         "annotations",
-        "pauseActionUsage"
+        "pauseActionUsage",
+        "classFileNamingCheck",
+        "testDependencies"
     ]
 }

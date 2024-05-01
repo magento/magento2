@@ -14,7 +14,6 @@
         <arguments>
             <argument name="filterPlaceholder" type="string"/>
         </arguments>
-
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.activeFilterPlaceholder(filterPlaceholder)}}"  stepKey="assertFilterPLaceHolder" />
+        <waitForElementVisible selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.activeFilterPlaceholder(filterPlaceholder)}}"  stepKey="assertFilterPLaceHolder" />
     </actionGroup>
 </actionGroups>

@@ -5,7 +5,14 @@
  */
 namespace Magento\Catalog\Helper\Product;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Customer\Model\Context;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 
 /**
  * @magentoAppArea frontend
@@ -33,10 +40,15 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
+        $this->fixtures = DataFixtureStorageManager::getStorage();
         $this->objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
         $this->objectManager->get(\Magento\Framework\App\Http\Context::class)
             ->setValue(Context::CONTEXT_AUTH, false, false);
@@ -101,6 +113,8 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoAppIsolation enabled
+     * @magentoConfigFixture default_store design/head/title_prefix prefix
+     * @magentoConfigFixture default_store design/head/title_suffix suffix
      * @magentoAppArea frontend
      */
     public function testPrepareAndRender()
@@ -112,12 +126,78 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\TestFramework\Response $response */
         $response = $this->objectManager->get(\Magento\TestFramework\Response::class);
         $this->page->renderResult($response);
+        $this->assertStringContainsString('prefix meta title suffix', $response->getBody());
         $this->assertNotEmpty($response->getBody());
         $this->assertEquals(
             10,
             $this->objectManager->get(
                 \Magento\Catalog\Model\Session::class
             )->getLastViewedProductId()
+        );
+    }
+
+    /**
+     * Product meta description should be rendered on the product HTML sources as is, without changes or substitutions
+     *
+     * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    #[
+        AppIsolation(true),
+        DataFixture(ProductFixture::class, ['meta_description' => 'Product Meta Description'], 'p1'),
+    ]
+    public function testProductMetaDescriptionShouldBeRenderedAsIs()
+    {
+        $product = $this->fixtures->get('p1');
+        $metaDescription = '<meta name="description" content="Product Meta Description"/>';
+
+        $this->objectManager->get(\Magento\Framework\App\RequestInterface::class)->setParam('id', $product->getId());
+        $this->_helper->prepareAndRender($this->page, $product->getId(), $this->_controller);
+
+        /** @var \Magento\TestFramework\Response $response */
+        $response = $this->objectManager->get(\Magento\TestFramework\Response::class);
+
+        $this->page->renderResult($response);
+
+        $this->assertNotEmpty($response->getBody());
+        $this->assertStringContainsString(
+            $metaDescription,
+            $response->getBody(),
+            'Empty meta description should be rendered as is'
+        );
+    }
+
+    /**
+     * If the product meta description is empty, it should not be substituted with any other data and should not be
+     * rendered on the product HTML sources
+     *
+     * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    #[
+        AppIsolation(true),
+        DataFixture(ProductFixture::class, ['meta_description' => ''], 'p1'),
+    ]
+    public function testEmptyProductMetaDescriptionShouldNotBeSubstitutedAndRendered()
+    {
+        $product = $this->fixtures->get('p1');
+        $metaDescription = '<meta name="description" content="';
+
+        $this->objectManager->get(\Magento\Framework\App\RequestInterface::class)->setParam('id', $product->getId());
+        $this->_helper->prepareAndRender($this->page, $product->getId(), $this->_controller);
+
+        /** @var \Magento\TestFramework\Response $response */
+        $response = $this->objectManager->get(\Magento\TestFramework\Response::class);
+
+        $this->page->renderResult($response);
+
+        $this->assertNotEmpty($response->getBody());
+        $this->assertStringNotContainsStringIgnoringCase(
+            $metaDescription,
+            $response->getBody(),
+            'Empty meta description should not be substituted or rendered'
         );
     }
 
