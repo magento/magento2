@@ -278,6 +278,7 @@ class Helper
      * @param Product $product
      * @return Product
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @since 101.0.0
      */
     protected function setProductLinks(Product $product)
@@ -301,7 +302,7 @@ class Helper
         }
 
         foreach ($linkTypes as $linkType => $readonly) {
-            if (isset($links[$linkType]) && !$readonly) {
+            if (isset($links[$linkType])) {
                 foreach ((array) $links[$linkType] as $linkData) {
                     if (empty($linkData['id'])) {
                         continue;
