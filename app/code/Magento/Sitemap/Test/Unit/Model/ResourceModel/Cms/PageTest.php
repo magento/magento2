@@ -11,6 +11,7 @@ namespace Magento\Sitemap\Test\Unit\Model\ResourceModel\Cms;
 
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\GetUtilityPageIdentifiers;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
