@@ -114,10 +114,6 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                 $resultUrlKey = $category->formatUrlKey($category->getOrigData('name'));
                 $this->updateUrlKey($category, $resultUrlKey);
             }
-            if (!$category->isObjectNew() && $category->getOrigData('url_key') !== null && $category->getUrlKey() === null) {
-                $category->setUrlPath(null);
-            }
-
 
             if ($category->hasChildren()
                 && $category->getUrlKey() === null
