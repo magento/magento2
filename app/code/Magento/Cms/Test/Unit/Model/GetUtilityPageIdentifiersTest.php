@@ -19,8 +19,16 @@ use PHPUnit\Framework\TestCase;
  */
 class GetUtilityPageIdentifiersTest extends TestCase
 {
+    /**
+     * Test subject.
+     *
+     * @var GetUtilityPageIdentifiers
+     */
     private GetUtilityPageIdentifiers $model;
 
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
     private ScopeConfigInterface|MockObject $scopeConfig;
 
     /**
