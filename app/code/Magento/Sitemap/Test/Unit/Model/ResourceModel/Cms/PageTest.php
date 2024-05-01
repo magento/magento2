@@ -163,7 +163,7 @@ class PageTest extends TestCase
             ->method('getEntityConnection')
             ->willReturn($connection);
 
-        $this->scopeConfig->expects($this->once())
+        $this->scopeConfig->expects($this->exactly(3))
             ->method('getValue')
             ->withConsecutive(
                 [$this->identicalTo('web/default/cms_home_page'), $this->identicalTo(ScopeInterface::SCOPE_STORE)],
