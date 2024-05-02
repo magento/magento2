@@ -423,22 +423,13 @@ class Storage extends \Magento\Framework\DataObject
                 }
 
                 try {
-                    if ($item->getSize() > 0) {
-                        $size = getimagesizefromstring(
-                            $driver->fileGetContents($item->getFilename())
-                        );
+                    $size = getimagesizefromstring(
+                        $driver->fileGetContents($item->getFilename())
+                    );
 
-                        if (is_array($size)) {
-                            $item->setWidth($size[0]);
-                            $item->setHeight($size[1]);
-                        }
-                    } else {
-                        $this->logger->notice(
-                            sprintf(
-                                "The image file %s cannot be processed by the Gallery because it has an invalid size.",
-                                $item->getFilename()
-                            )
-                        );
+                    if (is_array($size)) {
+                        $item->setWidth($size[0]);
+                        $item->setHeight($size[1]);
                     }
                 } catch (\Error $e) {
                     $this->logger->notice(sprintf("GetImageSize caused error: %s", $e->getMessage()));
