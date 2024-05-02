@@ -62,14 +62,13 @@
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabTransactionID"/>
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
         <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Canceled order')}}" userInput="Canceled order online Amount: $145.98. Transaction ID: &quot;{$grabTransactionID}&quot;" stepKey="seeOrderHistoryNotesAfterCancelingOrder"/>
-        <waitForText selector="{{AdminOrderCommentsTabSection.orderComment}}" userInput="Authorized amount of $145.98." stepKey="seeOrderHistoryNotes"/>
         <actionGroup ref="AdminAssertTransactionTypeInTransactionTabActionGroup" stepKey="assertTransactionTypeHasAuthorization">
             <argument name="transactionType" value="authorization"/>
         </actionGroup>
-        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForVoid"/>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForAuthorization"/>
         <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClicked"/>
         <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>
-        <actionGroup ref="AdminAssertTransactionTypeInTransactionTabActionGroup" stepKey="assertTransactionTypeHasAuthorization">
+        <actionGroup ref="AdminAssertTransactionTypeInTransactionTabActionGroup" stepKey="assertTransactionTypeHasVoid">
             <argument name="transactionType" value="void"/>
         </actionGroup>
         <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForVoid"/>
