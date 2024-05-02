@@ -309,24 +309,26 @@ class Helper
                     $isReadOnlyUpSellItems = true;
                 }
             }
-            if (isset($links[$linkType]) && !$readonly) {
-                foreach ((array) $links[$linkType] as $linkData) {
-                    if (empty($linkData['id'])) {
-                        continue;
-                    }
+            if ($isReadOnlyRelatedItems && $isReadOnlyUpSellItems) {
+                $productLinks = null;
+                break;
+            } else {
+                if (isset($links[$linkType]) && !$readonly) {
+                    foreach ((array) $links[$linkType] as $linkData) {
+                        if (empty($linkData['id'])) {
+                            continue;
+                        }
 
-                    $linkProduct = $this->productRepository->getById($linkData['id']);
-                    $link = $this->productLinkFactory->create();
-                    $link->setSku($product->getSku())
-                        ->setLinkedProductSku($linkProduct->getSku())
-                        ->setLinkType($linkType)
-                        ->setPosition(isset($linkData['position']) ? (int) $linkData['position'] : 0);
-                    $productLinks[] = $link;
+                        $linkProduct = $this->productRepository->getById($linkData['id']);
+                        $link = $this->productLinkFactory->create();
+                        $link->setSku($product->getSku())
+                            ->setLinkedProductSku($linkProduct->getSku())
+                            ->setLinkType($linkType)
+                            ->setPosition(isset($linkData['position']) ? (int) $linkData['position'] : 0);
+                        $productLinks[] = $link;
+                    }
                 }
             }
-        }
-        if ($isReadOnlyRelatedItems && $isReadOnlyUpSellItems) {
-            $productLinks = [];
         }
 
         return $product->setProductLinks($productLinks);
