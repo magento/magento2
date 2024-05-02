@@ -278,13 +278,13 @@ class Helper
      * @param Product $product
      * @return Product
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @since 101.0.0
      */
     protected function setProductLinks(Product $product)
     {
         $links = $this->getLinkResolver()->getLinks();
 
+        $currentProductLinks = $product->getProductLinks();
         $product->setProductLinks([]);
 
         $product = $this->productLinks->initializeLinks($product, $links);
@@ -300,9 +300,10 @@ class Helper
         foreach ($productLinks as $productLink) {
             unset($linkTypes[$productLink->getLinkType()]);
         }
-
+        $readonlyRelatedProducts = false;
+        $readonlyUpSellProducts = false;
         foreach ($linkTypes as $linkType => $readonly) {
-            if (isset($links[$linkType])) {
+            if (isset($links[$linkType]) && !$readonly) {
                 foreach ((array) $links[$linkType] as $linkData) {
                     if (empty($linkData['id'])) {
                         continue;
@@ -317,8 +318,16 @@ class Helper
                     $productLinks[] = $link;
                 }
             }
+            if ($linkType === 'related' && $readonly) {
+                $readonlyRelatedProducts = true;
+            }
+            if ($linkType === 'upsell' && $readonly) {
+                $readonlyUpSellProducts = true;
+            }
         }
-
+        if ($readonlyRelatedProducts && $readonlyUpSellProducts && empty($productLinks)) {
+            $productLinks = $currentProductLinks;
+        }
         return $product->setProductLinks($productLinks);
     }
 
