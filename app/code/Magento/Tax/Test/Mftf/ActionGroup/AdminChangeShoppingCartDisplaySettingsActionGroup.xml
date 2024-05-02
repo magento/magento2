@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminChangeShoppingCartDisplaySettingsActionGroup">
         <annotations>
-            <description>Goes to the 'Configuration' page via the Admin Side Menu. Change the values for 'Shopping Cart Display Settings'</description>
+            <description>Goes to the 'Configuration' page via the Admin Side Menu. Change the values for 'Shopping Cart Display Settings'.</description>
         </annotations>
         <!-- change shopping cart display setting configurations -->
         <scrollTo selector="{{AdminConfigureTaxSection.shoppingCartDisplay}}" stepKey="scrollToShoppingCartDisplaySettingsSection"/>
