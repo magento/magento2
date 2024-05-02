@@ -14,14 +14,14 @@ use Magento\Framework\Filesystem\Driver\File;
 class Js extends AbstractAdapter
 {
     /**
-     * @var \Magento\Framework\Filesystem
+     * @var \Magento\Framework\Filesystem\Driver\File
      */
     protected $_filesystem;
 
     /**
      * Adapter construct
      *
-     * @param  File $fileSystem
+     * @param \Magento\Framework\Filesystem\Driver\File $fileSystem
      */
     public function __construct(
         File $fileSystem
