@@ -304,6 +304,12 @@ class Helper
         $readonlyRelatedProducts = false;
         $readonlyUpSellProducts = false;
         foreach ($linkTypes as $linkType => $readonly) {
+            if ($linkType === 'related' && $readonly) {
+                $readonlyRelatedProducts = true;
+            }
+            if ($linkType === 'upsell' && $readonly) {
+                $readonlyUpSellProducts = true;
+            }
             if (isset($links[$linkType]) && !$readonly) {
                 foreach ((array) $links[$linkType] as $linkData) {
                     if (empty($linkData['id'])) {
@@ -319,15 +325,9 @@ class Helper
                     $productLinks[] = $link;
                 }
             }
-            if ($linkType === 'related' && $readonly) {
-                $readonlyRelatedProducts = true;
-            }
-            if ($linkType === 'upsell' && $readonly) {
-                $readonlyUpSellProducts = true;
-            }
         }
         if ($readonlyRelatedProducts && $readonlyUpSellProducts && empty($productLinks)) {
-            $productLinks = $currentProductLinks;
+            return $product->setProductLinks($currentProductLinks);
         }
 
         return $product->setProductLinks($productLinks);
