@@ -17,6 +17,8 @@ use Magento\Catalog\Test\Fixture\ProductStock as ProductStockFixture;
 use Magento\ConfigurableProduct\Test\Fixture\AddProductToCart as AddConfigurableProductToCartFixture;
 use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
 use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
+use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart;
@@ -257,33 +259,71 @@ class StockAvailabilityTest extends GraphQlAbstract
     }
 
     #[
-        DataFixture(ProductFixture::class, ['sku' => self::SKU], as: 'product'),
+        DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(AttributeFixture::class, as: 'attribute'),
         DataFixture(
             ConfigurableProductFixture::class,
-            ['sku' => self::PARENT_SKU_CONFIGURABLE, '_options' => ['$attribute$'], '_links' => ['$product$']],
+            ['_options' => ['$attribute$'], '_links' => ['$product$']],
             'configurable_product'
         ),
         DataFixture(GuestCartFixture::class, as: 'cart'),
         DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+        DataFixture(ProductStockFixture::class, ['prod_id' => '$product.id$', 'prod_qty' => 100], 'prodStock'),
         DataFixture(
             AddConfigurableProductToCartFixture::class,
             [
                 'cart_id' => '$cart.id$',
                 'product_id' => '$configurable_product.id$',
                 'child_product_id' => '$product.id$',
-                'qty' => 100
+                'qty' => 90
             ],
-        )
+        ),
+    ]
+    public function testStockStatusAvailableConfigurableProduct(): void
+    {
+        $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlMutation($query);
+        $responseDataObject = new DataObject($response);
+
+        self::assertTrue(
+            $responseDataObject->getData('cart/items/0/is_available')
+        );
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['sku' => self::SKU], as: 'product'),
+        DataFixture(AttributeFixture::class, as: 'attribute'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            [
+                'sku' => self::PARENT_SKU_CONFIGURABLE,
+                '_options' => ['$attribute$'],
+                '_links' => ['$product$'],
+            ],
+            'configurable_product'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
     ]
     public function testStockStatusAddConfigurableProduct(): void
     {
         $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
-        $query = $this->mutationAddConfigurableProduct($maskedQuoteId, self::SKU, self::PARENT_SKU_CONFIGURABLE);
+        /** @var AttributeInterface $attribute */
+        $attribute = $this->fixtures->get('attribute');
+        /** @var AttributeOptionInterface $option */
+        $option = $attribute->getOptions()[1];
+        $selectedOption = base64_encode("configurable/{$attribute->getAttributeId()}/{$option->getValue()}");
+        $query = $this->mutationAddConfigurableProduct(
+            $maskedQuoteId,
+            self::PARENT_SKU_CONFIGURABLE,
+            $selectedOption,
+            100
+        );
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
         self::assertTrue(
-            $responseDataObject->getData('addProductsToCart/cart/items/1/is_available')
+            $responseDataObject->getData('addProductsToCart/cart/items/0/is_available')
         );
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
@@ -367,7 +407,7 @@ QUERY;
     private function mutationAddConfigurableProduct(
         string $cartId,
         string $sku,
-        string $parentSku,
+        string $selectedOption,
         int $qty = 1
     ): string {
         return <<<QUERY
@@ -378,7 +418,9 @@ mutation {
     {
       sku: "{$sku}"
       quantity: $qty
-      parent_sku: "{$parentSku}"
+      selected_options: [
+        "$selectedOption"
+      ]
     }]
   ) {
     cart {

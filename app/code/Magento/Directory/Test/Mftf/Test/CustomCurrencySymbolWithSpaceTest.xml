@@ -65,7 +65,9 @@
         <click selector="{{AdminCurrencySymbolsGridSection.saveCurrencySymbols}}" stepKey="clickSaveCurrencySymbols"/>
         <waitForPageLoad stepKey="waitForSave"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="{{AdminSaveCurrencySymbolMessageData.success}}" stepKey="seeSuccessMessage"/>
-
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
         <!--Redirect back to admin dashboard screen-->
         <actionGroup ref="AdminReloadDashboardDataActionGroup" stepKey="reloadDashboardData" />
         <!--Verify there is a space between custom currency symbol respective amounts on admin dashboard-->

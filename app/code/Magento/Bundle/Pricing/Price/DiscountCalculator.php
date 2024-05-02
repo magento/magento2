@@ -7,12 +7,21 @@
 namespace Magento\Bundle\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
- * Class DiscountCalculator
+ * Check the product available discount and apply the correct discount to the price
  */
 class DiscountCalculator
 {
+
+    /**
+     * @param PriceCurrencyInterface $priceCurrency
+     */
+    public function __construct(private readonly PriceCurrencyInterface $priceCurrency)
+    {
+    }
+
     /**
      * Apply percentage discount
      *
@@ -32,6 +41,7 @@ class DiscountCalculator
                 $discount = min($price->getDiscountPercent(), $discount ?: $price->getDiscountPercent());
             }
         }
-        return (null !== $discount) ?  $discount/100 * $value : $value;
+        return (null !== $discount) ?
+            $this->priceCurrency->roundPrice($discount/100 * $value, 2) : $value;
     }
 }
