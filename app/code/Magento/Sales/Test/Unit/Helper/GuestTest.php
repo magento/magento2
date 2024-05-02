@@ -192,10 +192,13 @@ class GuestTest extends TestCase
 
         $this->searchCriteriaBuilder
             ->method('addFilter')
-            ->withConsecutive(
-                ['increment_id', trim($incrementId)],
-                ['store_id', $this->storeModelMock->getId()]
-            )->willReturnOnConsecutiveCalls($this->searchCriteriaBuilder, $this->searchCriteriaBuilder);
+            ->willReturnCallback(function ($arg1, $arg2) use ($incrementId) {
+                if ($arg1 == 'increment_id' && $arg2 ==  trim($incrementId)) {
+                    return $this->searchCriteriaBuilder;
+                } elseif ($arg1 == 'store_id' && $arg2 ==  $this->storeModelMock->getId()) {
+                    return $this->searchCriteriaBuilder;
+                }
+            });
 
         $this->salesOrderMock->expects($this->any())->method('getId')->willReturn($incrementId);
 
@@ -235,7 +238,7 @@ class GuestTest extends TestCase
      *
      * @return array
      */
-    public function loadValidOrderNotEmptyPostDataProvider(): array
+    public static function loadValidOrderNotEmptyPostDataProvider(): array
     {
         return [
             [
@@ -285,10 +288,13 @@ class GuestTest extends TestCase
 
         $this->searchCriteriaBuilder
             ->method('addFilter')
-            ->withConsecutive(
-                ['increment_id', trim($incrementId)],
-                ['store_id', $this->storeModelMock->getId()]
-            )->willReturnOnConsecutiveCalls($this->searchCriteriaBuilder, $this->searchCriteriaBuilder);
+            ->willReturnCallback(function ($arg1, $arg2) use ($incrementId) {
+                if ($arg1 == 'increment_id' && $arg2 ==  trim($incrementId)) {
+                    return $this->searchCriteriaBuilder;
+                } elseif ($arg1 == 'store_id' && $arg2 ==  $this->storeModelMock->getId()) {
+                    return $this->searchCriteriaBuilder;
+                }
+            });
 
         $this->salesOrderMock->expects($this->any())->method('getId')->willReturn($incrementId);
         $this->salesOrderMock->expects($this->once())->method('getProtectCode')->willReturn($protectedCode);

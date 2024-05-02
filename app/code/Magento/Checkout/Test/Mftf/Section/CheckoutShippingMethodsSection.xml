@@ -26,5 +26,16 @@
         <element name="showShippingVatNumber" type="text" selector="div.shipping-address-item"/>
         <element name="showBillingVatNumber" type="text" selector="div.billing-address-details"/>
         <element name="showShippingInfoVatNumber" type="text" selector="div.shipping-information-content"/>
+        <element name="shippingMethodDhlLabel" type="text" selector="#label_carrier_null_dhl"/>
+        <element name="shippingMethodFlatRateLabel" type="text" selector="#label_carrier_flatrate_flatrate"/>
+        <element name="shippingMethodDhlWorldWideExpressLabel" type="text" selector="#label_method_P_dhl"/>
+        <element name="shippingMethodDhlWorldWideExpress" type="radio" selector="#checkout-shipping-method-load input[value='dhl_P']"/>
+        <element name="shippingMethodDhlExpressTwelveLabel" type="text" selector="#label_method_Y_dhl"/>
+        <element name="shippingMethodDhlExpressTwelve" type="radio" selector="#checkout-shipping-method-load input[value='dhl_Y']"/>
+        <element name="shippingMethodDhlMedicalExpressLabel" type="text" selector="#label_method_Q_dhl"/>
+        <element name="shippingMethodDhlMedicalExpress" type="radio" selector="#checkout-shipping-method-load input[value='dhl_Q']"/>
+        <element name="shippingMethodFreeShippingLabel" type="text" selector="#label_carrier_freeshipping_freeshipping"/>
+        <element name="shippingDHLErrorMessage" type="text" selector="#checkout-shipping-method-load .table-checkout-shipping-method tr.row-error .error div"/>
+        <element name="smartPostShippingMethod" type="radio" selector="#checkout-shipping-method-load input[value='fedex_FEDEX_GROUND']"/>
     </section>
 </sections>
