@@ -40,6 +40,8 @@ class StoreConfigResolverTest extends GraphQlAbstract
             ScopeInterface::SCOPE_STORE,
             'default'
         ),
+        ConfigFixture('checkout/cart/grouped_product_image', 'parent', ScopeInterface::SCOPE_STORE, 'default'),
+        ConfigFixture('checkout/cart/configurable_product_image', 'itself', ScopeInterface::SCOPE_STORE, 'default')
     ]
     public function testGetStoreConfig(): void
     {
@@ -53,7 +55,9 @@ class StoreConfigResolverTest extends GraphQlAbstract
     cart_summary_display_quantity,
     minicart_display,
     minicart_max_items,
-    cart_expires_in_days
+    cart_expires_in_days,
+    grouped_product_image,
+    configurable_product_image
   }
 }
 QUERY;
@@ -77,5 +81,7 @@ QUERY;
         $this->assertTrue($responseConfig['minicart_display']);
         $this->assertEquals(self::MINICART_MAX_ITEMS, $responseConfig['minicart_max_items']);
         $this->assertEquals(self::CART_EXPIRES_IN_DAYS, $responseConfig['cart_expires_in_days']);
+        $this->assertEquals('PARENT', $responseConfig['grouped_product_image']);
+        $this->assertEquals('ITSELF', $responseConfig['configurable_product_image']);
     }
 }
