@@ -415,7 +415,7 @@ class Storage extends \Magento\Framework\DataObject
             $mimeType = $itemStats['mimetype'] ?? $this->mime->getMimeType($item->getFilename());
             $item->setMimeType($mimeType);
 
-            if ($this->isImage($item->getBasename())) {
+            if ($this->isImage($item->getBasename()) && $item->getSize() > 0) {
                 $thumbUrl = $this->getThumbnailUrl($item->getFilename(), true);
                 // generate thumbnail "on the fly" if it does not exists
                 if (!$thumbUrl) {
@@ -435,6 +435,12 @@ class Storage extends \Magento\Framework\DataObject
                     $this->logger->notice(sprintf("GetImageSize caused error: %s", $e->getMessage()));
                 }
             } else {
+                $this->logger->warning(
+                    sprintf(
+                        "The image %s is invalid and cannot be displayed in the gallery.",
+                        $item->getBasename()
+                    )
+                );
                 $thumbUrl = $this->_assetRepo->getUrl(self::THUMB_PLACEHOLDER_PATH_SUFFIX);
             }
 
