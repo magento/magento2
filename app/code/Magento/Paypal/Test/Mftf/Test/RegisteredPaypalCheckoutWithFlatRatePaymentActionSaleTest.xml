@@ -36,6 +36,9 @@
             </createData>
         </before>
         <after>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{GiftCard.sku}}"/>
+            </actionGroup>
             <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountry"/>
             <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
@@ -50,10 +53,24 @@
         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm">
             <argument name="productType" value="giftcard"/>
         </actionGroup>
-         <!-- Save gift card product -->
+        <!-- Fill gift card product values -->
+        <actionGroup ref="AdminFillGiftCardProductFieldsActionGroup" stepKey="fillGiftCardProductFields">
+            <argument name="product" value="GiftCard"/>
+        </actionGroup>
+        <!-- Add amount to gift card product -->
+        <actionGroup ref="addGiftCardAmount" stepKey="addAmountToGiftCard">
+            <argument name="giftCardAmount" value="GiftCard.amounts[0]"/>
+        </actionGroup>
+        <!-- Add gift card product to category -->
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory" after="addAmountToGiftCard"/>
+        <!-- Save gift card product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUpNewUser">
             <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Quick search gift card product -->
+        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="quickSearchForGiftCardProduct">
+            <argument name="phrase" value="GiftCard.sku"/>
         </actionGroup>
         <!-- Go to gift card product page on storefront -->
         <seeElement selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="seeProductsInCategory"/>
@@ -110,5 +127,9 @@
         <!-- Check comment history -->
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
         <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Captured amount')}}" userInput="Captured amount of $15.00 online. Transaction ID: &quot;{$grabLastTransactionIDForCaptured}&quot;" stepKey="seeOrderHistoryNotes"/>
-         </test>
+        <!-- Go to invoice tab and verify invoice is present-->
+        <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="clickInvoicesTabOrdersPage"/>
+        <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpenedOne"/>
+        <seeElement selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="seeForInvoicesTabOpenedOne"/>
+    </test>
 </tests>
