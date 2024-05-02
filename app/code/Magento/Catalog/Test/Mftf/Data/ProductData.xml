@@ -1527,4 +1527,25 @@
         <data key="weight">1</data>
         <data key="price">10</data>
     </entity>
+    <entity name="GiftCard" type="product">
+        <data key="name" unique="suffix">GiftCard</data>
+        <data key="sku" unique="suffix">GiftCard</data>
+        <data key="type_id">giftcard</data>
+        <data key="attribute_set_id">4</data>
+        <data key="quantity">1000</data>
+        <data key="card_type">Physical</data>
+        <array key="amounts">
+            <item>10.00</item>
+            <item>50.00</item>
+        </array>
+        <array key="negativeAmount">
+            <item>-10.00</item>
+        </array>
+        <array key="amountsInteger">
+            <item>10</item>
+            <item>50</item>
+        </array>
+        <data key="status">1</data>
+        <data key="urlKey" unique="suffix">giftcard</data>
+    </entity>
 </entities>
