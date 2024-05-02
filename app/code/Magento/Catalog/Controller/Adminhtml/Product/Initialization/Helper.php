@@ -300,6 +300,7 @@ class Helper
         foreach ($productLinks as $productLink) {
             unset($linkTypes[$productLink->getLinkType()]);
         }
+
         $readonlyRelatedProducts = false;
         $readonlyUpSellProducts = false;
         foreach ($linkTypes as $linkType => $readonly) {
@@ -328,6 +329,7 @@ class Helper
         if ($readonlyRelatedProducts && $readonlyUpSellProducts && empty($productLinks)) {
             $productLinks = $currentProductLinks;
         }
+
         return $product->setProductLinks($productLinks);
     }
 
