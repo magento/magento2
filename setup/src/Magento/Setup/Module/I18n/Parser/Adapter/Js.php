@@ -5,11 +5,29 @@
  */
 namespace Magento\Setup\Module\I18n\Parser\Adapter;
 
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\Driver\File;
+
 /**
  * Js parser adapter
  */
 class Js extends AbstractAdapter
 {
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * Adapter construct
+     *
+     * @param  File $fileSystem
+     */
+    public function __construct(
+        File $fileSystem
+    ) {
+        $this->_fileSystem = $fileSystem;
+    }
     /**
      * Covers
      * $.mage.__('Example text')
@@ -32,27 +50,59 @@ class Js extends AbstractAdapter
      */
     protected function _parse()
     {
-        $fileHandle = @fopen($this->_file, 'r');
+        
+        $fileHandle = $this->_fileSystem->fileOpen($this->_file, 'r');
         $lineNumber = 0;
-        while (!feof($fileHandle)) {
-            $lineNumber++;
-            $fileRow = fgets($fileHandle, 4096);
-            $results = [];
-            $regexes = [
-                static::REGEX_MAGE_TRANSLATE,
-                static::REGEX_TRANSLATE_FUNCTION
-            ];
+        try {
+            while (($line = $this->fileReadLine($fileHandle, 0)) !== false) {
+                $lineNumber++;
+                $fileRow = preg_replace('/"\s+\+"|"\s+\+\s+\"|"\+\s+\"|"\+"/', '', $line);
+                $fileRow = preg_replace("/'\s+\+'|'\s+\+\s+\'|'\+\s+\'|'\+'/", "", $fileRow);
+                $results = [];
+                $regexes = [
+                    static::REGEX_MAGE_TRANSLATE,
+                    static::REGEX_TRANSLATE_FUNCTION
+                ];
 
-            foreach ($regexes as $regex) {
-                preg_match_all($regex, $fileRow, $results, PREG_SET_ORDER);
-                for ($i = 0, $count = count($results); $i < $count; $i++) {
-                    if (isset($results[$i][2])) {
-                        $quote = $results[$i][1];
-                        $this->_addPhrase($quote . $results[$i][2] . $quote, $lineNumber);
+                foreach ($regexes as $regex) {
+                    preg_match_all($regex, $fileRow, $results, PREG_SET_ORDER);
+                    for ($i = 0, $count = count($results); $i < $count; $i++) {
+                        if (isset($results[$i][2])) {
+                            $quote = $results[$i][1];
+                            $this->_addPhrase($quote . $results[$i][2] . $quote, $lineNumber);
+                        }
                     }
                 }
             }
+        } catch (\Exception $e) {
+            $this->_fileSystem->fileClose($fileHandle);
+            throw new FileSystemException(
+                new \Magento\Framework\Phrase('Stream get line failed %1', [$e->getMessage()])
+            );
         }
-        fclose($fileHandle);
+        $this->_fileSystem->fileClose($fileHandle);
+    }
+
+    /**
+     * Reads the line content from file pointer (with specified number of bytes from the current position).
+     *
+     * @param resource $resource
+     * @param int $length
+     * @param string $ending [optional]
+     * @return string
+     * @throws FileSystemException
+     */
+    public function fileReadLine($resource, $length, $ending = null)
+    {
+        try {
+            // phpcs:disable
+            $result = @stream_get_line($resource, $length, $ending);
+            // phpcs:enable
+        } catch (\Exception $e) {
+            throw new FileSystemException(
+                new \Magento\Framework\Phrase('Stream get line failed %1', [$e->getMessage()])
+            );
+        }
+        return $result;
     }
 }
