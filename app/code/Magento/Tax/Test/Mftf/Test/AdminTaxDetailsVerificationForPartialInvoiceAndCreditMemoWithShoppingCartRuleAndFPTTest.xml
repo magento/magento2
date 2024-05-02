@@ -16,7 +16,6 @@
             <testCaseId value="AC-4273"/>
             <severity value="MAJOR"/>
         </annotations>
-
         <before>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <field key="price">100.00</field>

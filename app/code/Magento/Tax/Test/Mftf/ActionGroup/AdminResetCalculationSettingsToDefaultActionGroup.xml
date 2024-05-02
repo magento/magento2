@@ -13,19 +13,12 @@
             <description>Goes to the 'Configuration' page for 'Tax'. Resets the default data for Calculation Settings'.</description>
         </annotations>
         <!-- change configurations on tax calculation settings-->
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.taxCalculationAlgorithmInherit}}" stepKey="waitToClickCalculationMethodBasedCheckBox"/>
         <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationAlgorithmInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationAlgorithmInherit}}" visible="true" stepKey="clickCalculationMethodBasedCheckBox"/>
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.taxCalculationBasedInherit}}" stepKey="waitToClickTaxCalculationBasedCheckBox"/>
         <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationBasedInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationBasedInherit}}" visible="true" stepKey="clickTaxCalculationBasedCheckBox"/>
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.taxCalculationPricesInherit}}" stepKey="waitToClickCalculationPricesCheckBox"/>
         <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationPricesInherit}}" visible="true" stepKey="clickCalculationPricesCheckBox"/>
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.taxCalculationShippingPricesInherit}}" stepKey="waitToClickShippingPricesCheckBox"/>
         <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationShippingPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationShippingPricesInherit}}" visible="true" stepKey="clickShippingPricesCheckBox"/>
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.taxCalculationApplyCustomerTaxInherit}}" stepKey="waitToClickApplyCustomerTaxCheckBox"/>
         <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationApplyCustomerTaxInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationApplyCustomerTaxInherit}}" visible="true" stepKey="clickApplyCustomerTaxCheckBox"/>
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.taxCalculationApplyDiscountOnPricesInherit}}" stepKey="waitToClickApplyDiscountOnPricesCheckBox"/>
         <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationApplyDiscountOnPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationApplyDiscountOnPricesInherit}}" visible="true" stepKey="clickApplyDiscountOnPricesCheckBox"/>
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" stepKey="waitToCloseCalculationSettings"/>
         <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationSettingsOpened}}" visible="true" stepKey="closeCalculationSettings"/>
     </actionGroup>
 </actionGroups>

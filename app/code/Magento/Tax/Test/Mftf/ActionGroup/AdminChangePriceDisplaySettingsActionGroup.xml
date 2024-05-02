@@ -14,12 +14,9 @@
         </annotations>
         <!-- change display setting configurations -->
         <scrollTo selector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" stepKey="scrollToTaxPricesDisplaySection"/>
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" stepKey="waitToOpenPriceDisplaySettings"/>
         <conditionalClick selector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" dependentSelector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" visible="true" stepKey="openPriceDisplaySettings"/>
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" stepKey="waitToClickDisplayProductPricesCheckBox"/>
         <conditionalClick selector="{{AdminConfigureTaxSection.taxDisplayProductPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxDisplayProductPricesInherit}}" visible="true" stepKey="clickDisplayProductPricesCheckBox"/>
         <selectOption userInput="Including and Excluding Tax" selector="{{AdminConfigureTaxSection.taxDisplayProductPrices}}" stepKey="clickDisplayProductPrices"/>
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" stepKey="waitTolickDisplayShippingPricesCheckBox"/>
         <conditionalClick selector="{{AdminConfigureTaxSection.taxDisplayShippingPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxDisplayShippingPricesInherit}}" visible="true" stepKey="clickDisplayShippingPricesCheckBox"/>
         <selectOption userInput="Including and Excluding Tax" selector="{{AdminConfigureTaxSection.taxDisplayShippingPrices}}" stepKey="clickDisplayShippingPrices"/>
     </actionGroup>

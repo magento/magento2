@@ -12,7 +12,6 @@
         <annotations>
             <description>Goes to the 'Configuration' page for 'Tax'. Resets the default data for 'Default Tax Class for Product'.</description>
         </annotations>
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.taxClasses}}" stepKey="waitToOpenTaxClassesSection"/>
         <conditionalClick selector="{{AdminConfigureTaxSection.taxClasses}}" dependentSelector="{{AdminConfigureTaxSection.taxClasses}}" visible="true" stepKey="openTaxClassesSection"/>
         <waitForElementClickable selector="{{AdminConfigureTaxSection.useSystemValue}}" stepKey="waitToSelectDefaultOption"/>
         <click selector="{{AdminConfigureTaxSection.useSystemValue}}" stepKey="selectDefaultOption"/>

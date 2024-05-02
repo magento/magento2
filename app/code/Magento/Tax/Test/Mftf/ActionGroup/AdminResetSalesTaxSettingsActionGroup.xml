@@ -8,25 +8,18 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminResetSalesTaxSettingsActionGroup">
+    <actionGroup name=" AdminResetSalesTaxSettingsActionGroup">
         <annotations>
-            <description>Goes to the 'Configuration' page via the Admin Side Menu. Resets 'Order, Invoice, Credit Memo display Settings' default values.</description>
+            <description>Goes to the 'Configuration' page via the Admin Side Menu. Resets 'Order, Invoice, Credit Memo display Settings' to default values.</description>
         </annotations>
         <!-- change shopping cart display setting configurations -->
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.salesDisplayPriceCheckBox}}" stepKey="waitToClicksalesDisplayPriceCheckBoxCheckBox"/>
-        <conditionalClick selector="{{AdminConfigureTaxSection.salesDisplayPriceCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.salesDisplayPriceCheckBox}}" visible="true" stepKey="clicksalesDisplayPriceCheckBoxCheckBox"/>
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.salesDisplaySubtotalCheckBox}}" stepKey="waitToClicksalesDisplaySubtotalCheckBoxCheckBox"/>
-        <conditionalClick selector="{{AdminConfigureTaxSection.salesDisplaySubtotalCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.salesDisplaySubtotalCheckBox}}" visible="true" stepKey="clicksalesDisplaySubtotalCheckBoxCheckBox"/>
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.salesDisplayShippingAmountCheckBox}}" stepKey="waitToClicksalesDisplayShippingAmountCheckBoxCheckBox"/>
-        <conditionalClick selector="{{AdminConfigureTaxSection.salesDisplayShippingAmountCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.salesDisplayShippingAmountCheckBox}}" visible="true" stepKey="clicksalesDisplayShippingAmountCheckBoxCheckBox"/>
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}" stepKey="waitToClicksystemValueIncludeTaxTotalSalesCheckBox"/>
-        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}" visible="true" stepKey="clicksystemValueIncludeTaxTotalSalesCheckBox"/>
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummarySales}}" stepKey="waitToClicksystemValueDisplayTaxSummarySalesCheckBox"/>
-        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummarySales}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummarySales}}" visible="true" stepKey="clicksystemValueDisplayTaxSummarySalesCheckBox"/>
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxSales}}" stepKey="waitToClicksystemValueDisplayZeroTaxSalesCheckBox"/>
-        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxSales}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxSales}}" visible="true" stepKey="clicksystemValueDisplayZeroTaxSalesCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.salesDisplayPriceCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.salesDisplayPriceCheckBox}}" visible="true" stepKey="clickSalesDisplayPriceCheckBoxCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.salesDisplaySubtotalCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.salesDisplaySubtotalCheckBox}}" visible="true" stepKey="clickSalesDisplaySubtotalCheckBoxCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.salesDisplayShippingAmountCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.salesDisplayShippingAmountCheckBox}}" visible="true" stepKey="clickSalesDisplayShippingAmountCheckBoxCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}" visible="true" stepKey="clickSystemValueIncludeTaxTotalSalesCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummarySales}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummarySales}}" visible="true" stepKey="clickSystemValueDisplayTaxSummarySalesCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxSales}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxSales}}" visible="true" stepKey="clickSystemValueDisplayZeroTaxSalesCheckBox"/>
         <scrollTo selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" x="0" y="-80" stepKey="scrollToTaxSalesDisplay"/>
-        <waitForElementVisible selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" stepKey="waitToCloseOrdersInvoicesCreditSales"/>
         <conditionalClick selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" dependentSelector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" visible="true" stepKey="closeOrdersInvoicesCreditSales"/>
     </actionGroup>
 </actionGroups>
