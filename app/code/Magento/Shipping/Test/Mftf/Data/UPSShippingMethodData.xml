@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminEnableUPSConfigData" type="ups_config">
+        <data key="path">carriers/ups/active</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminDisableUPSConfigData" type="ups_config">
+        <data key="path">carriers/ups/active</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="AdminAccessLicenseNumberUPSConfigData" type="ups_config">
+        <data key="path">carriers/ups/access_license_number</data>
+        <data key="value">{{_CREDS.magento/carriers_ups_access_license_number}}</data>
+    </entity>
+    <entity name="AdminUserIDUPSConfigData" type="ups_config">
+        <data key="path">carriers/ups/username</data>
+        <data key="value">{{_CREDS.magento/carriers_ups_username}}</data>
+    </entity>
+    <entity name="AdminPasswordUPSConfigData" type="ups_config">
+        <data key="path">carriers/ups/password</data>
+        <data key="value">{{_CREDS.magento/carriers_ups_password}}</data>
+    </entity>
+    <entity name="AdminShipperNumberUPSConfigData" type="ups_config">
+        <data key="path">carriers/ups/shipper_number</data>
+        <data key="value">{{_CREDS.magento/carriers_ups_shipper_number}}</data>
+    </entity>
+    <entity name="AdminEnableDebugUPSConfigData" type="ups_config">
+        <data key="path">carriers/ups/debug</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminDisableDebugUPSConfigData" type="ups_config">
+        <data key="path">carriers/ups/debug</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="AdminEnableShowMethodUPSConfigData" type="ups_config">
+        <data key="path">carriers/ups/showmethod</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminDisableShowMethodUPSConfigData" type="ups_config">
+        <data key="path">carriers/ups/showmethod</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+</entities>

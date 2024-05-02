@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnableUSPSActionGroup">
+        <annotations>
+            <description>Enable United States Postal Service shipping method in backend</description>
+        </annotations>
+        <magentoCLI command="config:set {{AdminEnableUSPSConfigData.path}} {{AdminEnableUSPSConfigData.value}}" stepKey="enableUSPS"/>
+        <magentoCLI command="config:set {{AdminUserIDUSPSConfigData.path}} {{AdminUserIDUSPSConfigData.value}}" stepKey="fillUserID"/>
+        <magentoCLI command="config:set {{AdminPasswordUSPSConfigData.path}} {{AdminPasswordUSPSConfigData.value}}" stepKey="fillPassword"/>
+        <magentoCLI command="config:set {{AdminEnableDebugUSPSConfigData.path}} {{AdminEnableDebugUSPSConfigData.value}}" stepKey="enableDebug"/>
+        <magentoCLI command="config:set {{AdminEnableShowMethodUSPSConfigData.path}} {{AdminEnableShowMethodUSPSConfigData.value}}" stepKey="enableShowMethod"/>
+    </actionGroup>
+</actionGroups>
