@@ -14,8 +14,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 class AttributeSetTextTest extends AbstractColumnTestCase
 {
-    public const ATTRIBUTE_SET_ID = 4;
-    public const ATTRIBUTE_SET_NAME = 'Default';
+    private const ATTRIBUTE_SET_ID = 4;
+    private const ATTRIBUTE_SET_NAME = 'Default';
 
     /**
      * @var AttributeSetRepositoryInterface|MockObject
