@@ -10,7 +10,7 @@
     <test name="AdminCancelledPaymentStandardOrderTest">
         <annotations>
             <features value="PayPal"/>
-            <stories value="Payment standard methods"/>
+            <stories value="Payment standard method"/>
             <title value="Complete a Sales Order Paid with PayPal Payments Standard"/>
             <description value="Complete order paid with PayPalStandard and cancelled in backend"/>
             <severity value="MAJOR"/>
@@ -30,12 +30,18 @@
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Customer Log Out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Logout-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Navigate to StoreFront -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
         <!-- Add product to cart -->
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
@@ -48,8 +54,8 @@
         <!-- Login to PayPal in-context and verify order total on PayPal page-->
         <actionGroup ref="StorefrontLoginToPayPalStandardPaymentActionGroup" stepKey="loginToPayPal"/>
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
-        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeGrabbed"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
         <!-- Go to order page -->
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderedPage">
             <argument name="orderId" value="{$grabOrderNumber}"/>
@@ -62,13 +68,13 @@
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabTransactionID"/>
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
         <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Canceled order')}}" userInput="Canceled order online Amount: $145.98. Transaction ID: &quot;{$grabTransactionID}&quot;" stepKey="seeOrderHistoryNotesAfterCancelingOrder"/>
-        <actionGroup ref="AdminAssertTransactionTypeInTransactionTabActionGroup" stepKey="assertTransactionTypeHasAuthorization">
+        <actionGroup ref="AdminOpenTransactionsTabActionGroup" stepKey="openTransactionTypeHasAuthorization">
             <argument name="transactionType" value="authorization"/>
         </actionGroup>
         <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForAuthorization"/>
         <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClicked"/>
         <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>
-        <actionGroup ref="AdminAssertTransactionTypeInTransactionTabActionGroup" stepKey="assertTransactionTypeHasVoid">
+        <actionGroup ref="AdminOpenTransactionsTabActionGroup" stepKey="openTransactionTypeHasVoid">
             <argument name="transactionType" value="void"/>
         </actionGroup>
         <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForVoid"/>
