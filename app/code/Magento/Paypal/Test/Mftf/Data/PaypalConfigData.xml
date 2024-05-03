@@ -317,4 +317,10 @@
         <data key="path">payment/payflowpro_cc_vault/active</data>
         <data key="value">0</data>
     </entity>
+    <entity name="StorefrontPaypalExpressAuthorizationBillingAgreementPaymentActionOptionConfigData">
+        <data key="path">payment/paypal_billing_agreement/payment_action</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">Authorization</data>
+    </entity>
 </entities>
