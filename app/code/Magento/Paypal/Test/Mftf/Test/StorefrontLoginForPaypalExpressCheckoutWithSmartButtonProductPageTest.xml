@@ -16,7 +16,6 @@
             <description value="Customers should be able to perform PayPal Express Checkout method using PayPal Smart Button on Product Page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-6137"/>
-<!--            <group value="paypalExpress"/>-->
             <group value="3rd_party_integration"/>
 <!--            <group value="pr_exclude"/>-->
         </annotations>
@@ -24,6 +23,8 @@
             <createData entity="SimpleProduct" stepKey="simpleProduct"/>
             <!-- Create Customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Enable free shipping method -->
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShippingMethod"/>
             <magentoCLI command="config:set {{StorefrontPaypalExpressOrderPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressOrderPaymentActionOptionConfigData.value}}" stepKey="setPaymentAction"/>
             <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationBillingAgreementPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationBillingAgreementPaymentActionOptionConfigData.value}}" stepKey="setBillingPaymentAction"/>
             <magentoCLI command="config:set {{StorefrontPaypalEnableTransferCartLineConfigData.path}} {{StorefrontPaypalEnableTransferCartLineConfigData.value}}" stepKey="enableTransferCartLine"/>
@@ -34,6 +35,8 @@
             </actionGroup>
         </before>
         <after>
+            <!-- Disable free shipping method -->
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
             <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
             <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="returnPaymentActionDefaultValue"/>
             <magentoCLI command="config:set {{StorefrontPaypalDisableTransferCartLineConfigData.path}} {{StorefrontPaypalDisableTransferCartLineConfigData.value}}" stepKey="disableTransferCartLine"/>
