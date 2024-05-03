@@ -11,6 +11,7 @@ use Magento\Framework\Filesystem\Driver\File;
 /**
  * Js parser adapter
  */
+#[\AllowDynamicProperties]
 class Js extends AbstractAdapter
 {
     /**
