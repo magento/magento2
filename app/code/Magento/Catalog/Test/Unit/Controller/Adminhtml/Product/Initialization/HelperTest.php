@@ -219,6 +219,7 @@ class HelperTest extends TestCase
      * @param array|null $tierPrice
      * @dataProvider initializeDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function testInitialize(
         $isSingleStore,
