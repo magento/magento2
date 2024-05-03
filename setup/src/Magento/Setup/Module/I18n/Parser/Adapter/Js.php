@@ -27,7 +27,7 @@ class Js extends AbstractAdapter
     public function __construct(
         File $fileSystem
     ) {
-        $this->_fileSystem = $fileSystem;
+        $this->_filesystem = $fileSystem;
     }
     /**
      * Covers
@@ -52,7 +52,7 @@ class Js extends AbstractAdapter
     protected function _parse()
     {
         
-        $fileHandle = $this->_fileSystem->fileOpen($this->_file, 'r');
+        $fileHandle = $this->_filesystem->fileOpen($this->_file, 'r');
         $lineNumber = 0;
         try {
             while (($line = $this->fileReadLine($fileHandle, 0)) !== false) {
@@ -76,12 +76,12 @@ class Js extends AbstractAdapter
                 }
             }
         } catch (\Exception $e) {
-            $this->_fileSystem->fileClose($fileHandle);
+            $this->_filesystem->fileClose($fileHandle);
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('Stream get line failed %1', [$e->getMessage()])
             );
         }
-        $this->_fileSystem->fileClose($fileHandle);
+        $this->_filesystem->fileClose($fileHandle);
     }
 
     /**
