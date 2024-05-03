@@ -52,7 +52,7 @@ class ServiceLocator
             $filesCollector = new FilesCollector();
 
             $phraseCollector = new Parser\Adapter\Php\Tokenizer\PhraseCollector(new Parser\Adapter\Php\Tokenizer());
-            $fileSystem= new \Magento\Framework\Filesystem\Driver\File();
+            $fileSystem = new \Magento\Framework\Filesystem\Driver\File();
             $adapters = [
                 'php' => new Parser\Adapter\Php($phraseCollector),
                 'html' => new Parser\Adapter\Html(),

@@ -104,9 +104,10 @@ class TranslationFilesTest extends TranslationFiles
         $phraseCollector = new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector(
             new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer()
         );
+        $fileSystem = new \Magento\Framework\Filesystem\Driver\File();
         $adapters = [
             'php' => new \Magento\Setup\Module\I18n\Parser\Adapter\Php($phraseCollector),
-            'js' =>  new \Magento\Setup\Module\I18n\Parser\Adapter\Js(),
+            'js' =>  new \Magento\Setup\Module\I18n\Parser\Adapter\Js($fileSystem),
             'xml' => new \Magento\Setup\Module\I18n\Parser\Adapter\Xml(),
             'html' => new \Magento\Setup\Module\I18n\Parser\Adapter\Html(),
         ];
