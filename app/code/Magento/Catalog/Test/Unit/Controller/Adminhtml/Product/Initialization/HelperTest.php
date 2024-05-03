@@ -151,7 +151,7 @@ class HelperTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $productExtensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->onlyMethods(['getCategoryLinks', 'setCategoryLinks'])
+            ->addMethods(['getCategoryLinks', 'setCategoryLinks'])
             ->getMockForAbstractClass();
         $this->productMock->setExtensionAttributes($productExtensionAttributes);
 
