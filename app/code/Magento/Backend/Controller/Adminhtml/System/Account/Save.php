@@ -81,7 +81,32 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             } else {
                 $user->save();
                 $user->sendNotificationEmailsIfRequired();
-                $this->messageManager->addSuccessMessage(__('You saved the account.'));
+
+                // Check which fields were modified after saving
+                $modifiedFields = [];
+                $propertiesToCheck = ['password', 'username', 'firstname', 'lastname', 'email'];
+                
+                foreach ($propertiesToCheck as $property) {
+                    if ($user->getOrigData($property) !== $user->{'get' . ucfirst($property)}()) {
+                        $modifiedFields[] = $property;
+                    }
+                }
+                
+                if (!empty($modifiedFields)) {
+                    $countModifiedFields = count($modifiedFields);
+                    $successMessage = '';
+                    // validate how many fields were modified to display them correctly
+                    if ($countModifiedFields > 1) {
+                        $lastModifiedField = array_pop($modifiedFields);
+                        $modifiedFieldsText = implode(', ', $modifiedFields);
+                        $successMessage = __('The %1, and %2 of this account have been modified successfully.', $modifiedFieldsText, $lastModifiedField);
+                    } else {
+                        $successMessage = __('The %1 of this account has been modified successfully.', reset($modifiedFields));
+                    }
+                    $this->messageManager->addSuccessMessage($successMessage);
+                } else {
+                    $this->messageManager->addSuccessMessage(__('You saved the account.'));
+                }
             }
         } catch (UserLockedException $e) {
             $this->_auth->logout();
