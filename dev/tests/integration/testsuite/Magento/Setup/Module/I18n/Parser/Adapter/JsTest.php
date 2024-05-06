@@ -49,5 +49,5 @@ class JsTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $this->assertEquals($expectation, $this->jsPhraseCollector->getPhrases());
-    }   
+    }
 }
