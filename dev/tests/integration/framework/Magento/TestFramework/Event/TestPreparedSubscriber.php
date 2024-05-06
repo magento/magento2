@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 
 /**
- * Listener of PHPUnit built-in events
+ * Test Prepared Subscriber
  */
 namespace Magento\TestFramework\Event;
 
@@ -14,9 +14,14 @@ use PHPUnit\Event\Test\PreparedSubscriber;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Config;
 
-final class TestPreparedSubscriber implements PreparedSubscriber
+class TestPreparedSubscriber implements PreparedSubscriber
 {
-    public function notify(\PHPUnit\Event\Test\Prepared $event): void
+    /**
+     * Test prepared Subscriber
+     *
+     * @param Prepared $event
+     */
+    public function notify(Prepared $event): void
     {
         $className = $event->test()->className();
         $methodName = $event->test()->methodName();
@@ -25,7 +30,7 @@ final class TestPreparedSubscriber implements PreparedSubscriber
         $assetRepo = $objectManager->create($className, ['name' => $methodName]);
 
         $testData = $event->test()->testData();
-        if($testData->hasDataFromDataProvider()){
+        if ($testData->hasDataFromDataProvider()) {
             $dataSetName = $testData->dataFromDataProvider()->dataSetName();
             $assetRepo->setData($dataSetName, ['']);
         }
@@ -34,5 +39,6 @@ final class TestPreparedSubscriber implements PreparedSubscriber
         if ($skipConfig['skip']) {
             $assetRepo->markTestSkipped($skipConfig['skipMessage']);
         }
+        Magento::setTestPrepared(true);
     }
 }

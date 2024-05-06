@@ -1,22 +1,27 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 
 /**
- * Listener of PHPUnit built-in events
+ * TestSuite Started Subscriber
  */
 namespace Magento\TestFramework\Event;
 
-use ReflectionMethod;
+use PHPUnit\Event\TestSuite\Started;
 use PHPUnit\Event\TestSuite\StartedSubscriber;
 
-final class TestSuitStartedSubscriber implements StartedSubscriber
+class TestSuitStartedSubscriber implements StartedSubscriber
 {
-    public function notify(\PHPUnit\Event\TestSuite\Started $event): void
+    /**
+     * TestSuit Started Subscriber
+     *
+     * @param Started $event
+     */
+    public function notify(Started $event): void
     {
-        $mageEvent = \Magento\TestFramework\Event\Magento::getDefaultEventManager();
+        $mageEvent = Magento::getDefaultEventManager();
         $mageEvent->fireEvent('startTestSuite');
     }
 }

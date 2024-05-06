@@ -89,8 +89,6 @@
             <!-- Path to config file (default is config/allure.config.php) -->
             <parameter name="config" value="allure/allure.config.php" />
         </bootstrap>
-        <bootstrap class="Magento\TestFramework\Event\TestSuitStarted" />
-        <bootstrap class="Magento\TestFramework\Event\TestPreprationStarted" />
-        <bootstrap class="Magento\TestFramework\Event\TestPreprationFinished" />
+        <bootstrap class="Magento\TestFramework\Event\Subscribers"/>
     </extensions>
 </phpunit>

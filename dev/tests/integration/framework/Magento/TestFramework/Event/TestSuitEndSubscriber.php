@@ -1,24 +1,27 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 
 /**
- * Listener of PHPUnit built-in events
+ * TestSuite Finished Subscriber
  */
 namespace Magento\TestFramework\Event;
 
-use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Event\TestSuite\Finished;
 use PHPUnit\Event\TestSuite\FinishedSubscriber;
-//use PHPUnit\Event\TestSuite;
-use PHPUnit\Framework\TestSuite;
 
-final class TestSuitEndSubscriber implements FinishedSubscriber
+class TestSuitEndSubscriber implements FinishedSubscriber
 {
-    public function notify(\PHPUnit\Event\TestSuite\Finished $event): void
+    /**
+     * Finish TestSuite
+     *
+     * @param Finished $event
+     */
+    public function notify(Finished $event): void
     {
-        $mageEvent = \Magento\TestFramework\Event\Magento::getDefaultEventManager();
+        $mageEvent = Magento::getDefaultEventManager();
         $mageEvent->fireEvent('rollbackTransaction');
     }
 }
