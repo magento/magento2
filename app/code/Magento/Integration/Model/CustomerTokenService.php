@@ -58,7 +58,6 @@ class CustomerTokenService implements CustomerTokenServiceInterface
         $this->getRequestThrottler()->throttle($username, RequestThrottler::USER_TYPE_CUSTOMER);
         try {
             $customerDataObject = $this->accountManagement->authenticate($username, $password);
-            $this->revokeCustomerAccessToken($customerDataObject->getId());
         } catch (EmailNotConfirmedException $exception) {
             $this->getRequestThrottler()->logAuthenticationFailure($username, RequestThrottler::USER_TYPE_CUSTOMER);
             throw $exception;
@@ -78,7 +77,7 @@ class CustomerTokenService implements CustomerTokenServiceInterface
             CustomUserContext::USER_TYPE_CUSTOMER
         );
         $params = $this->tokenManager->createUserTokenParameters();
-
+        $this->revokeCustomerAccessToken($customerDataObject->getId());
         return $this->tokenManager->create($context, $params);
     }
 
