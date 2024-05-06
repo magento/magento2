@@ -22,6 +22,7 @@ use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Store\Model\StoreManagerInterface;
@@ -278,6 +279,7 @@ class Helper
      * @param Product $product
      * @return Product
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws NoSuchEntityException
      * @since 101.0.0
      */
     protected function setProductLinks(Product $product)
@@ -300,34 +302,21 @@ class Helper
             unset($linkTypes[$productLink->getLinkType()]);
         }
 
-        $isReadOnlyRelatedItems = $isReadOnlyUpSellItems = false;
+        $isReadOnlyUpSellItems = false;
         foreach ($linkTypes as $linkType => $readonly) {
-            if ($readonly) {
-                if ($linkType === 'related') {
-                    $isReadOnlyRelatedItems = true;
-                } elseif ($linkType === 'upsell') {
-                    $isReadOnlyUpSellItems = true;
-                }
-            }
+            $isReadOnlyRelatedItems = $readonly && $linkType === 'related' ||
+                ($isReadOnlyUpSellItems = $readonly && $linkType === 'upsell');
             if ($isReadOnlyRelatedItems && $isReadOnlyUpSellItems) {
                 $productLinks = null;
                 break;
             } else {
-                if (isset($links[$linkType]) && !$readonly) {
-                    foreach ((array) $links[$linkType] as $linkData) {
-                        if (empty($linkData['id'])) {
-                            continue;
-                        }
-
-                        $linkProduct = $this->productRepository->getById($linkData['id']);
-                        $link = $this->productLinkFactory->create();
-                        $link->setSku($product->getSku())
-                            ->setLinkedProductSku($linkProduct->getSku())
-                            ->setLinkType($linkType)
-                            ->setPosition(isset($linkData['position']) ? (int) $linkData['position'] : 0);
-                        $productLinks[] = $link;
-                    }
-                }
+                $productLinks = $this->setProductLinksForNotReadOnlyItems(
+                    $productLinks,
+                    $product,
+                    $links,
+                    $linkType,
+                    $readonly
+                );
             }
         }
 
@@ -535,5 +524,40 @@ class Helper
 
         $extensionAttributes->setCategoryLinks(!empty($newCategoryLinks) ? $newCategoryLinks : null);
         $product->setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * Set product links when readonly is false
+     *
+     * @param array $productLinks
+     * @param Product $product
+     * @param array $links
+     * @param string $linkType
+     * @param mixed $readonly
+     * @return array
+     * @throws NoSuchEntityException
+     */
+    private function setProductLinksForNotReadOnlyItems(
+        array $productLinks,
+        Product $product,
+        array $links,
+        string $linkType,
+        mixed $readonly
+    ): array {
+        if (isset($links[$linkType]) && !$readonly) {
+            foreach ((array)$links[$linkType] as $linkData) {
+                if (empty($linkData['id'])) {
+                    continue;
+                }
+                $linkProduct = $this->productRepository->getById($linkData['id']);
+                $link = $this->productLinkFactory->create();
+                $link->setSku($product->getSku())
+                ->setLinkedProductSku($linkProduct->getSku())
+                ->setLinkType($linkType)
+                ->setPosition(isset($linkData['position']) ? (int)$linkData['position'] : 0);
+                $productLinks[] = $link;
+            }
+        }
+        return $productLinks;
     }
 }
