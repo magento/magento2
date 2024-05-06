@@ -1162,7 +1162,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function canConfigure($product)
     {
-        return $product instanceof \Magento\Catalog\Model\Product && $product->isAvailable() && parent::canConfigure(
+        return $product instanceof \Magento\Catalog\Model\Product && $product->isAvailable() &&
+            parent::canConfigure(
                 $product
             );
     }

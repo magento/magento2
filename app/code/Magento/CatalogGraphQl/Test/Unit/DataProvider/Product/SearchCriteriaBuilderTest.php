@@ -26,6 +26,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Build search criteria
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SearchCriteriaBuilderTest extends TestCase
 {
