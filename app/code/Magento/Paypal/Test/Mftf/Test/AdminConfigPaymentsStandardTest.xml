@@ -16,6 +16,8 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5639"/>
             <group value="paypalStandard"/>
+            <group value="3rd_party_integration" />
+            <group value="pr_exclude" />
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
@@ -31,7 +33,7 @@
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="EnablePaypalPaylaterConfigurationActionGroup" stepKey="enablePaylaterCategoryPage">
+        <actionGroup ref="EnablePaylaterPaypalStandardActionGroup" stepKey="enablePaypalStandard">
         </actionGroup>
         <!-- Reindex and cache flush -->
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPage">
