@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigPaymentsStandardTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="configuration for paypal pay later on Category page"/>
+            <description value="Paypal Pay Later Message should display on Admin Category  Page configuration"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5639"/>
+            <group value="paypalStandard"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="simpleCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminPayPalStandardEnableActionGroup" stepKey="ConfigPaymentsStandard">
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="EnablePaypalPaylaterConfigurationActionGroup" stepKey="enablePaylaterCategoryPage">
+        </actionGroup>
+        <!-- Reindex and cache flush -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPage">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCachePage">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!--Navigate to Storefront-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <waitForElementClickable selector="{{PayPalStandardConfigSection.categoryClick}}" stepKey="waitForCategryToClickable"/>
+        <click selector ="{{PayPalStandardConfigSection.categoryClick}}" stepKey="clickCatagoryeButton"/>
+        <waitForPageLoad stepKey="waitForCategrypageTobeLoaded"/>
+        <waitForElementVisible selector="{{PayPalStandardConfigSection.payPaliFrame}}" stepKey="waitForElement"/>
+        <switchToIFrame selector="{{PayPalStandardConfigSection.payPaliFrame}}" stepKey="switchToBuyNowPaylaterIFrame"/>
+        <seeElement selector="{{PayPalStandardConfigSection.PaypallaterMessage}}"  stepKey="verifyBuyNowPaylaterMessage"/>
+        <switchToIFrame stepKey="switchBackToMainPaypalFrame"/>
+        <!--Disable Paypal Standard-->
+        <actionGroup ref="AdminPayPalStandardDisableActionGroup" stepKey="disablePaypalStandard">
+        </actionGroup>
+        <!-- Reindex and cache flush -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAdminPage">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAdminPage">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!--Validate Paylater Message On Storefront Category Page-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFrontPage"/>
+        <waitForPageLoad stepKey="waitForItemPage"/>
+        <waitForElementClickable selector="{{PayPalStandardConfigSection.categoryClick}}" stepKey="waitForCategryToBeClickable"/>
+        <click selector ="{{PayPalStandardConfigSection.categoryClick}}" stepKey="clickCatagoryeTab"/>
+        <waitForPageLoad stepKey="waitForCategoryPageTobeLoaded"/>
+        <dontSeeElement selector="{{PayPalStandardConfigSection.PaypallaterMessage}}"  stepKey="verifyPaylaterMessageToBeDisappeared"/>
+    </test>
+</tests>
+
+
+

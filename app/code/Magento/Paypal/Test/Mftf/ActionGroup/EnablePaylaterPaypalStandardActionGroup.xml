@@ -1,0 +1,28 @@
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="EnablePaypalPaylaterConfigurationActionGroup" >
+        <annotations>
+            <description>Enable Paypal Paylater Solution For Paypal Express Checkout</description>
+        </annotations>
+        <click selector="{{PayPalStandardConfigSection.configureBtn('us')}}" stepKey="clickPayPalConfigureBtn"/>
+        <selectOption selector="{{PayPalStandardConfigSection.enablePaylaterExperience('us')}}" userInput="Yes" stepKey="EnablePaylaterExperience"/>
+        <waitForPageLoad stepKey="waitForadvisepaylaterdropdown"/>
+        <waitForElementClickable selector="{{PayPalStandardConfigSection.advisepaylater('us')}}" stepKey="waitForAdvisepaylaterClickable"/>
+        <click selector="{{PayPalStandardConfigSection.advisepaylater('us')}}" stepKey="clickAdvisePaylater"/>
+        <selectOption selector="{{PayPalStandardConfigSection.enablePaypalPaylater('us')}}" userInput="Yes" stepKey="EnablePaypallater"/>
+        <waitForElementClickable selector="{{PayPalStandardConfigSection.expandcategorypage('us')}}" stepKey="waitForcategorypageClickable"/>
+        <click selector="{{PayPalStandardConfigSection.expandcategorypage('us')}}" stepKey="clickCategoryPage"/>
+        <selectOption selector ="{{PayPalStandardConfigSection.display('us')}}" userInput="Yes" stepKey="enableDisplayforPaylaterCategory"/>
+        <seeOptionIsSelected selector="{{PayPalStandardConfigSection.position('us')}}" userInput="Header (center)" stepKey="seeSelectedPosition"/>
+        <seeOptionIsSelected selector="{{PayPalStandardConfigSection.stylelayout('us')}}" userInput="Flex" stepKey="seeSelectedStylelayout"/>
+        <seeOptionIsSelected selector="{{PayPalStandardConfigSection.Ratio('us')}}" userInput="20x1" stepKey="seeSelectedRatio"/>
+        <seeOptionIsSelected selector="{{PayPalStandardConfigSection.color('us')}}" userInput="Blue" stepKey="seeSelectedColor"/>
+    </actionGroup>
+</actionGroups>
