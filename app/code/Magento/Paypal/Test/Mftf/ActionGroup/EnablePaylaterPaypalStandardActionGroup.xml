@@ -7,9 +7,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="EnablePaypalPaylaterConfigurationActionGroup" >
+    <actionGroup name="EnablePaylaterPaypalStandardActionGroup" >
         <annotations>
-            <description>Enable Paypal Paylater Solution For Paypal Express Checkout</description>
+            <description>Enable Paypal Paylater Solution For Paypal Standard</description>
         </annotations>
         <click selector="{{PayPalStandardConfigSection.configureBtn('us')}}" stepKey="clickPayPalConfigureBtn"/>
         <selectOption selector="{{PayPalStandardConfigSection.enablePaylaterExperience('us')}}" userInput="Yes" stepKey="EnablePaylaterExperience"/>
