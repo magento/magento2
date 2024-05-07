@@ -80,6 +80,15 @@
         <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
             <argument name="status" value="Processing"/>
         </actionGroup>
+        <!--Assert the total-->
+        <waitForText selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$123.00" stepKey="checkGrandTotal"/>
+        <!--Grab the transaction id-->
+        <waitForElementVisible selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForTransactionIDFieldToBeAppeared"/>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabTransactionID"/>
+        <!--Open comment history tab and assert the comment-->
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Ordered amount')}}" userInput="Ordered amount of $123.00 Transaction ID: &quot;{$grabTransactionID}&quot;" stepKey="seeOrderHistoryNotes"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderStatus}}" userInput="Processing" stepKey="assertOrderStatusInCommentsHistorySection"/>
         <!--Assert Authorize button is present and Invoice button is absent-->
         <actionGroup ref="AdminAssertAuthorizeButtonOnOrderPageActionGroup" stepKey="assertAuthorizeButtonIsPresent"/>
         <dontSee selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="dontSeeInvoiceButton"/>
