@@ -30,7 +30,7 @@ class State
             $currentState = Order::STATE_PROCESSING;
         }
 
-        if (!$order->isCanceled() && !$order->canUnhold() && !$order->canInvoice()) {
+        if (!$order->isCanceled() && !$order->canUnhold() && !$order->canInvoice() && $order->getTotalDue() == 0) {
             if (in_array($currentState, [Order::STATE_PROCESSING, Order::STATE_COMPLETE])
                 && !$order->canCreditmemo()
                 && !$order->canShip()
