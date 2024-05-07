@@ -14,11 +14,11 @@
             <argument name="recipient" type="entity" defaultValue="John_Smith_Customer"/>
             <argument name="message" type="string" defaultValue=""/>
         </arguments>
-        <waitForElementClickable selector="{{StorefrontProductInfoMainSection.giftCardSenderName}}" stepKey="waitForSenderNameField"/>
-        <fillField selector="{{StorefrontProductInfoMainSection.giftCardSenderName}}" userInput="{{sender.fullname}}" stepKey="fillSenderNameField"/>
-        <waitForElementClickable selector="{{StorefrontProductInfoMainSection.giftCardRecipientName}}" stepKey="waitForRecipientNameField"/>
-        <fillField selector="{{StorefrontProductInfoMainSection.giftCardRecipientName}}" userInput="{{recipient.fullname}}" stepKey="fillRecipientNameField"/>
-        <waitForElementClickable selector="{{StorefrontProductInfoMainSection.giftCardMessage}}" stepKey="waitForMessageField"/>
-        <fillField selector="{{StorefrontProductInfoMainSection.giftCardMessage}}" userInput="{{message}}" stepKey="fillMessageField"/>
+        <waitForElementClickable selector="{{StorefrontCategoryProductSection.productSenderName}}" stepKey="waitForSenderNameField"/>
+        <fillField selector="{{StorefrontCategoryProductSection.productSenderName}}" userInput="{{sender.fullname}}" stepKey="fillSenderNameField"/>
+        <waitForElementClickable selector="{{StorefrontCategoryProductSection.productRecipientName}}" stepKey="waitForRecipientNameField"/>
+        <fillField selector="{{StorefrontCategoryProductSection.productRecipientName}}" userInput="{{recipient.fullname}}" stepKey="fillRecipientNameField"/>
+        <waitForElementClickable selector="{{StorefrontCategoryProductSection.productMessage}}" stepKey="waitForMessageField"/>
+        <fillField selector="{{StorefrontCategoryProductSection.productMessage}}" userInput="{{message}}" stepKey="fillMessageField"/>
     </actionGroup>
 </actionGroups>
