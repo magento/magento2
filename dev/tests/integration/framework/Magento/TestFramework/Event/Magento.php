@@ -31,6 +31,27 @@ class Magento implements ObserverInterface
     protected static $_eventObject;
 
     /**
+     * @var $testPrepared
+     */
+    protected static $testPrepared = false;
+
+    /**
+     * set TestPrepared value
+     */
+    public static function setTestPrepared($value)
+    {
+        self::$testPrepared = $value;
+    }
+
+    /**
+     * get TestPrepared value
+     */
+    public static function getTestPrepared()
+    {
+        return  self::$testPrepared;
+    }
+
+    /**
      * Assign current Event Object
      *
      * @param $eventObject

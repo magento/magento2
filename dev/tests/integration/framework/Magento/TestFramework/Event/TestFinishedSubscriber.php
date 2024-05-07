@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 
 /**
- * Listener of PHPUnit built-in events
+ * Test Finished Subscriber
  */
 namespace Magento\TestFramework\Event;
 
@@ -13,9 +13,13 @@ use PHPUnit\Event\Test\FinishedSubscriber;
 use PHPUnit\Event\Test\Finished;
 use Magento\TestFramework\Helper\Bootstrap;
 
-
-final class PhpUnitExtensionSubscriberFinished implements FinishedSubscriber
+class TestFinishedSubscriber implements FinishedSubscriber
 {
+    /**
+     * Test finished Subscriber
+     *
+     * @param Finished $event
+     */
     public function notify(Finished $event): void
     {
         $className = $event->test()->className();
@@ -27,5 +31,6 @@ final class PhpUnitExtensionSubscriberFinished implements FinishedSubscriber
         $mageEvent = Magento::getDefaultEventManager();
         $mageEvent->fireEvent('endTest', [$assetRepo], true);
         Magento::setCurrentEventObject(null);
+        Magento::setTestPrepared(false);
     }
 }

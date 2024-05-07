@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 
 /**
- * Listener of PHPUnit built-in events
+ * Test Skipped Subscriber
  */
 namespace Magento\TestFramework\Event;
 
@@ -13,26 +13,26 @@ use PHPUnit\Event\Test\SkippedSubscriber;
 use PHPUnit\Event\Test\Skipped;
 use Magento\TestFramework\Helper\Bootstrap;
 
-
-final class TestSkippedSubscriber implements SkippedSubscriber
+class TestSkippedSubscriber implements SkippedSubscriber
 {
+    /**
+     * Skipped Subscriber
+     *
+     * @param Skipped $event
+     */
     public function notify(Skipped $event): void
     {
         $className = $event->test()->className();
         $methodName = $event->test()->methodName();
 
-        $skipMethods = [
-            'testAclHasAccess', 'testAclNoAccess', 'testCreateInvalidPriceFormat', 'testGetListWithAdditionalParams',
-            'testImageRolesWithMultipleStores', 'testResetSpecialPrice'
-        ];
-
-        if(!in_array($methodName, $skipMethods)) {
+        if (!Magento::getTestPrepared()) {
             $objectManager = Bootstrap::getObjectManager();
             $assetRepo = $objectManager->create($className, ['name' => $methodName]);
 
             $mageEvent = Magento::getDefaultEventManager();
             $mageEvent->fireEvent('endTest', [$assetRepo], true);
             Magento::setCurrentEventObject(null);
+            Magento::setTestPrepared(false);
         }
     }
 }

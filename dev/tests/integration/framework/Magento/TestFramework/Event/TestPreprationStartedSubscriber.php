@@ -1,18 +1,27 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 
+/**
+ * TestPreparation Started Subscriber
+ */
 namespace Magento\TestFramework\Event;
 
 use PHPUnit\Event\Test\PreparationStarted;
 use PHPUnit\Event\Test\PreparationStartedSubscriber;
 use Magento\TestFramework\Helper\Bootstrap;
 
-final class TestPreprationStartedSubscriber implements PreparationStartedSubscriber
+class TestPreprationStartedSubscriber implements PreparationStartedSubscriber
 {
-    public function notify(PreparationStarted $event): void{
+    /**
+     * Test Preparation Started Subscriber
+     *
+     * @param PreparationStarted $event
+     */
+    public function notify(PreparationStarted $event): void
+    {
         $className = $event->test()->className();
         $methodName = $event->test()->methodName();
 
