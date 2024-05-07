@@ -302,11 +302,9 @@ class Helper
             unset($linkTypes[$productLink->getLinkType()]);
         }
 
-        $isReadOnlyUpSellItems = false;
         foreach ($linkTypes as $linkType => $readonly) {
-            $isReadOnlyRelatedItems = $readonly && $linkType === 'related' ||
-                ($isReadOnlyUpSellItems = $readonly && $linkType === 'upsell');
-            if ($isReadOnlyRelatedItems && $isReadOnlyUpSellItems) {
+            $isReadOnlyLinks = $readonly && in_array($linkType, ['upsell', 'related']);
+            if ($isReadOnlyLinks) {
                 $productLinks = null;
                 break;
             } else {
