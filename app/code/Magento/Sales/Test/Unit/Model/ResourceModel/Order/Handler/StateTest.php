@@ -45,7 +45,8 @@ class StateTest extends TestCase
                     'getIsVirtual',
                     'getIsNotVirtual',
                     'getStatus',
-                    'getAllItems'
+                    'getAllItems',
+                    'getTotalDue'
                 ]
             )
             ->disableOriginalConstructor()
@@ -107,6 +108,8 @@ class StateTest extends TestCase
             ->willReturn($isNotVirtual);
         $this->orderMock->method('getAllItems')
             ->willReturn([]);
+        $this->orderMock->method('getTotalDue')
+            ->willReturn(0);
         if (!$isNotVirtual) {
             $this->orderMock->method('getIsVirtual')
                 ->willReturn(!$isNotVirtual);
