@@ -229,4 +229,11 @@
         <data key="paypal_paymentspro_vendor">MksGLTest</data>
         <data key="paypal_paymentspro_password">Abcd@123</data>
     </entity>
+    <entity name="SamplePaypalPaymentsFlowLinkConfig" type="paypal_payment_flow_Link_config">
+        <data key="paypal_paymentsflowlink_businessacct">us_m2_biz@ebay.com</data>
+        <data key="paypal_paymentsflowlink_partner">PayPal</data>
+        <data key="paypal_paymentsflowlink_user">mpilink</data>
+        <data key="paypal_paymentsflowlink_vendor">mpilink</data>
+        <data key="paypal_paymentsflowlink_password">1234_1234L!</data>
+    </entity>
 </entities>

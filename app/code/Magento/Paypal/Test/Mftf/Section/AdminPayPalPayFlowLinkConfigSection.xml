@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminPayPalPayFlowLinkConfigSection">
+        <element name="configureBtn" type="button" selector="//button[@id='payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us-head']" parameterized="true"/>
+        <element name="partner" type="text" selector="#payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_payflow_link_payflow_link_partner" parameterized="true"/>
+        <element name="user" type="text" selector="#payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_payflow_link_payflow_link_user" parameterized="true"/>
+        <element name="vendor" type="text" selector="#payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_payflow_link_payflow_link_vendor" parameterized="true"/>
+        <element name="password" type="text" selector="#payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_payflow_link_payflow_link_pwd" parameterized="true"/>
+        <element name="testMode" type="button" selector="#payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_payflow_link_payflow_link_sandbox_flag" parameterized="true"/>
+        <element name="enableSolution" type="button" selector="#payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_enable_payflow_link" parameterized="true"/>
+        <element name="paymentGateway" type="button" selector="//a[@id='payment_{{countryCode}}_paypal_payment_gateways-head']   " parameterized="true"/>
+    </section>
+</sections>
