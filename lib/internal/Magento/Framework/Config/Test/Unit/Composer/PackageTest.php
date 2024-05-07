@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class PackageTest extends TestCase
 {
-    const SAMPLE_DATA =
+    private const SAMPLE_DATA =
         '{"foo":"1","bar":"2","baz":["3","4"],"nested":{"one":"5","two":"6",
         "magento/theme-adminhtml-backend":7, "magento/theme-frontend-luma":8}}';
 
