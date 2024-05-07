@@ -17,6 +17,7 @@
             <testCaseId value="AC-4808"/>
             <group value="paypalStandard"/>
             <group value="3rd_party_integration" />
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Login to admin-->
