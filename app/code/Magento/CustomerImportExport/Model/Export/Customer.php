@@ -21,18 +21,18 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Names that begins with underscore is not an attribute. This name convention is for
      * to avoid interference with same attribute name.
      */
-    private const COLUMN_EMAIL = 'email';
+    public const COLUMN_EMAIL = 'email';
 
-    private const COLUMN_WEBSITE = '_website';
+    public const COLUMN_WEBSITE = '_website';
 
-    private const COLUMN_STORE = '_store';
+    public const COLUMN_STORE = '_store';
 
-    private const COLUMN_CREATED_AT = 'created_at';
+    public const COLUMN_CREATED_AT = 'created_at';
 
     /**
      * A constant declaration for attribute collection name
      */
-    private const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Attribute\Collection::class;
+    public const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Attribute\Collection::class;
 
     /**
      * XML path to page size parameter
