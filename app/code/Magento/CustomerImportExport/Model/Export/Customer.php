@@ -21,23 +21,23 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Names that begins with underscore is not an attribute. This name convention is for
      * to avoid interference with same attribute name.
      */
-    const COLUMN_EMAIL = 'email';
+    private const COLUMN_EMAIL = 'email';
 
-    const COLUMN_WEBSITE = '_website';
+    private const COLUMN_WEBSITE = '_website';
 
-    const COLUMN_STORE = '_store';
+    private const COLUMN_STORE = '_store';
 
     private const COLUMN_CREATED_AT = 'created_at';
 
     /**
-     * Attribute collection name
+     * A constant declaration for attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Attribute\Collection::class;
+    private const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Attribute\Collection::class;
 
     /**
      * XML path to page size parameter
      */
-    const XML_PATH_PAGE_SIZE = 'export/customer_page_size/customer';
+    private const XML_PATH_PAGE_SIZE = 'export/customer_page_size/customer';
 
     /**
      * @var array
@@ -141,7 +141,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _getHeaderColumns()
     {
@@ -161,7 +161,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
         $row[self::COLUMN_WEBSITE] = $this->_websiteIdToCode[$item->getWebsiteId()];
         $row[self::COLUMN_STORE] = $this->_storeIdToCode[$item->getStoreId()];
         $row[self::COLUMN_CREATED_AT] = $this->_localeDate->formatDate(
-            $row[self::COLUMN_CREATED_AT],
+            $item->getCreatedAt(),
             \IntlDateFormatter::MEDIUM,
             true
         );
