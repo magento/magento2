@@ -75,27 +75,14 @@ class PhpUnitTest extends \PHPUnit\Framework\TestCase
 
     public function testStartTestSuiteFireEvent()
     {
-        $this->_eventManager->expects($this->once())->method('fireEvent')->with('testSuiteStarted');
+        $this->_eventManager->expects($this->once())->method('fireEvent')->with('startTestSuite');
         $this->_object->startTestSuite(TestSuite::empty('TestSuite'));
     }
-
-//    public function testStartTestSuiteDoNotFireEvent()
-//    {
-//        $this->_eventManager->expects($this->never())->method('fireEvent');
-//        $this->_object->startTestSuite(new \PHPUnit\Framework\DataProviderTestSuite());
-//    }
-//
-//    public function testEndTestSuiteFireEvent()
-//    {
-//        $this->_eventManager->expects($this->once())->method('fireEvent')->with('endTestSuite');
-//        $this->_object->endTestSuite(new \PHPUnit\Framework\TestSuite());
-//    }
-//
-//    public function testEndTestSuiteDoNotFireEvent()
-//    {
-//        $this->_eventManager->expects($this->never())->method('fireEvent');
-//        $this->_object->endTestSuite(new \PHPUnit\Framework\DataProviderTestSuite());
-//    }
+    public function testEndTestSuiteFireEvent()
+    {
+        $this->_eventManager->expects($this->once())->method('fireEvent')->with('endTestSuite');
+        $this->_object->endTestSuite(TestSuite::empty('TestSuite'));
+    }
 
     public function testStartTestFireEvent()
     {
@@ -106,7 +93,6 @@ class PhpUnitTest extends \PHPUnit\Framework\TestCase
     public function testStartTestDoNotFireEvent()
     {
         $this->_eventManager->expects($this->never())->method('fireEvent');
-     //   $this->_object->startTest(new \PHPUnit\Framework\Warning());
         $this->_object->startTest($this->createMock(\PHPUnit\Framework\Test::class));
     }
 
@@ -119,7 +105,6 @@ class PhpUnitTest extends \PHPUnit\Framework\TestCase
     public function testEndTestDoNotFireEvent()
     {
         $this->_eventManager->expects($this->never())->method('fireEvent');
-   //     $this->_object->endTest(new \PHPUnit\Framework\Warning(), 0);
         $this->_object->endTest($this->createMock(\PHPUnit\Framework\Test::class), 0);
     }
 }
