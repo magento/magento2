@@ -49,10 +49,10 @@ class PackageTest extends TestCase
         $this->assertSame(['3', '4'], $this->object->get('baz'));
         $nested = $this->object->get('nested');
         $this->assertInstanceOf('\StdClass', $nested);
-        $this->assertObjectHasAttribute('one', $nested);
+        $this->assertObjectHasProperty('one', $nested);
         $this->assertEquals('5', $nested->one);
         $this->assertEquals('5', $this->object->get('nested->one'));
-        $this->assertObjectHasAttribute('two', $nested);
+        $this->assertObjectHasProperty('two', $nested);
         $this->assertEquals('6', $nested->two);
         $this->assertEquals('6', $this->object->get('nested->two'));
         $this->assertEquals(

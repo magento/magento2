@@ -24,10 +24,9 @@ class Js extends AbstractAdapter
      *
      * @param \Magento\Framework\Filesystem\Driver\File $fileSystem
      */
-    public function __construct(
-        File $fileSystem
-    ) {
-        $this->_filesystem = $fileSystem;
+    public function __construct()
+    {
+        $this->_filesystem = new \Magento\Framework\Filesystem\Driver\File();
     }
     /**
      * Covers
@@ -51,7 +50,6 @@ class Js extends AbstractAdapter
      */
     protected function _parse()
     {
-        
         $fileHandle = $this->_filesystem->fileOpen($this->_file, 'r');
         $lineNumber = 0;
         try {
