@@ -21,7 +21,7 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!-- Enable Flat rate -->
-            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+<!--            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>-->
             <!-- Create Category -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct2" stepKey="createProduct">
@@ -58,9 +58,13 @@
             <argument name="indices" value=""/>
         </actionGroup>
         <!-- Add simple product to cart -->
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProductToCart">
-            <argument name="productName" value="$$createProduct.name$$"/>
+        <!-- Open product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontSimpleProductPage">
+            <argument name="productUrl" value="$$createProduct.sku$$"/>
         </actionGroup>
+        <!-- Add product to cart-->
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontSimpleProductPage"/>
+
         <!-- Open mini cart-->
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickMiniCart"/>
         <!--proceed to checkout -->
