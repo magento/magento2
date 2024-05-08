@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertProductsInCategoryPageAsPerSetPositionInBackendActionGroup">
+        <annotations>
+            <description>Asserts the position of the Product in the Storefront Category page as per the set position in the backend.</description>
+        </annotations>
+        <arguments>
+            <argument name="product" type="string"/>
+            <argument name="position" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productListInCategoryStorefront(position,'product')}}" stepKey="guestAssertsProduct1PositionOnCategoryPage"/>
+    </actionGroup>
+</actionGroups>
