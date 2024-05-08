@@ -528,4 +528,17 @@
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionCA</requiredEntity>
     </entity>
+    <entity name="DE_Berlin_State" type="address" extends="DE_Address_Berlin_Not_Default_Address">
+        <requiredEntity type="region">RegionBER</requiredEntity>
+    </entity>
+    <entity name="UK_State_Address" type="address" extends="UK_Not_Default_Address">
+        <array key="street">
+            <item>172, Westminster</item>
+        </array>
+        <data key="state">California</data>
+        <requiredEntity type="region">RegionUKGL</requiredEntity>
+    </entity>
+    <entity name="US_California_State" type="address" extends="US_Address_California">
+        <requiredEntity type="region">RegionCA</requiredEntity>
+    </entity>
 </entities>

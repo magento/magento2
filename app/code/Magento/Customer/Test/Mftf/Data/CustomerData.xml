@@ -514,9 +514,9 @@
         <data key="password">pwdTest123!</data>
         <data key="store_id">0</data>
         <data key="website_id">0</data>
-        <requiredEntity type="address">DE_Address_Berlin_Not_Default_Address</requiredEntity>
-        <requiredEntity type="address">UK_Simple_Address</requiredEntity>
+        <requiredEntity type="address">DE_Berlin_State</requiredEntity>
+        <requiredEntity type="address">UK_State_Address</requiredEntity>
         <requiredEntity type="address">US_Address_NY_Not_Default_Address</requiredEntity>
-        <requiredEntity type="address">US_Address_California</requiredEntity>
+        <requiredEntity type="address">US_California_State</requiredEntity>
     </entity>
 </entities>
