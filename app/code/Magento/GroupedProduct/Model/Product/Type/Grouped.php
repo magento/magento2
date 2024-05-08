@@ -1,13 +1,13 @@
 <?php
 /**
- * Grouped product type implementation
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\DataObject;
 use Magento\Framework\File\UploaderFactory;
 
 /**
@@ -19,7 +19,7 @@ use Magento\Framework\File\UploaderFactory;
  */
 class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
-    const TYPE_CODE = 'grouped';
+    public const TYPE_CODE = 'grouped';
 
     /**
      * Cache key for Associated Products
@@ -57,15 +57,11 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_canConfigure = true;
 
     /**
-     * Catalog product status
-     *
      * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
      */
     protected $_catalogProductStatus;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -201,7 +197,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Retrieve array of associated products
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return array
      */
     public function getAssociatedProducts($product)
@@ -214,7 +210,16 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             $collection = $this->getAssociatedProductCollection(
                 $product
             )->addAttributeToSelect(
-                ['name', 'price', 'special_price', 'special_from_date', 'special_to_date', 'tax_class_id', 'image']
+                [
+                    'name',
+                    'price',
+                    'special_price',
+                    'special_from_date',
+                    'special_to_date',
+                    'tax_class_id',
+                    'image',
+                    'thumbnail'
+                ]
             )->addFilterByRequiredOptions()->setPositionOrder()->addStoreFilter(
                 $this->getStoreFilter($product)
             )->addAttributeToFilter(
@@ -347,20 +352,32 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             return __('Please specify the quantity of product(s).')->render();
         }
         foreach ($associatedProducts as $subProduct) {
-            if (!isset($productsInfo[$subProduct->getId()])) {
-                if ($isStrictProcessMode && !$subProduct->getQty() && $subProduct->isSalable()) {
-                    return __('Please specify the quantity of product(s).')->render();
-                }
-                if (isset($buyRequest['qty']) && !isset($buyRequest['super_group'])) {
-                    $subProductQty = (float)$subProduct->getQty() * (float)$buyRequest['qty'];
-                    $productsInfo[$subProduct->getId()] = $subProduct->isSalable() ? $subProductQty : 0;
-                } else {
-                    $productsInfo[$subProduct->getId()] = $subProduct->isSalable() ? (float)$subProduct->getQty() : 0;
-                }
+            if (isset($productsInfo[$subProduct->getId()])) {
+                continue;
             }
+            if ($isStrictProcessMode && !$subProduct->getQty() && $subProduct->isSalable()) {
+                return __('Please specify the quantity of product(s).')->render();
+            }
+            $productsInfo[$subProduct->getId()] = $this->getSubProductQtyInfo($buyRequest, $subProduct);
         }
-
         return $productsInfo;
+    }
+
+    /**
+     * Gets qty info for sub product in group
+     *
+     * @param DataObject $buyRequest
+     * @param Product $subProduct
+     * @return float
+     */
+    private function getSubProductQtyInfo(
+        DataObject $buyRequest,
+        Product $subProduct,
+    ): float {
+        if (isset($buyRequest['qty']) && !isset($buyRequest['super_group'])) {
+            return $subProduct->isSalable() ? $subProduct->getQty() * (float)$buyRequest['qty'] : 0.0;
+        }
+        return $subProduct->isSalable() ? $subProduct->getQty() : 0.0;
     }
 
     /**
