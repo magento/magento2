@@ -48,10 +48,16 @@
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
+        <!-- Login to Storefront -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUpNewUser">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
+        <!-- Go to category page-->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <!-- Add simple product to cart -->
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
@@ -59,12 +65,10 @@
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickMiniCart"/>
         <!--proceed to checkout -->
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
-
-
         <!-- Verify Shipping address-->
         <grabTextFrom selector="{{CheckoutShippingSection.savedAddress}}"  stepKey="grabAddress"/>
         <!-- Assert the value of created customer attribute in shipping address block of checkout page-->
-        <assertStringContainsString stepKey="assertCustomerAddresAttribute">
+        <assertStringContainsString stepKey="assertCustomerAddressAttribute">
             <actualResult type="variable">$grabAddress</actualResult>
             <expectedResult type="string">{{US_Address_TX.street[0]}}</expectedResult>
         </assertStringContainsString>
