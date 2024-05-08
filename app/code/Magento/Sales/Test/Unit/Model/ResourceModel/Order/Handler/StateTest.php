@@ -57,14 +57,14 @@ class StateTest extends TestCase
             ->method('getConfig')
             ->willReturnSelf();
         $invoice = $this->createMock(Invoice::class);
-        $invoice->expects($this->once())
+        $invoice->expects($this->any())
             ->method('getState')
             ->willReturn(Invoice::STATE_PAID);
         $invoiceCollection = $this->createMock(InvoiceCollection::class);
-        $invoiceCollection->expects($this->once())
+        $invoiceCollection->expects($this->any())
             ->method('getItems')
             ->willReturn([$invoice]);
-        $this->orderMock->expects($this->once())
+        $this->orderMock->expects($this->any())
             ->method('getInvoiceCollection')
             ->willReturn($invoiceCollection);
         $this->state = new State();

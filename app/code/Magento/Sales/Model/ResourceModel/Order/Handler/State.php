@@ -34,7 +34,7 @@ class State
         if (!$order->isCanceled()
             && !$order->canUnhold()
             && !$order->canInvoice()
-            && !$this->orderHasOpenInvoices($order)
+            && (!$this->orderHasOpenInvoices($order) || (int) $order->getTotalDue() == 0)
         ) {
             if (in_array($currentState, [Order::STATE_PROCESSING, Order::STATE_COMPLETE])
                 && !$order->canCreditmemo()
