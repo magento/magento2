@@ -15,7 +15,7 @@
             <description value="Create partial Capture for a Paypal Payflow Pro Order and and verify the transaction status after submit the Invoice."/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4795"/>
-            <group value="paypalPaymentsPro"/>
+            <group value="paypalPayflowProWithOutVault"/>
             <group value="3rd_party_integration"/>
             <!--            <group value="pr_exclude" />-->
         </annotations>
@@ -29,7 +29,8 @@
             <!--Create Simple product-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
-                <field key="price">10.00</field>
+<!--                <field key="price">10.00</field>-->
+                <field key="quantity">5</field>
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexConfig">
@@ -43,7 +44,7 @@
         </before>
         <after>
             <!-- Delete product and customer-->
-            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Logout-->
@@ -55,13 +56,18 @@
         </actionGroup>
 <!--        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="goToStorefront"/>-->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
-        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
-            <argument name="product" value="$$createSimpleProduct$$"/>
-            <argument name="productCount" value="1"/>
-        </actionGroup>
+<!--        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">-->
+<!--            <argument name="product" value="$$createSimpleProduct$$"/>-->
+<!--            <argument name="productCount" value="1"/>-->
+<!--        </actionGroup>-->
         <!-- Add product 1 to cart -->
-        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
-            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+<!--        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">-->
+<!--            <argument name="productName" value="$$createSimpleProduct.name$$"/>-->
+<!--        </actionGroup>-->
+
+        <actionGroup ref="StorefrontAddCategoryProductToCartWithQuantityNewActionGroup" stepKey="addToCartFromStorefrontProductPage1">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="quantity" value="5"/>
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
         <!-- Select shipping -->
@@ -95,6 +101,8 @@
         <!-- Go to invoice tab and fill data -->
         <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceAction"/>
         <fillField selector="{{AdminOrderInvoiceViewSection.invoiceQty}}" userInput="2" stepKey="fillInvoiceQuantity"/>
+        <waitForPageLoad stepKey="wait"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction1"/>
         <click selector="{{AdminOrderInvoiceViewSection.updateInvoiceBtn}}" stepKey="clickUpdateQtyInvoiceBtn"/>
         <!--        <fillField selector="{{AdminInvoiceTotalSection.invoiceComment}}" userInput="comment" stepKey="writeComment"/>-->
         <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
@@ -107,7 +115,7 @@
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabLastTransactionIDForCaptured"/>
         <!--Open the comment history tab and assert the comment-->
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryAfterSubmittingInvoice"/>
-        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Captured amount')}}" userInput="Captured amount of $128.00 online. Transaction ID: &quot;{$grabLastTransactionIDForCaptured}&quot;" stepKey="seeOrderHistoryNotesAfterSubmittingInvoice"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Captured amount')}}" userInput="Captured amount of $20.00 online. Transaction ID: &quot;{$grabLastTransactionIDForCaptured}&quot;" stepKey="seeOrderHistoryNotesAfterSubmittingInvoice"/>
 
         <!--Go to invoice page into the order-->
         <actionGroup ref="GoToInvoiceIntoOrderActionGroup" stepKey="goToInvoiceIntoOrderPage"/>
