@@ -117,22 +117,22 @@ class MoveTest extends TestCase
         $storeId = 0;
 
         $this->storeManagerMock->expects($this->once())->method('hasSingleStore')->willReturn(false);
-        $this->categoryMock->expects($this->any())->method('getStoreId')
+        $this->categoryMock->expects($this->exactly(3))->method('getStoreId')
             ->willReturn($storeId);
-        $this->categoryMock->expects($this->any())->method('setStoreId')
+        $this->categoryMock->expects($this->exactly(2))->method('setStoreId')
             ->willReturnOnConsecutiveCalls($storeId);
 
         $this->categoryMock->expects($this->once())->method('getData')
             ->willReturnOnConsecutiveCalls('1/3/5', '1/3/5');
         $this->categoryMock->expects($this->once())->method('getOrigData')
             ->willReturnOnConsecutiveCalls('1/2/5', '1/2/5');
-        $this->categoryMock->expects($this->any())->method('unsUrlPath')->willReturnSelf();
-        $this->childrenCategoriesProviderMock->expects($this->any())->method('getChildren')
+        $this->categoryMock->expects($this->exactly(4))->method('unsUrlPath')->willReturnSelf();
+        $this->childrenCategoriesProviderMock->expects($this->exactly(2))->method('getChildren')
             ->with($this->categoryMock, true)
             ->willReturnOnConsecutiveCalls([$this->categoryMock], [$this->categoryMock], [], []);
 
-        $this->categoryMock->expects($this->any())->method('getResource')->willReturn($this->subjectMock);
-        $this->subjectMock->expects($this->any())->method('saveAttribute')
+        $this->categoryMock->expects($this->exactly(4))->method('getResource')->willReturn($this->subjectMock);
+        $this->subjectMock->expects($this->exactly(4))->method('saveAttribute')
             ->with($this->categoryMock, 'url_path')->willReturnSelf();
         $this->categoryMock->expects($this->once())->method('getId')->willReturnSelf();
 
@@ -145,9 +145,9 @@ class MoveTest extends TestCase
         $this->categoryMock->expects($this->once())->method('setUrlKey')->with('url-key')
             ->willReturnSelf();
 
-        $this->categoryUrlPathGeneratorMock->expects($this->any())->method('getUrlPath')
+        $this->categoryUrlPathGeneratorMock->expects($this->exactly(2))->method('getUrlPath')
             ->with($this->categoryMock)->willReturn($urlPath);
-        $this->categoryMock->expects($this->any())->method('setUrlPath')->with($urlPath);
+        $this->categoryMock->expects($this->exactly(2))->method('setUrlPath')->with($urlPath);
 
         $this->assertSame(
             $this->subjectMock,
