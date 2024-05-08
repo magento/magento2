@@ -133,7 +133,6 @@ class OrderGetTest extends TestCase
     {
         //set Gift Message for Order
         $orderId = 1;
-        $this->orderMock->expects($this->once())->method('getEntityId')->willReturn($orderId);
         $this->orderMock
             ->expects($this->once())
             ->method('getExtensionAttributes')
@@ -141,8 +140,8 @@ class OrderGetTest extends TestCase
         $this->orderExtensionMock->expects($this->once())->method('getGiftMessage')->willReturn([]);
         $this->giftMessageOrderRepositoryMock
             ->expects($this->once())
-            ->method('get')
-            ->with($orderId)
+            ->method('getByOrder')
+            ->with($this->orderMock)
             ->willReturn($this->giftMessageMock);
         $this->orderExtensionMock
             ->expects($this->once())
@@ -166,7 +165,6 @@ class OrderGetTest extends TestCase
         $orderId = 1;
         $orderItemId = 2;
         $this->orderItemMock->expects($this->once())->method('getItemId')->willReturn($orderItemId);
-        $this->orderMock->expects($this->once())->method('getEntityId')->willReturn($orderId);
         $this->orderMock
             ->expects($this->once())
             ->method('getExtensionAttributes')
@@ -182,8 +180,8 @@ class OrderGetTest extends TestCase
         $this->orderItemExtensionMock->expects($this->once())->method('getGiftMessage')->willReturn([]);
         $this->giftMessageOrderItemRepositoryMock
             ->expects($this->once())
-            ->method('get')
-            ->with($orderId, $orderItemId)
+            ->method('getByOrder')
+            ->with($this->orderMock, $orderItemId)
             ->willReturn($this->giftMessageMock);
         $this->orderItemExtensionMock
             ->expects($this->once())
@@ -203,7 +201,6 @@ class OrderGetTest extends TestCase
         $orderId = 1;
         $orderItemId = 2;
         //set Gift Message for Order
-        $this->orderMock->expects($this->exactly(2))->method('getEntityId')->willReturn($orderId);
         $this->orderItemMock->expects($this->once())->method('getItemId')->willReturn($orderItemId);
         $this->orderMock
             ->expects($this->once())
@@ -212,8 +209,8 @@ class OrderGetTest extends TestCase
         $this->orderExtensionMock->expects($this->once())->method('getGiftMessage')->willReturn([]);
         $this->giftMessageOrderRepositoryMock
             ->expects($this->once())
-            ->method('get')
-            ->with($orderId)
+            ->method('getByOrder')
+            ->with($this->orderMock)
             ->willThrowException(new NoSuchEntityException());
         $this->orderExtensionMock
             ->expects($this->never())
@@ -228,8 +225,8 @@ class OrderGetTest extends TestCase
         $this->orderItemExtensionMock->expects($this->once())->method('getGiftMessage')->willReturn([]);
         $this->giftMessageOrderItemRepositoryMock
             ->expects($this->once())
-            ->method('get')
-            ->with($orderId, $orderItemId)
+            ->method('getByOrder')
+            ->with($this->orderMock, $orderItemId)
             ->willThrowException(new NoSuchEntityException());
         $this->orderItemExtensionMock
             ->expects($this->never())
@@ -242,7 +239,6 @@ class OrderGetTest extends TestCase
     {
         //set Gift Message List for Order
         $orderId = 1;
-        $this->orderMock->expects($this->once())->method('getEntityId')->willReturn($orderId);
         $this->orderMock
             ->expects($this->once())
             ->method('getExtensionAttributes')
@@ -250,8 +246,8 @@ class OrderGetTest extends TestCase
         $this->orderExtensionMock->expects($this->once())->method('getGiftMessage')->willReturn([]);
         $this->giftMessageOrderRepositoryMock
             ->expects($this->once())
-            ->method('get')
-            ->with($orderId)
+            ->method('getByOrder')
+            ->with($this->orderMock)
             ->willReturn($this->giftMessageMock);
         $this->orderExtensionMock
             ->expects($this->once())
