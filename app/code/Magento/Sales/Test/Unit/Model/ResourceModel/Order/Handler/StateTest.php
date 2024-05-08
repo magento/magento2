@@ -9,8 +9,10 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Handler;
 
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address;
+use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Address\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Handler\State;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -46,7 +48,7 @@ class StateTest extends TestCase
                     'getIsNotVirtual',
                     'getStatus',
                     'getAllItems',
-                    'getTotalDue'
+                    'getInvoiceCollection'
                 ]
             )
             ->disableOriginalConstructor()
@@ -54,6 +56,17 @@ class StateTest extends TestCase
         $this->orderMock->expects($this->any())
             ->method('getConfig')
             ->willReturnSelf();
+        $invoice = $this->createMock(Invoice::class);
+        $invoice->expects($this->once())
+            ->method('getState')
+            ->willReturn(Invoice::STATE_PAID);
+        $invoiceCollection = $this->createMock(InvoiceCollection::class);
+        $invoiceCollection->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$invoice]);
+        $this->orderMock->expects($this->once())
+            ->method('getInvoiceCollection')
+            ->willReturn($invoiceCollection);
         $this->state = new State();
     }
 
@@ -108,8 +121,6 @@ class StateTest extends TestCase
             ->willReturn($isNotVirtual);
         $this->orderMock->method('getAllItems')
             ->willReturn([]);
-        $this->orderMock->method('getTotalDue')
-            ->willReturn(0);
         if (!$isNotVirtual) {
             $this->orderMock->method('getIsVirtual')
                 ->willReturn(!$isNotVirtual);

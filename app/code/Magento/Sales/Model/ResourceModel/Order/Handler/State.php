@@ -7,6 +7,7 @@
 namespace Magento\Sales\Model\ResourceModel\Order\Handler;
 
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice;
 
 /**
  * Checking order status and adjusting order status before saving
@@ -30,7 +31,11 @@ class State
             $currentState = Order::STATE_PROCESSING;
         }
 
-        if (!$order->isCanceled() && !$order->canUnhold() && !$order->canInvoice() && $order->getTotalDue() == 0) {
+        if (!$order->isCanceled()
+            && !$order->canUnhold()
+            && !$order->canInvoice()
+            && !$this->orderHasOpenInvoices($order)
+        ) {
             if (in_array($currentState, [Order::STATE_PROCESSING, Order::STATE_COMPLETE])
                 && !$order->canCreditmemo()
                 && !$order->canShip()
@@ -65,6 +70,24 @@ class State
         }
 
         return $isPartiallyRefundedOrderShipped;
+    }
+
+    /**
+     * Check if order has unpaid invoices
+     *
+     * @param Order $order
+     * @return bool
+     */
+    private function orderHasOpenInvoices(Order $order): bool
+    {
+        /** @var Invoice $invoice */
+        foreach ($order->getInvoiceCollection()->getItems() as $invoice) {
+            if ($invoice->getState() == Invoice::STATE_OPEN) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
