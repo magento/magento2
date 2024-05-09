@@ -1,0 +1,29 @@
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="EnablePaypalPaylaterConfigurationActionGroup" >
+        <annotations>
+            <description>Enable Paypal Paylater Solution For Paypal Express Checkout</description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <waitForPageLoad stepKey="waitForAdvisePaylaterDropdown"/>
+        <selectOption selector ="{{PayPalExpressCheckoutConfigSection.enablePayLaterIn(countryCode)}}" userInput="Yes" stepKey="enablePaypalLater"/>
+        <waitForElementClickable selector="{{PayPalProductPageConfigSection.expandCatalogProductPage(countryCode)}}" stepKey="waitForCheckoutCartPageClickable"/>
+        <click selector="{{PayPalProductPageConfigSection.expandCatalogProductPage(countryCode)}}" stepKey="clickCheckoutCart"/>
+        <selectOption selector ="{{PayPalProductPageConfigSection.display(countryCode)}}" userInput="Yes" stepKey="enableDisplayforPaylaterCartPage"/>
+        <!--Verify Default Option was Selected correctly-->
+        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.position(countryCode)}}" userInput="Header (center)" stepKey="seeSelectedPosition"/>
+        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.styleLayout(countryCode)}}" userInput="Text" stepKey="seeSelectedStyleLayout"/>
+        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.logoType(countryCode)}}" userInput="Primary" stepKey="seeSelectedLogoType"/>
+        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.logoPosition(countryCode)}}" userInput="Left" stepKey="seeSelectedLogoPosition"/>
+        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.textColor(countryCode)}}" userInput="Black" stepKey="seeSelectedTextColor"/>
+        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.textSize(countryCode)}}" userInput="12px" stepKey="seeSelectedTextSize"/>
+    </actionGroup>
+</actionGroups>
