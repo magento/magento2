@@ -31,7 +31,7 @@
         <!--Navigate to Stores > Attributes > Product.-->
         <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
         <!--Create new Product Attribute as TextField, with code and default value.-->
-        <actionGroup ref="CreateProductAttributeWithSaveAndEditActionGroup" stepKey="createAttribute">
+        <actionGroup ref="AdminCreateProductAttributeWithSaveAndEditActionGroup" stepKey="createAttribute">
             <argument name="attribute" value="VisualSwatchProductAttributeForm"/>
         </actionGroup>
         <!--Add empty swatch-->
