@@ -22,10 +22,6 @@
         <before>
             <!--Create a customer-->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-            <!-- Simple product is created -->
-<!--            <createData entity="simpleProductWithoutCategory" stepKey="createProduct">-->
-<!--                <field key="price">10.00</field>-->
-<!--            </createData>-->
             <!--Create Simple product-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
@@ -44,9 +40,10 @@
         </before>
         <after>
             <!-- Delete product and customer-->
-            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
             <!-- Logout-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -54,22 +51,12 @@
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-<!--        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="goToStorefront"/>-->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
-<!--        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">-->
-<!--            <argument name="product" value="$$createSimpleProduct$$"/>-->
-<!--            <argument name="productCount" value="1"/>-->
-<!--        </actionGroup>-->
-        <!-- Add product 1 to cart -->
-<!--        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">-->
-<!--            <argument name="productName" value="$$createSimpleProduct.name$$"/>-->
-<!--        </actionGroup>-->
-
         <actionGroup ref="StorefrontAddCategoryProductToCartWithQuantityNewActionGroup" stepKey="addToCartFromStorefrontProductPage1">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="quantity" value="5"/>
         </actionGroup>
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="StorefrontGoToCheckoutFromMinicartNewActionGroup" stepKey="goToCheckoutFromMinicart"/>
         <!-- Select shipping -->
         <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatrate">
             <argument name="shippingMethodName" value="Flat Rate"/>
@@ -102,9 +89,7 @@
         <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceAction"/>
         <fillField selector="{{AdminOrderInvoiceViewSection.invoiceQty}}" userInput="2" stepKey="fillInvoiceQuantity"/>
         <waitForPageLoad stepKey="wait"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction1"/>
         <click selector="{{AdminOrderInvoiceViewSection.updateInvoiceBtn}}" stepKey="clickUpdateQtyInvoiceBtn"/>
-        <!--        <fillField selector="{{AdminInvoiceTotalSection.invoiceComment}}" userInput="comment" stepKey="writeComment"/>-->
         <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <!-- Assert invoice with shipment success message -->
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
@@ -115,31 +100,20 @@
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabLastTransactionIDForCaptured"/>
         <!--Open the comment history tab and assert the comment-->
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryAfterSubmittingInvoice"/>
-        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Captured amount')}}" userInput="Captured amount of $20.00 online. Transaction ID: &quot;{$grabLastTransactionIDForCaptured}&quot;" stepKey="seeOrderHistoryNotesAfterSubmittingInvoice"/>
-
-        <!--Go to invoice page into the order-->
-        <actionGroup ref="GoToInvoiceIntoOrderActionGroup" stepKey="goToInvoiceIntoOrderPage"/>
-
-<!--        <click selector="{{StorefrontOrderInvoicesSection.invoiceTab}}" stepKey="clickInvoiceTabOnStorefront"/>-->
-<!--        <see selector="{{StorefrontOrderInvoicesSection.grandTotalPrice}}" userInput="128.00" stepKey="seePrice"/>-->
-
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Captured amount')}}" userInput="Captured amount of $271.00 online. Transaction ID: &quot;{$grabLastTransactionIDForCaptured}&quot;" stepKey="seeOrderHistoryNotesAfterSubmittingInvoice"/>
         <!--Go to Invoice Tab and Verify Invoice Grand Total-->
-        <actionGroup ref="GoToInvoiceIntoOrderActionGroup" stepKey="goToInvoiceIntoOrder1"/>
-        <see selector="{{AdminInvoiceTotalSection.grandTotal}}" userInput="$45" stepKey="seeInvoiceSubTotal1"/>
-
-        <!--Assert the authorization transaction is present in transaction grid-->
-<!--        <actionGroup ref="AdminAssertTransactionTypeInTransactionTabActionGroup" stepKey="assertTransactionTypeHasAuthorization">-->
-<!--            <argument name="transactionType" value="authorization"/>-->
-<!--        </actionGroup>-->
-
-        <!--Assert the authorization transaction is present in transaction grid-->
-        <actionGroup ref="AdminOpenTransactionsTabActionGroup" stepKey="assertTransactionTypeHasAuthorization">
+        <click selector="{{StorefrontOrderInvoicesSection.invoiceTab1}}" stepKey="clickInvoiceTabOnStorefront"/>
+        <click selector="{{StorefrontOrderInvoicesSection.clickView}}" stepKey="clickViewButton"/>
+        <see selector="{{AdminInvoiceTotalSection.grandTotal}}" userInput="$271.00" stepKey="seeInvoiceSubTotal1"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClickedAfterAsserting"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButtonAfterAsserting"/>
+        <actionGroup ref="AdminAssertTransitionTypeStatusNewActionGroup" stepKey="assertTransactionTypeStatusForAuthorization">
             <argument name="transactionType" value="authorization"/>
+            <argument name="transitionTypeStatus" value="No"/>
         </actionGroup>
-        <!--Assert the authorization transaction is present in transaction grid-->
-        <actionGroup ref="AdminOpenTransactionsTabActionGroup" stepKey="assertTransactionTypeHasCapture">
+        <actionGroup ref="AdminAssertTransitionTypeStatusNewActionGroup" stepKey="assertTransactionTypeStatusForCapture">
             <argument name="transactionType" value="capture"/>
+            <argument name="transitionTypeStatus" value="No"/>
         </actionGroup>
-
     </test>
 </tests>
