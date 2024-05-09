@@ -272,7 +272,9 @@ class Cart extends Extended
     {
         if (null === $this->quote) {
             $customerId = $this->getCustomerId();
-            $storeIds = $this->_storeManager->getWebsite($this->getWebsiteId())->getStoreIds();
+            $websiteId = $this->getWebsiteId() ?:
+                $this->_storeManager->getDefaultStoreView()->getWebsiteId();
+            $storeIds = $this->_storeManager->getWebsite($websiteId)->getStoreIds();
 
             try {
                 $this->quote = $this->quoteRepository->getForCustomer($customerId, $storeIds);
