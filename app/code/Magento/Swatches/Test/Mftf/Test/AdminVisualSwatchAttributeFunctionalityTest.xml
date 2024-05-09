@@ -35,7 +35,7 @@
             <argument name="attribute" value="VisualSwatchProductAttributeForm"/>
         </actionGroup>
         <!--Add empty swatch-->
-        <actionGroup ref="AdminAddEmptyVisualSwatchActionGroup" stepKey="clickSwatch">
+        <actionGroup ref="AdminAddEmptyVisualSwatchActionGroup" stepKey="addEmptySwatch">
             <argument name="swatchType" value="Empty"/>
             <argument name="adminInputByIndex" value="0"/>
         </actionGroup>
@@ -62,7 +62,7 @@
             <argument name="expectedStyle" value="background: rgb(231, 77, 60);"/>
         </actionGroup>
         <!-- Add file swatch-->
-        <actionGroup ref="AdminUploadFileInVisualSwatchActionGroup" stepKey="clickSwatch">
+        <actionGroup ref="AdminUploadFileInVisualSwatchActionGroup" stepKey="addFileSwatch">
             <argument name="defaultRadioButtonIndex" value="2"/>
             <argument name="nthSwatchWindowEditRow" value="3"/>
             <argument name="nthSwatchWindowEditColumn" value="1"/>
