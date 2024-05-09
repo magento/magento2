@@ -67,7 +67,7 @@
             <argument name="nthSwatchWindowEditRow" value="3"/>
             <argument name="nthSwatchWindowEditColumn" value="1"/>
             <argument name="nthUploadFileIndex" value="3"/>
-            <argument name="fileName" value="adobe-thumb.jpg"/>
+            <argument name="fileName" value="placeholderThumbnailImage"/>
             <argument name="swatchWindowUnavailableIndex" value="0"/>
             <argument name="swatchType" value="File"/>
         </actionGroup>
