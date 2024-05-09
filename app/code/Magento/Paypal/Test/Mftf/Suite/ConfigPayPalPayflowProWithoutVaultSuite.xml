@@ -6,7 +6,7 @@
   */
 -->
 <suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
-    <suite name="ConfigPayPalPayflowProWithoutValutSuite">
+    <suite name="ConfigPayPalPayflowProWithoutVaultSuite">
         <before>
             <!-- Login -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
