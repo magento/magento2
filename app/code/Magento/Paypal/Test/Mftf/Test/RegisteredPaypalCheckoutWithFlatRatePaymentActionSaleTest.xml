@@ -68,7 +68,7 @@
         <!-- Open mini cart-->
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickMiniCart"/>
         <!--proceed to checkout -->
-        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
         <!-- Verify Shipping address-->
         <grabTextFrom selector="{{CheckoutShippingSection.savedAddress}}"  stepKey="grabAddress"/>
         <!-- Assert the value of created customer attribute in shipping address block of checkout page-->
