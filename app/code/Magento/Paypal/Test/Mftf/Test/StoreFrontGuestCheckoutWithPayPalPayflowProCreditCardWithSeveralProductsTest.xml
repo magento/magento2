@@ -23,8 +23,15 @@
             <createData entity="SimpleProduct" stepKey="createSimpleProduct3"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <comment userInput="BIC workaround" stepKey="configPaypalPayflowPro"/>
+            <comment userInput="BIC workaround" stepKey="SamplePaypalPaymentsProConfig"/>
+            <comment userInput="BIC workaround" stepKey="cleanInvalidatedCaches"/>
         </before>
         <after>
+            <comment userInput="BIC workaround" stepKey="rollbackPaypalPayflowProConfig"/>
+            <comment userInput="BIC workaround" stepKey="disablePayPalExpress"/>
+            <comment userInput="BIC workaround" stepKey="disablePayPalExpressBML"/>
+            <comment userInput="BIC workaround" stepKey="cleanInvalidatedCaches"/>
             <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
