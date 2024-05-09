@@ -21,12 +21,11 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!-- Enable Flat rate -->
-<!--            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- Create Category -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
-            <createData entity="SimpleProduct2" stepKey="createProduct">
-                <field key="price">10</field>
-                <requiredEntity createDataKey="createCategory"/>
+            <createData entity="ApiSimplePrice10Qty10" stepKey="createProduct">
+            <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!-- Enabling PayPal Express Checkout -->
             <magentoCLI command="config:set {{StorefrontPaypalExpressSalePaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressSalePaymentActionOptionConfigData.value}}" stepKey="setPaymentActionSale"/>
@@ -57,6 +56,7 @@
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
             <argument name="indices" value=""/>
         </actionGroup>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
         <!-- Add simple product to cart -->
         <!-- Open product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontSimpleProductPage">
