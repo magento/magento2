@@ -35,7 +35,7 @@
                 <argument name="tags" value=""/>
             </actionGroup>
             <!-- Paypal Payflow -->
-            <actionGroup ref="AdminConfigurePayPalPayflowProActionGroup" stepKey="ConfigPayflow">
+            <actionGroup ref="AdminPayPalPayflowProActionGroup" stepKey="ConfigPayflow">
                 <argument name="credentials" value="SamplePaypalPaymentsProConfig"/>
             </actionGroup>
         </before>
