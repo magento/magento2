@@ -87,6 +87,25 @@ class CollectionTest extends TestCase
     }
 
     /**
+     * Test case to check active quote on non default website
+     *
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoDataFixture Magento/Checkout/_files/active_quote_not_default_website.php
+     *
+     * @return void
+     */
+    public function testCollectionOnNonDefaultStores(): void
+    {
+        $this->registry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
+        $this->registry->register(RegistryConstants::CURRENT_CUSTOMER_ID, 1);
+        $collection = $this->executeInStoreContext->execute(
+            'fixture_second_store',
+            [$this->layout->createBlock(Cart::class), 'getPreparedCollection']
+        );
+        $this->assertCount(0, $collection);
+    }
+
+    /**
      * Check is collection match expected value
      *
      * @param Collection $collection
