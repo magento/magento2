@@ -65,7 +65,7 @@
         </actionGroup>
         <!-- Place Order and assert the url -->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <wait time="6" stepKey="waitForPageLoad" />
         <seeCurrentUrlMatches regex="~\/checkout/#payment~" stepKey="seeCurrentUrl"/>
     </test>
 </tests>
