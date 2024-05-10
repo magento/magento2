@@ -105,6 +105,7 @@ class Banner extends Template
         $componentAttributes = $this->jsLayout['components']['payLater']['config']['attributes'] ?? [];
         $config['attributes'] = array_replace($this->getStyleAttributesConfig(), $componentAttributes);
         $config['attributes']['data-pp-placement'] = $this->placement;
+        $config['attributes']['data-pp-buyercountry'] = 'US'; // this should be dynamic. Possible values listed here: https://developer.paypal.com/limited-release/sdk-pay-later-messaging-cross-border/#link-renderthemessageswiththebuyercountryparameter
 
         $this->jsLayout = [
             'components' => [
