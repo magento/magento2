@@ -11,7 +11,7 @@
             <!-- Login -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!--Config PayPal Payflow Pro-->
-            <actionGroup ref="AdminConfigurePayPalPayflowProActionGroup" stepKey="configPaypalPayflowPro">
+            <actionGroup ref="AdminPayPalPayflowProActionGroup" stepKey="configPaypalPayflowPro">
                 <argument name="credentials" value="SamplePaypalPaymentsProConfig"/>
             </actionGroup>
         </before>
