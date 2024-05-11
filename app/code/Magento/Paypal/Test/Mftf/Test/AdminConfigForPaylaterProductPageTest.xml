@@ -24,24 +24,14 @@
         </before>
         <after>
             <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
-        <!--Enable Paylater For Paypal Express Checkout  -->
-        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
-        <waitForElementClickable selector="{{PayPalExpressCheckoutConfigSection.configureBtn('us')}}" stepKey="waitForConfigureButtonClickable"/>
-        <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn('us')}}" stepKey="configureButtonClicked"/>
-        <selectOption selector ="{{PayPalExpressCheckoutConfigSection.enablePayLater('us')}}" userInput="Yes" stepKey="enablePaylaterExp"/>
-        <waitForPageLoad stepKey="waitForAdvisePageLoad"/>
-        <click selector="{{PayPalExpressCheckoutConfigSection.payLaterConfigDropDown('us')}}" stepKey="advertisePaylater"/>
-        <!--Enable Pay Later in Product Page and Check default values selected in dropdown -->
-        <actionGroup ref="EnablePaypalPaylaterConfigurationActionGroup" stepKey="enablePaypalPaylaterSolution">
-        </actionGroup>
+        <!--Enable Pay Later in Admin Product Page -->
+        <actionGroup ref="PaylaterProductPageConfigActionGroup" stepKey="enablePaypalPaylaterSolution"/>
+        <!--Check default values selected in dropdown  -->
+        <actionGroup ref="CheckValuesForAdminProductConfigActionGroup" stepKey="verifyDefaultValues"/>
         <!--Click on Save configure Button -->
-        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveAdminConfiguration">
-        </actionGroup>
-        <!-- Cleanup Paypal configurations -->
-        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
-            <argument name="tags" value="config full_page"/>
-        </actionGroup>
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveAdminConfiguration"/>
     </test>
 </tests>

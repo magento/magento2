@@ -1,0 +1,24 @@
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CheckValuesForAdminProductConfigActionGroup">
+        <annotations>
+            <description>Check the default Dropdown Values Available in Admin Cart Page.</description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <!--Verify Default Option was Selected correctly-->
+        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.position(countryCode)}}" userInput="Header (center)" stepKey="seeSelectedPosition"/>
+        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.styleLayout(countryCode)}}" userInput="Text" stepKey="seeSelectedStyleLayout"/>
+        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.logoType(countryCode)}}" userInput="Primary" stepKey="seeSelectedLogoType"/>
+        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.logoPosition(countryCode)}}" userInput="Left" stepKey="seeSelectedLogoPosition"/>
+        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.textColor(countryCode)}}" userInput="Black" stepKey="seeSelectedTextColor"/>
+        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.textSize(countryCode)}}" userInput="12px" stepKey="seeSelectedTextSize"/>
+    </actionGroup>
+</actionGroups>
