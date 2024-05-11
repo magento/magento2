@@ -1,7 +1,18 @@
 <?php declare(strict_types=1);
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ *
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ************************************************************************
  */
 
 /**
@@ -389,6 +400,7 @@ class CustomerTest extends TestCase
         $this->_model->setEntityId($customerId);
         $this->_model->setId($customerId);
         $addressDataModel = $this->getMockForAbstractClass(AddressInterface::class);
+        $addressDataModel->expects($this->exactly(4))->method('isDefaultShipping')->willReturn(true);
         $address = $this->getMockBuilder(AddressModel::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['setCustomer', 'getDataModel'])
