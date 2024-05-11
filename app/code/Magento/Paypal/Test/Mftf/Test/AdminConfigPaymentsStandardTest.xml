@@ -16,8 +16,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5639"/>
             <group value="paypalStandard"/>
-            <group value="3rd_party_integration" />
-            <group value="pr_exclude" />
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
@@ -36,12 +34,8 @@
         <actionGroup ref="EnablePaylaterPaypalStandardActionGroup" stepKey="enablePaypalStandard">
         </actionGroup>
         <!-- Reindex and cache flush -->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPage">
-            <argument name="indices" value=""/>
-        </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCachePage">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
         <!--Navigate to Storefront-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
@@ -50,25 +44,21 @@
         <waitForPageLoad stepKey="waitForCategrypageTobeLoaded"/>
         <waitForElementVisible selector="{{PayPalStandardConfigSection.payPaliFrame}}" stepKey="waitForElement"/>
         <switchToIFrame selector="{{PayPalStandardConfigSection.payPaliFrame}}" stepKey="switchToBuyNowPaylaterIFrame"/>
-        <seeElement selector="{{PayPalStandardConfigSection.PaypallaterMessage}}"  stepKey="verifyBuyNowPaylaterMessage"/>
+        <seeElement selector="{{PayPalStandardConfigSection.paypalPaylaterMessage}}"  stepKey="verifyBuyNowPaylaterMessage"/>
         <switchToIFrame stepKey="switchBackToMainPaypalFrame"/>
         <!--Disable Paypal Standard-->
         <actionGroup ref="AdminPayPalStandardDisableActionGroup" stepKey="disablePaypalStandard">
         </actionGroup>
         <!-- Reindex and cache flush -->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAdminPage">
-            <argument name="indices" value=""/>
-        </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAdminPage">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <magentoCLI command="indexer:reindex" stepKey="performReIndex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
         <!--Validate Paylater Message On Storefront Category Page-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForItemPage"/>
         <waitForElementClickable selector="{{PayPalStandardConfigSection.categoryClick}}" stepKey="waitForCategryToBeClickable"/>
         <click selector ="{{PayPalStandardConfigSection.categoryClick}}" stepKey="clickCatagoryeTab"/>
         <waitForPageLoad stepKey="waitForCategoryPageTobeLoaded"/>
-        <dontSeeElement selector="{{PayPalStandardConfigSection.PaypallaterMessage}}"  stepKey="verifyPaylaterMessageToBeDisappeared"/>
+        <dontSeeElement selector="{{PayPalStandardConfigSection.paypalPaylaterMessage}}"  stepKey="verifyPaylaterMessageToBeDisappeared"/>
     </test>
 </tests>
 

@@ -24,15 +24,15 @@
         <selectOption selector="{{PayPalStandardConfigSection.enableSolution(countryCode)}}" userInput="No" stepKey="disableSolution"/>
         <selectOption selector="{{PayPalStandardConfigSection.enablePaylaterExperience(countryCode)}}" userInput="Yes" stepKey="EnablePaylaterExperience"/>
         <waitForPageLoad stepKey="waitForadvisepaylaterdropdown"/>
-        <waitForElementClickable selector="{{PayPalStandardConfigSection.advisepaylater(countryCode)}}" stepKey="waitForAdvisepaylaterClickable"/>
-        <click selector="{{PayPalStandardConfigSection.advisepaylater(countryCode)}}" stepKey="clickAdvisePaylater"/>
+        <waitForElementClickable selector="{{PayPalStandardConfigSection.advisePaylater(countryCode)}}" stepKey="waitForAdvisepaylaterClickable"/>
+        <click selector="{{PayPalStandardConfigSection.advisePaylater(countryCode)}}" stepKey="clickAdvisePaylater"/>
         <selectOption selector="{{PayPalStandardConfigSection.enablePaypalPaylater(countryCode)}}" userInput="Yes" stepKey="EnablePaypallater"/>
-        <waitForElementClickable selector="{{PayPalStandardConfigSection.expandcategorypage(countryCode)}}" stepKey="waitForcategorypageClickable"/>
-        <click selector="{{PayPalStandardConfigSection.expandcategorypage(countryCode)}}" stepKey="clickCategoryPage"/>
+        <waitForElementClickable selector="{{PayPalStandardConfigSection.expandCategoryPage(countryCode)}}" stepKey="waitForcategorypageClickable"/>
+        <click selector="{{PayPalStandardConfigSection.expandCategoryPage(countryCode)}}" stepKey="clickCategoryPage"/>
         <selectOption selector ="{{PayPalStandardConfigSection.display(countryCode)}}" userInput="Yes" stepKey="enableDisplayforPaylaterCategoryPage"/>
         <seeOptionIsSelected selector="{{PayPalStandardConfigSection.position(countryCode)}}" userInput="Header (center)" stepKey="seeSelectedPosition"/>
-        <seeOptionIsSelected selector="{{PayPalStandardConfigSection.stylelayout(countryCode)}}" userInput="Flex" stepKey="seeSelectedStylelayout"/>
-        <seeOptionIsSelected selector="{{PayPalStandardConfigSection.Ratio(countryCode)}}" userInput="20x1" stepKey="seeSelectedRatio"/>
+        <seeOptionIsSelected selector="{{PayPalStandardConfigSection.styleLayout(countryCode)}}" userInput="Flex" stepKey="seeSelectedStylelayout"/>
+        <seeOptionIsSelected selector="{{PayPalStandardConfigSection.ratio(countryCode)}}" userInput="20x1" stepKey="seeSelectedRatio"/>
         <seeOptionIsSelected selector="{{PayPalStandardConfigSection.color(countryCode)}}" userInput="Blue" stepKey="seeSelectedColor"/>
         <waitForElementClickable selector="{{AdminConfigSection.saveButton}}" stepKey="waitForConfiguBtn" />
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfiguration"/>

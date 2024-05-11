@@ -17,17 +17,16 @@
         <element name="sandboxMode" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_express_checkout_required_express_checkout_sandbox_flag" parameterized="true"/>
         <element name="enableSolution" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_enable_express_checkout" parameterized="true"/>
         <element name="enablePaylaterExperience" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_enable_paypal_paylater_experience" parameterized="true"/>
-        <element name="expandcategorypage" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage-head" parameterized="true"/>
-        <element name="advisepaylater" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater-head" parameterized="true"/>
+        <element name="expandCategoryPage" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage-head" parameterized="true"/>
+        <element name="advisePaylater" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater-head" parameterized="true"/>
         <element name="enablePaypalPaylater" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_paylater_enabled" parameterized="true"/>
         <element name="display" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage_paylater_categorypage_display" parameterized="true"/>
         <element name="position" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage_paylater_categorypage_position" parameterized="true"/>
-        <element name="stylelayout" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage_paylater_categorypage_stylelayout" parameterized="true"/>
-        <element name="Ratio" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage_paylater_categorypage_ratio" parameterized="true"/>
+        <element name="styleLayout" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage_paylater_categorypage_stylelayout" parameterized="true"/>
+        <element name="ratio" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage_paylater_categorypage_ratio" parameterized="true"/>
         <element name="color" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage_paylater_categorypage_color" parameterized="true"/>
-        <element name="payPaFrame" type="iframe" selector="//iframe[contains(@id, 'jsx-iframe')]"/>
         <element name="categoryClick" type="button" selector="//span[contains(text(), 'SimpleSubCategory')]"/>
         <element name="payPaliFrame" type="iframe" selector="//iframe[contains(@name, 'zoid__paypal_message')]"/>
-        <element name="PaypallaterMessage" type="input" selector="//span[text()='Buy now, pay later.']"/>
+        <element name="paypalPaylaterMessage" type="input" selector="//span[text()='Buy now, pay later.']"/>
     </section>
 </sections>
