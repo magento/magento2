@@ -24,5 +24,7 @@
         <seeOptionIsSelected selector="{{PayPalStandardConfigSection.styleLayout('us')}}" userInput="Flex" stepKey="seeSelectedStylelayout"/>
         <seeOptionIsSelected selector="{{PayPalStandardConfigSection.ratio('us')}}" userInput="20x1" stepKey="seeSelectedRatio"/>
         <seeOptionIsSelected selector="{{PayPalStandardConfigSection.color('us')}}" userInput="Blue" stepKey="seeSelectedColor"/>
+        <waitForElementClickable selector="{{AdminConfigSection.saveButton}}" stepKey="waitForConfiguBtn" />
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfiguration"/>
     </actionGroup>
 </actionGroups>

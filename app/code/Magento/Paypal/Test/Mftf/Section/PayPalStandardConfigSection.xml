@@ -26,7 +26,7 @@
         <element name="ratio" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage_paylater_categorypage_ratio" parameterized="true"/>
         <element name="color" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage_paylater_categorypage_color" parameterized="true"/>
         <element name="categoryClick" type="button" selector="//span[contains(text(), 'SimpleSubCategory')]"/>
-        <element name="payPaliFrame" type="iframe" selector="//iframe[contains(@name, 'zoid__paypal_message')]"/>
+        <element name="payPalFrame" type="iframe" selector="//iframe[contains(@id, 'jsx-iframe')]"/>
         <element name="paypalPaylaterMessage" type="input" selector="//span[text()='Buy now, pay later.']"/>
     </section>
 </sections>

@@ -15,15 +15,20 @@
             <description value="Paypal Pay Later Message should display on Admin Category  Page configuration"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5639"/>
-            <group value="paypalStandard"/>
+
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
             <createData entity="SimpleProduct" stepKey="simpleProduct">
                 <requiredEntity createDataKey="simpleCategory"/>
             </createData>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminPayPalStandardEnableActionGroup" stepKey="ConfigPaymentsStandard">
+
+            <!-- Login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!--Config PayPal Standard-->
+            <actionGroup ref="AdminPayPalStandardEnableActionGroup" stepKey="ConfigPayPalStandard"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="config full_page"/>
             </actionGroup>
         </before>
         <after>
@@ -38,17 +43,9 @@
         <magentoCLI command="cache:flush" stepKey="cleanCache"/>
         <!--Navigate to Storefront-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
-        <waitForPageLoad stepKey="waitForProductPage"/>
-        <waitForElementClickable selector="{{PayPalStandardConfigSection.categoryClick}}" stepKey="waitForCategryToClickable"/>
-        <click selector ="{{PayPalStandardConfigSection.categoryClick}}" stepKey="clickCatagoryeButton"/>
-        <waitForPageLoad stepKey="waitForCategrypageTobeLoaded"/>
-        <waitForElementVisible selector="{{PayPalStandardConfigSection.payPaliFrame}}" stepKey="waitForElement"/>
-        <switchToIFrame selector="{{PayPalStandardConfigSection.payPaliFrame}}" stepKey="switchToBuyNowPaylaterIFrame"/>
-        <seeElement selector="{{PayPalStandardConfigSection.paypalPaylaterMessage}}"  stepKey="verifyBuyNowPaylaterMessage"/>
-        <switchToIFrame stepKey="switchBackToMainPaypalFrame"/>
+        <actionGroup ref="ValidatePaylaterInStorefrontActionGroup" stepKey="verifyPaylaterInStorefrontCategoryPage"/>
         <!--Disable Paypal Standard-->
-        <actionGroup ref="AdminPayPalStandardDisableActionGroup" stepKey="disablePaypalStandard">
-        </actionGroup>
+        <magentoCLI command="config:set {{DisablePaypalPayStandard.path}} {{DisablePaypalPayStandard.value}}" stepKey="disablePayPalStandard"/>
         <!-- Reindex and cache flush -->
         <magentoCLI command="indexer:reindex" stepKey="performReIndex"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
