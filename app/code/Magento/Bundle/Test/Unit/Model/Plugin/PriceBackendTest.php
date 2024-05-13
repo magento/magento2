@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class PriceBackendTest extends TestCase
 {
-    const CLOSURE_VALUE = 'CLOSURE';
+    private const CLOSURE_VALUE = 'CLOSURE';
 
     /** @var  PriceBackend */
     private $priceBackendPlugin;
@@ -45,7 +45,8 @@ class PriceBackendTest extends TestCase
             ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getPriceType', '__wakeUp'])
+            ->addMethods(['getPriceType'])
+            ->onlyMethods(['getTypeId', '__wakeUp'])
             ->getMock();
     }
 
@@ -73,7 +74,7 @@ class PriceBackendTest extends TestCase
      *
      * @return array
      */
-    public function aroundValidateDataProvider()
+    public static function aroundValidateDataProvider()
     {
         return [
             ['type' => Type::TYPE_SIMPLE, 'priceType' => Price::PRICE_TYPE_FIXED, 'result' => static::CLOSURE_VALUE],

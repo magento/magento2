@@ -15,7 +15,7 @@
             <strong class="product-item-name" data-bind="html: getNameUnsanitizedHtml($parent)"></strong>
             <div class="details-qty">
                 <span class="label"><!-- ko i18n: 'Qty' --><!-- /ko --></span>
-                <span class="value" data-bind="text: $parent.qty"></span>
+                <span class="value" data-bind="text: $parent.qty.toLocaleString(window.LOCALE)"></span>
             </div>
         </div>
         <!-- ko foreach: getRegion('after_details') -->

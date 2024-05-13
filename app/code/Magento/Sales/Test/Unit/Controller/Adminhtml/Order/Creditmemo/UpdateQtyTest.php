@@ -131,10 +131,8 @@ class UpdateQtyTest extends TestCase
     {
         $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getInvoice', 'getOrder', 'cancel', 'getId'])
-            ->getMock();
-        $titleMock = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
-            ->disableOriginalConstructor()
+            ->addMethods(['cancel'])
+            ->onlyMethods(['getInvoice', 'getOrder', 'getId'])
             ->getMock();
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
@@ -153,12 +151,11 @@ class UpdateQtyTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getRequest',
                     'getResponse',
                     'getObjectManager',
-                    'getTitle',
                     'getSession',
                     'getHelper',
                     'getActionFlag',
@@ -190,9 +187,6 @@ class UpdateQtyTest extends TestCase
             ->method('getObjectManager')
             ->willReturn($this->objectManagerMock);
         $this->contextMock->expects($this->any())
-            ->method('getTitle')
-            ->willReturn($titleMock);
-        $this->contextMock->expects($this->any())
             ->method('getMessageManager')
             ->willReturn($this->messageManagerMock);
         $this->loaderMock = $this->getMockBuilder(CreditmemoLoader::class)
@@ -200,15 +194,15 @@ class UpdateQtyTest extends TestCase
             ->getMock();
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultJsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRawFactoryMock = $this->getMockBuilder(RawFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()

@@ -36,7 +36,8 @@
         <actionGroup ref="AddCategoryImageActionGroup" stepKey="addCategoryImage"/>
         <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategoryForm"/>
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploader"/>
-        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
+        <comment userInput="BIC workaround" stepKey="clearFilter"/>
         <actionGroup ref="AdminMediaGalleryExpandFolderActionGroup" stepKey="expandCatalogFolder">
             <argument name="fieldId" value="catalog"/>
         </actionGroup>

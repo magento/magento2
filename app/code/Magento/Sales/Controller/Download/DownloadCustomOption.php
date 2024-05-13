@@ -14,11 +14,6 @@ use Magento\Framework\App\Action\Context;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\Controller\Result\ForwardFactory;
 
-/**
- * Class DownloadCustomOption
- *
- * @package Magento\Sales\Controller\Download
- */
 class DownloadCustomOption extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
     /**
@@ -34,6 +29,8 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
     /**
      * @var \Magento\Framework\Unserialize\Unserialize
      * @deprecated 101.0.0
+     * @deprecated No longer used
+     * @see $serializer
      */
     protected $unserialize;
 
@@ -87,7 +84,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
         }
 
         $optionId = null;
-        if (strpos($option->getCode(), AbstractType::OPTION_PREFIX) === 0) {
+        if ($option->getCode() && strpos($option->getCode(), AbstractType::OPTION_PREFIX) === 0) {
             $optionId = str_replace(AbstractType::OPTION_PREFIX, '', $option->getCode());
             if ((int)$optionId != $optionId) {
                 $optionId = null;
@@ -111,7 +108,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
             if ($this->getRequest()->getParam('key') != $info['secret_key']) {
                 return $resultForward->forward('noroute');
             }
-            $this->download->downloadFile($info);
+            return $this->download->createResponse($info);
         } catch (\Exception $e) {
             return $resultForward->forward('noroute');
         }

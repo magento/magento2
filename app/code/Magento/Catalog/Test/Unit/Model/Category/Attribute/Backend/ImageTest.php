@@ -325,6 +325,7 @@ class ImageTest extends TestCase
      */
     public function testBeforeSaveAttributeStringValue()
     {
+        $this->attribute->method('getName')->willReturn('test_attribute_name');
         $model = $this->objectManager->getObject(Image::class);
         $model->setAttribute($this->attribute);
 
@@ -392,6 +393,7 @@ class ImageTest extends TestCase
      */
     public function testBeforeSaveWithAdditionalData($value)
     {
+        $this->attribute->method('getName')->willReturn('test_attribute_name');
         $model = $this->setUpModelForTests();
 
         $this->imageUploader->expects($this->never())
@@ -416,6 +418,7 @@ class ImageTest extends TestCase
      */
     public function testBeforeSaveWithoutAdditionalData($value)
     {
+        $this->attribute->method('getName')->willReturn('test_attribute_name');
         $model = $this->setUpModelForTests();
 
         $this->imageUploader->expects($this->never())

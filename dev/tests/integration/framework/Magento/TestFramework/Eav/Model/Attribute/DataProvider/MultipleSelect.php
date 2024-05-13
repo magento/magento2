@@ -89,7 +89,7 @@ class MultipleSelect extends AbstractAttributeDataWithOptions
                 'frontend_class' => null,
                 'used_for_sort_by' => '0',
                 'is_user_defined' => '1',
-                'backend_type' => 'varchar',
+                'backend_type' => 'text',
             ]
         );
     }

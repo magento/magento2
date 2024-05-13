@@ -16,6 +16,7 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 class Image extends AbstractHelper implements ArgumentInterface
@@ -23,7 +24,7 @@ class Image extends AbstractHelper implements ArgumentInterface
     /**
      * Media config node
      */
-    const MEDIA_TYPE_CONFIG_NODE = 'images';
+    public const MEDIA_TYPE_CONFIG_NODE = 'images';
 
     /**
      * Current model
@@ -47,8 +48,6 @@ class Image extends AbstractHelper implements ArgumentInterface
     protected $_scheduleRotate = false;
 
     /**
-     * Angle
-     *
      * @var int
      */
     protected $_angle;
@@ -61,22 +60,16 @@ class Image extends AbstractHelper implements ArgumentInterface
     protected $_watermark;
 
     /**
-     * Watermark Position
-     *
      * @var string
      */
     protected $_watermarkPosition;
 
     /**
-     * Watermark Size
-     *
      * @var string
      */
     protected $_watermarkSize;
 
     /**
-     * Watermark Image opacity
-     *
      * @var int
      */
     protected $_watermarkImageOpacity;
@@ -89,8 +82,6 @@ class Image extends AbstractHelper implements ArgumentInterface
     protected $_product;
 
     /**
-     * Image File
-     *
      * @var string
      */
     protected $_imageFile;
@@ -108,8 +99,6 @@ class Image extends AbstractHelper implements ArgumentInterface
     protected $_assetRepo;
 
     /**
-     * Product image factory
-     *
      * @var \Magento\Catalog\Model\Product\ImageFactory
      */
     protected $_productImageFactory;
@@ -787,8 +776,8 @@ class Image extends AbstractHelper implements ArgumentInterface
      */
     protected function parseSize($string)
     {
-        $size = explode('x', strtolower($string));
-        if (count($size) == 2) {
+        $size = $string !== null ? explode('x', strtolower($string)) : [];
+        if (count($size) === 2) {
             return ['width' => $size[0] > 0 ? $size[0] : null, 'height' => $size[1] > 0 ? $size[1] : null];
         }
         return false;

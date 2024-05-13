@@ -16,7 +16,12 @@
             <severity value="AVERAGE"/>
             <testCaseId value="MC-37380"/>
             <group value="searchFrontend"/>
+            <group value="pr_exclude"/>
         </annotations>
+
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
 

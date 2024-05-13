@@ -18,6 +18,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Math\Random;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\ImportExport\Helper\Data as DataHelper;
 use Magento\ImportExport\Model\Export\Adapter\CsvFactory;
@@ -27,13 +28,13 @@ use Magento\ImportExport\Model\Import\Adapter;
 use Magento\ImportExport\Model\Import\ConfigInterface;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\Entity\Factory;
+use Magento\ImportExport\Model\Import\EntityInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\Framework\Message\ManagerInterface;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Magento\ImportExport\Model\Source\Import\AbstractBehavior;
 use Magento\ImportExport\Model\Source\Import\Behavior\Factory as BehaviorFactory;
-use Magento\MediaStorage\Model\File\Uploader;
+use Magento\ImportExport\Model\Source\Upload;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Psr\Log\LoggerInterface;
 
@@ -51,79 +52,83 @@ use Psr\Log\LoggerInterface;
  */
 class Import extends AbstractModel
 {
-    const BEHAVIOR_APPEND = 'append';
-    const BEHAVIOR_ADD_UPDATE = 'add_update';
-    const BEHAVIOR_REPLACE = 'replace';
-    const BEHAVIOR_DELETE = 'delete';
-    const BEHAVIOR_CUSTOM = 'custom';
+    public const BEHAVIOR_APPEND = 'append';
+    public const BEHAVIOR_ADD_UPDATE = 'add_update';
+    public const BEHAVIOR_REPLACE = 'replace';
+    public const BEHAVIOR_DELETE = 'delete';
+    public const BEHAVIOR_CUSTOM = 'custom';
 
     /**
      * Import source file.
      */
-    const FIELD_NAME_SOURCE_FILE = 'import_file';
+    public const FIELD_NAME_SOURCE_FILE = 'import_file';
 
     /**
      * Import image archive.
      */
-    const FIELD_NAME_IMG_ARCHIVE_FILE = 'import_image_archive';
+    public const FIELD_NAME_IMG_ARCHIVE_FILE = 'import_image_archive';
 
     /**
      * Import images file directory.
      */
-    const FIELD_NAME_IMG_FILE_DIR = 'import_images_file_dir';
+    public const FIELD_NAME_IMG_FILE_DIR = 'import_images_file_dir';
 
     /**
      * Allowed errors count field name
      */
-    const FIELD_NAME_ALLOWED_ERROR_COUNT = 'allowed_error_count';
+    public const FIELD_NAME_ALLOWED_ERROR_COUNT = 'allowed_error_count';
 
     /**
      * Validation startegt field name
      */
-    const FIELD_NAME_VALIDATION_STRATEGY = 'validation_strategy';
+    public const FIELD_NAME_VALIDATION_STRATEGY = 'validation_strategy';
 
     /**
      * Import field separator.
      */
-    const FIELD_FIELD_SEPARATOR = '_import_field_separator';
+    public const FIELD_FIELD_SEPARATOR = '_import_field_separator';
 
     /**
      * Import multiple value separator.
      */
-    const FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR = '_import_multiple_value_separator';
+    public const FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR = '_import_multiple_value_separator';
 
     /**
      * Import empty attribute value constant.
      */
-    const FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '_import_empty_attribute_value_constant';
+    public const FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '_import_empty_attribute_value_constant';
+
+    /**
+     * Id of the `importexport_importdata` row after validation.
+     */
+    public const FIELD_IMPORT_IDS = '_import_ids';
 
     /**
      * Allow multiple values wrapping in double quotes for additional attributes.
      */
-    const FIELDS_ENCLOSURE = 'fields_enclosure';
+    public const FIELDS_ENCLOSURE = 'fields_enclosure';
 
     /**
      * default delimiter for several values in one cell as default for FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR
      */
-    const DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR = ',';
+    public const DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR = ',';
 
     /**
      * Import empty attribute default value
      */
-    const DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '__EMPTY__VALUE__';
-    const DEFAULT_SIZE = 50;
-    const MAX_IMPORT_CHUNKS = 4;
-    const IMPORT_HISTORY_DIR = 'import_history/';
-    const IMPORT_DIR = 'import/';
+    public const DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '__EMPTY__VALUE__';
+    public const DEFAULT_SIZE = 50;
+    public const MAX_IMPORT_CHUNKS = 4;
+    public const IMPORT_HISTORY_DIR = 'import_history/';
+    public const IMPORT_DIR = 'import/';
 
     /**
-     * @var AbstractEntity|ImportAbstractEntity
+     * @var EntityInterface
      */
     protected $_entityAdapter;
 
     /**
-     * Import export data
-     *
+     * @Deprecated Property isn't used
      * @var DataHelper
      */
     protected $_importExportData = null;
@@ -134,7 +139,6 @@ class Import extends AbstractModel
     private $_coreConfig;
 
     /**
-     * @var \Magento\ImportExport\Model\Import\ConfigInterface
      * @var ConfigInterface
      */
     protected $_importConfig;
@@ -155,6 +159,7 @@ class Import extends AbstractModel
     protected $_csvFactory;
 
     /**
+     * @Deprecated Property isn't used
      * @var FileTransferFactory
      */
     protected $_httpFactory;
@@ -195,28 +200,41 @@ class Import extends AbstractModel
     private $messageManager;
 
     /**
+     * @Deprecated Property isn't used
      * @var Random
      */
     private $random;
+
+    /**
+     * @var Upload
+     */
+    private $upload;
+
+    /**
+     * @var LocaleEmulatorInterface
+     */
+    private $localeEmulator;
 
     /**
      * @param LoggerInterface $logger
      * @param Filesystem $filesystem
      * @param DataHelper $importExportData
      * @param ScopeConfigInterface $coreConfig
-     * @param Import\ConfigInterface $importConfig
-     * @param Import\Entity\Factory $entityFactory
+     * @param ConfigInterface $importConfig
+     * @param Factory $entityFactory
      * @param Data $importData
-     * @param Export\Adapter\CsvFactory $csvFactory
+     * @param CsvFactory $csvFactory
      * @param FileTransferFactory $httpFactory
      * @param UploaderFactory $uploaderFactory
-     * @param Source\Import\Behavior\Factory $behaviorFactory
+     * @param Factory $behaviorFactory
      * @param IndexerRegistry $indexerRegistry
      * @param History $importHistoryModel
      * @param DateTime $localeDate
      * @param array $data
      * @param ManagerInterface|null $messageManager
      * @param Random|null $random
+     * @param Upload|null $upload
+     * @param LocaleEmulatorInterface|null $localeEmulator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -236,7 +254,9 @@ class Import extends AbstractModel
         DateTime $localeDate,
         array $data = [],
         ManagerInterface $messageManager = null,
-        Random $random = null
+        Random $random = null,
+        Upload $upload = null,
+        LocaleEmulatorInterface $localeEmulator = null
     ) {
         $this->_importExportData = $importExportData;
         $this->_coreConfig = $coreConfig;
@@ -255,16 +275,38 @@ class Import extends AbstractModel
             ->get(ManagerInterface::class);
         $this->random = $random ?: ObjectManager::getInstance()
             ->get(Random::class);
+        $this->upload = $upload ?: ObjectManager::getInstance()
+            ->get(Upload::class);
+        $this->localeEmulator = $localeEmulator ?: ObjectManager::getInstance()
+            ->get(LocaleEmulatorInterface::class);
         parent::__construct($logger, $filesystem, $data);
+    }
+
+    /**
+     * Returns or create existing instance of entity adapter
+     *
+     * @throws LocalizedException
+     * @return EntityInterface
+     */
+    protected function _getEntityAdapter()
+    {
+        if (!$this->_entityAdapter) {
+            $this->_entityAdapter = $this->localeEmulator->emulate(
+                $this->createEntityAdapter(...),
+                $this->getData('locale') ?: null
+            );
+        }
+
+        return $this->_entityAdapter;
     }
 
     /**
      * Create instance of entity adapter and return it
      *
      * @throws LocalizedException
-     * @return AbstractEntity|ImportAbstractEntity
+     * @return EntityInterface
      */
-    protected function _getEntityAdapter()
+    private function createEntityAdapter()
     {
         if (!$this->_entityAdapter) {
             $entities = $this->_importConfig->getEntities();
@@ -306,6 +348,8 @@ class Import extends AbstractModel
     /**
      * Returns source adapter object.
      *
+     * @Deprecated
+     * @see \Magento\ImportExport\Model\Import\Source\Factory::create()
      * @param string $sourceFile Full path to source file
      * @return AbstractSource
      * @throws FileSystemException
@@ -463,8 +507,25 @@ class Import extends AbstractModel
      */
     public function importSource()
     {
-        $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode());
-        $this->setData('behavior', $this->getDataSourceModel()->getBehavior());
+        return $this->localeEmulator->emulate(
+            $this->importSourceCallback(...),
+            $this->getData('locale') ?: null
+        );
+    }
+
+    /**
+     * Import source file structure to DB.
+     *
+     * @return bool
+     * @throws LocalizedException
+     */
+    private function importSourceCallback()
+    {
+        $ids = $this->getImportIds();
+        $this->_getEntityAdapter()->setIds($ids);
+        $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode($ids));
+        $this->setData('behavior', $this->getDataSourceModel()->getBehavior($ids));
+
         //Validating images temporary directory path if the constraint has been provided
         if ($this->hasData('images_base_directory')
             && $this->getData('images_base_directory') instanceof Filesystem\Directory\ReadInterface
@@ -490,26 +551,49 @@ class Import extends AbstractModel
         $this->addLogComment(__('Begin import of "%1" with "%2" behavior', $this->getEntity(), $this->getBehavior()));
 
         $result = $this->processImport();
+        $this->getDataSourceModel()->markProcessedBunches($ids);
 
         if ($result) {
-            $this->addLogComment(
-                [
-                    __(
-                        'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
-                        $this->getProcessedRowsCount(),
-                        $this->getProcessedEntitiesCount(),
-                        $this->getErrorAggregator()->getInvalidRowsCount(),
-                        $this->getErrorAggregator()->getErrorsCount()
-                    ),
-                    __('The import was successful.'),
-                ]
-            );
+            $logComments = [
+                __(
+                    'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
+                    $this->getProcessedRowsCount(),
+                    $this->getProcessedEntitiesCount(),
+                    $this->getErrorAggregator()->getInvalidRowsCount(),
+                    $this->getErrorAggregator()->getErrorsCount()
+                )
+            ];
+            foreach ($this->getErrorAggregator()->getAllErrors() as $error) {
+                $logComments[] = $error->getErrorMessage();
+            }
+            $logComments[] = $this->getForceImport() == '0' && $this->getErrorAggregator()->getErrorsCount() > 0 ?
+                __('The import was not successful.') : __('The import was successful.');
+            $this->addLogComment($logComments);
             $this->importHistoryModel->updateReport($this, true);
         } else {
             $this->importHistoryModel->invalidateReport($this);
         }
 
         return $result;
+    }
+
+    /**
+     * Get entity import ids
+     *
+     * @return array
+     * @throws LocalizedException
+     */
+    private function getImportIds(): array
+    {
+        $ids = $this->_getEntityAdapter()->getIds();
+        if (empty($ids)) {
+            $idsFromPostData = $this->getData(self::FIELD_IMPORT_IDS);
+            if (null !== $idsFromPostData && '' !== $idsFromPostData) {
+                $ids = explode(",", $idsFromPostData);
+            }
+        }
+
+        return $ids;
     }
 
     /**
@@ -553,57 +637,12 @@ class Import extends AbstractModel
      */
     public function uploadSource()
     {
-        /** @var $adapter \Zend_File_Transfer_Adapter_Http */
-        $adapter = $this->_httpFactory->create();
-        if (!$adapter->isValid(self::FIELD_NAME_SOURCE_FILE)) {
-            $errors = $adapter->getErrors();
-            if ($errors[0] == \Zend_Validate_File_Upload::INI_SIZE) {
-                $errorMessage = $this->_importExportData->getMaxUploadSizeMessage();
-            } else {
-                $errorMessage = __('The file was not uploaded.');
-            }
-            throw new LocalizedException($errorMessage);
-        }
-
         $entity = $this->getEntity();
-        /** @var $uploader Uploader */
-        $uploader = $this->_uploaderFactory->create(['fileId' => self::FIELD_NAME_SOURCE_FILE]);
-        $uploader->setAllowedExtensions(['csv', 'zip']);
-        $uploader->skipDbProcessing(true);
-        $fileName = $this->random->getRandomString(32) . '.' . $uploader->getFileExtension();
-        try {
-            $result = $uploader->save($this->getWorkingDir(), $fileName);
-        } catch (\Exception $e) {
-            throw new LocalizedException(__('The file cannot be uploaded.'));
-        }
-
-        // phpcs:disable Magento2.Functions.DiscouragedFunction.Discouraged
+        $result = $this->upload->uploadSource($entity);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
-
-        $uploadedFile = $result['path'] . $result['file'];
-        if (!$extension) {
-            $this->_varDirectory->delete($uploadedFile);
-            throw new LocalizedException(__('The file you uploaded has no extension.'));
-        }
-        $sourceFile = $this->getWorkingDir() . $entity;
-
-        $sourceFile .= '.' . $extension;
+        $sourceFile = $this->getWorkingDir() . $entity . '.' . $extension;
         $sourceFileRelative = $this->_varDirectory->getRelativePath($sourceFile);
-
-        if (strtolower($uploadedFile) != strtolower($sourceFile)) {
-            if ($this->_varDirectory->isExist($sourceFileRelative)) {
-                $this->_varDirectory->delete($sourceFileRelative);
-            }
-
-            try {
-                $this->_varDirectory->renameFile(
-                    $this->_varDirectory->getRelativePath($uploadedFile),
-                    $sourceFileRelative
-                );
-            } catch (FileSystemException $e) {
-                throw new LocalizedException(__('The source file moving process failed.'));
-            }
-        }
         $this->_removeBom($sourceFile);
         $this->createHistoryReport($sourceFileRelative, $entity, $extension, $result);
         return $sourceFile;
@@ -638,12 +677,28 @@ class Import extends AbstractModel
      */
     protected function _removeBom($sourceFile)
     {
-        $string = $this->_varDirectory->readFile($this->_varDirectory->getRelativePath($sourceFile));
+        $driver = $this->_varDirectory->getDriver();
+        $string = $driver->fileGetContents($this->_varDirectory->getAbsolutePath($sourceFile));
         if ($string !== false && substr($string, 0, 3) == pack("CCC", 0xef, 0xbb, 0xbf)) {
             $string = substr($string, 3);
-            $this->_varDirectory->writeFile($this->_varDirectory->getRelativePath($sourceFile), $string);
+            $driver->filePutContents($this->_varDirectory->getAbsolutePath($sourceFile), $string);
         }
         return $this;
+    }
+
+    /**
+     * Validates source file and returns validation result
+     *
+     * @param AbstractSource $source
+     * @return bool
+     * @throws LocalizedException
+     */
+    public function validateSource(AbstractSource $source)
+    {
+        return $this->localeEmulator->emulate(
+            fn () => $this->validateSourceCallback($source),
+            $this->getData('locale') ?: null
+        );
     }
 
     /**
@@ -656,7 +711,7 @@ class Import extends AbstractModel
      * @return bool
      * @throws LocalizedException
      */
-    public function validateSource(AbstractSource $source)
+    private function validateSourceCallback(AbstractSource $source)
     {
         $this->addLogComment(__('Begin data validation'));
 
@@ -682,11 +737,18 @@ class Import extends AbstractModel
         $messages = $this->getOperationResultMessages($errorAggregator);
         $this->addLogComment($messages);
 
-        $result = !$errorAggregator->isErrorLimitExceeded();
-        if ($result) {
-            $this->addLogComment(__('Import data validation is complete.'));
+        if ($errorAggregator->isErrorLimitExceeded()) {
+            return false;
         }
-        return $result;
+
+        if ($this->getProcessedRowsCount() <= $errorAggregator->getInvalidRowsCount()) {
+            $this->addLogComment(__('There are no valid rows to import.'));
+            return false;
+        }
+
+        $this->addLogComment(__('Import data validation is complete.'));
+
+        return true;
     }
 
     /**
@@ -880,5 +942,15 @@ class Import extends AbstractModel
     public function getDeletedItemsCount()
     {
         return $this->_getEntityAdapter()->getDeletedItemsCount();
+    }
+
+    /**
+     * Retrieve Ids of Validated Rows
+     *
+     * @return int[]
+     */
+    public function getValidatedIds() : array
+    {
+        return $this->_getEntityAdapter()->getIds() ?? [];
     }
 }

@@ -147,7 +147,7 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
             case 'frontend':
                 return $this->design->getConfigurationDesignTheme($area);
             case 'adminhtml':
-                return 'Magento/backend';
+                return $this->design->getConfigurationDesignTheme($area);
             case 'doc':
                 return 'Magento/blank';
             default:
@@ -304,7 +304,14 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
         $result = [];
         $files = \Magento\Framework\App\Utility\Files::init()->getLayoutFiles(['with_metainfo' => true], false);
         foreach ($files as $metaInfo) {
-            list($area, $themePath, , , $file) = $metaInfo;
+            list($area, $themePath, , , $file) = array_pad($metaInfo, 5, null);
+
+            if (!is_string($file)) {
+                $this->addWarning(
+                    'Wrong layout file configuration provided. The `file` meta info must be the type of string'
+                );
+                continue;
+            }
             foreach ($this->collectFileIdsFromLayout($file) as $fileId) {
                 $result[] = [$file, $area, $themePath, $fileId];
             }

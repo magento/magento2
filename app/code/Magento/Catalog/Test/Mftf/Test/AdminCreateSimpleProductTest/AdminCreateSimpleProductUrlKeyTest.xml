@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateSimpleProductUrlKeyTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Validate URL key while creating Product via Admin"/>
+            <title value="Admin user should be informed and restricted on allowed characters in URL Key"/>
+            <description value="User was not being informed about the allowed characters in the UI for URL Key, but later the URL key was getting trimmed in backend"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-2585"/>
+            <useCaseId value="ACP2E-345"/>
+            <group value="product"/>
+        </annotations>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateProduct"/>
+
+        <!--Trigger SEO drop down-->
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToSearchEngineOptimization"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="selectSearchEngineOptimization"/>
+        <waitForPageLoad stepKey="WaitForDropDownSEO"/>
+
+        <fillField stepKey="fillUrlKey1" selector="{{AdminProductFormBundleSection.urlKey}}" userInput="example-page-"/>
+        <click stepKey="blurFromUrlKey1" selector="{{AdminProductSEOSection.metaTitleInput}}"/>
+        <see selector="{{AdminProductFormSection.fieldError('url_key')}}" userInput="Trailing hyphens are not allowed." stepKey="seeLastHyphenErrorMessage"/>
+
+        <clearField selector="{{AdminProductFormBundleSection.urlKey}}" stepKey="clearFieldUrlKey2"/>
+        <fillField stepKey="fillUrlKey2" selector="{{AdminProductFormBundleSection.urlKey}}" userInput="-Example-Page"/>
+        <click stepKey="blurFromUrlKey2" selector="{{AdminProductSEOSection.metaTitleInput}}"/>
+        <see selector="{{AdminProductFormSection.fieldError('url_key')}}" userInput="Trailing hyphens are not allowed." stepKey="seeFirstHyphenErrorMessage"/>
+
+        <clearField selector="{{AdminProductFormBundleSection.urlKey}}" stepKey="clearFieldUrlKey3"/>
+        <click stepKey="blurFromUrlKey3" selector="{{AdminProductSEOSection.metaTitleInput}}"/>
+        <fillField stepKey="fillUrlKey3" selector="{{AdminProductFormBundleSection.urlKey}}" userInput="example-page-test"/>
+        <dontSee selector="{{AdminProductFormSection.fieldError('url_key')}}" userInput="Trailing hyphens are not allowed." stepKey="dontSeeErrorMessage"/>
+    </test>
+</tests>

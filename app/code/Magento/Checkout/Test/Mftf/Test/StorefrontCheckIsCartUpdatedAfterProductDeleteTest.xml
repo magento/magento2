@@ -29,8 +29,8 @@
             </createData>
         </before>
         <after>
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
@@ -52,6 +52,7 @@
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteFirstProduct">
             <argument name="sku" value="$createFirstProduct.sku$"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertCartAfterProductDeleted">
             <argument name="productName" value="$createSecondProduct.name$"/>

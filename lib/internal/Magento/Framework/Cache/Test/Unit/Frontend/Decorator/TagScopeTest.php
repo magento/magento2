@@ -24,55 +24,64 @@ class TagScopeTest extends TestCase
      */
     protected $_frontend;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->_frontend = $this->getMockForAbstractClass(FrontendInterface::class);
         $this->_object = new TagScope($this->_frontend, 'enforced_tag');
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown(): void
     {
         $this->_object = null;
         $this->_frontend = null;
     }
 
-    public function testGetTag()
+    /**
+     * @return void
+     */
+    public function testGetTag(): void
     {
         $this->assertEquals('enforced_tag', $this->_object->getTag());
     }
 
-    public function testSave()
+    /**
+     * @return void
+     */
+    public function testSave(): void
     {
         $expectedResult = new \stdClass();
-        $this->_frontend->expects(
-            $this->once()
-        )->method(
-            'save'
-        )->with(
-            'test_value',
-            'test_id',
-            ['test_tag_one', 'test_tag_two', 'enforced_tag'],
-            111
-        )->willReturn(
-            $expectedResult
-        );
+        $this->_frontend->expects($this->once())
+            ->method('save')
+            ->with(
+                'test_value',
+                'test_id',
+                ['test_tag_one', 'test_tag_two', 'enforced_tag'],
+                111
+            )
+            ->willReturn($expectedResult);
         $actualResult = $this->_object->save('test_value', 'test_id', ['test_tag_one', 'test_tag_two'], 111);
         $this->assertSame($expectedResult, $actualResult);
     }
 
-    public function testCleanModeAll()
+    /**
+     * @return void
+     */
+    public function testCleanModeAll(): void
     {
         $expectedResult = new \stdClass();
-        $this->_frontend->expects(
-            $this->once()
-        )->method(
-            'clean'
-        )->with(
-            \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-            ['enforced_tag']
-        )->willReturn(
-            $expectedResult
-        );
+        $this->_frontend->expects($this->once())
+            ->method('clean')
+            ->with(
+                \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                ['enforced_tag']
+            )
+            ->willReturn($expectedResult);
         $actualResult = $this->_object->clean(
             \Zend_Cache::CLEANING_MODE_ALL,
             ['ignored_tag_one', 'ignored_tag_two']
@@ -80,19 +89,18 @@ class TagScopeTest extends TestCase
         $this->assertSame($expectedResult, $actualResult);
     }
 
-    public function testCleanModeMatchingTag()
+    /**
+     * @return void
+     */
+    public function testCleanModeMatchingTag(): void
     {
         $expectedResult = new \stdClass();
-        $this->_frontend->expects(
-            $this->once()
-        )->method(
-            'clean'
-        )->with(
-            \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-            ['test_tag_one', 'test_tag_two', 'enforced_tag']
-        )->willReturn(
-            $expectedResult
-        );
+        $this->_frontend->expects($this->once())
+            ->method('clean')
+            ->with(
+                \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                ['test_tag_one', 'test_tag_two', 'enforced_tag']
+            )->willReturn($expectedResult);
         $actualResult = $this->_object->clean(
             \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
             ['test_tag_one', 'test_tag_two']
@@ -104,30 +112,19 @@ class TagScopeTest extends TestCase
      * @param bool $fixtureResultOne
      * @param bool $fixtureResultTwo
      * @param bool $expectedResult
+     *
+     * @return void
      * @dataProvider cleanModeMatchingAnyTagDataProvider
      */
-    public function testCleanModeMatchingAnyTag($fixtureResultOne, $fixtureResultTwo, $expectedResult)
+    public function testCleanModeMatchingAnyTag($fixtureResultOne, $fixtureResultTwo, $expectedResult): void
     {
-        $this->_frontend->expects(
-            $this->at(0)
-        )->method(
-            'clean'
-        )->with(
-            \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-            ['test_tag_one', 'enforced_tag']
-        )->willReturn(
-            $fixtureResultOne
-        );
-        $this->_frontend->expects(
-            $this->at(1)
-        )->method(
-            'clean'
-        )->with(
-            \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-            ['test_tag_two', 'enforced_tag']
-        )->willReturn(
-            $fixtureResultTwo
-        );
+        $this->_frontend
+            ->method('clean')
+            ->withConsecutive(
+                [\Zend_Cache::CLEANING_MODE_MATCHING_TAG, ['test_tag_one', 'enforced_tag']],
+                [\Zend_Cache::CLEANING_MODE_MATCHING_TAG, ['test_tag_two', 'enforced_tag']]
+            )
+            ->willReturnOnConsecutiveCalls($fixtureResultOne, $fixtureResultTwo);
         $actualResult = $this->_object->clean(
             \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
             ['test_tag_one', 'test_tag_two']
@@ -138,7 +135,7 @@ class TagScopeTest extends TestCase
     /**
      * @return array
      */
-    public function cleanModeMatchingAnyTagDataProvider()
+    public function cleanModeMatchingAnyTagDataProvider(): array
     {
         return [
             'failure, failure' => [false, false, false],

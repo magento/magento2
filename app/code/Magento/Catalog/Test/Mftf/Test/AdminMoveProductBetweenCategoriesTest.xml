@@ -24,31 +24,24 @@
             <createData entity="_defaultCategory" stepKey="createAnchoredCategory1"/>
             <createData entity="_defaultCategory" stepKey="createSecondCategory"/>
 
-            <!-- Switch "Category Product" and "Product Category" indexers to "Update by Schedule" mode -->
-            <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="onIndexManagement"/>
+            <comment userInput="BIC workaround" stepKey="onIndexManagement"/>
+            <comment userInput="BIC workaround" stepKey="switchCategoryProduct"/>
+            <comment userInput="BIC workaround" stepKey="switchProductCategory"/>
+            <comment userInput="BIC workaround" stepKey="switchCatalogSearch"/>
 
-            <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchCategoryProduct">
-                <argument name="indexerValue" value="catalog_category_product"/>
-            </actionGroup>
-            <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchProductCategory">
-                <argument name="indexerValue" value="catalog_product_category"/>
-            </actionGroup>
-            <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchCatalogSearch">
-                <argument name="indexerValue" value="catalogsearch_fulltext"/>
+            <!-- Switch "Category Product", "Product Category" and "Catalog Search" indexers to "Update by Schedule" mode -->
+            <actionGroup ref="CliIndexerSetScheduleModeActionGroup" stepKey="setScheduleIndexerMode">
+                <argument name="indices" value="catalog_category_product catalog_product_category catalogsearch_fulltext"/>
             </actionGroup>
         </before>
 
         <after>
-            <!-- Switch "Category Product" and "Product Category" indexers to "Update by Save" mode -->
-            <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="onIndexManagement"/>
-
-            <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchCategoryProduct">
-                <argument name="indexerValue" value="catalog_category_product"/>
-                <argument name="action" value="Update on Save"/>
-            </actionGroup>
-            <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchProductCategory">
-                <argument name="indexerValue" value="catalog_product_category"/>
-                <argument name="action" value="Update on Save"/>
+            <comment userInput="BIC workaround" stepKey="onIndexManagement"/>
+            <comment userInput="BIC workaround" stepKey="switchCategoryProduct"/>
+            <comment userInput="BIC workaround" stepKey="switchProductCategory"/>
+            <!-- Switch "Category Product", "Product Category" and "Catalog Search" indexers to "Update by Save" mode -->
+            <actionGroup ref="CliIndexerSetRealtimeModeActionGroup" stepKey="setRealtimeIndexerMode">
+                <argument name="indices" value="catalog_category_product catalog_product_category catalogsearch_fulltext"/>
             </actionGroup>
 
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
@@ -111,7 +104,9 @@
         <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSuccessMessage"/>
 
         <!-- Run cron -->
-        <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCron">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Clear invalidated cache on System>Tools>Cache Management page  -->
         <amOnPage url="{{AdminCacheManagementPage.url}}" stepKey="onCachePage"/>
@@ -140,11 +135,13 @@
         <see userInput="$$simpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProduct"/>
 
         <!-- Open <product1>  -->
-        <click selector="{{StorefrontCategoryMainSection.productLinkByHref($$simpleProduct.urlKey$$)}}" stepKey="openProduct"/>
+        <click selector="{{StorefrontCategoryMainSection.productLinkByHref($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="openProduct"/>
         <waitForPageLoad stepKey="waitForProductPageLoading"/>
 
         <!-- # Product page should open successfully # Breadcrumb for product should be like <Cat 2> -->
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="$$simpleProduct.name$$"/>
+        </actionGroup>
         <see userInput="$$createSecondCategory.name$$" selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}" stepKey="seeCategoryInBreadcrumbs"/>
 
         <!-- Open <Cat1_anchored> category -->
@@ -180,7 +177,9 @@
         <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSaveMessage"/>
 
         <!-- Run cron -->
-        <magentoCLI command="cron:run --group=index" stepKey="runCron2"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCron2">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Open frontend -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="onFrontendPage"/>

@@ -15,12 +15,14 @@
                 <value id="vimeo" type="host">vimeo.com</value>
                 <value id="www_vimeo" type="host">www.vimeo.com</value>
                 <value id="vimeo_cdn" type="host">*.vimeocdn.com</value>
+                <value id="youtube" type="host">*.youtube.com</value>
             </values>
         </policy>
         <policy id="img-src">
             <values>
                 <value id="vimeo_cdn" type="host">*.vimeocdn.com</value>
                 <value id="youtube_image" type="host">i.ytimg.com</value>
+                <value id="youtube" type="host">*.youtube.com</value>
             </values>
         </policy>
         <policy id="frame-src">

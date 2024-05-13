@@ -9,6 +9,8 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
 /**
  * Wrapper for structure of price index table.
+ *
+ * @api
  */
 class IndexTableStructure
 {

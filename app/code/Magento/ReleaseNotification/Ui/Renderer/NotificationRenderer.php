@@ -10,6 +10,10 @@ use Magento\Framework\Escaper;
 
 /**
  * Builds the HTML for the release notification modals
+ *
+ * @deprecated Starting from Magento OS 2.4.7 Magento_ReleaseNotification module is deprecated
+ * in favor of another in-product messaging mechanism
+ * @see Current in-product messaging mechanism
  */
 class NotificationRenderer
 {
@@ -146,7 +150,7 @@ class NotificationRenderer
             $content .= $this->escaper->escapeHtml($subHeading['title']);
             $content .= "</h3>";
             $content .= "<p>";
-            $content .= $this->formatContentWithLinks($subHeading['content']);
+            $content .= isset($subHeading['content']) ? $this->formatContentWithLinks($subHeading['content']) : '';
             $content .= "</p>";
             $content .= "</div>";
         }
@@ -170,6 +174,8 @@ class NotificationRenderer
     }
 
     /**
+     * Formats links in the content to a correct format.
+     *
      * Searches a given string for a URL, formats it to an HTML anchor tag, and returns the original string in the
      * correct HTML format.
      *

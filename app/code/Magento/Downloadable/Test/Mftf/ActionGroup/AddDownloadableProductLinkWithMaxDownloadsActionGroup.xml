@@ -25,6 +25,7 @@
         <selectOption userInput="{{link.shareable}}" selector="{{AdminProductDownloadableSection.addLinkShareableSelector('0')}}" stepKey="selectDownloadableLinkShareable"/>
         <fillField userInput="{{link.max_downloads}}" selector="{{AdminProductDownloadableSection.addLinkMaxDownloadsInput('0')}}" stepKey="fillDownloadableLinkMaxDownloads"/>
         <attachFile userInput="{{link.file}}" selector="{{AdminProductDownloadableSection.addLinkFileUploadFile('0')}}" stepKey="fillDownloadableLinkUploadFile"/>
+        <waitForPageLoad stepKey="waitForFileLoad"/>
         <fillField userInput="{{link.sample}}" selector="{{AdminProductDownloadableSection.addLinkSampleUrlInput('0')}}" stepKey="fillDownloadableLinkSampleUrl"/>
     </actionGroup>
 </actionGroups>

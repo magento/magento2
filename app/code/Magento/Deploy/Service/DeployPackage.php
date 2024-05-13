@@ -8,6 +8,7 @@ namespace Magento\Deploy\Service;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFile;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Deploy\Console\InputValidator;
@@ -138,6 +139,7 @@ class DeployPackage
                 $this->errorsCount++;
                 $this->logger->critical($errorMessage);
                 $package->deleteFile($file->getFileId());
+                throw new LocalizedException($errorMessage);
             } catch (\Exception $exception) {
                 $this->logger->critical(
                     'Compilation from source ' . $file->getSourcePath() . ' failed' . PHP_EOL . (string)$exception
@@ -204,14 +206,14 @@ class DeployPackage
     private function checkIfCanCopy(PackageFile $file, Package $package, Package $parentPackage = null)
     {
         return $parentPackage
-        && $file->getOrigPackage() !== $package
-        && (
-            $file->getArea() !== $package->getArea()
-            || $file->getTheme() !== $package->getTheme()
-            || $file->getLocale() !== $package->getLocale()
-        )
-        && $file->getOrigPackage() === $parentPackage
-        && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
+            && $file->getOrigPackage() !== $package
+            && (
+                $file->getArea() !== $package->getArea()
+                || $file->getTheme() !== $package->getTheme()
+                || $file->getLocale() !== $package->getLocale()
+            )
+            && $file->getOrigPackage() === $parentPackage
+            && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
     }
 
     /**
@@ -224,6 +226,7 @@ class DeployPackage
     private function checkFileSkip($filePath, array $options)
     {
         if ($filePath !== '.') {
+            $filePath = (string)$filePath;
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
             // phpcs:ignore Magento2.Functions.DiscouragedFunction

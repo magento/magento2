@@ -12,6 +12,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Magento\Sales\Api\Data\OrderExtensionInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -28,8 +29,9 @@ use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
  * Repository class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  */
-class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
+class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, ResetAfterRequestInterface
 {
     /**
      * @var Metadata
@@ -91,7 +93,8 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @param OrderTaxManagementInterface|null $orderTaxManagement
      * @param PaymentAdditionalInfoInterfaceFactory|null $paymentAdditionalInfoFactory
      * @param JsonSerializer|null $serializer
-     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param JoinProcessorInterface|null $extensionAttributesJoinProcessor
+     * @param ShippingAssignmentBuilder|null $shippingAssignmentBuilder
      */
     public function __construct(
         Metadata $metadata,
@@ -101,7 +104,8 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         OrderTaxManagementInterface $orderTaxManagement = null,
         PaymentAdditionalInfoInterfaceFactory $paymentAdditionalInfoFactory = null,
         JsonSerializer $serializer = null,
-        JoinProcessorInterface $extensionAttributesJoinProcessor = null
+        JoinProcessorInterface $extensionAttributesJoinProcessor = null,
+        ShippingAssignmentBuilder $shippingAssignmentBuilder = null
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
@@ -117,6 +121,8 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             ->get(JsonSerializer::class);
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor
             ?: ObjectManager::getInstance()->get(JoinProcessorInterface::class);
+        $this->shippingAssignmentBuilder = $shippingAssignmentBuilder
+            ?: ObjectManager::getInstance()->get(ShippingAssignmentBuilder::class);
     }
 
     /**
@@ -164,9 +170,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         $appliedTaxes = $orderTaxDetails->getAppliedTaxes();
 
         $extensionAttributes->setAppliedTaxes($appliedTaxes);
-        if (!empty($appliedTaxes)) {
-            $extensionAttributes->setConvertingFromQuote(true);
-        }
+        $extensionAttributes->setConvertingFromQuote(false);
 
         $items = $orderTaxDetails->getItems();
         $extensionAttributes->setItemAppliedTaxes($items);
@@ -186,7 +190,13 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         if ($extensionAttributes === null) {
             $extensionAttributes = $this->orderExtensionFactory->create();
         }
-        $paymentAdditionalInformation = $order->getPayment()->getAdditionalInformation();
+
+        $paymentAdditionalInformation = [];
+        $payment = $order->getPayment();
+
+        if ($payment) {
+            $paymentAdditionalInformation = $payment->getAdditionalInformation();
+        }
 
         $objects = [];
         foreach ($paymentAdditionalInformation as $key => $value) {
@@ -264,12 +274,18 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     {
         /** @var  \Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes */
         $extensionAttributes = $entity->getExtensionAttributes();
-        if ($entity->getIsNotVirtual() && $extensionAttributes && $extensionAttributes->getShippingAssignments()) {
+        if ($entity->getIsNotVirtual() && $extensionAttributes) {
             $shippingAssignments = $extensionAttributes->getShippingAssignments();
             if (!empty($shippingAssignments)) {
                 $shipping = array_shift($shippingAssignments)->getShipping();
-                $entity->setShippingAddress($shipping->getAddress());
-                $entity->setShippingMethod($shipping->getMethod());
+                $shippingAddress = $shipping->getAddress();
+                $shippingEmail = ($shippingAddress !== null) ? $shippingAddress->getEmail() : null;
+                $shippingMethod = $shipping->getMethod();
+                $entity->setShippingAddress($shippingAddress);
+                $entity->setShippingMethod($shippingMethod);
+                if (!$entity->getCustomerEmail() && $shippingEmail) {
+                    $entity->setCustomerEmail($shippingEmail);
+                }
             }
         }
 
@@ -294,27 +310,9 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         } elseif ($extensionAttributes->getShippingAssignments() !== null) {
             return;
         }
-        /** @var ShippingAssignmentInterface $shippingAssignment */
-        $shippingAssignments = $this->getShippingAssignmentBuilderDependency();
-        $shippingAssignments->setOrderId($order->getEntityId());
-        $extensionAttributes->setShippingAssignments($shippingAssignments->create());
+        $this->shippingAssignmentBuilder->setOrder($order);
+        $extensionAttributes->setShippingAssignments($this->shippingAssignmentBuilder->create());
         $order->setExtensionAttributes($extensionAttributes);
-    }
-
-    /**
-     * Get the new ShippingAssignmentBuilder dependency for application code
-     *
-     * @return ShippingAssignmentBuilder
-     * @deprecated 100.0.4
-     */
-    private function getShippingAssignmentBuilderDependency()
-    {
-        if (!$this->shippingAssignmentBuilder instanceof ShippingAssignmentBuilder) {
-            $this->shippingAssignmentBuilder = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Sales\Model\Order\ShippingAssignmentBuilder::class
-            );
-        }
-        return $this->shippingAssignmentBuilder;
     }
 
     /**
@@ -340,5 +338,13 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         if ($fields) {
             $searchResult->addFieldToFilter($fields, $conditions);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->registry = [];
     }
 }

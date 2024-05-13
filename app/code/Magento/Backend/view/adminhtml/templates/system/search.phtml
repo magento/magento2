@@ -4,7 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Backend\Block\GlobalSearch */
+// phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
+
+use Magento\Backend\Block\GlobalSearch;
+use Magento\Framework\Json\Helper\Data;
+
+/** @var $block GlobalSearch */
+/** @var Data $helper */
+$helper = $this->helper(Data::class);
+
 ?>
 <div class="search-global" data-mage-init='{"globalSearch": {}}'>
     <form action="#" id="form-search">
@@ -15,9 +23,7 @@
                     class="search-global-input"
                     id="search-global"
                     name="query"
-                    <?php //phpcs:disable ?>
-                    data-mage-init='<?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getWidgetInitOptions()) ?>'>
-                    <?php //phpcs:enable ?>
+                    data-mage-init='<?= /* @noEscape */ $helper->jsonEncode($block->getWidgetInitOptions()) ?>'>
             <button
                 type="submit"
                 class="search-global-action"

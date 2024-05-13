@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerLoggingFilterTest">
+        <annotations>
+            <features value="Login as Customer logs"/>
+            <stories value="Filter by date login as customer logs"/>
+            <title value="Filter by date login as customer logs"/>
+            <description value="Filter by date should be from/to"/>
+            <severity value="AVERAGE"/>
+            <group value="login_as_customer"/>
+            <testCaseId value="MC-38920"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createFirstCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultUser"/>
+            <magentoCLI command="config:set general/locale/timezone UTC" stepKey="setTimezone"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set general/locale/timezone America/Los_Angeles" stepKey="setTimezone"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterAfter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsDefaultAdmin"/>
+            <deleteData createDataKey="createFirstCustomer" stepKey="deleteFirstCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+        </after>
+        <!-- Login into First Customer account -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                     stepKey="loginAsFirstCustomerByDefaultAdmin">
+            <argument name="customerId" value="$$createFirstCustomer.id$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutFirstCustomerDefaultAdmin"/>
+        <!-- Navigate to Login as Customer Log page -->
+        <actionGroup ref="AdminOpenLoginAsCustomerLogActionGroup" stepKey="gotoLoginAsCustomerLog"/>
+        <!-- Setup date filters -->
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+        <actionGroup ref="AdminLoginAsCustomerLogFilterDatePickerTodayActionGroup" stepKey="filterByToday"/>
+        <!-- Perform assertions -->
+        <actionGroup ref="AdminAssertLoginAsCustomerLogRecordActionGroup" stepKey="verifyDefaultAdminFirstCustomerLogRecord">
+            <argument name="rowNumber" value="1"/>
+            <argument name="adminId" value="1"/>
+            <argument name="customerId" value="$$createFirstCustomer.id$$"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -37,6 +37,7 @@ class AggregateInvoker
 
     /**
      * Collect all failed assertions and fail test in case such list is not empty.
+     *
      * Incomplete and skipped test results are aggregated as well.
      *
      * @param callable $callback
@@ -71,6 +72,8 @@ class AggregateInvoker
     }
 
     /**
+     * Prepare Message
+     *
      * @param \Exception $exception
      * @param string $dataSetName
      * @param mixed $dataSet
@@ -127,7 +130,7 @@ class AggregateInvoker
             $results[\PHPUnit\Framework\SkippedTestError::class]
         );
         if ($results[\PHPUnit\Framework\IncompleteTestError::class]) {
-            $this->_testCase->markTestIncomplete($message);
+            $this->_testCase->markTestSkipped($message);
         } elseif ($results[\PHPUnit\Framework\SkippedTestError::class]) {
             $this->_testCase->markTestSkipped($message);
         }

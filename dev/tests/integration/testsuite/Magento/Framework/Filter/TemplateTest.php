@@ -56,6 +56,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ['name' => 'Richard', 'age' => 24],
             ['name' => 'Jane', 'age' => 12],
             ['name' => 'Spot', 'age' => 7],
+            ['name' => 'Bill', 'age' => '25']
         ];
     }
 
@@ -89,28 +90,32 @@ TEMPLATE;
         2 name: Spot, lastname: , age: 7
     </li>
 
+    <li>
+        3 name: Bill, lastname: , age: 25
+    </li>
+
 </ul>
 EXPECTED_RESULT;
 
         $template2 = <<<TEMPLATE
 <ul>
-    {{for item in order.all_visible_items}}
+{{for item in order.all_visible_items}}
     <li>
         index: {{var loop.index}} sku: {{var item.sku}}
         name: {{var item.name}} price: {{var item.price}} quantity: {{var item.ordered_qty}}
     </li>
-    {{/for}}
+{{/for}}
 </ul>
 TEMPLATE;
 
         $expectedResult2 = <<<EXPECTED_RESULT
 <ul>
-    
+
     <li>
         index: 0 sku: ABC123
         name: Product ABC price: 123 quantity: 2
     </li>
-    
+
 </ul>
 EXPECTED_RESULT;
         return [
@@ -155,7 +160,6 @@ EXPECTED_RESULT;
 
     public function testNonDataObjectVariableParsing()
     {
-        $previous = $this->templateFilter->setStrictMode(false);
         $this->templateFilter->setVariables(
             [
                 'address' => new class {
@@ -168,12 +172,8 @@ EXPECTED_RESULT;
         );
 
         $template = '{{var address.format(\'html\')}}';
-        $expected = '<foo>html</foo>';
-        try {
-            self::assertEquals($expected, $this->templateFilter->filter($template));
-        } finally {
-            $this->templateFilter->setStrictMode($previous);
-        }
+        $expected = '';
+        self::assertEquals($expected, $this->templateFilter->filter($template));
     }
 
     public function testStrictModeByDefault()
@@ -195,7 +195,6 @@ EXPECTED_RESULT;
 
     public function testComplexVariableArguments()
     {
-        $previous = $this->templateFilter->setStrictMode(false);
         $this->templateFilter->setVariables(
             [
                 'address' => new class {
@@ -209,17 +208,13 @@ EXPECTED_RESULT;
         );
 
         $template = '{{var address.format($arg1,\'bar\',[param1:baz])}}';
-        $expected = 'foo bar baz';
-        try {
-            self::assertEquals($expected, $this->templateFilter->filter($template));
-        } finally {
-            $this->templateFilter->setStrictMode($previous);
-        }
+        $expected = '';
+
+        self::assertEquals($expected, $this->templateFilter->filter($template));
     }
 
     public function testComplexVariableGetterArguments()
     {
-        $previous = $this->templateFilter->setStrictMode(false);
         $this->templateFilter->setVariables(
             [
                 'address' => new class extends DataObject {
@@ -233,17 +228,12 @@ EXPECTED_RESULT;
         );
 
         $template = '{{var address.getFoo($arg1,\'bar\',[param1:baz])}}';
-        $expected = 'foo bar baz';
-        try {
-            self::assertEquals($expected, $this->templateFilter->filter($template));
-        } finally {
-            $this->templateFilter->setStrictMode($previous);
-        }
+        $expected = '';
+        self::assertEquals($expected, $this->templateFilter->filter($template));
     }
 
     public function testNonDataObjectRendersBlankInStrictMode()
     {
-        $this->templateFilter->setStrictMode(true);
         $this->templateFilter->setVariables(
             [
                 'address' => new class {
@@ -262,7 +252,6 @@ EXPECTED_RESULT;
 
     public function testDataObjectCanRenderPropertiesStrictMode()
     {
-        $this->templateFilter->setStrictMode(true);
         $this->templateFilter->setVariables(
             [
                 'customer' => new DataObject(['name' => 'John Doe']),
@@ -274,12 +263,8 @@ EXPECTED_RESULT;
         self::assertEquals($expected, $this->templateFilter->filter($template));
     }
 
-    /**
-     * @dataProvider strictModeTrueFalseProvider
-     */
-    public function testScalarDataKeys($strictMode)
+    public function testScalarDataKeys()
     {
-        $this->templateFilter->setStrictMode($strictMode);
         $this->templateFilter->setVariables(
             [
                 'customer_data' => [
@@ -400,13 +385,5 @@ EXPECTED_RESULT;
             '\DateTime',
             $this->templateFilter->filter('{{var dateTime.createFromFormat(\'d\',\'1548201468\')}}')
         );
-    }
-
-    public function strictModeTrueFalseProvider()
-    {
-        return [
-            'strictMode' => [true],
-            'legacyMode' => [false]
-        ];
     }
 }

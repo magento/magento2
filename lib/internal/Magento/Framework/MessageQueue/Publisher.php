@@ -72,7 +72,7 @@ class Publisher implements PublisherInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function publish($topicName, $data)
     {
@@ -83,7 +83,9 @@ class Publisher implements PublisherInterface
                 'body' => $data,
                 'properties' => [
                     'delivery_mode' => 2,
-                    'message_id' => md5(uniqid($topicName))
+                    // md5() here is not for cryptographic use.
+                    // phpcs:ignore Magento2.Security.InsecureFunction
+                    'message_id' => md5(gethostname() . microtime(true) . uniqid($topicName, true))
                 ]
             ]
         );

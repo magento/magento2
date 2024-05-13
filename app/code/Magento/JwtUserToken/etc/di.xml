@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Integration\Api\UserTokenIssuerInterface" type="Magento\JwtUserToken\Model\Issuer" />
+    <preference for="Magento\Integration\Api\UserTokenReaderInterface" type="Magento\Integration\Model\CompositeTokenReader" />
+    <preference for="Magento\Integration\Api\UserTokenRevokerInterface" type="Magento\JwtUserToken\Model\Revoker" />
+    <preference for="Magento\JwtUserToken\Model\JwtSettingsProviderInterface" type="Magento\JwtUserToken\Model\ConfigurableJwtSettingsProvider" />
+    <preference for="Magento\JwtUserToken\Api\ConfigReaderInterface" type="Magento\JwtUserToken\Model\Config\ConfigReader" />
+    <type name="Magento\JwtUserToken\Model\ResourceModel\FastStorageRevokedWrapper">
+        <arguments>
+            <argument name="slowRepo" xsi:type="object">Magento\JwtUserToken\Model\ResourceModel\RevokedRepository</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\JwtUserToken\Api\RevokedRepositoryInterface" type="Magento\JwtUserToken\Model\ResourceModel\FastStorageRevokedWrapper" />
+    <type name="Magento\Integration\Model\CompositeUserTokenValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="jwt_revoked" xsi:type="object">Magento\JwtUserToken\Model\RevokedValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Integration\Model\CompositeTokenReader">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="10" xsi:type="object">Magento\JwtUserToken\Model\Reader</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

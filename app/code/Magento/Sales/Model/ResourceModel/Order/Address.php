@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order;
 
+use Magento\Framework\Model\AbstractModel;
 use Magento\Sales\Model\ResourceModel\EntityAbstract as SalesResource;
 use Magento\Sales\Model\Spi\OrderAddressResourceInterface;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
@@ -15,7 +16,7 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 class Address extends SalesResource implements OrderAddressResourceInterface
 {
     /**
-     * Event prefix
+     * Sales order address event prefix
      *
      * @var string
      */
@@ -33,10 +34,10 @@ class Address extends SalesResource implements OrderAddressResourceInterface
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Sales\Model\ResourceModel\Attribute $attribute
-     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param Snapshot $entitySnapshot
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
+     * @param \Magento\Sales\Model\ResourceModel\Attribute $attribute
+     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param \Magento\Sales\Model\Order\Address\Validator $validator
      * @param \Magento\Sales\Model\ResourceModel\GridPool $gridPool
      * @param string $connectionName
@@ -121,5 +122,25 @@ class Address extends SalesResource implements OrderAddressResourceInterface
             );
         }
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function isModified(AbstractModel $entity): bool
+    {
+        if (!$entity->getId()) {
+            return true;
+        }
+        $snapShotData = $this->entitySnapshot->getSnapshotData($entity);
+        foreach ($snapShotData as $field => $value) {
+            $fieldValue = $entity->getDataByKey($field);
+            if (is_numeric($fieldValue) && is_numeric($value)) {
+                if ($fieldValue !== $value) {
+                    return true;
+                }
+            }
+        }
+        return parent::isModified($entity);
     }
 }

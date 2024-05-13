@@ -5,6 +5,7 @@
  */
 namespace Magento\Indexer\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -14,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class IndexerInfoCommand extends AbstractIndexerCommand
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -22,7 +23,7 @@ class IndexerInfoCommand extends AbstractIndexerCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -30,5 +31,7 @@ class IndexerInfoCommand extends AbstractIndexerCommand
         foreach ($indexers as $indexer) {
             $output->writeln(sprintf('%-40s %s', $indexer->getId(), $indexer->getTitle()));
         }
+
+        return Cli::RETURN_SUCCESS;
     }
 }

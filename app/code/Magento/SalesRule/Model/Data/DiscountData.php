@@ -8,18 +8,21 @@ declare(strict_types=1);
 namespace Magento\SalesRule\Model\Data;
 
 use Magento\SalesRule\Api\Data\DiscountDataInterface;
+use Magento\SalesRule\Api\Data\DiscountAppliedToInterface;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 
 /**
  * Discount Data Model
  */
-class DiscountData extends \Magento\Framework\Api\AbstractExtensibleObject implements DiscountDataInterface
+class DiscountData extends \Magento\Framework\Api\AbstractExtensibleObject implements
+    DiscountDataInterface,
+    DiscountAppliedToInterface
 {
 
-    const AMOUNT = 'amount';
-    const BASE_AMOUNT = 'base_amount';
-    const ORIGINAL_AMOUNT = 'original_amount';
-    const BASE_ORIGINAL_AMOUNT = 'base_original_amount';
+    public const AMOUNT = 'amount';
+    public const BASE_AMOUNT = 'base_amount';
+    public const ORIGINAL_AMOUNT = 'original_amount';
+    public const BASE_ORIGINAL_AMOUNT = 'base_original_amount';
 
     /**
      * Get Amount
@@ -125,5 +128,15 @@ class DiscountData extends \Magento\Framework\Api\AbstractExtensibleObject imple
         ExtensionAttributesInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * Get entity type the discount is applied to
+     *
+     * @return string
+     */
+    public function getAppliedTo()
+    {
+        return $this->_get(DiscountAppliedToInterface::APPLIED_TO) ?: DiscountAppliedToInterface::APPLIED_TO_ITEM;
     }
 }

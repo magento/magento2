@@ -38,8 +38,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 class SaveTest extends AbstractBackendController
 {
     /**
-     * Base controller URL
-     *
      * @var string
      */
     private $baseControllerUrl = 'backend/customer/index/';
