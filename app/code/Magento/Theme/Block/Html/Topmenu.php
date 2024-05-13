@@ -250,13 +250,13 @@ class Topmenu extends Template implements IdentityInterface
                 . $outermostClassCode
                 . 'role="menuitem"><span>'
                 . $this->escapeHtml(
-                $child->getName()
-            ) . '</span></a>' . $this->_addSubMenu(
-                $child,
-                $childLevel,
-                $childrenWrapClass,
-                $limit
-            ) . '</li>';
+                    $child->getName()
+                ) . '</span></a>' . $this->_addSubMenu(
+                    $child,
+                    $childLevel,
+                    $childrenWrapClass,
+                    $limit
+                ) . '</li>';
             $counter++;
         }
 
