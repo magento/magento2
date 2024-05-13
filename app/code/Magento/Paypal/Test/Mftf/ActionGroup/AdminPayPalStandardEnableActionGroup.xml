@@ -17,9 +17,9 @@
             <argument name="countryCode" type="string" defaultValue="us"/>
         </arguments>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <waitForElementClickable selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="waitForExpandOtherPaypalConfigButton" />
-        <click selector ="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="expandOtherPaypalConfigButton"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <waitForElementVisible selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="waitForOtherPayPalPaymentsSection"/>
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab(countryCode)}}" visible="false" stepKey="expandOtherPaypalConfigButton"/>
         <scrollTo selector="{{PayPalStandardConfigSection.configureBtn(countryCode)}}"  x="0" y="-80"  stepKey="scrollToConfigure"/>
         <waitForElementClickable selector="{{PayPalStandardConfigSection.configureBtn(countryCode)}}" stepKey="waitForPayPalStandardConfigureBtn" />
         <click selector="{{PayPalStandardConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalStandardConfigureBtn"/>

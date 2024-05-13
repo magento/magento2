@@ -8,7 +8,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="PayPalStandardConfigSection">
-        <element name="configureBtn" type="button" selector="//button[@id='payment_{{countryCode}}_paypal_group_all_in_one_wps_express-head']" parameterized="true"/>
+        <element name="configureBtn" type="button" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express-head" parameterized="true"/>
         <element name="email" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_express_checkout_required_express_checkout_business_account" parameterized="true"/>
         <element name="apiMethod" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_express_checkout_required_express_checkout_api_authentication" parameterized="true"/>
         <element name="username" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_express_checkout_required_express_checkout_api_username" parameterized="true"/>
