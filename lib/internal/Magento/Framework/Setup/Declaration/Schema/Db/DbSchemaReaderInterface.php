@@ -38,9 +38,10 @@ interface DbSchemaReaderInterface
      *
      * @param  string $tableName
      * @param  string $resource
+     * @param  object $declarativeSchema
      * @return array
      */
-    public function readColumns($tableName, $resource);
+    public function readColumns($tableName, $resource, $declarativeSchema);
 
     /**
      * Show table options like engine, partitioning, etc.

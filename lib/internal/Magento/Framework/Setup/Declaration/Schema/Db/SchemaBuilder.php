@@ -68,8 +68,18 @@ class SchemaBuilder
     /**
      * @inheritdoc
      */
-    public function build(Schema $schema)
+    public function build(Schema $schema, $declarativeSchema = null)
     {
+        $tablesWithJsonTypeField = [];
+        if($declarativeSchema != null) {
+            foreach ($declarativeSchema->getTables() as $table) {
+                foreach ($table->getColumns() as $column) {
+                    if ($column->getType() == 'json') {
+                        $tablesWithJsonTypeField[$table->getName()] = $column->getName();
+                    }
+                }
+            }
+        }
         foreach ($this->sharding->getResources() as $resource) {
             foreach ($this->dbSchemaReader->readTables($resource) as $tableName) {
                 $columns = [];
@@ -77,7 +87,7 @@ class SchemaBuilder
                 $constraints = [];
 
                 $tableOptions = $this->dbSchemaReader->getTableOptions($tableName, $resource);
-                $columnsData = $this->dbSchemaReader->readColumns($tableName, $resource);
+                $columnsData = $this->dbSchemaReader->readColumns($tableName, $resource, $tablesWithJsonTypeField);
                 $indexesData = $this->dbSchemaReader->readIndexes($tableName, $resource);
                 $constrainsData = $this->dbSchemaReader->readConstraints($tableName, $resource);
 

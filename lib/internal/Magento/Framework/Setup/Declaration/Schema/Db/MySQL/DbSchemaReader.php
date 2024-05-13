@@ -81,9 +81,10 @@ class DbSchemaReader implements DbSchemaReaderInterface
      *
      * @param  string $tableName
      * @param  string $resource
+     * @param array $tablesWithJsonTypeField
      * @return array
      */
-    public function readColumns($tableName, $resource)
+    public function readColumns($tableName, $resource, $tablesWithJsonTypeField = [])
     {
         $columns = [];
         $adapter = $this->resourceConnection->getConnection($resource);
@@ -108,6 +109,9 @@ class DbSchemaReader implements DbSchemaReaderInterface
         $columnsDefinition = $adapter->fetchAssoc($stmt);
 
         foreach ($columnsDefinition as $columnDefinition) {
+            if (count($tablesWithJsonTypeField) > 0 && isset($tablesWithJsonTypeField[$tableName]) && $tablesWithJsonTypeField[$tableName] == $columnDefinition['name']) {
+                $columnDefinition['type'] = 'json';
+            }
             $column = $this->definitionAggregator->fromDefinition($columnDefinition);
             $columns[$column['name']] = $column;
         }

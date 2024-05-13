@@ -63,7 +63,7 @@ class SchemaConfig implements SchemaConfigInterface
     public function getDbConfig()
     {
         $schema = $this->schemaFactory->create();
-        $schema = $this->dbSchemaBuilder->build($schema);
+        $schema = $this->dbSchemaBuilder->build($schema, $this->getDeclarationConfig());
         return $schema;
     }
 
