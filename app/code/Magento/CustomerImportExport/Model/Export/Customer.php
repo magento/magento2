@@ -27,7 +27,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 
     public const COLUMN_STORE = '_store';
 
-    public const COLUMN_CREATED_AT = 'created_at';
+    private const COLUMN_CREATED_AT = 'created_at';
 
     /**
      * A constant declaration for attribute collection name
@@ -37,7 +37,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     /**
      * XML path to page size parameter
      */
-    private const XML_PATH_PAGE_SIZE = 'export/customer_page_size/customer';
+    public const XML_PATH_PAGE_SIZE = 'export/customer_page_size/customer';
 
     /**
      * @var array
