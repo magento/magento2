@@ -25,7 +25,6 @@
             <!--Create Simple product-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
-<!--                <field key="price">10.00</field>-->
                 <field key="quantity">5</field>
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
@@ -92,7 +91,7 @@
         <click selector="{{AdminOrderInvoiceViewSection.updateInvoiceBtn}}" stepKey="clickUpdateQtyInvoiceBtn"/>
         <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <!-- Assert invoice with shipment success message -->
-        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
+        <waitForText selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
         <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkOrderStatus">
             <argument name="status" value="Processing"/>
         </actionGroup>
@@ -101,10 +100,12 @@
         <!--Open the comment history tab and assert the comment-->
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryAfterSubmittingInvoice"/>
         <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Captured amount')}}" userInput="Captured amount of $271.00 online. Transaction ID: &quot;{$grabLastTransactionIDForCaptured}&quot;" stepKey="seeOrderHistoryNotesAfterSubmittingInvoice"/>
+        <waitForElementClickable selector="{{StorefrontOrderInvoicesSection.invoiceTab1}}" stepKey="waitForInvoiceTabToBeClicked"/>
         <!--Go to Invoice Tab and Verify Invoice Grand Total-->
         <click selector="{{StorefrontOrderInvoicesSection.invoiceTab1}}" stepKey="clickInvoiceTabOnStorefront"/>
+        <waitForElementClickable selector="{{StorefrontOrderInvoicesSection.clickView}}" stepKey="waitForViewButtonToBeClicked"/>
         <click selector="{{StorefrontOrderInvoicesSection.clickView}}" stepKey="clickViewButton"/>
-        <see selector="{{AdminInvoiceTotalSection.grandTotal}}" userInput="$271.00" stepKey="seeInvoiceSubTotal1"/>
+        <waitForText selector="{{AdminInvoiceTotalSection.grandTotal}}" userInput="$271.00" stepKey="seeInvoiceSubTotal1"/>
         <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClickedAfterAsserting"/>
         <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButtonAfterAsserting"/>
         <actionGroup ref="AdminAssertTransitionTypeStatusNewActionGroup" stepKey="assertTransactionTypeStatusForAuthorization">
