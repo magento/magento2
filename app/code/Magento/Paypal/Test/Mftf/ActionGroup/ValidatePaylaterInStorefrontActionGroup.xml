@@ -12,9 +12,6 @@
         <annotations>
             <description>Goes to the 'Storefront Category' page for 'Paylater Message'. </description>
         </annotations>
-        <arguments>
-            <argument name="countryCode" type="string" defaultValue="us"/>
-        </arguments>
         <waitForElementClickable selector="{{PayPalStandardConfigSection.categoryClick}}" stepKey="waitForCategryToClickable"/>
         <click selector ="{{PayPalStandardConfigSection.categoryClick}}" stepKey="clickCatagoryeButton"/>
         <waitForPageLoad stepKey="waitForCategrypageTobeLoaded"/>
