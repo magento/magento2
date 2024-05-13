@@ -71,7 +71,7 @@ class SchemaBuilder
     public function build(Schema $schema, $declarativeSchema = null)
     {
         $tablesWithJsonTypeField = [];
-        if($declarativeSchema != null) {
+        if ($declarativeSchema != null) {
             foreach ($declarativeSchema->getTables() as $table) {
                 foreach ($table->getColumns() as $column) {
                     if ($column->getType() == 'json') {

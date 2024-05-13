@@ -21,7 +21,7 @@ class DbSchemaReader implements DbSchemaReaderInterface
     /**
      * Table type in information_schema.TABLES which allows to identify only tables and ignore views
      */
-    const MYSQL_TABLE_TYPE = 'BASE TABLE';
+    public const MYSQL_TABLE_TYPE = 'BASE TABLE';
 
     /**
      * @var ResourceConnection
@@ -81,7 +81,7 @@ class DbSchemaReader implements DbSchemaReaderInterface
      *
      * @param  string $tableName
      * @param  string $resource
-     * @param array $tablesWithJsonTypeField
+     * @param  array $tablesWithJsonTypeField
      * @return array
      */
     public function readColumns($tableName, $resource, $tablesWithJsonTypeField = [])
@@ -109,7 +109,8 @@ class DbSchemaReader implements DbSchemaReaderInterface
         $columnsDefinition = $adapter->fetchAssoc($stmt);
 
         foreach ($columnsDefinition as $columnDefinition) {
-            if (count($tablesWithJsonTypeField) > 0 && isset($tablesWithJsonTypeField[$tableName]) && $tablesWithJsonTypeField[$tableName] == $columnDefinition['name']) {
+            if (count($tablesWithJsonTypeField) > 0 && isset($tablesWithJsonTypeField[$tableName])
+                 && $tablesWithJsonTypeField[$tableName] == $columnDefinition['name']) {
                 $columnDefinition['type'] = 'json';
             }
             $column = $this->definitionAggregator->fromDefinition($columnDefinition);
