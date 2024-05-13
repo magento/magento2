@@ -6,7 +6,7 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="PaylaterProductPageConfigActionGroup" >
+    <actionGroup name="PaylaterProductPageConfigActionGroup">
         <annotations>
             <description>Enable Paypal Paylater Solution For Paypal Express Checkout</description>
         </annotations>
@@ -14,15 +14,12 @@
             <argument name="countryCode" type="string" defaultValue="us"/>
         </arguments>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
-        <waitForElementClickable selector="{{PayPalExpressCheckoutConfigSection.configureBtn('us')}}" stepKey="waitForConfigureButtonClickable"/>
-        <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn('us')}}" stepKey="configureButtonClicked"/>
-        <selectOption selector ="{{PayPalExpressCheckoutConfigSection.enablePayLater('us')}}" userInput="Yes" stepKey="enablePaylaterExp"/>
+        <waitForElementClickable selector="{{PayPalExpressCheckoutConfigSection.configureBtn(countryCode)}}" stepKey="waitForConfigureButtonClickable"/>
+        <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn(countryCode)}}" stepKey="configureButtonClicked"/>
+        <selectOption selector ="{{PayPalExpressCheckoutConfigSection.enablePayLater(countryCode)}}" userInput="Yes" stepKey="enablePaylaterExp"/>
         <waitForPageLoad stepKey="waitForAdvisePageLoad"/>
-        <click selector="{{PayPalExpressCheckoutConfigSection.payLaterConfigDropDown('us')}}" stepKey="advertisePaylater"/>
+        <click selector="{{PayPalExpressCheckoutConfigSection.payLaterConfigDropDown(countryCode)}}" stepKey="advertisePaylater"/>
         <waitForPageLoad stepKey="waitForAdvisePaylaterDropdown"/>
         <selectOption selector ="{{PayPalExpressCheckoutConfigSection.enablePayLaterIn(countryCode)}}" userInput="Yes" stepKey="enablePaypalLater"/>
-        <waitForElementClickable selector="{{PayPalProductPageConfigSection.expandCatalogProductPage(countryCode)}}" stepKey="waitForCheckoutCartPageClickable"/>
-        <click selector="{{PayPalProductPageConfigSection.expandCatalogProductPage(countryCode)}}" stepKey="clickCheckoutCart"/>
-        <selectOption selector ="{{PayPalProductPageConfigSection.display(countryCode)}}" userInput="Yes" stepKey="enableDisplayforPaylaterCartPage"/>
     </actionGroup>
 </actionGroups>
