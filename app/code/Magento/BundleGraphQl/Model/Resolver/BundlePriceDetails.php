@@ -28,7 +28,7 @@ class BundlePriceDetails implements ResolverInterface
 
         $price = $product->getPrice();
         $finalPrice = $product->getFinalPrice();
-        $discountPercentage = 100 - (($finalPrice * 100) / $price);
+        $discountPercentage = ($price) ? (100 - (($finalPrice * 100) / $price)) : 0;
         return [
             'main_price' =>  $price,
             'main_final_price' => $finalPrice,
