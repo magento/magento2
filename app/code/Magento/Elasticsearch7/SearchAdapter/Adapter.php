@@ -8,14 +8,11 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch7\SearchAdapter;
 
 use Magento\Elasticsearch7\Model\Client\Elasticsearch as ElasticsearchClient;
-use Magento\Framework\Search\RequestInterface;
-use Magento\Framework\Search\Response\QueryResponse;
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder as AggregationBuilder;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\SearchAdapter\QueryContainerFactory;
 use Magento\Elasticsearch\SearchAdapter\ResponseFactory;
 use Magento\Search\Model\Search\PageSizeProvider;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\Search\AdapterInterface;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Search\Response\QueryResponse;
