@@ -124,21 +124,14 @@ class StartConsumerCommandTest extends TestCase
             ->with(StartConsumerCommand::ARGUMENT_CONSUMER)
             ->willReturn($consumerName);
         $input->expects($this->exactly(6))->method('getOption')
-            ->withConsecutive(
-                [StartConsumerCommand::OPTION_NUMBER_OF_MESSAGES],
-                [StartConsumerCommand::OPTION_BATCH_SIZE],
-                [StartConsumerCommand::OPTION_AREACODE],
-                [StartConsumerCommand::PID_FILE_PATH],
-                [StartConsumerCommand::OPTION_SINGLE_THREAD],
-                [StartConsumerCommand::OPTION_MULTI_PROCESS]
-            )->willReturnOnConsecutiveCalls(
-                $numberOfMessages,
-                $batchSize,
-                $areaCode,
-                $pidFilePath,
-                $singleThread,
-                $multiProcess
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [StartConsumerCommand::OPTION_NUMBER_OF_MESSAGES] => $numberOfMessages,
+                [StartConsumerCommand::OPTION_BATCH_SIZE] => $batchSize,
+                [StartConsumerCommand::OPTION_AREACODE] => $areaCode,
+                [StartConsumerCommand::PID_FILE_PATH] => $pidFilePath,
+                [StartConsumerCommand::OPTION_SINGLE_THREAD] => $singleThread,
+                [StartConsumerCommand::OPTION_MULTI_PROCESS] => $multiProcess
+            });
         $this->appState->expects($this->exactly($runProcessExpects))->method('setAreaCode')->with($areaCode);
         $consumer = $this->getMockBuilder(ConsumerInterface::class)
             ->disableOriginalConstructor()
@@ -169,7 +162,7 @@ class StartConsumerCommandTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             [

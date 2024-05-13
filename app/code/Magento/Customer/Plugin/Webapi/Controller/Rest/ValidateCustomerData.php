@@ -28,8 +28,8 @@ class ValidateCustomerData
      */
     public function beforeOverride(ParamsOverrider $subject, array $inputData, array $parameters): array
     {
-        if (isset($inputData[self:: CUSTOMER_KEY])) {
-            $inputData[self:: CUSTOMER_KEY] = $this->validateInputData($inputData[self:: CUSTOMER_KEY]);
+        if (isset($inputData[self::CUSTOMER_KEY])) {
+            $inputData[self::CUSTOMER_KEY] = $this->validateInputData($inputData[self::CUSTOMER_KEY]);
         }
         return [$inputData, $parameters];
     }
@@ -45,7 +45,7 @@ class ValidateCustomerData
         $result = [];
 
         $data = array_filter($inputData, function ($k) use (&$result) {
-            $key = is_string($k) ? strtolower($k) : $k;
+            $key = is_string($k) ? strtolower(str_replace('_', "", $k)) : $k;
             return !isset($result[$key]) && ($result[$key] = true);
         }, ARRAY_FILTER_USE_KEY);
 

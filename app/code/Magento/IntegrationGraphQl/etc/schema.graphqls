@@ -1,0 +1,6 @@
+#  Copyright 2024 Adobe
+#  All Rights Reserved.
+
+type StoreConfig {
+    customer_access_token_lifetime: Float @doc(description: "Customer access token lifetime.")
+}

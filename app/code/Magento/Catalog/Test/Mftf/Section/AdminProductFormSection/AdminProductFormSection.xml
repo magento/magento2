@@ -6,7 +6,7 @@
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductFormSection">
         <element name="additionalOptions" type="select" selector=".admin__control-multiselect"/>
         <element name="datepickerNewAttribute" type="input" selector="[data-index='{{attrName}}'] input" timeout="30" parameterized="true"/>
@@ -69,6 +69,7 @@
         <element name="attributeRequiredInput" type="input" selector="//input[contains(@name, 'product[{{attributeCode}}]')]" parameterized="true"/>
         <element name="attributeFieldError" type="text" selector="//*[@class='admin__field _required _error']/..//label[contains(.,'This is a required field.')]"/>
         <element name="customSelectField" type="select" selector="//select[@name='product[{{var}}]']" parameterized="true"/>
+        <element name="customInputField" type="input" selector="//input[@name='product[{{var}}]']" parameterized="true"/>
         <element name="searchCategory" type="input" selector="//*[@data-index='category_ids']//input[contains(@class, 'multiselect-search')]" timeout="30"/>
         <element name="selectCategory" type="input" selector="//*[@data-index='category_ids']//label[contains(., '{{categoryName}}')]" parameterized="true" timeout="30"/>
         <element name="done" type="button" selector="//*[@data-index='category_ids']//button[@data-action='close-advanced-select']" timeout="30"/>
@@ -87,5 +88,9 @@
         <element name="btnAdvancedInventory" type="button" selector="//button//span[text()='Advanced Inventory']/.."/>
         <element name="saveCategory" type="button" selector="//button[@data-action='close-advanced-select']" timeout="30"/>
         <element name="attributeRequiredInputField" type="select" selector="//select[contains(@name, 'product[{{attributeCode}}]')]" parameterized="true"/>
+        <element name="customTextAttribute" type="input" selector="//input[@name='product[{{attribute_code}}]']" parameterized="true"/>
+        <element name="customSelectAttribute" type="select" selector="//select[@name='product[{{attribute_code}}]']" parameterized="true"/>
+        <element name="customSwitcherAttribute" type="checkbox" selector="//input[@name='product[{{attribute_code}}]' and @value='{{checked_value}}']/parent::div[@data-role='switcher']" parameterized="true"/>
+
     </section>
 </sections>

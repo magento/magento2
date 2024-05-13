@@ -2380,6 +2380,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get identities
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getIdentities()
     {
@@ -2404,6 +2405,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
         if ($this->_appState->getAreaCode() == \Magento\Framework\App\Area::AREA_FRONTEND) {
             $identities[] = self::CACHE_TAG;
+        }
+
+        $isProductNew = $this->getOrigData('news_from_date') != $this->getData('news_from_date')
+            || $this->isObjectNew();
+        if ($isProductNew && ($isStatusChanged || $this->getStatus() == Status::STATUS_ENABLED)) {
+            $identities[] = \Magento\Catalog\Block\Product\NewProduct::CACHE_TAG;
         }
 
         return array_unique($identities);
@@ -2840,7 +2847,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $this->_customOptions = [];
         $this->_errors = [];
-        $this->_canAffectOptions = [];
+        $this->_canAffectOptions = false;
         $this->_productIdCached = null;
     }
 }

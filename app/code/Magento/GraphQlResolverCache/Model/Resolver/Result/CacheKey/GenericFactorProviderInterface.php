@@ -24,12 +24,7 @@ interface GenericFactorProviderInterface
     /**
      * Returns the runtime value that should be used as factor.
      *
-     * Throws an Exception if factor value cannot be resolved.
-     *
      * @param ContextInterface $context
-     *
-     * @throws \Exception
-     *
      * @return string
      */
     public function getFactorValue(ContextInterface $context): string;

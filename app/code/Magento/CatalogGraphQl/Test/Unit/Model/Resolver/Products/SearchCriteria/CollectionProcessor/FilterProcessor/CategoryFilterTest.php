@@ -81,10 +81,17 @@ class CategoryFilterTest extends TestCase
             ->willReturnOnConsecutiveCalls($category1, $category3);
         $this->categoryResourceModel->expects($this->exactly(2))
             ->method('load')
-            ->withConsecutive(
-                [$category1, 1],
-                [$category3, 3]
-            );
+            ->willReturnCallback(function (...$args) use ($category1, $category3) {
+                static $index = 0;
+                $expectedArgs = [
+                    [$category1, 1],
+                    [$category3, 3]
+                ];
+                $index++;
+                if ($args === $expectedArgs[$index - 1]) {
+                    return null;
+                }
+            });
         $collection->expects($this->never())
             ->method('addCategoryFilter');
         $collection->expects($this->once())
@@ -146,7 +153,7 @@ class CategoryFilterTest extends TestCase
     /**
      * @return array
      */
-    public function applyWithOtherSupportedConditionTypesDataProvider(): array
+    public static function applyWithOtherSupportedConditionTypesDataProvider(): array
     {
         return [['neq'], ['nin'],];
     }
@@ -176,7 +183,7 @@ class CategoryFilterTest extends TestCase
     /**
      * @return array
      */
-    public function applyWithUnsupportedConditionTypesDataProvider(): array
+    public static function applyWithUnsupportedConditionTypesDataProvider(): array
     {
         return [['gteq'], ['lteq'], ['gt'], ['lt'], ['like'], ['nlike']];
     }

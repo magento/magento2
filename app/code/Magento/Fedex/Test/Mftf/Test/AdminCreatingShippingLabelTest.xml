@@ -18,9 +18,6 @@
             <testCaseId value="MC-20287"/>
             <useCaseId value="MC-18215"/>
             <group value="shipping"/>
-            <skip>
-                <issueId value="MQE-1578"/>
-            </skip>
             <group value="pr_exclude"/>
         </annotations>
         <before>
@@ -35,22 +32,27 @@
             <magentoCLI command="config:set {{AdminFedexEnableSandboxModeConfigData.path}} {{AdminFedexEnableSandboxModeConfigData.value}}" stepKey="enableSandbox"/>
             <magentoCLI command="config:set {{AdminFedexEnableDebugConfigData.path}} {{AdminFedexEnableDebugConfigData.value}}" stepKey="enableDebug"/>
             <magentoCLI command="config:set {{AdminFedexEnableShowMethodConfigData.path}} {{AdminFedexEnableShowMethodConfigData.value}}" stepKey="enableShowMethod"/>
-            <!--TODO: add fedex credentials-->
+            <magentoCLI command="config:set {{AdminFedexAccount.path}} {{_CREDS.magento/carriers_fedex_account}}" stepKey="accountSetting"/>
+            <magentoCLI command="config:set {{AdminFedexHubId.path}} {{_CREDS.magento/carriers_fedex_smartpost_hubid}}" stepKey="accountHub"/>
+            <magentoCLI command="config:set {{AdminFedexApiKey.path}} {{_CREDS.magento/carriers_fedex_api_key}}" stepKey="accountApiKey"/>
+            <magentoCLI command="config:set {{AdminFedexSecretKey.path}} {{_CREDS.magento/carriers_fedex_secret_key}}" stepKey="accountSecretKey"/>
+
             <!--Set StoreInformation configs data-->
             <magentoCLI command="config:set {{AdminGeneralSetStoreNameConfigData.path}} '{{AdminGeneralSetStoreNameConfigData.value}}'" stepKey="setStoreInformationName"/>
-            <magentoCLI command="config:set {{AdminGeneralSetStorePhoneConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.telephone}}" stepKey="setStoreInformationPhone"/>
-            <magentoCLI command="config:set {{AdminGeneralSetCountryConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.country_id}}" stepKey="setStoreInformationCountry"/>
-            <magentoCLI command="config:set {{AdminGeneralSetCityConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.city}}" stepKey="setStoreInformationCity"/>
-            <magentoCLI command="config:set {{AdminGeneralSetPostcodeConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.postcode}}" stepKey="setStoreInformationPostcode"/>
-            <magentoCLI command="config:set {{AdminGeneralSetStreetAddressConfigData.path}} '{{DE_Address_Berlin_Not_Default_Address.street[0]}}'" stepKey="setStoreInformationStreetAddress"/>
-            <magentoCLI command="config:set {{AdminGeneralSetStreetAddress2ConfigData.path}} '{{US_Address_California.street[0]}}'" stepKey="setStoreInformationStreetAddress2"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStorePhoneConfigData.path}} {{US_Address_California.telephone}}" stepKey="setStoreInformationPhone"/>
+            <magentoCLI command="config:set {{AdminGeneralSetCountryConfigData.path}} {{US_Address_California.country_id}}" stepKey="setStoreInformationCountry"/>
+            <magentoCLI command="config:set {{AdminGeneralSetCityConfigData.path}} '{{US_Address_California.city}}'" stepKey="setStoreInformationCity"/>
+            <magentoCLI command="config:set {{AdminGeneralSetPostcodeConfigData.path}} {{US_Address_California.postcode}}" stepKey="setStoreInformationPostcode"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStreetAddressConfigData.path}} '{{US_Address_California.street[0]}}'" stepKey="setStoreInformationStreetAddress"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStreetAddress2ConfigData.path}} '{{US_Address_California.street[1]}}'" stepKey="setStoreInformationStreetAddress2"/>
             <magentoCLI command="config:set {{AdminGeneralSetVatNumberConfigData.path}} {{AdminGeneralSetVatNumberConfigData.value}}" stepKey="setStoreInformationVatNumber"/>
+
             <!--Set Shipping settings origin data-->
-            <magentoCLI command="config:set {{AdminShippingSettingsOriginCountryConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.country_id}}" stepKey="setOriginCountry"/>
-            <magentoCLI command="config:set {{AdminShippingSettingsOriginCityConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.city}}" stepKey="setOriginCity"/>
-            <magentoCLI command="config:set {{AdminShippingSettingsOriginZipCodeConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.postcode}}" stepKey="setOriginZipCode"/>
-            <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddressConfigData.path}} '{{DE_Address_Berlin_Not_Default_Address.street[0]}}'" stepKey="setOriginStreetAddress"/>
-            <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddress2ConfigData.path}} '{{US_Address_California.street[0]}}'" stepKey="setOriginStreetAddress2"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginCountryConfigData.path}} {{US_Address_AE.country_id}}" stepKey="setOriginCountry"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginCityConfigData.path}} '{{US_Address_AE.city}}'" stepKey="setOriginCity"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginZipCodeConfigData.path}} {{US_Address_AE.postcode}}" stepKey="setOriginZipCode"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddressConfigData.path}} '{{US_Address_AE.street[0]}}'" stepKey="setOriginStreetAddress"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddress2ConfigData.path}} '{{US_Address_AE.street[1]}}'" stepKey="setOriginStreetAddress2"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
@@ -73,6 +75,10 @@
             <magentoCLI command="config:set {{AdminShippingSettingsOriginZipCodeConfigData.path}} ''" stepKey="setOriginZipCode"/>
             <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddressConfigData.path}} ''" stepKey="setOriginStreetAddress"/>
             <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddress2ConfigData.path}} ''" stepKey="setOriginStreetAddress2"/>
+            <magentoCLI command="config:set {{AdminFedexAccount.path}} ''" stepKey="accountSetting"/>
+            <magentoCLI command="config:set {{AdminFedexHubId.path}} ''" stepKey="accountHub"/>
+            <magentoCLI command="config:set {{AdminFedexApiKey.path}} ''" stepKey="accountApiKey"/>
+            <magentoCLI command="config:set {{AdminFedexSecretKey.path}} ''" stepKey="accountSecretKey"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>

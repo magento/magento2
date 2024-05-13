@@ -7,6 +7,7 @@ namespace Magento\Framework\Css\PreProcessor\Instruction;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Css\PreProcessor\ErrorHandlerInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\PreProcessorInterface;
@@ -18,12 +19,12 @@ use Magento\Framework\View\File\CollectorInterface;
  * @magento_import instruction preprocessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Must be deleted after moving themeProvider to construct
  */
-class MagentoImport implements PreProcessorInterface
+class MagentoImport implements PreProcessorInterface, ResetAfterRequestInterface
 {
     /**
      * PCRE pattern that matches @magento_import instruction
      */
-    const REPLACE_PATTERN =
+    public const REPLACE_PATTERN =
         '#//@magento_import(?P<reference>\s+\(reference\))?\s+[\'\"](?P<path>(?![/\\\]|\w:[/\\\])[^\"\']+)[\'\"]\s*?;#';
 
     /**
@@ -49,11 +50,12 @@ class MagentoImport implements PreProcessorInterface
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
      * @deprecated 100.0.2
+     * @see not used
      */
     protected $themeList;
 
     /**
-     * @var ThemeProviderInterface
+     * @var ThemeProviderInterface|null
      */
     private $themeProvider;
 
@@ -79,7 +81,7 @@ class MagentoImport implements PreProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function process(\Magento\Framework\View\Asset\PreProcessor\Chain $chain)
     {
@@ -137,15 +139,23 @@ class MagentoImport implements PreProcessorInterface
     }
 
     /**
+     * Gets themeProvider, lazy loading it when needed
+     *
      * @return ThemeProviderInterface
-     * @deprecated 100.1.1
      */
     private function getThemeProvider()
     {
         if (null === $this->themeProvider) {
             $this->themeProvider = ObjectManager::getInstance()->get(ThemeProviderInterface::class);
         }
-
         return $this->themeProvider;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->themeProvider = null;
     }
 }
