@@ -323,6 +323,13 @@ class ItemTest extends TestCase
                 ],
                 'expectedResult' => ['to_ship' => 7.0, 'to_invoice' => 0.0]
             ],
+            'partially_refunded_partially_shipped_refund_lower_than_ship' => [
+                'options' => [
+                    'qty_ordered' => 12, 'qty_invoiced' => 12, 'qty_refunded' => 2, 'qty_shipped' => 4,
+                    'qty_canceled' => 0
+                ],
+                'expectedResult' => ['to_ship' => 8.0, 'to_invoice' => 0.0]
+            ],
             'complete' => [
                 'options' => [
                     'qty_ordered' => 12, 'qty_invoiced' => 12, 'qty_refunded' => 0, 'qty_shipped' => 12,
@@ -350,7 +357,8 @@ class ItemTest extends TestCase
                     'qty_canceled' => 0.4
                 ],
                 'expectedResult' => ['to_ship' => 0.0, 'to_invoice' => 0.0]
-            ]
+            ],
+
         ];
     }
 
