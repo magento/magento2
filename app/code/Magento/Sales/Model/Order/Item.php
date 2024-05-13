@@ -41,6 +41,8 @@ class Item extends AbstractModel implements OrderItemInterface
     // When qty ordered = qty canceled
     const STATUS_PARTIAL = 6;
 
+    const ZERO_AMOUNT = 0.0;
+
     // If [qty shipped or(max of two) qty invoiced + qty canceled + qty returned]
     // < qty ordered
     const STATUS_MIXED = 7;
@@ -232,7 +234,21 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public function getSimpleQtyToShip()
     {
-        $qty = $this->getQtyOrdered() - $this->getQtyShipped() - $this->getQtyRefunded() - $this->getQtyCanceled();
+        if ($this->getIsVirtual() /*|| $this->getQtyInvoiced() == 0*/) {
+            return self::ZERO_AMOUNT;
+        }
+
+        if ($this->getQtyShipped() == $this->getQtyOrdered()) {
+            return self::ZERO_AMOUNT;
+        }
+
+        $qty = $this->getQtyOrdered()/*max($this->getQtyOrdered(), $this->getQtyInvoiced())*/ - $this->getQtyShipped() - $this->getQtyCanceled(); // standard flow
+
+        // we have to ship only the items that are not refunded and not shipped
+        if ($this->getQtyRefunded() > $this->getQtyShipped()) {
+            $qty -= $this->getQtyRefunded() - $this->getQtyShipped();
+        }
+
         return max(round($qty, 8), 0);
     }
 
