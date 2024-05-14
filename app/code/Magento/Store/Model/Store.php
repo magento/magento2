@@ -801,7 +801,7 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Check if request was secure
      *
-     * @return bool
+     * @return boolean
      */
     public function isCurrentlySecure()
     {
