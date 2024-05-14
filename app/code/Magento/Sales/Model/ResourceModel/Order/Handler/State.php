@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Model\ResourceModel\Order\Handler;
 
+use Magento\Catalog\Model\Product\Type;
 use Magento\Sales\Model\Order;
 
 /**
@@ -60,11 +61,28 @@ class State
     {
         $isPartiallyRefundedOrderShipped = false;
         if ($this->getShippedItems($order) > 0
-            && $order->getTotalQtyOrdered() <= $this->getRefundedItems($order) + $this->getShippedItems($order)) {
+            && $this->getQtyItemsToShip($order) <= $this->getRefundedItems($order) + $this->getShippedItems($order)) {
             $isPartiallyRefundedOrderShipped = true;
         }
 
         return $isPartiallyRefundedOrderShipped;
+    }
+
+    /**
+     * Get all refunded items number
+     *
+     * @param Order $order
+     * @return int
+     */
+    private function getQtyItemsToShip(Order $order): int
+    {
+        $numOfItemsToShip = 0;
+        foreach ($order->getAllItems() as $item) {
+            if ($item->getProductType() == Type::TYPE_SIMPLE) { // only simple products are accountable for the order qty
+                $numOfItemsToShip += (int)$item->getQtyOrdered();
+            }
+        }
+        return $numOfItemsToShip;
     }
 
     /**
