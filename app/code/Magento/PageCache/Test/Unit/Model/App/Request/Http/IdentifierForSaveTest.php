@@ -11,6 +11,7 @@ use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\PageCache\Model\App\Request\Http\IdentifierForSave;
+use Magento\PageCache\Model\App\Request\Http\IdentifierStoreReader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -40,6 +41,10 @@ class IdentifierForSaveTest extends TestCase
      * @var Json|MockObject
      */
     private mixed $serializerMock;
+    /**
+     * @var IdentifierStoreReader|MockObject
+     */
+    private $identifierStoreReader;
 
     /**
      * @inheritdoc
@@ -64,10 +69,16 @@ class IdentifierForSaveTest extends TestCase
                 }
             );
 
+        $this->identifierStoreReader = $this->getMockBuilder(IdentifierStoreReader::class)
+            ->onlyMethods(['getPageTagsWithStoreCacheTags'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new IdentifierForSave(
             $this->requestMock,
             $this->contextMock,
-            $this->serializerMock
+            $this->serializerMock,
+            $this->identifierStoreReader
         );
         parent::setUp();
     }
@@ -90,6 +101,12 @@ class IdentifierForSaveTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getVaryString')
             ->willReturn(self::VARY);
+
+        $this->identifierStoreReader->method('getPageTagsWithStoreCacheTags')->willReturnCallback(
+            function ($value) {
+                return $value;
+            }
+        );
 
         $this->assertEquals(
             sha1(
