@@ -28,7 +28,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
         <!--Enable Pay Later in Admin Product Page -->
-        <actionGroup ref="PaylaterProductPageConfigActionGroup" stepKey="enablePaypalPaylaterSolution"/>
+        <actionGroup ref="PaylaterConfigurationActionGroup" stepKey="enablePaypalPaylaterSolution"/>
         <!--Check default values selected in dropdown  -->
         <actionGroup ref="CheckValuesForAdminProductConfigActionGroup" stepKey="verifyDefaultValues"/>
         <!--Click on Save configure Button -->
