@@ -620,7 +620,9 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                 $totalShippingChargesText .= $order->formatPriceTxt($order->getShippingAmount());
             }
 
-            if($this->taxHelper->displayShippingBothPrices() && $order->getShippingInclTax() != $order->getShippingAmount()) {
+            if ($this->taxHelper->displayShippingBothPrices()
+                && $order->getShippingInclTax() != $order->getShippingAmount()
+            ) {
                 $totalShippingChargesText .= "(Incl. Tax " . $order->getShippingInclTax() . ")";
             }
             $totalShippingChargesText .= ")";

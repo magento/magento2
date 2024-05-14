@@ -13,8 +13,6 @@ use Magento\Shipping\Helper\Carrier;
 class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
 {
     /**
-     * Carrier helper
-     *
      * @var \Magento\Shipping\Helper\Carrier
      */
     protected $_carrierHelper;
@@ -96,7 +94,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
     /**
      * Format pdf file
      *
-     * @param  null $shipment
+     * @param  void $shipment
      * @return \Zend_Pdf
      */
     public function getPdf($shipment = null)
