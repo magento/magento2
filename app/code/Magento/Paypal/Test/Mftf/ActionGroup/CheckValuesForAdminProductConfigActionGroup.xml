@@ -16,6 +16,7 @@
         <waitForElementClickable selector="{{PayPalProductPageConfigSection.expandCatalogProductPage(countryCode)}}" stepKey="waitForCheckoutCartPageClickable"/>
         <click selector="{{PayPalProductPageConfigSection.expandCatalogProductPage(countryCode)}}" stepKey="clickCheckoutCart"/>
         <selectOption selector ="{{PayPalProductPageConfigSection.display(countryCode)}}" userInput="Yes" stepKey="enableDisplayforPaylaterCartPage"/>
+        <selectOption selector="{{PayPalProductPageConfigSection.position(countryCode)}}" userInput="Header (center)" stepKey="selectDefaultPosition"/>
         <!--Verify Default Option was Selected correctly-->
         <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.position(countryCode)}}" userInput="Header (center)" stepKey="seeSelectedPosition"/>
         <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.styleLayout(countryCode)}}" userInput="Text" stepKey="seeSelectedStyleLayout"/>
