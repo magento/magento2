@@ -101,13 +101,7 @@
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryAfterSubmittingInvoice"/>
         <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Captured amount')}}" userInput="Captured amount of $271.00 online. Transaction ID: &quot;{$grabLastTransactionIDForCaptured}&quot;" stepKey="seeOrderHistoryNotesAfterSubmittingInvoice"/>
         <waitForElementClickable selector="{{StorefrontOrderInvoicesSection.invoiceTab1}}" stepKey="waitForInvoiceTabToBeClicked"/>
-        <!--Go to Invoice Tab and Verify Invoice Grand Total-->
-        <click selector="{{StorefrontOrderInvoicesSection.invoiceTab1}}" stepKey="clickInvoiceTabOnStorefront"/>
-        <waitForElementClickable selector="{{StorefrontOrderInvoicesSection.clickView}}" stepKey="waitForViewButtonToBeClicked"/>
-        <click selector="{{StorefrontOrderInvoicesSection.clickView}}" stepKey="clickViewButton"/>
-        <waitForText selector="{{AdminInvoiceTotalSection.grandTotal}}" userInput="$271.00" stepKey="seeInvoiceSubTotal1"/>
-        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClickedAfterAsserting"/>
-        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButtonAfterAsserting"/>
+        <actionGroup ref="AdminAssertInvoiceGrandTotalDetailsActionGroup" stepKey="clickOnInvoiceSectionFromOrdersPage"/>
         <actionGroup ref="AdminAssertTransitionTypeStatusNewActionGroup" stepKey="assertTransactionTypeStatusForAuthorization">
             <argument name="transactionType" value="authorization"/>
             <argument name="transitionTypeStatus" value="No"/>
