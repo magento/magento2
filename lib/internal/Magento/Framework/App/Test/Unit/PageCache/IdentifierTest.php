@@ -12,6 +12,7 @@ use Magento\Framework\App\PageCache\Identifier;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\PageCache\Model\App\Request\Http\IdentifierStoreReader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -46,6 +47,10 @@ class IdentifierTest extends TestCase
      * @var Json|MockObject
      */
     private $serializerMock;
+    /**
+     * @var IdentifierStoreReader|MockObject
+     */
+    private $identifierStoreReader;
 
     /**
      * @inheritdoc
@@ -73,12 +78,19 @@ class IdentifierTest extends TestCase
                 }
             );
 
+        $this->identifierStoreReader = $this->getMockBuilder(IdentifierStoreReader::class)
+            ->onlyMethods(['getPageTagsWithStoreCacheTags'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+
         $this->model = $this->objectManager->getObject(
             Identifier::class,
             [
                 'request'    => $this->requestMock,
                 'context'    => $this->contextMock,
-                'serializer' => $this->serializerMock
+                'serializer' => $this->serializerMock,
+                'identifierStoreReader' => $this->identifierStoreReader
             ]
         );
         parent::setUp();
@@ -96,6 +108,12 @@ class IdentifierTest extends TestCase
             ->willReturn('http://example.com/path/');
         $this->contextMock->method('getVaryString')->willReturn(self::VARY);
 
+        $this->identifierStoreReader->method('getPageTagsWithStoreCacheTags')->willReturnCallback(
+            function ($value) {
+                return $value;
+            }
+        );
+
         $valueWithSecureRequest = $this->model->getValue();
         $valueWithInsecureRequest = $this->model->getValue();
         $this->assertNotEquals($valueWithSecureRequest, $valueWithInsecureRequest);
@@ -112,6 +130,12 @@ class IdentifierTest extends TestCase
             ->willReturnOnConsecutiveCalls('http://example.com/path/', 'http://example.net/path/');
         $this->contextMock->method('getVaryString')->willReturn(self::VARY);
 
+        $this->identifierStoreReader->method('getPageTagsWithStoreCacheTags')->willReturnCallback(
+            function ($value) {
+                return $value;
+            }
+        );
+
         $valueDomain1 = $this->model->getValue();
         $valueDomain2 = $this->model->getValue();
         $this->assertNotEquals($valueDomain1, $valueDomain2);
@@ -127,6 +151,12 @@ class IdentifierTest extends TestCase
             ->method('getUriString')
             ->willReturnOnConsecutiveCalls('http://example.com/path/', 'http://example.com/path1/');
         $this->contextMock->method('getVaryString')->willReturn(self::VARY);
+
+        $this->identifierStoreReader->method('getPageTagsWithStoreCacheTags')->willReturnCallback(
+            function ($value) {
+                return $value;
+            }
+        );
 
         $valuePath1 = $this->model->getValue();
         $valuePath2 = $this->model->getValue();
@@ -172,6 +202,12 @@ class IdentifierTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getVaryString')
             ->willReturn(self::VARY);
+
+        $this->identifierStoreReader->method('getPageTagsWithStoreCacheTags')->willReturnCallback(
+            function ($value) {
+                return $value;
+            }
+        );
 
         $this->assertEquals(
             sha1(
