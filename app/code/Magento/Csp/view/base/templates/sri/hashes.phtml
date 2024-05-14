@@ -1,0 +1,18 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Csp\Block\Sri\Hashes $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+
+<?php $sriHashes = /* @noEscape */ $block->getSerialized();
+$scriptString = <<<script
+        window.sriHashes = {$sriHashes};
+script;
+?>
+
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+

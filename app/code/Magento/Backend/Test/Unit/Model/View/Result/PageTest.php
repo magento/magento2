@@ -45,7 +45,7 @@ class PageTest extends TestCase
     protected function setUp(): void
     {
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->setMethods(['setGeneratorPool'])
+            ->addMethods(['setGeneratorPool'])
             ->getMockForAbstractClass();
         $this->breadcrumbsBlockMock = $this->getMockBuilder(Breadcrumbs::class)
             ->disableOriginalConstructor()
