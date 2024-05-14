@@ -20,8 +20,6 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-            <!-- Enable Flat rate -->
-            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- Create Category -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="ApiSimplePrice10Qty10" stepKey="createProduct">
@@ -96,8 +94,8 @@
         <waitForPageLoad stepKey="waitForPagePlacingOrderSuccessfully" />
         <!--See success messages-->
         <waitForElementVisible selector="{{CheckoutSuccessMainSection.successTitle}}" stepKey="waitForSuccessTitle"/>
-        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
-        <see selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order number is: " stepKey="seeOrderNumber"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order number is: " stepKey="seeOrderNumber"/>
         <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOrderNumberToBeGrabbed"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
         <!-- Go to order page -->
