@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SelectEuropeanUnionCountryActionGroup">
+        <annotations>
+            <description>Selects the provided Countries under 'European Union Countries' on the 'General' section of the 'Configuration' page. Clicks on the Save button.</description>
+        </annotations>
+        <arguments>
+            <argument name="countries" type="entity"/>
+        </arguments>
+        <!--Open country options section-->
+        <waitForElementClickable selector="{{CountryOptionsSection.countryOptions}}" stepKey="waitForCountryOptionClickable"/>
+        <conditionalClick selector="{{CountryOptionsSection.countryOptions}}" dependentSelector="{{CountryOptionsSection.countryOptionsOpen}}" visible="false" stepKey="clickOnStoreInformation"/>
+        <waitForElementVisible selector="{{CountryOptionsConfigSection.checkboxEuropeanUnion}}" stepKey="waitMessagesDropdownAppears"/>
+        <uncheckOption selector="{{CountryOptionsConfigSection.checkboxEuropeanUnion}}" stepKey="uncheckEuropeanUnionCountry"/>
+        <selectOption selector="{{CountryOptionsConfigSection.selectEuropeanUnion}}" parameterArray="[{{countries.country}}]" stepKey="selectEuropeanUnionCountry"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForSavingConfig"/>
+    </actionGroup>
+</actionGroups>
