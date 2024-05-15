@@ -59,17 +59,22 @@
             <waitForElementClickable selector="{{AdminShipmentAddressInformationSection.checkoutWithMultipleAddresses}}" stepKey="waitForCheckoutWithMultipleAddressesLink"/>
             <click selector="{{AdminShipmentAddressInformationSection.checkoutWithMultipleAddresses}}" stepKey="clickOnCheckoutWithMultipleAddressesLink"/>
             <waitForPageLoad stepKey="waitForMultipleAddressPageLoad"/>
-            <grabTextFrom selector="{{AdminShipmentAddressInformationSection.shippingAddressOptions('1','1')}}" after="waitForMultipleAddressPageLoad" stepKey="firstShippingAddressValue"/>
-            <selectOption selector="{{AdminShipmentAddressInformationSection.shippingAddressSelector('1')}}" userInput="{$firstShippingAddressValue}" after="firstShippingAddressValue" stepKey="selectFirstShippingMethod"/>
-            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.shippingAddressOptions('2','2')}}" stepKey="waitForSecondShippingAddress"/>
-            <grabTextFrom selector="{{AdminShipmentAddressInformationSection.shippingAddressOptions('2','2')}}" after="selectFirstShippingMethod" stepKey="secondShippingAddressValue"/>
-            <selectOption selector="{{AdminShipmentAddressInformationSection.shippingAddressSelector('2')}}" userInput="{$secondShippingAddressValue}" after="secondShippingAddressValue" stepKey="selectSecondShippingMethod"/>
-            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.shippingAddressOptions('3','3')}}" stepKey="waitForThirdShippingAddress"/>
-            <grabTextFrom selector="{{AdminShipmentAddressInformationSection.shippingAddressOptions('3','3')}}" after="selectSecondShippingMethod" stepKey="thirdShippingAddressValue"/>
-            <selectOption selector="{{AdminShipmentAddressInformationSection.shippingAddressSelector('3')}}" userInput="{$thirdShippingAddressValue}" after="thirdShippingAddressValue" stepKey="selectThirdShippingMethod"/>
-            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.shippingAddressOptions('4','4')}}" stepKey="waitForFourthShippingAddress"/>
-            <grabTextFrom selector="{{AdminShipmentAddressInformationSection.shippingAddressOptions('4','4')}}" after="selectThirdShippingMethod" stepKey="fourthShippingAddressValue"/>
-            <selectOption selector="{{AdminShipmentAddressInformationSection.shippingAddressSelector('4')}}" userInput="{$fourthShippingAddressValue}" after="fourthShippingAddressValue" stepKey="selectFourthShippingMethod"/>
+            <actionGroup ref="AdminSelectAddressInShippingInformationActionGroup" stepKey="selectFirstAddress">
+                <argument name="addressSection" value="1"/>
+                <argument name="selectOption" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectAddressInShippingInformationActionGroup" stepKey="selectSecondAddress">
+                <argument name="addressSection" value="2"/>
+                <argument name="selectOption" value="2"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectAddressInShippingInformationActionGroup" stepKey="selectThirdAddress">
+                <argument name="addressSection" value="3"/>
+                <argument name="selectOption" value="3"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectAddressInShippingInformationActionGroup" stepKey="selectFourthAddress">
+                <argument name="addressSection" value="4"/>
+                <argument name="selectOption" value="4"/>
+            </actionGroup>
             <!-- Updating the address for shipping section -->
             <waitForElementClickable selector="{{SingleShippingSection.updateAddress}}" stepKey="waitForUpdateAddress"/>
             <click selector="{{SingleShippingSection.updateAddress}}" after="waitForUpdateAddress" stepKey="clickUpdateAddress"/>
