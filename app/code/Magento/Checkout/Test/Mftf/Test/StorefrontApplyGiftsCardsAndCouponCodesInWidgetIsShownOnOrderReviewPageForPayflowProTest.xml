@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontApplyGiftsCardsAndCouponCodesInWidgetIsShownOnOrderReviewPageForPayflowProTest">
+        <annotations>
+            <features value="Payments"/>
+            <stories value="Payflow Pro"/>
+            <title value="Apply gift cards and promo codes widget are shown on Order review page for Payflow Pro"/>
+            <description value="As a guest, apply coupon and gift card while placing an order through paypal payflow pro"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5199"/>
+        </annotations>
+        <before>
+            <!--Create simple product-->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1"/>
+            <!--Create cart price rule and coupon-->
+            <createData entity="ActiveSalesRuleForNotLoggedIn" stepKey="createCartPriceRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
+            <!--Create a customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--Login to admin site-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Delete created product-->
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct"/>
+            <!--Delete created cart price rule-->
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+            <!--Delete created customer-->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Logout from admin site-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Go to storefront-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <!--Open product1 and add it to cart-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="gotToProductPage">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <!--Go to checkout page-->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckoutCartPage"/>
+        <!--Fill Shipping Address-->
+        <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="fillShippingAddress">
+            <argument name="customer" value="$$createCustomer$$" />
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <!-- Select shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectShippingMethodAsFlatrate">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+        <!-- Go to Order review -->
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage"/>
+        <waitForPageLoad stepKey="waitForLoadingMask"/>
+        <waitForPageLoad stepKey="waitForPaymentPageLoad"/>
+        <!-- Apply Discount Coupon to the Order -->
+        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
+            <argument name="discountCode" value="$createCouponForCartPriceRule.code$"/>
+        </actionGroup>
+        <!--Place an order-->
+        <actionGroup ref="ClickPlaceOrderActionGroup" after="fillCardData" stepKey="clickOnPlaceOrder"/>
+    </test>
+</tests>
