@@ -50,7 +50,7 @@
         <!-- Choose State as "Ladakh" -->
         <selectOption selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="selectStateInStorefrontAddressBook"/>
         <!--Assert if state "Ladakh" is selected-->
-        <seeInField selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="assertStateInStorefrontAddressBook"/>
+        <waitForText selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="assertStateInStorefrontAddressBook"/>
         <!--Make State & Country default before using FillNewCustomerAddressRequiredFieldsActionGroup-->
         <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="United States" stepKey="selectCountryAsDefaultInStorefrontAddressBook"/>
         <selectOption selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="" stepKey="selectStateAsDefaultInStorefrontAddressBook"/>
@@ -68,7 +68,7 @@
         <!--Select state as "Ladakh" while adding address-->
         <selectOption selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="selectStateInStorefrontToAddNewAddress"/>
         <!--Assert state as "Ladakh" while adding address-->
-        <seeInField selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="assertStateInStorefrontToAddNewAddress"/>
+        <waitForText selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="assertStateInStorefrontToAddNewAddress"/>
         <!--Select country other than "India" - picked "United States"-->
         <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="United States" stepKey="selectUnitedStatesAsCountryInStorefrontAddressBook"/>
         <!--Assert state "Ladakh" does not present post selecting "United States" as country-->
@@ -84,7 +84,7 @@
         <!--Select state as "Ladakh" while edit billing address-->
         <selectOption selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="selectStateInStorefrontInEditBillingAddress"/>
         <!--Assert state as "Ladakh" while edit billing address-->
-        <seeInField selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="assertStateInStorefrontInEditBillingAddress"/>
+        <waitForText selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="assertStateInStorefrontInEditBillingAddress"/>
         <!--Again navigate to Address book-->
         <amOnPage url="customer/address/index/" stepKey="goToAddressPageToEditShippingAddress"/>
         <waitForPageLoad stepKey="waitForShippingAddressPageToLoad"/>
@@ -96,7 +96,7 @@
         <!-- Select state as "Ladakh" while edit shipping address-->
         <selectOption selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="selectStateInStorefrontInEditShippingAddress"/>
         <!-- Assert state as "Ladakh" while edit shipping address-->
-        <seeInField selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="assertStateInStorefrontInEditShippingAddress"/>
+        <waitForText selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="assertStateInStorefrontInEditShippingAddress"/>
         <!--Signout customer from storefront-->
         <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="storefrontCustomerSignOut"/>
         <!--Navigate to product page-->
@@ -116,7 +116,7 @@
         <!--Select state as "Ladakh" in Shipping Information page-->
         <selectOption selector="{{CheckoutShippingSection.region}}" userInput="Ladakh" stepKey="selectStateInStorefrontCheckout"/>
         <!--Assert state as "Ladakh" in Shipping Information page selected-->
-        <seeInField selector="{{CheckoutShippingSection.region}}" userInput="Ladakh" stepKey="assertStateInStorefrontCheckout"/>
+        <waitForText selector="{{CheckoutShippingSection.region}}" userInput="Ladakh" stepKey="assertStateInStorefrontCheckout"/>
         <!--Fill shipping address as per UK customer to place order-->
         <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillGuestShippingAddress">
             <argument name="customer" value="UKCustomer"/>
@@ -144,7 +144,7 @@
         <!--Select state as "Ladakh" in admin address book-->
         <selectOption selector="{{AdminCustomerAddressesSection.state}}" userInput="Ladakh" stepKey="selectStateInAdminAddressBook"/>
         <!--Assert state as "Ladakh" in admin address book-->
-        <seeInField selector="{{AdminCustomerAddressesSection.state}}" userInput="Ladakh" stepKey="assertStateInAdminAddressBook"/>
+        <waitForText selector="{{AdminCustomerAddressesSection.state}}" userInput="Ladakh" stepKey="assertStateInAdminAddressBook"/>
         <!--Navigate to admin address and edit-->
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
             <argument name="orderId" value="{$orderId}"/>
@@ -159,13 +159,13 @@
         <!--Select state as "Ladakh" in admin order details page || Billing Address-->
         <selectOption selector="{{AdminOrderFormBillingAddressSection.State}}" userInput="Ladakh" stepKey="selectStateInEditOrderBillingAddress"/>
         <!--Assert state as "Ladakh" in admin order details page || Billing Address-->
-        <seeInField selector="{{AdminOrderFormBillingAddressSection.State}}" userInput="Ladakh" stepKey="assertStateInEditOrderBillingAddress"/>
+        <waitForText selector="{{AdminOrderFormBillingAddressSection.State}}" userInput="Ladakh" stepKey="assertStateInEditOrderBillingAddress"/>
         <!--Select country as "India" in admin order details page || Shipping Address-->
         <selectOption selector="{{AdminOrderFormShippingAddressSection.Country}}" userInput="India" stepKey="selectCountryInEditOrderShippingAddress"/>
         <!--Select state as "Ladakh" in admin order details page || Shipping Address-->
         <selectOption selector="{{AdminOrderFormShippingAddressSection.State}}" userInput="Ladakh" stepKey="selectStateInEditOrderShippingAddress"/>
         <!--Assert state as "Ladakh" in admin order details page || Shipping Address-->
-        <seeInField selector="{{AdminOrderFormShippingAddressSection.State}}" userInput="Ladakh" stepKey="assertStateInEditOrderShippingAddress"/>
+        <waitForText selector="{{AdminOrderFormShippingAddressSection.State}}" userInput="Ladakh" stepKey="assertStateInEditOrderShippingAddress"/>
         <!--Navigate to Tax Rate page-->
         <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
         <!--Add new Tax Rate-->
@@ -178,6 +178,6 @@
         <!--Select state as "Ladakh" in admin Tax Rate page-->
         <selectOption selector="{{AdminTaxRulesSection.state}}" userInput="Ladakh" stepKey="selectStateInNewTaxRate"/>
         <!--Assert state as "Ladakh" in admin Tax Rate page-->
-        <seeInField selector="{{AdminTaxRulesSection.state}}" userInput="Ladakh" stepKey="assertStateInNewTaxRate"/>
+        <waitForText selector="{{AdminTaxRulesSection.state}}" userInput="Ladakh" stepKey="assertStateInNewTaxRate"/>
     </test>
 </tests>
