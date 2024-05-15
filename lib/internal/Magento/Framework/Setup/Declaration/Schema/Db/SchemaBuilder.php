@@ -67,20 +67,9 @@ class SchemaBuilder
 
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function build(Schema $schema, $declarativeSchema = null)
+    public function build(Schema $schema, $tablesWithJsonTypeField = [])
     {
-        $tablesWithJsonTypeField = [];
-        if ($declarativeSchema != null) {
-            foreach ($declarativeSchema->getTables() as $table) {
-                foreach ($table->getColumns() as $column) {
-                    if ($column->getType() == 'json') {
-                        $tablesWithJsonTypeField[$table->getName()] = $column->getName();
-                    }
-                }
-            }
-        }
         foreach ($this->sharding->getResources() as $resource) {
             foreach ($this->dbSchemaReader->readTables($resource) as $tableName) {
                 $columns = [];
@@ -88,7 +77,7 @@ class SchemaBuilder
                 $constraints = [];
 
                 $tableOptions = $this->dbSchemaReader->getTableOptions($tableName, $resource);
-                $columnsData = $this->dbSchemaReader->readColumns($tableName, $resource, $tablesWithJsonTypeField);
+                $columnsData = $this->dbSchemaReader->readColumns($tableName, $resource);
                 $indexesData = $this->dbSchemaReader->readIndexes($tableName, $resource);
                 $constrainsData = $this->dbSchemaReader->readConstraints($tableName, $resource);
 
@@ -106,9 +95,16 @@ class SchemaBuilder
                         'collation' => $tableOptions['collation']
                     ]
                 );
+                $isJsonType = false;
+                if (count($tablesWithJsonTypeField) > 0 && isset($tablesWithJsonTypeField[$tableName])) {
+                    $isJsonType = true;
+                }
 
                 // Process columns
                 foreach ($columnsData as $columnData) {
+                    if ($isJsonType && $tablesWithJsonTypeField[$tableName] == $columnData['name']) {
+                        $columnData['type'] = 'json';
+                    }
                     $columnData['table'] = $table;
                     $column = $this->elementFactory->create($columnData['type'], $columnData);
                     $columns[$column->getName()] = $column;
