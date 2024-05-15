@@ -166,6 +166,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
                 \IntlDateFormatter::MEDIUM,
                 true
             );
+            $data['created_at'] = (new \DateTime($data['created_at']))->format('Y-m-d H:i:s');
             $exportData = $lines['data'][$data['email']];
             $exportData = $this->unsetDuplicateData($exportData);
 

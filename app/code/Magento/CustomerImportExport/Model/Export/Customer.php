@@ -160,11 +160,14 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
         $row = $this->_addAttributeValuesToRow($item);
         $row[self::COLUMN_WEBSITE] = $this->_websiteIdToCode[$item->getWebsiteId()];
         $row[self::COLUMN_STORE] = $this->_storeIdToCode[$item->getStoreId()];
-        $row[self::COLUMN_CREATED_AT] = $this->_localeDate->formatDate(
-            $item->getCreatedAt(),
-            \IntlDateFormatter::MEDIUM,
-            true
-        );
+        if (isset($row[self::COLUMN_CREATED_AT])) {
+            $row[self::COLUMN_CREATED_AT] = $this->_localeDate->formatDate(
+                $item->getCreatedAt(),
+                \IntlDateFormatter::MEDIUM,
+                true
+            );
+            $row[self::COLUMN_CREATED_AT] = (new \DateTime($row[self::COLUMN_CREATED_AT]))->format('Y-m-d H:i:s');
+        }
 
         $this->getWriter()->writeRow($row);
     }
