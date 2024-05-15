@@ -202,8 +202,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     }
 
     /**
-     * Store setter
-     * Also updates store ID in config object
+     * Store setter. Also updates store ID in config object
      *
      * @param \Magento\Store\Model\Store|int $store
      * @return $this
@@ -247,7 +246,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      */
     public function getAllowedCcTypes()
     {
-        $ccTypes = explode(',', $this->_pro->getConfig()->getValue('cctypes'));
+        $ccTypes = explode(',', $this->_pro->getConfig()->getValue('cctypes') ?? '');
         $country = $this->_pro->getConfig()->getMerchantCountry();
 
         if ($country == 'GB') {
@@ -362,6 +361,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
 
     /**
      * Whether payment can be reviewed
+     *
      * @return bool
      */
     public function canReviewPayment()
@@ -467,8 +467,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     }
 
     /**
-     * Format credit card expiration date based on month and year values
-     * Format: mmyyyy
+     * Format credit card expiration date based on month and year values. Format: mmyyyy
      *
      * @param string|int $month
      * @param string|int $year
@@ -494,6 +493,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
 
     /**
      * Check void availability
+     *
      * @return bool
      * @internal param \Magento\Framework\DataObject $payment
      */

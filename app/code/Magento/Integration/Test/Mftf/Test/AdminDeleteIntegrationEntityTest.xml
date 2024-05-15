@@ -18,6 +18,7 @@
             <testCaseId value="MC-28027"/>
             <group value="integration"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login As Admin -->

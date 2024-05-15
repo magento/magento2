@@ -42,6 +42,9 @@ class FilePermissionsTest extends TestCase
      */
     private $filePermissions;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->directoryWriteMock = $this->createMock(Write::class);
@@ -63,9 +66,11 @@ class FilePermissionsTest extends TestCase
 
     /**
      * @param string $mageMode
+     *
+     * @return void
      * @dataProvider modeDataProvider
      */
-    public function testGetInstallationWritableDirectories($mageMode)
+    public function testGetInstallationWritableDirectories($mageMode): void
     {
         $this->setUpDirectoryListInstallation();
         $this->stateMock->expects($this->once())
@@ -76,14 +81,17 @@ class FilePermissionsTest extends TestCase
             BP . '/app/etc',
             BP . '/var',
             BP . '/pub/media',
-            BP . '/pub/static',
-            BP . '/generated'
+            BP . '/generated',
+            BP . '/pub/static'
         ];
 
         $this->assertEquals($expected, $this->filePermissions->getInstallationWritableDirectories());
     }
 
-    public function testGetInstallationWritableDirectoriesInProduction()
+    /**
+     * @return void
+     */
+    public function testGetInstallationWritableDirectoriesInProduction(): void
     {
         $this->setUpDirectoryListInstallationInProduction();
         $this->stateMock->expects($this->once())
@@ -93,14 +101,16 @@ class FilePermissionsTest extends TestCase
         $expected = [
             BP . '/app/etc',
             BP . '/var',
-            BP . '/pub/media',
-            BP . '/pub/static'
+            BP . '/pub/media'
         ];
 
         $this->assertEquals($expected, $this->filePermissions->getInstallationWritableDirectories());
     }
 
-    public function testGetApplicationNonWritableDirectories()
+    /**
+     * @return void
+     */
+    public function testGetApplicationNonWritableDirectories(): void
     {
         $this->directoryListMock
             ->expects($this->once())
@@ -112,7 +122,10 @@ class FilePermissionsTest extends TestCase
         $this->assertEquals($expected, $this->filePermissions->getApplicationNonWritableDirectories());
     }
 
-    public function testGetInstallationCurrentWritableDirectories()
+    /**
+     * @return void
+     */
+    public function testGetInstallationCurrentWritableDirectories(): void
     {
         $this->setUpDirectoryListInstallation();
         $this->setUpDirectoryWriteInstallation();
@@ -127,23 +140,21 @@ class FilePermissionsTest extends TestCase
     /**
      * @param array $mockMethods
      * @param array $expected
+     *
+     * @return void
      * @dataProvider getApplicationCurrentNonWritableDirectoriesDataProvider
      */
-    public function testGetApplicationCurrentNonWritableDirectories(array $mockMethods, array $expected)
+    public function testGetApplicationCurrentNonWritableDirectories(array $mockMethods, array $expected): void
     {
         $this->directoryListMock
-            ->expects($this->at(0))
             ->method('getPath')
             ->with(DirectoryList::CONFIG)
             ->willReturn(BP . '/app/etc');
 
-        $index = 0;
         foreach ($mockMethods as $mockMethod => $returnValue) {
             $this->directoryWriteMock
-                ->expects($this->at($index))
                 ->method($mockMethod)
-                ->willReturn($returnValue);
-            $index++;
+                ->willReturnOnConsecutiveCalls($returnValue);
         }
 
         $this->filePermissions->getApplicationNonWritableDirectories();
@@ -153,7 +164,7 @@ class FilePermissionsTest extends TestCase
     /**
      * @return array
      */
-    public function getApplicationCurrentNonWritableDirectoriesDataProvider()
+    public function getApplicationCurrentNonWritableDirectoriesDataProvider(): array
     {
         return [
             [
@@ -163,21 +174,23 @@ class FilePermissionsTest extends TestCase
                     'isReadable' => true,
                     'isWritable' => false
                 ],
-                [BP . '/app/etc'],
+                [BP . '/app/etc']
             ],
             [['isExist' => false], []],
             [['isExist' => true, 'isDirectory' => false], []],
-            [['isExist' => true, 'isDirectory' => true, 'isReadable' => true, 'isWritable' => true], []],
+            [['isExist' => true, 'isDirectory' => true, 'isReadable' => true, 'isWritable' => true], []]
         ];
     }
 
     /**
      * @param string $mageMode
+     *
+     * @return void
      * @dataProvider modeDataProvider
      * @covers \Magento\Framework\Setup\FilePermissions::getMissingWritableDirectoriesForInstallation
      * @covers \Magento\Framework\Setup\FilePermissions::getMissingWritablePathsForInstallation
      */
-    public function testGetMissingWritableDirectoriesAndPathsForInstallation($mageMode)
+    public function testGetMissingWritableDirectoriesAndPathsForInstallation($mageMode): void
     {
         $this->setUpDirectoryListInstallation();
         $this->setUpDirectoryWriteInstallation();
@@ -188,32 +201,7 @@ class FilePermissionsTest extends TestCase
         $expected = [
             BP . '/var',
             BP . '/pub/media',
-            BP . '/pub/static',
-            BP . '/generated'
-        ];
-
-        $this->assertEquals(
-            $expected,
-            array_values($this->filePermissions->getMissingWritableDirectoriesForInstallation())
-        );
-
-        $this->assertEquals(
-            $expected,
-            array_values($this->filePermissions->getMissingWritablePathsForInstallation())
-        );
-    }
-
-    public function testGetMissingWritableDirectoriesAndPathsForInstallationInProduction()
-    {
-        $this->setUpDirectoryListInstallationInProduction();
-        $this->setUpDirectoryWriteInstallation();
-        $this->stateMock->expects($this->once())
-            ->method('getMode')
-            ->willReturn(State::MODE_PRODUCTION);
-
-        $expected = [
-            BP . '/var',
-            BP . '/pub/media',
+            BP . '/generated',
             BP . '/pub/static'
         ];
 
@@ -228,7 +216,37 @@ class FilePermissionsTest extends TestCase
         );
     }
 
-    public function testGetMissingWritableDirectoriesForDbUpgrade()
+    /**
+     * @return void
+     */
+    public function testGetMissingWritableDirectoriesAndPathsForInstallationInProduction(): void
+    {
+        $this->setUpDirectoryListInstallationInProduction();
+        $this->setUpDirectoryWriteInstallation();
+        $this->stateMock->expects($this->once())
+            ->method('getMode')
+            ->willReturn(State::MODE_PRODUCTION);
+
+        $expected = [
+            BP . '/var',
+            BP . '/pub/media'
+        ];
+
+        $this->assertEquals(
+            $expected,
+            array_values($this->filePermissions->getMissingWritableDirectoriesForInstallation())
+        );
+
+        $this->assertEquals(
+            $expected,
+            array_values($this->filePermissions->getMissingWritablePathsForInstallation())
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetMissingWritableDirectoriesForDbUpgrade(): void
     {
         $directoryMethods = ['isExist', 'isDirectory', 'isReadable', 'isWritable'];
         foreach ($directoryMethods as $method) {
@@ -243,23 +261,21 @@ class FilePermissionsTest extends TestCase
     /**
      * @param array $mockMethods
      * @param array $expected
+     *
+     * @return void
      * @dataProvider getUnnecessaryWritableDirectoriesForApplicationDataProvider
      */
-    public function testGetUnnecessaryWritableDirectoriesForApplication(array $mockMethods, array $expected)
+    public function testGetUnnecessaryWritableDirectoriesForApplication(array $mockMethods, array $expected): void
     {
         $this->directoryListMock
-            ->expects($this->at(0))
             ->method('getPath')
             ->with(DirectoryList::CONFIG)
             ->willReturn(BP . '/app/etc');
 
-        $index = 0;
         foreach ($mockMethods as $mockMethod => $returnValue) {
             $this->directoryWriteMock
-                ->expects($this->at($index))
                 ->method($mockMethod)
-                ->willReturn($returnValue);
-            $index++;
+                ->willReturnOnConsecutiveCalls($returnValue);
         }
 
         $this->assertEquals(
@@ -271,111 +287,75 @@ class FilePermissionsTest extends TestCase
     /**
      * @return array
      */
-    public function getUnnecessaryWritableDirectoriesForApplicationDataProvider()
+    public function getUnnecessaryWritableDirectoriesForApplicationDataProvider(): array
     {
         return [
             [['isExist' => true, 'isDirectory' => true, 'isReadable' => true, 'isWritable' => false], []],
-            [['isExist' => false], [BP . '/app/etc']],
+            [['isExist' => false], [BP . '/app/etc']]
         ];
     }
 
-    public function setUpDirectoryListInstallation()
+    /**
+     * @return void
+     */
+    public function setUpDirectoryListInstallation(): void
     {
-        $this->setUpDirectoryListInstallationInProduction();
         $this->directoryListMock
-            ->expects($this->at(4))
             ->method('getPath')
-            ->with(DirectoryList::GENERATED)
-            ->willReturn(BP . '/generated');
+            ->withConsecutive(
+                [DirectoryList::CONFIG],
+                [DirectoryList::VAR_DIR],
+                [DirectoryList::MEDIA],
+                [DirectoryList::GENERATED],
+                [DirectoryList::STATIC_VIEW]
+            )
+            ->willReturnOnConsecutiveCalls(
+                BP . '/app/etc',
+                BP . '/var',
+                BP . '/pub/media',
+                BP . '/generated',
+                BP . '/pub/static'
+            );
     }
 
-    public function setUpDirectoryListInstallationInProduction()
+    /**
+     * @return void
+     */
+    public function setUpDirectoryListInstallationInProduction(): void
     {
         $this->directoryListMock
-            ->expects($this->at(0))
             ->method('getPath')
-            ->with(DirectoryList::CONFIG)
-            ->willReturn(BP . '/app/etc');
-        $this->directoryListMock
-            ->expects($this->at(1))
-            ->method('getPath')
-            ->with(DirectoryList::VAR_DIR)
-            ->willReturn(BP . '/var');
-        $this->directoryListMock
-            ->expects($this->at(2))
-            ->method('getPath')
-            ->with(DirectoryList::MEDIA)
-            ->willReturn(BP . '/pub/media');
-        $this->directoryListMock
-            ->expects($this->at(3))
-            ->method('getPath')
-            ->with(DirectoryList::STATIC_VIEW)
-            ->willReturn(BP . '/pub/static');
+            ->withConsecutive([DirectoryList::CONFIG], [DirectoryList::VAR_DIR], [DirectoryList::MEDIA])
+            ->willReturnOnConsecutiveCalls(BP . '/app/etc', BP . '/var', BP . '/pub/media');
     }
 
-    public function setUpDirectoryWriteInstallation()
+    /**
+     * @return void
+     */
+    public function setUpDirectoryWriteInstallation(): void
     {
-        // CONFIG
         $this->directoryWriteMock
-            ->expects($this->at(0))
             ->method('isExist')
+            ->willReturnOnConsecutiveCalls(true, false, true);
+        $this->directoryWriteMock
+            ->method('isWritable')
             ->willReturn(true);
         $this->directoryWriteMock
-            ->expects($this->at(1))
-            ->method('isDirectory')
-            ->willReturn(true);
-        $this->directoryWriteMock
-            ->expects($this->at(2))
             ->method('isReadable')
             ->willReturn(true);
         $this->directoryWriteMock
-            ->expects($this->at(3))
-            ->method('isWritable')
-            ->willReturn(true);
-
-        // VAR
-        $this->directoryWriteMock
-            ->expects($this->at(4))
-            ->method('isExist')
-            ->willReturn(false);
-
-        // MEDIA
-        $this->directoryWriteMock
-            ->expects($this->at(5))
-            ->method('isExist')
-            ->willReturn(true);
-        $this->directoryWriteMock
-            ->expects($this->at(6))
             ->method('isDirectory')
-            ->willReturn(false);
-
-        // STATIC_VIEW
-        $this->directoryWriteMock
-            ->expects($this->at(7))
-            ->method('isExist')
-            ->willReturn(true);
-        $this->directoryWriteMock
-            ->expects($this->at(8))
-            ->method('isDirectory')
-            ->willReturn(true);
-        $this->directoryWriteMock
-            ->expects($this->at(9))
-            ->method('isReadable')
-            ->willReturn(true);
-        $this->directoryWriteMock
-            ->expects($this->at(10))
-            ->method('isWritable')
-            ->willReturn(false);
+            ->willReturnOnConsecutiveCalls(true, false);
     }
 
     /**
      * @return array
      */
-    public function modeDataProvider()
+    public function modeDataProvider(): array
     {
         return [
             [State::MODE_DEFAULT],
-            [State::MODE_DEVELOPER],
+            [State::MODE_DEVELOPER]
         ];
     }
 }

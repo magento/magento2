@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyGuestCheckoutUsingFreeShippingAndTaxesTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout via Guest Checkout"/>
+            <title value="Verify guest checkout using free shipping and tax variations"/>
+            <description value="Verify guest checkout using free shipping and tax variations"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-28285"/>
+            <group value="mtf_migrated"/>
+            <group value="checkout"/>
+            <group value="tax"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
+            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
+            <createData entity="MinimumOrderAmount100" stepKey="minimumOrderAmount"/>
+            <createData entity="taxRate_US_NY_8_1" stepKey="createTaxRateUSNY"/>
+            <createData entity="DefaultTaxRuleWithCustomTaxRate" stepKey="createTaxRuleUSNY">
+                <requiredEntity createDataKey="createTaxRateUSNY" />
+            </createData>
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct">
+                <field key="price">10.00</field>
+            </createData>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="configurableProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createProductAttributeOption">
+                <requiredEntity createDataKey="createProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="addToDefaultSet">
+                <requiredEntity createDataKey="createProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getProductAttributeOption">
+                <requiredEntity createDataKey="createProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="configurableChildProduct">
+                <requiredEntity createDataKey="createProductAttribute"/>
+                <requiredEntity createDataKey="getProductAttributeOption"/>
+                <field key="price">10.00</field>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="configurableProduct"/>
+                <requiredEntity createDataKey="createProductAttribute"/>
+                <requiredEntity createDataKey="getProductAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="configurableProductAddChild">
+                <requiredEntity createDataKey="configurableProduct"/>
+                <requiredEntity createDataKey="configurableChildProduct"/>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="firstBundleChildProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="secondBundleChildProduct">
+                <field key="price">200.00</field>
+            </createData>
+            <createData entity="BundleProductPriceViewRange" stepKey="bundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="MultipleSelectOption" stepKey="bundleOption">
+                <requiredEntity createDataKey="bundleProduct"/>
+                <field key="required">True</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="firstLinkOptionToProduct">
+                <requiredEntity createDataKey="bundleProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="firstBundleChildProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="secondLinkOptionToProduct">
+                <requiredEntity createDataKey="bundleProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="secondBundleChildProduct"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="configurableChildProduct" stepKey="deleteConfigurableChildProduct"/>
+            <deleteData createDataKey="configurableProduct" stepKey="deleteConfigurableProduct"/>
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
+            <deleteData createDataKey="firstBundleChildProduct" stepKey="deleteFirstBundleChild"/>
+            <deleteData createDataKey="secondBundleChildProduct" stepKey="deleteSecondBundleChild"/>
+            <deleteData createDataKey="bundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createTaxRuleUSNY" stepKey="deleteTaxRuleUSNY"/>
+            <deleteData createDataKey="createTaxRateUSNY" stepKey="deleteTaxRateUSNY"/>
+            <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
+            <createData entity="DefaultMinimumOrderAmount" stepKey="defaultMinimumOrderAmount"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminPanel"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
+            <argument name="product" value="$simpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addSimpleProductToTheCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
+            <argument name="urlKey" value="$configurableProduct.custom_attributes[url_key]$" />
+            <argument name="productAttribute" value="$createProductAttribute.default_value$"/>
+            <argument name="productOption" value="$getProductAttributeOption.label$"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyBundleProduct">
+            <argument name="product" value="$bundleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddBundleProductFromProductToCartWithMultiOptionActionGroup" stepKey="addBundleProductToCart">
+            <argument name="productName" value="$bundleProduct.name$"/>
+            <argument name="optionName" value="$bundleOption.name$"/>
+            <argument name="value" value="$firstBundleChildProduct.name$ +$100.00"/>
+        </actionGroup>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
+        <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields">
+            <argument name="address" value="US_Address_NY_Default_Shipping"/>
+        </actionGroup>
+        <click selector="{{CheckoutCartSummarySection.shippingMethodElementId('freeshipping', 'freeshipping')}}" stepKey="selectShippingMethod"/>
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$9.72" stepKey="seeTaxAmount"/>
+        <reloadPage stepKey="reloadThePage"/>
+        <waitForPageLoad stepKey="waitForPageToReload"/>
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$9.72" stepKey="seeTaxAmountAfterLoadPage"/>
+        <scrollTo selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="scrollToProceedToCheckout" />
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
+        <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillTheSignInForm">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="customerAddress" value="US_Address_NY_Default_Shipping"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <seeElement selector="{{StorefrontMinicartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderById">
+            <argument name="orderId" value="$orderId"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertOrderAvailableButtonsActionGroup" stepKey="assertOrderButtons"/>
+        <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$129.72" stepKey="seeGrandTotal"/>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeOrderPendingStatus"/>
+        <actionGroup ref="AdminShipThePendingOrderActionGroup" stepKey="shipTheOrder"/>
+        <actionGroup ref="AssertOrderAddressInformationActionGroup" stepKey="assertCustomerInformation">
+            <argument name="customer" value=""/>
+            <argument name="shippingAddress" value="US_Address_NY_Default_Shipping"/>
+            <argument name="billingAddress" value="US_Address_NY_Default_Shipping"/>
+            <argument name="customerGroup" value=""/>
+        </actionGroup>
+    </test>
+</tests>

@@ -12,13 +12,15 @@
         <annotations>
             <description>Goes to the 'Configuration' page for 'Tax'. Sets 'Tax Class for Shipping' to 'Taxable Goods'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
         </annotations>
-
+        <arguments>
+            <argument name="shippingTaxClass" type="string" defaultValue="Taxable Goods"/>
+        </arguments>
         <amOnPage url="{{AdminSalesTaxClassPage.url}}" stepKey="navigateToSalesTaxPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick selector="{{SalesConfigSection.TaxClassesTab}}" dependentSelector="{{SalesConfigSection.CheckIfTaxClassesTabExpand}}" visible="true" stepKey="expandTaxClassesTab"/>
         <waitForElementVisible selector="{{SalesConfigSection.ShippingTaxClass}}" stepKey="seeShippingTaxClass"/>
         <uncheckOption selector="{{SalesConfigSection.EnableTaxClassForShipping}}" stepKey="uncheckUseSystemValue"/>
-        <selectOption selector="{{SalesConfigSection.ShippingTaxClass}}" userInput="Taxable Goods" stepKey="setShippingTaxClass"/>
+        <selectOption selector="{{SalesConfigSection.ShippingTaxClass}}" userInput="{{shippingTaxClass}}" stepKey="setShippingTaxClass"/>
         <click selector="{{SalesConfigSection.TaxClassesTab}}" stepKey="collapseTaxClassesTab"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
     </actionGroup>

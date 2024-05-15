@@ -3,40 +3,74 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\TaxImportExport\Block\Adminhtml\Rate;
 
-class ImportExportTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests for Tax Rate Import/Export form.
+ *
+ * @magentoAppArea adminhtml
+ */
+class ImportExportTest extends TestCase
 {
     /**
-     * @var \Magento\TaxImportExport\Block\Adminhtml\Rate\ImportExport
+     * @var ObjectManagerInterface
      */
-    protected $_block = null;
+    private $objectManager;
 
+    /**
+     * @var ImportExport
+     */
+    protected $block = null;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()
-            ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\View\LayoutInterface::class
-        )->createBlock(\Magento\TaxImportExport\Block\Adminhtml\Rate\ImportExport::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(ImportExport::class);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown(): void
     {
-        $this->_block = null;
+        $this->block = null;
     }
 
-    public function testCreateBlock()
+    /**
+     * @return void
+     */
+    public function testCreateBlock(): void
     {
-        $this->assertInstanceOf(\Magento\TaxImportExport\Block\Adminhtml\Rate\ImportExport::class, $this->_block);
+        $this->assertInstanceOf(ImportExport::class, $this->block);
     }
 
-    public function testFormExists()
+    /**
+     * @return void
+     */
+    public function testFormExists(): void
     {
-        $html = $this->_block->toHtml();
-
+        $html = $this->block->toHtml();
         $this->assertStringContainsString('<form id="import-form"', $html);
-
         $this->assertStringContainsString('<form id="export_form"', $html);
+    }
+
+    /**
+     * @return void
+     */
+    public function testExportFormButtonOnClick(): void
+    {
+        $html = $this->block->toHtml();
+        $this->assertStringContainsString('<form id="export_form"', $html);
+        $this->assertStringContainsString('export_form.submit();', $html);
     }
 }

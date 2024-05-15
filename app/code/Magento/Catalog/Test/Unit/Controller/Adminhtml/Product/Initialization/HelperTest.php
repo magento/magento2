@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
 
+use Magento\Catalog\Api\Data\CategoryLinkInterface;
+use Magento\Catalog\Api\Data\CategoryLinkInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductLinkTypeInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface as ProductRepository;
@@ -26,6 +29,7 @@ use Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Locale\Format;
 use Magento\Framework\Locale\FormatInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -122,57 +126,65 @@ class HelperTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->productLinkFactoryMock = $this->getMockBuilder(ProductLinkInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productRepositoryMock = $this->getMockBuilder(ProductRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productRepositoryMock = $this->createMock(ProductRepository::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getPost'])
+            ->addMethods(['getPost'])
             ->getMockForAbstractClass();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->stockFilterMock = $this->getMockBuilder(StockDataFilter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->stockFilterMock = $this->createMock(StockDataFilter::class);
+
         $this->productMock = $this->getMockBuilder(Product::class)
-            ->setMethods(
+            ->addMethods(['getOptionsReadOnly'])
+            ->onlyMethods(
                 [
                     'getId',
                     'isLockedAttribute',
                     'lockAttribute',
                     'getAttributes',
                     'unlockAttribute',
-                    'getOptionsReadOnly',
                     'getSku',
                 ]
             )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $productExtensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->addMethods(['getCategoryLinks', 'setCategoryLinks'])
+            ->getMockForAbstractClass();
+        $this->productMock->setExtensionAttributes($productExtensionAttributes);
+
         $this->customOptionFactoryMock = $this->getMockBuilder(ProductCustomOptionInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->productLinksMock = $this->getMockBuilder(ProductLinks::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->linkTypeProviderMock = $this->getMockBuilder(LinkTypeProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productLinksMock = $this->createMock(ProductLinks::class);
+        $this->linkTypeProviderMock = $this->createMock(LinkTypeProvider::class);
         $this->productLinksMock->expects($this->any())
             ->method('initializeLinks')
             ->willReturn($this->productMock);
-        $this->attributeFilterMock = $this->getMockBuilder(AttributeFilter::class)
-            ->setMethods(['prepareProductAttributes'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->localeFormatMock = $this->getMockBuilder(Format::class)
-            ->setMethods(['getNumber'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attributeFilterMock = $this->createMock(AttributeFilter::class);
+        $this->localeFormatMock = $this->createMock(Format::class);
 
         $this->dateTimeFilterMock = $this->createMock(DateTime::class);
+
+        $categoryLinkFactoryMock = $this->getMockBuilder(CategoryLinkInterfaceFactory::class)
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $categoryLinkFactoryMock->method('create')
+            ->willReturnCallback(function () {
+                return $this->createMock(CategoryLinkInterface::class);
+            });
+
+        $objects = [
+            [
+                ProductCustomOptionInterfaceFactory::class,
+                $this->customOptionFactoryMock
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
 
         $this->helper = $this->objectManager->getObject(
             Helper::class,
@@ -187,13 +199,12 @@ class HelperTest extends TestCase
                 'linkTypeProvider' => $this->linkTypeProviderMock,
                 'attributeFilter' => $this->attributeFilterMock,
                 'localeFormat' => $this->localeFormatMock,
-                'dateTimeFilter' => $this->dateTimeFilterMock
+                'dateTimeFilter' => $this->dateTimeFilterMock,
+                'categoryLinkFactory' => $categoryLinkFactoryMock,
             ]
         );
 
-        $this->linkResolverMock = $this->getMockBuilder(Resolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->linkResolverMock = $this->createMock(Resolver::class);
         $helperReflection = new \ReflectionClass(get_class($this->helper));
         $resolverProperty = $helperReflection->getProperty('linkResolver');
         $resolverProperty->setAccessible(true);
@@ -278,7 +289,7 @@ class HelperTest extends TestCase
 
         $customOptionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
-            ->setMethods(null)
+            ->onlyMethods([])
             ->getMock();
         $firstExpectedCustomOption = clone $customOptionMock;
         $firstExpectedCustomOption->setData($optionsData['option2']);
@@ -314,7 +325,7 @@ class HelperTest extends TestCase
             ->willReturnCallback(
                 function () {
                     return $this->getMockBuilder(ProductLink::class)
-                        ->setMethods(null)
+                        ->onlyMethods([])
                         ->disableOriginalConstructor()
                         ->getMock();
                 }
@@ -381,13 +392,13 @@ class HelperTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function initializeDataProvider()
+    public static function initializeDataProvider()
     {
         return [
             [
                 'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'website_ids' => ['1' => 1, '2' => 2],
+                'expected_website_ids' => ['1' => 1, '2' => 2],
                 'links' => [],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
                 'expected_links' => [],
@@ -421,8 +432,8 @@ class HelperTest extends TestCase
             // Related links
             [
                 'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'website_ids' => ['1' => 1, '2' => 2],
+                'expected_website_ids' => ['1' => 1, '2' => 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -447,8 +458,8 @@ class HelperTest extends TestCase
             // Custom link
             [
                 'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'website_ids' => ['1' => 1, '2' => 2],
+                'expected_website_ids' => ['1' => 1, '2' => 2],
                 'links' => [
                     'customlink' => [
                         0 => [
@@ -473,8 +484,8 @@ class HelperTest extends TestCase
             // Both links
             [
                 'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'website_ids' => ['1' => 1, '2' => 2],
+                'expected_website_ids' => ['1' => 1, '2' => 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -513,8 +524,8 @@ class HelperTest extends TestCase
             // Undefined link type
             [
                 'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'website_ids' => ['1' => 1, '2' => 2],
+                'expected_website_ids' => ['1' => 1, '2' => 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -557,7 +568,7 @@ class HelperTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function mergeProductOptionsDataProvider()
+    public static function mergeProductOptionsDataProvider()
     {
         return [
             'options are not array, empty array is returned' => [

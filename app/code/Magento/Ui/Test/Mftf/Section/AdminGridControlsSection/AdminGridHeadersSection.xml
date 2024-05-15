@@ -11,5 +11,7 @@
         <element name="title" type="text" selector=".page-title-wrapper h1"/>
         <element name="headerByName" type="text" selector="//div[@data-role='grid-wrapper']//span[@class='data-grid-cell-content' and contains(text(), '{{var1}}')]/parent::*" parameterized="true"/>
         <element name="columnsNames" type="text" selector="[data-role='grid-wrapper'] .data-grid-th &gt; span"/>
+        <element name="totalRecords" type="text" selector="div.admin__data-grid-header-row.row.row-gutter div.row div.admin__control-support-text"/>
+        <element name="numberOfPages" type="text" selector="div.admin__data-grid-header-row.row.row-gutter div.row div.admin__data-grid-pager > label"/>
     </section>
 </sections>

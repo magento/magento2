@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckoutWithDifferentShippingAndBillingAddressAndCreateCustomerAfterCheckoutTest">
+        <annotations>
+            <stories value="Checkout"/>
+            <title value="Verify UK customer checkout with different billing and shipping address and register customer after checkout"/>
+            <description value="Checkout as UK customer with different shipping/billing address and register checkout method"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-28288"/>
+            <group value="mtf_migrated"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct">
+                <field key="price">50.00</field>
+            </createData>
+        </before>
+        <after>
+            <!-- Sign out Customer from storefront -->
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="UKCustomer.email"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCustomersGridFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!--Open Product page in StoreFront and assert product and price range -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
+            <argument name="product" value="$simpleProduct$"/>
+        </actionGroup>
+
+        <!--Add product to the cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$simpleProduct$"/>
+        </actionGroup>
+
+        <!--Open View and edit -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openCartFromMiniCart"/>
+
+        <!-- Fill the Estimate Shipping and Tax section -->
+        <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
+
+        <!-- Fill the guest form -->
+        <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillGuestShippingAddress">
+            <argument name="customer" value="UKCustomer"/>
+            <argument name="customerAddress" value="updateCustomerUKAddress"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.shippingMethodFlatRate}}" stepKey="waitForShippingMethod"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToBillingStep"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="waitForSameBillingAndShippingAddressCheckboxVisible"/>
+        <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="uncheckSameBillingAndShippingAddress"/>
+        <conditionalClick selector="{{CheckoutShippingSection.editAddressButton}}" dependentSelector="{{CheckoutShippingSection.editAddressButton}}" visible="true" stepKey="clickEditBillingAddressButton"/>
+
+        <!-- Fill Billing Address -->
+        <actionGroup ref="StorefrontFillBillingAddressActionGroup" stepKey="fillBillingAddressForm"/>
+        <click selector="{{CheckoutPaymentSection.update}}" stepKey="clickOnUpdateBillingAddressButton"/>
+
+        <!--Place order -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <seeElement selector="{{StorefrontMinicartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
+
+        <!-- Register customer after checkout -->
+        <actionGroup ref="StorefrontRegisterCustomerAfterCheckoutActionGroup" stepKey="registerCustomer"/>
+
+        <!-- Open Order Page in admin -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="{$orderId}"/>
+        </actionGroup>
+
+        <!-- Assert Grand Total -->
+        <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$55.00" stepKey="seeGrandTotal"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderStatus"/>
+
+        <!-- Ship the order and assert the status -->
+        <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="goToShipment"/>
+        <actionGroup ref="SubmitShipmentIntoOrderActionGroup" stepKey="submitShipment"/>
+
+        <!-- Assert order buttons -->
+        <actionGroup ref="AdminAssertOrderAvailableButtonsActionGroup" stepKey="assertOrderButtons"/>
+    </test>
+</tests>

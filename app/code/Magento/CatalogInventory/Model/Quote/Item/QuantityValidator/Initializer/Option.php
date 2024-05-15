@@ -120,7 +120,7 @@ class Option
             /**
              * if option's qty was updates we also need to update quote item qty
              */
-            $quoteItem->setData('qty', (int) $qty);
+            $quoteItem->setData('qty', (int) $result->getItemQty());
         }
         if ($result->getMessage() !== null) {
             $option->setMessage($result->getMessage());

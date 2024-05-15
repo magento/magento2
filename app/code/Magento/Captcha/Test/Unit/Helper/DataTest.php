@@ -23,6 +23,8 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Math\Random;
+use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -91,7 +93,9 @@ class DataTest extends TestCase
                 $this->createMock(SessionManager::class),
                 $this->createMock(Data::class),
                 $this->createPartialMock(LogFactory::class, ['create']),
-                'user_create'
+                'user_create',
+                $this->createMock(Random::class),
+                $this->createMock(UserContextInterface::class)
             )
         );
 
@@ -197,7 +201,7 @@ class DataTest extends TestCase
      */
     public function testGetImgUrl()
     {
-        $this->assertEquals($this->helper->getImgUrl(), 'http://localhost/pub/media/captcha/base/');
+        $this->assertEquals($this->helper->getImgUrl(), 'http://localhost/media/captcha/base/');
     }
 
     /**
@@ -223,7 +227,7 @@ class DataTest extends TestCase
     {
         $store = $this->createMock(Store::class);
 
-        $store->expects($this->any())->method('getBaseUrl')->willReturn('http://localhost/pub/media/');
+        $store->expects($this->any())->method('getBaseUrl')->willReturn('http://localhost/media/');
 
         return $store;
     }

@@ -12,4 +12,12 @@
         <data key="name" unique="suffix">New Bundle Product Name</data>
         <data key="description" unique="suffix">This is the description</data>
     </entity>
+    <entity name="UpdateAttributeQtyAndStockToInStock" type="productAttributeMassUpdate">
+        <data key="qty">10</data>
+        <data key="stockAvailability">In Stock</data>
+    </entity>
+    <entity name="UpdateAttributeQtyAndStockToOutOfStock" type="productAttributeMassUpdate">
+        <data key="qty">0</data>
+        <data key="stockAvailability">Out of Stock</data>
+    </entity>
 </entities>

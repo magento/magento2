@@ -7,24 +7,28 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMediaGalleryCatalogUiUsedInProductFilterTest">
+    <test name="AdminMediaGalleryCatalogUiUsedInProductFilterTest" deprecated="Use AdminMediaGalleryCatalogUiUsedInProductFilterOnTest instead">
         <annotations>
             <features value="AdminMediaGalleryUsedInProductsFilter"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1503"/>
-            <title value="User can open product entity the asset is associated"/>
+            <title value="Deprecated. User can open product entity the asset is associated"/>
             <stories value="Story 58: User sees entities where asset is used in" />
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/943908/scenarios/4523889"/>
             <description value="User filters assets used in products"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminMediaGalleryCatalogUiUsedInProductFilterOnTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <createData entity="SimpleProduct2" stepKey="product"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
         </after>
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProduct">
@@ -33,7 +37,8 @@
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
             <argument name="product" value="$$product$$"/>
         </actionGroup>
-        <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+        <actionGroup ref="AdminOpenMediaGalleryTinyMceActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
@@ -41,11 +46,12 @@
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
-        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
+        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMceActionGroup" stepKey="clickOkButton"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductsGrid"/>
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setUsedInFilter">
             <argument name="filterName" value="Used in Products"/>
@@ -58,8 +64,11 @@
             <argument name="entityName" value="Products"/>
         </actionGroup>
 
-        <actionGroup ref="AdminAssertMediaGalleryFilterPlaceHolderGridActionGroup" stepKey="assertFilterApplied">
-            <argument name="filterPlaceholder" value="{{ImageMetadata.title}}"/>
+        <wait time="10" stepKey="waitForBookmarkToSaveView"/>
+        <reloadPage stepKey="reloadPage"/>
+        <waitForPageLoad stepKey="waitForGridReloaded"/>
+        <actionGroup ref="AdminAssertMediaGalleryFilterPlaceholderActionGroup" stepKey="assertFilterApplied">
+            <argument name="filterPlaceholder" value="$$product.name$$"/>
         </actionGroup>
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFiltersOnProductGrid"/>
 
@@ -76,6 +85,5 @@
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clickDeleteSelectedButton"/>
         <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
-
    </test>
 </tests>

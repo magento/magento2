@@ -67,7 +67,7 @@ foreach ($product->getOptions() as $option) {
             $iDate++;
             break;
         case ProductCustomOptionInterface::OPTION_GROUP_FILE:
-            $value = 'test.jpg';
+            $value = null;
             break;
         default:
             $value = 'test';

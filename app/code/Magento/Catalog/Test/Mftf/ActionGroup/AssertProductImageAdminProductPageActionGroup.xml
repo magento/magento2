@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertProductImageAdminProductPageActionGroup">
+    <actionGroup name="AssertProductImageAdminProductPageActionGroup" deprecated="Use AdminAssertProductImageOnProductPageActionGroup instead">
         <annotations>
             <description>Validates that the provided Product Image is present and correct.</description>
         </annotations>

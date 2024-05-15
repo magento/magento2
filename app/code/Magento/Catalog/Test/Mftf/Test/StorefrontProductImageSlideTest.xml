@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductImageSlideTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Image"/>
+            <title value="Product image should be visible and slide left or right on frontend in mobile"/>
+            <description value="Product image should be visible and slide left or right on frontend in mobile"/>
+            <group value="Catalog"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-8441"/>
+        </annotations>
+        <before>
+            <resizeWindow width="800" height="700" stepKey="resizeWindowToMobileView"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <resizeWindow width="1920" height="1080" stepKey="resizeWindowToDesktop"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{SimpleProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
+        </after>
+
+        <!--Create product-->
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="openNewProductPage"/>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillSimpleProductMain">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+
+        <!-- Add image to product -->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForSimpleProduct">
+            <argument name="image" value="TestImageWithDotInFilename"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForSimpleProduct2">
+            <argument name="image" value="TestImageWithDotInFilename"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
+
+        <!-- Assert product in storefront product page -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="assertProductInStorefrontProductPage">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+
+        <click selector="{{StorefrontProductMediaSection.fotoramaImageThumbnail('2')}}" stepKey="clickForFullScreenImage1"/>
+        <wait stepKey="waitForImageScroll" time="2"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="waitPrevButton"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="seePrevButton"/>
+    </test>
+</tests>

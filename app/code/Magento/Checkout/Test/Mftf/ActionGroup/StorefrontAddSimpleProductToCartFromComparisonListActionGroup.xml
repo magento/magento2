@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+  <!-- Add Product to Cart from the category page and check message -->
+    <actionGroup name="StorefrontAddSimpleProductToCartFromComparisonListActionGroup">
+        <annotations>
+            <description>Add simple product from comparison page to the cart. Starts on products comparison page.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string" defaultValue="{{SimpleProduct.name}}"/>
+        </arguments>
+
+        <waitForElement selector="{{StorefrontProductCompareMainSection.ProductAddToCartButton(productName)}}" stepKey="waitForAddToCartButton"/>
+        <click selector="{{StorefrontProductCompareMainSection.ProductAddToCartButton(productName)}}" stepKey="clickAddToCartButton"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{productName}} to your shopping cart." stepKey="assertSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

@@ -12,5 +12,6 @@
         <element name="resetButton" type="button" selector="#reset" timeout="30"/>
         <element name="saveButton" type="button" selector="#save" timeout="60"/>
         <element name="loadingMask" type="text" selector=".loading-mask"/>
+        <element name="btnSaveStoreView" type="button" selector="//button[@title='Save Store View' and @id='save']"/>
     </section>
 </sections>

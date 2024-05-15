@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Captcha\Test\Unit\Model;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Captcha\Block\Captcha\DefaultCaptcha;
 use Magento\Captcha\Helper\Data;
 use Magento\Captcha\Model\DefaultModel;
@@ -17,6 +18,7 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Session\Storage;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Session\SessionStartChecker;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -30,7 +32,7 @@ class DefaultTest extends TestCase
     /**
      * Expiration frame
      */
-    const EXPIRE_FRAME = 86400;
+    private const EXPIRE_FRAME = 86400;
 
     /**
      * Captcha default config data
@@ -50,9 +52,9 @@ class DefaultTest extends TestCase
         'case_sensitive' => '0',
         'shown_to_logged_in_user' => ['contact_us' => 1],
         'always_for' => [
-            'user_create',
-            'user_forgotpassword',
-            'contact_us',
+            'user_create' => '1',
+            'user_forgotpassword' => '1',
+            'contact_us' => '1'
         ],
     ];
 
@@ -93,9 +95,14 @@ class DefaultTest extends TestCase
     protected $session;
 
     /**
-     * @var MockObject
+     * @var MockObject|LogFactory
      */
     protected $_resLogFactory;
+
+    /**
+     * @var UserContextInterface|MockObject
+     */
+    private $userContextMock;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -114,19 +121,6 @@ class DefaultTest extends TestCase
             $this->_getStoreStub()
         );
 
-        // \Magento\Customer\Model\Session
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->_objectManager->expects(
-            $this->any()
-        )->method(
-            'get'
-        )->willReturnMap(
-            [
-                Data::class => $this->_getHelperStub(),
-                Session::class => $this->session,
-            ]
-        );
-
         $this->_resLogFactory = $this->createPartialMock(
             LogFactory::class,
             ['create']
@@ -139,11 +133,18 @@ class DefaultTest extends TestCase
             $this->_getResourceModelStub()
         );
 
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('random-string');
+
+        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
+
         $this->_object = new DefaultModel(
             $this->session,
             $this->_getHelperStub(),
             $this->_resLogFactory,
-            'user_create'
+            'user_create',
+            $randomMock,
+            $this->userContextMock
         );
     }
 
@@ -161,6 +162,19 @@ class DefaultTest extends TestCase
     public function testIsRequired()
     {
         $this->assertTrue($this->_object->isRequired());
+    }
+
+    /**
+     * Validate that CAPTCHA is disabled for integrations.
+     *
+     * @return void
+     */
+    public function testIsRequiredForIntegration(): void
+    {
+        $this->userContextMock->method('getUserType')->willReturn(UserContextInterface::USER_TYPE_INTEGRATION);
+        $this->userContextMock->method('getUserId')->willReturn(1);
+
+        $this->assertFalse($this->_object->isRequired());
     }
 
     /**
@@ -217,7 +231,7 @@ class DefaultTest extends TestCase
     {
         $this->assertEquals(
             $this->_object->getImgSrc(),
-            'http://localhost/pub/media/captcha/base/' . $this->_object->getId() . '.png'
+            'http://localhost/media/captcha/base/' . $this->_object->getId() . '.png'
         );
     }
 
@@ -258,12 +272,20 @@ class DefaultTest extends TestCase
     protected function _getSessionStub()
     {
         $helper = new ObjectManager($this);
+        $objects = [
+            [
+                SessionStartChecker::class,
+                $this->createMock(SessionStartChecker::class)
+            ]
+        ];
+        $helper->prepareObjectManager($objects);
         $sessionArgs = $helper->getConstructArguments(
             Session::class,
             ['storage' => new Storage()]
         );
         $session = $this->getMockBuilder(Session::class)
-            ->setMethods(['isLoggedIn', 'getUserCreateWord'])
+            ->addMethods(['getUserCreateWord'])
+            ->onlyMethods(['isLoggedIn'])
             ->setConstructorArgs($sessionArgs)
             ->getMock();
         $session->expects($this->any())->method('isLoggedIn')->willReturn(false);
@@ -289,7 +311,7 @@ class DefaultTest extends TestCase
         $helper = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getConfig', 'getFonts', '_getWebsiteCode', 'getImgUrl']
             )->getMock();
 
@@ -310,7 +332,7 @@ class DefaultTest extends TestCase
         )->method(
             'getImgUrl'
         )->willReturn(
-            'http://localhost/pub/media/captcha/base/'
+            'http://localhost/media/captcha/base/'
         );
 
         return $helper;
@@ -365,7 +387,7 @@ class DefaultTest extends TestCase
             ->onlyMethods(['getBaseUrl'])
             ->disableOriginalConstructor()
             ->getMock();
-        $store->expects($this->any())->method('getBaseUrl')->willReturn('http://localhost/pub/media/');
+        $store->expects($this->any())->method('getBaseUrl')->willReturn('http://localhost/media/');
         $store->expects($this->any())->method('isAdmin')->willReturn(false);
         return $store;
     }
@@ -389,7 +411,7 @@ class DefaultTest extends TestCase
     /**
      * @return array
      */
-    public function isShownToLoggedInUserDataProvider()
+    public static function isShownToLoggedInUserDataProvider()
     {
         return [
             [true, 'contact_us'],
@@ -423,7 +445,7 @@ class DefaultTest extends TestCase
     /**
      * @return array
      */
-    public function generateWordProvider()
+    public static function generateWordProvider()
     {
         return [
             ['ABC123'],

@@ -15,7 +15,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-14796"/>
             <group value="CatalogSearch"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
@@ -70,12 +70,15 @@
                 <argument name="value" value="{{_defaultProduct.name}}"/>
             </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2b"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
             <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
-
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">

@@ -6,7 +6,7 @@
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductFormSection">
         <element name="additionalOptions" type="select" selector=".admin__control-multiselect"/>
         <element name="datepickerNewAttribute" type="input" selector="[data-index='{{attrName}}'] input" timeout="30" parameterized="true"/>
@@ -48,12 +48,13 @@
         <element name="contentTab" type="button" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Content']"/>
         <element name="fieldError" type="text" selector="//input[@name='product[{{fieldName}}]']/following-sibling::label[@class='admin__field-error']" parameterized="true"/>
         <element name="priceFieldError" type="text" selector="//input[@name='product[price]']/parent::div/parent::div/label[@class='admin__field-error']"/>
-        <element name="addAttributeBtn" type="button" selector="#addAttribute"/>
-        <element name="createNewAttributeBtn" type="button" selector="button[data-index='add_new_attribute_button']"/>
+        <element name="addAttributeBtn" type="button" selector="#addAttribute" timeout="30"/>
+        <element name="createNewAttributeBtn" type="button" selector="button[data-index='add_new_attribute_button']" timeout="30"/>
         <element name="save" type="button" selector="#save-button" timeout="30"/>
         <element name="saveNewAttribute" type="button" selector="//aside[contains(@class, 'create_new_attribute_modal')]//button[@id='save']"/>
         <element name="successMessage" type="text" selector="#messages"/>
         <element name="attributeTab" type="button" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Attributes']"/>
+        <element name="attributeTabOpened" type="button" selector="//div[contains(@class, 'admin__collapsible-block-wrapper') and contains(@class, '_show') ]//span[text()='Attributes']"/>
         <element name="attributeLabel" type="input" selector="//input[@name='frontend_label[0]']"/>
         <element name="frontendInput" type="select" selector="select[name = 'frontend_input']"/>
         <element name="productFormTab" type="button" selector="//strong[@class='admin__collapsible-title']/span[contains(text(), '{{tabName}}')]" parameterized="true"/>
@@ -68,13 +69,28 @@
         <element name="attributeRequiredInput" type="input" selector="//input[contains(@name, 'product[{{attributeCode}}]')]" parameterized="true"/>
         <element name="attributeFieldError" type="text" selector="//*[@class='admin__field _required _error']/..//label[contains(.,'This is a required field.')]"/>
         <element name="customSelectField" type="select" selector="//select[@name='product[{{var}}]']" parameterized="true"/>
+        <element name="customInputField" type="input" selector="//input[@name='product[{{var}}]']" parameterized="true"/>
         <element name="searchCategory" type="input" selector="//*[@data-index='category_ids']//input[contains(@class, 'multiselect-search')]" timeout="30"/>
         <element name="selectCategory" type="input" selector="//*[@data-index='category_ids']//label[contains(., '{{categoryName}}')]" parameterized="true" timeout="30"/>
         <element name="done" type="button" selector="//*[@data-index='category_ids']//button[@data-action='close-advanced-select']" timeout="30"/>
         <element name="selectMultipleCategories" type="input" selector="//*[@data-index='container_category_ids']//*[contains(@class, '_selected')]"/>
         <element name="countryOfManufacture" type="select" selector="select[name='product[country_of_manufacture]']"/>
         <element name="newAddedAttribute" type="text" selector="//fieldset[@class='admin__fieldset']//div[contains(@data-index,'{{attributeCode}}')]" parameterized="true"/>
+        <element name="newAddedAttributeInput" type="text" selector="//fieldset[@class='admin__fieldset']//div[contains(@data-index,'{{attributeCode}}')]//input" parameterized="true"/>
         <element name="newCategoryButton" type="button" selector="button[data-index='create_category_button']" timeout="30"/>
         <element name="footerBlock" type="block" selector="//footer"/>
+        <element name="categories" type="text" selector="//*[@class='admin__action-multiselect-crumb']/span[contains(text(), '{{categoryName}}')]" parameterized="true"/>
+        <element name="attributeRequiredLabelText" type="text" selector="//*[@class='admin__field-label']//span[text()='{{attributeLabel}}']" parameterized="true"/>
+        <element name="newAddedAttributeValue" type="text" selector="//option[contains(@data-title,'{{attributeValue}}')]" parameterized="true"/>
+        <element name="country_Of_Manufacture" type="select" selector="//td[contains(text(), 'country_of_manufacture')]"/>
+        <element name="textArea" type="text" selector="//textarea[@name='product[test_custom_attribute]']" timeout="30"/>
+        <element name="assignedSourcesQty" type="input" selector="//input[@name='sources[assigned_sources][0][quantity]']"/>
+        <element name="btnAdvancedInventory" type="button" selector="//button//span[text()='Advanced Inventory']/.."/>
+        <element name="saveCategory" type="button" selector="//button[@data-action='close-advanced-select']" timeout="30"/>
+        <element name="attributeRequiredInputField" type="select" selector="//select[contains(@name, 'product[{{attributeCode}}]')]" parameterized="true"/>
+        <element name="customTextAttribute" type="input" selector="//input[@name='product[{{attribute_code}}]']" parameterized="true"/>
+        <element name="customSelectAttribute" type="select" selector="//select[@name='product[{{attribute_code}}]']" parameterized="true"/>
+        <element name="customSwitcherAttribute" type="checkbox" selector="//input[@name='product[{{attribute_code}}]' and @value='{{checked_value}}']/parent::div[@data-role='switcher']" parameterized="true"/>
+
     </section>
 </sections>

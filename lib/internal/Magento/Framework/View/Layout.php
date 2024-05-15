@@ -36,6 +36,11 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     const LAYOUT_NODE = '<layout/>';
 
     /**
+     * Default cache life time
+     */
+    private const DEFAULT_CACHE_LIFETIME = 31536000;
+
+    /**
      * Layout Update module
      *
      * @var \Magento\Framework\View\Layout\ProcessorInterface
@@ -172,6 +177,10 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @var SerializerInterface
      */
     private $serializer;
+    /**
+     * @var int
+     */
+    private $cacheLifetime;
 
     /**
      * @param Layout\ProcessorFactory $processorFactory
@@ -188,6 +197,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param \Psr\Log\LoggerInterface $logger
      * @param bool $cacheable
      * @param SerializerInterface|null $serializer
+     * @param int|null $cacheLifetime
      */
     public function __construct(
         Layout\ProcessorFactory $processorFactory,
@@ -203,7 +213,8 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         AppState $appState,
         Logger $logger,
         $cacheable = true,
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        ?int $cacheLifetime = null
     ) {
         $this->_elementClass = \Magento\Framework\View\Layout\Element::class;
         $this->_renderingOutput = new \Magento\Framework\DataObject();
@@ -222,6 +233,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         $this->generatorContextFactory = $generatorContextFactory;
         $this->appState = $appState;
         $this->logger = $logger;
+        $this->cacheLifetime = $cacheLifetime ?? self::DEFAULT_CACHE_LIFETIME;
     }
 
     /**
@@ -338,7 +350,8 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
                 'pageConfigStructure' => $this->getReaderContext()->getPageConfigStructure()->__toArray(),
                 'scheduledStructure'  => $this->getReaderContext()->getScheduledStructure()->__toArray(),
             ];
-            $this->cache->save($this->serializer->serialize($data), $cacheId, $this->getUpdate()->getHandles());
+            $handles = $this->getUpdate()->getHandles();
+            $this->cache->save($this->serializer->serialize($data), $cacheId, $handles, $this->cacheLifetime);
         }
 
         $generatorContext = $this->generatorContextFactory->create(

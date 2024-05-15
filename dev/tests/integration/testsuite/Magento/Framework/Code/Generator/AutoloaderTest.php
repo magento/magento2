@@ -13,6 +13,9 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class AutoloaderTest extends TestCase
 {
     /**
@@ -28,21 +31,11 @@ class AutoloaderTest extends TestCase
         return ObjectManager::getInstance();
     }
 
-    /**
-     * @before
-     */
-    public function setupLoggerTestDouble(): void
+    protected function setUp(): void
     {
-        $loggerTestDouble = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->getTestFrameworkObjectManager()->addSharedInstance($loggerTestDouble, MagentoMonologLogger::class);
-    }
-
-    /**
-     * @after
-     */
-    public function removeLoggerTestDouble(): void
-    {
-        $this->getTestFrameworkObjectManager()->removeSharedInstance(MagentoMonologLogger::class);
+        $loggerTestDouble = $this->createMock(LoggerInterface::class);
+        $this->getTestFrameworkObjectManager()->addSharedInstance($loggerTestDouble, LoggerInterface::class, true);
+        // magentoAppIsolation will cleanup the mess
     }
 
     /**

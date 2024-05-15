@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryCatalogUiEditCategoryFromGridPageTest">
+        <annotations>
+            <features value="MediaGalleryCatalogUi"/>
+            <stories value="Story 58: User sees entities where asset is used in" />
+            <title value="User Edits Category from Category grid"/>
+            <description value="Edit Category from Media Gallery Category Grid"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/5034526"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1667"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openCategoryPage"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetGridFilters"/>
+        <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryItem">
+            <argument name="categoryName" value="$category.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCategoryPageTitleActionGroup" stepKey="assertCategoryByName"/>
+   </test>
+</tests>

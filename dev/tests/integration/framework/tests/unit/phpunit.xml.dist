@@ -6,12 +6,11 @@
  */
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/9.1/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
          colors="true"
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
-         bootstrap="./framework/bootstrap.php"
->
+         bootstrap="./framework/bootstrap.php">
     <!-- Test suites definition -->
     <testsuites>
         <testsuite name="Unit Tests for Integration Tests Framework">
@@ -21,32 +20,13 @@
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>
     </php>
-    <listeners>
-        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+    <extensions>
+        <extension class="Qameta\Allure\PHPUnit\AllureExtension">
+            <!-- Optional arguments block; omit it if you want to use default values -->
             <arguments>
-                <string>var/allure-results</string> <!-- XML files output directory -->
-                <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
-                <array> <!-- A list of custom annotations to ignore (optional) -->
-                    <element key="magentoAdminConfigFixture">
-                        <string>magentoAdminConfigFixture</string>
-                    </element>
-                    <element key="magentoAppIsolation">
-                        <string>magentoAppIsolation</string>
-                    </element>
-                    <element key="magentoComponentsDir">
-                        <string>magentoComponentsDir</string>
-                    </element>
-                    <element key="magentoConfigFixture">
-                        <string>magentoConfigFixture</string>
-                    </element>
-                    <element key="@magentoDbIsolation">
-                        <string>magentoDataFixture</string>
-                    </element>
-                    <element key="magentoDbIsolation">
-                        <string>magentoDbIsolation</string>
-                    </element>
-                </array>
+                <!-- Path to config file (default is config/allure.config.php) -->
+                <string>../../../allure/allure.config.php</string>
             </arguments>
-        </listener>
-    </listeners>
+        </extension>
+    </extensions>
 </phpunit>

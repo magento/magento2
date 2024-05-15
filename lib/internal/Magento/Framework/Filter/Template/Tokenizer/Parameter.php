@@ -19,16 +19,18 @@ class Parameter extends \Magento\Framework\Filter\Template\Tokenizer\AbstractTok
     {
         $parameters = [];
         $parameterName = '';
-        while ($this->next()) {
+        do {
             if ($this->isWhiteSpace()) {
                 continue;
-            } elseif ($this->char() != '=') {
+            }
+
+            if ($this->char() !== '=') {
                 $parameterName .= $this->char();
             } else {
                 $parameters[$parameterName] = $this->getValue();
                 $parameterName = '';
             }
-        }
+        } while ($this->next());
         return $parameters;
     }
 

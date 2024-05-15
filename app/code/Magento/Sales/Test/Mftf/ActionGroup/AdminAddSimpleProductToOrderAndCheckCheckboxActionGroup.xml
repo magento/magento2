@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddSimpleProductToOrderAndCheckCheckboxActionGroup" extends="AddSimpleProductToOrderActionGroup">
+        <annotations>
+            <description>Adds the provided Simple Product to an Order. Checks if checkbox is checked. Fills in the provided Product Qty. Clicks on 'Add Selected Product(s) to Order'.</description>
+        </annotations>
+
+        <seeCheckboxIsChecked selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="verifyProductChecked" after="selectProduct"/> 
+        
+    </actionGroup>
+</actionGroups>

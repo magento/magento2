@@ -67,6 +67,12 @@ class ProcessableException extends LocalizedException
                     . ' Please contact us so we can assist you.'
                 );
                 break;
+            case self::API_TRANSACTION_HAS_BEEN_COMPLETED:
+                $message = __(
+                    'A successful payment transaction has already been completed.'
+                    . ' Please, check if the order has been placed.'
+                );
+                break;
             case self::API_ADDRESS_MATCH_FAIL:
                 $message = __(
                     'A match of the Shipping Address City, State, and Postal Code failed.'

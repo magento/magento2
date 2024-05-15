@@ -21,8 +21,6 @@ use Magento\Framework\App\TemplateTypesInterface;
 class Edit extends Widget
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -216,7 +214,9 @@ class Edit extends Widget
      */
     public function getJsTemplateName()
     {
-        return addcslashes($this->getModel()->getTemplateCode(), "\"\r\n\\");
+        $templateCode = $this->getModel()->getTemplateCode();
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        return $templateCode ? addcslashes($templateCode, "\"\r\n\\") : '';
     }
 
     /**

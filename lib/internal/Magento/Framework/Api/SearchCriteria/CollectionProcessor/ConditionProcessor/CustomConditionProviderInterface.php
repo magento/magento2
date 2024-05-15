@@ -15,6 +15,8 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\
  *
  * Used to store processors as mapping attributeName => CustomConditionInterface
  * You can use di.xml to configure with any custom conditions you need
+ *
+ * @api
  */
 interface CustomConditionProviderInterface
 {

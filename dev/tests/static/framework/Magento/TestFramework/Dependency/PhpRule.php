@@ -1,7 +1,5 @@
 <?php
 /**
- * Rule for searching php file dependency
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,11 +8,14 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Dependency;
 
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Config\Reader\Filesystem as ConfigReader;
+use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Magento\TestFramework\Dependency\Reader\ClassScanner;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Exception\NoSuchActionException;
+use Magento\TestFramework\Inspection\Exception;
 
 /**
  * Rule to check the dependencies between modules based on references, getUrl and layout blocks
@@ -59,6 +60,12 @@ class PhpRule implements RuleInterface
     protected $_mapLayoutBlocks = [];
 
     /**
+     * Used to retrieve information from WebApi urls
+     * @var ConfigReader
+     */
+    protected $configReader;
+
+    /**
      * Default modules list.
      *
      * @var array
@@ -86,27 +93,35 @@ class PhpRule implements RuleInterface
     private $classScanner;
 
     /**
+     * @var array
+     */
+    private $serviceMethods;
+
+    /**
      * @param array $mapRouters
      * @param array $mapLayoutBlocks
+     * @param ConfigReader $configReader
      * @param array $pluginMap
      * @param array $whitelists
      * @param ClassScanner|null $classScanner
-     *
-     * @throws LocalizedException
+     * @param RouteMapper|null $routeMapper
      */
     public function __construct(
         array $mapRouters,
         array $mapLayoutBlocks,
+        ConfigReader $configReader,
         array $pluginMap = [],
         array $whitelists = [],
-        ClassScanner $classScanner = null
+        ClassScanner $classScanner = null,
+        RouteMapper $routeMapper = null
     ) {
         $this->_mapRouters = $mapRouters;
         $this->_mapLayoutBlocks = $mapLayoutBlocks;
+        $this->configReader = $configReader;
         $this->pluginMap = $pluginMap ?: null;
-        $this->routeMapper = new RouteMapper();
         $this->whitelists = $whitelists;
         $this->classScanner = $classScanner ?? new ClassScanner();
+        $this->routeMapper = $routeMapper ?? new RouteMapper();
     }
 
     /**
@@ -121,7 +136,7 @@ class PhpRule implements RuleInterface
      */
     public function getDependencyInfo($currentModule, $fileType, $file, &$contents)
     {
-        if (!in_array($fileType, ['php', 'template'])) {
+        if (!in_array($fileType, ['php', 'template', 'fixture'])) {
             return [];
         }
 
@@ -132,7 +147,7 @@ class PhpRule implements RuleInterface
         );
         $dependenciesInfo = $this->considerCaseDependencies(
             $dependenciesInfo,
-            $this->_caseGetUrl($currentModule, $contents)
+            $this->_caseGetUrl($currentModule, $contents, $file)
         );
         $dependenciesInfo = $this->considerCaseDependencies(
             $dependenciesInfo,
@@ -290,41 +305,29 @@ class PhpRule implements RuleInterface
      *
      * @param string $currentModule
      * @param string $contents
+     * @param string $file
      * @return array
      * @throws LocalizedException
-     * @throws \Exception
-     * @SuppressWarnings(PMD.CyclomaticComplexity)
      */
-    protected function _caseGetUrl(string $currentModule, string &$contents): array
+    protected function _caseGetUrl(string $currentModule, string &$contents, string $file): array
     {
-        $pattern = '#(\->|:)(?<source>getUrl\(([\'"])(?<route_id>[a-z0-9\-_]{3,}|\*)'
-            .'(/(?<controller_name>[a-z0-9\-_]+|\*))?(/(?<action_name>[a-z0-9\-_]+|\*))?\3)#i';
-
         $dependencies = [];
+        $pattern = '#(\->|:)(?<source>getUrl\(([\'"])(?<path>[a-zA-Z0-9\-_*/]+)\3)\s*[,)]#';
         if (!preg_match_all($pattern, $contents, $matches, PREG_SET_ORDER)) {
             return $dependencies;
         }
-
         try {
             foreach ($matches as $item) {
-                $routeId = $item['route_id'];
-                $controllerName = $item['controller_name'] ?? UrlInterface::DEFAULT_CONTROLLER_NAME;
-                $actionName = $item['action_name'] ?? UrlInterface::DEFAULT_ACTION_NAME;
-
-                // skip rest
-                if ($routeId === "rest") { //MC-19890
-                    continue;
+                $path = $item['path'];
+                $modules = [];
+                if (strpos($path, '*') !== false) {
+                    $modules = $this->processWildcardUrl($path, $file);
+                } elseif (preg_match('#rest(?<service>/V1/.+)#i', $path, $apiMatch)) {
+                    $modules = $this->processApiUrl($apiMatch['service']);
+                } else {
+                    $modules = $this->processStandardUrl($path);
                 }
-                // skip wildcards
-                if ($routeId === "*" || $controllerName === "*" || $actionName === "*") { //MC-19890
-                    continue;
-                }
-                $modules = $this->routeMapper->getDependencyByRoutePath(
-                    $routeId,
-                    $controllerName,
-                    $actionName
-                );
-                if (!in_array($currentModule, $modules)) {
+                if ($modules && !in_array($currentModule, $modules)) {
                     $dependencies[] = [
                         'modules' => $modules,
                         'type' => RuleInterface::TYPE_HARD,
@@ -337,8 +340,134 @@ class PhpRule implements RuleInterface
                 throw new LocalizedException(__('Invalid URL path: %1', $e->getMessage()), $e);
             }
         }
-
         return $dependencies;
+    }
+
+    /**
+     * Helper method to get module dependencies used by a wildcard Url
+     *
+     * @param string $urlPath
+     * @param string $filePath
+     * @return string[]
+     * @throws NoSuchActionException
+     */
+    private function processWildcardUrl(string $urlPath, string $filePath)
+    {
+        $filePath = strtolower($filePath);
+        $urlRoutePieces = explode('/', $urlPath);
+        $routeId = array_shift($urlRoutePieces);
+        //Skip route wildcard processing as this requires using the routeMapper
+        if ('*' === $routeId) {
+            return [];
+        }
+
+        /**
+         * Only handle Controllers. ie: Ignore Blocks, Templates, and Models due to complexity in static resolution
+         * of route
+         */
+        if (!preg_match(
+            '#controller/(adminhtml/)?(?<controller_name>.+)/(?<action_name>\w+).php$#',
+            $filePath,
+            $fileParts
+        )) {
+            return [];
+        }
+
+        $controllerName = array_shift($urlRoutePieces);
+        if ('*' === $controllerName) {
+            $controllerName = str_replace('/', '_', $fileParts['controller_name']);
+        }
+
+        if (empty($urlRoutePieces) || !$urlRoutePieces[0]) {
+            $actionName = UrlInterface::DEFAULT_ACTION_NAME;
+        } else {
+            $actionName = array_shift($urlRoutePieces);
+            if ('*' === $actionName) {
+                $actionName = $fileParts['action_name'];
+            }
+        }
+
+        return $this->routeMapper->getDependencyByRoutePath(
+            strtolower($routeId),
+            strtolower($controllerName),
+            strtolower($actionName)
+        );
+    }
+
+    /**
+     * Helper method to get module dependencies used by a standard URL
+     *
+     * @param string $path
+     * @return string[]
+     * @throws NoSuchActionException
+     */
+    private function processStandardUrl(string $path)
+    {
+        $pattern = '#(?<route_id>[a-z0-9\-_]{3,})'
+            . '(/(?<controller_name>[a-z0-9\-_]+))?(/(?<action_name>[a-z0-9\-_]+))?#i';
+        if (!preg_match($pattern, $path, $match)) {
+            throw new NoSuchActionException('Failed to parse standard url path: ' . $path);
+        }
+        $routeId = $match['route_id'];
+        $controllerName = $match['controller_name'] ?? UrlInterface::DEFAULT_CONTROLLER_NAME;
+        $actionName = $match['action_name'] ?? UrlInterface::DEFAULT_ACTION_NAME;
+
+        return $this->routeMapper->getDependencyByRoutePath(
+            $routeId,
+            $controllerName,
+            $actionName
+        );
+    }
+
+    /**
+     * Create regex patterns from service url paths
+     *
+     * @return array
+     */
+    private function getServiceMethodRegexps(): array
+    {
+        if (!$this->serviceMethods) {
+            $this->serviceMethods = [];
+            $serviceRoutes = $this->configReader->read()['routes'];
+            foreach ($serviceRoutes as $serviceRouteUrl => $methods) {
+                $pattern = '#:\w+#';
+                $replace = '\w+';
+                $serviceRouteUrlRegex = preg_replace($pattern, $replace, $serviceRouteUrl);
+                $serviceRouteUrlRegex = '#^' . $serviceRouteUrlRegex . '$#';
+                $this->serviceMethods[$serviceRouteUrlRegex] = $methods;
+            }
+        }
+        return $this->serviceMethods;
+    }
+
+    /**
+     * Helper method to get module dependencies used by an API URL
+     *
+     * @param string $path
+     * @return string[]
+     *
+     * @throws NoSuchActionException
+     * @throws Exception
+     */
+    private function processApiUrl(string $path): array
+    {
+        foreach ($this->getServiceMethodRegexps() as $serviceRouteUrlRegex => $methods) {
+            /**
+             * Since we expect that every service method should be within the same module, we can use the class from
+             * any method
+             */
+            if (preg_match($serviceRouteUrlRegex, $path)) {
+                $method = reset($methods);
+
+                $className = $method['service']['class'];
+                //get module from className
+                if (preg_match('#^(?<module>\w+[\\\]\w+)#', $className, $match)) {
+                    return [$match['module']];
+                }
+                throw new Exception('Failed to parse class from className: ' . $className);
+            }
+        }
+        throw new NoSuchActionException('Failed to match service with url path: ' . $path);
     }
 
     /**

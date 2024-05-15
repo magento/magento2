@@ -35,7 +35,7 @@ define([
                     modalClass: 'confirm lac-confirm',
                     buttons: [
                         {
-                            text: $t('Cancel'),
+                            text: $t('Close'),
                             class: 'action-secondary action-dismiss',
 
                             /**

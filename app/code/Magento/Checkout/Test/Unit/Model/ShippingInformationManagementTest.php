@@ -32,6 +32,7 @@ use Magento\Quote\Model\ShippingAssignment;
 use Magento\Quote\Model\ShippingAssignmentFactory;
 use Magento\Quote\Model\ShippingFactory;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -194,7 +195,7 @@ class ShippingInformationManagementTest extends TestCase
                 'shippingAssignmentFactory' => $this->shippingAssignmentFactoryMock,
                 'cartExtensionFactory' => $this->cartExtensionFactoryMock,
                 'shippingFactory' => $this->shippingFactoryMock,
-                'addressValidator' => $this->addressValidatorMock,
+                'addressValidator' => $this->addressValidatorMock
             ]
         );
     }
@@ -226,9 +227,10 @@ class ShippingInformationManagementTest extends TestCase
     }
 
     /**
-     * Sets shipping assignments
+     * Sets shipping assignments.
      *
      * @param string $shippingMethod
+     *
      * @return void
      */
     private function setShippingAssignmentsMocks($shippingMethod): void
@@ -238,9 +240,7 @@ class ShippingInformationManagementTest extends TestCase
             ->willReturn(null);
         $this->shippingAddressMock->expects($this->once())
             ->method('setLimitCarrier');
-        $this->cartExtensionMock = $this->getMockBuilder(CartExtension::class)
-            ->addMethods(['getShippingAssignments', 'setShippingAssignments'])
-            ->getMock();
+        $this->cartExtensionMock = $this->getCartExtensionMock();
         $this->cartExtensionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->cartExtensionMock);
@@ -287,7 +287,7 @@ class ShippingInformationManagementTest extends TestCase
     }
 
     /**
-     * Save address with `StateException`
+     * Save address with `StateException`.
      *
      * @return void
      */
@@ -318,7 +318,7 @@ class ShippingInformationManagementTest extends TestCase
     }
 
     /**
-     * Save address with `LocalizedException`
+     * Save address with `LocalizedException`.
      *
      * @return void
      */
@@ -386,7 +386,7 @@ class ShippingInformationManagementTest extends TestCase
     }
 
     /**
-     * Save address with `InputException`
+     * Save address with `InputException`.
      *
      * @return void
      */
@@ -451,7 +451,7 @@ class ShippingInformationManagementTest extends TestCase
     }
 
     /**
-     * Save address with `NoSuchEntityException`
+     * Save address with `NoSuchEntityException`.
      *
      * @return void
      */
@@ -526,7 +526,7 @@ class ShippingInformationManagementTest extends TestCase
     }
 
     /**
-     * Save address info test
+     * Save address info test.
      *
      * @return void
      */
@@ -621,5 +621,22 @@ class ShippingInformationManagementTest extends TestCase
             $paymentDetailsMock,
             $this->model->saveAddressInformation($cartId, $addressInformationMock)
         );
+    }
+
+    /**
+     * Build cart extension mock.
+     *
+     * @return MockObject
+     */
+    private function getCartExtensionMock(): MockObject
+    {
+        $mockBuilder = $this->getMockBuilder(CartExtension::class);
+        try {
+            $mockBuilder->addMethods(['getShippingAssignments', 'setShippingAssignments']);
+        } catch (RuntimeException $e) {
+            // CartExtension already generated.
+        }
+
+        return $mockBuilder->getMock();
     }
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertProductImageOnProductPageActionGroup">
+        <annotations>
+            <description>Validates that the provided product image is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="image" defaultValue="{{MagentoLogo.filename}}" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="waitForProductImagesSection"/>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image)}}" stepKey="seeImage"/>
+    </actionGroup>
+</actionGroups>

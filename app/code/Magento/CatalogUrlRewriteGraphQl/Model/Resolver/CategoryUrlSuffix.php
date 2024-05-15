@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewriteGraphQl\Model\Resolver;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -17,7 +18,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 /**
  * Returns the url suffix for category
  */
-class CategoryUrlSuffix implements ResolverInterface
+class CategoryUrlSuffix implements ResolverInterface, ResetAfterRequestInterface
 {
     /**
      * System setting for the url suffix for categories
@@ -55,7 +56,7 @@ class CategoryUrlSuffix implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): string {
+    ): ?string {
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
         $storeId = (int)$store->getId();
@@ -66,17 +67,25 @@ class CategoryUrlSuffix implements ResolverInterface
      * Retrieve category url suffix by store
      *
      * @param int $storeId
-     * @return string
+     * @return string|null
      */
-    private function getCategoryUrlSuffix(int $storeId): string
+    private function getCategoryUrlSuffix(int $storeId): ?string
     {
         if (!isset($this->categoryUrlSuffix[$storeId])) {
             $this->categoryUrlSuffix[$storeId] = $this->scopeConfig->getValue(
                 self::$xml_path_category_url_suffix,
                 ScopeInterface::SCOPE_STORE,
                 $storeId
-            );
+            ) ?? '';
         }
         return $this->categoryUrlSuffix[$storeId];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->categoryUrlSuffix = [];
     }
 }

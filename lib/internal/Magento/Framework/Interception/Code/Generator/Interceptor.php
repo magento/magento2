@@ -8,9 +8,12 @@ declare(strict_types=1);
 namespace Magento\Framework\Interception\Code\Generator;
 
 use Magento\Framework\Code\Generator\EntityAbstract;
+use Magento\Framework\GetReflectionMethodReturnTypeValueTrait;
 
 class Interceptor extends EntityAbstract
 {
+    use GetReflectionMethodReturnTypeValueTrait;
+
     public const ENTITY_TYPE = 'interceptor';
 
     /**
@@ -72,7 +75,7 @@ class Interceptor extends EntityAbstract
         $reflectionClass = new \ReflectionClass($this->getSourceClassName());
         $publicMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
         foreach ($publicMethods as $method) {
-            if ($this->isInterceptedMethod($method)) {
+            if (!$method->isInternal() && $this->isInterceptedMethod($method)) {
                 $methods[] = $this->_getMethodInfo($method);
             }
         }
@@ -89,7 +92,7 @@ class Interceptor extends EntityAbstract
     protected function isInterceptedMethod(\ReflectionMethod $method)
     {
         return !($method->isConstructor() || $method->isFinal() || $method->isStatic() || $method->isDestructor()) &&
-            !in_array($method->getName(), ['__sleep', '__wakeup', '__clone']);
+            !in_array($method->getName(), ['__sleep', '__wakeup', '__clone', '_resetState']);
     }
 
     /**
@@ -142,7 +145,7 @@ METHOD_BODY
             array_map(
                 function ($item) {
                     $output = '';
-                    if ($item['variadic']) {
+                    if (!empty($item['variadic'])) {
                         $output .= '... ';
                     }
 
@@ -199,25 +202,5 @@ METHOD_BODY
         }
 
         return $result;
-    }
-
-    /**
-     * Returns return type
-     *
-     * @param \ReflectionMethod $method
-     * @return null|string
-     */
-    private function getReturnTypeValue(\ReflectionMethod $method): ?string
-    {
-        $returnTypeValue = null;
-        $returnType = $method->getReturnType();
-        if ($returnType) {
-            $returnTypeValue = ($returnType->allowsNull() ? '?' : '');
-            $returnTypeValue .= ($returnType->getName() === 'self')
-                ? $this->_getFullyQualifiedClassName($method->getDeclaringClass()->getName())
-                : $returnType->getName();
-        }
-
-        return $returnTypeValue;
     }
 }

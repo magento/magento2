@@ -120,8 +120,38 @@ define([
                         $.extend(true, {}, checkoutProvider.get('shippingAddress'), shippingAddressData)
                     );
                 }
-                checkoutProvider.on('shippingAddress', function (shippingAddrsData) {
-                    checkoutData.setShippingAddressFromData(shippingAddrsData);
+                checkoutProvider.on('shippingAddress', function (shippingAddrsData, changes) {
+                    var isStreetAddressDeleted, isStreetAddressNotEmpty;
+
+                    /**
+                     * In last modifying operation street address was deleted.
+                     * @return {Boolean}
+                     */
+                    isStreetAddressDeleted = function () {
+                        var change;
+
+                        if (!changes || changes.length === 0) {
+                            return false;
+                        }
+
+                        change = changes.pop();
+
+                        if (_.isUndefined(change.value) || _.isUndefined(change.oldValue)) {
+                            return false;
+                        }
+
+                        if (!change.path.startsWith('shippingAddress.street')) {
+                            return false;
+                        }
+
+                        return change.value.length === 0 && change.oldValue.length > 0;
+                    };
+
+                    isStreetAddressNotEmpty = shippingAddrsData.street && !_.isEmpty(shippingAddrsData.street[0]);
+
+                    if (isStreetAddressNotEmpty || isStreetAddressDeleted()) {
+                        checkoutData.setShippingAddressFromData(shippingAddrsData);
+                    }
                 });
                 shippingRatesValidator.initFields(fieldsetName);
             });
@@ -229,7 +259,8 @@ define([
         rates: shippingService.getShippingRates(),
         isLoading: shippingService.isLoading,
         isSelected: ko.computed(function () {
-            return quote.shippingMethod() ?
+            return checkoutData.getSelectedShippingRate() ? checkoutData.getSelectedShippingRate() :
+                quote.shippingMethod() ?
                 quote.shippingMethod()['carrier_code'] + '_' + quote.shippingMethod()['method_code'] :
                 null;
         }),
@@ -299,6 +330,12 @@ define([
                 this.source.set('params.invalid', false);
                 this.triggerShippingDataValidateEvent();
 
+                if (!quote.shippingMethod()['method_code']) {
+                    this.errorValidationMessage(
+                        $t('The shipping method is missing. Select the shipping method and try again.')
+                    );
+                }
+
                 if (emailValidationResult &&
                     this.source.get('params.invalid') ||
                     !quote.shippingMethod()['method_code'] ||
@@ -346,7 +383,7 @@ define([
             }
 
             if (!emailValidationResult) {
-                $(loginFormSelector + ' input[name=username]').focus();
+                $(loginFormSelector + ' input[name=username]').trigger('focus');
 
                 return false;
             }

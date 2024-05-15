@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Gallery\UpdateHandler;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\LayoutInterface;
@@ -121,8 +122,22 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoConfigFixture default/web/url/catalog_media_url_format image_optimization_parameters
+     * @magentoDbIsolation enabled
+     * @return void
+     */
+    public function testGetGalleryImagesJsonWithoutImagesWithImageOptimizationParametersInUrl(): void
+    {
+        $this->block->setData('product', $this->getProduct());
+        $result = $this->serializer->unserialize($this->block->getGalleryImagesJson());
+        $this->assertImages(reset($result), $this->placeholderExpectation);
+    }
+
+    /**
      * @dataProvider galleryDisabledImagesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
+     * @magentoConfigFixture default/web/url/catalog_media_url_format hash
      * @magentoDbIsolation enabled
      * @param array $images
      * @param array $expectation
@@ -141,6 +156,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      * @dataProvider galleryDisabledImagesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoConfigFixture default/web/url/catalog_media_url_format hash
      * @magentoDbIsolation disabled
      * @param array $images
      * @param array $expectation
@@ -173,6 +189,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test default image generation format.
+     *
      * @dataProvider galleryImagesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
      * @magentoDbIsolation enabled
@@ -231,9 +249,94 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider galleryImagesWithImageOptimizationParametersInUrlDataProvider
+     * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
+     * @magentoConfigFixture default/web/url/catalog_media_url_format image_optimization_parameters
+     * @magentoDbIsolation enabled
+     * @param array $images
+     * @param array $expectation
+     * @return void
+     */
+    public function testGetGalleryImagesJsonWithImageOptimizationParametersInUrl(
+        array $images,
+        array $expectation
+    ): void {
+        $product = $this->getProduct();
+        $this->setGalleryImages($product, $images);
+        $this->block->setData('product', $this->getProduct());
+        [$firstImage, $secondImage] = $this->serializer->unserialize($this->block->getGalleryImagesJson());
+        [$firstExpectedImage, $secondExpectedImage] = $expectation;
+        $this->assertImages($firstImage, $firstExpectedImage);
+        $this->assertImages($secondImage, $secondExpectedImage);
+    }
+
+    /**
+     * @return array
+     */
+    public function galleryImagesWithImageOptimizationParametersInUrlDataProvider(): array
+    {
+
+        $imageExpectation = [
+            'thumb' => '/m/a/magento_image.jpg?width=88&height=110&store=default&image-type=thumbnail',
+            'img' => '/m/a/magento_image.jpg?width=700&height=700&store=default&image-type=image',
+            'full' => '/m/a/magento_image.jpg?store=default&image-type=image',
+            'caption' => 'Image Alt Text',
+            'position' => '1',
+            'isMain' => false,
+            'type' => 'image',
+            'videoUrl' => null,
+        ];
+
+        $thumbnailExpectation = [
+            'thumb' => '/m/a/magento_thumbnail.jpg?width=88&height=110&store=default&image-type=thumbnail',
+            'img' => '/m/a/magento_thumbnail.jpg?width=700&height=700&store=default&image-type=image',
+            'full' => '/m/a/magento_thumbnail.jpg?store=default&image-type=image',
+            'caption' => 'Thumbnail Image',
+            'position' => '2',
+            'isMain' => false,
+            'type' => 'image',
+            'videoUrl' => null,
+        ];
+
+        return [
+            'with_main_image' => [
+                'images' => [
+                    '/m/a/magento_image.jpg' => [],
+                    '/m/a/magento_thumbnail.jpg' => ['main' => true],
+                ],
+                'expectation' => [
+                    $imageExpectation,
+                    array_merge($thumbnailExpectation, ['isMain' => true]),
+                ],
+            ],
+            'without_main_image' => [
+                'images' => [
+                    '/m/a/magento_image.jpg' => [],
+                    '/m/a/magento_thumbnail.jpg' => [],
+                ],
+                'expectation' => [
+                    array_merge($imageExpectation, ['isMain' => true]),
+                    $thumbnailExpectation,
+                ],
+            ],
+            'with_changed_position' => [
+                'images' => [
+                    '/m/a/magento_image.jpg' => ['position' => '2'],
+                    '/m/a/magento_thumbnail.jpg' => ['position' => '1'],
+                ],
+                'expectation' => [
+                    array_merge($thumbnailExpectation, ['position' => '1']),
+                    array_merge($imageExpectation, ['position' => '2', 'isMain' => true]),
+                ],
+            ],
+        ];
+    }
+
+    /**
      * @dataProvider galleryImagesOnStoreViewDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoConfigFixture default/web/url/catalog_media_url_format hash
      * @magentoDbIsolation disabled
      * @param array $images
      * @param array $expectation
@@ -287,6 +390,107 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                     array_merge($this->thumbnailExpectation, ['isMain' => true]),
                 ],
             ],
+        ];
+    }
+
+    /**
+     * Tests images positions in store view
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoConfigFixture default/web/url/catalog_media_url_format image_optimization_parameters
+     * @dataProvider imagesPositionStoreViewDataProvider
+     * @param string $addFromStore
+     * @param array $newImages
+     * @param string $viewFromStore
+     * @param array $expectedImages
+     * @return void
+     */
+    public function testImagesPositionStoreView(
+        string $addFromStore,
+        array $newImages,
+        string $viewFromStore,
+        array $expectedImages
+    ): void {
+        $storeId = (int)$this->storeRepository->get($addFromStore)->getId();
+        $product = $this->getProduct($storeId);
+        $images = $product->getData('media_gallery')['images'];
+        $images = array_merge($images, $newImages);
+        $product->setData('media_gallery', ['images' => $images]);
+        $updateHandler = Bootstrap::getObjectManager()->create(UpdateHandler::class);
+        $updateHandler->execute($product);
+        $storeId = (int)$this->storeRepository->get($viewFromStore)->getId();
+        $product = $this->getProduct($storeId);
+        $this->block->setData('product', $product);
+        $actualImages = array_map(
+            function ($item) {
+                return [
+                    'img' => parse_url($item['img'], PHP_URL_PATH),
+                    'caption' => $item['caption'],
+                    'position' => $item['position'],
+                ];
+            },
+            $this->serializer->unserialize($this->block->getGalleryImagesJson())
+        );
+        $this->assertEquals($expectedImages, array_values($actualImages));
+    }
+
+    /**
+     * @return array[]
+     */
+    public function imagesPositionStoreViewDataProvider(): array
+    {
+        return [
+            [
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'position' => 2,
+                        'label' => 'New Image Alt Text',
+                        'disabled' => 0,
+                        'media_type' => 'image'
+                    ]
+                ],
+                'default',
+                [
+                    [
+                        'img' => '/media/catalog/product/m/a/magento_image.jpg',
+                        'caption' => 'Image Alt Text',
+                        'position' => 1,
+                    ],
+                    [
+                        'img' => '/media/catalog/product/m/a/magento_small_image.jpg',
+                        'caption' => 'Simple Product',
+                        'position' => 2,
+                    ],
+                ]
+            ],
+            [
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'position' => 2,
+                        'label' => 'New Image Alt Text',
+                        'disabled' => 0,
+                        'media_type' => 'image'
+                    ]
+                ],
+                'fixture_second_store',
+                [
+                    [
+                        'img' => '/media/catalog/product/m/a/magento_image.jpg',
+                        'caption' => 'Image Alt Text',
+                        'position' => 1,
+                    ],
+                    [
+                        'img' => '/media/catalog/product/m/a/magento_small_image.jpg',
+                        'caption' => 'New Image Alt Text',
+                        'position' => 2,
+                    ],
+                ]
+            ]
         ];
     }
 

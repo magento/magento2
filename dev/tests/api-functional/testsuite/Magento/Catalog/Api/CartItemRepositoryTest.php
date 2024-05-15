@@ -16,9 +16,9 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
  */
 class CartItemRepositoryTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'quoteCartItemRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const SIMPLE_PRODUCT_SKU = 'simple';
+    public const SERVICE_NAME = 'quoteCartItemRepositoryV1';
+    public const SERVICE_VERSION = 'V1';
+    public const SIMPLE_PRODUCT_SKU = 'simple';
 
     /**
      * @var \Magento\TestFramework\ObjectManager
@@ -175,10 +175,10 @@ class CartItemRepositoryTest extends WebapiAbstract
                 $returnValue = '2015-09-09 07:16:00';
                 break;
             case 'drop_down':
-                $returnValue = '3-1-select';
+                $returnValue = current($option->getValues())->getOptionTypeId();
                 break;
             case 'radio':
-                $returnValue = '4-1-radio';
+                $returnValue = current($option->getValues())->getOptionTypeId();
                 break;
         }
         return $returnValue;

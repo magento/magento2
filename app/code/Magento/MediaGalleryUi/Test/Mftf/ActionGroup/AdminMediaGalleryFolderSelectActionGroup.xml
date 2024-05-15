@@ -9,11 +9,15 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminMediaGalleryFolderSelectActionGroup">
+        <annotations>
+            <description>Wait for folder name appeared in tree and then click it.</description>
+        </annotations>
         <arguments>
             <argument name="name" type="string" defaultValue="{{AdminMediaGalleryFolderData.name}}"/>
         </arguments>
-        <wait time="2" stepKey="waitBeforeClickOnFolder"/>
-        <click selector="//div[contains(@class, 'media-directory-container')]//a[contains(text(), '{{name}}')]" stepKey="selectFolder"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForFolderContents"/>
+
+        <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.folderInTree(name)}}" stepKey="waitBeforeClickOnFolder"/>
+        <click selector="{{AdminMediaGalleryFolderSection.folderInTree(name)}}" stepKey="selectFolder"/>
+        <waitForPageLoad stepKey="waitForFolderContents"/>
     </actionGroup>
 </actionGroups>

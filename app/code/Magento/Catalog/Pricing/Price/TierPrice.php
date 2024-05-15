@@ -9,23 +9,30 @@ namespace Magento\Catalog\Pricing\Price;
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Customer\Model\Group\RetrieverInterface as CustomerGroupRetrieverInterface;
 
 /**
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class TierPrice extends AbstractPrice implements TierPriceInterface, BasePriceProviderInterface
 {
+    private const XML_PATH_TAX_DISPLAY_TYPE = 'tax/display/type';
+
     /**
      * Price type tier
      */
-    const PRICE_CODE = 'tier_price';
+    public const PRICE_CODE = 'tier_price';
 
     /**
      * @var Session
@@ -63,34 +70,42 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     private $customerGroupRetriever;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param PriceCurrencyInterface $priceCurrency
      * @param Session $customerSession
      * @param GroupManagementInterface $groupManagement
      * @param CustomerGroupRetrieverInterface|null $customerGroupRetriever
+     * @param ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         CalculatorInterface $calculator,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        PriceCurrencyInterface $priceCurrency,
         Session $customerSession,
         GroupManagementInterface $groupManagement,
-        CustomerGroupRetrieverInterface $customerGroupRetriever = null
+        CustomerGroupRetrieverInterface $customerGroupRetriever = null,
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         $quantity = (float)$quantity ? $quantity : 1;
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->customerSession = $customerSession;
         $this->groupManagement = $groupManagement;
         $this->customerGroupRetriever = $customerGroupRetriever
-            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CustomerGroupRetrieverInterface::class);
+            ?? ObjectManager::getInstance()->get(CustomerGroupRetrieverInterface::class);
         if ($saleableItem->hasCustomerGroupId()) {
             $this->customerGroup = (int) $saleableItem->getCustomerGroupId();
         } else {
             $this->customerGroup = (int) $this->customerGroupRetriever->getCustomerGroupId();
         }
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -136,6 +151,8 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     }
 
     /**
+     * Returns tier price count
+     *
      * @return int
      */
     public function getTierPriceCount()
@@ -144,6 +161,8 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     }
 
     /**
+     * Returns tier price list
+     *
      * @return array
      */
     public function getTierPriceList()
@@ -155,28 +174,31 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
                 $this->priceList,
                 function (&$priceData) {
                     /* convert string value to float */
-                    $priceData['price_qty'] = $priceData['price_qty'] * 1;
+                    $priceData['price_qty'] *= 1;
                     $priceData['price'] = $this->applyAdjustment($priceData['price']);
                 }
             );
         }
+
         return $this->priceList;
     }
 
     /**
+     * Filters tier prices
+     *
      * @param array $priceList
      * @return array
      */
     protected function filterTierPrices(array $priceList)
     {
         $qtyCache = [];
+        $minPrice = $this->priceInfo->getPrice(FinalPrice::PRICE_CODE)->getValue();
         $allCustomersGroupId = $this->groupManagement->getAllCustomersGroup()->getId();
         foreach ($priceList as $priceKey => &$price) {
-            if ($price['price'] >= $this->priceInfo->getPrice(FinalPrice::PRICE_CODE)->getValue()) {
+            if ($price['price'] >= $minPrice) {
                 unset($priceList[$priceKey]);
                 continue;
             }
-
             if (isset($price['price_qty']) && $price['price_qty'] == 1) {
                 unset($priceList[$priceKey]);
                 continue;
@@ -199,11 +221,14 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
             } else {
                 $qtyCache[$price['price_qty']] = $priceKey;
             }
+            $minPrice = $price['price'];
         }
         return array_values($priceList);
     }
 
     /**
+     * Returns base price
+     *
      * @return float
      */
     protected function getBasePrice()
@@ -213,25 +238,22 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     }
 
     /**
-     * Calculates savings percentage according to the given tier price amount
-     * and related product price amount.
+     * Calculates savings percentage according to the given tier price amount and related product price amount.
      *
      * @param AmountInterface $amount
-     *
      * @return float
      */
     public function getSavePercent(AmountInterface $amount)
     {
-        $productPriceAmount = $this->priceInfo->getPrice(
-            FinalPrice::PRICE_CODE
-        )->getAmount();
+        $productPriceAmount = $this->priceInfo->getPrice(FinalPrice::PRICE_CODE)
+            ->getAmount();
 
-        return round(
-            100 - ((100 / $productPriceAmount->getValue()) * $amount->getValue())
-        );
+        return round(100 - ((100 / $productPriceAmount->getValue()) * $amount->getValue()));
     }
 
     /**
+     * Apply adjustment to price
+     *
      * @param float|string $price
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
@@ -314,6 +336,8 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     }
 
     /**
+     * Return is percentage discount
+     *
      * @return bool
      */
     public function isPercentageDiscount()

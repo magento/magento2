@@ -12,6 +12,7 @@ use Magento\Eav\Model\Entity\Attribute;
 /**
  * Interface \Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface
  *
+ * @api
  */
 interface AttributeMapperInterface
 {

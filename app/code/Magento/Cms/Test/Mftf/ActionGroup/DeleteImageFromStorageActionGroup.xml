@@ -15,11 +15,11 @@
         <arguments>
             <argument name="Image"/>
         </arguments>
-        
+
         <waitForElementVisible selector="{{MediaGallerySection.imageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="waitForInitialImages"/>
         <grabMultiple selector="{{MediaGallerySection.imageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="initialImages"/>
         <waitForElementVisible selector="{{MediaGallerySection.lastImageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="waitForLastImage"/>
-        <click selector="{{MediaGallerySection.lastImageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="selectImage"/>
+        <conditionalClick selector="{{MediaGallerySection.lastImageOrImageCopy(Image.fileName, Image.extension)}}" dependentSelector="{{MediaGallerySection.DeleteSelectedBtn}}" visible="false" stepKey="selectImage"/>
         <waitForElementVisible selector="{{MediaGallerySection.DeleteSelectedBtn}}" stepKey="waitForDeleteBtn"/>
         <click selector="{{MediaGallerySection.DeleteSelectedBtn}}" stepKey="clickDeleteSelected"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
@@ -28,7 +28,7 @@
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
         <grabMultiple selector="{{MediaGallerySection.imageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="newImages"/>
-        
+
         <assertLessThan stepKey="assertLessImages">
             <expectedResult type="variable">initialImages</expectedResult>
             <actualResult type="variable">newImages</actualResult>

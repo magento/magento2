@@ -61,7 +61,7 @@ class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images imple
     public function execute()
     {
         $resultJson = $this->resultJsonFactory->create();
-
+        $result = [];
         if (!$this->getRequest()->isPost()) {
             $result = ['error' => true, 'message' => __('Wrong request.')];
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */
@@ -94,8 +94,7 @@ class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images imple
             // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
-
-            return $resultJson->setData($result);
         }
+        return $resultJson->setData($result);
     }
 }

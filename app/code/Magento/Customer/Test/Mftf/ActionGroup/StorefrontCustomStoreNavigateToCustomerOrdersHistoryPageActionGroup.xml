@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCustomStoreNavigateToCustomerOrdersHistoryPageActionGroup" extends="StorefrontNavigateToCustomerOrdersHistoryPageActionGroup">
+        <annotations>
+            <description>Goes to the storefront Customer Order History page for a custom store. Must have Add Store Code To Urls enabled</description>
+        </annotations>
+        <arguments>
+            <argument name="storeCode" defaultValue="{{customStoreEN.code}}" type="string"/>
+        </arguments>
+        <amOnPage url="{{StorefrontCustomStoreCustomerOrdersHistoryPage.url(storeCode)}}" stepKey="amOnTheCustomerPage"/>
+    </actionGroup>
+</actionGroups>

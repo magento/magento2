@@ -21,6 +21,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -67,8 +68,14 @@ class PriceTest extends TestCase
      */
     protected $websiteMock;
 
+    /**
+     * @var ProductTierPriceExtensionFactory|MockObject
+     */
     private $tierPriceExtensionFactoryMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -110,7 +117,7 @@ class PriceTest extends TestCase
         $this->groupManagementMock->expects($this->any())->method('getAllCustomersGroup')
             ->willReturn($group);
         $this->tierPriceExtensionFactoryMock = $this->getMockBuilder(ProductTierPriceExtensionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $this->objectManagerHelper->getObject(
@@ -128,9 +135,10 @@ class PriceTest extends TestCase
     /**
      * testGetTierPricesWithNull
      *
+     * @return void
      * @dataProvider nullPricesDataProvider
      */
-    public function testGetPricesWithNull($key, $getter)
+    public function testGetPricesWithNull($key, $getter): void
     {
         // test when we don't send anything in, that no data changes
         $someValue = 'any fake value';
@@ -144,7 +152,7 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function nullPricesDataProvider()
+    public function nullPricesDataProvider(): array
     {
         return [
             'testGetTierPricesWithNull' => [$this::KEY_TIER_PRICE, 'setTierPrices']
@@ -154,7 +162,7 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function pricesDataProvider()
+    public function pricesDataProvider(): array
     {
         return [
             'global price scope' => [$this::PRICE_SCOPE_GLOBAL, 0],
@@ -166,9 +174,10 @@ class PriceTest extends TestCase
      * testGetTierPrices
      * testSetTierPrices
      *
+     * @return void
      * @dataProvider pricesDataProvider
      */
-    public function testTierPrices($priceScope, $expectedWebsiteId)
+    public function testTierPrices($priceScope, $expectedWebsiteId): void
     {
         // establish the behavior of the mocks
         $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn($priceScope);
@@ -182,9 +191,7 @@ class PriceTest extends TestCase
             );
 
         // create sample TierPrice objects that would be coming from a REST call
-        $tierPriceExtensionMock = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
-            ->setMethods(['getWebsiteId', 'setWebsiteId', 'getPercentageValue', 'setPercentageValue'])
-            ->getMockForAbstractClass();
+        $tierPriceExtensionMock = $this->getProductTierPriceExtensionInterfaceMock();
         $tierPriceExtensionMock->expects($this->any())->method('getWebsiteId')->willReturn($expectedWebsiteId);
         $tierPriceExtensionMock->expects($this->any())->method('getPercentageValue')->willReturn(null);
         $tp1 = $this->objectManagerHelper->getObject(TierPrice::class);
@@ -226,9 +233,7 @@ class PriceTest extends TestCase
             $this->assertEquals($tps[$i]->getQty(), $tpData['price_qty'], 'Qty does not match');
         }
 
-        $tierPriceExtensionMock = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
-            ->setMethods(['getWebsiteId', 'setWebsiteId', 'getPercentageValue', 'setPercentageValue'])
-            ->getMockForAbstractClass();
+        $tierPriceExtensionMock = $this->getProductTierPriceExtensionInterfaceMock();
         $tierPriceExtensionMock->expects($this->any())->method('getPercentageValue')->willReturn(50);
         $tierPriceExtensionMock->expects($this->any())->method('setWebsiteId');
         $this->tierPriceExtensionFactoryMock->expects($this->any())
@@ -262,5 +267,57 @@ class PriceTest extends TestCase
                 'REST: Qty does not match'
             );
         }
+    }
+
+    /**
+     * Get tier price with percent value type.
+     *
+     * @return void
+     */
+    public function testGetPricesWithPercentType(): void
+    {
+        $tierPrices = [
+            0 => [
+                'record_id' => 0,
+                'cust_group' => 3200,
+                'price_qty' => 3,
+                'website_id' => 0,
+                'value_type' => 'percent',
+                'percentage_value' => 10,
+                ],
+        ];
+        $this->product->setData('tier_price', $tierPrices);
+        $this->tpFactory->expects($this->any())
+            ->method('create')
+            ->willReturnCallback(
+                function () {
+                    return $this->objectManagerHelper->getObject(TierPrice::class);
+                }
+            );
+        $tierPriceExtensionMock = $this->getProductTierPriceExtensionInterfaceMock();
+        $tierPriceExtensionMock->method('getPercentageValue')
+            ->willReturn(50);
+        $this->tierPriceExtensionFactoryMock->method('create')
+            ->willReturn($tierPriceExtensionMock);
+
+        $this->assertInstanceOf(TierPrice::class, $this->model->getTierPrices($this->product)[0]);
+    }
+
+    /**
+     * Build ProductTierPriceExtensionInterface mock.
+     *
+     * @return MockObject
+     */
+    private function getProductTierPriceExtensionInterfaceMock(): MockObject
+    {
+        $mockBuilder = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
+            ->disableOriginalConstructor();
+        try {
+            $mockBuilder->addMethods(['getPercentageValue', 'setPercentageValue', 'setWebsiteId', 'getWebsiteId']);
+        } catch (RuntimeException $e) {
+            // ProductTierPriceExtensionInterface already generated and has all necessary methods.
+        }
+
+        return $mockBuilder->getMock();
     }
 }

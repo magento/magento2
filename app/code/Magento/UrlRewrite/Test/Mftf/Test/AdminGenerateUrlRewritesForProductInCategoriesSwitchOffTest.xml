@@ -21,10 +21,7 @@
             <!-- Set the configuration for Generate "category/product" URL Rewrites-->
             <comment userInput="Enable config to generate category/product URL Rewrites" stepKey="commentEnableConfig" />
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
-            <!--Flush cache-->
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -39,10 +36,7 @@
             <!-- Set the configuration for Generate "category/product" URL Rewrites-->
             <comment userInput="Enable config to generate category/product URL Rewrites" stepKey="commentEnableConfig" />
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
-            <!--Flush cache-->
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -62,9 +56,7 @@
         <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
 
         <!-- 3. Flush cache-->
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- 4. Open Marketing - SEO & Search - URL Rewrites -->
         <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingUrlRewriteAfterDisablingTheConfig">

@@ -41,12 +41,19 @@
         <!-- Create a grouped product to appear in the widget -->
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="toggleAddProductButton"/>
-        <click selector="{{AdminProductGridActionSection.addGroupedProduct}}" stepKey="clickAddGroupedProduct"/>
-        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="fillProductName"/>
-        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{_defaultProduct.sku}}" stepKey="fillProductSku"/>
-        <fillField selector="{{AdminProductFormSection.setProductAsNewFrom}}" userInput="01/1/2000" stepKey="fillProductNewFrom"/>
-        <fillField selector="{{AdminProductFormSection.setProductAsNewTo}}" userInput="01/1/2099" stepKey="fillProductNewTo"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="toggleAddProductButton"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickAddGroupedProduct">
+            <argument name="productType" value="grouped"/>
+        </actionGroup>
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillProductName">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductSku"/>
+        <actionGroup ref="AdminSetProductAsNewDateActionGroup" stepKey="fillProductNewFrom">
+            <argument name="fromDate" value="01/1/2000"/>
+            <argument name="toDate" value="01/1/2099"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductNewTo"/>
         <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection"/>
         <scrollTo selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="scrollToAddProductsToGroup"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
@@ -62,9 +69,12 @@
         <!-- If PageCache is enabled, Cache clearing happens here, via merge -->
 
         <!-- Check for product on the CMS page with the New Products widget -->
-
-        <amOnPage url="{{_newDefaultCmsPage.identifier}}" stepKey="amOnCmsPage"/>
-        <waitForPageLoad stepKey="waitForCmsPage"/>
-        <see selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" userInput="{{_defaultProduct.name}}" stepKey="seeProductName"/>
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="amOnCmsPage">
+            <argument name="identifier" value="{{_newDefaultCmsPage.identifier}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCmsPage"/>
+        <actionGroup ref="AssertStorefrontProductIsShownOnCmsPageActionGroup" stepKey="seeProductName">
+            <argument name="cmsTitle" value="{{_newDefaultCmsPage.title}}"/>
+        </actionGroup>
     </test>
 </tests>

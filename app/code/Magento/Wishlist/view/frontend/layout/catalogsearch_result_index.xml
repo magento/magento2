@@ -14,5 +14,10 @@
                        template="Magento_Wishlist::catalog/product/list/addto/wishlist.phtml"/>
             </referenceBlock>
         </referenceContainer>
+        <referenceBlock name="wishlist_page_head_components">
+            <block class="Magento\Wishlist\Block\AddToWishlist"
+                name="catalogsearch.wishlist_addto"
+                template="Magento_Wishlist::addto.phtml"/>
+        </referenceBlock>
     </body>
 </page>

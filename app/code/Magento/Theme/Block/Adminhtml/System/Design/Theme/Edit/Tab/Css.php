@@ -21,7 +21,7 @@ use Magento\Theme\Helper\Storage;
 class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab
 {
     /**
-     * Uploader service
+     * Class for Uploader service
      *
      * @var \Magento\Theme\Model\Uploader\Service
      */
@@ -149,12 +149,13 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
 
         $themeFieldset->addField(
             'css_file_uploader',
-            'css_file',
+            'button',
             [
                 'name' => 'css_file_uploader',
                 'label' => __('Select CSS File to Upload'),
                 'title' => __('Select CSS File to Upload'),
                 'accept' => 'text/css',
+                'value' => __('Browse CSS File'),
                 'note' => $this->_getUploadCssFileNote()
             ]
         );
@@ -194,8 +195,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
                         Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE
                     ]
                 ) . "', null, null,'" . $this->escapeJs(
-                    __('Upload Images'),
-                    true
+                    __('Upload Images')
                 ) . "');",
             ]
         );
@@ -222,8 +222,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
                         Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
                     ]
                 ) . "', null, null,'" . $this->escapeJs(
-                    __('Upload Fonts'),
-                    true
+                    __('Upload Fonts')
                 ) . "');",
             ]
         );

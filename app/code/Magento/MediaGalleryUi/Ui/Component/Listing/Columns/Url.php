@@ -115,8 +115,8 @@ class Url extends Column
                 (array)$this->getData('config'),
                 [
                     'allowedActions' => $this->getAllowedActions(),
-                    'onInsertUrl' => $this->urlInterface->getUrl('cms/wysiwyg_images/oninsert'),
-                    'storeId' => $this->storeManager->getStore()->getId()
+                    'onInsertUrl' => $this->urlInterface->getUrl('media_gallery/image/oninsert'),
+                    'storeId' => $this->storeManager->getStore()->getId(),
                 ]
             )
         );

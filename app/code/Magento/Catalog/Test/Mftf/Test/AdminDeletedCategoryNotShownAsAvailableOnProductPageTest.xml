@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeletedCategoryNotShownAsAvailableOnProductPageTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Delete categories"/>
+            <title value="Deleted Category not shown as available on Product page"/>
+            <description value="Deleted category not shown as available Category on Product edit page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-37121"/>
+            <group value="Catalog"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logInAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Create Category -->
+        <actionGroup ref="GoToCreateCategoryPageActionGroup" stepKey="goToCreateCategoryPage"/>
+        <actionGroup ref="FillCategoryNameAndUrlKeyAndSaveActionGroup" stepKey="fillCategoryForm">
+            <argument name="categoryName" value="additional"/>
+            <argument name="categoryUrlKey" value=""/>
+        </actionGroup>
+
+        <!-- Check if Category present on Product page -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToProductPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad time="60" stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminProductFormCategoryExistInCategoryListActionGroup" stepKey="checkExistCategoryInList">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+
+        <!-- Delete Category -->
+        <actionGroup ref="AdminDeleteCategoryByNameActionGroup" stepKey="deleteAdditionalCategory">
+            <argument name="categoryName" value="additional"/>
+        </actionGroup>
+
+        <!-- Check if Category absent on Product page -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToProductPageAfterDelete">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad time="60" stepKey="waitForProductPageLoadAfterDelete"/>
+        <actionGroup ref="AdminProductFormCategoryNotExistInCategoryListActionGroup" stepKey="checkNotExistCategoryInList">
+            <argument name="categoryName" value="additional"/>
+        </actionGroup>
+    </test>
+</tests>

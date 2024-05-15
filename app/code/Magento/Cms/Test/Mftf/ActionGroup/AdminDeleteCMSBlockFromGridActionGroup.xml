@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteCMSBlockFromGridActionGroup">
+        <arguments>
+            <argument name="identifier" type="entity"/>
+        </arguments>
+        <click selector="{{BlockPageActionsSection.select(identifier)}}" stepKey="clickSelect"/>
+        <click selector="{{BlockPageActionsSection.delete(identifier)}}" stepKey="clickDelete"/>
+        <waitForElementVisible selector="{{BlockPageActionsSection.deleteConfirm}}" stepKey="waitForOkButtonToBeVisible"/>
+        <click selector="{{BlockPageActionsSection.deleteConfirm}}" stepKey="clickOkButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+</actionGroups>

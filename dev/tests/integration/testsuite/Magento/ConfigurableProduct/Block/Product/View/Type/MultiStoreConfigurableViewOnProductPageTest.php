@@ -184,7 +184,10 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     {
         $product = $this->productRepository->get($sku, false, null, true);
         $productToUpdate = $product->getTypeInstance()->getUsedProductCollection($product)
-            ->setPageSize(1)->getFirstItem();
+            ->addStoreFilter($storeCode)
+            ->setPageSize(1)
+            ->getFirstItem();
+
         $this->assertNotEmpty($productToUpdate->getData(), 'Configurable product does not have a child');
         $this->executeInStoreContext->execute($storeCode, [$this, 'setProductDisabled'], $productToUpdate);
     }

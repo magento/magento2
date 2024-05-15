@@ -8,7 +8,6 @@ namespace Magento\Review\Block\Adminhtml\Product;
 /**
  * Adminhtml product grid block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid

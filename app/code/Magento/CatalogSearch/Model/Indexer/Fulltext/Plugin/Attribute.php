@@ -5,12 +5,15 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Model\ResourceModel\Attribute as AttributeResourceModel;
 use Magento\Framework\Search\Request\Config;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Catalog\Api\Data\EavAttributeInterface;
+use Magento\Eav\Model\Config as EavConfig;
 
 /**
  * Catalog search indexer plugin for catalog attribute.
@@ -38,15 +41,23 @@ class Attribute extends AbstractPlugin
     private $saveIsNew;
 
     /**
+     * @var EavConfig
+     */
+    private $eavConfig;
+
+    /**
      * @param IndexerRegistry $indexerRegistry
      * @param Config $config
+     * @param EavConfig $eavConfig
      */
     public function __construct(
         IndexerRegistry $indexerRegistry,
-        Config $config
+        Config $config,
+        EavConfig $eavConfig
     ) {
         parent::__construct($indexerRegistry);
         $this->config = $config;
+        $this->eavConfig = $eavConfig;
     }
 
     /**
@@ -84,6 +95,11 @@ class Attribute extends AbstractPlugin
         }
         if ($this->saveIsNew || $this->saveNeedInvalidation) {
             $this->config->reset();
+            /**
+             * TODO: Remove this in next minor release and use public method instead.
+             * @see DataProvider::getSearchableAttributes
+             */
+            $this->eavConfig->getEntityType(Product::ENTITY)->setNeedRefreshSearchAttributesList(true);
         }
 
         return $result;

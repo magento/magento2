@@ -18,8 +18,13 @@
         <element name="submitReview" type="button" selector="#save_button"/>
         <element name="SuccessMessage" type="button" selector="div.message-success"/>
         <element name="gridProducts_filter_review_cnt" type="button" selector="#gridProducts_filter_review_cnt"/>
+        <element name="filterProductName" type="button" selector="#gridProducts_filter_name"/>
         <element name="searchButton" type="button" selector="//*[@id='gridProducts']//button[contains(@title, 'Search')]"/>
         <element name="gridReviewColumn" type="text" selector="//tbody//td[@data-column='review_cnt']"/>
+        <element name="gridLastReviewColumn" type="text" selector="//tbody//td[@data-column='created_at']"/>
+        <element name="gridProductColumn" type="text" selector="//tbody//td[@data-column='name']"/>
+        <element name="showReviewsButton" type="text" selector="//tbody//td[@data-column='action']"/>
+        <element name="grabLatestUserReviewDate" type="text" selector="//table[@class='data-grid']//tbody//tr[position()=1]//td[position()=3]"/>
         <element name="gridCustomer_filter_review_cnt" type="button" selector="#customers_grid_filter_review_cnt"/>
         <element name="CustomerSearchButton" type="button" selector="//*[@id='customers_grid']//button[contains(@title, 'Search')]"/>
      </section>

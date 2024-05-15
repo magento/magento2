@@ -6,6 +6,8 @@
 namespace Magento\DownloadableImportExport\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * Uploader helper for downloadable products
@@ -75,12 +77,17 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $type
      * @param array $parameters
      * @return \Magento\CatalogImportExport\Model\Import\Uploader
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getUploader($type, $parameters)
     {
         $dirConfig = DirectoryList::getDefaultConfig();
         $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
+
+        // make media folder a primary folder for media in external storages
+        if (!is_a($this->mediaDirectory->getDriver(), File::class)) {
+            $dirAddon = DirectoryList::MEDIA;
+        }
 
         if (!empty($parameters[\Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR])) {
             $tmpPath = $parameters[\Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR];
@@ -88,8 +95,14 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
             $tmpPath = $dirAddon . '/' . $this->mediaDirectory->getRelativePath('import');
         }
 
+        if (!$this->mediaDirectory->create($tmpPath)) {
+            throw new LocalizedException(
+                __('Directory \'%1\' could not be created.', $tmpPath)
+            );
+        }
+
         if (!$this->fileUploader->setTmpDir($tmpPath)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('File directory \'%1\' is not readable.', $tmpPath)
             );
         }
@@ -98,7 +111,7 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
 
         $this->mediaDirectory->create($destinationPath);
         if (!$this->fileUploader->setDestDir($destinationPath)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('File directory \'%1\' is not writable.', $destinationPath)
             );
         }
@@ -113,7 +126,9 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isFileExist(string $fileName): bool
     {
-        return $this->mediaDirectory->isExist($this->fileUploader->getDestDir().$fileName);
+        $fileName = '/' . ltrim($fileName, '/');
+
+        return $this->mediaDirectory->isExist($this->fileUploader->getDestDir() . $fileName);
     }
 
     /**

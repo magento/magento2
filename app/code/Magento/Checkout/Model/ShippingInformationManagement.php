@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Checkout\Model;
 
@@ -39,60 +40,62 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
     /**
      * @var PaymentMethodManagementInterface
      */
-    protected $paymentMethodManagement;
+    protected PaymentMethodManagementInterface $paymentMethodManagement;
 
     /**
      * @var PaymentDetailsFactory
      */
-    protected $paymentDetailsFactory;
+    protected PaymentDetailsFactory $paymentDetailsFactory;
 
     /**
      * @var CartTotalRepositoryInterface
      */
-    protected $cartTotalsRepository;
+    protected CartTotalRepositoryInterface $cartTotalsRepository;
 
     /**
      * @var CartRepositoryInterface
      */
-    protected $quoteRepository;
-
+    protected CartRepositoryInterface $quoteRepository;
     /**
      * @var Logger
      */
-    protected $logger;
+    protected Logger $logger;
 
     /**
      * @var QuoteAddressValidator
      */
-    protected $addressValidator;
+    protected QuoteAddressValidator $addressValidator;
 
     /**
      * @var AddressRepositoryInterface
      * @deprecated 100.2.0
+     * @see AddressRepositoryInterface
      */
-    protected $addressRepository;
+    protected AddressRepositoryInterface $addressRepository;
 
     /**
      * @var ScopeConfigInterface
      * @deprecated 100.2.0
+     * @see ScopeConfigInterface
      */
-    protected $scopeConfig;
+    protected ScopeConfigInterface $scopeConfig;
 
     /**
      * @var TotalsCollector
      * @deprecated 100.2.0
+     * @see TotalsCollector
      */
-    protected $totalsCollector;
+    protected TotalsCollector $totalsCollector;
 
     /**
      * @var CartExtensionFactory
      */
-    private $cartExtensionFactory;
+    private CartExtensionFactory $cartExtensionFactory;
 
     /**
      * @var ShippingAssignmentFactory
      */
-    protected $shippingAssignmentFactory;
+    protected ShippingAssignmentFactory $shippingAssignmentFactory;
 
     /**
      * @var ShippingFactory
@@ -209,8 +212,11 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
         if (!$quote->getIsVirtual()
             && !$shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod())
         ) {
-            throw new NoSuchEntityException(
+            $errorMessage = $methodCode ?
                 __('Carrier with such method not found: %1, %2', $carrierCode, $methodCode)
+                : __('The shipping method is missing. Select the shipping method and try again.');
+            throw new NoSuchEntityException(
+                $errorMessage
             );
         }
 
@@ -259,8 +265,11 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
      * @param string $method
      * @return CartInterface
      */
-    private function prepareShippingAssignment(CartInterface $quote, AddressInterface $address, $method): CartInterface
-    {
+    private function prepareShippingAssignment(
+        CartInterface $quote,
+        AddressInterface $address,
+        string $method
+    ): CartInterface {
         $cartExtension = $quote->getExtensionAttributes();
         if ($cartExtension === null) {
             $cartExtension = $this->cartExtensionFactory->create();

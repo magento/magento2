@@ -73,10 +73,9 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     {
         $blacklist = [];
         foreach (glob($pattern) as $list) {
-            //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $blacklist = array_merge($blacklist, file($list, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+            $blacklist[] = file($list, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         }
-        return $blacklist;
+        return array_merge([], ...$blacklist);
     }
 
     public function testValidComposerJson()
@@ -150,8 +149,16 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertCodingStyle($contents)
     {
-        $this->assertDoesNotMatchRegularExpression('/" :\s*["{]/', $contents, 'Coding style: there should be no space before colon.');
-        $this->assertDoesNotMatchRegularExpression('/":["{]/', $contents, 'Coding style: a space is necessary after colon.');
+        $this->assertDoesNotMatchRegularExpression(
+            '/" :\s*["{]/',
+            $contents,
+            'Coding style: there should be no space before colon.'
+        );
+        $this->assertDoesNotMatchRegularExpression(
+            '/":["{]/',
+            $contents,
+            'Coding style: a space is necessary after colon.'
+        );
     }
 
     /**
@@ -164,10 +171,10 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertMagentoConventions($dir, $packageType, \StdClass $json)
     {
-        $this->assertObjectHasAttribute('name', $json);
-        $this->assertObjectHasAttribute('license', $json);
-        $this->assertObjectHasAttribute('type', $json);
-        $this->assertObjectHasAttribute('require', $json);
+        $this->assertObjectHasProperty('name', $json);
+        $this->assertObjectHasProperty('license', $json);
+        $this->assertObjectHasProperty('type', $json);
+        $this->assertObjectHasProperty('require', $json);
         $this->assertEquals($packageType, $json->type);
         if ($packageType !== 'project') {
             self::$dependencies[] = $json->name;
@@ -188,13 +195,19 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 $this->assertNoVersionSpecified($json);
                 break;
             case 'magento2-language':
-                $this->assertMatchesRegularExpression('/^magento\/language\-[a-z]{2}_([a-z]{4}_)?[a-z]{2}$/', $json->name);
+                $this->assertMatchesRegularExpression(
+                    '/^magento\/language\-[a-z]{2}_([a-z]{4}_)?[a-z]{2}$/',
+                    $json->name
+                );
                 $this->assertDependsOnFramework($json->require);
                 $this->assertRequireInSync($json);
                 $this->assertNoVersionSpecified($json);
                 break;
             case 'magento2-theme':
-                $this->assertMatchesRegularExpression('/^magento\/theme-(?:adminhtml|frontend)(\-[a-z0-9_]+)+$/', $json->name);
+                $this->assertMatchesRegularExpression(
+                    '/^magento\/theme-(?:adminhtml|frontend)(\-[a-z0-9_]+)+$/',
+                    $json->name
+                );
                 $this->assertDependsOnPhp($json->require);
                 $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertDependsOnFramework($json->require);
@@ -238,8 +251,8 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     private function assertAutoloadRegistrar(\StdClass $json, $dir)
     {
         $error = 'There must be an "autoload->files" node in composer.json of each Magento component.';
-        $this->assertObjectHasAttribute('autoload', $json, $error);
-        $this->assertObjectHasAttribute('files', $json->autoload, $error);
+        $this->assertObjectHasProperty('autoload', $json, $error);
+        $this->assertObjectHasProperty('files', $json->autoload, $error);
         $this->assertTrue(in_array("registration.php", $json->autoload->files), $error);
         $this->assertFileExists("$dir/registration.php");
     }
@@ -253,8 +266,10 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertNoVersionSpecified(\StdClass $json)
     {
-        $errorMessage = 'Version must not be specified in the root and package composer JSON files in Git';
-        $this->assertObjectNotHasAttribute('version', $json, $errorMessage);
+        if (!in_array($json->name, self::$rootComposerModuleBlacklist)) {
+            $errorMessage = 'Version must not be specified in the root and package composer JSON files in Git';
+            $this->assertObjectNotHasProperty('version', $json, $errorMessage);
+        }
     }
 
     /**
@@ -265,8 +280,8 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     private function assertAutoload(\StdClass $json)
     {
         $errorMessage = 'There must be an "autoload->psr-4" section in composer.json of each Magento component.';
-        $this->assertObjectHasAttribute('autoload', $json, $errorMessage);
-        $this->assertObjectHasAttribute('psr-4', $json->autoload, $errorMessage);
+        $this->assertObjectHasProperty('autoload', $json, $errorMessage);
+        $this->assertObjectHasProperty('psr-4', $json->autoload, $errorMessage);
     }
 
     /**
@@ -277,7 +292,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     private function assertNoMap(\StdClass $json)
     {
         $error = 'There is no "extra->map" node in composer.json of each Magento component.';
-        $this->assertObjectNotHasAttribute('extra', $json, $error);
+        $this->assertObjectNotHasProperty('extra', $json, $error);
     }
 
     /**
@@ -306,7 +321,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertDependsOnPhp(\StdClass $json)
     {
-        $this->assertObjectHasAttribute('php', $json, 'This component is expected to depend on certain PHP version(s)');
+        $this->assertObjectHasProperty('php', $json, 'This component is expected to depend on certain PHP version(s)');
     }
 
     /**
@@ -316,7 +331,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertDependsOnFramework(\StdClass $json)
     {
-        $this->assertObjectHasAttribute(
+        $this->assertObjectHasProperty(
             self::$magentoFrameworkLibraryName,
             $json,
             'This component is expected to depend on ' . self::$magentoFrameworkLibraryName

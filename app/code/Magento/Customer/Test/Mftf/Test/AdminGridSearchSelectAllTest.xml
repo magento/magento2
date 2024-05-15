@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminGridSearchSelectAllTest">
+        <annotations>
+            <stories value="Selection should be removed during search."/>
+            <title value="Selection should be removed during search."/>
+            <description value="Empty selected before and after search, like it works for filter"/>
+            <testCaseId value="MC-37659"/>
+            <severity value="CRITICAL"/>
+            <group value="uI"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create three customers-->
+            <createData entity="Simple_US_Customer" stepKey="firstCustomer"/>
+            <createData entity="Simple_US_Customer" stepKey="secondCustomer"/>
+            <createData entity="Simple_US_Customer" stepKey="thirdCustomer"/>
+        </before>
+        <after>
+            <!--Remove two created customers, third already deleted-->
+            <deleteData createDataKey="firstCustomer" stepKey="deleteFirstCustomer"/>
+            <deleteData createDataKey="secondCustomer" stepKey="deleteSecondCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomerPage"/>
+        <!-- search Admin Data Grid By Keyword -->
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="$$secondCustomer.email$$" stepKey="fillKeywordSearchFieldWithSecondCustomerEmail"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+         <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <!-- Select all from dropdown -->
+        <actionGroup ref="AdminGridSelectAllActionGroup" stepKey="selectAllCustomers"/>
+        <!-- Clear searching By Keyword-->
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersAfterSearch"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterSearchRemoved"/>
+        <!-- Check if selection has bee removed -->
+        <dontSeeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.customerCheckbox($$secondCustomer.email$$)}}" stepKey="checkSecondCustomerCheckboxIsUnchecked"/>
+        <!-- Check delete action -->
+        <click selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(($$thirdCustomer.email$$)}}" stepKey="selectThirdCustomer"/>
+        <seeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.customerCheckbox($$thirdCustomer.email$$)}}" stepKey="checkThirdCustomerIsChecked"/>
+        <!-- Use delete action for selected -->
+        <click selector="{{AdminCustomerGridMainActionsSection.actions}}" stepKey="clickActions"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.delete}}" stepKey="clickDelete"/>
+        <waitForAjaxLoad stepKey="waitForLoadConfirmation"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
+        <!-- Check if only one record record has been deleted -->
+        <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) were deleted" stepKey="seeSuccess"/>
+    </test>
+</tests>

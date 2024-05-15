@@ -5,16 +5,12 @@
  */
 namespace Magento\Catalog\Ui\DataProvider\Product;
 
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Eav\Model\Entity\Attribute\AttributeInterface;
+use Magento\Framework\DB\Select;
 
 /**
  * Collection which is used for rendering product list in the backend.
  *
  * Used for product grid and customizes behavior of the default Product collection for grid needs.
- *
- * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class ProductCollection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
@@ -33,64 +29,50 @@ class ProductCollection extends \Magento\Catalog\Model\ResourceModel\Product\Col
     }
 
     /**
-     * Add attribute filter to collection
-     *
-     * @param AttributeInterface|integer|string|array $attribute
-     * @param null|string|array $condition
-     * @param string $joinType
-     * @return $this
-     * @throws LocalizedException
+     * @inheritdoc
      */
-    public function addAttributeToFilter($attribute, $condition = null, $joinType = 'inner')
+    public function getSize()
     {
-        $storeId = (int)$this->getStoreId();
-        if ($attribute === 'is_saleable'
-            || is_array($attribute)
-            || $storeId !== $this->getDefaultStoreId()
-        ) {
-            return parent::addAttributeToFilter($attribute, $condition, $joinType);
-        }
+        if ($this->_totalRecords === null) {
+            if ($this->_scopeConfig->getValue('admin/grid/limit_total_number_of_products')) {
+                $sql = $this->getSelectCountSql();
+                $estimatedRowsCount = $this->analyzeRows($sql);
+                $recordsLimit = $this->_scopeConfig->getValue('admin/grid/records_limit');
 
-        if ($attribute instanceof AttributeInterface) {
-            $attributeModel = $attribute;
-        } else {
-            $attributeModel = $this->getEntity()->getAttribute($attribute);
-            if ($attributeModel === false) {
-                throw new LocalizedException(
-                    __('Invalid attribute identifier for filter (%1)', get_class($attribute))
-                );
+                if ($estimatedRowsCount > $recordsLimit) {
+                    $columns = $sql->getPart(Select::COLUMNS);
+                    $sql->reset(Select::COLUMNS);
+
+                    foreach ($columns as &$column) {
+                        if ($column[1] instanceof \Zend_Db_Expr && $column[1] == "COUNT(DISTINCT e.entity_id)") {
+                            $column[1] = new \Zend_Db_Expr('e.entity_id');
+                        }
+                    }
+                    $sql->setPart(Select::COLUMNS, $columns);
+                    $sql->limit($recordsLimit);
+                    $query = new \Zend_Db_Expr('SELECT COUNT(*) FROM (' . $sql->assemble() . ') AS c');
+                    $this->_totalRecords = (int)$this->getConnection()->query($query)->fetchColumn();
+                } else {
+                    return parent::getSize();
+                }
+                return $this->_totalRecords;
             }
+            return parent::getSize();
         }
-
-        if ($attributeModel->isScopeGlobal() || $attributeModel->getBackend()->isStatic()) {
-            return parent::addAttributeToFilter($attribute, $condition, $joinType);
-        }
-
-        $this->addAttributeToFilterAllStores($attributeModel, $condition);
-
-        return $this;
+        return $this->_totalRecords;
     }
 
     /**
-     * Add attribute to filter by all stores
+     * Analyze number of rows to be examined to execute the query.
      *
-     * @param Attribute $attributeModel
-     * @param array $condition
-     * @return void
+     * @param Select $sql
+     * @return mixed
+     * @throws \Zend_Db_Statement_Exception
      */
-    private function addAttributeToFilterAllStores(Attribute $attributeModel, array $condition): void
+    private function analyzeRows(Select $sql)
     {
-        $tableName = $this->getTable($attributeModel->getBackendTable());
-        $entity = $this->getEntity();
-        $fKey = 'e.' . $this->getEntityPkName($entity);
-        $pKey = $tableName . '.' . $this->getEntityPkName($entity);
-        $attributeId = $attributeModel->getAttributeId();
-        $condition = "({$pKey} = {$fKey}) AND ("
-            . $this->_getConditionSql("{$tableName}.value", $condition)
-            . ') AND ('
-            . $this->_getConditionSql("{$tableName}.attribute_id", $attributeId)
-            . ')';
-        $selectExistsInAllStores = $this->getConnection()->select()->from($tableName);
-        $this->getSelect()->exists($selectExistsInAllStores, $condition);
+        $results = $this->getConnection()->query('EXPLAIN ' . $sql)->fetchAll();
+
+        return max(array_column($results, 'rows'));
     }
 }

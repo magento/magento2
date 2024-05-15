@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCachedInputFormKeyValueUpdatedTest">
+        <annotations>
+            <features value="PageCache"/>
+            <stories value="FormKey"/>
+            <title value="Form Key value should be updated by js script"/>
+            <description value="Form Key value should be updated by js script"/>
+            <testCaseId value="MC-39300"/>
+            <useCaseId value="MC-30171"/>
+            <severity value="AVERAGE"/>
+            <group value="pageCache"/>
+        </annotations>
+        <before>
+            <!-- Create Data -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete data -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <grabValueFrom selector="{{StorefrontProductActionSection.inputFormKey}}" stepKey="grabCachedValue"/>
+        <resetCookie userInput="PHPSESSID" stepKey="resetSessionCookie"/>
+        <resetCookie userInput="form_key" stepKey="resetFormKeyCookie"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="reopenProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAddToCartFormKeyValueIsNotCachedActionGroup" stepKey="assertValueIsUpdatedByScript">
+            <argument name="cachedValue" value="{$grabCachedValue}"/>
+        </actionGroup>
+    </test>
+</tests>

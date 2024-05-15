@@ -742,7 +742,7 @@ class Payment extends Info implements OrderPaymentInterface
                 $this->formatPrice($baseAmountToRefund)
             );
         }
-        $message = $message = $this->prependMessage($message);
+        $message = $this->prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
         $orderState = $this->getOrderStateResolver()->getStateForOrder($this->getOrder());
         $statuses = $this->getOrder()->getConfig()->getStateStatuses($orderState, false);
@@ -2270,6 +2270,21 @@ class Payment extends Info implements OrderPaymentInterface
     public function setCcLast4($ccLast4)
     {
         return $this->setData(OrderPaymentInterface::CC_LAST_4, $ccLast4);
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * Because cc_last_4 data attribute violates data contract (use underscore (_) between alphanumerical characters),
+     * this ad hoc method is for setting cc_last_4 data value in \Magento\Framework\Api\DataObjectHelper::_setDataValues
+     */
+    public function setCustomAttribute($attributeCode, $attributeValue)
+    {
+        if ($attributeCode === OrderPaymentInterface::CC_LAST_4) {
+            return parent::setData(OrderPaymentInterface::CC_LAST_4, $attributeValue);
+        }
+
+        return parent::setCustomAttribute($attributeCode, $attributeValue);
     }
 
     /**

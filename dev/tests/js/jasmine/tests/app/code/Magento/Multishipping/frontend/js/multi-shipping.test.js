@@ -68,9 +68,11 @@ define([
             var addNewAddressBtn,
                 addressflag,
                 canContinueBtn,
-                canContinueFlag;
+                canContinueFlag,
+                originalGetJSON;
 
             beforeEach(function () {
+                originalGetJSON = $.getJSON;
                 addNewAddressBtn = $('<button type="button" data-role="add-new-address"/>');
                 addressflag = $('<input type="hidden" value="0" id="add_new_address_flag"/>');
                 canContinueBtn = $('<button type="submit" data-role="can-continue" data-flag="1"/>');
@@ -79,6 +81,12 @@ define([
                     .append(addressflag)
                     .append(canContinueBtn)
                     .append(canContinueFlag);
+
+                $.getJSON = jasmine.createSpy().and.callFake(function () {
+                    var deferred = $.Deferred();
+
+                    return deferred.promise();
+                });
             });
 
             afterEach(function () {
@@ -86,12 +94,13 @@ define([
                 addressflag.remove();
                 canContinueBtn.remove();
                 canContinueFlag.remove();
+                $.getJSON = originalGetJSON;
             });
 
             it('Check add new address event', function () {
                 Obj = new MultiShipping({});
                 Obj.element = jasmine.createSpyObj('element', ['submit']);
-                addNewAddressBtn.click();
+                addNewAddressBtn.trigger('click');
 
                 expect(Obj.element.submit).toHaveBeenCalled();
                 expect(addressflag.val()).toBe('1');
@@ -100,7 +109,7 @@ define([
             it('Check can continue event', function () {
                 Obj = new MultiShipping({});
                 Obj.element = jasmine.createSpyObj('element', ['submit']);
-                canContinueBtn.click();
+                canContinueBtn.trigger('click');
 
                 expect(Obj.element.submit).not.toHaveBeenCalled();
                 expect(canContinueFlag.val()).toBe('1');

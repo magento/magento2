@@ -190,8 +190,6 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Test cleaning imported attribute data from empty values (note '0' is not empty).
      *
-     * @magentoDbIsolation  enabled
-     * @magentoAppIsolation enabled
      * @magentoDataFixture  Magento/CatalogImportExport/Model/Import/_files/custom_attributes.php
      * @dataProvider        clearEmptyDataDataProvider
      * @param array $rowData

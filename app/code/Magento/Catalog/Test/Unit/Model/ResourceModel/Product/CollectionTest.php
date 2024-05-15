@@ -38,6 +38,7 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\UniversalFactory;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -94,6 +95,11 @@ class CollectionTest extends TestCase
     private $storeManager;
 
     /**
+     * @var ProductLimitation|MockObject
+     */
+    private $productLimitationMock;
+
+    /**
      * @var EntityFactory|MockObject
      */
     private $entityFactory;
@@ -131,7 +137,8 @@ class CollectionTest extends TestCase
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore', 'getId', 'getWebsiteId'])
+            ->addMethods(['getId', 'getWebsiteId'])
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
         $moduleManager = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
@@ -161,7 +168,7 @@ class CollectionTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['getId'])
+            ->addMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->selectMock = $this->getMockBuilder(Select::class)
@@ -192,16 +199,16 @@ class CollectionTest extends TestCase
         $this->entityMock->expects($this->any())->method('getTable')->willReturnArgument(0);
         $this->connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($this->selectMock);
 
-        $productLimitationMock = $this->createMock(
+        $this->productLimitationMock = $this->createMock(
             ProductLimitation::class
         );
         $productLimitationFactoryMock = $this->getMockBuilder(
             ProductLimitationFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
 
         $productLimitationFactoryMock->method('create')
-            ->willReturn($productLimitationMock);
+            ->willReturn($this->productLimitationMock);
         $this->collection = $this->objectManager->getObject(
             Collection::class,
             [
@@ -277,7 +284,7 @@ class CollectionTest extends TestCase
         $mediaGalleriesMock = [[$linkField => $rowId]];
         $itemMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOrigData'])
+            ->onlyMethods(['getOrigData'])
             ->getMock();
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
@@ -319,11 +326,12 @@ class CollectionTest extends TestCase
         $customerGroupId = 2;
         $itemMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isScopeGlobal', 'getBackend'])
+            ->addMethods(['isScopeGlobal'])
+            ->onlyMethods(['getBackend'])
             ->getMock();
         $backend = $this->getMockBuilder(Tierprice::class)
             ->disableOriginalConstructor()
@@ -374,11 +382,12 @@ class CollectionTest extends TestCase
     {
         $itemMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isScopeGlobal', 'getBackend'])
+            ->addMethods(['isScopeGlobal'])
+            ->onlyMethods(['getBackend'])
             ->getMock();
         $backend = $this->getMockBuilder(Tierprice::class)
             ->disableOriginalConstructor()
@@ -431,5 +440,45 @@ class CollectionTest extends TestCase
         $firstItem = $this->collection->getNewEmptyItem();
         $secondItem = $this->collection->getNewEmptyItem();
         $this->assertEquals($firstItem, $secondItem);
+    }
+
+    /**
+     * Test to add website filter in admin area
+     */
+    public function testAddWebsiteFilterOnAdminStore(): void
+    {
+        $websiteIds = [2];
+        $websiteTable = 'catalog_product_website';
+        $joinCondition = 'join condition';
+        $this->productLimitationMock->expects($this->atLeastOnce())
+            ->method('offsetSet')
+            ->with('website_ids', $websiteIds);
+        $this->productLimitationMock->method('offsetExists')
+            ->with('website_ids')
+            ->willReturn(true);
+        $this->productLimitationMock->method('offsetGet')
+            ->with('website_ids')
+            ->willReturn($websiteIds);
+        $this->connectionMock->expects($this->once())
+            ->method('quoteInto')
+            ->with('product_website.website_id IN(?)', $websiteIds, 'int')
+            ->willReturn($joinCondition);
+        $this->selectMock->method('getPart')->with(Select::FROM)->willReturn([]);
+        /** @var AbstractEntity|MockObject $eavEntity */
+        $eavEntity = $this->createMock(AbstractEntity::class);
+        $eavEntity->method('getTable')
+            ->with('catalog_product_website')
+            ->willReturn($websiteTable);
+        $this->selectMock->expects($this->once())
+            ->method('join')
+            ->with(
+                ['product_website' => $websiteTable],
+                'product_website.product_id = e.entity_id AND ' . $joinCondition,
+                []
+            );
+
+        $this->collection->setEntity($eavEntity);
+        $this->collection->setStoreId(Store::DEFAULT_STORE_ID);
+        $this->collection->addWebsiteFilter($websiteIds);
     }
 }
