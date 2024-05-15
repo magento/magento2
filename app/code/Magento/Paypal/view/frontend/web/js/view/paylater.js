@@ -51,7 +51,7 @@ define([
                 layout([this.amountComponentConfig]);
             }
 
-            if (this.sdkUrl !== '') {
+            if (this.sdkUrl !== '') { // we should probably make a check here if we should load it or not
                 this.loadPayPalSdk(this.sdkUrl, this.dataAttributes)
                     .then(this._setPayPalObject.bind(this));
             }
