@@ -171,7 +171,6 @@ class GaTest extends TestCase
             'orders' => [
                 [
                     'transaction_id' => 100,
-                    'currency' => 'USD',
                     'value' => 10.00,
                     'tax' => 2.00,
                     'shipping' => 1.00,
