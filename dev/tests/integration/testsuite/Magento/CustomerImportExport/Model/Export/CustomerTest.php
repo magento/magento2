@@ -161,12 +161,15 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $customers = $this->objectManager->create(CustomerCollection::class);
         foreach ($customers as $customer) {
             $data = $this->processCustomerData($customer, $expectedAttributes);
-            $data['created_at'] = $this->localeDate->formatDate(
-                $data['created_at'],
-                \IntlDateFormatter::MEDIUM,
-                true
-            );
-            $data['created_at'] = (new \DateTime($data['created_at']))->format('Y-m-d H:i:s');
+
+            $data['created_at'] = $this->localeDate
+                ->scopeDate(null, $data['created_at'], true)
+                ->format('Y-m-d H:i:s');
+
+            $data['updated_at'] = $this->localeDate
+                ->scopeDate(null, $data['updated_at'], true)
+                ->format('Y-m-d H:i:s');
+
             $exportData = $lines['data'][$data['email']];
             $exportData = $this->unsetDuplicateData($exportData);
 
