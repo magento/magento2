@@ -284,4 +284,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Model\Quote\Address\Total\Subtotal">
+        <plugin name="update_bundle_quote_item_base_original_price"
+                type="Magento\Bundle\Plugin\Quote\UpdateBundleQuoteItemBaseOriginalPrice"
+                sortOrder="10"/>
+    </type>
 </config>
