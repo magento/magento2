@@ -9,13 +9,10 @@ declare(strict_types=1);
 namespace Magento\Paypal\Block\PayLater;
 
 use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Paypal\Block\Adminhtml\System\Config\PayLaterLink;
 use Magento\Paypal\Model\PayLaterConfig;
 use Magento\Paypal\Model\SdkUrl;
 use Magento\Paypal\Model\Config as PaypalConfig;
 use Magento\Framework\App\ObjectManager;
-use Magento\Customer\Model\Session as CustomerSession;
 
 /**
  * PayPal PayLater component block
@@ -49,30 +46,18 @@ class Banner extends Template
     private $paypalConfig;
 
     /**
-     * @var string|null
-     */
-    private ?string $buyerCountry = null;
-
-    /**
-     * @var CustomerSession
-     */
-    private CustomerSession $session;
-
-    /**
-     * @param Context $context
+     * @param Template\Context $context
      * @param PayLaterConfig $payLaterConfig
      * @param SdkUrl $sdkUrl
      * @param array $data
-     * @param PaypalConfig|null $paypalConfig
-     * @param CustomerSession|null $session
+     * @param PaypalConfig $paypalConfig
      */
     public function __construct(
         Template\Context $context,
         PayLaterConfig $payLaterConfig,
         SdkUrl $sdkUrl,
         array $data = [],
-        ?PaypalConfig $paypalConfig = null,
-        ?CustomerSession $session = null
+        PaypalConfig $paypalConfig = null
     ) {
         parent::__construct($context, $data);
         $this->payLaterConfig = $payLaterConfig;
@@ -81,7 +66,6 @@ class Banner extends Template
         $this->position = $data['position'] ??  '';
         $this->paypalConfig = $paypalConfig ?: ObjectManager::getInstance()
             ->get(PaypalConfig::class);
-        $this->session = $session ?: ObjectManager::getInstance()->get(CustomerSession::class);
     }
 
     /**
@@ -121,7 +105,6 @@ class Banner extends Template
         $componentAttributes = $this->jsLayout['components']['payLater']['config']['attributes'] ?? [];
         $config['attributes'] = array_replace($this->getStyleAttributesConfig(), $componentAttributes);
         $config['attributes']['data-pp-placement'] = $this->placement;
-        $config['attributes']['data-pp-buyercountry'] = $this->getBuyerCountry();
 
         $this->jsLayout = [
             'components' => [
@@ -164,44 +147,7 @@ class Banner extends Template
     {
         $enabled = $this->payLaterConfig->isEnabled($this->placement);
         return $enabled &&
-            $this->isBuyerCountryAvailable() &&
             $this->payLaterConfig->getSectionConfig($this->placement, PayLaterConfig::CONFIG_KEY_POSITION) ===
                 $this->position;
-    }
-
-    /**
-     * The pay later message should be displayed only if the buyer country is available
-     *
-     * @return bool
-     */
-    private function isBuyerCountryAvailable(): bool
-    {
-        return (bool)$this->getBuyerCountry();
-    }
-
-    /**
-     * Buyer country should be extracted from logged-in user billing or shipping address
-     *
-     * @return string
-     */
-    private function getBuyerCountry(): string
-    {
-        if ($this->buyerCountry === null) {
-            $country = null;
-            if ($this->session->isLoggedIn()) {
-                $address = $this->session->getCustomer()->getPrimaryBillingAddress() ?
-                    $this->session->getCustomer()->getPrimaryBillingAddress() :
-                    $this->session->getCustomer()->getDefaultShippingAddress();
-                $country = $address->getCountryId();
-            }
-
-            if (in_array($country, PayLaterLink::ARRAY_PAYLATER_SUPPORTED_COUNTRIES)) {
-                $this->buyerCountry = $country;
-            } else {
-                $this->buyerCountry = '';
-            }
-        }
-
-        return $this->buyerCountry;
     }
 }

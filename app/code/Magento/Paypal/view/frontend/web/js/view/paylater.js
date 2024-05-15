@@ -9,13 +9,15 @@ define([
     'uiElement',
     'uiLayout',
     'Magento_Paypal/js/in-context/paypal-sdk',
+    'Magento_Customer/js/customer-data',
     'domReady!'
 ], function (
     $,
     ko,
     Component,
     layout,
-    paypalSdk
+    paypalSdk,
+    customerData
 ) {
     'use strict';
 
@@ -37,6 +39,7 @@ define([
         },
         paypal: null,
         amount: null,
+        buyerCountry: null,
 
         /**
          * Initialize
@@ -44,6 +47,13 @@ define([
          * @returns {*}
          */
         initialize: function () {
+            let buyerCountry = customerData.get('paypal-buyer-country');
+            this.buyerCountry = buyerCountry().code;
+
+            if (!this.buyerCountry) {
+                return this;
+            }
+
             this._super()
                 .observe(['amount']);
 
@@ -51,7 +61,7 @@ define([
                 layout([this.amountComponentConfig]);
             }
 
-            if (this.sdkUrl !== '') { // we should probably make a check here if we should load it or not
+            if (this.sdkUrl !== '') {
                 this.loadPayPalSdk(this.sdkUrl, this.dataAttributes)
                     .then(this._setPayPalObject.bind(this));
             }
