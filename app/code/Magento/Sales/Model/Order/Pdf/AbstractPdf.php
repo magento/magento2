@@ -133,7 +133,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     protected $addressRenderer;
 
     /**
-     * @var Magento\Tax\Helper\Data
+     * @var \Magento\Tax\Helper\Data
      */
     protected $taxHelper;
 
@@ -158,7 +158,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
-     * @param TaxHelper $taxHelper
+     * @param \Magento\Tax\Helper\Data $taxHelper,
      * @param array $data
      * @param Database $fileStorageDatabase
      * @param RtlTextHandler|null $rtlTextHandler
@@ -176,7 +176,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
-        TaxHelper $taxHelper,
+        \Magento\Tax\Helper\Data $taxHelper,
         array $data = [],
         Database $fileStorageDatabase = null,
         ?RtlTextHandler $rtlTextHandler = null,
