@@ -11,18 +11,16 @@
         <annotations>
             <features value="PayPal"/>
             <stories value="Payment methods"/>
-            <title value="configuration for paypal pay later on Category page"/>
-            <description value="Paypal Pay Later Message should display on Admin Category  Page configuration"/>
+            <title value="Configuration for paypal pay later on Category page"/>
+            <description value="Paypal Pay Later Message should display on Admin Category Page configuration"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5639"/>
-
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
             <createData entity="SimpleProduct" stepKey="simpleProduct">
                 <requiredEntity createDataKey="simpleCategory"/>
             </createData>
-
             <!-- Login -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!--Config PayPal Standard-->
@@ -36,8 +34,7 @@
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="EnablePaylaterPaypalStandardActionGroup" stepKey="enablePaypalStandard">
-        </actionGroup>
+        <actionGroup ref="EnablePaylaterPaypalStandardActionGroup" stepKey="enablePaypalStandard"/>
         <!-- Reindex and cache flush -->
         <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
         <magentoCLI command="cache:flush" stepKey="cleanCache"/>
@@ -52,8 +49,8 @@
         <!--Validate Paylater Message On Storefront Category Page-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForItemPage"/>
-        <waitForElementClickable selector="{{PayPalStandardConfigSection.categoryClick}}" stepKey="waitForCategryToBeClickable"/>
-        <click selector ="{{PayPalStandardConfigSection.categoryClick}}" stepKey="clickCatagoryeTab"/>
+        <waitForElementClickable selector="{{PayPalStandardConfigSection.categoryClick}}" stepKey="waitForCategoryToBeClickable"/>
+        <click selector ="{{PayPalStandardConfigSection.categoryClick}}" stepKey="clickCatagoryTab"/>
         <waitForPageLoad stepKey="waitForCategoryPageTobeLoaded"/>
         <dontSeeElement selector="{{PayPalStandardConfigSection.paypalPaylaterMessage}}"  stepKey="verifyPaylaterMessageToBeDisappeared"/>
     </test>
