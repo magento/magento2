@@ -92,7 +92,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
 
     /**
      * Core store config
-     *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
