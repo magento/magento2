@@ -1101,12 +1101,12 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     protected function getCacheLifetime()
     {
         if (!$this->hasData('cache_lifetime')) {
-            return 86400;
+            return null;
         }
 
         $cacheLifetime = $this->getData('cache_lifetime');
         if (false === $cacheLifetime || null === $cacheLifetime) {
-            return 86400;
+            return null;
         }
 
         return (int)$cacheLifetime;
