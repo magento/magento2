@@ -67,6 +67,7 @@ class SchemaBuilder
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function build(Schema $schema, $tablesWithJsonTypeField = [])
     {
