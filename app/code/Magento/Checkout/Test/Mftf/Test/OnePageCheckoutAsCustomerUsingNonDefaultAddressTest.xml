@@ -72,6 +72,7 @@
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution"/>
 
         <!-- Change the address -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.editAddress}}" stepKey="waitForEditAddressElementToBeClickable"/>
         <click selector="{{CheckoutPaymentSection.editAddress}}" stepKey="editAddress"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.addressDropdown}}" stepKey="waitForDropDownToBeVisible"/>
         <see selector="{{CheckoutPaymentSection.addressDropdownSelected}}" userInput="{{US_Address_NY.street[0]}}" stepKey="seeDefaultBillingAddressStreet"/>
