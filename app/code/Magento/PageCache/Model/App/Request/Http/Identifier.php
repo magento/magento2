@@ -1,16 +1,12 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
-namespace Magento\Framework\App\PageCache;
+declare(strict_types=1);
+
+namespace Magento\PageCache\Model\App\Request\Http;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\PageCache\IdentifierInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
-/**
- * Page unique identifier
- */
 class Identifier implements IdentifierInterface
 {
     /**
@@ -36,7 +32,8 @@ class Identifier implements IdentifierInterface
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\App\Http\Context $context,
-        Json $serializer = null
+        Json $serializer = null,
+        private IdentifierStoreReader $identifierStoreReader
     ) {
         $this->request = $request;
         $this->context = $context;
@@ -56,6 +53,8 @@ class Identifier implements IdentifierInterface
             $this->request->get(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING)
                 ?: $this->context->getVaryString()
         ];
+
+        $data = $this->identifierStoreReader->getPageTagsWithStoreCacheTags($data);
 
         return sha1($this->serializer->serialize($data));
     }
