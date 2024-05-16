@@ -114,7 +114,7 @@ QUERY;
      *
      * @return array[][]
      */
-    public function categoryFieldsDataProvider(): array
+    public static function categoryFieldsDataProvider(): array
     {
         return [
             [

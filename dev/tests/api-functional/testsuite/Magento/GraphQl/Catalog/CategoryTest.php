@@ -780,7 +780,7 @@ QUERY;
     /**
      * @return array
      */
-    public function categoryImageDataProvider(): array
+    public static function categoryImageDataProvider(): array
     {
         return [
             'default_filename_strategy' => [

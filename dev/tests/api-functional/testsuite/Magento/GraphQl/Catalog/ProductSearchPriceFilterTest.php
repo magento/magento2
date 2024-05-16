@@ -164,7 +164,7 @@ QUERY;
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array[][]
      */
-    public function productSearchPriceDataProvider(): array
+    public static function productSearchPriceDataProvider(): array
     {
         return [
             [

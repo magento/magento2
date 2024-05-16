@@ -185,7 +185,7 @@ QUERY;
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderSetShippingMethodWithWrongParameters(): array
+    public static function dataProviderSetShippingMethodWithWrongParameters(): array
     {
         return [
             'shipping_methods_are_empty' => [

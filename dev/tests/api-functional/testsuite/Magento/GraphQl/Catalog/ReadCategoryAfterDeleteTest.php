@@ -88,7 +88,7 @@ QUERY;
     /**
      * @return array
      */
-    public function categoriesDeleteDataProvider(): array
+    public static function categoriesDeleteDataProvider(): array
     {
         return [
             [

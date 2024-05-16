@@ -338,7 +338,7 @@ class ProductPriceTest extends GraphQlAbstract
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function priceDataProvider() : array
+    public static function priceDataProvider() : array
     {
         return [
             [
@@ -1371,7 +1371,7 @@ QUERY;
     /**
      * @return array[]
      */
-    public function configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider(): array
+    public static function configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider(): array
     {
         return [
             [

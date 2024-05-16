@@ -85,7 +85,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
      *
      * @return array
      */
-    public function addDataProvider(): array
+    public static function addDataProvider(): array
     {
         $optionPayload = [
             AttributeOptionInterface::LABEL => 'new color',

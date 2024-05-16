@@ -71,7 +71,7 @@ class StoreConfigFPTTest extends GraphQlAbstract
      *
      * @return array
      */
-    public function sameFPTDisplaySettingsProvider()
+    public static function sameFPTDisplaySettingsProvider()
     {
         return [
             [
@@ -170,7 +170,7 @@ class StoreConfigFPTTest extends GraphQlAbstract
      *
      * @return array
      */
-    public function differentFPTDisplaySettingsProvider()
+    public static function differentFPTDisplaySettingsProvider()
     {
         return [
             [

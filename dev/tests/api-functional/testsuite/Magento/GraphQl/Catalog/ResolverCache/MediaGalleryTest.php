@@ -58,7 +58,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
     /**
      * @var Integration
      */
-    private $integration;
+    private static $integration;
 
     /**
      * @var StoreManagerInterface
@@ -337,7 +337,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
      * @return array[]
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function actionMechanismProvider(): array
+    public static function actionMechanismProvider(): array
     {
         // provider is invoked before setUp() is called so need to init here
         $objectManager = Bootstrap::getObjectManager();
@@ -353,7 +353,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
                 function (ProductInterface $product) {
                     // create an integration so that cache is not cleared in
                     // Magento\TestFramework\Authentication\OauthHelper::_createIntegration before making the API call
-                    $integration = $this->getOauthIntegration();
+                    $integration = self::getOauthIntegration();
 
                     $serviceInfo = [
                         'rest' => [
@@ -362,7 +362,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
                         ],
                     ];
 
-                    $this->_webApiCall(
+                    self::_webApiCall(
                         $serviceInfo,
                         ['product' => ['name' => 'new name']],
                         'rest',
@@ -376,7 +376,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
                 function (ProductInterface $product) {
                     // create an integration so that cache is not cleared in
                     // Magento\TestFramework\Authentication\OauthHelper::_createIntegration before making the API call
-                    $integration = $this->getOauthIntegration();
+                    $integration = self::getOauthIntegration();
 
                     $galleryEntry = $product->getMediaGalleryEntries()[0];
                     $galleryEntryId = $galleryEntry->getId();
@@ -742,19 +742,19 @@ QUERY;
      * @return Integration
      * @throws \Magento\Framework\Exception\IntegrationException
      */
-    private function getOauthIntegration(): Integration
+    private static function getOauthIntegration(): Integration
     {
-        if (!isset($this->integration)) {
+        if (!isset(self::$integration)) {
             $params = [
                 'all_resources' => true,
                 'status' => Integration::STATUS_ACTIVE,
                 'name' => 'Integration' . microtime()
             ];
 
-            $this->integration = Bootstrap::getObjectManager()->get(IntegrationServiceInterface::class)
+            self::$integration = Bootstrap::getObjectManager()->get(IntegrationServiceInterface::class)
                 ->create($params);
         }
 
-        return $this->integration;
+        return self::$integration;
     }
 }

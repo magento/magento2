@@ -79,7 +79,7 @@ class RemoveConfigurableProductFromCartTest extends GraphQlAbstract
      *
      * @return array
      */
-    public function removeConfigurableProductFromCartDataProvider(): array
+    public static function removeConfigurableProductFromCartDataProvider(): array
     {
         return [
             ['cart_item_id', 'test_cart_with_configurable'],

@@ -87,7 +87,7 @@ QUERY;
      *
      * @return array
      */
-    public function getProductCustomizableOptionsProvider(): array
+    public static function getProductCustomizableOptionsProvider(): array
     {
         return [
             'products' => [

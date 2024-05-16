@@ -1535,7 +1535,7 @@ QUERY;
     /**
      * @return array
      */
-    public function sortByPositionWithMultipleCategoriesDataProvider(): array
+    public static function sortByPositionWithMultipleCategoriesDataProvider(): array
     {
         return [
             [
@@ -2905,7 +2905,7 @@ QUERY;
      *
      * @return array[][]
      */
-    public function filterProductsBySingleCategoryIdDataProvider(): array
+    public static function filterProductsBySingleCategoryIdDataProvider(): array
     {
         return [
             [

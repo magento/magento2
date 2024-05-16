@@ -146,7 +146,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
      *
      * @return array
      */
-    public function dataProviderInvalidInfo(): array
+    public static function dataProviderInvalidInfo(): array
     {
         return [
             'invalid_admin_user_name' => [

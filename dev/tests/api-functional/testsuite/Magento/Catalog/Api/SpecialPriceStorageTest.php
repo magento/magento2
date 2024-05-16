@@ -238,7 +238,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
      *
      * @return array
      */
-    public function updateData(): array
+    public static function updateData(): array
     {
         $fromDate = '2037-01-19 03:14:07';
         $toDate = '2038-01-19 03:14:07';
@@ -272,7 +272,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
      *
      * @return array
      */
-    public function deleteData(): array
+    public static function deleteData(): array
     {
         $fromDate = '1970-01-01 00:00:01';
         $toDate = '2038-01-19 03:14:07';

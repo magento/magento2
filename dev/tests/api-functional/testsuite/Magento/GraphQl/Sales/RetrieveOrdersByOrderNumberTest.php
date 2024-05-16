@@ -856,7 +856,7 @@ QUERY;
     /**
      * @return array
      */
-    public function dataProviderIncorrectOrder(): array
+    public static function dataProviderIncorrectOrder(): array
     {
         return [
             'correctFormatNonExistingOrder' => [
@@ -946,7 +946,7 @@ QUERY;
     /**
      * @return array
      */
-    public function dataProviderMultiStores(): array
+    public static function dataProviderMultiStores(): array
     {
         return [
             'firstStoreFirstOrder' => [
