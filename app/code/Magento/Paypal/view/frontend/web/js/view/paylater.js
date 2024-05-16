@@ -48,6 +48,7 @@ define([
          */
         initialize: function () {
             let buyerCountry = customerData.get('paypal-buyer-country');
+
             this.buyerCountry = buyerCountry().code;
 
             if (!this.buyerCountry) {
