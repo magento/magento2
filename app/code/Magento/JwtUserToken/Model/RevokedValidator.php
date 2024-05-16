@@ -43,8 +43,5 @@ class RevokedValidator implements UserTokenValidatorInterface
         if ($revoked && $token->getData()->getIssued()->getTimestamp() <= $revoked->getBeforeTimestamp()) {
             throw new AuthorizationException(__('User token has been revoked'));
         }
-        elseif($revoked && $token->getData()->getIssued()->getTimestamp() >= $revoked->getBeforeTimestamp()) {
-            throw new AuthorizationException(__('User token has been revoked'));
-        }
     }
 }
