@@ -52,7 +52,7 @@ class ProductLinksTest extends TestCase
         $this->configMock->expects($this->once())->method('isShowOutOfStock')->willReturn($status);
         $this->stockHelperMock
             ->expects($this->exactly($callCount))
-            ->method('addInStockFilterToCollection')
+            ->method('addIsInStockFilterToCollection')
             ->with($collectionMock);
 
         $this->assertEquals($collectionMock, $this->model->afterGetProductCollection($subjectMock, $collectionMock));
