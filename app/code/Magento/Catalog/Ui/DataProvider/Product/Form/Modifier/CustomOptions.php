@@ -658,16 +658,13 @@ class CustomOptions extends AbstractModifier
                     'config' => [
                         'addButtonLabel' => __('Add Value'),
                         'componentType' => DynamicRows::NAME,
-                        'component' => 'Magento_Catalog/js/components/dynamic-rows-per-page',
-                        'template' => 'Magento_Catalog/components/dynamic-rows-per-page',
+                        'component' => 'Magento_Ui/js/dynamic-rows/dynamic-rows',
+                        'template' => 'ui/dynamic-rows/templates/default',
                         'additionalClasses' => 'admin__field-wide',
                         'deleteProperty' => static::FIELD_IS_DELETE,
                         'deleteValue' => '1',
                         'renderDefaultRecord' => false,
-                        'sortOrder' => $sortOrder,
-                        'sizesConfig' => [
-                            'enabled' => true
-                        ]
+                        'sortOrder' => $sortOrder
                     ],
                 ],
             ],
