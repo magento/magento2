@@ -23,6 +23,7 @@ class Session implements ConfigOptionsListInterface
     const INPUT_KEY_SESSION_REDIS_PORT = 'session-save-redis-port';
     const INPUT_KEY_SESSION_REDIS_PASSWORD = 'session-save-redis-password';
     const INPUT_KEY_SESSION_REDIS_TIMEOUT = 'session-save-redis-timeout';
+    const INPUT_KEY_SESSION_REDIS_RETRIES = 'session-save-redis-retries';
     const INPUT_KEY_SESSION_REDIS_PERSISTENT_IDENTIFIER = 'session-save-redis-persistent-id';
     const INPUT_KEY_SESSION_REDIS_DATABASE = 'session-save-redis-db';
     const INPUT_KEY_SESSION_REDIS_COMPRESSION_THRESHOLD = 'session-save-redis-compression-threshold';
@@ -47,6 +48,7 @@ class Session implements ConfigOptionsListInterface
     const CONFIG_PATH_SESSION_REDIS_PORT = 'session/redis/port';
     const CONFIG_PATH_SESSION_REDIS_PASSWORD = 'session/redis/password';
     const CONFIG_PATH_SESSION_REDIS_TIMEOUT = 'session/redis/timeout';
+    const CONFIG_PATH_SESSION_REDIS_RETRIES = 'session/redis/retries';
     const CONFIG_PATH_SESSION_REDIS_PERSISTENT_IDENTIFIER = 'session/redis/persistent_identifier';
     const CONFIG_PATH_SESSION_REDIS_DATABASE = 'session/redis/database';
     const CONFIG_PATH_SESSION_REDIS_COMPRESSION_THRESHOLD = 'session/redis/compression_threshold';
@@ -75,6 +77,7 @@ class Session implements ConfigOptionsListInterface
         self::INPUT_KEY_SESSION_REDIS_PORT => '6379',
         self::INPUT_KEY_SESSION_REDIS_PASSWORD => '',
         self::INPUT_KEY_SESSION_REDIS_TIMEOUT => '2.5',
+        self::INPUT_KEY_SESSION_REDIS_RETRIES => '0',
         self::INPUT_KEY_SESSION_REDIS_PERSISTENT_IDENTIFIER => '',
         self::INPUT_KEY_SESSION_REDIS_DATABASE => '2',
         self::INPUT_KEY_SESSION_REDIS_COMPRESSION_THRESHOLD => '2048',
@@ -117,6 +120,7 @@ class Session implements ConfigOptionsListInterface
         self::INPUT_KEY_SESSION_REDIS_PORT => self::CONFIG_PATH_SESSION_REDIS_PORT,
         self::INPUT_KEY_SESSION_REDIS_PASSWORD => self::CONFIG_PATH_SESSION_REDIS_PASSWORD,
         self::INPUT_KEY_SESSION_REDIS_TIMEOUT => self::CONFIG_PATH_SESSION_REDIS_TIMEOUT,
+        self::INPUT_KEY_SESSION_REDIS_RETRIES => self::CONFIG_PATH_SESSION_REDIS_RETRIES,
         self::INPUT_KEY_SESSION_REDIS_PERSISTENT_IDENTIFIER => self::CONFIG_PATH_SESSION_REDIS_PERSISTENT_IDENTIFIER,
         self::INPUT_KEY_SESSION_REDIS_DATABASE => self::CONFIG_PATH_SESSION_REDIS_DATABASE,
         self::INPUT_KEY_SESSION_REDIS_COMPRESSION_THRESHOLD => self::CONFIG_PATH_SESSION_REDIS_COMPRESSION_THRESHOLD,
@@ -176,6 +180,12 @@ class Session implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_SESSION_REDIS_TIMEOUT,
                 'Connection timeout, in seconds'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_SESSION_REDIS_RETRIES,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_SESSION_REDIS_RETRIES,
+                'Redis connection retries.'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_SESSION_REDIS_PERSISTENT_IDENTIFIER,
