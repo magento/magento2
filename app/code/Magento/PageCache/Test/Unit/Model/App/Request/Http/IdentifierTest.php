@@ -21,7 +21,7 @@ class IdentifierTest extends TestCase
     /**
      * Test value for cache vary string
      */
-    const VARY = '123';
+    private const VARY = '123';
 
     /**
      * @var ObjectManager
@@ -82,7 +82,6 @@ class IdentifierTest extends TestCase
             ->onlyMethods(['getPageTagsWithStoreCacheTags'])
             ->disableOriginalConstructor()
             ->getMock();
-
 
         $this->model = $this->objectManager->getObject(
             Identifier::class,

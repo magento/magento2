@@ -3,19 +3,21 @@ declare(strict_types=1);
 
 namespace Magento\PageCache\Model\App\Request\Http;
 
+use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\PageCache\IdentifierInterface;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Serialize\Serializer\Json;
 
 class Identifier implements IdentifierInterface
 {
     /**
-     * @var \Magento\Framework\App\Request\Http
+     * @var Http
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
+     * @var Context
      */
     protected $context;
 
@@ -25,15 +27,16 @@ class Identifier implements IdentifierInterface
     private $serializer;
 
     /**
-     * @param \Magento\Framework\App\Request\Http $request
-     * @param \Magento\Framework\App\Http\Context $context
+     * @param Http $request
+     * @param Context $context
+     * @param IdentifierStoreReader $identifierStoreReader
      * @param Json|null $serializer
      */
     public function __construct(
-        \Magento\Framework\App\Request\Http $request,
-        \Magento\Framework\App\Http\Context $context,
-        Json $serializer = null,
-        private IdentifierStoreReader $identifierStoreReader
+        Http $request,
+        Context $context,
+        private IdentifierStoreReader $identifierStoreReader,
+        Json $serializer = null
     ) {
         $this->request = $request;
         $this->context = $context;

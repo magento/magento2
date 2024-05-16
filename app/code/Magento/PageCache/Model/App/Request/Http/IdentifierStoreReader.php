@@ -40,12 +40,11 @@ class IdentifierStoreReader
     /**
      * Adds a theme key to identifier for a built-in cache if user-agent theme rule is actual
      *
-     * @param \Magento\Framework\App\PageCache\Identifier $identifier
-     * @param string $result
-     * @return array
+     * @param array $data
+     * @return array|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getPageTagsWithStoreCacheTags($data): ?array
+    public function getPageTagsWithStoreCacheTags(array $data): ?array
     {
         if ($this->config->getType() === \Magento\PageCache\Model\Config::BUILT_IN && $this->config->isEnabled()) {
             $ruleDesignException = $this->designExceptions->getThemeByRequest($this->request);

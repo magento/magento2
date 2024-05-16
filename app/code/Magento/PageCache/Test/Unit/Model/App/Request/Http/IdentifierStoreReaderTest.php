@@ -1,39 +1,42 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 declare(strict_types=1);
 
 namespace Magento\PageCache\Test\Unit\Model\App\Request\Http;
 
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\DesignExceptions;
+use Magento\PageCache\Model\App\Request\Http\IdentifierStoreReader;
 use Magento\PageCache\Model\Config;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class IdentifierStoreReaderTest extends TestCase
 {
     /**
-     * @var DesignExceptions|\PHPUnit\Framework\MockObject\MockObject
+     * @var DesignExceptions|MockObject
      */
     private $designExceptionsMock;
     /**
-     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestInterface|MockObject
      */
-    private \PHPUnit\Framework\MockObject\MockObject|RequestInterface $requestMock;
+    private MockObject|RequestInterface $requestMock;
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $configMock;
     /**
-     * @var \Magento\PageCache\Model\App\Request\Http\IdentifierStoreReader
+     * @var IdentifierStoreReader
      */
     private $model;
 
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
-
         $this->designExceptionsMock = $this->createPartialMock(
             DesignExceptions::class,
             ['getThemeByRequest']
@@ -47,7 +50,7 @@ class IdentifierStoreReaderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->model = new \Magento\PageCache\Model\App\Request\Http\IdentifierStoreReader(
+        $this->model = new IdentifierStoreReader(
             $this->designExceptionsMock,
             $this->requestMock,
             $this->configMock
@@ -104,7 +107,7 @@ class IdentifierStoreReaderTest extends TestCase
 
         $data = ['anything'];
 
-        $this->model = new \Magento\PageCache\Model\App\Request\Http\IdentifierStoreReader(
+        $this->model = new IdentifierStoreReader(
             $this->designExceptionsMock,
             $defaultRequestMock,
             $this->configMock

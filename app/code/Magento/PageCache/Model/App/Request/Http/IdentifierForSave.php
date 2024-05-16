@@ -21,6 +21,7 @@ class IdentifierForSave implements IdentifierInterface
      * @param Http $request
      * @param Context $context
      * @param Json $serializer
+     * @param IdentifierStoreReader $identifierStoreReader
      */
     public function __construct(
         private Http                  $request,
