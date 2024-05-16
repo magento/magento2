@@ -31,6 +31,7 @@
                 <item name="radio" xsi:type="string">Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\Dropdown</item>
                 <item name="checkbox" xsi:type="string">Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\Multiple</item>
                 <item name="multiple" xsi:type="string">Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\Multiple</item>
+                <item name="file" xsi:type="string">Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\File</item>
             </argument>
         </arguments>
     </type>
