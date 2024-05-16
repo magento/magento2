@@ -11,7 +11,7 @@
         <annotations>
             <features value="PayPal"/>
             <stories value="Payment methods"/>
-            <title value="Configuration for paypal pay later on Category page"/>
+            <title value="Configuration for paypal pay later on Category Page"/>
             <description value="Paypal Pay Later Message should display on Admin Category Page configuration"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5639"/>
@@ -35,24 +35,33 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="EnablePaylaterPaypalStandardActionGroup" stepKey="enablePaypalStandard"/>
+        <actionGroup ref="ValidatePaylaterDropdownValuesActionGroup" stepKey="verifyPaylaterDropdownVales"/>
         <!-- Reindex and cache flush -->
-        <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
-        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanMagentoCache">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
         <!--Navigate to Storefront-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
         <actionGroup ref="ValidatePaylaterInStorefrontActionGroup" stepKey="verifyPaylaterInStorefrontCategoryPage"/>
         <!--Disable Paypal Standard-->
         <magentoCLI command="config:set {{DisablePaypalPayStandard.path}} {{DisablePaypalPayStandard.value}}" stepKey="disablePayPalStandard"/>
         <!-- Reindex and cache flush -->
-        <magentoCLI command="indexer:reindex" stepKey="performReIndex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex1">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanMagentoCache1">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
         <!--Validate Paylater Message On Storefront Category Page-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForItemPage"/>
         <waitForElementClickable selector="{{PayPalStandardConfigSection.categoryClick}}" stepKey="waitForCategoryToBeClickable"/>
         <click selector ="{{PayPalStandardConfigSection.categoryClick}}" stepKey="clickCatagoryTab"/>
         <waitForPageLoad stepKey="waitForCategoryPageTobeLoaded"/>
-        <dontSeeElement selector="{{PayPalStandardConfigSection.paypalPaylaterMessage}}"  stepKey="verifyPaylaterMessageToBeDisappeared"/>
+        <waitForElementNotVisible selector="{{PayPalStandardConfigSection.paypalPaylaterMessage}}"  stepKey="verifyPaylaterMessageToBeDisappeared"/>
     </test>
 </tests>
 

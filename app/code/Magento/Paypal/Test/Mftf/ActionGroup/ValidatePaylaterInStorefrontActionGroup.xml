@@ -17,7 +17,7 @@
         <waitForPageLoad stepKey="waitForCategrypageTobeLoaded"/>
         <waitForElementVisible selector="{{PayPalStandardConfigSection.payPalFrame}}" stepKey="waitForElement"/>
         <switchToIFrame selector="{{PayPalStandardConfigSection.payPalFrame}}" stepKey="switchToBuyNowPaylaterIFrame"/>
-        <seeElement selector="{{PayPalStandardConfigSection.paypalPaylaterMessage}}"  stepKey="verifyBuyNowPaylaterMessage"/>
+        <waitForElementVisible selector="{{PayPalStandardConfigSection.paypalPaylaterMessage}}"  stepKey="verifyBuyNowPaylaterMessage"/>
         <switchToIFrame stepKey="switchBackToMainPaypalFrame"/>
     </actionGroup>
 </actionGroups>
