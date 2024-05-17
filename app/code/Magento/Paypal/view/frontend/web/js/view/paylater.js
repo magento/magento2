@@ -52,7 +52,7 @@ define([
             this.buyerCountry = buyerCountry().code;
 
             if (!this.buyerCountry) {
-                return this;
+                return this.attributes['data-pp-placement'] = null;
             }
 
             this._super()
