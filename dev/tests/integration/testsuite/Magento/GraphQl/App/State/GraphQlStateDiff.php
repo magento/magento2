@@ -55,6 +55,9 @@ class GraphQlStateDiff
      */
     private readonly Comparator $comparator;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->objectManagerBeforeTest = Bootstrap::getObjectManager();
