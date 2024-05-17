@@ -45,5 +45,5 @@
     <preference for="Magento\PageCache\Model\VclTemplateLocatorInterface" type="Magento\PageCache\Model\Varnish\VclTemplateLocator"/>
     <preference for="Magento\PageCache\Model\Spi\PageCacheTagsPreprocessorInterface" type="Magento\PageCache\Model\PageCacheTagsPreprocessorComposite"/>
 
-    <preference for="Magento\Framework\App\PageCache\IdentifierInterface" type="Magento\PageCache\Model\App\Request\Http\Identifier"/>
+    <preference for="Magento\Framework\App\PageCache\IdentifierInterface" type="Magento\PageCache\Model\App\Request\Http\IdentifierForSave"/>
 </config>
