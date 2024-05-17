@@ -33,7 +33,10 @@ type Customer {
 }
 
 input CustomerOrdersFilterInput @doc(description: "Identifies the filter to use for filtering orders.") {
+    order_date: FilterRangeTypeInput @doc(description: "Filters by order created_at time.")
+    status: FilterEqualTypeInput @doc(description: "Filters by order status.")
     number: FilterStringTypeInput @doc(description: "Filters by order number.")
+    grand_total: FilterRangeTypeInput @doc(description: "Filters by order base grand total value.")
 }
 
 input CustomerOrderSortInput @doc(description: "CustomerOrderSortInput specifies the field to use for sorting search results and indicates whether the results are sorted in ascending or descending order.") {
