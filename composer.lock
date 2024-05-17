@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2db5f112b2570c1420fe6089c5de526e",
+    "content-hash": "0d174ef5374078e24b312404e0e87755",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -10746,16 +10746,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "dev-ACQE-5710_ver1",
+            "version": "4.8.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:magento-gl/magento2-functional-testing-framework.git",
-                "reference": "301f127afc269c7b581eb01df3110676c28d8ce9"
+                "url": "https://github.com/magento/magento2-functional-testing-framework.git",
+                "reference": "7b15ca1a1d801f6ad36a93991600987b113a1747"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento-gl/magento2-functional-testing-framework/zipball/301f127afc269c7b581eb01df3110676c28d8ce9",
-                "reference": "301f127afc269c7b581eb01df3110676c28d8ce9",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/7b15ca1a1d801f6ad36a93991600987b113a1747",
+                "reference": "7b15ca1a1d801f6ad36a93991600987b113a1747",
                 "shasum": ""
             },
             "require": {
@@ -10822,24 +10822,12 @@
                     "src/Magento/FunctionalTestingFramework/_bootstrap.php"
                 ],
                 "psr-4": {
-                    "Magento\\FunctionalTestingFramework\\": "src/Magento/FunctionalTestingFramework",
                     "MFTF\\": "dev/tests/functional/tests/MFTF",
+                    "Magento\\FunctionalTestingFramework\\": "src/Magento/FunctionalTestingFramework",
                     "Magento\\FunctionalTestingFramework\\Tests\\Verification\\": "dev/tests/verification/Tests"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "tests\\": "dev/tests"
-                }
-            },
-            "scripts": {
-                "tests": [
-                    "bin/phpunit-checks"
-                ],
-                "static": [
-                    "bin/static-checks"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "AGPL-3.0"
             ],
@@ -10851,9 +10839,10 @@
                 "testing"
             ],
             "support": {
-                "source": "https://github.com/magento-gl/magento2-functional-testing-framework/tree/ACQE-5710_ver1"
+                "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.8.0"
             },
-            "time": "2024-04-15T10:25:11+00:00"
+            "time": "2024-05-17T08:51:13+00:00"
         },
         {
             "name": "magento/php-compatibility-fork",
@@ -13649,8 +13638,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "magento/composer": 10,
-        "magento/magento2-functional-testing-framework": 20
+        "magento/composer": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,
