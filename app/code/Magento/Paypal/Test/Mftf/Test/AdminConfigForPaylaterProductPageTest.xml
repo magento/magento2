@@ -15,6 +15,7 @@
             <description value="Paypal Pay Later Message should display on Catalog Product Page configuration"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5602"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
