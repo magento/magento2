@@ -37,8 +37,8 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Framework\Module\ModuleResource;
     use Magento\Framework\ObjectManagerInterface;
     use Magento\Framework\Registry;
+    use Magento\Framework\Setup\ConsoleLoggerInterface;
     use Magento\Framework\Setup\FilePermissions;
-    use Magento\Framework\Setup\LoggerInterface;
     use Magento\Framework\Setup\Patch\PatchApplier;
     use Magento\Framework\Setup\Patch\PatchApplierFactory;
     use Magento\Framework\Setup\SampleData\State;
@@ -126,7 +126,7 @@ namespace Magento\Setup\Test\Unit\Model {
         private $adminFactory;
 
         /**
-         * @var LoggerInterface|MockObject
+         * @var ConsoleLoggerInterface|MockObject
          */
         private $logger;
 
@@ -265,7 +265,7 @@ namespace Magento\Setup\Test\Unit\Model {
             );
             $this->moduleLoader = $this->createMock(Loader::class);
             $this->adminFactory = $this->createMock(AdminAccountFactory::class);
-            $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+            $this->logger = $this->getMockForAbstractClass(ConsoleLoggerInterface::class);
             $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
             $this->maintenanceMode = $this->createMock(MaintenanceMode::class);
             $this->filesystem = $this->createMock(Filesystem::class);
@@ -347,10 +347,11 @@ namespace Magento\Setup\Test\Unit\Model {
         /**
          * @param array $request
          * @param array $logMessages
+         * @param array $logMetaMessages
          * @dataProvider installDataProvider
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-        public function testInstall(array $request, array $logMessages)
+        public function testInstall(array $request, array $logMessages, array $logMetaMessages)
         {
             $this->moduleList->method('getOne')
                 ->willReturnMap(
@@ -485,17 +486,24 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->indexerRegistryMock->expects($this->exactly(2))->method('get')->willReturn(
                 $this->indexerInterfaceMock
             );
-
             $this->logger->expects($this->exactly(count($logMessages)))->method('log')
                 ->willReturnCallback(function ($arg) use ($logMessages) {
                     if ($arg == $logMessages) {
                         return null;
                     }
                 });
-            $this->logger->expects($this->exactly(2))
+            $this->logger->expects($this->exactly(count($logMetaMessages)))->method('logMeta')
+                ->willReturnCallback(function ($arg) use ($logMetaMessages) {
+                    if ($arg == $logMetaMessages) {
+                        return null;
+                    }
+                });
+            $this->logger->expects($this->exactly(3))
                 ->method('logSuccess')
                 ->willReturnCallback(function ($arg) {
-                    if ($arg == 'Magento installation complete.' || $arg == 'Magento Admin URI: /') {
+                    if ($arg == 'Cache cleared successfully'
+                        || $arg == 'Magento installation complete.'
+                        || $arg == 'Magento Admin URI: /') {
                         return null;
                     }
                 });
@@ -513,16 +521,13 @@ namespace Magento\Setup\Test\Unit\Model {
                 [
                     'request' => self::$request,
                     'logMessages' => [
-                        ['Starting Magento installation:'],
                         ['File permissions check...'],
                         ['Required extensions check...'],
                         ['Enabling Maintenance Mode...'],
                         ['Installing deployment configuration...'],
                         ['Installing database schema:'],
-                        ['Schema creation/updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Schema post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Installing search configuration...'],
@@ -533,20 +538,47 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['foo: 1'],
                         ['bar: 1'],
                         ['Installing data...'],
-                        ['Data install/update:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Data post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Caches clearing:'],
-                        ['Cache cleared successfully'],
                         ['Disabling Maintenance Mode:'],
                         ['Post installation file permissions check...'],
                         ['Write installation date...'],
                         ['Enabling Update by Schedule Indexer Mode...'],
                         ['2 indexer(s) are in "Update by Schedule" mode.'],
                         ['Sample Data is installed with errors. See log file for details']
+                    ],
+                    'logMetaMessages' => [
+                        ['Starting Magento installation:'],
+                        ['[Progress: 1 / 23]'],
+                        ['[Progress: 2 / 23]'],
+                        ['[Progress: 3 / 23]'],
+                        ['[Progress: 4 / 23]'],
+                        ['Schema creation/updates:'],
+                        ['[Progress: 5 / 23]'],
+                        ['[Progress: 6 / 23]'],
+                        ['Schema post-updates:'],
+                        ['[Progress: 7 / 23]'],
+                        ['[Progress: 8 / 23]'],
+                        ['[Progress: 9 / 23]'],
+                        ['[Progress: 10 / 23]'],
+                        ['[Progress: 11 / 23]'],
+                        ['[Progress: 12 / 23]'],
+                        ['[Progress: 13 / 23]'],
+                        ['Data install/update:'],
+                        ['[Progress: 14 / 23]'],
+                        ['[Progress: 15 / 23]'],
+                        ['Data post-updates:'],
+                        ['[Progress: 16 / 23]'],
+                        ['[Progress: 17 / 23]'],
+                        ['[Progress: 18 / 23]'],
+                        ['[Progress: 19 / 23]'],
+                        ['[Progress: 20 / 23]'],
+                        ['[Progress: 21 / 23]'],
+                        ['[Progress: 22 / 23]'],
+                        ['[Progress: 23 / 23]'],
                     ],
                 ],
                 [
@@ -563,16 +595,13 @@ namespace Magento\Setup\Test\Unit\Model {
                         AdminAccount::KEY_LAST_NAME => 'Doe'
                     ],
                     'logMessages' => [
-                        ['Starting Magento installation:'],
                         ['File permissions check...'],
                         ['Required extensions check...'],
                         ['Enabling Maintenance Mode...'],
                         ['Installing deployment configuration...'],
                         ['Installing database schema:'],
-                        ['Schema creation/updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Schema post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Installing search configuration...'],
@@ -583,21 +612,49 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['foo: 1'],
                         ['bar: 1'],
                         ['Installing data...'],
-                        ['Data install/update:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Data post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Installing admin user...'],
                         ['Caches clearing:'],
-                        ['Cache cleared successfully'],
                         ['Disabling Maintenance Mode:'],
                         ['Post installation file permissions check...'],
                         ['Write installation date...'],
                         ['Enabling Update by Schedule Indexer Mode...'],
                         ['2 indexer(s) are in "Update by Schedule" mode.'],
                         ['Sample Data is installed with errors. See log file for details']
+                    ],
+                    'logMetaMessages' => [
+                        ['Starting Magento installation:'],
+                        ['[Progress: 1 / 24]'],
+                        ['[Progress: 2 / 24]'],
+                        ['[Progress: 3 / 24]'],
+                        ['[Progress: 4 / 24]'],
+                        ['Schema creation/updates:'],
+                        ['[Progress: 5 / 24]'],
+                        ['[Progress: 6 / 24]'],
+                        ['Schema post-updates:'],
+                        ['[Progress: 7 / 24]'],
+                        ['[Progress: 8 / 24]'],
+                        ['[Progress: 9 / 24]'],
+                        ['[Progress: 10 / 24]'],
+                        ['[Progress: 11 / 24]'],
+                        ['[Progress: 12 / 24]'],
+                        ['[Progress: 13 / 24]'],
+                        ['Data install/update:'],
+                        ['[Progress: 14 / 24]'],
+                        ['[Progress: 15 / 24]'],
+                        ['Data post-updates:'],
+                        ['[Progress: 16 / 24]'],
+                        ['[Progress: 17 / 24]'],
+                        ['[Progress: 18 / 24]'],
+                        ['[Progress: 19 / 24]'],
+                        ['[Progress: 20 / 24]'],
+                        ['[Progress: 21 / 24]'],
+                        ['[Progress: 22 / 24]'],
+                        ['[Progress: 23 / 24]'],
+                        ['[Progress: 24 / 24]'],
                     ],
                 ],
             ];
@@ -608,13 +665,14 @@ namespace Magento\Setup\Test\Unit\Model {
          *
          * @param array $request
          * @param array $logMessages
+         * @param array $logMetaMessages
          * @throws RuntimeException
          * @throws FileSystemException
          * @throws LocalizedException
          * @dataProvider installWithOrderIncrementPrefixDataProvider
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-        public function testInstallWithOrderIncrementPrefix(array $request, array $logMessages)
+        public function testInstallWithOrderIncrementPrefix(array $request, array $logMessages, array $logMetaMessages)
         {
             $this->moduleList->method('getOne')
                 ->willReturnMap(
@@ -762,17 +820,24 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->filePermissions->expects($this->once())
                 ->method('getMissingWritableDirectoriesForDbUpgrade')
                 ->willReturn([]);
-
             $this->logger->expects($this->exactly(count($logMessages)))->method('log')
                 ->willReturnCallback(function ($arg) use ($logMessages) {
                     if ($arg == $logMessages) {
                         return null;
                     }
                 });
-            $this->logger->expects($this->exactly(2))
+            $this->logger->expects($this->exactly(count($logMetaMessages)))->method('logMeta')
+                ->willReturnCallback(function ($arg) use ($logMetaMessages) {
+                    if ($arg == $logMetaMessages) {
+                        return null;
+                    }
+                });
+            $this->logger->expects($this->exactly(3))
                 ->method('logSuccess')
                 ->willReturnCallback(function ($arg) {
-                    if ($arg == 'Magento installation complete.' || $arg == 'Magento Admin URI: /') {
+                    if ($arg == 'Cache cleared successfully'
+                        || $arg == 'Magento installation complete.'
+                        || $arg == 'Magento Admin URI: /') {
                         return null;
                     }
                 });
@@ -797,16 +862,13 @@ namespace Magento\Setup\Test\Unit\Model {
                         InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX => 'ORD'
                     ],
                     'logMessages' => [
-                        ['Starting Magento installation:'],
                         ['File permissions check...'],
                         ['Required extensions check...'],
                         ['Enabling Maintenance Mode...'],
                         ['Installing deployment configuration...'],
                         ['Installing database schema:'],
-                        ['Schema creation/updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Schema post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Installing search configuration...'],
@@ -817,21 +879,49 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['foo: 1'],
                         ['bar: 1'],
                         ['Installing data...'],
-                        ['Data install/update:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Data post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Creating sales order increment prefix...'], // << added
                         ['Caches clearing:'],
-                        ['Cache cleared successfully'],
                         ['Disabling Maintenance Mode:'],
                         ['Post installation file permissions check...'],
                         ['Write installation date...'],
                         ['Enabling Update by Schedule Indexer Mode...'],
                         ['2 indexer(s) are in "Update by Schedule" mode.'],
                         ['Sample Data is installed with errors. See log file for details']
+                    ],
+                    'logMetaMessages' => [
+                        ['Starting Magento installation:'],
+                        ['[Progress: 1 / 24]'],
+                        ['[Progress: 2 / 24]'],
+                        ['[Progress: 3 / 24]'],
+                        ['[Progress: 4 / 24]'],
+                        ['Schema creation/updates:'],
+                        ['[Progress: 5 / 24]'],
+                        ['[Progress: 6 / 24]'],
+                        ['Schema post-updates:'],
+                        ['[Progress: 7 / 24]'],
+                        ['[Progress: 8 / 24]'],
+                        ['[Progress: 9 / 24]'],
+                        ['[Progress: 10 / 24]'],
+                        ['[Progress: 11 / 24]'],
+                        ['[Progress: 12 / 24]'],
+                        ['[Progress: 13 / 24]'],
+                        ['Data install/update:'],
+                        ['[Progress: 14 / 24]'],
+                        ['[Progress: 15 / 24]'],
+                        ['Data post-updates:'],
+                        ['[Progress: 16 / 24]'],
+                        ['[Progress: 17 / 24]'],
+                        ['[Progress: 18 / 24]'],
+                        ['[Progress: 19 / 24]'],
+                        ['[Progress: 20 / 24]'],
+                        ['[Progress: 21 / 24]'],
+                        ['[Progress: 22 / 24]'],
+                        ['[Progress: 23 / 24]'],
+                        ['[Progress: 24 / 24]'],
                     ],
                 ],
             ];
@@ -853,20 +943,33 @@ namespace Magento\Setup\Test\Unit\Model {
             $request = self::$request;
 
             $logMessages = [
-                ['Starting Magento installation:'],
                 ['File permissions check...'],
                 ['Required extensions check...'],
                 ['Enabling Maintenance Mode...'],
                 ['Installing deployment configuration...'],
                 ['Installing database schema:'],
-                ['Schema creation/updates:'],
                 ['Module \'Foo_One\':'],
                 ['Module \'Bar_Two\':'],
-                ['Schema post-updates:'],
                 ['Module \'Foo_One\':'],
                 ['Module \'Bar_Two\':'],
                 ['Installing search configuration...'],
                 ['Validating remote storage configuration...'],
+            ];
+
+            $logMetaMessages = [
+                ['Starting Magento installation:'],
+                ['[Progress: 1 / 23]'],
+                ['[Progress: 2 / 23]'],
+                ['[Progress: 3 / 23]'],
+                ['[Progress: 4 / 23]'],
+                ['Schema creation/updates:'],
+                ['[Progress: 5 / 23]'],
+                ['[Progress: 6 / 23]'],
+                ['Schema post-updates:'],
+                ['[Progress: 7 / 23]'],
+                ['[Progress: 8 / 23]'],
+                ['[Progress: 9 / 23]'],
+                ['[Progress: 10 / 23]'],
             ];
 
             $this->config->expects(static::atLeastOnce())
@@ -1012,6 +1115,13 @@ namespace Magento\Setup\Test\Unit\Model {
                     }
                 });
 
+            $this->logger->expects($this->exactly(count($logMetaMessages)))->method('logMeta')
+                ->willReturnCallback(function ($arg) use ($logMetaMessages) {
+                    if ($arg == $logMetaMessages) {
+                        return null;
+                    }
+                });
+
             $this->logger->expects(static::never())->method('logSuccess');
 
             $this->object->install($request);
@@ -1043,6 +1153,7 @@ namespace Magento\Setup\Test\Unit\Model {
 
             // every log message call is expected
             $logMessages = $this->installDataProvider()[0]['logMessages'];
+            $logMetaMessages = $this->installDataProvider()[0]['logMetaMessages'];
 
             $this->config->expects(static::atLeastOnce())
                 ->method('get')
@@ -1217,18 +1328,25 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->filePermissions->expects(static::once())
                 ->method('getMissingWritableDirectoriesForDbUpgrade')
                 ->willReturn([]);
-
             $this->logger->expects($this->exactly(count($logMessages)))->method('log')
                 ->willReturnCallback(function ($arg) use ($logMessages) {
                     if ($arg == $logMessages) {
                         return null;
                     }
                 });
+            $this->logger->expects($this->exactly(count($logMetaMessages)))->method('logMeta')
+                ->willReturnCallback(function ($arg) use ($logMetaMessages) {
+                    if ($arg == $logMetaMessages) {
+                        return null;
+                    }
+                });
 
-            $this->logger->expects(static::exactly(2))
+            $this->logger->expects($this->exactly(3))
                 ->method('logSuccess')
                 ->willReturnCallback(function ($arg) {
-                    if ($arg == 'Magento installation complete.' || $arg == 'Magento Admin URI: /') {
+                    if ($arg == 'Cache cleared successfully'
+                        || $arg == 'Magento installation complete.'
+                        || $arg == 'Magento Admin URI: /') {
                         return null;
                     }
                 });
@@ -1251,13 +1369,20 @@ namespace Magento\Setup\Test\Unit\Model {
             $request = self::$request;
 
             $logMessages = [
-                ['Starting Magento installation:'],
                 ['File permissions check...'],
                 ['Required extensions check...'],
                 ['Enabling Maintenance Mode...'],
                 ['Installing deployment configuration...'],
                 ['Installing database schema:'],
-                ['Schema creation/updates:']
+            ];
+
+            $logMetaMessages = [
+                ['Starting Magento installation:'],
+                ['[Progress: 1 / 23]'],
+                ['[Progress: 2 / 23]'],
+                ['[Progress: 3 / 23]'],
+                ['[Progress: 4 / 23]'],
+                ['Schema creation/updates:'],
             ];
 
             $this->config->expects(static::atLeastOnce())
@@ -1362,6 +1487,13 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->logger->expects($this->exactly(count($logMessages)))->method('log')
                 ->willReturnCallback(function ($arg) use ($logMessages) {
                     if ($arg == $logMessages) {
+                        return null;
+                    }
+                });
+
+            $this->logger->expects($this->exactly(count($logMetaMessages)))->method('logMeta')
+                ->willReturnCallback(function ($arg) use ($logMetaMessages) {
+                    if ($arg == $logMetaMessages) {
                         return null;
                     }
                 });
@@ -1510,11 +1642,24 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->logger
                 ->method('log')
                 ->willReturnCallback(function ($arg) {
-                    if ($arg == 'Cache types config flushed successfully' ||
-                        $arg == 'Cache cleared successfully' ||
-                        $arg == 'File system cleanup:' ||
-                        $arg == 'The directory \'/generation\' doesn\'t exist - skipping cleanup' ||
+                    if ($arg == 'The directory \'/generation\' doesn\'t exist - skipping cleanup') {
+                        return null;
+                    }
+                });
+            $this->logger
+                ->method('logMeta')
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'File system cleanup:' ||
                         $arg == 'Updating modules:'
+                    ) {
+                        return null;
+                    }
+                });
+            $this->logger
+                ->method('logSuccess')
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Cache types config flushed successfully' ||
+                        $arg == 'Cache cleared successfully'
                     ) {
                         return null;
                     }
@@ -1529,12 +1674,18 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $installer = $this->prepareForUpdateModulesTests();
             $this->logger
-                ->method('log')
+                ->method('logSuccess')
                 ->willReturnCallback(function ($arg) {
                     if ($arg == 'Cache types config flushed successfully' ||
-                        $arg == 'Cache cleared successfully' ||
-                        $arg == 'Updating modules:'
+                        $arg == 'Cache cleared successfully'
                     ) {
+                        return null;
+                    }
+                });
+            $this->logger
+                ->method('logMeta')
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Updating modules:') {
                         return null;
                     }
                 });
@@ -1584,7 +1735,6 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('get')
                 ->with(Manager::class)
                 ->willReturn($cacheManager);
-            $this->logger->expects($this->once())->method('logSuccess')->with('Magento uninstallation complete.');
             $this->cleanupFiles->expects($this->once())->method('clearAllFiles')->willReturn(
                 [
                     "The directory '/var' doesn't exist - skipping cleanup",
@@ -1595,14 +1745,29 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->logger
                 ->method('log')
                 ->willReturnCallback(function ($arg) {
-                    if ($arg == 'Starting Magento uninstallation:' ||
-                        $arg == 'Cache cleared successfully' ||
-                        $arg == 'No database connection defined - skipping database cleanup' ||
-                        $arg == 'File system cleanup:' ||
+                    if ($arg == 'No database connection defined - skipping database cleanup' ||
                         $arg == "The directory '/var' doesn't exist - skipping cleanup" ||
                         $arg == "The directory '/static' doesn't exist - skipping cleanup" ||
                         $arg == "The file '/config/ConfigOne.php' doesn't exist - skipping cleanup" ||
                         $arg == "The file '/config/ConfigTwo.php' doesn't exist - skipping cleanup"
+                    ) {
+                        return null;
+                    }
+                });
+            $this->logger
+                ->method('logMeta')
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Starting Magento uninstallation:' ||
+                        $arg == 'File system cleanup:'
+                    ) {
+                        return null;
+                    }
+                });
+            $this->logger
+                ->method('logSuccess')
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Cache cleared successfully' ||
+                        $arg == 'Magento uninstallation complete.'
                     ) {
                         return null;
                     }
