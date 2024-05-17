@@ -69,6 +69,7 @@
         <!-- Click next button to open payment section -->
         <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="waitForElementSelectPaymentSolutionToBeClickable"/>
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution"/>
 
         <!-- Change the address -->
