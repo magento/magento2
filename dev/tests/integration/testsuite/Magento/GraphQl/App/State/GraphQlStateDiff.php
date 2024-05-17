@@ -55,20 +55,8 @@ class GraphQlStateDiff
      */
     private readonly Comparator $comparator;
 
-    /**
-     * Constructor
-     *
-     * @param TestCase $test
-     */
-    public function __construct(TestCase $test)
+    public function __construct()
     {
-        if (8 == PHP_MAJOR_VERSION && 3 == PHP_MINOR_VERSION && PHP_RELEASE_VERSION  < 5) {
-            $test->markTestSkipped(
-                "This test isn't compatible with PHP 8.3 versions less than PHP 8.3.5 because of "
-                . "bug in garbage collector. https://github.com/php/php-src/issues/13569"
-                . " will roll back in AC-11491"
-            );
-        }
         $this->objectManagerBeforeTest = Bootstrap::getObjectManager();
         $this->objectManagerForTest = new ObjectManager($this->objectManagerBeforeTest);
         $this->objectManagerForTest->getFactory()->setObjectManager($this->objectManagerForTest);
