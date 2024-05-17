@@ -12,5 +12,7 @@
         <element name="productSku" type="input" selector="//tr[1]/td[@data-column='sku']"/>
         <element name="productName" type="input" selector="//tr[1]/td[@data-column='name']"/>
         <element name="productQty" type="input" selector="//tr[1]/td[@data-column='qty']"/>
+        <element name="search" type="input" selector="//span[text()='Search']"/>
+        <element name="enterProduct" type="input" selector="//input[@id='gridLowstock_filter_name']"/>
     </section>
 </sections>

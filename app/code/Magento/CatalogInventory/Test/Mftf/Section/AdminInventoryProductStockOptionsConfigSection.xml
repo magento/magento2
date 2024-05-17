@@ -12,5 +12,8 @@
         <element name="maxSaleQtyInherit" type="checkbox" selector="#cataloginventory_item_options_max_sale_qty_inherit" timeout="30"/>
         <element name="maxSaleQty" type="input" selector="#cataloginventory_item_options_max_sale_qty"/>
         <element name="maxSaleQtyError" type="input" selector="#cataloginventory_item_options_max_sale_qty-error"/>
+        <element name="notifyQty" type="input" selector="//input[@id='cataloginventory_item_options_notify_stock_qty']"/>
+        <element name="saveConfig" type="button" selector="//span[text()='Save Config']"/>
+        <element name="systemValue" type="input" selector="//input[@id='cataloginventory_item_options_notify_stock_qty_inherit']"/>
     </section>
 </sections>
