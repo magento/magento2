@@ -165,44 +165,45 @@ class AlertProcessor
         $defaultStoreId = $website->getDefaultStore()->getId();
         $products = [];
 
-        /** @var Price|Stock $alert */
-        foreach ($collection as $alert) {
-            try {
-                if ($alert->getStoreId()) {
-                    $email->setStoreId($alert->getStoreId());
-                }
-                if ($customer === null) {
-                    $customer = $this->customerRepository->getById($alert->getCustomerId());
-                } elseif ((int)$customer->getId() !== (int)$alert->getCustomerId()) {
-                    $this->sendEmail($customer, $email);
-                    $customer = $this->customerRepository->getById($alert->getCustomerId());
-                }
+        $groupedByStore = $this->groupAlertsByStore($collection, (int)$defaultStoreId);
 
-                if (!isset($products[$alert->getProductId()])) {
-                    $product = $this->productRepository->getById($alert->getProductId(), false, $defaultStoreId, true);
-                    $products[$alert->getProductId()] = $product;
-                } else {
-                    $product = $products[$alert->getProductId()];
-                }
+        foreach ($groupedByStore as $storeId => $alerts) {
+            $email->setStoreId($storeId);
 
-                switch ($alertType) {
-                    case self::ALERT_TYPE_STOCK:
-                        $this->saveStockAlert($alert, $product, $website, $email);
-                        break;
-                    case self::ALERT_TYPE_PRICE:
-                        $this->savePriceAlert($alert, $product, $customer, $email);
-                        break;
+            /** @var Price|Stock $alert */
+            foreach ($alerts as $alert) {
+                try {
+                    if ($customer === null) {
+                        $customer = $this->customerRepository->getById($alert->getCustomerId());
+                    } elseif ((int)$customer->getId() !== (int)$alert->getCustomerId()) {
+                        $this->sendEmail($customer, $email);
+                        $customer = $this->customerRepository->getById($alert->getCustomerId());
+                    }
+
+                    if (!isset($products[$alert->getProductId()])) {
+                        $product = $this->productRepository->getById(
+                            $alert->getProductId(),
+                            false,
+                            $defaultStoreId,
+                            true
+                        );
+                        $products[$alert->getProductId()] = $product;
+                    } else {
+                        $product = $products[$alert->getProductId()];
+                    }
+
+                    $this->saveAlert($alertType, $alert, $product, $website, $customer, $email);
+                } catch (\Exception $e) {
+                    $errors[] = $e->getMessage();
                 }
-            } catch (\Exception $e) {
-                $errors[] = $e->getMessage();
             }
-        }
 
-        if ($customer !== null) {
-            try {
-                $this->sendEmail($customer, $email);
-            } catch (\Exception $e) {
-                $errors[] = $e->getMessage();
+            if ($customer !== null) {
+                try {
+                    $this->sendEmail($customer, $email);
+                } catch (\Exception $e) {
+                    $errors[] = $e->getMessage();
+                }
             }
         }
 
@@ -254,6 +255,56 @@ class AlertProcessor
         }
 
         return $collection;
+    }
+
+    /**
+     * Prepare an array of alerts grouped by store ID
+     *
+     * @param AbstractCollection $collection
+     * @param int $defaultStoreId
+     * @return array
+     */
+    private function groupAlertsByStore(AbstractCollection $collection, int $defaultStoreId): array
+    {
+        $groupedByStore = [];
+        foreach ($collection as $item) {
+            if ($storeId = $item->getStoreId()) {
+                $groupedByStore[$storeId][] = $item;
+            } else {
+                $groupedByStore[$defaultStoreId][] = $item;
+            }
+        }
+
+        return $groupedByStore;
+    }
+
+    /**
+     * Save alert by type
+     *
+     * @param string $alertType
+     * @param Stock|Price $alert
+     * @param ProductInterface $product
+     * @param WebsiteInterface $website
+     * @param CustomerInterface $customer
+     * @param Email $email
+     * @throws \Exception
+     */
+    private function saveAlert(
+        string $alertType,
+        $alert,
+        ProductInterface $product,
+        WebsiteInterface $website,
+        CustomerInterface $customer,
+        Email $email
+    ): void {
+        switch ($alertType) {
+            case self::ALERT_TYPE_STOCK:
+                $this->saveStockAlert($alert, $product, $website, $email);
+                break;
+            case self::ALERT_TYPE_PRICE:
+                $this->savePriceAlert($alert, $product, $customer, $email);
+                break;
+        }
     }
 
     /**
