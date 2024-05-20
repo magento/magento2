@@ -7,7 +7,7 @@
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="PayPalProductPageConfigSection">
+    <section name="AdminPaypalProductPageConfigSection">
         <element name="expandCatalogProductPage" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_us_express_checkout_required_advertise_paylater_settings_paylater_productpage-head" parameterized="true"/>
         <element name="display" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_us_express_checkout_required_advertise_paylater_settings_paylater_productpage_paylater_productpage_display" parameterized="true"/>
         <element name="position" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_us_express_checkout_required_advertise_paylater_settings_paylater_productpage_paylater_productpage_position" parameterized="true"/>

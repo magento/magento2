@@ -13,16 +13,16 @@
         <arguments>
             <argument name="countryCode" type="string" defaultValue="us"/>
         </arguments>
-        <waitForElementClickable selector="{{PayPalProductPageConfigSection.expandCatalogProductPage(countryCode)}}" stepKey="waitForCheckoutCartPageClickable"/>
-        <click selector="{{PayPalProductPageConfigSection.expandCatalogProductPage(countryCode)}}" stepKey="clickCheckoutCart"/>
-        <selectOption selector ="{{PayPalProductPageConfigSection.display(countryCode)}}" userInput="Yes" stepKey="enableDisplayforPaylaterCartPage"/>
-        <selectOption selector="{{PayPalProductPageConfigSection.position(countryCode)}}" userInput="Header (center)" stepKey="selectDefaultPosition"/>
+        <waitForElementClickable selector="{{AdminPaypalProductPageConfigSection.expandCatalogProductPage(countryCode)}}" stepKey="waitForCheckoutCartPageClickable"/>
+        <click selector="{{AdminPaypalProductPageConfigSection.expandCatalogProductPage(countryCode)}}" stepKey="clickCheckoutCart"/>
+        <selectOption selector ="{{AdminPaypalProductPageConfigSection.display(countryCode)}}" userInput="Yes" stepKey="enableDisplayforPaylaterCartPage"/>
+        <selectOption selector="{{AdminPaypalProductPageConfigSection.position(countryCode)}}" userInput="Header (center)" stepKey="selectDefaultPosition"/>
         <!--Verify Default Option was Selected correctly-->
-        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.position(countryCode)}}" userInput="Header (center)" stepKey="seeSelectedPosition"/>
-        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.styleLayout(countryCode)}}" userInput="Text" stepKey="seeSelectedStyleLayout"/>
-        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.logoType(countryCode)}}" userInput="Primary" stepKey="seeSelectedLogoType"/>
-        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.logoPosition(countryCode)}}" userInput="Left" stepKey="seeSelectedLogoPosition"/>
-        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.textColor(countryCode)}}" userInput="Black" stepKey="seeSelectedTextColor"/>
-        <seeOptionIsSelected selector="{{PayPalProductPageConfigSection.textSize(countryCode)}}" userInput="12px" stepKey="seeSelectedTextSize"/>
+        <seeOptionIsSelected selector="{{AdminPaypalProductPageConfigSection.position(countryCode)}}" userInput="Header (center)" stepKey="seeSelectedPosition"/>
+        <seeOptionIsSelected selector="{{AdminPaypalProductPageConfigSection.styleLayout(countryCode)}}" userInput="Text" stepKey="seeSelectedStyleLayout"/>
+        <seeOptionIsSelected selector="{{AdminPaypalProductPageConfigSection.logoType(countryCode)}}" userInput="Primary" stepKey="seeSelectedLogoType"/>
+        <seeOptionIsSelected selector="{{AdminPaypalProductPageConfigSection.logoPosition(countryCode)}}" userInput="Left" stepKey="seeSelectedLogoPosition"/>
+        <seeOptionIsSelected selector="{{AdminPaypalProductPageConfigSection.textColor(countryCode)}}" userInput="Black" stepKey="seeSelectedTextColor"/>
+        <seeOptionIsSelected selector="{{AdminPaypalProductPageConfigSection.textSize(countryCode)}}" userInput="12px" stepKey="seeSelectedTextSize"/>
     </actionGroup>
 </actionGroups>

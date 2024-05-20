@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5602"/>
             <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
