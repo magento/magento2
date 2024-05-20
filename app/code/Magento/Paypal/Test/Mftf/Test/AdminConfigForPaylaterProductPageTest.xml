@@ -32,7 +32,7 @@
         <!--Enable Pay Later in Admin Product Page -->
         <actionGroup ref="AdminConfigurePaypalPaylaterEnableActionGroup" stepKey="enablePaypalPaylaterSolution"/>
         <!--Check default values selected in dropdown  -->
-        <actionGroup ref="AssertAdminCinfigForDefaultValuesInPaylaterProductPageActionGroup" stepKey="verifyDefaultValuesFromDropDown"/>
+        <actionGroup ref="AssertAdminConfigForDefaultValuesInPaylaterProductPageActionGroup" stepKey="verifyDefaultValuesFromDropDown"/>
         <!--Click on Save configure Button -->
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveAdminConfiguration"/>
     </test>
