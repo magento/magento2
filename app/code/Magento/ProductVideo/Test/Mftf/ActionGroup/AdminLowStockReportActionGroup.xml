@@ -9,6 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminLowStockReportActionGroup">
+        <annotations>
+            <description>Navigate to Low stock Product and search for Product</description>
+        </annotations>
         <amOnPage url="{{LowStockReportPage.url}}" stepKey="navigateToLowStockReportPageWithZeroQuantity"/>
         <fillField selector="{{LowStockProductGridSection.enterProduct}}" userInput="$$createSimpleProduct.name$$" stepKey="fillProductName"/>
         <waitForElementClickable selector="{{LowStockProductGridSection.search($$createSimpleProduct.name$$)}}" stepKey="waitForSearchProduct"/>

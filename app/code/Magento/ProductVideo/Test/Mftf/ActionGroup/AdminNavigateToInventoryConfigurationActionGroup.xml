@@ -9,6 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminNavigateToInventoryConfigurationActionGroup">
+        <annotations>
+            <description>Navigate to Inventory Configuration page to set the quantity and save</description>
+        </annotations>
         <amOnPage url="{{AdminInventoryProductStockOptionsConfigPage.url}}" stepKey="openInventoryConfigPage"/>
         <uncheckOption selector="{{AdminInventoryProductStockOptionsConfigSection.systemValue}}" stepKey="uncheckSystemValue"/>
         <fillField selector="{{AdminInventoryProductStockOptionsConfigSection.notifyQty}}" userInput="2" stepKey="fillNotifyQty"/>
