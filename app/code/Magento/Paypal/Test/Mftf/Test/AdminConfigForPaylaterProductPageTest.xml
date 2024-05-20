@@ -15,6 +15,7 @@
             <description value="Paypal Pay Later Message should display on Catalog Product Page configuration"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5602"/>
+            <group value="3rd_party_integration"/>
             <group value="pr_exclude"/>
         </annotations>
         <before>
@@ -29,9 +30,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
         <!--Enable Pay Later in Admin Product Page -->
-        <actionGroup ref="PaylaterConfigurationActionGroup" stepKey="enablePaypalPaylaterSolution"/>
+        <actionGroup ref="AdminConfigurePaypalPaylaterEnableActionGroup" stepKey="enablePaypalPaylaterSolution"/>
         <!--Check default values selected in dropdown  -->
-        <actionGroup ref="CheckValuesForAdminProductConfigActionGroup" stepKey="verifyDefaultValuesFromDropDown"/>
+        <actionGroup ref="AssertAdminCinfigForDefaultValuesInPaylaterProductPageActionGroup" stepKey="verifyDefaultValuesFromDropDown"/>
         <!--Click on Save configure Button -->
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveAdminConfiguration"/>
     </test>
