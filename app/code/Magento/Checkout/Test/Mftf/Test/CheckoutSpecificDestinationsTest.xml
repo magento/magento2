@@ -74,7 +74,6 @@
             <argument name="country" value="Afghanistan"/>
             <argument name="placeNumber" value="2"/>
         </actionGroup>
-
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
