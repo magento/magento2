@@ -1,16 +1,15 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Sitemap\Test\Unit\Model\ResourceModel\Cms;
 
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\GetUtilityPageIdentifiers;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -21,6 +20,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sitemap\Model\ResourceModel\Cms\Page;
+use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -37,32 +37,37 @@ class PageTest extends TestCase
      *
      * @var Page
      */
-    private $model;
+    private Page $model;
 
     /**
      * @var Context|MockObject
      */
-    private $context;
+    private Context|MockObject $context;
 
     /**
      * @var MetadataPool|MockObject
      */
-    private $metadataPool;
+    private MetadataPool|MockObject $metadataPool;
 
     /**
      * @var EntityManager|MockObject
      */
-    private $entityManager;
+    private EntityManager|MockObject $entityManager;
 
     /**
-     * @var GetUtilityPageIdentifiers|MockObject
+     * @var GetUtilityPageIdentifiers
      */
-    private $getUtilityPageIdentifiers;
+    private GetUtilityPageIdentifiers $getUtilityPageIdentifiers;
 
     /**
      * @var ResourceConnection|MockObject
      */
-    private $resource;
+    private ResourceConnection|MockObject $resource;
+
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private ScopeConfigInterface|MockObject $scopeConfig;
 
     /**
      * @inheritdoc
@@ -83,36 +88,30 @@ class PageTest extends TestCase
         $this->entityManager = $this->getMockBuilder(EntityManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->getUtilityPageIdentifiers = $this->getMockBuilder(GetUtilityPageIdentifiers::class)
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->setMethods(['getValue'])
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->model = $objectManager->getObject(
-            Page::class,
-            [
-                'context' => $this->context,
-                'metadataPool' => $this->metadataPool,
-                'entityManager' => $this->entityManager,
-                'connectionName' => 'default',
-                'getUtilityPageIdentifiers' => $this->getUtilityPageIdentifiers,
-            ]
+            ->getMockForAbstractClass();
+        $this->getUtilityPageIdentifiers = new GetUtilityPageIdentifiers($this->scopeConfig);
+        $this->model = new Page(
+            $this->context,
+            $this->metadataPool,
+            $this->entityManager,
+            'default',
+            $this->getUtilityPageIdentifiers
         );
     }
 
     /**
      * Test Page::getCollection() build correct query to get cms page collection array.
      *
-     * @return void
+     * @dataProvider webDefaultPages
      */
-    public function testGetCollection()
+    public function testGetCollection(array $pageIdentifiers): void
     {
         $pageId = 'testPageId';
         $url = 'testUrl';
         $updatedAt = 'testUpdatedAt';
-        $pageIdentifiers = [
-            'testCmsHomePage|ID' => 'testCmsHomePage',
-            'testCmsNoRoute' => 'testCmsNoRoute',
-            'testCmsNoCookies' => 'testCmsNoCookies',
-        ];
         $storeId = 1;
         $linkField = 'testLinkField';
         $expectedPage = new DataObject();
@@ -159,7 +158,7 @@ class PageTest extends TestCase
                     $this->identicalTo('main_table.identifier NOT IN (?)'),
                     $this->identicalTo(array_values($pageIdentifiers))
                 ],
-                [$this->identicalTo('store_table.store_id IN(?)'), $this->identicalTo([0, $storeId])]
+                [$this->identicalTo('store_table.store_id IN (?)'), $this->identicalTo([0, $storeId])]
             )->willReturnSelf();
 
         $connection = $this->getMockBuilder(AdapterInterface::class)
@@ -185,9 +184,13 @@ class PageTest extends TestCase
             ->method('getEntityConnection')
             ->willReturn($connection);
 
-        $this->getUtilityPageIdentifiers->expects($this->once())
-            ->method('execute')
-            ->willReturn(array_keys($pageIdentifiers));
+        $this->scopeConfig->expects($this->exactly(3))
+            ->method('getValue')
+            ->withConsecutive(
+                [$this->identicalTo('web/default/cms_home_page'), $this->identicalTo(ScopeInterface::SCOPE_STORE)],
+                [$this->identicalTo('web/default/cms_no_route'), $this->identicalTo(ScopeInterface::SCOPE_STORE)],
+                [$this->identicalTo('web/default/cms_no_cookies'), $this->identicalTo(ScopeInterface::SCOPE_STORE)]
+            )->willReturnOnConsecutiveCalls(...array_keys($pageIdentifiers));
 
         $this->resource->expects($this->exactly(2))
             ->method('getTableName')
@@ -207,5 +210,32 @@ class PageTest extends TestCase
         $result = $this->model->getCollection($storeId);
         $resultPage = array_shift($result);
         $this->assertEquals($expectedPage, $resultPage);
+    }
+
+    public function webDefaultPages(): array
+    {
+        return [
+            [
+                [
+                    'testCmsHomePage' => 'testCmsHomePage',
+                    'testCmsNoRoute' => 'testCmsNoRoute',
+                    'testCmsNoCookies' => 'testCmsNoCookies',
+                ]
+            ],
+            [
+                [
+                    'testCmsHomePage|ID' => 'testCmsHomePage',
+                    'testCmsNoRoute|ID' => 'testCmsNoRoute',
+                    'testCmsNoCookies|ID' => 'testCmsNoCookies',
+                ]
+            ],
+            [
+                [
+                    'testCmsHomePage|ID' => 'testCmsHomePage',
+                    'testCmsNoRoute' => 'testCmsNoRoute',
+                    'testCmsNoCookies' => 'testCmsNoCookies',
+                ]
+            ]
+        ];
     }
 }

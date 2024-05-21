@@ -31,6 +31,11 @@ class GetUtilityPageIdentifiers implements GetUtilityPageIdentifiersInterface
 
     /**
      * Get List Page Identifiers.
+     * When two CMS pages have the same URL key (in different stores),
+     * the value stored in configuration is 'url-key|ID'.
+     * This method strips the trailing '|ID' so that this method returns
+     * only configured url-key mathcing the current scope store ID.
+     * See https://github.com/magento/magento2/issues/35001
      *
      * @return array
      */
@@ -50,6 +55,6 @@ class GetUtilityPageIdentifiers implements GetUtilityPageIdentifiersInterface
             ScopeInterface::SCOPE_STORE
         );
 
-        return [$homePageIdentifier, $noRouteIdentifier, $noCookieIdentifier];
+        return [strtok($homePageIdentifier, '|'), strtok($noRouteIdentifier, '|'), strtok($noCookieIdentifier, '|')];
     }
 }
