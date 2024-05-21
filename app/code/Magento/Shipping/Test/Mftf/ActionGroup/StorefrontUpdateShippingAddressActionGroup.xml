@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontUpdateShippingAddressActionGroup">
+        <annotations>
+            <description>Update Shipping address after selecting from drop-down and go to shipping information page.</description>
+        </annotations>
+        <waitForElementClickable selector="{{SingleShippingSection.updateAddress}}" stepKey="waitForUpdateAddress"/>
+        <click selector="{{SingleShippingSection.updateAddress}}" after="waitForUpdateAddress" stepKey="clickUpdateAddress"/>
+        <waitForPageLoad after="clickUpdateAddress" stepKey="waitForClickOnUpdateAddress"/>
+        <waitForElementClickable selector="{{AdminShipmentAddressInformationSection.goToShippingInformation}}" stepKey="waitForClickGoToShippingInformation"/>
+        <click selector="{{AdminShipmentAddressInformationSection.goToShippingInformation}}" stepKey="clickGoToShippingInformation"/>
+        <waitForPageLoad after="clickGoToShippingInformation" stepKey="waitForShippingInformation"/>
+    </actionGroup>
+</actionGroups>

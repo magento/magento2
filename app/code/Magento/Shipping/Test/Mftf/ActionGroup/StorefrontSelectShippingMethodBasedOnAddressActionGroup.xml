@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontSelectShippingMethodBasedOnAddressActionGroup">
+        <annotations>
+            <description>Select shipping method based on the address and shipping method.</description>
+        </annotations>
+        <waitForElementClickable selector="{{AdminShipmentAddressInformationSection.selectShippingMethodBasedOnAddress('Culver City', 'Federal Express', 'Ground')}}" stepKey="waitForSelectShippingMethodBasedOnAddress"/>
+            <click selector="{{AdminShipmentAddressInformationSection.selectShippingMethodBasedOnAddress('Culver City', 'Federal Express', 'Ground')}}" stepKey="clickToSelectFederalExpressMethod"/>
+            <click selector="{{AdminShipmentAddressInformationSection.selectShippingMethodBasedOnAddress('Germany', 'DHL', 'Express easy')}}" stepKey="clickToSelectDHLMethod"/>
+            <click selector="{{AdminShipmentAddressInformationSection.selectShippingMethodBasedOnAddress('London', 'United Parcel Service', 'UPS Worldwide Expedited')}}" stepKey="clickToSelectUPSMethod"/>
+            <click selector="{{AdminShipmentAddressInformationSection.selectShippingMethodBasedOnAddress('New York', 'United States Postal Service', 'Library Mail Parcel')}}" stepKey="clickToSelectUSPSMethod"/>
+    </actionGroup>
+</actionGroups>
