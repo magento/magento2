@@ -32,7 +32,9 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Allows customer quickly to reorder previously added products and put them to the Cart
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Reorder
 {
