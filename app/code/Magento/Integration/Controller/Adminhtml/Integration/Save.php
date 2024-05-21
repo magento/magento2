@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
@@ -30,6 +33,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
      *
      * @return SecurityCookie
      * @deprecated 100.1.0
+     * @see we don't recommend this approach anymore
      */
     private function getSecurityCookie()
     {
@@ -76,7 +80,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
             $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
             $this->_getSession()->setIntegrationData($this->getRequest()->getPostValue());
             $this->_redirectOnSaveError();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirectOnSaveError();
         } catch (\Exception $e) {
@@ -148,6 +152,8 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
      *
      * @param array $integrationData
      * @return void
+     * @throws IntegrationException
+     * @throws LocalizedException
      */
     private function processData($integrationData)
     {
@@ -157,7 +163,13 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
             if (!isset($data['resource'])) {
                 $integrationData['resource'] = [];
             }
+
             $integrationData = array_merge($integrationData, $data);
+
+            if (!empty($integrationData[Info::DATA_IDENTITY_LINK_URL])) {
+                $this->validateIdentityLinkURL($integrationData[Info::DATA_IDENTITY_LINK_URL]);
+            }
+
             if (!isset($integrationData[Info::DATA_ID])) {
                 $integration = $this->_integrationService->create($integrationData);
             } else {
@@ -181,6 +193,20 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
             }
         } else {
             $this->messageManager->addError(__('The integration was not saved.'));
+        }
+    }
+
+    /**
+     * To validate the provided Identity Link URL
+     *
+     * @param string $url
+     * @return void
+     * @throws LocalizedException
+     */
+    private function validateIdentityLinkURL(string $url): void
+    {
+        if (!$this->urlValidator->isValid($url)) {
+            throw new LocalizedException(__('Invalid Identity Link URL'));
         }
     }
 }
