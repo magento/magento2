@@ -166,8 +166,10 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
 
             $integrationData = array_merge($integrationData, $data);
 
-            if (!empty($integrationData[Info::DATA_IDENTITY_LINK_URL])) {
-                $this->validateIdentityLinkURL($integrationData[Info::DATA_IDENTITY_LINK_URL]);
+            // Check if the Identity Link URL field is not empty and then validate it
+            $url = $integrationData[Info::DATA_IDENTITY_LINK_URL] ?? null;
+            if (!empty($url) && !$this->urlValidator->isValid($url)) {
+                throw new LocalizedException(__('Invalid Identity Link URL'));
             }
 
             if (!isset($integrationData[Info::DATA_ID])) {
