@@ -197,18 +197,4 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
             $this->messageManager->addError(__('The integration was not saved.'));
         }
     }
-
-    /**
-     * To validate the provided Identity Link URL
-     *
-     * @param string $url
-     * @return void
-     * @throws LocalizedException
-     */
-    private function validateIdentityLinkURL(string $url): void
-    {
-        if (!$this->urlValidator->isValid($url)) {
-            throw new LocalizedException(__('Invalid Identity Link URL'));
-        }
-    }
 }
