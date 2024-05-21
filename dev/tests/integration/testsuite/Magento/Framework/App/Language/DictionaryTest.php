@@ -55,24 +55,24 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function dictionaryDataProvider()
+    public static function dictionaryDataProvider()
     {
         return [
             // First case with multiple inheritance, the obtained dictionary is en_AU
-            'a case with multiple inheritance' => $this->getDataMultipleInheritance(),
+            'a case with multiple inheritance' => self::getDataMultipleInheritance(),
             // Second case with inheritance of package with the same language code
-            'a case with inheritance similar language code' => $this->getDataInheritanceWitSimilarCode(),
+            'a case with inheritance similar language code' => self::getDataInheritanceWitSimilarCode(),
             // Third case with circular inheritance, when two packages depend on each other
-            'a case with circular inheritance' => $this->getDataCircularInheritance(),
+            'a case with circular inheritance' => self::getDataCircularInheritance(),
             // Fourth case with multiple inheritance from dev docs
-            'a case with multiple inheritance from dev docs' => $this->getDataMultipleInheritanceFromDevDocs()
+            'a case with multiple inheritance from dev docs' => self::getDataMultipleInheritanceFromDevDocs()
         ];
     }
 
     /**
      * @return array
      */
-    private function getDataMultipleInheritance()
+    private static function getDataMultipleInheritance()
     {
         return [
             // Dictionary that will be requested
@@ -94,7 +94,7 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    private function getDataInheritanceWitSimilarCode()
+    private static function getDataInheritanceWitSimilarCode()
     {
         return [
             // Dictionary that will be requested
@@ -111,7 +111,7 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    private function getDataCircularInheritance()
+    private static function getDataCircularInheritance()
     {
         return [
             // Dictionary that will be requested
@@ -150,7 +150,7 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    private function getDataMultipleInheritanceFromDevDocs()
+    private static function getDataMultipleInheritanceFromDevDocs()
     {
         return [
             // Dictionary that will be requested

@@ -120,7 +120,7 @@ class InlineEditTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function inlineEditParametersDataProvider(): array
+    public static function inlineEditParametersDataProvider(): array
     {
         return [
             [

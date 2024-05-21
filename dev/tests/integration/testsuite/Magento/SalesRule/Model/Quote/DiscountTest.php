@@ -184,7 +184,7 @@ class DiscountTest extends TestCase
     /**
      * @return array
      */
-    public function bundleProductWithDynamicPriceAndCartPriceRuleDataProvider(): array
+    public static function bundleProductWithDynamicPriceAndCartPriceRuleDataProvider(): array
     {
         return [
             [

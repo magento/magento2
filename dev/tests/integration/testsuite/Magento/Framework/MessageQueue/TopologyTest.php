@@ -82,7 +82,7 @@ class TopologyTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function exchangeDataProvider(): array
+    public static function exchangeDataProvider(): array
     {
         $virtualHost = defined('RABBITMQ_VIRTUALHOST') ? RABBITMQ_VIRTUALHOST : Amqp::DEFAULT_VIRTUALHOST;
         return [

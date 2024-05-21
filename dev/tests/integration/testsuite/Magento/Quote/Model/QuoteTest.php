@@ -485,7 +485,7 @@ class QuoteTest extends TestCase
      *
      * @return array
      */
-    public function giftMessageDataProvider(): array
+    public static function giftMessageDataProvider(): array
     {
         return [
             [

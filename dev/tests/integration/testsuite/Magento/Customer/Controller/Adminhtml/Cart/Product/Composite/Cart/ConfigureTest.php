@@ -106,7 +106,7 @@ class ConfigureTest extends AbstractBackendController
      *
      * @return array
      */
-    public function configureWithQuoteProvider(): array
+    public static function configureWithQuoteProvider(): array
     {
         return [
             'with_quote_item_id' => [

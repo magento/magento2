@@ -181,7 +181,7 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
      *
      * @return array[]
      */
-    public function keyFactorDataProvider()
+    public static function keyFactorDataProvider()
     {
         $salt = Bootstrap::getObjectManager()->get(DeploymentConfig::class)
             ->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);

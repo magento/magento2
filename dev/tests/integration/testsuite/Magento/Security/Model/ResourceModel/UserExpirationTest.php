@@ -70,7 +70,7 @@ class UserExpirationTest extends TestCase
      *
      * @return array
      */
-    public function userExpirationSaveDataProvider(): array
+    public static function userExpirationSaveDataProvider(): array
     {
         return [
             'default' => [

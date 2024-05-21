@@ -121,7 +121,7 @@ class CompositeTest extends TestCase
      *
      * @return array
      */
-    public function renderConfigureResultExceptionProvider(): array
+    public static function renderConfigureResultExceptionProvider(): array
     {
         return [
             'error_true' => [

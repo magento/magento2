@@ -106,7 +106,7 @@ class BundleTest extends TestCase
     /**
      * @return array
      */
-    public function isSalableForStockStatusProvider(): array
+    public static function isSalableForStockStatusProvider(): array
     {
         return [
             'is_salable' => [
@@ -139,7 +139,7 @@ class BundleTest extends TestCase
     /**
      * @return array
      */
-    public function isSalableForCustomizeButtonProvider(): array
+    public static function isSalableForCustomizeButtonProvider(): array
     {
         return [
             'is_salable' => [

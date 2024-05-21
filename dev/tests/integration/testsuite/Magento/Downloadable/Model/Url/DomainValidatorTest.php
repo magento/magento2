@@ -72,7 +72,7 @@ class DomainValidatorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function isValidDataProvider()
+    public static function isValidDataProvider()
     {
         return [
             ['http://example.com', ['example.co'], false],

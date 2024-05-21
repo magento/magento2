@@ -54,7 +54,7 @@ class StockTest extends AbstractAlertTest
     /**
      * @return array
      */
-    public function alertsDataProvider(): array
+    public static function alertsDataProvider(): array
     {
         return [
             'without_store_id_filter' => [
@@ -84,7 +84,7 @@ class StockTest extends AbstractAlertTest
     /**
      * @return array
      */
-    public function storeProvider(): array
+    public static function storeProvider(): array
     {
         return [
             'without_store_id_param' => [

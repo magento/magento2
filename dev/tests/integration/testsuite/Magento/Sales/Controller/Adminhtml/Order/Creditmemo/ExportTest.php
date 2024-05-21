@@ -70,7 +70,7 @@ class ExportTest extends ExportBase
     /**
      * @return array
      */
-    public function exportCreditmemoDataProvider(): array
+    public static function exportCreditmemoDataProvider(): array
     {
         return [
             'creditmemo_grid_in_csv' => [

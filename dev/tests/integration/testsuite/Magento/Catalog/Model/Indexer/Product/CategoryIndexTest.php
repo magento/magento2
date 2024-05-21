@@ -102,7 +102,7 @@ class CategoryIndexTest extends TestCase
     /**
      * @return array
      */
-    public function assignCategoriesDataProvider(): array
+    public static function assignCategoriesDataProvider(): array
     {
         return [
             'assign_to_category' => [
@@ -140,7 +140,7 @@ class CategoryIndexTest extends TestCase
     /**
      * @return array
      */
-    public function assignProductsDataProvider(): array
+    public static function assignProductsDataProvider(): array
     {
         return [
             'assign_product_to_category' => [

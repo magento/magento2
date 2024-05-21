@@ -178,7 +178,7 @@ class ViewTest extends AbstractController
     /**
      * @return array
      */
-    public function productVisibilityDataProvider(): array
+    public static function productVisibilityDataProvider(): array
     {
         return [
             'catalog_search' => [Visibility::VISIBILITY_BOTH],

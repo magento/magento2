@@ -130,7 +130,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getGenderFilterValueDataProvider()
+    public static function getGenderFilterValueDataProvider()
     {
         return ['male' => ['$genderFilterValue' => 1], 'female' => ['$genderFilterValue' => 2]];
     }

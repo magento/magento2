@@ -112,7 +112,7 @@ class InitialConfigSourceTest extends TestCase
     /**
      * @return array
      */
-    public function getDefaultDataProvider(): array
+    public static function getDefaultDataProvider(): array
     {
         return [
             [

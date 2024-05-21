@@ -282,7 +282,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function createDataProvider()
+    public static function createDataProvider()
     {
         return [
             'invalidZipRange' => [

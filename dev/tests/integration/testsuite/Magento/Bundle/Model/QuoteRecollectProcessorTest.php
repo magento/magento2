@@ -70,7 +70,7 @@ class QuoteRecollectProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function getBundleOptionsDataProvider(): array
+    public static function getBundleOptionsDataProvider(): array
     {
         return [
             'product option changed' => [

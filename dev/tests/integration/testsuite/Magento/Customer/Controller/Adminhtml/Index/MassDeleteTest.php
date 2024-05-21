@@ -129,7 +129,7 @@ class MassDeleteTest extends AbstractBackendController
      *
      * @return array
      */
-    public function failedRequestDataProvider(): array
+    public static function failedRequestDataProvider(): array
     {
         return [
             [
@@ -155,7 +155,7 @@ class MassDeleteTest extends AbstractBackendController
      *
      * @return array
      */
-    public function successRequestDataProvider(): array
+    public static function successRequestDataProvider(): array
     {
         return [
             [

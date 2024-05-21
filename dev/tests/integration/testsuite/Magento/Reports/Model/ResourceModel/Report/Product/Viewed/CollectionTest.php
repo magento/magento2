@@ -96,7 +96,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function tableForPeriodDataProvider()
+    public static function tableForPeriodDataProvider()
     {
         $dateFrom = '2019-10-15';
         $dateYearBefore = date('Y-m-d', strtotime($dateFrom . ' -1 year'));

@@ -111,7 +111,7 @@ class QtyTest extends TestCase
      *
      * @return array
      */
-    public function getQtyValueProvider(): array
+    public static function getQtyValueProvider(): array
     {
         return [
             'with_qty' => [

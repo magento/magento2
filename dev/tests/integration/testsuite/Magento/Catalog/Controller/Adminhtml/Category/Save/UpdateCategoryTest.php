@@ -62,7 +62,7 @@ class UpdateCategoryTest extends AbstractSaveCategoryTest
     /**
      * @return array
      */
-    public function categoryDataProvider(): array
+    public static function categoryDataProvider(): array
     {
         return [
             [

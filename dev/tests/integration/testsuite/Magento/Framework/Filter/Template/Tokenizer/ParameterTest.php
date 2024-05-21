@@ -60,7 +60,7 @@ class ParameterTest extends TestCase
      *
      * @return array
      */
-    public function tokenizeDataProvider(): array
+    public static function tokenizeDataProvider(): array
     {
         return [
             [
@@ -101,7 +101,7 @@ class ParameterTest extends TestCase
     /**
      * @return array
      */
-    public function getValueDataProvider()
+    public static function getValueDataProvider()
     {
         return [
             [

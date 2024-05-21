@@ -76,7 +76,7 @@ class ImagesTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function simpleProductImagesDataProvider(): array
+    public static function simpleProductImagesDataProvider(): array
     {
         return [
             'simple_product_with_jpg_image' => [

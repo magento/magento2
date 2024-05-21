@@ -98,7 +98,7 @@ class RepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function errorProvider(): array
+    public static function errorProvider(): array
     {
         return [
             'with_invalid_attribute_code' => [

@@ -71,7 +71,7 @@ class CreateCustomOptionsTest extends AbstractBackendController
      *
      * @return array
      */
-    public function productWithNewOptionsDataProvider(): array
+    public static function productWithNewOptionsDataProvider(): array
     {
         return [
             'required_options' => [

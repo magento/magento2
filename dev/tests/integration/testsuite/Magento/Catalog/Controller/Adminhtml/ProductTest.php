@@ -290,7 +290,7 @@ class ProductTest extends AbstractBackendController
      *
      * @return array
      */
-    public function saveActionWithAlreadyExistingUrlKeyDataProvider()
+    public static function saveActionWithAlreadyExistingUrlKeyDataProvider()
     {
         return [
             [
@@ -369,7 +369,7 @@ class ProductTest extends AbstractBackendController
      *
      * @return array
      */
-    public function saveActionTierPriceDataProvider()
+    public static function saveActionTierPriceDataProvider()
     {
         return [
             [
@@ -648,7 +648,7 @@ class ProductTest extends AbstractBackendController
      *
      * @return array
      */
-    public function saveActionWithInvalidUrlKeyDataProvider()
+    public static function saveActionWithInvalidUrlKeyDataProvider()
     {
         return [
             [

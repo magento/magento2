@@ -141,7 +141,7 @@ class SaveTest extends AbstractInvoiceControllerTest
     /**
      * @return array
      */
-    public function invoiceDataProvider(): array
+    public static function invoiceDataProvider(): array
     {
         return [
             'with_comment_message' => [

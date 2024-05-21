@@ -42,7 +42,7 @@ class ExportTest extends ExportBase
     /**
      * @return array
      */
-    public function exportOrderDataProvider(): array
+    public static function exportOrderDataProvider(): array
     {
         return [
             'order_grid_in_csv' => ['format' => ExportBase::CSV_FORMAT],

@@ -168,7 +168,7 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function updateUpdateSetInStockDataProvider(): array
+    public static function updateUpdateSetInStockDataProvider(): array
     {
         return [
             'manage_stock_yes' => [
@@ -222,7 +222,7 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function updateLowStockDateDataProvider(): array
+    public static function updateLowStockDateDataProvider(): array
     {
         return [
             'manage_stock_yes' => [

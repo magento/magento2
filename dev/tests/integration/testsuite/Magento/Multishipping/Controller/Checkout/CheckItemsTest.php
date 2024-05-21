@@ -143,7 +143,7 @@ class CheckItemsTest extends \Magento\TestFramework\TestCase\AbstractController
      * Variations of request data.
      * @returns array
      */
-    public function requestDataProvider(): array
+    public static function requestDataProvider(): array
     {
         return [
             [

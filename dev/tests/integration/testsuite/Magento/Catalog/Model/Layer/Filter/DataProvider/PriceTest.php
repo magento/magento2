@@ -90,7 +90,7 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function getRangeItemCountsDataProvider(): array
+    public static function getRangeItemCountsDataProvider(): array
     {
         return [
             // These are $inputRange, [$expectedItemCounts] values
@@ -154,7 +154,7 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function getAdditionalRequestDataDataProvider(): array
+    public static function getAdditionalRequestDataDataProvider(): array
     {
         return [
             'with_prior_filters' => [

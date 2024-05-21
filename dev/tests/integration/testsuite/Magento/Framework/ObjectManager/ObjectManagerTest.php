@@ -46,7 +46,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    protected $_numerableClasses = [
+    protected static $_numerableClasses = [
         0 => \Magento\Framework\ObjectManager\TestAsset\ConstructorNoArguments::class,
         1 => \Magento\Framework\ObjectManager\TestAsset\ConstructorOneArgument::class,
         2 => \Magento\Framework\ObjectManager\TestAsset\ConstructorTwoArguments::class,
@@ -65,7 +65,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    protected $_numerableProperties = [
+    protected static $_numerableProperties = [
         1 => '_one',
         2 => '_two',
         3 => '_three',
@@ -100,7 +100,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function newInstanceDataProvider()
+    public static function newInstanceDataProvider()
     {
         $data = [
             'basic model' => [
@@ -113,10 +113,10 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        foreach ($this->_numerableClasses as $number => $className) {
+        foreach (self::$_numerableClasses as $number => $className) {
             $properties = [];
             for ($i = 1; $i <= $number; $i++) {
-                $propertyName = $this->_numerableProperties[$i];
+                $propertyName = self::$_numerableProperties[$i];
                 $properties[$propertyName] = self::TEST_CLASS;
             }
             $data[$number . ' arguments'] = ['$actualClassName' => $className, '$properties' => $properties];

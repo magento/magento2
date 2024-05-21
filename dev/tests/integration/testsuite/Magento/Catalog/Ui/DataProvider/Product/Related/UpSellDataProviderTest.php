@@ -37,7 +37,7 @@ class UpSellDataProviderTest extends AbstractRelationsDataProviderTest
     /**
      * @return array
      */
-    public function productDataProvider(): array
+    public static function productDataProvider(): array
     {
         return [
             'without_store_code' => [

@@ -42,7 +42,7 @@ class WildcardTopicTest extends QueueTestCaseAbstract
         }
     }
 
-    public function wildCardTopicsDataProvider()
+    public static function wildCardTopicsDataProvider()
     {
         return [
             'segment1.segment2.segment3.wildcard' => [

@@ -63,7 +63,7 @@ class DropdownAttributeTest extends AbstractAttributeTest
     /**
      * @return array
      */
-    public function attributeWithTagsProvider(): array
+    public static function attributeWithTagsProvider(): array
     {
         return [
             'allow_html_tags' => [

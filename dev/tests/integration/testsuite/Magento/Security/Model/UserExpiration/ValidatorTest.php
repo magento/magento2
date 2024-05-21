@@ -71,7 +71,7 @@ class ValidatorTest extends TestCase
      *
      * @return array
      */
-    public function validateUserExpiresAtDataProvider(): array
+    public static function validateUserExpiresAtDataProvider(): array
     {
         return [
             'default' => [

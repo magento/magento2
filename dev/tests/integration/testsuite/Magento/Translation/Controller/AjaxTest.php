@@ -36,7 +36,7 @@ class AjaxTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @return array
      */
-    public function indexActionDataProvider(): array
+    public static function indexActionDataProvider(): array
     {
         return [
             [

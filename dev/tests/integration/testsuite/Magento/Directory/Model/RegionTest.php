@@ -60,7 +60,7 @@ class RegionTest extends TestCase
      *
      * @return array
      */
-    public function getCountryIdDataProvider(): array
+    public static function getCountryIdDataProvider(): array
     {
         return [
             ['countryId' => 'US'],

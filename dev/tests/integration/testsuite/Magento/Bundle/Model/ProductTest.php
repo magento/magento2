@@ -205,7 +205,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function stockConfigDataProvider(): array
+    public static function stockConfigDataProvider(): array
     {
         $qtyVars = [0, 10];
         $isInStockVars = [
@@ -231,7 +231,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                                 . " isInStock: {$isInStock}"
                                 . " manageStock: {$manageStock}"
                                 . " backorders: {$backorders}";
-                            $isSalable = $this->checkIsSalable(
+                            $isSalable = self::checkIsSalable(
                                 $selectionQty,
                                 $qty,
                                 $isInStock,
@@ -312,7 +312,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider(): array
+    public static function shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider(): array
     {
         return [
             'all options are required' => [
@@ -393,7 +393,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @return bool
      * @see \Magento\Bundle\Model\ResourceModel\Selection\Collection::addQuantityFilter
      */
-    private function checkIsSalable(
+    private static function checkIsSalable(
         float $selectionQty,
         float $qty,
         int $isInStock,

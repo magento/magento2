@@ -76,7 +76,7 @@ class DeleteAssetsTest extends TestCase
      *
      * @return array
      */
-    public function matchingPathsProvider(): array
+    public static function matchingPathsProvider(): array
     {
         return [
             [['testDirectory/path.jpg']],
@@ -90,7 +90,7 @@ class DeleteAssetsTest extends TestCase
      *
      * @return array
      */
-    public function notMatchingPathsProvider(): array
+    public static function notMatchingPathsProvider(): array
     {
         return [
             [['testDirectory/path.png']],

@@ -86,7 +86,7 @@ class InlineParserTest extends TestCase
      *
      * @return array
      */
-    public function processAjaxPostDataProvider(): array
+    public static function processAjaxPostDataProvider(): array
     {
         return [
             ['original text 1', 'translated text 1', Area::AREA_ADMINHTML],
@@ -126,7 +126,7 @@ class InlineParserTest extends TestCase
      *
      * @return array
      */
-    public function allowedAreasDataProvider(): array
+    public static function allowedAreasDataProvider(): array
     {
         return [
             [Area::AREA_ADMINHTML],

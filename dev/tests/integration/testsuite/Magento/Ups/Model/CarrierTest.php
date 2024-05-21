@@ -299,7 +299,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function collectRatesDataProvider()
+    public static function collectRatesDataProvider()
     {
         return [
             [0, 0, 1, '03', 136.09 ],

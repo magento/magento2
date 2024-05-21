@@ -138,7 +138,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function updateAttributesDataProvider()
+    public static function updateAttributesDataProvider()
     {
         return [
             [

@@ -51,7 +51,7 @@ class LegacyDirectiveTest extends TestCase
         self::assertEquals($expect, $result);
     }
 
-    public function useCaseProvider()
+    public static function useCaseProvider()
     {
         return [
             'protected method' => ['{{cool "blah" foo bar baz=bash}}', [], 'value1: cool: "blah" foo bar baz=bash'],

@@ -73,7 +73,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getUrlDataProvider(): array
+    public static function getUrlDataProvider(): array
     {
         /** @var $escaper Escaper */
         $escaper = Bootstrap::getObjectManager()->get(Escaper::class);
@@ -162,7 +162,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getSecretKeyDataProvider(): array
+    public static function getSecretKeyDataProvider(): array
     {
         /** @var $encryptor EncryptorInterface */
         $encryptor = Bootstrap::getObjectManager()->get(EncryptorInterface::class);

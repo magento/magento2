@@ -130,7 +130,7 @@ class SortingTest extends TestCase
     /**
      * @return array
      */
-    public function productListSortOrderDataProvider(): array
+    public static function productListSortOrderDataProvider(): array
     {
         return [
             'default_order_price_asc' => [
@@ -252,7 +252,7 @@ class SortingTest extends TestCase
     /**
      * @return array
      */
-    public function productListSortOrderDataProviderOnStoreView(): array
+    public static function productListSortOrderDataProviderOnStoreView(): array
     {
         return [
             'default_order_price_asc' => [
@@ -426,7 +426,7 @@ class SortingTest extends TestCase
      *
      * @return array
      */
-    public function productListWithOutOfStockSortOrderDataProvider(): array
+    public static function productListWithOutOfStockSortOrderDataProvider(): array
     {
         return [
             'default_order_price_asc' => [

@@ -376,7 +376,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function filterDataProvider(): array
+    public static function filterDataProvider(): array
     {
         return [
             ['en_US', 1, ['created_at' => ['01/02/1999', '01/03/1999']]],

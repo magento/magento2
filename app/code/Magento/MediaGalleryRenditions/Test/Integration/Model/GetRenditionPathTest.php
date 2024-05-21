@@ -62,7 +62,7 @@ class GetRenditionPathTest extends TestCase
     /**
      * @return array
      */
-    public function getImageProvider(): array
+    public static function getImageProvider(): array
     {
         return [
             'return_original_path' => [

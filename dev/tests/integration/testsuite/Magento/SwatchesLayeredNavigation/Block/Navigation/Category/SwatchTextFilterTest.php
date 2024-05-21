@@ -37,7 +37,7 @@ class SwatchTextFilterTest extends AbstractFiltersTest
     /**
      * @return array
      */
-    public function getFiltersWithCustomAttributeDataProvider(): array
+    public static function getFiltersWithCustomAttributeDataProvider(): array
     {
         return [
             'not_used_in_navigation' => [
@@ -93,7 +93,7 @@ class SwatchTextFilterTest extends AbstractFiltersTest
     /**
      * @return array
      */
-    public function getActiveFiltersWithCustomAttributeDataProvider(): array
+    public static function getActiveFiltersWithCustomAttributeDataProvider(): array
     {
         return [
             'filter_by_first_option_in_products_with_first_option' => [

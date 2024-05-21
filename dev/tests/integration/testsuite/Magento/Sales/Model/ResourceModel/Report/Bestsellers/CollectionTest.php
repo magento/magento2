@@ -64,7 +64,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function tableForPeriodDataProvider()
+    public static function tableForPeriodDataProvider()
     {
         $dateNow = date('Y-m-d', time());
         $dateYearAgo = date('Y-m-d', strtotime($dateNow . ' -1 year'));

@@ -95,7 +95,7 @@ class CategoryUrlRewriteTest extends AbstractController
     /**
      * @return array
      */
-    public function categoryRewriteProvider(): array
+    public static function categoryRewriteProvider(): array
     {
         return [
             [

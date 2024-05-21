@@ -29,7 +29,7 @@ class LayoutUpdateConverterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->converter->convert($value));
     }
 
-    public function convertDataProvider()
+    public static function convertDataProvider()
     {
         // @codingStandardsIgnoreStart
         $beginning = '<body><referenceContainer name="content"><block class="Magento\CatalogWidget\Block\Product\ProductsList" name="23e38bbfa7cc6474454570e51aeffcc3" template="Magento_CatalogWidget::product/widget/content/grid.phtml"><action method="setData"><argument name="name" xsi:type="string">show_pager</argument><argument name="value" xsi:type="string">0</argument></action><action method="setData"><argument name="name" xsi:type="string">products_count</argument><argument name="value" xsi:type="string">10</argument></action><action method="setData">';

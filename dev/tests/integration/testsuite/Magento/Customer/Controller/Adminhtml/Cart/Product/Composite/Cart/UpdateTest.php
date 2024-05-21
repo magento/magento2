@@ -143,7 +143,7 @@ class UpdateTest extends AbstractBackendController
      *
      * @return array
      */
-    public function updateWithQuoteProvider(): array
+    public static function updateWithQuoteProvider(): array
     {
         return [
             'with_quote_item_id' => [
@@ -257,7 +257,7 @@ class UpdateTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function bundleOptionQuantityProvider(): array
+    public static function bundleOptionQuantityProvider(): array
     {
         return [
             'Quantity, less than allowed in the Shopping Cart' => [

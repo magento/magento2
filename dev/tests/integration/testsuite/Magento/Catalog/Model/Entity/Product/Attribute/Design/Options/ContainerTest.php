@@ -50,7 +50,7 @@ class ContainerTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionTextDataProvider(): array
+    public static function getOptionTextDataProvider(): array
     {
         return [
             'with_value' => [

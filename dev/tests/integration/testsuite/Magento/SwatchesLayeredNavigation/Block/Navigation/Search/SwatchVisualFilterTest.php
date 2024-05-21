@@ -40,7 +40,7 @@ class SwatchVisualFilterTest extends CategorySwatchVisualTest
     /**
      * @return array
      */
-    public function getFiltersWithCustomAttributeDataProvider(): array
+    public static function getFiltersWithCustomAttributeDataProvider(): array
     {
         $dataProvider = parent::getFiltersWithCustomAttributeDataProvider();
 

@@ -81,7 +81,7 @@ class ValidateImportTest extends \Magento\TestFramework\TestCase\AbstractBackend
     /**
      * @return array
      */
-    public function validationDataProvider(): array
+    public static function validationDataProvider(): array
     {
         return [
             [

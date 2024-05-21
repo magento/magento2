@@ -243,7 +243,7 @@ class AddressTest extends TestCase
     /**
      * @return array
      */
-    public function unsetAddressIdDataProvider()
+    public static function unsetAddressIdDataProvider()
     {
         return [[true], [false]];
     }
@@ -373,7 +373,7 @@ class AddressTest extends TestCase
      *
      * @return array
      */
-    public function appliedTaxesDataProvider()
+    public static function appliedTaxesDataProvider()
     {
         return [
             ['test', 'test'],

@@ -111,7 +111,7 @@ class ProductTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function saveNewProductDataProvider(): array
+    public static function saveNewProductDataProvider(): array
     {
         return [
             'with_different_prices_and_qty' => [
@@ -180,7 +180,7 @@ class ProductTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function saveExistProductDataProvider(): array
+    public static function saveExistProductDataProvider(): array
     {
         return [
             'added_new_option' => [

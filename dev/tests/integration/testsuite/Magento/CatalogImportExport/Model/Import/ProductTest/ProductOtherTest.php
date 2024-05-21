@@ -464,7 +464,7 @@ class ProductOtherTest extends ProductTestBase
     /**
      * @return array
      */
-    public function importWithJsonAndMarkupTextAttributeDataProvider(): array
+    public static function importWithJsonAndMarkupTextAttributeDataProvider(): array
     {
         return [
             'import of attribute with json' => [

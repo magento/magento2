@@ -52,7 +52,7 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function prepareInvoiceConfigurableProductDataProvider()
+    public static function prepareInvoiceConfigurableProductDataProvider()
     {
         return [
             'full invoice' => [2],
@@ -82,7 +82,7 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function prepareInvoiceSimpleProductDataProvider()
+    public static function prepareInvoiceSimpleProductDataProvider()
     {
         return [
             'full invoice' => [2],
@@ -129,7 +129,7 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function bundleProductQtyOrderedDataProvider(): array
+    public static function bundleProductQtyOrderedDataProvider(): array
     {
         return [
             'Create invoice w/o predefined qty' => [

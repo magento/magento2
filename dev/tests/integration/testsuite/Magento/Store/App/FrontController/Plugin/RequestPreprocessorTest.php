@@ -112,7 +112,7 @@ class RequestPreprocessorTest extends \Magento\TestFramework\TestCase\AbstractCo
     /**
      * @return array
      */
-    public function autoRedirectToBaseURLDataProvider(): array
+    public static function autoRedirectToBaseURLDataProvider(): array
     {
         $baseConfig = [
             'web/unsecure/base_url' => 'http://magento.com/us/',

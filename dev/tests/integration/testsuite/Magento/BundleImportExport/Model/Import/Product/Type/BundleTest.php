@@ -267,7 +267,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @return array
      */
-    public function valuesDataProvider(): array
+    public static function valuesDataProvider(): array
     {
         return [
             [
@@ -344,7 +344,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @return array
      */
-    public function shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider(): array
+    public static function shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider(): array
     {
         return [
             'all options are required' => [

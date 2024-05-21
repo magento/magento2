@@ -140,7 +140,7 @@ abstract class CombinationAbstract extends TestCase
      *
      * @return array
      */
-    public function tierPricesForAllCustomerGroupsDataProvider(): array
+    public static function tierPricesForAllCustomerGroupsDataProvider(): array
     {
         return [
             'fixed_tier_price_with_qty_1' => [
@@ -191,7 +191,7 @@ abstract class CombinationAbstract extends TestCase
      *
      * @return array
      */
-    public function tierPricesForLoggedCustomerGroupDataProvider(): array
+    public static function tierPricesForLoggedCustomerGroupDataProvider(): array
     {
         return [
             'fixed_tier_price_with_qty_1' => [
@@ -218,7 +218,7 @@ abstract class CombinationAbstract extends TestCase
      *
      * @return array
      */
-    public function catalogRulesDataProvider(): array
+    public static function catalogRulesDataProvider(): array
     {
         return [
             'fixed_catalog_rule_price_more_than_special_price' => [
@@ -305,7 +305,7 @@ abstract class CombinationAbstract extends TestCase
      *
      * @return array
      */
-    public function percentCustomOptionsDataProvider(): array
+    public static function percentCustomOptionsDataProvider(): array
     {
         return [
             'percent_option_for_product_without_special_price' => [

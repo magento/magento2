@@ -102,7 +102,7 @@ class ImageUploaderTest extends TestCase
     /**
      * @return array
      */
-    public function saveFileToTmpDirProvider(): array
+    public static function saveFileToTmpDirProvider(): array
     {
         return [
             'image_default_name' => [

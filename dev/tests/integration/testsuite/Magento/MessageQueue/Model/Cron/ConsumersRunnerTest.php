@@ -150,7 +150,7 @@ class ConsumersRunnerTest extends TestCase
     /**
      * @return array
      */
-    public function runDataProvider()
+    public static function runDataProvider()
     {
         return [
           [

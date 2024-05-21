@@ -40,7 +40,7 @@ class SwatchTextFilterTest extends CategorySwatchTextFilterTest
     /**
      * @return array
      */
-    public function getFiltersWithCustomAttributeDataProvider(): array
+    public static function getFiltersWithCustomAttributeDataProvider(): array
     {
         $dataProvider = parent::getFiltersWithCustomAttributeDataProvider();
 

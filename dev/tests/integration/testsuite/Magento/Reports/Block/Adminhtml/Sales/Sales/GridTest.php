@@ -88,7 +88,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getCountTotalsDataProvider()
+    public static function getCountTotalsDataProvider()
     {
         $time = time();
         return [

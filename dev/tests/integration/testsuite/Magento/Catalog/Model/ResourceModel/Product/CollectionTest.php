@@ -244,7 +244,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function addIsSaleableAttributeToSortDataProvider(): array
+    public static function addIsSaleableAttributeToSortDataProvider(): array
     {
         return [
             [
@@ -280,7 +280,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function addPriceAttributeToSortDataProvider(): array
+    public static function addPriceAttributeToSortDataProvider(): array
     {
         return [
             [
@@ -349,7 +349,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function addAttributeTierPriceToFilterDataProvider(): array
+    public static function addAttributeTierPriceToFilterDataProvider(): array
     {
         return [
             'condition is array' => [['eq' => 8]],
@@ -376,7 +376,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function addAttributeIsSaleableToFilterDataProvider(): array
+    public static function addAttributeIsSaleableToFilterDataProvider(): array
     {
         return [
             'condition is array' => [['eq' => 1]],

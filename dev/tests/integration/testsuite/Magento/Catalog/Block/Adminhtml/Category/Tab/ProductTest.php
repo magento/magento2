@@ -102,7 +102,7 @@ class ProductTest extends TestCase
      *
      * @return array
      */
-    public function optionsFilterProvider(): array
+    public static function optionsFilterProvider(): array
     {
         return [
             'filter_yes' => [
@@ -201,7 +201,7 @@ class ProductTest extends TestCase
      *
      * @return array
      */
-    public function sortingOptionsProvider(): array
+    public static function sortingOptionsProvider(): array
     {
         return [
             'default_store_sort_name_asc' => [

@@ -77,7 +77,7 @@ class LoginPostTest extends AbstractController
     /**
      * @return array
      */
-    public function missingParametersDataProvider(): array
+    public static function missingParametersDataProvider(): array
     {
         return [
             'missing_email' => [

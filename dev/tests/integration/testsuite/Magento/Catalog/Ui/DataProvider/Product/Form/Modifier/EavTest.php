@@ -87,7 +87,7 @@ class EavTest extends AbstractEavTest
     /**
      * @return array
      */
-    public function modifyMetaWithAttributeProvider(): array
+    public static function modifyMetaWithAttributeProvider(): array
     {
         $textAttributeMeta = [
             'dataType' => 'textarea',
@@ -245,7 +245,7 @@ class EavTest extends AbstractEavTest
     /**
      * @return array
      */
-    public function testModifyMetaNewProductPageLayoutDefaultProvider(): array
+    public static function testModifyMetaNewProductPageLayoutDefaultProvider(): array
     {
         return [
             'attributes_meta' => [

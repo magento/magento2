@@ -811,7 +811,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function productWithBackordersDataProvider(): array
+    public static function productWithBackordersDataProvider(): array
     {
         return [
             [0, 0, false],

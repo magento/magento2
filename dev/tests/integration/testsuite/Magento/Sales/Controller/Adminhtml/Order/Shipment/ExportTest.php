@@ -70,7 +70,7 @@ class ExportTest extends ExportBase
     /**
      * @return array
      */
-    public function exportShipmentDataProvider(): array
+    public static function exportShipmentDataProvider(): array
     {
         return [
             'shipment_grid_in_csv' => [

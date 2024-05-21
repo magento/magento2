@@ -57,7 +57,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    protected $_beforeImport = [
+    protected static $_beforeImport = [
         'betsyparker@example.com' => [
             'addresses' => ['19107', '72701'],
             'data' => [self::ATTRIBUTE_CODE_FIRST_NAME => 'Betsy', self::ATTRIBUTE_CODE_LAST_NAME => 'Parker'],
@@ -69,7 +69,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    protected $_afterImport = [
+    protected static $_afterImport = [
         'betsyparker@example.com' => [
             'addresses' => ['19107', '72701', '19108'],
             'data' => [
@@ -200,14 +200,14 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function importDataDataProvider()
+    public static function importDataDataProvider()
     {
         $filesDirectory = __DIR__ . '/_files/';
         $sourceData = [
             'delete_behavior' => [
                 '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
                 '$sourceFile' => $filesDirectory . self::DELETE_FILE_NAME,
-                '$dataBefore' => $this->_beforeImport,
+                '$dataBefore' => self::$_beforeImport,
                 '$dataAfter' => [],
                 '$updatedItemsCount' => 0,
                 '$createdItemsCount' => 0,
@@ -219,8 +219,8 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
         $sourceData['add_update_behavior'] = [
             '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
             '$sourceFile' => $filesDirectory . self::UPDATE_FILE_NAME,
-            '$dataBefore' => $this->_beforeImport,
-            '$dataAfter' => $this->_afterImport,
+            '$dataBefore' => self::$_beforeImport,
+            '$dataAfter' => self::$_afterImport,
             '$updatedItemsCount' => 1,
             '$createdItemsCount' => 3,
             '$deletedItemsCount' => 0,
