@@ -1,18 +1,7 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ***********************************************************************
  */
 declare(strict_types=1);
 
@@ -48,6 +37,7 @@ class GuestOrderByTokenTest extends GraphQlAbstract
       token: "%token"
   }) {
     number
+    email
     billing_address {
       firstname
       lastname
@@ -63,6 +53,7 @@ mutation {
   }) {
     orderV2 {
       number
+      email
       billing_address {
         firstname
         lastname
@@ -97,6 +88,7 @@ QUERY;
 
         $this->assertNotEmpty($placeOrderResponse['placeOrder']['orderV2']['number']);
         $this->assertNotEmpty($placeOrderResponse['placeOrder']['orderV2']['token']);
+        $this->assertNotEmpty($placeOrderResponse['placeOrder']['orderV2']['email']);
         $this->assertNotEmpty($placeOrderResponse['placeOrder']['orderV2']['billing_address']['firstname']);
         $this->assertNotEmpty($placeOrderResponse['placeOrder']['orderV2']['billing_address']['lastname']);
 
@@ -111,6 +103,7 @@ QUERY;
             [
                 'guestOrderByToken' => [
                     'number' => $placeOrderResponse['placeOrder']['orderV2']['number'],
+                    'email' => $placeOrderResponse['placeOrder']['orderV2']['email'],
                     'billing_address' => [
                         'firstname' => $placeOrderResponse['placeOrder']['orderV2']['billing_address']['firstname'],
                         'lastname' => $placeOrderResponse['placeOrder']['orderV2']['billing_address']['lastname']
