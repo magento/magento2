@@ -54,7 +54,7 @@ class MultipleFiltersTest extends AbstractFiltersTest
     /**
      * @return array
      */
-    public function getMultipleActiveFiltersDataProvider(): array
+    public static function getMultipleActiveFiltersDataProvider(): array
     {
         return [
             'without_filters' => [
