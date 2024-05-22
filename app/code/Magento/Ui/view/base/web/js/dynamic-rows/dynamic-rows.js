@@ -584,8 +584,8 @@ define([
                 updatedCollection;
 
             if (this.elems().filter(function (el) {
-                    return el.position || el.position === 0;
-                }).length !== this.getChildItems().length) {
+                return el.position || el.position === 0;
+            }).length !== this.getChildItems().length) {
 
                 return false;
             }

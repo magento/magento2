@@ -55,7 +55,7 @@ define([
                 this.source.set(path, optionBaseData);
                 this.source.set(path + '.bundle_button_proxy', []);
                 this.source.set(path + '.bundle_selections', []);
-                this.removeBundleItemsFromOption(idx); // would be best to remove the entire html, but see first if remove from data works
+                this.removeBundleItemsFromOption(idx);
                 _.each(rec['bundle_selections'], function (obj, index) {
                     this.source.set(path + '.bundle_button_proxy' + '.' + index, rec['bundle_button_proxy'][index]);
                     this.source.set(path + '.bundle_selections' + '.' + index, obj);
@@ -72,6 +72,7 @@ define([
          */
         removeBundleItemsFromOption: function (index) {
             let bundleSelections = registry.get(this.name + '.' + index + '.' + this.bundleSelectionsName);
+
             bundleSelections.destroyChildren();
         },
 
@@ -80,9 +81,9 @@ define([
         */
         processingAddChild: function (ctx, index, prop) {
             var recordIds = _.map(this.recordData(), function (rec) {
-                return parseInt(rec['record_id'], 10);
-            }),
-            maxRecordId = _.max(recordIds);
+                    return parseInt(rec['record_id'], 10);
+                }),
+                maxRecordId = _.max(recordIds);
 
             prop = maxRecordId > -1 ? maxRecordId + 1 : prop;
             this._super(ctx, index, prop);
