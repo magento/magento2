@@ -36,7 +36,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminEnablePaypalStandardPaylaterActionGroup" stepKey="enablePaypalStandard"/>
-        <actionGroup ref="AssertAdminPaypalStandardPaylaterDefaultValuesCartPageActionGroup" stepKey="verifyPaylaterDropdownVales"/>
+        <actionGroup ref="AssertAdminPaypalStandardPaylaterDefaultValuesCartPageActionGroup" stepKey="verifyPaylaterDropdownValues"/>
         <!-- Reindex and cache flush -->
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
             <argument name="indices" value=""/>
