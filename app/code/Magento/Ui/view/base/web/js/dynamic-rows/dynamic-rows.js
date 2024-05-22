@@ -655,7 +655,10 @@ define([
 
             startIndex = page || this.startIndex;
 
-            return dataRecord.slice(startIndex, this.startIndex + parseInt(this.pageSize, 10));
+            if (dataRecord.length) {
+                return dataRecord.slice(startIndex, this.startIndex + parseInt(this.pageSize, 10));
+            }
+            return [];
         },
 
         /**

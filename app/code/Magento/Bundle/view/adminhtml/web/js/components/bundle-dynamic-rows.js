@@ -55,7 +55,7 @@ define([
                 this.source.set(path, optionBaseData);
                 this.source.set(path + '.bundle_button_proxy', []);
                 this.source.set(path + '.bundle_selections', []);
-                this.removeBundleItemsFromOption(idx);
+                this.removeBundleItemsFromOption(idx); // would be best to remove the entire html, but see first if remove from data works
                 _.each(rec['bundle_selections'], function (obj, index) {
                     this.source.set(path + '.bundle_button_proxy' + '.' + index, rec['bundle_button_proxy'][index]);
                     this.source.set(path + '.bundle_selections' + '.' + index, obj);
@@ -71,15 +71,8 @@ define([
          * @param {Number|String} index - element index
          */
         removeBundleItemsFromOption: function (index) {
-            var bundleSelections = registry.get(this.name + '.' + index + '.' + this.bundleSelectionsName),
-                bundleSelectionsLength = (bundleSelections.elems() || []).length,
-                i;
-
-            if (bundleSelectionsLength) {
-                for (i = 0; i < bundleSelectionsLength; i++) {
-                    bundleSelections.elems()[0].destroy();
-                }
-            }
+            let bundleSelections = registry.get(this.name + '.' + index + '.' + this.bundleSelectionsName);
+            bundleSelections.destroyChildren();
         },
 
         /**
