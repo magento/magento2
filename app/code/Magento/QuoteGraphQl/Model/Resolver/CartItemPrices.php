@@ -12,9 +12,11 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Cart\Totals;
 use Magento\Quote\Model\Quote\Item;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
+use Magento\QuoteGraphQl\Model\GetDiscounts;
 
 /**
  * @inheritdoc
@@ -22,24 +24,20 @@ use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
 {
     /**
-     * @var TotalsCollector
-     */
-    private $totalsCollector;
-
-    /**
      * @var Totals|null
      */
     private $totals;
 
     /**
-     * CartItemPrices constructor
-     *
      * @param TotalsCollector $totalsCollector
+     * @param GetDiscounts $getDiscounts
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
-        TotalsCollector $totalsCollector
+        private readonly TotalsCollector $totalsCollector,
+        private readonly GetDiscounts $getDiscounts,
+        private readonly PriceCurrencyInterface $priceCurrency
     ) {
-        $this->totalsCollector = $totalsCollector;
     }
 
     /**
@@ -69,10 +67,10 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
 
         /** calculate bundle product discount */
         if ($cartItem->getProductType() == 'bundle') {
-            $discountValues = $this->getDiscountValues($cartItem, $currencyCode);
+            $discounts = $cartItem->getExtensionAttributes()->getDiscounts() ?? [];
             $discountAmount = 0;
-            foreach ((array) $discountValues as $discountValue) {
-                $discountAmount += $discountValue['amount']['value'];
+            foreach ($discounts as $discount) {
+                $discountAmount += $discount->getDiscountData()->getAmount();
             }
         } else {
             $discountAmount = $cartItem->getDiscountAmount();
@@ -99,36 +97,27 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
                 'currency' => $currencyCode,
                 'value' => $discountAmount,
             ],
-            'discounts' => $this->getDiscountValues($cartItem, $currencyCode)
+            'discounts' => $this->getDiscounts->execute(
+                $cartItem->getQuote(),
+                $cartItem->getExtensionAttributes()->getDiscounts() ?? []
+            ),
+            'original_row_total' => [
+                'currency' => $currencyCode,
+                'value' => $this->getOriginalRowTotal($cartItem),
+            ],
         ];
     }
 
     /**
-     * Get Discount Values
+     * Calculate the original price row total
      *
      * @param Item $cartItem
-     * @param string $currencyCode
-     * @return array|null
+     * @return float
      */
-    private function getDiscountValues($cartItem, $currencyCode)
+    private function getOriginalRowTotal(Item $cartItem): float
     {
-        $itemDiscounts = $cartItem->getExtensionAttributes()->getDiscounts();
-        if ($itemDiscounts) {
-            $discountValues = [];
-            foreach ($itemDiscounts as $value) {
-                $discount = [];
-                $amount = [];
-                /* @var \Magento\SalesRule\Api\Data\DiscountDataInterface $discountData */
-                $discountData = $value->getDiscountData();
-                $discountAmount = $discountData->getAmount();
-                $discount['label'] = $value->getRuleLabel() ?: __('Discount');
-                $amount['value'] = $discountAmount;
-                $amount['currency'] = $currencyCode;
-                $discount['amount'] = $amount;
-                $discountValues[] = $discount;
-            }
-            return $discountValues;
-        }
-        return null;
+        $qty = $cartItem->getTotalQty();
+        // Round unit price before multiplying to prevent losing 1 cent on subtotal
+        return $this->priceCurrency->round($cartItem->getOriginalPrice()) * $qty;
     }
 }
