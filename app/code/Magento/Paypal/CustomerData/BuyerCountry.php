@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\CustomerData;
 
-use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -19,12 +18,9 @@ class BuyerCountry implements SectionSourceInterface
 {
     /**
      * @param CurrentCustomer $currentCustomer
-     * @param AddressRepositoryInterface $addressRepository
      */
-    public function __construct(
-        private readonly CurrentCustomer $currentCustomer,
-        private readonly AddressRepositoryInterface $addressRepository
-    ) {
+    public function __construct(private readonly CurrentCustomer $currentCustomer)
+    {
     }
 
     /**
@@ -40,8 +36,12 @@ class BuyerCountry implements SectionSourceInterface
                 $customer->getDefaultShipping();
 
             if ($addressId) {
-                $address = $this->addressRepository->getById($addressId);
-                $country = $address->getCountryId();
+                foreach ($customer->getAddresses() as $address) {
+                    if ($address->getId() == $addressId) {
+                        $country = $address->getCountryId();
+                        break;
+                    }
+                }
             }
         } catch (NoSuchEntityException $e) {
             return [

@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\CustomerData;
 
-use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Helper\Session\CurrentCustomer;
@@ -27,11 +26,6 @@ class BuyerCountryTest extends TestCase
     private CurrentCustomer $currentCustomer;
 
     /**
-     * @var AddressRepositoryInterface|MockObject
-     */
-    private AddressRepositoryInterface $addressRepository;
-
-    /**
      * @var BuyerCountry
      */
     private BuyerCountry $buyerCountry;
@@ -42,9 +36,8 @@ class BuyerCountryTest extends TestCase
     protected function setUp(): void
     {
         $this->currentCustomer = $this->createMock(CurrentCustomer::class);
-        $this->addressRepository = $this->createMock(AddressRepositoryInterface::class);
 
-        $this->buyerCountry = new BuyerCountry($this->currentCustomer, $this->addressRepository);
+        $this->buyerCountry = new BuyerCountry($this->currentCustomer);
     }
 
     /**
@@ -52,15 +45,8 @@ class BuyerCountryTest extends TestCase
      */
     public function testGetSectionDataException(): void
     {
-        $customer = $this->createMock(CustomerInterface::class);
-        $customer->expects($this->exactly(2))
-            ->method('getDefaultBilling')
-            ->willReturn(1);
         $this->currentCustomer->expects($this->once())
             ->method('getCustomer')
-            ->willReturn($customer);
-        $this->addressRepository->expects($this->once())
-            ->method('getById')
             ->willThrowException(new NoSuchEntityException());
 
         $this->assertEquals(['code' => null], $this->buyerCountry->getSectionData());
@@ -90,22 +76,28 @@ class BuyerCountryTest extends TestCase
      */
     public function testGetSectionDataShippingAddress(): void
     {
+        $addressId = 1;
+        $countryId = 'US';
+        $address = $this->createMock(AddressInterface::class);
+        $address->expects($this->once())
+            ->method('getCountryId')
+            ->willReturn($countryId);
+        $address->expects($this->once())
+            ->method('getId')
+            ->willReturn($addressId);
         $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->once())
             ->method('getDefaultBilling')
             ->willReturn(null);
         $customer->expects($this->once())
             ->method('getDefaultShipping')
-            ->willReturn(1);
+            ->willReturn($addressId);
+        $customer->expects($this->once())->method('getAddresses')
+            ->willReturn([$address]);
         $this->currentCustomer->expects($this->once())
             ->method('getCustomer')
             ->willReturn($customer);
-        $address = $this->createMock(AddressInterface::class);
-        $address->expects($this->once())
-            ->method('getCountryId')
-            ->willReturn('US');
-        $this->addressRepository->expects($this->once())->method('getById')->willReturn($address);
 
-        $this->assertEquals(['code' => 'US'], $this->buyerCountry->getSectionData());
+        $this->assertEquals(['code' => $countryId], $this->buyerCountry->getSectionData());
     }
 }
