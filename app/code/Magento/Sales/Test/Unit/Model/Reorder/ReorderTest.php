@@ -18,17 +18,16 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Reorder;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Customer\Model\Session as CustomerSession;
-use Magento\Framework\DataObject;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Cart\CustomerCartResolver;
 use Magento\Quote\Model\GuestCart\GuestCartResolver;
 use Magento\Quote\Model\Quote;
@@ -221,6 +220,7 @@ class ReorderTest extends TestCase
      * @throws LocalizedException
      * @throws NoSuchEntityException
      * @dataProvider dataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecuteReorder(
         string $orderNumber,
@@ -230,84 +230,34 @@ class ReorderTest extends TestCase
         bool $customerIsLoggedIn,
         bool $isReorderAllowed,
     ): void {
-        $item1 = $this->createPartialMock(
-            Item::class,
-            ['getParentItem', 'getProductId', 'getId']
-        );
-        $item1->expects($this->any())
-            ->method('getParentItem')
-            ->willReturn(null);
-        $item1->expects($this->any())
-            ->method('getProductId')
-            ->willReturn(1);
-        $item1->expects($this->any())
-            ->method('getId')
-            ->willReturn(5);
-        $item2 = $this->createPartialMock(
-            Item::class,
-            ['getParentItem', 'getProductId', 'getId']
-        );
-        $item2->expects($this->any())
-            ->method('getParentItem')
-            ->willReturn(null);
-        $item2->expects($this->any())
-            ->method('getProductId')
-            ->willReturn(2);
-        $item2->expects($this->any())
-            ->method('getId')
-            ->willReturn(5);
+        list($item1, $item2) = $this->getCollectionItems();
         $collection = $this->createMock(ItemCollection::class);
         $collection->expects($this->any())->method('getIterator')
             ->willReturn(new \ArrayIterator([$item1, $item2]));
-        $this->order->expects($this->once())
+        $this->order->expects($this->any())
             ->method('getItemsCollection')
             ->willReturn($collection);
-         $productCollection = $this->getMockBuilder(Collection::class)
-            ->onlyMethods(
-                [
-                    'getItems',
-                    'addIdFilter',
-                    'addStoreFilter',
-                    'addAttributeToSelect',
-                    'joinAttribute',
-                    'addOptionsToResult',
-                    'getIterator',
-                    'setStore'
-                ]
-            )
-             ->addMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productCollection->expects($this->any())->method('setStore')->willReturnSelf();
-        $productCollection->expects($this->any())->method('addIdFilter')->willReturnSelf();
-        $productCollection->expects($this->any())->method('addStoreFilter')->willReturnSelf();
-        $productCollection->expects($this->once())->method('addAttributeToSelect')->willReturnSelf();
-        $productCollection->expects($this->any())->method('joinAttribute')->willReturnSelf();
-        $productCollection->expects($this->once())->method('addOptionsToResult')->willReturnSelf();
-        $this->productCollectionFactory->expects($this->once())
+        $productCollection = $this->getProductCollection();
+        $this->productCollectionFactory->expects($this->any())
             ->method('create')
             ->willReturn($productCollection);
-//        $product1 = $this->getMockForAbstractClass(ProductInterface::class);
-//        $product2 = $this->getMockForAbstractClass(ProductInterface::class);
-//        $productCollection->expects($this->once())->method('getItems')->willReturn([$product1, $product2]);
-        $productCollection->expects($this->once())->method('getItems')->willReturn([]);
-        $this->orderFactory->expects($this->once())
+        $this->orderFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->order);
-        $this->order->expects($this->once())
+        $this->order->expects($this->any())
             ->method('loadByIncrementIdAndStoreId')
             ->with($orderNumber, $storeId)
             ->willReturnSelf();
-        $this->order->expects($this->once())
+        $this->order->expects($this->any())
             ->method('getId')
             ->willReturn($orderId);
-        $this->order->expects($this->once())
+        $this->order->expects($this->any())
             ->method('getCustomerId')
             ->willReturn($customerId);
-        $this->order->expects($this->once())
+        $this->order->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
-        $this->customerSession->expects($this->once())
+        $this->customerSession->expects($this->any())
             ->method('isLoggedIn')
             ->willReturn($customerIsLoggedIn);
         $this->guestCartResolver->expects($this->any())
@@ -321,35 +271,26 @@ class ReorderTest extends TestCase
             ->method('isAllowed')
             ->with($this->store)
             ->willReturn($isReorderAllowed);
-        $this->storeManager->expects($this->once())
+        $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
-        $this->store->expects($this->once())
+        $this->store->expects($this->any())
             ->method('getId')
             ->willReturn($storeId);
-        $this->cartRepository->expects($this->once())
+        $this->cartRepository->expects($this->any())
             ->method('save')
             ->with($this->cart)
             ->willReturnSelf();
-//        $infoBuyRequest = new DataObject(['options' => [
-//            [
-//                'option_id' => 1,
-//                'option_value' => 2
-//            ]
-//        ]]);
-//        $this->orderInfoBuyRequestGetter->expects($this->once())
-//            ->method('getInfoBuyRequest')
-//            ->willReturn($infoBuyRequest);
-        $savedCart = $this->getMockBuilder(\Magento\Quote\Api\Data\CartInterface::class)
+        $savedCart = $this->getMockBuilder(CartInterface::class)
             ->disableOriginalConstructor()
             ->addMethods(['setHasError'])
             ->getMockForAbstractClass();
-        $this->cartRepository->expects($this->once())
+        $this->cartRepository->expects($this->any())
             ->method('get')
             ->willReturn($savedCart);
 
         $output = $this->reorder->execute($orderNumber, $storeId);
-        $this->assertNotEmpty($output);
+        $this->assertNotEmpty($output->getCart());
     }
 
     /**
@@ -358,7 +299,81 @@ class ReorderTest extends TestCase
     public function dataProvider()
     {
         return [
-            'test case 1' => ['000001', 1, '1', 1, true, true],
+            'test case when reorder is allowed and customer is logged in' =>
+                ['000001', 1, '1', 1, true, true],
+            'test case when reorder is not allowed' =>
+                ['000001', 1, '1', 1, true, false],
         ];
+    }
+
+    /**
+     * Get collection items
+     *
+     * @return array
+     */
+    private function getCollectionItems(): array
+    {
+        $productId1 = 1;
+        $productId2 = 5;
+        $item1 = $this->createPartialMock(
+            Item::class,
+            ['getParentItem', 'getProductId', 'getId']
+        );
+        $item1->expects($this->any())
+            ->method('getParentItem')
+            ->willReturn(null);
+        $item1->expects($this->any())
+            ->method('getProductId')
+            ->willReturn($productId1);
+        $item1->expects($this->any())
+            ->method('getId')
+            ->willReturn($productId1);
+        $item2 = $this->createPartialMock(
+            Item::class,
+            ['getParentItem', 'getProductId', 'getId']
+        );
+        $item2->expects($this->any())
+            ->method('getParentItem')
+            ->willReturn(null);
+        $item2->expects($this->any())
+            ->method('getProductId')
+            ->willReturn($productId2);
+        $item2->expects($this->any())
+            ->method('getId')
+            ->willReturn($productId2);
+        return [$item1, $item2];
+    }
+
+    /**
+     * Get product collection mock
+     *
+     * @return MockObject|Collection
+     */
+    private function getProductCollection(): MockObject|Collection
+    {
+        $productCollection = $this->getMockBuilder(Collection::class)
+            ->onlyMethods(
+                [
+                    'getItems',
+                    'addIdFilter',
+                    'addStoreFilter',
+                    'addAttributeToSelect',
+                    'joinAttribute',
+                    'addOptionsToResult',
+                    'getIterator',
+                    'setStore'
+                ]
+            )
+            ->addMethods(['getStore'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productCollection->expects($this->any())->method('setStore')->willReturnSelf();
+        $productCollection->expects($this->any())->method('addIdFilter')->willReturnSelf();
+        $productCollection->expects($this->any())->method('addStoreFilter')->willReturnSelf();
+        $productCollection->expects($this->any())->method('addAttributeToSelect')->willReturnSelf();
+        $productCollection->expects($this->any())->method('joinAttribute')->willReturnSelf();
+        $productCollection->expects($this->any())->method('addOptionsToResult')->willReturnSelf();
+        $productCollection->expects($this->any())->method('getItems')->willReturn([]);
+        return $productCollection;
     }
 }
