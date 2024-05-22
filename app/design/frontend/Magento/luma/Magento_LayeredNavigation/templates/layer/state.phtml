@@ -12,7 +12,9 @@
  *
  * @var $escaper \Magento\Framework\Escaper
  * @var $block \Magento\LayeredNavigation\Block\Navigation\State
+ * @var $viewModel \Magento\LayeredNavigation\ViewModel\Layer\State
  */
+$viewModel = $block->getViewModel();
 ?>
 <?php $_filters = $block->getActiveFilters() ?>
 <?php if (!empty($_filters)): ?>
@@ -26,10 +28,7 @@
         <?php foreach ($_filters as $_filter): ?>
             <li class="item">
                 <span class="filter-label"><?= $escaper->escapeHtml(__($_filter->getName())) ?></span>
-                <span class="filter-value">
-                <?= ((string)$_filter->getLabel() === "0") ? $escaper->escapeHtml($_filter->getLabel()) :
-                    $escaper->escapeHtml($block->stripTags($_filter->getLabel())) ?>
-                </span>
+                <span class="filter-value"><?= $escaper->escapeHtml($viewModel->stripTags($_filter->getLabel())) ?></span>
                 <?php
                 $clearLinkUrl = $_filter->getClearLinkUrl();
                 $currentFilterName = $escaper->escapeHtmlAttr(__($_filter->getName()) . " " . $block->stripTags($_filter->getLabel()));
