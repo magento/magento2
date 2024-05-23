@@ -48,7 +48,7 @@ class DecimalFilterTest extends CategoryDecimalFilterTest
             $dataProvider,
             [
                 'not_used_in_navigation' => [
-                    'attribute_data' => ['is_filterable' => 0, 'is_filterable_in_search' => 0],
+                    'attributeData' => ['is_filterable' => 0, 'is_filterable_in_search' => 0],
                 ],
 
                 /* @TODO: Should be uncommented in MC-16650 */

@@ -78,8 +78,8 @@ class DecimalFilterTest extends AbstractFiltersTest
     {
         return [
             'not_used_in_navigation' => [
-                'products_data' => [],
-                'attribute_data' => ['is_filterable' => 0],
+                'products' => [],
+                'attributeData' => ['is_filterable' => 0],
                 'expectation' => [],
             ],
 
