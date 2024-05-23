@@ -16,10 +16,11 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5602"/>
             <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="configPayPalExpress">
                 <argument name="credentials" value="SamplePaypalExpressConfig2"/>
             </actionGroup>
         </before>
