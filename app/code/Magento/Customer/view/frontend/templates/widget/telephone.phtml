@@ -15,7 +15,7 @@
     <div class="control">
         <input type="tel"
                name="<?= $escaper->escapeHtmlAttr($block->getFieldName('telephone')) ?>"
-               id="telephone"
+               id="<?= $escaper->escapeHtmlAttr($block->getFieldId('telephone')) ?>"
                value="<?= $escaper->escapeHtmlAttr($block->getTelephone()) ?>"
                title="<?= $escaper->escapeHtmlAttr(__('Phone Number')) ?>"
                class="input-text <?= $escaper->escapeHtmlAttr(
