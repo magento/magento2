@@ -52,6 +52,8 @@ class ImagesGenerator
 
         $image = imagecreate($config['image-width'], $config['image-height']);
         $bgColor = imagecolorallocate($image, 240, 240, 240);
+        // mt_rand() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $fgColor = imagecolorallocate($image, mt_rand(0, 230), mt_rand(0, 230), mt_rand(0, 230));
         $colors = [$fgColor, $bgColor];
         imagefilledrectangle($image, 0, 0, $config['image-width'], $config['image-height'], $bgColor);

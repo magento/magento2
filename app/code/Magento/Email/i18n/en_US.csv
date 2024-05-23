@@ -98,3 +98,4 @@ Action,Action
 "Email template chosen based on theme fallback, when the ""Default"" option is selected.","Email template chosen based on theme fallback, when the ""Default"" option is selected."
 "Header Template","Header Template"
 "Footer Template","Footer Template"
+"Unable to send mail. Please try again later.","Unable to send mail. Please try again later."

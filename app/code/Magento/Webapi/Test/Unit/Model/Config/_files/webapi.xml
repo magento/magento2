@@ -39,6 +39,7 @@
         <resources>
             <resource ref="Magento_Customer::manage" />
         </resources>
+        <data input-array-size-limit="50"/>
     </route>
     <route url="/V1/customers/:id" method="GET">
         <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="getById" />

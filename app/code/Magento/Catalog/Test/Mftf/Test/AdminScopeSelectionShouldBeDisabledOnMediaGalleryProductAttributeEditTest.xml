@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminScopeSelectionShouldBeDisabledOnMediaGalleryProductAttributeEditTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Attributes Updating"/>
+            <group value="Catalog"/>
+            <title value="Admin should not able to change Scope of Media Gallery product attribute"/>
+            <description value="Admin should not able to change Scope of Media Gallery product attribute"/>
+            <severity value="MAJOR"/>
+            <useCaseId value="MC-38156"/>
+            <testCaseId value="AC-1337"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminNavigateToProductAttributeEditPageActionGroup" stepKey="navigateToMediaGalleryProductAttribute">
+            <argument name="ProductAttributeLabel" value="Media Gallery"/>
+        </actionGroup>
+
+        <click selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="clickAdvancedAttributePropertiesSectionToggle"/>
+
+        <assertElementContainsAttribute stepKey="assertTheScopeSelectionIsDisabled">
+            <expectedResult selector="{{AdvancedAttributePropertiesSection.Scope}}" attribute="disabled" type="string"></expectedResult>
+        </assertElementContainsAttribute>
+
+    </test>
+</tests>
+

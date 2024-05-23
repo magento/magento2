@@ -10,7 +10,6 @@ namespace Magento\Wishlist\Controller\Shared;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Forward;
 use Magento\Framework\Controller\Result\Redirect;
@@ -20,7 +19,7 @@ use Magento\Wishlist\Model\ItemCarrier;
 /**
  * Wishlist Allcart Controller
  */
-class Allcart extends Action implements HttpGetActionInterface, HttpPostActionInterface
+class Allcart extends Action implements HttpPostActionInterface
 {
     /**
      * @var WishlistProvider

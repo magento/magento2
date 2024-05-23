@@ -28,6 +28,8 @@
     </type>
     <type name="Magento\MediaStorage\Console\Command\ImagesResizeCommand">
         <arguments>
+            <argument name="appState" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
+            <argument name="imageResize" xsi:type="object">Magento\MediaStorage\Service\ImageResize\Proxy</argument>
             <argument name="imageResizeScheduler" xsi:type="object">Magento\MediaStorage\Service\ImageResizeScheduler\Proxy</argument>
         </arguments>
     </type>

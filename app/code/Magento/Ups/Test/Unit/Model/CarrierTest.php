@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\Ups\Test\Unit\Model;
 
 use Magento\Directory\Model\Country;
@@ -13,7 +12,6 @@ use Magento\Directory\Model\CountryFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\ClientFactory;
 use Magento\Framework\HTTP\ClientInterface;
-use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Address\RateRequest;
@@ -34,16 +32,15 @@ use Psr\Log\LoggerInterface;
  * Unit tests for \Magento\Ups\Model\Carrier class.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class CarrierTest extends TestCase
 {
-    const FREE_METHOD_NAME = 'free_method';
+    public const FREE_METHOD_NAME = 'free_method';
 
-    const PAID_METHOD_NAME = 'paid_method';
+    public const PAID_METHOD_NAME = 'paid_method';
 
     /**
-     * Model under test
-     *
      * @var Error|MockObject
      */
     private $error;
@@ -54,8 +51,6 @@ class CarrierTest extends TestCase
     private $helper;
 
     /**
-     * Model under test
-     *
      * @var Carrier|MockObject
      */
     private $model;
@@ -81,11 +76,6 @@ class CarrierTest extends TestCase
     private $country;
 
     /**
-     * @var AbstractModel
-     */
-    private $abstractModel;
-
-    /**
      * @var Result
      */
     private $rate;
@@ -106,7 +96,7 @@ class CarrierTest extends TestCase
     private $configHelper;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -114,16 +104,16 @@ class CarrierTest extends TestCase
 
         $this->scope = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue', 'isSetFlag'])
+            ->onlyMethods(['getValue', 'isSetFlag'])
             ->getMockForAbstractClass();
 
         $this->error = $this->getMockBuilder(Error::class)
-            ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
+            ->addMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
             ->getMock();
 
         $this->errorFactory = $this->getMockBuilder(ErrorFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->errorFactory->method('create')
@@ -133,33 +123,27 @@ class CarrierTest extends TestCase
 
         $this->country = $this->getMockBuilder(Country::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getData'])
-            ->getMock();
-
-        $this->abstractModel = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['load', 'getData'])
             ->getMock();
 
         $this->country->method('load')
-            ->willReturn($this->abstractModel);
+            ->willReturnCallback([$this, 'getCountryById']);
 
         $this->countryFactory = $this->getMockBuilder(CountryFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->countryFactory->method('create')
             ->willReturn($this->country);
 
-        $xmlFactory = $this->getXmlFactory();
         $httpClientFactory = $this->getHttpClientFactory();
 
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->configHelper = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode'])
+            ->onlyMethods(['getCode'])
             ->getMock();
 
         $this->model = $this->helper->getObject(
@@ -169,10 +153,9 @@ class CarrierTest extends TestCase
                 'rateErrorFactory' => $this->errorFactory,
                 'countryFactory' => $this->countryFactory,
                 'rateFactory' => $rateFactory,
-                'xmlElFactory' => $xmlFactory,
                 'logger' => $this->logger,
                 'httpClientFactory' => $httpClientFactory,
-                'configHelper' => $this->configHelper,
+                'configHelper' => $this->configHelper
             ]
         );
     }
@@ -181,7 +164,8 @@ class CarrierTest extends TestCase
      * Callback function, emulates getValue function.
      *
      * @param string $path
-     * @return null|string
+     *
+     * @return null|string|int
      */
     public function scopeConfigGetValue(string $path)
     {
@@ -192,11 +176,9 @@ class CarrierTest extends TestCase
             'carriers/ups/title' => 'ups Title',
             'carriers/ups/specificerrmsg' => 'ups error message',
             'carriers/ups/min_package_weight' => 2,
-            'carriers/ups/type' => 'UPS',
             'carriers/ups/debug' => 1,
             'carriers/ups/username' => 'user',
-            'carriers/ups/password' => 'pass',
-            'carriers/ups/access_license_number' => 'acn',
+            'carriers/ups/password' => 'pass'
         ];
 
         return $pathMap[$path] ?? null;
@@ -233,11 +215,11 @@ class CarrierTest extends TestCase
     }
 
     /**
-     * Data provider for testGenerate method
+     * Data provider for testGenerate method.
      *
      * @return array
      */
-    public function getMethodPriceProvider()
+    public function getMethodPriceProvider(): array
     {
         return [
             [3, self::FREE_METHOD_NAME, true, 6, 0],
@@ -289,127 +271,212 @@ class CarrierTest extends TestCase
     }
 
     /**
-     * @param string $data
-     * @param array $maskFields
-     * @param string $expected
-     * @dataProvider logDataProvider
-     */
-    public function testFilterDebugData($data, array $maskFields, $expected)
-    {
-        $refClass = new \ReflectionClass(Carrier::class);
-        $property = $refClass->getProperty('_debugReplacePrivateDataKeys');
-        $property->setAccessible(true);
-        $property->setValue($this->model, $maskFields);
-
-        $refMethod = $refClass->getMethod('filterDebugData');
-        $refMethod->setAccessible(true);
-        $result = $refMethod->invoke($this->model, $data);
-        $expectedXml = new \SimpleXMLElement($expected);
-        $resultXml = new \SimpleXMLElement($result);
-        $this->assertEquals($expectedXml->asXML(), $resultXml->asXML());
-    }
-
-    /**
-     * Get list of variations
-     */
-    public function logDataProvider()
-    {
-        return [
-            [
-                '<?xml version="1.0" encoding="UTF-8"?>
-                <RateRequest>
-                    <UserId>42121</UserId>
-                    <Password>TestPassword</Password>
-                    <Package ID="0">
-                        <Service>ALL</Service>
-                    </Package>
-                </RateRequest>',
-                ['UserId', 'Password'],
-                '<?xml version="1.0" encoding="UTF-8"?>
-                <RateRequest>
-                    <UserId>****</UserId>
-                    <Password>****</Password>
-                    <Package ID="0">
-                        <Service>ALL</Service>
-                    </Package>
-                </RateRequest>',
-            ],
-            [
-                '<?xml version="1.0" encoding="UTF-8"?>
-                <RateRequest>
-                    <Auth>
-                        <UserId>1231</UserId>
-                    </Auth>
-                    <Package ID="0">
-                        <Service>ALL</Service>
-                    </Package>
-                </RateRequest>',
-                ['UserId'],
-                '<?xml version="1.0" encoding="UTF-8"?>
-                <RateRequest>
-                    <Auth>
-                        <UserId>****</UserId>
-                    </Auth>
-                    <Package ID="0">
-                        <Service>ALL</Service>
-                    </Package>
-                </RateRequest>',
-            ]
-        ];
-    }
-
-    /**
-     * @param string $countryCode
-     * @param string $foundCountryCode
+     * @param array $requestData
+     * @param array $rawRequestData
+     *
+     * @return void
      * @dataProvider countryDataProvider
      */
-    public function testSetRequest($countryCode, $foundCountryCode)
+    public function testSetRequest(array $requestData, array $rawRequestData): void
     {
         /** @var RateRequest $request */
         $request = $this->helper->getObject(RateRequest::class);
-        $request->setData(
-            [
-                'orig_country' => 'USA',
-                'orig_region_code' => 'CA',
-                'orig_post_code' => 90230,
-                'orig_city' => 'Culver City',
-                'dest_country_id' => $countryCode,
-            ]
-        );
-
-        $this->country->expects($this->at(1))
-            ->method('load')
-            ->with($countryCode)
-            ->willReturnSelf();
-
-        $this->country->method('getData')
-            ->with('iso2_code')
-            ->willReturn($foundCountryCode);
-
+        $request->setData($requestData);
         $this->model->setRequest($request);
+        $property = new \ReflectionProperty($this->model, '_rawRequest');
+        $property->setAccessible(true);
+        $rawRequest = $property->getValue($this->model);
+        $this->assertEquals($rawRequestData, array_intersect_key($rawRequest->getData(), $rawRequestData));
     }
 
     /**
-     * Get list of country variations
+     * Get list of request variations for setRequest.
+     *
      * @return array
      */
-    public function countryDataProvider()
+    public function countryDataProvider(): array
     {
         return [
-            ['countryCode' => 'PR', 'foundCountryCode' => null],
-            ['countryCode' => 'US', 'foundCountryCode' => 'US'],
+            [
+                [
+                    'orig_region_code' => 'CA',
+                    'orig_postcode' => '90230',
+                    'orig_country' => 'US',
+                    'dest_region_code' => 'NY',
+                    'dest_postcode' => '11236',
+                    'dest_country_id' => 'US',
+                ],
+                [
+                    'orig_region_code' => 'CA',
+                    'orig_postal' => '90230',
+                    'orig_country' => 'US',
+                    'dest_region_code' => 'NY',
+                    'dest_postal' => '11236',
+                    'dest_country' => 'US',
+                ]
+            ],
+            [
+                [
+                    'orig_region_code' => 'CA',
+                    'orig_postcode' => '90230',
+                    'orig_country' => 'US',
+                    'dest_region_code' => 'PR',
+                    'dest_postcode' => '00968',
+                    'dest_country_id' => 'US',
+                ],
+                [
+                    'orig_region_code' => 'CA',
+                    'orig_postal' => '90230',
+                    'orig_country' => 'US',
+                    'dest_region_code' => 'PR',
+                    'dest_postal' => '00968',
+                    'dest_country' => 'PR',
+                ]
+            ],
+            [
+                [
+                    'orig_region_code' => 'PR',
+                    'orig_postcode' => '00968',
+                    'orig_country' => 'US',
+                    'dest_region_code' => 'CA',
+                    'dest_postcode' => '90230',
+                    'dest_country_id' => 'US',
+                ],
+                [
+                    'orig_region_code' => 'PR',
+                    'orig_postal' => '00968',
+                    'orig_country' => 'PR',
+                    'dest_region_code' => 'CA',
+                    'dest_postal' => '90230',
+                    'dest_country' => 'US',
+                ]
+            ],
         ];
     }
 
     /**
-     * @dataProvider allowedMethodsDataProvider
+     * @param array $requestData
+     * @param array $expectedRequestData
+     * @dataProvider requestToShipmentDataProvider
+     */
+    public function testRequestToShipment(array $requestData, array $expectedRequestData): void
+    {
+        /** @var \Magento\Shipping\Model\Shipment\Request $request */
+        $request = $this->helper->getObject(\Magento\Shipping\Model\Shipment\Request::class);
+        $shipmentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipment::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getOrder'])
+            ->getMock();
+        $orderMock =  $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getIncrementId'])
+            ->getMock();
+
+        $shipmentMock->expects($this->any())
+            ->method('getOrder')
+            ->willReturn($orderMock);
+        $orderMock->expects($this->any())
+            ->method('getIncrementId')
+            ->willReturn('100000001');
+
+        $requestData['order_shipment'] = $shipmentMock;
+        $request->setData($requestData);
+        $request->setPackages([['items' => [], 'params' => ['container' => '']]]);
+        $this->model->requestToShipment($request);
+        $this->assertEquals($expectedRequestData, array_intersect_key($request->getData(), $expectedRequestData));
+    }
+
+    /**
+     * Get list of request variations for requestToShipment.
+     *
+     * @return array
+     */
+    public function requestToShipmentDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'recipient_address_state_or_province_code' => 'CA',
+                    'recipient_address_postal_code' => '90230',
+                    'recipient_address_country_code' => 'US',
+                    'shipper_address_state_or_province_code' => 'NY',
+                    'shipper_address_postal_code' => '11236',
+                    'shipper_address_country_code' => 'US',
+                ],
+                [
+                    'recipient_address_state_or_province_code' => 'CA',
+                    'recipient_address_postal_code' => '90230',
+                    'recipient_address_country_code' => 'US',
+                    'shipper_address_state_or_province_code' => 'NY',
+                    'shipper_address_postal_code' => '11236',
+                    'shipper_address_country_code' => 'US',
+                ]
+            ],
+            [
+                [
+                    'recipient_address_state_or_province_code' => 'CA',
+                    'recipient_address_postal_code' => '90230',
+                    'recipient_address_country_code' => 'US',
+                    'shipper_address_state_or_province_code' => 'PR',
+                    'shipper_address_postal_code' => '00968',
+                    'shipper_address_country_code' => 'US',
+                ],
+                [
+                    'recipient_address_state_or_province_code' => 'CA',
+                    'recipient_address_postal_code' => '90230',
+                    'recipient_address_country_code' => 'US',
+                    'shipper_address_state_or_province_code' => 'PR',
+                    'shipper_address_postal_code' => '00968',
+                    'shipper_address_country_code' => 'US',
+                ]
+            ],
+            [
+                [
+                    'recipient_address_state_or_province_code' => 'PR',
+                    'recipient_address_postal_code' => '00968',
+                    'recipient_address_country_code' => 'US',
+                    'shipper_address_state_or_province_code' => 'CA',
+                    'shipper_address_postal_code' => '90230',
+                    'shipper_address_country_code' => 'US',
+                ],
+                [
+                    'recipient_address_state_or_province_code' => 'PR',
+                    'recipient_address_postal_code' => '00968',
+                    'recipient_address_country_code' => 'US',
+                    'shipper_address_state_or_province_code' => 'CA',
+                    'shipper_address_postal_code' => '90230',
+                    'shipper_address_country_code' => 'US',
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @param string|null $id
+     * @return Country
+     */
+    public function getCountryById(?string $id): Country
+    {
+        $countries = [
+            'US' => 'US'
+        ];
+        $countryMock = $this->getMockBuilder(Country::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $countryMock->setData('iso2_code', $countries[$id] ?? null);
+        return $countryMock;
+    }
+
+    /**
      * @param string $carrierType
      * @param string $methodType
      * @param string $methodCode
      * @param string $methodTitle
      * @param string $allowedMethods
      * @param array $expectedMethods
+     *
      * @return void
+     * @dataProvider allowedMethodsDataProvider
      */
     public function testGetAllowedMethods(
         string $carrierType,
@@ -426,20 +493,20 @@ class CarrierTest extends TestCase
                         'carriers/ups/allowed_methods',
                         ScopeInterface::SCOPE_STORE,
                         null,
-                        $allowedMethods,
+                        $allowedMethods
                     ],
                     [
                         'carriers/ups/type',
                         ScopeInterface::SCOPE_STORE,
                         null,
-                        $carrierType,
+                        $carrierType
                     ],
                     [
                         'carriers/ups/origin_shipment',
                         ScopeInterface::SCOPE_STORE,
                         null,
-                        'Shipments Originating in United States',
-                    ],
+                        'Shipments Originating in United States'
+                    ]
                 ]
             );
         $this->configHelper->method('getCode')
@@ -461,7 +528,7 @@ class CarrierTest extends TestCase
                 '1DM',
                 'Next Day Air Early AM',
                 '',
-                [],
+                []
             ],
             [
                 'UPS',
@@ -469,7 +536,7 @@ class CarrierTest extends TestCase
                 '1DM',
                 'Next Day Air Early AM',
                 '1DM,1DML,1DA',
-                ['1DM' => 'Next Day Air Early AM'],
+                ['1DM' => 'Next Day Air Early AM']
             ],
             [
                 'UPS_XML',
@@ -477,35 +544,17 @@ class CarrierTest extends TestCase
                 '01',
                 'UPS Next Day Air',
                 '01,02,03',
-                ['01' => 'UPS Next Day Air'],
+                ['01' => 'UPS Next Day Air']
             ],
+            [
+                'UPS_REST',
+                'originShipment',
+                '03',
+                'UPS Ground',
+                '01,02,03',
+                ['03' => 'UPS Ground']
+            ]
         ];
-    }
-
-    /**
-     * Creates mock for XML factory.
-     *
-     * @return ElementFactory|MockObject
-     */
-    private function getXmlFactory(): MockObject
-    {
-        $xmlElFactory = $this->getMockBuilder(ElementFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $xmlElFactory->method('create')
-            ->willReturnCallback(
-                function ($data) {
-                    $helper = new ObjectManager($this);
-
-                    return $helper->getObject(
-                        Element::class,
-                        ['data' => $data['data']]
-                    );
-                }
-            );
-
-        return $xmlElFactory;
     }
 
     /**
@@ -517,7 +566,7 @@ class CarrierTest extends TestCase
     {
         $httpClientFactory = $this->getMockBuilder(ClientFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->httpClient = $this->getMockForAbstractClass(ClientInterface::class);
         $httpClientFactory->method('create')

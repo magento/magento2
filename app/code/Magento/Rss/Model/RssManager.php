@@ -22,6 +22,11 @@ class RssManager implements RssManagerInterface
     protected $providers;
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $dataProviders
      */

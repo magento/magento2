@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="PlaceAnOrderAndCreditMemoItValidateTheOrderStatusIsClosedTest">
+        <annotations>
+            <stories value="Place an order and credit memo it, validate the order status is closed"/>
+            <title value="Place an order and credit memo it, validate the order status is closed"/>
+            <description value="Place an order and credit memo it, validate the order status is closed"/>
+            <severity value="MINOR"/>
+            <testCaseId value="AC-1577"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>
+            <!-- Add downloadable domains -->
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
+
+            <!-- Login as an Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create Customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Create Category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- Create Simple Product -->
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create Configurable Product having color attribute -->
+            <actionGroup ref="CreateConfigurableProductActionGroupWithDefaultColorAttributeActionGroup" stepKey="createConfigurableProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+            <!-- Assigning quantities to each SKU's -->
+            <actionGroup ref="AdminSetProductQuantityToEachSkusConfigurableProductActionGroup" stepKey="saveConfigurableProduct"/>
+
+            <!-- Create Virtual Product -->
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create Downloadable product -->
+            <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct"/>
+            <createData entity="ApiDownloadableLink" stepKey="addFirstDownloadableLink">
+                <requiredEntity createDataKey="createDownloadableProduct"/>
+            </createData>
+            <createData entity="ApiDownloadableLink" stepKey="addSecondDownloadableLink">
+                <requiredEntity createDataKey="createDownloadableProduct"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Remove downloadable domains -->
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
+
+            <!-- Delete Customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCreateCustomer"/>
+
+            <!-- Delete Simple Product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <!-- Delete configurable product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="_defaultProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters" after="deleteProduct"/>
+
+            <!-- Delete Virtual Product -->
+            <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProducts"/>
+
+            <!-- Delete created downloadable product -->
+            <deleteData createDataKey="createDownloadableProduct" stepKey="deleteDownloadableProduct"/>
+
+            <!-- Delete Category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Logout User and Admin -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 0" stepKey="DisablingGuestCheckoutLogin"/>
+        </after>
+
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToProductPage">
+            <argument name="productUrlKey" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Add Simple Product -->
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckout"/>
+        <waitForPageLoad stepKey="waitForPaymentSelectionPageLoad"/>
+
+        <actionGroup ref="LoginAsCustomerOnCheckoutPageActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="gotoPaymentStep"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="getOrderNumber"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="getOrderNumber">
+            <actualResult type="const">$getOrderNumber</actualResult>
+        </assertNotEmpty>
+
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$getOrderNumber"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButton"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
+
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemoAction"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmitCreditMemo"/>
+        <scrollTo selector="//select[@id='history_status']" stepKey="scrollToAnchor"/>
+        <seeOptionIsSelected userInput="Closed" selector="//select[@id='history_status']" stepKey="seeOption1"/>
+
+        <!-- Add Virtual Product -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToProductPageVirtual">
+            <argument name="productUrlKey" value="$createVirtualProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddVirtualProductToCart">
+            <argument name="product" value="$$createVirtualProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckoutVirtual"/>
+        <waitForPageLoad stepKey="waitForPaymentSelectionPageLoadVirtual"/>
+
+        <!-- Place Order -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="getOrderNumberVirtual"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmptyVirtual" after="getOrderNumberVirtual">
+            <actualResult type="const">$getOrderNumberVirtual</actualResult>
+        </assertNotEmpty>
+
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersVirtual"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridByIdVirtual">
+            <argument name="orderId" value="$getOrderNumberVirtual"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButtonVirtual"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoiceVirtual"/>
+
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemoActionVirtual"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmitCreditMemoVirtual"/>
+        <scrollTo selector="//select[@id='history_status']" stepKey="scrollToAnchorVirtual"/>
+        <seeOptionIsSelected userInput="Closed" selector="//select[@id='history_status']" stepKey="seeOption1Virtual"/>
+
+        <!-- Add Configurable Product -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToProductPageConfigurable">
+            <argument name="productUrlKey" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Add configurable product to the cart  -->
+        <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
+            <argument name="urlKey" value="{{_defaultProduct.urlKey}}" />
+            <argument name="productAttribute" value="Color"/>
+            <argument name="productOption" value="{{colorProductAttribute2.name}}"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
+        <waitForPageLoad stepKey="waitForPaymentSelectionPageLoadConfigurable"/>
+
+        <!-- Place Order -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrderConfigurable"/>
+
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="getOrderNumberConfigurable"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmptyConfigurable" after="getOrderNumberConfigurable">
+            <actualResult type="const">$getOrderNumberConfigurable</actualResult>
+        </assertNotEmpty>
+
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersConfigurable"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridByIdConfigurable">
+            <argument name="orderId" value="$getOrderNumberConfigurable"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButtonConfigurable"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoiceConfigurable"/>
+
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemoActionConfigurable"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmitCreditMemoConfigurable"/>
+        <scrollTo selector="//select[@id='history_status']" stepKey="scrollToAnchorConfigurable"/>
+        <seeOptionIsSelected userInput="Closed" selector="//select[@id='history_status']" stepKey="seeOption1Configurable"/>
+
+        <!-- Add Downloadable Product -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToProductPageDownloadable">
+            <argument name="productUrlKey" value="$createDownloadableProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddDownloadableProductToCart">
+            <argument name="product" value="$$createDownloadableProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckoutDownloadable"/>
+        <waitForPageLoad stepKey="waitForPaymentSelectionPageLoadDownloadable"/>
+
+        <!-- Place Order -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrderDownloadable"/>
+
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="getOrderNumberDownloadable"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmptyDownloadable" after="getOrderNumberDownloadable">
+            <actualResult type="const">$getOrderNumberDownloadable</actualResult>
+        </assertNotEmpty>
+
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersDownloadable"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridByIdDownloadable">
+            <argument name="orderId" value="$getOrderNumberDownloadable"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButtonDownloadable"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoiceDownloadable"/>
+
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemoActionDownloadable"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmitCreditMemoDownloadable"/>
+        <scrollTo selector="//select[@id='history_status']" stepKey="scrollToAnchorDownloadable"/>
+        <seeOptionIsSelected userInput="Closed" selector="//select[@id='history_status']" stepKey="seeOption1Downloadable"/>
+
+    </test>
+</tests>

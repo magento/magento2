@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontVerifyCustomerDefaultCookieExpiryDateActionGroup">
+        <annotations>
+            <description>Verify a customer's cookies expiry date on browser's local storage in storefront</description>
+        </annotations>
+        <arguments>
+            <argument name="timezoneOffset" type="string" defaultValue="0"/>
+            <argument name="timeUnit" type="string" defaultValue="minute"/>
+        </arguments>
+
+        <!--Verify that there are cookies exists with the given name `section_data_ids`, `mage-cache-sessid`, `mage-cache-storage`-->
+        <seeCookie userInput="section_data_ids" stepKey="seeCookieForMagentoSectionDataIds"/>
+        <seeCookie userInput="mage-cache-sessid" stepKey="seeCookieForMagentoCacheSessionId"/>
+        <seeCookie userInput="mage-cache-storage" stepKey="seeCookieForMagentoCacheStorage"/>
+
+        <!--Grab the cookies attribute with the given names `section_data_ids`, `mage-cache-sessid`, `mage-cache-storage-->
+        <grabCookieAttributes userInput="section_data_ids" stepKey="grabCookieForMagentoDataIds"/>
+        <grabCookieAttributes userInput="mage-cache-sessid" stepKey="grabCookieForMagentoCacheSessionId"/>
+        <grabCookieAttributes userInput="mage-cache-storage" stepKey="grabCookieForMagentoCacheStorage"/>
+
+        <!--Grab expected date-->
+        <generateDate date="{{timezoneOffset}} {{timeUnit}}" format="d/m/Y" timezone="UTC" stepKey="generateExpireDate"/>
+
+        <!--Assert cookies `section_data_ids`, `mage-cache-sessid`, `mage-cache-storage` having expiry date equal to expected date-->
+        <assertEquals stepKey="validateExpiryDateForMagentoDataIds">
+            <actualResult type="string">{{$grabCookieForMagentoDataIds['expiry']}}</actualResult>
+            <expectedResult type="string">{{$generateExpireDate}}</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="validateExpiryDateForMagentoCacheSessionId">
+            <actualResult type="string">{{$grabCookieForMagentoCacheSessionId['expiry']}}</actualResult>
+            <expectedResult type="string">{{$generateExpireDate}}</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="validateExpiryDateForMagentoCacheStorage">
+            <actualResult type="string">{{$grabCookieForMagentoCacheStorage['expiry']}}</actualResult>
+            <expectedResult type="string">{{$generateExpireDate}}</expectedResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

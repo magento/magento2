@@ -1,12 +1,15 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * test Magento\Customer\Model\Metadata\Form\AbstractData
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
+use Laminas\I18n\Validator\Alpha;
+use Laminas\Validator\Date;
+use Laminas\Validator\Digits;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\ValidationRuleInterface;
 use Magento\Framework\App\Request\Http;
@@ -14,6 +17,9 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Validator\Alnum;
+use Magento\Framework\Validator\EmailAddress;
+use Magento\Framework\Validator\Hostname;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -23,125 +29,160 @@ use Psr\Log\LoggerInterface;
  */
 class AbstractDataTest extends TestCase
 {
-    const MODEL = 'MODEL';
+    public const MODEL = 'MODEL';
 
-    /** @var ExtendsAbstractData */
-    protected $_model;
+    /**
+     * @var ExtendsAbstractData
+     */
+    private $model;
 
-    /** @var MockObject|TimezoneInterface */
-    protected $_localeMock;
+    /**
+     * @var MockObject|TimezoneInterface
+     */
+    private $localeMock;
 
-    /** @var MockObject|ResolverInterface */
-    protected $_localeResolverMock;
+    /**
+     * @var MockObject|ResolverInterface
+     */
+    private $localeResolverMock;
 
-    /** @var MockObject|LoggerInterface */
-    protected $_loggerMock;
+    /**
+     * @var MockObject|LoggerInterface
+     */
+    private $loggerMock;
 
-    /** @var MockObject|AttributeMetadataInterface */
-    protected $_attributeMock;
+    /**
+     * @var MockObject|AttributeMetadataInterface
+     */
+    private $attributeMock;
 
-    /** @var string */
-    protected $_value;
+    /**
+     * @var string
+     */
+    private $value;
 
-    /** @var string */
-    protected $_entityTypeCode;
+    /**
+     * @var string
+     */
+    private $entityTypeCode;
 
-    /** @var string */
-    protected $_isAjax;
+    /**
+     * @var string
+     */
+    private $isAjax;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->_localeMock = $this->getMockBuilder(
+        $this->localeMock = $this->getMockBuilder(
             TimezoneInterface::class
         )->disableOriginalConstructor()
             ->getMock();
-        $this->_localeResolverMock = $this->getMockBuilder(
+        $this->localeResolverMock = $this->getMockBuilder(
             ResolverInterface::class
         )->disableOriginalConstructor()
             ->getMock();
-        $this->_loggerMock = $this->getMockBuilder(LoggerInterface::class)
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
-        $this->_attributeMock = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
-        $this->_value = 'VALUE';
-        $this->_entityTypeCode = 'ENTITY_TYPE_CODE';
-        $this->_isAjax = false;
+        $this->attributeMock = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
+        $this->value = 'VALUE';
+        $this->entityTypeCode = 'ENTITY_TYPE_CODE';
+        $this->isAjax = false;
 
-        $this->_model = new ExtendsAbstractData(
-            $this->_localeMock,
-            $this->_loggerMock,
-            $this->_attributeMock,
-            $this->_localeResolverMock,
-            $this->_value,
-            $this->_entityTypeCode,
-            $this->_isAjax
+        $this->model = new ExtendsAbstractData(
+            $this->localeMock,
+            $this->loggerMock,
+            $this->attributeMock,
+            $this->localeResolverMock,
+            $this->value,
+            $this->entityTypeCode,
+            $this->isAjax
         );
     }
 
-    public function testGetAttribute()
+    /**
+     * @return void
+     */
+    public function testGetAttribute(): void
     {
-        $this->assertSame($this->_attributeMock, $this->_model->getAttribute());
+        $this->assertSame($this->attributeMock, $this->model->getAttribute());
     }
 
-    public function testGetAttributeException()
+    /**
+     * @return void
+     */
+    public function testGetAttributeException(): void
     {
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('Attribute object is undefined');
 
-        $this->_model->setAttribute(false);
-        $this->_model->getAttribute();
+        $this->model->setAttribute(false);
+        $this->model->getAttribute();
     }
 
-    public function testSetRequestScope()
+    /**
+     * @return void
+     */
+    public function testSetRequestScope(): void
     {
-        $this->assertSame($this->_model, $this->_model->setRequestScope('REQUEST_SCOPE'));
-        $this->assertSame('REQUEST_SCOPE', $this->_model->getRequestScope());
+        $this->assertSame($this->model, $this->model->setRequestScope('REQUEST_SCOPE'));
+        $this->assertSame('REQUEST_SCOPE', $this->model->getRequestScope());
     }
 
     /**
      * @param bool $bool
+     *
+     * @return void
      * @dataProvider trueFalseDataProvider
      */
-    public function testSetRequestScopeOnly($bool)
+    public function testSetRequestScopeOnly($bool): void
     {
-        $this->assertSame($this->_model, $this->_model->setRequestScopeOnly($bool));
-        $this->assertSame($bool, $this->_model->isRequestScopeOnly());
+        $this->assertSame($this->model, $this->model->setRequestScopeOnly($bool));
+        $this->assertSame($bool, $this->model->isRequestScopeOnly());
     }
 
     /**
      * @return array
      */
-    public function trueFalseDataProvider()
+    public function trueFalseDataProvider(): array
     {
         return [[true], [false]];
     }
 
-    public function testGetSetExtractedData()
+    /**
+     * @return void
+     */
+    public function testGetSetExtractedData(): void
     {
         $data = ['KEY' => 'VALUE'];
-        $this->assertSame($this->_model, $this->_model->setExtractedData($data));
-        $this->assertSame($data, $this->_model->getExtractedData());
-        $this->assertSame('VALUE', $this->_model->getExtractedData('KEY'));
-        $this->assertNull($this->_model->getExtractedData('BAD_KEY'));
+        $this->assertSame($this->model, $this->model->setExtractedData($data));
+        $this->assertSame($data, $this->model->getExtractedData());
+        $this->assertSame('VALUE', $this->model->getExtractedData('KEY'));
+        $this->assertNull($this->model->getExtractedData('BAD_KEY'));
     }
 
     /**
      * @param bool|string $input
      * @param bool|string $output
      * @param bool|string $filter
+     *
+     * @return void
      * @dataProvider applyInputFilterProvider
      */
-    public function testApplyInputFilter($input, $output, $filter)
+    public function testApplyInputFilter($input, $output, $filter): void
     {
         if ($input) {
-            $this->_attributeMock->expects($this->once())->method('getInputFilter')->willReturn($filter);
+            $this->attributeMock->expects($this->once())->method('getInputFilter')->willReturn($filter);
         }
-        $this->assertEquals($output, $this->_model->applyInputFilter($input));
+        $this->assertEquals($output, $this->model->applyInputFilter($input));
     }
 
     /**
      * @return array
      */
-    public function applyInputFilterProvider()
+    public function applyInputFilterProvider(): array
     {
         return [
             [false, false, false],
@@ -155,17 +196,19 @@ class AbstractDataTest extends TestCase
     /**
      * @param null|bool|string $format
      * @param string           $output
+     *
+     * @return void
      * @dataProvider dateFilterFormatProvider
      */
-    public function testDateFilterFormat($format, $output)
+    public function testDateFilterFormat($format, $output): void
     {
         // Since model is instantiated in setup, if I use it directly in the dataProvider, it will be null.
         // I use this value to indicate the model is to be used for output
         if (self::MODEL == $output) {
-            $output = $this->_model;
+            $output = $this->model;
         }
         if ($format === null) {
-            $this->_localeMock->expects(
+            $this->localeMock->expects(
                 $this->once()
             )->method(
                 'getDateFormat'
@@ -175,14 +218,14 @@ class AbstractDataTest extends TestCase
                 $output
             );
         }
-        $actual = $this->_model->dateFilterFormat($format);
+        $actual = $this->model->dateFilterFormat($format);
         $this->assertEquals($output, $actual);
     }
 
     /**
      * @return array
      */
-    public function dateFilterFormatProvider()
+    public function dateFilterFormatProvider(): array
     {
         return [[null, 'Whatever I put'], [false, self::MODEL], ['something else', self::MODEL]];
     }
@@ -191,22 +234,24 @@ class AbstractDataTest extends TestCase
      * @param bool|string $input
      * @param bool|string $output
      * @param bool|string $filter
+     *
+     * @return void
      * @dataProvider applyOutputFilterDataProvider
      */
-    public function testApplyOutputFilter($input, $output, $filter)
+    public function testApplyOutputFilter($input, $output, $filter): void
     {
         if ($input) {
-            $this->_attributeMock->expects($this->once())->method('getInputFilter')->willReturn($filter);
+            $this->attributeMock->expects($this->once())->method('getInputFilter')->willReturn($filter);
         }
-        $this->assertEquals($output, $this->_model->applyOutputFilter($input));
+        $this->assertEquals($output, $this->model->applyOutputFilter($input));
     }
 
     /**
-     * This is similar to applyInputFilterProvider except for striptags
+     * This is similar to applyInputFilterProvider except for striptags.
      *
      * @return array
      */
-    public function applyOutputFilterDataProvider()
+    public function applyOutputFilterDataProvider(): array
     {
         return [
             [false, false, false],
@@ -224,13 +269,14 @@ class AbstractDataTest extends TestCase
      * @param null|string $label
      * @param null|string $inputValidation
      * @param bool|array  $expectedOutput
+     *
+     * @return void
      * @dataProvider validateInputRuleDataProvider
      */
     public function testValidateInputRule($value, $label, $inputValidation, $expectedOutput): void
     {
-        $validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getValue'])
+        $validationRule = $this->getMockBuilder(ValidationRuleInterface::class)->disableOriginalConstructor()
+            ->onlyMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
 
         $validationRule->method('getName')
@@ -239,19 +285,19 @@ class AbstractDataTest extends TestCase
         $validationRule->method('getValue')
             ->willReturn($inputValidation);
 
-        $this->_attributeMock->method('getStoreLabel')
+        $this->attributeMock->method('getStoreLabel')
             ->willReturn($label);
 
-        $this->_attributeMock->method('getValidationRules')
+        $this->attributeMock->method('getValidationRules')
             ->willReturn([$validationRule]);
 
-        $this->assertEquals($expectedOutput, $this->_model->validateInputRule($value));
+        $this->assertEquals($expectedOutput, $this->model->validateInputRule($value));
     }
 
     /**
      * @return array
      */
-    public function validateInputRuleDataProvider()
+    public function validateInputRuleDataProvider(): array
     {
         return [
             [null, null, null, true],
@@ -261,7 +307,7 @@ class AbstractDataTest extends TestCase
                 'mylabel',
                 'alphanumeric',
                 [
-                    \Zend_Validate_Alnum::NOT_ALNUM => '"mylabel" contains non-alphabetic or non-numeric characters.'
+                    Alnum::NOT_ALNUM => '"mylabel" contains non-alphabetic or non-numeric characters.'
                 ]
             ],
             [
@@ -269,7 +315,7 @@ class AbstractDataTest extends TestCase
                 'mylabel',
                 'alphanumeric',
                 [
-                    \Zend_Validate_Alnum::NOT_ALNUM => '"mylabel" contains non-alphabetic or non-numeric characters.'
+                    Alnum::NOT_ALNUM => '"mylabel" contains non-alphabetic or non-numeric characters.'
                 ]
             ],
             ['abcqaz', 'mylabel', 'alphanumeric', true],
@@ -278,13 +324,13 @@ class AbstractDataTest extends TestCase
                 '!@#$',
                 'mylabel',
                 'numeric',
-                [\Zend_Validate_Digits::NOT_DIGITS => '"mylabel" contains non-numeric characters.']
+                [Digits::NOT_DIGITS => '"mylabel" contains non-numeric characters.']
             ],
             [
                 '1234',
                 'mylabel',
                 'alpha',
-                [\Zend_Validate_Alpha::NOT_ALPHA => '"mylabel" contains non-alphabetic characters.']
+                [Alpha::NOT_ALPHA => '"mylabel" contains non-alphabetic characters.']
             ],
             [
                 '!@#$',
@@ -292,9 +338,9 @@ class AbstractDataTest extends TestCase
                 'email',
                 [
                     // @codingStandardsIgnoreStart
-                    \Zend_Validate_EmailAddress::INVALID_HOSTNAME => '"mylabel" is not a valid hostname.',
-                    \Zend_Validate_Hostname::INVALID_HOSTNAME => "'#\$' does not match the expected structure for a DNS hostname",
-                    \Zend_Validate_Hostname::INVALID_LOCAL_NAME => "'#\$' does not look like a valid local network name."
+                    EmailAddress::INVALID_HOSTNAME => '"mylabel" is not a valid hostname.',
+                    Hostname::INVALID_HOSTNAME => "'#\$' does not match the expected structure for a DNS hostname",
+                    Hostname::INVALID_LOCAL_NAME => "'#\$' does not look like a valid local network name."
                     // @codingStandardsIgnoreEnd
                 ]
             ],
@@ -304,27 +350,29 @@ class AbstractDataTest extends TestCase
                 '1234',
                 'mylabel',
                 'date',
-                [\Zend_Validate_Date::INVALID_DATE => '"mylabel" is not a valid date.']
+                [Date::INVALID_DATE => '"mylabel" is not a valid date.']
             ]
         ];
     }
 
     /**
      * @param bool $ajaxRequest
+     *
+     * @return void
      * @dataProvider trueFalseDataProvider
      */
-    public function testGetIsAjaxRequest($ajaxRequest)
+    public function testGetIsAjaxRequest($ajaxRequest): void
     {
-        $this->_model = new ExtendsAbstractData(
-            $this->_localeMock,
-            $this->_loggerMock,
-            $this->_attributeMock,
-            $this->_localeResolverMock,
-            $this->_value,
-            $this->_entityTypeCode,
+        $this->model = new ExtendsAbstractData(
+            $this->localeMock,
+            $this->loggerMock,
+            $this->attributeMock,
+            $this->localeResolverMock,
+            $this->value,
+            $this->entityTypeCode,
             $ajaxRequest
         );
-        $this->assertSame($ajaxRequest, $this->_model->getIsAjaxRequest());
+        $this->assertSame($ajaxRequest, $this->model->getIsAjaxRequest());
     }
 
     /**
@@ -333,80 +381,54 @@ class AbstractDataTest extends TestCase
      * @param bool|string                   $requestScope
      * @param bool                          $requestScopeOnly
      * @param string                        $expectedValue
+     *
+     * @return void
      * @dataProvider getRequestValueDataProvider
      */
-    public function testGetRequestValue($request, $attributeCode, $requestScope, $requestScopeOnly, $expectedValue)
-    {
-        $this->_attributeMock->expects(
+    public function testGetRequestValue(
+        $request,
+        $attributeCode,
+        $requestScope,
+        $requestScopeOnly,
+        $expectedValue
+    ): void {
+        $this->attributeMock->expects(
             $this->once()
         )->method(
             'getAttributeCode'
         )->willReturn(
             $attributeCode
         );
-        $this->_model->setRequestScope($requestScope);
-        $this->_model->setRequestScopeOnly($requestScopeOnly);
-        $this->assertEquals($expectedValue, $this->_model->getRequestValue($request));
+        $this->model->setRequestScope($requestScope);
+        $this->model->setRequestScopeOnly($requestScopeOnly);
+        $this->assertEquals($expectedValue, $this->model->getRequestValue($request));
     }
 
     /**
      * @return array
      */
-    public function getRequestValueDataProvider()
+    public function getRequestValueDataProvider(): array
     {
         $expectedValue = 'EXPECTED_VALUE';
-        $requestMockOne = $this->getMockBuilder(RequestInterface::class)
+        $requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMock();
-        $requestMockOne->expects(
-            $this->any()
-        )->method(
-            'getParam'
-        )->with(
-            'ATTR_CODE'
-        )->willReturn(
-            $expectedValue
-        );
+        $requestMock->method('getParam')
+            ->withConsecutive(['ATTR_CODE'], ['REQUEST_SCOPE'], ['REQUEST_SCOPE'])
+            ->willReturn($expectedValue, ['ATTR_CODE' => $expectedValue], []);
 
-        $requestMockTwo = $this->getMockBuilder(RequestInterface::class)
+        $requestMockHttp = $this->getMockBuilder(Http::class)
+            ->disableOriginalConstructor()
             ->getMock();
-        $requestMockTwo->expects(
-            $this->at(0)
-        )->method(
-            'getParam'
-        )->with(
-            'REQUEST_SCOPE'
-        )->willReturn(
-            ['ATTR_CODE' => $expectedValue]
-        );
+        $requestMockHttp
+            ->expects($this->once())
+            ->method('getParams')
+            ->willReturn(['REQUEST' => ['SCOPE' => ['ATTR_CODE' => $expectedValue]]]);
 
-        $requestMockFour = $this->getMockBuilder(RequestInterface::class)
-            ->getMock();
-        $requestMockFour->expects(
-            $this->at(0)
-        )->method(
-            'getParam'
-        )->with(
-            'REQUEST_SCOPE'
-        )->willReturn(
-            []
-        );
-
-        $requestMockThree = $this->getMockBuilder(
-            Http::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $requestMockThree->expects(
-            $this->once()
-        )->method(
-            'getParams'
-        )->willReturn(
-            ['REQUEST' => ['SCOPE' => ['ATTR_CODE' => $expectedValue]]]
-        );
         return [
-            [$requestMockOne, 'ATTR_CODE', false, false, $expectedValue],
-            [$requestMockTwo, 'ATTR_CODE', 'REQUEST_SCOPE', false, $expectedValue],
-            [$requestMockThree, 'ATTR_CODE', 'REQUEST/SCOPE', false, $expectedValue],
-            [$requestMockFour, 'ATTR_CODE', 'REQUEST_SCOPE', false, false],
+            [$requestMock, 'ATTR_CODE', false, false, $expectedValue],
+            [$requestMock, 'ATTR_CODE', 'REQUEST_SCOPE', false, $expectedValue],
+            [$requestMock, 'ATTR_CODE', 'REQUEST_SCOPE', false, false],
+            [$requestMockHttp, 'ATTR_CODE', 'REQUEST/SCOPE', false, $expectedValue]
         ];
     }
 }

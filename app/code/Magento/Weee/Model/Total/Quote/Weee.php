@@ -25,11 +25,11 @@ class Weee extends AbstractTotal
     /**
      * Constant for weee item code prefix
      */
-    const ITEM_CODE_WEEE_PREFIX = 'weee';
+    public const ITEM_CODE_WEEE_PREFIX = 'weee';
     /**
      * Constant for weee item type
      */
-    const ITEM_TYPE = 'weee';
+    public const ITEM_TYPE = 'weee';
 
     /**
      * @var WeeHelper
@@ -42,7 +42,7 @@ class Weee extends AbstractTotal
     protected $_store;
 
     /**
-     * Counter
+     * Counter to keep track of count for weee
      *
      * @var int
      */
@@ -86,6 +86,15 @@ class Weee extends AbstractTotal
         $this->weeeData = $weeeData;
         $this->setCode('weee');
         $this->weeeCodeToItemMap = [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->setCode('weee');
     }
 
     /**
@@ -245,6 +254,7 @@ class Weee extends AbstractTotal
 
         $this->processTotalAmount(
             $total,
+            $address,
             $totalRowValueExclTax,
             $baseTotalRowValueExclTax,
             $totalRowValueInclTax,
@@ -258,6 +268,7 @@ class Weee extends AbstractTotal
      * Process row amount based on FPT total amount configuration setting
      *
      * @param Total $total
+     * @param Address $address
      * @param float $rowValueExclTax
      * @param float $baseRowValueExclTax
      * @param float $rowValueInclTax
@@ -266,6 +277,7 @@ class Weee extends AbstractTotal
      */
     protected function processTotalAmount(
         $total,
+        $address,
         $rowValueExclTax,
         $baseRowValueExclTax,
         $rowValueInclTax,
@@ -284,6 +296,8 @@ class Weee extends AbstractTotal
         $total->setBaseSubtotalInclTax(
             $total->getBaseSubtotalInclTax() + $this->priceCurrency->round($baseRowValueInclTax)
         );
+        $address->setBaseSubtotalTotalInclTax($total->getBaseSubtotalInclTax());
+        $address->setSubtotalInclTax($total->getSubtotalInclTax());
         return $this;
     }
 
@@ -310,9 +324,8 @@ class Weee extends AbstractTotal
         foreach ($item->getChildren() as $child) {
             $associatedTaxables[] = $child->getAssociatedTaxables();
         }
-        $item->setAssociatedTaxables(
-            array_unique(array_merge([], ...$associatedTaxables))
-        );
+        $associatedTaxables = array_merge([], ...$associatedTaxables);
+        $item->setAssociatedTaxables($associatedTaxables);
     }
 
     /**

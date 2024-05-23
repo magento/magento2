@@ -64,12 +64,12 @@ class FrontControllerTest extends TestCase
     private $requestValidator;
 
     /**
-     * @var MockObject|\MessageManager
+     * @var MockObject|MessageManager
      */
     private $messages;
 
     /**
-     * @var MockObject|\LoggerInterface
+     * @var MockObject|LoggerInterface
      */
     private $logger;
 
@@ -88,11 +88,14 @@ class FrontControllerTest extends TestCase
      */
     private $areaMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isDispatched', 'setDispatched', 'initForward', 'setActionName'])
+            ->onlyMethods(['isDispatched', 'setDispatched', 'initForward', 'setActionName'])
             ->getMock();
 
         $this->router = $this->getMockForAbstractClass(RouterInterface::class);
@@ -123,7 +126,10 @@ class FrontControllerTest extends TestCase
         );
     }
 
-    public function testDispatchThrowException()
+    /**
+     * @return void
+     */
+    public function testDispatchThrowException(): void
     {
         $this->expectException('LogicException');
         $this->expectExceptionMessage('Front controller reached 100 router match iterations');
@@ -150,15 +156,19 @@ class FrontControllerTest extends TestCase
 
     /**
      * Check adding validation failure message to debug log.
+     *
+     * @return void
      */
-    public function testAddingValidationFailureMessageToDebugLog()
+    public function testAddingValidationFailureMessageToDebugLog(): void
     {
         $exceptionMessage = 'exception_message';
         $exception = new InvalidRequestException($exceptionMessage);
 
         $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn('frontend');
-        $this->areaMock->expects($this->at(0))->method('load')->with(Area::PART_DESIGN)->willReturnSelf();
-        $this->areaMock->expects($this->at(1))->method('load')->with(Area::PART_TRANSLATE)->willReturnSelf();
+        $this->areaMock
+            ->method('load')
+            ->withConsecutive([Area::PART_DESIGN], [Area::PART_TRANSLATE])
+            ->willReturnOnConsecutiveCalls($this->areaMock, $this->areaMock);
         $this->areaListMock->expects($this->any())->method('getArea')->willReturn($this->areaMock);
         $this->routerList->expects($this->any())
             ->method('valid')
@@ -172,22 +182,21 @@ class FrontControllerTest extends TestCase
             ->method('dispatch')
             ->with($this->request)
             ->willReturn($response);
-        $this->router->expects($this->at(0))
+        $this->router
             ->method('match')
-            ->with($this->request)
-            ->willReturn(false);
-        $this->router->expects($this->at(1))
-            ->method('match')
-            ->with($this->request)
-            ->willReturn($controllerInstance);
+            ->withConsecutive([$this->request], [$this->request])
+            ->willReturnOnConsecutiveCalls(false, $controllerInstance);
 
         $this->routerList->expects($this->any())
             ->method('current')
             ->willReturn($this->router);
 
-        $this->request->expects($this->at(0))->method('isDispatched')->willReturn(false);
-        $this->request->expects($this->at(1))->method('setDispatched')->with(true);
-        $this->request->expects($this->at(2))->method('isDispatched')->willReturn(true);
+        $this->request
+            ->method('isDispatched')
+            ->willReturnOnConsecutiveCalls(false, true);
+        $this->request
+            ->method('setDispatched')
+            ->withConsecutive([true]);
 
         $this->requestValidator->expects($this->once())
             ->method('validate')->with($this->request, $controllerInstance)->willThrowException($exception);
@@ -200,7 +209,10 @@ class FrontControllerTest extends TestCase
         $this->assertEquals($exceptionMessage, $this->model->dispatch($this->request));
     }
 
-    public function testDispatched()
+    /**
+     * @return void
+     */
+    public function testDispatched(): void
     {
         $this->routerList->expects($this->any())
             ->method('valid')
@@ -214,30 +226,34 @@ class FrontControllerTest extends TestCase
             ->method('dispatch')
             ->with($this->request)
             ->willReturn($response);
-        $this->router->expects($this->at(0))
+        $this->router
             ->method('match')
-            ->with($this->request)
-            ->willReturn(false);
-        $this->router->expects($this->at(1))
-            ->method('match')
-            ->with($this->request)
-            ->willReturn($controllerInstance);
+            ->withConsecutive([$this->request], [$this->request])
+            ->willReturnOnConsecutiveCalls(false, $controllerInstance);
 
         $this->routerList->expects($this->any())
             ->method('current')
             ->willReturn($this->router);
         $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn('frontend');
-        $this->areaMock->expects($this->at(0))->method('load')->with(Area::PART_DESIGN)->willReturnSelf();
-        $this->areaMock->expects($this->at(1))->method('load')->with(Area::PART_TRANSLATE)->willReturnSelf();
+        $this->areaMock
+            ->method('load')
+            ->withConsecutive([Area::PART_DESIGN], [Area::PART_TRANSLATE])
+            ->willReturnOnConsecutiveCalls($this->areaMock, $this->areaMock);
         $this->areaListMock->expects($this->any())->method('getArea')->willReturn($this->areaMock);
-        $this->request->expects($this->at(0))->method('isDispatched')->willReturn(false);
-        $this->request->expects($this->at(1))->method('setDispatched')->with(true);
-        $this->request->expects($this->at(2))->method('isDispatched')->willReturn(true);
+        $this->request
+            ->method('isDispatched')
+            ->willReturnOnConsecutiveCalls(false, true);
+        $this->request
+            ->method('setDispatched')
+            ->with(true);
 
         $this->assertEquals($response, $this->model->dispatch($this->request));
     }
 
-    public function testDispatchedNotFoundException()
+    /**
+     * @return void
+     */
+    public function testDispatchedNotFoundException(): void
     {
         $this->routerList->expects($this->any())
             ->method('valid')
@@ -251,30 +267,35 @@ class FrontControllerTest extends TestCase
             ->method('dispatch')
             ->with($this->request)
             ->willReturn($response);
-        $this->router->expects($this->at(0))
+        $this->router
             ->method('match')
-            ->with($this->request)
-            ->willThrowException(new NotFoundException(new Phrase('Page not found.')));
-        $this->router->expects($this->at(1))
-            ->method('match')
-            ->with($this->request)
-            ->willReturn($controllerInstance);
+            ->withConsecutive([$this->request], [$this->request])
+            ->willReturnOnConsecutiveCalls(
+                $this->throwException(new NotFoundException(new Phrase('Page not found.'))),
+                $controllerInstance
+            );
 
         $this->routerList->expects($this->any())
             ->method('current')
             ->willReturn($this->router);
 
         $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn('frontend');
-        $this->areaMock->expects($this->at(0))->method('load')->with(Area::PART_DESIGN)->willReturnSelf();
-        $this->areaMock->expects($this->at(1))->method('load')->with(Area::PART_TRANSLATE)->willReturnSelf();
+        $this->areaMock
+            ->method('load')
+            ->withConsecutive([Area::PART_DESIGN], [Area::PART_TRANSLATE])
+            ->willReturnOnConsecutiveCalls($this->areaMock, $this->areaMock);
         $this->areaListMock->expects($this->any())->method('getArea')->willReturn($this->areaMock);
-        $this->request->expects($this->at(0))->method('isDispatched')->willReturn(false);
-        $this->request->expects($this->at(1))->method('initForward');
-        $this->request->expects($this->at(2))->method('setActionName')->with('noroute');
-        $this->request->expects($this->at(3))->method('setDispatched')->with(false);
-        $this->request->expects($this->at(4))->method('isDispatched')->willReturn(false);
-        $this->request->expects($this->at(5))->method('setDispatched')->with(true);
-        $this->request->expects($this->at(6))->method('isDispatched')->willReturn(true);
+        $this->request
+            ->method('isDispatched')
+            ->willReturnOnConsecutiveCalls(false, false, true);
+        $this->request
+            ->method('setDispatched')
+            ->withConsecutive([false], [true]);
+        $this->request
+            ->method('setActionName')
+            ->with('noroute');
+        $this->request
+            ->method('initForward');
 
         $this->assertEquals($response, $this->model->dispatch($this->request));
     }

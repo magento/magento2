@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutShippingMethodsSection">
+        <element name="shippingMethodSelectorNextButton" selector="#checkout-step-shipping_method button.button.action.continue.primary" type="button" timeout="30" />
         <element name="next" type="button" selector="button.button.action.continue.primary" timeout="30"/>
         <element name="firstShippingMethod" type="radio" selector="//*[@id='checkout-shipping-method-load']//input[@class='radio']"/>
         <element name="shippingMethodRow" type="text" selector=".form.methods-shipping table tbody tr"/>
@@ -21,5 +22,20 @@
         <element name="freeShippingShippingMethod" type="input" selector="#s_method_freeshipping_freeshipping" timeout="30"/>
         <element name="noQuotesMsg" type="text" selector="#checkout-step-shipping_method div"/>
         <element name="price" type="text" selector="//*[@id='checkout-shipping-method-load']//td[@class='col col-price']"/>
+        <element name="shippingRatePriceByName" type="text" selector="//div[@id='checkout-shipping-method-load']//td[contains(., '{{var1}}')]/..//td//span[contains(@class, 'price')]" parameterized="true"/>
+        <element name="showShippingVatNumber" type="text" selector="div.shipping-address-item"/>
+        <element name="showBillingVatNumber" type="text" selector="div.billing-address-details"/>
+        <element name="showShippingInfoVatNumber" type="text" selector="div.shipping-information-content"/>
+        <element name="shippingMethodDhlLabel" type="text" selector="#label_carrier_null_dhl"/>
+        <element name="shippingMethodFlatRateLabel" type="text" selector="#label_carrier_flatrate_flatrate"/>
+        <element name="shippingMethodDhlWorldWideExpressLabel" type="text" selector="#label_method_P_dhl"/>
+        <element name="shippingMethodDhlWorldWideExpress" type="radio" selector="#checkout-shipping-method-load input[value='dhl_P']"/>
+        <element name="shippingMethodDhlExpressTwelveLabel" type="text" selector="#label_method_Y_dhl"/>
+        <element name="shippingMethodDhlExpressTwelve" type="radio" selector="#checkout-shipping-method-load input[value='dhl_Y']"/>
+        <element name="shippingMethodDhlMedicalExpressLabel" type="text" selector="#label_method_Q_dhl"/>
+        <element name="shippingMethodDhlMedicalExpress" type="radio" selector="#checkout-shipping-method-load input[value='dhl_Q']"/>
+        <element name="shippingMethodFreeShippingLabel" type="text" selector="#label_carrier_freeshipping_freeshipping"/>
+        <element name="shippingDHLErrorMessage" type="text" selector="#checkout-shipping-method-load .table-checkout-shipping-method tr.row-error .error div"/>
+        <element name="smartPostShippingMethod" type="radio" selector="#checkout-shipping-method-load input[value='fedex_FEDEX_GROUND']"/>
     </section>
 </sections>

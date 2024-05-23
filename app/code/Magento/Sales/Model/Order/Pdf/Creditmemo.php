@@ -87,7 +87,7 @@ class Creditmemo extends AbstractPdf
         $page->setFillColor(new \Zend_Pdf_Color_Rgb(0.93, 0.92, 0.92));
         $page->setLineColor(new \Zend_Pdf_Color_GrayScale(0.5));
         $page->setLineWidth(0.5);
-        $page->drawRectangle(25, $this->y, 570, $this->y - 30);
+        $page->drawRectangle(25, $this->y, 570, $this->y - 15);
         $this->y -= 10;
         $page->setFillColor(new \Zend_Pdf_Color_Rgb(0, 0, 0));
 

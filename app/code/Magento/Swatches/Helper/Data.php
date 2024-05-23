@@ -6,9 +6,9 @@
 namespace Magento\Swatches\Helper;
 
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Catalog\Api\Data\ProductInterface as Product;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product as ModelProduct;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
@@ -23,8 +23,6 @@ use Magento\Swatches\Model\SwatchAttributesProvider;
 use Magento\Swatches\Model\SwatchAttributeType;
 
 /**
- * Class Helper Data
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Data
@@ -32,12 +30,12 @@ class Data
     /**
      * When we init media gallery empty image types contain this value.
      */
-    const EMPTY_IMAGE_VALUE = 'no_selection';
+    public const EMPTY_IMAGE_VALUE = 'no_selection';
 
     /**
      * The int value of the Default store ID
      */
-    const DEFAULT_STORE_ID = 0;
+    public const DEFAULT_STORE_ID = 0;
 
     /**
      * @var CollectionFactory
@@ -83,8 +81,11 @@ class Data
     ];
 
     /**
-     * Serializer to/from JSON.
-     *
+     * @var array
+     */
+    private $swatchesCache = [];
+
+    /**
      * @var Json
      */
     private $serializer;
@@ -106,7 +107,7 @@ class Data
      * @param SwatchCollectionFactory $swatchCollectionFactory
      * @param UrlBuilder $urlBuilder
      * @param Json|null $serializer
-     * @param SwatchAttributesProvider $swatchAttributesProvider
+     * @param SwatchAttributesProvider|null $swatchAttributesProvider
      * @param SwatchAttributeType|null $swatchTypeChecker
      */
     public function __construct(
@@ -123,12 +124,12 @@ class Data
         $this->productRepository = $productRepository;
         $this->storeManager = $storeManager;
         $this->swatchCollectionFactory = $swatchCollectionFactory;
+        $this->imageUrlBuilder = $urlBuilder;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->create(Json::class);
         $this->swatchAttributesProvider = $swatchAttributesProvider
             ?: ObjectManager::getInstance()->get(SwatchAttributesProvider::class);
         $this->swatchTypeChecker = $swatchTypeChecker
             ?: ObjectManager::getInstance()->create(SwatchAttributeType::class);
-        $this->imageUrlBuilder = $urlBuilder;
     }
 
     /**
@@ -163,11 +164,11 @@ class Data
     /**
      * Check is media attribute available
      *
-     * @param ModelProduct $product
+     * @param Product $product
      * @param string $attributeCode
      * @return bool
      */
-    private function isMediaAvailable(ModelProduct $product, string $attributeCode): bool
+    private function isMediaAvailable(Product $product, string $attributeCode): bool
     {
         $isAvailable = false;
 
@@ -186,11 +187,11 @@ class Data
      * Load first variation
      *
      * @param string $attributeCode swatch_image|image
-     * @param ModelProduct $configurableProduct
+     * @param Product $configurableProduct
      * @param array $requiredAttributes
-     * @return bool|Product
+     * @return bool|ProductInterface
      */
-    private function loadFirstVariation($attributeCode, ModelProduct $configurableProduct, array $requiredAttributes)
+    private function loadFirstVariation($attributeCode, Product $configurableProduct, array $requiredAttributes)
     {
         if ($this->isProductHasSwatch($configurableProduct)) {
             $usedProducts = $configurableProduct->getTypeInstance()->getUsedProducts($configurableProduct);
@@ -210,11 +211,11 @@ class Data
     /**
      * Load first variation with swatch image
      *
-     * @param Product $configurableProduct
+     * @param ProductInterface|Product $configurableProduct
      * @param array $requiredAttributes
-     * @return bool|Product
+     * @return bool|ProductInterface
      */
-    public function loadFirstVariationWithSwatchImage(Product $configurableProduct, array $requiredAttributes)
+    public function loadFirstVariationWithSwatchImage(ProductInterface $configurableProduct, array $requiredAttributes)
     {
         return $this->loadFirstVariation('swatch_image', $configurableProduct, $requiredAttributes);
     }
@@ -222,11 +223,11 @@ class Data
     /**
      * Load first variation with image
      *
-     * @param Product $configurableProduct
+     * @param ProductInterface|Product $configurableProduct
      * @param array $requiredAttributes
-     * @return bool|Product
+     * @return bool|ProductInterface
      */
-    public function loadFirstVariationWithImage(Product $configurableProduct, array $requiredAttributes)
+    public function loadFirstVariationWithImage(ProductInterface $configurableProduct, array $requiredAttributes)
     {
         return $this->loadFirstVariation('image', $configurableProduct, $requiredAttributes);
     }
@@ -234,11 +235,11 @@ class Data
     /**
      * Load Variation Product using fallback
      *
-     * @param Product $parentProduct
+     * @param ProductInterface $parentProduct
      * @param array $attributes
-     * @return bool|Product
+     * @return bool|ProductInterface
      */
-    public function loadVariationByFallback(Product $parentProduct, array $attributes)
+    public function loadVariationByFallback(ProductInterface $parentProduct, array $attributes)
     {
         if (!$this->isProductHasSwatch($parentProduct)) {
             return false;
@@ -318,12 +319,12 @@ class Data
      *      ]
      * ]
      *
-     * @param ModelProduct $product
+     * @param Product $product
      *
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getProductMediaGallery(ModelProduct $product): array
+    public function getProductMediaGallery(Product $product): array
     {
         $baseImage = null;
         $gallery = [];
@@ -394,22 +395,21 @@ class Data
     /**
      * Retrieve collection of Swatch attributes
      *
-     * @param Product $product
+     * @param ProductInterface|Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
      */
-    private function getSwatchAttributes(Product $product)
+    private function getSwatchAttributes(ProductInterface $product)
     {
-        $swatchAttributes = $this->swatchAttributesProvider->provide($product);
-        return $swatchAttributes;
+        return $this->swatchAttributesProvider->provide($product);
     }
 
     /**
      * Retrieve collection of Eav Attributes from Configurable product
      *
-     * @param Product $product
+     * @param ProductInterface|Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
      */
-    public function getAttributesFromConfigurable(Product $product)
+    public function getAttributesFromConfigurable(ProductInterface $product)
     {
         $result = [];
         $typeInstance = $product->getTypeInstance();
@@ -428,10 +428,10 @@ class Data
     /**
      * Retrieve all visible Swatch attributes for current product.
      *
-     * @param Product $product
+     * @param ProductInterface $product
      * @return array
      */
-    public function getSwatchAttributesAsArray(Product $product)
+    public function getSwatchAttributesAsArray(ProductInterface $product)
     {
         $result = [];
         $swatchAttributes = $this->getSwatchAttributes($product);
@@ -446,11 +446,6 @@ class Data
 
         return $result;
     }
-
-    /**
-     * @var array
-     */
-    private $swatchesCache = [];
 
     /**
      * Get swatch options by option id's according to fallback logic
@@ -511,7 +506,7 @@ class Data
     private function setCachedSwatches(array $optionIds, array $swatches)
     {
         foreach ($optionIds as $optionId) {
-            $this->swatchesCache[$optionId] = isset($swatches[$optionId]) ? $swatches[$optionId] : null;
+            $this->swatchesCache[$optionId] = $swatches[$optionId] ?? null;
         }
     }
 
@@ -543,10 +538,10 @@ class Data
     /**
      * Check if the Product has Swatch attributes
      *
-     * @param Product $product
+     * @param ProductInterface $product
      * @return bool
      */
-    public function isProductHasSwatch(Product $product)
+    public function isProductHasSwatch(ProductInterface $product)
     {
         return !empty($this->getSwatchAttributes($product));
     }

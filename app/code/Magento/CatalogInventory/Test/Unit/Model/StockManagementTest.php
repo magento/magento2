@@ -98,11 +98,11 @@ class StockManagementTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockItemInterfaceMock = $this->getMockBuilder(StockItemInterface::class)
-            ->setMethods(['hasAdminArea','getWebsiteId'])
+            ->addMethods(['hasAdminArea','getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->stockManagement = $this->getMockBuilder(StockManagement::class)
-            ->setMethods(['getResource', 'canSubtractQty'])
+            ->onlyMethods(['getResource', 'canSubtractQty'])
             ->setConstructorArgs(
                 [
                     'stockResource' => $this->stockResourceMock,
@@ -203,8 +203,8 @@ class StockManagementTest extends TestCase
      */
     public function testRegisterProductsSaleException(array $items, array $lockedItems)
     {
-        $this->expectException('Magento\Framework\Exception\LocalizedException');
-        $this->expectExceptionMessage('Not all of your products are available in the requested quantity.');
+        $this->expectException('Magento\CatalogInventory\Model\StockStateException');
+        $this->expectExceptionMessage('Some of the products are out of stock.');
         $this->stockResourceMock
             ->expects($this->once())
             ->method('beginTransaction');
@@ -238,7 +238,7 @@ class StockManagementTest extends TestCase
     /**
      * @return array
      */
-    public function productsWithCorrectQtyDataProvider(): array
+    public static function productsWithCorrectQtyDataProvider(): array
     {
         return [
             [
@@ -278,7 +278,7 @@ class StockManagementTest extends TestCase
     /**
      * @return array
      */
-    public function productsWithIncorrectQtyDataProvider(): array
+    public static function productsWithIncorrectQtyDataProvider(): array
     {
         return [
             [

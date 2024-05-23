@@ -16,6 +16,12 @@
                 <session_lifetime>900</session_lifetime>
             </security>
         </admin>
+        <system>
+            <security>
+                <max_session_size_admin>256000</max_session_size_admin>
+                <max_session_size_storefront>256000</max_session_size_storefront>
+            </security>
+        </system>
         <customer>
             <password>
                 <password_reset_protection_type>1</password_reset_protection_type>

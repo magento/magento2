@@ -22,6 +22,9 @@ use Magento\Catalog\Model\Product;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager;
 use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product\Attribute\Repository as ProductAttributeRepository;
 
 /**
  * Test class for Product adminhtml actions
@@ -47,6 +50,11 @@ class ProductTest extends AbstractBackendController
     private $resourceModel;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -62,6 +70,7 @@ class ProductTest extends AbstractBackendController
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
         $this->repositoryFactory = Bootstrap::getObjectManager()->get(ProductRepositoryFactory::class);
         $this->resourceModel = Bootstrap::getObjectManager()->get(ProductResource::class);
+        $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
     }
 
     /**
@@ -188,7 +197,6 @@ class ProductTest extends AbstractBackendController
 
     /**
      * Testing existing product edit page.
-     *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testEditAction()
@@ -225,6 +233,22 @@ class ProductTest extends AbstractBackendController
             ),
             '"Save & Duplicate" button isn\'t present on Edit Product page'
         );
+    }
+
+    /**
+     * Testing product short description has Wysiwyg after creating category short_description attribute.
+     * @magentoDataFixture Magento/Catalog/_files/category_custom_short_description_attribute.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testProductShortDescriptionHasWysiwygEditor()
+    {
+        /** @var ProductRepository $repository */
+        $repository = $this->repositoryFactory->create();
+        $product = $repository->get('simple');
+        $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
+        $body = $this->getResponse()->getBody();
+        $this->assertMatchesRegularExpression('/editorproduct_form_short_description/', $body);
+        $this->assertMatchesRegularExpression('/buttonsproduct_form_short_description/', $body);
     }
 
     /**
@@ -457,7 +481,10 @@ class ProductTest extends AbstractBackendController
         //Trying to update product's design settings without proper permissions.
         //Expected list of sessions messages collected throughout the controller calls.
         $sessionMessages = ['Not allowed to edit the product\'s design attributes'];
-        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_product_design');
+        $this->aclBuilder->getAcl()->deny(
+            \Magento\TestFramework\Bootstrap::ADMIN_ROLE_ID,
+            'Magento_Catalog::edit_product_design'
+        );
         $requestData['product']['custom_design'] = '1';
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($requestData);
@@ -468,7 +495,10 @@ class ProductTest extends AbstractBackendController
         );
 
         //Trying again with the permissions.
-        $this->aclBuilder->getAcl()->allow(null, ['Magento_Catalog::products', 'Magento_Catalog::edit_product_design']);
+        $this->aclBuilder->getAcl()->allow(
+            \Magento\TestFramework\Bootstrap::ADMIN_ROLE_ID,
+            ['Magento_Catalog::products', 'Magento_Catalog::edit_product_design']
+        );
         $this->getRequest()->setDispatched(false);
         $this->dispatch($uri);
         /** @var ProductRepository $repo */
@@ -517,7 +547,10 @@ class ProductTest extends AbstractBackendController
         $uri = 'backend/catalog/product/save';
 
         //Updating product's design settings without proper permissions.
-        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_product_design');
+        $this->aclBuilder->getAcl()->deny(
+            \Magento\TestFramework\Bootstrap::ADMIN_ROLE_ID,
+            'Magento_Catalog::edit_product_design'
+        );
         //Testing that special "No Update" value is treated as no change.
         $requestData['product']['custom_layout_update_file'] = LayoutUpdate::VALUE_NO_UPDATE;
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
@@ -676,5 +709,25 @@ class ProductTest extends AbstractBackendController
             $message->getText()
         );
         $this->assertRedirect($this->stringContains('/backend/catalog/product/new'));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/category_product.php
+     * @magentoDbIsolation disabled
+     * @magentoAppArea adminhtml
+     */
+    public function testSaveProductWithDeletedCategory(): void
+    {
+        $category = $this->_objectManager->get(Category::class);
+        $category->load(333);
+        $category->delete();
+        $product = $this->productRepository->get('simple333');
+        $this->productRepository->save($product);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You saved the product.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
     }
 }

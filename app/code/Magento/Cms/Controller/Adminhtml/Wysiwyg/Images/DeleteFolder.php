@@ -60,17 +60,16 @@ class DeleteFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images impl
      */
     public function execute()
     {
+        $result = [];
         try {
             $path = $this->getStorage()->getCmsWysiwygImages()->getCurrentPath();
             $this->getStorage()->deleteDirectory($path);
-
-            return $this->resultRawFactory->create();
         } catch (\Exception $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
-            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-            $resultJson = $this->resultJsonFactory->create();
-
-            return $resultJson->setData($result);
         }
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        $resultJson = $this->resultJsonFactory->create();
+
+        return $resultJson->setData($result);
     }
 }

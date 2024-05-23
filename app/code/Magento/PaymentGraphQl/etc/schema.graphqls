@@ -1,0 +1,25 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+type StoreConfig {
+    zero_subtotal_enabled: Boolean @doc(description: "Indicates whether the Zero Subtotal payment method is enabled.")
+    zero_subtotal_title: String @doc(description: "The title of the Zero Subtotal payment method displayed on the storefront.")
+    zero_subtotal_new_order_status: String @doc(description: "The status of new orders placed using the Zero Subtotal payment method.")
+    zero_subtotal_payment_action: String @doc(description: "When the new order status is 'Processing', this can be set to `authorize_capture` to automatically invoice all items that have a zero balance.")
+    zero_subtotal_enable_for_specific_countries: Boolean @doc(description: "Indicates whether only specific countries can use this payment method.")
+    zero_subtotal_payment_from_specific_countries: String @doc(description: "A comma-separated list of specific countries allowed to use the Zero Subtotal payment method.")
+    zero_subtotal_sort_order: Int @doc(description: "A number indicating the position of the Zero Subtotal payment method in the list of available payment methods during checkout.")
+    check_money_order_enabled: Boolean @doc(description: "Indicates whether the Check/Money Order payment method is enabled.")
+    check_money_order_title: String @doc(description: "The title of the Check/Money Order payment method displayed on the storefront.")
+    check_money_order_new_order_status: String @doc(description: "The status of new orders placed using the Check/Money Order payment method.")
+    check_money_order_enable_for_specific_countries: Boolean @doc(description: "Indicates whether only specific countries can use this payment method.")
+    check_money_order_payment_from_specific_countries: String @doc(description: "A comma-separated list of specific countries allowed to use the Check/Money Order payment method.")
+    check_money_order_make_check_payable_to: String @doc(description: "The name of the party to whom the check must be payable.")
+    check_money_order_send_check_to: String @doc(description: "The full street address or PO Box where the checks are mailed.")
+    check_money_order_min_order_total: String @doc(description: "The minimum order amount required to qualify for the Check/Money Order payment method.")
+    check_money_order_max_order_total: String @doc(description: "The maximum order amount required to qualify for the Check/Money Order payment method.")
+    check_money_order_sort_order: Int @doc(description: "A number indicating the position of the Check/Money Order payment method in the list of available payment methods during checkout.")
+}
+
+type AvailablePaymentMethod @doc(description: "Describes a payment method that the shopper can use to pay for the order.") {
+    is_deferred: Boolean! @doc(description: "If the payment method is an online integration") @resolver(class: "\\Magento\\PaymentGraphQl\\Model\\Resolver\\IsDeferred") 
+}

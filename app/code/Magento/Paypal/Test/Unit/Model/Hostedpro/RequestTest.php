@@ -16,6 +16,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Tax\Helper\Data;
 use Magento\Tax\Model\Config;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class RequestTest extends TestCase
@@ -30,6 +31,9 @@ class RequestTest extends TestCase
      */
     protected $_model;
 
+    /**
+     * @var Resolver|MockObject
+     */
     protected $localeResolverMock;
 
     /**
@@ -216,7 +220,7 @@ class RequestTest extends TestCase
             'total' => $total,
             'tax' => $tax,
             'shipping' => $shipping,
-            'discount' => abs($discount)
+            'discount' => abs((float) $discount)
         ];
 
         static::assertFalse($this->taxData->priceIncludesTax());
@@ -273,7 +277,7 @@ class RequestTest extends TestCase
             'total' => $total,
             'tax' => $tax,
             'shipping' => $shipping,
-            'discount' => abs($discount)
+            'discount' => abs((float) $discount)
         ];
 
         static::assertFalse($this->taxData->priceIncludesTax());

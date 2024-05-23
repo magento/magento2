@@ -3,18 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Entity\Attribute;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -102,18 +103,18 @@ class ProductRepositoryTest extends WebapiAbstract
 
         $configurableProductOptions = [
             [
-                "attribute_id" =>  $this->configurableAttribute->getId(),
+                "attribute_id" => $this->configurableAttribute->getId(),
                 "label" => $label,
                 "position" => 0,
                 "values" => [
                     [
-                        "value_index" =>  $options[0]['option_id'],
+                        "value_index" => $options[0]['option_id'],
                     ],
                     [
-                        "value_index" =>  $options[1]['option_id'],
-                    ]
+                        "value_index" => $options[1]['option_id'],
+                    ],
                 ],
-            ]
+            ],
         ];
 
         $product = [
@@ -171,6 +172,20 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertCount(2, $resultConfigurableProductLinks);
 
         $this->assertEquals([$productId1, $productId2], $resultConfigurableProductLinks);
+    }
+
+    /**
+     * Verify configurable product creation passes validation with required attribute not specified in product itself.
+     *
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     */
+    public function testCreateConfigurableProductWithRequiredAttribute(): void
+    {
+        $configurableAttribute = $this->eavConfig->getAttribute('catalog_product', 'test_configurable');
+        $configurableAttribute->setIsRequired(true);
+        $configurableAttribute->save();
+        $response = $this->createConfigurableProductWithRequiredAttribute();
+        $this->assertEquals(self::CONFIGURABLE_PRODUCT_SKU, $response[ProductInterface::SKU]);
     }
 
     /**
@@ -340,10 +355,10 @@ class ProductRepositoryTest extends WebapiAbstract
             = [$productId1, $productId2];
         //set the value for required attribute
         $response["custom_attributes"][] =
-        [
-            "attribute_code" => $this->configurableAttribute->getAttributeCode(),
-            "value" => $resultConfigurableProductOptions[0]['values'][0]['value_index'],
-        ];
+            [
+                "attribute_code" => $this->configurableAttribute->getAttributeCode(),
+                "value" => $resultConfigurableProductOptions[0]['values'][0]['value_index'],
+            ];
 
         $response = $this->saveProduct($response);
 
@@ -364,7 +379,8 @@ class ProductRepositoryTest extends WebapiAbstract
         //leave existing option untouched
         unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options']);
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links'] = [
-            $productId1, $nonExistingId
+            $productId1,
+            $nonExistingId,
         ];
 
         $expectedMessage = 'The product that was requested doesn\'t exist. Verify the product and try again.';
@@ -400,14 +416,15 @@ class ProductRepositoryTest extends WebapiAbstract
             [
                 'attribute_code' => 'test_configurable',
                 'value' => $optionValue1,
-            ]
+            ],
         ];
         $this->saveProduct($product2);
 
         //leave existing option untouched
         unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options']);
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links'] = [
-            $productId1, $productId2
+            $productId1,
+            $productId2,
         ];
 
         $expectedMessage = 'Products "%1" and "%2" have the same set of attribute values.';
@@ -440,7 +457,8 @@ class ProductRepositoryTest extends WebapiAbstract
         /** delete all variation attribute */
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'] = [];
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links'] = [
-            $productId1, $productId2
+            $productId1,
+            $productId2,
         ];
 
         $expectedMessage = 'The product that was requested doesn\'t exist. Verify the product and try again.';
@@ -496,7 +514,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => Request::HTTP_METHOD_POST
+                'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -521,7 +539,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $resourcePath,
-                'httpMethod' => Request::HTTP_METHOD_DELETE
+                'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -544,7 +562,7 @@ class ProductRepositoryTest extends WebapiAbstract
     {
         if (isset($product['custom_attributes'])) {
             $count = count($product['custom_attributes']);
-            for ($i=0; $i < $count; $i++) {
+            for ($i = 0; $i < $count; $i++) {
                 if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
                     && !is_array($product['custom_attributes'][$i]['value'])
                 ) {
@@ -556,7 +574,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $resourcePath,
-                'httpMethod' => Request::HTTP_METHOD_PUT
+                'httpMethod' => Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -567,5 +585,44 @@ class ProductRepositoryTest extends WebapiAbstract
         $requestData = ['product' => $product];
         $response = $this->_webApiCall($serviceInfo, $requestData);
         return $response;
+    }
+
+    /**
+     * Create configurable product with required attribute by web api.
+     *
+     * @return array
+     */
+    private function createConfigurableProductWithRequiredAttribute(): array
+    {
+        $this->configurableAttribute = $this->eavConfig->getAttribute('catalog_product', 'test_configurable');
+        $options = $this->getConfigurableAttributeOptions();
+        $configurableProductOptions = [
+            [
+                "attribute_id" => $this->configurableAttribute->getId(),
+                "label" => 'color',
+                "position" => 0,
+                "values" => [
+                    [
+                        "value_index" => $options[0]['option_id'],
+                    ],
+                    [
+                        "value_index" => $options[1]['option_id'],
+                    ],
+                ],
+            ],
+        ];
+        $product = [
+            "sku" => self::CONFIGURABLE_PRODUCT_SKU,
+            "name" => self::CONFIGURABLE_PRODUCT_SKU,
+            "type_id" => "configurable",
+            "price" => 50,
+            'attribute_set_id' => 4,
+            "extension_attributes" => [
+                "configurable_product_options" => $configurableProductOptions,
+                "configurable_product_links" => [10, 20],
+            ],
+        ];
+
+        return $this->createProduct($product);
     }
 }

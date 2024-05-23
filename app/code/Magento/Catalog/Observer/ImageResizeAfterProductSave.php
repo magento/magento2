@@ -10,6 +10,7 @@ namespace Magento\Catalog\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\App\State;
 use Magento\MediaStorage\Service\ImageResize;
+use Magento\MediaStorage\Service\ImageResizeScheduler;
 use Magento\Catalog\Model\Config\CatalogMediaConfig;
 
 /**
@@ -33,20 +34,36 @@ class ImageResizeAfterProductSave implements ObserverInterface
     private $catalogMediaConfig;
 
     /**
+     * @var ImageResizeScheduler
+     */
+    private $imageResizeScheduler;
+
+    /**
+     * @var bool
+     */
+    private $imageResizeSchedulerFlag = false;
+
+    /**
      * Product constructor.
      *
      * @param ImageResize $imageResize
      * @param State $state
      * @param CatalogMediaConfig $catalogMediaConfig
+     * @param ImageResizeScheduler $imageResizeScheduler
+     * @param bool $imageResizeSchedulerFlag
      */
     public function __construct(
         ImageResize $imageResize,
         State $state,
-        CatalogMediaConfig $catalogMediaConfig
+        CatalogMediaConfig $catalogMediaConfig,
+        ImageResizeScheduler $imageResizeScheduler,
+        bool $imageResizeSchedulerFlag = false
     ) {
         $this->imageResize = $imageResize;
         $this->state = $state;
         $this->catalogMediaConfig = $catalogMediaConfig;
+        $this->imageResizeScheduler = $imageResizeScheduler;
+        $this->imageResizeSchedulerFlag = $imageResizeSchedulerFlag;
     }
 
     /**
@@ -72,7 +89,7 @@ class ImageResizeAfterProductSave implements ObserverInterface
 
         if (!(bool) $product->getId()) {
             foreach ($product->getMediaGalleryImages() as $image) {
-                $this->imageResize->resizeFromImageName($image->getFile());
+                $this->resizeImage($image->getFile());
             }
         } else {
             $new = $product->getData('media_gallery');
@@ -81,8 +98,22 @@ class ImageResizeAfterProductSave implements ObserverInterface
             $mediaOriginalGallery = !empty($original['images']) ? array_column($original['images'], 'file') : [];
 
             foreach (array_diff($mediaGallery, $mediaOriginalGallery) as $image) {
-                $this->imageResize->resizeFromImageName($image);
+                $this->resizeImage($image);
             }
+        }
+    }
+
+    /**
+     * Resize image in synchronous or asynchronous way
+     *
+     * @param string $image
+     */
+    private function resizeImage(string $image): void
+    {
+        if ($this->imageResizeSchedulerFlag) {
+            $this->imageResizeScheduler->schedule($image);
+        } else {
+            $this->imageResize->resizeFromImageName($image);
         }
     }
 }

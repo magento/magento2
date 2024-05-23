@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderSameAsBillingAddressCheckboxTest">
+        <annotations>
+            <title value="Asserting Shipping address information while placing order in admin"/>
+            <stories value="Asserting Shipping address information after frequent check/uncheck the Same As Billing Address checkbox while placing order in admin"/>
+            <description value="Frequent check/uncheck the Same As Billing Address checkbox on Create New Order page in Admin panel and asserting Shipping address information"/>
+            <testCaseId value="AC-3640"/>
+            <useCaseId value="MC-37880"/>
+            <features value="Sales"/>
+            <severity value="AVERAGE"/>
+            <group value="Sales"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+            <createData entity="SimpleProduct_25" stepKey="simpleProduct">
+                <field key="price">5</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+        </after>
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="productQty" value="{{SimpleProduct_25.quantity}}"/>
+        </actionGroup>
+        <scrollTo selector="section#order-addresses" stepKey="scrollToSameAsBillingAddress"/>
+        <actionGroup ref="AssertAdminBillingAddressFieldsOnOrderCreateFormActionGroup" stepKey="assertBillingAddressFieldsFilled">
+            <argument name="vatNumber" value=""/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCreateOrderFormShippingAddressActionGroup" stepKey="assertShippingAddresFieldsFilled">
+            <argument name="prefix" value=""/>
+            <argument name="firstName" value="{{US_Address_CA.firstname}}"/>
+            <argument name="middleName" value=""/>
+            <argument name="lastName" value="{{US_Address_CA.lastname}}"/>
+            <argument name="suffix" value=""/>
+            <argument name="company" value="{{US_Address_CA.company}}"/>
+            <argument name="streetLine1" value="{{US_Address_CA.street[0]}}"/>
+            <argument name="streetLine2" value="{{US_Address_CA.street[1]}}"/>
+            <argument name="countryId" value="{{US_Address_CA.country_id}}"/>
+            <argument name="state" value="{{US_Address_CA.state}}"/>
+            <argument name="province" value=""/>
+            <argument name="city" value="{{US_Address_CA.city}}"/>
+            <argument name="postcode" value="{{US_Address_CA.postcode}}"/>
+            <argument name="telephone" value="{{US_Address_CA.telephone}}"/>
+            <argument name="fax" value=""/>
+            <argument name="vatNumber" value=""/>
+        </actionGroup>
+        <seeCheckboxIsChecked selector="{{AdminOrderFormShippingAddressSection.SameAsBilling}}" stepKey="seeSameAsBillingCheckboxChecked"/>
+        <uncheckOption selector="{{AdminOrderFormShippingAddressSection.SameAsBilling}}" stepKey="uncheckSameAsBillingCheckbox"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearSameAsBilling"/>
+        <waitForElementClickable selector="{{AdminOrderFormShippingAddressSection.SameAsBilling}}" stepKey="waitForElementClickableSameAsBilling"/>
+        <selectOption userInput="" selector="{{AdminOrderFormBillingAddressSection.selectAddress}}" stepKey="addNewBillingAddress" />
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="FillOrderNewShippingAddress">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+            <argument name="address" value="US_Address_NY_Not_Default_Address"/>
+        </actionGroup>
+        <scrollTo selector="section#order-addresses" stepKey="scrollToSameAsBillingAddress2"/>
+        <helper class="\Magento\Sales\Test\Mftf\Helper\AdminProductPage" method="rapidChecksOnCheckBox" stepKey="rapidClickOnSameAsBillingAddressCheckbox">
+            <argument name="context">{{AdminOrderFormShippingAddressSection.SameAsBilling}}</argument>
+            <argument name="count">5</argument>
+        </helper>
+        <actionGroup ref="AssertAdminCreateOrderFormShippingAddressActionGroup" stepKey="assertShippingAddresFieldsAfterRaidChecks">
+            <argument name="prefix" value=""/>
+            <argument name="firstName" value="{{US_Address_NY_Not_Default_Address.firstname}}"/>
+            <argument name="middleName" value=""/>
+            <argument name="lastName" value="{{US_Address_NY_Not_Default_Address.lastname}}"/>
+            <argument name="suffix" value=""/>
+            <argument name="company" value=""/>
+            <argument name="streetLine1" value="{{US_Address_NY_Not_Default_Address.street[0]}}"/>
+            <argument name="streetLine2" value=""/>
+            <argument name="countryId" value="{{US_Address_NY_Not_Default_Address.country_id}}"/>
+            <argument name="state" value="{{US_Address_NY_Not_Default_Address.state}}"/>
+            <argument name="province" value=""/>
+            <argument name="city" value="{{US_Address_NY_Not_Default_Address.city}}"/>
+            <argument name="postcode" value="{{US_Address_NY_Not_Default_Address.postcode}}"/>
+            <argument name="telephone" value="{{US_Address_NY_Not_Default_Address.telephone}}"/>
+            <argument name="fax" value=""/>
+            <argument name="vatNumber" value=""/>
+        </actionGroup>
+    </test>
+</tests>

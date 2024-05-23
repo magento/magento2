@@ -21,6 +21,7 @@
             <skip>
                 <issueId value="MC-33951"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontPaypalCartPageEnableCustomizeButtonConfigData.path}} {{StorefrontPaypalCartPageEnableCustomizeButtonConfigData.value}}" stepKey="enableCustomizeButton"/>
