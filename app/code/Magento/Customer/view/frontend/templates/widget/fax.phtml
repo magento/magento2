@@ -15,7 +15,7 @@
     <div class="control">
             <?php
             $_validationClass = $escaper->escapeHtmlAttr(
-                $this->helper(\Magento\Customer\Helper\Address::class)
+                $block->helper(\Magento\Customer\Helper\Address::class)
                      ->getAttributeValidationClass('fax')
             );
             ?>
