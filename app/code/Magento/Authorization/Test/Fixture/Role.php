@@ -91,8 +91,8 @@ class Role implements RevertibleDataFixtureInterface
     {
         $data = $this->prepareData($data);
 
-        $websites = isset($data['gws_websites']) ? implode(',', $data['gws_websites']) : implode(',', []);
-        $storeGroups = isset($data['gws_store_groups']) ? implode(',', $data['gws_store_groups']) : implode(',', []);
+        $websites = $this->convertGwsWebsiteStoreGroups($data['gws_websites']);
+        $storeGroups = $this->convertGwsWebsiteStoreGroups($data['gws_store_groups']);
 
         $role = $this->roleFactory->create();
         $role->setRoleName($data['role_name'])
@@ -136,5 +136,24 @@ class Role implements RevertibleDataFixtureInterface
     {
         $data = $this->dataMerger->merge(self::DEFAULT_DATA, $data);
         return $this->dataProcessor->process($this, $data);
+    }
+
+    /**
+     * Convert GWS websites and store groups to string
+     *
+     * @param $data
+     * @return string|null
+     */
+    private function convertGwsWebsiteStoreGroups($data): ?string
+    {
+        if (isset($data)) {
+            if (is_array($data)) {
+                return implode(',',$data);
+            }
+            if (is_string($data)) {
+                return $data;
+            }
+        }
+        return null;
     }
 }
