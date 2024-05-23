@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Integration\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\ObjectManager;
 use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
 use Magento\Framework\Url\Validator;
 
@@ -92,7 +93,7 @@ abstract class Integration extends Action
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection
-     * @param Validator $urlValidator
+     * @param Validator|null $urlValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -106,7 +107,7 @@ abstract class Integration extends Action
         \Magento\Integration\Helper\Data $integrationData,
         \Magento\Framework\Escaper $escaper,
         \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection,
-        Validator $urlValidator
+        Validator $urlValidator  = null
     ) {
         parent::__construct($context);
         $this->_registry = $registry;
@@ -117,7 +118,7 @@ abstract class Integration extends Action
         $this->_integrationData = $integrationData;
         $this->escaper = $escaper;
         $this->_integrationCollection = $integrationCollection;
-        $this->urlValidator = $urlValidator;
+        $this->urlValidator = $urlValidator ?: ObjectManager::getInstance()->get(Validator::class);
         parent::__construct($context);
     }
 
