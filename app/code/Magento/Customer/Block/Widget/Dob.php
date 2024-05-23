@@ -247,7 +247,7 @@ class Dob extends AbstractWidget
         $this->dateElement->setData(
             [
                 'extra_params' => $this->getHtmlExtraParams(),
-                'name' => $this->getHtmlId(),
+                'name' => $this->getFieldName($this->getHtmlId()),
                 'id' => $this->getHtmlId(),
                 'class' => $this->getHtmlClass(),
                 'value' => $this->getValue(),
