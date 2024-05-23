@@ -61,9 +61,16 @@ abstract class Review extends Action
     protected function _isAllowed()
     {
         return match ($this->getRequest()->getActionName()) {
-            'exportCustomerCsv', 'exportCustomerExcel', 'customer' =>
+            'exportCustomerCsv',
+            'exportCustomerExcel',
+            'customer' =>
                 $this->_authorization->isAllowed('Magento_Reports::review_customer'),
-            'exportProductCsv', 'exportProductExcel', 'exportProductDetailCsv', 'exportProductDetailExcel', 'productDetail', 'product' =>
+            'exportProductCsv',
+            'exportProductExcel',
+            'exportProductDetailCsv',
+            'exportProductDetailExcel',
+            'productDetail',
+            'product' =>
                 $this->_authorization->isAllowed('Magento_Reports::review_product'),
             default =>
                 $this->_authorization->isAllowed('Magento_Reports::review'),
