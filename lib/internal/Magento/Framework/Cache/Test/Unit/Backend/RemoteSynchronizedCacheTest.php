@@ -413,4 +413,16 @@ class RemoteSynchronizedCacheTest extends TestCase
 
         $this->remoteSyncCacheInstance->save(1, 1);
     }
+
+    public function testTest(): void
+    {
+        $this->localCacheMockExample
+            ->method('test')
+            ->willReturn(true);
+        $this->remoteCacheMockExample
+            ->method('test')
+            ->willReturn(false);
+
+        $this->assertFalse($this->remoteSyncCacheInstance->test(1));
+    }
 }
