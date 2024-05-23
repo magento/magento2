@@ -5,25 +5,24 @@
  */
 
 /** @var \Magento\Customer\Block\Widget\Company $block */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
 <div class="field company <?= $block->isRequired() ? 'required' : '' ?>">
     <label for="company" class="label">
-        <span>
-            <?= $block->escapeHtml(__('Company')) ?>
-        </span>
+        <span><?= $escaper->escapeHtml(__('Company')) ?></span>
     </label>
     <div class="control">
             <?php
-            $_validationClass = $block->escapeHtmlAttr(
+            $_validationClass = $escaper->escapeHtmlAttr(
                 $this->helper(\Magento\Customer\Helper\Address::class)
                      ->getAttributeValidationClass('company')
             );
             ?>
         <input type="text"
-               name="company"
-               id="company"
-               value="<?= $block->escapeHtmlAttr($block->getCompany()) ?>"
-               title="<?= $block->escapeHtmlAttr(__('Company')) ?>"
+               name="<?= $escaper->escapeHtmlAttr($block->getFieldName('company')) ?>"
+               id="<?= $escaper->escapeHtmlAttr($block->getFieldId('company')) ?>"
+               value="<?= $escaper->escapeHtmlAttr($block->getCompany()) ?>"
+               title="<?= $escaper->escapeHtmlAttr(__('Company')) ?>"
                class="input-text <?= $_validationClass ?: '' ?>"
          >
     </div>
