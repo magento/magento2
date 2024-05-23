@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5639"/>
             <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
@@ -65,6 +66,3 @@
         <waitForElementNotVisible selector="{{AdminPaypalStandardConfigSection.paypalPaylaterMessage}}"  stepKey="verifyPaylaterMessageToBeDisappeared"/>
     </test>
 </tests>
-
-
-
