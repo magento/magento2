@@ -365,6 +365,54 @@ QUERY;
     }
 
     /**
+     * Verify that products returned in a correct order
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testSortMultipleFields(): void
+    {
+        $query = <<<QUERY
+query products {
+  products(currentPage: 1
+      pageSize: 10
+      filter: {
+        category_id: {
+          eq :"333"
+        }
+      }
+      sort: { price: DESC, name: ASC}
+      ) {
+
+    items {
+      name
+    }
+    total_count
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(5, $response['products']['total_count']);
+        $prod1 = $this->productRepository->get('search_product_5');
+        $prod2 = $this->productRepository->get('search_product_4');
+        $prod3 = $this->productRepository->get('search_product_3');
+        $prod4 = $this->productRepository->get('search_product_1');
+        $prod5 = $this->productRepository->get('search_product_2');
+
+        $filteredProducts = [$prod1, $prod2, $prod3, $prod4, $prod5];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                ]
+            );
+        }
+    }
+
+    /**
      * Compare arrays by value in 'name' field.
      *
      * @param array $a
@@ -1933,21 +1981,18 @@ QUERY;
             $product = $this->productRepository->get($links[$itemIndex]->getSku());
             $this->assertEquals($response['products']['items'][$itemIndex]['name'], $product->getName());
             $this->assertEquals($response['products']['items'][$itemIndex]['type_id'], $product->getTypeId());
-            $categoryIds = $product->getCategoryIds();
-            foreach ($categoryIds as $index => $value) {
-                $categoryIds[$index] = (int)$value;
-            }
-            $categoryInResponse = array_map(
-                null,
-                $categoryIds,
+            $categoryIds = array_map('intval', $product->getCategoryIds());
+            $this->assertCount(count($categoryIds), $response['products']['items'][$itemIndex]['categories']);
+            $categoryInResponse = array_combine(
+                array_column($response['products']['items'][$itemIndex]['categories'], 'id'),
                 $response['products']['items'][$itemIndex]['categories']
             );
-            foreach ($categoryInResponse as $key => $categoryData) {
-                $this->assertNotEmpty($categoryData);
+            foreach ($categoryIds as $categoryId) {
+                $this->assertArrayHasKey($categoryId, $categoryInResponse);
                 /** @var CategoryInterface | Category $category */
-                $category = $this->categoryRepository->get($categoryInResponse[$key][0]);
+                $category = $this->categoryRepository->get($categoryId);
                 $this->assertResponseFields(
-                    $categoryInResponse[$key][1],
+                    $categoryInResponse[$categoryId],
                     [
                         'name' => $category->getName(),
                         'id' => $category->getId(),
@@ -2161,9 +2206,9 @@ QUERY;
       }
 }
 QUERY;
-        $prod1 = $this->productRepository->get('blue_briefs');
+        $prod1 = $this->productRepository->get('navy-striped-shoes');
         $prod2 = $this->productRepository->get('grey_shorts');
-        $prod3 = $this->productRepository->get('navy-striped-shoes');
+        $prod3 = $this->productRepository->get('blue_briefs');
         $response = $this->graphQlQuery($query);
         $this->assertEquals(3, $response['products']['total_count']);
 
@@ -2250,11 +2295,10 @@ QUERY;
 }
 QUERY;
         $prod1 = $this->productRepository->get('simple1');
-        $prod2 = $this->productRepository->get('simple2');
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertEquals(1, $response['products']['total_count']);
 
-        $filteredProducts = [$prod1, $prod2];
+        $filteredProducts = [$prod1];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         foreach ($productItemsInResponse as $itemIndex => $itemArray) {
             $this->assertNotEmpty($itemArray);
@@ -2337,11 +2381,10 @@ QUERY;
 }
 QUERY;
         $prod1 = $this->productRepository->get('prd1sku');
-        $prod2 = $this->productRepository->get('prd2-sku2');
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertEquals(1, $response['products']['total_count']);
 
-        $filteredProducts = [$prod1, $prod2];
+        $filteredProducts = [$prod1];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         foreach ($productItemsInResponse as $itemIndex => $itemArray) {
             $this->assertNotEmpty($itemArray);
@@ -2364,14 +2407,13 @@ QUERY;
     }
 
     /**
-     * Partial search on hyphenated sku filtered for price and sorted by price and sku
+     * Partial search on hyphenated sku having visibility as catalog
      *
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products_with_different_sku_and_name.php
      */
     public function testProductPartialSkuHyphenatedFullTextSearchQuery(): void
     {
-        $prod2 = $this->productRepository->get('prd2-sku2');
         $textToSearch = 'sku2';
         $query
             = <<<QUERY
@@ -2426,28 +2468,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(1, $response['products']['total_count']);
-
-        $filteredProducts = [$prod2];
-        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
-        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
-            $this->assertNotEmpty($itemArray);
-            $this->assertResponseFields(
-                $productItemsInResponse[$itemIndex][0],
-                [
-                    'sku' => $filteredProducts[$itemIndex]->getSku(),
-                    'name' => $filteredProducts[$itemIndex]->getName(),
-                    'price' => [
-                        'minimalPrice' => [
-                            'amount' => [
-                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
-                                'currency' => 'USD'
-                            ]
-                        ]
-                    ]
-                ]
-            );
-        }
+        $this->assertEquals(0, $response['products']['total_count']);
     }
 
     /**

@@ -102,45 +102,28 @@ class ObserverTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testScheduledUpdateCurrencyRates(): void
     {
         $importWarnings = ['WARNING: error1', 'WARNING: error2'];
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
-            ->withConsecutive(
-                [
-                    Observer::IMPORT_ENABLE,
-                    ScopeInterface::SCOPE_STORE
-                ],
-                [
-                    Observer::CRON_STRING_PATH,
-                    ScopeInterface::SCOPE_STORE
-                ],
-                [
-                    Observer::IMPORT_SERVICE,
-                    ScopeInterface::SCOPE_STORE
-                ],
-                [
-                    Observer::XML_PATH_ERROR_RECIPIENT,
-                    ScopeInterface::SCOPE_STORE
-                ],
-                [
-                    Observer::XML_PATH_ERROR_TEMPLATE,
-                    ScopeInterface::SCOPE_STORE
-                ],
-                [
-                    Observer::XML_PATH_ERROR_IDENTITY,
-                    ScopeInterface::SCOPE_STORE
-                ]
-            )->willReturnOnConsecutiveCalls(
-                1,
-                '* * * * *',
-                'fixerio',
-                'test1@email.com,test2@email.com',
-                self::STUB_ERROR_TEMPLATE,
-                self::STUB_SENDER
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == Observer::IMPORT_ENABLE && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return 1;
+                } elseif ($arg1 == Observer::CRON_STRING_PATH && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return '* * * * *';
+                } elseif ($arg1 == Observer::IMPORT_SERVICE && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return 'fixerio';
+                } elseif ($arg1 == Observer::XML_PATH_ERROR_RECIPIENT && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return 'test1@email.com,test2@email.com';
+                } elseif ($arg1 == Observer::XML_PATH_ERROR_TEMPLATE && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return self::STUB_ERROR_TEMPLATE;
+                } elseif ($arg1 == Observer::XML_PATH_ERROR_IDENTITY && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return self::STUB_SENDER;
+                }
+            });
         $import = $this->getMockForAbstractClass(ImportInterface::class);
         $import->expects($this->once())->method('fetchRates')
             ->willReturn([]);

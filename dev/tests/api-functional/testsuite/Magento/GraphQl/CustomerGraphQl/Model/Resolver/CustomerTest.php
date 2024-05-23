@@ -12,7 +12,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
 use Magento\CustomerGraphQl\Model\Resolver\Customer as CustomerResolver;
-use Magento\CustomerGraphQl\Model\Resolver\IsSubscribed;
+use Magento\NewsletterGraphQl\Model\Resolver\IsSubscribed;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;

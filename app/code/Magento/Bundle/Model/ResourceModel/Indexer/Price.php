@@ -6,18 +6,18 @@
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
-use Magento\Framework\DB\Select;
-use Magento\Framework\Indexer\DimensionalIndexerInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\JoinAttributeProcessor;
-use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
-use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\JoinAttributeProcessor;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Indexer\DimensionalIndexerInterface;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**
  * Bundle products Price indexer resource model
@@ -671,10 +671,9 @@ class Price implements DimensionalIndexerInterface
      * @return void
      * @throws \Exception
      */
-    private function calculateDynamicBundleSelectionPrice($dimensions)
+    private function calculateDynamicBundleSelectionPrice(array $dimensions): void
     {
         $connection = $this->getConnection();
-
         $price = 'idx.min_price * bs.selection_qty';
         $specialExpr = $connection->getCheckSql(
             'i.special_price > 0 AND i.special_price < 100',
@@ -716,8 +715,32 @@ class Price implements DimensionalIndexerInterface
             []
         );
         $select->where('si.stock_status = ?', Stock::STOCK_IN_STOCK);
+        $query = str_replace('AS `idx`', 'AS `idx` USE INDEX (PRIMARY)', (string) $select);
+        $insertColumns = [
+            'entity_id',
+            'customer_group_id',
+            'website_id',
+            'option_id',
+            'selection_id',
+            'group_type',
+            'is_required',
+            'price',
+            'tier_price'
+        ];
+        $insertColumns = array_map(function ($item) use ($connection) {
+            return $connection->quoteIdentifier($item);
+        }, $insertColumns);
+        $updateValues = [];
+        foreach ($insertColumns as $column) {
+            $updateValues[] = sprintf("%s = VALUES(%s)", $column, $column);
+        }
 
-        $this->tableMaintainer->insertFromSelect($select, $this->getBundleSelectionTable(), []);
+        $connection->query(sprintf(
+            "INSERT INTO `" . $this->getBundleSelectionTable() . "` (%s) %s ON DUPLICATE KEY UPDATE %s",
+            implode(",", $insertColumns),
+            $query,
+            implode(",", $updateValues)
+        ));
     }
 
     /**

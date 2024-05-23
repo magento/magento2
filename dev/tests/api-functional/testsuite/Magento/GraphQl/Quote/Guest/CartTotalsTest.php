@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Guest;
 
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
@@ -265,6 +266,40 @@ class CartTotalsTest extends GraphQlAbstract
         self::assertEmpty($pricesResponse['applied_taxes']);
     }
 
+    #[
+        DataFixture(ProductFixture::class, [
+            'price' => 15,
+            'custom_attributes' => [
+                'special_price' => 10
+             ]
+        ], 'p'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p.id$', 'qty' => 2]),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+    ]
+    public function testGetTotalsWithOriginalRowTotalPrice()
+    {
+        $cart = $this->fixtures->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query);
+
+        $cartItem = $response['cart']['items'][0];
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(10, $cartItem['prices']['price_including_tax']['value']);
+        self::assertEquals(20, $cartItem['prices']['row_total']['value']);
+        self::assertEquals(20, $cartItem['prices']['row_total_including_tax']['value']);
+        self::assertEquals(30, $cartItem['prices']['original_row_total']['value']);
+
+        $pricesResponse = $response['cart']['prices'];
+        self::assertEquals(20, $pricesResponse['grand_total']['value']);
+        self::assertEquals(20, $pricesResponse['subtotal_including_tax']['value']);
+        self::assertEquals(20, $pricesResponse['subtotal_excluding_tax']['value']);
+        self::assertEquals(20, $pricesResponse['subtotal_with_discount_excluding_tax']['value']);
+        self::assertEmpty($pricesResponse['applied_taxes']);
+    }
+
     /**
      * The totals calculation is based on quote address.
      * But the totals should be calculated even if no address is set
@@ -315,6 +350,25 @@ class CartTotalsTest extends GraphQlAbstract
         $this->graphQlQuery($query);
     }
 
+    public function testGetCartTotalsWithNonExistingCartId(): void
+    {
+        $maskedQuoteId = 'NonExistingQuoteId';
+        $query = $this->getQuery($maskedQuoteId);
+        try {
+            $this->graphQlQuery($query);
+            $this->fail('Expected exception was not raised');
+        } catch (\Exception $exception) {
+            $response = $exception->getResponseData();
+            $this->assertArrayHasKey('errors', $response);
+            $actualError = reset($response['errors']);
+            $this->assertEquals("Could not find a cart with ID \"$maskedQuoteId\"", $actualError['message']);
+            $this->assertEquals(
+                GraphQlNoSuchEntityException::EXCEPTION_CATEGORY,
+                $actualError['extensions']['category']
+            );
+        }
+    }
+
     /**
      * Generates GraphQl query for retrieving cart totals
      *
@@ -352,6 +406,10 @@ class CartTotalsTest extends GraphQlAbstract
             amount {
                 value
             }
+        }
+        original_row_total {
+            value
+            currency
         }
       }
     }
