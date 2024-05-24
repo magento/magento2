@@ -10,7 +10,6 @@ namespace Magento\Integration\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\ObjectManager;
-use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
 use Magento\Framework\Url\Validator;
 
 /**
