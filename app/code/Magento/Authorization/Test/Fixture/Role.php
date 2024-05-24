@@ -148,7 +148,7 @@ class Role implements RevertibleDataFixtureInterface
     {
         if (isset($data)) {
             if (is_array($data)) {
-                return implode(',',$data);
+                return implode(',', $data);
             }
             if (is_string($data)) {
                 return $data;
