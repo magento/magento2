@@ -50,11 +50,6 @@ define([
             let buyerCountry = customerData.get('paypal-buyer-country');
 
             this.buyerCountry = buyerCountry().code;
-
-            if (!this.buyerCountry) {
-                this.attributes['data-pp-placement'] = null;
-            }
-
             this._super()
                 .observe(['amount']);
 
