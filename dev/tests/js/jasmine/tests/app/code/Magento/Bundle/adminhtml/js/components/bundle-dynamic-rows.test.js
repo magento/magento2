@@ -6,6 +6,7 @@
  * ************************************************************************
  */
 
+/*eslint max-nested-callbacks: 0*/
 define(['Magento_Bundle/js/components/bundle-dynamic-rows', 'uiRegistry', 'uiCollection'],
     function (BundleDynamicRows, registry, uiCollection) {
         'use strict';
