@@ -4331,16 +4331,16 @@
         },
         {
             "name": "magento/composer",
-            "version": "1.10.0-beta1",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/composer.git",
-                "reference": "3941875c84a54f195ad5aaa1826f5b2f0f122fe5"
+                "reference": "2d7c0b3628c8c80c9021fbc7f5d0b827ad66510b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/composer/zipball/3941875c84a54f195ad5aaa1826f5b2f0f122fe5",
-                "reference": "3941875c84a54f195ad5aaa1826f5b2f0f122fe5",
+                "url": "https://api.github.com/repos/magento/composer/zipball/2d7c0b3628c8c80c9021fbc7f5d0b827ad66510b",
+                "reference": "2d7c0b3628c8c80c9021fbc7f5d0b827ad66510b",
                 "shasum": ""
             },
             "require": {
@@ -4365,9 +4365,9 @@
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
             "support": {
                 "issues": "https://github.com/magento/composer/issues",
-                "source": "https://github.com/magento/composer/tree/1.10.0-beta1"
+                "source": "https://github.com/magento/composer/tree/1.10.0"
             },
-            "time": "2024-02-07T21:13:02+00:00"
+            "time": "2024-04-03T14:53:29+00:00"
         },
         {
             "name": "magento/composer-dependency-version-audit-plugin",
