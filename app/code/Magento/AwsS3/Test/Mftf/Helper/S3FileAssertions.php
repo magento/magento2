@@ -27,6 +27,11 @@ class S3FileAssertions extends Helper
     private $driver;
 
     /**
+     * @var AwsS3V3Adapter
+     */
+    private $adapter;
+
+    /**
      * Call the parent constructor then create the AwsS3 driver from environment variables
      *
      * @param ModuleContainer $moduleContainer
@@ -204,9 +209,8 @@ class S3FileAssertions extends Helper
         if (method_exists($this->adapter, 'directoryExists')) {
             $this->assertTrue($this->adapter->directoryExists($path), "Failed asserting $path exists. " . $message);
         } else {
-            $this->assertTrue(true,'directoryExists method does not exist!');
+            $this->assertTrue(true, 'directoryExists method does not exist!');
         }
-
     }
 
     /**
