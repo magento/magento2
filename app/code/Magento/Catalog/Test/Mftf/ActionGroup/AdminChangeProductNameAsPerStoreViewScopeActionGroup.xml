@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+     /**
+      * Copyright © Magento, Inc. All rights reserved.
+      * See COPYING.txt for license details.
+      */
+    -->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminChangeProductNameAsPerStoreViewScopeActionGroup">
+        <annotations>
+            <description>Admin change product name having store view scope</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <waitForElementClickable selector="{{AdminProductFormSection.productNameUseDefault}}" stepKey="waitForDefaultNameCheckBox"/>
+        <uncheckOption selector="{{AdminProductFormSection.productNameUseDefault}}" stepKey="unCheckDefaultNameCheckbox"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{productName}}" stepKey="changeProductName"/>
+    </actionGroup>
+</actionGroups>
