@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminFedexHandlingFeeData" type="fedex_config">
+        <data key="path">carriers/fedex/handling/fee</data>
+        <data key="value">10</data>
+    </entity>
+    <entity name="AdminFedexAccount" type="fedex_config">
+        <data key="path">carriers/fedex/account</data>
+    </entity>
+    <entity name="AdminFedexHubId" type="fedex_config">
+        <data key="path">carriers/fedex/smartpost_hubid</data>
+    </entity>
+    <entity name="AdminFedexApiKey" type="fedex_config">
+        <data key="path">carriers/fedex/api_key</data>
+    </entity>
+    <entity name="AdminFedexSecretKey" type="fedex_config">
+        <data key="path">carriers/fedex/secret_key</data>
+    </entity>
+</entities>

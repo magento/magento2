@@ -80,6 +80,7 @@ class StockItemRepository implements StockItemRepositoryInterface
     /**
      * @var Processor
      * @deprecated 100.2.0
+     * @see No longer used
      */
     protected $indexProcessor;
 
@@ -117,6 +118,7 @@ class StockItemRepository implements StockItemRepositoryInterface
      * @param DateTime $dateTime
      * @param CollectionFactory|null $productCollectionFactory
      * @param PsrLogger|null $psrLogger
+     * @param StockRegistryStorage|null $stockRegistryStorage
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -132,7 +134,8 @@ class StockItemRepository implements StockItemRepositoryInterface
         Processor $indexProcessor,
         DateTime $dateTime,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory = null,
-        PsrLogger $psrLogger = null
+        PsrLogger $psrLogger = null,
+        ?StockRegistryStorage $stockRegistryStorage = null
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->stockStateProvider = $stockStateProvider;
@@ -149,12 +152,14 @@ class StockItemRepository implements StockItemRepositoryInterface
             ->get(CollectionFactory::class);
         $this->psrLogger = $psrLogger ?: ObjectManager::getInstance()
             ->get(PsrLogger::class);
+        $this->stockRegistryStorage = $stockRegistryStorage
+            ?? ObjectManager::getInstance()->get(StockRegistryStorage::class);
     }
 
     /**
      * @inheritdoc
      */
-    public function save(\Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem)
+    public function save(StockItemInterface $stockItem)
     {
         try {
             /** @var \Magento\Catalog\Model\Product $product */
@@ -170,16 +175,13 @@ class StockItemRepository implements StockItemRepositoryInterface
             $typeId = $product->getTypeId() ?: $product->getTypeInstance()->getTypeId();
             $isQty = $this->stockConfiguration->isQty($typeId);
             if ($isQty) {
-                $isInStock = $this->stockStateProvider->verifyStock($stockItem);
-                if ($stockItem->getManageStock() && !$isInStock) {
-                    $stockItem->setIsInStock(false)->setStockStatusChangedAutomaticallyFlag(true);
-                }
+                $this->updateStockStatus($stockItem);
                 // if qty is below notify qty, update the low stock date to today date otherwise set null
                 $stockItem->setLowStockDate(null);
                 if ($this->stockStateProvider->verifyNotification($stockItem)) {
                     $stockItem->setLowStockDate($this->dateTime->gmtDate());
                 }
-                $stockItem->setStockStatusChangedAuto(0);
+
                 if ($stockItem->hasStockStatusChangedAutomaticallyFlag()) {
                     $stockItem->setStockStatusChangedAuto((int)$stockItem->getStockStatusChangedAutomaticallyFlag());
                 }
@@ -196,6 +198,53 @@ class StockItemRepository implements StockItemRepositoryInterface
             throw new CouldNotSaveException(__('The stock item was unable to be saved. Please try again.'), $exception);
         }
         return $stockItem;
+    }
+
+    /**
+     * Update stock status based on stock configuration
+     *
+     * @param StockItemInterface $stockItem
+     * @return void
+     */
+    private function updateStockStatus(StockItemInterface $stockItem): void
+    {
+        $isInStock = $this->stockStateProvider->verifyStock($stockItem);
+        if ($stockItem->getManageStock()) {
+            if (!$isInStock) {
+                if ($stockItem->getIsInStock() === true) {
+                    $stockItem->setIsInStock(false);
+                    $stockItem->setStockStatusChangedAuto(1);
+                }
+            } else {
+                if ($this->hasStockStatusChanged($stockItem)) {
+                    $stockItem->setStockStatusChangedAuto(0);
+                }
+                if ($stockItem->getIsInStock() === false && $stockItem->getStockStatusChangedAuto()) {
+                    $stockItem->setIsInStock(true);
+                }
+            }
+        } else {
+            $stockItem->setStockStatusChangedAuto(0);
+        }
+    }
+
+    /**
+     * Check if stock status has changed
+     *
+     * @param StockItemInterface $stockItem
+     * @return bool
+     */
+    private function hasStockStatusChanged(StockItemInterface $stockItem): bool
+    {
+        if ($stockItem->getItemId()) {
+            try {
+                $existingStockItem = $this->get($stockItem->getItemId());
+                return $existingStockItem->getIsInStock() !== $stockItem->getIsInStock();
+            } catch (NoSuchEntityException $e) {
+                return true;
+            }
+        }
+        return true;
     }
 
     /**
@@ -233,8 +282,8 @@ class StockItemRepository implements StockItemRepositoryInterface
     {
         try {
             $this->resource->delete($stockItem);
-            $this->getStockRegistryStorage()->removeStockItem($stockItem->getProductId());
-            $this->getStockRegistryStorage()->removeStockStatus($stockItem->getProductId());
+            $this->stockRegistryStorage->removeStockItem($stockItem->getProductId());
+            $this->stockRegistryStorage->removeStockStatus($stockItem->getProductId());
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
                 __(
@@ -262,17 +311,5 @@ class StockItemRepository implements StockItemRepositoryInterface
             );
         }
         return true;
-    }
-
-    /**
-     * @return StockRegistryStorage
-     */
-    private function getStockRegistryStorage()
-    {
-        if (null === $this->stockRegistryStorage) {
-            $this->stockRegistryStorage = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
-        }
-        return $this->stockRegistryStorage;
     }
 }

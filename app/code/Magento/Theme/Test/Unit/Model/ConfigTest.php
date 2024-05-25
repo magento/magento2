@@ -131,11 +131,13 @@ class ConfigTest extends TestCase
 
         $this->configData
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                ['scope', ScopeInterface::SCOPE_STORES],
-                ['path', DesignInterface::XML_PATH_THEME_ID]
-            )
-            ->willReturnOnConsecutiveCalls($this->configData, [$configEntity]);
+            ->willReturnCallback(function ($arg1, $arg2) use ($configEntity) {
+                if ($arg1 == 'scope' && $arg2 == ScopeInterface::SCOPE_STORES) {
+                    return $this->configData;
+                } elseif ($arg1 == 'path' && $arg2 == DesignInterface::XML_PATH_THEME_ID) {
+                    return [$configEntity];
+                }
+            });
 
         $this->themeMock->expects($this->any())->method('getId')->willReturn(6);
         $this->themeMock->expects($this->any())->method('getThemePath')->willReturn($themePath);
@@ -165,11 +167,13 @@ class ConfigTest extends TestCase
 
         $this->configData
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                ['scope', ScopeInterface::SCOPE_STORES],
-                ['path', DesignInterface::XML_PATH_THEME_ID]
-            )
-            ->willReturnOnConsecutiveCalls($this->configData, [$configEntity]);
+            ->willReturnCallback(function ($arg1, $arg2) use ($configEntity) {
+                if ($arg1 == 'scope' && $arg2 == ScopeInterface::SCOPE_STORES) {
+                    return $this->configData;
+                } elseif ($arg1 == 'path' && $arg2 == DesignInterface::XML_PATH_THEME_ID) {
+                    return [$configEntity];
+                }
+            });
 
         $this->themeMock->expects($this->any())->method('getId')->willReturn(6);
         $this->themeMock->expects($this->any())->method('getThemePath')->willReturn($themePath);
