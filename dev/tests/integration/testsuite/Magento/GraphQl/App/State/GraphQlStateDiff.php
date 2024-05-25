@@ -57,16 +57,25 @@ class GraphQlStateDiff
 
     /**
      * Constructor
+     *
+     * @param TestCase $test
      */
-    public function __construct()
+    public function __construct(TestCase $test)
     {
+        if (8 == PHP_MAJOR_VERSION && 3 == PHP_MINOR_VERSION && PHP_RELEASE_VERSION  < 5) {
+            $test->markTestSkipped(
+                "This test isn't compatible with PHP 8.3 versions less than PHP 8.3.5 because of "
+                . "bug in garbage collector. https://github.com/php/php-src/issues/13569"
+                . " will roll back in AC-11491"
+            );
+        }
         $this->objectManagerBeforeTest = Bootstrap::getObjectManager();
         $this->objectManagerForTest = new ObjectManager($this->objectManagerBeforeTest);
         $this->objectManagerForTest->getFactory()->setObjectManager($this->objectManagerForTest);
         AppObjectManager::setInstance($this->objectManagerForTest);
         Bootstrap::setObjectManager($this->objectManagerForTest);
         $this->comparator = $this->objectManagerForTest->create(Comparator::class);
-        $this->objectManagerForTest->resetStateSharedInstances();
+        $this->objectManagerForTest->_resetState();
     }
 
     /**
@@ -172,10 +181,10 @@ class GraphQlStateDiff
         TestCase $test,
         bool $firstRequest = false
     ): string {
-        $this->objectManagerForTest->resetStateSharedInstances();
+        $this->objectManagerForTest->_resetState();
         $this->comparator->rememberObjectsStateBefore($firstRequest);
         $response = $this->doRequest($query, $authInfo);
-        $this->objectManagerForTest->resetStateSharedInstances();
+        $this->objectManagerForTest->_resetState();
         $this->comparator->rememberObjectsStateAfter($firstRequest);
         $result = $this->comparator->compareBetweenRequests($operationName);
         $test->assertEmpty(

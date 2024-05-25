@@ -11,6 +11,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request\Deserializer\Xml;
 use Magento\Framework\Xml\Parser;
+use Magento\Framework\Xml\ParserFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -18,6 +19,12 @@ class XmlTest extends TestCase
 {
     /** @var MockObject */
     protected $_xmlParserMock;
+
+    /** @var MockObject */
+    protected $xmlParserMock2;
+
+    /** @var MockObject */
+    protected $xmlParserFactoryMock;
 
     /** @var Xml */
     protected $_xmlDeserializer;
@@ -32,11 +39,23 @@ class XmlTest extends TestCase
             Parser::class,
             ['xmlToArray', 'loadXML']
         );
+        $this->_xmlParserMock->expects($this->never())->method('xmlToArray');
+        $this->_xmlParserMock->expects($this->never())->method('loadXML');
+        $this->xmlParserMock2 = $this->createPartialMock(
+            Parser::class,
+            ['xmlToArray', 'loadXML'],
+        );
+        $this->xmlParserFactoryMock = $this->createPartialMock(
+            ParserFactory::class,
+            ['create'],
+        );
+        $this->xmlParserFactoryMock->expects($this->any())->method('create')->willReturn($this->xmlParserMock2);
         $this->_appStateMock = $this->createMock(State::class);
         /** Initialize SUT. */
         $this->_xmlDeserializer = new Xml(
             $this->_xmlParserMock,
-            $this->_appStateMock
+            $this->_appStateMock,
+            $this->xmlParserFactoryMock,
         );
         parent::setUp();
     }
@@ -59,10 +78,10 @@ class XmlTest extends TestCase
     public function testDeserialize()
     {
         /** Prepare mocks for SUT constructor. */
-        $this->_xmlParserMock->expects($this->once())->method('loadXML');
+        $this->xmlParserMock2->expects($this->once())->method('loadXML');
         $validInputXml = '<?xml version="1.0"?><xml><key1>test1</key1><key2>test2</key2></xml>';
         $returnArray = ['xml' => ['key1' => 'test1', 'key2' => 'test2']];
-        $this->_xmlParserMock->expects($this->once())->method('xmlToArray')->willReturn($returnArray);
+        $this->xmlParserMock2->expects($this->once())->method('xmlToArray')->willReturn($returnArray);
         $expectedArray = ['key1' => 'test1', 'key2' => 'test2'];
         /** Initialize SUT. */
         $this->assertEquals(
@@ -107,7 +126,7 @@ class XmlTest extends TestCase
             ->willReturn('developer');
         $errorMessage = 'End tag for "key1" was omitted.';
         $this->_xmlDeserializer->handleErrors(null, $errorMessage, null, null);
-        $this->_xmlParserMock->expects($this->once())->method('loadXML');
+        $this->xmlParserMock2->expects($this->once())->method('loadXML');
         $invalidXml = '<?xml version="1.0"?><xml><key1>test1</xml>';
         /** Initialize SUT. */
         try {
@@ -133,7 +152,7 @@ class XmlTest extends TestCase
             ->willReturn('production');
         $errorMessage = 'End tag for "key1" was omitted.';
         $this->_xmlDeserializer->handleErrors(null, $errorMessage, null, null);
-        $this->_xmlParserMock->expects($this->once())->method('loadXML');
+        $this->xmlParserMock2->expects($this->once())->method('loadXML');
         $invalidXml = '<?xml version="1.0"?><xml><key1>test1</xml>';
         /** Initialize SUT. */
         try {

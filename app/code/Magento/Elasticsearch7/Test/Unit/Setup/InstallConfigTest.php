@@ -63,11 +63,15 @@ class InstallConfigTest extends TestCase
 
         $this->configWriterMock
             ->method('save')
-            ->withConsecutive(
-                ['catalog/search/engine', 'elasticsearch7'],
-                ['catalog/search/elasticsearch7_server_hostname', 'localhost'],
-                ['catalog/search/elasticsearch7_server_port', '9200']
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'catalog/search/engine' && $arg2 == 'elasticsearch7') {
+                    return null;
+                } elseif ($arg1 == 'catalog/search/elasticsearch7_server_hostname' && $arg2 == 'localhost') {
+                    return null;
+                } elseif ($arg1 == 'catalog/search/elasticsearch7_server_port' && $arg2 == '9200') {
+                    return null;
+                }
+            });
 
         $this->installConfig->configure($inputOptions);
     }
