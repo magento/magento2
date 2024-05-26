@@ -7,51 +7,59 @@
 namespace Magento\Developer\Console\Command;
 
 use Magento\Developer\Model\Di\Information;
+use Magento\Framework\App\ObjectManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Helper\Table;
+use Magento\Framework\App\AreaList;
 
 class DiInfoCommand extends Command
 {
-    /**
-     * Command name
-     */
-    const COMMAND_NAME = 'dev:di:info';
+    public const COMMAND_NAME = 'dev:di:info';
 
-    /**
-     * input name
-     */
-    const CLASS_NAME = 'class';
+    public const CLASS_NAME = 'class';
+
+    public const AREA_CODE = 'area';
 
     /**
      * @var Information
      */
-    private $diInformation;
+    private Information $diInformation;
+
+    /**
+     * @var AreaList
+     */
+    private AreaList $areaList;
 
     /**
      * @param Information $diInformation
+     * @param AreaList $areaList
      */
     public function __construct(
-        Information $diInformation
+        Information $diInformation,
+        AreaList    $areaList
     ) {
+        $this->areaList = $areaList;
         $this->diInformation = $diInformation;
         parent::__construct();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @throws InvalidArgumentException
      */
     protected function configure()
     {
         $this->setName(self::COMMAND_NAME)
-             ->setDescription('Provides information on Dependency Injection configuration for the Command.')
-             ->setDefinition([
-                new InputArgument(self::CLASS_NAME, InputArgument::REQUIRED, 'Class name')
-             ]);
+            ->setDescription('Provides information on Dependency Injection configuration for the Command.')
+            ->setDefinition([
+                new InputArgument(self::CLASS_NAME, InputArgument::REQUIRED, 'Class name'),
+                new InputArgument(self::AREA_CODE, InputArgument::OPTIONAL, 'Area Code')
+            ]);
 
         parent::configure();
     }
@@ -146,15 +154,19 @@ class DiInfoCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @throws \InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $area = 'GLOBAL';
+        if ($area = $input->getArgument(self::AREA_CODE)) {
+            $this->setDiArea($area);
+        }
         $className = $input->getArgument(self::CLASS_NAME);
         $output->setDecorated(true);
         $output->writeln('');
-        $output->writeln(sprintf('DI configuration for the class %s in the GLOBAL area', $className));
+        $output->writeln(sprintf('DI configuration for the class %s in the %s area', $className, strtoupper($area)));
 
         if ($this->diInformation->isVirtualType($className)) {
             $output->writeln(
@@ -169,5 +181,41 @@ class DiInfoCommand extends Command
         $this->printPlugins($preference, $output, 'Plugins for the Preference:');
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Set Area for DI Configuration
+     *
+     * @param string $area
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    private function setDiArea($area)
+    {
+        if ($this->validateAreaCodeFromInput($area)) {
+            $objectManager = ObjectManager::getInstance();
+
+            $objectManager->configure(
+                $objectManager
+                    ->get(\Magento\Framework\App\ObjectManager\ConfigLoader::class)
+                    ->load($area)
+            );
+            $objectManager->get(\Magento\Framework\Config\ScopeInterface::class)
+                ->setCurrentScope($area);
+        } else {
+            throw new InvalidArgumentException(sprintf('The "%s" area code does not exist', $area));
+        }
+    }
+
+    /**
+     * Validate Input
+     *
+     * @param string $area
+     * @return bool
+     */
+    private function validateAreaCodeFromInput($area)
+    {
+        $availableAreaCodes = $this->areaList->getCodes();
+        return in_array($area, $availableAreaCodes, true);
     }
 }
