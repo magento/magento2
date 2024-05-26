@@ -15,6 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Helper\Table;
 use Magento\Framework\App\AreaList;
+use Magento\Framework\App\Area;
 
 class DiInfoCommand extends Command
 {
@@ -159,8 +160,8 @@ class DiInfoCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $area = 'GLOBAL';
-        if ($area = $input->getArgument(self::AREA_CODE)) {
+        $area = $input->getArgument(self::AREA_CODE) ?? Area::AREA_GLOBAL;
+        if ($area !== Area::AREA_GLOBAL) {
             $this->setDiArea($area);
         }
         $className = $input->getArgument(self::CLASS_NAME);
