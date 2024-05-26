@@ -16,6 +16,8 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Source\Backorders;
 use Magento\CatalogInventory\Model\Source\Stock;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -82,6 +84,18 @@ class InventoryTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
 
         $this->contextMock = $this->createPartialMock(
             Context::class,

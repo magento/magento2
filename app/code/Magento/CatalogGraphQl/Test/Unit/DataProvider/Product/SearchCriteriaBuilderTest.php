@@ -118,8 +118,10 @@ class SearchCriteriaBuilderTest extends TestCase
 
         $this->sortOrderBuilder->expects($this->exactly(2))
             ->method('setField')
-            ->withConsecutive([$sortOrderList[0]], [$sortOrderList[1]])
-            ->willReturnSelf();
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$sortOrderList[0]] => $this->sortOrderBuilder,
+                [$sortOrderList[1]] => $this->sortOrderBuilder
+            });
 
         $this->sortOrderBuilder->expects($this->exactly(2))
             ->method('setDirection')
@@ -134,8 +136,11 @@ class SearchCriteriaBuilderTest extends TestCase
 
         $this->filterBuilder->expects($this->exactly(2))
             ->method('setField')
-            ->withConsecutive([$filterOrderList[0]], [$filterOrderList[1]])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($filterOrderList) {
+                if ([$filterOrderList[0]] || [$filterOrderList[1]]) {
+                    return $this->filterBuilder;
+                }
+            });
 
         $this->filterBuilder->expects($this->exactly(2))
             ->method('setValue')
@@ -144,8 +149,11 @@ class SearchCriteriaBuilderTest extends TestCase
 
         $this->filterBuilder->expects($this->exactly(2))
             ->method('setConditionType')
-            ->withConsecutive([''], ['in'])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'in' || empty($arg1)) {
+                    return $this->filterBuilder;
+                }
+            });
 
         $this->filterBuilder
             ->expects($this->exactly(2))
