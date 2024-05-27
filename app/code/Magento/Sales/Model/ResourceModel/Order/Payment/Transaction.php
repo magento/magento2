@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\ResourceModel\Order\Payment;
 
 use Magento\Sales\Model\ResourceModel\EntityAbstract;
@@ -222,7 +224,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      *
      * @param int $orderId
      */
-    protected function getParentTxnId($orderId)
+    private function getParentTxnId($orderId)
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from(
