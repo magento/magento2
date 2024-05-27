@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\ViewModel\Product\OptionsData;
 use Magento\CatalogWidget\Block\Product\ProductsList;
 use Magento\CatalogWidget\Model\Rule;
 use Magento\Directory\Model\Currency;
@@ -451,5 +452,13 @@ class ProductsListTest extends TestCase
     public function testScope()
     {
         $this->assertFalse($this->productsList->isScopePrivate());
+    }
+
+    /**
+     * Test if getViewModel() returns an instance of OptionsData.
+     */
+    public function testGetViewModelReturnsOptionsDataInstance()
+    {
+        $this->assertInstanceOf(OptionsData::class, $this->productsList->getViewModel());
     }
 }
