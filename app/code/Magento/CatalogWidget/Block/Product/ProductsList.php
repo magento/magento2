@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogWidget\Block\Product;
 
@@ -87,7 +88,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     /**
      * @var OptionsData
      */
-    protected $optionsDataViewModel;
+    private $optionsDataViewModel;
 
     /**
      * @var SqlBuilder
@@ -157,7 +158,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         Context $context,
         CollectionFactory $productCollectionFactory,
         Visibility $catalogProductVisibility,
-        OptionsData $optionsDataViewModel,
+        OptionsData $optionsDataViewModel = null,
         HttpContext $httpContext,
         SqlBuilder $sqlBuilder,
         Rule $rule,
@@ -170,7 +171,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
-        $this->optionsDataViewModel = $optionsDataViewModel;
+        $this->optionsDataViewModel = $optionsDataViewModel ?: ObjectManager::getInstance()->get(OptionsData::class);
         $this->httpContext = $httpContext;
         $this->sqlBuilder = $sqlBuilder;
         $this->rule = $rule;
@@ -302,7 +303,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      *
      * @return OptionsData
      */
-    public function getViewModel()
+    public function getViewModel(): OptionsData
     {
         return $this->optionsDataViewModel;
     }
