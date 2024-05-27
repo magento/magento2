@@ -1418,7 +1418,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
     }
 
     /**
-     * @param $key
+     * Get object original data
+     *
+     * @param string $key
      *
      * @return array|mixed|null
      */
