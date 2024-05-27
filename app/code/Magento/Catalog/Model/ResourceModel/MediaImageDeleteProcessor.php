@@ -101,7 +101,7 @@ class MediaImageDeleteProcessor
      */
     private function canDeleteImage(string $file): bool
     {
-        return $this->productGallery->countImageUses($file) <= 1;
+        return $this->productGallery->countImageUses($file) < 1;
     }
 
     /**
