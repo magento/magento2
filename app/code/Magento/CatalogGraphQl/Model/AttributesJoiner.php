@@ -89,28 +89,52 @@ class AttributesJoiner implements ResetAfterRequestInterface
      */
     public function getQueryData(NodeList $query, ResolveInfo $resolveInfo): array
     {
-        $selectedFields = $fragmentFields = $data = [];
+        $data = [
+            'selectedFields' => [],
+            'fragmentFields' => [],
+        ];
         foreach ($query as $field) {
             if ($field->kind === NodeKind::INLINE_FRAGMENT) {
-                $fragmentFields[] = $this->addInlineFragmentFields($resolveInfo, $field);
-            } elseif ($field->kind === NodeKind::FRAGMENT_SPREAD &&
-                ($spreadFragmentNode = $resolveInfo->fragments[$field->name->value])) {
-                foreach ($spreadFragmentNode->selectionSet->selections as $spreadNode) {
-                    if (isset($spreadNode->selectionSet->selections)) {
-                        if ($spreadNode->kind === NodeKind::FIELD && isset($spreadNode->name)) {
-                            $selectedFields[] = $spreadNode->name->value;
-                        }
-                        $fragmentFields[] = $this->getQueryFields($spreadNode, $resolveInfo);
-                    } else {
-                        $selectedFields[] = $spreadNode->name->value;
-                    }
-                }
+                $data['fragmentFields'][] = $this->addInlineFragmentFields($resolveInfo, $field);
+            } elseif ($field->kind === NodeKind::FRAGMENT_SPREAD) {
+                $data = array_merge_recursive($data, $this->handleFragment($field, $resolveInfo));
             } else {
-                $selectedFields[] = $field->name->value;
+                $data['selectedFields'][] = $field->name->value;
             }
         }
-        $data['selectedFields'] = $selectedFields;
-        $data['fragmentFields'] = $fragmentFields;
+
+        return $data;
+    }
+
+    /**
+     * Get fields from Fragment.
+     *
+     * @param Node        $field
+     * @param ResolveInfo $resolveInfo
+     * @return array
+     */
+    private function handleFragment(Node $field, ResolveInfo $resolveInfo): array
+    {
+        $data = [
+            'selectedFields' => [],
+            'fragmentFields' => [],
+        ];
+        $spreadFragmentNode = $resolveInfo->fragments[$field->name->value] ?? null;
+        if (!$spreadFragmentNode) {
+            return $data;
+        }
+        foreach ($spreadFragmentNode->selectionSet->selections as $spreadNode) {
+            if (isset($spreadNode->selectionSet->selections)) {
+                if ($spreadNode->kind === NodeKind::FIELD && isset($spreadNode->name)) {
+                    $data['selectedFields'][] = $spreadNode->name->value;
+                }
+                $data['fragmentFields'][] = $this->getQueryFields($spreadNode, $resolveInfo);
+            } elseif ($spreadNode->kind === NodeKind::FRAGMENT_SPREAD) {
+                $data = array_merge_recursive($data, $this->handleFragment($spreadNode, $resolveInfo));
+            } else {
+                $data['selectedFields'][] = $spreadNode->name->value;
+            }
+        }
 
         return $data;
     }
