@@ -17,7 +17,7 @@
 
             <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{BundleProduct.sku}}" stepKey="fillBundleName" after="goToCreateBundleProduct"/>
             <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{BundleProduct.name}}" stepKey="fillBundleSku" after="fillBundleName"/>
-            <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption3" after="fillBundleSku"/>
+            <actionGroup ref="AdminClickAddOptionForBundleItemsActionGroup" stepKey="clickAddOption3" after="fillBundleSku"/>
             <waitForElementVisible selector="{{AdminProductFormBundleSection.firstOptionTitle}}" stepKey="waitForBundleOptions" after="clickAddOption3"/>
             <fillField selector="{{AdminProductFormBundleSection.firstOptionTitle}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle" after="waitForBundleOptions"/>
             <selectOption selector="{{AdminProductFormBundleSection.firstInputType}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType" after="fillOptionTitle"/>
