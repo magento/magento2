@@ -73,13 +73,16 @@ class Move
         $afterCategoryId
     ) {
         $categoryStoreId = $category->getStoreId();
+        foreach ($category->getStoreIds() as $storeId) {
+            $category->setStoreId($storeId);
+            $this->removeObsoleteUrlPathEntries($category, $categoryStoreId);
+            $this->updateCategoryUrlKeyForStore($category);
+            $category->unsUrlPath();
+            $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
+            $category->getResource()->saveAttribute($category, 'url_path');
+            $this->updateUrlPathForChildren($category);
+        }
         $category->setStoreId($categoryStoreId);
-        $this->removeObsoleteUrlPathEntries($category);
-        $this->updateCategoryUrlKeyForStore($category);
-        $category->unsUrlPath();
-        $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
-        $category->getResource()->saveAttribute($category, 'url_path');
-        $this->updateUrlPathForChildren($category);
 
         return $result;
     }
@@ -120,7 +123,7 @@ class Move
      * @param Category $category
      * @return void
      */
-    private function removeObsoleteUrlPathEntries(Category $category): void
+    private function removeObsoleteUrlPathEntries(Category $category, $categoryStoreId): void
     {
         if ($this->storeManager->hasSingleStore()) {
             return;
@@ -129,6 +132,10 @@ class Move
         $path = $category->getData('path');
         if ($origPath != null && $path != null && $origPath != $path) {
             $category->unsUrlPath();
+            if( $category->getStoreId() !== $categoryStoreId ) {
+                $category->setStoreId($categoryStoreId);
+                $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
+            }
             $category->getResource()->saveAttribute($category, 'url_path');
             foreach ($this->childrenCategoriesProvider->getChildren($category, true) as $childCategory) {
                 $childCategory->unsUrlPath();
