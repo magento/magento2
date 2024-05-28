@@ -121,6 +121,7 @@ class Move
      * Clean obsolete entries
      *
      * @param Category $category
+     * @param int $categoryStoreId
      * @return void
      */
     private function removeObsoleteUrlPathEntries(Category $category, $categoryStoreId): void
@@ -132,7 +133,7 @@ class Move
         $path = $category->getData('path');
         if ($origPath != null && $path != null && $origPath != $path) {
             $category->unsUrlPath();
-            if( $category->getStoreId() !== $categoryStoreId ) {
+            if ($category->getStoreId() !== $categoryStoreId) {
                 $category->setStoreId($categoryStoreId);
                 $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
             }
