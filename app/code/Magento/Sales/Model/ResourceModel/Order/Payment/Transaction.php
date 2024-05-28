@@ -9,7 +9,6 @@ namespace Magento\Sales\Model\ResourceModel\Order\Payment;
 
 use Magento\Sales\Model\ResourceModel\EntityAbstract;
 use Magento\Sales\Model\Spi\TransactionResourceInterface;
-use Magento\Tests\NamingConvention\true\string;
 
 /**
  * Sales transaction resource model
