@@ -10,11 +10,13 @@ use Magento\Framework\Setup\Declaration\Schema\Comparator;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Index;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\Setup\Declaration\Schema\Operations\AddColumn;
 use Magento\Framework\Setup\Declaration\Schema\Operations\AddComplexElement;
 use Magento\Framework\Setup\Declaration\Schema\Operations\CreateTable;
 use Magento\Framework\Setup\Declaration\Schema\Operations\DropElement;
+use Magento\Framework\Setup\Declaration\Schema\Operations\DropIndex;
 use Magento\Framework\Setup\Declaration\Schema\Operations\DropReference;
 use Magento\Framework\Setup\Declaration\Schema\Operations\DropTable;
 use Magento\Framework\Setup\Declaration\Schema\Operations\ModifyColumn;
@@ -107,6 +109,8 @@ class DiffManager
                 $diff->register($generatedElement, DropReference::OPERATION_NAME, $generatedElement);
             } elseif ($generatedElement instanceof Table) {
                 $diff->register($generatedElement, DropTable::OPERATION_NAME, $generatedElement);
+            } elseif ($generatedElement instanceof Index) {
+                $diff->register($generatedElement, DropIndex::OPERATION_NAME, $generatedElement);
             } else {
                 $diff->register($generatedElement, DropElement::OPERATION_NAME, $generatedElement);
             }
