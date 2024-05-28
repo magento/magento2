@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="InputCurrencySymbolSection">
+        <element name="checkValue" type="button" selector="//input[@id='custom_currency_symbol_inheritUSD']"/>
+        <element name="setCurrency" type="input" selector="//input[@id='custom_currency_symbolUSD']"/>
+        <element name="saveCurrencySymbol" type="button" selector="//span[text()='Save Currency Symbols']"/>
+        <element name="productSymbol" type="button" selector="//span[@data-price-type='finalPrice']//span"/>
+    </section>
+</sections>
