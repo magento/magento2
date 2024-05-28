@@ -133,9 +133,13 @@ class DeployPackage
             try {
                 $this->processFile($file, $package);
             } catch (ContentProcessorException $exception) {
-                $errorMessage = __('Compilation from source: ')
-                    . $file->getSourcePath()
-                    . PHP_EOL . $exception->getMessage() . PHP_EOL;
+                $errorMessage = __(
+                    'Compilation from source: %1',
+                    $file->getSourcePath()
+                    . PHP_EOL
+                    . $exception->getMessage()
+                    . PHP_EOL
+                );
                 $this->errorsCount++;
                 $this->logger->critical($errorMessage);
                 $package->deleteFile($file->getFileId());
