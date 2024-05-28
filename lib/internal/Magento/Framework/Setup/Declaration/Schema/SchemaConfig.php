@@ -62,17 +62,8 @@ class SchemaConfig implements SchemaConfigInterface
      */
     public function getDbConfig()
     {
-        $declarativeSchema = $this->getDeclarationConfig();
-        $tablesWithJsonTypeField = [];
-        foreach ($declarativeSchema->getTables() as $table) {
-            foreach ($table->getColumns() as $column) {
-                if ($column->getType() == 'json') {
-                    $tablesWithJsonTypeField[$table->getName()] = $column->getName();
-                }
-            }
-        }
         $schema = $this->schemaFactory->create();
-        $schema = $this->dbSchemaBuilder->build($schema, $tablesWithJsonTypeField);
+        $schema = $this->dbSchemaBuilder->build($schema);
         return $schema;
     }
 

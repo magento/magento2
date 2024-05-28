@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\ResourceModel\Order\Payment;
 
 use Magento\Sales\Model\ResourceModel\EntityAbstract;
 use Magento\Sales\Model\Spi\TransactionResourceInterface;
+use Magento\Tests\NamingConvention\true\string;
 
 /**
  * Sales transaction resource model
@@ -223,8 +224,9 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      * Retrieve transaction by the unique key of order_id
      *
      * @param int $orderId
+     * @return string
      */
-    private function getParentTxnId($orderId)
+    private function getParentTxnId(int $orderId): string
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from(
