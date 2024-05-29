@@ -149,7 +149,7 @@
         <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="true" identity="false"/>
         <column xsi:type="int" name="edit_increment" unsigned="false" nullable="true" identity="false"
                 comment="Edit Increment"/>
-        <column xsi:type="smallint" name="email_sent" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="email_sent" unsigned="false" nullable="true" identity="false"
                 comment="Email Sent"/>
         <column xsi:type="smallint" name="send_email" unsigned="true" nullable="true" identity="false"
                 comment="Send Email"/>
@@ -708,7 +708,7 @@
                 comment="Total Weight"/>
         <column xsi:type="decimal" name="total_qty" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Total Qty"/>
-        <column xsi:type="smallint" name="email_sent" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="email_sent" unsigned="false" nullable="true" identity="false"
                 comment="Email Sent"/>
         <column xsi:type="smallint" name="send_email" unsigned="true" nullable="true" identity="false"
                 comment="Send Email"/>
@@ -981,7 +981,7 @@
                 identity="false" comment="Is Used For Refund"/>
         <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
                 comment="Order ID"/>
-        <column xsi:type="smallint" name="email_sent" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="email_sent" unsigned="false" nullable="true" identity="false"
                 comment="Email Sent"/>
         <column xsi:type="smallint" name="send_email" unsigned="true" nullable="true" identity="false"
                 comment="Send Email"/>
@@ -1278,7 +1278,7 @@
                 comment="Tax Amount"/>
         <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
                 comment="Order ID"/>
-        <column xsi:type="smallint" name="email_sent" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="email_sent" unsigned="false" nullable="true" identity="false"
                 comment="Email Sent"/>
         <column xsi:type="smallint" name="send_email" unsigned="true" nullable="true" identity="false"
                 comment="Send Email"/>

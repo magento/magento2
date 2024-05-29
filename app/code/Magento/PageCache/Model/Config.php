@@ -57,11 +57,15 @@ class Config
     public const VARNISH_6_CONFIGURATION_PATH = 'system/full_page_cache/varnish6/path';
 
     /**
+     * @deprecated Varnish 5 is EOL
+     * @see VARNISH_6_CONFIGURATION_PATH
      * XML path to Varnish 5 config template path
      */
     public const VARNISH_5_CONFIGURATION_PATH = 'system/full_page_cache/varnish5/path';
 
     /**
+     * @deprecated Varnish 4 is EOL
+     * @see VARNISH_6_CONFIGURATION_PATH
      * XML path to Varnish 4 config template path
      */
     public const VARNISH_4_CONFIGURATION_PATH = 'system/full_page_cache/varnish4/path';
@@ -140,7 +144,8 @@ class Config
      *
      * @param string $vclTemplatePath
      * @return string
-     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0
+     * @see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     public function getVclFile($vclTemplatePath)
     {
@@ -153,11 +158,8 @@ class Config
             case self::VARNISH_6_CONFIGURATION_PATH:
                 $version = 6;
                 break;
-            case self::VARNISH_5_CONFIGURATION_PATH:
-                $version = 5;
-                break;
             default:
-                $version = 4;
+                $version = 6;
         }
         $sslOffloadedHeader = $this->_scopeConfig->getValue(
             Request::XML_PATH_OFFLOADER_HEADER
@@ -179,7 +181,8 @@ class Config
      * Prepare data for VCL config
      *
      * @return array
-     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0
+     * @see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getReplacements()
     {
@@ -209,7 +212,8 @@ class Config
      * }
      *
      * @return mixed|null|string
-     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0
+     * @see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getAccessList()
     {
@@ -235,7 +239,8 @@ class Config
      * we have to convert "/pattern/iU" into "(?Ui)pattern"
      *
      * @return string
-     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0
+     * @see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getDesignExceptions()
     {

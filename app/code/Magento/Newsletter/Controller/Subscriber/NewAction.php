@@ -4,6 +4,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Newsletter\Controller\Subscriber;
 
 use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement;
@@ -24,6 +26,7 @@ use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\SubscriptionManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Newsletter\Model\Config as NewsletterConfig;
 use Magento\Newsletter\Model\SubscriberFactory;
 
 /**
@@ -42,6 +45,11 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      * @var EmailValidator
      */
     private $emailValidator;
+
+    /**
+     * @var NewsletterConfig
+     */
+    private $newsletterConfig;
 
     /**
      * @var SubscriptionManagerInterface
@@ -65,6 +73,8 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      * @param SubscriptionManagerInterface $subscriptionManager
      * @param EmailValidator|null $emailValidator
      * @param CustomerRepositoryInterface|null $customerRepository
+     * @param NewsletterConfig|null $newsletterConfig
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -75,13 +85,16 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
         CustomerAccountManagement $customerAccountManagement,
         SubscriptionManagerInterface $subscriptionManager,
         EmailValidator $emailValidator = null,
-        CustomerRepositoryInterface $customerRepository = null
+        CustomerRepositoryInterface $customerRepository = null,
+        NewsletterConfig $newsletterConfig = null
     ) {
         $this->customerAccountManagement = $customerAccountManagement;
         $this->subscriptionManager = $subscriptionManager;
         $this->emailValidator = $emailValidator ?: ObjectManager::getInstance()->get(EmailValidator::class);
         $this->customerRepository = $customerRepository ?: ObjectManager::getInstance()
             ->get(CustomerRepositoryInterface::class);
+        $this->newsletterConfig = $newsletterConfig?: ObjectManager::getInstance()
+            ->get(NewsletterConfig::class);
         parent::__construct(
             $context,
             $subscriberFactory,
@@ -95,8 +108,9 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      * Validates that the email address isn't being used by a different account.
      *
      * @param string $email
-     * @throws LocalizedException
+     *
      * @return void
+     * @throws LocalizedException
      */
     protected function validateEmailAvailable($email)
     {
@@ -139,8 +153,9 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      * Validates the format of the email address
      *
      * @param string $email
-     * @throws LocalizedException
+     *
      * @return void
+     * @throws LocalizedException
      */
     protected function validateEmailFormat($email)
     {
@@ -156,7 +171,10 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      */
     public function execute()
     {
-        if ($this->getRequest()->isPost() && $this->getRequest()->getPost('email')) {
+        if ($this->getRequest()->isPost()
+            && $this->getRequest()->getPost('email')
+            && $this->newsletterConfig->isActive()
+        ) {
             $email = (string)$this->getRequest()->getPost('email');
 
             try {
@@ -195,6 +213,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
         $redirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $redirectUrl = $this->_redirect->getRedirectUrl();
+
         return $redirect->setUrl($redirectUrl);
     }
 
@@ -203,6 +222,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      *
      * @param string $email
      * @param int $websiteId
+     *
      * @return int|null
      */
     private function getCustomerId(string $email, int $websiteId): ?int
@@ -219,6 +239,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      * Get success message
      *
      * @param int $status
+     *
      * @return Phrase
      */
     private function getSuccessMessage(int $status): Phrase
