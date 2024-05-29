@@ -208,6 +208,8 @@ class DeclarativeInstallerTest extends SetupTestCase
             ['Magento_TestSetupDeclarationModule1']
         );
         $this->updateDbSchemaRevision('constraint_modifications');
+        $adapter = $this->resourceConnection->getConnection("default");
+        $adapter->query("SET @OLD_RESTRICT_FK_ON_NON_STANDARD_KEY=@@GLOBAL.RESTRICT_FK_ON_NON_STANDARD_KEY, @@GLOBAL.RESTRICT_FK_ON_NON_STANDARD_KEY=0");
         $this->cliCommand->upgrade();
 
         $diff = $this->schemaDiff->diff(
@@ -217,6 +219,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         self::assertNull($diff->getAll());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
         $this->assertTableCreationStatements($this->getTrimmedData(), $shardData);
+        $adapter->query("SET @@GLOBAL.RESTRICT_FK_ON_NON_STANDARD_KEY=IF(@OLD_RESTRICT_FK_ON_NON_STANDARD_KEY=0, 0, 1)");
     }
 
     /**

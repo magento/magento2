@@ -31,6 +31,9 @@
         <index referenceId="CATALOG_PRODUCT_ENTITY_SKU" indexType="btree">
             <column name="sku"/>
         </index>
+        <constraint xsi:type="unique" referenceId="CATALOG_PRODUCT_ENTITY_ENTITY_ID">
+            <column name="entity_id"/>
+        </constraint>
     </table>
     <table name="catalog_product_entity_datetime" resource="default" engine="innodb"
            comment="Catalog Product Datetime Attribute Backend Table">
