@@ -46,11 +46,35 @@
                     <constraint alias="eav_data_validator" class="Magento\Eav\Model\Validator\Attribute\Data" />
                 </entity_constraints>
             </rule>
+            <rule name="check_name">
+                <entity_constraints>
+                    <constraint alias="name_validator" class="Magento\Customer\Model\Validator\Name" />
+                </entity_constraints>
+            </rule>
+            <rule name="check_street">
+                <entity_constraints>
+                    <constraint alias="street_validator" class="Magento\Customer\Model\Validator\Street" />
+                </entity_constraints>
+            </rule>
+            <rule name="check_city">
+                <entity_constraints>
+                    <constraint alias="city_validator" class="Magento\Customer\Model\Validator\City" />
+                </entity_constraints>
+            </rule>
+            <rule name="check_telephone">
+                <entity_constraints>
+                    <constraint alias="telephone_validator" class="Magento\Customer\Model\Validator\Telephone" />
+                </entity_constraints>
+            </rule>
         </rules>
         <groups>
             <group name="save">
                 <uses>
                     <use rule="check_eav"/>
+                    <use rule="check_name"/>
+                    <use rule="check_street"/>
+                    <use rule="check_city"/>
+                    <use rule="check_telephone"/>
                 </uses>
             </group>
         </groups>

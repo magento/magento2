@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSwitchDefaultConfigWebsiteActionGroup">
+        <!-- Admin switch default config between websites -->
+        <annotations>
+            <description>Goes to the Store Configuration page. Click on the default config and switch between the websites.</description>
+        </annotations>
+        <arguments>
+            <argument name="newWebsiteName" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminB2BConfigPage.url}}" stepKey="goToB2BFeaturesPage3"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+
+        <click selector="{{AdminConfigSection.defaultConfigButton}}" stepKey="clickDefaultConfigButton"/>
+        <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{newWebsiteName}}" stepKey="seeAssertWebsiteInDefaultConfigDropdown"/>
+
+        <click selector="{{AdminConfigSection.selectWebsiteName(newWebsiteName)}}" stepKey="clickSaveWebsite"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForElementVisible"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptMessage"/>
+    </actionGroup>
+</actionGroups>
