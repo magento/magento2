@@ -338,7 +338,7 @@ class HttpTest extends TestCase
         $objectManagerClass = new ReflectionClass(AppObjectManager::class);
         $instanceProperty = $objectManagerClass->getProperty('_instance');
         $instanceProperty->setAccessible(true);
-        $instanceProperty->setValue(null);
+        $instanceProperty->setValue(null, null);
 
         $this->model->__wakeup();
         $this->assertNull($this->cookieMetadataFactoryMock);

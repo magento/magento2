@@ -8,14 +8,13 @@ namespace Magento\Setup\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\App\Cache\Manager;
-use Magento\Framework\App\Cache\Manager as CacheManager;
-use Magento\Framework\App\Cache\Type\Block as BlockCache;
 use Magento\Framework\App\Cache\Type\Config as ConfigCache;
-use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
@@ -34,11 +33,11 @@ use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Module\ModuleResource;
 use Magento\Framework\Mview\TriggerCleaner;
+use Magento\Framework\Setup\ConsoleLoggerInterface;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\InstallSchemaInterface;
-use Magento\Framework\Setup\LoggerInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\PatchApplier;
 use Magento\Framework\Setup\Patch\PatchApplierFactory;
@@ -49,7 +48,6 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Validation\ValidationException;
 use Magento\Indexer\Model\Indexer\Collection;
-use Magento\PageCache\Model\Cache\Type as PageCache;
 use Magento\RemoteStorage\Driver\DriverException;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
@@ -138,7 +136,7 @@ class Installer
     /**
      * Logger
      *
-     * @var LoggerInterface
+     * @var ConsoleLoggerInterface
      */
     private $log;
 
@@ -178,9 +176,14 @@ class Installer
     private $installInfo = [];
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig
+     * @var DeploymentConfig
      */
     private $deploymentConfig;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $firstDeploymentConfig;
 
     /**
      * @var ObjectManagerProvider
@@ -266,7 +269,7 @@ class Installer
      * @param ModuleListInterface $moduleList
      * @param ModuleLoader $moduleLoader
      * @param AdminAccountFactory $adminAccountFactory
-     * @param LoggerInterface $log
+     * @param ConsoleLoggerInterface $log
      * @param ConnectionFactory $connectionFactory
      * @param MaintenanceMode $maintenanceMode
      * @param Filesystem $filesystem
@@ -291,7 +294,7 @@ class Installer
         ModuleListInterface $moduleList,
         ModuleLoader $moduleLoader,
         AdminAccountFactory $adminAccountFactory,
-        LoggerInterface $log,
+        ConsoleLoggerInterface $log,
         ConnectionFactory $connectionFactory,
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
@@ -330,6 +333,11 @@ class Installer
         $this->phpReadinessCheck = $phpReadinessCheck;
         $this->schemaPersistor = $this->objectManagerProvider->get()->get(SchemaPersistor::class);
         $this->triggerCleaner = $this->objectManagerProvider->get()->get(TriggerCleaner::class);
+        /* Note: Because this class is dependency injected with Laminas ServiceManager, but our plugins, and some
+         * other classes also use the App\ObjectManager instead, we have to make sure that the DeploymentConfig object
+         * from that ObjectManager gets reset as different steps in the installer will write to the deployment config.
+         */
+        $this->firstDeploymentConfig = ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -360,7 +368,7 @@ class Installer
             [$request]
         ];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
-        $script[] = ['Enabling caches:', 'updateCaches', [true]];
+        $script[] = ['Enabling caches:', 'enableCaches', [true]];
         $script[] = ['Installing data...', 'installDataFixtures', [$request]];
         if (!empty($request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX])) {
             $script[] = [
@@ -386,9 +394,12 @@ class Installer
         $total = count($script) + 4 * count(array_filter($estimatedModules));
         $this->progress = new Installer\Progress($total, 0);
 
-        $this->log->log('Starting Magento installation:');
+        $this->log->logMeta('Starting Magento installation:');
 
         foreach ($script as $item) {
+            /* Note: Because the $this->DeploymentConfig gets written to, but plugins use $this->firstDeploymentConfig,
+             * we have to reset this one after each item of $script so the plugins will see the config updates. */
+            $this->firstDeploymentConfig->resetData();
             list($message, $method, $params) = $item;
             $this->log->log($message);
             try {
@@ -901,7 +912,7 @@ class Installer
         $this->setupModuleRegistry($setup);
         $this->setupCoreTables($setup);
         $this->cleanMemoryTables($setup);
-        $this->log->log('Schema creation/updates:');
+        $this->log->logMeta('Schema creation/updates:');
         $this->declarativeInstallSchema($request);
         $this->handleDBSchemaData($setup, 'schema', $request);
         /** @var Mysql $adapter */
@@ -932,25 +943,14 @@ class Installer
      * Installs data fixtures
      *
      * @param array $request
-     * @param boolean $keepCacheStatuses
+     *
      * @return void
+     *
      * @throws Exception
      * @throws \Magento\Framework\Setup\Exception
      */
-    public function installDataFixtures(array $request = [], $keepCacheStatuses = false)
+    public function installDataFixtures(array $request = [])
     {
-        $frontendCaches = [
-            PageCache::TYPE_IDENTIFIER,
-            BlockCache::TYPE_IDENTIFIER,
-            LayoutCache::TYPE_IDENTIFIER,
-        ];
-
-        if ($keepCacheStatuses) {
-            $disabledCaches = $this->getDisabledCacheTypes($frontendCaches);
-
-            $frontendCaches = array_diff($frontendCaches, $disabledCaches);
-        }
-
         /** @var \Magento\Framework\Registry $registry */
         $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
         //For backward compatibility in install and upgrade scripts with enabled parallelization.
@@ -960,21 +960,9 @@ class Installer
         $this->assertDbAccessible();
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
-        $this->log->log('Data install/update:');
+        $this->log->logMeta('Data install/update:');
 
-        if ($frontendCaches) {
-            $this->log->log('Disabling caches:');
-            $this->updateCaches(false, $frontendCaches);
-        }
-
-        try {
-            $this->handleDBSchemaData($setup, 'data', $request);
-        } finally {
-            if ($frontendCaches) {
-                $this->log->log('Enabling caches:');
-                $this->updateCaches(true, $frontendCaches);
-            }
-        }
+        $this->handleDBSchemaData($setup, 'data', $request);
 
         $registry->unregister('setup-mode-enabled');
     }
@@ -1066,7 +1054,7 @@ class Installer
                 if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
                     $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
                     if ($upgrader) {
-                        $this->log->logInline("Upgrading $type.. ");
+                        $this->log->logMetaInline("Upgrading $type.. ");
                         $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                         if ($type === 'schema') {
                             $resource->setDbVersion($moduleName, $configVer);
@@ -1078,12 +1066,12 @@ class Installer
             } elseif ($configVer) {
                 $installer = $this->getSchemaDataHandler($moduleName, $installType);
                 if ($installer) {
-                    $this->log->logInline("Installing $type... ");
+                    $this->log->logMetaInline("Installing $type... ");
                     $installer->install($setup, $moduleContextList[$moduleName]);
                 }
                 $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
                 if ($upgrader) {
-                    $this->log->logInline("Upgrading $type... ");
+                    $this->log->logMetaInline("Upgrading $type... ");
                     $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                 }
             }
@@ -1109,9 +1097,9 @@ class Installer
         }
 
         if ($type === 'schema') {
-            $this->log->log('Schema post-updates:');
+            $this->log->logMeta('Schema post-updates:');
         } elseif ($type === 'data') {
-            $this->log->log('Data post-updates:');
+            $this->log->logMeta('Data post-updates:');
         }
         $handlerType = $type === 'schema' ? 'schema-recurring' : 'data-recurring';
 
@@ -1124,7 +1112,7 @@ class Installer
             $this->log->log("Module '{$moduleName}':");
             $modulePostUpdater = $this->getSchemaDataHandler($moduleName, $handlerType);
             if ($modulePostUpdater) {
-                $this->log->logInline('Running ' . str_replace('-', ' ', $handlerType) . '...');
+                $this->log->logMetaInline('Running ' . str_replace('-', ' ', $handlerType) . '...');
                 $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
             }
             $this->logProgress();
@@ -1379,7 +1367,7 @@ class Installer
         if (!$keepGeneratedFiles) {
             $this->cleanupGeneratedFiles();
         }
-        $this->log->log('Updating modules:');
+        $this->log->logMeta('Updating modules:');
         $this->createModulesConfig([]);
     }
 
@@ -1401,7 +1389,7 @@ class Installer
      */
     public function uninstall()
     {
-        $this->log->log('Starting Magento uninstallation:');
+        $this->log->logMeta('Starting Magento uninstallation:');
 
         try {
             $this->cleanCaches();
@@ -1415,7 +1403,7 @@ class Installer
 
         $this->cleanupDb();
 
-        $this->log->log('File system cleanup:');
+        $this->log->logMeta('File system cleanup:');
         $messages = $this->cleanupFiles->clearAllFiles();
         foreach ($messages as $message) {
             $this->log->log($message);
@@ -1427,39 +1415,27 @@ class Installer
     }
 
     /**
-     * Enable or disable caches for specific types that are available
+     * Enable caches for after installing application
      *
-     * If no types are specified then it will enable or disable all available types
      * Note this is called by install() via callback.
      *
-     * @param bool $isEnabled
-     * @param array $types
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     *
      * @return void
+     *
      * @throws Exception
      */
-    private function updateCaches($isEnabled, $types = [])
+    private function enableCaches()
     {
         /** @var Manager $cacheManager */
         $cacheManager = $this->objectManagerProvider->get()->create(Manager::class);
 
-        $availableTypes = $cacheManager->getAvailableTypes();
-        $types = empty($types) ? $availableTypes : array_intersect($availableTypes, $types);
-        $enabledTypes = $cacheManager->setEnabled($types, $isEnabled);
-        if ($isEnabled) {
-            $cacheManager->clean($enabledTypes);
-        }
-
-        // Only get statuses of specific cache types
-        $cacheStatus = array_filter(
-            $cacheManager->getStatus(),
-            function (string $key) use ($types) {
-                return in_array($key, $types);
-            },
-            ARRAY_FILTER_USE_KEY
-        );
+        $types = $cacheManager->getAvailableTypes();
+        $enabledTypes = $cacheManager->setEnabled($types, true);
+        $cacheManager->clean($enabledTypes);
 
         $this->log->log('Current status:');
-        foreach ($cacheStatus as $cache => $status) {
+        foreach ($cacheManager->getStatus() as $cache => $status) {
             $this->log->log(sprintf('%s: %d', $cache, $status));
         }
     }
@@ -1478,7 +1454,7 @@ class Installer
         $cacheManager = $this->objectManagerProvider->get()->get(Manager::class);
         $types = $cacheManager->getAvailableTypes();
         $cacheManager->clean($types);
-        $this->log->log('Cache cleared successfully');
+        $this->log->logSuccess('Cache cleared successfully');
     }
 
     /**
@@ -1495,7 +1471,7 @@ class Installer
         $cacheManager = $this->objectManagerProvider->get()->get(Manager::class);
         $types = empty($types) ? $cacheManager->getAvailableTypes() : $types;
         $cacheManager->flush($types);
-        $this->log->log('Cache types ' . implode(',', $types) . ' flushed successfully');
+        $this->log->logSuccess('Cache types ' . implode(',', $types) . ' flushed successfully');
     }
 
     /**
@@ -1727,7 +1703,7 @@ class Installer
      */
     private function cleanupGeneratedFiles()
     {
-        $this->log->log('File system cleanup:');
+        $this->log->logMeta('File system cleanup:');
         $messages = $this->cleanupFiles->clearCodeGeneratedFiles();
 
         // unload Magento autoloader because it may be using compiled definition
@@ -1807,29 +1783,6 @@ class Installer
     {
         $this->triggerCleaner->removeTriggers();
         $this->cleanCaches();
-    }
-
-    /**
-     * Returns list of disabled cache types
-     *
-     * @param array $cacheTypesToCheck
-     * @return array
-     */
-    private function getDisabledCacheTypes(array $cacheTypesToCheck): array
-    {
-        $disabledCaches = [];
-
-        /** @var CacheManager $cacheManager */
-        $cacheManager = $this->objectManagerProvider->get()->create(CacheManager::class);
-        $cacheStatus = $cacheManager->getStatus();
-
-        foreach ($cacheTypesToCheck as $cacheType) {
-            if (isset($cacheStatus[$cacheType]) && $cacheStatus[$cacheType] === 0) {
-                $disabledCaches[] = $cacheType;
-            }
-        }
-
-        return $disabledCaches;
     }
 
     /**

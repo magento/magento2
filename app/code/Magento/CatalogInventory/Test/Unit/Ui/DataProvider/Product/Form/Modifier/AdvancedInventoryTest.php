@@ -48,13 +48,13 @@ class AdvancedInventoryTest extends AbstractModifierTest
     {
         parent::setUp();
         $this->stockRegistryMock = $this->getMockBuilder(StockRegistryInterface::class)
-            ->setMethods(['getStockItem'])
+            ->onlyMethods(['getStockItem'])
             ->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockItemMock = $this->getMockBuilder(StockItemInterface::class)
-            ->setMethods(['getData'])
+            ->addMethods(['getData'])
             ->getMockForAbstractClass();
         $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
             ->disableOriginalConstructor()
@@ -154,7 +154,7 @@ class AdvancedInventoryTest extends AbstractModifierTest
     /**
      * @return array
      */
-    public function modifyDataProvider()
+    public static function modifyDataProvider()
     {
         return [
             [1, 1, 1],

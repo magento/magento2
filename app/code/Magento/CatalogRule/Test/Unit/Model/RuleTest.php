@@ -83,6 +83,11 @@ class RuleTest extends TestCase
     private $resourceIterator;
 
     /**
+     * @var \Magento\CatalogRule\Model\ResourceModel\Rule|MockObject
+     */
+    private $ruleResourceModel;
+
+    /**
      * @var Product|MockObject
      */
     private $productModel;
@@ -136,6 +141,8 @@ class RuleTest extends TestCase
             ['walk']
         );
 
+        $this->ruleResourceModel = $this->createMock(\Magento\CatalogRule\Model\ResourceModel\Rule::class);
+
         $extensionFactoryMock = $this->createMock(ExtensionAttributesFactory::class);
         $attributeValueFactoryMock = $this->createMock(AttributeValueFactory::class);
 
@@ -149,7 +156,8 @@ class RuleTest extends TestCase
                 'resourceIterator' => $this->resourceIterator,
                 'extensionFactory' => $extensionFactoryMock,
                 'customAttributeFactory' => $attributeValueFactoryMock,
-                'serializer' => $this->getSerializerMock()
+                'serializer' => $this->getSerializerMock(),
+                'ruleResourceModel' => $this->ruleResourceModel
             ]
         );
     }
@@ -330,9 +338,10 @@ class RuleTest extends TestCase
      */
     public function testAfterDelete(): void
     {
-        $indexer = $this->getMockForAbstractClass(IndexerInterface::class);
-        $indexer->expects($this->once())->method('invalidate');
-        $this->ruleProductProcessor->expects($this->once())->method('getIndexer')->willReturn($indexer);
+        $this->rule->setData('is_active', 1);
+        $this->ruleResourceModel->expects($this->once())
+            ->method('addCommitCallback')
+            ->with([$this->rule, 'reindex']);
         $this->rule->afterDelete();
     }
 
@@ -349,9 +358,9 @@ class RuleTest extends TestCase
         $this->rule->isObjectNew(false);
         $this->rule->setIsActive($active);
         $this->rule->setOrigData(RuleInterface::IS_ACTIVE, 1);
-        $indexer = $this->getMockForAbstractClass(IndexerInterface::class);
-        $indexer->expects($this->once())->method('invalidate');
-        $this->ruleProductProcessor->expects($this->once())->method('getIndexer')->willReturn($indexer);
+        $this->ruleResourceModel->expects($this->once())
+            ->method('addCommitCallback')
+            ->with([$this->rule, 'reindex']);
         $this->rule->afterSave();
     }
 
@@ -447,7 +456,9 @@ class RuleTest extends TestCase
      */
     public function testReindex(): void
     {
-        $this->ruleProductProcessor->expects($this->once())->method('reindexList');
+        $ruleId = 1;
+        $this->rule->setData('rule_id', $ruleId);
+        $this->ruleProductProcessor->expects($this->once())->method('reindexRow')->with($ruleId);
         $this->rule->reindex();
     }
 }
