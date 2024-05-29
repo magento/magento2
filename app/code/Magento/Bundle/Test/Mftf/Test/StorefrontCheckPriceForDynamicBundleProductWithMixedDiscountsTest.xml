@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckPriceForDynamicBundleProductWithMixedDiscountsTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="View bundle product"/>
+            <title value="Check mixed discount prices for bundle product"/>
+            <description value="The testcase purpose to verify mixed discount prices for bundle product on storefront"/>
+            <testCaseId value="AC-4571"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <!-- create three categories-->
+            <createData entity="_defaultCategory" stepKey="category1"/>
+            <createData entity="_defaultCategory" stepKey="category2"/>
+            <createData entity="_defaultCategory" stepKey="category3"/>
+            <!-- login to backend -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="clearExistingCatalogPriceRules"/>
+            <!-- create two catalog rules for categories -->
+            <!-- first catalog rule -->
+            <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="openNewCatalogPriceRulePage"/>
+            <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForCatalogPriceRule"/>
+            <actionGroup ref="AdminFillCatalogRuleConditionActionGroup" stepKey="fillConditionsForCatalogPriceRule">
+                <argument name="conditionValue" value="$category2.id$"/>
+            </actionGroup>
+            <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForCatalogPriceRule">
+                <argument name="apply" value="by_percent"/>
+                <argument name="discountAmount" value="100"/>
+            </actionGroup>
+            <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyFirstPriceRule"/>
+            <!-- second catalog rule -->
+            <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="openAgainNewCatalogPriceRulePage"/>
+            <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForSecondCatalogPriceRule"/>
+            <actionGroup ref="AdminFillCatalogRuleConditionActionGroup" stepKey="fillConditionsForSecondCatalogPriceRule">
+                <argument name="conditionValue" value="$category3.id$"/>
+            </actionGroup>
+            <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForSecondCatalogPriceRule">
+                <argument name="apply" value="by_percent"/>
+                <argument name="discountAmount" value="70"/>
+            </actionGroup>
+            <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplySecondPriceRule"/>
+            <!-- create 6 simple products -->
+            <!-- create first product -->
+            <createData entity="_defaultProduct" stepKey="firstProduct">
+                <field key="price">10.5</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <createData entity="tierPriceForSimpleProduct" stepKey="addTierPrice">
+                <requiredEntity createDataKey="firstProduct"/>
+            </createData>
+            <!-- create second product -->
+            <createData entity="SimpleProduct4" stepKey="secondProduct">
+                <field key="price">15</field>
+                <requiredEntity createDataKey="category2"/>
+            </createData>
+            <!-- create third product -->
+            <createData entity="_defaultProduct" stepKey="thirdProduct">
+                <field key="price">23.40</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <createData entity="specialProductPriceForProduct" stepKey="addSpecialPrice">
+                <requiredEntity createDataKey="thirdProduct"/>
+            </createData>
+            <!-- create fourth product -->
+            <createData entity="_defaultProduct" stepKey="fourthProduct">
+                <field key="price">30</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="category3"/>
+            </createData>
+            <!-- create fifth product -->
+            <createData entity="_defaultProduct" stepKey="fifthProduct">
+                <field key="price">25</field>
+                <field key="status">0</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <!-- create sixth product -->
+            <createData entity="_defaultProduct" stepKey="sixthProduct">
+                <field key="price">25</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <createData entity="specialProductPriceForSimpleProduct" stepKey="addSpecialPriceForSixthProduct">
+                <requiredEntity createDataKey="sixthProduct"/>
+            </createData>
+            <!--Create Bundle product -->
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <!-- Add options to the product -->
+            <createData entity="MultipleSelectOption" stepKey="createBundleOption1_1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">false</field>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption1_2">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">false</field>
+            </createData>
+            <!-- add products to checkbox option -->
+            <createData entity="ApiBundleLink" stepKey="linkOptionToFifthProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_2"/>
+                <requiredEntity createDataKey="fifthProduct"/>
+                <field key="qty">1</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToFourthProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_2"/>
+                <requiredEntity createDataKey="fourthProduct"/>
+                <field key="qty">3</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToSixthProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_2"/>
+                <requiredEntity createDataKey="sixthProduct"/>
+                <field key="qty">1</field>
+            </createData>
+            <!-- add products to multiselect option -->
+            <createData entity="ApiBundleLink" stepKey="linkOptionToSecondProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="secondProduct"/>
+                <field key="qty">3</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToFirstProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="firstProduct"/>
+                <field key="qty">2</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToThirdProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="thirdProduct"/>
+                <field key="qty">1</field>
+            </createData>
+            <!-- Add advanced pricing to bundle product -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductForEdit">
+                <argument name="productId" value="$createBundleProduct.id$"/>
+            </actionGroup>
+            <actionGroup ref="AdminBundleProductSetAdvancedPricingActionGroup" stepKey="addProductTierPrice">
+                <argument name="quantity" value="1"/>
+                <argument name="price" value="Discount"/>
+                <argument name="amount" value="75"/>
+                <argument name="priceView" value="Price Range"/>
+            </actionGroup>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value="catalogsearch_fulltext catalog_category_product catalog_product_price catalogrule_rule"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- delete created data -->
+            <deleteData createDataKey="firstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="secondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="thirdProduct" stepKey="deleteThirdProduct"/>
+            <deleteData createDataKey="fourthProduct" stepKey="deleteFourthProduct"/>
+            <deleteData createDataKey="fifthProduct" stepKey="deleteFifthProduct"/>
+            <deleteData createDataKey="sixthProduct" stepKey="deleteSixthProduct"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteCatalogPriceRules"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Go to storefront category page -->
+        <!-- check product prices on category and product page -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="amOnCategoryPage">
+            <argument name="category" value="$$category1$$"/>
+        </actionGroup>
+        <waitForText userInput="From $4.69 Regular Price $21.00" selector="{{StorefrontCategoryProductSection.priceFromByProductId($$createBundleProduct.id$$)}}" stepKey="seePriceFromInCategoryBundle"/>
+        <waitForText userInput="To $16.44 Regular Price $134.40" selector="{{StorefrontCategoryProductSection.priceToByProductId($$createBundleProduct.id$$)}}" stepKey="seePriceToInCategoryBundle"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="productUrl" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <waitForElement selector="{{StorefrontProductInfoMainSection.priceFrom('From $4.69 Regular Price $21.00')}}" stepKey="seePriceFromBundle"/>
+        <waitForElement selector="{{StorefrontProductInfoMainSection.priceTo('To $16.44 Regular Price $134.40')}}" stepKey="seePriceToBundle"/>
+    </test>
+</tests>

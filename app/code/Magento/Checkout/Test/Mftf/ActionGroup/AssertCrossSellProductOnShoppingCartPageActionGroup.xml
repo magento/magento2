@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertCrossSellProductOnShoppingCartPageActionGroup">
+        <annotations>
+            <description>Verify crossSell Product in shopping cart section</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string" defaultValue="{{_defaultProduct.name}}"/>
+        </arguments>
+        <scrollTo selector="{{CheckoutCartCrossSellSection.title}}" stepKey="scrollToCrossSellSection"/>
+        <waitForElementVisible selector="{{CheckoutCartCrossSellSection.productRowByName(productName)}}" stepKey="seeCrossSellProductNameInMoreChoices"/>
+          </actionGroup>
+</actionGroups>

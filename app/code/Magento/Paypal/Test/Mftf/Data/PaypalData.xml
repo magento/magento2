@@ -237,4 +237,10 @@
         <data key="paypal_paymentspro_vendor">MksGLTest</data>
         <data key="paypal_paymentspro_password">Abcd@123</data>
     </entity>
+    <entity name="validCreditCard" type="data">
+        <data key="cardNumber">4111111111111111</data>
+        <data key="month">12</data>
+        <data key="year">25</data>
+        <data key="cvv">123</data>
+    </entity>
 </entities>
