@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUploadFileInVisualSwatchActionGroup">
+        <annotations>
+            <description>Upload file in visual swatch to attribute.</description>
+        </annotations>
+        <arguments>
+            <argument name="defaultRadioButtonIndex" type="string"/>
+            <argument name="nthSwatchWindowEditRow" type="string"/>
+            <argument name="nthSwatchWindowEditColumn" type="string"/>
+            <argument name="nthUploadFileIndex" type="string"/>
+            <argument name="fileName" defaultValue="placeholderThumbnailImage"/>
+            <argument name="swatchWindowUnavailableIndex" type="string"/>
+            <argument name="swatchType" type="string"/>
+        </arguments>
+        <waitForElementClickable selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="waitToClickAddSwatchButtonForOption3"/>
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatchButtonForOption3"/>
+        <waitForElementClickable selector="{{AttributePropertiesSection.defaultRadioButton('2')}}" stepKey="waitForRadioButtonToBeClicked"/>
+        <click selector="{{AttributePropertiesSection.defaultRadioButton(defaultRadioButtonIndex)}}" stepKey="setAsDefault"/>
+        <waitForElementClickable selector="{{AdminManageSwatchSection.nthSwatchWindowEdit(nthSwatchWindowEditRow,nthSwatchWindowEditColumn)}}" stepKey="waitToClickSwatchButtonToAddFile"/>
+        <click selector="{{AdminManageSwatchSection.nthSwatchWindowEdit(nthSwatchWindowEditRow,nthSwatchWindowEditColumn)}}" stepKey="clickSwatchButtonToEditForOption"/>
+        <waitForElementClickable selector="{{AdminManageSwatchSection.nthUploadFile(nthUploadFileIndex)}}" stepKey="waitToClickUploadFileForOption3"/>
+        <click selector="{{AdminManageSwatchSection.nthUploadFile(nthUploadFileIndex)}}" stepKey="clickUploadFile1ForOption"/>
+        <attachFile selector="input[name='datafile']" userInput="{{fileName.file}}" stepKey="attachFile1ForOption"/>
+        <!-- Assert file is uploaded-->
+        <waitForElementNotVisible selector="{{AdminManageSwatchSection.swatchWindowUnavailable('swatchWindowUnavailableIndex)}}" stepKey="waitForImageUploaded1"/>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('2')}}" userInput="{{swatchType}}" stepKey="fillAdminImage"/>
+        <waitForPageLoad stepKey="waitFileAttachedForOption"/>
+    </actionGroup>
+</actionGroups>

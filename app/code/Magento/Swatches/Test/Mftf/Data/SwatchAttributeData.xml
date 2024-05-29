@@ -30,6 +30,7 @@
         <data key="frontend_label[0]" unique="suffix">VisualSwatchAttribute-</data>
         <data key="frontend_input">swatch_visual</data>
         <data key="is_required">0</data>
+        <data key="is_required_admin">0</data>
         <data key="update_product_preview_image">1</data>
         <data key="use_product_image_for_swatch">0</data>
         <data key="attribute_code" unique="suffix">visual_swatch_attribute_</data>
