@@ -15,7 +15,8 @@
         <arguments>
             <argument name="productName" type="string"/>
         </arguments>
-
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.importOptions}}" stepKey="scrollToClickImportOptions"/>
+        <waitForElementClickable selector="{{AdminProductCustomizableOptionsSection.importOptions}}" stepKey="waitForElementClickImportOptions"/>
         <click selector="{{AdminProductCustomizableOptionsSection.importOptions}}" stepKey="clickImportOptions"/>
         <waitForElementVisible selector="{{AdminProductImportOptionsSection.selectProductTitle}}" stepKey="waitForTitleVisible"/>
         <conditionalClick selector="{{AdminProductImportOptionsSection.resetFiltersButton}}" dependentSelector="{{AdminProductImportOptionsSection.resetFiltersButton}}" visible="true" stepKey="clickResetFilters"/>
