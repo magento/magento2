@@ -95,7 +95,8 @@
                    userInput="blue" stepKey="fillAdmin3"/>
 
         <!-- Mark second option as default -->
-        <waitForElementClickable selector="{{AdminManageSwatchSection.nthIsDefault('2')}}" stepKey="waitSecondOptionToBeClickable"/>
+        <scrollTo selector="{{AdminManageSwatchSection.manageSwatchSection}}" stepKey="scrollToManageSwatchSection"/>
+        <waitForElementClickable selector="{{AdminManageSwatchSection.nthIsDefault('2')}}" stepKey="waitForSetSecondOptionAsDefault"/>
         <click selector="{{AdminManageSwatchSection.nthIsDefault('2')}}" stepKey="setSecondOptionAsDefault"/>
 
         <!-- Go to Storefront Properties tab -->

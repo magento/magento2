@@ -24,36 +24,38 @@ use Magento\Sales\Model\AbstractModel;
  */
 class Item extends AbstractModel implements OrderItemInterface
 {
-    const STATUS_PENDING = 1;
+    public const STATUS_PENDING = 1;
 
     // No items shipped, invoiced, canceled, refunded nor backordered
-    const STATUS_SHIPPED = 2;
+    public const STATUS_SHIPPED = 2;
 
     // When qty ordered - [qty canceled + qty returned] = qty shipped
-    const STATUS_INVOICED = 9;
+    public const STATUS_INVOICED = 9;
 
     // When qty ordered - [qty canceled + qty returned] = qty invoiced
-    const STATUS_BACKORDERED = 3;
+    public const STATUS_BACKORDERED = 3;
 
     // When qty ordered - [qty canceled + qty returned] = qty backordered
-    const STATUS_CANCELED = 5;
+    public const STATUS_CANCELED = 5;
 
     // When qty ordered = qty canceled
-    const STATUS_PARTIAL = 6;
+    public const STATUS_PARTIAL = 6;
 
     // If [qty shipped or(max of two) qty invoiced + qty canceled + qty returned]
     // < qty ordered
-    const STATUS_MIXED = 7;
+    public const STATUS_MIXED = 7;
 
     // All other combinations
-    const STATUS_REFUNDED = 8;
+    public const STATUS_REFUNDED = 8;
 
     // When qty ordered = qty refunded
-    const STATUS_RETURNED = 4;
+    public const STATUS_RETURNED = 4;
 
-    // When qty ordered = qty returned // not used at the moment
-
-    // When qty ordered = qty returned // not used at the moment
+    /**
+     * When qty ordered = qty returned // not used at the moment
+     *
+     * @var string
+     */
     protected $_eventPrefix = 'sales_order_item';
 
     /**
