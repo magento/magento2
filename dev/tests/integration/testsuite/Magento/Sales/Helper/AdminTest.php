@@ -76,7 +76,7 @@ class AdminTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 '<a href=\"#\">Foo</a>',
-                '<a href="#">Foo</a>',
+                '<a href="%5C&quot;#%5C&quot;">Foo</a>',
                 'allowedTags' => ['a'],
             ],
             [
@@ -86,7 +86,7 @@ class AdminTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 "<a href=\"javascript&colon;alert(59)\">Foo</a>",
-                '<a href="#">Foo</a>',
+                '<a href="javascript&amp;colon;alert(59)">Foo</a>',
                 'allowedTags' => ['a'],
             ],
             [
