@@ -27,10 +27,10 @@
         "magento/module-wishlist": "*"
     },
     "suggest": {
+        "magento/module-asynchronous-operations": "*",
         "magento/module-cookie": "*",
         "magento/module-customer-sample-data": "*",
-        "magento/module-webapi": "*",
-        "magento/module-asynchronous-operations": "*"
+        "magento/module-webapi": "*"
     },
     "type": "magento2-module",
     "license": [

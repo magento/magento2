@@ -20,9 +20,9 @@
         "magento/module-widget": "*"
     },
     "suggest": {
-        "magento/module-theme-sample-data": "*",
         "magento/module-deploy": "*",
-        "magento/module-directory": "*"
+        "magento/module-directory": "*",
+        "magento/module-theme-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [

@@ -9,10 +9,10 @@
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-config": "*",
-        "magento/module-store": "*",
-        "magento/module-ui": "*",
+        "magento/module-csp": "*",
         "magento/module-release-notification": "*",
-        "magento/module-csp": "*"
+        "magento/module-store": "*",
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [

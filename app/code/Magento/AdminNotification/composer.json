@@ -9,10 +9,10 @@
         "lib-libxml": "*",
         "magento/framework": "*",
         "magento/module-backend": "*",
+        "magento/module-config": "*",
         "magento/module-media-storage": "*",
         "magento/module-store": "*",
-        "magento/module-ui": "*",
-        "magento/module-config": "*"
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [
