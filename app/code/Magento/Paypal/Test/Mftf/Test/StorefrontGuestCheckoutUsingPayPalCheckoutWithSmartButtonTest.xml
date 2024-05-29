@@ -1,0 +1,230 @@
+    <!--
+     /**
+      * Copyright © Magento, Inc. All rights reserved.
+      * See COPYING.txt for license details.
+      */
+    -->
+    <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+        <test name="StorefrontGuestCheckoutUsingPayPalCheckoutWithSmartButtonTest">
+            <annotations>
+                <features value="PayPal"/>
+                <stories value="Payment methods"/>
+                <title value="Guest Checkout Using PayPal Express and Smart Button."/>
+                <description value="Enable Paypal Guest Checkout with PayPal Express Checkout and PalPal Smart Button."/>
+                <severity value="MAJOR"/>
+                <testCaseId value="AC-5336"/>
+                <group value="3rd_party_integration"/>
+                <group value="pr_exclude"/>
+            </annotations>
+            <before>
+                <createData entity="SimpleProduct" stepKey="simpleProduct"/>
+                <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+                <magentoCLI command="config:set {{StorefrontPaypalExpressEnableCheckoutAsGuestConfigData.path}} {{StorefrontPaypalExpressEnableCheckoutAsGuestConfigData.value}}" stepKey="setGuestCheckout"/>
+                <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageEnableCustomizeButtonConfigData.path}} {{StorefrontPaypalCheckoutPageEnableCustomizeButtonConfigData.value}}" stepKey="enableCustomizeButton"/>
+                <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageButtonPayPalLabelConfigData.path}} {{StorefrontPaypalCheckoutPageButtonPayPalLabelConfigData.value}}" stepKey="setLabelForPayPalSmartButton"/>
+                <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageButtonHorizontalLayoutConfigData.path}} {{StorefrontPaypalCheckoutPageButtonHorizontalLayoutConfigData.value}}" stepKey="setLayoutForPayPalSmartButton"/>
+                <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                    <argument name="tags" value="full_page"/>
+                </actionGroup>
+                <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+                <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="configPayPalExpress">
+                    <argument name="credentials" value="SamplePaypalExpressConfig2"/>
+                </actionGroup>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
+                <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                    <argument name="tags" value="config full_page"/>
+                </actionGroup>
+                <!--Go to storefront and add product to cart -->
+                <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+                    <argument name="Customer" value="$createCustomer$" />
+                </actionGroup>
+                <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront">
+                    <argument name="product" value="$$simpleProduct$$"/>
+                </actionGroup>
+                <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addTheProductToCart">
+                    <argument name="productName" value="$simpleProduct.name$"/>
+                </actionGroup>
+                <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="goToCheckoutPage"/>
+                <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRate">
+                    <argument name="shippingMethodName" value="Flat Rate"/>
+                </actionGroup>
+                <!-- Go to Order review -->
+                    <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage"/>
+                    <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaypalExpress}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaypalExpressActive}}" visible="false" stepKey="selectPaypalExpressMethod"/>
+                <waitForPageLoad stepKey="waitForPaypalExpressCheckoutToBeLoaded"/>
+                <!-- Click on Paypal paypal button-->
+                <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+                <!--Login to Paypal in-context-->
+                <actionGroup ref="StorefrontLoginToPayPalValidatePayPalPopupActionGroup" stepKey="loginToPayPalPopup"/>
+                <!-- Config2 -->
+                <magentoCLI command="config:set {{StorefrontPaypalExpressDisableCheckoutAsGuestConfigData.path}} {{StorefrontPaypalExpressDisableCheckoutAsGuestConfigData.value}}" stepKey="disableGuestCheckoutConfig2"/>
+                <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                    <field key="price">11.00</field>
+                    </createData>
+                <createData entity="Simple_US_Customer" stepKey="createCustomer1"/>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexConfig2">
+                    <argument name="indices" value=""/>
+                </actionGroup>
+                <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheConfig2">
+                    <argument name="tags" value="config full_page"/>
+                </actionGroup>
+                <!--Go to All Customers Page to open the customer-->
+                <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToAllCustomersPage2"/>
+                <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="OpenEditCustomerFrom2">
+                    <argument name="customer" value="$$createCustomer$$"/>
+                </actionGroup>
+                <actionGroup ref="AdminOpenAccountInformationTabFromCustomerEditPageAllowAssistanceActionGroup" stepKey="clickOnAllowAssistanceConfig2"/>
+                <!--Verify that changes are saved successfully-->
+                <actionGroup ref="AdminSaveCustomerAndAssertSuccessMessage" stepKey="assertThatChangesAreSavedSuccessfully2"/>
+                <!-- Verify new User has access to 'Login as Customer Button' -->
+                <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                             stepKey="verifyLoginAsCustomerWorksOnCustomerPage2">
+                    <argument name="customerId" value="$$createCustomer.id$$"/>
+                </actionGroup>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexConfigaa">
+                    <argument name="indices" value=""/>
+                </actionGroup>
+                <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheConfigaa">
+                    <argument name="tags" value="config full_page"/>
+                </actionGroup>
+                <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefrontConfig2">
+                    <argument name="product" value="$$simpleProduct1$$"/>
+                </actionGroup>
+                <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addTheProductToCartConfig2">
+                    <argument name="productName" value="$simpleProduct1.name$"/>
+                </actionGroup>
+                <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="goToCheckoutPageConfig2"/>
+                <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRateConfig2">
+                    <argument name="shippingMethodName" value="Flat Rate"/>
+                </actionGroup>
+                <!-- Go to Order review -->
+                <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPageConfig2"/>
+                <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaypalExpress}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaypalExpressActive}}" visible="false" stepKey="selectPaypalExpressMethod2"/>
+                <waitForPageLoad stepKey="waitForPaypalExpressCheckoutToBeLoadedConfig2"/>
+                <!-- Click on Paypal paypal button-->
+                <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtnConfig2"/>
+                <!--Login to Paypal in-context-->
+                <actionGroup ref="StorefrontLoginToPayPalValidatePayPalPopupCreateAccountActionGroup" stepKey="loginToPayPalPopupConfig2"/>
+                <!-- Config3 -->
+                <magentoCLI command="config:set {{StorefrontPaypalExpressEnableCheckoutAsGuestConfigData.path}} {{StorefrontPaypalExpressEnableCheckoutAsGuestConfigData.value}}" stepKey="enableGuestCheckoutConfig3"/>
+                <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageButtonVerticalLayoutConfigData.path}} {{StorefrontPaypalCheckoutPageButtonVerticalLayoutConfigData.value}}" stepKey="setLayoutForPayPalSmartButtonConfig3"/>
+                <createData entity="SimpleProduct" stepKey="simpleProduct2">
+                <field key="price">15.00</field>
+                </createData>
+                <createData entity="Simple_US_Customer" stepKey="createCustomer2"/>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexConfig3">
+                    <argument name="indices" value=""/>
+                </actionGroup>
+                <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheConfig3">
+                    <argument name="tags" value="config full_page"/>
+                </actionGroup>
+                <!--Go to All Customers Page to open the customer-->
+                <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToAllCustomersPage3"/>
+                <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="OpenEditCustomerFrom3">
+                    <argument name="customer" value="$$createCustomer$$"/>
+                </actionGroup>
+                <actionGroup ref="AdminOpenAccountInformationTabFromCustomerEditPageAllowAssistanceActionGroup" stepKey="clickOnAllowAssistanceConfig3"/>
+                <!--Verify that changes are saved successfully-->
+                <actionGroup ref="AdminSaveCustomerAndAssertSuccessMessage" stepKey="assertThatChangesAreSavedSuccessfully3"/>
+                <!-- Verify new User has access to 'Login as Customer Button' -->
+                <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                             stepKey="verifyLoginAsCustomerWorksOnCustomerPage3">
+                    <argument name="customerId" value="$$createCustomer.id$$"/>
+                </actionGroup>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexConfigbb">
+                    <argument name="indices" value=""/>
+                </actionGroup>
+                <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheConfigbb">
+                    <argument name="tags" value="config full_page"/>
+                </actionGroup>
+                <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefrontConfig3">
+                    <argument name="product" value="$$simpleProduct2$$"/>
+                </actionGroup>
+                <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addTheProductToCartConfig3">
+                    <argument name="productName" value="$simpleProduct2.name$"/>
+                </actionGroup>
+                <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="goToCheckoutPageConfig3"/>
+                <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRateConfig3">
+                    <argument name="shippingMethodName" value="Flat Rate"/>
+                </actionGroup>
+                <!-- Go to Order review -->
+                <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPageConfig3"/>
+                <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaypalExpress}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaypalExpressActive}}" visible="false" stepKey="selectPaypalExpressMethod3"/>
+                <waitForPageLoad stepKey="waitForPaypalExpressCheckoutToBeLoadedConfig3"/>
+                <!-- Click on Paypal paypal button-->
+                <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtnConfig3"/>
+                <!--Login to Paypal in-context-->
+                <actionGroup ref="StorefrontLoginToPayPalValidatePayPalPopupActionGroup" stepKey="loginToPayPalPopupConfig3"/>
+                <!-- Config4 -->
+                <magentoCLI command="config:set {{StorefrontPaypalExpressDisableCheckoutAsGuestConfigData.path}} {{StorefrontPaypalExpressDisableCheckoutAsGuestConfigData.value}}" stepKey="disableGuestCheckoutConfig4"/>
+                <createData entity="SimpleProduct" stepKey="simpleProduct3">
+                <field key="price">20.00</field>
+                </createData>
+                <createData entity="Simple_US_Customer" stepKey="createCustomer3"/>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexConfig4">
+                    <argument name="indices" value=""/>
+                </actionGroup>
+                <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheConfig4">
+                    <argument name="tags" value="config full_page"/>
+                </actionGroup>
+                <!--Go to All Customers Page to open the customer-->
+                <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToAllCustomersPage4"/>
+                <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="OpenEditCustomerFrom4">
+                    <argument name="customer" value="$$createCustomer$$"/>
+                </actionGroup>
+                <actionGroup ref="AdminOpenAccountInformationTabFromCustomerEditPageAllowAssistanceActionGroup" stepKey="clickOnAllowAssistanceConfig4"/>
+                <!--Verify that changes are saved successfully-->
+                <actionGroup ref="AdminSaveCustomerAndAssertSuccessMessage" stepKey="assertThatChangesAreSavedSuccessfully4"/>
+                <!-- Verify new User has access to 'Login as Customer Button' -->
+                <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                             stepKey="verifyLoginAsCustomerWorksOnCustomerPage4">
+                    <argument name="customerId" value="$$createCustomer.id$$"/>
+                </actionGroup>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexConfigcc">
+                    <argument name="indices" value=""/>
+                </actionGroup>
+                <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheConfigcc">
+                    <argument name="tags" value="config full_page"/>
+                </actionGroup>
+                <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefrontConfig4">
+                    <argument name="product" value="$$simpleProduct3$$"/>
+                </actionGroup>
+                <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addTheProductToCartConfig4">
+                    <argument name="productName" value="$simpleProduct3.name$"/>
+                </actionGroup>
+                <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="goToCheckoutPageConfig4"/>
+                <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRateConfig4">
+                    <argument name="shippingMethodName" value="Flat Rate"/>
+                </actionGroup>
+                <!-- Go to Order review -->
+                <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPageConfig4"/>
+                <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaypalExpress}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaypalExpressActive}}" visible="false" stepKey="selectPaypalExpressMethod4"/>
+                <waitForPageLoad stepKey="waitForPaypalExpressCheckoutToBeLoadedConfig4"/>
+                <!-- Click on Paypal paypal button-->
+                <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtnConfig4"/>
+                <!--Login to Paypal in-context-->
+                <actionGroup ref="StorefrontLoginToPayPalValidatePayPalPopupCreateAccountActionGroup" stepKey="loginToPayPalPopupConfig4"/>
+            </before>
+
+            <after>
+                <magentoCLI command="config:set {{StorefrontPaypalExpressDisableCheckoutAsGuestConfigData.path}} {{StorefrontPaypalExpressDisableCheckoutAsGuestConfigData.value}}" stepKey="disableGuestCheckoutLast"/>
+                <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageButtonHorizontalLayoutConfigData.path}} {{StorefrontPaypalCheckoutPageButtonHorizontalLayoutConfigData.value}}" stepKey="setLayoutForPayPalSmartButton"/>
+                <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageDisableCustomizeButtonConfigData.path}} {{StorefrontPaypalCheckoutPageDisableCustomizeButtonConfigData.value}}" stepKey="disableCustomizeButton"/>
+                <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
+                <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+                <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+                <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
+                <deleteData createDataKey="simpleProduct3" stepKey="deleteProduct3"/>
+                <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+                <deleteData createDataKey="createCustomer1" stepKey="deleteCustomer1"/>
+                <deleteData createDataKey="createCustomer2" stepKey="deleteCustomer2"/>
+                <deleteData createDataKey="createCustomer3" stepKey="deleteCustomer3"/>
+                <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
+                <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+                <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            </after>
+        </test>
+    </tests>
