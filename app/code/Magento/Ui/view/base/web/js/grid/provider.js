@@ -15,8 +15,9 @@ define([
     'Magento_Ui/js/modal/alert',
     'mage/translate',
     'uiElement',
+    'uiRegistry',
     'Magento_Ui/js/grid/data-storage'
-], function ($, _, utils, resolver, layout, alert, $t, Element) {
+], function ($, _, utils, resolver, layout, alert, $t, Element, registry) {
     'use strict';
 
     return Element.extend({
@@ -152,9 +153,8 @@ define([
             if (xhr.statusText === 'abort') {
                 return;
             }
-
+            this.trigger('reloaded');
             this.set('lastError', true);
-
             this.firstLoad = false;
             this.triggerDataReload = false;
 
@@ -186,9 +186,9 @@ define([
          * @param {Object} requestConfig
          */
         updateRequestConfig: function (requestConfig) {
-            if (this.storage()) {
-                _.extend(this.storage().requestConfig, requestConfig);
-            }
+            registry.get(this.storageConfig.provider, function (storage) {
+                _.extend(storage.requestConfig, requestConfig);
+            });
         }
     });
 });

@@ -17,13 +17,16 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-215"/>
             <group value="Bundle"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Creating data-->
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!--Admin login-->
             <actionGroup stepKey="loginToAdminPanel" ref="AdminLoginActionGroup"/>
@@ -42,6 +45,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
 
         <!-- Add two bundle items -->
+
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="conditionallyOpenSectionBundleItems"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickAddOption3"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleOptions"/>

@@ -18,6 +18,7 @@
             <group value="mtf_migrated"/>
             <group value="checkout"/>
             <group value="tax"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
@@ -82,7 +83,9 @@
                 <requiredEntity createDataKey="secondBundleChildProduct"/>
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
                 <argument name="tags" value="config full_page"/>
             </actionGroup>
@@ -146,6 +149,7 @@
             <argument name="customerAddress" value="US_Address_NY_Default_Shipping"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
         <seeElement selector="{{StorefrontMinicartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>

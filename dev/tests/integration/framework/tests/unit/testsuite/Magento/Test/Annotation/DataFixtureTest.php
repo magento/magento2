@@ -24,6 +24,7 @@ use Magento\TestFramework\Fixture\DataFixtureFactory;
 use Magento\TestFramework\Fixture\LegacyDataFixture;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ScopeSwitcherInterface;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -99,11 +100,16 @@ class DataFixtureTest extends TestCase
         $dataFixtureFactory = new DataFixtureFactory($objectManager);
         $annotationParser = new \Magento\TestFramework\Annotation\Parser\DataFixture('magentoDataFixture');
 
+        $dataFixtureSetup = new DataFixtureSetup(
+            new Registry(),
+            $dataFixtureFactory,
+            $this->createMock(ScopeSwitcherInterface::class)
+        );
         $sharedInstances = [
             TestsIsolation::class => $this->testsIsolationMock,
             \Magento\TestFramework\Annotation\Parser\DataFixture::class => $annotationParser,
             DataFixtureFactory::class => $dataFixtureFactory,
-            DataFixtureSetup::class => new DataFixtureSetup(new Registry(), $dataFixtureFactory),
+            DataFixtureSetup::class => $dataFixtureSetup,
             'MockFixture1' => $this->fixture1,
             'MockFixture2' => $this->fixture2,
             'MockFixture3' => $this->fixture3,
@@ -478,6 +484,42 @@ class DataFixtureTest extends TestCase
         $this->fixture1->expects($this->once())
             ->method('revert')
             ->with($fixture1);
+        $this->fixture2->expects($this->once())
+            ->method('revert')
+            ->with($fixture2);
+        $this->revertFixtures();
+    }
+
+    #[
+        DbIsolation(false),
+        DataFixture('MockFixture1', ['p1' => 'param-value1'], 'fixture1', count: 2),
+        DataFixture('MockFixture2', ['p2' => '$fixture12.attr_1$'], 'fixture2'),
+        DataFixture('MockFixture3', ['p3' => '$fixture2.attr_3$', 'p4' => ['p5' => '$fixture11$']], 'fixture3'),
+    ]
+    public function testCount(): void
+    {
+        $fixture11 = new DataObject(['attr_1' => 'attr-value11', 'attr_2' => 'attr-value21']);
+        $fixture12 = new DataObject(['attr_1' => 'attr-value12', 'attr_2' => 'attr-value22']);
+        $fixture2 = new DataObject(['attr_3' => 1]);
+        $this->fixture1->expects($this->exactly(2))
+            ->method('apply')
+            ->with(['p1' => 'param-value1'])
+            ->willReturnOnConsecutiveCalls($fixture11, $fixture12);
+        $this->fixture2->expects($this->once())
+            ->method('apply')
+            ->with(['p2' => 'attr-value12'])
+            ->willReturn($fixture2);
+        $this->fixture3->expects($this->once())
+            ->method('apply')
+            ->with(['p3' => 1, 'p4' => ['p5' => $fixture11]]);
+        $this->applyFixtures();
+        $this->assertSame($fixture11, $this->fixtureStorage->get('fixture11'));
+        $this->assertSame($fixture12, $this->fixtureStorage->get('fixture12'));
+        $this->assertSame($fixture2, $this->fixtureStorage->get('fixture2'));
+        $this->assertNull($this->fixtureStorage->get('fixture3'));
+        $this->fixture1->expects($this->exactly(2))
+            ->method('revert')
+            ->withConsecutive([$fixture12], [$fixture11]);
         $this->fixture2->expects($this->once())
             ->method('revert')
             ->with($fixture2);

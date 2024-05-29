@@ -8,6 +8,7 @@ namespace Magento\Elasticsearch\Model\Adapter;
 
 use Elasticsearch\Common\Exceptions\Missing404Exception;
 use Exception;
+use LogicException;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\StaticField;
@@ -19,9 +20,11 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Stdlib\ArrayManager;
 use Psr\Log\LoggerInterface;
+use Magento\AdvancedSearch\Helper\Data;
 
 /**
  * Elasticsearch adapter
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Elasticsearch
@@ -111,11 +114,26 @@ class Elasticsearch
     private $arrayManager;
 
     /**
+     * @var Data
+     */
+    protected $helper;
+
+    /**
      * @var array
      */
     private $responseErrorExceptionList = [
         'elasticsearchMissing404' => Missing404Exception::class
     ];
+
+    /**
+     * @var bool
+     */
+    private bool $isStackQueries = false;
+
+    /**
+     * @var array
+     */
+    private array $stackedQueries = [];
 
     /**
      * @param ConnectionManager $connectionManager
@@ -125,6 +143,7 @@ class Elasticsearch
      * @param LoggerInterface $logger
      * @param Index\IndexNameResolver $indexNameResolver
      * @param BatchDataMapperInterface $batchDocumentDataMapper
+     * @param Data $helper
      * @param array $options
      * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
      * @param StaticField|null $staticFieldProvider
@@ -141,6 +160,7 @@ class Elasticsearch
         LoggerInterface $logger,
         IndexNameResolver $indexNameResolver,
         BatchDataMapperInterface $batchDocumentDataMapper,
+        Data $helper,
         $options = [],
         ProductAttributeRepositoryInterface $productAttributeRepository = null,
         StaticField $staticFieldProvider = null,
@@ -154,6 +174,7 @@ class Elasticsearch
         $this->logger = $logger;
         $this->indexNameResolver = $indexNameResolver;
         $this->batchDocumentDataMapper = $batchDocumentDataMapper;
+        $this->helper = $helper;
         $this->productAttributeRepository = $productAttributeRepository ?:
             ObjectManager::getInstance()->get(ProductAttributeRepositoryInterface::class);
         $this->staticFieldProvider = $staticFieldProvider ?:
@@ -169,6 +190,67 @@ class Elasticsearch
             throw new LocalizedException(
                 __('The search failed because of a search engine misconfiguration.')
             );
+        }
+    }
+
+    /**
+     * Disable query stacking
+     *
+     * @return void
+     */
+    public function disableStackQueriesMode(): void
+    {
+        $this->stackedQueries = [];
+        $this->isStackQueries = false;
+    }
+
+    /**
+     * Enable query stacking
+     *
+     * @return void
+     */
+    public function enableStackQueriesMode(): void
+    {
+        $this->isStackQueries = true;
+    }
+
+    /**
+     * Run the stacked queries
+     *
+     * @return $this
+     * @throws Exception
+     */
+    public function triggerStackedQueries(): self
+    {
+        try {
+            if (!empty($this->stackedQueries)) {
+                $this->client->bulkQuery($this->stackedQueries);
+            }
+        } catch (Exception $e) {
+            $this->logger->critical($e);
+            throw $e;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Combine query body request
+     *
+     * @param array $queries
+     * @return void
+     * @throws LogicException
+     */
+    private function stackQueries(array $queries): void
+    {
+        if ($this->isStackQueries) {
+            if (empty($this->stackedQueries)) {
+                $this->stackedQueries = $queries;
+            } else {
+                $this->stackedQueries['body'] = array_merge($this->stackedQueries['body'], $queries['body']);
+            }
+        } else {
+            throw new LogicException('Stacked indexer queries not enabled');
         }
     }
 
@@ -224,7 +306,11 @@ class Elasticsearch
             try {
                 $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
                 $bulkIndexDocuments = $this->getDocsArrayInBulkIndexFormat($documents, $indexName);
-                $this->client->bulkQuery($bulkIndexDocuments);
+                if ($this->isStackQueries === false) {
+                    $this->client->bulkQuery($bulkIndexDocuments);
+                } else {
+                    $this->stackQueries($bulkIndexDocuments);
+                }
             } catch (Exception $e) {
                 $this->logger->critical($e);
                 throw $e;
@@ -299,7 +385,11 @@ class Elasticsearch
                 $indexName,
                 self::BULK_ACTION_DELETE
             );
-            $this->client->bulkQuery($bulkDeleteDocuments);
+            if ($this->isStackQueries === false) {
+                $this->client->bulkQuery($bulkDeleteDocuments);
+            } else {
+                $this->stackQueries($bulkDeleteDocuments);
+            }
         } catch (Exception $e) {
             $this->logger->critical($e);
             throw $e;
@@ -329,18 +419,30 @@ class Elasticsearch
         ];
 
         foreach ($documents as $id => $document) {
-            $bulkArray['body'][] = [
-                $action => [
-                    '_id' => $id,
-                    '_type' => $this->clientConfig->getEntityType(),
-                    '_index' => $indexName
-                ]
-            ];
+            if ($this->helper->isClientOpenSearchV2()) {
+                $bulkArray['body'][] = [
+                    $action => [
+                        '_id' => $id,
+                        '_index' => $indexName
+                    ]
+                ];
+            } else {
+                $bulkArray['body'][] = [
+                    $action => [
+                        '_id' => $id,
+                        '_type' => $this->clientConfig->getEntityType(),
+                        '_index' => $indexName
+                    ]
+                ];
+            }
             if ($action == self::BULK_ACTION_INDEX) {
                 $bulkArray['body'][] = $document;
             }
         }
 
+        if ($this->helper->isClientOpenSearchV2()) {
+            unset($bulkArray['type']);
+        }
         return $bulkArray;
     }
 

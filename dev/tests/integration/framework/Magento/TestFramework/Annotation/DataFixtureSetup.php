@@ -8,11 +8,13 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Fixture\DataFixtureFactory;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
+use Magento\TestFramework\ScopeSwitcherInterface;
 
 /**
  * Apply and revert data fixtures
@@ -20,25 +22,15 @@ use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 class DataFixtureSetup
 {
     /**
-     * @var Registry
-     */
-    private $registry;
-
-    /**
-     * @var DataFixtureFactory
-     */
-    private $dataFixtureFactory;
-
-    /**
      * @param Registry $registry
      * @param DataFixtureFactory $dataFixtureFactory
+     * @param ScopeSwitcherInterface $scopeSwitcher
      */
     public function __construct(
-        Registry $registry,
-        DataFixtureFactory $dataFixtureFactory
+        private Registry $registry,
+        private DataFixtureFactory $dataFixtureFactory,
+        private ScopeSwitcherInterface $scopeSwitcher
     ) {
-        $this->registry = $registry;
-        $this->dataFixtureFactory = $dataFixtureFactory;
     }
 
     /**
@@ -46,12 +38,23 @@ class DataFixtureSetup
      *
      * @param array $fixture
      * @return DataObject|null
+     * @throws LocalizedException
      */
     public function apply(array $fixture): ?DataObject
     {
         $data = $this->resolveVariables($fixture['data'] ?? []);
         $factory = $this->dataFixtureFactory->create($fixture['factory']);
-        $result = $factory->apply($data);
+        if (isset($fixture['scope'])) {
+            $scope = DataFixtureStorageManager::getStorage()->get($fixture['scope']);
+            $fromScope = $this->scopeSwitcher->switch($scope);
+            try {
+                $result = $factory->apply($data);
+            } finally {
+                $this->scopeSwitcher->switch($fromScope);
+            }
+        } else {
+            $result = $factory->apply($data);
+        }
 
         if ($result !== null && !empty($fixture['name'])) {
             DataFixtureStorageManager::getStorage()->persist(
@@ -95,7 +98,7 @@ class DataFixtureSetup
      *
      * @param array $data
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function resolveVariables(array $data): array
     {
@@ -103,17 +106,44 @@ class DataFixtureSetup
             if (is_array($value)) {
                 $data[$key] = $this->resolveVariables($value);
             } else {
-                if (is_string($value) && preg_match('/^\$\w+(\.\w+)?\$$/', $value)) {
-                    list($fixtureName, $attribute) = array_pad(explode('.', trim($value, '$')), 2, null);
-                    $fixtureData = DataFixtureStorageManager::getStorage()->get($fixtureName);
-                    if (!$fixtureData) {
-                        throw new \InvalidArgumentException("Unable to resolve fixture reference '$value'");
+                if (is_string($value)) {
+                    $value = $this->parseFixtureKeyValue($value);
+                    if ($value) {
+                        $data[$key] = $value;
                     }
-                    $data[$key] = $attribute ? $fixtureData->getDataUsingMethod($attribute) : $fixtureData;
+                }
+            }
+
+            if (is_string($key)) {
+                $newKey = $this->parseFixtureKeyValue($key);
+                if (is_string($newKey)) {
+                    $value = $data[$key];
+                    unset($data[$key]);
+                    $data[$newKey] = $value;
                 }
             }
         }
 
         return $data;
+    }
+
+    /**
+     * Parse either key or value of the fixture data
+     *
+     * @param string $data
+     * @return DataObject|mixed|void
+     * @throws LocalizedException
+     */
+    private function parseFixtureKeyValue(string $data)
+    {
+        if (preg_match('/^\$\w+(\.\w+)?\$$/', $data)) {
+            list($fixtureName, $attribute) = array_pad(explode('.', trim($data, '$')), 2, null);
+            $fixtureData = DataFixtureStorageManager::getStorage()->get($fixtureName);
+            if (!$fixtureData) {
+                throw new \InvalidArgumentException("Unable to resolve fixture reference '$data'");
+            }
+            return $attribute ? $fixtureData->getDataUsingMethod($attribute) : $fixtureData;
+        }
+        return false;
     }
 }

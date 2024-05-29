@@ -97,7 +97,7 @@ class BundleTest extends TestCase
     public function testStockStatusView(bool $isSalable, string $expectedValue): void
     {
         $product = $this->productRepository->get('bundle-product');
-        $product->setAllItemsSalable($isSalable);
+        $product->setIsSalable($isSalable);
         $this->block->setTemplate('Magento_Bundle::catalog/product/view/type/bundle.phtml');
         $result = $this->renderBlockHtml($product);
         $this->assertEquals($expectedValue, trim(strip_tags($result)));

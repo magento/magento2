@@ -37,8 +37,8 @@ class SearchConfigOptionsListTest extends TestCase
 
         $selectOptions = $optionsList[0]->getSelectOptions();
         $this->assertCount(3, $selectOptions);
-        $this->assertContains('elasticsearch5', $selectOptions);
         $this->assertContains('elasticsearch7', $selectOptions);
+        $this->assertContains('elasticsearch8', $selectOptions);
         $this->assertContains('opensearch', $selectOptions);
 
         $this->assertArrayHasKey(1, $optionsList);

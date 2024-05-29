@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-91409"/>
             <group value="Theme"/>
+            <group value="cloud"/>
         </annotations>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>

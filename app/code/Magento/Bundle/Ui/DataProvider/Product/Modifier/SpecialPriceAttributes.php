@@ -8,9 +8,11 @@ declare(strict_types=1);
 namespace Magento\Bundle\Ui\DataProvider\Product\Modifier;
 
 use Magento\Bundle\Model\Product\Type;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Directory\Model\Currency as DirectoryCurrency;
-use Magento\Framework\Currency\Data\Currency as CurrencyData;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\NumberFormatterFactory;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use NumberFormatter;
 
@@ -19,8 +21,6 @@ use NumberFormatter;
  */
 class SpecialPriceAttributes implements ModifierInterface
 {
-    public const LOCALE_USING_DECIMAL_COMMA = ['nl_BE', 'nl_NL'];
-
     /**
      * @var ResolverInterface
      */
@@ -32,9 +32,9 @@ class SpecialPriceAttributes implements ModifierInterface
     private $priceAttributeList;
 
     /**
-     * @var DirectoryCurrency
+     * @var NumberFormatterFactory
      */
-    private $directoryCurrency;
+    private $numberFormatterFactory;
 
     /**
      * PriceAttributes constructor.
@@ -42,15 +42,19 @@ class SpecialPriceAttributes implements ModifierInterface
      * @param DirectoryCurrency $directoryCurrency
      * @param ResolverInterface $localeResolver
      * @param array $priceAttributeList
+     * @param NumberFormatterFactory|null $numberFormatterFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         DirectoryCurrency $directoryCurrency,
         ResolverInterface $localeResolver,
-        array $priceAttributeList = []
+        array $priceAttributeList = [],
+        ?NumberFormatterFactory $numberFormatterFactory = null
     ) {
-        $this->directoryCurrency = $directoryCurrency;
         $this->localeResolver = $localeResolver;
         $this->priceAttributeList = $priceAttributeList;
+        $this->numberFormatterFactory = $numberFormatterFactory
+            ?? ObjectManager::getInstance()->get(NumberFormatterFactory::class);
     }
 
     /**
@@ -61,24 +65,15 @@ class SpecialPriceAttributes implements ModifierInterface
         if (empty($data) || empty($this->priceAttributeList)) {
             return $data;
         }
-        $numberFormatter = new NumberFormatter(
-            $this->localeResolver->getLocale(),
-            NumberFormatter::PERCENT
-        );
-        $numberFormatter->setAttribute(NumberFormatter::MIN_FRACTION_DIGITS, 2);
+        $numberFormatter = $this->numberFormatterFactory->create([
+            'locale' => $this->localeResolver->getLocale(),
+            'style' => NumberFormatter::PERCENT
+        ]);
+        $numberFormatter->setAttribute(NumberFormatter::MIN_FRACTION_DIGITS, 6);
         foreach ($data['items'] as &$item) {
             foreach ($this->priceAttributeList as $priceAttribute) {
-                if (isset($item[$priceAttribute]) && $item['type_id'] == Type::TYPE_CODE) {
-                    $item[$priceAttribute] =
-                        $this->directoryCurrency->format(
-                            $item[$priceAttribute],
-                            ['display' => CurrencyData::NO_SYMBOL],
-                            false
-                        );
-                    if (in_array($this->localeResolver->getLocale(), self::LOCALE_USING_DECIMAL_COMMA)) {
-                        $item[$priceAttribute] = str_replace(['.',','], ['','.'], $item[$priceAttribute]);
-                    }
-                    $item[$priceAttribute] = $numberFormatter->format($item[$priceAttribute] / 100);
+                if (isset($item[$priceAttribute]) && $item[ProductInterface::TYPE_ID] === Type::TYPE_CODE) {
+                    $item[$priceAttribute] = $numberFormatter->format((float) $item[$priceAttribute] / 100);
                 }
             }
         }

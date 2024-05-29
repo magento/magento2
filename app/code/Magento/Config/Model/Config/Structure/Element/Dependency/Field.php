@@ -6,14 +6,12 @@
 namespace Magento\Config\Model\Config\Structure\Element\Dependency;
 
 /**
- * @api
- * @since 100.0.2
- */
-
-/**
  * Class Field
  *
  * Fields are used to describe possible values for a type/interface.
+ *
+ * @api
+ * @since 100.0.2
  */
 class Field
 {

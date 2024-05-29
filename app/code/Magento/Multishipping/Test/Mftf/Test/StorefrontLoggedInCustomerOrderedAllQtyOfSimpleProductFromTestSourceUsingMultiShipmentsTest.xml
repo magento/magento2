@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontLoggedInCustomerOrderedAllQtyOfSimpleProductFromTestSourceUsingMultiShipmentsTest">
+        <annotations>
+            <stories value="Logged in customer ordered all qty of Simple product from Test source using multi-shipments"/>
+            <title value="Logged in customer ordered all qty of Simple product from Test source using multi-shipments"/>
+            <description value="Logged in customer ordered all qty of Simple product from Test source using multi-shipments."/>
+            <testCaseId value="https://studio.cucumber.io/projects/69435/test-plan/folders/419534/scenarios/3688106"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Login as a customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount" after="saveSimpleProduct">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <!-- Open AddressBook and set Country -->
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBookPage">
+            <argument name="menu" value="Address Book"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddNewAddressActionGroup" stepKey="goToAddressDetailsPageToCreateUSAddress"/>
+        <!-- Fill all required address fields -->
+        <actionGroup ref="FillNewCustomerAddressRequiredFieldsActionGroup" stepKey="fillUSAddressFields">
+            <argument name="address" value="US_Address_California"/>
+        </actionGroup>
+        <!-- Save new address -->
+        <actionGroup ref="StorefrontSaveCustomerAddressActionGroup" stepKey="saveUSAddress"/>
+        <actionGroup ref="StorefrontAddNewAddressActionGroup" stepKey="goToAddressDetailsPageToCreateUKAddress"/>
+        <!-- Fill all required address fields -->
+        <actionGroup ref="FillNewCustomerAddressRequiredFieldsActionGroup" stepKey="fillUKAddressFields">
+            <argument name="address" value="CustomerUKAddress"/>
+        </actionGroup>
+        <!-- Save new address -->
+        <actionGroup ref="StorefrontSaveCustomerAddressActionGroup" stepKey="saveUKAddress"/>
+        <actionGroup ref="StorefrontAddNewAddressActionGroup" stepKey="goToAddressDetailsPageToCreatePolandAddress"/>
+        <!-- Fill all required address fields -->
+        <actionGroup ref="FillNewCustomerAddressRequiredFieldsActionGroup" stepKey="fillTXAddressFields">
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <!-- Save new address -->
+        <actionGroup ref="StorefrontSaveCustomerAddressActionGroup" stepKey="saveTXAddress"/>
+        <!--Goto storefront add the product -->
+        <actionGroup ref="StorefrontAddSimpleProductWithQtyActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="gotoCart"/>
+        <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <!-- Select different addresses and click 'Go to Shipping Information' -->
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectUSAddres">
+            <argument name="sequenceNumber" value="1"/>
+            <argument name="option" value="John Doe, 6161 West Centinela Avenue, Culver City, California 90230, United States"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectUKAddress">
+            <argument name="sequenceNumber" value="2"/>
+            <argument name="option" value="Jane Miller, 1 London Bridge Street, London,  SE12 9GF, United Kingdom"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selecAustinAddress">
+            <argument name="sequenceNumber" value="3"/>
+            <argument name="option" value="John Doe, 7700 West Parmer Lane, Austin, Texas 78729, United States"/>
+        </actionGroup>
+        <!-- Click Go to Shipping Information* -->
+        <actionGroup ref="StorefrontMultiShippingShippingOrderPageActionGroup" stepKey="goToShippingOrderPage"/>
+        <actionGroup ref="StorefrontMultiShippingBillingOrderPageActionGroup" stepKey="goToBilling"/>
+        <!-- Page contains Payment Method -->
+        <actionGroup ref="StorefrontSelectMultiShippingCheckMoneyOrderPaymentMethodActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <actionGroup ref="StorefrontMultiShippingReviewOrderPageActionGroup" stepKey="goToReviewOrder"/>
+        <!--Click on Place Order"-->
+        <actionGroup ref="PlaceOrderActionGroup" stepKey="placeOrder"/>
+        <!--Check Thank you for your purchase!" page is opened -->
+        <waitForText selector="{{StorefrontMultipleShippingMethodSection.successMessage}}" userInput="Successfully ordered" stepKey="seeSuccessMessage"/>
+        <!--Grab all Order IDs -->
+        <waitForElementVisible selector="{{StorefrontMultipleShippingMethodSection.orderId('1')}}" stepKey="waitForFirstOrderIdToBeVisible"/>
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('1')}}" stepKey="grabFirstOrderId"/>
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('2')}}" stepKey="grabSecondOrderId"/>
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('3')}}" stepKey="grabThirdOrderId"/>
+        <!-- Go to admin and check order status -->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchForFirstOrder">
+            <argument name="keyword" value="{$grabFirstOrderId}"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <!--Verify that Created order is in Pending status-->
+        <waitForText selector="{{AdminShipmentOrderInformationSection.orderStatus({$grabFirstOrderId})}}" userInput="Pending" stepKey="seeFirstOrderStatus"/>
+        <waitForText selector="{{AdminShipmentOrderInformationSection.orderStatus({$grabSecondOrderId})}}" userInput="Pending" stepKey="seeSecondOrderStatus"/>
+        <waitForText selector="{{AdminShipmentOrderInformationSection.orderStatus({$grabThirdOrderId})}}" userInput="Pending" stepKey="seeThirdOrderStatus"/>
+    </test>
+</tests>
