@@ -8,11 +8,11 @@
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-bundle": "*",
-        "magento/module-store": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-import-export": "*",
         "magento/module-eav": "*",
-        "magento/module-import-export": "*"
+        "magento/module-import-export": "*",
+        "magento/module-store": "*"
     },
     "type": "magento2-module",
     "license": [

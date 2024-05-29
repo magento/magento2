@@ -1,18 +1,21 @@
 {
     "name": "magento/module-cms-url-rewrite-graph-ql",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "type": "magento2-module",
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-cms": "*",
+        "magento/module-cms-graph-ql": "*",
         "magento/module-store": "*",
-        "magento/module-url-rewrite-graph-ql": "*",
-        "magento/module-cms-graph-ql": "*"
+        "magento/module-url-rewrite-graph-ql": "*"
     },
     "suggest": {
-        "magento/module-cms-url-rewrite": "*",
-        "magento/module-catalog-graph-ql": "*"
+        "magento/module-catalog-graph-ql": "*",
+        "magento/module-cms-url-rewrite": "*"
     },
     "license": [
         "OSL-3.0",

@@ -1,20 +1,23 @@
 {
     "name": "magento/module-media-gallery-ui",
     "description": "Magento module responsible for the media gallery UI implementation",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
+        "magento/module-authorization": "*",
         "magento/module-backend": "*",
-        "magento/module-ui": "*",
-        "magento/module-store": "*",
-        "magento/module-media-gallery-ui-api": "*",
+        "magento/module-cms": "*",
+        "magento/module-directory": "*",
+        "magento/module-media-content-api": "*",
         "magento/module-media-gallery-api": "*",
         "magento/module-media-gallery-metadata-api": "*",
         "magento/module-media-gallery-synchronization-api": "*",
-        "magento/module-media-content-api": "*",
-        "magento/module-cms": "*",
-        "magento/module-directory": "*",
-        "magento/module-authorization": "*"
+        "magento/module-media-gallery-ui-api": "*",
+        "magento/module-store": "*",
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [

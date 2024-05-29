@@ -23,9 +23,9 @@
         "magento/module-user": "*"
     },
     "suggest": {
+        "magento/module-config": "*",
         "magento/module-fedex": "*",
-        "magento/module-ups": "*",
-        "magento/module-config": "*"
+        "magento/module-ups": "*"
     },
     "type": "magento2-module",
     "license": [

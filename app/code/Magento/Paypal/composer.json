@@ -13,6 +13,7 @@
         "magento/module-catalog": "*",
         "magento/module-checkout": "*",
         "magento/module-config": "*",
+        "magento/module-csp": "*",
         "magento/module-customer": "*",
         "magento/module-directory": "*",
         "magento/module-eav": "*",
@@ -24,8 +25,7 @@
         "magento/module-tax": "*",
         "magento/module-theme": "*",
         "magento/module-ui": "*",
-        "magento/module-vault": "*",
-        "magento/module-csp": "*"
+        "magento/module-vault": "*"
     },
     "suggest": {
         "magento/module-checkout-agreements": "*"

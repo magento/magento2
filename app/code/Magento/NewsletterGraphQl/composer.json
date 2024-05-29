@@ -9,10 +9,10 @@
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-customer": "*",
-        "magento/module-newsletter": "*",
-        "magento/module-store": "*",
         "magento/module-graph-ql": "*",
-        "magento/module-graph-ql-resolver-cache": "*"
+        "magento/module-graph-ql-resolver-cache": "*",
+        "magento/module-newsletter": "*",
+        "magento/module-store": "*"
     },
     "license": [
         "OSL-3.0",

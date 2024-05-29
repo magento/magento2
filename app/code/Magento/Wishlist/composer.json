@@ -8,6 +8,7 @@
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
+        "magento/module-captcha": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-checkout": "*",
@@ -16,14 +17,13 @@
         "magento/module-sales": "*",
         "magento/module-store": "*",
         "magento/module-theme": "*",
-        "magento/module-ui": "*",
-        "magento/module-captcha": "*"
+        "magento/module-ui": "*"
     },
     "suggest": {
-        "magento/module-configurable-product": "*",
-        "magento/module-downloadable": "*",
         "magento/module-bundle": "*",
+        "magento/module-configurable-product": "*",
         "magento/module-cookie": "*",
+        "magento/module-downloadable": "*",
         "magento/module-grouped-product": "*",
         "magento/module-wishlist-sample-data": "*"
     },

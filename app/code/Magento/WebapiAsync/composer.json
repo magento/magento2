@@ -7,13 +7,13 @@
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
-        "magento/module-webapi": "*",
         "magento/module-asynchronous-operations": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-webapi": "*"
     },
     "suggest": {
-        "magento/module-user": "*",
-        "magento/module-customer": "*"
+        "magento/module-customer": "*",
+        "magento/module-user": "*"
     },
     "type": "magento2-module",
     "license": [

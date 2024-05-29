@@ -1,11 +1,14 @@
 {
     "name": "magento/module-login-as-customer-page-cache",
     "description": "",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
-        "magento/module-store": "*",
-        "magento/module-login-as-customer-api": "*"
+        "magento/module-login-as-customer-api": "*",
+        "magento/module-store": "*"
     },
     "suggest": {
         "magento/module-page-cache": "*"

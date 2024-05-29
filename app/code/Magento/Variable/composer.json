@@ -8,8 +8,8 @@
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
-        "magento/module-store": "*",
         "magento/module-config": "*",
+        "magento/module-store": "*",
         "magento/module-ui": "*"
     },
     "type": "magento2-module",

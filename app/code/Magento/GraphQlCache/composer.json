@@ -1,14 +1,17 @@
 {
     "name": "magento/module-graph-ql-cache",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "type": "magento2-module",
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
-        "magento/module-page-cache": "*",
-        "magento/module-graph-ql": "*",
         "magento/module-authorization": "*",
-        "magento/module-integration": "*"
+        "magento/module-graph-ql": "*",
+        "magento/module-integration": "*",
+        "magento/module-page-cache": "*"
     },
     "license": [
         "OSL-3.0",

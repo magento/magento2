@@ -7,12 +7,12 @@
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
-        "magento/module-quote": "*",
         "magento/module-checkout": "*",
+        "magento/module-payment": "*",
         "magento/module-paypal": "*",
+        "magento/module-quote": "*",
         "magento/module-quote-graph-ql": "*",
         "magento/module-sales": "*",
-        "magento/module-payment": "*",
         "magento/module-store": "*",
         "magento/module-vault": "*"
     },

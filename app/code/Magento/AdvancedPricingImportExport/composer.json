@@ -11,10 +11,10 @@
         "magento/module-catalog-import-export": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-customer": "*",
+        "magento/module-directory": "*",
         "magento/module-eav": "*",
         "magento/module-import-export": "*",
-        "magento/module-store": "*",
-        "magento/module-directory": "*"
+        "magento/module-store": "*"
     },
     "type": "magento2-module",
     "license": [
