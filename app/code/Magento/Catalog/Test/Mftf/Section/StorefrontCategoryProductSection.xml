@@ -40,8 +40,5 @@
         <element name="filterOptionCurrencySymbol" type="text" selector="//div[@class='filter-options-content']//a//span[@class='price' and contains(text(),'{{currencySymbol}}')]" parameterized="true"/>
         <element name="priceDropdown" type="button" selector="//div[@class='filter-options-title']"/>
         <element name="priceBlockShoppingOptions" type="block" selector="//div[@class='filter-options-content']"/>
-        <element name="productSenderName" type="input" selector="#giftcard_sender_name"/>
-        <element name="productRecipientName" type="input" selector="#giftcard_recipient_name"/>
-        <element name="productMessage" type="input" selector="#giftcard-message"/>
     </section>
 </sections>
