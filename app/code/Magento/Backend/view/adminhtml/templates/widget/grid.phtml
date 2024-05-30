@@ -127,8 +127,8 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
                                 '#' . $escaper->escapeHtml($block->getHtmlId()) . '_page-current'
                             ) ?>
 
-                            <label class="admin__control-support-text" for="<?= $escaper->escapeHtml($block->getHtmlId())
-                            ?>_page-current">
+                            <label class="admin__control-support-text"
+                                   for="<?= $escaper->escapeHtml($block->getHtmlId()) ?>_page-current">
                                 <?= /* @noEscape */ __('of %1', '<span>' .
                                     $block->getCollection()->getLastPageNumber() . '</span>') ?>
                             </label>
@@ -202,7 +202,8 @@ require(deps, function('. ($block->getDependencyJsObject() ? 'registry' : '') .'
             $escaper->escapeJs($block->getId()) . '\', \'' . $escaper->escapeJs($block->getGridUrl()) . '\', \'' .
             $escaper->escapeJs($block->getVarNamePage()) .'\', \'' .
             $escaper->escapeJs($block->getVarNameSort()) . '\', \'' .
-            $escaper->escapeJs($block->getVarNameDir()) . '\', \'' . $escaper->escapeJs($block->getVarNameFilter()) .'\');
+            $escaper->escapeJs($block->getVarNameDir()) . '\', \'' .
+            $escaper->escapeJs($block->getVarNameFilter()) .'\');
 ' . PHP_EOL;
         $scriptString .= $escaper->escapeJs($block->getJsObjectName()) . '.useAjax = ' .
             (/* @noEscape */ $escaper->escapeJs($block->getUseAjax()) ? 'true' : 'false') . ';' . PHP_EOL;
@@ -246,8 +247,8 @@ require(deps, function('. ($block->getDependencyJsObject() ? 'registry' : '') .'
         }
 
         $scriptString .= '});' . PHP_EOL;
-
-        echo /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false);
+        /* @noEscape */
+        echo $secureRenderer->renderTag('script', [], $scriptString, false);
         ?>
 
 <?php endif; ?>
