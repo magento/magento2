@@ -2,22 +2,19 @@
 /**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained from
- * Adobe.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
+use Magento\Bundle\Test\Fixture\AddProductToCart as AddBundleProductToCart;
+use Magento\Bundle\Test\Fixture\Link as BundleSelectionFixture;
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Catalog\Test\Fixture\ProductStock as ProductStockFixture;
+use Magento\CatalogInventory\Model\StockRegistry;
 use Magento\Indexer\Test\Fixture\Indexer;
 use Magento\Quote\Model\Cart\Data\CartItem;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
@@ -77,11 +74,15 @@ class GetCartPaginatedItemsTest extends GraphQlAbstract
      */
     private $quoteIdToMaskedQuoteIdInterface;
 
+    /** @var StockRegistry */
+    private $stockRegistry;
+
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->fixtures = $objectManager->get(DataFixtureStorageManager::class)->getStorage();
         $this->quoteIdToMaskedQuoteIdInterface = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->stockRegistry = $objectManager->get(StockRegistry::class);
     }
 
     public function testGetCartWithZeroPageSize()
@@ -100,6 +101,113 @@ class GetCartPaginatedItemsTest extends GraphQlAbstract
         $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId, 1, 0);
         $this->graphQlQuery($query);
+    }
+
+    #[
+        DataFixture(ProductFixture::class, as: 'p1'),
+        DataFixture(
+            ProductStockFixture::class,
+            [
+                'prod_id' => '$p1.id$',
+                'prod_qty' => 100
+            ],
+            'p1Stock'
+        ),
+        DataFixture(
+            BundleSelectionFixture::class,
+            [
+                'sku' => '$p1.sku$', 'price' => 100, 'price_type' => 0
+            ],
+            as:'link'
+        ),
+        DataFixture(
+            BundleOptionFixture::class,
+            [   'title' => 'Checkbox Options',
+                'type' => 'checkbox',
+                'required' => 1,
+                'product_links' => ['$link$']
+            ],
+            'option'
+        ),
+        DataFixture(
+            BundleProductFixture::class,
+            ['price' => 90, '_options' => ['$option$']],
+            as:'bundle_product'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(
+            AddBundleProductToCart::class,
+            [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$bundle_product.id$',
+                'selections' => [['$p1.id$']],
+                'qty' => 100
+            ],
+            as: 'cart_item'
+        ),
+    ]
+    public function testSetStockToZeroAfterAddingBundleProductToCart()
+    {
+        $cart = $this->fixtures->get('cart');
+        /** @var Product $p1 */
+        $p1 = $this->fixtures->get('p1');
+        /** @var CartItem $cartItem */
+        $cartItem = $this->fixtures->get('cart_item');
+        $bundleProduct = $this->fixtures->get('bundle_product');
+
+        $stockItem = $this->stockRegistry->getStockItemBySku($p1->getSku());
+        $stockItem->setQty(0);
+        $this->stockRegistry->updateStockItemBySku($p1->getSku(), $stockItem);
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
+        $query = $this->getQuery($maskedQuoteId, 20, 1);
+        $response = $this->graphQlQuery($query);
+
+        $expected = [
+            'cart' => [
+                'id' => $maskedQuoteId,
+                'itemsV2' => [
+                    'total_count' => 1,
+                    'items' => [
+                        [
+                            'id' => $cartItem->getId(),
+                            'quantity' => 100,
+                            'product' => [
+                                'sku' => $bundleProduct->getSku(),
+                                'stock_status' => 'OUT_OF_STOCK',
+                            ],
+                            'prices' => [
+                                'price' => [
+                                    'value' => 10,
+                                    'currency' => 'USD',
+                                ]
+                            ],
+                            'errors' => [
+                                [
+                                    'code' => 'ITEM_QTY',
+                                    'message' => 'This product is out of stock.'
+                                ],
+                                [
+                                    'code' => 'UNDEFINED',
+                                    'message' => 'There are no source items with the in stock status
+This product is out of stock.
+The required options you selected are not available.'
+                                ]
+                            ]
+                        ],
+                    ],
+                    'page_info' => [
+                        'page_size' => 20,
+                        'current_page' => 1,
+                        'total_pages' => 1,
+                    ]
+                ],
+            ]
+        ];
+        $this->assertEquals(
+            $expected,
+            $response,
+            sprintf("Expected:\n%s\ngot:\n%s", json_encode($expected), json_encode($response))
+        );
     }
 
     public function testGetCart()

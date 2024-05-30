@@ -56,6 +56,38 @@
         <from>0</from>
         <size>10</size>
     </request>
+    <request query="one_aggregations_with_null" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="one_aggregations" boost="2">
+                <queryReference clause="must" ref="fulltext_search_query"/>
+            </query>
+
+            <query xsi:type="matchQuery" name="fulltext_search_query" value="$fulltext_search_query$" boost="5">
+                <match field="description" boost="2"/>
+            </query>
+        </queries>
+        <aggregations>
+            <bucket xsi:type="termBucket" name="weight_bucket" field="weight">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+            </bucket>
+            <bucket xsi:type="rangeBucket" name="price_bucket" field="price">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+                <ranges>
+                    <range from="" to=""/>
+                </ranges>
+            </bucket>
+            <bucket xsi:type="dynamicBucket" method="manual" name="dynamic_price" field="price" />
+        </aggregations>
+        <from>0</from>
+        <size>10</size>
+    </request>
     <request query="one_wildcard" index="catalogsearch_fulltext">
         <dimensions>
             <dimension name="scope" value="default"/>
