@@ -23,6 +23,10 @@
         <element name="customOption" type="block" selector="[data-index='options'] tbody tr.data-row"/>
         <element name="customOptionButtonDelete" type="button" selector="[data-index='options'] [data-index='delete_button']"/>
         <element name="toggleCustomizableOption" type="button" selector="//table[@data-index='options']//tr[{{index}}]//div[contains(@class, 'admin__collapsible-title')]" parameterized="true" timeout="30"/>
+        <element name="customTextArea" type="text" selector="textarea[name='product[{{areaName}}]']" parameterized="true"/>
+        <element name="customDropDown" type="select" selector="select[name='product[{{dropdown}}]']" parameterized="true"/>
+        <element name="customYesOrNo" type="checkbox" selector="input[name='product[{{boolean}}]']+label" parameterized="true"/>
+        <element name="customMultiSelect" type="select" selector="[name='product[multi_en]']"/>
 
         <element name="optionTypeDropDown" type="select" selector="//table[@data-index='options']//tr[{{index}}]//div[@data-index='type']//div[contains(@class, 'action-select-wrap')]" parameterized="true" timeout="30"/>
         <element name="optionTypeItem" type="select" selector="//table[@data-index='options']//tr[{{index}}]//div[@data-index='type']//*[contains(@class, 'action-menu-item')]//*[contains(., '{{optionValue}}')]" parameterized="true" timeout="30"/>
