@@ -34,8 +34,8 @@
         <fillField selector="{{AdminProductCustomizableOptionsSection.customTextArea('areaAttributeCode')}}" userInput="{{areaAttributeValue}}" stepKey="fillAreaField"/>
         <selectOption selector="{{AdminProductCustomizableOptionsSection.customDropDown('dropdownAttributeCode')}}" userInput="{{dropdownAttributeValue}}" stepKey="selectDropdownValue"/>
         <checkOption selector="{{AdminProductCustomizableOptionsSection.customYesOrNo('boolean')}}" stepKey="checkYesOrNo"/>
-        <waitForElementVisible selector="{{AdminProductContentSection.attributeInput('date_en')}}" stepKey="waitForDateFieldToBeVisible"/>
-        <fillField selector="{{AdminProductContentSection.attributeInput('date_en')}}" userInput="{{dateAttributeValue}}" stepKey="fillDateField"/>
+        <waitForElementVisible selector="{{AdminProductContentSection.attributeInput('dateAttributeCode')}}" stepKey="waitForDateFieldToBeVisible"/>
+        <fillField selector="{{AdminProductContentSection.attributeInput('dateAttributeCode')}}" userInput="{{dateAttributeValue}}" stepKey="fillDateField"/>
         <selectOption selector="{{AdminProductCustomizableOptionsSection.customMultiSelect}}" parameterArray="[{{multiSelectAttributeValue}}]" stepKey="multiSelectSpecifiedValues"/>
     </actionGroup>
 </actionGroups>
