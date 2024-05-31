@@ -236,4 +236,10 @@
         <data key="paypal_paymentsflowlink_vendor">mpilink</data>
         <data key="paypal_paymentsflowlink_password">1234_1234L!</data>
     </entity>
+    <entity name="validCreditCard" type="data">
+        <data key="cardNumber">4111111111111111</data>
+        <data key="month">12</data>
+        <data key="year">25</data>
+        <data key="cvv">123</data>
+    </entity>
 </entities>
