@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontGuestCheckoutUsingPaypalPayFlowLinkTest">
+        <annotations>
+            <features value="payFlow link"/>
+            <stories value="Paypal pay flow link configuration"/>
+            <title value="Paypal pay flow link configuration with valid credentials"/>
+            <description value="As a customer I want to be able to buy goods using PayPal payflow link with flat rate Shipping"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-6151"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!-- Simple product is created -->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct">
+                <field key="price">10.00</field>
+            </createData>
+            <actionGroup ref="AdminEnablePayPalPayFlowLinkActionGroup" stepKey="ConfigPayPalPayFlowLink">
+                <argument name="credentials" value="SamplePaypalPaymentsFlowLinkConfig"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminDisablePayPalPayFlowLinkActionGroup" stepKey="disablePayPalPayFlow"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Go to Storefront as Guest and add simple product to cart -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <!-- Proceed to Checkout from mini shopping cart -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+            <argument name="shippingMethod" value="Flat Rate"/>
+            <argument name="customerVar" value="Simple_US_Customer_CA"/>
+            <argument name="customerAddressVar" value="US_Address_California_Madison"/>
+        </actionGroup>
+
+        <!-- Click on PayPal payment radio button -->
+        <actionGroup ref="StorefrontSelectPayPalExpressCheckoutPayFlowEditionActionGroup" stepKey="selectPaypalExpress"/>
+        <!-- Login to PayPal and verify order total on PayPal page-->
+        <actionGroup ref="StorefrontLoginToPayPalExpressCheckoutPayFlowEditionActionGroup" stepKey="loginToPayPal"/>
+        <actionGroup ref="AssertStorefrontOrderDetailsOnPayPalPageActionGroup" stepKey="assertOrderDetails"/>
+
+        <scrollTo selector="{{PayPalPaymentSection.paypalSubmitBtn}}" stepKey="scrollToContinueBtn"/>
+        <waitForElementClickable selector="{{PayPalPaymentSection.paypalSubmitBtn}}" stepKey="waitForCompletePurchaseButtonToBeClickable"/>
+        <click selector="{{PayPalPaymentSection.paypalSubmitBtn}}" stepKey="clickCompleteButton"/>
+
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.successTitle}}" stepKey="waitForLoadSuccessPageTitle"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <!--Assert order in orders grid -->
+        <!-- Go to order page -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openFirstOrderPage">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!-- Check status -->
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+        <waitForText selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$15.00" stepKey="checkGrandTotal"/>
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderComment}}" userInput="Authorized amount of $15.00." stepKey="seeOrderHistoryNotes"/>
+    </test>
+</tests>
