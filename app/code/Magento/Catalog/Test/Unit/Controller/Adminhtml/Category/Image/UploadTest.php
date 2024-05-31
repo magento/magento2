@@ -27,7 +27,7 @@ class UploadTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             ['image1', 'image1'],

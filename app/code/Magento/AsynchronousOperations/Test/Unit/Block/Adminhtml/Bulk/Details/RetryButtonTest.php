@@ -64,7 +64,7 @@ class RetryButtonTest extends TestCase
     /**
      * @return array
      */
-    public function getButtonDataProvider()
+    public static function getButtonDataProvider()
     {
         return [
             [0, []],

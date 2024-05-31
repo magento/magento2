@@ -123,7 +123,7 @@ class ModuleEnableDisableCommandTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             'enable, do not clear static content' => [

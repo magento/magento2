@@ -409,7 +409,7 @@ class RefundOrderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             'TestWithNotifyTrue' => [1, true, true],

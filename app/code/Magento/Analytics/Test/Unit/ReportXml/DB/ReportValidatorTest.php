@@ -104,7 +104,7 @@ class ReportValidatorTest extends TestCase
      *
      * @return array
      */
-    public function errorDataProvider()
+    public static function errorDataProvider()
     {
         $reportName = 'test';
         $errorMessage = 'SQL Error 42';

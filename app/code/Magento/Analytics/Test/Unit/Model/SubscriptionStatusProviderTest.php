@@ -89,7 +89,7 @@ class SubscriptionStatusProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getStatusShouldBeFailedDataProvider()
+    public static function getStatusShouldBeFailedDataProvider()
     {
         return [
             'Subscription update doesn\'t active' => [
@@ -129,7 +129,7 @@ class SubscriptionStatusProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getStatusShouldBePendingDataProvider()
+    public static function getStatusShouldBePendingDataProvider()
     {
         return [
             'Subscription update doesn\'t active and the token does not exist' => [

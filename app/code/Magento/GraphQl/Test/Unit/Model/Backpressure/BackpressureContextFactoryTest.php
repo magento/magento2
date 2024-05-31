@@ -75,7 +75,7 @@ class BackpressureContextFactoryTest extends TestCase
      *
      * @return array
      */
-    public function getIdentityCases(): array
+    public static function getIdentityCases(): array
     {
         return [
             'guest' => [

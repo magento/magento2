@@ -106,7 +106,7 @@ class MetadataProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getColumnsDataProvider(): array
+    public static function getColumnsDataProvider(): array
     {
         return [
             [['ID'], ['ID']],

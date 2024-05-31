@@ -259,7 +259,7 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function loadDataProvider()
+    public static function loadDataProvider()
     {
         return ['test validity' => [false], 'do not test validity' => [true]];
     }
