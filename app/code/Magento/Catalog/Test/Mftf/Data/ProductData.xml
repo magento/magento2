@@ -934,6 +934,10 @@
         <data key="name" unique="suffix">Product With Long Name And Sku - But not too long</data>
         <data key="sku" unique="suffix">Product With Long Name And Sku - But not too long</data>
     </entity>
+    <entity name="ProductWithSpecialCharNameSku" extends="ApiSimpleProduct">
+        <data key="name" unique="suffix">Test "Config"</data>
+        <data key="sku" unique="suffix">Test "Config"</data>
+    </entity>
     <entity name="PaginationProduct" type="product">
         <data key="name" unique="suffix">pagi</data>
         <data key="sku" unique="suffix">pagisku</data>
