@@ -13,9 +13,10 @@
             <argument name="sku" type="string"/>
         </arguments>
         <!--Click on Add New Review -->
+        <waitForElementClickable selector="{{AdminCreateNewReviewSection.addNewReviewButton}}" stepKey="waitForElementClickOnNewReviewToBeClickable"/>
         <click selector="{{AdminCreateNewReviewSection.addNewReviewButton}}" stepKey="clickOnNewReview"/>
-        <waitForElementVisible selector="{{AdminCreateNewReviewSection.addNewReviewBySKU(sku)}}" stepKey="waitForVisibleReviewButton"/>
         <!--Select Product by SKU and Create Review -->
+        <waitForElementClickable selector="{{AdminCreateNewReviewSection.addNewReviewBySKU(sku)}}" stepKey="waitForVisibleReviewButton"/>
         <click selector="{{AdminCreateNewReviewSection.addNewReviewBySKU(sku)}}" stepKey="addNewReviewBySKU"/>
         <waitForElementVisible selector="{{AdminCreateNewReviewSection.select_stores}}" stepKey="waitForVisibleReviewDetails"/>
         <selectOption selector="{{AdminCreateNewReviewSection.select_stores}}" userInput="{{review.select_stores[0]}}" stepKey="visibilityField"/>
