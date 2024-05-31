@@ -196,6 +196,14 @@
     <entity name="DisablePaypalPayflowProVault" type="payflowpro_cc_vault_active">
         <data key="value">0</data>
     </entity>
+    <entity name="EnablePaypalPayStandard">
+        <data key="path">payment/wps_express/active</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisablePaypalPayStandard">
+        <data key="path">payment/wps_express/active</data>
+        <data key="value">0</data>
+    </entity>
     <entity name="Visa3DSecureCard" type="data">
         <data key="cardNumber">4000000000000002</data>
         <data key="month">12</data>
