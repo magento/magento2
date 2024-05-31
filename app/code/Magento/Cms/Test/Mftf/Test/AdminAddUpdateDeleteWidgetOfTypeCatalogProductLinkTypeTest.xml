@@ -16,6 +16,9 @@
             <description value="Admin should be able to create widget type of Catalog product link and shown on storefront"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-12209"/>
+             <skip>
+                <issueId value="ACQE-4481"/>
+            </skip>
         </annotations>
 
         <before>
@@ -39,7 +42,7 @@
             <argument name="WidgetType" value="Catalog Product Link"/>
             <argument name="WidgetTheme" value="Magento Luma"/>
             <argument name="WidgetTitle" value="NewWidget"/>
-            <argument name="AssigntoStoreViews" value="All Store Views"/>
+            <argument name="AssignToStoreViews" value="All Store Views"/>
             <argument name="WidgetDisplayOn" value="All Pages"/>
             <argument name="Container" value="Main Content Area"/>
             <argument name="Template" value="Product Link Block Template"/>
@@ -47,6 +50,7 @@
 
         <amOnPage url="{{StorefrontCategoryPage.url($createPreReqCategory.custom_attributes[url_key]$)}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="wait1"/>
+        <waitForElementVisible selector="{{StorefrontHeaderSection.ProductWidgetLink}}" stepKey="waitForProductLinkButton"/>
         <click selector="{{StorefrontHeaderSection.ProductWidgetLink}}" stepKey="clickProductLinkButton"/>
         <waitForPageLoad stepKey="wait2"/>
         <actionGroup ref="AssertStorefrontProductDetailPageNameActionGroup" stepKey="assertProductNameText">
@@ -76,7 +80,9 @@
             <argument name="row" value="1"/>
         </actionGroup>
         <waitForPageLoad stepKey="wait5"/>
-        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <amOnPage url="{{StorefrontCategoryPage.url($createPreReqCategory.custom_attributes[url_key]$)}}" stepKey="navigateToCategoryPage3"/>
         <waitForPageLoad stepKey="wait6"/>

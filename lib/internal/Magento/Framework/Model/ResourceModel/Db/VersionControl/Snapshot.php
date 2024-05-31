@@ -5,10 +5,13 @@
  */
 namespace Magento\Framework\Model\ResourceModel\Db\VersionControl;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Class Snapshot register snapshot of entity data, for tracking changes
  */
-class Snapshot
+class Snapshot implements ResetAfterRequestInterface
 {
     /**
      * Array of snapshots of entities data
@@ -49,6 +52,24 @@ class Snapshot
     }
 
     /**
+     * Get snapshot data
+     *
+     * @param DataObject $entity
+     * @return array
+     */
+    public function getSnapshotData(DataObject $entity): array
+    {
+        $entityClass = get_class($entity);
+        $entityId = $entity->getId();
+
+        if (isset($this->snapshotData[$entityClass][$entityId])) {
+            return $this->snapshotData[$entityClass][$entityId];
+        }
+
+        return [];
+    }
+
+    /**
      * Check is current entity has changes, by comparing current object state with stored snapshot
      *
      * @param \Magento\Framework\DataObject $entity
@@ -85,5 +106,13 @@ class Snapshot
         } else {
             $this->snapshotData = [];
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->snapshotData = [];
     }
 }

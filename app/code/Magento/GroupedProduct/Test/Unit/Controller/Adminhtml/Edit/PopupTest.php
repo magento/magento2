@@ -119,8 +119,17 @@ class PopupTest extends TestCase
         $product->expects($this->once())->method('setData')->with('_edit_mode', true);
         $this->request
             ->method('getParam')
-            ->withConsecutive(['id'], ['store', 0], ['type'], ['set'])
-            ->willReturnOnConsecutiveCalls($productId, $storeId, $typeId, $setId);
+            ->willReturnCallback(function ($arg1, $arg2) use ($productId, $storeId, $typeId, $setId) {
+                if ($arg1 == 'id') {
+                    return $productId;
+                } elseif ($arg1 == 'store' && $arg2 == 0) {
+                    return $storeId;
+                } elseif ($arg1 == 'type') {
+                    return $typeId;
+                } elseif ($arg1 == 'set') {
+                    return $setId;
+                }
+            });
         $this->registry->expects($this->once())->method('register')->with('current_product', $product);
 
         $this->assertSame($this->resultLayoutMock, $this->action->execute());
@@ -147,8 +156,17 @@ class PopupTest extends TestCase
         $product->expects($this->once())->method('load')->with($productId);
         $this->request
             ->method('getParam')
-            ->withConsecutive(['id'], ['store', 0], ['type'], ['set'])
-            ->willReturnOnConsecutiveCalls($productId, $storeId, $typeId, $setId);
+            ->willReturnCallback(function ($arg1, $arg2) use ($productId, $storeId, $typeId, $setId) {
+                if ($arg1 == 'id') {
+                    return $productId;
+                } elseif ($arg1 == 'store' && $arg2 == 0) {
+                    return $storeId;
+                } elseif ($arg1 == 'type') {
+                    return $typeId;
+                } elseif ($arg1 == 'set') {
+                    return $setId;
+                }
+            });
         $this->registry->expects($this->once())->method('register')->with('current_product', $product);
 
         $this->assertSame($this->resultLayoutMock, $this->action->execute());

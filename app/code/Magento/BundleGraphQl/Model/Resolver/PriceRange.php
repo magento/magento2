@@ -73,7 +73,7 @@ class PriceRange implements ResolverInterface
         array $args = null
     ) {
         $this->productDataProvider->addProductSku($value['sku']);
-        $productData = $this->productDataProvider->getProductBySku($value['sku']);
+        $productData = $this->productDataProvider->getProductBySku($value['sku'], $context);
         $value['model'] = $productData['model'];
 
         return $this->priceRangeDataProvider->prepare($context, $info, $value);

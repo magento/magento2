@@ -22,6 +22,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\User\Block\Role\Grid\User;
 use Magento\User\Controller\Adminhtml\User\Role\SaveRole;
 use Magento\User\Model\ResourceModel\Role\User\CollectionFactory;
+use Magento\Framework\Escaper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -82,6 +83,11 @@ class UserTest extends TestCase
      */
     protected $filesystemMock;
 
+    /**
+     * @var Escaper|MockObject
+     */
+    protected $escaperMock;
+
     protected function setUp(): void
     {
         $this->backendHelperMock = $this->getMockBuilder(Data::class)
@@ -123,6 +129,10 @@ class UserTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->escaperMock = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
             User::class,
@@ -135,7 +145,8 @@ class UserTest extends TestCase
                 'request' => $this->requestInterfaceMock,
                 'urlBuilder' => $this->urlInterfaceMock,
                 'layout' => $this->layoutMock,
-                'filesystem' => $this->filesystemMock
+                'filesystem' => $this->filesystemMock,
+                'escaper' => $this->escaperMock
             ]
         );
     }
@@ -267,15 +278,21 @@ class UserTest extends TestCase
         $this->filesystemMock->expects($this->any())->method('getDirectoryRead')->willReturn($directoryMock);
         $directoryMock->expects($this->any())->method('getRelativePath')->willReturn('filename');
 
-        $blockMock->expects($this->exactly(7))->method('setId')->withConsecutive(
-            ['in_role_users'],
-            ['role_user_id'],
-            ['role_user_username'],
-            ['role_user_firstname'],
-            ['role_user_lastname'],
-            ['role_user_email'],
-            ['role_user_is_active']
-        )->willReturnSelf();
+        $blockMock->expects($this->exactly(7))->method('setId')
+                    ->willReturnCallback(function ($column) use ($blockMock) {
+                        switch ($column) {
+                            case 'in_role_users':
+                            case 'role_user_id':
+                            case 'role_user_username':
+                            case 'role_user_firstname':
+                            case 'role_user_lastname':
+                            case 'role_user_email':
+                            case 'role_user_is_active':
+                                return $blockMock;
+                            default:
+                                break;
+                        }
+                    });
 
         $this->model->toHtml();
     }
@@ -301,5 +318,16 @@ class UserTest extends TestCase
         $paramValue = 'not_JSON';
         $this->requestInterfaceMock->expects($this->once())->method('getParam')->with($param)->willReturn($paramValue);
         $this->assertEquals('{}', $this->model->getUsers(true));
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetUsers(): void
+    {
+        $paramValue = ['1'];
+        $this->requestInterfaceMock->expects($this->once())->method('getParam')
+            ->with('in_role_user')->willReturn($paramValue);
+        $this->assertEquals($paramValue, $this->model->getUsers());
     }
 }

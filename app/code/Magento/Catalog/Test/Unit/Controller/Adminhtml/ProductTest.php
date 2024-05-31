@@ -75,24 +75,24 @@ abstract class ProductTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->layout = $this->getMockBuilder(Layout::class)
-            ->setMethods(['getBlock'])->disableOriginalConstructor()
+            ->onlyMethods(['getBlock'])->disableOriginalConstructor()
             ->getMock();
         $this->layout->expects($this->any())->method('getBlock')->willReturn($block);
 
         $eventManager = $this->getMockBuilder(Manager::class)
-            ->setMethods(['dispatch'])->disableOriginalConstructor()
+            ->onlyMethods(['dispatch'])->disableOriginalConstructor()
             ->getMock();
         $eventManager->expects($this->any())->method('dispatch')->willReturnSelf();
         $requestInterfaceMock = $this->getMockBuilder(Http::class)
-            ->setMethods(
+            ->onlyMethods(
                 ['getParam', 'getPost', 'getFullActionName', 'getPostValue']
             )->disableOriginalConstructor()
             ->getMock();
 
         $responseInterfaceMock = $this->getMockBuilder(ResponseInterface::class)
-            ->setMethods(
-                ['setRedirect', 'sendResponse']
-            )->getMockForAbstractClass();
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMockForAbstractClass();
 
         $managerInterfaceMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $sessionMock = $this->getMockBuilder(Session::class)

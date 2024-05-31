@@ -9,6 +9,7 @@ namespace Magento\Framework\Data;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Option\ArrayInterface;
 
 /**
@@ -18,8 +19,14 @@ use Magento\Framework\Option\ArrayInterface;
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
+class Collection implements
+    \IteratorAggregate,
+    \Countable,
+    ArrayInterface,
+    CollectionDataSourceInterface,
+    ResetAfterRequestInterface
 {
     public const SORT_ORDER_ASC = 'ASC';
 
@@ -70,7 +77,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Pager page size
      *
-     * if page size is false, then we works with all items
+     * if page size is false, then we work with all items
      *
      * @var int|false
      */
@@ -154,8 +161,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * - ["finset" => $valueInSet]
      * </pre>
      *
-     * If non matched - sequential parallel arrays are expected and OR conditions
-     * will be built using above mentioned structure.
+     * If non-matched - sequential parallel arrays are expected and OR conditions
+     * will be built using above-mentioned structure.
      *
      * Example:
      * <pre>
@@ -818,7 +825,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Retrieve item by id
      *
      * @param string|int $idValue
-     * @return DataObject
+     * @return DataObject|null
      */
     public function getItemById($idValue)
     {
@@ -918,5 +925,20 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         $this->_entityFactory = ObjectManager::getInstance()->get(
             EntityFactoryInterface::class
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->clear();
+        $this->_isCollectionLoaded = null;
+        $this->_orders = [];
+        $this->_filters = [];
+        $this->_isFiltersRendered = false;
+        $this->_curPage = 1;
+        $this->_pageSize = false;
+        $this->_flags = [];
     }
 }

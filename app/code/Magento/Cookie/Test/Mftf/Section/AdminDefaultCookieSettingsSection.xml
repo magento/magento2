@@ -11,5 +11,7 @@
     <section name="AdminDefaultCookieSettingsSection">
         <element name="DefaultCookieSettingsTab" type="button" selector="#web_cookie-head"/>
         <element name="DefaultCookieLifetime" type="input" selector="#web_cookie_cookie_lifetime"/>
+        <element name="DefaultCookieLifetimeSystemValueCheckbox" type="input" selector="#web_cookie_cookie_lifetime_inherit"/>
+        <element name="Save" type="button" selector="#save"/>
     </section>
 </sections>

@@ -16,6 +16,12 @@ use Magento\TestFramework\Db\Sequence;
 use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
+/**
+ * Store Fixture
+ *
+ * This fixture may result in DDL operations that cannot be executed within a transaction.
+ * In case DB isolation is enabled, it is recommended to use "DataFixtureBeforeTransaction" instead of "DataFixture"
+ */
 class Store implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
@@ -93,7 +99,7 @@ class Store implements RevertibleDataFixtureInterface
         $store->setData($this->prepareData($data));
         $this->storeResource->save($store);
         $this->storeManager->reinitStores();
-        $this->regenerateSequenceTables((int)$store->getId());
+        $this->sequence->generate((int) $store->getId());
         return $store;
     }
 
@@ -133,20 +139,5 @@ class Store implements RevertibleDataFixtureInterface
         $data['group_id'] = $data['store_group_id'];
 
         return $this->dataProcessor->process($this, $data);
-    }
-
-    /**
-     * Generate missing sequence tables
-     *
-     * @param int $storeId
-     *
-     * @return void
-     */
-    private function regenerateSequenceTables(int $storeId): void
-    {
-        if ($storeId >= 10) {
-            $n = $storeId + 1;
-            $this->sequence->generateSequences($n);
-        }
     }
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminResetFixedProductTaxesActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page via the Admin Side Menu. Reset 'Fixed Product Taxes' values to default.</description>
+        </annotations>
+        <!-- change shopping cart display setting configurations -->
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueEnableFpt}}" dependentSelector="{{AdminConfigureTaxSection.systemValueEnableFpt}}" visible="true" stepKey="clickSystemValueEnableFptCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueDisplayPricesProducts}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDisplayPricesProducts}}" visible="true" stepKey="clickSystemValueDisplayPricesProductsCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.displayPricesOnProductViewPageCheckbox}}" dependentSelector="{{AdminConfigureTaxSection.displayPricesOnProductViewPageCheckbox}}" visible="true" stepKey="clickDisplayPricesOnProductViewPageCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.displayPricesInSaleModuleCheckbox}}" dependentSelector="{{AdminConfigureTaxSection.displayPricesInSaleModuleCheckbox}}" visible="true" stepKey="clickDisplayPricesInSaleModuleCheckbox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.displayPricesInEmailCheckbox}}" dependentSelector="{{AdminConfigureTaxSection.displayPricesInEmailCheckbox}}" visible="true" stepKey="clickDisplayPricesInEmailCheckbox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueApplyTaxToFpt}}" dependentSelector="{{AdminConfigureTaxSection.includeFPTInSubtotalCheckbox}}" visible="true" stepKey="clickSystemValueApplyTaxToFptCheckbox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.includeFPTInSubtotalCheckbox}}" dependentSelector="{{AdminConfigureTaxSection.includeFPTInSubtotalCheckbox}}" visible="true" stepKey="clickIncludeFPTInSubtotalCheckbox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.fixedProductTaxes}}" dependentSelector="{{AdminConfigureTaxSection.fixedProductTaxes}}" visible="true" stepKey="closeFixedProductTaxesSettings"/>
+    </actionGroup>
+</actionGroups>

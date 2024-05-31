@@ -8,10 +8,13 @@ namespace Magento\Customer\Api;
 
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
 use Magento\Customer\Model\AccountManagement;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Security\Model\Config;
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -23,15 +26,20 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class AccountManagementTest extends WebapiAbstract
 {
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'customerAccountManagementV1';
-    const RESOURCE_PATH = '/V1/customers';
+    public const SERVICE_VERSION = 'V1';
+    public const SERVICE_NAME = 'customerAccountManagementV1';
+    public const RESOURCE_PATH = '/V1/customers';
 
     /**
      * Sample values for testing
      */
-    const ATTRIBUTE_CODE = 'attribute_code';
-    const ATTRIBUTE_VALUE = 'attribute_value';
+    public const ATTRIBUTE_CODE = 'attribute_code';
+    public const ATTRIBUTE_VALUE = 'attribute_value';
+
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
 
     /**
      * @var AccountManagementInterface
@@ -86,6 +94,8 @@ class AccountManagementTest extends WebapiAbstract
      */
     protected function setUp(): void
     {
+        $this->objectManager = Bootstrap::getObjectManager();
+
         $this->accountManagement = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Api\AccountManagementInterface::class
         );
@@ -255,6 +265,7 @@ class AccountManagementTest extends WebapiAbstract
             $customerData[Customer::ID],
             [
                 'id' => $customerData[Customer::ID],
+                'addresses' => $customerData[Customer::KEY_ADDRESSES],
                 'confirmation' => CustomerHelper::CONFIRMATION
             ]
         );
@@ -645,6 +656,7 @@ class AccountManagementTest extends WebapiAbstract
 
     public function testEmailAvailable()
     {
+        $config = $this->objectManager->get(ScopeConfigInterface::class);
         $customerData = $this->_createCustomer();
 
         $serviceInfo = [
@@ -662,7 +674,18 @@ class AccountManagementTest extends WebapiAbstract
             'customerEmail' => $customerData[Customer::EMAIL],
             'websiteId' => $customerData[Customer::WEBSITE_ID],
         ];
-        $this->assertFalse($this->_webApiCall($serviceInfo, $requestData));
+
+        $emailSetting = $config->getValue(
+            AccountManagement::GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG,
+            ScopeInterface::SCOPE_WEBSITE,
+            $customerData[Customer::WEBSITE_ID]
+        );
+
+        if (!$emailSetting) {
+            $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
+        } else {
+            $this->assertFalse($this->_webApiCall($serviceInfo, $requestData));
+        }
     }
 
     public function testEmailAvailableInvalidEmail()

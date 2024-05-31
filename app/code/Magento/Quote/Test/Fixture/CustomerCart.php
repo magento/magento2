@@ -10,24 +10,14 @@ namespace Magento\Quote\Test\Fixture;
 use Magento\Framework\DataObject;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\TestFramework\Fixture\Api\DataMerger;
-use Magento\TestFramework\Fixture\Api\ServiceFactory;
-use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
 class CustomerCart implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
-        'customer_id' => null
+        'customer_id' => null,
+        'reserved_order_id' => null
     ];
-
-    /**
-     * @var ServiceFactory
-     */
-    private $serviceFactory;
 
     /**
      * @var CartRepositoryInterface
@@ -40,76 +30,36 @@ class CustomerCart implements RevertibleDataFixtureInterface
     private $cartManagement;
 
     /**
-     * @var QuoteResource
-     */
-    private $quoteResource;
-
-    /**
-     * @var QuoteFactory
-     */
-    private $quoteFactory;
-
-    /**
-     * @var ProcessorInterface
-     */
-    private $dataProcessor;
-
-    /**
-     * @var DataMerger
-     */
-    private $dataMerger;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @param ServiceFactory $serviceFactory
-     * @param StoreManagerInterface $storeManager
      * @param CartRepositoryInterface $cartRepository
      * @param CartManagementInterface $cartManagement
-     * @param QuoteResource $quoteResource
-     * @param QuoteFactory $quoteFactory
-     * @param ProcessorInterface $dataProcessor
-     * @param DataMerger $dataMerger
      */
     public function __construct(
-        ServiceFactory $serviceFactory,
-        StoreManagerInterface $storeManager,
         CartRepositoryInterface $cartRepository,
-        CartManagementInterface $cartManagement,
-        QuoteResource $quoteResource,
-        QuoteFactory $quoteFactory,
-        ProcessorInterface $dataProcessor,
-        DataMerger $dataMerger,
+        CartManagementInterface $cartManagement
     ) {
-        $this->serviceFactory = $serviceFactory;
-        $this->storeManager = $storeManager;
         $this->cartRepository = $cartRepository;
         $this->cartManagement = $cartManagement;
-        $this->quoteResource = $quoteResource;
-        $this->quoteFactory = $quoteFactory;
-        $this->dataProcessor = $dataProcessor;
-        $this->dataMerger = $dataMerger;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @param array $data Parameters
+     * <pre>
+     *    $data = [
+     *      'customer_id' => (int) Customer ID. Required.
+     *    ]
+     * </pre>
      */
     public function apply(array $data = []): ?DataObject
     {
-        $data = $this->prepareData($data);
-        $customerId = $data['customer_id'] ?? null;
-        $storeId = $data['store_id'] ?? null;
-        if ($storeId) {
-            $setCurrentStoreService = $this->serviceFactory->create(StoreManagerInterface::class, 'setCurrentStore');
-            $setCurrentStoreService->execute(['store' => $storeId]);
+        $data = array_merge(self::DEFAULT_DATA, $data);
+        $cartId = $this->cartManagement->createEmptyCartForCustomer($data['customer_id']);
+        $cart = $this->cartRepository->get($cartId);
+        if (isset($data['reserved_order_id'])) {
+            $cart->setReservedOrderId($data['reserved_order_id']);
+            $this->cartRepository->save($cart);
         }
-        $cartService = $this->serviceFactory->create(CartManagementInterface::class, 'createEmptyCartForCustomer');
-        $cartId = $cartService->execute(['customerId' => $customerId]);
-        $cartRepositoryService = $this->serviceFactory->create(CartRepositoryInterface::class, 'get');
-        $cart = $cartRepositoryService->execute(['cartId' => $cartId]);
+
         return $cart;
     }
 
@@ -118,19 +68,6 @@ class CustomerCart implements RevertibleDataFixtureInterface
      */
     public function revert(DataObject $data): void
     {
-        $cartRepositoryService = $this->serviceFactory->create(CartRepositoryInterface::class, 'delete');
-        $cartRepositoryService->execute(['quote' => $data]);
-    }
-
-    /**
-     * Prepare quote data
-     *
-     * @param array $data
-     * @return array
-     */
-    private function prepareData(array $data): array
-    {
-        $data = $this->dataMerger->merge(self::DEFAULT_DATA, $data, false);
-        return $this->dataProcessor->process($this, $data);
+        $this->cartRepository->delete($data);
     }
 }

@@ -138,12 +138,16 @@ class CurrencyTest extends TestCase
      */
     public function getOutputFormatDataProvider(): array
     {
+        $ar_DZ = "\u{062C}.\u{0645}.\u{200F}\u{00A0}%s";
+        if (version_compare(PHP_VERSION, '8.3', '>=')) {
+            $ar_DZ = "%s\u{00A0}\u{062C}.\u{0645}.\u{200F}";
+        }
         return [
             'en_US:USD' => ['en_US', 'USD', '$%s'],
             'en_US:PLN' => ['en_US', 'PLN', "PLN\u{00A0}%s"],
             'en_US:PKR' => ['en_US', 'PKR', "PKR\u{00A0}%s"],
             'af_ZA:VND' => ['af_ZA', 'VND', "\u{20AB}%s"],
-            'ar_DZ:EGP' => ['ar_DZ', 'EGP', "\u{062C}.\u{0645}.\u{200F}\u{00A0}%s"],
+            'ar_DZ:EGP' => ['ar_DZ', 'EGP', $ar_DZ],
             'ar_SA:USD' => ['ar_SA', 'USD', "%s\u{00A0}US$"],
             'ar_SA:LBP' => ['ar_SA', 'LBP', "%s\u{00A0}\u{0644}.\u{0644}.\u{200F}"],
             'fa_IR:USD' => ['fa_IR', 'USD', "\u{200E}$%s"],
@@ -205,8 +209,8 @@ class CurrencyTest extends TestCase
             ['en_US', 'USD', '9999', [], '$9,999.00'],
             ['en_US', 'EUR', '9999', [], '€9,999.00'],
             ['en_US', 'LBP', '9999', [], "LBP\u{00A0}9,999"],
-            ['ar_AE', 'USD', '9', [], "\u{0669}\u{066B}\u{0660}\u{0660}\u{00A0}US$"],
-            ['ar_AE', 'AED', '9', [], "\u{0669}\u{066B}\u{0660}\u{0660}\u{00A0}\u{062F}.\u{0625}.\u{200F}"],
+            ['ar_SA', 'USD', '9', [], "\u{0669}\u{066B}\u{0660}\u{0660}\u{00A0}US$"],
+            ['ar_SA', 'AED', '9', [], "\u{0669}\u{066B}\u{0660}\u{0660}\u{00A0}\u{062F}.\u{0625}.\u{200F}"],
             ['de_DE', 'USD', '9999', [], "9.999,00\u{00A0}$"],
             ['de_DE', 'EUR', '9999', [], "9.999,00\u{00A0}€"],
             ['en_US', 'USD', '9999', ['display' => CurrencyData::NO_SYMBOL, 'precision' => 2], '9,999.00'],
@@ -214,14 +218,14 @@ class CurrencyTest extends TestCase
             ['en_US', 'PLN', '9999', ['display' => CurrencyData::NO_SYMBOL], '9,999.00'],
             ['en_US', 'LBP', '9999', ['display' => CurrencyData::NO_SYMBOL], '9,999'],
             [
-                'ar_AE',
+                'ar_SA',
                 'USD',
                 '9999',
                 ['display' => CurrencyData::NO_SYMBOL],
                 "\u{0669}\u{066C}\u{0669}\u{0669}\u{0669}\u{066B}\u{0660}\u{0660}"
             ],
             [
-                'ar_AE',
+                'ar_SA',
                 'AED',
                 '9999',
                 ['display' => CurrencyData::NO_SYMBOL],

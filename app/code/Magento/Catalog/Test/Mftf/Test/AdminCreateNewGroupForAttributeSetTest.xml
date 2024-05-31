@@ -16,6 +16,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MC-170"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create a custom attribute set and custom product attribute -->
@@ -31,7 +32,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Navigate to Stores > Attributes > Attribute Set -->

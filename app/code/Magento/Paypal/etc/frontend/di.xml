@@ -173,6 +173,7 @@
         <arguments>
             <argument name="disallowedFundingMap" xsi:type="array">
                 <item name="CREDIT" xsi:type="string">credit</item>
+                <item name="VENMO" xsi:type="string">venmo</item>
                 <item name="CARD" xsi:type="string">card</item>
                 <item name="ELV" xsi:type="string">sepa</item>
             </argument>

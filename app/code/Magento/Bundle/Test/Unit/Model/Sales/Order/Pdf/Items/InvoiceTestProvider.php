@@ -24,7 +24,7 @@ class InvoiceTestProvider
             'display_both' => [
                 'expected' => [
                     1 => [
-                        'height' => 15,
+                        'height' => 20,
                         'lines' => [
                             [
                                 [
@@ -52,7 +52,7 @@ class InvoiceTestProvider
                                 ],
                                 [
                                     'text' => 'Excl. Tax:',
-                                    'feed' => 380,
+                                    'feed' => 395,
                                     'align' => 'right',
                                 ],
                                 [
@@ -64,7 +64,7 @@ class InvoiceTestProvider
                             [
                                 [
                                     'text' => '10.00',
-                                    'feed' => 380,
+                                    'feed' => 395,
                                     'font' => 'bold',
                                     'align' => 'right',
                                 ],
@@ -78,7 +78,7 @@ class InvoiceTestProvider
                             [
                                 [
                                     'text' => 'Incl. Tax:',
-                                    'feed' => 380,
+                                    'feed' => 395,
                                     'align' => 'right',
                                 ],
                                 [
@@ -90,7 +90,7 @@ class InvoiceTestProvider
                             [
                                 [
                                     'text' => '10.83',
-                                    'feed' => 380,
+                                    'feed' => 395,
                                     'font' => 'bold',
                                     'align' => 'right',
                                 ],
@@ -119,7 +119,7 @@ class InvoiceTestProvider
                                 ],
                                 [
                                     'text' => 'Excl. Tax:',
-                                    'feed' => 380,
+                                    'feed' => 395,
                                     'align' => 'right',
                                 ],
                                 [
@@ -131,7 +131,7 @@ class InvoiceTestProvider
                             [
                                 [
                                     'text' => '5.00',
-                                    'feed' => 380,
+                                    'feed' => 395,
                                     'font' => 'bold',
                                     'align' => 'right',
                                 ],
@@ -145,7 +145,7 @@ class InvoiceTestProvider
                             [
                                 [
                                     'text' => 'Incl. Tax:',
-                                    'feed' => 380,
+                                    'feed' => 395,
                                     'align' => 'right',
                                 ],
                                 [
@@ -157,7 +157,7 @@ class InvoiceTestProvider
                             [
                                 [
                                     'text' => '5.41',
-                                    'feed' => 380,
+                                    'feed' => 395,
                                     'font' => 'bold',
                                     'align' => 'right',
                                 ],
@@ -176,7 +176,7 @@ class InvoiceTestProvider
             'including_tax' => [
                 'expected' => [
                     1 => [
-                        'height' => 15,
+                        'height' => 20,
                         'lines' => [
                             [
                                 [
@@ -203,7 +203,7 @@ class InvoiceTestProvider
                                 ],
                                 [
                                     'text' => '10.83',
-                                    'feed' => 380,
+                                    'feed' => 395,
                                     'font' => 'bold',
                                     'align' => 'right',
                                 ],
@@ -232,7 +232,7 @@ class InvoiceTestProvider
                                 ],
                                 [
                                     'text' => '5.41',
-                                    'feed' => 380,
+                                    'feed' => 395,
                                     'font' => 'bold',
                                     'align' => 'right',
                                 ],
@@ -251,7 +251,7 @@ class InvoiceTestProvider
             'excluding_tax' => [
                 'expected' => [
                     1 => [
-                        'height' => 15,
+                        'height' => 20,
                         'lines' => [
                             [
                                 [
@@ -279,7 +279,7 @@ class InvoiceTestProvider
                                 ],
                                 [
                                     'text' => '10.00',
-                                    'feed' => 380,
+                                    'feed' => 395,
                                     'font' => 'bold',
                                     'align' => 'right',
                                 ],
@@ -308,7 +308,7 @@ class InvoiceTestProvider
                                 ],
                                 [
                                     'text' => '5.00',
-                                    'feed' => 380,
+                                    'feed' => 395,
                                     'font' => 'bold',
                                     'align' => 'right',
                                 ],

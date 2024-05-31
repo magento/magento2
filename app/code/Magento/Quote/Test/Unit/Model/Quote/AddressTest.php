@@ -252,30 +252,84 @@ class AddressTest extends TestCase
     }
 
     /**
+     * Provide data for test different cases
+     *
+     * @param void
+     * @return array
+     */
+    public function getDataProvider(): array
+    {
+        return [
+            'Non-virtual Quote' => [
+                'scopeConfigValues' => [
+                    ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, 1, true],
+                    ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, 1, 20],
+                    ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, 1, true],
+                    ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, 1, true]
+                ],
+                'address' => [
+                    'setAddressType' => 'billing'
+                ],
+                'quote' => [
+                    'getStoreId' => 1,
+                    'getIsVirtual' => false
+                ],
+                'result' => true
+            ],
+            'With Shipping Discount' => [
+                'scopeConfigValues' => [
+                    ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, 1, true],
+                    ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, 1, 2],
+                    ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, 1, true],
+                    ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, 1, true]
+                ],
+                'address' => [
+                    'setBaseSubtotal' => 25.00,
+                    'setBaseDiscountAmount' => -27.60,
+                    'setBaseShippingDiscountAmount' => 4.6,
+                    'setAddressType' => 'shipping'
+                ],
+                'quote' => [
+                    'getStoreId' => 1,
+                    'getIsVirtual' => false
+                ],
+                'result' => true
+            ]
+        ];
+    }
+
+    /**
+     * Tests minimum order amount validation
+     *
+     * @param array $scopeConfigValues
+     * @param array $address
+     * @param array $quote
+     * @param bool $result
+     * @dataProvider getDataProvider
+     *
      * @return void
      */
-    public function testValidateMinimumAmount(): void
-    {
-        $storeId = 1;
-        $scopeConfigValues = [
-            ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
-            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true]
-        ];
+    public function testValidateMinimumAmount(
+        array $scopeConfigValues,
+        array $address,
+        array $quote,
+        bool $result
+    ): void {
+        foreach ($quote as $method => $value) {
+            $this->quote->expects($this->once())
+                ->method($method)
+                ->willReturn($value);
+        }
 
-        $this->quote->expects($this->once())
-            ->method('getStoreId')
-            ->willReturn($storeId);
-        $this->quote->expects($this->once())
-            ->method('getIsVirtual')
-            ->willReturn(false);
+        foreach ($address as $setter => $value) {
+            $this->address->$setter($value);
+        }
 
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
             ->willReturnMap($scopeConfigValues);
 
-        $this->assertTrue($this->address->validateMinimumAmount());
+        $this->assertEquals($result, $this->address->validateMinimumAmount());
     }
 
     /**

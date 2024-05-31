@@ -181,6 +181,7 @@ class CurrencyTest extends TestCase
      * @param string $storeCurrencyCode
      * @param string $adminOrderAmount
      * @param string $convertedAmount
+     * @param bool $needToGetRateFromModel
      * @throws LocalizedException
      * @throws NoSuchEntityException
      * @throws CurrencyException
@@ -195,7 +196,8 @@ class CurrencyTest extends TestCase
         string $adminCurrencyCode,
         string $storeCurrencyCode,
         string $adminOrderAmount,
-        string $convertedAmount
+        string $convertedAmount,
+        bool $needToGetRateFromModel
     ): void {
         $this->row = new DataObject(
             [
@@ -252,6 +254,14 @@ class CurrencyTest extends TestCase
             ->willReturn($currLocaleMock);
         $this->gridColumnMock->method('getCurrency')->willReturn('USD');
         $this->gridColumnMock->method('getRateField')->willReturn('test_rate_field');
+
+        if ($needToGetRateFromModel) {
+            $this->currencyMock->expects($this->once())
+                ->method('getAnyRate')
+                ->with($storeCurrencyCode)
+                ->willReturn($rate);
+        }
+
         $actualAmount = $this->model->render($this->row);
         $this->assertEquals($convertedAmount, $actualAmount);
     }
@@ -272,7 +282,8 @@ class CurrencyTest extends TestCase
                 'adminCurrencyCode' => 'EUR',
                 'storeCurrencyCode' => 'EUR',
                 'adminOrderAmount' => '105.00',
-                'convertedAmount' => '105.00'
+                'convertedAmount' => '105.00',
+                'needToGetRateFromModel' => false
             ],
             'rate conversion with different admin and storefront rate' => [
                 'rate' => 1.4150,
@@ -282,8 +293,20 @@ class CurrencyTest extends TestCase
                 'adminCurrencyCode' => 'USD',
                 'storeCurrencyCode' => 'EUR',
                 'adminOrderAmount' => '105.00',
-                'convertedAmount' => '148.575'
-            ]
+                'convertedAmount' => '148.575',
+                'needToGetRateFromModel' => true
+            ],
+            'rate conversation with same rate for different currencies' => [
+                'rate' => 1.00,
+                'columnIndex' => 'total_income_amount',
+                'catalogPriceScope' => 1,
+                'adminWebsiteId' => 1,
+                'adminCurrencyCode' => 'USD',
+                'storeCurrencyCode' => 'THB',
+                'adminOrderAmount' => '100.00',
+                'convertedAmount' => '100.00',
+                'needToGetRateFromModel' => true
+            ],
         ];
     }
 

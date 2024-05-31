@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="store"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -30,7 +31,9 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -40,7 +43,9 @@
             <argument name="store" value="{{customStoreGroup.name}}"/>
             <argument name="rootCategory" value="Default Category"/>
         </actionGroup>
-        <magentoCron groups="index" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!--Search created store group(from above step) in grid and verify AssertStoreGroupInGrid message-->
         <actionGroup ref="AssertStoreGroupInGridActionGroup" stepKey="seeCreatedStoreGroupInGrid">

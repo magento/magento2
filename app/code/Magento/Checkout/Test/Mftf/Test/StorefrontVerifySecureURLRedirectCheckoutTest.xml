@@ -45,8 +45,10 @@
         </after>
         <executeJS function="return window.location.host" stepKey="hostname"/>
         <amOnUrl url="http://{$hostname}/checkout" stepKey="goToUnsecureCheckoutURL"/>
-        <seeCurrentUrlEquals url="https://{$hostname}/checkout" stepKey="seeSecureCheckoutURL"/>
+        <waitForPageLoad stepKey="waitForCheckoutShippingPageToLoad" />
+        <seeCurrentUrlMatches regex="~https://$hostname/checkout(?:#shipping)?~" stepKey="seeSecureCheckoutURL" />
         <amOnUrl url="http://{$hostname}/checkout/sidebar" stepKey="goToUnsecureCheckoutSidebarURL"/>
+        <waitForPageLoad stepKey="waitForUnsecureCheckoutSidebarPageToLoad" />
         <seeCurrentUrlEquals url="http://{$hostname}/checkout/sidebar" stepKey="seeUnsecureCheckoutSidebarURL"/>
     </test>
 </tests>

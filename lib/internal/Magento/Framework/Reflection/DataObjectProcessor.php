@@ -47,12 +47,18 @@ class DataObjectProcessor
     private $processors;
 
     /**
+     * @var array[]
+     */
+    private $excludedMethodsClassMap;
+
+    /**
      * @param MethodsMap $methodsMapProcessor
      * @param TypeCaster $typeCaster
      * @param FieldNamer $fieldNamer
      * @param CustomAttributesProcessor $customAttributesProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
      * @param array $processors
+     * @param array $excludedMethodsClassMap
      */
     public function __construct(
         MethodsMap $methodsMapProcessor,
@@ -60,7 +66,8 @@ class DataObjectProcessor
         FieldNamer $fieldNamer,
         CustomAttributesProcessor $customAttributesProcessor,
         ExtensionAttributesProcessor $extensionAttributesProcessor,
-        array $processors = []
+        array $processors = [],
+        array $excludedMethodsClassMap = []
     ) {
         $this->methodsMapProcessor = $methodsMapProcessor;
         $this->typeCaster = $typeCaster;
@@ -68,6 +75,7 @@ class DataObjectProcessor
         $this->extensionAttributesProcessor = $extensionAttributesProcessor;
         $this->customAttributesProcessor = $customAttributesProcessor;
         $this->processors = $processors;
+        $this->excludedMethodsClassMap = $excludedMethodsClassMap;
     }
 
     /**
@@ -84,7 +92,13 @@ class DataObjectProcessor
         $methods = $this->methodsMapProcessor->getMethodsMap($dataObjectType);
         $outputData = [];
 
+        $excludedMethodsForDataObjectType = $this->excludedMethodsClassMap[$dataObjectType] ?? [];
+
         foreach (array_keys($methods) as $methodName) {
+            if (in_array($methodName, $excludedMethodsForDataObjectType)) {
+                continue;
+            }
+
             if (!$this->methodsMapProcessor->isMethodValidForDataField($dataObjectType, $methodName)) {
                 continue;
             }
