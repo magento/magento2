@@ -299,7 +299,9 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             foreach (explode(',', (string)$optionValue) as $value) {
                 $optionSku = $option->getValueById($value);
                 if ($optionSku) {
-                    $skus[] = $optionSku->getSku();
+                    if (!empty($optionSku->getSku())) {
+                        $skus[] = $optionSku->getSku();
+                    }
                 } else {
                     if ($this->getListener()) {
                         $this->getListener()->setHasError(true)->setMessage($this->_getWrongConfigurationMessage());
