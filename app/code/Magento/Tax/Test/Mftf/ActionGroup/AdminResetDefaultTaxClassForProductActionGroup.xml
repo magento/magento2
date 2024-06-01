@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminResetDefaultTaxClassForProductActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Tax'. Resets the default data for 'Default Tax Class for Product'.</description>
+        </annotations>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxClasses}}" dependentSelector="{{AdminConfigureTaxSection.taxClasses}}" visible="true" stepKey="openTaxClassesSection"/>
+        <waitForElementClickable selector="{{AdminConfigureTaxSection.useSystemValue}}" stepKey="waitToSelectDefaultOption"/>
+        <click selector="{{AdminConfigureTaxSection.useSystemValue}}" stepKey="selectDefaultOption"/>
+        <waitForElementClickable selector="{{AdminConfigureTaxSection.taxClasses}}" stepKey="waitToTaxClassesSectionToBeAppearedToClose"/>
+        <click selector="{{AdminConfigureTaxSection.taxClasses}}" stepKey="closeTaxClasses"/>
+    </actionGroup>
+</actionGroups>

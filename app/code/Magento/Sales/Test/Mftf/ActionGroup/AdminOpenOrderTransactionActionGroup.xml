@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenOrderTransactionActionGroup">
+        <annotations>
+            <description>Clicks on the 'Transaction' on Admin View Order page.</description>
+        </annotations>
+        <waitForElementClickable selector="{{AdminOrderDetailsOrderViewSection.transaction}}" stepKey="waitForTransactionTab"/>
+        <click selector="{{AdminOrderDetailsOrderViewSection.transaction}}" stepKey="clickOnTabTransaction"/>
+        <waitForElementVisible selector="{{AdminOrderDetailsOrderViewSection.transactionTotalCount}}" stepKey="waitForTransactionCountText"/>
+    </actionGroup>
+</actionGroups>
