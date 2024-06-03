@@ -38,7 +38,7 @@ class DataTest extends TestCase
     /**
      * @var MockObject
      */
-    protected $_googleAnalyticsHelperMock;
+    protected $gtagConfigurationMock;
 
     /**
      * @var Data
@@ -53,7 +53,7 @@ class DataTest extends TestCase
         /** @var Context $context */
         $context = $arguments['context'];
         $this->_scopeConfigMock = $context->getScopeConfig();
-        $this->_googleAnalyticsHelperMock = $arguments['analyticsHelper'];
+        $this->gtagConfigurationMock = $arguments['gtagConfiguration'];
         $this->_helper = $objectManagerHelper->getObject($className, $arguments);
     }
 
@@ -110,7 +110,7 @@ class DataTest extends TestCase
             }
         });
 
-        $this->_googleAnalyticsHelperMock->expects(
+        $this->gtagConfigurationMock->expects(
             $this->any()
         )->method(
             'isGoogleAnalyticsAvailable'
