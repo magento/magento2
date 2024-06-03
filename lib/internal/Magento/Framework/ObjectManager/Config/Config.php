@@ -156,6 +156,7 @@ class Config implements ConfigInterface
     public function getInstanceType($instanceName)
     {
         while (isset($this->_virtualTypes[$instanceName])) {
+            if ($instanceName == $this->_virtualTypes[$instanceName]) break;
             $instanceName = $this->_virtualTypes[$instanceName];
         }
         return $instanceName;
