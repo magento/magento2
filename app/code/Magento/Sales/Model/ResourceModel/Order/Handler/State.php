@@ -31,7 +31,7 @@ class State
         if ($order->isCanceled() ||
             $order->canUnhold() ||
             $order->canInvoice() ||
-            $this->orderHasOpenInvoices($order) ||
+            $this->orderHasOpenInvoices($order) &&
             (int) $order->getTotalDue() > 0
         ) {
             return $this;
