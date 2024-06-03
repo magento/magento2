@@ -51,16 +51,18 @@ class Fields implements ResetAfterRequestInterface
             if (is_string($query)) {
                 $query = $this->queryParser->parse($query);
             }
-            \GraphQL\Language\Visitor::visit(
-                $query,
-                [
-                    'leave' => [
-                        NodeKind::NAME => function (Node $node) use (&$queryFields) {
-                            $queryFields[$node->value] = $node->value;
-                        }
+            if (!empty($query)) {
+                \GraphQL\Language\Visitor::visit(
+                    $query,
+                    [
+                        'leave' => [
+                            NodeKind::NAME => function (Node $node) use (&$queryFields) {
+                                $queryFields[$node->value] = $node->value;
+                            }
+                        ]
                     ]
-                ]
-            );
+                );
+            }
             if (isset($variables)) {
                 $this->extractVariables($queryFields, $variables);
             }
