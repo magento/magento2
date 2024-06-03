@@ -8,10 +8,8 @@ declare(strict_types=1);
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Handler;
 
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\Order\Invoice;
-use Magento\Sales\Model\ResourceModel\Order\Address\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Handler\State;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -50,7 +48,8 @@ class StateTest extends TestCase
                     'getStatus',
                     'getAllItems',
                     'getInvoiceCollection',
-                    'getTotalQtyOrdered'
+                    'getTotalQtyOrdered',
+                    'getTotalDue'
                 ]
             )
             ->disableOriginalConstructor()

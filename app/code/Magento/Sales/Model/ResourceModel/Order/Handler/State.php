@@ -28,7 +28,12 @@ class State
                 ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING));
             $currentState = Order::STATE_PROCESSING;
         }
-        if ($order->isCanceled() || $order->canUnhold() || $order->canInvoice() || $this->orderHasOpenInvoices($order) || (int) $order->getTotalDue() > 0) {
+        if ($order->isCanceled() ||
+            $order->canUnhold() ||
+            $order->canInvoice() ||
+            $this->orderHasOpenInvoices($order) ||
+            (int) $order->getTotalDue() > 0
+        ) {
             return $this;
         }
 
