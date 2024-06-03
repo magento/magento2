@@ -6,6 +6,8 @@
 namespace Magento\Shipping\Model\Order\Pdf;
 
 use Magento\Shipping\Helper\Carrier;
+use Magento\Framework\App\ObjectManager;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -65,7 +67,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
-        \Magento\Tax\Helper\Data $taxHelper,
+        TaxHelper $taxHelper = null,
         Carrier $carrierHelper,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\LayoutInterface $layout,
@@ -76,6 +78,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         $this->_storeManager = $storeManager;
         $this->_layout = $layout;
         $this->_localeResolver = $localeResolver;
+        $this->taxHelper = $taxHelper ?: ObjectManager::getInstance()->get(TaxHelper::class);
 
         parent::__construct(
             $paymentData,
@@ -88,7 +91,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
             $localeDate,
             $inlineTranslation,
             $addressRenderer,
-            $taxHelper,
+            $this->taxHelper,
             $data
         );
     }
