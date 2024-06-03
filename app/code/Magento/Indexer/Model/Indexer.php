@@ -326,6 +326,7 @@ class Indexer extends DataObject implements IndexerInterface, SuspendableIndexer
             $this->getView()->subscribe();
         } else {
             $this->getView()->unsubscribe();
+            $this->invalidate();
         }
         $this->getState()->save();
     }
