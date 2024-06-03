@@ -2,15 +2,6 @@
 /**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained from
- * Adobe.
  */
 declare(strict_types=1);
 
@@ -102,6 +93,64 @@ class AddProductWithOptionsToCartTest extends GraphQlAbstract
         $this->assertEquals(
             $response['cart']['items'],
             $this->getExpectedResponse($optionUid, $productOptions)
+        );
+    }
+
+    #[
+        DataFixture(GuestCart::class, as: 'quote'),
+        DataFixture(QuoteIdMask::class, ['cart_id' => '$quote.id$'], 'quoteIdMask'),
+        DataFixture(
+            Product::class,
+            [
+                'sku' => 'simple1',
+                'options' => [
+                    [
+                        'title' => 'option1',
+                        'type' => ProductCustomOptionInterface::OPTION_TYPE_FIELD,
+                    ]
+                ]
+            ],
+            'product1'
+        ),
+        DataFixture(Indexer::class, as: 'indexer')
+    ]
+    public function testAddSameProductWithDifferentOptionValues()
+    {
+        $uidEncoder = Bootstrap::getObjectManager()->create(Uid::class);
+
+        $cartId = DataFixtureStorageManager::getStorage()->get('quoteIdMask')->getMaskedId();
+        $product = DataFixtureStorageManager::getStorage()->get('product1');
+        /* @var \Magento\Catalog\Api\Data\ProductInterface $product */
+        $sku = $product->getSku();
+        $option = $product->getOptions();
+        $optionUid = $uidEncoder->encode(
+            'custom-option' . '/' . $option[0]->getData()['option_id']
+        );
+
+        // Assert if product options for item added to the cart
+        // are present in mutation response after product with selected option was added
+        $mutation = $this->getAddProductWithDifferentOptionValuesMutation(
+            $cartId,
+            $sku,
+            $optionUid
+        );
+        $response = $this->graphQlMutation($mutation);
+
+        $this->assertArrayHasKey('items', $response['addProductsToCart']['cart']);
+        $this->assertCount(2, $response['addProductsToCart']['cart']['items']);
+        $this->assertArrayHasKey('customizable_options', $response['addProductsToCart']['cart']['items'][0]);
+
+        $this->assertEquals(
+            $response['addProductsToCart']['cart']['items'],
+            $this->getExpectedResponseForDifferentOptionValues($optionUid, $sku)
+        );
+
+        // Assert if product options for item in the cart are present in the response
+        $query = $this->getCartQueryForDifferentOptionValues($cartId);
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(
+            $this->getExpectedResponseForDifferentOptionValues($optionUid, $sku),
+            $response['cart']['items']
         );
     }
 
@@ -268,7 +317,67 @@ mutation {
             }
         }
     }
-} 
+}
+QRY;
+    }
+
+    /**
+     * Returns mutation for the test with different option values
+     *
+     * @param string $cartId
+     * @param string $sku
+     * @param string $optionUid
+     * @return string
+     */
+    private function getAddProductWithDifferentOptionValuesMutation(
+        string $cartId,
+        string $sku,
+        string $optionUid
+    ): string {
+        return <<<QRY
+mutation {
+    addProductsToCart(
+        cartId: "{$cartId}"
+        cartItems: [
+            {
+                quantity:1
+                sku: "{$sku}"
+                entered_options: [{
+                    uid:"{$optionUid}",
+                    value:"value1"
+                }]
+            }
+            {
+                quantity:1
+                sku: "{$sku}"
+                entered_options: [{
+                    uid:"{$optionUid}",
+                    value:"value2"
+                }]
+            }
+        ]
+    ) {
+        cart {
+        id
+            items {
+                quantity
+                product {
+                    sku
+                }
+                ... on SimpleCartItem {
+                    customizable_options {
+                        customizable_option_uid
+                        label
+                        values {
+                            customizable_option_value_uid
+                            value
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 QRY;
     }
 
@@ -298,6 +407,39 @@ query {
                                 uid
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+QRY;
+    }
+
+    /**
+     * Returns query to get cart with information about item and associated product with different option values
+     *
+     * @param string $cartId
+     * @return string
+     */
+    private function getCartQueryForDifferentOptionValues(string $cartId): string
+    {
+        return <<<QRY
+query {
+    cart(cart_id: "{$cartId}")
+    {
+        items {
+            quantity
+            product {
+                sku
+            }
+            ... on SimpleCartItem {
+                customizable_options {
+                    customizable_option_uid
+                    label
+                    values {
+                        customizable_option_value_uid
+                        value
                     }
                 }
             }
@@ -404,6 +546,51 @@ MUTATION;
                             ]
                     ]
             ]
+        ];
+    }
+
+    /**
+     * Returns formatted response for test with different option values
+     *
+     * @param string $selectedOptionUid
+     * @param array $productOptions
+     * @return array
+     */
+    private function getExpectedResponseForDifferentOptionValues(string $optionUid, string $sku): array
+    {
+        return [
+            0 => [
+                "quantity" => 1,
+                "product" => ["sku" => "{$sku}"],
+                "customizable_options" => [
+                    0 => [
+                        "customizable_option_uid" => "{$optionUid}",
+                        "label" => "option1",
+                        "values" => [
+                            0 => [
+                                "customizable_option_value_uid" => "{$optionUid}",
+                                "value" => "value1"
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            1 => [
+                "quantity" => 1,
+                "product" => ["sku" => "{$sku}"],
+                "customizable_options" => [
+                    0 => [
+                        "customizable_option_uid" => "{$optionUid}",
+                        "label" => "option1",
+                        "values" => [
+                            0 => [
+                                "customizable_option_value_uid" => "{$optionUid}",
+                                "value" => "value2"
+                            ]
+                        ]
+                    ]
+                ]
+            ],
         ];
     }
 }
