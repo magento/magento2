@@ -17,7 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit test for Magento\GoogleAnalytics\Model\Config\GtagConfig
+ * Unit test for Magento\GoogleGtag\Model\Config\GtagConfig
  */
 class GtagConfigTest extends TestCase
 {

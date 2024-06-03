@@ -88,7 +88,6 @@
             <item>Magento_Config::config</item>
             <item>Magento_Payment::payment</item>
             <item>Magento_Cms::config_cms</item>
-            <item>Magento_GoogleAnalytics::google</item>
             <item>Magento_Downloadable::downloadable</item>
             <item>Magento_Contact::contact</item>
             <item>Magento_CatalogInventory::cataloginventory</item>
