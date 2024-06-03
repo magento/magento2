@@ -36,6 +36,7 @@
 
         <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct"/>
         <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillBasicProductInfo" />
+        <waitForElementClickable selector="{{AdminProductFormSection.contentTab}}" stepKey="waitForClickContentTab">
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
         <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDescription"/>
         <waitForElementVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForDescription" />
