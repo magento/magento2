@@ -9,12 +9,40 @@ namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Customer\Model\Cache\GroupExcludedWebsiteCache;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Excluded customer group website resource model.
  */
-class GroupExcludedWebsite extends AbstractDb
+class GroupExcludedWebsite extends AbstractDb implements ResetAfterRequestInterface
 {
+    /**
+     * @var GroupExcludedWebsiteCache $groupExcludedWebsiteCache
+     */
+    private GroupExcludedWebsiteCache $groupExcludedWebsiteCache;
+
+    /**
+     * @param Context $context
+     * @param Snapshot $entitySnapshot
+     * @param RelationComposite $entityRelationComposite
+     * @param GroupExcludedWebsiteCache $groupExcludedWebsiteCache
+     * @param string $connectionName
+     */
+    public function __construct(
+        Context $context,
+        Snapshot $entitySnapshot,
+        RelationComposite $entityRelationComposite,
+        GroupExcludedWebsiteCache $groupExcludedWebsiteCache,
+        $connectionName = null
+    ) {
+        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $connectionName);
+        $this->groupExcludedWebsiteCache = $groupExcludedWebsiteCache;
+    }
+
     /**
      * Resource initialization
      *
@@ -26,14 +54,35 @@ class GroupExcludedWebsite extends AbstractDb
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->groupExcludedWebsiteCache->invalidate();
+    }
+
+    /**
+     * Makes sure ExcludedWebsiteCache is invalidated when excluded websites are modified
+     */
+    public function invalidateCache()
+    {
+        $this->_resetState();
+    }
+
+    /**
      * Retrieve excluded website ids related to customer group.
      *
      * @param int $customerGroupId
      * @return array
      * @throws LocalizedException
      */
+
     public function loadCustomerGroupExcludedWebsites(int $customerGroupId): array
     {
+        if ($this->groupExcludedWebsiteCache->isCached($customerGroupId)) {
+            return $this->groupExcludedWebsiteCache->getFromCache($customerGroupId);
+        }
+        
         $connection = $this->getConnection();
         $bind = ['customer_group_id' => $customerGroupId];
 
@@ -44,7 +93,8 @@ class GroupExcludedWebsite extends AbstractDb
             'customer_group_id = :customer_group_id'
         );
 
-        return $connection->fetchCol($select, $bind);
+        $this->groupExcludedWebsiteCache->addToCache($customerGroupId, $connection->fetchCol($select, $bind));
+        return $this->groupExcludedWebsiteCache->getFromCache($customerGroupId);
     }
 
     /**
@@ -76,6 +126,7 @@ class GroupExcludedWebsite extends AbstractDb
     {
         $connection = $this->getConnection();
         $connection->beginTransaction();
+        $this->invalidateCache();
         try {
             $where = $connection->quoteInto('customer_group_id = ?', $customerGroupId);
             $connection->delete(
@@ -87,7 +138,6 @@ class GroupExcludedWebsite extends AbstractDb
             $connection->rollBack();
             throw $e;
         }
-
         return $this;
     }
 

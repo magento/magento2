@@ -624,7 +624,7 @@ class AccountTest extends AbstractController
         $customerData = $customerRegistry->retrieveByEmail($email);
         $token = $customerData->getRpToken();
         $customerId = $customerData->getId();
-        $this->assertForgotPasswordEmailContent($token, $customerId);
+        $this->assertForgotPasswordEmailContent($token, $customerId, $email);
 
         /* Set new email */
         /** @var CustomerRepositoryInterface $customerRepository */
@@ -701,13 +701,16 @@ class AccountTest extends AbstractController
      * Check that 'Forgot password' email contains correct data.
      *
      * @param string $token
+     * @param int $customerId
+     * @param string $email
      * @return void
      */
-    private function assertForgotPasswordEmailContent(string $token, int $customerId): void
+    private function assertForgotPasswordEmailContent(string $token, int $customerId, string $email): void
     {
         $message = $this->transportBuilderMock->getSentMessage();
+        $email = urlencode($email);
         //phpcs:ignore
-        $pattern = "/<a.+customer\/account\/createPassword\/\?id={$customerId}&amp;token={$token}.+Set\s+a\s+New\s+Password<\/a\>/";
+        $pattern = "/<a.+customer\/account\/createPassword\/\?email={$email}&amp;id={$customerId}&amp;token={$token}.+Set\s+a\s+New\s+Password<\/a\>/";
         $rawMessage = $message->getBody()->getParts()[0]->getRawContent();
         $messageConstraint = $this->logicalAnd(
             new StringContains('There was recently a request to change the password for your account.'),

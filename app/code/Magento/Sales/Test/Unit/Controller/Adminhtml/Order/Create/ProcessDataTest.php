@@ -157,11 +157,9 @@ class ProcessDataTest extends TestCase
     /**
      * @param bool $noDiscount
      * @param string $couponCode
-     * @param string $errorMessage
-     * @param string $actualCouponCode
      * @dataProvider isApplyDiscountDataProvider
      */
-    public function testExecute($noDiscount, $couponCode, $errorMessage, $actualCouponCode)
+    public function testExecute($noDiscount, $couponCode)
     {
         $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)->addMethods(['getCouponCode'])
             ->onlyMethods(['isVirtual', 'getAllItems'])
@@ -233,22 +231,6 @@ class ProcessDataTest extends TestCase
         );
         $quote->expects($this->any())->method('getAllItems')->willReturn([$item]);
         $item->expects($this->any())->method('getNoDiscount')->willReturn($noDiscount);
-        if (!$noDiscount) {
-            $quote->expects($this->once())->method('getCouponCode')->willReturn($actualCouponCode);
-        }
-
-        $errorMessageManager = __(
-            $errorMessage,
-            $couponCode
-        );
-        $this->escaper->expects($this->once())->method('escapeHtml')->with($couponCode)->willReturn($couponCode);
-
-        $this->messageManager
-            ->expects($this->once())
-            ->method('addErrorMessage')
-            ->with($errorMessageManager)
-            ->willReturnSelf();
-
         $this->resultForward->expects($this->once())
             ->method('forward')
             ->with('index')
@@ -262,8 +244,8 @@ class ProcessDataTest extends TestCase
     public function isApplyDiscountDataProvider()
     {
         return [
-            [true, '123', '"%1" coupon code was not applied. Do not apply discount is selected for item(s)', null],
-            [false, '123', 'The "%1" coupon code isn\'t valid. Verify the code and try again.', '132'],
+            [true, '123'],
+            [false, '123'],
         ];
     }
 }

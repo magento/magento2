@@ -12,12 +12,13 @@ use Magento\Framework\GraphQl\Query\Resolver\BatchServiceContractResolverInterfa
 use Magento\Framework\GraphQl\Query\Resolver\ResolveRequest;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Default logic to make batch contract resolvers work.
  */
-class BatchContractResolverWrapper implements ResolverInterface
+class BatchContractResolverWrapper implements ResolverInterface, ResetAfterRequestInterface
 {
     /**
      * @var BatchServiceContractResolverInterface
@@ -159,5 +160,13 @@ class BatchContractResolverWrapper implements ResolverInterface
                 return $this->getResolvedFor($i);
             }
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->clearAggregated();
     }
 }

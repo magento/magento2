@@ -62,4 +62,10 @@
             <argument name="variableConfig" xsi:type="object">Magento\Variable\Model\Variable\Config\Proxy</argument>
         </arguments>
     </type>
+    <preference for="Magento\Cms\Model\Page\TargetUrlBuilderInterface" type="Magento\Cms\Model\Page\TargetUrlBuilder"/>
+    <type name="Magento\Cms\Model\Page\TargetUrlBuilder">
+        <arguments>
+            <argument name="frontendUrlBuilder" xsi:type="object">Magento\Framework\Url</argument>
+        </arguments>
+    </type>
 </config>

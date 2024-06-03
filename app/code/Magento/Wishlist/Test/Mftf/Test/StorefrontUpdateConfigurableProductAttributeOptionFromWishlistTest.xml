@@ -20,6 +20,7 @@
             <group value="catalog"/>
             <group value="configurableProduct"/>
             <group value="wishlist"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create Customer -->
@@ -81,7 +82,9 @@
             </createData>
 
             <!-- Reindex invalidated indices after Product Attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete Configurable Product data -->
@@ -94,10 +97,13 @@
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromStorefront"/>
 
             <!-- Delete Customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Reindex invalidated indices after Product Attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndicesAfterDelete"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndicesAfterDelete">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Login as Customer -->

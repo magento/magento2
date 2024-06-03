@@ -18,6 +18,7 @@
             <testCaseId value="MC-25815"/>
             <useCaseId value="MAGETWO-91521"/>
             <group value="Tax"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create category and product -->
@@ -110,6 +111,7 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterProduct"/>
 
             <!-- Delete Customer and clear filter -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{Simple_US_Customer.email}}"/>
             </actionGroup>
