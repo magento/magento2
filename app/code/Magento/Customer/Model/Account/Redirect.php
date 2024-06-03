@@ -144,7 +144,7 @@ class Redirect
                 ->forward($this->session->getBeforeAction());
         } else {
             $result = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-            $result->setUrl($this->session->getBeforeAuthUrl(true));
+            $result->setUrl($this->session->getBeforeAuthUrl());
         }
         return $result;
     }
