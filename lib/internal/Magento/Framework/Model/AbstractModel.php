@@ -1040,12 +1040,14 @@ abstract class AbstractModel extends DataObject
     private function checkAndConvertNumericValue(mixed $key, mixed $value): void
     {
         if (array_key_exists($key, $this->_data) && is_numeric($this->_data[$key])
-            && $value != null
+            && $value !== null
         ) {
-            if (is_int($value)) {
-                $this->_data[$key] = (int) $this->_data[$key];
-            } elseif (is_float($value)) {
+            if (is_float($value) ||
+                (is_string($value) && preg_match('/^-?\d*\.\d+$/', $value))
+            ) {
                 $this->_data[$key] = (float) $this->_data[$key];
+            } elseif (is_int($value)) {
+                $this->_data[$key] = (int) $this->_data[$key];
             }
         }
     }
