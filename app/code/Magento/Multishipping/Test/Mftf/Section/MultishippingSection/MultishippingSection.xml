@@ -23,6 +23,6 @@
         <element name="enterNewAddress" type="button" selector=".action.add"/>
         <element name="updateQtyAndAddress" type="button" selector="//button[@type='submit' and @class='action update']"/>
         <element name="attentionMessage" type="text" selector="//div[@id='modal-content-9']//div[contains(text(),'Maximum qty allowed for Shipping to multiple addresses is 10')]"/>
-        <element name="acceptAttention" type="button" selector="//button[@class='action-primary action-accept']//span[contains(text(),'OK')]”/>
+        <element name="acceptAttention" type="button" selector="//button[@class='action-primary action-accept']//span[contains(text(),'OK')]"/>
     </section>
 </sections>
