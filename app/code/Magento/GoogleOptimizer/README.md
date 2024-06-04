@@ -5,8 +5,6 @@ This module implements functionality of Google Experiment tool that is the part 
 ## Installation
 
 Before installing this module, note that the Magento_GoogleOptimizer is dependent on the following modules:
-
-- `Magento_GoogleAnalytics`
 - `Magento_Catalog`
 - `Magento_Cms`
 - `Magento_Ui`

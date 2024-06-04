@@ -34,11 +34,6 @@ class Data extends AbstractHelper
     protected $_activeForCmsFlag;
 
     /**
-     * @var \Magento\GoogleAnalytics\Helper\Data
-     */
-    protected $_analyticsHelper;
-
-    /**
      * @var GtagConfiguration|null
      */
     private $gtagConfiguration;
@@ -47,15 +42,12 @@ class Data extends AbstractHelper
      * Data constructor.
      *
      * @param Context $context
-     * @param \Magento\GoogleAnalytics\Helper\Data $analyticsHelper
      * @param GtagConfiguration|null $gtagConfiguration
      */
     public function __construct(
         Context $context,
-        \Magento\GoogleAnalytics\Helper\Data $analyticsHelper,
         GtagConfiguration $gtagConfiguration = null
     ) {
-        $this->_analyticsHelper = $analyticsHelper;
         $this->gtagConfiguration = $gtagConfiguration ?: ObjectManager::getInstance()->get(GtagConfiguration::class);
         parent::__construct($context);
     }
@@ -89,7 +81,6 @@ class Data extends AbstractHelper
     {
         return $this->isGoogleExperimentEnabled($store) &&
             (
-                $this->_analyticsHelper->isGoogleAnalyticsAvailable($store) ||
                 $this->gtagConfiguration->isGoogleAnalyticsAvailable($store)
             );
     }
