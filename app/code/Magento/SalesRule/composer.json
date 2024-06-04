@@ -19,6 +19,7 @@
         "magento/module-customer": "*",
         "magento/module-directory": "*",
         "magento/module-eav": "*",
+        "magento/module-multishipping": "*",
         "magento/module-payment": "*",
         "magento/module-quote": "*",
         "magento/module-reports": "*",
