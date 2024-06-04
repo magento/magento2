@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Lock\Backend;
 
-use Magento\Framework\Lock\LockManagerInterface;
-use Magento\Framework\Filesystem\Driver\File as FileDriver;
-use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\RuntimeException;
+use Magento\Framework\Filesystem\Driver\File as FileDriver;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Phrase;
 
 /**
@@ -60,6 +60,10 @@ class FileLock implements LockManagerInterface
 
         $this->fileDriver = $fileDriver;
         $this->path = rtrim($path, '/') . '/';
+
+        if (!$this->fileDriver->getRealPath($this->path)) {
+            $this->path = BP . DIRECTORY_SEPARATOR . $this->path;
+        }
 
         try {
             if (!$this->fileDriver->isExists($this->path)) {
