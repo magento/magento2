@@ -18,7 +18,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      *
      * @see _isAllowed()
      */
-    public const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
+    public const ADMIN_RESOURCE = 'Magento_Sales::creditmemo';
 
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
