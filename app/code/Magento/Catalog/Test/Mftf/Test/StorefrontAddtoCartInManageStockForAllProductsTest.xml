@@ -11,7 +11,7 @@
         <annotations>
             <stories value="Enabling Manage Stock During Product Creation"/>
             <title value="Update Product with (Out of Stock) Visible in Category when Manage Stock is No in config"/>
-            <description value="Customer shouldn't be able to see add to cart button in storefront if product is Out Of Stock"/>
+            <description value="Customer shouldn't be able to see add to cart button in the storefront if product is Out Of Stock"/>
             <testCaseId value="AC-4167"/>
             <severity value="MAJOR"/>
             <group value="catalog"/>
