@@ -224,6 +224,7 @@
                 <deleteData createDataKey="createCustomer3" stepKey="deleteCustomer3"/>
                 <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
                 <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+                <waitForPageLoad stepKey="waitForCustomersFilterToBeDeleted"/>
                 <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             </after>
         </test>

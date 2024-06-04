@@ -33,6 +33,7 @@
                 <argument name="customerEmail" value="Simple_US_Customer.email"/>
             </actionGroup>
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearFilters"/>
+            <waitForPageLoad stepKey="waitForFilterToBeDeleted"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>

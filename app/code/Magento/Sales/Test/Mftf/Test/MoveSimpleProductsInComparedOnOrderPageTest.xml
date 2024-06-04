@@ -36,6 +36,10 @@
             </actionGroup>
         </before>
         <after>
+            <!-- Clear customers filters -->
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomersFilter"/>
+            <waitForPageLoad stepKey="waitForCustomersFilterToBeDeleted"/>
+
             <!-- Admin logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 

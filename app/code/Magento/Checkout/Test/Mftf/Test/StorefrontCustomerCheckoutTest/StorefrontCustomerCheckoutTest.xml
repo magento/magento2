@@ -35,6 +35,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteSimpleCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteUsCustomer"/>
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="resetCustomerFilters"/>
+            <waitForPageLoad stepKey="waitForCustomersFilterToBeDeleted"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
             <comment userInput="BIC workaround" stepKey="logoutCustomer"/>
         </after>
