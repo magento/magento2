@@ -37,8 +37,7 @@
         <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct"/>
         <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillBasicProductInfo" />
         <waitForElementClickable selector="{{AdminProductFormSection.contentTab}}" stepKey="waitForClickContentTab"/>
-        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
-        <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDescription"/>
+        <comment userInput="BIC Workaround" stepKey="scrollToDescription"/>
         <comment userInput="BIC Workaround" stepKey="waitForDescription"/>
         <comment userInput="BIC Workaround" stepKey="scrollToDescriptionAgain"/>
         <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon1" />
