@@ -5,10 +5,12 @@
  */
 namespace Magento\Quote\Model\ResourceModel\Quote\Address\Rate;
 
+use Magento\Quote\Model\ResourceModel\Quote\Address\Rate;
+
 /**
  * Quote addresses shipping rates collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection
 {
@@ -25,14 +27,20 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     private $_carrierFactory;
 
     /**
+     * @var Delete
+     */
+    private Delete $deleteRates;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @param Delete $deleteRates
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -41,8 +49,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory,
+        Delete $deleteRates,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
     ) {
         parent::__construct(
             $entityFactory,
@@ -53,6 +62,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
             $connection,
             $resource
         );
+        $this->deleteRates = $deleteRates;
         $this->_carrierFactory = $carrierFactory;
     }
 
@@ -111,5 +121,29 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
             return $this;
         }
         return parent::addItem($rate);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function save()
+    {
+        $itemsToDelete = [];
+        $itemsToSave = [];
+        /** @var Rate $item */
+        foreach ($this->getItems() as $key => $item) {
+            if ($item->isDeleted()) {
+                $itemsToDelete[] = $item;
+                $this->removeItemByKey($key);
+            } else {
+                $itemsToSave[] = $item;
+            }
+        }
+        $this->deleteRates->execute($itemsToDelete);
+        /** @var Rate $item */
+        foreach ($itemsToSave as $item) {
+            $item->save();
+        }
+        return $this;
     }
 }

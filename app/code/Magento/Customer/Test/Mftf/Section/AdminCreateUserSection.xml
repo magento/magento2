@@ -24,5 +24,7 @@
         <element name="userInfoTab" type="button" selector="#page_tabs_main_section"/>
         <element name="userRoleTab" type="button" selector="#page_tabs_roles_section"/>
         <element name="saveButton" type="button" selector="#save"/>
+        <element name="createAnAccountButton" type="button" selector="//div[contains(@class, 'block-new-customer')]//a/span[contains(.,'Create an Account')]"/>
+        <element name="createAnAccountButtonForCustomer" type="button" selector="//*[@class='block-content']//a[@class='action create primary']/span[contains(.,'Create an Account')]"/>
     </section>
 </sections>

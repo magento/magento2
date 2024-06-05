@@ -85,7 +85,7 @@ QUERY;
         ], 'store2'),
         Config(
             'sales/cancellation/reasons',
-            '{"item1":{"reason":"Reason 1"},"item2":{"reason":"Reason 2"},"1691592389534":{"reason":"Another reason"}}',
+            '{"Reason1":{"description":"Reason 1"},"110":{"description":"Reason 2"},"111":{"description":"Another"}}',
             'store',
             'some_store_2'
         )
@@ -113,7 +113,7 @@ QUERY;
                             'description' => 'Reason 2'
                         ],
                         [
-                            'description' => 'Another reason'
+                            'description' => 'Another'
                         ]
                     ],
                 ]
@@ -132,7 +132,7 @@ QUERY;
         ], 'store3'),
         Config(
             'sales/cancellation/reasons',
-            '{"item1": {"reason": "Dummy reason"}}',
+            '{"Reason1": {"description": "Dummy reason"}}',
             'store',
             'some_store_3'
         )
