@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Integration\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
-use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Url\Validator;
 
 /**
  * Controller for integrations management.
@@ -20,18 +24,18 @@ abstract class Integration extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Integration::integrations';
+    public const ADMIN_RESOURCE = 'Magento_Integration::integrations';
 
     /** Param Key for extracting integration id from Request */
-    const PARAM_INTEGRATION_ID = 'id';
+    public const PARAM_INTEGRATION_ID = 'id';
 
     /** Reauthorize flag is used to distinguish activation from reauthorization */
-    const PARAM_REAUTHORIZE = 'reauthorize';
+    public const PARAM_REAUTHORIZE = 'reauthorize';
 
-    const REGISTRY_KEY_CURRENT_INTEGRATION = 'current_integration';
+    public const REGISTRY_KEY_CURRENT_INTEGRATION = 'current_integration';
 
     /** Saved API form data session key */
-    const REGISTRY_KEY_CURRENT_RESOURCE = 'current_resource';
+    public const REGISTRY_KEY_CURRENT_RESOURCE = 'current_resource';
 
     /**
      * @var \Magento\Framework\Registry
@@ -74,6 +78,11 @@ abstract class Integration extends Action
     protected $escaper;
 
     /**
+     * @var Validator
+     */
+    protected $urlValidator;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Psr\Log\LoggerInterface $logger
@@ -83,6 +92,9 @@ abstract class Integration extends Action
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection
+     * @param Validator|null $urlValidator
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -93,7 +105,8 @@ abstract class Integration extends Action
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Integration\Helper\Data $integrationData,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection
+        \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection,
+        Validator $urlValidator = null
     ) {
         parent::__construct($context);
         $this->_registry = $registry;
@@ -104,6 +117,7 @@ abstract class Integration extends Action
         $this->_integrationData = $integrationData;
         $this->escaper = $escaper;
         $this->_integrationCollection = $integrationCollection;
+        $this->urlValidator = $urlValidator ?: ObjectManager::getInstance()->get(Validator::class);
         parent::__construct($context);
     }
 
