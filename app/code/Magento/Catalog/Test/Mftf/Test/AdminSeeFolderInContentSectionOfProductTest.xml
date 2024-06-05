@@ -36,12 +36,11 @@
 
         <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct"/>
         <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillBasicProductInfo" />
-        <waitForElementClickable selector="{{AdminProductFormSection.contentTab}}" stepKey="waitForClickContentTab"/>
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
-        <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDescription"/>
-        <comment userInput="BIC Workaround" stepKey="scrollToDescriptionAgain"/>
-        <waitForElementClickable selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForDescription" />
-        <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon1" />
+        <scrollTo selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDescription"/>
+        <waitForElementVisible selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForDescription" />
+        <scrollTo selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDescriptionAgain"/>
+        <click selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon1" />
         <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse1" />
         <waitForPageLoad stepKey="waitForBrowseModal" />
         <waitForElement selector="{{MediaGallerySection.CancelBtn}}" stepKey="waitForCancelBtn1" />
