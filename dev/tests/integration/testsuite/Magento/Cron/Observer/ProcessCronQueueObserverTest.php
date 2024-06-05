@@ -36,7 +36,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             \Magento\Cron\Model\ResourceModel\Schedule\Collection::class
         );
         $collection->addFieldToFilter('status', \Magento\Cron\Model\Schedule::STATUS_PENDING);
-        $collection->addFieldToFilter('job_code', 'catalog_product_alert');
+        $collection->addFieldToFilter('job_code', 'product_alert');
         $this->assertGreaterThan(0, $collection->count(), 'Cron has failed to schedule tasks for itself for future.');
     }
 
