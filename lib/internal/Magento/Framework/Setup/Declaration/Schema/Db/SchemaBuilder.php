@@ -67,9 +67,8 @@ class SchemaBuilder
 
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function build(Schema $schema, $tablesWithJsonTypeField = [])
+    public function build(Schema $schema)
     {
         foreach ($this->sharding->getResources() as $resource) {
             foreach ($this->dbSchemaReader->readTables($resource) as $tableName) {
@@ -97,6 +96,7 @@ class SchemaBuilder
                     ]
                 );
                 $isJsonType = false;
+                $tablesWithJsonTypeField = $schema->getTablesWithJsonTypeField();
                 if (count($tablesWithJsonTypeField) > 0 && isset($tablesWithJsonTypeField[$tableName])) {
                     $isJsonType = true;
                 }

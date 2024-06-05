@@ -17,7 +17,7 @@ use Magento\Framework\App\ResourceConnection;
 class Schema
 {
     /**
-     * Resource connection.
+     * Get resource connection.
      *
      * @var ResourceConnection
      */
@@ -29,6 +29,13 @@ class Schema
      * @var Table[]
      */
     private $tables;
+
+    /**
+     * declared tables.
+     *
+     * @var array
+     */
+    private $tablesWithJsonTypeField;
 
     /**
      * Schema constructor.
@@ -75,5 +82,26 @@ class Schema
     {
         $name = $this->resourceConnection->getTableName($name);
         return $this->tables[$name] ?? false;
+    }
+
+    /**
+     * Get tables name with JSON type fields.
+     *
+     * @return array
+     */
+    public function getTablesWithJsonTypeField(): array
+    {
+        return $this->tablesWithJsonTypeField;
+    }
+
+    /**
+     * Set tables name with JSON type fields.
+     *
+     * @param array $tablesWithJsonTypeField
+     * @return array
+     */
+    public function setTablesWithJsonTypeField(array $tablesWithJsonTypeField): array
+    {
+        return $this->tablesWithJsonTypeField = $tablesWithJsonTypeField;
     }
 }
