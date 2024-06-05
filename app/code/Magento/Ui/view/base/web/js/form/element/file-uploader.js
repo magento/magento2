@@ -307,7 +307,7 @@ define([
             file.previewType = this.getFilePreviewType(file);
 
             if (!file.id && file.name) {
-                file.id = Base64.mageEncode(file.name);
+                file.id = Base64.idEncode(file.name);
             }
 
             this.observe.call(file, true, [
@@ -398,6 +398,11 @@ define([
 
             if (!file.type) {
                 return 'document';
+            }
+
+            if (file.name.indexOf('?rand') !== -1 && file.type.indexOf('?rand') !== -1) {
+                file.name = file.name.split('?')[0];
+                file.type = file.type.split('?')[0];
             }
 
             type = file.type.split('/')[0];
@@ -619,6 +624,11 @@ define([
          */
         onPreviewLoad: function (file, event) {
             var img = event.currentTarget;
+
+            if (img.alt === file.name && /gif|png|jpe?g|webp/.test(file.url) && file.url.indexOf('?rand') === -1) {
+                file.url += '?rand=' + Date.now();
+                img.src = file.url;
+            }
 
             file.previewWidth = img.naturalWidth;
             file.previewHeight = img.naturalHeight;
