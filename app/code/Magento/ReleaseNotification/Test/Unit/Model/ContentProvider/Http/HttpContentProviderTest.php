@@ -116,14 +116,21 @@ class HttpContentProviderTest extends TestCase
 
         $this->urlBuilderMock->expects($this->exactly(2))
             ->method('getUrl')
-            ->withConsecutive(
-                [$version, $edition, $locale],
-                [$version, $edition, 'en_US']
-            )
-            ->willReturnOnConsecutiveCalls($urlLocale, $urlDefaultLocale);
+            ->willReturnCallback(function ($version, $edition, $locale) use ($urlLocale, $urlDefaultLocale) {
+                if ($locale == 'en_US') {
+                    return $urlDefaultLocale;
+                } elseif ($locale == 'fr_FR') {
+                    return $urlLocale;
+                }
+            });
+
         $this->httpClientMock->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive([$urlLocale], [$urlDefaultLocale]);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$urlLocale] => null,
+                [$urlDefaultLocale] => null
+            });
+
         $this->httpClientMock->expects($this->exactly(2))
             ->method('getBody')
             ->willReturnOnConsecutiveCalls('', $response);
@@ -151,15 +158,33 @@ class HttpContentProviderTest extends TestCase
 
         $this->urlBuilderMock->expects($this->exactly(3))
             ->method('getUrl')
-            ->withConsecutive(
-                [$version, $edition, $locale],
-                [$version, $edition, 'en_US'],
-                [$version, '', 'default']
-            )
-            ->willReturnOnConsecutiveCalls($urlLocale, $urlDefaultLocale, $urlDefault);
+            ->willReturnCallback(
+                function (
+                    $version,
+                    $edition,
+                    $locale
+                ) use (
+                    $urlLocale,
+                    $urlDefaultLocale,
+                    $urlDefault
+                ) {
+                    if ($locale === 'en_US') {
+                        return $urlDefaultLocale;
+                    } elseif ($edition === '' && $locale === 'default') {
+                        return $urlDefault;
+                    }
+                    return $urlLocale;
+                }
+            );
+
         $this->httpClientMock->expects($this->exactly(3))
             ->method('get')
-            ->withConsecutive([$urlLocale], [$urlDefaultLocale], [$urlDefault]);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$urlLocale] => null,
+                [$urlDefaultLocale] => null,
+                [$urlDefault] => null
+            });
+
         $this->httpClientMock->expects($this->exactly(3))
             ->method('getBody')
             ->willReturnOnConsecutiveCalls('', '', $response);
@@ -175,7 +200,7 @@ class HttpContentProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getGetContentOnDefaultOrEmptyProvider()
+    public static function getGetContentOnDefaultOrEmptyProvider()
     {
         return [
             'default-fr_FR' => [

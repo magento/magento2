@@ -26,6 +26,6 @@ class CancellationReason implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        return $value['reason'];
+        return $value['description'];
     }
 }
