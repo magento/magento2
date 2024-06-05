@@ -383,10 +383,13 @@ class EmailSenderTest extends TestCase
 
             $this->invoiceResourceMock
                 ->method('saveAttribute')
-                ->withConsecutive(
-                    [$this->invoiceMock, 'email_sent'],
-                    [$this->invoiceMock, 'send_email']
-                );
+                ->willReturnCallback(function ($arg1, $arg2) {
+                    if ($arg1 == $this->invoiceMock &&
+                        $arg2 == 'email_sent' ||
+                        $arg2 == 'send_email') {
+                        return null;
+                    }
+                });
 
             $this->assertFalse(
                 $this->subject->send(
@@ -402,7 +405,7 @@ class EmailSenderTest extends TestCase
     /**
      * @return array
      */
-    public function sendDataProvider(): array
+    public static function sendDataProvider(): array
     {
         return [
             'Successful sync sending with comment' => [0, false, true, true],

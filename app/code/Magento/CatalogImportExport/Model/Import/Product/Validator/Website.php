@@ -24,7 +24,7 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid($value)
     {
@@ -33,7 +33,16 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
             return true;
         }
         $separator = $this->context->getMultipleValueSeparator();
-        $websites = explode($separator, $value[ImportProduct::COL_PRODUCT_WEBSITES]);
+
+        if (is_string($value[ImportProduct::COL_PRODUCT_WEBSITES])) {
+            $websites = explode($separator, $value[ImportProduct::COL_PRODUCT_WEBSITES]);
+        } elseif (is_array($value[ImportProduct::COL_PRODUCT_WEBSITES])) {
+            $websites = $value[ImportProduct::COL_PRODUCT_WEBSITES];
+        } else {
+            $this->_addMessages([self::ERROR_INVALID_WEBSITE]);
+            return false;
+        }
+
         foreach ($websites as $website) {
             if (!$this->storeResolver->getWebsiteCodeToId($website)) {
                 $this->_addMessages([self::ERROR_INVALID_WEBSITE]);

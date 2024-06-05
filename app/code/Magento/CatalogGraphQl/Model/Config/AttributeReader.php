@@ -9,8 +9,10 @@ namespace Magento\CatalogGraphQl\Model\Config;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Attributes\Collection;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Attributes\CollectionFactory;
 use Magento\EavGraphQl\Model\Resolver\Query\Type;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\Entity\MapperInterface;
@@ -36,9 +38,9 @@ class AttributeReader implements ReaderInterface
     private Type $typeLocator;
 
     /**
-     * @var Collection
+     * @var CollectionFactory
      */
-    private Collection $collection;
+    private readonly CollectionFactory $collectionFactory;
 
     /**
      * @var ScopeConfigInterface
@@ -48,18 +50,21 @@ class AttributeReader implements ReaderInterface
     /**
      * @param MapperInterface $mapper
      * @param Type $typeLocator
-     * @param Collection $collection
+     * @param Collection $collection @deprecated @see $collectionFactory
      * @param ScopeConfigInterface $config
+     * @param CollectionFactory|null $collectionFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         MapperInterface $mapper,
         Type $typeLocator,
         Collection $collection,
-        ScopeConfigInterface $config
+        ScopeConfigInterface $config,
+        CollectionFactory $collectionFactory = null,
     ) {
         $this->mapper = $mapper;
         $this->typeLocator = $typeLocator;
-        $this->collection = $collection;
+        $this->collectionFactory = $collectionFactory ?? ObjectManager::getInstance()->get(CollectionFactory::class);
         $this->config = $config;
     }
 
@@ -74,12 +79,11 @@ class AttributeReader implements ReaderInterface
     public function read($scope = null) : array
     {
         $config = [];
-
         if ($this->config->isSetFlag(self::XML_PATH_INCLUDE_DYNAMIC_ATTRIBUTES, ScopeInterface::SCOPE_STORE)) {
             $typeNames = $this->mapper->getMappedTypes(Product::ENTITY);
 
             /** @var Attribute $attribute */
-            foreach ($this->collection->getAttributes() as $attribute) {
+            foreach ($this->collectionFactory->create()->getAttributes() as $attribute) {
                 $attributeCode = $attribute->getAttributeCode();
                 $locatedType = $this->typeLocator->getType($attributeCode, Product::ENTITY) ?: 'String';
                 $locatedType = TypeProcessor::NORMALIZED_ANY_TYPE === $locatedType ? 'String' : ucfirst($locatedType);

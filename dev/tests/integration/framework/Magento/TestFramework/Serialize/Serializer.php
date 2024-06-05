@@ -41,7 +41,7 @@ class Serializer implements SerializerInterface
                 restore_error_handler();
                 throw new \InvalidArgumentException('Unable to unserialize value, string is corrupted.');
             },
-            E_NOTICE
+            E_WARNING
         );
         // phpcs:ignore Magento2.Security.InsecureFunction
         $result = unserialize($string);

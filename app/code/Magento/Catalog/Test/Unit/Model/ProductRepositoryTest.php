@@ -78,11 +78,6 @@ class ProductRepositoryTest extends TestCase
     private $model;
 
     /**
-     * @var Helper|MockObject
-     */
-    private $initializationHelper;
-
-    /**
      * @var Product|MockObject
      */
     private $resourceModel;
@@ -255,7 +250,6 @@ class ProductRepositoryTest extends TestCase
             ->method('hasGalleryAttribute')
             ->willReturn(true);
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
-        $this->initializationHelper = $this->createMock(Helper::class);
         $this->collectionFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
         $this->metadataService = $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
@@ -342,7 +336,6 @@ class ProductRepositoryTest extends TestCase
             ProductRepository::class,
             [
                 'productFactory' => $this->productFactory,
-                'initializationHelper' => $this->initializationHelper,
                 'resourceModel' => $this->resourceModel,
                 'filterBuilder' => $this->filterBuilder,
                 'collectionFactory' => $this->collectionFactory,
@@ -723,7 +716,6 @@ class ProductRepositoryTest extends TestCase
         $this->productFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->product);
-        $this->initializationHelper->expects($this->never())->method('initialize');
         $this->resourceModel->expects($this->once())->method('validate')->with($this->product)
             ->willReturn(true);
         $this->resourceModel->expects($this->once())->method('save')->with($this->product)->willReturn(true);
@@ -748,7 +740,6 @@ class ProductRepositoryTest extends TestCase
         $this->productFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->product);
-        $this->initializationHelper->expects($this->never())->method('initialize');
         $this->resourceModel->expects($this->once())->method('validate')->with($this->product)
             ->willReturn(true);
         $this->resourceModel->expects($this->once())->method('save')->with($this->product)->willReturn(true);
@@ -774,7 +765,6 @@ class ProductRepositoryTest extends TestCase
         $this->productFactory->expects($this->exactly(2))
             ->method('create')
             ->willReturn($this->product);
-        $this->initializationHelper->expects($this->never())->method('initialize');
         $this->resourceModel->expects($this->once())->method('validate')->with($this->product)
             ->willReturn(true);
         $this->resourceModel->expects($this->once())->method('save')->with($this->product)
@@ -800,7 +790,6 @@ class ProductRepositoryTest extends TestCase
         $this->productFactory->expects($this->exactly(2))
             ->method('create')
             ->willReturn($this->product);
-        $this->initializationHelper->expects($this->never())->method('initialize');
         $this->resourceModel->expects($this->once())->method('validate')->with($this->product)
             ->willReturn(true);
 
@@ -830,7 +819,6 @@ class ProductRepositoryTest extends TestCase
         $this->productFactory->expects($this->exactly(2))
             ->method('create')
             ->willReturn($this->product);
-        $this->initializationHelper->expects($this->never())->method('initialize');
         $this->resourceModel->expects($this->once())->method('validate')->with($this->product)
             ->willReturn(['error1', 'error2']);
         $this->product->expects($this->once())->method('getId')->willReturn(null);
@@ -854,8 +842,6 @@ class ProductRepositoryTest extends TestCase
         $this->productFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->product);
-        $this->initializationHelper->expects($this->never())
-            ->method('initialize');
         $this->resourceModel->expects($this->once())
             ->method('validate')
             ->with($this->product)
@@ -983,24 +969,13 @@ class ProductRepositoryTest extends TestCase
             [
                 'identifier' => 25,
                 'editMode' => true,
-                'storeId' => $anyObject
+                'storeId' => '1'
             ],
             [
                 'identifier' => 'test-sku',
                 'editMode' => true,
-                'storeId' => $anyObject
+                'storeId' => 1
             ],
-            [
-                'identifier' => 25,
-                'editMode' => false,
-                'storeId' => $anyObject
-            ],
-            [
-
-                'identifier' => 'test-sku',
-                'editMode' => false,
-                'storeId' => $anyObject
-            ]
         ];
     }
 
@@ -1018,7 +993,6 @@ class ProductRepositoryTest extends TestCase
         $this->productFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->initializedProduct);
-        $this->initializationHelper->expects($this->never())->method('initialize');
         $this->resourceModel->expects($this->once())->method('validate')->with($this->initializedProduct)
             ->willReturn(true);
         $this->resourceModel->expects($this->once())->method('save')
@@ -1184,7 +1158,6 @@ class ProductRepositoryTest extends TestCase
         $this->productFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->initializedProduct);
-        $this->initializationHelper->expects($this->never())->method('initialize');
         $this->resourceModel->expects($this->once())->method('validate')->with($this->initializedProduct)
             ->willReturn(true);
         $this->resourceModel->expects($this->once())->method('save')
@@ -1354,7 +1327,6 @@ class ProductRepositoryTest extends TestCase
         $this->productFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->initializedProduct);
-        $this->initializationHelper->expects($this->never())->method('initialize');
         $this->resourceModel->expects($this->once())->method('validate')->with($this->initializedProduct)
             ->willReturn(true);
         $this->resourceModel->expects($this->once())->method('save')
@@ -1421,7 +1393,7 @@ class ProductRepositoryTest extends TestCase
         //verify new entries
         $contentDataObject = $this->getMockBuilder(ImageContent::class)
             ->disableOriginalConstructor()
-            ->setMethods(null)
+            ->onlyMethods([])
             ->getMock();
         $this->contentFactory->expects($this->once())
             ->method('create')
@@ -1475,7 +1447,6 @@ class ProductRepositoryTest extends TestCase
         $this->productFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->product);
-        $this->initializationHelper->expects($this->never())->method('initialize');
         $this->resourceModel->expects($this->once())->method('validate')->with($this->product)
             ->willReturn(true);
         $this->resourceModel->expects($this->once())->method('save')->with($this->product)->willReturn(true);
