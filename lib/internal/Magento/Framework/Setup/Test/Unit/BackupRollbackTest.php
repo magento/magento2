@@ -18,7 +18,7 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\BackupRollback;
-use Magento\Framework\Setup\LoggerInterface;
+use Magento\Framework\Setup\ConsoleLoggerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,7 +33,7 @@ class BackupRollbackTest extends TestCase
     private $objectManager;
 
     /**
-     * @var LoggerInterface|MockObject
+     * @var ConsoleLoggerInterface|MockObject
      */
     private $log;
 
@@ -75,7 +75,7 @@ class BackupRollbackTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->log = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->log = $this->getMockForAbstractClass(ConsoleLoggerInterface::class);
         $this->directoryList = $this->createMock(DirectoryList::class);
         $this->path = realpath(__DIR__);
         $this->directoryList->expects($this->any())
