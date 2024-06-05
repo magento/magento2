@@ -9,7 +9,9 @@ namespace Magento\Sales\Api\Data;
  * Shipment interface.
  *
  * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
- * document lists the products and their quantities in the delivery package.
+ * document lists the products and their quantities in the delivery package. This interface creates shipment
+ * record without items quantity (total_qty) validation. To validate total shipped quantity for each item
+ * in the order you must use newer `POST /V1/order/:orderId/ship` endpoint.
  * @api
  * @since 100.0.2
  */
@@ -31,7 +33,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      */
     const TOTAL_WEIGHT = 'total_weight';
     /*
-     * Total quantity.
+     * Total quantity. Can be greater than ordered (not validated).
      */
     const TOTAL_QTY = 'total_qty';
     /*
