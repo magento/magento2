@@ -66,7 +66,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #1 Testing price for fixed bundle product
                 with special price and without any sub items and options
             ' => [
-                'strategy' => self::getBundleConfiguration1(),
+                'strategyModifiers' => self::getBundleConfiguration1(),
                 'expectedResults' => [
                     // 110 * 0.5
                     'minimalPrice' => 55,
@@ -80,7 +80,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #2 Testing price for fixed bundle product
                 with special price, fixed sub items and fixed options
             ' => [
-                'strategy' => self::getBundleConfiguration2(
+                'strategyModifiers' => self::getBundleConfiguration2(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -97,7 +97,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #3 Testing price for fixed bundle product
                 with special price, percent sub items and percent options
             ' => [
-                'strategy' => self::getBundleConfiguration2(
+                'strategyModifiers' => self::getBundleConfiguration2(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -114,7 +114,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #4 Testing price for fixed bundle product
                 with special price, fixed sub items and percent options
             ' => [
-                'strategy' => self::getBundleConfiguration2(
+                'strategyModifiers' => self::getBundleConfiguration2(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -131,7 +131,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #5 Testing price for fixed bundle product
                 with special price, percent sub items and fixed options
             ' => [
-                'strategy' => self::getBundleConfiguration2(
+                'strategyModifiers' => self::getBundleConfiguration2(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -148,7 +148,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #6 Testing price for fixed bundle product
                 with special price, fixed sub items and fixed options
             ' => [
-                'strategy' => self::getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -165,7 +165,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #7 Testing price for fixed bundle product
                 with special price, percent sub items and percent options
             ' => [
-                'strategy' => self::getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -182,7 +182,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #8 Testing price for fixed bundle product
                 with special price, fixed sub items and percent options
             ' => [
-                'strategy' => self::getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -199,7 +199,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #9 Testing price for fixed bundle product
                 with special price, percent sub items and fixed options
             ' => [
-                'strategy' => self::getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -216,7 +216,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #10 Testing price for fixed bundle product
                 with special price, fixed sub items and fixed options
             ' => [
-                'strategy' => self::getBundleConfiguration4(
+                'strategyModifiers' => self::getBundleConfiguration4(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -233,7 +233,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #11 Testing price for fixed bundle product
                 with special price, percent sub items and percent options
             ' => [
-                'strategy' => self::getBundleConfiguration4(
+                'strategyModifiers' => self::getBundleConfiguration4(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -250,7 +250,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #12 Testing price for fixed bundle product
                 with special price, fixed sub items and percent options
             ' => [
-                'strategy' => self::getBundleConfiguration4(
+                'strategyModifiers' => self::getBundleConfiguration4(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -267,7 +267,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #13 Testing price for fixed bundle product
                 with special price, percent sub items and fixed options
             ' => [
-                'strategy' => self::getBundleConfiguration4(
+                'strategyModifiers' => self::getBundleConfiguration4(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -284,7 +284,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #14 Testing price for fixed bundle product
                 with special price, fixed sub items and fixed options
             ' => [
-                'strategy' => self::getBundleConfiguration5(
+                'strategyModifiers' => self::getBundleConfiguration5(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -301,7 +301,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #15 Testing price for fixed bundle product
                 with special price, percent sub items and percent options
             ' => [
-                'strategy' => self::getBundleConfiguration5(
+                'strategyModifiers' => self::getBundleConfiguration5(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -318,7 +318,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #16 Testing price for fixed bundle product
                 with special price, fixed sub items and percent options
             ' => [
-                'strategy' => self::getBundleConfiguration5(
+                'strategyModifiers' => self::getBundleConfiguration5(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -335,7 +335,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #17 Testing price for fixed bundle product
                 with special price, percent sub items and fixed options
             ' => [
-                'strategy' => self::getBundleConfiguration5(
+                'strategyModifiers' => self::getBundleConfiguration5(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -352,7 +352,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #18 Testing price for fixed bundle product
                 with special price, fixed sub items and fixed options
             ' => [
-                'strategy' => self::getBundleConfiguration6(
+                'strategyModifiers' => self::getBundleConfiguration6(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -369,7 +369,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #19 Testing price for fixed bundle product
                 with special price, percent sub items and percent options
             ' => [
-                'strategy' => self::getBundleConfiguration6(
+                'strategyModifiers' => self::getBundleConfiguration6(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -386,7 +386,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #20 Testing price for fixed bundle product
                 with special price, fixed sub items and percent options
             ' => [
-                'strategy' => self::getBundleConfiguration6(
+                'strategyModifiers' => self::getBundleConfiguration6(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -403,7 +403,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #21 Testing price for fixed bundle product
                 with special price, percent sub items and fixed options
             ' => [
-                'strategy' => self::getBundleConfiguration6(
+                'strategyModifiers' => self::getBundleConfiguration6(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -420,7 +420,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #22 Testing price for fixed bundle product
                 with special price, fixed sub items and fixed options
             ' => [
-                'strategy' => self::getBundleConfiguration7(
+                'strategyModifiers' => self::getBundleConfiguration7(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -437,7 +437,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #23 Testing price for fixed bundle product
                 with special price, percent sub items and percent options
             ' => [
-                'strategy' => self::getBundleConfiguration7(
+                'strategyModifiers' => self::getBundleConfiguration7(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -454,7 +454,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #24 Testing price for fixed bundle product
                 with special price, fixed sub items and percent options
             ' => [
-                'strategy' => self::getBundleConfiguration7(
+                'strategyModifiers' => self::getBundleConfiguration7(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -471,7 +471,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #25 Testing price for fixed bundle product
                 with special price, percent sub items and fixed options
             ' => [
-                'strategy' => self::getBundleConfiguration7(
+                'strategyModifiers' => self::getBundleConfiguration7(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),

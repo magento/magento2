@@ -102,7 +102,7 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
     {
         return [
             '#1 Testing price for fixed bundle product with one simple' => [
-                'strategy' => self::getProductWithOneSimple(),
+                'strategyModifiers' => self::getProductWithOneSimple(),
                 'expectedResults' => [
                     //  110 + 10 (price from simple1)
                     'minimalPrice' => 120,
@@ -112,7 +112,7 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
             ],
 
             '#2 Testing price for fixed bundle product with three simples and different qty' => [
-                'strategy' => self::getProductWithDifferentQty(),
+                'strategyModifiers' => self::getProductWithDifferentQty(),
                 'expectedResults' => [
                     // 110 + 10 (min price from simples)
                     'minimalPrice' => 120,
@@ -122,7 +122,7 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
             ],
 
             '#3 Testing price for fixed bundle product with three simples and different price' => [
-                'strategy' => self::getProductWithDifferentPrice(),
+                'strategyModifiers' => self::getProductWithDifferentPrice(),
                 'expectedResults' => [
                     //  110 + 10
                     'minimalPrice' => 120,
@@ -132,7 +132,7 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
             ],
 
             '#4 Testing price for fixed bundle product with three simples' => [
-                'strategy' => self::getProductWithSamePrice(),
+                'strategyModifiers' => self::getProductWithSamePrice(),
                 'expectedResults' => [
                     //  110 + 10
                     'minimalPrice' => 120,
@@ -145,7 +145,7 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
                 #5 Testing price for fixed bundle product
                 with fixed sub items, fixed options and without any discounts
             ' => [
-                'strategy' => self::getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -162,7 +162,7 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
                 #6 Testing price for fixed bundle product
                 with percent sub items, percent options and without any discounts
             ' => [
-                'strategy' => self::getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -179,7 +179,7 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
                 #7 Testing price for fixed bundle product
                 with fixed sub items, percent options and without any discounts
             ' => [
-                'strategy' => self::getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -196,7 +196,7 @@ class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
                 #8 Testing price for fixed bundle product
                 with percent sub items, fixed options and without any discounts
             ' => [
-                'strategy' => self::getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
