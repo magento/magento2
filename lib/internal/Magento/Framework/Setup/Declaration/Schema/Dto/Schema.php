@@ -35,7 +35,7 @@ class Schema
      *
      * @var array
      */
-    private $tablesWithJsonTypeField;
+    private $tablesWithJsonTypeField = [];
 
     /**
      * Schema constructor.
