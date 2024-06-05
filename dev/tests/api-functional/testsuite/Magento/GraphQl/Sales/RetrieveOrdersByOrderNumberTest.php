@@ -434,75 +434,73 @@ QUERY;
      * @throws AuthenticationException
      */
     #[
-        DataFixture(Customer::class, ['email' => 'customer@example.com'], 'customer'),
+        DataFixture(Customer::class, as: 'customer'),
+
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart1'),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p1'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart1.id$', 'product_id' => '$p1.id$']),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart1.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart1.id$']),
+        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart1.id$']),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart1.id$']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart1.id$'], 'or1'),
+
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart2'),
-        DataFixture(ProductFixture::class, ['sku' => '100000002', 'price' => 10], 'p2'),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p2'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart2.id$', 'product_id' => '$p2.id$']),
         DataFixture(SetBillingAddress::class, ['cart_id' => '$cart2.id$']),
         DataFixture(SetShippingAddress::class, ['cart_id' => '$cart2.id$']),
         DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart2.id$']),
         DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart2.id$']),
         DataFixture(PlaceOrder::class, ['cart_id' => '$cart2.id$'], 'or2'),
-    ]
 
-    #[
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart3'),
-        DataFixture(ProductFixture::class, ['sku' => '100000003', 'price' => 10], 'p3'),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p3'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart3.id$', 'product_id' => '$p3.id$']),
         DataFixture(SetBillingAddress::class, ['cart_id' => '$cart3.id$']),
         DataFixture(SetShippingAddress::class, ['cart_id' => '$cart3.id$']),
         DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart3.id$']),
         DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart3.id$']),
         DataFixture(PlaceOrder::class, ['cart_id' => '$cart3.id$'], 'or3'),
-    ]
 
-    #[
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart4'),
-        DataFixture(ProductFixture::class, ['sku' => '100000004', 'price' => 10], 'p4'),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p4'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart4.id$', 'product_id' => '$p4.id$']),
         DataFixture(SetBillingAddress::class, ['cart_id' => '$cart4.id$']),
         DataFixture(SetShippingAddress::class, ['cart_id' => '$cart4.id$']),
         DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart4.id$']),
         DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart4.id$']),
         DataFixture(PlaceOrder::class, ['cart_id' => '$cart4.id$'], 'or4'),
-    ]
 
-    #[
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart5'),
-        DataFixture(ProductFixture::class, ['sku' => '100000005', 'price' => 10], 'p5'),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p5'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart5.id$', 'product_id' => '$p5.id$']),
         DataFixture(SetBillingAddress::class, ['cart_id' => '$cart5.id$']),
         DataFixture(SetShippingAddress::class, ['cart_id' => '$cart5.id$']),
         DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart5.id$']),
         DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart5.id$']),
         DataFixture(PlaceOrder::class, ['cart_id' => '$cart5.id$'], 'or5'),
-    ]
 
-    #[
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart6'),
-        DataFixture(ProductFixture::class, ['sku' => '100000006', 'price' => 10], 'p6'),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p6'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart6.id$', 'product_id' => '$p6.id$']),
         DataFixture(SetBillingAddress::class, ['cart_id' => '$cart6.id$']),
         DataFixture(SetShippingAddress::class, ['cart_id' => '$cart6.id$']),
         DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart6.id$']),
         DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart6.id$']),
         DataFixture(PlaceOrder::class, ['cart_id' => '$cart6.id$'], 'or6'),
-    ]
 
-    #[
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart7'),
-        DataFixture(ProductFixture::class, ['sku' => '100000007', 'price' => 10], 'p7'),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p7'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart7.id$', 'product_id' => '$p7.id$']),
         DataFixture(SetBillingAddress::class, ['cart_id' => '$cart7.id$']),
         DataFixture(SetShippingAddress::class, ['cart_id' => '$cart7.id$']),
         DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart7.id$']),
         DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart7.id$']),
         DataFixture(PlaceOrder::class, ['cart_id' => '$cart7.id$'], 'or7'),
-    ]
 
-    #[
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart8'),
-        DataFixture(ProductFixture::class, ['sku' => '100000008', 'price' => 10], 'p8'),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p8'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart8.id$', 'product_id' => '$p8.id$']),
         DataFixture(SetBillingAddress::class, ['cart_id' => '$cart8.id$']),
         DataFixture(SetShippingAddress::class, ['cart_id' => '$cart8.id$']),
@@ -512,6 +510,8 @@ QUERY;
     ]
     public function testGetCustomerDescendingSortedOrders()
     {
+        $customer = $this->fixtures->get('customer');
+
         $query = <<<QUERY
 {
   customer {
@@ -532,7 +532,7 @@ QUERY;
 }
 QUERY;
 
-        $currentEmail = 'customer@example.com';
+        $currentEmail = $customer->getEmail();
         $currentPassword = 'password';
         $response = $this->graphQlQuery(
             $query,
@@ -544,28 +544,21 @@ QUERY;
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
 
-        $order2 = $this->fixtures->get('or2')->getIncrementId();
-        $order3 = $this->fixtures->get('or3')->getIncrementId();
-        $order4 = $this->fixtures->get('or4')->getIncrementId();
-        $order5 = $this->fixtures->get('or5')->getIncrementId();
-        $order6 = $this->fixtures->get('or6')->getIncrementId();
-        $order7 = $this->fixtures->get('or7')->getIncrementId();
-        $order8 = $this->fixtures->get('or8')->getIncrementId();
+        $orderNumberCreatedAt = [];
+        for ($i = 1; $i <= 8; $i++) {
+            $orderNumber = $this->fixtures->get('or' . $i)->getIncrementId();
+            $orderCreatedAt = $this->fixtures->get('or' . $i)->getCreatedAt();
+            $orderNumberCreatedAt[$orderNumber] = $orderCreatedAt;
+        }
 
-        $expectedOrderNumbersOptions = [$order8, $order7, $order6, $order5, $order4, $order3, $order2 ];
-        $expectedOrderNumbers = $scalarTemp = [];
-        $compDate = $prevComKey = '';
-        foreach ($expectedOrderNumbersOptions as $comKey => $comData) {
-            if ($compDate == $customerOrderItemsInResponse[$comKey]['order_date']) {
-                $expectedOrderNumbers[] = $expectedOrderNumbers[$prevComKey];
-                $scalarTemp = (array)$comData;
-                $expectedOrderNumbers[$prevComKey] = $scalarTemp[0];
-            } else {
-                $scalarTemp = (array)$comData;
-                $expectedOrderNumbers[] = $scalarTemp[0];
+        array_multisort($orderNumberCreatedAt, SORT_DESC);
+
+        $expectedOrderNumbers = [];
+        foreach ($customerOrderItemsInResponse as $key => $item) {
+            if (isset($orderNumberCreatedAt[$item['number']])
+                && $item['order_date'] == $orderNumberCreatedAt[$item['number']]) {
+                $expectedOrderNumbers[] = $item['number'];
             }
-            $prevComKey = $comKey;
-            $compDate = $customerOrderItemsInResponse[$comKey]['order_date'];
         }
 
         foreach ($expectedOrderNumbers as $key => $data) {
