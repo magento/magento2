@@ -38,9 +38,7 @@
         <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillBasicProductInfo" />
         <waitForElementClickable selector="{{AdminProductFormSection.contentTab}}" stepKey="waitForClickContentTab"/>
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
-        <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-250" x="0" stepKey="scrollToDescription"/>
-        <waitForElementVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForDescription" />
-        <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDescriptionAgain"/>
+        <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDescription"/>
         <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon1" />
         <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse1" />
         <waitForPageLoad stepKey="waitForBrowseModal" />
