@@ -156,7 +156,7 @@ class Oauth implements OauthInterface
         $headerParameters = array_merge($headerParameters, $params);
         $headerParameters['oauth_signature'] = $this->hmacSignatureHelper->sign(
             $params,
-            'SHA256',
+            $signatureMethod,
             $headerParameters['oauth_consumer_secret'],
             $headerParameters['oauth_token_secret'],
             $httpMethod,
@@ -192,7 +192,7 @@ class Oauth implements OauthInterface
 
         $calculatedSign = $this->hmacSignatureHelper->sign(
             $params,
-            'SHA256',
+            $params['oauth_signature_method'],
             $consumerSecret,
             $tokenSecret,
             $httpMethod,

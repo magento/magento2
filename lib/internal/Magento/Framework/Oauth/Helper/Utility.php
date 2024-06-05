@@ -1,27 +1,15 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Oauth\Helper;
 
 use Laminas\Crypt\Hmac as HMACEncryption;
-use Laminas\OAuth\Http\Utility as HTTPUtility;
 
-class Utility extends HTTPUtility
+class Utility
 {
     /**
      * Generate signature string
@@ -35,18 +23,19 @@ class Utility extends HTTPUtility
      * @return string
      */
     public function sign(
-        array $params,
-        $signatureMethod,
-        $consumerSecret,
-        $tokenSecret = null,
-        $method = null,
-        $url = null
+        array  $params,
+        string $signatureMethod,
+        string $consumerSecret,
+        ?string $tokenSecret = null,
+        ?string $method = null,
+        ?string $url = null
     ): string {
         unset($params['oauth_signature']);
 
+        $parts     = explode('-', $signatureMethod);
         $binaryHash = HMACEncryption::compute(
             $this->assembleKey($consumerSecret, $tokenSecret),
-            $signatureMethod,
+            count($parts) > 1 ? $parts[1] : $signatureMethod,
             $this->getBaseSignatureString($params, $method, $url),
             HMACEncryption::OUTPUT_BINARY
         );
@@ -68,7 +57,7 @@ class Utility extends HTTPUtility
             $parts[] = $tokenSecret;
         }
         foreach ($parts as $key => $secret) {
-            $parts[$key] = self::urlEncode($secret);
+            $parts[$key] = $this->urlEncode($secret);
         }
 
         return implode('&', $parts);
@@ -86,20 +75,20 @@ class Utility extends HTTPUtility
     {
         $encodedParams = [];
         foreach ($params as $key => $value) {
-            $encodedParams[self::urlEncode($key)] =
-                self::urlEncode($value);
+            $encodedParams[$this->urlEncode($key)] =
+                $this->urlEncode($value);
         }
         $baseStrings = [];
         if (isset($method)) {
             $baseStrings[] = strtoupper($method);
         }
         if (isset($url)) {
-            $baseStrings[] = self::urlEncode($url);
+            $baseStrings[] = $this->urlEncode($url);
         }
         if (isset($encodedParams['oauth_signature'])) {
             unset($encodedParams['oauth_signature']);
         }
-        $baseStrings[] = self::urlEncode(
+        $baseStrings[] = $this->urlEncode(
             $this->toByteValueOrderedQueryString($encodedParams)
         );
 
@@ -127,5 +116,17 @@ class Utility extends HTTPUtility
             }
         }
         return implode('&', $return);
+    }
+
+    /**
+     * URL encode a value
+     *
+     * @param string $value
+     * @return string
+     */
+    private function urlEncode(string $value): string
+    {
+        $encoded = rawurlencode($value);
+        return str_replace('%7E', '~', $encoded);
     }
 }
