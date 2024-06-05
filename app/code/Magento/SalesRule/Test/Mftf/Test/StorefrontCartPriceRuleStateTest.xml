@@ -75,10 +75,12 @@
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage"/>
         <click selector="{{CheckoutCartSummarySection.shippingHeading}}" stepKey="expandShipping"/>
         <checkOption selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectFlatRateShipping"/>
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="France" stepKey="fillCountryForCheckout"/>
         <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$123.00" stepKey="seeSubtotal"/>
         <dontSeeElement selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="dontSeeDiscount"/>
 
         <!-- See discount if we use valid postcode -->
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="fillCountryForDiscount"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Indiana" stepKey="fillState"/>
         <waitForPageLoad stepKey="waitForPostcode1"/>
         <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForDiscountElement"/>

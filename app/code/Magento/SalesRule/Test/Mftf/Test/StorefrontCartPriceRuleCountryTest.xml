@@ -87,7 +87,7 @@
         </actionGroup>
 
         <!-- Do not see discount with other country -->
-        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="fillCountry2"/>
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="France" stepKey="fillCountry2"/>
         <waitForPageLoad stepKey="waitForCountry2"/>
         <dontSeeElement selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="dontSeeDiscount2"/>
     </test>
