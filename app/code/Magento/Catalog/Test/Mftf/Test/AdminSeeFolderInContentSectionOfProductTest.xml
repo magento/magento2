@@ -40,6 +40,7 @@
         <comment userInput="BIC Workaround" stepKey="scrollToDescription"/>
         <comment userInput="BIC Workaround" stepKey="waitForDescription"/>
         <comment userInput="BIC Workaround" stepKey="scrollToDescriptionAgain"/>
+        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
         <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon1" />
         <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse1" />
         <waitForPageLoad stepKey="waitForBrowseModal" />
