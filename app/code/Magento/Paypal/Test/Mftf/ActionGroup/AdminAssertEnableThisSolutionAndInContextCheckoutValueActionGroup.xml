@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertEnableThisSolutionAndInContextCheckoutValueActionGroup" extends="AdminPayPalExpressCheckoutEnableActionGroup">
+        <annotations>
+            <description>Admin asserts enable this solution and  enable in context  checkout experience </description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <seeOptionIsSelected selector="{{PayPalExpressCheckoutConfigSection.enableSolution(countryCode)}}" userInput="No" stepKey="seeEnableThisSolutionIsSetAsNo" after="enableSandboxMode"/>
+        <assertElementContainsAttribute stepKey="seeInContextCheckoutIsDisabled" after="seeEnableThisSolutionIsSetAsNo">
+            <expectedResult selector="{{PayPalExpressCheckoutConfigSection.enableInContext(countryCode)}}" attribute="disabled" type="string"></expectedResult>
+        </assertElementContainsAttribute>
+        <!-- Check that In-Context checkout experience is set to No and it is disabled -->
+        <seeOptionIsSelected selector="{{PayPalExpressCheckoutConfigSection.enableInContext(countryCode)}}" userInput="No" stepKey="seeEnableEnableInContextCheckoutExprerienceIsSetAsNo" after="seeInContextCheckoutIsDisabled"/>
+        <waitForElementVisible selector="{{PayPalExpressCheckoutConfigSection.disabledEnableSolution('us')}}" stepKey="assertGreenTickMarkForEnableThisSolutionDropdown" after="enableSolution"/>
+        <waitForElementVisible selector="{{PayPalExpressCheckoutConfigSection.disabledEnableInContextCheckoutExp('us')}}" stepKey="assertGreenTickMarkForEnableInContextCheckoutExperience" after="assertGreenTickMarkForEnableThisSolutionDropdown"/>
+    </actionGroup>
+</actionGroups>
