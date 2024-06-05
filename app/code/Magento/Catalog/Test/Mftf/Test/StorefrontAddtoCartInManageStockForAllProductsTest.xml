@@ -26,8 +26,16 @@
             </createData>
         </before>
         <after>
-            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProductsFromGrid"/>
-            <wait time="10" stepKey="waitToDeleteAttribute"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="initialVirtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="createDownloadableProduct" stepKey="deleteDownloadableProduct"/>
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteSimpleChildGroupedProduct"/>
+            <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleChildBundledProduct"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleChildBundleProduct"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createFirstConfigFirstChildProduct" stepKey="deleteChildConfigProduct"/>
+            <deleteData createDataKey="createFirstConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData stepKey="deleteSubCategory" createDataKey="createCategory"/>
             <deleteData createDataKey="createFirstConfigProductAttribute" stepKey="deleteFirstConfigAttribute"/>
             <magentoCLI command="indexer:reindex" stepKey="performReindex1"/>
