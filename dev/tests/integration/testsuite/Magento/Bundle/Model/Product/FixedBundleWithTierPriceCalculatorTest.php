@@ -14,7 +14,7 @@ use \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
  * @package Magento\Bundle\Model\Product
  * @magentoAppArea frontend
  */
-class FixedBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
+class FixedBundleWithTierPriceCalculatorTest
 {
     /** @var ProductTierPriceInterfaceFactory */
     private $tierPriceFactory;
