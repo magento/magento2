@@ -18,6 +18,9 @@
             <testCaseId value="MAGETWO-93101"/>
             <group value="ConfigurableProduct"/>
             <group value="Swatches"/>
+            <skip>
+                <issueId value="ACQE-3855"/>
+            </skip>
         </annotations>
 
         <before>

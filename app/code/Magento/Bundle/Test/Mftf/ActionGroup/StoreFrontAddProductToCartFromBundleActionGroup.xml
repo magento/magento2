@@ -17,11 +17,15 @@
             <argument name="currency" type="string" defaultValue="US Dollar"/>
         </arguments>
 
+        <waitForElementVisible selector="{{StorefrontBundledSection.currencyTrigger}}" stepKey="waitForCurrencyTriggerVisible"/>
         <click selector="{{StorefrontBundledSection.currencyTrigger}}" stepKey="openCurrencyTrigger"/>
+        <waitForElementVisible selector="{{StorefrontBundledSection.currency(currency)}}" stepKey="waitForChooseCurrencyVisible"/>
         <click selector="{{StorefrontBundledSection.currency(currency)}}" stepKey="chooseCurrency"/>
+        <waitForElementVisible selector="{{StorefrontBundledSection.addToCart}}" stepKey="waitForCustomizeButtonVisible"/>
         <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
         <waitForPageLoad stepKey="waitForBundleOpen"/>
         <checkOption selector="{{StorefrontBundledSection.productInBundle(product.name)}}" stepKey="chooseProduct"/>
+        <waitForElementVisible selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="waitForAddToCartButtonVisible"/>
         <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="addToCartProduct"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
     </actionGroup>

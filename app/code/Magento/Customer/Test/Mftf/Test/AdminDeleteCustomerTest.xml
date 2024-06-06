@@ -28,6 +28,14 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
+        <!-- Reindex and flush cache -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        
         <!-- Delete created customer -->
         <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
             <argument name="email" value="$$createCustomer.email$$"/>

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Api;
 
@@ -142,7 +143,7 @@ class CustomerRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * Validate update by invalid customer.
+     * Validate update operation by invalid customer
      *
      */
     public function testInvalidCustomerUpdate()
@@ -152,9 +153,8 @@ class CustomerRepositoryTest extends WebapiAbstract
         //Create first customer and retrieve customer token.
         $firstCustomerData = $this->_createCustomer();
 
-        // get customer ID token
+        //Get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
-        //$customerTokenService = $this->objectManager->create(CustomerTokenServiceInterface::class);
         $customerTokenService = Bootstrap::getObjectManager()->create(
             \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
@@ -238,11 +238,9 @@ class CustomerRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'DeleteById',
             ],
         ];
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $response = $this->_webApiCall($serviceInfo, ['customerId' => $customerData['id']]);
-        } else {
-            $response = $this->_webApiCall($serviceInfo);
-        }
+        $response = (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP)
+            ? $this->_webApiCall($serviceInfo, ['customerId' => $customerData['id']])
+            : $this->_webApiCall($serviceInfo);
 
         $this->assertTrue($response);
 
@@ -253,7 +251,7 @@ class CustomerRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * Check that non authorized consumer can`t delete customer.
+     * Check that non-authorized consumer can`t delete customer.
      *
      * @return void
      */
@@ -347,10 +345,10 @@ class CustomerRepositoryTest extends WebapiAbstract
     public function testUpdateCustomer(): void
     {
         $customerId = 1;
-        $updatedLastname = 'Updated lastname';
+        $updatedLastName = 'Updated lastname';
         $customer = $this->getCustomerData($customerId);
         $customerData = $this->dataObjectProcessor->buildOutputDataArray($customer, Customer::class);
-        $customerData[Customer::LASTNAME] = $updatedLastname;
+        $customerData[Customer::LASTNAME] = $updatedLastName;
 
         $serviceInfo = [
             'rest' => [
@@ -364,16 +362,21 @@ class CustomerRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $requestData['customer'] = TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP
+        $requestData['customer'] = (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP)
             ? $customerData
-            : [Customer::LASTNAME => $updatedLastname];
-
+            : [
+                Customer::FIRSTNAME => $customer->getFirstname(),
+                Customer::LASTNAME => $updatedLastName,
+                Customer::EMAIL => $customer->getEmail(),
+                Customer::WEBSITE_ID => $customer->getWebsiteId(),
+                Customer::ID => $customerId,
+            ];
         $response = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertNotNull($response);
 
         //Verify if the customer is updated
         $existingCustomerDataObject = $this->getCustomerData($customerId);
-        $this->assertEquals($updatedLastname, $existingCustomerDataObject->getLastname());
+        $this->assertEquals($updatedLastName, $existingCustomerDataObject->getLastname());
         $this->assertEquals($customerData[Customer::FIRSTNAME], $existingCustomerDataObject->getFirstname());
     }
 
@@ -410,12 +413,16 @@ class CustomerRepositoryTest extends WebapiAbstract
         );
         unset($newCustomerDataObject['website_id']);
         $requestData = ['customer' => $newCustomerDataObject];
-
+        $expectedMessage = '"Associate to Website" is a required value.';
         try {
             $response = $this->_webApiCall($serviceInfo, $requestData);
             $this->assertEquals($customerData['website_id'], $response['website_id']);
         } catch (\SoapFault $e) {
-            $this->assertStringContainsString('"Associate to Website" is a required value.', $e->getMessage());
+            $this->assertStringContainsString($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertEquals($expectedMessage, $errorObj['message']);
         }
     }
 

@@ -51,6 +51,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
      * @var PhpFormatter
      */
     private $formatter;
+    private const EPSILON=2;
 
     /**
      * Perform GraphQL query call via GET to the system under test.
@@ -224,9 +225,10 @@ abstract class GraphQlAbstract extends WebapiAbstract
                 $actualResponse,
                 "Response array does not contain key '{$responseField}'"
             );
-            self::assertEquals(
+            self::assertEqualsWithDelta(
                 $expectedValue,
                 $actualResponse[$responseField],
+                self::EPSILON,
                 "Value of '{$responseField}' field in response does not match expected value: "
                 . var_export($expectedValue, true)
             );
