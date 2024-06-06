@@ -117,6 +117,11 @@ class GaTest extends TestCase
                 return $value;
             });
 
+        $escaper->expects($this->any())
+            ->method('escapeHtml')
+            ->withConsecutive([__('sku0')], [__('testName0')], [__('test')])
+            ->willReturnOnConsecutiveCalls('sku0', 'testName0', 'test');
+
         $this->gaBlock = $objectManager->getObject(
             Ga::class,
             [
@@ -231,7 +236,7 @@ class GaTest extends TestCase
         $orderMock->expects($this->once())->method('getGrandTotal')->willReturn(10);
         $orderMock->expects($this->once())->method('getTaxAmount')->willReturn(2);
         $orderMock->expects($this->once())->method('getShippingAmount')->willReturn($orderItemCount);
-        $orderMock->expects($this->exactly(2))->method('getOrderCurrencyCode')->willReturn('USD');
+        $orderMock->expects($this->once())->method('getOrderCurrencyCode')->willReturn('USD');
         return $orderMock;
     }
 
