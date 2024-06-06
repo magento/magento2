@@ -29,7 +29,9 @@ class DataProviderFromFile
         SqlVersionProvider::MYSQL_8_0_VERSION => 'mysql8',
         SqlVersionProvider::MARIA_DB_10_4_VERSION => 'mariadb10',
         SqlVersionProvider::MARIA_DB_10_6_VERSION => 'mariadb106',
-        SqlVersionProvider::MYSQL_8_0_29_VERSION => 'mysql829'
+        SqlVersionProvider::MYSQL_8_0_29_VERSION => 'mysql829',
+        SqlVersionProvider::MARIA_DB_10_4_27_VERSION => 'mariadb10427',
+        SqlVersionProvider::MARIA_DB_10_6_11_VERSION => 'mariadb10611'
     ];
 
     /**

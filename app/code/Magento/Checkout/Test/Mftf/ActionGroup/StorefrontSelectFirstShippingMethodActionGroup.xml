@@ -13,6 +13,7 @@
             <description>Select first shipping method.</description>
         </annotations>
 
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="waitForShippingMethod" />
         <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
         <waitForLoadingMaskToDisappear stepKey="waitForMaskDisappear"/>
     </actionGroup>

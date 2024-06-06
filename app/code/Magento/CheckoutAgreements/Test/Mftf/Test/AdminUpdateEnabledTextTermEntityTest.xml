@@ -18,9 +18,10 @@
             <testCaseId value="MC-14666"/>
             <group value="checkoutAgreements"/>
             <group value="mtf_migrated"/>
+            <group value="guest_checkout"/>
         </annotations>
         <after>
-            <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
+            <actionGroup ref="AdminOpenEditPageTermsConditionsByNameActionGroup" stepKey="openTermToDelete">
                 <argument name="termName" value="{{disabledHtmlTerm.name}}"/>
             </actionGroup>
         </after>

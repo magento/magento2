@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 /**
- * Unit Test for \Magento\Framework\Filesystem\Directory\PathValidator
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -12,6 +10,9 @@ use Magento\Framework\Filesystem\Driver\File;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit Test for \Magento\Framework\Filesystem\Directory\PathValidator
+ */
 class PathValidatorTest extends TestCase
 {
     /**
@@ -77,6 +78,7 @@ class PathValidatorTest extends TestCase
         return [
             ['/directory/path/', '/directory/path/', '/', false, '/://'],
             ['/directory/path/', '/var/.regenerate', null, false, ''],
+            ['/directory/path/', '/var/image - 1.jpg', null, false, ''],
         ];
     }
 }

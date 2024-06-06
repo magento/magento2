@@ -32,4 +32,16 @@
         <data key="path">payment/checkmo/title</data>
         <data key="value">Test</data>
     </entity>
+    <entity name="DefaultTaxDestinationCountry">
+        <data key="path">tax/defaults/country</data>
+        <data key="value">US</data>
+    </entity>
+    <entity name="DefaultTaxDestinationRegion">
+        <data key="path">tax/defaults/region</data>
+        <data key="value">*</data>
+    </entity>
+    <entity name="DefaultTaxDestinationPostcode">
+        <data key="path">tax/defaults/postcode</data>
+        <data key="value">''</data>
+    </entity>
 </entities>

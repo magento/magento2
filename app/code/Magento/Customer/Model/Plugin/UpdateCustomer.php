@@ -52,14 +52,19 @@ class UpdateCustomer
         CustomerInterface $customer,
         ?string $passwordHash = null
     ): array {
-        $customerSessionId = $this->userContext->getUserType() === $this->userContext::USER_TYPE_CUSTOMER ?
-                             (int)$this->userContext->getUserId() : 0;
+        $userType = $this->userContext->getUserType();
+        $customerSessionId = (int)$this->userContext->getUserId();
         $customerId = (int)$this->request->getParam('customerId');
         $bodyParams = $this->request->getBodyParams();
-        if (!isset($bodyParams['customer']['Id']) && $customerId) {
-            if ($customerId === $customerSessionId || $customerSessionId === 0) {
-                $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
-            }
+
+        if ($userType === UserContextInterface::USER_TYPE_CUSTOMER &&
+            !isset($bodyParams['customer']['Id']) &&
+            $customerId &&
+            $customerId === $customerSessionId
+        ) {
+            $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
+        } elseif ($userType === UserContextInterface::USER_TYPE_ADMIN && $customerId) {
+            $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
         }
 
         return [$customer, $passwordHash];
