@@ -33,7 +33,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      */
     const TOTAL_WEIGHT = 'total_weight';
     /*
-     * Total quantity. Can be greater than ordered (not validated).
+     * Total quantity. Can be greater than ordered quantity (not validated).
      */
     const TOTAL_QTY = 'total_qty';
     /*
