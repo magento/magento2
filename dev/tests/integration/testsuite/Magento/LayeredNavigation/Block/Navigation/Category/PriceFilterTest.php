@@ -22,7 +22,7 @@ use Magento\Store\Model\ScopeInterface as StoreScope;
  * @magentoAppIsolation enabled
  * @magentoDbIsolation disabled
  */
-class PriceFilter
+class PriceFilterTest extends AbstractFiltersTest
 {
     /**
      * @var MutableScopeConfigInterface
@@ -34,6 +34,7 @@ class PriceFilter
      */
     protected function setUp(): void
     {
+        parent::setUp();
         $this->scopeConfig = $this->objectManager->get(MutableScopeConfigInterface::class);
     }
 

@@ -14,13 +14,14 @@ use \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
  * @package Magento\Bundle\Model\Product
  * @magentoAppArea frontend
  */
-class FixedBundleWithTierPriceCalculator
+class FixedBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
 {
     /** @var ProductTierPriceInterfaceFactory */
     private $tierPriceFactory;
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->tierPriceFactory = $this->objectManager->create(ProductTierPriceInterfaceFactory::class);
     }
 

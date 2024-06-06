@@ -9,7 +9,7 @@ namespace Magento\LayeredNavigation\Block\Navigation\Search;
 
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Resolver;
-use Magento\LayeredNavigation\Block\Navigation\Category\PriceFilter as CategoryPriceFilterTest;
+use Magento\LayeredNavigation\Block\Navigation\Category\PriceFilterTest as CategoryPriceFilterTest;
 
 /**
  * Provides price filter tests with different price ranges calculation in navigation block on search page.
@@ -18,7 +18,7 @@ use Magento\LayeredNavigation\Block\Navigation\Category\PriceFilter as CategoryP
  * @magentoAppIsolation enabled
  * @magentoDbIsolation disabled
  */
-class PriceFilter
+class PriceFilterTest extends CategoryPriceFilterTest
 {
     /**
      * @magentoDataFixture Magento/Catalog/_files/category_with_three_products.php
