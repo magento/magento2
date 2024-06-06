@@ -49,6 +49,13 @@ class SchemaBuilder
     private $tables;
 
     /**
+     * declared tables.
+     *
+     * @var array
+     */
+    private array $tablesWithJsonTypeField = [];
+
+    /**
      * Constructor.
      *
      * @param ElementFactory $elementFactory
@@ -96,8 +103,9 @@ class SchemaBuilder
                         'collation' => $tableOptions['collation']
                     ]
                 );
+
                 $isJsonType = false;
-                $tablesWithJsonTypeField = $schema->getTablesWithJsonTypeField();
+                $tablesWithJsonTypeField = $this->getTablesWithJsonTypeField();
                 if (count($tablesWithJsonTypeField) > 0 && isset($tablesWithJsonTypeField[$tableName])) {
                     $isJsonType = true;
                 }
@@ -214,5 +222,26 @@ class SchemaBuilder
         }
 
         return $referenceColumns;
+    }
+
+    /**
+     * Get tables name with JSON type fields.
+     *
+     * @return array
+     */
+    public function getTablesWithJsonTypeField(): array
+    {
+        return $this->tablesWithJsonTypeField;
+    }
+
+    /**
+     * Set tables name with JSON type fields.
+     *
+     * @param array $tablesWithJsonTypeField
+     * @return array
+     */
+    public function setTablesWithJsonTypeField(array $tablesWithJsonTypeField): array
+    {
+        return $this->tablesWithJsonTypeField = $tablesWithJsonTypeField;
     }
 }

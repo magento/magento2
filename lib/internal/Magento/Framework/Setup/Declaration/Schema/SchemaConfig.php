@@ -72,7 +72,7 @@ class SchemaConfig implements SchemaConfigInterface
             }
         }
         $schema = $this->schemaFactory->create();
-        $schema->setTablesWithJsonTypeField($tablesWithJsonTypeField);
+        $this->dbSchemaBuilder->setTablesWithJsonTypeField($tablesWithJsonTypeField);
         $schema = $this->dbSchemaBuilder->build($schema);
         return $schema;
     }
