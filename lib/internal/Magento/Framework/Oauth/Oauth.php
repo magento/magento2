@@ -162,10 +162,8 @@ class Oauth implements OauthInterface
             $httpMethod,
             $requestUrl
         );
-        $authorizationHeader = $this->hmacSignatureHelper->toAuthorizationHeader($headerParameters);
-        // toAuthorizationHeader adds an optional realm="" which is not required for now.
-        // http://tools.ietf.org/html/rfc2617#section-1.2
-        return str_replace('realm="",', '', $authorizationHeader);
+
+        return $this->hmacSignatureHelper->toAuthorizationHeader($headerParameters);
     }
 
     /**

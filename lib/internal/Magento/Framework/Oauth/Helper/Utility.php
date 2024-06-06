@@ -44,6 +44,29 @@ class Utility
     }
 
     /**
+     * Cast to authorization header
+     *
+     * @param array $params
+     * @param bool $excludeCustomParams
+     * @return string
+     */
+    public function toAuthorizationHeader(array $params, bool $excludeCustomParams = true): string
+    {
+        $headerValue = [];
+        foreach ($params as $key => $value) {
+            if ($excludeCustomParams) {
+                if (! preg_match("/^oauth_/", $key)) {
+                    continue;
+                }
+            }
+            $headerValue[] = $this->urlEncode((string)$key)
+                . '="'
+                . $this->urlEncode((string)$value) . '"';
+        }
+        return 'OAuth ' . implode(",", $headerValue);
+    }
+
+    /**
      * Assemble key from consumer and token secrets
      *
      * @param string $consumerSecret
