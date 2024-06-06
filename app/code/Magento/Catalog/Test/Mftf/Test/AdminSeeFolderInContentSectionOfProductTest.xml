@@ -33,14 +33,13 @@
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
-
         <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct"/>
         <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillBasicProductInfo" />
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
-        <scrollTo selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDescription"/>
-        <waitForElementVisible selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForDescription" />
-        <scrollTo selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDescriptionAgain"/>
-        <click selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon1" />
+        <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtnOfDescription}}" y="-150" x="0" stepKey="scrollToDescription"/>
+        <waitForElementVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForDescription" />
+        <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtnOfDescription}}" y="-150" x="0" stepKey="scrollToDescriptionAgain"/>
+        <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon1" />
         <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse1" />
         <waitForPageLoad stepKey="waitForBrowseModal" />
         <waitForElement selector="{{MediaGallerySection.CancelBtn}}" stepKey="waitForCancelBtn1" />
@@ -48,6 +47,5 @@
         <see selector="{{MediaGallerySection.UploadImageNew}}" userInput="Upload Image" stepKey="seeUploadImage" />
         <waitForElement selector="{{MediaGallerySection.wysiwygAnchor}}" stepKey="waitForWysiwygAnchor" />
         <see selector="{{MediaGallerySection.wysiwygAnchor}}" userInput="wysiwyg" stepKey="seeWysiwygAnchor" />
-
     </test>
 </tests>
