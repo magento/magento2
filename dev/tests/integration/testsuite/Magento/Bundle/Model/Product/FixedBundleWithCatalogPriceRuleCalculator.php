@@ -12,7 +12,7 @@ use \Magento\Bundle\Api\Data\LinkInterface;
 /**
  * @magentoAppArea frontend
  */
-class FixedBundleWithCatalogPriceRuleCalculatorTest
+class FixedBundleWithCatalogPriceRuleCalculator
 {
     /**
      * @param array $strategyModifiers
