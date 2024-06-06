@@ -39,6 +39,5 @@
         <element name="IframeContent" type="block" selector=".mce-content-body"/>
         <element name="imageSource" type="text" selector="//img[contains(@src,'{{var1}}')]" parameterized="true"/>
         <element name="ImageAlt" type="text" selector="//img[contains(@alt,'{{var1}}')]" parameterized="true"/>
-        <element name="ShowHideBtnOfDescription" type="button" selector="#buttonsproduct_form_description .scalable.action-show-hide"/>
     </section>
 </sections>
