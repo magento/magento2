@@ -432,6 +432,19 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $unit = $this->getConfigData('unit_of_measure');
         }
         $rowRequest->setUnitMeasure($unit);
+
+        $rowRequest->setPackageHeight($request->getPackageHeight());
+        $rowRequest->setPackageWidth($request->getPackageWidth());
+        $rowRequest->setPackageDepth($request->getPackageDepth());
+
+        if ($rowRequest->getUnitMeasure() == 'KGS') {
+            $rowRequest->setUnitDimensions('CM');
+            $rowRequest->setUnitDimensionsDescription('Centimeter');
+        } else {
+            $rowRequest->setUnitDimensions('IN');
+            $rowRequest->setUnitDimensionsDescription('Inches');
+        }
+
         $rowRequest->setIsReturn($request->getIsReturn());
         $rowRequest->setBaseSubtotalInclTax($request->getBaseSubtotalInclTax());
 
@@ -1134,6 +1147,10 @@ XMLRequest;
             $rateParams['RateRequest']['Shipment']['Service']['Description'] = $serviceDescription;
         }
 
+        $height = $rowRequest->getPackageHeight() ?? 0;
+        $width = $rowRequest->getPackageWidth() ?? 0;
+        $length = $rowRequest->getPackageDepth() ?? 0;
+
         foreach ($rowRequest->getPackages() as $package) {
             $rateParams['RateRequest']['Shipment']['Package'][] = [
                 "PackagingType" => [
@@ -1142,12 +1159,12 @@ XMLRequest;
                 ],
                 "Dimensions" => [
                     "UnitOfMeasurement" => [
-                        "Code" => "IN",
-                        "Description" => "Inches"
+                        "Code" => "{$rowRequest->getUnitDimensions()}",
+                        "Description" => "{$rowRequest->getUnitDimensionsDescription()}"
                     ],
-                    "Length" => "5",
-                    "Width" => "5",
-                    "Height" => "5"
+                    "Length" => "{$length}",
+                    "Width" => "{$width}",
+                    "Height" => "{$height}"
                 ],
                 "PackageWeight" => [
                     "UnitOfMeasurement" => [

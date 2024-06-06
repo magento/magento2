@@ -161,6 +161,8 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
             ['name with[ bracket.jpg'],
             ['magento_small_image.jpg'],
             ['_.jpg'],
+            [' - .jpg'],
+            ['-.jpg'],
         ];
     }
 
