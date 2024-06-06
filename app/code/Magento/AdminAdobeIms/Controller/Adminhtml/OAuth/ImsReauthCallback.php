@@ -21,6 +21,8 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\NotFoundException;
 
 class ImsReauthCallback extends Auth implements HttpGetActionInterface
 {
@@ -111,6 +113,7 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
         }
 
         try {
+            $this->validateStateKey($this->getRequest());
             $code = $this->getRequest()->getParam('code');
 
             if ($code === null) {
@@ -148,5 +151,20 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
         $resultRaw->setContents($response);
 
         return $resultRaw;
+    }
+
+    /**
+     * Validate IMS state is valid
+     *
+     * @param RequestInterface $request
+     * @return void
+     * @throws NotFoundException
+     */
+    private function validateStateKey(RequestInterface $request): void
+    {
+        $request->setParam('form_key', $request->getParam('state', null));
+        if (!$this->_formKeyValidator->validate($request)) {
+            throw new NotFoundException(__('Invalid state returned from IMS'));
+        }
     }
 }

@@ -67,7 +67,6 @@
 
     <preference for="Magento\AdminAdobeIms\Api\TokenReaderInterface" type="Magento\AdminAdobeIms\Model\TokenReader"/>
 
-
     <type name="Magento\Integration\Model\AdminTokenService">
         <plugin name="admin_adobe_ims_admin_token_plugin"
                 type="Magento\AdminAdobeIms\Plugin\AdminTokenPlugin" />
@@ -76,5 +75,11 @@
     <type name="Magento\Backend\Model\Auth\Session">
         <plugin name="admin_adobe_ims_backend_auth_session"
                 type="Magento\AdminAdobeIms\Plugin\BackendAuthSessionPlugin"/>
+    </type>
+
+    <type name="Magento\AdminAdobeIms\Service\ImsConfig">
+        <arguments>
+            <argument name="formKey" xsi:type="object">Magento\Framework\Data\Form\FormKey\Proxy</argument>
+        </arguments>
     </type>
 </config>

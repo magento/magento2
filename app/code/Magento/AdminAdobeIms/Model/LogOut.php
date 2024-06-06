@@ -112,8 +112,12 @@ class LogOut implements ImsLogOutInterface
         $curl->addHeader('cache-control', 'no-cache');
 
         $curl->post(
-            $this->adminImsConfig->getBackendLogoutUrl($accessToken),
-            []
+            $this->adminImsConfig->getBackendLogoutUrl(),
+            [
+                'access_token' => $accessToken,
+                'client_secret' => $this->adminImsConfig->getPrivateKey(),
+                'client_id' => $this->adminImsConfig->getApiKey()
+            ]
         );
 
         if ($curl->getStatus() !== self::HTTP_OK || ($this->checkUserProfile($accessToken))) {

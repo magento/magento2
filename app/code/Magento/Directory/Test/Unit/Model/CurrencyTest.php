@@ -171,7 +171,7 @@ class CurrencyTest extends TestCase
         array $options,
         string $expected
     ): void {
-        $this->localeResolver->expects(self::once())
+        $this->localeResolver->expects(self::atLeastOnce())
             ->method('getLocale')
             ->willReturn($locale);
         $this->numberFormatterFactory
@@ -203,8 +203,8 @@ class CurrencyTest extends TestCase
             ['en_US', 'USD', '9999', [], '$9,999.00'],
             ['en_US', 'EUR', '9999', [], '€9,999.00'],
             ['en_US', 'LBP', '9999', [], "LBP\u{00A0}9,999"],
-            ['ar_AE', 'USD', '9', [], "\u{0669}\u{066B}\u{0660}\u{0660}\u{00A0}US$"],
-            ['ar_AE', 'AED', '9', [], "\u{0669}\u{066B}\u{0660}\u{0660}\u{00A0}\u{062F}.\u{0625}.\u{200F}"],
+            ['ar_SA', 'USD', '9', [], "\u{0669}\u{066B}\u{0660}\u{0660}\u{00A0}US$"],
+            ['ar_SA', 'AED', '9', [], "\u{0669}\u{066B}\u{0660}\u{0660}\u{00A0}\u{062F}.\u{0625}.\u{200F}"],
             ['de_DE', 'USD', '9999', [], "9.999,00\u{00A0}$"],
             ['de_DE', 'EUR', '9999', [], "9.999,00\u{00A0}€"],
             ['en_US', 'USD', '9999', ['display' => Currency::NO_SYMBOL, 'precision' => 2], '9,999.00'],
@@ -212,14 +212,14 @@ class CurrencyTest extends TestCase
             ['en_US', 'PLN', '9999', ['display' => Currency::NO_SYMBOL], '9,999.00'],
             ['en_US', 'LBP', '9999', ['display' => Currency::NO_SYMBOL], '9,999'],
             [
-                'ar_AE',
+                'ar_SA',
                 'USD',
                 '9999',
                 ['display' => Currency::NO_SYMBOL],
                 "\u{0669}\u{066C}\u{0669}\u{0669}\u{0669}\u{066B}\u{0660}\u{0660}"
             ],
             [
-                'ar_AE',
+                'ar_SA',
                 'AED',
                 '9999',
                 ['display' => Currency::NO_SYMBOL],

@@ -16,7 +16,7 @@ class Validator extends \Zend_Validate_Abstract
     /**#@+
      * Error keys
      */
-    const INVALID_URL = 'invalidUrl';
+    public const INVALID_URL = 'invalidUrl';
     /**#@-*/
 
     /**
@@ -54,11 +54,14 @@ class Validator extends \Zend_Validate_Abstract
         $this->_setValue($value);
 
         $valid = $this->validator->isValid($value);
-
-        if (!$valid) {
-            $this->_error(self::INVALID_URL);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $protocol = parse_url($value ? $value : '', PHP_URL_SCHEME);
+        if ($valid && ($protocol === 'https' || $protocol === 'http')) {
+            return true;
         }
 
-        return $valid;
+        $this->_error(self::INVALID_URL);
+
+        return false;
     }
 }
