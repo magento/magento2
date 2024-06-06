@@ -21,7 +21,6 @@ class FixedBundleWithTierPriceCalculatorTest
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->tierPriceFactory = $this->objectManager->create(ProductTierPriceInterfaceFactory::class);
     }
 
