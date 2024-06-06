@@ -92,7 +92,6 @@
         <!--Click on "Update Qty & Addresses"-->
         <actionGroup ref="StorefrontUpdateMultishippingItemsQuantityAndAddressesActionGroup" stepKey="clickOnUpdateQtyAndAddress"/>
         <!--Assert error message-->
-        <waitForElementVisible selector="{{MultishippingSection.attentionMessage}}" stepKey="waitForAttentionMessage"/>
         <waitForText selector="{{MultishippingSection.attentionMessage}}" userInput="Maximum qty allowed for Shipping to multiple addresses is 10" stepKey="assertErrorMessage"/>
         <!--Accept alert-->
         <waitForElementClickable selector="{{MultishippingSection.acceptAttention}}" stepKey="waitToAcceptAttention"/>
