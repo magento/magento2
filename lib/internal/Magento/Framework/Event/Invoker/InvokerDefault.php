@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Event\Invoker;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\Observer;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State;
@@ -48,12 +49,13 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
     public function __construct(
         \Magento\Framework\Event\ObserverFactory $observerFactory,
         State $appState,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null,
         LoggerInterface $logger = null
     ) {
         $this->_observerFactory = $observerFactory;
         $this->_appState = $appState;
-        $this->scopeConfig = $scopeConfig;
+        $this->scopeConfig = $scopeConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(ScopeConfigInterface::class);
         $this->logger = $logger ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(LoggerInterface::class);
     }
