@@ -168,9 +168,9 @@ function (
                     selectBillingAddress(newBillingAddress);
                     checkoutData.setSelectedBillingAddress(newBillingAddress.getKey());
                     checkoutData.setNewCustomerBillingAddress(addressData);
+                    this.updateAddresses(true);
                 }
             }
-            this.updateAddresses(true);
         },
 
         /**
