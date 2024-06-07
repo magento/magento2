@@ -18,7 +18,7 @@ use Magento\LayeredNavigation\Block\Navigation\Category\PriceFilterTest as Categ
  * @magentoAppIsolation enabled
  * @magentoDbIsolation disabled
  */
-class PriceFilter
+class PriceFilterTest extends CategoryPriceFilterTest
 {
     /**
      * @magentoDataFixture Magento/Catalog/_files/category_with_three_products.php

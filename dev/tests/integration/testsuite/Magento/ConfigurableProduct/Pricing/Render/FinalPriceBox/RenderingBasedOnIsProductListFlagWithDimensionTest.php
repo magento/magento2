@@ -22,7 +22,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @group indexer_dimension
  * Test price rendering according to is_product_list flag for Configurable product
  */
-class RenderingBasedOnIsProductListFlagWithDimension
+class RenderingBasedOnIsProductListFlagWithDimensionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductInterface
