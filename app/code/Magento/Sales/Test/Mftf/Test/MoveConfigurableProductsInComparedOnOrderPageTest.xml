@@ -94,7 +94,6 @@
 
             <!-- Clear customers filters -->
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomersFilter"/>
-            <waitForPageLoad stepKey="waitForCustomersFilterToBeDeleted"/>
 
             <!-- Delete configurable products data -->
             <deleteData createDataKey="createFirstConfigChildProduct" stepKey="deleteFirstConfigChildProduct"/>

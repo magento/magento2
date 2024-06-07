@@ -38,7 +38,6 @@
             <actionGroup ref="AdminMarketingDeleteNewsletterTemplateActionGroup" stepKey="deleteTemplate"/>
 
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomersFilter"/>
-            <waitForPageLoad stepKey="waitForFilterToBeDeleted"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

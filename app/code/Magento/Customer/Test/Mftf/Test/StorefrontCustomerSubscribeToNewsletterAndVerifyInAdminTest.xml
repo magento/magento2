@@ -26,7 +26,6 @@
     </before>
     <after>
         <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearFilters"/>
-        <waitForPageLoad stepKey="waitForCustomersFilterToBeDeleted"/>
         <deleteData createDataKey="createCustomer" stepKey="deleteCreatedCustomer"/>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
     </after>
