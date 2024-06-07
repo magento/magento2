@@ -93,7 +93,7 @@ class DiInfoCommand extends Command
             $paramsTableArray[] = $parameterRow;
         }
         $paramsTable->setRows($paramsTableArray);
-        $output->writeln($paramsTable->render());
+        $paramsTable->render();
     }
 
     /**
