@@ -39,15 +39,4 @@ class Revoker implements UserTokenRevokerInterface
             new Revoked((int) $userContext->getUserType(), (int) $userContext->getUserId(), time())
         );
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function revokeForOld(UserContextInterface $userContext): void
-    {
-        //Invalidating all tokens issued before current datetime.
-        $this->revokedRepo->saveRevoked(
-            new Revoked((int) $userContext->getUserType(), (int) $userContext->getUserId(), time()-1)
-        );
-    }
 }

@@ -77,7 +77,6 @@ class CustomerTokenService implements CustomerTokenServiceInterface
             CustomUserContext::USER_TYPE_CUSTOMER
         );
         $params = $this->tokenManager->createUserTokenParameters();
-        $this->revokeCustomerAccessTokenOld($customerDataObject->getId());
 
         return $this->tokenManager->create($context, $params);
     }
@@ -114,24 +113,5 @@ class CustomerTokenService implements CustomerTokenServiceInterface
             return ObjectManager::getInstance()->get(RequestThrottler::class);
         }
         return $this->requestThrottler;
-    }
-
-    /**
-     * Revoke old token by customer id.
-     *
-     * @param int $customerId
-     * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function revokeCustomerAccessTokenOld($customerId)
-    {
-        try {
-            $this->tokenManager->revokeForOld(
-                new CustomUserContext((int)$customerId, CustomUserContext::USER_TYPE_CUSTOMER)
-            );
-        } catch (UserTokenException $exception) {
-            throw new LocalizedException(__('Failed to revoke customer\'s access tokens'), $exception);
-        }
-        return true;
     }
 }

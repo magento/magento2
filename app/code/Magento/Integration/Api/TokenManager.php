@@ -94,15 +94,4 @@ class TokenManager
     {
         $this->tokenRevoker->revokeFor($userContext);
     }
-
-    /**
-     * Revoke  previously issued tokens for given user.
-     *
-     * @param UserContextInterface $userContext
-     * @return void
-     */
-    public function revokeForOld(UserContextInterface $userContext): void
-    {
-        $this->tokenRevoker->revokeForOld($userContext);
-    }
 }
