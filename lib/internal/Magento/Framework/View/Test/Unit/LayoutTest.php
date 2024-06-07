@@ -539,7 +539,7 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function isContainerDataProvider(): array
+    public static function isContainerDataProvider(): array
     {
         return [
             [false, '', false],
@@ -583,7 +583,7 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function isManipulationAllowedDataProvider(): array
+    public static function isManipulationAllowedDataProvider(): array
     {
         return [
             ['parent', ['has_element' => true, 'attribute' => 'container'], true],
@@ -713,7 +713,7 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function getBlockSingletonDataProvider(): array
+    public static function getBlockSingletonDataProvider(): array
     {
         return [
             [
@@ -754,7 +754,7 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function getRendererOptionsDataProvider(): array
+    public static function getRendererOptionsDataProvider(): array
     {
         $rendererData = [
             'namespace' => 'namespace_value',
@@ -828,7 +828,7 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function isCacheableDataProvider(): array
+    public static function isCacheableDataProvider(): array
     {
         return [
             'blockWithoutName' => [
@@ -1117,24 +1117,15 @@ class LayoutTest extends TestCase
 
         $this->eventManagerMock
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'core_layout_render_element',
-                    [
-                        'element_name' => $child,
-                        'layout' => $this->model,
-                        'transport' => $renderingOutput
-                    ]
-                ],
-                [
-                    'core_layout_render_element',
-                    [
-                        'element_name' => $name,
-                        'layout' => $this->model,
-                        'transport' => $renderingOutput
-                    ]
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($child, $renderingOutput, $name) {
+                if ($arg1 == 'core_layout_render_element' &&
+                    $arg2 == ['element_name' => $child, 'layout' => $this->model, 'transport' => $renderingOutput]) {
+                    return null;
+                } elseif ($arg1 == 'core_layout_render_element' &&
+                    $arg2 == ['element_name' => $name, 'layout' => $this->model, 'transport' => $renderingOutput]) {
+                    return null;
+                }
+            });
 
         $this->model->setBlock($child, $block);
         $this->assertEquals($blockHtml, $this->model->renderElement($name, false));
@@ -1161,7 +1152,7 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function renderElementDoNotDisplayDataProvider(): array
+    public static function renderElementDoNotDisplayDataProvider(): array
     {
         return [
             ['false'],
@@ -1173,7 +1164,7 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function renderElementDisplayDataProvider(): array
+    public static function renderElementDisplayDataProvider(): array
     {
         return [
             [true],

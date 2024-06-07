@@ -413,8 +413,21 @@ class AbstractDataTest extends TestCase
         $requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMock();
         $requestMock->method('getParam')
-            ->withConsecutive(['ATTR_CODE'], ['REQUEST_SCOPE'], ['REQUEST_SCOPE'])
-            ->willReturn($expectedValue, ['ATTR_CODE' => $expectedValue], []);
+            ->willReturnCallback(
+                function ($arg) use ($expectedValue) {
+                    static $callCount = 0;
+                    if ($arg == 'ATTR_CODE' && $callCount ==0) {
+                        $callCount++;
+                        return $expectedValue;
+                    } elseif ($arg == 'REQUEST_SCOPE' && $callCount == 1) {
+                        $callCount++;
+                        return ['ATTR_CODE' => $expectedValue];
+                    } elseif ($arg == 'REQUEST_SCOPE' && $callCount == 2) {
+                        $callCount++;
+                        return false;
+                    }
+                }
+            );
 
         $requestMockHttp = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()

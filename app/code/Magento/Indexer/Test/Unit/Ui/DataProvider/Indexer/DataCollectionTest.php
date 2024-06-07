@@ -121,7 +121,7 @@ class DataCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function loadDataDataProvider()
+    public static function loadDataDataProvider()
     {
         return [
             [

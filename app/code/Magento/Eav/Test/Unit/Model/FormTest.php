@@ -49,7 +49,7 @@ class FormTest extends TestCase
     {
         $this->_model = $this->getMockBuilder(
             Form::class
-        )->setMethods(
+        )->onlyMethods(
             ['_getFilteredFormAttributeCollection', '_getValidator', 'getEntity']
         )->disableOriginalConstructor()
             ->getMock();
@@ -134,7 +134,7 @@ class FormTest extends TestCase
         $validator = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['isValid', 'getMessages']
             )->getMock();
         $validator->expects($this->once())->method('isValid')->willReturn($isValid);

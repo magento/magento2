@@ -33,7 +33,7 @@ class PayLaterConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getStyleDataProvider()
+    public static function getStyleDataProvider()
     {
         return [
             [
@@ -91,7 +91,7 @@ class PayLaterConfigTest extends TestCase
     /**
      * @return array[]
      */
-    public function getPositionDataProvider()
+    public static function getPositionDataProvider()
     {
         return [
             [
@@ -136,7 +136,7 @@ class PayLaterConfigTest extends TestCase
     /**
      * @return array[]
      */
-    public function isEnabledDataProvider()
+    public static function isEnabledDataProvider()
     {
         $paymentPath = 'payment/%s/active';
         return [

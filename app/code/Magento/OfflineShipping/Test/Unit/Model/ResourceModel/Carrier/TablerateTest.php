@@ -17,7 +17,9 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Io\File as IoFile;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Import;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\RateQueryFactory;
@@ -71,6 +73,19 @@ class TablerateTest extends TestCase
 
     protected function setUp(): void
     {
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $configOptionClassMock = $this->getMockBuilder(IoFile::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
+
+        $objects = [
+            [
+                IoFile::class,
+                $configOptionClassMock
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
         $contextMock = $this->createMock(Context::class);
         $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $coreConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);

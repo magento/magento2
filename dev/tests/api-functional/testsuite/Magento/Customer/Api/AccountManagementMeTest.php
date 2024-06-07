@@ -85,7 +85,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         $this->customerAccountManagement = Bootstrap::getObjectManager()
             ->get(\Magento\Customer\Api\AccountManagementInterface::class);
 
-        $this->customerHelper = new CustomerHelper();
+        $this->customerHelper = new CustomerHelper($this->name());
         $this->customerData = $this->customerHelper->createSampleCustomer();
         $this->tokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
 

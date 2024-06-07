@@ -18,7 +18,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * @method General getModel
  */
-class GeneralTest extends AbstractModifierTest
+class GeneralTest extends AbstractModifierTestCase
 {
     /**
      * @var AttributeRepositoryInterface|MockObject
