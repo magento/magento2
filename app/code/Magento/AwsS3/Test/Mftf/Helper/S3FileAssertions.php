@@ -206,11 +206,7 @@ class S3FileAssertions extends Helper
      */
     public function assertDirectoryExists($path, $message = ''): void
     {
-        if (method_exists($this->adapter, 'directoryExists')) {
-            $this->assertTrue($this->adapter->directoryExists($path), "Failed asserting $path exists. " . $message);
-        } else {
-            $this->assertTrue(true, 'directoryExists method does not exist!');
-        }
+        $this->assertTrue($this->adapter->directoryExists($path), "Failed asserting $path exists. " . $message);
     }
 
     /**
