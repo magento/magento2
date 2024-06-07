@@ -11,10 +11,10 @@ use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Block\Adminhtml\Product\Downloads\Grid;
 use Magento\Reports\Controller\Adminhtml\Report\Product\ExportDownloadsCsv;
-use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class ExportDownloadsCsvTest extends AbstractControllerTest
+class ExportDownloadsCsvTest extends AbstractControllerTestCase
 {
     /**
      * @var ExportDownloadsCsv

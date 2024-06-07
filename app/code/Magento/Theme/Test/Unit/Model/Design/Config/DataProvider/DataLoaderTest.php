@@ -68,7 +68,7 @@ class DataLoaderTest extends TestCase
             ->getMockForAbstractClass();
         $this->designConfigExtension = $this->getMockBuilder(
             \Magento\Theme\Api\Data\DesignConfigExtensionInterface::class
-        )->setMethods(['getDesignConfigData'])->getMockForAbstractClass();
+        )->addMethods(['getDesignConfigData'])->getMockForAbstractClass();
 
         $this->model = new DataLoader(
             $this->request,

@@ -49,7 +49,7 @@ class FetchReportsTest extends TestCase
             ->getMock();
         $this->settlementFactoryMock = $this->getMockBuilder(SettlementFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 

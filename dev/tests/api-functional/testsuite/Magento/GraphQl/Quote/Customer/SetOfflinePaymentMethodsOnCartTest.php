@@ -78,7 +78,7 @@ class SetOfflinePaymentMethodsOnCartTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function offlinePaymentMethodDataProvider(): array
+    public static function offlinePaymentMethodDataProvider(): array
     {
         return [
             'check_mo' => [Checkmo::PAYMENT_METHOD_CHECKMO_CODE, 'Check / Money order'],

@@ -50,13 +50,13 @@ class InfoTest extends TestCase
         $helper = new ObjectManager($this);
         $this->_storeManager = $this->getMockBuilder(
             StoreManager::class
-        )->setMethods(
+        )->onlyMethods(
             ['getStore']
         )->disableOriginalConstructor()
             ->getMock();
         $this->_eventManager = $this->getMockBuilder(
             ManagerInterface::class
-        )->setMethods(
+        )->onlyMethods(
             ['dispatch']
         )->disableOriginalConstructor()
             ->getMock();
@@ -125,7 +125,7 @@ class InfoTest extends TestCase
     {
         $methodInstance = $this->getMockBuilder(
             AbstractMethod::class
-        )->setMethods(
+        )->onlyMethods(
             ['getStore']
         )->disableOriginalConstructor()
             ->getMock();

@@ -72,7 +72,7 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
     {
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'hasDataChanges',
                 'getOrigData',
             ])
@@ -121,7 +121,7 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
         $sameWebsiteId = 1;
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'hasDataChanges',
                 'getOrigData',
                 'getWebsiteId',
@@ -188,7 +188,7 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
         $sameWebsiteId = 1;
         $storeNew = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'hasDataChanges',
                 'getOrigData',
                 'getWebsiteId',
@@ -225,7 +225,7 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
         $newWebsiteId = 2;
         $storeChangedWebsite = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'hasDataChanges',
                 'getOrigData',
                 'getWebsiteId',

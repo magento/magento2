@@ -46,7 +46,7 @@ class PaymentMethodListTest extends TestCase
     protected function setUp(): void
     {
         $this->methodFactoryMock = $this->getMockBuilder(PaymentMethodInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->helperMock = $this->getMockBuilder(Data::class)
@@ -198,7 +198,7 @@ class PaymentMethodListTest extends TestCase
     private function mockPaymentMethodInstance($storeId, $sortOrder, $code, $title, $isActive)
     {
         $paymentMethodInstance = $this->getMockBuilder(AbstractMethod::class)
-            ->setMethods(['getCode', 'getTitle', 'isActive', 'getConfigData'])
+            ->onlyMethods(['getCode', 'getTitle', 'isActive', 'getConfigData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $paymentMethodInstance->expects($this->any())

@@ -62,7 +62,6 @@ class ConfigOptionsListTest extends TestCase
 
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->model = $this->objectManager->getObject(

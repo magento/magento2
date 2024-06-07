@@ -80,7 +80,7 @@ class TaxTest extends TestCase
         foreach ($orderData['previous_invoices'] as $previousInvoiceData) {
             $previousInvoice = $this->getMockBuilder(Invoice::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['isCanceled'])
+                ->onlyMethods(['isCanceled'])
                 ->getMock();
             $previousInvoice->setData('shipping_amount', $previousInvoiceData['shipping_amount']);
             $previousInvoices[] = $previousInvoice;
