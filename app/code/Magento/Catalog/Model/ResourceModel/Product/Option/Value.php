@@ -27,15 +27,11 @@ use Magento\Catalog\Helper\Data;
 class Value extends AbstractDb
 {
     /**
-     * Store manager
-     *
      * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Currency factory
-     *
      * @var CurrencyFactory
      */
     protected $_currencyFactory;
@@ -288,8 +284,12 @@ class Value extends AbstractDb
                         Store::DEFAULT_STORE_ID
                     );
                     // we should insert record into not default store only of if it does not exist in default store
-                    if (($storeId == Store::DEFAULT_STORE_ID && !$existInDefaultStore)
-                        || ($storeId != Store::DEFAULT_STORE_ID && !$existInCurrentStore)
+                    if (((int)$storeId === Store::DEFAULT_STORE_ID && !$existInDefaultStore) ||
+                        (
+                            (int)$storeId !== Store::DEFAULT_STORE_ID &&
+                            ($object->getDefaultTitle() !== null && $object->getTitle() !== $object->getDefaultTitle())
+                        ) ||
+                        ($object->getIsUseDefault() !== null && !(int)$object->getIsUseDefault())
                     ) {
                         $bind = [
                             'option_type_id' => (int)$object->getId(),
@@ -456,6 +456,7 @@ class Value extends AbstractDb
      *
      * @return FormatInterface
      * @deprecated 101.0.8
+     * @see Avoid direct use of ObjectManager
      */
     private function getLocaleFormatter()
     {
