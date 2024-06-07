@@ -60,7 +60,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->_checkoutSession = $this->getMockBuilder(
             \Magento\Checkout\Model\Session::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+        )->disableOriginalConstructor()->onlyMethods([])->getMock();
 
         $this->_observer = $this->_objectManager->create(
             \Magento\Persistent\Model\Observer::class,

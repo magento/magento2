@@ -65,12 +65,12 @@ class CategoryListTest extends TestCase
     {
         $this->categoryCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->extensionAttributesJoinProcessor = $this->getMockForAbstractClass(JoinProcessorInterface::class);
         $this->categorySearchResultsFactory = $this->getMockBuilder(CategorySearchResultsInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)

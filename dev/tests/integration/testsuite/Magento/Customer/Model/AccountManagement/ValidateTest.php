@@ -78,7 +78,7 @@ class ValidateTest extends TestCase
     /**
      * @return array
      */
-    public function validateFieldsProvider(): array
+    public static function validateFieldsProvider(): array
     {
         $attributeEmptyMessage = 'The "%1" attribute value is empty. Set the attribute and try again.';
         return [

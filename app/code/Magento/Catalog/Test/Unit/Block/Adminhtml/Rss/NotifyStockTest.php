@@ -69,7 +69,7 @@ class NotifyStockTest extends TestCase
     protected function setUp(): void
     {
         $this->rssModel = $this->getMockBuilder(\Magento\Catalog\Model\Rss\Product\NotifyStock::class)
-            ->setMethods(['getProductsCollection'])
+            ->onlyMethods(['getProductsCollection'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->rssUrlBuilder = $this->getMockForAbstractClass(UrlBuilderInterface::class);
@@ -90,7 +90,7 @@ class NotifyStockTest extends TestCase
         $this->rssUrlBuilder->expects($this->once())->method('getUrl')
             ->willReturn('http://magento.com/rss/feeds/index/type/notifystock');
         $item = $this->getMockBuilder(Product::class)
-            ->setMethods(['__sleep', 'getId', 'getQty', 'getName'])
+            ->onlyMethods(['__sleep', 'getId', 'getQty', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
         $item->expects($this->once())->method('getId')->willReturn(1);

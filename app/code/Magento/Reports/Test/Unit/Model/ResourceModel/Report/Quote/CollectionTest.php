@@ -52,7 +52,7 @@ class CollectionTest extends TestCase
     {
         /** @var MockObject $collection */
         $collection = $this->getMockBuilder(QuoteCollection::class)
-            ->setMethods(['getSelect'])
+            ->onlyMethods(['getSelect'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -72,7 +72,7 @@ class CollectionTest extends TestCase
         $constructArgs = $this->objectManager
             ->getConstructArguments(QuoteItemCollection::class);
         $collection = $this->getMockBuilder(QuoteItemCollection::class)
-            ->setMethods(['getSelect', 'getTable', 'getFlag', 'setFlag'])
+            ->onlyMethods(['getSelect', 'getTable', 'getFlag', 'setFlag'])
             ->disableOriginalConstructor()
             ->setConstructorArgs($constructArgs)
             ->getMock();
@@ -127,7 +127,7 @@ class CollectionTest extends TestCase
         $constructArgs['orderResource'] = $orderResourceMock;
         $constructArgs['productDataRetriever'] = $this->productDataRetriever;
         $collection = $this->getMockBuilder(QuoteItemCollection::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     '_beforeLoad',
                     '_renderFilters',

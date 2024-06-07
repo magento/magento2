@@ -42,7 +42,7 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getExpectedAttributeTypesProvider(): array
+    public static function getExpectedAttributeTypesProvider(): array
     {
         return [
             'product' => [

@@ -146,7 +146,7 @@ class RenderingBasedOnIsProductListFlagWithDimensionTest extends \PHPUnit\Framew
     /**
      * @return array
      */
-    public function isProductListDataProvider()
+    public static function isProductListDataProvider()
     {
         return [
             //'is_not_product_list' => [false, 1],

@@ -254,7 +254,7 @@ class MassOnTheFlyTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             'set1' => [

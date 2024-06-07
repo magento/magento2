@@ -75,7 +75,7 @@ class TestConnectionTest extends TestCase
         $responseMock = $this->createMock(HttpResponse::class);
 
         $context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession'])
+            ->onlyMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession'])
             ->setConstructorArgs(
                 $helper->getConstructArguments(
                     Context::class,
@@ -90,7 +90,7 @@ class TestConnectionTest extends TestCase
 
         $this->clientResolverMock = $this->getMockBuilder(ClientResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->clientMock = $this->getMockForAbstractClass(ClientInterface::class);
@@ -101,12 +101,12 @@ class TestConnectionTest extends TestCase
 
         $this->resultJsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->tagFilterMock = $this->getMockBuilder(StripTags::class)
             ->disableOriginalConstructor()
-            ->setMethods(['filter'])
+            ->onlyMethods(['filter'])
             ->getMock();
 
         $this->controller = new TestConnection(

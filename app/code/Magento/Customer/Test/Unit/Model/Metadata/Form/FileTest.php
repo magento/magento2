@@ -18,6 +18,7 @@ use Magento\Framework\File\Uploader;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Io\File as IoFile;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -65,6 +66,11 @@ class FileTest extends AbstractFormTestCase
     private $fileProcessorFactoryMock;
 
     /**
+     * @var IoFile|MockObject
+     */
+    protected $ioFile;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -93,6 +99,10 @@ class FileTest extends AbstractFormTestCase
         $this->fileProcessorFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->fileProcessorMock);
+        $this->ioFile = $this->getMockBuilder(IoFile::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
     }
 
     /**
@@ -140,7 +150,7 @@ class FileTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function extractValueNoRequestScopeDataProvider(): array
+    public static function extractValueNoRequestScopeDataProvider(): array
     {
         return [
             'no_file' => [[]],
@@ -199,7 +209,7 @@ class FileTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function extractValueWithRequestScopeDataProvider(): array
+    public static function extractValueWithRequestScopeDataProvider(): array
     {
         return [
             'requestScope' => [[], 'requestScope'],
@@ -256,7 +266,7 @@ class FileTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueNotToUploadDataProvider(): array
+    public static function validateValueNotToUploadDataProvider(): array
     {
         return [
             'emptyValue' => [true, [], true],
@@ -327,7 +337,7 @@ class FileTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueToUploadDataProvider(): array
+    public static function validateValueToUploadDataProvider(): array
     {
         return [
             'notValid' => [
@@ -526,7 +536,7 @@ class FileTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function outputValueDataProvider(): array
+    public static function outputValueDataProvider(): array
     {
         return [
             ElementFactory::OUTPUT_FORMAT_TEXT => [ElementFactory::OUTPUT_FORMAT_TEXT],
@@ -587,7 +597,8 @@ class FileTest extends AbstractFormTestCase
             $this->fileValidatorMock,
             $this->fileSystemMock,
             $this->uploaderFactoryMock,
-            $this->fileProcessorFactoryMock
+            $this->fileProcessorFactoryMock,
+            $this->ioFile
         );
     }
 
@@ -606,16 +617,17 @@ class FileTest extends AbstractFormTestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive([$requestScope])
-            ->willReturnOnConsecutiveCalls(
-                [
-                    $attributeCode => [
-                        [
-                            'file' => $fileName
+            ->willReturnCallback(function ($arg1) use ($requestScope, $attributeCode, $fileName) {
+                if ($arg1 == $requestScope) {
+                    return [
+                        $attributeCode => [
+                            [
+                                'file' => $fileName
+                            ]
                         ]
-                    ]
-                ]
-            );
+                    ];
+                }
+            });
 
         $model = $this->initialize(
             [
