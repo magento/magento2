@@ -49,7 +49,7 @@ class ItemTest extends TestCase
         $this->orderFactory = $this->createPartialMock(SalesOrderFactory::class, ['create']);
 
         $this->serializerMock = $this->getMockBuilder(Json::class)
-            ->setMethods(['unserialize'])
+            ->onlyMethods(['unserialize'])
             ->getMock();
 
         $arguments = [

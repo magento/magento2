@@ -39,7 +39,7 @@ class PhraseFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         $subMessage1 = new Error('go jogging');
         $subMessage2 = new Error('paint the wall');

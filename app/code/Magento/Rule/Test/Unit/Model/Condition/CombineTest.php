@@ -45,17 +45,14 @@ class CombineTest extends TestCase
     {
         $this->conditionFactoryMock = $this->getMockBuilder(ConditionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->conditionObjectMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->combine = (new ObjectManagerHelper($this))->getObject(
@@ -88,7 +85,7 @@ class CombineTest extends TestCase
     /**
      * @return array
      */
-    public function optionValuesData()
+    public static function optionValuesData()
     {
         return [
             ['option_key', 'option_value'],
