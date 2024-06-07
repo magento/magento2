@@ -114,6 +114,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_productsSkuToId = [];
 
     /**
+     * @var bool
+     */
+    private $resetProductsSkus = true;
+
+    /**
      * Instance of import/export resource helper
      *
      * @var \Magento\ImportExport\Model\ResourceModel\Helper
@@ -330,11 +335,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $productEntityLinkField;
 
     /**
-     * @var string
-     */
-    private $productEntityIdentifierField;
-
-    /**
      * @var ProductOptionValueCollectionFactory
      */
     private $productOptionValueCollectionFactory;
@@ -364,6 +364,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $optionTypeNewIdExistingIdMap = [];
 
     /**
+     * @var SkuStorage
+     */
+    private SkuStorage $skuStorage;
+
+    /**
      * @param Data $importData
      * @param ResourceConnection $resource
      * @param Helper $resourceHelper
@@ -378,6 +383,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $data
      * @param ProductOptionValueCollectionFactory|null $productOptionValueCollectionFactory
      * @param TransactionManagerInterface|null $transactionManager
+     * @param SkuStorage|null $skuStorage
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -395,7 +401,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = [],
         ProductOptionValueCollectionFactory $productOptionValueCollectionFactory = null,
-        ?TransactionManagerInterface $transactionManager = null
+        ?TransactionManagerInterface $transactionManager = null,
+        ?SkuStorage $skuStorage = null
     ) {
         $this->_resource = $resource;
         $this->_catalogData = $catalogData;
@@ -437,6 +444,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
 
         $this->errorAggregator = $errorAggregator;
+        $this->skuStorage = $skuStorage ?? ObjectManager::getInstance()
+            ->get(SkuStorage::class);
 
         $this->_initSourceEntities($data)->_initTables($data)->_initStores($data);
 
@@ -927,9 +936,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         } else {
             $storeId = Store::DEFAULT_STORE_ID;
         }
-        if (isset($this->_productsSkuToId[$this->_rowProductSku])) {
+        if ($this->_rowProductSku && $this->skuStorage->has($this->_rowProductSku)) {
             // save in existing data array
-            $productId = $this->_productsSkuToId[$this->_rowProductSku];
+            $productId = $this->skuStorage->get($this->_rowProductSku)[$this->getProductEntityLinkField()];
             if (!isset($this->_newOptionsOldData[$productId])) {
                 $this->_newOptionsOldData[$productId] = [];
             }
@@ -946,24 +955,37 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             // set row number
             $this->_newOptionsOldData[$productId][$this->_newCustomOptionId]['rows'][] = $rowNumber;
         } else {
-            // save in new data array
-            $productSku = $this->_rowProductSku;
-            if (!isset($this->_newOptionsNewData[$this->_rowProductSku])) {
-                $this->_newOptionsNewData[$this->_rowProductSku] = [];
-            }
-            if (!isset($this->_newOptionsNewData[$productSku][$this->_newCustomOptionId])) {
-                $this->_newOptionsNewData[$productSku][$this->_newCustomOptionId] = [
-                    'titles' => [],
-                    'rows' => [],
-                    'type' => $rowData[self::COLUMN_TYPE],
-                ];
-            }
-            // set title
-            $this->_newOptionsNewData[$productSku][$this
-                ->_newCustomOptionId]['titles'][$storeId] = $rowData[self::COLUMN_TITLE];
-            // set row number
-            $this->_newOptionsNewData[$productSku][$this->_newCustomOptionId]['rows'][] = $rowNumber;
+            $this->saveInNewDataArray($rowData, $rowNumber, $storeId);
         }
+    }
+
+    /**
+     * Save option data in array for non-existing new product
+     *
+     * @param array $rowData
+     * @param int $rowNumber
+     * @param int $storeId
+     * @return void
+     */
+    private function saveInNewDataArray(array $rowData, $rowNumber, $storeId): void
+    {
+        // save in new data array
+        $productSku = $this->_rowProductSku;
+        if (!isset($this->_newOptionsNewData[$productSku])) {
+            $this->_newOptionsNewData[$productSku] = [];
+        }
+        if (!isset($this->_newOptionsNewData[$productSku][$this->_newCustomOptionId])) {
+            $this->_newOptionsNewData[$productSku][$this->_newCustomOptionId] = [
+                'titles' => [],
+                'rows' => [],
+                'type' => $rowData[self::COLUMN_TYPE],
+            ];
+        }
+        // set title
+        $this->_newOptionsNewData[$productSku][$this
+            ->_newCustomOptionId]['titles'][$storeId] = $rowData[self::COLUMN_TITLE];
+        // set row number
+        $this->_newOptionsNewData[$productSku][$this->_newCustomOptionId]['rows'][] = $rowNumber;
     }
 
     /**
@@ -987,8 +1009,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         } elseif (!empty($rowData[self::COLUMN_ROW_SORT]) && !ctype_digit((string)$rowData[self::COLUMN_ROW_SORT])) {
             $this->_productEntity->addRowError(self::ERROR_INVALID_ROW_SORT, $rowNumber);
         } else {
-            if (isset($this->_productsSkuToId[$this->_rowProductSku])) {
-                $productId = $this->_productsSkuToId[$this->_rowProductSku];
+            if ($this->_rowProductSku && $this->skuStorage->has($this->_rowProductSku)) {
+                $productId = $this->skuStorage->get($this->_rowProductSku)[$this->getProductEntityLinkField()];
                 $this->_newOptionsOldData[$productId][$this->_newCustomOptionId]['rows'][] = $rowNumber;
             } else {
                 $productSku = $this->_rowProductSku;
@@ -1310,23 +1332,28 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $parentCount = [];
             $childCount = [];
             $optionsToRemove = [];
+            $optionCount = $valueCount = 0;
             foreach ($bunch as $rowNumber => $rowData) {
                 $rowSku = !empty($rowData[self::COLUMN_SKU])
                     ? mb_strtolower($rowData[self::COLUMN_SKU])
                     : '';
 
+                $multiRowData = $this->_getMultiRowFormat($rowData);
                 if ($rowSku !== $prevRowSku) {
                     $nextOptionId = $optionId ?? $nextOptionId;
                     $nextValueId = $valueId ?? $nextValueId;
                     $prevRowSku = $rowSku;
+                } elseif (count($multiRowData) === 0) {
+                    $nextOptionId += $optionCount;
+                    $nextValueId += $valueCount;
                 }
                 $optionId = $nextOptionId;
                 $valueId = $nextValueId;
-                $multiRowData = $this->_getMultiRowFormat($rowData);
-                if (!empty($rowData[self::COLUMN_SKU]) && isset($this->_productsSkuToId[$rowData[self::COLUMN_SKU]])) {
-                    $this->_rowProductId = $this->_productsSkuToId[$rowData[self::COLUMN_SKU]];
-                    if (array_key_exists('custom_options', $rowData) &&
-                        (
+                if (!empty($rowData[self::COLUMN_SKU]) && $this->skuStorage->has($rowData[self::COLUMN_SKU])) {
+                    $productData = $this->skuStorage->get($rowData[self::COLUMN_SKU]);
+                    $this->_rowProductId = $productData[$this->getProductEntityLinkField()];
+                    if (array_key_exists('custom_options', $rowData)
+                        && (
                             $rowData['custom_options'] === null ||
                             (is_string($rowData['custom_options']) && trim($rowData['custom_options'])
                                 === $this->_productEntity->getEmptyAttributeValueConstant()) ||
@@ -1337,6 +1364,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     }
                 }
 
+                $optionCount = $valueCount = 0;
                 foreach ($multiRowData as $combinedData) {
                     foreach ($rowData as $key => $field) {
                         $combinedData[$key] = $field;
@@ -1355,6 +1383,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     );
                     if ($optionData) {
                         $options[$optionData['option_id']] = $optionData;
+                        $optionCount++;
                     }
                     $this->_collectOptionTypeData(
                         $combinedData,
@@ -1366,6 +1395,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         $parentCount,
                         $childCount
                     );
+                    $valueCount++;
 
                     $this->_collectOptionTitle($combinedData, $prevOptionId, $titles);
                 }
@@ -1418,14 +1448,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _initProductsSku()
     {
-        if (!$this->_productsSkuToId || !empty($this->_newOptionsNewData)) {
-            $columns = ['entity_id', 'sku'];
-            if ($this->getProductEntityLinkField() != $this->getProductIdentifierField()) {
-                $columns[] = $this->getProductEntityLinkField();
-            }
-            foreach ($this->_productModel->getProductEntitiesInfo($columns) as $product) {
-                $this->_productsSkuToId[$product['sku']] = $product[$this->getProductEntityLinkField()];
-            }
+        if ($this->resetProductsSkus || !empty($this->_newOptionsNewData)) {
+            $this->skuStorage->reset();
+            $this->resetProductsSkus = false;
         }
 
         return $this;
@@ -2136,6 +2161,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     public function clearProductsSkuToId()
     {
         $this->_productsSkuToId = null;
+        $this->resetProductsSkus = true;
         return $this;
     }
 
@@ -2152,21 +2178,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 ->getLinkField();
         }
         return $this->productEntityLinkField;
-    }
-
-    /**
-     * Get product entity identifier field
-     *
-     * @return string
-     */
-    private function getProductIdentifierField()
-    {
-        if (!$this->productEntityIdentifierField) {
-            $this->productEntityIdentifierField = $this->getMetadataPool()
-                ->getMetadata(ProductInterface::class)
-                ->getIdentifierField();
-        }
-        return $this->productEntityIdentifierField;
     }
 
     /**

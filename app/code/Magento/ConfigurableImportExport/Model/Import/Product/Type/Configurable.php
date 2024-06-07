@@ -8,6 +8,7 @@ namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -203,6 +204,11 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     private $productEntityIdentifierField;
 
     /**
+     * @var SkuStorage
+     */
+    private SkuStorage $skuStorage;
+
+    /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -211,6 +217,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac
      * @param MetadataPool $metadataPool
+     * @param SkuStorage $skuStorage
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -220,13 +227,16 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig,
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac,
-        MetadataPool $metadataPool = null
+        MetadataPool $metadataPool = null,
+        SkuStorage $skuStorage = null
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
         $this->_productTypesConfig = $productTypesConfig;
         $this->_resourceHelper = $resourceHelper;
         $this->_productColFac = $_productColFac;
         $this->_connection = $this->_entityModel->getConnection();
+        $this->skuStorage = $skuStorage ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(SkuStorage::class);
     }
 
     /**
@@ -377,11 +387,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $bunch - portion of products to process
      * @param array $newSku - imported variations list
-     * @param array $oldSku - present variations list
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _loadSkuSuperAttributeValues($bunch, $newSku, $oldSku)
+    protected function _loadSkuSuperAttributeValues($bunch, $newSku)
     {
         if ($this->_superAttributes) {
             $attrSetIdToName = $this->_entityModel->getAttrSetIdToName();
@@ -397,10 +406,11 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
                 foreach ($dataWithExtraVirtualRows as $data) {
                     if (!empty($data['_super_products_sku'])) {
-                        if (isset($newSku[$data['_super_products_sku']])) {
-                            $productIds[] = $newSku[$data['_super_products_sku']][$this->getProductEntityLinkField()];
-                        } elseif (isset($oldSku[$data['_super_products_sku']])) {
-                            $productIds[] = $oldSku[$data['_super_products_sku']][$this->getProductEntityLinkField()];
+                        $sku = $data['_super_products_sku'];
+                        if (isset($newSku[$sku])) {
+                            $productIds[] = $newSku[$sku][$this->getProductEntityLinkField()];
+                        } elseif ($this->skuStorage->has($sku)) {
+                            $productIds[] = $this->skuStorage->get($sku)[$this->getProductEntityLinkField()];
                         }
                     }
                 }
@@ -437,11 +447,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function _loadSkuSuperDataForBunch(array $bunch)
     {
         $newSku = $this->_entityModel->getNewSku();
-        $oldSku = $this->_entityModel->getOldSku();
         $productIds = [];
         foreach ($bunch as $rowData) {
             $sku = isset($rowData[ImportProduct::COL_SKU]) ? strtolower($rowData[ImportProduct::COL_SKU]) : '';
-            $productData = $newSku[$sku] ?? $oldSku[$sku];
+            $productData = $newSku[$sku] ?? $this->skuStorage->get($sku);
             $productIds[] = $productData[$this->getProductEntityLinkField()];
         }
 
@@ -827,14 +836,14 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function _collectAssocIds($data)
     {
         $newSku = $this->_entityModel->getNewSku();
-        $oldSku = $this->_entityModel->getOldSku();
         if (!empty($data['_super_products_sku'])) {
             if (isset($newSku[$data['_super_products_sku']])) {
                 $superProductRowId = $newSku[$data['_super_products_sku']][$this->getProductEntityLinkField()];
                 $superProductEntityId = $newSku[$data['_super_products_sku']][$this->getProductEntityIdentifierField()];
-            } elseif (isset($oldSku[$data['_super_products_sku']])) {
-                $superProductRowId = $oldSku[$data['_super_products_sku']][$this->getProductEntityLinkField()];
-                $superProductEntityId = $oldSku[$data['_super_products_sku']][$this->getProductEntityIdentifierField()];
+            } elseif ($this->skuStorage->has($data['_super_products_sku'])) {
+                $oldSkuData = $this->skuStorage->get($data['_super_products_sku']);
+                $superProductRowId = $oldSkuData[$this->getProductEntityLinkField()];
+                $superProductEntityId = $oldSkuData[$this->getProductEntityIdentifierField()];
             }
             if (isset($superProductRowId)) {
                 if (isset($data['display']) && $data['display'] == 0) {
@@ -886,7 +895,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     public function saveData()
     {
         $newSku = $this->_entityModel->getNewSku();
-        $oldSku = $this->_entityModel->getOldSku();
         $this->_productSuperData = [];
         $this->_productData = null;
 
@@ -907,7 +915,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
             $this->_simpleIdsToDelete = [];
 
-            $this->_loadSkuSuperAttributeValues($bunch, $newSku, $oldSku);
+            $this->_loadSkuSuperAttributeValues($bunch, $newSku);
 
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum)) {
@@ -918,7 +926,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if (ImportProduct::SCOPE_DEFAULT == $scope &&
                     !empty($rowData[ImportProduct::COL_SKU])) {
                     $sku = strtolower($rowData[ImportProduct::COL_SKU]);
-                    $this->_productData = $newSku[$sku] ?? $oldSku[$sku];
+                    $this->_productData = $newSku[$sku] ?? $this->skuStorage->get($sku);
 
                     if ($this->_type != $this->_productData['type_id']) {
                         $this->_productData = null;

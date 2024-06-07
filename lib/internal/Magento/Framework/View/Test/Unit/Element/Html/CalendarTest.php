@@ -48,6 +48,9 @@ class CalendarTest extends TestCase
             ['en_US'],
             ['ja_JP'],
             ['ko_KR'],
+            ['lv_LV'],
+            ['sv_SE'],
+            ['de_AT'],
         ];
     }
 

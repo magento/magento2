@@ -31,6 +31,8 @@
                 <argument name="indices" value=""/>
             </actionGroup>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <!-- Disable search suggestions -->
+            <magentoCLI command="config:set {{DisableSearchSuggestions.path}} {{DisableSearchSuggestions.value}}" stepKey="DisableSearchSuggestions"/>
         </before>
         <after>
             <!-- Delete create product -->
@@ -45,6 +47,8 @@
             </actionGroup>
             <!-- Delete created below search terms -->
             <actionGroup ref="AdminDeleteSearchTermActionGroup" stepKey="deleteSearchTerms"/>
+            <!-- Re-enable search suggestions -->
+            <magentoCLI command="config:set {{EnableSearchSuggestions.path}} {{EnableSearchSuggestions.value}}" stepKey="EnableSearchSuggestions"/>
         </after>
 
         <!-- Go to storefront home page -->
