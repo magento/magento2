@@ -106,7 +106,7 @@ class ResultTest extends TestCase
             ->method('setUrl');
 
         $redirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

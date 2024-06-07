@@ -16,8 +16,10 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
 use Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\UniversalFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -69,19 +71,28 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                ScopeConfigInterface::class,
+                $this->createMock(ScopeConfigInterface::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $this->typeFactoryMock = $this->getMockBuilder(TypeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->collectionFactoryMock =
             $this->getMockBuilder(CollectionFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->cacheStateMock = $this->getMockForAbstractClass(StateInterface::class);
         $this->universalFactoryMock = $this->getMockBuilder(UniversalFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -108,7 +119,7 @@ class ConfigTest extends TestCase
         $attributeCollectionMock = $this->getMockBuilder(
             Collection::class
         )->disableOriginalConstructor()
-            ->setMethods(['getData', 'setEntityTypeFilter'])
+            ->onlyMethods(['getData', 'setEntityTypeFilter'])
             ->getMock();
         $attributeCollectionMock->expects($this->any())
             ->method('setEntityTypeFilter')->willReturnSelf();
@@ -116,7 +127,7 @@ class ConfigTest extends TestCase
             ->method('getData')
             ->willReturn([$attributeData]);
         $entityAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['setData', 'loadByCode', 'toArray'])
+            ->onlyMethods(['setData', 'loadByCode', 'toArray'])
             ->disableOriginalConstructor()
             ->getMock();
         $entityAttributeMock->expects($this->atLeastOnce())->method('setData')
@@ -148,7 +159,7 @@ class ConfigTest extends TestCase
             ->willReturn($collectionStub);
 
         $entityType = $this->getMockBuilder(Type::class)
-            ->setMethods(['getEntity', 'setData', 'getData', 'getEntityTypeCode', 'getId'])
+            ->onlyMethods(['getEntity', 'setData', 'getData', 'getEntityTypeCode', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $entityType->method('getEntityTypeCode')
@@ -172,7 +183,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getAttributeCacheDataProvider()
+    public static function getAttributeCacheDataProvider()
     {
         return [
             'cache-disabled' => [
@@ -213,7 +224,7 @@ class ConfigTest extends TestCase
         $attributeCollectionMock = $this->getMockBuilder(
             Collection::class
         )->disableOriginalConstructor()
-            ->setMethods(['getData', 'setEntityTypeFilter'])
+            ->onlyMethods(['getData', 'setEntityTypeFilter'])
             ->getMock();
         $attributeCollectionMock
             ->expects($this->any())
@@ -223,7 +234,7 @@ class ConfigTest extends TestCase
             ->method('getData')
             ->willReturn([$attributeData]);
         $entityAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['setData', 'setOrigData', 'load', 'toArray'])
+            ->onlyMethods(['setData', 'setOrigData', 'load', 'toArray'])
             ->disableOriginalConstructor()
             ->getMock();
         $entityAttributeMock->method('setData')
@@ -264,7 +275,7 @@ class ConfigTest extends TestCase
             ->willReturn($collectionStub);
 
         $entityType = $this->getMockBuilder(Type::class)
-            ->setMethods(['getEntity', 'setData', 'getData', 'getEntityTypeCode', 'getId'])
+            ->onlyMethods(['getEntity', 'setData', 'getData', 'getEntityTypeCode', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $entityType->method('getEntityTypeCode')

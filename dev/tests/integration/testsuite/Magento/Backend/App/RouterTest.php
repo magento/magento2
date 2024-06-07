@@ -69,7 +69,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         ];
 
         $routeConfig = $this->getMockBuilder(\Magento\Framework\App\Route\Config::class)
-            ->setMethods(['_getRoutes'])
+            ->onlyMethods(['_getRoutes'])
             ->setConstructorArgs(
                 [
                     'reader' => $this->objectManager->get(\Magento\Framework\App\Route\Config\Reader::class),

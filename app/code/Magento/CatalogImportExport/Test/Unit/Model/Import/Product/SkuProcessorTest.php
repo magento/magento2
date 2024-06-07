@@ -29,7 +29,7 @@ class SkuProcessorTest extends TestCase
         $this->skuProcessor = $this->getMockBuilder(
             \Magento\CatalogImportExport\Model\Import\Product\SkuProcessor::class
         )
-            ->setMethods(['_getSkus'])
+            ->onlyMethods(['_getSkus'])
             ->setConstructorArgs([$this->productFactory])
             ->getMock();
     }

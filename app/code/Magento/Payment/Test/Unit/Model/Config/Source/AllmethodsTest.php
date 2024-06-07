@@ -30,8 +30,7 @@ class AllmethodsTest extends TestCase
     {
         $this->_paymentData = $this->getMockBuilder(
             Data::class
-        )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
 
         $this->_model = new Allmethods($this->_paymentData);
     }

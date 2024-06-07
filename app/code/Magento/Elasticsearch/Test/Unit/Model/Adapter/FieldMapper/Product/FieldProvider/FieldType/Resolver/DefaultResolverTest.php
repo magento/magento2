@@ -38,7 +38,7 @@ class DefaultResolverTest extends TestCase
     {
         $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['convert'])
+            ->onlyMethods(['convert'])
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManagerHelper($this);
