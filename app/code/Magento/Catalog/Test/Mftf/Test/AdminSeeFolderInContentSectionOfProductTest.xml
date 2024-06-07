@@ -16,7 +16,6 @@
             <description value="Admin should be able to see default folder is visible Simple Product in Content short description"/>
             <severity value="BLOCKER"/>
             <testCaseId value="AC-9638"/>
-            <group value="catalog"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -27,8 +26,7 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
-            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="enableOldMediaGallery">
                 <argument name="enabled" value="0"/>
             </actionGroup>
