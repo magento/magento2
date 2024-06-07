@@ -163,7 +163,7 @@ class AbstractBlockTest extends TestCase
     /**
      * @return array
      */
-    public function getUiIdDataProvider()
+    public static function getUiIdDataProvider()
     {
         return [
             [' data-ui-id="" ', null, []],
@@ -345,37 +345,37 @@ class AbstractBlockTest extends TestCase
     /**
      * @return array
      */
-    public function getCacheLifetimeDataProvider()
+    public static function getCacheLifetimeDataProvider()
     {
         return [
             [
                 'cacheLifetime' => null,
                 'dataFromCache' => 'dataFromCache',
-                'expectsDispatchEvent' => $this->exactly(2),
+                'expectsDispatchEvent' => self::exactly(2),
                 'expectedResult' => '',
             ],
             [
                 'cacheLifetime' => false,
                 'dataFromCache' => 'dataFromCache',
-                'expectsDispatchEvent' => $this->exactly(2),
+                'expectsDispatchEvent' => self::exactly(2),
                 'expectedResult' => '',
             ],
             [
                 'cacheLifetime' => 120,
                 'dataFromCache' => 'dataFromCache',
-                'expectsDispatchEvent' => $this->exactly(2),
+                'expectsDispatchEvent' => self::exactly(2),
                 'expectedResult' => 'dataFromCache',
             ],
             [
                 'cacheLifetime' => '120string',
                 'dataFromCache' => 'dataFromCache',
-                'expectsDispatchEvent' => $this->exactly(2),
+                'expectsDispatchEvent' => self::exactly(2),
                 'expectedResult' => 'dataFromCache',
             ],
             [
                 'cacheLifetime' => 120,
                 'dataFromCache' => false,
-                'expectsDispatchEvent' => $this->exactly(2),
+                'expectsDispatchEvent' => self::exactly(2),
                 'expectedResult' => '',
             ],
         ];

@@ -113,7 +113,7 @@ class UspsUrlTest extends TestCase
     /**
      * @return string[][]
      */
-    public function invalidDataProvider(): array
+    public static function invalidDataProvider(): array
     {
         return [
             ['https://shippingapis.com.fake.com'],

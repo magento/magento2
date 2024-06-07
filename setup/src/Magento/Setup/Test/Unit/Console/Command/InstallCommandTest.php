@@ -379,7 +379,7 @@ class InstallCommandTest extends TestCase
     /**
      * @return array
      */
-    public function validateWithExceptionDataProvider()
+    public static function validateWithExceptionDataProvider()
     {
         return [
             ['123456789012345678901', 'InvalidArgumentException'],

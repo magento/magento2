@@ -222,7 +222,7 @@ class ModuleEnableDisableCommandTest extends TestCase
     /**
      * @return array
      */
-    public function executeAllDataProvider()
+    public static function executeAllDataProvider()
     {
         return [
             'enable'  => [true, '%amodules have been enabled%aMagento_Module1%a'],
@@ -257,7 +257,7 @@ class ModuleEnableDisableCommandTest extends TestCase
     /**
      * @return array
      */
-    public function executeWithConstraintsDataProvider()
+    public static function executeWithConstraintsDataProvider()
     {
         return [
             'enable'  => [true],

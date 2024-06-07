@@ -230,7 +230,7 @@ class ConfigurableObjectTest extends TestCase
         ];
     }
 
-    public function invalidDataProvider()
+    public static function invalidDataProvider()
     {
         return [
             [

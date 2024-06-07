@@ -42,7 +42,7 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createDictionaryWriterDataProvider()
+    public static function createDictionaryWriterDataProvider()
     {
         return [
             [

@@ -258,7 +258,7 @@ class CartPriceRulesFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGenerateAdvancedCondition()
+    public static function dataProviderGenerateAdvancedCondition()
     {
         return [
             [1, [[0]], 1],

@@ -201,7 +201,7 @@ class DirectoryTest extends TestCase
      *
      * @return array
      */
-    public function getListExceptionDataProvider()
+    public static function getListExceptionDataProvider()
     {
         return [
             [new ValidatorException(new Phrase('Not Valid!'))],

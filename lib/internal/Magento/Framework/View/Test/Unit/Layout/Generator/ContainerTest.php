@@ -194,7 +194,7 @@ class ContainerTest extends TestCase
     /**
      * @return array
      */
-    public function processWithExceptionDataProvider()
+    public static function processWithExceptionDataProvider()
     {
         return [
             'wrong_html_tag' => [

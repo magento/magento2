@@ -48,7 +48,7 @@ class RequestTest extends TestCase
     /**
      * @return array
      */
-    public function providerTestGetRequestedServicesSuccess()
+    public static function providerTestGetRequestedServicesSuccess()
     {
         $testModuleA = 'testModule1AllSoapAndRestV1';
         $testModuleB = 'testModule1AllSoapAndRestV2';
