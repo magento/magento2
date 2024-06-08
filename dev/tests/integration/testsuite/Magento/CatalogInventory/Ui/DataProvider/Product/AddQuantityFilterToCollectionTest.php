@@ -63,7 +63,7 @@ class AddQuantityFilterToCollectionTest extends TestCase
      *
      * @return array
      */
-    public function quantityFilterProvider(): array
+    public static function quantityFilterProvider(): array
     {
         return [
             'from' => [

@@ -35,7 +35,7 @@ class ResponseTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->transferAdapter = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(['send'])
+            ->onlyMethods(['send'])
             ->getMock();
         $this->response = $objectManager->getObject(
             Response::class,

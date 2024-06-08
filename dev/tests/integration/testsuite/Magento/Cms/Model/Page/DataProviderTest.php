@@ -105,7 +105,7 @@ class DataProviderTest extends TestCase
      *
      * @return array
      */
-    public function customLayoutDataProvider(): array
+    public static function customLayoutDataProvider(): array
     {
         return [
             ['test_custom_layout_page_1', '_existing_'],

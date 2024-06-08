@@ -168,7 +168,11 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         }
         $this->shell
             ->method('execute')
-            ->withConsecutive(...$withArgs);
+            ->willReturnCallback(function (...$withArgs) {
+                if (!empty($withArgs)) {
+                    return null;
+                }
+            });
 
         $subject->install(false);
     }

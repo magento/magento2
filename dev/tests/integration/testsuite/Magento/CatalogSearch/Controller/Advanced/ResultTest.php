@@ -206,7 +206,7 @@ class ResultTest extends AbstractController
      *
      * @return array
      */
-    public function searchParamsInArrayDataProvider(): array
+    public static function searchParamsInArrayDataProvider(): array
     {
         return [
             'search_with_from_param_is_array' => [
@@ -277,7 +277,7 @@ class ResultTest extends AbstractController
      *
      * @return array
      */
-    public function searchStringDataProvider(): array
+    public static function searchStringDataProvider(): array
     {
         return [
             'search_product_by_name' => [
@@ -381,7 +381,7 @@ class ResultTest extends AbstractController
      *
      * @return array
      */
-    public function testDataForAttributesCombination(): array
+    public static function testDataForAttributesCombination(): array
     {
         return [
             'search_product_by_name_and_price' => [

@@ -42,7 +42,7 @@ class GridAsyncInsertTest extends TestCase
             ->getMockForAbstractClass();
         $this->salesModelMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getId'
                 ]

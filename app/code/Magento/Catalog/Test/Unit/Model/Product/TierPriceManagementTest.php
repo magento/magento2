@@ -244,7 +244,7 @@ class TierPriceManagementTest extends TestCase
     public function testSetNewPriceWithGlobalPriceScopeAll()
     {
         $websiteMock = $this->getMockBuilder(Website::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $websiteMock->expects($this->once())->method('getId')->willReturn(0);
