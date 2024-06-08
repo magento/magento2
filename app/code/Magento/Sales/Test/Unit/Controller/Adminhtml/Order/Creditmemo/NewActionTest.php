@@ -156,7 +156,7 @@ class NewActionTest extends TestCase
         );
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()

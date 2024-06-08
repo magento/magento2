@@ -114,7 +114,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
      *
      * @return array
      */
-    public function storesDataProvider(): array
+    public static function storesDataProvider(): array
     {
         return [
             'default store' => [null],
@@ -174,7 +174,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
      *
      * @return array
      */
-    public function validationDataProvider()
+    public static function validationDataProvider()
     {
         return [
             'Check for empty credentials' => ['', ''],

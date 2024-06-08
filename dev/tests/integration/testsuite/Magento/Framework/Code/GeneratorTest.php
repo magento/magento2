@@ -132,7 +132,7 @@ class GeneratorTest extends TestCase
      *
      * @return array
      */
-    public function generateClassFactoryDataProvider()
+    public static function generateClassFactoryDataProvider()
     {
         return [
             'factory_with_namespace' => [
@@ -184,7 +184,7 @@ class GeneratorTest extends TestCase
      *
      * @return array
      */
-    public function generateClassDataProvider()
+    public static function generateClassDataProvider()
     {
         return [
             'proxy' => [

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item;
 
-use Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\AbstractItemTest;
+use Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\AbstractItemTestCase;
 use Magento\Framework\Module\Manager;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @see \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item
  */
-class ItemConfigurableTest extends AbstractItemTest
+class ItemConfigurableTest extends AbstractItemTestCase
 {
     /**
      * @inheritdoc

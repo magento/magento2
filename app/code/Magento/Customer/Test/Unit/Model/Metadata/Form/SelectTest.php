@@ -116,7 +116,7 @@ class SelectTest extends AbstractFormTestCase
     {
         $option1 = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLabel', 'getValue'])
+            ->onlyMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();
         $option1->expects($this->any())
             ->method('getLabel')
@@ -127,7 +127,7 @@ class SelectTest extends AbstractFormTestCase
 
         $option2 = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLabel', 'getValue'])
+            ->onlyMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();
         $option2->expects($this->any())
             ->method('getLabel')
@@ -138,7 +138,7 @@ class SelectTest extends AbstractFormTestCase
 
         $option3 = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLabel', 'getValue'])
+            ->onlyMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();
         $option3->expects($this->any())
             ->method('getLabel')

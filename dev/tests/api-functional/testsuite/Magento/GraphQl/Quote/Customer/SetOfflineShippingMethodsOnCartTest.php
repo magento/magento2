@@ -99,7 +99,7 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function offlineShippingMethodDataProvider(): array
+    public static function offlineShippingMethodDataProvider(): array
     {
         return [
             'flatrate_flatrate' => [
@@ -139,9 +139,9 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
     ): string {
         return <<<QUERY
 mutation {
-  setShippingMethodsOnCart(input: 
+  setShippingMethodsOnCart(input:
     {
-      cart_id: "$maskedQuoteId", 
+      cart_id: "$maskedQuoteId",
       shipping_methods: [{
         carrier_code: "$shippingCarrierCode"
         method_code: "$shippingMethodCode"

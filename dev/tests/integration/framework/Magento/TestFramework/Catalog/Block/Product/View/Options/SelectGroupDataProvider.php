@@ -24,7 +24,7 @@ class SelectGroupDataProvider
      *
      * @return array
      */
-    public function getData(): array
+    public static function getData(): array
     {
         return [
             'type_drop_down_required' => [

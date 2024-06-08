@@ -57,15 +57,15 @@ class ReportModulesInfoTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled'])
+            ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
         $this->collectMock = $this->getMockBuilder(Collect::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getModuleData'])
+            ->onlyMethods(['getModuleData'])
             ->getMock();
         $this->systemFactoryMock = $this->getMockBuilder(SystemFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->systemModelMock = $this->getMockBuilder(System::class)
             ->disableOriginalConstructor()

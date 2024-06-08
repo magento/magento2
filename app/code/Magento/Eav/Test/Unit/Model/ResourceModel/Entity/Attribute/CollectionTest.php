@@ -113,7 +113,7 @@ class CollectionTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
-            ->setMethods(['__wakeup', 'getConnection', 'getMainTable', 'getTable'])
+            ->onlyMethods(['__wakeup', 'getConnection', 'getMainTable', 'getTable'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

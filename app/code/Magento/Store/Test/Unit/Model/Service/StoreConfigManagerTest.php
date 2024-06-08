@@ -52,12 +52,12 @@ class StoreConfigManagerTest extends TestCase
     {
         $this->storeConfigFactoryMock = $this->getMockBuilder(StoreConfigFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->storeCollectionFactoryMock = $this->getMockBuilder(
             CollectionFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
