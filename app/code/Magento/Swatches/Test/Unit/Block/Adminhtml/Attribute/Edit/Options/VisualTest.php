@@ -27,7 +27,8 @@ class VisualTest extends TestCase
     {
         $this->model = $this->getMockBuilder(Visual::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getReadOnly', 'canManageOptionDefaultOnly', 'getOptionValues', 'getUrl'])
+            ->addMethods(['getReadOnly'])
+            ->onlyMethods(['canManageOptionDefaultOnly', 'getOptionValues', 'getUrl'])
             ->getMock();
     }
 

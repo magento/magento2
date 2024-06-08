@@ -62,7 +62,7 @@ class CreditmemoTest extends TestCase
         $this->cmItemCollectionFactoryMock = $this->getMockBuilder(
             CollectionFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $arguments = [
