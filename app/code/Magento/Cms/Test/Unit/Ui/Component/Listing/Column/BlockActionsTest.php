@@ -56,7 +56,7 @@ class BlockActionsTest extends TestCase
 
         $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['escapeHtmlAttr'])
+            ->onlyMethods(['escapeHtmlAttr'])
             ->getMock();
 
         $this->blockActions = $objectManager->getObject(

@@ -29,7 +29,7 @@ class CleanerTest extends TestCase
 
         $this->status = $this->getMockBuilder(StatusInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isEnabled'])
+            ->onlyMethods(['isEnabled'])
             ->getMockForAbstractClass();
 
         $this->cleaner = $helper->getObject(

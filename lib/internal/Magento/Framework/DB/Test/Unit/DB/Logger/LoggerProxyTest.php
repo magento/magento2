@@ -49,7 +49,7 @@ class LoggerProxyTest extends TestCase
 
         $fileLoggerFactoryMock = $this->getMockBuilder(FileFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $fileLoggerFactoryMock->expects($this->once())
@@ -65,7 +65,7 @@ class LoggerProxyTest extends TestCase
 
         $quietLoggerFactoryMock = $this->getMockBuilder(QuietFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->loggerProxy = $this->objectManager->getObject(
@@ -94,7 +94,7 @@ class LoggerProxyTest extends TestCase
 
         $fileLoggerFactoryMock = $this->getMockBuilder(FileFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $quietLoggerMock = $this->getMockBuilder(Quiet::class)
@@ -106,7 +106,7 @@ class LoggerProxyTest extends TestCase
 
         $quietLoggerFactoryMock = $this->getMockBuilder(QuietFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $quietLoggerFactoryMock->expects($this->once())
