@@ -44,7 +44,7 @@ class PriceTest extends TestCase
         $this->priceInfoFactory = $this->getMockBuilder(
             PriceInfoInterfaceFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

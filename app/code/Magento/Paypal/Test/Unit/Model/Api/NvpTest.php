@@ -73,7 +73,7 @@ class NvpTest extends TestCase
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->customLoggerMock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
-            ->setMethods(['debug'])
+            ->onlyMethods(['debug'])
             ->getMock();
         $this->resolver = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->regionFactory = $this->createMock(RegionFactory::class);

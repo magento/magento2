@@ -49,14 +49,14 @@ class BackendModelFactoryTest extends TestCase
             \Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->backendModel = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setValue'])
+            ->addMethods(['setValue'])
             ->getMock();
 
         $this->model = new BackendModelFactory(

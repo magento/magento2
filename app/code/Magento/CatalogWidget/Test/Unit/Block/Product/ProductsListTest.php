@@ -165,11 +165,13 @@ class ProductsListTest extends TestCase
 
         $this->httpContext->expects($this->exactly(2))
             ->method('getValue')
-            ->withConsecutive(
-                [$this->equalTo(\Magento\Customer\Model\Context::CONTEXT_GROUP)],
-                [$this->equalTo('tax_rates')]
-            )
-            ->willReturnOnConsecutiveCalls('context_group', [10]);
+            ->willReturnCallback(function ($arg) {
+                if ($arg == \Magento\Customer\Model\Context::CONTEXT_GROUP) {
+                    return 'context_group';
+                } elseif ($arg == 'tax_rates') {
+                    return [10];
+                }
+            });
 
         $this->productsList->setData('conditions', 'some_serialized_conditions');
 

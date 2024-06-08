@@ -12,6 +12,7 @@ use Magento\Customer\Plugin\Webapi\Controller\Rest\ValidateCustomerData;
 use Magento\Framework\App\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectmanagerHelper;
 
 /**
  * Unit test for ValidateCustomerData plugin
@@ -35,6 +36,14 @@ class ValidateCustomerDataTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectmanagerHelper($this);
+        $objects = [
+            [
+                ValidateCustomerData::class,
+                $this->createMock(ValidateCustomerData::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->validateCustomerDataObject = ObjectManager::getInstance()->get(ValidateCustomerData::class);
         $this->reflectionObject = new ReflectionClass(get_class($this->validateCustomerDataObject));
     }
@@ -71,7 +80,7 @@ class ValidateCustomerDataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderInputData(): array
+    public static function dataProviderInputData(): array
     {
         return [
             [

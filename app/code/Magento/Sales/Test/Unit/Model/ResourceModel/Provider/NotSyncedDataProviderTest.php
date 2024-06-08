@@ -22,7 +22,7 @@ class NotSyncedDataProviderTest extends TestCase
         /** @var TMapFactory|MockObject $tMapFactory */
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $tMapFactory->method('create')
@@ -37,7 +37,7 @@ class NotSyncedDataProviderTest extends TestCase
         /** @var TMapFactory|MockObject $tMapFactory */
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $provider1 = $this->getMockBuilder(NotSyncedDataProviderInterface::class)
