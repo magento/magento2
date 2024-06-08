@@ -37,7 +37,7 @@ class ProcessorFactory
      */
     public function get($processorModel)
     {
-        if (!isset($this->_pool[$processorModel])) {
+        if (!isset($this->_pool[$processorModel]) || !($this->_pool[$processorModel] instanceof ProcessorInterface)) {
             $instance = $this->_objectManager->create($processorModel);
             if (!$instance instanceof ProcessorInterface) {
                 throw new \InvalidArgumentException(
