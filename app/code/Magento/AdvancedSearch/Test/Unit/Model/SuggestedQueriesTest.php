@@ -53,7 +53,7 @@ class SuggestedQueriesTest extends TestCase
     protected function setUp(): void
     {
         $this->engineResolverMock = $this->getMockBuilder(EngineResolver::class)
-            ->setMethods(['getCurrentSearchEngine'])
+            ->onlyMethods(['getCurrentSearchEngine'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->engineResolverMock->expects($this->any())

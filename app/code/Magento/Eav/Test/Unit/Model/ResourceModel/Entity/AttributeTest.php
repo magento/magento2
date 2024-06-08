@@ -79,7 +79,7 @@ class AttributeTest extends TestCase
         $arguments['context'] = $this->contextMock;
 
         $model = $this->getMockBuilder(AbstractModel::class)
-            ->setMethods(['hasDataChanges'])
+            ->onlyMethods(['hasDataChanges'])
             ->setConstructorArgs($arguments)
             ->getMock();
         $model->setDefault(['2']);
@@ -99,7 +99,7 @@ class AttributeTest extends TestCase
         )->method(
             'fetchRow'
         )->willReturnMap(
-            
+
                 [
                     [
                         'SELECT `eav_attribute`.* FROM `eav_attribute` ' .
@@ -107,7 +107,7 @@ class AttributeTest extends TestCase
                         $attributeData,
                     ],
                 ]
-            
+
         );
         $connectionMock->expects(
             $this->once()
@@ -152,7 +152,7 @@ class AttributeTest extends TestCase
         $arguments['data'] = $attributeData;
         $arguments['context'] = $this->contextMock;
         $model = $this->getMockBuilder(AbstractModel::class)
-            ->setMethods(['hasDataChanges'])
+            ->onlyMethods(['hasDataChanges'])
             ->setConstructorArgs($arguments)
             ->getMock();
         $model->expects($this->any())->method('hasDataChanges')->willReturn(true);
@@ -171,16 +171,16 @@ class AttributeTest extends TestCase
         )->method(
             'update'
         )->willReturnMap(
-            
+
                 [['eav_attribute', ['default_value' => ''], ['attribute_id = ?' => 123], 1]]
-            
+
         );
         $connectionMock->expects(
             $this->once()
         )->method(
             'fetchRow'
         )->willReturnMap(
-            
+
                 [
                     [
                         'SELECT `eav_attribute`.* FROM `eav_attribute` ' .
@@ -188,7 +188,7 @@ class AttributeTest extends TestCase
                         false,
                     ],
                 ]
-            
+
         );
         $connectionMock->expects(
             $this->once()
@@ -202,7 +202,7 @@ class AttributeTest extends TestCase
         )->method(
             'insert'
         )->willReturnMap(
-            
+
                 [
                     ['eav_attribute', $attributeData, 1],
                     ['eav_attribute_option', ['attribute_id' => 123, 'sort_order' => 0], 1],
@@ -217,7 +217,7 @@ class AttributeTest extends TestCase
                         1
                     ],
                 ]
-            
+
         );
         $connectionMock->expects($this->any())->method('getTransactionLevel')->willReturn(1);
 
@@ -238,7 +238,7 @@ class AttributeTest extends TestCase
         $arguments = $objectManagerHelper->getConstructArguments(AbstractModel::class);
         $arguments['context'] = $this->contextMock;
         $model = $this->getMockBuilder(AbstractModel::class)
-            ->setMethods(['hasDataChanges'])
+            ->onlyMethods(['hasDataChanges'])
             ->setConstructorArgs($arguments)
             ->getMock();
         $model->expects($this->any())->method('hasDataChanges')->willReturn(true);

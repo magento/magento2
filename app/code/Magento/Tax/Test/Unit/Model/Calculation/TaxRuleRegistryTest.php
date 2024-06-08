@@ -42,7 +42,7 @@ class TaxRuleRegistryTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->taxRuleModelFactoryMock = $this->getMockBuilder(RuleFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->taxRuleRegistry = $objectManager->getObject(

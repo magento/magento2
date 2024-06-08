@@ -44,7 +44,7 @@ class AdminTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function escapeHtmlWithLinksDataProvider(): array
+    public static function escapeHtmlWithLinksDataProvider(): array
     {
         return [
             [

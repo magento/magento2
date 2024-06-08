@@ -46,7 +46,7 @@ class OptionsTest extends TestCase
     protected function setUp(): void
     {
         $this->categoryCollectionFactoryMock = $this->getMockBuilder(CategoryCollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -106,7 +106,7 @@ class FileManagerTest extends TestCase
     /**
      * @return array
      */
-    public function createRequireJsAssetDataProvider()
+    public static function createRequireJsAssetDataProvider()
     {
         return [[true], [false]];
     }
@@ -170,15 +170,15 @@ class FileManagerTest extends TestCase
             ->expects($this->exactly(2))
             ->method('getRelativePath')
             ->willReturnMap([
-                'path/to/bundle1.js',
-                'path/to/bundle2.js'
+                ['path/to/bundle1.js'],
+                ['path/to/bundle2.js']
             ]);
         $assetRepo
             ->expects($this->exactly(2))
             ->method('createArbitrary')
             ->willReturnMap([
-                $this->asset,
-                $this->asset
+                [$this->asset],
+                [$this->asset]
             ]);
 
         $assetRepo

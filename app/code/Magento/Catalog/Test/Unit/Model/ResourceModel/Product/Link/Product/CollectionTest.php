@@ -151,7 +151,7 @@ class CollectionTest extends TestCase
         $productLimitationFactoryMock = $this->getMockBuilder(
             ProductLimitationFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
 
         $productLimitationFactoryMock->method('create')
             ->willReturn($this->createMock(ProductLimitation::class));
