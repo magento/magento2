@@ -157,9 +157,9 @@ class Config implements ConfigInterface
     public function getInstanceType($instanceName)
     {
         while (isset($this->_virtualTypes[$instanceName])) {
-            if ($instanceName == $this->_virtualTypes[$instanceName]) {
+            if ($instanceName === $this->_virtualTypes[$instanceName]) {
                 throw new \LogicException(
-                    'unsupported self-referencing virutal type: '
+                    'unsupported self-referencing virtual type: '
                     .$instanceName
                 );
             }
