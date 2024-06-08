@@ -23,7 +23,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoriesTest extends AbstractModifierTest
+class CategoriesTest extends AbstractModifierTestCase
 {
     /**
      * @var CategoryCollectionFactory|MockObject

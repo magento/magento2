@@ -159,7 +159,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /**
      * Data provider for checking fields state
      */
-    public function fieldsStateDataProvider()
+    public static function fieldsStateDataProvider()
     {
         return [
             [

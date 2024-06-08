@@ -106,12 +106,26 @@ class IndexStructureTest extends TestCase
             ->willReturn($index . '_flat');
         $this->connectionInterface
             ->method('isTableExists')
-            ->withConsecutive([$expectedTable], [$index . '_flat'])
-            ->willReturn(true, true);
+            ->willReturnCallback(
+                function ($arg) use ($expectedTable, $index) {
+                    if ($arg == $expectedTable) {
+                        return true;
+                    } elseif ($arg == $index . '_flat') {
+                        return true;
+                    }
+                }
+            );
         $this->connectionInterface
             ->method('dropTable')
-            ->withConsecutive([$expectedTable], [$index . '_flat'])
-            ->willReturnOnConsecutiveCalls(true, true);
+            ->willReturnCallback(
+                function ($arg) use ($expectedTable, $index) {
+                    if ($arg == $expectedTable) {
+                        return true;
+                    } elseif ($arg == $index . '_flat') {
+                        return true;
+                    }
+                }
+            );
 
         $this->target->delete($index, $dimensions);
     }
@@ -176,12 +190,25 @@ class IndexStructureTest extends TestCase
 
         $this->connectionInterface
             ->method('newTable')
-            ->withConsecutive([$expectedTable], [$index . '_flat'])
-            ->willReturnOnConsecutiveCalls($table, $table2);
+            ->willReturnCallback(
+                function ($arg) use ($expectedTable, $index, $table, $table2) {
+                    if ($arg == $expectedTable) {
+                        return $table;
+                    } elseif ($arg == $index . '_flat') {
+                        return $table2;
+                    }
+                }
+            );
+
         $this->connectionInterface
             ->method('createTable')
-            ->withConsecutive([$table], [$table2])
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg) use ($table, $table2) {
+                    if ($arg == $table || $arg == $table2) {
+                        return $this->connectionInterface;
+                    }
+                }
+            );
 
         $this->target->create($index, $fields, $dimensions);
     }
@@ -235,44 +262,42 @@ class IndexStructureTest extends TestCase
 
         $table
             ->method('addColumn')
-            ->withConsecutive(
-                [
-                    'entity_id',
-                    Table::TYPE_INTEGER,
-                    10,
-                    ['unsigned' => true, 'nullable' => false],
-                    'Entity ID'
-                ],
-                [
-                    'attribute_id',
-                    Table::TYPE_TEXT,
-                    255,
-                    ['unsigned' => true, 'nullable' => true]
-                ],
-                [
-                    'data_index',
-                    Table::TYPE_TEXT,
-                    '4g',
-                    ['nullable' => true],
-                    'Data index'
-                ]
-            )
-            ->willReturnOnConsecutiveCalls($table, $table, $table);
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3, $arg4, $arg5) use ($table) {
+                    if ($arg1 == 'entity_id' &&
+                        $arg2 == Table::TYPE_INTEGER &&
+                        $arg3 == 10 && $arg4 == ['unsigned' => true, 'nullable' => false] &&
+                        $arg5 == 'Entity ID') {
+                        return $table;
+                    } elseif ($arg1 == 'attribute_id' &&
+                        $arg2 == Table::TYPE_TEXT &&
+                        $arg3 == 255 &&
+                        $arg4 == ['unsigned' => true, 'nullable' => true]) {
+                        return $table;
+                    } elseif ($arg1 == 'data_index' &&
+                        $arg2 == Table::TYPE_TEXT &&
+                        $arg3 == '4g' &&
+                        $arg4 == ['nullable' => true] &&
+                        $arg5 == 'Data index') {
+                        return $table;
+                    }
+                }
+            );
         $table
             ->method('addIndex')
-            ->withConsecutive(
-                [
-                    'idx_primary',
-                    ['entity_id', 'attribute_id'],
-                    ['type' => AdapterInterface::INDEX_TYPE_PRIMARY]
-                ],
-                [
-                    'FTI_FULLTEXT_DATA_INDEX',
-                    ['data_index'],
-                    ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls($table, $table);
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($table) {
+                    if ($arg1 == 'idx_primary' &&
+                        $arg2 == ['entity_id', 'attribute_id'] &&
+                        $arg3 == ['type' => AdapterInterface::INDEX_TYPE_PRIMARY]) {
+                        return $table;
+                    } elseif ($arg1 == 'FTI_FULLTEXT_DATA_INDEX' &&
+                        $arg2 == ['data_index'] &&
+                        $arg3 == ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]) {
+                        return $table;
+                    }
+                }
+            );
 
         return $table;
     }

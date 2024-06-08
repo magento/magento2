@@ -42,7 +42,7 @@ class RateRegistryTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->rateModelFactoryMock = $this->getMockBuilder(RateFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->rateRegistry = $objectManager->getObject(

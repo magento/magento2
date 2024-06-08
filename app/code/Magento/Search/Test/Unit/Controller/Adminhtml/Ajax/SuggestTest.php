@@ -59,15 +59,14 @@ class SuggestTest extends TestCase
     {
         $this->autocomplete = $this->getMockBuilder(AutocompleteInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getItems'])
+            ->onlyMethods(['getItems'])
             ->getMockForAbstractClass();
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $this->url = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseUrl'])
+            ->onlyMethods(['getBaseUrl'])
             ->getMockForAbstractClass();
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
@@ -116,12 +115,12 @@ class SuggestTest extends TestCase
         $firstItemMock =  $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMockClassName('FirstItem')
-            ->setMethods(['toArray'])
+            ->onlyMethods(['toArray'])
             ->getMock();
         $secondItemMock =  $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMockClassName('SecondItem')
-            ->setMethods(['toArray'])
+            ->onlyMethods(['toArray'])
             ->getMock();
 
         $this->request->expects($this->once())

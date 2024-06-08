@@ -106,7 +106,7 @@ class WeightTest extends TestCase
      */
     public function testMeasureSetWithNoLocale()
     {
-        $this->expectError();
+        $this->expectException( \Error::class );
 
         $value = new Weight('100', Weight::STANDARD, 'en_US');
         $value->setValue('200', Weight::STANDARD);

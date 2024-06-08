@@ -66,7 +66,7 @@ abstract class AbstractDataFixture
             ExceptionHandler::handle(
                 'Unable to parse fixtures',
                 get_class($test),
-                $test->getName(false),
+                $test->name(),
                 $exception
             );
         }
@@ -117,7 +117,7 @@ abstract class AbstractDataFixture
             }
             $fixture['test'] = [
                 'class' => get_class($test),
-                'method' => $test->getName(false),
+                'method' => $test->name(),
                 'dataSet' => $test->dataName(),
             ];
             try {
@@ -222,7 +222,7 @@ abstract class AbstractDataFixture
      */
     private function getTestKey(TestCase $test): string
     {
-        return sprintf('%s::%s', get_class($test), $test->getName());
+        return sprintf('%s::%s', get_class($test), $test->nameWithDataSet());
     }
 
     /**

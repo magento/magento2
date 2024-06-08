@@ -193,7 +193,7 @@ class OnepageTest extends TestCase
 
         $this->extensibleDataObjectConverterMock = $this->getMockBuilder(
             ExtensibleDataObjectConverter::class
-        )->setMethods(['toFlatArray'])->disableOriginalConstructor()
+        )->onlyMethods(['toFlatArray'])->disableOriginalConstructor()
             ->getMock();
 
         $this->extensibleDataObjectConverterMock

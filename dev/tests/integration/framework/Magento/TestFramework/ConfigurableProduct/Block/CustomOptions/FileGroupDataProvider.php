@@ -17,7 +17,7 @@ class FileGroupDataProvider extends OptionsFileGroupDataProvider
     /**
      * @inheritdoc
      */
-    public function getData(): array
+    public static function getData(): array
     {
         $optionsData = parent::getData();
         unset($optionsData['type_file_percent_price']);

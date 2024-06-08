@@ -23,7 +23,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * @method AdvancedPricing getModel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdvancedPricingTest extends AbstractModifierTest
+class AdvancedPricingTest extends AbstractModifierTestCase
 {
     /**
      * @var StoreManagerInterface|MockObject
