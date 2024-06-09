@@ -80,7 +80,7 @@ class DesignTest extends TestCase
     /**
      * @return array[]
      */
-    public function getDesignSettingsForProductWithScheduleDesignTest(): array
+    public static function getDesignSettingsForProductWithScheduleDesignTest(): array
     {
         $datetime = new \DateTime();
         $datetime->modify('-10 day');
@@ -149,10 +149,10 @@ class DesignTest extends TestCase
     /**
      * @return array
      */
-    public function getThemeModel(): array
+    public static function getThemeModel(): array
     {
         $theme = Bootstrap::getObjectManager()->create(ThemeInterface::class);
-        $theme->setData($this->_getThemeData());
+        $theme->setData(self::_getThemeData());
 
         return [[$theme]];
     }
@@ -160,7 +160,7 @@ class DesignTest extends TestCase
     /**
      * @return array
      */
-    protected function _getThemeData()
+    protected static function _getThemeData()
     {
         return [
             'theme_title' => 'Magento Theme',

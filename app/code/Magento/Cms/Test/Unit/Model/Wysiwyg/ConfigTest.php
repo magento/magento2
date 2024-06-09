@@ -151,7 +151,7 @@ class ConfigTest extends TestCase
                     'galleryConfigProvider' => ['default' => WysiwygDefaultConfig::class],
                 ]
             )
-            ->setMethods(['processVariableConfig', 'processWidgetConfig'])
+            ->onlyMethods(['processVariableConfig', 'processWidgetConfig'])
             ->getMock();
 
         $this->wysiwygConfig = $objectManager->getObject(

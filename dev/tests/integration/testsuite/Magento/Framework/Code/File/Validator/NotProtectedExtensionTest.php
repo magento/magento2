@@ -26,7 +26,7 @@ class NotProtectedExtensionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($model->isValid($extension));
     }
 
-    public function isValidDataProvider()
+    public static function isValidDataProvider()
     {
         return [
             ['phpt'],

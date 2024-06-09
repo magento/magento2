@@ -82,7 +82,7 @@ class ConfigTest extends TestCase
     /**
      * Data provider with invalid xml array according to cache.xsd
      */
-    public function schemaCorrectlyIdentifiesInvalidXmlDataProvider(): array
+    public static function schemaCorrectlyIdentifiesInvalidXmlDataProvider(): array
     {
         return include __DIR__ . '/_files/invalidCacheConfigXmlArray.php';
     }
