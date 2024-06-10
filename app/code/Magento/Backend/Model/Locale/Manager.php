@@ -9,6 +9,7 @@ namespace Magento\Backend\Model\Locale;
  * Locale manager model
  *
  * @api
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Manager
