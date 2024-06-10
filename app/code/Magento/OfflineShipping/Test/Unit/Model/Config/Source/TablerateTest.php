@@ -28,7 +28,7 @@ class TablerateTest extends TestCase
     {
         $this->carrierTablerateMock = $this->getMockBuilder(\Magento\OfflineShipping\Model\Carrier\Tablerate::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode'])
+            ->onlyMethods(['getCode'])
             ->getMock();
 
         $helper = new ObjectManager($this);

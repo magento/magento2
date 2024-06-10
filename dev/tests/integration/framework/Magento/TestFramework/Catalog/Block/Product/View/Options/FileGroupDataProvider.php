@@ -23,7 +23,7 @@ class FileGroupDataProvider
      *
      * @return array
      */
-    public function getData(): array
+    public static function getData(): array
     {
         return [
             'type_file_required' => [

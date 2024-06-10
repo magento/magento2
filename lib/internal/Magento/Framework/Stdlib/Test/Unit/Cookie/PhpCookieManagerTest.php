@@ -133,7 +133,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::$isSetCookieInvoked = false;
             $this->objectManager = new ObjectManager($this);
             $this->scopeMock = $this->getMockBuilder(CookieScopeInterface::class)
-                ->setMethods(['getPublicCookieMetadata', 'getCookieMetadata', 'getSensitiveCookieMetadata'])
+                ->onlyMethods(['getPublicCookieMetadata', 'getCookieMetadata', 'getSensitiveCookieMetadata'])
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
             $this->readerMock = $this->getMockForAbstractClass(CookieReaderInterface::class);
