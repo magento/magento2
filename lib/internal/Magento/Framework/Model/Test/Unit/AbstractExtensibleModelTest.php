@@ -108,7 +108,7 @@ class AbstractExtensibleModelTest extends TestCase
                 ]
             );
         $extensionAttributesFactory = $this->getMockBuilder(ExtensionAttributesFactory::class)
-            ->setMethods(['extractExtensionAttributes'])
+            ->addMethods(['extractExtensionAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
         $extensionAttributesFactory->expects($this->any())

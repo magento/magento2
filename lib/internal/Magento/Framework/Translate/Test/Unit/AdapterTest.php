@@ -23,7 +23,7 @@ class AdapterTest extends TestCase
     public function testTranslate($strToTranslate, $translatedStr)
     {
         $translatorMock = $this->getMockBuilder(Translator::class)
-            ->setMethods(['translate'])->getMock();
+            ->onlyMethods(['translate'])->getMock();
         $translatorMock->expects(
             $this->once()
         )->method(

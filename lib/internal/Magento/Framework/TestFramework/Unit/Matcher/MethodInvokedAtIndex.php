@@ -61,17 +61,17 @@ class MethodInvokedAtIndex extends \PHPUnit\Framework\MockObject\Rule\Invocation
     public function matches(BaseInvocation $invocation): bool
     {
         /** @noinspection PhpUndefinedFieldInspection */
-        if (!isset($this->indexes[$invocation->getMethodName()])) {
+        if (!isset($this->indexes[$invocation->methodName()])) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $this->indexes[$invocation->getMethodName()] = 0;
+            $this->indexes[$invocation->methodName()] = 0;
         } else {
             /** @noinspection PhpUndefinedFieldInspection */
-            $this->indexes[$invocation->getMethodName()]++;
+            $this->indexes[$invocation->methodName()]++;
         }
         $this->currentIndex++;
 
         /** @noinspection PhpUndefinedFieldInspection */
-        return $this->indexes[$invocation->getMethodName()] == $this->sequenceIndex;
+        return $this->indexes[$invocation->methodName()] == $this->sequenceIndex;
     }
 
     /**
@@ -92,7 +92,7 @@ class MethodInvokedAtIndex extends \PHPUnit\Framework\MockObject\Rule\Invocation
         }
     }
 
-    protected function invokedDo(BaseInvocation $invocation)
+    protected function invokedDo(BaseInvocation $invocation): void
     {
     }
 }

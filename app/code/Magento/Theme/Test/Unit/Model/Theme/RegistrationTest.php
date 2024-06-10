@@ -36,7 +36,7 @@ class RegistrationTest extends TestCase
     {
         $this->collectionFactory =
             $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->filesystemCollection = $this->getMockBuilder(Collection::class)
@@ -61,17 +61,21 @@ class RegistrationTest extends TestCase
         $parentId = 1;
         $fullPath = '/full/path';
         $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
-                    'setParentId',
                     'getId',
                     'getFullPath',
-                    'getParentTheme',
+                    'getParentTheme'
+                ]
+            )
+            ->addMethods(
+                [
+                    'setParentId',
                     'getCustomization',
                     'getPreviewImage',
                     'getThemeImage',
                     'setType',
-                    'save',
+                    'save'
                 ]
             )
             ->getMockForAbstractClass();
@@ -79,10 +83,12 @@ class RegistrationTest extends TestCase
             ->getMock();
         $parentThemeFromCollectionId = 123;
         $parentThemeFromCollection = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(['getType', 'getId'])
+            ->onlyMethods(['getId'])
+            ->addMethods(['getType'])
             ->getMockForAbstractClass();
         $themeFromCollection = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(['setType', 'save', 'getParentTheme', 'getType', 'getParentId', 'setParentId'])
+            ->addMethods(['setType', 'save', 'getType', 'getParentId', 'setParentId'])
+            ->onlyMethods(['getParentTheme'])
             ->getMockForAbstractClass();
         $collection = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\Data\Collection::class)
             ->disableOriginalConstructor()

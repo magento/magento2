@@ -104,7 +104,8 @@ class DownloadCssTest extends TestCase
         $this->redirect = $this->getMockBuilder(RedirectInterface::class)
             ->getMock();
         $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->setMethods(['sendResponse', 'setRedirect'])
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
             ->getMockForAbstractClass();
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
@@ -180,7 +181,8 @@ class DownloadCssTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(['getId', 'load'])
+            ->onlyMethods(['getId'])
+            ->addMethods(['load'])
             ->getMockForAbstractClass();
         $urlDecoder = $this->getMockBuilder(DecoderInterface::class)
             ->getMock();
@@ -245,7 +247,8 @@ class DownloadCssTest extends TestCase
                 ]
             );
         $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(['getId', 'load'])
+            ->onlyMethods(['getId'])
+            ->addMethods(['load'])
             ->getMockForAbstractClass();
         $urlDecoder = $this->getMockBuilder(DecoderInterface::class)
             ->getMock();
