@@ -55,7 +55,7 @@ class ViewTest extends TestCase
             ->getMock();
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isObjectNew'])
+            ->onlyMethods(['isObjectNew'])
             ->getMock();
 
         $this->plugin = new StoreViewIndexerPlugin($this->indexerRegistryMock);

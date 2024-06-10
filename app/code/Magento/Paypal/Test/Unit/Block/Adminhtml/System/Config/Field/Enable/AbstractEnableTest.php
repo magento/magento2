@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Escaper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
@@ -73,10 +75,10 @@ class AbstractEnableTest extends TestCase
         $mockArguments[] = $this->createMock(SecureHtmlRenderer::class);
         $mockArguments[] = $randomMock;
         $this->elementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(
+            ->addMethods(['getTooltip'])
+            ->onlyMethods(
                 [
                     'getHtmlId',
-                    'getTooltip',
                     'getForm'
                 ]
             )->setConstructorArgs($mockArguments)
@@ -89,6 +91,25 @@ class AbstractEnableTest extends TestCase
         $reflection_property->setAccessible(true);
         $reflection_property->setValue($this->elementMock, $escaper);
 
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ],
+            [
+                \Magento\Framework\Translate\InlineInterface::class,
+                $this->createMock(\Magento\Framework\Translate\InlineInterface::class)
+            ],
+            [
+                \Magento\Framework\ZendEscaper::class,
+                $this->createMock(\Magento\Framework\ZendEscaper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->abstractEnable = $objectManager->getObject(
             Stub::class,
             [
@@ -115,7 +136,7 @@ class AbstractEnableTest extends TestCase
     public function testRender()
     {
         $formMock = $this->getMockBuilder(Form::class)
-            ->setMethods(['getFieldNameSuffix'])
+            ->addMethods(['getFieldNameSuffix'])
             ->disableOriginalConstructor()
             ->getMock();
 

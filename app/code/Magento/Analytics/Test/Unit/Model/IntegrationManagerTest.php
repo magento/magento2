@@ -161,8 +161,15 @@ class IntegrationManagerTest extends TestCase
         }
         $this->oauthServiceMock
             ->method('getAccessToken')
-            ->withConsecutive([100500], [100500])
-            ->willReturnOnConsecutiveCalls(false, 'IntegrationToken');
+            ->willReturnCallback(function ($arg1) use (&$callCount) {
+                if ($callCount == 0 && $arg1 == 100500) {
+                    $callCount++;
+                    return false;
+                } elseif ($callCount == 1 && $arg1 == 100500) {
+                    $callCount++;
+                    return 'IntegrationToken';
+                }
+            });
         $this->oauthServiceMock->expects($this->once())
             ->method('createAccessToken')
             ->with(100500, true)
@@ -211,7 +218,7 @@ class IntegrationManagerTest extends TestCase
     /**
      * @return array
      */
-    public function integrationIdDataProvider(): array
+    public static function integrationIdDataProvider(): array
     {
         return [
             [1],

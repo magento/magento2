@@ -89,7 +89,7 @@ class AppArea
             ExceptionHandler::handle(
                 'Unable to parse fixtures',
                 get_class($test),
-                $test->getName(false),
+                null,
                 $exception
             );
         }

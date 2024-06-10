@@ -70,7 +70,7 @@ class SaveProcessorTest extends TestCase
             ->getMock();
         $this->currencyValueMock = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
-            ->setMethods(['beforeSave', 'afterSave'])
+            ->onlyMethods(['beforeSave', 'afterSave'])
             ->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();

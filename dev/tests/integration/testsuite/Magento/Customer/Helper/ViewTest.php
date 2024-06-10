@@ -66,7 +66,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function getCustomerNameDataProvider()
+    public static function getCustomerNameDataProvider()
     {
         /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
         $customerFactory = Bootstrap::getObjectManager()->create(

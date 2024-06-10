@@ -88,7 +88,7 @@ class ConfigurableViewOnProductPageTest extends TestCase
     /**
      * @return array
      */
-    public function oneChildNotVisibleDataProvider(): array
+    public static function oneChildNotVisibleDataProvider(): array
     {
         return [
             'one_child_out_of_stock' => [
@@ -154,7 +154,7 @@ class ConfigurableViewOnProductPageTest extends TestCase
     /**
      * @return array
      */
-    public function oneChildNotVisibleDataProviderWithEnabledConfig(): array
+    public static function oneChildNotVisibleDataProviderWithEnabledConfig(): array
     {
         return [
             'one_child_out_of_stock' => [

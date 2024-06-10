@@ -382,7 +382,7 @@ class CartRepositoryTest extends WebapiAbstract
      *
      * @return array
      */
-    public function customerIdDataProvider()
+    public static function customerIdDataProvider()
     {
         return [[999],[null],['25']];
     }

@@ -103,7 +103,6 @@ class RulesTest extends TestCase
 
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->resourceConnectionMock->expects($this->once())
@@ -122,17 +121,14 @@ class RulesTest extends TestCase
 
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->rootResourceMock = $this->getMockBuilder(RootResource::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->aclDataCacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->aclBuilderMock->method('getConfigCache')

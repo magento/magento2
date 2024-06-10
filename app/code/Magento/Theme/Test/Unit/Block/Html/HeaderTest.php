@@ -36,11 +36,11 @@ class HeaderTest extends TestCase
     protected function setUp(): void
     {
         $context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getScopeConfig'])
+            ->onlyMethods(['getScopeConfig'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->scopeConfig = $this->getMockBuilder(Config::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
         $context->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfig);

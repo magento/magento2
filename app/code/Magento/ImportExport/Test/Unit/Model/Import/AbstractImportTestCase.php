@@ -33,12 +33,12 @@ abstract class AbstractImportTestCase extends TestCase
      * @param array|null $methods
      * @return ProcessingErrorAggregatorInterface|MockObject
      */
-    protected function getErrorAggregatorObject($methods = null)
+    protected function getErrorAggregatorObject(array $methods = [])
     {
         $errorFactory = $this->getMockBuilder(
             ProcessingErrorFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $errorFactory->method('create')->willReturn(
             $this->objectManagerHelper->getObject(
@@ -47,7 +47,7 @@ abstract class AbstractImportTestCase extends TestCase
         );
         return $this->getMockBuilder(
             ProcessingErrorAggregator::class
-        )->setMethods($methods)
+        )->onlyMethods($methods)
             ->setConstructorArgs(['errorFactory' => $errorFactory])
             ->getMock();
     }

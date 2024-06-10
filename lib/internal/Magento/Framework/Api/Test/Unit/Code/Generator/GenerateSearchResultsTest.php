@@ -35,7 +35,7 @@ class GenerateSearchResultsTest extends TestCase
     {
         require_once __DIR__ . '/Sample.php';
         $model = $this->getMockBuilder(SearchResults::class)
-            ->setMethods(['_validateData'])
+            ->onlyMethods(['_validateData'])
             ->setConstructorArgs(
                 [\Magento\Framework\Api\Code\Generator\Sample::class,
                     null,

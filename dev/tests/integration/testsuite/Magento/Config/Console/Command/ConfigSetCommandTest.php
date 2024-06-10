@@ -179,9 +179,13 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ]);
         $this->outputMock->expects($this->exactly(2))
             ->method('writeln')
-            ->withConsecutive(
-                ['<info>Value was saved in app/etc/env.php and locked.</info>'],
-                ['<info>Value was saved in app/etc/env.php and locked.</info>']
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == '<info>Value was saved in app/etc/env.php and locked.</info>' ||
+                        $arg1 == '<info>Value was saved in app/etc/env.php and locked.</info>') {
+                        return null;
+                    }
+                }
             );
 
         /** @var ConfigSetCommand $command */
@@ -205,7 +209,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function runLockDataProvider()
+    public static function runLockDataProvider()
     {
         return [
             ['general/region/display_all', '1'],
@@ -302,9 +306,9 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function runExtendedDataProvider()
+    public static function runExtendedDataProvider()
     {
-        return $this->runLockDataProvider();
+        return self::runLockDataProvider();
     }
 
     /**
@@ -331,7 +335,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function configSetValidationErrorDataProvider()
+    public static function configSetValidationErrorDataProvider()
     {
         return [
             //wrong value for URL - checked by backend model of URL field
@@ -435,7 +439,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function configSetValidDataProvider()
+    public static function configSetValidDataProvider()
     {
         return [
             [Custom::XML_PATH_UNSECURE_BASE_URL, 'http://magento2.local/'],

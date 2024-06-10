@@ -52,14 +52,13 @@ class ProductOptionProcessorTest extends TestCase
     protected function setUp(): void
     {
         $this->dataObject = $this->getMockBuilder(DataObject::class)
-            ->setMethods([
-                'getSuperAttribute', 'addData'
-            ])
+            ->onlyMethods(['addData'])
+            ->addMethods(['getSuperAttribute'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->dataObjectFactory = $this->getMockBuilder(\Magento\Framework\DataObject\Factory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectFactory->expects($this->any())
@@ -74,7 +73,7 @@ class ProductOptionProcessorTest extends TestCase
         $this->itemOptionValueFactory = $this->getMockBuilder(
             ConfigurableItemOptionValueFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->itemOptionValueFactory->expects($this->any())
@@ -102,7 +101,7 @@ class ProductOptionProcessorTest extends TestCase
         $productOptionExtensionMock = $this->getMockBuilder(
             ProductOptionExtensionInterface::class
         )
-            ->setMethods([
+            ->addMethods([
                 'getConfigurableItemOptions',
             ])
             ->getMockForAbstractClass();
