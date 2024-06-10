@@ -198,7 +198,7 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
      * @return array[]
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function customerDataProvider(): array
+    public static function customerDataProvider(): array
     {
         return [
             'Create Customer' => [

@@ -49,7 +49,7 @@ class GenerateRepositoryTest extends TestCase
     {
         /** @var Repository|MockObject $repository */
         $repository = $this->getMockBuilder(Repository::class)
-            ->setMethods(['_validateData'])
+            ->onlyMethods(['_validateData'])
             ->setConstructorArgs([
                 $sourceClassName,
                 null,

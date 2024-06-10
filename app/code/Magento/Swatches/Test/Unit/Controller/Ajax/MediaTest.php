@@ -93,7 +93,7 @@ class MediaTest extends TestCase
         $this->contextMock->method('getRequest')->willReturn($this->requestMock);
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setPublicHeaders'])
+            ->addMethods(['setPublicHeaders'])
             ->getMockForAbstractClass();
         $this->responseMock->method('setPublicHeaders')->willReturnSelf();
         $this->contextMock->method('getResponse')->willReturn($this->responseMock);
