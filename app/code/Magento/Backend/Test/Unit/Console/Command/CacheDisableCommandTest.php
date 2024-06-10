@@ -10,7 +10,7 @@ namespace Magento\Backend\Test\Unit\Console\Command;
 use Magento\Backend\Console\Command\CacheDisableCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CacheDisableCommandTest extends AbstractCacheSetCommandTest
+class CacheDisableCommandTest extends AbstractCacheSetCommandTestCase
 {
     protected function setUp(): void
     {

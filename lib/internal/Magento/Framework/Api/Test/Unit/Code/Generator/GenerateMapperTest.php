@@ -35,7 +35,7 @@ class GenerateMapperTest extends TestCase
     {
         require_once __DIR__ . '/Sample.php';
         $model = $this->getMockBuilder(Mapper::class)
-            ->setMethods(['_validateData'])
+            ->onlyMethods(['_validateData'])
             ->setConstructorArgs(
                 [\Magento\Framework\Api\Code\Generator\Sample::class,
                     null,

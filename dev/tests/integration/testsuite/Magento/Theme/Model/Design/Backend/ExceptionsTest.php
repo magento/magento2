@@ -88,7 +88,7 @@ class ExceptionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function saveExceptionDataProvider()
+    public static function saveExceptionDataProvider()
     {
         $result = [
             [['search' => 'Opera', 'value' => 'Magento/blank'], '/Opera/i'],
@@ -119,7 +119,7 @@ class ExceptionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function saveWrongExceptionDataProvider()
+    public static function saveWrongExceptionDataProvider()
     {
         $result = [
             [

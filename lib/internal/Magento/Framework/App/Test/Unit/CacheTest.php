@@ -81,7 +81,7 @@ class CacheTest extends TestCase
         ];
         foreach ($cacheTypes as $type) {
             $this->_cacheTypeMocks[$type] = $this->getMockBuilder($type)
-                ->setMethods(['clean'])
+                ->onlyMethods(['clean'])
                 ->setConstructorArgs(
                     [
                         $this->getMockForAbstractClass(FrontendInterface::class), '

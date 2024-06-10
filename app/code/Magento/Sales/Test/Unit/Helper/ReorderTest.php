@@ -56,7 +56,7 @@ class ReorderTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock = $this->getMockBuilder(Context::class)

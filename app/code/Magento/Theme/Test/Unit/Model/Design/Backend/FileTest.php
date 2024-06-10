@@ -141,7 +141,7 @@ class FileTest extends TestCase
         $builder =  $this->getMockBuilder($class)
             ->disableOriginalConstructor();
         if (count($methods)) {
-            $builder->setMethods($methods);
+            $builder->onlyMethods($methods);
         }
         return  $builder->getMock();
     }

@@ -33,23 +33,23 @@ class PropertyLockerTest extends TestCase
     protected function setUp(): void
     {
         $this->attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $registryMock = $this->getMockBuilder(Registry::class)
-            ->setMethods(['registry'])
+            ->onlyMethods(['registry'])
             ->disableOriginalConstructor()
             ->getMock();
         $registryMock->expects($this->atLeastOnce())->method('registry')->willReturn($this->attributeMock);
 
         $this->attributeConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['getLockedFields'])
+            ->onlyMethods(['getLockedFields'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->formMock = $this->getMockBuilder(Form::class)
-            ->setMethods(['getElement'])
+            ->onlyMethods(['getElement'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -69,7 +69,8 @@ class PropertyLockerTest extends TestCase
         $this->attributeConfigMock->expects($this->once())->method('getLockedFields')->willReturn($lockedFields);
 
         $elementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(['setDisabled', 'setReadonly'])
+            ->addMethods(['setDisabled'])
+            ->onlyMethods(['setReadonly'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $elementMock->expects($this->exactly(2))->method('setDisabled');
