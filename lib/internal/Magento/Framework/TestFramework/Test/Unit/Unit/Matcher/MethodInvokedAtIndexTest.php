@@ -15,12 +15,14 @@ class MethodInvokedAtIndexTest extends TestCase
 {
     public function testMatches()
     {
+        $object = $this->createMock(\stdClass::class);
+
         $invocationObject = new Invocation(
             'ClassName',
             'ValidMethodName',
             [],
             'void',
-            new \StdClass()
+            $object
         );
         $matcher = new MethodInvokedAtIndex(0);
         $this->assertTrue($matcher->matches($invocationObject));

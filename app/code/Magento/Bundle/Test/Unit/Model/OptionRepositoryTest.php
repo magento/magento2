@@ -96,7 +96,7 @@ class OptionRepositoryTest extends TestCase
         $this->typeMock = $this->createMock(Type::class);
         $this->optionFactoryMock = $this->getMockBuilder(OptionInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectHelperMock = $this->getMockBuilder(DataObjectHelper::class)

@@ -27,7 +27,7 @@ class ConfigTest extends TestCase
 
         $this->object = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getClassConfig', 'getMethodConfig', 'getDataSetConfig'])
+            ->onlyMethods(['getClassConfig', 'getMethodConfig', 'getDataSetConfig'])
             ->getMock();
     }
 
@@ -106,7 +106,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function skipValuesProvider(): array
+    public static function skipValuesProvider(): array
     {
         return [
             'skipped' => [

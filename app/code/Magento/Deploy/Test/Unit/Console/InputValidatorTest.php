@@ -50,7 +50,7 @@ class InputValidatorTest extends TestCase
 
         $regexFactoryMock = $this->getMockBuilder(RegexFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $regexObject = new Regex('/^[A-Za-z0-9_.]+$/');
@@ -59,7 +59,7 @@ class InputValidatorTest extends TestCase
             ->willReturn($regexObject);
 
         $localeObjectMock = $this->getMockBuilder(Locale::class)
-            ->setMethods(['isValid'])
+            ->onlyMethods(['isValid'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -80,7 +80,7 @@ class InputValidatorTest extends TestCase
     {
         $input = $this->getMockBuilder(ArrayInput::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOption', 'getArgument'])
+            ->onlyMethods(['getOption', 'getArgument'])
             ->getMock();
 
         $input->expects($this->atLeastOnce())->method('getArgument')->willReturn(['all']);

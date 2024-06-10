@@ -54,7 +54,7 @@ class ExcludeFilterTest extends TestCase
         foreach ($files as $file) {
             $item = $this->getMockBuilder(
                 \SplFileInfo::class
-            )->disableOriginalConstructor()->setMethods(['__toString', 'getFilename'])->getMock();
+            )->disableOriginalConstructor()->onlyMethods(['__toString', 'getFilename'])->getMock();
             $item->expects($this->any())->method('__toString')->willReturn($file);
             $item->expects($this->any())->method('getFilename')->willReturn('notDots');
             yield $item;

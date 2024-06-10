@@ -65,7 +65,7 @@ class PageActionsTest extends TestCase
             ->getMockForAbstractClass();
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['escapeHtml'])
+            ->onlyMethods(['escapeHtml'])
             ->getMock();
 
         $objectManager = new ObjectManager($this);
