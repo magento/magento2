@@ -11,7 +11,7 @@ use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterfac
 class Edit extends \Magento\Newsletter\Controller\Adminhtml\Queue implements HttpGetActionInterface
 {
     /**
-     * Core registry
+     * Core registry variable
      *
      * @var \Magento\Framework\Registry
      */
@@ -31,6 +31,7 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Queue implements Htt
      * Edit Newsletter queue
      *
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function execute()
     {
@@ -61,6 +62,8 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Queue implements Htt
     }
 
     /**
+     * Checks the acl permission
+     *
      * @return bool
      */
     protected function _isAllowed()

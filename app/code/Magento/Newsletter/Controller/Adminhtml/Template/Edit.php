@@ -11,7 +11,7 @@ use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterfac
 class Edit extends \Magento\Newsletter\Controller\Adminhtml\Template implements HttpGetActionInterface
 {
     /**
-     * Core registry
+     * Registry core variable
      *
      * @var \Magento\Framework\Registry
      */
@@ -69,6 +69,8 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Template implements 
     }
 
     /**
+     * Checks the acl permission
+     *
      * @return bool
      */
     protected function _isAllowed()
