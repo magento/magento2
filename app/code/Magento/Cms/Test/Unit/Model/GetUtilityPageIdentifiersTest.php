@@ -38,7 +38,7 @@ class GetUtilityPageIdentifiersTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->model = $objectManager->getObject(
@@ -61,14 +61,16 @@ class GetUtilityPageIdentifiersTest extends TestCase
         $cmsNoCookies = 'testCmsNoCookies';
         $this->scopeConfig->expects($this->exactly(3))
             ->method('getValue')
-            ->withConsecutive(
-                [$this->identicalTo('web/default/cms_home_page'), $this->identicalTo(ScopeInterface::SCOPE_STORE)],
-                [$this->identicalTo('web/default/cms_no_route'), $this->identicalTo(ScopeInterface::SCOPE_STORE)],
-                [$this->identicalTo('web/default/cms_no_cookies'), $this->identicalTo(ScopeInterface::SCOPE_STORE)]
-            )->willReturnOnConsecutiveCalls(
-                $cmsHomePage,
-                $cmsNoRoute,
-                $cmsNoCookies
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($cmsHomePage, $cmsNoRoute, $cmsNoCookies) {
+                    if ($arg1 === 'web/default/cms_home_page' && $arg2 === ScopeInterface::SCOPE_STORE) {
+                        return $cmsHomePage;
+                    } elseif ($arg1 === 'web/default/cms_no_route' && $arg2 === ScopeInterface::SCOPE_STORE) {
+                        return $cmsNoRoute;
+                    } elseif ($arg1 === 'web/default/cms_no_cookies' && $arg2 === ScopeInterface::SCOPE_STORE) {
+                        return $cmsNoCookies;
+                    }
+                }
             );
         $this->assertSame([$cmsHomePage, $cmsNoRoute, $cmsNoCookies], $this->model->execute());
     }

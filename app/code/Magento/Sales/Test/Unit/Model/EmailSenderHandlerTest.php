@@ -180,15 +180,17 @@ class EmailSenderHandlerTest extends TestCase
             $fromDate = date('Y-m-d H:i:s', strtotime($nowDate . ' ' . $this->modifyStartFromDate));
             $this->entityCollection
                 ->method('addFieldToFilter')
-                ->withConsecutive(
-                    ['send_email', ['eq' => 1]],
-                    ['email_sent',
-                        [
-                            ['null' => true],
-                            ['lteq' => -1]
-                        ]
-                    ],
-                    ['created_at', ['from' => $fromDate]]
+                ->willReturnCallback(
+                    function ($arg1, $arg2) use ($fromDate) {
+                        if ($arg1 == 'send_email' && $arg2 == ['eq' => 1]) {
+                            return null;
+                        } elseif ($arg1 == 'email_sent' &&
+                            ($arg2 == ['null' => true] || $arg2 == ['lteq' => -1])) {
+                            return null;
+                        } elseif ($arg1 == 'created_at' && $arg2 == ['from' => $fromDate]) {
+                            return null;
+                        }
+                    }
                 );
 
             $this->entityCollection

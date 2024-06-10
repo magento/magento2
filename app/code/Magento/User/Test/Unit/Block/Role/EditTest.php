@@ -9,7 +9,9 @@ namespace Magento\User\Test\Unit\Block\Role;
 
 use Magento\Backend\Block\Widget\Tabs;
 use Magento\Backend\Model\Auth\Session;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
@@ -45,25 +47,34 @@ class EditTest extends TestCase
     {
         $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->authSessionsMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods(['registry'])
             ->getMock();
 
         $this->layoutInterfaceMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setRole', 'setActive', 'getId'])
+            ->addMethods(['setRole', 'setActive', 'getId'])
             ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
         $this->model = $objectManagerHelper->getObject(
             Edit::class,
             [

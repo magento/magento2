@@ -53,7 +53,6 @@ class InStockOptionSelectBuilderTest extends TestCase
             ->getMock();
 
         $this->optionSelectBuilderMock = $this->getMockBuilder(OptionSelectBuilder::class)
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 

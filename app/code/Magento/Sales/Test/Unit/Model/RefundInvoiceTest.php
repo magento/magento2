@@ -208,7 +208,7 @@ class RefundInvoiceTest extends TestCase
             ->getMockForAbstractClass();
         $this->validationMessagesMock = $this->getMockBuilder(ValidatorResultInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['hasMessages', 'getMessages', 'addMessage'])
+            ->onlyMethods(['hasMessages', 'getMessages', 'addMessage'])
             ->getMockForAbstractClass();
 
         $this->refundInvoice = new RefundInvoice(

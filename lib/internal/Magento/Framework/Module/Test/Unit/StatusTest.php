@@ -180,8 +180,17 @@ class StatusTest extends TestCase
         $this->loader->expects($this->once())->method('load')->willReturn($modules);
         $this->moduleList
             ->method('has')
-            ->withConsecutive(['Module_Foo'], ['Module_Bar'], ['Module_Baz'])
-            ->willReturnOnConsecutiveCalls(false, false, false);
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == 'Module_Foo') {
+                        return false;
+                    } elseif ($arg1 == 'Module_Bar') {
+                        return false;
+                    } elseif ($arg1 == 'Module_Baz') {
+                        return false;
+                    }
+                }
+            );
         $expectedModules = ['Module_Foo' => 1, 'Module_Bar' => 1, 'Module_Baz' => 0];
         $this->writer->expects($this->once())->method('saveConfig')
             ->with([ConfigFilePool::APP_CONFIG => ['modules' => $expectedModules]]);
@@ -218,8 +227,17 @@ class StatusTest extends TestCase
         $this->loader->expects($this->once())->method('load')->willReturn($modules);
         $this->moduleList
             ->method('has')
-            ->withConsecutive(['Module_Foo'], ['Module_Bar'], ['Module_Baz'])
-            ->willReturnOnConsecutiveCalls($firstEnabled, $secondEnabled, $thirdEnabled);
+            ->willReturnCallback(
+                function ($arg1) use ($firstEnabled, $secondEnabled, $thirdEnabled) {
+                    if ($arg1 == 'Module_Foo') {
+                        return $firstEnabled;
+                    } elseif ($arg1 == 'Module_Bar') {
+                        return $secondEnabled;
+                    } elseif ($arg1 == 'Module_Baz') {
+                        return $thirdEnabled;
+                    }
+                }
+            );
         $result = $this->object->getModulesToChange($isEnabled, ['Module_Foo', 'Module_Bar', 'Module_Baz']);
         $this->assertEquals($expected, $result);
     }
@@ -227,7 +245,7 @@ class StatusTest extends TestCase
     /**
      * @return array
      */
-    public function getModulesToChangeDataProvider(): array
+    public static function getModulesToChangeDataProvider(): array
     {
         return [
             [true, true, true, true, []],

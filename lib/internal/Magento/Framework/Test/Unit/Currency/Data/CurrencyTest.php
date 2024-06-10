@@ -36,7 +36,7 @@ class CurrencyTest extends TestCase
     /**
      * @return array[]
      */
-    public function optionsDataProvider(): array
+    public static function optionsDataProvider(): array
     {
         return [
             'rightPosition_en_AU' => [

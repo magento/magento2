@@ -13,10 +13,10 @@ use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Page\Title;
 use Magento\Reports\Controller\Adminhtml\Report\Product\Sold;
-use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class SoldTest extends AbstractControllerTest
+class SoldTest extends AbstractControllerTestCase
 {
     /**
      * @var Sold
@@ -83,12 +83,17 @@ class SoldTest extends AbstractControllerTest
         $this->breadcrumbsBlockMock
             ->expects($this->exactly(3))
             ->method('addLink')
-            ->withConsecutive(
-                [new Phrase('Reports'), new Phrase('Reports')],
-                [new Phrase('Products'), new Phrase('Products')],
-                [new Phrase('Products Ordered'), new Phrase('Products Ordered')]
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == new Phrase('Reports') && $arg2 == new Phrase('Reports')) {
+                        return null;
+                    } elseif ($arg1 == new Phrase('Products') && $arg2 == new Phrase('Products')) {
+                        return null;
+                    } elseif ($arg1 == new Phrase('Products Ordered') && $arg2 == new Phrase('Products Ordered')) {
+                        return null;
+                    }
+                }
             );
-
         $this->sold->execute();
     }
 }

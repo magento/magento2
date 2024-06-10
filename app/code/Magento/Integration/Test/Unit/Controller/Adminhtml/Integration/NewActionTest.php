@@ -8,9 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
-use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
+use Magento\Backend\Model\Menu\Item\Factory;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTestCase;
 
-class NewActionTest extends IntegrationTest
+class NewActionTest extends IntegrationTestCase
 {
     public function testNewAction()
     {
@@ -20,6 +23,18 @@ class NewActionTest extends IntegrationTest
             ->method('setActionName')
             ->with('edit')
             ->willReturn($this->_requestMock);
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Factory::class,
+                $this->createMock(Factory::class)
+            ],
+            [
+                SerializerInterface::class,
+                $this->createMock(SerializerInterface::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $integrationContr = $this->_createIntegrationController('NewAction');
         $result = $integrationContr->execute();
         $this->assertNull($result);

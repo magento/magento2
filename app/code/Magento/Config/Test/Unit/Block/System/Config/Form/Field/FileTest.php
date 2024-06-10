@@ -12,7 +12,9 @@ use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -70,6 +72,17 @@ class FileTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
 
         $this->factoryMock = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
