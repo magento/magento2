@@ -38,7 +38,7 @@ class BaseurlTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $model = $this->getMockBuilder(Baseurl::class)
-            ->setMethods(['getOldValue'])
+            ->onlyMethods(['getOldValue'])
             ->setConstructorArgs(
                 [
                     $context,

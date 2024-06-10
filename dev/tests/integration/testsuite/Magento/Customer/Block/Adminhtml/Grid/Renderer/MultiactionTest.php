@@ -38,7 +38,7 @@ class MultiactionTest extends AbstractMultiactionTest
      *
      * @return array
      */
-    public function renderEmptyProvider(): array
+    public static function renderEmptyProvider(): array
     {
         return [
             'empty_actions' => [

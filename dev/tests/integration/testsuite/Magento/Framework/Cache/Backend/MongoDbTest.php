@@ -81,7 +81,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedIds, $actualIds);
     }
 
-    public function getIdsMatchingTagsDataProvider()
+    public static function getIdsMatchingTagsDataProvider()
     {
         return [
             'one tag' => [['tag1'], ['test1', 'test2', 'test3']],
@@ -99,7 +99,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedIds, $actualIds);
     }
 
-    public function getIdsNotMatchingTagsDataProvider()
+    public static function getIdsNotMatchingTagsDataProvider()
     {
         return [
             'one tag' => [['tag2'], ['test2', 'test4', 'test5']],
@@ -117,7 +117,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedIds, $actualIds);
     }
 
-    public function getIdsMatchingAnyTagsDataProvider()
+    public static function getIdsMatchingAnyTagsDataProvider()
     {
         return [
             'no tags' => [[], []],
@@ -153,11 +153,11 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         $this->assertThat($this->_model->test($cacheId), $constraint);
     }
 
-    public function touchDataProvider()
+    public static function touchDataProvider()
     {
         return [
-            'not enough extra lifetime' => [0, $this->isFalse()],
-            'enough extra lifetime' => [1000, $this->logicalNot($this->isFalse())]
+            'not enough extra lifetime' => [0, self::isFalse()],
+            'enough extra lifetime' => [1000, self::logicalNot(self::isFalse())]
         ];
     }
 
@@ -176,7 +176,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $actualData);
     }
 
-    public function loadDataProvider()
+    public static function loadDataProvider()
     {
         return [
             'infinite lifetime with validity' => ['test data', null, false, 'test data'],
@@ -228,7 +228,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedIds, $actualIds);
     }
 
-    public function cleanDataProvider()
+    public static function cleanDataProvider()
     {
         return [
             'clean all cache' => [\Zend_Cache::CLEANING_MODE_ALL, [], []],

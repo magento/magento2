@@ -51,7 +51,7 @@ class AdminUserCreateCommandTest extends TestCase
         $this->command = new AdminUserCreateCommand($this->installerFactoryMock, new UserValidationRules());
 
         $this->questionHelperMock = $this->getMockBuilder(QuestionHelper::class)
-            ->setMethods(['ask'])
+            ->onlyMethods(['ask'])
             ->getMock();
     }
 

@@ -63,11 +63,11 @@ class UrlTest extends TestCase
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isGet'])
+            ->addMethods(['isGet'])
             ->getMockForAbstractClass();
         $this->customerSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getNoReferer'])
+            ->addMethods(['getNoReferer'])
             ->getMock();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()

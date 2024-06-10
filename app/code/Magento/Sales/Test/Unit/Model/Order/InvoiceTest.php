@@ -78,7 +78,7 @@ class InvoiceTest extends TestCase
         $this->helperManager = new ObjectManager($this);
         $this->order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getPayment', 'load', 'setHistoryEntityName', 'getStore', 'getBillingAddress',
                     'getShippingAddress', 'getConfig',
@@ -92,7 +92,7 @@ class InvoiceTest extends TestCase
         $this->paymentMock = $this->getMockBuilder(
             Payment::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['canVoid', 'canCapture', 'capture', 'pay', 'cancelInvoice']
             )->getMock();
 
@@ -430,7 +430,7 @@ class InvoiceTest extends TestCase
     {
         $orderConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getStateDefaultStatus']
             )->getMock();
 

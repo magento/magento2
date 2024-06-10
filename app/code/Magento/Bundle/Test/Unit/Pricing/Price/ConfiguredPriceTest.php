@@ -93,7 +93,7 @@ class ConfiguredPriceTest extends TestCase
         $this->priceInfoMock = $this->createMock(Base::class);
         $this->priceInfoMock->expects($this->any())->method('getPrice')->willReturn($basePrice);
         $this->productMock = $this->getMockBuilder(Product::class)
-            ->setMethods(['getPriceInfo', 'getOptionById', 'getResource', 'getId'])
+            ->onlyMethods(['getPriceInfo', 'getOptionById', 'getResource', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productMock->expects($this->once())->method('getPriceInfo')->willReturn($this->priceInfoMock);
@@ -102,7 +102,7 @@ class ConfiguredPriceTest extends TestCase
         $this->jsonSerializerMock = $this->getMockBuilder(Json::class)
             ->getMock();
         $this->configuredPriceSelectionMock = $this->getMockBuilder(ConfiguredPriceSelection::class)
-            ->setMethods(['getSelectionPriceList'])
+            ->onlyMethods(['getSelectionPriceList'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->configuredPriceSelectionMock->expects($this->any())->method('getSelectionPriceList')

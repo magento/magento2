@@ -61,7 +61,7 @@ class CurrencyTest extends TestCase
             ->getMockForAbstractClass();
         $this->numberFormatterFactory = $this->getMockBuilder(NumberFormatterFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->serializer = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
