@@ -114,7 +114,7 @@ class ListProductTest extends TestCase
     /**
      * @return array
      */
-    public function getImageDataProvider(): array
+    public static function getImageDataProvider(): array
     {
         return [
             'without_images_and_display_grid' => [

@@ -52,11 +52,11 @@ class ReportSystemCacheFlushTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled'])
+            ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
         $this->systemFactory = $this->getMockBuilder(SystemFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->systemModel = $this->getMockBuilder(System::class)
             ->disableOriginalConstructor()

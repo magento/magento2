@@ -29,17 +29,17 @@ class FooterTest extends TestCase
      * @var Config
      */
     private $scopeConfig;
-    
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
         $context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getScopeConfig'])
+            ->onlyMethods(['getScopeConfig'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->scopeConfig = $this->getMockBuilder(Config::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
         $context->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfig);

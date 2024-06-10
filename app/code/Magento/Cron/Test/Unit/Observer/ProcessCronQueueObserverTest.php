@@ -816,10 +816,15 @@ class ProcessCronQueueObserverTest extends TestCase
             ->method('getParam')->willReturn('test_group');
         $this->cacheMock
             ->method('load')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                [ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'test_group'] => $this->time + 10000000,
-                [ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'test_group'] => $this->time - 10000000
-            });
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg === ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'test_group') {
+                        return $this->time + 10000000;
+                    } elseif ($arg === ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'test_group') {
+                        return $this->time - 10000000;
+                    }
+                }
+            );
 
         $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn(0);
 
@@ -879,10 +884,15 @@ class ProcessCronQueueObserverTest extends TestCase
         $this->consoleRequestMock->expects($this->any())->method('getParam')->willReturn('default');
         $this->cacheMock
             ->method('load')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                [ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'default'] => $this->time + 10000000,
-                [ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'default'] => $this->time - 10000000
-            });
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg === ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'default') {
+                        return $this->time + 10000000;
+                    } elseif ($arg === ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'default') {
+                        return $this->time - 10000000;
+                    }
+                }
+            );
 
         $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturnMap(
             [
@@ -1067,6 +1077,7 @@ class ProcessCronQueueObserverTest extends TestCase
      * @param string $tableName
      *
      * @return AdapterInterface|MockObject
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function prepareConnectionMock(string $tableName): AdapterInterface
     {
@@ -1074,39 +1085,46 @@ class ProcessCronQueueObserverTest extends TestCase
 
         $connectionMock->expects($this->exactly(5))
             ->method('delete')
-            ->withConsecutive(
-                [
-                    $tableName,
-                    ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1']]
-                ],
-                [
-                    $tableName,
-                    ['status = ?' => 'success', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
-                ],
-                [
-                    $tableName,
-                    ['status = ?' => 'missed', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
-                ],
-                [
-                    $tableName,
-                    ['status = ?' => 'error', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
-                ],
-                [
-                    $tableName,
-                    ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
-                ]
-            )
-            ->willReturn(1);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($tableName) {
+                    if ($arg1== $tableName &&
+                        $arg2 === ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1']]
+                    ) {
+                        return 1;
+                    } elseif ($arg1== $tableName &&
+                        $arg2 === ['status = ?' => 'success', 'job_code in (?)' => ['test_job1'],
+                            'scheduled_at < ?' => null]
+                    ) {
+                        return 1;
+                    } elseif ($arg1== $tableName &&
+                        $arg2 === ['status = ?' => 'missed',
+                            'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
+                    ) {
+                        return 1;
+                    } elseif ($arg1== $tableName &&
+                        $arg2 === ['status = ?' => 'error',
+                            'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
+                    ) {
+                        return 1;
+                    } elseif ($arg1== $tableName && $arg1== $tableName &&
+                        $arg2 === ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1'],
+                            'scheduled_at < ?' => null]
+                    ) {
+                        return 1;
+                    }
+                }
+            );
 
         $connectionMock->expects($this->any())
             ->method('quoteInto')
-            ->withConsecutive(
-                ['status = ?', Schedule::STATUS_RUNNING],
-                ['job_code IN (?)', ['test_job1']]
-            )
-            ->willReturnOnConsecutiveCalls(
-                "status = 'running'",
-                "job_code IN ('test_job1')"
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 === 'status = ?' && $arg2 === Schedule::STATUS_RUNNING) {
+                        return "status = 'running'";
+                    } elseif ($arg1 === 'job_code IN (?)' && $arg2 === ['test_job1']) {
+                        return "job_code IN ('test_job1')";
+                    }
+                }
             );
 
         $connectionMock->expects($this->once())

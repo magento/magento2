@@ -58,12 +58,13 @@ class DefaultItemsTest extends TestCase
 
         $this->layoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBlock'])
+            ->onlyMethods(['getBlock'])
             ->getMock();
 
         $this->priceRenderBlock = $this->getMockBuilder(Template::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setItem', 'toHtml'])
+            ->addMethods(['setItem'])
+            ->onlyMethods(['toHtml'])
             ->getMock();
 
         $this->itemMock = $this->getMockBuilder(OrderItem::class)
@@ -72,7 +73,7 @@ class DefaultItemsTest extends TestCase
 
         $this->quoteItemMock = $this->getMockBuilder(QuoteItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQty'])
+            ->onlyMethods(['getQty'])
             ->getMock();
 
         $this->block = $this->objectManager->getObject(

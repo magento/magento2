@@ -135,7 +135,7 @@ class SwatchAttributeTypeTest extends TestCase
         /** @var AttributeInterface|MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(AttributeInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['hasData', 'getData', 'setData'])
+            ->addMethods(['hasData', 'getData', 'setData'])
             ->getMockForAbstractClass();
 
         $attributeMock->expects($this->any())->method('hasData')->willReturn(false);
@@ -162,7 +162,7 @@ class SwatchAttributeTypeTest extends TestCase
     {
         $attributeMock = $this->getMockBuilder(AttributeInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['hasData', 'getData', 'setData'])
+            ->addMethods(['hasData', 'getData', 'setData'])
             ->getMockForAbstractClass();
 
         $attributeMock->expects($this->any())->method('hasData')->willReturn($hasDataReturns);

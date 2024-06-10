@@ -85,7 +85,7 @@ class FilterScopeTest extends AbstractFiltersTest
     /**
      * @return array
      */
-    public function filtersWithScopeDataProvider(): array
+    public static function filtersWithScopeDataProvider(): array
     {
         return [
             'with_scope_store' => [

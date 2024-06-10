@@ -47,7 +47,7 @@ class CollectionTest extends TestCase
 
         $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['select', 'prepareSqlCondition', 'quoteIdentifier'])
+            ->onlyMethods(['select', 'prepareSqlCondition', 'quoteIdentifier'])
             ->getMockForAbstractClass();
         $connection->expects($this->any())
             ->method('select')
@@ -64,7 +64,7 @@ class CollectionTest extends TestCase
             )->willReturn('testResultCondition');
 
         $resource = $this->getMockBuilder(AbstractDb::class)
-            ->setMethods(['getTable', 'getMainTable', 'getConnection'])
+            ->onlyMethods(['getTable', 'getMainTable', 'getConnection'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $resource->expects($this->any())
@@ -75,13 +75,13 @@ class CollectionTest extends TestCase
             ->willReturn('testMainTable');
         $resource->expects($this->exactly(2))
             ->method('getTable')
-            ->withConsecutive(
-                [$mainTableName],
-                [$tableName]
-            )->willReturnOnConsecutiveCalls(
-                $mainTableName,
-                $tableName
-            );
+            ->willReturnCallback(function ($arg1) use ($mainTableName, $tableName) {
+                if ($arg1 == $mainTableName) {
+                    return $mainTableName;
+                } elseif ($arg1 == $tableName) {
+                    return $tableName;
+                }
+            });
 
         $objectManager = new ObjectManager($this);
         $collection = $objectManager->getObject(

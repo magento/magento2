@@ -68,7 +68,7 @@ class InitialTranslationSourceTest extends TestCase
     {
         $this->translationFactory = $this->getMockBuilder(TranslateFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->translation = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()

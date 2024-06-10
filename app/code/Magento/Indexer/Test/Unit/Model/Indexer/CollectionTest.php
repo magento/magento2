@@ -56,7 +56,7 @@ class CollectionTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->statesFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -180,7 +180,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function getAllIdsDataProvider()
+    public static function getAllIdsDataProvider()
     {
         return [
             [
@@ -224,7 +224,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function stubMethodsDataProvider()
+    public static function stubMethodsDataProvider()
     {
         return [
             [
@@ -283,7 +283,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function stubMethodsWithReturnSelfDataProvider()
+    public static function stubMethodsWithReturnSelfDataProvider()
     {
         return [
             [
