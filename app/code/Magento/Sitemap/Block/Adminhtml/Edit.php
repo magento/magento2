@@ -11,8 +11,6 @@ namespace Magento\Sitemap\Block\Adminhtml;
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

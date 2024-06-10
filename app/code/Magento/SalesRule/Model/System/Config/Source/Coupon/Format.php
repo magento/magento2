@@ -11,8 +11,6 @@ namespace Magento\SalesRule\Model\System\Config\Source\Coupon;
 class Format implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * Sales rule coupon
-     *
      * @var \Magento\SalesRule\Helper\Coupon
      */
     protected $_salesRuleCoupon = null;
@@ -26,7 +24,7 @@ class Format implements \Magento\Framework\Option\ArrayInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

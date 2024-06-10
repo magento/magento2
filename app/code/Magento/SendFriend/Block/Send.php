@@ -17,15 +17,11 @@ use Magento\Customer\Model\Context;
 class Send extends \Magento\Framework\View\Element\Template
 {
     /**
-     * SendFriend data
-     *
      * @var \Magento\SendFriend\Helper\Data
      */
     protected $_sendfriendData = null;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -227,6 +223,7 @@ class Send extends \Magento\Framework\View\Element\Template
 
     /**
      * @inheritdoc
+     * @return void
      * @since 100.3.1
      */
     protected function _prepareLayout()
