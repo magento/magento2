@@ -15,7 +15,7 @@
             <description value="Cancel a Sales Order placed with PayPal Payflow Pro"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-5144"/>
-            <group value="paypalPayflowPro"/>
+            <group value="paypalPayflowProWithOutValut"/>
             <group value="3rd_party_integration" />
 <!--            <group value="pr_exclude" />-->
         </annotations>
