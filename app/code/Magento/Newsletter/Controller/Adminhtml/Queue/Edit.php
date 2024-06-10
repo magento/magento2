@@ -59,4 +59,12 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Queue implements Htt
 
         $this->_view->renderLayout();
     }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Newsletter::queue');
+    }
 }
