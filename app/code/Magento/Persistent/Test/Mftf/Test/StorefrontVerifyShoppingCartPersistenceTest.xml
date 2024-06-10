@@ -50,9 +50,6 @@
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCachesAfterModulesDisabled">
                 <argument name="tags" value="" />
             </actionGroup>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAndFlushCache">
-                <argument name="indices" value=""/>
-            </actionGroup>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteJohnSmithCustomer">
                 <argument name="customerEmail" value="John_Smith_Customer.email"/>
             </actionGroup>
