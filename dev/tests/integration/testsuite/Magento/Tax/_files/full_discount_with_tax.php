@@ -8,6 +8,7 @@ declare(strict_types=1);
 use Magento\Tax\Model\Config;
 use Magento\Tax\Model\Sales\Total\Quote\SetupUtil;
 
+global $fullDiscountIncTax;
 $fullDiscountIncTax = [
         'config_data' => [
                 'config_overrides' => [

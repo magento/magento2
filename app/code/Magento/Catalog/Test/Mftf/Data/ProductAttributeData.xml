@@ -443,4 +443,37 @@
         <data key="attribute_code">attribute</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabelForExportImport</requiredEntity>
     </entity>
+    <!-- Product attributes for sorting in product listing as No -->
+    <entity name="textAttributeWithNoProductSortListing" extends="newProductAttribute" type="ProductAttribute">
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="dateAttributeWithNoProductSortListing" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">date</data>
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="yesNoAttributeWithNoProductSortListing" extends="productYesNoAttribute" type="ProductAttribute">
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="dropdownAttributeWithNoProductSortListing" extends="productAttributeWithDropdownTwoOptions" type="ProductAttribute">
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="multiSelectAttributeWithNoProductSortListing" extends="productDropDownAttribute" type="ProductAttribute">
+        <data key="frontend_input">multiselect</data>
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="priceAttributeWithNoProductSortListing" extends="newProductAttribute" type="ProductAttribute">
+        <data key="frontend_input">price</data>
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="productAttributeFPT" type="ProductAttribute">
+        <data key="default_frontend_label">FPT</data>
+        <data key="attribute_code">fpt</data>
+        <data key="frontend_input">weee</data>
+        <data key="scope">global</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
 </entities>
+

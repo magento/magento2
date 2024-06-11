@@ -168,7 +168,7 @@ class CreateAccountTest extends TestCase
     /**
      * @return array
      */
-    public function createInvalidAccountDataProvider(): array
+    public static function createInvalidAccountDataProvider(): array
     {
         return [
             'empty_firstname' => [
@@ -209,7 +209,7 @@ class CreateAccountTest extends TestCase
             ],
             'invalid_password_maximum_length' => [
                 'customer_data' => [],
-                'password' => $this->getRandomNumericString(257),
+                'password' => self::getRandomNumericString(257),
                 'error_type' => InputException::class,
                 'error_message' => ['Please enter a password with at most 256 characters.'],
             ],
@@ -421,6 +421,8 @@ class CreateAccountTest extends TestCase
         $customerData = $this->customerRepository->getById($customerId);
         $customerData->getAddresses()[1]->setRegion(null)->setCountryId($allowedCountryIdForSecondWebsite)
             ->setRegionId(null);
+        $customerData->getAddresses()[1]->setIsDefaultBilling(true);
+        $customerData->getAddresses()[1]->setIsDefaultShipping(true);
         $customerData->setStoreId($store->getId())->setWebsiteId($store->getWebsiteId())->setId(null);
         $password = $this->random->getRandomString(8);
         $passwordHash = $this->encryptor->getHash($password, true);
@@ -649,7 +651,7 @@ class CreateAccountTest extends TestCase
      * @param int $length
      * @return string
      */
-    private function getRandomNumericString(int $length): string
+    private static function getRandomNumericString(int $length): string
     {
         $string = '';
         for ($i = 0; $i <= $length; $i++) {

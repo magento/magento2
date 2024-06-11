@@ -206,7 +206,7 @@ class ExpressTest extends TestCase
      *
      * @return array
      */
-    public function paymentDataProvider(): array
+    public static function paymentDataProvider(): array
     {
         return [
             ['paypal_express', 'sale', 10, false],

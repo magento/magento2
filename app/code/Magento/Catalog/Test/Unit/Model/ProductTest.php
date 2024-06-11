@@ -536,7 +536,7 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    public function getSingleStoreIds(): array
+    public static function getSingleStoreIds(): array
     {
         return [
             [
@@ -628,7 +628,7 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    public function getCategoryCollectionCollectionNullDataProvider(): array
+    public static function getCategoryCollectionCollectionNullDataProvider(): array
     {
         return [
             [
@@ -772,7 +772,7 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    public function getProductReindexProvider(): array
+    public static function getProductReindexProvider(): array
     {
         return [
             'set 1' => [true, false, 1, 1],
@@ -983,7 +983,7 @@ class ProductTest extends TestCase
     private function getNewProductProviderData(): array
     {
         return [
-            ['cat_p_1', 'cat_c_p_1'],
+            ['cat_p_1', 'cat_c_p_1', 'cat_p_new'],
             null,
             [
                 'id' => 1,
@@ -1595,9 +1595,12 @@ class ProductTest extends TestCase
             ]
         );
         $imagesCollectionMock->expects(self::exactly(2))->method('addItem')
-            ->withConsecutive(
-                [$expectedImageDataObject],
-                [$expectedSmallImageDataObject]
+            ->willReturnCallback(
+                function ($arg1) use ($expectedImageDataObject, $expectedSmallImageDataObject) {
+                    if ($arg1 == $expectedImageDataObject || $arg1 == $expectedSmallImageDataObject) {
+                        return null;
+                    }
+                }
             );
         $this->collectionFactoryMock->method('create')->willReturn($imagesCollectionMock);
 

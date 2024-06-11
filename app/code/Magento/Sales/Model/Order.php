@@ -721,7 +721,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function canCreditmemo()
     {
-        if ($this->hasForcedCanCreditmemo()) {
+        if ($this->hasForcedCanCreditmemo() && $this->getData('forced_can_creditmemo') === true) {
             return $this->getForcedCanCreditmemo();
         }
 
@@ -861,7 +861,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Retrieve order shipment availability
      *
      * @return bool
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function canShip()
     {
@@ -877,27 +876,26 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             return false;
         }
 
+        return $this->checkItemShipping();
+    }
+
+    /**
+     * Check if at least one of the order items can be shipped
+     *
+     * @return bool
+     */
+    private function checkItemShipping(): bool
+    {
         foreach ($this->getAllItems() as $item) {
             $qtyToShip = !$item->getParentItem() || $item->getParentItem()->getProductType() !== Type::TYPE_BUNDLE ?
                 $item->getQtyToShip() : $item->getSimpleQtyToShip();
 
-            if ($qtyToShip > 0 && !$item->getIsVirtual() &&
-                !$item->getLockedDoShip() && !$this->isRefunded($item)) {
+            if ($qtyToShip > 0 && !$item->getIsVirtual() && !$item->getLockedDoShip()) {
                 return true;
             }
         }
-        return false;
-    }
 
-    /**
-     * Check if item is refunded.
-     *
-     * @param OrderItemInterface $item
-     * @return bool
-     */
-    private function isRefunded(OrderItemInterface $item)
-    {
-        return $item->getQtyRefunded() == $item->getQtyOrdered();
+        return false;
     }
 
     /**

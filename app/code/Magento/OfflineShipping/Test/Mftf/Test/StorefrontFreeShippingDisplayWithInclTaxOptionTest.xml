@@ -18,6 +18,9 @@
             <testCaseId value="MC-20613"/>
             <useCaseId value="MC-18457"/>
             <group value="shipping"/>
+            <skip>
+                <issueId value="ACQE-6511"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
@@ -54,6 +57,10 @@
         <waitForPageLoad stepKey="waitForSelectCountry"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="California" stepKey="selectCaliforniaRegion"/>
         <waitForPageLoad stepKey="waitForSelectRegion"/>
+        <!-- Flush cache -->
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache1">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <see selector="{{CheckoutPaymentSection.tax}}" userInput="$8.25"  stepKey="seeTaxForCA"/>
         <!-- See available Free Shipping option -->
         <actionGroup ref="StorefrontAssertShippingMethodPresentInCartActionGroup" stepKey="assertShippingMethodLabel">

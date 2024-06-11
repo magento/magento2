@@ -65,8 +65,8 @@
     margin-left: -(@content__indent / 2);
     margin-right: -(@content__indent / 2);
     > [class*='col-'] {
-        padding-left: @content__indent / 2;
-        padding-right: @content__indent / 2;
+        padding-left: (@content__indent / 2);
+        padding-right: (@content__indent / 2);
     }
 }
 
@@ -81,7 +81,7 @@
     }
 
     .return_length(@_columns-min, @_total: @temp_columns, @mathSymbol: '-') {
-        @_part: @_columns-min/@_total;
+        @_part: (@_columns-min/@_total);
         @_length: ~'calc( (100%) * @{_part} @{mathSymbol} @{temp_gutter} )';
     }
 

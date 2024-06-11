@@ -60,7 +60,7 @@ class AssignOrderToCustomerObserverTest extends TestCase
         /** @var Event|MockObject $eventMock */
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
         /** @var CustomerInterface|MockObject $customerMock */
         $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);

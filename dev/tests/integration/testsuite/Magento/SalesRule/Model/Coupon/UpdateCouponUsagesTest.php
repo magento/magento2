@@ -2,15 +2,6 @@
 /**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
  */
 declare(strict_types=1);
 
@@ -121,6 +112,46 @@ class UpdateCouponUsagesTest extends TestCase
         $this->cartManagement->assignCustomer($cart->getId(), $customer->getId(), 1);
         $cart = $this->cartRepository->get($cart->getId());
         $this->couponManagement->set($cart->getId(), 'one_per_customer');
+        $this->cartManagement->placeOrder($cart->getId());
+        $consumer->process(1);
+    }
+
+    #[
+        DataFixture(ProductFixture::class, as: 'p1'),
+        DataFixture(
+            SalesRuleFixture::class,
+            ['coupon_code' => 'once', 'uses_per_coupon' => 1, 'discount_amount' => 10]
+        ),
+        DataFixture(Customer::class, as: 'customer'),
+
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart1'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$cart1.id$', 'product_id' => '$p1.id$']),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart1.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart1.id$']),
+        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart1.id$']),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart1.id$']),
+
+        DataFixture(GuestCart::class, as: 'cart2'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$cart2.id$', 'product_id' => '$p1.id$']),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart2.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart2.id$']),
+        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart2.id$']),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart2.id$']),
+    ]
+    public function testCancelOrderBeforeConsumerAndRuleTimesUsed(): void
+    {
+        $cart = $this->fixtures->get('cart1');
+        $this->couponManagement->set($cart->getId(), 'once');
+        $orderId = $this->cartManagement->placeOrder($cart->getId());
+        $this->orderManagement->cancel($orderId);
+        $consumer = $this->consumerFactory->get('sales.rule.update.coupon.usage');
+        $consumer->process(2);
+
+        $cart = $this->fixtures->get('cart2');
+        $customer = $this->fixtures->get('customer');
+        $this->cartManagement->assignCustomer($cart->getId(), $customer->getId(), 1);
+        $cart = $this->cartRepository->get($cart->getId());
+        $this->couponManagement->set($cart->getId(), 'once');
         $this->cartManagement->placeOrder($cart->getId());
         $consumer->process(1);
     }
