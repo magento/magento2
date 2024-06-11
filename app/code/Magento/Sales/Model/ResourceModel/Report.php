@@ -14,6 +14,7 @@ class Report extends \Magento\Sales\Model\ResourceModel\EntityAbstract
      * Resource initialization
      *
      * @return void
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function _construct()
     {

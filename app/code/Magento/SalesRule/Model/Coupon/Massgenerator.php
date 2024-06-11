@@ -14,12 +14,12 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
     /**
      * Maximum probability of guessing the coupon on the first attempt
      */
-    const MAX_PROBABILITY_OF_GUESSING = 0.25;
+    public const MAX_PROBABILITY_OF_GUESSING = 0.25;
 
     /**
      * Number of attempts to generate
      */
-    const MAX_GENERATE_ATTEMPTS = 10;
+    public const MAX_GENERATE_ATTEMPTS = 10;
 
     /**
      * Count of generated Coupons
@@ -33,8 +33,6 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
     protected $generatedCodes = [];
 
     /**
-     * Sales rule coupon
-     *
      * @var \Magento\SalesRule\Helper\Coupon
      */
     protected $salesRuleCoupon;

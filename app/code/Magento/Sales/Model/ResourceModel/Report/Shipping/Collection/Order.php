@@ -11,15 +11,11 @@ namespace Magento\Sales\Model\ResourceModel\Report\Shipping\Collection;
 class Order extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
 {
     /**
-     * Period format
-     *
      * @var string
      */
     protected $_periodFormat;
 
     /**
-     * Selected columns
-     *
      * @var array
      */
     protected $_selectedColumns = [];

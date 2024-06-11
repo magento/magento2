@@ -87,8 +87,7 @@ class ListStatus
     }
 
     /**
-     * Removes items at mentioned index/indexes.
-     * Returns items removed.
+     * Removes items at mentioned index/indexes. Returns items removed.
      *
      * @param int|array $indexes
      * @return array

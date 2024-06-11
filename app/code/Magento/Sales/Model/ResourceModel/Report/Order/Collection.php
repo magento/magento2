@@ -11,8 +11,6 @@ namespace Magento\Sales\Model\ResourceModel\Report\Order;
 class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
 {
     /**
-     * Period format
-     *
      * @var string
      */
     protected $_periodFormat;
@@ -25,8 +23,6 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
     protected $_aggregationTable = 'sales_order_aggregated_created';
 
     /**
-     * Selected columns
-     *
      * @var array
      */
     protected $_selectedColumns = [];

@@ -15,8 +15,6 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons;
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
-     * Sales rule coupon
-     *
      * @var \Magento\SalesRule\Helper\Coupon
      */
     protected $_salesRuleCoupon = null;

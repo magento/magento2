@@ -48,8 +48,8 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory $ruleFactory
      * @param \Magento\Sales\Model\ResourceModel\Report $resource
+     * @param \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory $ruleFactory
      * @param mixed $connection
      */
     public function __construct(

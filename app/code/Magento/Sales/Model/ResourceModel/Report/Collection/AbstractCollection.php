@@ -11,8 +11,6 @@ namespace Magento\Sales\Model\ResourceModel\Report\Collection;
 class AbstractCollection extends \Magento\Reports\Model\ResourceModel\Report\Collection\AbstractCollection
 {
     /**
-     * Order status
-     *
      * @var string
      */
     protected $_orderStatus = null;
