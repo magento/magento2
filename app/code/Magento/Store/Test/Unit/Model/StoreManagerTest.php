@@ -69,11 +69,9 @@ class StoreManagerTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->storeRepositoryMock = $this->getMockBuilder(StoreRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $this->storeResolverMock = $this->getMockBuilder(StoreResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $this->cache = $this->getMockBuilder(FrontendInterface::class)
         ->getMockForAbstractClass();
@@ -105,7 +103,6 @@ class StoreManagerTest extends TestCase
         $storeId = 1;
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $this->storeResolverMock->expects($this->any())->method('getCurrentStoreId')->willReturn($storeId);
         $this->storeRepositoryMock->expects($this->atLeastOnce())
@@ -121,7 +118,6 @@ class StoreManagerTest extends TestCase
         $storeId = 'store_code';
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $this->storeRepositoryMock->expects($this->atLeastOnce())
             ->method('get')
@@ -136,7 +132,6 @@ class StoreManagerTest extends TestCase
     {
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $actualStore = $this->model->getStore($storeMock);
         $this->assertInstanceOf(StoreInterface::class, $actualStore);
@@ -173,11 +168,9 @@ class StoreManagerTest extends TestCase
     {
         $defaultStoreMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $defaultStoreMock->expects($this->any())->method('getId')->willReturn(0);
         $defaultStoreMock->expects($this->any())->method('getCode')->willReturn('default');

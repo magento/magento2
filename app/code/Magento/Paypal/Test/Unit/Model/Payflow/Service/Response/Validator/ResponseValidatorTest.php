@@ -42,11 +42,10 @@ class ResponseValidatorTest extends TestCase
         $this->validatorMock = $this->getMockBuilder(
             ValidatorInterface::class
         )
-            ->setMethods(['validate'])
+            ->onlyMethods(['validate'])
             ->getMockForAbstractClass();
         $this->payflowFacade = $this->getMockBuilder(Transparent::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->responseValidator = new ResponseValidator([$this->validatorMock]);
@@ -70,7 +69,7 @@ class ResponseValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestValidate()
+    public static function dataProviderForTestValidate()
     {
         return [
             [

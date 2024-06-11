@@ -149,11 +149,10 @@ class SaveTest extends TestCase
         $request = $this->getMockForAbstractClass(RequestInterface::class);
         $request->expects($this->exactly(2))
             ->method('getParam')
-            ->withConsecutive(['data'], ['namespace'])
-            ->willReturnOnConsecutiveCalls(
-                '{"' . Save::ACTIVE_IDENTIFIER . '":"bookmark2"}',
-                'product_listing'
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['data'] => '{"' . Save::ACTIVE_IDENTIFIER . '":"bookmark2"}',
+                ['namespace'] => 'product_listing'
+            });
         $reflectionProperty = new \ReflectionProperty($this->model, '_request');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->model, $request);
@@ -199,19 +198,18 @@ class SaveTest extends TestCase
         $this->userContext->expects($this->exactly(2))->method('getUserId')->willReturn(1);
         $bookmark = $this->getMockBuilder(BookmarkInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCurrent', 'getIdentifier'])
+            ->addMethods(['getCurrent'])
+            ->onlyMethods(['getIdentifier'])
             ->getMockForAbstractClass();
         $this->bookmarkFactory->expects($this->once())->method('create')->willReturn($bookmark);
 
         $request = $this->getMockForAbstractClass(RequestInterface::class);
         $request->expects($this->atLeast(3))
             ->method('getParam')
-            ->withConsecutive(['data'], ['namespace'], ['namespace'])
-            ->willReturnOnConsecutiveCalls(
-                $currentConfig,
-                'product_listing',
-                'product_listing'
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['data'] => $currentConfig,
+                ['namespace'] => 'product_listing'
+            });
         $reflectionProperty = new \ReflectionProperty($this->model, '_request');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->model, $request);
@@ -287,7 +285,8 @@ class SaveTest extends TestCase
         }
         $bookmark = $this->getMockBuilder(BookmarkInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCurrent', 'getIdentifier'])
+            ->onlyMethods(['getIdentifier'])
+            ->addMethods(['getCurrent'])
             ->getMockForAbstractClass();
         $bookmark->expects($this->any())->method('getCurrent')->willReturn($current);
         $bookmark->expects($this->any())->method('getIdentifier')->willReturn($identifier);

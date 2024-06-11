@@ -13,7 +13,7 @@ class ProductTest extends AbstractProductExportImportTestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function exportImportDataProvider(): array
+    public static function exportImportDataProvider(): array
     {
         return [
             'product_export_data' => [

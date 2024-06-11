@@ -29,7 +29,7 @@ class GenericTest extends TestCase
         $helper = new ObjectManager($this);
         $this->_uspsModel = $this->getMockBuilder(
             Carrier::class
-        )->setMethods(
+        )->onlyMethods(
             ['getCode']
         )->disableOriginalConstructor()
             ->getMock();

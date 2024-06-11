@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Quote\Test\Unit\Plugin\Webapi\Controller\Rest;
 
 use Exception;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Plugin\Webapi\Controller\Rest\ValidateQuoteData;
 use PHPUnit\Framework\TestCase;
@@ -35,6 +36,14 @@ class ValidateQuoteDataTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objects = [
+            [
+                ValidateQuoteData::class,
+                $this->createMock(ValidateQuoteData::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->validateQuoteDataObject = ObjectManager::getInstance()->get(ValidateQuoteData::class);
         $this->reflectionObject = new ReflectionClass(get_class($this->validateQuoteDataObject));
     }
@@ -70,7 +79,7 @@ class ValidateQuoteDataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderInputData(): array
+    public static function dataProviderInputData(): array
     {
         return [
             [

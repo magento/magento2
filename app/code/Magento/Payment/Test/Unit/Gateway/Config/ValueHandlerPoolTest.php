@@ -20,7 +20,7 @@ class ValueHandlerPoolTest extends TestCase
         $this->expectException(\LogicException::class);
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $tMapFactory->expects(static::never())
@@ -38,7 +38,7 @@ class ValueHandlerPoolTest extends TestCase
             ->getMockForAbstractClass();
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $tMap = $this->getMockBuilder(TMap::class)
             ->disableOriginalConstructor()

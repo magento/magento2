@@ -13,9 +13,9 @@ use Magento\Theme\Model\Theme;
 use Magento\Theme\Model\Theme\Customization\File\CustomCss;
 use Magento\Theme\Model\Theme\Data;
 use Magento\Theme\Model\Theme\SingleFile;
-use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest;
+use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTestCase;
 
-class SaveTest extends ThemeTest
+class SaveTest extends ThemeTestCase
 {
     /**
      * @var string
@@ -35,20 +35,20 @@ class SaveTest extends ThemeTest
 
         $this->_request
             ->method('getParam')
-            ->withConsecutive(
-                ['back', false],
-                ['theme'],
-                ['custom_css_content'],
-                ['js_removed_files'],
-                ['js_order']
-            )
-            ->willReturnOnConsecutiveCalls(
-                true,
-                $themeData,
-                $customCssContent,
-                $jsRemovedFiles,
-                $jsOrder
-            );
+            ->willReturnCallback(function ($arg1, $arg2)
+ use ($themeData, $customCssContent, $jsRemovedFiles, $jsOrder) {
+                if ($arg1 == 'back' && $arg2 === false) {
+                    return true;
+                } elseif ($arg1 == 'theme') {
+                    return $themeData;
+                } elseif ($arg1 == 'custom_css_content') {
+                    return $customCssContent;
+                } elseif ($arg1 == 'js_removed_files') {
+                    return $jsRemovedFiles;
+                } elseif ($arg1 == 'js_order') {
+                    return $jsOrder;
+                }
+            });
 
         $this->_request->expects($this->once())->method('getPostValue')->willReturn(true);
 
@@ -69,8 +69,10 @@ class SaveTest extends ThemeTest
 
         $this->_objectManagerMock
             ->method('get')
-            ->withConsecutive([FlyweightFactory::class], [CustomCss::class])
-            ->willReturnOnConsecutiveCalls($themeFactory, null);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [FlyweightFactory::class] => $themeFactory,
+                [CustomCss::class] => null
+            });
         $this->_objectManagerMock
             ->method('create')
             ->with(SingleFile::class)

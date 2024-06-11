@@ -105,7 +105,7 @@ class MessageFormatterTest extends TestCase
     {
         $translateMock = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLocale'])
+            ->onlyMethods(['getLocale'])
             ->getMock();
         $translateMock->method('getLocale')
             ->willReturn($locale);
