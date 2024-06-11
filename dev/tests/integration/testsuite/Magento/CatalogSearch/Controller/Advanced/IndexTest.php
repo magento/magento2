@@ -47,7 +47,7 @@ class IndexTest extends AbstractController
      *
      * @return array
      */
-    public function fromParamsInArrayDataProvider(): array
+    public static function fromParamsInArrayDataProvider(): array
     {
         return [
             'from_data_with_from_param_is_array' => [

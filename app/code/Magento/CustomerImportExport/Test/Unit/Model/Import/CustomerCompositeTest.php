@@ -163,7 +163,7 @@ class CustomerCompositeTest extends TestCase
         $this->errorAggregator = $this->getMockBuilder(
             ProcessingErrorAggregator::class
         )
-            ->setMethods(['hasToBeTerminated'])
+            ->onlyMethods(['hasToBeTerminated'])
             ->setConstructorArgs([$this->errorFactory])
             ->getMock();
 

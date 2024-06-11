@@ -68,7 +68,7 @@ class CheckoutCartAddProductObserverTest extends TestCase
         $this->quoteItemMock = $this->createMock(QuoteItem::class);
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getItem'])
+            ->addMethods(['getItem'])
             ->getMock();
 
         $objectManager = new ObjectManager($this);

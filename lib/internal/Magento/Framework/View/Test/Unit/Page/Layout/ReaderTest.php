@@ -80,7 +80,7 @@ class ReaderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->readerContext = $this->getMockBuilder(Context::class)
-            ->setMethods(['getScheduledStructure'])
+            ->onlyMethods(['getScheduledStructure'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = (new ObjectManager($this))

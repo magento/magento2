@@ -77,8 +77,16 @@ class FactoryTest extends TestCase
         $this->fileIteratorMock = $this->createMock(FileIterator::class);
         $this->objectManagerMock
             ->method('create')
-            ->withConsecutive([Adapter::class], [Config::class, ['configFiles' => $this->fileIteratorMock]])
-            ->willReturnOnConsecutiveCalls($translateAdapterMock, $this->validatorConfigMock);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($translateAdapterMock) {
+                    if ($arg1 == Adapter::class) {
+                        return $translateAdapterMock;
+                    } elseif ($arg1 == Config::class && $arg2 == ['configFiles' => $this->fileIteratorMock]) {
+                        return $this->validatorConfigMock;
+                    }
+                }
+            );
+
         $this->readerMock = $this->createPartialMock(
             Reader::class,
             ['getConfigurationFiles']

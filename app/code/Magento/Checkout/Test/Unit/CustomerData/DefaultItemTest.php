@@ -48,11 +48,10 @@ class DefaultItemTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->configurationPool = $this->getMockBuilder(ConfigurationPool::class)
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $checkoutHelper = $this->getMockBuilder(Data::class)
-            ->setMethods(['formatPrice'])->disableOriginalConstructor()
+            ->onlyMethods(['formatPrice'])->disableOriginalConstructor()
             ->getMock();
         $checkoutHelper->expects($this->any())->method('formatPrice')->willReturn(5);
         $this->itemResolver = $this->getMockForAbstractClass(ItemResolverInterface::class);
@@ -73,7 +72,7 @@ class DefaultItemTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $product = $this->getMockBuilder(Product::class)
-            ->setMethods(['getUrlModel', 'isVisibleInSiteVisibility', 'getSku'])
+            ->onlyMethods(['getUrlModel', 'isVisibleInSiteVisibility', 'getSku'])
             ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->any())->method('getUrlModel')->willReturn($urlModel);
@@ -81,7 +80,7 @@ class DefaultItemTest extends TestCase
         $product->expects($this->any())->method('getSku')->willReturn('simple');
         /** @var Item $item */
         $item = $this->getMockBuilder(Item::class)
-            ->setMethods(['getProductType', 'getProduct', 'getCalculationPrice'])
+            ->onlyMethods(['getProductType', 'getProduct', 'getCalculationPrice'])
             ->disableOriginalConstructor()
             ->getMock();
         $item->expects($this->any())->method('getProduct')->willReturn($product);
