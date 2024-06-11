@@ -68,6 +68,7 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Queue implements Htt
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Newsletter::queue');
+        return ($this->_authorization->isAllowed('Magento_Newsletter::queue') &&
+                $this->_authorization->isAllowed('Magento_Newsletter::template'));
     }
 }
