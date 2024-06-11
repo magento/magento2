@@ -14,12 +14,13 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class BundleDataProviderTest extends TestCase
 {
-    const ALLOWED_TYPE = 'simple';
+    private const ALLOWED_TYPE = 'simple';
 
     /**
      * @var ObjectManager
@@ -47,17 +48,25 @@ class BundleDataProviderTest extends TestCase
     protected $dataHelperMock;
 
     /**
+     * @var PoolInterface|MockObject
+     */
+    private $modifierPool;
+
+    /**
      * @return void
      */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
+        $this->modifierPool = $this->getMockBuilder(PoolInterface::class)
+            ->getMockForAbstractClass();
+
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'toArray',
                     'isLoaded',
@@ -70,14 +79,14 @@ class BundleDataProviderTest extends TestCase
             )->getMock();
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->collectionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->collectionMock);
         $this->dataHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllowedSelectionTypes'])
+            ->onlyMethods(['getAllowedSelectionTypes'])
             ->getMock();
     }
 
@@ -97,6 +106,7 @@ class BundleDataProviderTest extends TestCase
             'addFilterStrategies' => [],
             'meta' => [],
             'data' => [],
+            'modifiersPool' => $this->modifierPool,
         ]);
     }
 
@@ -128,6 +138,9 @@ class BundleDataProviderTest extends TestCase
         $this->collectionMock->expects($this->once())
             ->method('getSize')
             ->willReturn(count($items));
+        $this->modifierPool->expects($this->once())
+            ->method('getModifiersInstances')
+            ->willReturn([]);
 
         $this->assertEquals($expectedData, $this->getModel()->getData());
     }

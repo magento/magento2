@@ -46,7 +46,7 @@ class MinifyTest extends TestCase
     protected function setUp(): void
     {
         $this->adapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['minify'])
+            ->onlyMethods(['minify'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->minificationMock = $this->getMockBuilder(Minification::class)

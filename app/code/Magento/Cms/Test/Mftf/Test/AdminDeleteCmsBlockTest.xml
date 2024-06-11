@@ -16,6 +16,7 @@
             <description value="Admin should be able to delete CMS block from grid"/>
             <group value="Cms"/>
             <severity value="MINOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultBlock" stepKey="createCMSBlock"/>

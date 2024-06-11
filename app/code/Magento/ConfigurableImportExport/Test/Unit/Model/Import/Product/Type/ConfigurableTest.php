@@ -95,6 +95,11 @@ class ConfigurableTest extends AbstractImportTestCase
     protected $productEntityLinkField = 'entity_id';
 
     /**
+     * @var Product\SkuStorage|MockObject
+     */
+    private Product\SkuStorage $skuStorage;
+
+    /**
      * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -172,6 +177,7 @@ class ConfigurableTest extends AbstractImportTestCase
                 'getAttributeOptions'
             ]
         );
+        $this->skuStorage = $this->createMock(Product\SkuStorage::class);
         $this->_entityModel->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
 
         $this->params = [
@@ -302,7 +308,8 @@ class ConfigurableTest extends AbstractImportTestCase
                 'params' => $this->params,
                 'resource' => $this->resource,
                 'productColFac' => $this->productCollectionFactory,
-                'metadataPool' => $metadataPoolMock
+                'metadataPool' => $metadataPoolMock,
+                'skuStorage' => $this->skuStorage
             ]
         );
     }
@@ -550,8 +557,15 @@ class ConfigurableTest extends AbstractImportTestCase
         // at(0) is select() call, quoteIdentifier() is invoked at(1) and at(2)
         $this->_connection
             ->method('quoteIdentifier')
-            ->withConsecutive(['m.attribute_id'], ['o.attribute_id'])
-            ->willReturnOnConsecutiveCalls('a', 'b');
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'm.attribute_id') {
+                        return 'a';
+                    } elseif ($arg == 'o.attribute_id') {
+                        return 'b';
+                    }
+                }
+            );
 
         $this->_connection->expects($this->any())->method('select')->willReturn($this->select);
         $this->_connection->expects($this->any())->method('fetchAll')->with($this->select)->willReturn(
@@ -588,13 +602,26 @@ class ConfigurableTest extends AbstractImportTestCase
             ->method('isRowAllowedToImport')
             ->willReturnCallback([$this, 'isRowAllowedToImport']);
 
-        $this->_entityModel->expects($this->any())->method('getOldSku')->willReturn([
+        $skuData = [
             'testsimpleold' => [
                 $this->productEntityLinkField => 10,
                 'type_id' => 'simple',
                 'attr_set_code' => 'Default'
             ],
-        ]);
+        ];
+        $this->_entityModel->expects($this->never())->method('getOldSku');
+
+        $this->skuStorage->expects($this->any())
+            ->method('has')
+            ->willReturnCallback(function ($sku) use ($skuData) {
+                return isset($skuData[$sku]);
+            });
+
+        $this->skuStorage->expects($this->any())
+            ->method('get')
+            ->willReturnCallback(function ($sku) use ($skuData) {
+                return $skuData[$sku] ?? null;
+            });
 
         $this->_entityModel->expects($this->any())->method('getAttrSetIdToName')->willReturn([4 => 'Default']);
 
@@ -657,7 +684,7 @@ class ConfigurableTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function getProductDataIsValidRow(): array
+    public static function getProductDataIsValidRow(): array
     {
         return [
             [

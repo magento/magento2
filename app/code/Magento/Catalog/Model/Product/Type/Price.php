@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
@@ -23,7 +24,7 @@ use Magento\Store\Api\Data\WebsiteInterface;
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
-class Price
+class Price implements ResetAfterRequestInterface
 {
     /**
      * Product price cache tag
@@ -656,5 +657,13 @@ class Price
     public function isTierPriceFixed()
     {
         return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        self::$attributeCache = [];
     }
 }

@@ -6,6 +6,8 @@
 
 namespace Magento\Setup\Fixtures;
 
+use Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory as CouponCollectionFactory;
+
 /**
  * Fixture for generating coupon codes
  *
@@ -38,22 +40,31 @@ class CouponCodesFixture extends Fixture
     private $couponCodeFactory;
 
     /**
+     * @var CouponCollectionFactory
+     */
+    private $couponCollectionFactory;
+
+    /**
      * Constructor
      *
      * @param FixtureModel $fixtureModel
      * @param \Magento\SalesRule\Model\RuleFactory|null $ruleFactory
      * @param \Magento\SalesRule\Model\CouponFactory|null $couponCodeFactory
+     * @param CouponCollectionFactory|null $couponCollectionFactory
      */
     public function __construct(
         FixtureModel $fixtureModel,
         \Magento\SalesRule\Model\RuleFactory $ruleFactory = null,
-        \Magento\SalesRule\Model\CouponFactory $couponCodeFactory = null
+        \Magento\SalesRule\Model\CouponFactory $couponCodeFactory = null,
+        CouponCollectionFactory $couponCollectionFactory = null
     ) {
         parent::__construct($fixtureModel);
         $this->ruleFactory = $ruleFactory ?: $this->fixtureModel->getObjectManager()
             ->get(\Magento\SalesRule\Model\RuleFactory::class);
         $this->couponCodeFactory = $couponCodeFactory ?: $this->fixtureModel->getObjectManager()
             ->get(\Magento\SalesRule\Model\CouponFactory::class);
+        $this->couponCollectionFactory = $couponCollectionFactory ?: $this->fixtureModel->getObjectManager()
+            ->get(CouponCollectionFactory::class);
     }
 
     /**
@@ -63,8 +74,9 @@ class CouponCodesFixture extends Fixture
      */
     public function execute()
     {
-        $this->fixtureModel->resetObjectManager();
-        $this->couponCodesCount = $this->fixtureModel->getValue('coupon_codes', 0);
+        $requestedCouponsCount = (int) $this->fixtureModel->getValue('coupon_codes', 0);
+        $existedCouponsCount = $this->couponCollectionFactory->create()->getSize();
+        $this->couponCodesCount = max(0, $requestedCouponsCount - $existedCouponsCount);
         if (!$this->couponCodesCount) {
             return;
         }

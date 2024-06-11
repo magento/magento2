@@ -68,9 +68,9 @@ class StockRegistryTest extends TestCase
      */
     protected $product;
 
-    protected $productId = 111;
-    protected $productSku = 'simple';
-    protected $websiteId = 111;
+    private const PRODUCT_ID = 111;
+    private const PRODUCT_SKU = 'simple';
+    private const WEBSITE_ID = 111;
 
     protected function setUp(): void
     {
@@ -79,7 +79,7 @@ class StockRegistryTest extends TestCase
         $this->product = $this->createPartialMock(Product::class, ['__wakeup', 'getIdBySku']);
         $this->product->expects($this->any())
             ->method('getIdBySku')
-            ->willReturn($this->productId);
+            ->willReturn(self::PRODUCT_ID);
         //getIdBySku
         $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->productFactory->expects($this->any())
@@ -93,7 +93,8 @@ class StockRegistryTest extends TestCase
             false
         );
         $this->stockItem = $this->getMockBuilder(StockItemInterface::class)
-            ->setMethods(['setProductId', 'getData', 'addData', 'getItemId', 'getWebsiteId'])
+            ->addMethods(['getData', 'addData', 'getWebsiteId'])
+            ->onlyMethods(['setProductId', 'getItemId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->stockStatus = $this->getMockForAbstractClass(
@@ -146,19 +147,19 @@ class StockRegistryTest extends TestCase
 
     public function testGetStock()
     {
-        $this->assertEquals($this->stock, $this->stockRegistry->getStock($this->websiteId));
+        $this->assertEquals($this->stock, $this->stockRegistry->getStock(self::WEBSITE_ID));
     }
 
     public function testGetStockItem()
     {
-        $this->assertEquals($this->stockItem, $this->stockRegistry->getStockItem($this->productId, $this->websiteId));
+        $this->assertEquals($this->stockItem, $this->stockRegistry->getStockItem(self::PRODUCT_ID, self::WEBSITE_ID));
     }
 
     public function testGetStockItemBySku()
     {
         $this->assertEquals(
             $this->stockItem,
-            $this->stockRegistry->getStockItemBySku($this->productSku, $this->websiteId)
+            $this->stockRegistry->getStockItemBySku(self::PRODUCT_SKU, self::WEBSITE_ID)
         );
     }
 
@@ -166,7 +167,7 @@ class StockRegistryTest extends TestCase
     {
         $this->assertEquals(
             $this->stockStatus,
-            $this->stockRegistry->getStockStatus($this->productId, $this->websiteId)
+            $this->stockRegistry->getStockStatus(self::PRODUCT_ID, self::WEBSITE_ID)
         );
     }
 
@@ -174,7 +175,7 @@ class StockRegistryTest extends TestCase
     {
         $this->assertEquals(
             $this->stockStatus,
-            $this->stockRegistry->getStockStatus($this->productId, $this->websiteId)
+            $this->stockRegistry->getStockStatus(self::PRODUCT_ID, self::WEBSITE_ID)
         );
     }
 
@@ -187,7 +188,7 @@ class StockRegistryTest extends TestCase
         $this->stockItem->expects($this->atLeastOnce())->method('getItemId')->willReturn($itemId);
         $this->assertEquals(
             $itemId,
-            $this->stockRegistry->updateStockItemBySku($this->productSku, $this->stockItem)
+            $this->stockRegistry->updateStockItemBySku(self::PRODUCT_SKU, $this->stockItem)
         );
     }
 }

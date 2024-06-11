@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Category\Action;
 
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\Config;
@@ -112,6 +114,15 @@ class RowsTest extends TestCase
      */
     protected function setUp() : void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Visibility::class,
+                $this->createMock(Visibility::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         $this->workingStateProvider = $this->getMockBuilder(WorkingStateProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -237,20 +248,10 @@ class RowsTest extends TestCase
             ->willReturn($categoryId);
         $this->indexerRegistry
             ->method('get')
-            ->withConsecutive(
-                [CategoryProductIndexer::INDEXER_ID],
-                [CategoryProductIndexer::INDEXER_ID],
-                [ProductCategoryIndexer::INDEXER_ID],
-                [CategoryProductIndexer::INDEXER_ID],
-                [ProductCategoryIndexer::INDEXER_ID]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $this->indexer,
-                $this->indexer,
-                $this->indexer,
-                $this->indexer,
-                $this->indexer
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [ProductCategoryIndexer::INDEXER_ID] => $this->indexer,
+                [CategoryProductIndexer::INDEXER_ID] => $this->indexer
+            });
         $this->indexer->expects($this->any())
             ->method('getId')
             ->willReturn(CategoryProductIndexer::INDEXER_ID);

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total;
@@ -16,7 +17,7 @@ use Magento\Quote\Model\Quote\TotalsCollector as QuoteTotalsCollector;
 /**
  * Helper class to eliminate redundant expensive total calculations
  */
-class TotalsCollector
+class TotalsCollector implements ResetAfterRequestInterface
 {
     /**
      * @var QuoteTotalsCollector
@@ -34,6 +35,8 @@ class TotalsCollector
     private $addressTotals;
 
     /**
+     * TotalsCollector constructor
+     *
      * @param QuoteTotalsCollector $quoteTotalsCollector
      */
     public function __construct(QuoteTotalsCollector $quoteTotalsCollector)
@@ -41,6 +44,14 @@ class TotalsCollector
         $this->quoteTotalsCollector = $quoteTotalsCollector;
         $this->quoteTotals = [];
         $this->addressTotals = [];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        $this->clearTotals();
     }
 
     /**
@@ -101,7 +112,6 @@ class TotalsCollector
             $this->addressTotals[$quoteId][$addressId] =
                 $this->quoteTotalsCollector->collectAddressTotals($quote, $address);
         }
-
         return $this->addressTotals[$quoteId][$addressId];
     }
 }

@@ -15,7 +15,7 @@ class Config extends \Magento\Framework\Config\Data
     /**
      * Cache identifier
      */
-    const CACHE_ID = 'request_declaration';
+    public const CACHE_ID = 'request_declaration';
 
     /**
      * Constructor
@@ -24,13 +24,16 @@ class Config extends \Magento\Framework\Config\Data
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
+     * @param array|null $cacheTags
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function __construct(
         \Magento\Framework\Search\Request\Config\FilesystemReader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = self::CACHE_ID,
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        ?array $cacheTags = null,
     ) {
-        parent::__construct($reader, $cache, $cacheId, $serializer);
+        parent::__construct($reader, $cache, $cacheId, $serializer, $cacheTags);
     }
 }

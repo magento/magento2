@@ -36,7 +36,8 @@ class Product implements RevertibleDataFixtureInterface
         'visibility' => Visibility::VISIBILITY_BOTH,
         'status' => Status::STATUS_ENABLED,
         'custom_attributes' => [
-            'tax_class_id' => '2'
+            'tax_class_id' => '2',
+            'special_price' => null,
         ],
         'extension_attributes' => [
             'website_ids' => [1],
@@ -53,7 +54,7 @@ class Product implements RevertibleDataFixtureInterface
         'media_gallery_entries' => [],
         'tier_prices' => [],
         'created_at' => null,
-        'updated_at' => null,
+        'updated_at' => null
     ];
 
     private const DEFAULT_PRODUCT_LINK_DATA = [
@@ -120,11 +121,7 @@ class Product implements RevertibleDataFixtureInterface
     public function revert(DataObject $data): void
     {
         $service = $this->serviceFactory->create(ProductRepositoryInterface::class, 'deleteById');
-        $service->execute(
-            [
-                'sku' => $data->getSku()
-            ]
-        );
+        $service->execute(['sku' => $data->getSku()]);
     }
 
     /**

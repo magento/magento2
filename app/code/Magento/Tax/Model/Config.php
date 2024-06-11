@@ -6,11 +6,10 @@
 
 /**
  * Configuration paths storage
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Model;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -18,7 +17,7 @@ use Magento\Store\Model\Store;
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Config
+class Config implements ResetAfterRequestInterface
 {
     /**
      * Tax notifications
@@ -922,7 +921,9 @@ class Config
         $res = false;
         $priceIncludesTax = $this->priceIncludesTax($store)
             || $this->getNeedUseShippingExcludeTax()
-            || $this->shippingPriceIncludesTax($store);
+            || $this->shippingPriceIncludesTax($store)
+            || $this->displayCartShippingInclTax()
+            || $this->displayCartShippingBoth();
         if ($priceIncludesTax) {
             switch ($this->getPriceDisplayType($store)) {
                 case self::DISPLAY_TYPE_EXCLUDING_TAX:
@@ -951,5 +952,15 @@ class Config
             $res = $this->displayCartPricesBoth();
         }
         return $res;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_priceIncludesTax = null;
+        $this->_shippingPriceIncludeTax = null;
+        $this->_needUseShippingExcludeTax = false;
     }
 }

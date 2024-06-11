@@ -11,13 +11,17 @@ use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\Intl\DateFormatterFactory;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Helper\Data;
@@ -27,6 +31,7 @@ use Magento\ImportExport\Model\History;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Config;
 use Magento\ImportExport\Model\Import\Entity\Factory;
+use Magento\ImportExport\Model\LocaleEmulatorInterface;
 use Magento\ImportExport\Model\Source\Upload;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -47,11 +52,6 @@ class ReportTest extends TestCase
      * @var Context|MockObject
      */
     protected $context;
-
-    /**
-     * @var Timezone|MockObject
-     */
-    protected $timezone;
 
     /**
      * @var Filesystem|MockObject
@@ -88,11 +88,6 @@ class ReportTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
-        $this->timezone = $this->getMockBuilder(Timezone::class)
-            ->addMethods(['diff', 'format'])
-            ->onlyMethods(['date', 'getConfigTimezone'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->varDirectory = $this->createPartialMock(
             Write::class,
             ['getRelativePath', 'getAbsolutePath', 'readFile', 'isFile', 'stat']
@@ -142,7 +137,7 @@ class ReportTest extends TestCase
             Report::class,
             [
                 'context' => $this->context,
-                'timeZone' => $this->timezone,
+                'timeZone' => $this->getTimezone(),
                 'filesystem' =>$this->filesystem
             ]
         );
@@ -161,11 +156,30 @@ class ReportTest extends TestCase
 
         $startDateMock = $this->createTestProxy(\DateTime::class, ['time' => $startDate]);
         $endDateMock = $this->createTestProxy(\DateTime::class, ['time' => $endDate]);
-        $this->timezone->method('date')
-            ->withConsecutive([$startDate], [])
-            ->willReturnOnConsecutiveCalls($startDateMock, $endDateMock);
+        $this->getTimezone()->method('date')
+            ->willReturnCallback(function ($arg1, $arg2) use ($startDate, $startDateMock, $endDateMock) {
+                if ($arg1 == $startDate) {
+                    return $startDateMock;
+                } elseif ($arg2 == null) {
+                    return $endDateMock;
+                }
+            });
 
         $this->assertEquals($executionTime, $this->report->getExecutionTime($startDate));
+    }
+
+    /**
+     * Assert the report update execution time with default UTC timezone.
+     *
+     * @return void
+     */
+    public function testGetExecutionTimeDefaultTimezone()
+    {
+        $this->assertEquals(
+            '00:00:03',
+            $this->report->getExecutionTime((new \DateTime('now - 3seconds'))->format('Y-m-d H:i:s')),
+            'Report update execution time is not a match.'
+        );
     }
 
     /**
@@ -204,6 +218,10 @@ class ReportTest extends TestCase
         $importHistoryModel = $this->createMock(History::class);
         $localeDate = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
         $upload = $this->createMock(Upload::class);
+        $localeEmulator = $this->getMockForAbstractClass(LocaleEmulatorInterface::class);
+        $localeEmulator->method('emulate')
+            ->willReturnCallback(fn (callable $callback) => $callback());
+        $this->objectManagerHelper->prepareObjectManager();
         $import = new Import(
             $logger,
             $filesystem,
@@ -222,7 +240,8 @@ class ReportTest extends TestCase
             [],
             null,
             null,
-            $upload
+            $upload,
+            $localeEmulator
         );
         $import->setData('entity', 'catalog_product');
         $message = $this->report->getSummaryStats($import);
@@ -257,7 +276,7 @@ class ReportTest extends TestCase
      *
      * @return array
      */
-    public function importFileExistsDataProvider()
+    public static function importFileExistsDataProvider()
     {
         return [
             [
@@ -300,5 +319,35 @@ class ReportTest extends TestCase
             $testDelimiter,
             $this->report->getDelimiter()
         );
+    }
+
+    /**
+     * Returns Timezone, UTC by default
+     *
+     * @param string $timezone
+     * @return Timezone|MockObject
+     */
+    private function getTimezone(string $timezone = 'UTC'): Timezone|MockObject
+    {
+        $localeResolver = $this->getMockBuilder(ResolverInterface::class)->getMock();
+        $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)->getMock();
+        $dateTime = $this->getMockBuilder(DateTime::class)->getMock();
+        $scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();
+        $timezoneMock = $this->getMockBuilder(Timezone::class)
+            ->addMethods(['diff', 'format'])
+            ->onlyMethods(['getConfigTimezone'])
+            ->setConstructorArgs([
+                'scopeResolver' => $scopeResolver,
+                'localeResolver' => $localeResolver,
+                'dateTime' => $dateTime,
+                'scopeConfig' => $scopeConfig,
+                'scopeType' => 'default',
+                'defaultTimezonePath' => 'general/locale/timezone',
+                'dateFormatterFactory' => (new DateFormatterFactory())
+            ])->getMock();
+
+        $timezoneMock->method('getConfigTimezone')->willReturn($timezone);
+
+        return $timezoneMock;
     }
 }

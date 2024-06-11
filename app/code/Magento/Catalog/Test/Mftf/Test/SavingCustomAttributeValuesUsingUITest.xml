@@ -16,6 +16,7 @@
             <description value="Saving custom attribute values using UI"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-7325"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -54,19 +55,23 @@
             <actionGroup ref="AdminSetProductAttributeUseInLayeredNavigationOptionActionGroup" stepKey="setDropdownUseInLayeredNavigationNoResults">
                 <argument name="useInLayeredNavigationValue" value="Filterable (with results)"/>
             </actionGroup>
+            <selectOption selector="{{AdvancedAttributePropertiesSection.UseInSearch}}" userInput="Yes" stepKey="selectIsSearchAble"/>
             <selectOption selector="{{AttributePropertiesSection.useInSearchResultsLayeredNavigation}}" userInput="Yes" stepKey="selectUseInLayeredNavigationOption"/>
             <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
 
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteFirstProduct"/>
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
                 <argument name="ProductAttribute" value="{{multiselectProductAttribute.attribute_code}}"/>
             </actionGroup>
-            <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
-            <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
-            <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute"/>
+            <comment userInput="BIC workaround" stepKey="clickDelete"/>
+            <comment userInput="BIC workaround" stepKey="clickOk"/>
+            <comment userInput="BIC workaround" stepKey="waitForDeletion"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>

@@ -31,7 +31,7 @@ class AbstractTest extends AbstractImportTestCase
 
         $this->_model = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
-            ->setMethods(['_saveValidatedBunches', 'getErrorAggregator'])
+            ->onlyMethods(['_saveValidatedBunches', 'getErrorAggregator'])
             ->getMockForAbstractClass();
 
         $this->_model->method('getErrorAggregator')->willReturn(

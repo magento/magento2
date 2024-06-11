@@ -47,7 +47,6 @@ class CVV2MatchTest extends TestCase
             ->getMockForAbstractClass();
         $this->payflowproFacade = $this->getMockBuilder(Transparent::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->validator = new CVV2Match();
@@ -136,6 +135,15 @@ class CVV2MatchTest extends TestCase
                 'expectedResult' => true,
                 'response' => new DataObject(),
                 'configValue' => '1',
+            ],
+            [
+                'expectedResult' => true,
+                'response' => new DataObject(
+                    [
+                        'cvv2match' => 'N',
+                    ]
+                ),
+                'configValue' => '0',
             ],
         ];
     }

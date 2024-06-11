@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="MultipleAddressCheckoutWithTwoDifferentRatesTest">
+        <annotations>
+            <stories value="Multiple Address Checkout with Table Rates (Use Two Different Rates)"/>
+            <title value="Verify Multiple Address Checkout with Table Rates (Use Two Different Rates)"/>
+            <description value="Verify Multiple Address Checkout with Table Rates (Use Two Different Rates)"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4499" />
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer_CA_NY_Addresses" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!-- remove the Filter From the page-->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearFilterFromProductIndex"/>
+        </before>
+        <after>
+            <!-- Delete created data -->
+            <!-- disable table rate meth0d -->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+            <!-- Switch to Website scope -->
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreView">
+                <argument name="website" value="_defaultWebsite"/>
+            </actionGroup>
+            <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="disableTableRatesShippingMethod">
+                <argument name="status" value="0"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Go to Stores > Configuration > Sales > Shipping Methods -->
+        <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+        <!-- Switch to Website scope -->
+        <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreView">
+            <argument name="website" value="_defaultWebsite"/>
+        </actionGroup>
+        <!-- Enable Table Rate method and save config -->
+        <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="enableTableRatesShippingMethod"/>
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
+        <!-- Make sure you have Condition Weight vs. Destination -->
+        <see selector="{{AdminShippingMethodTableRatesSection.condition}}" userInput="{{TableRatesWeightVSDestination.condition}}" stepKey="seeDefaultCondition"/>
+        <!-- Import file and save config -->
+        <conditionalClick selector="{{AdminShippingMethodTableRatesSection.carriersTableRateTab}}" dependentSelector="{{AdminShippingMethodTableRatesSection.carriersTableRateActive}}" visible="false" stepKey="expandTab"/>
+        <attachFile selector="{{AdminShippingMethodTableRatesSection.importFile}}" userInput="table_rate_30895.csv" stepKey="attachFileForImport"/>
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigs"/>
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Add product to the shopping cart -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCartAgain">
+            <argument name="quantity" value="2"/>
+        </actionGroup>
+        <!-- Open the shopping cart page -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart"/>
+        <click selector="{{MultishippingSection.checkoutWithMultipleAddresses}}" stepKey="proceedMultishipping"/>
+        <!-- Select different addresses and click 'Go to Shipping Information' -->
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectCAAddress">
+            <argument name="sequenceNumber" value="1"/>
+            <argument name="option" value="John Doe, 7700 West Parmer Lane 113, Los Angeles, California 90001, United States"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectNYAddress">
+            <argument name="sequenceNumber" value="2"/>
+            <argument name="option" value="John Doe, 368 Broadway St. Apt. 113, New York, New York 10001, United States"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSaveAddressActionGroup" stepKey="saveAddresses"/>
+        <see selector="{{ShippingMethodSection.shippingMethod('1','2')}}" userInput="Table Rate $5.00" stepKey="assertTableRateForLA"/>
+        <see selector="{{ShippingMethodSection.shippingMethod('2','2')}}" userInput="Table Rate $10.00" stepKey="assertTableRateForNY"/>
+    </test>
+</tests>

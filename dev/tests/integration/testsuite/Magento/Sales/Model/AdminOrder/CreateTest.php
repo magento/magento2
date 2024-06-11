@@ -98,6 +98,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $order->loadByIncrementId('100000001');
 
         /** @var $orderCreate \Magento\Sales\Model\AdminOrder\Create */
+        $order->setReordered(true);
         $orderCreate = $this->model->initFromOrder($order);
 
         $quoteItems = $orderCreate->getQuote()->getItemsCollection();
@@ -545,7 +546,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @case #2 Changed after failed first place order action.
      * @return array
      */
-    public function createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider()
+    public static function createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider()
     {
         return [
             1 => ['customer@email.com', 'customer@email.com'],
@@ -698,6 +699,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         /** @var SessionQuote $session */
         $session = $this->objectManager->create(SessionQuote::class);
         $session->setCustomerId($fixtureCustomerId);
+        $session->setTransferredItems(['cart' => [124]]);
         /** @var $quoteFixture Quote */
         $quoteFixture = $this->objectManager->create(Quote::class);
         $quoteFixture->load('test01', 'reserved_order_id');
@@ -709,6 +711,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->model->moveQuoteItem($item, 'cart', 3);
         self::assertEquals(4, $item->getQty(), 'Number of Qty isn\'t correct for Quote item.');
         self::assertEquals(3, $item->getQtyToAdd(), 'Number of added qty isn\'t correct for Quote item.');
+        self::assertEquals($session->getTransferredItems(), ['cart' => []]);
     }
 
     /**
@@ -985,7 +988,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     {
         $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Data\Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getId',
                     'getGroupId',

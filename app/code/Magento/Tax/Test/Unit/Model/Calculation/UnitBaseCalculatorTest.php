@@ -29,6 +29,11 @@ use PHPUnit\Framework\TestCase;
  */
 class UnitBaseCalculatorTest extends TestCase
 {
+    /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
     public const STORE_ID = 2300;
     public const QUANTITY = 1;
     public const UNIT_PRICE = 500;
@@ -77,7 +82,7 @@ class UnitBaseCalculatorTest extends TestCase
         $this->taxDetailsItem = $objectManager->getObject(ItemDetails::class);
         $this->taxDetailsItemDataObjectFactoryMock =
             $this->getMockBuilder(TaxDetailsItemInterfaceFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->taxDetailsItemDataObjectFactoryMock->expects($this->any())
@@ -86,7 +91,7 @@ class UnitBaseCalculatorTest extends TestCase
 
         $this->mockCalculationTool = $this->getMockBuilder(Calculation::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'round', 'getRate', 'getStoreRate', 'getRateRequest', 'getAppliedRates'])
+            ->onlyMethods(['__wakeup', 'round', 'getRate', 'getStoreRate', 'getRateRequest', 'getAppliedRates'])
             ->getMock();
         $this->mockCalculationTool->expects($this->any())
             ->method('round')
@@ -161,14 +166,30 @@ class UnitBaseCalculatorTest extends TestCase
         $this->assertSame($this->taxDetailsItem, $this->model->calculate($mockItem, self::QUANTITY));
         $this->assertSame(self::CODE, $this->taxDetailsItem->getCode());
         $this->assertSame(self::TYPE, $this->taxDetailsItem->getType());
-        $this->assertEquals(self::ROW_TAX_ROUNDED, $this->taxDetailsItem->getRowTax());
-        $this->assertEquals(self::PRICE_INCL_TAX_ROUNDED, $this->taxDetailsItem->getPriceInclTax());
+        $this->assertEqualsWithDelta(
+            self::ROW_TAX_ROUNDED,
+            $this->taxDetailsItem->getRowTax(),
+            self::EPSILON
+        );
+        $this->assertEqualsWithDelta(
+            self::PRICE_INCL_TAX_ROUNDED,
+            $this->taxDetailsItem->getPriceInclTax(),
+            self::EPSILON
+        );
 
         $this->assertSame($this->taxDetailsItem, $this->model->calculate($mockItem, self::QUANTITY, false));
         $this->assertSame(self::CODE, $this->taxDetailsItem->getCode());
         $this->assertSame(self::TYPE, $this->taxDetailsItem->getType());
-        $this->assertEquals(self::ROW_TAX, $this->taxDetailsItem->getRowTax());
-        $this->assertEquals(self::PRICE_INCL_TAX, $this->taxDetailsItem->getPriceInclTax());
+        $this->assertEqualsWithDelta(
+            self::ROW_TAX,
+            $this->taxDetailsItem->getRowTax(),
+            self::EPSILON
+        );
+        $this->assertEqualsWithDelta(
+            self::PRICE_INCL_TAX,
+            $this->taxDetailsItem->getPriceInclTax(),
+            self::EPSILON
+        );
     }
 
     public function testCalculateWithTaxNotInPrice()
@@ -192,9 +213,13 @@ class UnitBaseCalculatorTest extends TestCase
             ->willReturn([['id' => 0, 'percent' => 0, 'rates' => []]]);
 
         $this->assertSame($this->taxDetailsItem, $this->model->calculate($mockItem, self::QUANTITY));
-        $this->assertEquals(self::CODE, $this->taxDetailsItem->getCode());
-        $this->assertEquals(self::TYPE, $this->taxDetailsItem->getType());
-        $this->assertEquals(0.0, $this->taxDetailsItem->getRowTax());
+        $this->assertEqualsWithDelta(
+            self::CODE,
+            $this->taxDetailsItem->getCode(),
+            self::EPSILON
+        );
+        $this->assertEqualsWithDelta(self::TYPE, $this->taxDetailsItem->getType(), self::EPSILON);
+        $this->assertEqualsWithDelta(0.0, $this->taxDetailsItem->getRowTax(), self::EPSILON);
     }
 
     /**

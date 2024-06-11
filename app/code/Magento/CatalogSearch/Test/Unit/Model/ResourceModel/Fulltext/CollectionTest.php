@@ -7,8 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Fulltext;
 
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
+use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
+use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverInterface;
@@ -16,6 +21,7 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultAp
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverInterface;
+use Magento\CatalogUrlRewrite\Model\Storage\DbStorage;
 use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
@@ -24,6 +30,7 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\UniversalFactory;
 use Magento\Search\Api\SearchInterface;
@@ -102,6 +109,38 @@ class CollectionTest extends TestCase
         $this->criteriaBuilder = $this->getCriteriaBuilder();
         $this->filterBuilder = $this->getFilterBuilder();
 
+        $objects = [
+            [
+                TableMaintainer::class,
+                $this->createMock(TableMaintainer::class)
+            ],
+            [
+                PriceTableResolver::class,
+                $this->createMock(PriceTableResolver::class)
+            ],
+            [
+                DimensionFactory::class,
+                $this->createMock(DimensionFactory::class)
+            ],
+            [
+                Category::class,
+                $this->createMock(Category::class)
+            ],
+            [
+                DbStorage::class,
+                $this->createMock(DbStorage::class)
+            ],
+            [
+            GalleryReadHandler::class,
+                $this->createMock(GalleryReadHandler::class)
+            ],
+            [
+                Gallery::class,
+                $this->createMock(Gallery::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
+
         $productLimitationMock = $this->createMock(ProductLimitation::class);
         $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
             ->disableOriginalConstructor()
@@ -167,7 +206,7 @@ class CollectionTest extends TestCase
     {
         $reflectionProperty = new ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
         $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue(null);
+        $reflectionProperty->setValue(null, null);
     }
 
     /**
@@ -187,7 +226,7 @@ class CollectionTest extends TestCase
 
         $searchResultApplier = $this->getMockBuilder(SearchResultApplierInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['apply'])
+            ->onlyMethods(['apply'])
             ->getMockForAbstractClass();
         $this->searchResultApplierFactory->expects($this->any())
             ->method('create')

@@ -11,6 +11,8 @@
     <section name="AdminCustomerAccountInformationSection">
         <element name="accountInformationTab" type="button" selector="#tab_customer" timeout="30"/>
         <element name="statusInactive" type="button" selector=".admin__actions-switch-label"/>
+        <element name="statusInactiveCheck" type="button" selector="//div/input[@class='admin__actions-switch-checkbox' and @name='customer[extension_attributes][assistance_allowed]' and @value='2']"/>
+        <element name="statusInactiveNew" type="button" selector="//div/input[@class='admin__actions-switch-checkbox' and @name='customer[extension_attributes][assistance_allowed]']/..//child::label"/>
         <element name="accountInformationTitle" type="text" selector=".admin__page-nav-title"/>
         <element name="accountInformationButton" type="text" selector="//a/span[text()='Account Information']"/>
         <element name="addressesButton" type="select" selector="//a//span[contains(text(), 'Addresses')]"/>
@@ -20,6 +22,7 @@
         <element name="email" type="input" selector="input[name='customer[email]']"/>
         <element name="disableAutomaticGroupChange" type="input" selector="input[name='customer[disable_auto_group_change]']"/>
         <element name="group" type="select" selector="[name='customer[group_id]']"/>
+        <element name="inviteeGroup" type="select" selector="div[data-index='group_id'] select[name='group_id']"/>
         <element name="groupIdValue" type="text" selector="//*[@name='customer[group_id]']/option"/>
         <element name="groupValue" type="button" selector="//span[text()='{{groupValue}}']" parameterized="true"/>
         <element name="associateToWebsite" type="select" selector="//select[@name='customer[website_id]']"/>
