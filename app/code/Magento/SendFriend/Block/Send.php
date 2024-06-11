@@ -224,7 +224,7 @@ class Send extends \Magento\Framework\View\Element\Template
     /**
      * @inheritdoc
      * @since 100.3.1
-     * @codeCoverageIgnore
+     * phpcs:disable
      */
     protected function _prepareLayout()
     {
