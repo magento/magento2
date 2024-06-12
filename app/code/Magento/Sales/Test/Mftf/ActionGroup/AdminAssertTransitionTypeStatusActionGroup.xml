@@ -17,6 +17,6 @@
         </arguments>
         <remove keyForRemoval="clickOnVoidTransaction"/>
         <remove keyForRemoval="clickFirstRow"/>
-        <waitForText selector="{{AdminTransactionsGridSection.transitionStatus}}" userInput="{{transitionTypeStatus}}" stepKey="verifyTransitionTypeStatus" after="waitForFilterToLoad"/>
+        <waitForText selector="{{AdminTransactionsGridSection.transitionStatus('is_closed')}}" userInput="{{transitionTypeStatus}}" stepKey="verifyTransitionTypeStatus" after="waitForFilterToLoad"/>
     </actionGroup>
 </actionGroups>
