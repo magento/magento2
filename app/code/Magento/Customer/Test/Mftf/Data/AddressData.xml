@@ -528,4 +528,18 @@
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionCA</requiredEntity>
     </entity>
+    <entity name="US_Address_Florida">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>352 Lake View Lane</item>
+        </array>
+        <data key="city">Palm Bay</data>
+        <data key="country_id">United States</data>
+        <data key="country">United States</data>
+        <data key="state">Florida</data>
+        <data key="postcode">32909</data>
+        <data key="telephone">12345678</data>
+    </entity>
 </entities>
