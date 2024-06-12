@@ -20,7 +20,6 @@ use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\Quote\Test\Fixture\AddProductToCart;
 use Magento\Quote\Test\Fixture\GuestCart;
-use Magento\Quote\Test\Fixture\QuoteIdMask;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -732,13 +731,9 @@ QUERY;
      * _security
      */
     #[
-        DataFixture(Customer::class, ['addresses' => [['postcode' => '12345']]], as: 'customer1'),
-        DataFixture(Customer::class, ['addresses' => [['postcode' => '12345']]], as: 'customer2'),
+        DataFixture(Customer::class, ['addresses' => [['postcode' => '12345']]], as: 'customer', count: 2),
         DataFixture(Product::class, as: 'product'),
-        DataFixture(GuestCart::class, ['customer_id' => '$customer2.id$'], as: 'cart'),
-        DataFixture(QuoteIdMask::class, [
-            'cart_id' => '$cart.id$'
-        ], 'quoteIdMask'),
+        DataFixture(GuestCart::class, ['customer_email' => '$customer2.email$'], as: 'cart'),
         DataFixture(AddProductToCart::class, [
             'cart_id' => '$cart.id$',
             'product_id' => '$product.id$',
@@ -755,7 +750,7 @@ QUERY;
 
         /** @var Quote $quote */
         $quote = $this->fixtures->get('cart');
-        $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
 
         $quote->setCustomer($customer2);
         $quote->setCustomerIsGuest(false);

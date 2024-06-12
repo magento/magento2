@@ -435,10 +435,10 @@ QUERY;
      */
     #[
         DataFixture(Customer::class, as: 'customer'),
+        DataFixture(ProductFixture::class, as: 'product'),
 
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart1'),
-        DataFixture(ProductFixture::class, ['price' => 10], 'p1'),
-        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart1.id$', 'product_id' => '$p1.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart1.id$', 'product_id' => '$product.id$']),
         DataFixture(SetBillingAddress::class, ['cart_id' => '$cart1.id$']),
         DataFixture(SetShippingAddress::class, ['cart_id' => '$cart1.id$']),
         DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart1.id$']),
@@ -446,8 +446,7 @@ QUERY;
         DataFixture(PlaceOrder::class, ['cart_id' => '$cart1.id$'], 'or1'),
 
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart2'),
-        DataFixture(ProductFixture::class, ['price' => 10], 'p2'),
-        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart2.id$', 'product_id' => '$p2.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart2.id$', 'product_id' => '$product.id$']),
         DataFixture(SetBillingAddress::class, ['cart_id' => '$cart2.id$']),
         DataFixture(SetShippingAddress::class, ['cart_id' => '$cart2.id$']),
         DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart2.id$']),
@@ -455,58 +454,12 @@ QUERY;
         DataFixture(PlaceOrder::class, ['cart_id' => '$cart2.id$'], 'or2'),
 
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart3'),
-        DataFixture(ProductFixture::class, ['price' => 10], 'p3'),
-        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart3.id$', 'product_id' => '$p3.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart3.id$', 'product_id' => '$product.id$']),
         DataFixture(SetBillingAddress::class, ['cart_id' => '$cart3.id$']),
         DataFixture(SetShippingAddress::class, ['cart_id' => '$cart3.id$']),
         DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart3.id$']),
         DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart3.id$']),
-        DataFixture(PlaceOrder::class, ['cart_id' => '$cart3.id$'], 'or3'),
-
-        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart4'),
-        DataFixture(ProductFixture::class, ['price' => 10], 'p4'),
-        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart4.id$', 'product_id' => '$p4.id$']),
-        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart4.id$']),
-        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart4.id$']),
-        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart4.id$']),
-        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart4.id$']),
-        DataFixture(PlaceOrder::class, ['cart_id' => '$cart4.id$'], 'or4'),
-
-        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart5'),
-        DataFixture(ProductFixture::class, ['price' => 10], 'p5'),
-        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart5.id$', 'product_id' => '$p5.id$']),
-        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart5.id$']),
-        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart5.id$']),
-        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart5.id$']),
-        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart5.id$']),
-        DataFixture(PlaceOrder::class, ['cart_id' => '$cart5.id$'], 'or5'),
-
-        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart6'),
-        DataFixture(ProductFixture::class, ['price' => 10], 'p6'),
-        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart6.id$', 'product_id' => '$p6.id$']),
-        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart6.id$']),
-        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart6.id$']),
-        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart6.id$']),
-        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart6.id$']),
-        DataFixture(PlaceOrder::class, ['cart_id' => '$cart6.id$'], 'or6'),
-
-        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart7'),
-        DataFixture(ProductFixture::class, ['price' => 10], 'p7'),
-        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart7.id$', 'product_id' => '$p7.id$']),
-        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart7.id$']),
-        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart7.id$']),
-        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart7.id$']),
-        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart7.id$']),
-        DataFixture(PlaceOrder::class, ['cart_id' => '$cart7.id$'], 'or7'),
-
-        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart8'),
-        DataFixture(ProductFixture::class, ['price' => 10], 'p8'),
-        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart8.id$', 'product_id' => '$p8.id$']),
-        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart8.id$']),
-        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart8.id$']),
-        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart8.id$']),
-        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart8.id$']),
-        DataFixture(PlaceOrder::class, ['cart_id' => '$cart8.id$'], 'or8'),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart3.id$'], 'or3')
     ]
     public function testGetCustomerDescendingSortedOrders()
     {
@@ -544,31 +497,25 @@ QUERY;
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
 
-        $orderNumberCreatedAt = [];
-        for ($i = 1; $i <= 8; $i++) {
+        $orderNumberCreatedAtExpected = [];
+        for ($i = 1; $i <= 3; $i++) {
             $orderNumber = $this->fixtures->get('or' . $i)->getIncrementId();
             $orderCreatedAt = $this->fixtures->get('or' . $i)->getCreatedAt();
-            $orderNumberCreatedAt[$orderNumber] = $orderCreatedAt;
+            $orderNumberCreatedAtExpected[$orderNumber] = $orderCreatedAt;
         }
 
-        array_multisort($orderNumberCreatedAt, SORT_DESC);
+        array_multisort($orderNumberCreatedAtExpected, SORT_DESC);
 
-        $expectedOrderNumbers = [];
-        foreach ($customerOrderItemsInResponse as $key => $item) {
-            if (isset($orderNumberCreatedAt[$item['number']])
-                && $item['order_date'] == $orderNumberCreatedAt[$item['number']]) {
-                $expectedOrderNumbers[] = $item['number'];
-            }
+        $orderNumberCreatedAtResponse = [];
+        foreach ($customerOrderItemsInResponse as $item) {
+            $orderNumberCreatedAtResponse[$item['number']] = $item['order_date'];
         }
 
-        foreach ($expectedOrderNumbers as $key => $data) {
-            $orderItemInResponse = $customerOrderItemsInResponse[$key];
-            $this->assertEquals(
-                $data,
-                $orderItemInResponse['number'],
-                "The order number is different than the expected for order - {$data}"
-            );
-        }
+        $this->assertEquals(
+            $orderNumberCreatedAtExpected,
+            $orderNumberCreatedAtResponse,
+            "The order number is different than the expected for order"
+        );
     }
 
     /**

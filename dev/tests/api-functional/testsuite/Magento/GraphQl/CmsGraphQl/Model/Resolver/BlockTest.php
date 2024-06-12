@@ -109,8 +109,7 @@ class BlockTest extends ResolverCacheAbstract
     }
 
     #[
-        DataFixture(BlockFixture::class, as: 'block1'),
-        DataFixture(BlockFixture::class, as: 'block2')
+        DataFixture(BlockFixture::class, as: 'block', count: 2)
     ]
     public function testCmsMultipleBlockResolverCacheAndInvalidationAsGuest()
     {
@@ -190,11 +189,11 @@ class BlockTest extends ResolverCacheAbstract
     }
 
     #[
-        DataFixture(BlockFixture::class, as: 'disabled_block')
+        DataFixture(BlockFixture::class, as: 'enabled_block')
     ]
     public function testCmsBlockResolverCacheInvalidatesWhenBlockGetsDisabled()
     {
-        $block = $this->fixtures->get('disabled_block');
+        $block = $this->fixtures->get('enabled_block');
 
         $query = $this->getQuery([
             $block->getIdentifier(),
@@ -301,9 +300,8 @@ class BlockTest extends ResolverCacheAbstract
     }
 
     #[
-        Config('system/full_page_cache/caching_application', '2', 'store', 'default'),
-        DataFixture(BlockFixture::class, as: 'block1'),
-        DataFixture(BlockFixture::class, as: 'block2')
+        Config('system/full_page_cache/caching_application', '2'),
+        DataFixture(BlockFixture::class, as: 'block', count: 2)
     ]
     public function testCmsBlockResolverCacheRetainsEntriesThatHaveNotBeenUpdated()
     {
