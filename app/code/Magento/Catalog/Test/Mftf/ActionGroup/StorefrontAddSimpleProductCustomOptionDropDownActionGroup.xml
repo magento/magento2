@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAddSimpleProductCustomOptionDropDownActionGroup">
+        <annotations>
+            <description>Adding simple product to cart with custom options dropdown.</description>
+        </annotations>
+        <arguments>
+            <argument name="dropDownOption" type="string" defaultValue="Value1 +$10.00"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.selectCustomOptionDropDown}}" stepKey="waitForOptionDropDown"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.selectCustomOptionDropDown}}" userInput="{{dropDownOption}}" stepKey="clickOptionValueDropDown"/>
+    </actionGroup>
+</actionGroups>

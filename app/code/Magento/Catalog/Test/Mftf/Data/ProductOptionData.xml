@@ -195,4 +195,29 @@
         <data key="price">250</data>
         <data key="price_type">fixed</data>
     </entity>
+    <entity name="ProductOptionNewField" extends="ProductOptionField">
+        <data key="title">Option 3</data>
+        <data key="type">field</data>
+        <data key="is_require">false</data>
+        <data key="price">50</data>
+        <data key="price_type">fixed</data>
+    </entity>
+    <entity name="ProductOptionDropDownFor2" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">Option 1</data>
+        <data key="type">drop_down</data>
+        <data key="sort_order">0</data>
+        <data key="is_require">true</data>
+        <requiredEntity type="product_option_value">ProductValueDropdown1</requiredEntity>
+        <requiredEntity type="product_option_value">ProductValueDropdown2</requiredEntity>
+    </entity>
+    <entity name="ProductOptionCheckboxFor2" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">Option 2</data>
+        <data key="type">checkbox</data>
+        <data key="sort_order">0</data>
+        <data key="is_require">true</data>
+        <requiredEntity type="product_option_value">ProductValueCheckbox1</requiredEntity>
+        <requiredEntity type="product_option_value">ProductValueCheckbox2</requiredEntity>
+    </entity>
 </entities>
