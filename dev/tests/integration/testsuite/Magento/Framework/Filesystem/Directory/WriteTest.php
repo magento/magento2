@@ -58,7 +58,7 @@ class WriteTest extends TestCase
      *
      * @return array
      */
-    public function createProvider()
+    public static function createProvider()
     {
         return [
             ['newDir1', 0777, "newDir1"],
@@ -117,7 +117,7 @@ class WriteTest extends TestCase
      *
      * @return array
      */
-    public function deleteProvider()
+    public static function deleteProvider()
     {
         return [['subdir'], ['subdir/subsubdir']];
     }
@@ -177,7 +177,7 @@ class WriteTest extends TestCase
      *
      * @return array
      */
-    public function renameProvider()
+    public static function renameProvider()
     {
         return [['newDir1', 0777, 'first_name.txt', 'second_name.txt']];
     }
@@ -243,7 +243,7 @@ class WriteTest extends TestCase
      *
      * @return array
      */
-    public function renameTargetDirProvider()
+    public static function renameTargetDirProvider()
     {
         return [['dir1', 'dir2', 0777, 'first_name.txt', 'second_name.txt']];
     }
@@ -351,7 +351,7 @@ class WriteTest extends TestCase
      *
      * @return array
      */
-    public function copyTargetDirProvider()
+    public static function copyTargetDirProvider()
     {
         return [
             ['dir1', 'dir2', 0777, 'first_name.txt', 'second_name.txt'],
@@ -464,7 +464,7 @@ class WriteTest extends TestCase
      *
      * @return array
      */
-    public function touchProvider()
+    public static function touchProvider()
     {
         return [
             ['test_directory', 0777, 'touch_file.txt', time() - 3600],
@@ -563,7 +563,7 @@ class WriteTest extends TestCase
      *
      * @return array
      */
-    public function openFileProvider()
+    public static function openFileProvider()
     {
         return [
             ['newDir1', 0777, 'newFile.txt', 'w+'],
@@ -641,7 +641,7 @@ class WriteTest extends TestCase
      *
      * @return array
      */
-    public function writeFileProvider()
+    public static function writeFileProvider()
     {
         return [['file1', '123', '456'], ['folder1/file1', '123', '456']];
     }

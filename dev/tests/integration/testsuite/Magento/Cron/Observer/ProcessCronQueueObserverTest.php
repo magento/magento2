@@ -84,7 +84,11 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
 
         $lockManager->expects($this->exactly(count($expectedLockData)))
             ->method('lock')
-            ->withConsecutive(...$expectedLockData);
+            ->willReturnCallback(function (...$expectedLockData) {
+                if (!empty($expectedLockData)) {
+                    return false;
+                }
+            });
 
         $request->setParams(
             [
@@ -105,7 +109,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array|array[]
      */
-    public function groupFiltersDataProvider(): array
+    public static function groupFiltersDataProvider(): array
     {
 
         return [

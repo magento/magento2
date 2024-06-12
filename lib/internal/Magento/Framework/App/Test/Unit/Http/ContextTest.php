@@ -53,7 +53,7 @@ class ContextTest extends TestCase
 
         $this->objectManager = new ObjectManager($this);
         $this->serializerMock = $this->getMockBuilder(Json::class)
-            ->setMethods(['serialize'])
+            ->onlyMethods(['serialize'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->serializerMock->expects($this->any())

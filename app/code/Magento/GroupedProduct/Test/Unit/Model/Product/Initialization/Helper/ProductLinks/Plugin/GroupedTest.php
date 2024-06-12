@@ -66,11 +66,11 @@ class GroupedTest extends TestCase
             ProductLinkExtensionFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->productLinkFactory = $this->getMockBuilder(ProductLinkInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->disableOriginalConstructor()
@@ -121,7 +121,7 @@ class GroupedTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $extensionAttributes = $this->getMockBuilder(ProductLinkExtensionInterface::class)
-            ->setMethods(['setQty', 'getQty'])
+            ->addMethods(['setQty', 'getQty'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $linkedProduct->expects($this->once())->method('getTypeId')->willReturn(Grouped::TYPE_CODE);

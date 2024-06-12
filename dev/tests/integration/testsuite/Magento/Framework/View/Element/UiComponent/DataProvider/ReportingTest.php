@@ -77,7 +77,7 @@ class ReportingTest extends TestCase
     /**
      * @return array[]
      */
-    public function filtersDataProvider()
+    public static function filtersDataProvider()
     {
         return [
             'variation 1 (filter OR filter) AND filter' => [

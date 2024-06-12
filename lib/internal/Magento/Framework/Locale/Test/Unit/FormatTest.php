@@ -55,11 +55,11 @@ class FormatTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->scope = $this->getMockBuilder(ScopeInterface::class)
-            ->setMethods(['getCurrentCurrency'])
+            ->addMethods(['getCurrentCurrency'])
             ->getMockForAbstractClass();
 
         $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->setMethods(['getScope'])
+            ->onlyMethods(['getScope'])
             ->getMockForAbstractClass();
         $this->scopeResolver->expects($this->any())
             ->method('getScope')

@@ -74,7 +74,6 @@ class CouponCodesFixture extends Fixture
      */
     public function execute()
     {
-        $this->fixtureModel->resetObjectManager();
         $requestedCouponsCount = (int) $this->fixtureModel->getValue('coupon_codes', 0);
         $existedCouponsCount = $this->couponCollectionFactory->create()->getSize();
         $this->couponCodesCount = max(0, $requestedCouponsCount - $existedCouponsCount);

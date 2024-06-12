@@ -22,7 +22,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Test related/upsell/crosssel products UI modifier
  */
-class RelatedTest extends AbstractModifierTest
+class RelatedTest extends AbstractModifierTestCase
 {
     /**
      * @var ProductLinkRepositoryInterface|MockObject
