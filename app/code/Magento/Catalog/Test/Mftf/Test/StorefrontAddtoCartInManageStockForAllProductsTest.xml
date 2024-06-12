@@ -196,9 +196,6 @@
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openConfigurableProductEditPage">
             <argument name="productId" value="$createFirstConfigProduct.id$"/>
         </actionGroup>
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reIndex">
-            <argument name="indices" value=""/>
-        </actionGroup>
         <!-- Manage Stock Advanced Inventory Section-->
         <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink6"/>
         <actionGroup ref="AdminSetManageStockConfigActionGroup" stepKey="setManageStockConfig6">
