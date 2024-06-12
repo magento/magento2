@@ -43,7 +43,7 @@ class SqlCollectorTest extends TestCase
     public function testGetEmptySql()
     {
         $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['getProfiler'])
+            ->addMethods(['getProfiler'])
             ->getMockForAbstractClass();
         $profiler = $this->getMockBuilder(\Zend_Db_Profiler::class)
             ->disableOriginalConstructor()
@@ -60,7 +60,7 @@ class SqlCollectorTest extends TestCase
     public function testGetEmptySqlWhenSelectQueryProcessed()
     {
         $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['getProfiler'])
+            ->addMethods(['getProfiler'])
             ->getMockForAbstractClass();
         $profiler = $this->getMockBuilder(\Zend_Db_Profiler::class)
             ->disableOriginalConstructor()
@@ -80,7 +80,7 @@ class SqlCollectorTest extends TestCase
     public function testGetSql()
     {
         $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['getProfiler'])
+            ->addMethods(['getProfiler'])
             ->getMockForAbstractClass();
         $profiler = $this->getMockBuilder(\Zend_Db_Profiler::class)
             ->disableOriginalConstructor()

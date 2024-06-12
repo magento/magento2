@@ -41,7 +41,7 @@ class AttributeSetFinderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->productCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productCollectionFactory->expects($this->once())->method('create')->willReturn($this->productCollection);

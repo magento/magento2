@@ -58,7 +58,7 @@ class ImporterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->themecollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->themeRegistrationMock = $this->getMockBuilder(Registration::class)

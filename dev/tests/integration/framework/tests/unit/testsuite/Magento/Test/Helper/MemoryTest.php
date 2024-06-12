@@ -37,10 +37,14 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->_shell
             ->method('execute')
-            ->withConsecutive([$this->stringStartsWith('ps ')], [$this->stringStartsWith('tasklist.exe ')])
-            ->willReturnOnConsecutiveCalls(
-                $this->throwException(new \Magento\Framework\Exception\LocalizedException(__('command not found'))),
-                '"php.exe","12345","N/A","0","26,321 K"'
+            ->willReturnCallback(
+                function ($arg1) {
+                    if (strpos($arg1, 'ps ') === 0) {
+                        throw new \Magento\Framework\Exception\LocalizedException(__('command not found'));
+                    } elseif (strpos($arg1, 'tasklist.exe ') === 0) {
+                        return '"php.exe","12345","N/A","0","26,321 K"';
+                    }
+                }
             );
 
         $object = new \Magento\TestFramework\Helper\Memory($this->_shell);

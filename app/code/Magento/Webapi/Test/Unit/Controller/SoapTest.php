@@ -14,6 +14,7 @@ use Magento\Framework\App\AreaInterface;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\State;
+use Magento\Framework\Escaper;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -87,26 +88,27 @@ class SoapTest extends TestCase
 
         $this->_soapServerMock = $this->getMockBuilder(Server::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getApiCharset', 'generateUri', 'handle', 'setWSDL', 'setEncoding', 'setReturnResponse'])
+            ->addMethods(['setWSDL', 'setEncoding', 'setReturnResponse'])
+            ->onlyMethods(['getApiCharset', 'generateUri', 'handle'])
             ->getMock();
         $this->_wsdlGeneratorMock = $this->getMockBuilder(Generator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['generate'])
+            ->onlyMethods(['generate'])
             ->getMock();
         $this->_requestMock = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParams', 'getParam', 'getRequestedServices', 'getHttpHost'])
+            ->onlyMethods(['getParams', 'getParam', 'getRequestedServices', 'getHttpHost'])
             ->getMock();
         $this->_requestMock->expects($this->any())
             ->method('getHttpHost')
             ->willReturn('testHostName.com');
         $this->_responseMock = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
-            ->setMethods(['clearHeaders', 'setHeader', 'sendResponse', 'getHeaders'])
+            ->onlyMethods(['clearHeaders', 'setHeader', 'sendResponse', 'getHeaders'])
             ->getMock();
         $this->_errorProcessorMock = $this->getMockBuilder(ErrorProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['maskException'])
+            ->onlyMethods(['maskException'])
             ->getMock();
 
         $this->_appStateMock =  $this->createMock(State::class);
@@ -114,7 +116,7 @@ class SoapTest extends TestCase
         $localeResolverMock = $this->getMockBuilder(
             Resolver::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getLocale']
             )->getMock();
         $localeResolverMock->expects($this->any())->method('getLocale')->willReturn('en');
@@ -199,6 +201,14 @@ class SoapTest extends TestCase
         $this->_wsdlGeneratorMock->expects($this->any())->method('generate')->willReturn($wsdl);
         $encoding = "utf-8";
         $this->_soapServerMock->expects($this->any())->method('getApiCharset')->willReturn($encoding);
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Escaper::class,
+                $this->createMock(Escaper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->_soapController->dispatch($this->_requestMock);
 
         $expectedMessage = <<<EXPECTED_MESSAGE
