@@ -10,6 +10,8 @@ namespace Magento\Bundle\Model\Quote\Item;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
@@ -23,12 +25,20 @@ class Option
     private $serializer;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    private $priceCurrency;
+
+    /**
      * @param Json $serializer
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
-        Json $serializer
+        Json $serializer,
+        ?PriceCurrencyInterface $priceCurrency = null,
     ) {
         $this->serializer = $serializer;
+        $this->priceCurrency = $priceCurrency ?? ObjectManager::getInstance()->get(PriceCurrencyInterface::class);
     }
 
     /**
@@ -83,7 +93,7 @@ class Option
             'code' => 'bundle_selection_attributes',
             'value'=> $this->serializer->serialize(
                 [
-                    'price' => $price,
+                    'price' => $this->priceCurrency->convert($price, $product->getStore()),
                     'qty' => $qty,
                     'option_label' => $bundleOption->getTitle(),
                     'option_id' => $bundleOption->getId(),
