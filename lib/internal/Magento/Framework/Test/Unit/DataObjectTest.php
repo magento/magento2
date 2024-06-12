@@ -393,7 +393,7 @@ string',
     /**
      * @return array
      */
-    public function underscoreDataProvider()
+    public static function underscoreDataProvider()
     {
         return [
             'Test 1' => ['GetStone1Color', 'stone_1_color'],

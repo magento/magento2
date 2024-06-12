@@ -17,7 +17,7 @@ class SynchronizeWebsiteAttributesTest extends TestCase
     {
         $synchronizerMock = $this->getMockBuilder(WebsiteAttributesSynchronizer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'isSynchronizationRequired',
                 'synchronize',
             ])
@@ -40,7 +40,7 @@ class SynchronizeWebsiteAttributesTest extends TestCase
     {
         $synchronizerMock = $this->getMockBuilder(WebsiteAttributesSynchronizer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'isSynchronizationRequired',
                 'synchronize',
             ])

@@ -52,7 +52,7 @@ class CurrencyConfigTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->setMethods(['getStores', 'getWebsites'])
+            ->onlyMethods(['getStores', 'getWebsites'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->appState = $this->getMockBuilder(State::class)
@@ -86,7 +86,7 @@ class CurrencyConfigTest extends TestCase
 
         /** @var StoreInterface|MockObject $store */
         $store = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getCode'])
+            ->onlyMethods(['getCode'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $store->expects(self::once())

@@ -688,7 +688,13 @@ class ElasticsearchTest extends TestCase
         ];
         $this->client
             ->method('createIndex')
-            ->withConsecutive([null, ['settings' => $settings]]);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($settings) {
+                    if ($arg1 == null && $arg2 == ['settings' => $settings]) {
+                        return null;
+                    }
+                }
+            );
         $this->emulateCleanIndex();
     }
 

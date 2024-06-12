@@ -67,41 +67,35 @@ class ChangeTest extends TestCase
     {
         $this->encryptMock = $this->getMockBuilder(EncryptorInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setNewKey', 'exportKeys'])
+            ->addMethods(['setNewKey', 'exportKeys'])
             ->getMockForAbstractClass();
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->structureMock = $this->getMockBuilder(Structure::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->writerMock = $this->getMockBuilder(Writer::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->setMethods(['from', 'where', 'update'])
+            ->addMethods(['update'])
+            ->onlyMethods(['from', 'where'])
             ->getMock();
         $translationClassName = TransactionManagerInterface::class;
         $this->transactionMock = $this->getMockBuilder($translationClassName)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $relationClassName = ObjectRelationProcessor::class;
         $this->objRelationMock = $this->getMockBuilder($relationClassName)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->randomMock = $this->createMock(Random::class);
 

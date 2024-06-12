@@ -83,7 +83,7 @@ class GeneratorTest extends TestCase
         $swagger = $this->objectManager->getObject(Swagger::class);
         $this->swaggerFactoryMock = $this->getMockBuilder(
             SwaggerFactory::class
-        )->setMethods(
+        )->onlyMethods(
             ['create']
         )->disableOriginalConstructor()
             ->getMock();
@@ -105,7 +105,7 @@ class GeneratorTest extends TestCase
         $this->customAttributeTypeLocatorMock = $this->getMockBuilder(
             ServiceTypeListInterface::class
         )->disableOriginalConstructor()
-            ->setMethods(['getDataTypes'])
+            ->onlyMethods(['getDataTypes'])
             ->getMockForAbstractClass();
         $this->customAttributeTypeLocatorMock->expects($this->any())
             ->method('getDataTypes')

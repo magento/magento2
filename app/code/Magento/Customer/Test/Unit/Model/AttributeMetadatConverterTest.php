@@ -56,15 +56,15 @@ class AttributeMetadatConverterTest extends TestCase
     protected function setUp(): void
     {
         $this->optionFactory = $this->getMockBuilder(OptionInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->validationRuleFactory = $this->getMockBuilder(ValidationRuleInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeMetadataFactory = $this->getMockBuilder(AttributeMetadataInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectHelper =  $this->getMockBuilder(DataObjectHelper::class)
@@ -112,6 +112,10 @@ class AttributeMetadatConverterTest extends TestCase
         ];
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testCreateAttributeMetadataTestWithSource()
     {
         $validatedRules = $this->prepareValidateRules();
@@ -157,9 +161,14 @@ class AttributeMetadatConverterTest extends TestCase
             ->with('one_value');
         $this->dataObjectHelper->expects($this->exactly(2))
             ->method('populateWithArray')
-            ->withConsecutive(
-                [$optionObject1, ['1'], OptionInterface::class],
-                [$optionObject2, ['2'], OptionInterface::class]
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($optionObject1, $optionObject2) {
+                    if ($arg1 === $optionObject1 && $arg2 === ['1'] && $arg3 === OptionInterface::class) {
+                        return null;
+                    } elseif ($arg1 === $optionObject2 && $arg2 === ['2'] && $arg3 === OptionInterface::class) {
+                        return null;
+                    }
+                }
             );
         $validationRule1 = $this->getMockForAbstractClass(ValidationRuleInterface::class);
         $validationRule2 = $this->getMockForAbstractClass(ValidationRuleInterface::class);
@@ -183,7 +192,7 @@ class AttributeMetadatConverterTest extends TestCase
 
         $mockMethods = ['setAttributeCode', 'setFrontendInput'];
         $attributeMetaData = $this->getMockBuilder(AttributeMetadata::class)
-            ->setMethods($mockMethods)
+            ->onlyMethods($mockMethods)
             ->disableOriginalConstructor()
             ->getMock();
         foreach ($mockMethods as $method) {
