@@ -99,27 +99,29 @@ class EditTest extends TestCase
             ->getMock();
         $this->viewMock = $this->getMockBuilder(View::class)
             ->disableOriginalConstructor()
-            ->setMethods(['loadLayout', 'getLayout', 'getPage', 'renderLayout'])
+            ->onlyMethods(['loadLayout', 'getLayout', 'getPage', 'renderLayout'])
             ->getMock();
         $this->layoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBlock', 'createBlock', 'setChild'])
+            ->onlyMethods(['getBlock', 'createBlock', 'setChild'])
             ->getMock();
         $this->menuBlockMock = $this->getMockBuilder(Menu::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setActive', 'getMenuModel', 'getParentItems'])
+            ->addMethods(['setActive', 'getParentItems'])
+            ->onlyMethods(['getMenuModel'])
             ->getMock();
         $this->breadcrumbsBlockMock = $this->getMockBuilder(Breadcrumbs::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addLink'])
+            ->onlyMethods(['addLink'])
             ->getMock();
         $this->editBlockMock = $this->getMockBuilder(Breadcrumbs::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setEditMode'])
+            ->addMethods(['setEditMode'])
             ->getMock();
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setActiveMenu', 'getConfig', 'addBreadcrumb'])
+            ->addMethods(['setActiveMenu', 'addBreadcrumb'])
+            ->onlyMethods([ 'getConfig'])
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -128,7 +130,8 @@ class EditTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->templateMock = $this->getMockBuilder(BackendTemplate::class)
-            ->setMethods(['getId', 'getTemplateCode', 'load'])
+            ->addMethods(['getTemplateCode'])
+            ->onlyMethods(['getId', 'load'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->templateMock->expects($this->once())

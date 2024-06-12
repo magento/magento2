@@ -46,13 +46,13 @@ class NameTest extends TestCase
             ->getMock();
         $this->purchasedFactory = $this->getMockBuilder(PurchasedFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->itemsFactory = $this->getMockBuilder(
             CollectionFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->block = $objectManager->getObject(
@@ -69,16 +69,16 @@ class NameTest extends TestCase
     {
         $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
         $linkPurchased = $this->getMockBuilder(Purchased::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load'])
+            ->onlyMethods(['load'])
             ->getMock();
         $itemCollection =
             $this->getMockBuilder(Collection::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['addFieldToFilter'])
+                ->onlyMethods(['addFieldToFilter'])
                 ->getMock();
 
         $this->block->setData('item', $item);

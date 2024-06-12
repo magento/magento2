@@ -38,7 +38,7 @@ class IntegerTypeTest extends TestCase
     {
         $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['convert'])
+            ->onlyMethods(['convert'])
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManagerHelper($this);
@@ -67,7 +67,7 @@ class IntegerTypeTest extends TestCase
     ): void {
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode', 'isIntegerType', 'isBooleanType', 'isUserDefined'])
+            ->onlyMethods(['getAttributeCode', 'isIntegerType', 'isBooleanType', 'isUserDefined'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('getAttributeCode')

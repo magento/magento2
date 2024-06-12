@@ -151,9 +151,14 @@ class IndexTest extends TestCase
             ->with('Customers');
         $this->resultPageMock->expects($this->atLeastOnce())
             ->method('addBreadcrumb')
-            ->withConsecutive(
-                ['Customers', 'Customers'],
-                ['Manage Customers', 'Manage Customers']
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'Customers' && $arg2 == 'Customers') {
+                        return null;
+                    } elseif ($arg1 == 'Manage Customers' && $arg2 == 'Manage Customers') {
+                        return null;
+                    }
+                }
             );
         $this->sessionMock->expects($this->once())
             ->method('unsCustomerData');

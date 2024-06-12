@@ -301,7 +301,7 @@ class RendererTest extends TestCase
 
         $model = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOrder', 'getSelectionAttributes', 'escapeHtml'])
+            ->onlyMethods(['getOrder', 'getSelectionAttributes', 'escapeHtml'])
             ->getMock();
         $model->expects($this->any())->method('escapeHtml')->willReturn('Test');
         $model->expects($this->any())->method('getOrder')->willReturn($orderModel);

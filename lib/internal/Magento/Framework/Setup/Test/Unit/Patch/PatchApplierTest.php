@@ -644,7 +644,7 @@ class PatchApplierTest extends TestCase
 
         $mockIteratorAggregate = $this->getMockBuilder($className)
             ->disableOriginalConstructor()
-            ->setMethods(array_merge($methods, ['getIterator']))
+            ->onlyMethods(array_merge($methods, ['getIterator']))
             ->getMock();
 
         $mockIteratorAggregate->expects($this->any())->method('getIterator')->willReturn($someIterator);

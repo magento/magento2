@@ -61,14 +61,14 @@ class PaymentMethodProcessTest extends TestCase
     {
         $checkmoPaymentMethod = $this->getMockBuilder(PaymentMethodInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode'])
+            ->onlyMethods(['getCode'])
             ->getMockForAbstractClass();
         $checkmoPaymentMethod->expects($this->any())->method('getCode')
             ->willReturn(self::PAYMENT_METHOD_CHECKMO);
 
         $payflowCCVaultTPaymentMethod = $this->getMockBuilder(VaultPaymentInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode'])
+            ->onlyMethods(['getCode'])
             ->getMockForAbstractClass();
         $payflowCCVaultTPaymentMethod->expects($this->any())->method('getCode')
             ->willReturn(self::PAYMENT_METHOD_PAYFLOWPRO_CC_VAULT);
