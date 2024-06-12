@@ -45,11 +45,11 @@ class PageLayoutTest extends TestCase
         $this->builderMock = $this->getMockBuilder(
             BuilderInterface::class
         )->disableOriginalConstructor()
-            ->setMethods(['getPageLayoutsConfig'])
+            ->onlyMethods(['getPageLayoutsConfig'])
             ->getMock();
         $this->pageLayoutConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOptions'])
+            ->onlyMethods(['getOptions'])
             ->getMock();
 
         $this->builderMock->expects($this->any())

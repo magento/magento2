@@ -53,7 +53,7 @@ class AbstractFileTest extends TestCase
 
         $this->_modelBuilder = $this->getMockBuilder(
             AbstractFile::class
-        )->setMethods(
+        )->onlyMethods(
             ['getType', 'getContentType']
         )->setConstructorArgs(
             [$this->_customizationPath, $this->_fileFactory, $this->_filesystem]
@@ -197,7 +197,7 @@ class AbstractFileTest extends TestCase
      */
     public function testSave()
     {
-        $model = $this->_modelBuilder->setMethods(['getFullPath'])->getMock();
+        $model = $this->_modelBuilder->onlyMethods(['getFullPath'])->getMock();
 
         $file = $this->createPartialMock(File::class, ['__wakeup']);
         $file->setData(
@@ -238,7 +238,7 @@ class AbstractFileTest extends TestCase
      */
     public function testDelete()
     {
-        $model = $this->_modelBuilder->setMethods(['getFullPath'])->getMock();
+        $model = $this->_modelBuilder->onlyMethods(['getFullPath'])->getMock();
         $file = $this->createPartialMock(File::class, ['__wakeup']);
         $file->setData(
             [

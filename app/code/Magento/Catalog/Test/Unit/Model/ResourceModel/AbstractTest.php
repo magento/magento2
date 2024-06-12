@@ -90,7 +90,7 @@ class AbstractTest extends TestCase
             AbstractResource::class
         );
         $model = $this->getMockBuilder(AbstractResource::class)
-            ->setMethods(['getAttributesByCode'])
+            ->onlyMethods(['getAttributesByCode'])
             ->setConstructorArgs($arguments)
             ->getMock();
 

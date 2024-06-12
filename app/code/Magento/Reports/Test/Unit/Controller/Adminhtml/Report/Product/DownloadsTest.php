@@ -13,10 +13,10 @@ use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Page\Title;
 use Magento\Reports\Controller\Adminhtml\Report\Product\Downloads;
-use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class DownloadsTest extends AbstractControllerTest
+class DownloadsTest extends AbstractControllerTestCase
 {
     /**
      * @var Downloads
@@ -83,10 +83,16 @@ class DownloadsTest extends AbstractControllerTest
         $this->breadcrumbsBlockMock
             ->expects($this->exactly(3))
             ->method('addLink')
-            ->withConsecutive(
-                [new Phrase('Reports'), new Phrase('Reports')],
-                [new Phrase('Products'), new Phrase('Products')],
-                [new Phrase('Downloads'), new Phrase('Downloads')]
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == new Phrase('Reports') && $arg2 == new Phrase('Reports')) {
+                        return null;
+                    } elseif ($arg1 == new Phrase('Products') && $arg2 == new Phrase('Products')) {
+                        return null;
+                    } elseif ($arg1 == new Phrase('Downloads') && $arg2 == new Phrase('Downloads')) {
+                        return null;
+                    }
+                }
             );
 
         $this->layoutMock

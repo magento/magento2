@@ -54,11 +54,11 @@ class FixedProductTaxTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->setMethods(['getExtensionAttributes'])
+            ->addMethods(['getExtensionAttributes'])
             ->getMockForAbstractClass();
 
         $this->extensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->setMethods(['getStore', 'setStore', 'getIsCustomer', 'setIsCustomer'])
+            ->addMethods(['getStore', 'setStore', 'getIsCustomer', 'setIsCustomer'])
             ->getMockForAbstractClass();
 
         $this->contextMock->method('getExtensionAttributes')
@@ -70,7 +70,7 @@ class FixedProductTaxTest extends TestCase
 
         $this->weeeHelperMock = $this->getMockBuilder(WeeeHelper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isEnabled', 'getProductWeeeAttributesForDisplay'])
+            ->onlyMethods(['isEnabled', 'getProductWeeeAttributesForDisplay'])
             ->getMock();
 
         $objectManager = new ObjectManager($this);

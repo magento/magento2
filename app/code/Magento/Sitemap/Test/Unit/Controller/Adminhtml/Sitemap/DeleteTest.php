@@ -94,7 +94,7 @@ class DeleteTest extends TestCase
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParam'])
+            ->onlyMethods(['getParam'])
             ->getMockForAbstractClass();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
