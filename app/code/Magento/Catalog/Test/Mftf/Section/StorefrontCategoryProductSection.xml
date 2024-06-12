@@ -35,6 +35,7 @@
         <element name="ProductImageByNameAndSrc" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//img[contains(@src, '{{src}}')]" parameterized="true"/>
         <element name="ProductStockUnavailable" type="text" selector="//*[text()='Out of stock']"/>
         <element name="listedProductOnProductPage" type="block" selector="//div[contains(@aria-labelledBy,'{{attribute_code}}')]//div[@aria-label='{{attribute_name}}']" parameterized="true"/>
+        <element name="clickProduct" type="button" selector="//li/a/span[text()='{{product}}']" parameterized="true"/>
         <element name="productCurrencyByProductName" type="text" selector="//strong[@class='product name product-item-name']//a[contains(text(),'{{productName}}')]/parent::strong/following-sibling::div[@class='price-box price-final_price']//span[@class='price' and contains(text(),'{{currencySymbol}}')]" parameterized="true"/>
         <element name="productPriceByProductName" type="text" selector="//strong[@class='product name product-item-name']//a[contains(text(),'{{productName}}')]/parent::strong/following-sibling::div[@class='price-box price-final_price']//span[@class='price' and contains(text(),'{{productPrice}}')]" parameterized="true"/>
         <element name="filterOptionCurrencySymbol" type="text" selector="//div[@class='filter-options-content']//a//span[@class='price' and contains(text(),'{{currencySymbol}}')]" parameterized="true"/>

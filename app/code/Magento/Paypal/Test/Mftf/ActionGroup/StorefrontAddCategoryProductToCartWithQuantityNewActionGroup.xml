@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAddCategoryProductToCartWithQuantityNewActionGroup">
+        <annotations>
+            <description>Adds the provided Product to the Cart from a Storefront Category page. Validates that the Success Message is present and correct. Updates the Product Quantity using the provided Product Quantity. Validates that the provided Quantity is present and correct in the Mini Shopping Cart.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+            <argument name="quantity" defaultValue="1" type="string"/>
+            <argument name="checkQuantity" defaultValue="1" type="string"/>
+        </arguments>
+
+        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage"/>
+        <waitForText selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="You added {{product.name}} to your shopping cart." stepKey="assertSuccessMessage"/>
+        <seeLink stepKey="assertLinkToShoppingCart" url="{{_ENV.MAGENTO_BASE_URL}}checkout/cart/" userInput="shopping cart"/>
+        <waitForText userInput="{{checkQuantity}}" selector="{{StorefrontMinicartSection.productCount}}" time="30" stepKey="assertProductCount"/>
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
+        <doubleClick selector="{{StorefrontMinicartSection.itemQuantity(product.name)}}" stepKey="doubleClickOnQtyInput"/>
+        <pressKey selector="{{StorefrontMinicartSection.itemQuantity(product.name)}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::DELETE]" stepKey="clearQty"/>
+        <fillField selector="{{StorefrontMinicartSection.itemQuantity(product.name)}}" userInput="{{quantity}}" stepKey="setProductQtyToFiftyInMiniCart"/>
+        <waitForElementClickable selector="{{StorefrontMinicartSection.itemQuantityUpdate(product.name)}}" stepKey="waitForUpdateQtyButton"/>
+        <click selector="{{StorefrontMinicartSection.itemQuantityUpdate(product.name)}}" stepKey="updateQtyInMiniCart"/>
+    </actionGroup>
+</actionGroups>
