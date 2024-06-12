@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class PackageTest extends TestCase
 {
-    public const SAMPLE_DATA =
+    const SAMPLE_DATA =
         '{"foo":"1","bar":"2","baz":["3","4"],"nested":{"one":"5","two":"6",
         "magento/theme-adminhtml-backend":7, "magento/theme-frontend-luma":8}}';
 
@@ -49,10 +49,10 @@ class PackageTest extends TestCase
         $this->assertSame(['3', '4'], $this->object->get('baz'));
         $nested = $this->object->get('nested');
         $this->assertInstanceOf('\StdClass', $nested);
-        $this->assertObjectHasProperty('one', $nested);
+        $this->assertObjectHasAttribute('one', $nested);
         $this->assertEquals('5', $nested->one);
         $this->assertEquals('5', $this->object->get('nested->one'));
-        $this->assertObjectHasProperty('two', $nested);
+        $this->assertObjectHasAttribute('two', $nested);
         $this->assertEquals('6', $nested->two);
         $this->assertEquals('6', $this->object->get('nested->two'));
         $this->assertEquals(

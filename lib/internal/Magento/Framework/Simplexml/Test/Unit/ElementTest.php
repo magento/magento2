@@ -19,11 +19,11 @@ class ElementTest extends TestCase
     {
         /** @var Element $xml */
         $xml = simplexml_load_file($xmlData[0], $xmlData[1]);
-        $this->assertObjectHasProperty('node4', $xml->node3);
+        $this->assertObjectHasAttribute('node4', $xml->node3);
         $xml->node3->unsetSelf();
-        $this->assertObjectNotHasProperty('node4', $xml->node3);
-        $this->assertObjectNotHasProperty('node3', $xml);
-        $this->assertObjectHasProperty('node1', $xml);
+        $this->assertObjectNotHasAttribute('node4', $xml->node3);
+        $this->assertObjectNotHasAttribute('node3', $xml);
+        $this->assertObjectHasAttribute('node1', $xml);
     }
 
     /**
