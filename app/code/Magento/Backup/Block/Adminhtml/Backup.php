@@ -23,7 +23,7 @@ class Backup extends \Magento\Backend\Block\Template
     /**
      * Prepare the layout
      *
-     * @return void
+     * @return AbstractBlock|void
      */
     protected function _prepareLayout()
     {
