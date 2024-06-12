@@ -119,7 +119,6 @@ class GaTest extends TestCase
 
         $escaper->expects($this->any())
             ->method('escapeHtml')
-            ->withConsecutive([__('sku0')], [__('testName0')], [__('test')])
             ->willReturnOnConsecutiveCalls('sku0', 'testName0', 'test');
 
         $this->gaBlock = $objectManager->getObject(
