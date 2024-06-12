@@ -107,7 +107,7 @@ class SelectTest extends TestCase
     /**
      * @return array
      */
-    public function validateValueDataProvider()
+    public static function validateValueDataProvider()
     {
         return [
             [

@@ -166,7 +166,7 @@ class FileTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function validateValueDataProvider()
+    public static function validateValueDataProvider()
     {
         return [
             [

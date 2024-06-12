@@ -149,7 +149,7 @@ class RowCustomizerTest extends TestCase
     /**
      * @return array
      */
-    public function getAdditionalRowsCountDataProvider()
+    public static function getAdditionalRowsCountDataProvider()
     {
         return [
             [

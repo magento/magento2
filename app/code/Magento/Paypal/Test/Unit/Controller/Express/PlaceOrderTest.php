@@ -47,7 +47,7 @@ class PlaceOrderTest extends ExpressTestCase
     /**
      * @return array
      */
-    public function trueFalseDataProvider()
+    public static function trueFalseDataProvider()
     {
         return [[true], [false]];
     }

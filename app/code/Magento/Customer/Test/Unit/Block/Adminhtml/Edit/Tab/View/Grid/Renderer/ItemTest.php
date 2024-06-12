@@ -113,7 +113,7 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function optionHtmlProvider()
+    public static function optionHtmlProvider()
     {
         return [
             [

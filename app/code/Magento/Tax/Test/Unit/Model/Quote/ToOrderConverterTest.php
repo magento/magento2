@@ -195,7 +195,7 @@ class ToOrderConverterTest extends TestCase
      *
      * @return array
      */
-    public function afterConvertDataProvider()
+    public static function afterConvertDataProvider()
     {
         return [
             'afterConvert' => [

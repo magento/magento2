@@ -56,7 +56,7 @@ class AddressConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertDataProvider(): array
+    public static function convertDataProvider(): array
     {
         return [
             [

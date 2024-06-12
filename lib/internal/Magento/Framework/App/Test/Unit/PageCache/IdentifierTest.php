@@ -149,7 +149,7 @@ class IdentifierTest extends TestCase
     /**
      * @return array
      */
-    public function trueFalseDataProvider(): array
+    public static function trueFalseDataProvider(): array
     {
         return [[true], [false]];
     }

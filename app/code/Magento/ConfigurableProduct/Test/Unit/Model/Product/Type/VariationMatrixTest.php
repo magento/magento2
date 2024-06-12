@@ -42,7 +42,7 @@ class VariationMatrixTest extends TestCase
     /**
      * Test data provider.
      */
-    public function variationProvider()
+    public static function variationProvider()
     {
         return [
             [

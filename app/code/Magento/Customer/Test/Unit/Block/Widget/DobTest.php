@@ -251,7 +251,7 @@ class DobTest extends TestCase
     /**
      * @return array
      */
-    public function isRequiredDataProvider()
+    public static function isRequiredDataProvider()
     {
         return [[true, true], [false, false]];
     }
@@ -274,7 +274,7 @@ class DobTest extends TestCase
     /**
      * @return array
      */
-    public function setDateDataProvider()
+    public static function setDateDataProvider()
     {
         return [
             [false, false, false],
@@ -306,7 +306,7 @@ class DobTest extends TestCase
     /**
      * @return array
      */
-    public function getDayDataProvider()
+    public static function getDayDataProvider()
     {
         return [[self::DATE, self::DAY], [false, '']];
     }
@@ -326,7 +326,7 @@ class DobTest extends TestCase
     /**
      * @return array
      */
-    public function getMonthDataProvider()
+    public static function getMonthDataProvider()
     {
         return [[self::DATE, self::MONTH], [false, '']];
     }
@@ -346,7 +346,7 @@ class DobTest extends TestCase
     /**
      * @return array
      */
-    public function getYearDataProvider()
+    public static function getYearDataProvider()
     {
         return [[self::DATE, self::YEAR], [false, '']];
     }
@@ -367,7 +367,7 @@ class DobTest extends TestCase
     /**
      * @return array
      */
-    public function getDateFormatDataProvider(): array
+    public static function getDateFormatDataProvider(): array
     {
         return [
             [
@@ -652,7 +652,7 @@ class DobTest extends TestCase
      *
      * @return array
      */
-    public function getTranslatedCalendarConfigJsonDataProvider()
+    public static function getTranslatedCalendarConfigJsonDataProvider()
     {
         return [
             [

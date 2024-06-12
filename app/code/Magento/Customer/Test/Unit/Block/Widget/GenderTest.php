@@ -129,7 +129,7 @@ class GenderTest extends TestCase
      * The testIsRequired data provider.
      * @return array
      */
-    public function isRequiredDataProvider()
+    public static function isRequiredDataProvider()
     {
         return [[true, true], [false, false]];
     }

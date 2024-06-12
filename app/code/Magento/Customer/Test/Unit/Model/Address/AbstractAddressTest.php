@@ -428,7 +428,7 @@ class AbstractAddressTest extends TestCase
     /**
      * @return array
      */
-    public function getStreetFullDataProvider()
+    public static function getStreetFullDataProvider()
     {
         return [
             [null, null],
