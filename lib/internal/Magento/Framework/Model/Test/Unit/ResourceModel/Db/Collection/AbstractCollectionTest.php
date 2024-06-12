@@ -82,7 +82,7 @@ class AbstractCollectionTest extends TestCase
             ->willReturn($this->connectionMock);
 
         $this->selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['getPart', 'setPart', 'from', 'columns'])
+            ->onlyMethods(['getPart', 'setPart', 'from', 'columns'])
             ->setConstructorArgs([$this->connectionMock, $renderer])
             ->getMock();
 

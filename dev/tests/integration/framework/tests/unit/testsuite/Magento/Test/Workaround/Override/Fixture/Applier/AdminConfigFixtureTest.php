@@ -43,7 +43,7 @@ class AdminConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function annotationsProvider(): array
+    public static function annotationsProvider(): array
     {
         return [
             'simple_record' => [
@@ -78,7 +78,7 @@ class AdminConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function wrongRecordsProvider(): array
+    public static function wrongRecordsProvider(): array
     {
         return [
             'another_path_record' => [
@@ -109,7 +109,7 @@ class AdminConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function initFixtureProvider(): array
+    public static function initFixtureProvider(): array
     {
         return [
             'with_value' => [

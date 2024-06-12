@@ -66,12 +66,12 @@ class CollectionProcessorTest extends TestCase
         $this->expectException('InvalidArgumentException');
         /** @var CollectionProcessorInterface|MockObject $customFilterMock */
         $processorOneMock = $this->getMockBuilder(CollectionProcessorInterface::class)
-            ->setMethods(['process'])
+            ->onlyMethods(['process'])
             ->getMockForAbstractClass();
 
         /** @var \stdClass|MockObject $processorTwoMock */
         $processorTwoMock = $this->getMockBuilder(\stdClass::class)
-            ->setMethods(['process'])
+            ->addMethods(['process'])
             ->getMock();
 
         $processors = [$processorOneMock, $processorTwoMock];

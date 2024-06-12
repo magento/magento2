@@ -50,7 +50,7 @@ class LayoutProcessorTest extends TestCase
     /**
      * @return array[]
      */
-    public function defaultCountryDataProvider(): array
+    public static function defaultCountryDataProvider(): array
     {
         return [
             'Default country isn\'t in allowed country list' => [

@@ -12,8 +12,11 @@ use Magento\Customer\Block\Adminhtml\Form\Element\Address\File;
 use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,6 +35,18 @@ class FileTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $factoryElement = $this->createMock(Factory::class);
         $factoryCollection = $this->createMock(CollectionFactory::class);
         $escaper = $this->createMock(Escaper::class);

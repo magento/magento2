@@ -183,7 +183,7 @@ class AttributeManagementTest extends TestCase
         $entityTypeMock->expects($this->once())->method('getEntityTypeCode')->willReturn($entityTypeCode);
 
         $attributeGroup = $this->getMockBuilder(AttributeGroupInterface::class)
-            ->setMethods(['getAttributeSetId'])
+            ->onlyMethods(['getAttributeSetId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -236,7 +236,7 @@ class AttributeManagementTest extends TestCase
         $attributeMock->expects($this->once())->method('getData')->with('entity_attribute_id')->willReturnSelf();
 
         $attributeGroup = $this->getMockBuilder(AttributeGroupInterface::class)
-            ->setMethods(['getAttributeSetId'])
+            ->onlyMethods(['getAttributeSetId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

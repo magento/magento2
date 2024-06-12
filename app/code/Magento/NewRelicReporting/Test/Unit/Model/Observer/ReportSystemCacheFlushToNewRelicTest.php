@@ -53,20 +53,20 @@ class ReportSystemCacheFlushToNewRelicTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled'])
+            ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
         $this->backendAuthSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUser'])
+            ->addMethods(['getUser'])
             ->getMock();
         $this->deploymentsFactory = $this->getMockBuilder(
             DeploymentsFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->deploymentsModel = $this->getMockBuilder(Deployments::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setDeployment'])
+            ->onlyMethods(['setDeployment'])
             ->getMock();
         $this->deploymentsFactory->expects($this->any())
             ->method('create')
