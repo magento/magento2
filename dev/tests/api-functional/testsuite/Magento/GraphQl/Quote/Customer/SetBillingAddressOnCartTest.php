@@ -822,7 +822,7 @@ QUERY;
     /**
      * @return array
      */
-    public function dataProviderSetWithoutRequiredParameters(): array
+    public static function dataProviderSetWithoutRequiredParameters(): array
     {
         return [
             'missed_region' => [

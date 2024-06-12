@@ -48,7 +48,7 @@ class ExportTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getEntityDataProvider()
+    public static function getEntityDataProvider()
     {
         return [
             'product' => [

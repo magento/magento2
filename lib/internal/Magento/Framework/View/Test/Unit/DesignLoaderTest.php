@@ -62,8 +62,13 @@ class DesignLoaderTest extends TestCase
         $this->_areaListMock->expects($this->once())->method('getArea')->with('area')->willReturn($area);
         $area
             ->method('load')
-            ->withConsecutive([Area::PART_DESIGN], [Area::PART_TRANSLATE])
-            ->willReturnOnConsecutiveCalls($area, $area);
+            ->willReturnCallback(
+                function ($arg) use ($area) {
+                    if ($arg == Area::PART_DESIGN || $arg == Area::PART_TRANSLATE) {
+                        return $area;
+                    }
+                }
+            );
         $this->_model->load($this->_requestMock);
     }
 }

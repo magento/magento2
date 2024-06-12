@@ -94,7 +94,7 @@ class AttributeTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->eavConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['clear'])
+            ->onlyMethods(['clear'])
             ->disableOriginalConstructor()
             ->getMock();
 

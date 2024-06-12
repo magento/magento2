@@ -127,7 +127,7 @@ namespace Magento\Framework\Session {
             $this->assertSame($value, $model->{$getter}());
         }
 
-        public function optionsProvider()
+        public static function optionsProvider()
         {
             return [
                 ['save_path', 'getSavePath', __DIR__],
@@ -357,7 +357,7 @@ namespace Magento\Framework\Session {
             $mockPHPFunctions = false;
         }
 
-        public function constructorDataProvider()
+        public static function constructorDataProvider()
         {
             // preset value (null = not set), input value (null = not set), expected value
             $savePathGiven = 'explicit_save_path';

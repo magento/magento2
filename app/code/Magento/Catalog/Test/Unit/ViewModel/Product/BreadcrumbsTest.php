@@ -57,12 +57,12 @@ class BreadcrumbsTest extends TestCase
     protected function setUp(): void
     {
         $this->catalogHelperMock = $this->getMockBuilder(CatalogHelper::class)
-            ->setMethods(['getProduct'])
+            ->onlyMethods(['getProduct'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue', 'isSetFlag'])
+            ->onlyMethods(['getValue', 'isSetFlag'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
