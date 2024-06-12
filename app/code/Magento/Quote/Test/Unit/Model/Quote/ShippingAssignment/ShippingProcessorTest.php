@@ -38,12 +38,12 @@ class ShippingProcessorTest extends TestCase
     {
         $this->shippingAddressManagement = $this->getMockBuilder(ShippingAddressManagement::class)
             ->disableOriginalConstructor()
-            ->setMethods(['assign'])
+            ->onlyMethods(['assign'])
             ->getMock();
 
         $this->shippingMethodManagement = $this->getMockBuilder(ShippingMethodManagement::class)
             ->disableOriginalConstructor()
-            ->setMethods(['apply'])
+            ->onlyMethods(['apply'])
             ->getMock();
 
         $objectManager = new ObjectManager($this);

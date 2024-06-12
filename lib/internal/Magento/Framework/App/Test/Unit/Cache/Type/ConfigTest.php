@@ -144,10 +144,15 @@ class ConfigTest extends TestCase
     {
         $this->frontendMock
             ->method('clean')
-            ->withConsecutive(
-                [\Zend_Cache::CLEANING_MODE_MATCHING_TAG, ['test_tag_one', Config::CACHE_TAG]],
-                [\Zend_Cache::CLEANING_MODE_MATCHING_TAG, ['test_tag_two', Config::CACHE_TAG]]
-            )->willReturnOnConsecutiveCalls($fixtureResultOne, $fixtureResultTwo);
+            ->willReturnCallback(function ($arg1, $arg2) use ($fixtureResultOne, $fixtureResultTwo) {
+                if ($arg1 == \Zend_Cache::CLEANING_MODE_MATCHING_TAG &&
+                    $arg2 == ['test_tag_one', Config::CACHE_TAG]) {
+                    return $fixtureResultOne;
+                } elseif ($arg1 == \Zend_Cache::CLEANING_MODE_MATCHING_TAG &&
+                    $arg2 == ['test_tag_two', Config::CACHE_TAG]) {
+                    return $fixtureResultTwo;
+                }
+            });
         $actualResult = $this->model->clean(
             \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
             ['test_tag_one', 'test_tag_two']

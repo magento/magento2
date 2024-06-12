@@ -55,12 +55,12 @@ class PlaceOrderWithHostedProTest extends TestCase
 
         $this->nvpMock = $this->getMockBuilder(Nvp::class)
             ->disableOriginalConstructor()
-            ->setMethods(['call'])
+            ->onlyMethods(['call'])
             ->getMock();
 
         $apiFactoryMock = $this->getMockBuilder(ApiFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $apiFactoryMock->method('create')->willReturn($this->nvpMock);
 

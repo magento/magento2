@@ -71,7 +71,7 @@ class AttributeValueProviderTest extends TestCase
     {
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $this->productMock->expects($this->any())
@@ -81,7 +81,7 @@ class AttributeValueProviderTest extends TestCase
 
         $productCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'addIdFilter', 'addStoreFilter', 'addAttributeToSelect', 'isEnabledFlat', 'getFirstItem'
             ])->getMock();
 
@@ -130,7 +130,7 @@ class AttributeValueProviderTest extends TestCase
             ]);
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
         $this->productMock->expects($this->any())
             ->method('getData')
@@ -139,7 +139,7 @@ class AttributeValueProviderTest extends TestCase
 
         $productCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'addIdFilter', 'addStoreFilter', 'addAttributeToSelect', 'isEnabledFlat', 'getConnection'
             ])->getMock();
 

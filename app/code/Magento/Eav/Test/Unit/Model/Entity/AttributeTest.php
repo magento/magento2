@@ -143,10 +143,10 @@ class AttributeTest extends TestCase
         $storeLabels = ['test_attribute_store1'];
         $frontendLabelFactory = $this->getMockBuilder(FrontendLabelFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resource = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class)
-            ->setMethods(['getStoreLabelsByAttributeId'])
+            ->onlyMethods(['getStoreLabelsByAttributeId'])
             ->disableOriginalConstructor()
             ->getMock();
         $arguments = [
@@ -162,7 +162,7 @@ class AttributeTest extends TestCase
             ->with($attributeId)
             ->willReturn($storeLabels);
         $frontendLabel = $this->getMockBuilder(FrontendLabel::class)
-            ->setMethods(['setStoreId', 'setLabel'])
+            ->onlyMethods(['setStoreId', 'setLabel'])
             ->disableOriginalConstructor()
             ->getMock();
         $frontendLabelFactory->expects($this->once())
