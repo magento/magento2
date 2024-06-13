@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2023 Adobe
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -8,9 +8,11 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\CartItem;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\CatalogInventory\Model\StockState;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote\Item;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 
 /**
  * Product Stock class to check availability of product
@@ -31,9 +33,13 @@ class ProductStock
      * ProductStock constructor
      *
      * @param ProductRepositoryInterface $productRepositoryInterface
+     * @param StockState $stockState
+     * @param StockConfigurationInterface $stockConfiguration
      */
     public function __construct(
         private readonly ProductRepositoryInterface $productRepositoryInterface,
+        private readonly StockState $stockState,
+        private readonly StockConfigurationInterface $stockConfiguration
     ) {
     }
 
@@ -46,8 +52,6 @@ class ProductStock
      */
     public function isProductAvailable(Item $cartItem): bool
     {
-        $requestedQty = 0;
-        $previousQty = 0;
         /**
          * @var ProductInterface $variantProduct
          * Configurable products cannot have stock, only its variants can. If the user adds a configurable product
@@ -55,18 +59,13 @@ class ProductStock
          */
         $variantProduct = null;
 
-        foreach ($cartItem->getQuote()->getItems() as $item) {
-            if ($item->getItemId() !== $cartItem->getItemId()) {
-                continue;
+        if ($cartItem->getProductType() === self::PRODUCT_TYPE_CONFIGURABLE) {
+            if ($cartItem->getChildren()[0] !== null) {
+                $variantProduct = $this->productRepositoryInterface->get($cartItem->getSku());
             }
-            if ($cartItem->getProductType() === self::PRODUCT_TYPE_CONFIGURABLE) {
-                if ($cartItem->getChildren()[0] !== null) {
-                    $variantProduct = $this->productRepositoryInterface->get($item->getSku());
-                }
-            }
-            $requestedQty = $item->getQtyToAdd() ?? $item->getQty();
-            $previousQty = $item->getPreviousQty() ?? 0;
         }
+        $requestedQty = $cartItem->getQtyToAdd() ?? $cartItem->getQty();
+        $previousQty = $cartItem->getPreviousQty() ?? 0;
 
         if ($cartItem->getProductType() === self::PRODUCT_TYPE_BUNDLE) {
             return $this->isStockAvailableBundle($cartItem, $previousQty, $requestedQty);
@@ -74,9 +73,9 @@ class ProductStock
 
         $requiredItemQty =  $requestedQty + $previousQty;
         if ($variantProduct !== null) {
-            return $this->isStockQtyAvailable($variantProduct, $requiredItemQty);
+            return $this->isStockQtyAvailable($variantProduct, $requestedQty, $requiredItemQty, $previousQty);
         }
-        return $this->isStockQtyAvailable($cartItem->getProduct(), $requiredItemQty);
+        return $this->isStockQtyAvailable($cartItem->getProduct(), $requestedQty, $requiredItemQty, $previousQty);
     }
 
     /**
@@ -96,7 +95,7 @@ class ProductStock
             if ($totalRequestedQty) {
                 $requiredItemQty = $requiredItemQty * $totalRequestedQty;
             }
-            if (!$this->isStockQtyAvailable($qtyOption->getProduct(), $requiredItemQty)) {
+            if (!$this->isStockQtyAvailable($qtyOption->getProduct(), $requestedQty, $requiredItemQty, $previousQty)) {
                 return false;
             }
         }
@@ -104,22 +103,28 @@ class ProductStock
     }
 
     /**
-     * Check if product is available in stock using quantity from Catalog Inventory Stock Item
+     * Check if product is available in stock
      *
      * @param ProductInterface $product
+     * @param float $itemQty
      * @param float $requiredQuantity
-     * @throws NoSuchEntityException
+     * @param float $prevQty
      * @return bool
      */
-    private function isStockQtyAvailable(ProductInterface $product, float $requiredQuantity): bool
-    {
-        $stockItem = $product->getExtensionAttributes()->getStockItem();
-        if ($stockItem === null) {
-            return true;
-        }
-        if ((int) $stockItem->getProductId() !== (int) $product->getId()) {
-            throw new NoSuchEntityException(__('Stock item\'s product ID does not match requested product ID'));
-        }
-        return $stockItem->getQty() >= $requiredQuantity;
+    private function isStockQtyAvailable(
+        ProductInterface $product,
+        float $itemQty,
+        float $requiredQuantity,
+        float $prevQty
+    ): bool {
+        $stockStatus = $this->stockState->checkQuoteItemQty(
+            $product->getId(),
+            $itemQty,
+            $requiredQuantity,
+            $prevQty,
+            $this->stockConfiguration->getDefaultScopeId()
+        );
+
+        return ((bool) $stockStatus->getHasError()) === false;
     }
 }
