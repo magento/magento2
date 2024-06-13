@@ -78,6 +78,7 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     token: String! @doc(description: "The token that can be used to retrieve the order using order query.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Token")
     applied_coupons: [AppliedCoupon!]! @doc(description: "Coupons applied to the order.")
     email: String @doc(description: "Order customer email.")
+    is_virtual: Boolean! @doc(description: "`TRUE` if the order is virtual") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderIsVirtual")
 }
 
 type OrderAddress @doc(description: "Contains detailed information about an order's billing and shipping addresses."){
