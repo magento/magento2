@@ -14,6 +14,8 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\ElementFactory;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\Setup\Declaration\Schema\Sharding;
+use Magento\Framework\Config\FileResolverByModule;
+use Magento\Framework\Setup\Declaration\Schema\Declaration\ReaderComposite;
 
 /**
  * This type of builder is responsible for converting ENTIRE data, that comes from db
@@ -49,11 +51,9 @@ class SchemaBuilder
     private $tables;
 
     /**
-     * declared tables.
-     *
-     * @var array
+     * @var ReaderComposite
      */
-    private array $tablesWithJsonTypeField = [];
+    private $readerComposite;
 
     /**
      * Constructor.
@@ -61,23 +61,37 @@ class SchemaBuilder
      * @param ElementFactory $elementFactory
      * @param DbSchemaReaderInterface $dbSchemaReader
      * @param Sharding $sharding
+     * @param ReaderComposite $readerComposite
      */
     public function __construct(
         ElementFactory $elementFactory,
         DbSchemaReaderInterface $dbSchemaReader,
-        Sharding $sharding
+        Sharding $sharding,
+        ReaderComposite $readerComposite
     ) {
         $this->elementFactory = $elementFactory;
         $this->dbSchemaReader = $dbSchemaReader;
         $this->sharding = $sharding;
+        $this->readerComposite = $readerComposite;
     }
 
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function build(Schema $schema)
     {
+        $data = $this->readerComposite->read(FileResolverByModule::ALL_MODULES);
+        $tablesWithJsonTypeField = [];
+        foreach ($data['table'] as $keyTable => $tableColumns) {
+            foreach ($tableColumns['column'] as $keyColumn => $columnData) {
+                if ($columnData['type'] == 'json') {
+                    $tablesWithJsonTypeField[$keyTable] = $keyColumn;
+                }
+            }
+        }
+
         foreach ($this->sharding->getResources() as $resource) {
             foreach ($this->dbSchemaReader->readTables($resource) as $tableName) {
                 $columns = [];
@@ -105,7 +119,6 @@ class SchemaBuilder
                 );
 
                 $isJsonType = false;
-                $tablesWithJsonTypeField = $this->getTablesWithJsonTypeField();
                 if (count($tablesWithJsonTypeField) > 0 && isset($tablesWithJsonTypeField[$tableName])) {
                     $isJsonType = true;
                 }
@@ -222,26 +235,5 @@ class SchemaBuilder
         }
 
         return $referenceColumns;
-    }
-
-    /**
-     * Get tables name with JSON type fields.
-     *
-     * @return array
-     */
-    public function getTablesWithJsonTypeField(): array
-    {
-        return $this->tablesWithJsonTypeField;
-    }
-
-    /**
-     * Set tables name with JSON type fields.
-     *
-     * @param array $tablesWithJsonTypeField
-     * @return array
-     */
-    public function setTablesWithJsonTypeField(array $tablesWithJsonTypeField): array
-    {
-        return $this->tablesWithJsonTypeField = $tablesWithJsonTypeField;
     }
 }
