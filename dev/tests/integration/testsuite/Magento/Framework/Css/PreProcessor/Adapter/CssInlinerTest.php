@@ -45,7 +45,7 @@ class CssInlinerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getFilesDataProvider()
+    public static function getFilesDataProvider()
     {
         $fixtureDir = dirname(dirname(__DIR__));
         return [
@@ -84,7 +84,7 @@ class CssInlinerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getFilesDataProviderEmogrifier()
+    public static function getFilesDataProviderEmogrifier()
     {
         $fixtureDir = dirname(dirname(__DIR__));
         return [

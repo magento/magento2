@@ -61,7 +61,7 @@ class DependencyTest extends TestCase
         /** @var PackageFactory|MockObject $packageFactory */
         $packageFactory = $this->getMockBuilder(PackageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $packageFactory->method('create')
             ->willReturnCallback(function ($args) {
@@ -78,7 +78,7 @@ class DependencyTest extends TestCase
 
         $directoryReadFactory = $this->getMockBuilder(ReadFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $directoryReadFactory->method('create')
             ->willReturnMap($composerJsonGenerator($this));

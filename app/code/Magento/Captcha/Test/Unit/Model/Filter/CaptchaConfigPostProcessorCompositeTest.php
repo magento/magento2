@@ -47,11 +47,11 @@ class CaptchaConfigPostProcessorCompositeTest extends TestCase
 
         $this->processorMock1 = $this->getMockBuilder(CaptchaConfigPostProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['process'])
+            ->onlyMethods(['process'])
             ->getMock();
         $this->processorMock2 = $this->getMockBuilder(CaptchaConfigPostProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['process'])
+            ->onlyMethods(['process'])
             ->getMock();
 
         $processors = [$this->processorMock1, $this->processorMock2];

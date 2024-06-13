@@ -11,7 +11,7 @@ use Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundlePrice;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 
-class BundlePriceTest extends AbstractModifierTest
+class BundlePriceTest extends AbstractModifierTestCase
 {
     /**
      * @return BundlePrice

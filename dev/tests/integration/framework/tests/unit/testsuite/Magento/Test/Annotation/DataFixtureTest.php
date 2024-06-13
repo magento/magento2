@@ -519,7 +519,14 @@ class DataFixtureTest extends TestCase
         $this->assertNull($this->fixtureStorage->get('fixture3'));
         $this->fixture1->expects($this->exactly(2))
             ->method('revert')
-            ->withConsecutive([$fixture12], [$fixture11]);
+            ->willReturnCallback(
+                function($arg) use($fixture12,$fixture11){
+                    if ($arg == $fixture12 || $arg == $fixture11) {
+                        return null;
+                    }
+                }
+            );
+            
         $this->fixture2->expects($this->once())
             ->method('revert')
             ->with($fixture2);

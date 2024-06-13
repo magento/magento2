@@ -168,15 +168,15 @@ class WishlistTest extends TestCase
             ->getMock();
         $this->itemFactory = $this->getMockBuilder(ItemFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->itemsFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->productFactory = $this->getMockBuilder(ProductFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->mathRandom = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
@@ -361,9 +361,10 @@ class WishlistTest extends TestCase
     private function prepareWishlistItem(): MockObject
     {
         $newItem = $this->getMockBuilder(Item::class)
-            ->setMethods(
-                ['setProductId', 'setWishlistId', 'setStoreId', 'setOptions', 'setProduct', 'setQty', 'getItem', 'save']
+            ->onlyMethods(
+                ['setOptions', 'setQty', 'save']
             )
+            ->addMethods(['setProductId', 'setWishlistId', 'setStoreId', 'getItem', 'setProduct'])
             ->disableOriginalConstructor()
             ->getMock();
         $newItem->expects($this->any())->method('setProductId')->willReturnSelf();
@@ -433,7 +434,8 @@ class WishlistTest extends TestCase
 
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'hasWishlistStoreId', 'getStoreId', 'getTypeInstance', 'getIsSalable'])
+            ->addMethods(['hasWishlistStoreId'])
+            ->onlyMethods(['getId', 'getStoreId', 'getTypeInstance', 'getIsSalable'])
             ->getMock();
         $productMock->method('getId')
             ->willReturn($productId);

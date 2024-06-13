@@ -116,23 +116,24 @@ class PageCacheTest extends TestCase
      */
     public function testCreateConfigWithRedisConfiguration()
     {
-        $this->deploymentConfigMock->method('get')->withConsecutive(
-            [PageCache::CONFIG_PATH_PAGE_CACHE_ID_PREFIX],
-            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER, '127.0.0.1'],
-            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE, '1'],
-            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT, '6379'],
-            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD, ''],
-            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA, '0'],
-            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB, '']
-        )->willReturnOnConsecutiveCalls(
-            'XXX_',
-            '127.0.0.1',
-            '1',
-            '6379',
-            '',
-            '0',
-            ''
-        );
+        $this->deploymentConfigMock->method('get')
+            ->willReturnCallback(function ($arg1, $arg2 = null) {
+                if ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_ID_PREFIX) {
+                    return 'XXX_';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER && $arg2 == '127.0.0.1') {
+                    return '127.0.0.1';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE && $arg2 == '1') {
+                    return '1';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT && $arg2 == '6379') {
+                    return '6379';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD && $arg2 == '') {
+                    return '';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA && $arg2 == '0') {
+                    return '0';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB && $arg2 == '') {
+                    return '';
+                }
+            });
 
         $expectedConfigData = [
             'cache' => [

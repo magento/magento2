@@ -23,7 +23,7 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getConfigurations(): array
+    public static function getConfigurations(): array
     {
         return [
             'no-html' => [['div'], [], [], 'just text', true, [], []],

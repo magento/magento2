@@ -93,7 +93,7 @@ class EmailMessageTest extends TestCase
     /**
      * @return array
      */
-    public function getEmailMessageDataProvider(): array
+    public static function getEmailMessageDataProvider(): array
     {
         return [
             [

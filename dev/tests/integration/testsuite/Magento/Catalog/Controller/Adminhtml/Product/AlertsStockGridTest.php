@@ -37,7 +37,7 @@ class AlertsStockGridTest extends AbstractAlertTest
     /**
      * @return array
      */
-    public function stockLimitProvider(): array
+    public static function stockLimitProvider(): array
     {
         return [
             'default_limit' => [

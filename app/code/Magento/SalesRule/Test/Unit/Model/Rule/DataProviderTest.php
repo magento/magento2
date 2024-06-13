@@ -66,7 +66,6 @@ class DataProviderTest extends TestCase
         $ruleMock = $this->createMock(Rule::class);
         $metaDataValueProviderMock = $this->getMockBuilder(ValueProvider::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $registryMock = $this->createMock(Registry::class);
         $registryMock->expects($this->once())
