@@ -136,8 +136,13 @@ class StoreTest extends TestCase
 
         $this->converter
             ->method('convert')
-            ->withConsecutive([$expectedResult], [$expectedResult])
-            ->willReturnArgument(0);
+            ->willReturnCallback(
+                function ($arg1) use ($expectedResult) {
+                    if ($arg1 == $expectedResult) {
+                        return $arg1;
+                    }
+                }
+            );
 
         $this->assertEquals($expectedResult, $this->storeSource->get($scopeCode));
     }

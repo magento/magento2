@@ -103,7 +103,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $this->assertLessThanOrEqual($afterTimestamp, $pageTimestamp);
     }
 
-    public function generateIdentifierFromTitleDataProvider() : array
+    public static function generateIdentifierFromTitleDataProvider() : array
     {
         return [
             ['data' => ['title' => 'Test title', 'stores' => [1]], 'expectedIdentifier' => 'test-title'],
@@ -122,7 +122,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
      * Data provider for "testGetByIdentifier" method
      * @return array
      */
-    public function testGetByIdentifierDataProvider() : array
+    public static function testGetByIdentifierDataProvider() : array
     {
         return [
             ['data' => [

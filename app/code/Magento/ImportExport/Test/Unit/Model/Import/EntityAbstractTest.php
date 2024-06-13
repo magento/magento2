@@ -48,7 +48,7 @@ class EntityAbstractTest extends AbstractImportTestCase
 
         $this->_model = $this->getMockBuilder(AbstractEntity::class)
             ->setConstructorArgs($this->_getModelDependencies())
-            ->setMethods(['_saveValidatedBunches'])
+            ->onlyMethods(['_saveValidatedBunches'])
             ->getMockForAbstractClass();
     }
 

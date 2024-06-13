@@ -137,8 +137,18 @@ class ManagerTest extends TestCase
 
         $this->session
             ->method('getData')
-            ->withConsecutive([Manager::DEFAULT_GROUP], [Manager::DEFAULT_GROUP])
-            ->willReturnOnConsecutiveCalls(null, $messageCollection);
+            ->willReturnCallback(
+                function ($arg1) use ($messageCollection) {
+                    static $callCount = 0;
+                    if ($callCount == 0 && $arg1 == Manager::DEFAULT_GROUP) {
+                        $callCount++;
+                        return null;
+                    } elseif ($callCount == 1 && $arg1 == Manager::DEFAULT_GROUP) {
+                        $callCount++;
+                        return $messageCollection;
+                    }
+                }
+            );
         $this->session
             ->method('setData')
             ->with(Manager::DEFAULT_GROUP, $messageCollection)
@@ -258,7 +268,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function addMessageDataProvider(): array
+    public static function addMessageDataProvider(): array
     {
         return [
             'error' => [MessageInterface::TYPE_ERROR, 'addError'],
@@ -293,7 +303,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function addUniqueMessagesWhenMessagesImplementMessageInterfaceDataProvider(): array
+    public static function addUniqueMessagesWhenMessagesImplementMessageInterfaceDataProvider(): array
     {
         return [
             'message_text_is_unique' => [
@@ -331,7 +341,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function addUniqueMessagesDataProvider(): array
+    public static function addUniqueMessagesDataProvider(): array
     {
         return [
             'messages_are_text' => [['message']],

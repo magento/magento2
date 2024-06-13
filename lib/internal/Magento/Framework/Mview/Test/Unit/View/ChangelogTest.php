@@ -128,7 +128,7 @@ class ChangelogTest extends TestCase
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
-            ->setMethods(['from', 'order', 'limit'])
+            ->onlyMethods(['from', 'order', 'limit'])
             ->getMock();
         $selectMock->expects($this->any())->method('from')->willReturn($selectMock);
         $selectMock->expects($this->any())->method('order')->willReturn($selectMock);
@@ -153,7 +153,7 @@ class ChangelogTest extends TestCase
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
-            ->setMethods(['from', 'order', 'limit'])
+            ->onlyMethods(['from', 'order', 'limit'])
             ->getMock();
         $selectMock->expects($this->any())->method('from')->willReturn($selectMock);
         $selectMock->expects($this->any())->method('order')->willReturn($selectMock);
@@ -180,7 +180,7 @@ class ChangelogTest extends TestCase
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
-            ->setMethods(['from', 'order', 'limit'])
+            ->onlyMethods(['from', 'order', 'limit'])
             ->getMock();
         $selectMock->expects($this->any())->method('from')->willReturn($selectMock);
         $selectMock->expects($this->any())->method('order')->willReturn($selectMock);

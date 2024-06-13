@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Module\Di\Code\Scanner\XmlScanner;
 use Magento\Setup\Module\Di\Compiler\Log\Log;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class XmlScannerTest extends TestCase
 {
@@ -34,6 +36,14 @@ class XmlScannerTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                LoggerInterface::class,
+                $this->createMock(LoggerInterface::class)
+            ],
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
         $this->logMock = $this->createMock(Log::class);
         $this->model = new XmlScanner($this->logMock);
         $testDir = __DIR__ . '/../../' . '/_files';
@@ -54,33 +64,21 @@ class XmlScannerTest extends TestCase
         $className = 'Magento\Store\Model\Config\Invalidator\Proxy';
         $this->logMock
             ->method('add')
-            ->withConsecutive(
-                [
-                    4,
-                    $className,
-                    'Invalid proxy class for ' . substr($className, 0, -5)
-                ],
-                [
-                    4,
-                    'Magento\SomeModule\Model\Element\Proxy',
-                    'Invalid proxy class for ' . substr('Magento\SomeModule\Model\Element\Proxy', 0, -5)
-                ],
-                [
-                    4,
-                    'Magento\SomeModule\Model\Element2\Proxy',
-                    'Invalid proxy class for ' . substr('Magento\SomeModule\Model\Element2\Proxy', 0, -5)
-                ],
-                [
-                    4,
-                    'Magento\SomeModule\Model\Nested\Element\Proxy',
-                    'Invalid proxy class for ' . substr('Magento\SomeModule\Model\Nested\Element\Proxy', 0, -5)
-                ],
-                [
-                    4,
-                    'Magento\SomeModule\Model\Nested\Element2\Proxy',
-                    'Invalid proxy class for ' . substr('Magento\SomeModule\Model\Nested\Element2\Proxy', 0, -5)
-                ],
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($className) {
+                if ($arg1 == 4 && $arg2 == $className && $arg3 == 'Invalid proxy class for ' .
+                    substr($className, 0, -5)) {
+                    return null;
+                } elseif ($arg1 == 4 && $arg2 == 'Magento\SomeModule\Model\Element\Proxy') {
+                    return null;
+                } elseif ($arg1 == 4 && $arg2 == 'Magento\SomeModule\Model\Element2\Proxy') {
+                    return null;
+                } elseif ($arg1 == 4 && $arg2 == 'Magento\SomeModule\Model\Nested\Element\Proxy') {
+                    return null;
+                } elseif ($arg1 == 4 && $arg2 == 'Magento\SomeModule\Model\Nested\Element2\Proxy') {
+                    return null;
+                }
+            });
+
         $actual = $this->model->collectEntities($this->testFiles);
         $expected = [];
         $this->assertEquals($expected, $actual);

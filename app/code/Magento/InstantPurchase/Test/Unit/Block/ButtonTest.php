@@ -72,7 +72,7 @@ class ButtonTest extends TestCase
                     'instantPurchaseConfig' => $this->config
                 ]
             )
-            ->setMethods(['getUrl'])
+            ->onlyMethods(['getUrl'])
             ->getMock();
     }
 

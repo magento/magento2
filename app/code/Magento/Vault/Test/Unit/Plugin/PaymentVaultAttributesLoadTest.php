@@ -55,17 +55,17 @@ class PaymentVaultAttributesLoadTest extends TestCase
     {
         $this->paymentMock = $this->getMockBuilder(OrderPaymentInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityId', 'setExtensionAttributes'])
+            ->onlyMethods(['getEntityId', 'setExtensionAttributes'])
             ->getMockForAbstractClass();
         $this->paymentExtensionMock = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getVaultPaymentToken', 'setVaultPaymentToken'])
+            ->addMethods(['getVaultPaymentToken', 'setVaultPaymentToken'])
             ->getMockForAbstractClass();
 
         $this->paymentExtensionFactoryMock = $this->createMock(OrderPaymentExtensionFactory::class);
         $this->paymentTokenManagementMock = $this->getMockBuilder(PaymentTokenManagementInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getByPaymentId'])
+            ->onlyMethods(['getByPaymentId'])
             ->getMockForAbstractClass();
 
         $this->plugin = (new ObjectManagerHelper($this))->getObject(
