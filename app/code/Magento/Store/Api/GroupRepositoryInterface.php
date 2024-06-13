@@ -1,0 +1,40 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Store\Api;
+
+use Magento\Framework\Exception\NoSuchEntityException;
+
+/**
+ * Group repository interface
+ *
+ * @api
+ * @since 100.0.2
+ */
+interface GroupRepositoryInterface
+{
+    /**
+     * Retrieve group by id
+     *
+     * @param int $id
+     * @return \Magento\Store\Api\Data\GroupInterface
+     * @throws NoSuchEntityException
+     */
+    public function get($id);
+
+    /**
+     * Retrieve list of all groups
+     *
+     * @return \Magento\Store\Api\Data\GroupInterface[]
+     */
+    public function getList();
+
+    /**
+     * Clear cached entities
+     *
+     * @return void
+     */
+    public function clean();
+}

@@ -1,0 +1,11 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+/**
+ * @var $block \Magento\OfflinePayments\Block\Info\Purchaseorder
+ */
+?>
+<?= $block->escapeHtml(__('Purchase Order Number: %1', $block->getInfo()->getPoNumber())) ?>
+    {{pdf_row_separator}}

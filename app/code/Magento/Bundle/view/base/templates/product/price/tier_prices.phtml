@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+
+<?php
+/**
+ * @var \Magento\Framework\Pricing\Render\PriceBox $block
+ * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
+ */
+/** @var \Magento\Bundle\Pricing\Price\TierPrice $tierPriceModel */
+$tierPriceModel = $block->getPrice();
+$tierPrices = $tierPriceModel->getTierPriceList();
+?>
+<?php if (count($tierPrices)):?>
+    <ul class="<?= $block->escapeHtmlAttr(($block->hasListClass() ? $block->getListClass() : 'prices-tier items')) ?>">
+        <?php foreach ($tierPrices as $index => $price): ?>
+            <li class="item">
+                <?= /* @noEscape */ __(
+                    'Buy %1 with %2 discount each',
+                    $localeFormatter->formatNumber($price['price_qty']),
+                    '<strong class="benefit">' .
+                    $localeFormatter->formatNumber(round($price['percentage_value'])) .
+                    '%</strong>'
+                ); ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>

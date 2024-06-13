@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\OrderItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="default" xsi:type="string">OrderItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\InvoiceItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="default" xsi:type="string">InvoiceItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\CreditMemoItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="default" xsi:type="string">CreditMemoItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\ShipmentItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="default" xsi:type="string">ShipmentItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\SalesGraphQl\Model\Shipment\Item\FormatterInterface" type="Magento\SalesGraphQl\Model\Shipment\Item\ShipmentItemFormatter"/>
+    <type name="Magento\SalesGraphQl\Model\Shipment\ItemProvider">
+        <arguments>
+            <argument name="formatters" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\SalesGraphQl\Model\Shipment\Item\ShipmentItemFormatter\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="CustomerOrderSortableField" xsi:type="array">
+                    <item name="number" xsi:type="string">increment_id</item>
+                    <item name="created_at" xsi:type="string">created_at</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesGraphQl\Model\GetOrderAvailableActions">
+        <arguments>
+            <argument name="actions" xsi:type="array">
+                <item name="is_reorder_available_action" xsi:type="object">Magento\SalesGraphQl\Model\GetReorderAvailableActions</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="display_product_prices_in_catalog" xsi:type="string">tax/display/type</item>
+                <item name="display_shipping_prices" xsi:type="string">tax/display/shipping</item>
+                <item name="orders_invoices_credit_memos_display_price" xsi:type="string">tax/sales_display/price</item>
+                <item name="orders_invoices_credit_memos_display_subtotal" xsi:type="string">tax/sales_display/subtotal</item>
+                <item name="orders_invoices_credit_memos_display_shipping_amount" xsi:type="string">tax/sales_display/shipping</item>
+                <item name="orders_invoices_credit_memos_display_grandtotal" xsi:type="string">tax/sales_display/grandtotal</item>
+                <item name="orders_invoices_credit_memos_display_full_summary" xsi:type="string">tax/sales_display/full_summary</item>
+                <item name="orders_invoices_credit_memos_display_zero_tax" xsi:type="string">tax/sales_display/zero_tax</item>
+                <item name="fixed_product_taxes_enable" xsi:type="string">tax/weee/enable</item>
+                <item name="fixed_product_taxes_display_prices_in_product_lists" xsi:type="string">tax/weee/display_list</item>
+                <item name="fixed_product_taxes_display_prices_on_product_view_page" xsi:type="string">tax/weee/display</item>
+                <item name="fixed_product_taxes_display_prices_in_sales_modules" xsi:type="string">tax/weee/display_sales</item>
+                <item name="fixed_product_taxes_display_prices_in_emails" xsi:type="string">tax/weee/display_email</item>
+                <item name="fixed_product_taxes_apply_tax_to_fpt" xsi:type="string">tax/weee/apply_vat</item>
+                <item name="fixed_product_taxes_include_fpt_in_subtotal" xsi:type="string">tax/weee/include_in_subtotal</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

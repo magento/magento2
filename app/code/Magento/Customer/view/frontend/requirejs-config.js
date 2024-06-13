@@ -1,0 +1,21 @@
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+var config = {
+    map: {
+        '*': {
+            checkoutBalance:    'Magento_Customer/js/checkout-balance',
+            address:            'Magento_Customer/js/address',
+            changeEmailPassword: 'Magento_Customer/js/change-email-password',
+            passwordStrengthIndicator: 'Magento_Customer/js/password-strength-indicator',
+            zxcvbn: 'Magento_Customer/js/zxcvbn',
+            addressValidation: 'Magento_Customer/js/addressValidation',
+            showPassword: 'Magento_Customer/js/show-password',
+            'Magento_Customer/address': 'Magento_Customer/js/address',
+            'Magento_Customer/change-email-password': 'Magento_Customer/js/change-email-password',
+            globalSessionLoader:    'Magento_Customer/js/customer-global-session-loader.js'
+        }
+    }
+};

@@ -1,0 +1,23 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Framework\Stdlib\DateTime;
+
+/**
+ * @api
+ * @since 100.0.2
+ */
+interface DateTimeFormatterInterface
+{
+    /**
+     * Returns a translated and localized date string
+     *
+     * @param \IntlCalendar|\DateTimeInterface $object
+     * @param string|int|array|null $format
+     * @param string|null $locale
+     * @return string
+     */
+    public function formatObject($object, $format = null, $locale = null);
+}

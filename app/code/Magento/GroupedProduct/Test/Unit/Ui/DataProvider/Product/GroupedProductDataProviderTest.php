@@ -1,0 +1,129 @@
+<?php
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\GroupedProduct\Test\Unit\Ui\DataProvider\Product;
+
+use Magento\Catalog\Model\ProductTypes\ConfigInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GroupedProduct\Ui\DataProvider\Product\GroupedProductDataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class GroupedProductDataProviderTest extends TestCase
+{
+    private const ALLOWED_TYPE = 'simple';
+
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var RequestInterface|MockObject
+     */
+    protected $requestMock;
+
+    /**
+     * @var CollectionFactory|MockObject
+     */
+    protected $collectionFactoryMock;
+
+    /**
+     * @var Collection|MockObject
+     */
+    protected $collectionMock;
+
+    /**
+     * @var ConfigInterface|MockObject
+     */
+    protected $configMock;
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->objectManager = new ObjectManager($this);
+
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->collectionMock = $this->createPartialMock(
+            Collection::class,
+            [
+                'toArray',
+                'isLoaded',
+                'addAttributeToFilter',
+                'load',
+                'getSize',
+                'addFilterByRequiredOptions',
+                'addStoreFilter'
+            ]
+        );
+        $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
+        $this->collectionFactoryMock->method('create')->willReturn($this->collectionMock);
+        $this->configMock = $this->createMock(ConfigInterface::class);
+    }
+
+    /**
+     * @return object
+     */
+    protected function getModel()
+    {
+        return $this->objectManager->getObject(GroupedProductDataProvider::class, [
+            'name' => 'testName',
+            'primaryFieldName' => 'testPrimaryFieldName',
+            'requestFieldName' => 'testRequestFieldName',
+            'collectionFactory' => $this->collectionFactoryMock,
+            'request' => $this->requestMock,
+            'config' => $this->configMock,
+            'addFieldStrategies' => [],
+            'addFilterStrategies' => [],
+            'meta' => [],
+            'data' => [],
+        ]);
+    }
+
+    public function testGetData()
+    {
+        $items = ['testProduct1', 'testProduct2'];
+        $expectedData = [
+            'totalRecords' => count($items),
+            'items' => $items,
+        ];
+
+        $this->configMock->expects($this->once())
+            ->method('getComposableTypes')
+            ->willReturn([self::ALLOWED_TYPE]);
+        $this->collectionMock->expects($this->once())
+            ->method('isLoaded')
+            ->willReturn(false);
+        $this->collectionMock->expects($this->any())
+            ->method('addAttributeToFilter')
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'type_id' && $arg2 == [self::ALLOWED_TYPE]) {
+                    return null;
+                } elseif ($arg1 == 'required_options' && $arg2 == '0') {
+                    return null;
+                }
+            });
+        $this->collectionMock->expects($this->once())
+            ->method('toArray')
+            ->willReturn($items);
+        $this->collectionMock->expects($this->once())
+            ->method('getSize')
+            ->willReturn(count($items));
+
+        $this->assertEquals($expectedData, $this->getModel()->getData());
+    }
+
+    public function testGetCollection()
+    {
+        $this->assertInstanceOf(Collection::class, $this->getModel()->getCollection());
+    }
+}

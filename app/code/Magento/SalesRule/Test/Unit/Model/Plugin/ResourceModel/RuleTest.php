@@ -1,0 +1,65 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\SalesRule\Test\Unit\Model\Plugin\ResourceModel;
+
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\SalesRule\Model\Plugin\ResourceModel\Rule;
+use Magento\SalesRule\Model\ResourceModel\Rule as RuleResource;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RuleTest extends TestCase
+{
+    /**
+     * @var Rule
+     */
+    protected $plugin;
+
+    /**
+     * @var MockObject
+     */
+    protected $ruleResource;
+
+    /**
+     * @var \Closure
+     */
+    protected $genericClosure;
+
+    /**
+     * @var MockObject
+     */
+    protected $abstractModel;
+
+    protected function setUp(): void
+    {
+        $objectManager = new ObjectManager($this);
+        $this->ruleResource = $this->createMock(RuleResource::class);
+        $this->genericClosure = function () {
+        };
+        $this->abstractModel = $this->createMock(AbstractModel::class);
+
+        $this->plugin = $objectManager->getObject(Rule::class);
+    }
+
+    public function testAroundLoadCustomerGroupIds()
+    {
+        $this->assertEquals(
+            $this->ruleResource,
+            $this->plugin->aroundLoadCustomerGroupIds($this->ruleResource, $this->genericClosure, $this->abstractModel)
+        );
+    }
+
+    public function testAroundLoadWebsiteIds()
+    {
+        $this->assertEquals(
+            $this->ruleResource,
+            $this->plugin->aroundLoadWebsiteIds($this->ruleResource, $this->genericClosure, $this->abstractModel)
+        );
+    }
+}

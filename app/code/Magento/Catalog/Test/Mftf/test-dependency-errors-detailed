@@ -1,0 +1,365 @@
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AddNewProductAttributeInProductPageTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontQuickSearchResultsSection from module(s): magento/module-search
+	 StorefrontLayeredNavigationSection from module(s): magento/module-layered-navigation
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminAddImageToWYSIWYGCatalogTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliMediaGalleryEnhancedEnableActionGroup from module(s): magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminAddImageToWYSIWYGProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliMediaGalleryEnhancedEnableActionGroup from module(s): magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminApplyChangePriceForConfigurableProductWithAssignedSimpleProductsTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckCategoryConfigurableProductWithUpdatedPriceActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminCheckCustomAttributeValuesAfterProductSaveTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminCheckPaginationInStorefrontTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CatalogProductsSection from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminCreateCustomProductAttributeWithDropdownFieldTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontQuickSearchResultsSection from module(s): magento/module-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminCreateDropdownProductAttributeVisibleInStorefrontAdvancedSearchFormTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchAdvancedFormSection from module(s): magento/module-catalog-search
+	 GoToStoreViewAdvancedCatalogSearchActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminCreateMultipleSelectProductAttributeVisibleInStorefrontAdvancedSearchFormTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchAdvancedFormSection from module(s): magento/module-catalog-search
+	 GoToStoreViewAdvancedCatalogSearchActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminCreateProductAttributeFromProductPageTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminCreateSimpleProductTest/AdminCreateSimpleProductZeroPriceTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontAssertUpdatedProductPriceInStorefrontProductPageActionGroup from module(s): magento/module-catalog-rule-configurable
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminCreateVirtualProductWithCustomOptionsSuiteAndImportOptionsTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontQuickSearchResultsSection from module(s): magento/module-search
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminCreateVirtualProductWithTierPriceTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontQuickSearchResultsSection from module(s): magento/module-search
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminDeleteConfigurableChildProductsTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AssertStorefrontProductOptionsDropDownVisibleActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminDeleteProductWithCustomOptionTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchMainSection from module(s): magento/module-catalog-search
+	 StoreFrontQuickSearchActionGroup from module(s): magento/module-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminDeleteSimpleProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StoreFrontQuickSearchActionGroup from module(s): magento/module-search
+	 AssertStorefrontProductIsMissingOnSearchResultPageActionGroup from module(s): magento/module-catalog-search
+	 AssertStorefrontNoResultsMessageOnSearchPageActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminDeleteVirtualProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchMainSection from module(s): magento/module-catalog-search
+	 StoreFrontQuickSearchActionGroup from module(s): magento/module-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminMassChangeProductsStatusTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchAdvancedResultMainSection from module(s): magento/module-catalog-search
+	 GoToStoreViewAdvancedCatalogSearchActionGroup from module(s): magento/module-catalog-search
+	 StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup from module(s): magento/module-catalog-search
+	 StorefrontCheckAdvancedSearchResultActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminMassProductAttributeUpdateAddedToQueueTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminSystemMessagesSection from module(s): magento/module-admin-notification
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminMassProductPriceUpdateTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminMassUpdateProductAttributeDatetimeTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminProductAttributeUpdateMessageConsumerData from module(s): magento/module-message-queue
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminMassUpdateProductAttributesGlobalScopeTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminProductAttributeUpdateMessageConsumerData from module(s): magento/module-message-queue
+	 StorefrontCatalogSearchAdvancedResultMainSection from module(s): magento/module-catalog-search
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+	 GoToStoreViewAdvancedCatalogSearchActionGroup from module(s): magento/module-catalog-search
+	 StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup from module(s): magento/module-catalog-search
+	 StorefrontCheckAdvancedSearchResultActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminMassUpdateProductAttributesStoreViewScopeTest/AdminMassUpdateProductAttributesStoreViewScopeTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminProductAttributeUpdateMessageConsumerData from module(s): magento/module-message-queue
+	 StorefrontCatalogSearchAdvancedResultMainSection from module(s): magento/module-catalog-search
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+	 GoToStoreViewAdvancedCatalogSearchActionGroup from module(s): magento/module-catalog-search
+	 StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup from module(s): magento/module-catalog-search
+	 StorefrontCheckAdvancedSearchResultActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminMassUpdateProductQtyIncrementsTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminProductAttributeUpdateMessageConsumerData from module(s): magento/module-message-queue
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminMassUpdateProductStatusStoreViewScopeTest/AdminMassUpdateProductStatusStoreViewScopeTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchAdvancedResultMainSection from module(s): magento/module-catalog-search
+	 GoToStoreViewAdvancedCatalogSearchActionGroup from module(s): magento/module-catalog-search
+	 StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup from module(s): magento/module-catalog-search
+	 StorefrontCheckAdvancedSearchResultActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminMoveProductBetweenCategoriesTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CatalogProductsSection from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminProductGridSwitchViewBookmarkTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminEnhancedMediaGalleryActionsSection from module(s): magento/module-adobe-stock-image-admin-ui, magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminProductStatusAttributeDisabledByDefaultTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminNewAttributePanel from module(s): magento/module-configurable-product, magento/module-inventory-configurable-product-admin-ui, magento/module-swatches
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateCategoryWithProductsTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CatalogProductsSection from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateSimpleProductNameToVerifyDataOverridingOnStoreViewLevelTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateSimpleProductPriceToVerifyDataOverridingOnStoreViewLevelTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontQuickSearchResultsSection from module(s): magento/module-search
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateSimpleProductTieredPriceTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateSimpleProductWithRegularPriceInStockDisabledProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatCatalogTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+	 StorefrontOpenProductFromQuickSearchActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontQuickSearchResultsSection from module(s): magento/module-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateSimpleProductWithRegularPriceInStockNotVisibleIndividuallyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateSimpleProductWithRegularPriceInStockVisibleInCatalogAndSearchTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateSimpleProductWithRegularPriceInStockVisibleInCatalogOnlyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateSimpleProductWithRegularPriceInStockVisibleInSearchOnlyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateSimpleProductWithRegularPriceOutOfStockTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateVirtualProductWithRegularPriceInStockVisibleInCategoryOnlyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateVirtualProductWithRegularPriceOutOfStockVisibleInCategoryOnlyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateVirtualProductWithRegularPriceOutOfStockVisibleInSearchOnlyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateVirtualProductWithSpecialPriceInStockVisibleInCategoryAndSearchTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateVirtualProductWithSpecialPriceOutOfStockVisibleInCategoryAndSearchTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateVirtualProductWithTierPriceInStockVisibleInCategoryAndSearchTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontQuickSearchResultsSection from module(s): magento/module-search
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+	 StorefrontQuickSearchSeeProductByNameActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateVirtualProductWithTierPriceInStockVisibleInCategoryOnlyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminUpdateVirtualProductWithTierPriceOutOfStockVisibleInCategoryAndSearchTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminValidateRelatedUpsellCrossSellPositionValueInProductExportCsvTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminExportMessageConsumerData from module(s): magento/module-message-queue
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AdminVerifyCreateCustomProductAttributeTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontAssertUpdatedProductPriceInStorefrontProductPageActionGroup from module(s): magento/module-catalog-rule-configurable
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/AlterAnchorCategoryTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminOpenCategoryGridPageActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AdminEditCategoryInGridPageActionGroup from module(s): magento/module-media-gallery-catalog-ui
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/CreateAnchorCategoryTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminOpenCategoryGridPageActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AdminEditCategoryInGridPageActionGroup from module(s): magento/module-media-gallery-catalog-ui
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/CreateProductAttributeEntityTest/CreateBundleProductCustomAttributeEntityTextAreaTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminNewAttributePanel from module(s): magento/module-configurable-product, magento/module-inventory-configurable-product-admin-ui, magento/module-swatches
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/DisplayRefreshCacheAfterChangingCategoryPageLayoutTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminSystemMessagesWarningActionGroup from module(s): magento/module-admin-notification
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/DisplayingCustomAttributesInProductGridTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminNewAttributePanel from module(s): magento/module-configurable-product, magento/module-inventory-configurable-product-admin-ui, magento/module-swatches
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/EndToEndB2CAdminTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 GroupedProduct from module(s): magento/module-grouped-product
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/SavingCustomAttributeValuesUsingUITest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/StorefrontCheckCustomOptionPriceDifferentCurrencyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 SetAllowedCurrenciesConfigForUSD from module(s): magento/module-currency-symbol
+	 SetAllowedCurrenciesConfigForEUR from module(s): magento/module-currency-symbol
+	 StorefrontSwitchCurrencyActionGroup from module(s): magento/module-currency-symbol
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/StorefrontCheckNoAppearDefaultOptionConfigurableProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 colorProductAttribute from module(s): magento/module-configurable-product
+	 LayeredNavigationSection from module(s): magento/module-layered-navigation
+	 colorProductAttribute1 from module(s): magento/module-configurable-product
+	 AdminFillBasicValueConfigurableProductActionGroup from module(s): magento/module-configurable-product
+	 AdminAddOptionsToAttributeWithDefaultLayeredNavigationActionGroup from module(s): magento/module-configurable-product
+	 AdminGotoSelectValueAttributePageActionGroup from module(s): magento/module-configurable-product
+	 AdminSelectValueFromAttributeActionGroup from module(s): magento/module-configurable-product
+	 AdminSetQuantityToEachSkusConfigurableProductActionGroup from module(s): magento/module-configurable-product
+	 SelectStorefrontSideBarAttributeOption from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/StorefrontProductWithMediaGalleryBehaviorTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminAddProductVideoWithPreviewActionGroup from module(s): magento/module-product-video
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/Test/VerifyCategoryProductAndProductCategoryPartialReindexTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminSystemMessagesSection from module(s): magento/module-admin-notification
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/ActionGroup/AdminAssignCategoryToProductAndSaveActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 CatalogProductsSection from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/ActionGroup/AdminUnassignCategoryOnProductAndSaveActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 CatalogProductsSection from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Catalog/Test/Mftf/ActionGroup/CreateCustomAttributeActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminNewAttributePanel from module(s): magento/module-configurable-product, magento/module-inventory-configurable-product-admin-ui, magento/module-swatches

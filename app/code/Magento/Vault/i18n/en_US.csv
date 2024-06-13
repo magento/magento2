@@ -1,0 +1,16 @@
+"No token found.","No token found."
+"Wrong request.","Wrong request."
+"Deletion failure. Please try again.","Deletion failure. Please try again."
+"Stored Payment Method was successfully removed","Stored Payment Method was successfully removed"
+"Stored Payment Methods","Stored Payment Methods"
+"No available payment tokens for specified order payment.","No available payment tokens for specified order payment."
+"Card Number","Card Number"
+"Expiration Date","Expiration Date"
+Type,Type
+"You have no stored payment methods.","You have no stored payment methods."
+ending,ending
+Actions,Actions
+Delete,Delete
+"Account","Account"
+Cancel,Cancel
+"Are you sure you want to delete this card: %1?","Are you sure you want to delete this card: %1?"

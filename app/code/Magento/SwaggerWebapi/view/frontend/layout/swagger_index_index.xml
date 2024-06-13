@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="swaggerUiContent">
+            <arguments>
+                <argument name="schema_types" xsi:type="array">
+                    <item name="rest" xsi:type="object">Magento\SwaggerWebapi\Model\SchemaType\Rest</item>
+                </argument>
+                <argument name="default_schema_type_code" xsi:type="string">rest</argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

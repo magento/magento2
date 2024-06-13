@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="GiftOptionsOnFrontSection">
+        <element name="giftOptionCheckbox" type="text" selector="//span[text()='Add Gift Options']"/>
+        <element name="addGiftOptionsForIndividualItems" type="text" selector="//dt[@class='order-title individual']"/>
+    </section>
+</sections>

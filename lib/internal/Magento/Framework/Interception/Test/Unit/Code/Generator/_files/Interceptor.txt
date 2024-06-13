@@ -1,0 +1,68 @@
+namespace Magento\Framework\Interception\Code\Generator\Sample;
+
+/**
+ * Interceptor class for @see \Magento\Framework\Interception\Code\Generator\Sample
+ */
+class Interceptor extends \Magento\Framework\Interception\Code\Generator\Sample implements \Magento\Framework\Interception\InterceptorInterface
+{
+    use \Magento\Framework\Interception\Interceptor;
+
+    public function __construct()
+    {
+        $this->___init();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValue()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getValue');
+        return $pluginInfo ? $this->___callPlugins('getValue', func_get_args(), $pluginInfo) : parent::getValue();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValue($value)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'setValue');
+        return $pluginInfo ? $this->___callPlugins('setValue', func_get_args(), $pluginInfo) : parent::setValue($value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function & getReference()
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getReference');
+        return $pluginInfo ? $this->___callPlugins('getReference', func_get_args(), $pluginInfo) : parent::getReference();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function firstVariadicParameter(... $variadicValue)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'firstVariadicParameter');
+        return $pluginInfo ? $this->___callPlugins('firstVariadicParameter', func_get_args(), $pluginInfo) : parent::firstVariadicParameter(... $variadicValue);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function secondVariadicParameter($value, ... $variadicValue)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'secondVariadicParameter');
+        return $pluginInfo ? $this->___callPlugins('secondVariadicParameter', func_get_args(), $pluginInfo) : parent::secondVariadicParameter($value, ... $variadicValue);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function byRefVariadic(&... $variadicValue)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'byRefVariadic');
+        return $pluginInfo ? $this->___callPlugins('byRefVariadic', func_get_args(), $pluginInfo) : parent::byRefVariadic(... $variadicValue);
+    }
+}

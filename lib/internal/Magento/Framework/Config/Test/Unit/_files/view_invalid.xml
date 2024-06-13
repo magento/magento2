@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
+ */
+-->
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
+   <vars module="Namespace_Module1">
+        <var name="var1">Value1</var>
+        <var name="var1">Value1</var><!-- duplicate var name -->
+    </vars>
+    <media>
+        <images module="Magento_Catalog">
+            <!-- Valid image type values -->
+            <image id="test" type="valid"/>
+            <image id="test" type="valid_image"/>
+            <image id="test" type="valid_image_type"/>
+            <image id="test" type="ii"/>
+            <image id="test" type="i_i"/>
+            <image id="test" type="i_i_i"/>
+            <!-- Invalid image type values -->
+            <image id="test" type="_invalid_image_type"/>
+            <image id="test" type="invalid-image"/>
+            <image id="test" type="Invalid"/>
+            <image id="test" type="invalid_"/>
+            <image id="test" type="invalid__image"/>
+            <image id="test" type="i"/>
+            <image id="test" type="i_"/>
+            <image id="test" type="?invalid"/>
+            <image id="test" type="123"/>
+        </images>
+    </media>
+</view>

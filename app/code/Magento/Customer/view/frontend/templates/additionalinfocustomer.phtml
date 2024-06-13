@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+<?php
+/**
+ * Customer additional info for register and login forms
+ *
+ */
+?>
+<?php if ($this->helper(\Magento\Checkout\Helper\Data::class)->isContextCheckout()) : ?>
+    <input name="context" type="hidden" value="checkout" />
+<?php endif; ?>

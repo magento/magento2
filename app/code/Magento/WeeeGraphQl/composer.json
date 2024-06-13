@@ -1,0 +1,28 @@
+{
+    "name": "magento/module-weee-graph-ql",
+    "description": "N/A",
+    "type": "magento2-module",
+    "require": {
+        "php": "~8.2.0||~8.3.0||~8.4.0",
+        "magento/framework": "*",
+        "magento/module-sales": "*",
+        "magento/module-store": "*",
+        "magento/module-tax": "*",
+        "magento/module-weee": "*"
+    },
+    "suggest": {
+        "magento/module-catalog-graph-ql": "*"
+    },
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\WeeeGraphQl\\": ""
+        }
+    }
+}

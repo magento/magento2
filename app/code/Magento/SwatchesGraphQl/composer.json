@@ -1,0 +1,27 @@
+{
+    "name": "magento/module-swatches-graph-ql",
+    "description": "N/A",
+    "type": "magento2-module",
+    "require": {
+        "php": "~8.2.0||~8.3.0||~8.4.0",
+        "magento/framework": "*",
+        "magento/module-swatches": "*",
+        "magento/module-catalog": "*",
+        "magento/module-catalog-graph-ql": "*"
+    },
+    "suggest": {
+        "magento/module-configurable-product-graph-ql": "*"
+    },
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\SwatchesGraphQl\\": ""
+        }
+    }
+}

@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Framework\Setup\Test\Unit;
+
+use Magento\Framework\Setup\BackendFrontnameGenerator;
+use PHPUnit\Framework\TestCase;
+
+class BackendFrontnameGeneratorTest extends TestCase
+{
+    public function testGenerate()
+    {
+        $regexp = '/' . BackendFrontnameGenerator::ADMIN_AREA_PATH_PREFIX
+            . '[a-z0-9]{1,' . BackendFrontnameGenerator::ADMIN_AREA_PATH_RANDOM_PART_LENGTH . '}/';
+
+        $this->assertMatchesRegularExpression(
+            $regexp,
+            BackendFrontnameGenerator::generate(),
+            'Unexpected Backend Frontname pattern.'
+        );
+    }
+}

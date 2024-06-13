@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+
+<?php
+/** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
+
+/** ex: \Magento\Catalog\Pricing\Price\RegularPrice */
+/** @var \Magento\Framework\Pricing\Price\PriceInterface $priceModel */
+$priceModel = $block->getPriceType('regular_price');
+
+/* @noEscape */ echo $block->renderAmount($priceModel->getAmount(), [
+    'price_id'          => $block->getPriceId('product-price-'),
+    'include_container' => true
+]);
+?>

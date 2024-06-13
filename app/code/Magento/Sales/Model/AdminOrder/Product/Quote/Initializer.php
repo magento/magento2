@@ -1,0 +1,58 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * Product quote initializer
+ */
+namespace Magento\Sales\Model\AdminOrder\Product\Quote;
+
+class Initializer
+{
+    /**
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     */
+    protected $stockRegistry;
+
+    /**
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     */
+    public function __construct(
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+    ) {
+        $this->stockRegistry = $stockRegistry;
+    }
+
+    /**
+     * Initializing quote product
+     *
+     * @param \Magento\Quote\Model\Quote $quote
+     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Framework\DataObject $config
+     * @return \Magento\Quote\Model\Quote\Item|string
+     */
+    public function init(
+        \Magento\Quote\Model\Quote $quote,
+        \Magento\Catalog\Model\Product $product,
+        \Magento\Framework\DataObject $config
+    ) {
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), $quote->getStore()->getWebsiteId());
+        if ($stockItem->getIsQtyDecimal()) {
+            $product->setIsQtyDecimal(1);
+        } else {
+            $config->setQty((int)$config->getQty());
+        }
+
+        $product->setCartQty($config->getQty());
+
+        $item = $quote->addProduct(
+            $product,
+            $config,
+            \Magento\Catalog\Model\Product\Type\AbstractType::PROCESS_MODE_FULL
+        );
+
+        return $item;
+    }
+}

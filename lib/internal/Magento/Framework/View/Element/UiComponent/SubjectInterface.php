@@ -1,0 +1,40 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Framework\View\Element\UiComponent;
+
+/**
+ * Interface SubjectInterface
+ *
+ * @api
+ */
+interface SubjectInterface
+{
+    /**
+     * Attach an observer by type
+     *
+     * @param string $type
+     * @param ObserverInterface $observer
+     * @return void
+     */
+    public function attach($type, ObserverInterface $observer);
+
+    /**
+     * Detach an observer by type
+     *
+     * @param string $type
+     * @param ObserverInterface $observer
+     * @return void
+     */
+    public function detach($type, ObserverInterface $observer);
+
+    /**
+     * Notify an observer(s) by type
+     *
+     * @param string $type
+     * @return void
+     */
+    public function notify($type);
+}

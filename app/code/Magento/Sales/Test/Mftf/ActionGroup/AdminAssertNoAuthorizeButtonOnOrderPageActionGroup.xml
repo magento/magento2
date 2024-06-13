@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertNoAuthorizeButtonOnOrderPageActionGroup">
+        <annotations>
+            <description>Assert that order not waiting for authorization.</description>
+        </annotations>
+        <dontSeeElement selector="{{AdminOrderDetailsMainActionsSection.authorize}}" stepKey="dontSeeOrderWaitingForAuthorize"/>
+    </actionGroup>
+</actionGroups>

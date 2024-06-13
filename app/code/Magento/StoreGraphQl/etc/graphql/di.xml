@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\GraphQl\Controller\HttpRequestProcessor">
+        <arguments>
+            <argument name="graphQlHeaders" xsi:type="array">
+                <item name="Store" xsi:type="object">Magento\StoreGraphQl\Controller\HttpHeaderProcessor\StoreProcessor</item>
+            </argument>
+            <argument name="requestValidators" xsi:type="array">
+                <item name="storeValidator" xsi:type="object">Magento\StoreGraphQl\Controller\HttpRequestValidator\StoreValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQl\Model\Query\ContextFactory">
+        <arguments>
+            <argument name="contextParametersProcessors" xsi:type="array">
+                <item name="add_store_info_to_context" xsi:type="object">Magento\StoreGraphQl\Model\Context\AddStoreInfoToContext</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="use_store_in_url" xsi:type="string">web/url/use_store</item>
+                <item name="default_country" xsi:type="string">general/country/default</item>
+                <item name="countries_with_required_region" xsi:type="string">general/region/state_required</item>
+                <item name="display_state_if_optional" xsi:type="string">general/region/display_all</item>
+                <item name="optional_zip_countries" xsi:type="string">general/country/optional_zip_countries</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlCache\Model\CacheId\CacheIdCalculator">
+        <arguments>
+            <argument name="idFactorProviders" xsi:type="array">
+                <item name="currency" xsi:type="object">Magento\StoreGraphQl\CacheIdFactorProviders\CurrencyProvider</item>
+                <item name="store" xsi:type="object">Magento\StoreGraphQl\CacheIdFactorProviders\StoreProvider</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

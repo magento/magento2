@@ -1,0 +1,103 @@
+<?php
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+
+namespace Magento\Customer\Model\ResourceModel\Grid;
+
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\Framework\Exception\InvalidEmailOrPasswordException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Indexer\TestCase;
+
+/**
+ * Test if customer account lock on too many failed authentication attempts triggers customer grid reindex
+ *
+ * @SuppressWarnings(PHPMD)
+ */
+class CollectionReindexOnAccountLockTest extends TestCase
+{
+    /** Set Up
+     *
+     * @return void
+     *
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $indexerRegistry = Bootstrap::getObjectManager()->create(IndexerRegistry::class);
+        $indexer = $indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+        $indexer->reindexAll();
+    }
+
+    /**
+     * Trigger customer account lock by making 10 failed authentication attempts
+     */
+    private function lockCustomerAccountWithInvalidAuthentications()
+    {
+        /** @var AccountManagementInterface */
+        $accountManagement = Bootstrap::getObjectManager()->create(AccountManagementInterface::class);
+
+        for ($i = 0; $i < 10; $i++) {
+            try {
+                $accountManagement->authenticate('customer@example.com', 'wrongPassword');
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+            } catch (InvalidEmailOrPasswordException $e) {
+            }
+        }
+    }
+
+    /**
+     * @return string|null
+     * @throws NoSuchEntityException
+     */
+    private function getCustomerLockExpire(): ?string
+    {
+        /** @var CustomerRegistry $customerRegistry */
+        $customerRegistry = Bootstrap::getObjectManager()->create(CustomerRegistry::class);
+        $customerModel = $customerRegistry->retrieve(1);
+        $this->assertNotEmpty($customerModel);
+
+        return $customerModel->getData('lock_expires');
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getCustomerGridLockExpire(): ?string
+    {
+        /** @var Collection */
+        $gridCustomerCollection = Bootstrap::getObjectManager()->create(Collection::class);
+        $gridCustomerItem = $gridCustomerCollection->getItemById(1);
+        $this->assertNotEmpty($gridCustomerItem);
+
+        return $gridCustomerItem->getData('lock_expires');
+    }
+
+    /**
+     * Test if customer account lock on too many failed authentication attempts triggers customer grid reindex
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
+     */
+    public function testCustomerAccountReindexOnLock()
+    {
+        $this->assertSame(
+            $this->getCustomerGridLockExpire(),
+            $this->getCustomerLockExpire()
+        );
+
+        $this->lockCustomerAccountWithInvalidAuthentications();
+
+        $this->assertSame(
+            $this->getCustomerGridLockExpire(),
+            $this->getCustomerLockExpire()
+        );
+    }
+}

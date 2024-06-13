@@ -1,0 +1,228 @@
+"New Accounts","New Accounts"
+"Customers by number of orders","Customers by number of orders"
+"Customers by Orders Total","Customers by Orders Total"
+Filter,Filter
+"Date Used","Date Used"
+Day,Day
+Month,Month
+Year,Year
+Period,Period
+From,From
+To,To
+Yes,Yes
+No,No
+"Empty Rows","Empty Rows"
+"Invalid date specified","Invalid date specified"
+Refresh,Refresh
+"We can't find records for this period.","We can't find records for this period."
+"Show Reviews","Show Reviews"
+"Products Report","Products Report"
+Downloads,Downloads
+Product,Product
+Link,Link
+SKU,SKU
+Purchases,Purchases
+CSV,CSV
+"Excel XML","Excel XML"
+Unlimited,Unlimited
+"Low stock","Low stock"
+"Products Ordered","Products Ordered"
+"Most Viewed","Most Viewed"
+"Show Report","Show Report"
+Interval,Interval
+Total,Total
+Price,Price
+Views,Views
+"Refresh Statistics","Refresh Statistics"
+"Customers Reviews","Customers Reviews"
+"Reviews for %1","Reviews for %1"
+Customer,Customer
+Title,Title
+Detail,Detail
+Created,Created
+"Products Reviews","Products Reviews"
+"Products Bestsellers Report","Products Bestsellers Report"
+"Order Quantity","Order Quantity"
+"Coupons Usage Report","Coupons Usage Report"
+Subtotal,Subtotal
+"Coupon Code","Coupon Code"
+"Price Rule","Price Rule"
+Uses,Uses
+"Sales Subtotal","Sales Subtotal"
+"Sales Discount","Sales Discount"
+"Sales Total","Sales Total"
+Discount,Discount
+"Total Invoiced vs. Paid Report","Total Invoiced vs. Paid Report"
+Orders,Orders
+"Invoiced Orders","Invoiced Orders"
+"Total Invoiced","Total Invoiced"
+"Paid Invoices","Paid Invoices"
+"Unpaid Invoices","Unpaid Invoices"
+"Total Refunded Report","Total Refunded Report"
+"Refunded Orders","Refunded Orders"
+"Total Refunded","Total Refunded"
+"Online Refunds","Online Refunds"
+"Offline Refunds","Offline Refunds"
+"Total Ordered Report","Total Ordered Report"
+"Sales Items","Sales Items"
+Items,Items
+Revenue,Revenue
+Profit,Profit
+Invoiced,Invoiced
+Paid,Paid
+Refunded,Refunded
+"Sales Tax","Sales Tax"
+Tax,Tax
+"Sales Shipping","Sales Shipping"
+Shipping,Shipping
+Canceled,Canceled
+"Total Shipped Report","Total Shipped Report"
+Carrier/Method,Carrier/Method
+"Total Sales Shipping","Total Sales Shipping"
+"Total Shipping","Total Shipping"
+"Order Taxes Report Grouped by Tax Rate","Order Taxes Report Grouped by Tax Rate"
+Rate,Rate
+"Tax Amount","Tax Amount"
+"Abandoned carts","Abandoned carts"
+Email,Email
+Products,Products
+Quantity,Quantity
+"Applied Coupon","Applied Coupon"
+Updated,Updated
+"IP Address","IP Address"
+Customers,Customers
+ID,ID
+"First Name","First Name"
+"Last Name","Last Name"
+"Items in Cart","Items in Cart"
+"Products in carts","Products in carts"
+Carts,Carts
+Name,Name
+"Wish Lists","Wish Lists"
+"Wish List Purchase","Wish List Purchase"
+"Wish List vs. Regular Order","Wish List vs. Regular Order"
+"Times Deleted","Times Deleted"
+"Index type is not valid","Index type is not valid"
+Reports,Reports
+"Last updated: %1. To refresh last day's <a href=""%2"">statistics</a>, click <a href=""%3"">here</a>.","Last updated: %1. To refresh last day's <a href=""%2"">statistics</a>, click <a href=""%3"">here</a>."
+"New Accounts Report","New Accounts Report"
+"Customers by Number of Orders","Customers by Number of Orders"
+"Order Count Report","Order Count Report"
+"Order Total Report","Order Total Report"
+"Downloads Report","Downloads Report"
+"Low Stock","Low Stock"
+"Low Stock Report","Low Stock Report"
+"Ordered Products Report","Ordered Products Report"
+"Products Most Viewed Report","Products Most Viewed Report"
+"Product Views Report","Product Views Report"
+"An error occurred while showing the product views report. Please review the log and try again.","An error occurred while showing the product views report. Please review the log and try again."
+Review,Review
+Reviews,Reviews
+"Customers Report","Customers Report"
+"Customer Reviews Report","Customer Reviews Report"
+"Product Reviews Report","Product Reviews Report"
+"Product Reviews","Product Reviews"
+Details,Details
+Sales,Sales
+"Bestsellers Report","Bestsellers Report"
+Coupons,Coupons
+"Coupons Report","Coupons Report"
+"Invoice Report","Invoice Report"
+"Refunds Report","Refunds Report"
+"Sales Report","Sales Report"
+"Orders Report","Orders Report"
+"Shipping Report","Shipping Report"
+"Tax Report","Tax Report"
+"Shopping Cart","Shopping Cart"
+"Abandoned Carts","Abandoned Carts"
+"Customer Shopping Carts","Customer Shopping Carts"
+"Products in Carts","Products in Carts"
+Statistics,Statistics
+"No report code is specified.","No report code is specified."
+"You refreshed lifetime statistics.","You refreshed lifetime statistics."
+"We can't refresh lifetime statistics.","We can't refresh lifetime statistics."
+"Recent statistics have been updated.","Recent statistics have been updated."
+"We can't refresh recent statistics.","We can't refresh recent statistics."
+"The product type filter specified is incorrect.","The product type filter specified is incorrect."
+"Order Taxes Report Grouped by Tax Rates","Order Taxes Report Grouped by Tax Rates"
+"Total Invoiced VS Paid Report","Total Invoiced VS Paid Report"
+"Promotion Coupons Usage Report","Promotion Coupons Usage Report"
+Bestsellers,Bestsellers
+"Most Viewed Products Report","Most Viewed Products Report"
+Error,Error
+"Show By","Show By"
+"Select Date","Select Date"
+"Customers that have Wish List: %1","Customers that have Wish List: %1"
+"Number of Wish Lists: %1","Number of Wish Lists: %1"
+"Number of items bought from a Wish List: %1","Number of items bought from a Wish List: %1"
+"Number of times Wish Lists have been shared (emailed): %1","Number of times Wish Lists have been shared (emailed): %1"
+"Number of Wish List referrals: %1","Number of Wish List referrals: %1"
+"Number of Wish List conversions: %1","Number of Wish List conversions: %1"
+"Show Report For:","Show Report For:"
+"All Websites","All Websites"
+"Recently Viewed","Recently Viewed"
+"Add to Cart","Add to Cart"
+"In stock","In stock"
+"Out of stock","Out of stock"
+"Add to Wish List","Add to Wish List"
+"Add to Compare","Add to Compare"
+"Recently Compared","Recently Compared"
+"Learn More","Learn More"
+Marketing,Marketing
+"Products in Cart","Products in Cart"
+"Abandoned Cart","Abandoned Cart"
+"Search Terms","Search Terms"
+"By Customers","By Customers"
+"By Products","By Products"
+Refunds,Refunds
+"Order Total","Order Total"
+"Order Count","Order Count"
+New,New
+Ordered,Ordered
+"Recently Viewed/Compared Products","Recently Viewed/Compared Products"
+"Show for Current","Show for Current"
+"Default Recently Viewed Products Count","Default Recently Viewed Products Count"
+"Default Recently Compared Products Count","Default Recently Compared Products Count"
+Dashboard,Dashboard
+"Year-To-Date Starts","Year-To-Date Starts"
+"Current Month Starts","Current Month Starts"
+"Select day of the month.","Select day of the month."
+"Recently Viewed Products","Recently Viewed Products"
+"List of Products Recently Viewed by Visitor","List of Products Recently Viewed by Visitor"
+"Number of Products to display","Number of Products to display"
+"Viewed Products Grid Template","Viewed Products Grid Template"
+"Viewed Products List Template","Viewed Products List Template"
+"Viewed Products Images and Names Template","Viewed Products Images and Names Template"
+"Viewed Products Names Only Template","Viewed Products Names Only Template"
+"Viewed Products Images Only Template","Viewed Products Images Only Template"
+"Recently Compared Products","Recently Compared Products"
+"List of Products Recently Compared and Removed from the Compare List by Visitor","List of Products Recently Compared and Removed from the Compare List by Visitor"
+"Compared Products Grid Template","Compared Products Grid Template"
+"Compared Products List Template","Compared Products List Template"
+"Compared Products Images and Names Template","Compared Products Images and Names Template"
+"Compared Product Names Only Template","Compared Product Names Only Template"
+"Compared Product Images Only Template","Compared Product Images Only Template"
+Average,Average
+"Stock Quantity","Stock Quantity"
+"Ordered Quantity","Ordered Quantity"
+"The report displays the top 5 most viewed products for each interval.","The report displays the top 5 most viewed products for each interval."
+"For accurate reporting, be sure to refresh lifetime statistics whenever you change the time zone.","For accurate reporting, be sure to refresh lifetime statistics whenever you change the time zone."
+Guest,Guest
+Action,Action
+"Average (Approved)","Average (Approved)"
+"Last Review","Last Review"
+"Order Created","Order Created"
+"Order Updated","Order Updated"
+"The Order Updated report is created in real time and does not require a refresh.","The Order Updated report is created in real time and does not require a refresh."
+"Last Invoice Created Date","Last Invoice Created Date"
+"Last Credit Memo Created Date","Last Credit Memo Created Date"
+"First Invoice Created Date","First Invoice Created Date"
+"Refresh Lifetime Statistics","Refresh Lifetime Statistics"
+"Are you sure you want to refresh lifetime statistics right now? This operation may slow down your customers' shopping experience.","Are you sure you want to refresh lifetime statistics right now? This operation may slow down your customers' shopping experience."
+"Refresh Statistics for the Last Day","Refresh Statistics for the Last Day"
+"Are you sure you want to refresh statistics for the last day?","Are you sure you want to refresh statistics for the last day?"
+Report,Report
+Description,Description
+undefined,undefined
+Never,Never
+

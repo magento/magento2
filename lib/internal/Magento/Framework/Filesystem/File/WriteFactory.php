@@ -1,0 +1,51 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Framework\Filesystem\File;
+
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\DriverPool;
+
+/**
+ * Opens a file for reading and/or writing
+ * @api
+ * @since 100.0.2
+ */
+class WriteFactory extends ReadFactory
+{
+    /**
+     * Pool of filesystem drivers
+     *
+     * @var DriverPool
+     */
+    private $driverPool;
+
+    /**
+     * Constructor
+     *
+     * @param DriverPool $driverPool
+     */
+    public function __construct(DriverPool $driverPool)
+    {
+        parent::__construct($driverPool);
+        $this->driverPool = $driverPool;
+    }
+
+    /**
+     * Create a {@see WriterInterface}
+     *
+     * @param string $path
+     * @param DriverInterface|string $driver Driver or driver code
+     * @param string $mode [optional]
+     * @return WriteInterface
+     */
+    public function create($path, $driver, $mode = 'r')
+    {
+        if (is_string($driver)) {
+            return new Write($path, $this->driverPool->getDriver($driver), $mode);
+        }
+        return new Write($path, $driver, $mode);
+    }
+}

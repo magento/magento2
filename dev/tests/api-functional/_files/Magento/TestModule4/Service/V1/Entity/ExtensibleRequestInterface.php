@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\TestModule4\Service\V1\Entity;
+
+interface ExtensibleRequestInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+{
+    /**
+     * @return string
+     */
+    public function getName();
+
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name);
+
+    /**
+     * @return int|null
+     */
+    public function getEntityId();
+
+    /**
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+}

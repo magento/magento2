@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding="utf-8" ?>
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<layout>
+    <referenceBlock translate="description, label">
+        <description>Theme layout description</description>
+        <label>Theme layout label</label>
+        <title translate="true">Theme layout title</title>
+    </referenceBlock>
+</layout>

@@ -1,0 +1,19 @@
+#  Copyright 2018 Adobe
+#  All Rights Reserved.
+
+interface ProductInterface {
+    only_x_left_in_stock: Float @doc(description: "Remaining stock if it is below the value assigned to the Only X Left Threshold option in the Admin.") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\OnlyXLeftInStockResolver")
+    stock_status: ProductStockStatus @doc(description: "The stock status of the product.") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\StockStatusProvider")
+    quantity: Float @doc(description: "Amount of available stock") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\QuantityResolver")
+    min_sale_qty: Float @doc(description: "Minimum Qty Allowed in Shopping Cart") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\MinSaleQtyResolver")
+    max_sale_qty: Float @doc(description: "Maximum Qty Allowed in Shopping Cart") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\MaxSaleQtyResolver")
+}
+
+enum ProductStockStatus @doc(description: "States whether a product stock status is in stock or out of stock.") {
+    IN_STOCK
+    OUT_OF_STOCK
+}
+
+interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemTypeResolver") @doc(description: "An interface for products in a cart.") {
+    not_available_message: String @doc(description: "Message to display when the product is not available with this selected option.") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\NotAvailableMessageResolver")
+}

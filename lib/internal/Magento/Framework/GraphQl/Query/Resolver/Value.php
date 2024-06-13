@@ -1,0 +1,20 @@
+<?php
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Framework\GraphQl\Query\Resolver;
+
+use Magento\Framework\GraphQl\Query\ResolverInterface;
+
+/**
+ * Return value for @see ResolverInterface
+ *
+ * @api
+ */
+class Value extends \GraphQL\Deferred
+{
+
+}

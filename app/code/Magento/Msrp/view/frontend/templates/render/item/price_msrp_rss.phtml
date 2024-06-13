@@ -1,0 +1,22 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+<?php
+/**
+ * Template for displaying wishlist item price at rss feeds pages
+ *
+ * @var $block \Magento\Catalog\Block\Product\Price
+ */
+?>
+<div class="price-box msrp">
+    <?php //phpcs:disable ?>
+    <?php if ($this->helper(\Magento\Msrp\Helper\Data::class)->canApplyMsrp($block->getProduct())) : ?>
+    <?php //phpcs:enable ?>
+        <a href="<?= $block->escapeUrl($block->getProduct()->getProductUrl()) ?>">
+            <?= $block->escapeHtml(__('Click for price')) ?>
+        </a>
+    <?php endif; ?>
+</div>

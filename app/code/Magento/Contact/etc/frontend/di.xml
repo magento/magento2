@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Url\SecurityInfo">
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="contact" xsi:type="string">/contact/</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Contact\Plugin\UserDataProvider\ViewModel">
+        <arguments>
+            <argument name="viewModel" xsi:type="object">Magento\Contact\ViewModel\UserDataProvider</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Contact\Block\ContactForm">
+        <plugin name="set_view_model" type="Magento\Contact\Plugin\UserDataProvider\ViewModel" />
+    </type>
+</config>

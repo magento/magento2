@@ -1,0 +1,23 @@
+{
+    "cron_schedule": {
+        "column": {
+            "schedule_id": true,
+            "job_code": true,
+            "status": true,
+            "messages": true,
+            "created_at": true,
+            "scheduled_at": true,
+            "executed_at": true,
+            "finished_at": true
+        },
+        "index": {
+            "CRON_SCHEDULE_JOB_CODE": true,
+            "CRON_SCHEDULE_SCHEDULED_AT_STATUS": true,
+            "CRON_SCHEDULE_SCHEDULE_ID_STATUS": true,
+            "CRON_SCHEDULE_JOB_CODE_STATUS_SCHEDULED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

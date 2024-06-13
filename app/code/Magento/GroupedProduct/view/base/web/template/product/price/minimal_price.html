@@ -1,0 +1,25 @@
+<!--
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+-->
+<if args="isSalable($row())">
+    <div class="minimal-price">
+        <span if="label"
+              class="price-label"
+              text="label"></span>
+
+        <span class="price-container"
+              css="getAdjustmentCssClasses($row())">
+            <span class="price-wrapper price-including-tax"
+                  data-price-amount=""
+                  data-price-type=""
+                  html="getPriceUnsanitizedHtml($row())"></span>
+
+            <each args="data: getAdjustments(), as: '$adj'">
+                <render args="$adj.getBody()"></render>
+            </each>
+        </span>
+    </div>
+</if>

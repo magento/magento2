@@ -1,0 +1,165 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+// phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
+/** @var $block \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Uploader */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+
+<div id="<?= $block->getHtmlId() ?>" class="uploader">
+    <span class="fileinput-button form-buttons">
+        <button id="fileupload" title="Browse Files" type="button"
+                name="<?= $escaper->escapeHtmlAttr($block->getConfig()->getFileField()) ?>"
+                data-url="<?= $escaper->escapeUrl($block->getConfig()->getUrl()) ?>">
+            <span>Browse Files</span>
+        </button>
+    </span>
+    <div class="clear"></div>
+    <script id="<?= $block->getHtmlId() ?>-template" type="text/x-magento-template">
+        <div id="<%- data.id %>" class="file-row">
+            <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
+            <div class="progressbar-container">
+                <div class="progressbar upload-progress"></div>
+            </div>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                "width: 0%;",
+                "div.progressbar-container div.progressbar.upload-progress"
+            ) ?>
+            <div class="clear"></div>
+        </div>
+    </script>
+</div>
+<?php $scriptString= <<<script
+
+require([
+    'jquery',
+    'mage/template',
+    'jquery/uppy-core',
+    'domReady!',
+    'mage/translate'
+], function ($, mageTemplate) {
+    let targetElement = $('#fileupload').parent()[0],
+    url = $('#fileupload').attr('data-url'),
+    arrayFromObj = Array.from,
+    inputFileName = $('#fileupload').attr('name'),
+    fileId = null,
+    options = {
+        proudlyDisplayPoweredByUppy: false,
+        target: targetElement,
+        hideUploadButton: false,
+        hideRetryButton: true,
+        hideCancelButton: true,
+        inline: true,
+        showRemoveButtonAfterComplete: true,
+        showProgressDetails: false,
+        showSelectedFiles: false,
+        allowMultipleUploads: false,
+        hideProgressAfterFinish: true
+    };
+    const uppy = new Uppy.Uppy({
+        autoProceed: true,
+        restrictions: {
+            maxFileSize: {$block->escapeJs($block->getFileSizeService()->getMaxFileSize())}
+        },
+
+        onBeforeFileAdded: (currentFile) => {
+            var progressTmpl = mageTemplate('#{$block->getHtmlId()}-template'),
+                fileSize,
+                tmpl;
+
+            fileSize = typeof currentFile.size == "undefined" ?
+                    $.mage.__('We could not detect a size.') :
+                    byteConvert(currentFile.size);
+
+            fileId = Math.random().toString(36).substr(2, 9);
+
+            tmpl = progressTmpl({
+                data: {
+                    name: currentFile.name,
+                    size: fileSize,
+                    id: fileId
+                }
+            });
+
+            // code to allow duplicate files from same folder
+            const modifiedFile = {
+                ...currentFile,
+                id:  currentFile.id + '-' + fileId,
+                tempFileId:  fileId
+            };
+
+            $(tmpl).appendTo('#{$block->getHtmlId()}');
+
+            return modifiedFile;
+        },
+        meta: {
+            isAjax: 'true',
+            form_key: FORM_KEY
+        }
+    });
+
+    // initialize Uppy upload
+    uppy.use(Uppy.Dashboard, options);
+
+    // drop area for file upload
+    uppy.use(Uppy.DropTarget, {
+        target: targetElement,
+        onDragOver: () => {
+            // override Array.from method of legacy-build.min.js file
+            Array.from = null;
+        },
+        onDragLeave: () => {
+            Array.from = arrayFromObj;
+        }
+    });
+
+    // upload files on server
+    uppy.use(Uppy.XHRUpload, {
+        endpoint: url,
+        fieldName: inputFileName
+    });
+
+    uppy.on('upload-progress', (file, progress) => {
+        let progressWidth = parseInt(progress.bytesUploaded / progress.bytesTotal * 100, 10),
+            progressSelector = '#' + file.tempFileId + ' .progressbar-container .progressbar';
+
+        $(progressSelector).css('width', progressWidth + '%');
+    });
+
+    uppy.on('upload-success', (file, response) => {
+        var progressSelector = '#' + file.tempFileId + ' .progressbar-container .progressbar';
+        $(progressSelector).css('width', '100%');
+
+        if (response.body && !response.body.hasOwnProperty('errorcode')) {
+            $(progressSelector).removeClass('upload-progress').addClass('upload-success');
+            MediabrowserInstance.handleUploadComplete();
+        } else {
+             $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+        }
+    });
+
+    uppy.on('upload-error', (file, error) => {
+       let progressSelector = '#' + file.tempFileId + ' .progressbar-container .progressbar';
+       $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+    });
+
+    uppy.on('restriction-failed', (file, error) => {
+        console.error(error);
+    });
+
+    uppy.on('complete', () => {
+        Array.from = arrayFromObj;
+    });
+
+    $('#fileupload').on('click', function () {
+        $('#fileupload').parent().find('.uppy-Dashboard-browse').trigger('click');
+    });
+});
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

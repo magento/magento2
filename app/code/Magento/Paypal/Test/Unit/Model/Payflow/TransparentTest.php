@@ -1,0 +1,436 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Paypal\Test\Unit\Model\Payflow;
+
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Payment\Model\Method\ConfigInterface as PaymentConfigInterface;
+use Magento\Payment\Model\Method\ConfigInterfaceFactory as PaymentConfigInterfaceFactory;
+use Magento\Paypal\Model\Cart as PayPalCart;
+use Magento\Paypal\Model\CartFactory as PayPalCartFactory;
+use Magento\Paypal\Model\Payflow\Service\Gateway as PayPalPayflowGateway;
+use Magento\Paypal\Model\Payflow\Transparent as PayPalPayflowTransparent;
+use Magento\Paypal\Model\Payflowpro;
+use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
+use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory as PaymentExtensionInterfaceFactory;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Paypal transparent test class
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class TransparentTest extends TestCase
+{
+    use MockCreationTrait;
+    /**
+     * @var PayPalPayflowTransparent
+     */
+    private $subject;
+
+    /**
+     * @var PaymentConfigInterface|MockObject
+     */
+    private $paymentConfig;
+
+    /**
+     * @var PayPalPayflowGateway|MockObject
+     */
+    private $payPalPayflowGateway;
+
+    /**
+     * @var PaymentTokenInterface|MockObject
+     */
+    private $paymentToken;
+
+    /**
+     * @var PayPalCart|MockObject
+     */
+    private $payPalCart;
+
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfig;
+
+    /**
+     * @var Payment|MockObject
+     */
+    private $payment;
+
+    /**
+     * @var Order|MockObject
+     */
+    private $order;
+
+    /**
+     * @var OrderPaymentExtensionInterface|MockObject
+     */
+    private $paymentExtensionAttributes;
+
+    protected function setUp(): void
+    {
+        $helper = new ObjectManager($this);
+        $objects = [
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $helper->prepareObjectManager($objects);
+        $this->initPayment();
+
+        $this->subject = (new ObjectManagerHelper($this))
+            ->getObject(
+                PayPalPayflowTransparent::class,
+                [
+                    'configFactory' => $this->getPaymentConfigInterfaceFactory(),
+                    'paymentExtensionFactory' => $this->getPaymentExtensionInterfaceFactory(),
+                    'storeManager' => $this->getStoreManager(),
+                    'gateway' => $this->getPayPalPayflowGateway(),
+                    'paymentTokenFactory' => $this->getPaymentTokenFactory(),
+                    'payPalCartFactory' => $this->getPayPalCartFactory(),
+                    'scopeConfig' => $this->getScopeConfig(),
+                ]
+            );
+    }
+
+    /**
+     * Check correct parent transaction ID for Payflow delayed capture.
+     *
+     * @param string $parentTransactionId
+     * @param bool $createPaymentToken
+     * @throws InvalidTransitionException
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    #[DataProvider('captureCorrectIdDataProvider')]
+    public function testCaptureCorrectId(string $parentTransactionId, bool $createPaymentToken)
+    {
+        if (empty($parentTransactionId)) {
+            $setParentTransactionIdCalls =  1;
+            $setAdditionalInformationCalls = 1;
+            $getGatewayTokenCalls = 2;
+        } else {
+            $setParentTransactionIdCalls =  0;
+            $setAdditionalInformationCalls = 0;
+            $getGatewayTokenCalls = 0;
+        }
+
+        $this->payment->expects($this->any())
+            ->method('getAdditionalInformation')
+            ->willReturnCallback(function ($args) use ($createPaymentToken) {
+                static $callCount = 0;
+                if ($callCount == 0 && $args == 'result_code') {
+                    $callCount++;
+                    return 0;
+                } elseif ($callCount == 1 && $args == Payflowpro::PNREF && !$createPaymentToken) {
+                    $callCount++;
+                    return '';
+                } elseif ($callCount == 1 && $args == Payflowpro::PNREF && $createPaymentToken) {
+                    $callCount++;
+                    return 'ABCD';
+                } elseif ($callCount == 2 && $args == Payflowpro::PNREF) {
+                    $callCount++;
+                    return Payflowpro::PNREF;
+                } elseif ($callCount == 3 && $args == Payflowpro::PNREF) {
+                    $callCount++;
+                    return Payflowpro::PNREF;
+                } elseif ($args == PayPalPayflowTransparent::CC_DETAILS && $createPaymentToken) {
+                    return json_encode([]);
+                }
+            });
+
+        $gatewayToken = 'gateway_token';
+        if ($createPaymentToken) {
+            $this->payment->expects($this->never())->method('setParentTransactionId');
+            $this->payment->expects($this->never())
+                ->method('setAdditionalInformation');
+            $this->paymentExtensionAttributes->expects($this->once())
+                ->method('getVaultPaymentToken')
+                ->willReturn(null);
+            $this->paymentToken->expects($this->never())
+                ->method('getGatewayToken')
+                ->willReturn($gatewayToken);
+        } else {
+            $this->payment->expects($this->once())->method('getParentTransactionId')->willReturn($parentTransactionId);
+            $this->payment->expects($this->exactly($setParentTransactionIdCalls))->method('setParentTransactionId');
+            $this->payment->expects($this->exactly($setAdditionalInformationCalls))
+                ->method('setAdditionalInformation')
+                ->with(Payflowpro::PNREF, $gatewayToken);
+            $this->paymentExtensionAttributes->expects($this->once())
+                ->method('getVaultPaymentToken')
+                ->willReturn($this->paymentToken);
+            $this->paymentToken->expects($this->exactly($getGatewayTokenCalls))
+                ->method('getGatewayToken')
+                ->willReturn($gatewayToken);
+        }
+
+        $this->subject->capture($this->payment, 100);
+    }
+
+    /**
+     * Data provider for testCaptureCorrectId.
+     *
+     * @return array
+     */
+    public static function captureCorrectIdDataProvider(): array
+    {
+        return [
+            ['', false],
+            ['1', false],
+            ['', true],
+            ['1', true],
+        ];
+    }
+
+    /**
+     * Asserts that authorize request to Payflow gateway is valid.
+     *
+     * @param DataObject $validAuthorizeRequest
+     * @throws LocalizedException
+     * @throws InvalidTransitionException
+     */
+    #[DataProvider('validAuthorizeRequestDataProvider')]
+    public function testValidAuthorizeRequest(DataObject $validAuthorizeRequest)
+    {
+        $this->scopeConfig->method('getValue')
+            ->willReturnMap(
+                [
+                    ['payment/payflowpro/user', ScopeInterface::SCOPE_STORE, null, 'user'],
+                    ['payment/payflowpro/vendor', ScopeInterface::SCOPE_STORE, null, 'vendor'],
+                    ['payment/payflowpro/partner', ScopeInterface::SCOPE_STORE, null, 'partner'],
+                    ['payment/payflowpro/pwd', ScopeInterface::SCOPE_STORE, null, 'pwd'],
+                    ['payment/payflowpro/verbosity', ScopeInterface::SCOPE_STORE, null, 'verbosity'],
+                ]
+            );
+        $this->paymentConfig->method('getBuildNotationCode')->willReturn('BUTTONSOURCE');
+        $this->payment->method('getAdditionalInformation')
+            ->willReturnMap(
+                [
+                    [Payflowpro::PNREF, 'XXXXXXXXXXXX'],
+                ]
+            );
+        $this->order->method('getIncrementId')->willReturn('000000001');
+        $this->order->method('getBaseCurrencyCode')->willReturn('USD');
+        $this->payPalCart->method('getSubtotal')->willReturn(5.00);
+        $this->payPalCart->method('getTax')->willReturn(5.00);
+        $this->payPalCart->method('getShipping')->willReturn(5.00);
+        $this->payPalCart->method('getDiscount')->willReturn(5.00);
+
+        $this->payPalPayflowGateway->expects($this->once())
+            ->method('postRequest')
+            ->with($validAuthorizeRequest);
+
+        $this->subject->authorize($this->payment, 10);
+    }
+
+    /**
+     * @return array
+     */
+    public static function validAuthorizeRequestDataProvider(): array
+    {
+        return [
+            [
+                new DataObject(
+                    [
+                        'user' => 'user',
+                        'vendor' => 'vendor',
+                        'partner' => 'partner',
+                        'pwd' => 'pwd',
+                        'verbosity' => 'verbosity',
+                        'BUTTONSOURCE' => 'BUTTONSOURCE',
+                        'tender' => 'C',
+                        'custref' => '000000001',
+                        'invnum' => '000000001',
+                        'comment1' => '000000001',
+                        'trxtype' => 'A',
+                        'origid' => 'XXXXXXXXXXXX',
+                        'amt' => '10.00',
+                        'currency' => 'USD',
+                        'itemamt' => '5.00',
+                        'taxamt' => '5.00',
+                        'freightamt' => '5.00',
+                        'discount' => '5.00',
+                    ]
+                ),
+            ]
+        ];
+    }
+
+    /**
+     * @return PaymentConfigInterfaceFactory|MockObject
+     */
+    private function getPaymentConfigInterfaceFactory()
+    {
+        $paymentConfigInterfaceFactory = $this->createMock(
+            PaymentConfigInterfaceFactory::class
+        );
+        $this->paymentConfig = $this->createPartialMockWithReflection(
+            PaymentConfigInterface::class,
+            [
+                'setStoreId',
+                'setMethodInstance',
+                'setMethod',
+                'getBuildNotationCode',
+                'getPaymentAction',
+                'getValue',
+                'setMethodCode',
+                'setPathPattern'
+            ]
+        );
+
+        $paymentConfigInterfaceFactory->method('create')->willReturn($this->paymentConfig);
+
+        return $paymentConfigInterfaceFactory;
+    }
+
+    /**
+     * @return PaymentExtensionInterfaceFactory|MockObject
+     */
+    private function getPaymentExtensionInterfaceFactory()
+    {
+        $paymentExtensionInterfaceFactory = $this->createMock(
+            PaymentExtensionInterfaceFactory::class
+        );
+        $orderPaymentExtension = $this->createPartialMockWithReflection(
+            OrderPaymentExtensionInterface::class,
+            ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
+        );
+
+        $paymentExtensionInterfaceFactory->method('create')->willReturn($orderPaymentExtension);
+
+        return $paymentExtensionInterfaceFactory;
+    }
+
+    /**
+     * @return StoreManagerInterface|MockObject
+     */
+    private function getStoreManager()
+    {
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $store = $this->createMock(StoreInterface::class);
+
+        $storeManager->method('getStore')->willReturn($store);
+
+        return $storeManager;
+    }
+
+    /**
+     * @return PayPalPayflowGateway|MockObject
+     */
+    private function getPayPalPayflowGateway()
+    {
+        $this->payPalPayflowGateway = $this->createMock(PayPalPayflowGateway::class);
+        $this->payPalPayflowGateway->method('postRequest')
+            ->willReturn(new DataObject());
+
+        return $this->payPalPayflowGateway;
+    }
+
+    /**
+     * @return PaymentTokenInterfaceFactory|MockObject
+     */
+    private function getPaymentTokenFactory()
+    {
+        $paymentTokenInterfaceFactory = $this->createMock(PaymentTokenInterfaceFactory::class);
+        $this->paymentToken = $this->createMock(PaymentTokenInterface::class);
+
+        $paymentTokenInterfaceFactory->method('create')->willReturn($this->paymentToken);
+
+        return $paymentTokenInterfaceFactory;
+    }
+
+    /**
+     * @return PayPalCartFactory|MockObject
+     */
+    private function getPayPalCartFactory()
+    {
+        $payPalCartFactory = $this->createMock(
+            PayPalCartFactory::class
+        );
+        $this->payPalCart = $this->createMock(PayPalCart::class);
+
+        $payPalCartFactory->method('create')->willReturn($this->payPalCart);
+
+        return $payPalCartFactory;
+    }
+
+    /**
+     * @return ScopeConfigInterface|MockObject
+     */
+    private function getScopeConfig()
+    {
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+
+        return $this->scopeConfig;
+    }
+
+    /**
+     * @return Payment|MockObject
+     */
+    private function initPayment()
+    {
+        $this->payment = $this->createPartialMockWithReflection(
+            Payment::class,
+            [
+                'getIsTransactionApproved',
+                'setTransactionId',
+                'setIsTransactionClosed',
+                'getCcExpYear',
+                'getCcExpMonth',
+                'getExtensionAttributes',
+                'getOrder',
+                'authorize',
+                'canFetchTransactionInfo',
+                'getParentTransactionId',
+                'setParentTransactionId',
+                'setAdditionalInformation',
+                'getAdditionalInformation',
+                'setExtensionAttributes'
+            ]
+        );
+        $this->order = $this->createMock(Order::class);
+        $this->paymentExtensionAttributes = $this->createPartialMockWithReflection(
+            OrderPaymentExtensionInterface::class,
+            ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
+        );
+        $this->payment->method('getOrder')->willReturn($this->order);
+        $this->payment->method('setTransactionId')->willReturnSelf();
+        $this->payment->method('setIsTransactionClosed')->willReturnSelf();
+        $this->payment->method('getCcExpYear')->willReturn('2019');
+        $this->payment->method('getCcExpMonth')->willReturn('05');
+        $this->payment->method('getExtensionAttributes')->willReturn($this->paymentExtensionAttributes);
+        $this->payment->method('getIsTransactionApproved')->willReturn(true);
+
+        return $this->payment;
+    }
+
+    public function testFetchTransactionInfo()
+    {
+        $this->payment->method('canFetchTransactionInfo')->willReturn(false);
+        $this->paymentConfig->method('getPaymentAction')->willReturn('authorize');
+        $this->payment->expects($this->never())->method('authorize');
+        $this->subject->fetchTransactionInfo($this->payment, '123');
+    }
+}

@@ -1,0 +1,35 @@
+{
+    "name": "magento/module-product-alert",
+    "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~8.2.0||~8.3.0||~8.4.0",
+        "magento/framework": "*",
+        "magento/framework-bulk": "*",
+        "magento/module-asynchronous-operations": "*",
+        "magento/module-authorization": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog": "*",
+        "magento/module-customer": "*",
+        "magento/module-store": "*",
+        "magento/module-theme": "*"
+    },
+    "suggest": {
+        "magento/module-config": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\ProductAlert\\": ""
+        }
+    }
+}

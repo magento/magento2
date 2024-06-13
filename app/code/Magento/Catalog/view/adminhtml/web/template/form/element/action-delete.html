@@ -1,0 +1,16 @@
+<!--
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+-->
+<button class="action-delete"
+        attr="{'data-action': 'remove_row'}"
+        data-bind="
+            click: function(){ $parent.processingDeleteRecord($record().index, $record.recordId); },
+            attr: {
+                title: $parent.deleteButtonLabel
+            }
+        ">
+    <span translate="$parent.deleteButtonLabel"></span>
+</button>

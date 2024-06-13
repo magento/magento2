@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config>
+    <words>
+        <word>demon</word>
+        <word>vampire</word>
+    </words>
+    <whitelist>
+        <item>
+            <path>twilight/eclipse.php</path>
+        </item>
+        <item>
+            <word>vampire</word>
+            <path>twilight/newmoon.php</path>
+        </item>
+    </whitelist>
+</config>

@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Backend\Controller\Adminhtml\System\Store;
+
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\Controller\ResultFactory;
+
+/**
+ * Class Index returns Stores page
+ */
+class Index extends \Magento\Backend\Controller\Adminhtml\System\Store implements HttpGetActionInterface
+{
+    /**
+     * Returns Stores page
+     *
+     * @return \Magento\Backend\Model\View\Result\Page
+     */
+    public function execute()
+    {
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->setActiveMenu('Magento_Backend::system_store');
+        $resultPage->addBreadcrumb(__('Stores'), __('Stores'));
+        $resultPage->addBreadcrumb(__('All Stores'), __('All Stores'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Stores'));
+        return $resultPage;
+    }
+}

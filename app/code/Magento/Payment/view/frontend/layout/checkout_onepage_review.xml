@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="checkout.onepage.review.info.items.after">
+            <block class="Magento\Payment\Block\Transparent\Form" name="payment.form.transparent">
+                <action method="setTemplate">
+                    <argument name="template" xsi:type="string">Magento_Payment::transparent/form.phtml</argument>
+                </action>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

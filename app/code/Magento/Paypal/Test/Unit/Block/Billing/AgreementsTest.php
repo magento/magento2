@@ -1,0 +1,288 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Paypal\Test\Unit\Block\Billing;
+
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Context;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Paypal\Block\Billing\Agreements;
+use Magento\Paypal\Helper\Data;
+use Magento\Paypal\Model\Billing\Agreement;
+use Magento\Paypal\Model\Method\Agreement as PaymentMethodAgreement;
+use Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection;
+use Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class AgreementsTest extends TestCase
+{
+    use MockCreationTrait;
+
+    /**
+     * @var Context|MockObject
+     */
+    private $context;
+
+    /**
+     * @codingStandardsIgnoreStart
+     * @var CollectionFactory|MockObject
+     * @codingStandardsIgnoreEnd
+     */
+    private $agreementCollection;
+
+    /**
+     * @var UrlInterface|MockObject
+     */
+    private $urlBuilder;
+
+    /**
+     * @var Escaper|MockObject
+     */
+    private $escaper;
+
+    /**
+     * @var Data|MockObject
+     */
+    private $helper;
+
+    /**
+     * @var LayoutInterface|MockObject
+     */
+    private $layout;
+
+    /**
+     * @var ManagerInterface|MockObject
+     */
+    private $eventManager;
+
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfig;
+
+    /**
+     * @var CacheInterface|MockObject
+     */
+    private $cache;
+
+    /**
+     * @var Agreements
+     */
+    private $block;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        $this->context = $this->createMock(TemplateContext::class);
+        $this->escaper = $this->createMock(Escaper::class);
+        $this->context->expects($this->once())->method('getEscaper')->willReturn($this->escaper);
+        $localeDate = $this->createMock(TimezoneInterface::class);
+        $this->context->expects($this->once())->method('getLocaleDate')->willReturn($localeDate);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->context->expects($this->once())->method('getUrlBuilder')->willReturn($this->urlBuilder);
+        $this->layout = $this->createMock(LayoutInterface::class);
+        $this->context->expects($this->once())->method('getLayout')->willReturn($this->layout);
+        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $this->context->expects($this->once())->method('getEventManager')->willReturn($this->eventManager);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->context->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfig);
+        $this->cache = $this->createMock(CacheInterface::class);
+        $this->context->expects($this->once())->method('getCache')->willReturn($this->cache);
+        $this->agreementCollection = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
+        $this->helper = $this->createMock(Data::class);
+        $objectManager = new ObjectManager($this);
+
+        $this->block = $objectManager->getObject(
+            Agreements::class,
+            [
+                'context' => $this->context,
+                'agreementCollection' => $this->agreementCollection,
+                'helper' => $this->helper
+            ]
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetBillingAgreements(): void
+    {
+        $collection = $this->createMock(Collection::class);
+        $this->agreementCollection->expects($this->once())->method('create')->willReturn($collection);
+        $collection->expects($this->once())->method('addFieldToFilter')->willReturn($collection);
+        $collection->expects($this->once())->method('setOrder')->willReturn($collection);
+        $this->assertSame($collection, $this->block->getBillingAgreements());
+        // call second time to make sure mock only called once
+        $this->block->getBillingAgreements();
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetItemValueCreatedAt(): void
+    {
+        $this->escaper->expects($this->once())->method('escapeHtml');
+        $item = $this->createMock(Agreement::class);
+        $item->expects($this->exactly(2))->method('getData')->with('created_at')->willReturn('03/10/2014');
+        $this->block->getItemValue($item, 'created_at');
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetItemValueCreatedAtNoData(): void
+    {
+        $this->escaper->expects($this->once())->method('escapeHtml');
+        $item = $this->createMock(Agreement::class);
+        $item->expects($this->once())->method('getData')->with('created_at')->willReturn(false);
+        $this->block->getItemValue($item, 'created_at');
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetItemValueUpdatedAt(): void
+    {
+        $this->escaper->expects($this->once())->method('escapeHtml');
+        $item = $this->createMock(Agreement::class);
+        $item->expects($this->exactly(2))->method('getData')->with('updated_at')->willReturn('03/10/2014');
+        $this->block->getItemValue($item, 'updated_at');
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetItemValueUpdatedAtNoData(): void
+    {
+        $this->escaper->expects($this->once())->method('escapeHtml');
+        $item = $this->createMock(Agreement::class);
+        $item->expects($this->once())->method('getData')->with('updated_at')->willReturn(false);
+        $this->block->getItemValue($item, 'updated_at');
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetItemValueEditUrl(): void
+    {
+        $this->escaper->expects($this->once())->method('escapeHtml');
+        $item = $this->createPartialMockWithReflection(Agreement::class, ['getAgreementId']);
+        $item->expects($this->once())->method('getAgreementId')->willReturn(1);
+        $this->urlBuilder
+            ->expects($this->once())
+            ->method('getUrl')
+            ->with('paypal/billing_agreement/view', ['agreement' => 1]);
+        $this->block->getItemValue($item, 'edit_url');
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetItemPaymentMethodLabel(): void
+    {
+        $this->escaper->expects($this->once())->method('escapeHtml')->with('label', null);
+        $item = $this->createPartialMockWithReflection(Agreement::class, ['getAgreementLabel']);
+        $item->expects($this->once())->method('getAgreementLabel')->willReturn('label');
+        $this->block->getItemValue($item, 'payment_method_label');
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetItemStatus(): void
+    {
+        $this->escaper->expects($this->once())->method('escapeHtml')->with('status', null);
+        $item = $this->createMock(Agreement::class);
+        $item->expects($this->once())->method('getStatusLabel')->willReturn('status');
+        $this->block->getItemValue($item, 'status');
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetItemDefault(): void
+    {
+        $this->escaper->expects($this->once())->method('escapeHtml')->with('value', null);
+        $item = $this->createMock(Agreement::class);
+        $item->expects($this->exactly(2))->method('getData')->with('default')->willReturn('value');
+        $this->block->getItemValue($item, 'default');
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetWizardPaymentMethodOptions(): void
+    {
+        $method1 = $this->createPartialMock(
+            PaymentMethodAgreement::class,
+            ['getConfigData', 'getCode', 'getTitle']
+        );
+        $method2 = $this->createPartialMock(
+            PaymentMethodAgreement::class,
+            ['getConfigData', 'getCode', 'getTitle']
+        );
+        $method3 = $this->createPartialMock(
+            PaymentMethodAgreement::class,
+            ['getConfigData', 'getCode', 'getTitle']
+        );
+        $method1->expects($this->once())->method('getCode')->willReturn('code1');
+        $method2->expects($this->never())->method('getCode');
+        $method3->expects($this->once())->method('getCode')->willReturn('code3');
+        $method1->expects($this->once())->method('getTitle')->willReturn('title1');
+        $method2->expects($this->never())->method('getTitle');
+        $method3->expects($this->once())->method('getTitle')->willReturn('title3');
+        $method1->expects($this->any())->method('getConfigData')->willReturn(1);
+        $method2->expects($this->any())->method('getConfigData')->willReturn(0);
+        $method3->expects($this->any())->method('getConfigData')->willReturn(1);
+        $paymentMethods = [$method1, $method2, $method3];
+        $this->helper->expects($this->once())->method('getBillingAgreementMethods')->willReturn($paymentMethods);
+        $this->assertEquals(['code1' => 'title1', 'code3' => 'title3'], $this->block->getWizardPaymentMethodOptions());
+    }
+
+    /**
+     * @return void
+     */
+    public function testToHtml(): void
+    {
+        $transport = new DataObject(['html' => '']);
+        $this->eventManager
+            ->method('dispatch')
+            ->willReturnCallback(function ($arg1, $arg2) use ($transport) {
+                if ($arg1 == 'view_block_abstract_to_html_before' && $arg2 == ['block' => $this->block]) {
+                    return null;
+                } elseif ($arg1 == 'view_block_abstract_to_html_after' &&
+                     $arg2 == ['block' => $this->block, 'transport' => $transport]) {
+                    return null;
+                }
+            });
+
+        $this->scopeConfig
+            ->expects($this->once())
+            ->method('getValue')
+            ->willReturn(false);
+        $this->urlBuilder->expects($this->once())->method('getUrl')->with('paypal/billing_agreement/startWizard', []);
+        $this->block->toHtml();
+    }
+}

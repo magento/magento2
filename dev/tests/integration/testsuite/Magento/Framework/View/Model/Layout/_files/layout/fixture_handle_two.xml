@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+<page>
+    <body>
+        <block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture_template_two.phtml"/>
+    </body>
+</page>

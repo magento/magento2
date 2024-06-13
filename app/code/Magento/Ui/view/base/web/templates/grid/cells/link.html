@@ -1,0 +1,13 @@
+<!--
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+-->
+<div class="data-grid-cell-content"
+     if="!$col.isLink($row())"
+     text="$col.getLabel($row())"></div>
+<a   class="action-menu-item"
+     if="$col.isLink($row())"
+     text="$col.getLabel($row())"
+     attr="href: $col.getLink($row())"></a>

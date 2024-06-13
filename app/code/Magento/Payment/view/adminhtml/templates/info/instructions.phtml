@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * @var \Magento\Payment\Block\Info $block
+ * @see \Magento\Payment\Block\Info
+ */
+?>
+<p><?= $block->escapeHtml($block->getMethod()->getTitle()) ?></p>
+<?php if ($block->getInstructions()) : ?>
+    <table>
+        <tbody>
+            <tr>
+                <td><?= /* @noEscape */ nl2br($block->escapeHtml($block->getInstructions())) ?></td>
+            </tr>
+        </tbody>
+    </table>
+<?php endif; ?>

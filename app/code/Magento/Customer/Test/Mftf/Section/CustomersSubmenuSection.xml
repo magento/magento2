@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CustomersSubmenuSection">
+        <element name="allCustomers" type="button" selector="//li[@id='menu-magento-customer-customer']//li[@data-ui-id='menu-magento-customer-customer-manage']"/>
+    </section>
+</sections>

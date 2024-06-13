@@ -1,0 +1,17 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+
+<?php $_product = $block->getProduct() ?>
+<?php if ($_product->isSaleable() && $block->hasOptions()) :?>
+    <div class="bundle-actions">
+        <button id="bundle-slide"
+                class="action primary customize"
+                type="button">
+            <span><?= $block->escapeHtml(__('Customize and Add to Cart')) ?></span>
+        </button>
+    </div>
+<?php endif;?>

@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="currency" translate="label" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Currency Setup</label>
+            <tab>general</tab>
+            <resource>Magento_Config::currency</resource>
+            <group id="options" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Currency Options</label>
+                <field id="base" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Base Currency</label>
+                    <frontend_model>Magento\Directory\Block\Adminhtml\Frontend\Currency\Base</frontend_model>
+                    <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Currency\Base</backend_model>
+                    <comment>
+                        <![CDATA[Base currency is used for all online payment transactions. The base currency scope is defined by the catalog price scope ("Catalog" > "Price" > "Catalog Price Scope").]]>
+                    </comment>
+                </field>
+                <field id="default" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Default Display Currency</label>
+                    <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Currency\DefaultCurrency</backend_model>
+                </field>
+                <field id="allow" translate="label" type="multiselect" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Allowed Currencies</label>
+                    <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Currency\Allow</backend_model>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+            </group>
+            <group id="fixerio" translate="label" sortOrder="35" showInDefault="1">
+                <label>Fixer.io (legacy)</label>
+                <field id="api_key" translate="label" type="obscure" sortOrder="5" showInDefault="1">
+                    <label>API Key</label>
+                    <config_path>currency/fixerio/api_key</config_path>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <comment>Use this field if your API Key was generated at Fixer.io. If your key was generated via ApiLayer then use "Setting > General > Currency setup > Fixer Api via APILayer" configuration.</comment>
+                </field>
+                <field id="timeout" translate="label" type="text" sortOrder="10" showInDefault="1">
+                    <label>Connection Timeout in Seconds</label>
+                    <validate>validate-zero-or-greater validate-number</validate>
+                </field>
+            </group>
+            <group id="fixerio_apilayer" translate="label" sortOrder="35" showInDefault="1">
+                <label>Fixer Api (APILayer)</label>
+                <field id="api_key" translate="label" type="obscure" sortOrder="5" showInDefault="1">
+                    <label>API Key</label>
+                    <config_path>currency/fixerio_apilayer/api_key</config_path>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="timeout" translate="label" type="text" sortOrder="10" showInDefault="1">
+                    <label>Connection Timeout in Seconds</label>
+                    <validate>validate-zero-or-greater validate-number</validate>
+                </field>
+            </group>
+            <group id="currencyconverterapi" translate="label" sortOrder="45" showInDefault="1">
+                <label>Currency Converter API</label>
+                <field id="api_key" translate="label" type="obscure" sortOrder="5" showInDefault="1">
+                    <label>API Key</label>
+                    <config_path>currency/currencyconverterapi/api_key</config_path>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="timeout" translate="label" type="text" sortOrder="10" showInDefault="1">
+                    <label>Connection Timeout in Seconds</label>
+                    <validate>validate-zero-or-greater validate-number</validate>
+                </field>
+            </group>
+            <group id="import" translate="label" type="text" sortOrder="50" showInDefault="1">
+                <label>Scheduled Import Settings</label>
+                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="error_email" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Error Email Recipient</label>
+                    <validate>validate-emails</validate>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="error_email_identity" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Error Email Sender</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="error_email_template" translate="label comment" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Error Email Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="frequency" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Frequency</label>
+                    <source_model>Magento\Cron\Model\Config\Source\Frequency</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="service" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Service</label>
+                    <source_model>Magento\Directory\Model\Currency\Import\Source\Service</source_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Currency\Cron</backend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="time" translate="label" type="time" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Start Time</label>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+        <section id="system">
+            <group id="currency" translate="label" type="text" sortOrder="50" showInDefault="1">
+                <label>Currency</label>
+                <field id="installed" translate="label" type="multiselect" sortOrder="1" showInDefault="1" canRestore="1">
+                    <label>Installed Currencies</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Locale</backend_model>
+                    <source_model>Magento\Config\Model\Config\Source\Locale\Currency\All</source_model>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+            </group>
+        </section>
+        <section id="general">
+            <group id="country">
+                <field id="optional_zip_countries" translate="label" type="multiselect" sortOrder="3" showInDefault="1" canRestore="1">
+                    <label>Zip/Postal Code is Optional for</label>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+            </group>
+            <group id="region" translate="label" type="text" sortOrder="4" showInDefault="1">
+                <label>State Options</label>
+                <field id="state_required" translate="label" type="multiselect" sortOrder="1" showInDefault="1">
+                    <label>State is Required for</label>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+                <field id="display_all" translate="label" type="select" sortOrder="8" showInDefault="1">
+                    <label>Allow to Choose State if It is Optional for Country</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="locale">
+                <field id="weight_unit" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Weight Unit</label>
+                    <source_model>Magento\Directory\Model\Config\Source\WeightUnit</source_model>
+                    <backend_model>Magento\Directory\Model\Config\Backend\WeightUnit</backend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

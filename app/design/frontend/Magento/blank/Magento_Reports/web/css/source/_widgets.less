@@ -1,0 +1,36 @@
+// /**
+//  * Copyright 2015 Adobe
+//  * All Rights Reserved.
+//  */
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .block {
+        &.widget {
+            &.viewed {
+                .grid,
+                .list,
+                .links,
+                .mini.products.images {
+                }
+            }
+
+            &.compared {
+                .grid,
+                .list,
+                .links,
+                .mini.products.images {
+                }
+            }
+        }
+
+        &.viewed,
+        &.compared {
+            .links {
+            }
+        }
+    }
+}

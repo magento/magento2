@@ -1,0 +1,13 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+?>
+<?php $_product = $block->getProduct() ?>
+<?php if ($block->canEmailToFriend()) :?>
+    <a href="<?= $block->escapeUrl($this->helper(Magento\Catalog\Helper\Product::class)->getEmailToFriendUrl($_product)) ?>"
+       class="action mailto friend"><span><?= $block->escapeHtml(__('Email')) ?></span></a>
+<?php endif; ?>

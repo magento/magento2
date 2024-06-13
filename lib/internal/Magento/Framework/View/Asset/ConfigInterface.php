@@ -1,0 +1,43 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Framework\View\Asset;
+
+/**
+ * View asset configuration interface
+ *
+ * @api
+ * @since 100.0.2
+ */
+interface ConfigInterface
+{
+    /**
+     * Check whether merging of CSS files is on
+     *
+     * @return bool
+     */
+    public function isMergeCssFiles();
+
+    /**
+     * Check whether merging of JavScript files is on
+     *
+     * @return bool
+     */
+    public function isMergeJsFiles();
+
+    /**
+     * Check whether bundling of JavScript files is on
+     *
+     * @return bool
+     */
+    public function isBundlingJsFiles();
+
+    /**
+     * Check whether minify of HTML is on
+     *
+     * @return bool
+     */
+    public function isMinifyHtml();
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormGroupedProductsSection">
+        <element name="toggleGroupedProduct" type="button" selector="div[data-index=grouped] .admin__collapsible-title"/>
+        <element name="addProductsToGroup" type="button" selector="button[data-index='grouped_products_button']" timeout="30"/>
+        <element name="nextActionButton" type="button" selector="//*[@data-index='grouped']//*[@class='action-next']"/>
+        <element name="previousActionButton" type="button" selector="//*[@data-index='grouped']//*[@class='action-previous']"/>
+        <element name="positionProduct" type="input" selector="//tbody/tr[{{arg}}][contains(@class,'data-row')]/td[10]//input[@class='position-widget-input']" parameterized="true"/>
+        <element name="nameProductFromGrid" type="text" selector="//tbody/tr[{{arg}}][contains(@class,'data-row')]/td[4]//*[@class='admin__field-control']//span" parameterized="true"/>
+        <element name="optionProductCheckbox" type="checkbox" selector="//*[@data-bind='attr: {for: ko.uid}']"/>
+        <element name="productNextPageInAdd" type="button" selector="//div[@class='selectmenu']//following::div[@class='admin__data-grid-pager']//button[@class='action-next']"/>
+        <element name="productNextPageInEdit" type="button" selector="//div[@data-index='associated']//div[@class='admin__field-control']//div[@class='admin__control-table-pagination']//div[@class='admin__data-grid-pager-wrap']//child::*[@class='admin__control-select']/following::div[@class='admin__data-grid-pager']/button[@class='action-next']"/>
+    </section>
+</sections>

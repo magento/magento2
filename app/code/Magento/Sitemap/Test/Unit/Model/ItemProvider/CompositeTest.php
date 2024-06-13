@@ -1,0 +1,75 @@
+<?php
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Sitemap\Test\Unit\Model\ItemProvider;
+
+use Magento\Sitemap\Model\ItemProvider\Composite as CompositeItemResolver;
+use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
+use Magento\Sitemap\Model\SitemapItemInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
+class CompositeTest extends TestCase
+{
+    public function testNoResolvers()
+    {
+        $resolver = new CompositeItemResolver();
+        $this->assertSame([], $resolver->getItems(1));
+    }
+
+    /**
+     * @param array $itemResolverData
+     * @param array $expectedItems
+     */
+    #[DataProvider('sitemapItemsProvider')]
+    public function testGetItems($itemResolverData, $expectedItems)
+    {
+        $mockResolvers = [];
+
+        foreach ($itemResolverData as $data) {
+            $mockResolver = $this->createMock(ItemProviderInterface::class);
+            $mockResolver->expects(self::once())
+                ->method('getItems')
+                ->willReturn($data);
+
+            $mockResolvers[] = $mockResolver;
+        }
+
+        $resolver = new CompositeItemResolver($mockResolvers);
+        $items = $resolver->getItems(1);
+
+        $this->assertSame($expectedItems, $items);
+    }
+
+    /**
+     * @return array
+     */
+    public static function sitemapItemsProvider()
+    {
+        $testCases = [];
+
+        for ($i = 1; $i < 5; $i++) {
+            $itemProviders = [];
+            $expectedItems = [];
+            $maxProviders = random_int(1, 5);
+            for ($j = 1; $j < $maxProviders; $j++) {
+                $items = [];
+                $maxItems = random_int(2, 5);
+                for ($k = 1; $k < $maxItems; $k++) {
+                    $sitemapItem = static fn (self $testCase) => $testCase->createMock(SitemapItemInterface::class);
+                    $items[] = $sitemapItem;
+                    $expectedItems[]  = $sitemapItem;
+                }
+                $itemProviders[] = $items;
+            }
+
+            $testCases[] = [$itemProviders, $expectedItems];
+        }
+
+        return $testCases;
+    }
+}

@@ -1,0 +1,29 @@
+No,No
+"Filterable (with results)","Filterable (with results)"
+"Filterable (no results)","Filterable (no results)"
+"Use in Layered Navigation","Use in Layered Navigation"
+"Can be used only with catalog input type Dropdown, Multiple Select and Price","Can be used only with catalog input type Dropdown, Multiple Select and Price"
+"Can be used only with catalog input type Dropdown, Multiple Select and Price.","Can be used only with catalog input type Dropdown, Multiple Select and Price."
+"Use in Search Results Layered Navigation","Use in Search Results Layered Navigation"
+Position,Position
+"Position in Layered Navigation","Position in Layered Navigation"
+"Position of attribute in layered navigation block.","Position of attribute in layered navigation block."
+item,item
+items,items
+"Now Shopping by","Now Shopping by"
+Previous,Previous
+Remove,Remove
+"Remove This Item","Remove This Item"
+"Shop By","Shop By"
+"Clear All","Clear All"
+"Shopping Options","Shopping Options"
+"Layered Navigation","Layered Navigation"
+"Display Product Count","Display Product Count"
+"Price Navigation Step Calculation","Price Navigation Step Calculation"
+"Default Price Navigation Step","Default Price Navigation Step"
+"Maximum Number of Price Intervals","Maximum Number of Price Intervals"
+"Maximum number of price intervals is 100","Maximum number of price intervals is 100"
+"Display Price Interval as One Price","Display Price Interval as One Price"
+"This setting will be applied when all prices in the specific price interval are equal.","This setting will be applied when all prices in the specific price interval are equal."
+"Interval Division Limit","Interval Division Limit"
+"Please specify the number of products, that will not be divided into subintervals.","Please specify the number of products, that will not be divided into subintervals."

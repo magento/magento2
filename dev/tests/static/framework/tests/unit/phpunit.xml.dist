@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
+ */
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         colors="true"
+         columns="max"
+         beStrictAboutTestsThatDoNotTestAnything="false"
+         bootstrap="../../bootstrap.php">
+    <testsuites>
+        <testsuite name="Magento Unit Tests for Static Code Analysis Framework">
+            <directory>testsuite/Magento/TestFramework</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <ini name="date.timezone" value="America/Los_Angeles"/>
+    </php>
+    <extensions>
+        <extension class="Qameta\Allure\PHPUnit\AllureExtension">
+            <!-- Optional arguments block; omit it if you want to use default values -->
+            <arguments>
+                <!-- Path to config file (default is config/allure.config.php) -->
+                <string>../../../allure/allure.config.php</string>
+            </arguments>
+        </extension>
+    </extensions>
+</phpunit>

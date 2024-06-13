@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2018 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontOrderAndReturnInformationSection">
+        <element name="orderId" type="input" selector="#oar-order-id"/>
+        <element name="bilingLastName" type="input" selector="#oar-billing-lastname"/>
+        <element name="findOrderBy" type="select" selector="#quick-search-type-id"/>
+        <element name="email" type="input" selector="#oar_email"/>
+        <element name="bilingZipCode" type="input" selector="//input[@id='oar_zip']"/>
+        <element name="continueButton" type="button" selector="//button[@title='Continue']"/>
+        <element name="ordersAndReturnsTitle" type="text" selector="//span[@id='page-title-wrapper']"/>
+        <element name="pagerAtTop" type="text" selector="//td[@data-block='order-items-pager-top']//span[@class='toolbar-number']"/>
+        <element name="pagerAtBottom" type="text" selector="//td[@data-block='order-items-pager-bottom']//span[@class='toolbar-number']"/>
+        <element name="orderPage" type="text" selector="//span[contains(text(),'{{grabOrderText}}')]" parameterized="true"/>
+    </section>
+</sections>

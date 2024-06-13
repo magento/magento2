@@ -1,0 +1,23 @@
+<!--
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+-->
+<div class="admin__field"
+     visible="visible"
+     css="$data.additionalClasses"
+     attr="'data-index': index">
+    <label class="admin__field-label">
+        <span text="label"></span>
+    </label>
+
+    <div class="admin__field-control"
+         css="'_with-tooltip': $data.tooltip">
+        <render args="tooltipTpl" if="$data.tooltip"></render>
+        <render args="buttonTpl" ></render>
+        <div class="admin__field-note" if="$data.notice">
+            <span text="notice"></span>
+        </div>
+    </div>
+</div>

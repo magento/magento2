@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontPayPalOrderReviewSection">
+        <element name="shippingMethod" type="select" selector="#shipping-method"/>
+        <element name="placeOrderBtn" type="button" selector="#review-button" timeout="30"/>
+        <element name="applyDiscountCodeHeader" type="select" selector="//strong[text()='Apply Discount Code']"/>
+        <element name="discountCodeField" type="input" selector=".control #coupon_code"/>
+        <element name="applyDiscount" type="button" selector="//button//span[text()='Apply Discount']"/>
+        <element name="grandTotal" type="text" selector="//td[@data-th='Grand Total']//strong"/>
+    </section>
+</sections>
+

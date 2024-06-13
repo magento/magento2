@@ -1,0 +1,70 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\CatalogSearch\Model\Indexer;
+
+use Magento\Framework\Indexer\IndexStructureInterface;
+
+/**
+ * Catalog search index structure proxy.
+ *
+ * @deprecated mysql search engine has been removed
+ * @see \Magento\Elasticsearch
+ */
+class IndexStructureProxy implements IndexStructureInterface
+{
+    /**
+     * @var IndexStructureInterface
+     */
+    private $indexStructureEntity;
+
+    /**
+     * @var IndexStructureFactory
+     */
+    private $indexStructureFactory;
+
+    /**
+     * @param IndexStructureFactory $indexStructureFactory
+     */
+    public function __construct(
+        IndexStructureFactory $indexStructureFactory
+    ) {
+        $this->indexStructureFactory = $indexStructureFactory;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function delete(
+        $index,
+        array $dimensions = []
+    ) {
+        return $this->getEntity()->delete($index, $dimensions);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function create(
+        $index,
+        array $fields,
+        array $dimensions = []
+    ) {
+        return $this->getEntity()->create($index, $fields, $dimensions);
+    }
+
+    /**
+     * Get instance of current index structure
+     *
+     * @return IndexStructureInterface
+     */
+    private function getEntity()
+    {
+        if (empty($this->indexStructureEntity)) {
+            $this->indexStructureEntity = $this->indexStructureFactory->create();
+        }
+        return $this->indexStructureEntity;
+    }
+}

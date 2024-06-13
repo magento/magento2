@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\View\Comments" name="invoice_comments">
+            <block class="Magento\Sales\Block\Adminhtml\Order\Comments\View" name="order_comments" template="Magento_Sales::order/comments/view.phtml">
+                <arguments>
+                    <argument name="editCommentCheck" xsi:type="object">Magento\Sales\ViewModel\Order\Entity\EditCommentCheck</argument>
+                </arguments>
+            </block>
+        </block>
+    </body>
+</page>

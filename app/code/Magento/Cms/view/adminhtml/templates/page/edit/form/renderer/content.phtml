@@ -1,0 +1,13 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+<?php $_element = $block->getElement() ?>
+
+<?php if (!$_element->getNoDisplay()): ?>
+<div class="cms-manage-content-actions">
+    <?= /* @noEscape */ $_element->getElementHtml() !== null ? trim($_element->getElementHtml()) : '' ?>
+</div>
+<?php endif; ?>

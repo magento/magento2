@@ -1,0 +1,112 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Cms\Test\Unit\Observer;
+
+use Magento\Cms\Observer\NoRouteObserver;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class NoRouteObserverTest extends TestCase
+{
+    use MockCreationTrait;
+    /**
+     * @var NoRouteObserver
+     */
+    protected $noRouteObserver;
+
+    /**
+     * @var Observer|MockObject
+     */
+    protected $observerMock;
+
+    /**
+     * @var Event|MockObject
+     */
+    protected $eventMock;
+
+    /**
+     * @var DataObject|MockObject
+     */
+    protected $objectMock;
+
+    protected function setUp(): void
+    {
+        $this->observerMock = $this
+            ->getMockBuilder(Observer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            [
+                'getStatus',
+                'getRedirect',
+            ]
+        );
+        $this->objectMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            [
+                'setLoaded',
+                'setForwardModule',
+                'setForwardController',
+                'setForwardAction',
+                'setRedirectUrl',
+                'setRedirect',
+                'setPath',
+                'setArguments',
+            ]
+        );
+
+        $objectManager = new ObjectManager($this);
+        $this->noRouteObserver = $objectManager->getObject(
+            NoRouteObserver::class,
+            []
+        );
+    }
+
+    /**
+     * @covers \Magento\Cms\Observer\NoRouteObserver::execute
+     */
+    public function testNoRoute()
+    {
+        $this->observerMock
+            ->expects($this->atLeastOnce())
+            ->method('getEvent')
+            ->willReturn($this->eventMock);
+        $this->eventMock
+            ->expects($this->atLeastOnce())
+            ->method('getStatus')
+            ->willReturn($this->objectMock);
+        $this->objectMock
+            ->expects($this->atLeastOnce())
+            ->method('setLoaded')
+            ->with(true)
+            ->willReturnSelf();
+        $this->objectMock
+            ->expects($this->atLeastOnce())
+            ->method('setForwardModule')
+            ->with('cms')
+            ->willReturnSelf();
+        $this->objectMock
+            ->expects($this->atLeastOnce())
+            ->method('setForwardController')
+            ->with('index')
+            ->willReturnSelf();
+        $this->objectMock
+            ->expects($this->atLeastOnce())
+            ->method('setForwardAction')
+            ->with('noroute')
+            ->willReturnSelf();
+
+        $this->assertEquals($this->noRouteObserver, $this->noRouteObserver->execute($this->observerMock));
+    }
+}

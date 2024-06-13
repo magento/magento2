@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCatalogSearchEngineConfigurationSection">
+        <element name="searchEngineOptimization" type="button" selector="#catalog_seo-head"/>
+        <element name="openedEngineOptimization" type="button" selector="#catalog_seo-head.open"/>
+        <element name="systemValueUseCategoriesPath" type="checkbox" selector="#catalog_seo_product_use_categories_inherit"/>
+        <element name="selectUseCategoriesPatForProductUrls" type="select" selector="#catalog_seo_product_use_categories"/>
+    </section>
+</sections>

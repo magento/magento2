@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+<action>
+    <translatable translate="true">test</translatable>
+    <string>test</string>
+</action>

@@ -1,0 +1,50 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Downloadable\Model\Link;
+
+use Magento\Downloadable\Api\LinkRepositoryInterface as LinkRepository;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+
+/**
+ * Delete Handler for Downloadable Product Links.
+ */
+class DeleteHandler implements ExtensionInterface
+{
+    /**
+     * @var LinkRepository
+     */
+    protected $linkRepository;
+
+    /**
+     * @param LinkRepository $linkRepository
+     */
+    public function __construct(LinkRepository $linkRepository)
+    {
+        $this->linkRepository = $linkRepository;
+    }
+
+    /**
+     * Delete Downloadable Links for the provided Product.
+     *
+     * @param object $entity
+     * @param array $arguments
+     * @return \Magento\Catalog\Api\Data\ProductInterface|object
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function execute($entity, $arguments = [])
+    {
+        if ($entity->getTypeId() != \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
+            return $entity;
+        }
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
+        foreach ($this->linkRepository->getList($entity->getSku()) as $link) {
+            $this->linkRepository->delete($link->getId());
+        }
+        $entity->setDownloadableLinks(null);
+
+        return $entity;
+    }
+}

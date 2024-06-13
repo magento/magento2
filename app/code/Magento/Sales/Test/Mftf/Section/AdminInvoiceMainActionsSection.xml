@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2017 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminInvoiceMainActionsSection">
+        <element name="submitInvoice" type="button" selector=".action-default.scalable.save.submit-button.primary" timeout="60"/>
+        <element name="openNewCreditMemoFromInvoice" type="button" selector=".action-default.scalable.credit-memo"/>
+        <element name="submitNewRefundFromInvoice" type="button" selector=".action-default.scalable.save.submit-button.refund.primary"/>
+        <element name="cancel" type="button" selector=".action-default.scalable.delete"/>
+        <element name="selectModeOfAmount" type="select" selector=".admin__control-select"/>
+    </section>
+</sections>

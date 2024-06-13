@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config>
+    <words>
+        <word>darkness</word>
+        <word>paranormal</word>
+    </words>
+    <whitelist>
+        <item>
+            <word>paranormal</word>
+            <path>twilight/newmoon.php</path>
+        </item>
+    </whitelist>
+</config>

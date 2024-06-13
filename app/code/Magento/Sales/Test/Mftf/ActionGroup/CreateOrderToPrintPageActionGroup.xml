@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2018 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateOrderToPrintPageActionGroup">
+        <annotations>
+            <description>Goes to the provided Storefront Category page. Adds the Product to the Cart. Places the Order. Clicks on Print Order.</description>
+        </annotations>
+        <arguments>
+            <argument name="Category"/>
+        </arguments>
+
+        <amOnPage url="{{StorefrontCategoryPage.url(Category.name)}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
+        <waitForElementClickable selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="waitForAddToCartButtonClickable"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <waitForElementClickable selector="{{StorefrontMinicartSection.showCart}}" stepKey="waitForClickCartButtonClickable"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
+        <waitForElementClickable selector="{{StorefrontMinicartSection.showCart}}" stepKey="waitForGoToCheckoutButtonClickable"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForPageLoad stepKey="waitForLoadingMask"/>
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="waitForFirstShippingMethodClickable" />
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <waitForPageLoad stepKey="waitForLoadingMask2"/>
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <waitForElementClickable selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="waitForClickOrderLink"/>
+        <click selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="clickOrderLink"/>
+        <waitForElementClickable selector="{{StorefrontCustomerOrderViewSection.printOrderLink}}" stepKey="waitForClickPrintOrderLink"/>
+        <click selector="{{StorefrontCustomerOrderViewSection.printOrderLink}}" stepKey="clickPrintOrderLink"/>
+        <waitForPageLoad stepKey="waitForPrintOrderPageLoad"/>
+    </actionGroup>
+</actionGroups>

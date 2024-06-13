@@ -1,0 +1,30 @@
+<?php
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\TestFramework\ConfigurableProduct\Block\CustomOptions;
+
+use Magento\TestFramework\Catalog\Block\Product\View\Options\TextGroupDataProvider as OptionsTextGroupDataProvider;
+
+/**
+ * @inheritdoc
+ */
+class TextGroupDataProvider extends OptionsTextGroupDataProvider
+{
+    /**
+     * @inheritdoc
+     */
+    public static function getData(): array
+    {
+        $optionsData = parent::getData();
+        unset(
+            $optionsData['type_field_percent_price'],
+            $optionsData['type_area_percent_price']
+        );
+
+        return $optionsData;
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "name": "magento/module-b",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.4.0||~8.0.0",
+        "magento/framework": "*",
+        "magento/module-a": "0.1"
+    },
+    "version": "0.1"
+}

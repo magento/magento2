@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+<?php $_element = $block->getElement() ?>
+<?php if ($_element->getNoSpan() !== true) : ?>
+<span class="field-row">
+<?php endif; ?>
+<?= $_element->getLabelHtml() ?>
+<?= $_element->getElementHtml() ?>
+<?php if ($_element->getNoSpan() !== true) : ?>
+</span>
+<?php endif; ?>

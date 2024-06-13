@@ -1,0 +1,250 @@
+<?php
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Customer\Test\Unit\Block\Account;
+
+use Magento\Customer\Block\Account\AuthenticationPopup;
+use Magento\Customer\Model\Form;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AuthenticationPopupTest extends TestCase
+{
+    use MockCreationTrait;
+
+    /** @var AuthenticationPopup */
+    private $model;
+
+    /** @var Context|MockObject */
+    private $contextMock;
+
+    /** @var StoreManagerInterface|MockObject */
+    private $storeManagerMock;
+
+    /** @var ScopeConfigInterface|MockObject */
+    private $scopeConfigMock;
+
+    /** @var UrlInterface|MockObject */
+    private $urlBuilderMock;
+
+    /** @var Json|MockObject */
+    private $serializerMock;
+
+    protected function setUp(): void
+    {
+        $this->contextMock = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMock();
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->getMock();
+        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
+            ->getMock();
+
+        $this->contextMock->expects($this->once())
+            ->method('getStoreManager')
+            ->willReturn($this->storeManagerMock);
+        $this->contextMock->expects($this->once())
+            ->method('getScopeConfig')
+            ->willReturn($this->scopeConfigMock);
+        $this->contextMock->expects($this->once())
+            ->method('getUrlBuilder')
+            ->willReturn($this->urlBuilderMock);
+        $escaperMock = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escaperMock->method('escapeHtml')
+            ->willReturnCallback(
+                function ($string) {
+                    return 'escapeHtml' . $string;
+                }
+            );
+        $escaperMock->method('escapeUrl')
+            ->willReturnCallback(
+                function ($string) {
+                    return 'escapeUrl' . $string;
+                }
+            );
+        $this->contextMock->expects($this->once())
+            ->method('getEscaper')
+            ->willReturn($escaperMock);
+
+        $this->serializerMock = $this->getMockBuilder(Json::class)
+            ->getMock();
+
+        $this->model = new AuthenticationPopup(
+            $this->contextMock,
+            [],
+            $this->serializerMock
+        );
+    }
+
+    /**
+     * @param mixed $isAutocomplete
+     * @param string $baseUrl
+     * @param string $registerUrl
+     * @param string $forgotUrl
+     * @param array $result
+     * @throws Exception
+     */
+    #[DataProvider('dataProviderGetConfig')]
+    public function testGetConfig($isAutocomplete, $baseUrl, $registerUrl, $forgotUrl, $loginUrl, array $result)
+    {
+        $this->scopeConfigMock->expects($this->any())
+            ->method('getValue')
+            ->with(Form::XML_PATH_ENABLE_AUTOCOMPLETE, ScopeInterface::SCOPE_STORE, null)
+            ->willReturn($isAutocomplete);
+
+        /** @var Store||\PHPUnit\Framework\MockObject\MockObject $storeMock */
+        $storeMock = $this->createPartialMock(Store::class, ['getBaseUrl']);
+        $storeMock->method('getBaseUrl')->willReturn($baseUrl);
+
+        $this->storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->with(null)
+            ->willReturn($storeMock);
+
+        $this->urlBuilderMock->expects($this->any())
+            ->method('getUrl')
+            ->willReturnMap(
+                [
+                    ['customer/account/create', [], $registerUrl],
+                    ['customer/account/forgotpassword', [], $forgotUrl],
+                    ['customer/ajax/login', [], $loginUrl],
+                ]
+            );
+
+        $this->assertEquals($result, $this->model->getConfig());
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderGetConfig()
+    {
+        return [
+            [
+                0,
+                'base',
+                'reg',
+                'forgot',
+                'loginUrl',
+                [
+                    'autocomplete' => 'escapeHtmloff',
+                    'customerRegisterUrl' => 'escapeUrlreg',
+                    'customerForgotPasswordUrl' => 'escapeUrlforgot',
+                    'baseUrl' => 'escapeUrlbase',
+                    'customerLoginUrl'=>'loginUrl',
+                ],
+            ],
+            [
+                1,
+                '',
+                'reg',
+                'forgot',
+                'loginUrl',
+                [
+                    'autocomplete' => 'escapeHtmlon',
+                    'customerRegisterUrl' => 'escapeUrlreg',
+                    'customerForgotPasswordUrl' => 'escapeUrlforgot',
+                    'baseUrl' => 'escapeUrl',
+                    'customerLoginUrl'=>'loginUrl',
+                ],
+            ],
+            [
+                '',
+                'base',
+                '',
+                'forgot',
+                'loginUrl',
+                [
+                    'autocomplete' => 'escapeHtmloff',
+                    'customerRegisterUrl' => 'escapeUrl',
+                    'customerForgotPasswordUrl' => 'escapeUrlforgot',
+                    'baseUrl' => 'escapeUrlbase',
+                    'customerLoginUrl'=>'loginUrl',
+                ],
+            ],
+            [
+                true,
+                'base',
+                'reg',
+                '',
+                'loginUrl',
+                [
+                    'autocomplete' => 'escapeHtmlon',
+                    'customerRegisterUrl' => 'escapeUrlreg',
+                    'customerForgotPasswordUrl' => 'escapeUrl',
+                    'baseUrl' => 'escapeUrlbase',
+                    'customerLoginUrl'=>'loginUrl',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @param mixed $isAutocomplete
+     * @param string $baseUrl
+     * @param string $registerUrl
+     * @param string $forgotUrl
+     * @param array $result
+     * @throws Exception
+     */
+    #[DataProvider('dataProviderGetConfig')]
+    public function testGetSerializedConfig(
+        $isAutocomplete,
+        $baseUrl,
+        $registerUrl,
+        $forgotUrl,
+        $loginUrl,
+        array $result
+    ) {
+        $this->scopeConfigMock->expects($this->any())
+            ->method('getValue')
+            ->with(Form::XML_PATH_ENABLE_AUTOCOMPLETE, ScopeInterface::SCOPE_STORE, null)
+            ->willReturn($isAutocomplete);
+
+        /** @var Store||\PHPUnit\Framework\MockObject\MockObject $storeMock */
+        $storeMock = $this->createPartialMock(Store::class, ['getBaseUrl']);
+        $storeMock->method('getBaseUrl')->willReturn($baseUrl);
+
+        $this->storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->with(null)
+            ->willReturn($storeMock);
+
+        $this->urlBuilderMock->expects($this->any())
+            ->method('getUrl')
+            ->willReturnMap(
+                [
+                    ['customer/account/create', [], $registerUrl],
+                    ['customer/account/forgotpassword', [], $forgotUrl],
+                    ['customer/ajax/login', [], $loginUrl],
+                ]
+            );
+        $this->serializerMock->expects($this->any())->method('serialize')
+            ->willReturn(
+                json_encode($this->model->getConfig())
+            );
+
+        $this->assertEquals(json_encode($result), $this->model->getSerializedConfig());
+    }
+}

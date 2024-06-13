@@ -1,0 +1,43 @@
+<?php
+/**
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Integration\Model\Config;
+
+use Magento\Integration\Model\Config\Reader as ConfigReader;
+
+/**
+ * Integration config reader test.
+ */
+class ReaderTest extends \PHPUnit\Framework\TestCase
+{
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    protected $_fileResolverMock;
+
+    /** @var ConfigReader */
+    protected $_configReader;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->_fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->_configReader = $objectManager->create(
+            \Magento\Integration\Model\Config\Reader::class,
+            ['fileResolver' => $this->_fileResolverMock]
+        );
+    }
+
+    public function testRead()
+    {
+        $configFiles = [
+            file_get_contents(realpath(__DIR__ . '/_files/configA.xml')),
+            file_get_contents(realpath(__DIR__ . '/_files/configB.xml')),
+        ];
+        $this->_fileResolverMock->expects($this->any())->method('get')->willReturn($configFiles);
+
+        $expectedResult = require __DIR__ . '/_files/integration.php';
+        $this->assertEquals($expectedResult, $this->_configReader->read(), 'Error happened during config reading.');
+    }
+}

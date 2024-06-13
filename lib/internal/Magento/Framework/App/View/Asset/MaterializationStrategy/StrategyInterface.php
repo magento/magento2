@@ -1,0 +1,43 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Framework\App\View\Asset\MaterializationStrategy;
+
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\View\Asset;
+
+/**
+ * Interface \Magento\Framework\App\View\Asset\MaterializationStrategy\StrategyInterface
+ *
+ * @api
+ */
+interface StrategyInterface
+{
+    /**
+     * Publish file
+     *
+     * @param WriteInterface $sourceDir
+     * @param WriteInterface $targetDir
+     * @param string $sourcePath
+     * @param string $destinationPath
+     * @return bool
+     */
+    public function publishFile(
+        WriteInterface $sourceDir,
+        WriteInterface $targetDir,
+        $sourcePath,
+        $destinationPath
+    );
+
+    /**
+     * Whether the strategy can be applied
+     *
+     * @param Asset\LocalInterface $asset
+     * @return bool
+     */
+    public function isSupported(Asset\LocalInterface $asset);
+}

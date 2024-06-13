@@ -1,0 +1,11 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var $block \Magento\Catalog\Block\Product\View\Additional */
+?>
+<?php foreach ($block->getChildHtmlList() as $_html) :?>
+    <?= /* @noEscape */ $_html ?>
+<?php endforeach; ?>

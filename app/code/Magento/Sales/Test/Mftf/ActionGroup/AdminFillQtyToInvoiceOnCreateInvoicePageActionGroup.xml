@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillQtyToInvoiceOnCreateInvoicePageActionGroup">
+        <annotations>
+            <description>Fills the "Qty to invoice" field on the Create Invoice page</description>
+        </annotations>
+        <arguments>
+            <argument name="qty" type="string" defaultValue="1"/>
+        </arguments>
+
+        <fillField selector="{{AdminOrderInvoiceViewSection.invoiceQty}}" userInput="{{qty}}" stepKey="fillQtyToInvoiceField"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,91 @@
+{
+    "host": "http://localhost:<%= port %>",
+    "port": 8000,
+    "root": "dev/tests/js/jasmine",
+    "static": "pub/static",
+
+    /**
+     * Path to themes configuration module. Relative to Magento root.
+     * This node is replaced by formatted theme configuration by 'dev/tests/jasmine/spec_runner' module
+     */
+    "themes": "dev/tools/grunt/configs/themes",
+
+    "files": {
+        "requireBaseUrl": "<%= static %>/<%= area %>/<%= name %>/<%= locale %>",
+        "compactMap" : "<%= static %>/<%= area %>/<%= name %>/<%= locale %>/requirejs-map.js",
+        /**
+         * Path to RequireJS library. Relative to "server.base" config.
+         */
+        "requireJs": {
+            "quick": "<%= static %>/<%= area %>/<%= name %>/<%= locale %>/requirejs/require.js",
+            "compact": "<%= static %>/base/Magento/base/default/requirejs/require.js"
+        },
+
+        /**
+         * Overridden "grunt-contrib-jasmine" SpecRunner template.
+         */
+        "template": "<%= root %>/spec_runner/template.html",
+
+        /**
+         * These files are included to the page in <head> right after "require.js" in declared sequence.
+         */
+        "requirejsConfigs": {
+            "quick": [
+                "<%= static %>/<%= area %>/<%= name %>/<%= locale %>/requirejs-config.js",
+                "<%= root %>/require.conf.js",
+                "<%= root %>/tests/lib/**/*.conf.js",
+                "<%= root %>/tests/app/code/**/base/**/*.conf.js",
+                "<%= root %>/tests/app/code/**/<%= area %>/**/*.conf.js",
+                "<%= root %>/tests/app/design/<%= area %>/<%= name %>/**/*.conf.js"
+            ],
+            "compact": [
+                "<%= static %>/<%= area %>/<%= name %>/<%= locale %>/requirejs-map.js",
+                "<%= static %>/base/Magento/base/default/mage/requirejs/baseUrlResolver.js",
+                "<%= static %>/<%= area %>/<%= name %>/<%= locale %>/requirejs-config.js",
+                "<%= root %>/require.conf.js",
+                "<%= root %>/tests/lib/**/*.conf.js",
+                "<%= root %>/tests/app/code/**/base/**/*.conf.js",
+                "<%= root %>/tests/app/code/**/<%= area %>/**/*.conf.js",
+                "<%= root %>/tests/app/design/<%= area %>/<%= name %>/**/*.conf.js"
+            ]
+        },
+
+        /**
+         * Files that contain tests. These are loaded to the page via RequireJS after all RequireJS configuration files have been loaded to the page.
+         * The sequence is ignored.
+         */
+        "specs": [
+            "<%= root %>/tests/lib/**/*.test.js",
+            "<%= root %>/tests/app/code/**/base/**/*.test.js",
+            "<%= root %>/tests/app/code/**/<%= area %>/**/*.test.js",
+            "<%= root %>/tests/app/design/<%= area %>/<%= name %>/**/*.test.js"
+        ]
+    },
+    "server": {
+        /**
+         * Directory to serve files from
+         */
+        "base": "./",
+
+        /**
+         * Strings, mentioned here are interpreted as regular expressions. Use this option to override server's
+         *     default behaviour and serve matched urls "as is" from Magento root.
+         */
+        "serveAsIs": [
+            "^\/_SpecRunner.html",
+            "^\/dev\/tests",
+            "^\/.grunt",
+            "^\/pub\/static",
+            "^\/node_modules"
+        ],
+        "options": {
+            /**
+             * All options mentioned here are defaults for "connect" grunt task.
+             * "debug" option enables server logs
+             * "keepalive" makes "connect" task pause with set up spec server, which you can fetch by %host%:%port%/_SpecRunner.html address in browser
+             */
+            "debug": false,
+            "keepalive": false
+        }
+    }
+}

@@ -1,0 +1,49 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Framework;
+
+/**
+ * Class Url Factory
+ *
+ * @api
+ */
+class UrlFactory
+{
+    /**
+     * @var ObjectManagerInterface
+     */
+    protected $_objectManager = null;
+
+    /**
+     * @var string
+     */
+    protected $_instanceName = null;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param string $instanceName
+     */
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        $instanceName = UrlInterface::class
+    ) {
+        $this->_objectManager = $objectManager;
+        $this->_instanceName = $instanceName;
+    }
+
+    /**
+     * Create Url instance with specified parameters
+     *
+     * @param array $data
+     * @return UrlInterface
+     */
+    public function create(array $data = [])
+    {
+        return $this->_objectManager->create($this->_instanceName, $data);
+    }
+}

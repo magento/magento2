@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminMenuSEOAndSearchSiteMap">
+        <data key="pageTitle">Site Map</data>
+        <data key="title">Site Map</data>
+        <data key="dataUiId">magento-sitemap-catalog-sitemap</data>
+    </entity>
+</entities>

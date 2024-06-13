@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUiGridSelectFilterOptionActionGroup">
+        <arguments>
+            <argument name="filterName" type="string"/>
+            <argument name="filterValue" type="string"/>
+        </arguments>
+        <selectOption selector="{{AdminDataGridFilterSection.selectByNameAttrInGrid(filterName)}}" userInput="{{filterValue}}" stepKey="selectOption"/>
+    </actionGroup>
+</actionGroups>

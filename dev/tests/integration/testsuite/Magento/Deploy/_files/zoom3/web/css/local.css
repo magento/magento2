@@ -1,0 +1,4 @@
+/* To make sure the import directive will correctly parse external stylesheets */
+@import url("https://localhost/external-stylesheet.css");
+
+p{align:center}

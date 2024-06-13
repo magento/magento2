@@ -1,0 +1,30 @@
+<?php
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Sales\Model\Order\Shipment;
+
+/**
+ * Interface for notification sender for Shipment.
+ * @api
+ */
+interface SenderInterface
+{
+    /**
+     * Sends notification to a customer.
+     *
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @param \Magento\Sales\Api\Data\ShipmentInterface $shipment
+     * @param \Magento\Sales\Api\Data\ShipmentCommentCreationInterface|null $comment
+     * @param bool $forceSyncMode
+     *
+     * @return bool
+     */
+    public function send(
+        \Magento\Sales\Api\Data\OrderInterface $order,
+        \Magento\Sales\Api\Data\ShipmentInterface $shipment,
+        ?\Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
+        $forceSyncMode = false
+    );
+}

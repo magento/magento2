@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2019 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerCanChangeProductOptionsUsingSwatchesTest" extends="AdminCreateVisualSwatchTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Swatches"/>
+            <title value="Customer can change product options using swatches"/>
+            <description value="Customer can change product options using swatches"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3085"/>
+            <group value="swatches"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" after="createCategory" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <!-- Logout customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" before="goToProductAttributes" stepKey="deleteCustomer"/>
+            <comment userInput="BIC workaround" stepKey="logoutFromCustomer"/>
+        </after>
+
+        <!-- Remove steps that are not used for this test -->
+        <remove keyForRemoval="assertSwatch4"/>
+        <remove keyForRemoval="assertSwatch5"/>
+        <remove keyForRemoval="assertSwatch6"/>
+
+        <!-- Login to storefront from customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" before="amOnProductPage" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Add configurable product with swatch attribute to the cart -->
+        <actionGroup ref="StorefrontAddProductWithSwatchesToTheCartActionGroup" stepKey="addConfigurableProductToTheCart">
+            <argument name="productQty" value="1"/>
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="productOption" value="3498db"/>
+        </actionGroup>
+
+        <!-- Go to shopping cart and update option of configurable product -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <actionGroup ref="StorefrontUpdateCartConfigurableProductWithSwatchesActionGroup" stepKey="updateConfigurableProductInTheCart">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="productOption" value="e74c3c"/>
+        </actionGroup>
+    </test>
+</tests>

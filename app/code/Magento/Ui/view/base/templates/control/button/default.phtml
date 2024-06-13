@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * @var $block \Magento\Ui\Component\Control\Button
+ */
+?>
+<?= $block->getBeforeHtml() ?>
+<button <?= /* @noEscape */ $block->getAttributesHtml(), /* @noEscape */ $block->getUiId() ?>>
+    <span><?= $block->escapeHtml($block->getLabel()) ?></span>
+</button>
+<?= $block->getAfterHtml() ?>

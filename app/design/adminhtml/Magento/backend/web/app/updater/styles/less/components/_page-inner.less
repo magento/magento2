@@ -1,0 +1,28 @@
+// /**
+//  * Copyright 2015 Adobe
+//  * All Rights Reserved.
+//  */
+
+//
+//  Page Inner
+//  _____________________________________________
+
+.page-columns {
+    .page-inner-sidebar {
+        margin: 0 0 @indent__l;
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .page-columns {
+        #mix-grid .row();
+        .page-inner-content {
+            #mix-grid .width(9, 12);
+            float: right;
+        }
+
+        .page-inner-sidebar {
+            #mix-grid .column(3, 12);
+        }
+    }
+}

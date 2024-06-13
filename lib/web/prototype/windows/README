@@ -1,0 +1,182 @@
+== Installation/Usage
+
+Just copy windows.js in your javascript directory, and default.css + default directory in your stylesheets directory 
+See samples/index.html for more details and go on my web page : http://prototype-window.xilinus.com
+
+== Change log        
+- 04/23/07  V 1.3
+            - Added: getTitle
+            - Added: blur/focus function on Windows module
+            - Added: onBlur event  
+            - Fixed: WindowCloseKey works with URL content (iframe) 
+            - Fixed: Modal window with a parent != document.body
+            - Updated: prototype 1.5RC3
+            - Updated: Dialog handle resizable,minimizable, maximizable, draggable and closable options
+- 02/27/07  V 1.2
+            - Added: gridX and gridY constructor's options to snap move and resize 
+            - Added: Effect on modal overlay (fade/appear) only if effects.js in included.
+              You can change effect options (Windows.overlayShowEffectOptions and Windows.overlayHideEffectOptions).
+              
+            - Fixed: Multimodal mode.
+            - Fixed: Works on WebKit.
+              
+            - Beta: effects on minimize and maximize. You need to include window_effects.js to have them.
+            
+- 02/17/07  V 1.1
+            - Constructor has been simplified, now you can just do win = new Window(). By default id is automatically generated and can be passed as options
+              win = new Window({id: "my_id", width: 100, height: 100}) 
+              Backward compatibility with old constructor win = new Window("my_id", {width: 100, height: 100}) 
+            - Observer event can be passed as window option:   win = new Window({onClose: function() {alert('close')}}) 
+            - parent option can be id or element
+            - delegate has been removed (not really usefull) and0 setCloseCallback has been addedinstead. (It could be also passed as a constructor's option closeCallback: your_callcabck)
+              your_callcabck must return true to be able to close the window
+            - add onMove event
+            - fix constraint for minimized window
+            - destroyOnClose could be passed as constructor's option:  win = new Window({destroyOnClose: true}) 
+            - constraint works for maximized windows
+            - Dialog ok and cancel parameters has been renamed to onOk and onCancel for coherence (ok and cancel still works)
+            - Update to Prototype 1.5 and script.aculo.us 1.7
+
+- 01/14/07  V 1.00
+            - add changeClassName to change look and feel dynamically.
+            - add constraint move. Constraint can be on a div or document.
+            - full top and bottom bar are use to move window.
+            - fixed computation of window width or height.
+            - add setURL/getURL/refresh and setHTMLContent. Content can be change dynamically. 
+            - add tooltip.js add on. It's an add-on to add dynamically tooltips on a webpage (see samples/tooltips/tooltip.html)
+              Thanks to Jonathan Modell of  2moromedia.com.
+            
+- 12/06/06  V 0.99
+            - remove addClass that automatically tries to include default.css
+            - add wired move/resize
+            - fix recenterAuto
+            - add show to WindowStore to be able to open a window the first time, wihtout any cookie (check samples/window_store/html)
+
+- 11/06/06  V 0.98
+            - new optional behavior for multi-level modal window.
+            - Two new add-ons (in window_ext.js file) 
+               + WindowStore to save open/close window status.
+               + WindowCloseKey to handle escape key (or any keys) to close windows/dialogs
+
+- 10/26/06  V 0.97
+            - add recenterModal to constructor
+            - setAjaxContent eval response request
+            - modal window multi level
+            - fix close/closeAll issues
+            - add addCss (auto add default.css)
+            
+- 09/26/06  V 0.96.3
+      			- Fixed onClose, no more memory leak and nore issues with sound on IE (even on dialogs)
+      			- add getLocation
+      			- Debug select problem on Firefox
+      			- change mouseup event to onclick event
+      			- Fixed event propagation on mininize/maximize/close
+      			- Add frameborder=0
+      			- Add prototype_window_class_helper.rb by Jorge Díaz (http://xurde.info)
+      			
+- 07/22/06  V 0.96.2
+            - Fixed select issue in modal window			
+            
+- 07/15/06  V 0.96.1
+            - Bugs fixed
+            - Add isVisible()
+            - Update debug.js
+            
+- 07/11/06  V 0.96
+            - New events onShow, onHide, onFocus
+            - isVisible()
+            - Autofit width or height if width or (NOT AND) height is set to null in the constructor
+            - updateWidth / updateHeight if you need to update width or height (useful after changing window content if you do not want scrollbars)
+            - Add top, left to showCenter(modal, top, left) optional arguments if you need to center only left or top value.
+            
+- 06/30/06  V 0.95
+            - Now you can set windows or dialogs content with an Ajax request!!
+            - Fixed IE issue when you destroy window with an url that embeds mp3.
+            - Fixed buttonClass issue for Dialog.
+            - Update samples
+            
+- 06/24/06  V 0.90
+            - Valid XHTML 1.0 Strict!
+            - Fixed minimize function
+            - Fixed destroy on window without hide effects
+            - No more text selection while dragging
+            - Add onMinimize/onMaximize event
+            
+- 06/19/06  V 0.85.2
+            - Remove undeclared vars
+            - Set top/left to 0 if not specify
+            - Destroy objet after hide effect instead of before effect instead
+            - getSize
+            - add extended_debug.js (from Jason Pollard)
+            
+- 06/13/06  V 0.85.1
+            - IE bug fixed
+            
+- 06/12/06  V 0.85
+            - Autofit width or height for Dialog
+            - Better Move/Resize over 
+            - Allow select in modal window (even on IE)
+            - WARNING, ok callback for Dialog should returns true to close the dialog
+            - better window HTML code (no more div inside the td)
+            - Add themes
+            
+- 05/23/06  V 0.80
+            - Add setTitle
+            - Add setStatusBar
+            - Store minimize/maximize in the cookie (Thanks to Ifran)
+            - Add onload constructor parameter (Thanks to Ifran)
+            - Add button class for dialog (Thanks to Felix Shnir)
+            
+- 05/09/06  V 0.75
+            - Update with Script.aculo.us 1.6.1 and Prototype 1.5.0_rc1
+            - Remove PNG for dialog overlay, use opacity as done in lightbox V2
+            - Add Windows.focusedWindow and  Windows.closeAll
+            - Add name to iframe in case of url window
+            - Clean up code, use _ for private function (just name convention)
+            - Add Dialog.info function, usefull for submit or notice info (in Rails)
+            - Add minimize and maximize buttons
+            - Add alert_lite.css without any images
+            - Debug
+            
+- 04/15/06  V 0.70
+					  - Add autoposition in setContent. The window will at the element location
+					  - Add draggable/closable parameter if you need to specify is the window is draggable/closable or not
+					  - Add parent parameter if you need a specific parent instead of body
+					  - Better resize
+					  - Add setCookie to store window location/size in a cookie
+					  - Add parent.html sample
+
+- 04/05/06  V 0.65 
+           - Update to Prototype 1.5.0_pre1, script.aculo.us 1.6.0
+				   - Add setDestoyOnClose
+				   - Add Windows Observer with onStartResize(), onEndResize(), onStartMove(), onEndMove(), onClose(), onDestroy() events
+				   - Add setContent(id, autoresize)
+
+- 03/29/06  V 0.6  
+           - Add Window delegate to manage close action
+			     - Add modal mode and Dialog class with common panels: alert, confirm
+				   - Clean HTML code and change caracters to lowercase to be XHTML compliant (thanks to nuxygen and Joseph)
+				   - Add showEffectOptions, hideEffectOptions, effectOptions to Window constructor (thanks to Jon)
+				   - Fix checkbox IE bug (big thanks to JCA)
+				   - Fix other little bugs (thanks to nuxygen, Dennis, and all who sent me emails)
+				   - Update samples/index.html
+				   - Add new sample usng frame (samples/inset.html and samples/inframe.html but use only samples/inset.html)
+				
+- 03/27/06 	V 0.51 
+           - New CSS theme structure 
+           - Add url: constructor parameter to have a window with an URL content
+				   - Add bottom/right constructor parameters	
+				   - Update sample files.
+			
+- 03/24/06  V 0.50 Initial revision
+
+
+== License
+
+it is licensed under the terms of the MIT License, see the included MIT-LICENSE file.
+
+== Thanks
+To all of you who sent me bugs, patches and feature requests
+
+http://www.ciudadmovil.com.co/q/mod/mapa/conexion.php
+http://www.desyr.net/

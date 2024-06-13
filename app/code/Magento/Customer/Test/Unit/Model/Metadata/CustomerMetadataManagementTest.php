@@ -1,0 +1,73 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Customer\Test\Unit\Model\Metadata;
+
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Model\Attribute;
+use Magento\Customer\Model\Metadata\AttributeResolver;
+use Magento\Customer\Model\Metadata\CustomerMetadataManagement;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CustomerMetadataManagementTest extends TestCase
+{
+    /** @var CustomerMetadataManagement */
+    protected $model;
+
+    /** @var AttributeResolver|MockObject */
+    protected $attributeResolverMock;
+
+    protected function setUp(): void
+    {
+        $this->attributeResolverMock = $this->createMock(AttributeResolver::class);
+
+        $this->model = new CustomerMetadataManagement(
+            $this->attributeResolverMock
+        );
+    }
+
+    public function testCanBeSearchableInGrid()
+    {
+        /** @var AttributeMetadataInterface|MockObject $attributeMock */
+        $attributeMock = $this->createMock(AttributeMetadataInterface::class);
+
+        /** @var Attribute|MockObject $modelMock */
+        $modelMock = $this->createMock(Attribute::class);
+
+        $this->attributeResolverMock->expects($this->once())
+            ->method('getModelByAttribute')
+            ->with(CustomerMetadataManagement::ENTITY_TYPE_CUSTOMER, $attributeMock)
+            ->willReturn($modelMock);
+
+        $modelMock->expects($this->once())
+            ->method('canBeSearchableInGrid')
+            ->willReturn(true);
+
+        $this->assertTrue($this->model->canBeSearchableInGrid($attributeMock));
+    }
+
+    public function testCanBeFilterableInGrid()
+    {
+        /** @var AttributeMetadataInterface|MockObject $attributeMock */
+        $attributeMock = $this->createMock(AttributeMetadataInterface::class);
+
+        /** @var Attribute|MockObject $modelMock */
+        $modelMock = $this->createMock(Attribute::class);
+
+        $this->attributeResolverMock->expects($this->once())
+            ->method('getModelByAttribute')
+            ->with(CustomerMetadataManagement::ENTITY_TYPE_CUSTOMER, $attributeMock)
+            ->willReturn($modelMock);
+
+        $modelMock->expects($this->once())
+            ->method('canBeFilterableInGrid')
+            ->willReturn(true);
+
+        $this->assertTrue($this->model->canBeFilterableInGrid($attributeMock));
+    }
+}

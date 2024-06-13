@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="BaseConfigurableProduct" type="product">
+        <data key="sku" unique="suffix">configurable</data>
+        <data key="type_id">configurable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">configurable</data>
+        <data key="price">123.00</data>
+        <data key="weight">2</data>
+        <data key="urlKey" unique="suffix">configurable</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ApiConfigurableProduct" type="product">
+        <data key="name" unique="suffix">API Configurable Product</data>
+        <data key="sku" unique="suffix">api-configurable-product</data>
+        <data key="urlKey" unique="suffix">api-configurable-product</data>
+        <data key="type_id">configurable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="price">123.00</data>
+        <data key="weight">2</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ApiConfigurableProductWithOutCategory" type="product">
+        <data key="sku" unique="suffix">api-configurable-product-with-out-category</data>
+        <data key="type_id">configurable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">API Configurable Product</data>
+        <data key="urlKey" unique="suffix">api-configurable-product</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+    </entity>
+    <entity name="ApiConfigurableProductWithOutCategory1" type="product">
+        <data key="sku" unique="suffix">api-configurable-product-with-out-category</data>
+        <data key="type_id">configurable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">API Configurable Product</data>
+        <data key="urlKey" unique="suffix">api-configurable-product</data>
+        <data key="status">1</data>
+        <data key="quantity">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+    </entity>
+    <entity name="ApiConfigurableProductWithDescription" type="product">
+        <data key="sku" unique="suffix">api-configurable-product</data>
+        <data key="type_id">configurable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">API Configurable Product</data>
+        <data key="urlKey" unique="suffix">api-configurable-product</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
+    </entity>
+    <entity name="ApiConfigurableProductWithDescriptionUnderscoredSku" type="product">
+        <data key="sku" unique="suffix">api_configurable_product</data>
+        <data key="type_id">configurable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">API Configurable Product</data>
+        <data key="urlKey" unique="suffix">api-configurable-product</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
+    </entity>
+    <entity name="ConfigurableProductAddChild" type="ConfigurableProductAddChild">
+        <var key="sku" entityKey="sku" entityType="product" />
+        <var key="childSku" entityKey="sku" entityType="product2"/>
+    </entity>
+    <entity name="ConfigurableProductWithAttributeSet" type="product">
+        <data key="sku" unique="suffix">configurable</data>
+        <data key="type_id">configurable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="attribute_set_name">mySet</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Configurable product</data>
+        <data key="price">1.00</data>
+        <data key="weight">2</data>
+        <data key="urlKey" unique="suffix">configurableurlkey</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ConfigurableProductPrice10Qty1" type="product">
+        <data key="sku" unique="suffix">configurable-product_</data>
+        <data key="type_id">configurable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">ConfigurableProduct_</data>
+        <data key="urlKey" unique="suffix">configurable-product_</data>
+        <data key="price">10.00</data>
+        <data key="weight">2</data>
+        <data key="status">1</data>
+        <data key="quantity">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <!-- Configurable product from file "export_import_configurable_product.csv"-->
+    <entity name="ApiConfigurableExportImportProduct" extends="ApiConfigurableProduct" type="product">
+        <data key="sku">api-configurable-export-import-product</data>
+        <data key="name">API Configurable Export Import Product</data>
+        <data key="urlKey">api-configurable-export-import-product</data>
+    </entity>
+    <entity name="ConfigurableProduct1" type="product">
+        <data key="name" unique="suffix">conf1</data>
+        <data key="sku" unique="suffix">conf1</data>
+        <data key="type_id">configurable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="status">1</data>
+        <data key="quantity">10000</data>
+        <data key="price">10</data>
+        <data key="color_label">Color</data>
+        <data key="size_label">Size</data>
+        <data key="color_option1">black</data>
+        <data key="color_option2">red</data>
+        <data key="size_option1">8</data>
+        <data key="size_option2">10</data>
+    </entity>
+</entities>

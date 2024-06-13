@@ -1,0 +1,9 @@
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+h2 {background: url(../images/h2.gif?test);}
+body {background: url(body.gif);}
+a {background: url(data:image/png;)}
+li {background: url("https://example.com/absolute.gif");}
+ol.favicon {background: url(Magento_Theme::favicon.ico)} /* base file */

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="EnableGuestCheckoutConfigData">
+        <data key="path">checkout/options/guest_checkout</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableGuestCheckoutConfigData">
+        <data key="path">checkout/options/guest_checkout</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableHttpsFrontendConfigData">
+        <data key="path">web/secure/use_in_frontend</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableHttpsFrontendConfigData">
+        <data key="path">web/secure/use_in_frontend</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableRedirectToShoppingCart">
+        <data key="path">checkout/cart/redirect_to_cart</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableRedirectToShoppingCart">
+        <data key="path">checkout/cart/redirect_to_cart</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="ErrorMessageAfterAddingCoupon">
+        <data key="text">The shipping method is missing. Select the shipping method and try again.</data>
+    </entity>
+</entities>

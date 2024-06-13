@@ -1,0 +1,17 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+
+/**
+ * @var \Magento\Paypal\Block\Checkout\Onepage\Success\BillingAgreement $block
+ */
+?>
+<p data-mage-init='{"Magento_Paypal/js/in-context/billing-agreement": {"invalidateOnLoad" : true}}'>
+    <?= $block->escapeHtml(__('Your billing agreement # is: ')) ?>
+    <a href="<?= $block->escapeUrl($block->getAgreementUrl()) ?>">
+        <?= $block->escapeHtml($block->getAgreementRefId()) ?>
+    </a>.
+</p>

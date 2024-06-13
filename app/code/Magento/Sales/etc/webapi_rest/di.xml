@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Sales\Model\ResourceModel\Order">
+        <plugin name="authorization" type="Magento\Sales\Model\ResourceModel\Order\Plugin\Authorization" />
+    </type>
+    <type name="Magento\Sales\Api\ShipmentRepositoryInterface">
+        <plugin name="convert_blob_to_string" type="Magento\Sales\Plugin\ShippingLabelConverter" />
+    </type>
+    <type name="Magento\Framework\Reflection\DataObjectProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="Magento\Sales\Model\Order\Item" xsi:type="object">Magento\Sales\Model\Order\Webapi\ChangeOutputArray\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Service\InvoiceService">
+        <plugin name="addTransactionCommentAfterCapture" type="Magento\Sales\Plugin\Model\Service\Invoice\AddTransactionCommentAfterCapture"/>
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Relation">
+        <plugin name="add_existing_product_options"
+                type="Magento\Sales\Plugin\Model\ResourceModel\Order\Relation\AddExistingItemProductOptions"/>
+    </type>
+    <type name="Magento\Sales\Model\OrderRepository">
+        <plugin name="validate_billing_address_on_save"
+                type="Magento\Sales\Plugin\Model\OrderRepositoryPlugin"
+                sortOrder="10"/>
+    </type>
+    <type name="Magento\Framework\Webapi\ServiceOutputProcessor">
+        <plugin name="sales_rest_add_null_state_status"
+                type="Magento\Sales\Plugin\Webapi\OrderResponseNullKeysPlugin"
+                sortOrder="10"/>
+    </type>
+</config>

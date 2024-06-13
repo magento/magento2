@@ -1,0 +1,93 @@
+<?php
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Tax\Controller\Adminhtml\Rule;
+
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Tax\Model\Rate\Provider as RatesProvider;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Tax\Model\Calculation\Rate;
+
+/**
+ * Class AjaxLoadRates is intended to load existing
+ * Tax rates as options for a select element.
+ */
+class AjaxLoadRates extends Action implements HttpGetActionInterface
+{
+    /**
+     * @var RatesProvider
+     */
+    private $ratesProvider;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @param Context $context
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param RatesProvider $ratesProvider
+     */
+    public function __construct(
+        Context $context,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        RatesProvider $ratesProvider
+    ) {
+        parent::__construct($context);
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->ratesProvider = $ratesProvider;
+    }
+
+    /**
+     * Get rates page via AJAX
+     *
+     * @return Json
+     * @throws \InvalidArgumentException
+     */
+    public function execute()
+    {
+        $ratesPage = (int) $this->getRequest()->getParam('p');
+        $ratesFilter = trim($this->getRequest()->getParam('s', ''));
+
+        try {
+            if (!empty($ratesFilter)) {
+                $this->searchCriteriaBuilder->addFilter(
+                    Rate::KEY_CODE,
+                    '%'.$ratesFilter.'%',
+                    'like'
+                );
+            }
+
+            $searchCriteria = $this->searchCriteriaBuilder
+                ->setPageSize($this->ratesProvider->getPageSize())
+                ->setCurrentPage($ratesPage)
+                ->create();
+
+            $options = $this->ratesProvider->toOptionArray($searchCriteria);
+
+            $response = [
+                'success' => true,
+                'errorMessage' => '',
+                'result'=> $options,
+            ];
+        } catch (\Exception $e) {
+            $response = [
+                'success' => false,
+                'errorMessage' => __('An error occurred while loading tax rates.')
+            ];
+        }
+
+        /** @var Json $resultJson */
+        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $resultJson->setData($response);
+
+        return $resultJson;
+    }
+}

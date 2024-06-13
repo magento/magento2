@@ -1,0 +1,10 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var $block \Magento\Directory\Block\Currency */
+?>
+<meta property="product:price:currency"
+      content="<?= /* @noEscape */ $block->stripTags($block->getCurrentCurrencyCode()) ?>"/>

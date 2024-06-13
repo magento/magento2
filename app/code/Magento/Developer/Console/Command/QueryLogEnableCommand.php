@@ -1,0 +1,130 @@
+<?php
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+
+namespace Magento\Developer\Console\Command;
+
+use InvalidArgumentException;
+use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Console\Cli;
+use Magento\Framework\DB\Logger\LoggerProxy;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+
+class QueryLogEnableCommand extends Command
+{
+    /**
+     * input parameter log-all-queries
+     */
+    public const INPUT_ARG_LOG_ALL_QUERIES = 'include-all-queries';
+
+    /**
+     * input parameter log-query-time
+     */
+    public const INPUT_ARG_LOG_QUERY_TIME = 'query-time-threshold';
+
+    /**
+     * input parameter log-call-stack
+     */
+    public const INPUT_ARG_LOG_CALL_STACK = 'include-call-stack';
+
+    public const COMMAND_NAME = 'dev:query-log:enable';
+
+    public const SUCCESS_MESSAGE = "DB query logging enabled.";
+
+    public const INPUT_ARG_LOG_INDEX_CHECK = 'include-index-check';
+
+    /**
+     * @var Writer
+     */
+    private $deployConfigWriter;
+
+    /**
+     * QueryLogEnableCommand constructor.
+     * @param Writer $deployConfigWriter
+     * @param ?string $name
+     */
+    public function __construct(
+        Writer $deployConfigWriter,
+        $name = null
+    ) {
+        parent::__construct($name);
+        $this->deployConfigWriter = $deployConfigWriter;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function configure()
+    {
+        $this->setName(self::COMMAND_NAME)
+            ->setDescription('Enable DB query logging')
+            ->setDefinition(
+                [
+                    new InputOption(
+                        self::INPUT_ARG_LOG_ALL_QUERIES,
+                        null,
+                        InputOption::VALUE_OPTIONAL,
+                        'Log all queries. [true|false]',
+                        "true"
+                    ),
+                    new InputOption(
+                        self::INPUT_ARG_LOG_QUERY_TIME,
+                        null,
+                        InputOption::VALUE_OPTIONAL,
+                        'Query time thresholds.',
+                        "0.001"
+                    ),
+                    new InputOption(
+                        self::INPUT_ARG_LOG_CALL_STACK,
+                        null,
+                        InputOption::VALUE_OPTIONAL,
+                        'Include call stack. [true|false]',
+                        "true"
+                    ),
+                    new InputOption(
+                        self::INPUT_ARG_LOG_INDEX_CHECK,
+                        null,
+                        InputOption::VALUE_OPTIONAL,
+                        'Include index check. Warning: may cause performance degradation. [true|false]',
+                        "false"
+                    )
+                ]
+            );
+
+        parent::configure();
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @throws InvalidArgumentException|\Magento\Framework\Exception\FileSystemException
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $data = [LoggerProxy::PARAM_ALIAS => LoggerProxy::LOGGER_ALIAS_FILE];
+
+        $logAllQueries = $input->getOption(self::INPUT_ARG_LOG_ALL_QUERIES);
+        $logQueryTime = $input->getOption(self::INPUT_ARG_LOG_QUERY_TIME);
+        $logCallStack = $input->getOption(self::INPUT_ARG_LOG_CALL_STACK);
+        $logIndexCheck = $input->getOption(self::INPUT_ARG_LOG_INDEX_CHECK);
+
+        $data[LoggerProxy::PARAM_LOG_ALL] = (int)($logAllQueries != 'false');
+        $data[LoggerProxy::PARAM_QUERY_TIME] = number_format($logQueryTime, 3);
+        $data[LoggerProxy::PARAM_CALL_STACK] = (int)($logCallStack != 'false');
+        $data[LoggerProxy::PARAM_INDEX_CHECK] = (int)($logIndexCheck != 'false');
+
+        $configGroup[LoggerProxy::CONF_GROUP_NAME] = $data;
+
+        $this->deployConfigWriter->saveConfig([ConfigFilePool::APP_ENV => $configGroup]);
+
+        $output->writeln("<info>". self::SUCCESS_MESSAGE . "</info>");
+
+        return Cli::RETURN_SUCCESS;
+    }
+}

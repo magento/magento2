@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ */
+-->
+<payment>
+    <credit_cards>
+        <type id="ABC" order="0">
+            <label>ABC Credit Card Company</label>
+        </type>
+        <type id="XYZ">
+        </type>
+    </credit_cards>
+    <groups>
+        <group id="none">
+            <label>Group Label</label>
+        </group>
+    </groups>
+</payment>

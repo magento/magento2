@@ -1,0 +1,53 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Review\Model\ResourceModel\Review\Summary;
+
+/**
+ * Review summery collection
+ */
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+{
+    /**
+     * @inheritdoc
+     */
+    protected function _construct()
+    {
+        $this->_init(
+            \Magento\Review\Model\Review\Summary::class,
+            \Magento\Review\Model\ResourceModel\Review\Summary::class
+        );
+    }
+
+    /**
+     * Add entity filter
+     *
+     * @param int|string $entityId
+     * @param int $entityType
+     * @return $this
+     */
+    public function addEntityFilter($entityId, $entityType = 1)
+    {
+        $this->_select->where('entity_pk_value IN(?)', $entityId)->where('entity_type = ?', $entityType);
+        return $this;
+    }
+
+    /**
+     * Add store filter
+     *
+     * @param array|int $storeId
+     * @return $this
+     */
+    public function addStoreFilter($storeId)
+    {
+        if (is_numeric($storeId)) {
+            $this->_select->where('store_id = ?', $storeId);
+        } else {
+            $this->_select->where('store_id IN (?)', $storeId);
+        }
+
+        return $this;
+    }
+}

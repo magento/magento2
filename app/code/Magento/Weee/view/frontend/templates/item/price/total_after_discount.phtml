@@ -1,0 +1,11 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\Weee\Block\Item\Price\Renderer $block */
+$_item = $block->getItem();
+?>
+<?php $_order = $block->getItem()->getOrderItem()->getOrder() ?>
+<?= /* @noEscape */ $_order->formatPrice($block->getTotalAmount($_item)) ?>

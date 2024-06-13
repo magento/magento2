@@ -1,0 +1,44 @@
+<?php
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Backend\Test\Unit\Model\Search\Config\Structure\Element\Builder;
+
+use Magento\Backend\Model\Search\Config\Structure\Element\Builder\Section;
+use Magento\Config\Model\Config\StructureElementInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class SectionTest extends TestCase
+{
+    /**
+     * @var StructureElementInterface|MockObject
+     */
+    private $structureElementMock;
+
+    /**
+     * @var Section
+     */
+    private $model;
+
+    protected function setUp(): void
+    {
+        $this->structureElementMock = $this->createMock(StructureElementInterface::class);
+        $this->model = new Section();
+    }
+
+    public function testBuild()
+    {
+        $structureElementPath = '/path_part_1';
+
+        $this->structureElementMock->expects($this->never())
+            ->method('getId');
+        $this->structureElementMock->expects($this->once())
+            ->method('getPath')
+            ->willReturn($structureElementPath);
+        $this->assertEquals(['section' => 'path_part_1'], $this->model->build($this->structureElementMock));
+    }
+}

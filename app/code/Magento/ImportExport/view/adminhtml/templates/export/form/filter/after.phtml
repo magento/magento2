@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\Backend\Block\Template $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+
+<?php $scriptString = <<<script
+require([
+    'mage/adminhtml/grid'
+], function(){
+    if (window['export_filter_gridJsObject'] != undefined) {
+        export_filter_gridJsObject.resetFilter = function () {
+            return varienGrid.prototype.resetFilter.call(this, varienExport.modifyFilterGrid);
+        };
+        export_filter_gridJsObject.doFilter = function () {
+            return varienGrid.prototype.doFilter.call(this, varienExport.modifyFilterGrid);
+        };
+    }
+});
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config>
+    <argument>
+        <item name="one">value1</item>
+        <item name="nested">
+            <item name="two">value2</item>
+            <item name="three">value3</item>
+        </item>
+    </argument>
+</config>

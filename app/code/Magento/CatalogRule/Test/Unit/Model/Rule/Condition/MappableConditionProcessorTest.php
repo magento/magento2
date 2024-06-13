@@ -1,0 +1,1147 @@
+<?php
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\CatalogRule\Test\Unit\Model\Rule\Condition;
+
+use Magento\CatalogRule\Model\Rule\Condition\Combine as CombinedCondition;
+use Magento\CatalogRule\Model\Rule\Condition\MappableConditionsProcessor;
+use Magento\CatalogRule\Model\Rule\Condition\Product as SimpleCondition;
+use Magento\Eav\Model\Config as EavConfig;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionProviderInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class MappableConditionProcessorTest extends TestCase
+{
+    /**
+     * @var MappableConditionsProcessor
+     */
+    private $mappableConditionProcessor;
+
+    /**
+     * @var MockObject
+     */
+    private $eavConfigMock;
+
+    /**
+     * @var ObjectManager
+     */
+    private $objectManagerHelper;
+
+    /**
+     * @var MockObject
+     */
+    private $customConditionProcessorBuilderMock;
+
+    protected function setUp(): void
+    {
+        $this->eavConfigMock = $this->getMockBuilder(EavConfig::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getAttribute'])
+            ->getMock();
+
+        $this->customConditionProcessorBuilderMock = $this->getMockBuilder(
+            CustomConditionProviderInterface::class
+        )->disableOriginalConstructor()
+            ->onlyMethods(['hasProcessorForField'])
+            ->getMockForAbstractClass();
+
+        $this->objectManagerHelper = new ObjectManager($this);
+
+        $this->mappableConditionProcessor = $this->objectManagerHelper->getObject(
+            MappableConditionsProcessor::class,
+            [
+                'customConditionProvider' => $this->customConditionProcessorBuilderMock,
+                'eavConfig' => $this->eavConfigMock,
+            ]
+        );
+    }
+
+    /**
+     * input condition tree:
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => any
+     *          conditions =>
+     *              [
+     *                  condition-1 => [ attribute => field-1 ]
+     *                  condition-2 => [ attribute => field-2 ]
+     *              ]
+     *      ]
+     * ]
+     *
+     * in case when condition-2 is not mappable the result must be next:
+     *
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => any
+     *          conditions => []
+     *      ]
+     * ]
+     */
+    public function testConditionV1()
+    {
+        $field1 = 'field-1';
+        $field2 = 'field-2';
+
+        $simpleCondition1 = $this->getMockForSimpleCondition($field1);
+        $simpleCondition2 = $this->getMockForSimpleCondition($field2);
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $simpleCondition2
+            ],
+            'any'
+        );
+
+        $validResult = $this->getMockForCombinedCondition([], 'any');
+
+        $this->customConditionProcessorBuilderMock
+            ->method('hasProcessorForField')
+            ->willReturnMap(
+                [
+                    [$field1, true],
+                    [$field2, false],
+                ]
+            );
+
+        $this->eavConfigMock
+            ->method('getAttribute')
+            ->willReturn(null);
+
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+
+        $this->assertEquals($validResult, $result);
+    }
+
+    /**
+     * input condition tree:
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => all
+     *          conditions =>
+     *              [
+     *                  condition-1 => [ attribute => field-1 ]
+     *                  condition-2 => [ attribute => field-2 ]
+     *              ]
+     *      ]
+     * ]
+     *
+     * in case when condition-2 is not mappable the result must be next:
+     *
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => all
+     *          conditions =>
+     *              [
+     *                  condition-1 => [ attribute => field-1 ]
+     *              ]
+     *      ]
+     * ]
+     */
+    public function testConditionV2()
+    {
+        $field1 = 'field-1';
+        $field2 = 'field-2';
+
+        $simpleCondition1 = $this->getMockForSimpleCondition($field1);
+        $simpleCondition2 = $this->getMockForSimpleCondition($field2);
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $simpleCondition2
+            ],
+            'all'
+        );
+
+        $validResult = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1
+            ],
+            'all'
+        );
+
+        $this->customConditionProcessorBuilderMock
+            ->method('hasProcessorForField')
+            ->willReturnMap(
+                [
+                    [$field1, true],
+                    [$field2, false],
+                ]
+            );
+
+        $this->eavConfigMock
+            ->method('getAttribute')
+            ->willReturn(null);
+
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+
+        $this->assertEquals($validResult, $result);
+    }
+
+    /**
+     * input condition tree:
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => all
+     *          conditions =>
+     *              [
+     *                  condition-1 => [ attribute => field-1 ]
+     *                  condition-2 => [ attribute => field-2 ]
+     *              ]
+     *      ]
+     * ]
+     *
+     * in case when condition-1 and condition-2 are not mappable the result must be next:
+     *
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => all
+     *          conditions => []
+     *      ]
+     * ]
+     */
+    public function testConditionV3()
+    {
+        $field1 = 'field-1';
+        $field2 = 'field-2';
+
+        $simpleCondition1 = $this->getMockForSimpleCondition($field1);
+        $simpleCondition2 = $this->getMockForSimpleCondition($field2);
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $simpleCondition2
+            ],
+            'all'
+        );
+
+        $validResult = $this->getMockForCombinedCondition([], 'all');
+
+        $this->customConditionProcessorBuilderMock
+            ->method('hasProcessorForField')
+            ->willReturnMap(
+                [
+                    [$field1, false],
+                    [$field2, false],
+                ]
+            );
+
+        $this->eavConfigMock
+            ->method('getAttribute')
+            ->willReturn(null);
+
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+
+        $this->assertEquals($validResult, $result);
+    }
+
+    /**
+     * input condition tree:
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => any
+     *          conditions =>
+     *              [
+     *                  combined-condition =>
+     *                      [
+     *                          aggregation => all
+     *                          conditions =>
+     *                              [
+     *                                  condition-1 => [ attribute => field-1 ]
+     *                                  condition-2 => [ attribute => field-2 ]
+     *                              ]
+     *                      ]
+     *                  combined-condition =>
+     *                      [
+     *                          aggregation => any
+     *                          conditions =>
+     *                              [
+     *                                  condition-3 => [ attribute => field-3 ]
+     *                                  condition-4 => [ attribute => field-4 ]
+     *                              ]
+     *                      ]
+     *              ]
+     *      ]
+     * ]
+     *
+     * in case when condition-1 is not mappable the result must be next:
+     *
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => any
+     *          conditions =>
+     *              [
+     *                  combined-condition =>
+     *                      [
+     *                          aggregation => all
+     *                          conditions =>
+     *                              [
+     *                                  condition-2 => [ attribute => field-2 ]
+     *                              ]
+     *                      ]
+     *                  combined-condition =>
+     *                      [
+     *                          aggregation => any
+     *                          conditions =>
+     *                              [
+     *                                  condition-3 => [ attribute => field-3 ]
+     *                                  condition-4 => [ attribute => field-4 ]
+     *                              ]
+     *                      ]
+     *              ]
+     *      ]
+     * ]
+     */
+    public function testConditionV4()
+    {
+        $field1 = 'field-1';
+        $field2 = 'field-2';
+
+        $simpleCondition1 = $this->getMockForSimpleCondition($field1);
+        $simpleCondition2 = $this->getMockForSimpleCondition($field2);
+        $subCondition1 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $simpleCondition2
+            ],
+            'all'
+        );
+
+        $field3 = 'field-3';
+        $field4 = 'field-4';
+
+        $simpleCondition3 = $this->getMockForSimpleCondition($field3);
+        $simpleCondition4 = $this->getMockForSimpleCondition($field4);
+        $subCondition2 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition3,
+                $simpleCondition4
+            ],
+            'any'
+        );
+
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $subCondition1,
+                $subCondition2
+            ],
+            'any'
+        );
+
+        $validSubCondition1 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition2
+            ],
+            'all'
+        );
+        $validSubCondition2 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition3,
+                $simpleCondition4
+            ],
+            'any'
+        );
+        $validResult = $this->getMockForCombinedCondition(
+            [
+                $validSubCondition1,
+                $validSubCondition2
+            ],
+            'any'
+        );
+
+        $this->customConditionProcessorBuilderMock
+            ->method('hasProcessorForField')
+            ->willReturnMap(
+                [
+                    [$field1, false],
+                    [$field2, true],
+                    [$field3, true],
+                    [$field4, true],
+                ]
+            );
+
+        $this->eavConfigMock
+            ->method('getAttribute')
+            ->willReturn(null);
+
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+
+        $this->assertEquals($validResult, $result);
+    }
+
+    /**
+     * input condition tree:
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => all
+     *          conditions =>
+     *              [
+     *                  combined-condition =>
+     *                      [
+     *                          aggregation => any
+     *                          conditions =>
+     *                              [
+     *                                  condition-1 => [ attribute => field-1 ]
+     *                                  condition-2 => [ attribute => field-2 ]
+     *                              ]
+     *                      ]
+     *                  combined-condition =>
+     *                      [
+     *                          aggregation => any
+     *                          conditions =>
+     *                              [
+     *                                  condition-3 => [ attribute => field-3 ]
+     *                                  condition-4 => [ attribute => field-4 ]
+     *                              ]
+     *                      ]
+     *              ]
+     *      ]
+     * ]
+     *
+     * in case when condition-1 is not mappable the result must be next:
+     *
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => all
+     *          conditions =>
+     *              [
+     *                  combined-condition =>
+     *                      [
+     *                          aggregation => any
+     *                          conditions =>
+     *                              [
+     *                                  condition-3 => [ attribute => field-3 ]
+     *                                  condition-4 => [ attribute => field-4 ]
+     *                              ]
+     *                      ]
+     *              ]
+     *      ]
+     * ]
+     */
+    public function testConditionV5()
+    {
+        $field1 = 'field-1';
+        $field2 = 'field-2';
+
+        $simpleCondition1 = $this->getMockForSimpleCondition($field1);
+        $simpleCondition2 = $this->getMockForSimpleCondition($field2);
+        $subCondition1 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $simpleCondition2
+            ],
+            'any'
+        );
+
+        $field3 = 'field-3';
+        $field4 = 'field-4';
+
+        $simpleCondition3 = $this->getMockForSimpleCondition($field3);
+        $simpleCondition4 = $this->getMockForSimpleCondition($field4);
+        $subCondition2 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition3,
+                $simpleCondition4
+            ],
+            'any'
+        );
+
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $subCondition1,
+                $subCondition2
+            ],
+            'all'
+        );
+
+        $validSubCondition2 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition3,
+                $simpleCondition4
+            ],
+            'any'
+        );
+        $validResult = $this->getMockForCombinedCondition(
+            [
+                $validSubCondition2
+            ],
+            'all'
+        );
+
+        $this->customConditionProcessorBuilderMock
+            ->method('hasProcessorForField')
+            ->willReturnMap(
+                [
+                    [$field1, false],
+                    [$field2, true],
+                    [$field3, true],
+                    [$field4, true],
+                ]
+            );
+
+        $this->eavConfigMock
+            ->method('getAttribute')
+            ->willReturn(null);
+
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+
+        $this->assertEquals($validResult, $result);
+    }
+
+    /**
+     * input condition tree:
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => all
+     *          conditions =>
+     *              [
+     *                  condition-1 => [ attribute => field-1 ]
+     *                  condition-2 => [ attribute => field-2 ]
+     *                  combined-condition =>
+     *                      [
+     *                          aggregation => any
+     *                          conditions =>
+     *                              [
+     *                                  condition-3 => [ attribute => field-3 ]
+     *                                  condition-4 => [ attribute => field-4 ]
+     *                              ]
+     *                      ]
+     *              ]
+     *      ]
+     * ]
+     *
+     * in case when all condition are mappable there must not be any changes to input
+     */
+    public function testConditionV6()
+    {
+        $field1 = 'field-1';
+        $field2 = 'field-2';
+
+        $simpleCondition1 = $this->getMockForSimpleCondition($field1);
+        $simpleCondition2 = $this->getMockForSimpleCondition($field2);
+
+        $field3 = 'field-3';
+        $field4 = 'field-4';
+
+        $simpleCondition3 = $this->getMockForSimpleCondition($field3);
+        $simpleCondition4 = $this->getMockForSimpleCondition($field4);
+        $subCondition1 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition3,
+                $simpleCondition4
+            ],
+            'any'
+        );
+
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $simpleCondition2,
+                $subCondition1
+            ],
+            'all'
+        );
+
+        $this->customConditionProcessorBuilderMock
+            ->method('hasProcessorForField')
+            ->willReturnMap(
+                [
+                    [$field1, true],
+                    [$field2, true],
+                    [$field3, true],
+                    [$field4, true],
+                ]
+            );
+
+        $this->eavConfigMock
+            ->method('getAttribute')
+            ->willReturn(null);
+
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+
+        $this->assertEquals($inputCondition, $result);
+    }
+
+    /**
+     * input condition tree:
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => any
+     *          conditions =>
+     *              [
+     *                  combined-condition =>
+     *                      [
+     *                          aggregation => all
+     *                          conditions =>
+     *                              [
+     *                                  condition-1 => [ attribute => field-1 ]
+     *                                  combined-condition =>
+     *                                      [
+     *                                          aggregation => any
+     *                                          conditions =>
+     *                                              [
+     *                                                  condition-2 => [ attribute => field-2 ]
+     *                                                  condition-3 => [ attribute => field-3 ]
+     *                                              ]
+     *                                      ]
+     *                              ]
+     *                      ]
+     *                  combined-condition =>
+     *                      [
+     *                          aggregation => all
+     *                          conditions =>
+     *                              [
+     *                                  combined-condition =>
+     *                                      [
+     *                                          aggregation => any
+     *                                          conditions =>
+     *                                              [
+     *                                                  condition-4 => [ attribute => field-4 ]
+     *                                                  condition-5 => [ attribute => field-5 ]
+     *                                              ]
+     *                                      ]
+     *                                  combined-condition =>
+     *                                      [
+     *                                          aggregation => any
+     *                                          conditions =>
+     *                                              [
+     *                                                  condition-6 => [ attribute => field-6 ]
+     *                                                  condition-7 => [ attribute => field-7 ]
+     *                                              ]
+     *                                      ]
+     *                              ]
+     *                      ]
+     *              ]
+     *      ]
+     * ]
+     *
+     * in case when condition-3 and condition-5 are not mappable the result must be next:
+     *
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => any
+     *          conditions =>
+     *              [
+     *                  combined-condition =>
+     *                      [
+     *                          aggregation => all
+     *                          conditions =>
+     *                              [
+     *                                  condition-1 => [ attribute => field-1 ]
+     *                              ]
+     *                      ]
+     *                  combined-condition =>
+     *                      [
+     *                          aggregation => all
+     *                          conditions =>
+     *                              [
+     *                                  combined-condition =>
+     *                                      [
+     *                                          aggregation => any
+     *                                          conditions =>
+     *                                              [
+     *                                                  condition-6 => [ attribute => field-6 ]
+     *                                                  condition-7 => [ attribute => field-7 ]
+     *                                              ]
+     *                                      ]
+     *                              ]
+     *                      ]
+     *              ]
+     *      ]
+     * ]
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testConditionV7()
+    {
+        $field1 = 'field-1';
+        $field2 = 'field-2';
+        $field3 = 'field-3';
+
+        $simpleCondition1 = $this->getMockForSimpleCondition($field1);
+        $simpleCondition2 = $this->getMockForSimpleCondition($field2);
+        $simpleCondition3 = $this->getMockForSimpleCondition($field3);
+
+        $subCondition1 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition2,
+                $simpleCondition3
+            ],
+            'any'
+        );
+        $subCondition2 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $subCondition1
+            ],
+            'all'
+        );
+
+        $field4 = 'field-4';
+        $field5 = 'field-5';
+        $field6 = 'field-6';
+        $field7 = 'field-7';
+
+        $simpleCondition4 = $this->getMockForSimpleCondition($field4);
+        $simpleCondition5 = $this->getMockForSimpleCondition($field5);
+        $simpleCondition6 = $this->getMockForSimpleCondition($field6);
+        $simpleCondition7 = $this->getMockForSimpleCondition($field7);
+
+        $subCondition3 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition4,
+                $simpleCondition5
+            ],
+            'any'
+        );
+        $subCondition4 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition6,
+                $simpleCondition7
+            ],
+            'any'
+        );
+        $subCondition5 = $this->getMockForCombinedCondition(
+            [
+                $subCondition3,
+                $subCondition4
+            ],
+            'all'
+        );
+
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $subCondition2,
+                $subCondition5
+            ],
+            'any'
+        );
+
+        $validSubCondition2 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1
+            ],
+            'all'
+        );
+        $validSubCondition4 = $this->getMockForCombinedCondition(
+            [
+                $subCondition4
+            ],
+            'all'
+        );
+
+        $validResult = $this->getMockForCombinedCondition(
+            [
+                $validSubCondition2,
+                $validSubCondition4
+            ],
+            'any'
+        );
+
+        $this->customConditionProcessorBuilderMock
+            ->method('hasProcessorForField')
+            ->willReturnMap(
+                [
+                    [$field1, true],
+                    [$field2, true],
+                    [$field3, false],
+                    [$field4, true],
+                    [$field5, false],
+                    [$field6, true],
+                    [$field7, true],
+                ]
+            );
+
+        $this->eavConfigMock
+            ->method('getAttribute')
+            ->willReturn(null);
+
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+
+        $this->assertEquals($validResult, $result);
+    }
+
+    /**
+     * input condition tree:
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => any
+     *          conditions =>
+     *              [
+     *                  combined-condition =>
+     *                      [
+     *                          aggregation => any
+     *                          conditions =>
+     *                              [
+     *                                  condition-1 => [ attribute => field-1 ]
+     *                                  condition-2 => [ attribute => field-2 ]
+     *                              ]
+     *                      ]
+     *                  combined-condition =>
+     *                      [
+     *                          aggregation => any
+     *                          conditions =>
+     *                              [
+     *                                  condition-3 => [ attribute => field-3 ]
+     *                                  condition-4 => [ attribute => field-4 ]
+     *                              ]
+     *                      ]
+     *              ]
+     *      ]
+     * ]
+     *
+     * in case when condition-1 and condition-4 are not mappable the result must be next:
+     *
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => any
+     *          conditions => []
+     * ]
+     */
+    public function testConditionV8()
+    {
+        $field1 = 'field-1';
+        $field2 = 'field-2';
+
+        $simpleCondition1 = $this->getMockForSimpleCondition($field1);
+        $simpleCondition2 = $this->getMockForSimpleCondition($field2);
+        $subCondition1 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $simpleCondition2
+            ],
+            'any'
+        );
+
+        $field3 = 'field-3';
+        $field4 = 'field-4';
+
+        $simpleCondition3 = $this->getMockForSimpleCondition($field3);
+        $simpleCondition4 = $this->getMockForSimpleCondition($field4);
+        $subCondition2 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition3,
+                $simpleCondition4
+            ],
+            'any'
+        );
+
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $subCondition1,
+                $subCondition2
+            ],
+            'any'
+        );
+
+        $validResult = $this->getMockForCombinedCondition([], 'any');
+
+        $this->customConditionProcessorBuilderMock
+            ->method('hasProcessorForField')
+            ->willReturnMap(
+                [
+                    [$field1, false],
+                    [$field2, true],
+                    [$field3, true],
+                    [$field4, false],
+                ]
+            );
+
+        $this->eavConfigMock
+            ->method('getAttribute')
+            ->willReturn(null);
+
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+
+        $this->assertEquals($validResult, $result);
+    }
+
+    /**
+     * input condition tree:
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => any
+     *          conditions =>
+     *              [
+     *                  combined-condition =>
+     *                      [
+     *                          aggregation => any
+     *                          conditions =>
+     *                              [
+     *                                  condition-1 => [ attribute => field-1 ]
+     *                                  condition-2 => [ attribute => field-2 ]
+     *                              ]
+     *                      ]
+     *                  combined-condition =>
+     *                      [
+     *                          aggregation => any
+     *                          conditions =>
+     *                              [
+     *                                  condition-3 => [ attribute => field-3 ]
+     *                                  condition-4 => [ attribute => field-4 ]
+     *                              ]
+     *                      ]
+     *                  condition-5 => [ attribute => field-5 ]
+     *              ]
+     *      ]
+     * ]
+     *
+     * in case when condition-1 and condition-4 are not mappable the result must be next:
+     *
+     * [
+     *  combined-condition =>
+     *      [
+     *          aggregation => any
+     *          conditions => []
+     * ]
+     */
+    public function testConditionV9()
+    {
+        $field1 = 'field-1';
+        $field2 = 'field-2';
+
+        $simpleCondition1 = $this->getMockForSimpleCondition($field1);
+        $simpleCondition2 = $this->getMockForSimpleCondition($field2);
+        $subCondition1 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition1,
+                $simpleCondition2
+            ],
+            'any'
+        );
+
+        $field3 = 'field-3';
+        $field4 = 'field-4';
+
+        $simpleCondition3 = $this->getMockForSimpleCondition($field3);
+        $simpleCondition4 = $this->getMockForSimpleCondition($field4);
+        $subCondition2 = $this->getMockForCombinedCondition(
+            [
+                $simpleCondition3,
+                $simpleCondition4
+            ],
+            'any'
+        );
+
+        $field5 = 'field-5';
+        $simpleCondition5 = $this->getMockForSimpleCondition($field5);
+
+        $inputCondition = $this->getMockForCombinedCondition(
+            [
+                $subCondition1,
+                $subCondition2,
+                $simpleCondition5
+            ],
+            'any'
+        );
+
+        $validResult = $this->getMockForCombinedCondition([], 'any');
+
+        $this->customConditionProcessorBuilderMock
+            ->method('hasProcessorForField')
+            ->willReturnMap(
+                [
+                    [$field1, false],
+                    [$field2, true],
+                    [$field3, true],
+                    [$field4, false],
+                    [$field5, true],
+                ]
+            );
+
+        $this->eavConfigMock
+            ->method('getAttribute')
+            ->willReturn(null);
+
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+
+        $this->assertEquals($validResult, $result);
+    }
+
+    public function testException()
+    {
+        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectExceptionMessage('Undefined condition type "olo-lo" passed in.');
+        
+        // Create a mock that doesn't extend SimpleCondition or CombinedCondition
+        // This tests the instanceof logic at line 82 and 70 - if neither match, throw exception
+        $invalidCondition = $this->getMockBuilder(\Magento\Rule\Model\Condition\AbstractCondition::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getType'])
+            ->getMockForAbstractClass();
+        $invalidCondition->method('getType')->willReturn('olo-lo');
+        
+        $inputCondition = $this->getMockForCombinedCondition([$invalidCondition], 'any');
+
+        $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+    }
+
+    /**
+     * @param $subConditions
+     * @param $aggregator
+     * @return MockObject
+     */
+    protected function getMockForCombinedCondition($subConditions, $aggregator)
+    {
+        $mock = $this->getMockBuilder(CombinedCondition::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
+
+        $mock->setConditions($subConditions);
+        $mock->setAggregator($aggregator);
+        $mock->setType(CombinedCondition::class);
+
+        return $mock;
+    }
+
+    /**
+     * @param $attribute
+     * @return MockObject
+     */
+    protected function getMockForSimpleCondition($attribute)
+    {
+        $mock = $this->getMockBuilder(SimpleCondition::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
+
+        $mock->setAttribute($attribute);
+        $mock->setType(SimpleCondition::class);
+
+        return $mock;
+    }
+
+    /**
+     * Test that conditions with EAV attributes (with backend type) are valid
+     *
+     * Tests line 138: if ($attribute && $attribute->getBackendType() !== null)
+     */
+    public function testValidateSimpleConditionWithEavAttribute()
+    {
+        // Create a simple condition with an EAV attribute
+        $simpleCondition = $this->getMockForSimpleCondition('sku');
+        
+        // Mock attribute with backend type (valid EAV attribute)
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getBackendType'])
+            ->getMockForAbstractClass();
+        $attributeMock->method('getBackendType')->willReturn('varchar');
+
+        // No custom processor for this field
+        $this->customConditionProcessorBuilderMock
+            ->expects($this->once())
+            ->method('hasProcessorForField')
+            ->with('sku')
+            ->willReturn(false);
+
+        // EAV config returns the attribute
+        $this->eavConfigMock
+            ->expects($this->once())
+            ->method('getAttribute')
+            ->with(\Magento\Catalog\Model\Product::ENTITY, 'sku')
+            ->willReturn($attributeMock);
+
+        $inputCondition = $this->getMockForCombinedCondition([$simpleCondition], 'all');
+        
+        // The condition should be valid (kept in validConditions)
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+        
+        // Should have 1 valid condition
+        $this->assertCount(1, $result->getConditions());
+    }
+
+    /**
+     * Test that conditions with non-EAV attributes (null backend type) are invalid
+     *
+     * Tests line 138 negative case and line 143: return false
+     */
+    public function testValidateSimpleConditionWithNonEavAttribute()
+    {
+        // Create a simple condition with a non-EAV field
+        $simpleCondition = $this->getMockForSimpleCondition('non_existent_field');
+        
+        // Mock attribute with null backend type (invalid/non-existent EAV attribute)
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getBackendType'])
+            ->getMockForAbstractClass();
+        $attributeMock->method('getBackendType')->willReturn(null);
+
+        // No custom processor for this field
+        $this->customConditionProcessorBuilderMock
+            ->expects($this->once())
+            ->method('hasProcessorForField')
+            ->with('non_existent_field')
+            ->willReturn(false);
+
+        // EAV config returns the attribute (but with null backend type)
+        $this->eavConfigMock
+            ->expects($this->once())
+            ->method('getAttribute')
+            ->with(\Magento\Catalog\Model\Product::ENTITY, 'non_existent_field')
+            ->willReturn($attributeMock);
+
+        $inputCondition = $this->getMockForCombinedCondition([$simpleCondition], 'all');
+        
+        // The condition should be invalid (removed from conditions)
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+        
+        // Should have 0 valid conditions
+        $this->assertCount(0, $result->getConditions());
+    }
+
+    /**
+     * Test that conditions with custom processor are valid
+     *
+     * Tests line 128-130: if ($this->customConditionProvider->hasProcessorForField($fieldName))
+     */
+    public function testValidateSimpleConditionWithCustomProcessor()
+    {
+        // Create a simple condition with a custom field
+        $simpleCondition = $this->getMockForSimpleCondition('custom_field');
+        
+        // Has custom processor for this field
+        $this->customConditionProcessorBuilderMock
+            ->expects($this->once())
+            ->method('hasProcessorForField')
+            ->with('custom_field')
+            ->willReturn(true);
+
+        // EAV config should not be called since custom processor exists
+        $this->eavConfigMock
+            ->expects($this->never())
+            ->method('getAttribute');
+
+        $inputCondition = $this->getMockForCombinedCondition([$simpleCondition], 'all');
+        
+        // The condition should be valid (kept in validConditions)
+        $result = $this->mappableConditionProcessor->rebuildConditionsTree($inputCondition);
+        
+        // Should have 1 valid condition
+        $this->assertCount(1, $result->getConditions());
+    }
+}

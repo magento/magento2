@@ -1,0 +1,65 @@
+<?php
+/**
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Sales\Block\Adminhtml\Order\Invoice;
+
+use Magento\Framework\DataObject;
+use Magento\Sales\Model\Order\Invoice;
+
+/**
+ * Adminhtml order invoice totals block
+ *
+ * @api
+ * @since 100.0.2
+ */
+class Totals extends \Magento\Sales\Block\Adminhtml\Totals
+{
+    /**
+     * Order invoice
+     *
+     * @var Invoice|null
+     */
+    protected $_invoice = null;
+
+    /**
+     * Get invoice
+     *
+     * @return Invoice|null
+     */
+    public function getInvoice()
+    {
+        if ($this->_invoice === null) {
+            if ($this->hasData('invoice')) {
+                $this->_invoice = $this->_getData('invoice');
+            } elseif ($this->_coreRegistry->registry('current_invoice')) {
+                $this->_invoice = $this->_coreRegistry->registry('current_invoice');
+            } elseif ($this->getParentBlock()->getInvoice()) {
+                $this->_invoice = $this->getParentBlock()->getInvoice();
+            }
+        }
+        return $this->_invoice;
+    }
+
+    /**
+     * Get source
+     *
+     * @return Invoice|null
+     */
+    public function getSource()
+    {
+        return $this->getInvoice();
+    }
+
+    /**
+     * Initialize order totals array
+     *
+     * @return $this
+     */
+    protected function _initTotals()
+    {
+        parent::_initTotals();
+        return $this;
+    }
+}

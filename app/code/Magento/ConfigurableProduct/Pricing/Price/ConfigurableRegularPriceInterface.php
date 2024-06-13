@@ -1,0 +1,32 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+
+namespace Magento\ConfigurableProduct\Pricing\Price;
+
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
+
+/**
+ * Configurable regular price interface
+ * @api
+ * @since 100.0.2
+ */
+interface ConfigurableRegularPriceInterface extends BasePriceProviderInterface
+{
+    /**
+     * Get max regular amount
+     *
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     */
+    public function getMaxRegularAmount();
+
+    /**
+     * Get min regular amount
+     *
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     */
+    public function getMinRegularAmount();
+}

@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * @var \Magento\Customer\Block\Account\AuthorizationLink $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+$dataPostParam = '';
+if ($block->isLoggedIn()) {
+    $dataPostParam = sprintf(" data-post='%s'", $block->getPostParams());
+}
+?>
+
+<a class="lac-notification-close-link" <?= /* @noEscape */ $block->getLinkAttributes()
+?><?= /* @noEscape */ $dataPostParam ?>>
+    <?= $escaper->escapeHtml(__('Close Session')) ?>
+</a>
+

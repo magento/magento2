@@ -1,0 +1,121 @@
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
+
+define([
+    'jquery',
+    'ko',
+    'uiElement',
+    'uiLayout',
+    'Magento_Paypal/js/in-context/paypal-sdk',
+    'Magento_Customer/js/customer-data',
+    'domReady!'
+], function (
+    $,
+    ko,
+    Component,
+    layout,
+    paypalSdk,
+    customerData
+) {
+    'use strict';
+
+    return Component.extend({
+
+        defaults: {
+            template: 'Magento_Paypal/paylater',
+            sdkUrl: '',
+            attributes: {
+                class: 'pay-later-message'
+            },
+            dataAttributes: {},
+            refreshSelector: '',
+            displayAmount: false,
+            amountComponentConfig: {
+                name: '${ $.name }.amountProvider',
+                component: ''
+            }
+        },
+        paypal: null,
+        amount: null,
+        buyerCountry: null,
+
+        /**
+         * Initialize
+         *
+         * @returns {*}
+         */
+        initialize: function () {
+            let customer = customerData.get('customer'),
+                buyerCountry = customerData.get('paypal-buyer-country');
+
+            this.buyerCountry = buyerCountry().code;
+
+            if (customer().firstname && !this.buyerCountry) {
+                customerData.reload(['paypal-buyer-country'], false);
+                this.buyerCountry = customerData.get('paypal-buyer-country')().code;
+            }
+
+            this._super()
+                .observe(['amount']);
+
+            if (this.displayAmount) {
+                layout([this.amountComponentConfig]);
+            }
+
+            if (this.sdkUrl !== '') {
+                this.loadPayPalSdk(this.sdkUrl, this.dataAttributes)
+                    .then(this._setPayPalObject.bind(this));
+            }
+
+            if (this.refreshSelector) {
+                $(this.refreshSelector).on('click', this._refreshMessages.bind(this));
+            }
+
+            return this;
+        },
+
+        /**
+         * Get attribute value from configuration
+         *
+         * @param {String} attributeName
+         * @returns {*|null}
+         */
+        getAttribute: function (attributeName) {
+            return typeof this.attributes[attributeName] !== 'undefined' ?
+                this.attributes[attributeName] : null;
+        },
+
+        /**
+         * Load PP SDK with preconfigured options
+         *
+         * @param {String} sdkUrl - the url of the PayPal SDK
+         * @param {Array} dataAttributes - Array of the Attributes for PayPal SDK Script tag
+         */
+        loadPayPalSdk: function (sdkUrl, dataAttributes) {
+            return paypalSdk(sdkUrl, dataAttributes);
+        },
+
+        /**
+         * Set reference to paypal Sdk object
+         *
+         * @param {Object} paypal
+         * @private
+         */
+        _setPayPalObject: function (paypal) {
+            this.paypal = paypal;
+        },
+
+        /**
+         * Render messages
+         *
+         * @private
+         */
+        _refreshMessages: function () {
+            if (this.paypal) {
+                this.paypal.Messages.render();
+            }
+        }
+    });
+});

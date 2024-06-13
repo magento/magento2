@@ -1,0 +1,20 @@
+"Save Currency Rates","Save Currency Rates"
+Options,Options
+Reset,Reset
+Import,Import
+"Manage Currency Rates","Manage Currency Rates"
+"Import Service","Import Service"
+"Save Currency Symbols","Save Currency Symbols"
+"Currency Symbols","Currency Symbols"
+"Use Standard","Use Standard"
+"Please specify a correct Import Service.","Please specify a correct Import Service."
+"We can't initialize the import model.","We can't initialize the import model."
+"Click ""Save"" to apply the rates we found.","Click ""Save"" to apply the rates we found."
+"Currency Rates","Currency Rates"
+"Please correct the input data for ""%1 => %2"" rate.","Please correct the input data for ""%1 => %2"" rate."
+"All valid rates have been saved.","All valid rates have been saved."
+System,System
+"You applied the custom currency symbols.","You applied the custom currency symbols."
+"You must first configure currency options before being able to see currency rates.","You must first configure currency options before being able to see currency rates."
+"Old rate:","Old rate:"
+Currency,Currency

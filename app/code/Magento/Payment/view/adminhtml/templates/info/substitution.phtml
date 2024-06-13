@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * @var \Magento\Payment\Block\Info $block
+ */
+?>
+<div>
+    <?= $block->getMethod()->getTitle()
+        ? $block->escapeHtml($block->getMethod()->getTitle())
+        : $block->escapeHtml(__('Payment method')); ?>
+    <?= $block->escapeHtml(__(' is not available. You still can process offline actions.')) ?>
+</div>

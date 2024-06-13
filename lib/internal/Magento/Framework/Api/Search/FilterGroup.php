@@ -1,0 +1,43 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+namespace Magento\Framework\Api\Search;
+
+use Magento\Framework\Api\AbstractSimpleObject;
+
+/**
+ * Groups two or more filters together using a logical OR
+ *
+ * @api
+ * @since 100.0.2
+ */
+class FilterGroup extends AbstractSimpleObject
+{
+    const FILTERS = 'filters';
+
+    /**
+     * Returns a list of filters in this group
+     *
+     * @return \Magento\Framework\Api\Filter[]|null
+     */
+    public function getFilters()
+    {
+        $filters = $this->_get(self::FILTERS);
+        return $filters === null ? [] : $filters;
+    }
+
+    /**
+     * Set filters
+     *
+     * @param \Magento\Framework\Api\Filter[] $filters
+     * @return $this
+     * @codeCoverageIgnore
+     */
+    public function setFilters(?array $filters = null)
+    {
+        return $this->setData(self::FILTERS, $filters);
+    }
+}

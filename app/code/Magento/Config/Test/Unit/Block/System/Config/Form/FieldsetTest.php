@@ -1,0 +1,295 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Config\Test\Unit\Block\System\Config\Form;
+
+use Magento\Backend\Model\Auth\Session;
+use Magento\Backend\Model\Url;
+use Magento\Config\Block\System\Config\Form\Fieldset;
+use Magento\Config\Model\Config\Structure\Element\Group;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\AbstractForm;
+use Magento\Framework\Data\Form\Element\Collection;
+use Magento\Framework\Data\Form\Element\Fieldset as FieldsetElement;
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\Data\Form\Element\Text;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\View\Helper\Js;
+use Magento\Framework\View\Layout;
+use Magento\User\Model\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class FieldsetTest extends TestCase
+{
+    use MockCreationTrait;
+
+    /**
+     * @var Fieldset
+     */
+    protected $_object;
+
+    /**
+     * @var MockObject
+     */
+    protected $_elementMock;
+
+    /**
+     * @var MockObject
+     */
+    protected $_requestMock;
+
+    /**
+     * @var MockObject
+     */
+    protected $_urlModelMock;
+
+    /**
+     * @var array
+     */
+    protected static $testData = [
+        'htmlId' => 'test_field_id',
+        'name' => 'test_name',
+        'label' => 'test_label',
+        'elementHTML' => 'test_html',
+        'legend' => 'test_legend',
+        'comment' => 'test_comment',
+        'tooltip'     => 'test_tooltip',
+    ];
+
+    /**
+     * @var MockObject
+     */
+    protected $_layoutMock;
+
+    /**
+     * @var ObjectManager
+     */
+    protected $_testHelper;
+
+    /**
+     * @var MockObject
+     */
+    protected $_helperMock;
+
+    /**
+     * @var MockObject
+     */
+    protected $authSessionMock;
+
+    /**
+     * @var MockObject
+     */
+    protected $userMock;
+
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    protected function setUp(): void
+    {
+        $this->_testHelper = new ObjectManager($this);
+        $this->authSessionMock = $this->_testHelper->createPartialMockWithReflection(
+            Session::class,
+            ['getUser']
+        );
+
+        $this->userMock = $this->_testHelper->createPartialMockWithReflection(
+            User::class,
+            ['getExtra']
+        );
+
+        $this->authSessionMock->expects($this->any())
+            ->method('getUser')
+            ->willReturn($this->userMock);
+
+        $this->_requestMock = $this->createMock(RequestInterface::class);
+        $this->_requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturn('Test Param');
+        $this->_urlModelMock = $this->createMock(Url::class);
+        $this->_layoutMock = $this->createMock(Layout::class);
+        $groupMock = $this->createMock(Group::class);
+        $groupMock->expects($this->any())->method('getFieldsetCss')->willReturn('test_fieldset_css');
+
+        $this->_helperMock = $this->createMock(Js::class);
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderStyleAsTag')
+            ->willReturnCallback(
+                function (string $style, string $selector): string {
+                    return "<style>$selector { $style }</style>";
+                }
+            );
+
+        $data = [
+            'request' => $this->_requestMock,
+            'authSession' => $this->authSessionMock,
+            'urlBuilder' => $this->_urlModelMock,
+            'layout' => $this->_layoutMock,
+            'jsHelper' => $this->_helperMock,
+            'data' => ['group' => $groupMock],
+            'secureRenderer' => $secureRendererMock
+        ];
+        $this->_object = $this->_testHelper->getObject(Fieldset::class, $data);
+
+        $this->_elementMock = $this->_testHelper->createPartialMockWithReflection(
+            Text::class,
+            ['getLegend', 'getComment', 'getIsNested', 'getExpanded',
+             'getId', 'getHtmlId', 'getName', 'getElements', 'getForm']
+        );
+
+        $this->_elementMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(self::$testData['htmlId']);
+        $this->_elementMock->expects($this->any())
+            ->method('getHtmlId')
+            ->willReturn(self::$testData['htmlId']);
+        $this->_elementMock->expects($this->any())
+            ->method('getName')
+            ->willReturn(self::$testData['name']);
+        $this->_elementMock->expects($this->any())
+            ->method('getLegend')
+            ->willReturn(self::$testData['legend']);
+        $this->_elementMock->expects($this->any())
+            ->method('getComment')
+            ->willReturn(self::$testData['comment']);
+    }
+
+    /**
+     * @param $expanded
+     * @param $nested
+     * @param extra
+     */
+    #[DataProvider('renderWithoutStoredElementsDataProvider')]
+    public function testRenderWithoutStoredElements($expanded, $nested, $extra)
+    {
+        $this->userMock->expects($this->any())->method('getExtra')->willReturn($extra);
+        $collection = $this->_testHelper->getObject(Collection::class);
+        $formMock = $this->createMock(Form::class);
+        $this->_elementMock->expects($this->any())->method('getForm')->willReturn($formMock);
+        $formMock->expects($this->any())->method('getElements')->willReturn($collection);
+        $this->_elementMock->expects($this->any())->method('getElements')->willReturn($collection);
+        $this->_elementMock->expects($this->any())->method('getIsNested')->willReturn($nested);
+        $this->_elementMock->expects($this->any())->method('getExpanded')->willReturn($expanded);
+        $actualHtml = $this->_object->render($this->_elementMock);
+        $this->assertStringContainsString(self::$testData['htmlId'], $actualHtml);
+        $this->assertStringContainsString(self::$testData['legend'], $actualHtml);
+        $this->assertStringContainsString(self::$testData['comment'], $actualHtml);
+        if ($nested) {
+            $this->assertStringContainsString('nested', $actualHtml);
+        }
+    }
+
+    /**
+     * @param $expanded
+     * @param $nested
+     * @param $extra
+     */
+    #[DataProvider('renderWithStoredElementsDataProvider')]
+    public function testRenderWithStoredElements($expanded, $nested, $extra)
+    {
+        $this->userMock->expects($this->any())->method('getExtra')->willReturn($extra);
+        $this->_helperMock->expects($this->any())->method('getScript')->willReturnArgument(0);
+        $fieldMock = $this->_testHelper->createPartialMockWithReflection(
+            Text::class,
+            ['getTooltip', 'getIsNested', 'getExpanded', 'getId', 'toHtml', 'getHtmlId']
+        );
+        $fieldMock->expects($this->any())->method('getId')->willReturn('test_field_id');
+        $fieldMock->expects($this->any())->method('getTooltip')->willReturn('test_field_tootip');
+        $fieldMock->expects($this->any())->method('toHtml')->willReturn('test_field_toHTML');
+        $fieldMock->expects($this->any())->method('getHtmlId')->willReturn('test_field_HTML_id');
+
+        $fieldSetMock = $this->_testHelper->createPartialMockWithReflection(
+            FieldsetElement::class,
+            ['getTooltip', 'getIsNested', 'getExpanded', 'getId', 'toHtml', 'getHtmlId']
+        );
+        $fieldSetMock->expects($this->any())->method('getId')->willReturn('test_fieldset_id');
+        $fieldSetMock->expects($this->any())->method('getTooltip')->willReturn('test_fieldset_tootip');
+        $fieldSetMock->expects($this->any())->method('toHtml')->willReturn('test_fieldset_toHTML');
+        $fieldSetMock->expects($this->any())->method('getHtmlId')->willReturn('test_fieldset_HTML_id');
+
+        $factory = $this->createMock(Factory::class);
+
+        $factoryColl = $this->createMock(CollectionFactory::class);
+
+        $formMock = $this->getMockBuilder(AbstractForm::class)
+            ->setConstructorArgs([$factory, $factoryColl])
+            ->getMock();
+
+        $collection = $this->_testHelper->getObject(
+            Collection::class,
+            ['container' => $formMock]
+        );
+        $collection->add($fieldMock);
+        $collection->add($fieldSetMock);
+        $formMock = $this->createMock(Form::class);
+        $this->_elementMock->expects($this->any())->method('getForm')->willReturn($formMock);
+        $formMock->expects($this->any())->method('getElements')->willReturn($collection);
+        $this->_elementMock->expects($this->any())->method('getElements')->willReturn($collection);
+        $this->_elementMock->expects($this->any())->method('getIsNested')->willReturn($nested);
+        $this->_elementMock->expects($this->any())->method('getExpanded')->willReturn($expanded);
+
+        $actual = $this->_object->render($this->_elementMock);
+
+        $this->assertStringContainsString('test_field_toHTML', $actual);
+
+        $expected = '<div id="row_test_field_id_comment" class="system-tooltip-box">test_field_tootip</div>' .
+        '<style>#row_test_field_id_comment { display:none; }</style>';
+        $this->assertStringContainsString($expected, $actual);
+        if ($nested) {
+            $this->assertStringContainsString('nested', $actual);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public static function renderWithoutStoredElementsDataProvider()
+    {
+        return self::dataProvider();
+    }
+
+    /**
+     * @return array
+     */
+    public static function renderWithStoredElementsDataProvider()
+    {
+        return self::dataProvider();
+    }
+
+    /**
+     * @return array
+     */
+    protected static function dataProvider()
+    {
+        return [
+            'expandedNestedExtra' => [
+                'expanded' => true,
+                'nested'   => true,
+                'extra'    => [],
+            ],
+            'collapsedNotNestedExtra' => [
+                'expanded' => false,
+                'nested'   => false,
+                'extra'    => ['configState' => [self::$testData['htmlId'] => true]],
+            ],
+            'collapsedNotNestedNoExtra' => [
+                'expanded' => true,
+                'nested'   => false,
+                'extra'    => [],
+            ],
+        ];
+    }
+}

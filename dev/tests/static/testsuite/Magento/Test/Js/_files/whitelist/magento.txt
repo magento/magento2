@@ -1,0 +1,9 @@
+app/code/**/*.js
+app/design/**/*.js
+dev/tests/js/jasmine/tests/**/*.js
+lib/web/css/docs/source/js/dropdown.js
+lib/web/less/config.less.js
+lib/web/mage/**/*.js
+lib/web/magnifier/**/*.js
+lib/web/varien/**/*.js
+vendor/magento/**/*.js

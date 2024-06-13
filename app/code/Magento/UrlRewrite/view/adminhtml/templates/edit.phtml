@@ -1,0 +1,20 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\UrlRewrite\Block\Edit $block */
+?>
+<?= $block->getChildHtml() ?>
+<?php if ($block->getChildBlock('form')) : ?>
+<script type="text/x-magento-init">
+    {
+        "#edit_form": {
+            "Magento_UrlRewrite/js/url-rewrite-validation" : {
+                "url": "<?= $block->escapeUrl($block->getValidationUrl()) ?>"
+            }
+        }
+    }
+</script>
+<?php endif; ?>

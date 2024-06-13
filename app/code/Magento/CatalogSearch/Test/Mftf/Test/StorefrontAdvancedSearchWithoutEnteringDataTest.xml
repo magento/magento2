@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAdvancedSearchWithoutEnteringDataTest">
+        <annotations>
+            <stories value="Use advanced search"/>
+            <title value="Do advanced search without entering data"/>
+            <description value="Verify catalog advanced search with empty data submits and stays on form with error"/>
+            <severity value="MINOR"/>
+            <testCaseId value="AC-13670"/>
+            <group value="searchFrontend"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Precondition 1: Have a logged-in customer for front end login -->
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="logInFromCustomer">
+                <argument name="Customer" value="$$customer$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Logout from Storefront, delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Step 1: Open Home page and go to Advanced Search from footer -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHome"/>
+        <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup" stepKey="openAdvancedSearch"/>
+        <!-- Step 2: Click search with no data and verify page should stay in the advance search page with error enter a search term and try again-->
+        <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="submitEmpty"/>
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchAdvancedFormPage.url}}" stepKey="assertStillOnAdvancedForm"/>
+        <waitForText userInput="{{ErrorMessage.message}}" selector="{{StorefrontQuickSearchResultsSection.messageSection}}" stepKey="assertErrorMessage"/>
+    </test>
+</tests>

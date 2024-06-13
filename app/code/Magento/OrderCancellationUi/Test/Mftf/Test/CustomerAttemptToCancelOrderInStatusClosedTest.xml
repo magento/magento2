@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CustomerAttemptToCancelOrderInStatusClosedTest">
+        <annotations>
+            <features value="Attempt to cancel an order in status Closed."/>
+            <stories value="Attempt to cancel an order in status Closed."/>
+            <title value="Attempt to cancel an order in status Closed."/>
+            <description value="Customer attempts to cancel an order in status Closed."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="LYNX-180"/>
+        </annotations>
+        <before>
+            <!-- Enable configuration -->
+            <magentoCLI command="config:set sales/cancellation/enabled 1" stepKey="EnablingSalesCancellation"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItemOne">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformationOne">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </updateData>
+            <createData entity="Invoice" stepKey="invoiceOrder">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <createData entity="CreditMemo" stepKey="creditMemo">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Disable configuration -->
+            <magentoCLI command="config:set sales/cancellation/enabled 0" stepKey="DisablingSalesCancellation"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Login to storefront from customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!--Check that Order is Closed -->
+        <grabTextFrom selector="{{CustomerOrderCancellationSection.referenceToLatestOrderStatus}}" stepKey="getLatestOrderStatus"/>
+        <assertEquals message="Order should have status Closed" stepKey="assertOrderStatusIsClosed" after="getLatestOrderStatus">
+            <expectedResult type="string">Closed</expectedResult>
+            <actualResult type="variable">$getLatestOrderStatus</actualResult>
+        </assertEquals>
+
+        <!-- Confirm there is no link to open cancellation modal -->
+        <dontSee selector="{{CustomerOrderCancellationSection.linkToOpenModal}}" stepKey="dontSeeLinkToModal"/>
+    </test>
+</tests>

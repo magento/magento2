@@ -1,0 +1,32 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Framework\Indexer;
+
+use Magento\Framework\Search\Request\Dimension;
+
+/**
+ * Indexer structure (schema) handler
+ *
+ * @api
+ * @since 100.0.2
+ */
+interface IndexStructureInterface
+{
+    /**
+     * @param string $index
+     * @param Dimension[] $dimensions
+     * @return void
+     */
+    public function delete($index, array $dimensions = []);
+
+    /**
+     * @param string $index
+     * @param array $fields
+     * @param Dimension[] $dimensions
+     * @return void
+     */
+    public function create($index, array $fields, array $dimensions = []);
+}

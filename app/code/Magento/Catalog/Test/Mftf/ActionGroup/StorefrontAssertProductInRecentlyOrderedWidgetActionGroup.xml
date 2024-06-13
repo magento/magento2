@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertProductInRecentlyOrderedWidgetActionGroup">
+        <annotations>
+            <description>Validate that the provided Product appears in the Recently Ordered Products widget.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontWidgetsSection.widgetRecentlyOrderedProductsGrid}}" stepKey="waitWidgetRecentlyOrderedProductsGrid"/>
+        <waitForText selector="{{StorefrontWidgetsSection.widgetRecentlyOrderedProductsGrid}}" userInput="{{product.name}}" stepKey="seeProductInRecentlyOrderedWidget"/>
+    </actionGroup>
+</actionGroups>

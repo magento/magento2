@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+$target = $block->getTarget();
+$label = $block->getLabel();
+?>
+<a class="action skip <?= $block->escapeHtmlAttr($target) ?>"
+   href="#<?= $block->escapeHtmlAttr($target) ?>">
+    <span>
+        <?= $block->escapeHtml($label) ?>
+    </span>
+</a>

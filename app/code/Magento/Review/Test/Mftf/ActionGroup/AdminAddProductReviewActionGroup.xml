@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddProductReviewActionGroup">
+        <arguments>
+            <argument name="review" type="entity" defaultValue="simpleProductReview"/>
+            <argument name="sku" type="string"/>
+        </arguments>
+        <!--Click on Add New Review -->
+        <waitForElementClickable selector="{{AdminCreateNewReviewSection.addNewReviewButton}}" stepKey="waitForElementClickOnNewReviewToBeClickable"/>
+        <click selector="{{AdminCreateNewReviewSection.addNewReviewButton}}" stepKey="clickOnNewReview"/>
+        <!--Select Product by SKU and Create Review -->
+        <fillField selector="{{AdminCreateNewReviewSection.filterName}}" userInput="{{sku}}" stepKey="fillValue"/>
+        <pressKey parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" selector="{{AdminCreateNewReviewSection.filterName}}" stepKey="pressEnter"/>
+        <waitForElementClickable selector="{{AdminCreateNewReviewSection.firstRowReview}}" stepKey="waitForVisibleReviewButton"/>
+        <executeJS function="jQuery('{{AdminCreateNewReviewSection.firstRowReview}}').click()" stepKey="addNewReviewBySKU"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{AdminCreateNewReviewSection.select_stores}}" stepKey="waitForVisibleReviewDetails"/>
+        <selectOption selector="{{AdminCreateNewReviewSection.select_stores}}" userInput="{{review.select_stores[0]}}" stepKey="visibilityField"/>
+        <fillField selector="{{AdminCreateNewReviewSection.nickname}}" userInput="{{review.nickname}}" stepKey="fillNicknameField"/>
+        <fillField selector="{{AdminCreateNewReviewSection.title}}" userInput="{{review.title}}" stepKey="fillSummaryField"/>
+        <fillField selector="{{AdminCreateNewReviewSection.detail}}" userInput="{{review.detail}}" stepKey="fillReviewField"/>
+        <click selector="{{AdminCreateNewReviewSection.submitReview}}" stepKey="clickSubmitReview"/>
+        <waitForElementVisible selector="{{AdminCreateNewReviewSection.SuccessMessage}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminCreateNewReviewSection.SuccessMessage}}" userInput="You saved the review." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

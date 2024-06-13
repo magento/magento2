@@ -1,0 +1,7 @@
+email,_website,_store,confirmation,created_at,created_in,default_billing,default_shipping,disable_auto_group_change,dob,firstname,gender,group_id,lastname,middlename,password_hash,prefix,rp_token,rp_token_created_at,store_id,suffix,taxvat,website_id,password
+AnthonyANealy@magento.com,base,admin,,5/6/2012 15:53,Admin,1,1,0,5/6/2010,Anthony,Male,1,Nealy,A.,6a9c9bfb2ba88a6ad2a64e7402df44a763e0c48cd21d7af9e7e796cd4677ee28:RF,,,,0,,,1,
+LoriBBanks@magento.com,admin,admin,,5/6/2012 15:59,Admin,3,3,0,5/6/2010,Lori,Female,1,Banks,B.,7ad6dbdc83d3e9f598825dc58b84678c7351e4281f6bc2b277a32dcd88b9756b:pz,,,,0,,,0,
+CharlesTAlston@teleworm.us,base,admin,,5/6/2012 16:13,Admin,4,4,0,,Jhon,Female,1,Doe,T.,145d12bfff8a6a279eb61e277e3d727c0ba95acc1131237f1594ddbb7687a564:l1,,,,0,,,2,
+customer@example.com,base,admin,,5/6/2012 16:15,Admin,4,4,0,,Firstname,Male,1,Lastname,T.,145d12bfff8a6a279eb61e277e3d727c0ba95acc1131237f1594ddbb7687a564:l1,,,,0,,,2,
+julie.worrell@example.com,base,admin,,5/6/2012 16:19,Admin,4,4,0,,Julie,Female,1,Worrell,T.,145d12bfff8a6a279eb61e277e3d727c0ba95acc1131237f1594ddbb7687a564:l1,,,,0,,,2,
+david.lamar@example.com,base,admin,,5/6/2012 16:25,Admin,4,4,0,,David,,1,Lamar,T.,145d12bfff8a6a279eb61e277e3d727c0ba95acc1131237f1594ddbb7687a564:l1,,,,0,,,2,

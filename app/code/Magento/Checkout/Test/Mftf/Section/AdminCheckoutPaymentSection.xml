@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCheckoutPaymentSection">
+        <element name="checkBillingMethodByName" type="radio" selector="//div[@id='order-billing_method']//dl[@class='admin__payment-methods']//dt//label[contains(., '{{methodName}}')]/..//input" parameterized="true"/>
+    </section>
+</sections>

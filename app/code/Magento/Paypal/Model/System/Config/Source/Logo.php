@@ -1,0 +1,35 @@
+<?php
+/**
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Paypal\Model\System\Config\Source;
+
+/**
+ * Source model for available logo types
+ */
+class Logo implements \Magento\Framework\Option\ArrayInterface
+{
+    /**
+     * @var \Magento\Paypal\Model\ConfigFactory
+     */
+    protected $_configFactory;
+
+    /**
+     * @param \Magento\Paypal\Model\ConfigFactory $configFactory
+     */
+    public function __construct(\Magento\Paypal\Model\ConfigFactory $configFactory)
+    {
+        $this->_configFactory = $configFactory;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toOptionArray()
+    {
+        $result = ['' => __('No Logo')];
+        $result += $this->_configFactory->create()->getAdditionalOptionsLogoTypes();
+        return $result;
+    }
+}

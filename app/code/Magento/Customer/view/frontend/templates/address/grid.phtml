@@ -1,0 +1,113 @@
+<?php
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\Customer\Block\Address\Grid $block */
+/** @var \Magento\Framework\Escaper $escaper */
+$customerAddressView = $block->getData('customer_address');
+?>
+
+<div class="block block-addresses-list">
+    <div class="block-title"><strong><?= $escaper->escapeHtml(__('Additional Address Entries')) ?></strong></div>
+    <div class="block-content">
+        <?php if ($additionalAddresses = $block->getAdditionalAddresses()): ?>
+            <div class="table-wrapper additional-addresses">
+                <table class="data table table-additional-addresses-items history" id="additional-addresses-table">
+                    <caption class="table-caption"><?= $escaper->escapeHtml(__('Additional addresses')) ?></caption>
+                    <thead>
+                    <tr>
+                        <th scope="col" class="col firstname"><?= $escaper->escapeHtml(__('First Name')) ?></th>
+                        <th scope="col" class="col lastname"><?= $escaper->escapeHtml(__('Last Name')) ?></th>
+                        <th scope="col" class="col streetaddress"><?= $escaper->escapeHtml(__('Street Address')) ?></th>
+                        <th scope="col" class="col city"><?= $escaper->escapeHtml(__('City')) ?></th>
+                        <th scope="col" class="col country"><?= $escaper->escapeHtml(__('Country')) ?></th>
+                        <th scope="col" class="col state"><?= $escaper->escapeHtml(__('State')) ?></th>
+                        <th scope="col" class="col zip"><?= $escaper->escapeHtml(__('Zip/Postal Code')) ?></th>
+                        <th scope="col" class="col phone"><?= $escaper->escapeHtml(__('Phone')) ?></th>
+                        <th scope="col" class="col actions"> </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($additionalAddresses as $address): ?>
+                        <tr>
+                            <td data-th="<?= $escaper->escapeHtml(__('First Name')) ?>" class="col firstname">
+                                <?= $escaper->escapeHtml($address->getFirstname()) ?>
+                            </td>
+                            <td data-th="<?= $escaper->escapeHtml(__('Last Name')) ?>" class="col lastname">
+                                <?= $escaper->escapeHtml($address->getLastname()) ?>
+                            </td>
+                            <td data-th="<?= $escaper->escapeHtml(__('Street Address')) ?>" class="col streetaddress">
+                                <?= $escaper->escapeHtml($block->getStreetAddress($address)) ?>
+                            </td>
+                            <td data-th="<?= $escaper->escapeHtml(__('City')) ?>" class="col city">
+                                <?= $escaper->escapeHtml($address->getCity()) ?>
+                            </td>
+                            <td data-th="<?= $escaper->escapeHtml(__('Country')) ?>" class="col country">
+                                <?= $escaper->escapeHtml($block->getCountryByCode($address->getCountryId())) ?>
+                            </td>
+                            <td data-th="<?= $escaper->escapeHtml(__('State')) ?>" class="col state">
+                                <?= $escaper->escapeHtml($address->getRegion()->getRegion()) ?>
+                            </td>
+                            <td data-th="<?= $escaper->escapeHtml(__('Zip/Postal Code')) ?>" class="col zip">
+                                <?= $escaper->escapeHtml($address->getPostcode()) ?>
+                            </td>
+                            <td data-th="<?= $escaper->escapeHtml(__('Phone')) ?>" class="col phone">
+                                <?= $escaper->escapeHtml($address->getTelephone()) ?>
+                            </td>
+                            <td data-th="<?= $escaper->escapeHtml(__('Actions')) ?>" class="col actions">
+                                <a class="action edit" href="
+                                <?= $escaper->escapeUrl(
+                                    $block->getUrl('customer/address/edit', ['id' => $address->getId()])
+                                ) ?>">
+                                    <span><?= $escaper->escapeHtml(__('Edit')) ?></span>
+                                </a>
+                                <a class="action delete"
+                                   href="#" role="delete-address"
+                                   data-address="<?= $escaper->escapeHtmlAttr($address->getId()) ?>">
+                                    <span><?= $escaper->escapeHtml(__('Delete')) ?></span>
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php if ($block->getChildHtml('pager')): ?>
+                <div class="customer-addresses-toolbar toolbar bottom"><?= $block->getChildHtml('pager') ?></div>
+            <?php endif ?>
+        <?php else: ?>
+            <p class="empty">
+                <?= $escaper->escapeHtml(__('You have no other address entries in your address book.')) ?>
+            </p>
+        <?php endif ?>
+    </div>
+</div>
+
+<div class="actions-toolbar">
+    <div class="primary">
+        <button type="button" role="add-address" title="<?= $escaper->escapeHtmlAttr(__('Add New Address')) ?>"
+                class="action primary add">
+            <span><?= $escaper->escapeHtml(__('Add New Address')) ?></span>
+        </button>
+    </div>
+    <div class="secondary">
+        <a class="action back"
+           href="<?= $escaper->escapeUrl($block->getUrl('customer/account')) ?>">
+            <span><?= $escaper->escapeHtml(__('Back')) ?></span>
+        </a>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        ".page-main": {
+            "address": {
+                "deleteAddress": "td a[role='delete-address']",
+                "deleteUrlPrefix": "<?= $escaper->escapeJs($escaper->escapeUrl($block->getDeleteUrl())) ?>id/",
+                "addAddress": "button[role='add-address']",
+                "addAddressLocation": "<?= $escaper->escapeJs($escaper->escapeUrl($block->getAddAddressUrl())) ?>"
+            }
+        }
+    }
+</script>

@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\TestFramework\ConfigurableProduct\Block\CustomOptions;
+
+use Magento\TestFramework\Catalog\Block\Product\View\Options\DateGroupDataProvider as OptionsDateGroupDataProvider;
+
+/**
+ * @inheritdoc
+ */
+class DateGroupDataProvider extends OptionsDateGroupDataProvider
+{
+    /**
+     * @inheritdoc
+     */
+    public static function getData(): array
+    {
+        $optionsData = parent::getData();
+        unset(
+            $optionsData['type_date_percent_price'],
+            $optionsData['type_date_and_time_percent_price'],
+            $optionsData['type_time_percent_price']
+        );
+
+        return $optionsData;
+    }
+}

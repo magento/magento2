@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Reports\Controller\Adminhtml\Report\Review;
+
+class ProductDetail extends \Magento\Reports\Controller\Adminhtml\Report\Review
+{
+    /**
+     * Details action
+     *
+     * @return void
+     */
+    public function execute()
+    {
+        $this->_initAction()->_setActiveMenu(
+            'Magento_Review::report_review'
+        )->_addBreadcrumb(
+            __('Products Report'),
+            __('Products Report')
+        )->_addBreadcrumb(
+            __('Product Reviews'),
+            __('Product Reviews')
+        )->_addContent(
+            $this->_view->getLayout()->createBlock(\Magento\Reports\Block\Adminhtml\Review\Detail::class)
+        );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Details'));
+        $this->_view->renderLayout();
+    }
+}

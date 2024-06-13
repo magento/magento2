@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontProductInfoMainSection">
+        <element name="groupedProductsTable" type="text" selector="#super-product-table .product-item-name"/>
+        <element name="groupedProductsTableAllRows" type="text" selector="#super-product-table tbody tr"/>
+        <element name="groupedProductsAssociatedProductName" type="text" parameterized="true" selector="#super-product-table tbody tr:nth-of-type({{index}}) .product-item-name"/>
+        <element name="groupedProductsAssociatedProductPrice" type="text" parameterized="true" selector="#super-product-table tbody tr:nth-of-type({{index}}) .price"/>
+        <element name="groupedProductsAssociatedProductQuantity" type="input" parameterized="true" selector="#super-product-table tbody tr:nth-of-type({{index}}) input.qty"/>
+        <element name="groupedProductOptions" type="input" selector="//td//strong[text()='{{productName}}']" parameterized="true"/>
+        <element name="groupedProductOptionQtyError" type="text" selector="//*[@id='super_group[{{productId}}]-error']" parameterized="true"/>
+    </section>
+</sections>

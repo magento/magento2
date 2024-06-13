@@ -1,0 +1,67 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+
+namespace Magento\Setup\Fixtures;
+
+/**
+ * Class ConfigsApplyFixture
+ */
+class ConfigsApplyFixture extends Fixture
+{
+    /**
+     * @var int
+     */
+    protected $priority = -1;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function execute()
+    {
+        $configs = $this->fixtureModel->getValue('configs', []);
+        if (empty($configs)) {
+            return;
+        }
+
+        foreach ($configs['config'] as $config) {
+            $backendModel = isset($config['backend_model'])
+                ?
+                $config['backend_model'] : \Magento\Framework\App\Config\Value::class;
+            /**
+             * @var \Magento\Framework\App\Config\ValueInterface $configData
+             */
+            $configData = $this->fixtureModel->getObjectManager()->create($backendModel);
+            $configData->setPath($config['path'])
+                ->setScope($config['scope'])
+                ->setScopeId($config['scopeId'])
+                ->setValue($config['value'])
+                ->save();
+        }
+        $this->fixtureModel->getObjectManager()
+            ->get(\Magento\Framework\App\CacheInterface::class)
+            ->clean([\Magento\Framework\App\Config::CACHE_TAG]);
+
+        $this->fixtureModel->getObjectManager()
+            ->get(\Magento\Config\App\Config\Type\System::class)
+            ->clean();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getActionTitle()
+    {
+        return 'Config Changes';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function introduceParamLabels()
+    {
+        return [];
+    }
+}

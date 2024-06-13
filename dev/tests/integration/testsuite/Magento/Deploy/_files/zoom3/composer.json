@@ -1,0 +1,22 @@
+{
+    "name": "magento/theme-frontend-zoom3",
+    "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.4.0||~8.0.0",
+        "magento/framework": "*",
+        "magento/theme-frontend-zoom2": "*"
+    },
+    "type": "magento2-theme",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ]
+    }
+}

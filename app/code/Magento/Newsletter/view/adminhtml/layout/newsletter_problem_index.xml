@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="formkey"/>
+    <update handle="newsletter_problem_block"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Newsletter\Block\Adminhtml\Problem" name="adminhtml.newsletter.problem.container"/>
+        </referenceContainer>
+    </body>
+</page>

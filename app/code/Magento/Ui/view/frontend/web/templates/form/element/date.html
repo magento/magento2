@@ -1,0 +1,19 @@
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+<input class="input-text" type="text" data-bind="
+    hasFocus: focused,
+    datepicker: { storage: value, options: options },
+    attr: {
+        id: uid,
+        value: value,
+        name: inputName,
+        placeholder: placeholder,
+        'aria-describedby': getDescriptionId(),
+        'aria-required': required,
+        'aria-invalid': error() ? true : 'false',
+        disabled: disabled
+    }" />

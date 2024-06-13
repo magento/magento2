@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\Sales\Block\Adminhtml\Order\Create\Items $block */
+?>
+<div class="admin__page-section-title">
+    <strong class="title"><?= $block->escapeHtml($block->getHeaderText()) ?></strong>
+    <div class="actions">
+        <?= $block->getButtonsHtml() ?>
+    </div>
+</div>
+<?= $block->getChildHtml() ?>

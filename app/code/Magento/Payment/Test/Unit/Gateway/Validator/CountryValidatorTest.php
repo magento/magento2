@@ -1,0 +1,135 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Payment\Test\Unit\Gateway\Validator;
+
+use Magento\Payment\Gateway\ConfigInterface;
+use Magento\Payment\Gateway\Validator\CountryValidator;
+use Magento\Payment\Gateway\Validator\Result;
+use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CountryValidatorTest extends TestCase
+{
+    /**
+     * @var CountryValidator
+     */
+    protected $model;
+
+    /**
+     * @var ConfigInterface|MockObject
+     */
+    protected $configMock;
+
+    /**
+     * @var ResultInterfaceFactory|MockObject
+     */
+    protected $resultFactoryMock;
+
+    /**
+     * @var Result|MockObject
+     */
+    protected $resultMock;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        $this->configMock = $this->createMock(ConfigInterface::class);
+        $this->resultFactoryMock = $this->createPartialMock(
+            ResultInterfaceFactory::class,
+            ['create']
+        );
+        $this->resultMock = $this->createMock(Result::class);
+
+        $this->model = new CountryValidator(
+            $this->resultFactoryMock,
+            $this->configMock
+        );
+    }
+
+    /**
+     * @param $storeId
+     * @param $country
+     * @param $allowspecific
+     * @param $specificcountry
+     * @param $isValid
+     *
+     * @return void
+     */
+    #[DataProvider('validateAllowspecificTrueDataProvider')]
+    public function testValidateAllowspecificTrue(
+        $storeId,
+        $country,
+        $allowspecific,
+        $specificcountry,
+        $isValid
+    ): void {
+        $validationSubject = ['storeId' => $storeId, 'country' => $country];
+
+        $this->configMock
+            ->method('getValue')
+            ->willReturnCallback(function ($arg1, $arg2) use ($storeId, $allowspecific, $specificcountry) {
+                if ($arg1 == 'allowspecific' && $arg2 == $storeId) {
+                    return $allowspecific;
+                } elseif ($arg1 == 'specificcountry' && $arg2 == $storeId) {
+                    return $specificcountry;
+                }
+            });
+
+        $this->resultFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['isValid' => $isValid, 'failsDescription' => [], 'errorCodes' => []])
+            ->willReturn($this->resultMock);
+
+        $this->assertSame($this->resultMock, $this->model->validate($validationSubject));
+    }
+
+    /**
+     * @return array
+     */
+    public static function validateAllowspecificTrueDataProvider(): array
+    {
+        return [
+            [1, 'US', 1, 'US,UK,CA', true], //$storeId, $country, $allowspecific, $specificcountry, $isValid
+            [1, 'BJ', 1, 'US,UK,CA', false]
+        ];
+    }
+
+    /**
+     */
+    #[DataProvider('validateAllowspecificFalseDataProvider')]
+    public function testValidateAllowspecificFalse($storeId, $allowspecific, $isValid): void
+    {
+        $validationSubject = ['storeId' => $storeId];
+
+        $this->configMock
+            ->method('getValue')
+            ->with('allowspecific', $storeId)
+            ->willReturn($allowspecific);
+
+        $this->resultFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['isValid' => $isValid, 'failsDescription' => [], 'errorCodes' => []])
+            ->willReturn($this->resultMock);
+
+        $this->assertSame($this->resultMock, $this->model->validate($validationSubject));
+    }
+
+    /**
+     * @return array
+     */
+    public static function validateAllowspecificFalseDataProvider(): array
+    {
+        return [
+            [1, 0, true] //$storeId, $allowspecific, $isValid
+        ];
+    }
+}

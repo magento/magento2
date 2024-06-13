@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifySecureCookieTest">
+        <annotations>
+            <features value="Cookie"/>
+            <stories value="Storefront Secure Cookie"/>
+            <title value="Verify Storefront Cookie Secure Config over https"/>
+            <description value="Verify that cookie are secure on storefront over https"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-36900"/>
+            <useCaseId value="MC-36809"/>
+            <group value="cookie"/>
+            <group value="configuration"/>
+            <group value="secure_storefront_url"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <amOnPage url="/" stepKey="goToHomePage"/>
+            <executeJS function="return window.location.host" stepKey="hostname"/>
+            <magentoCLI command="config:set web/unsecure/base_url http://{$hostname}/" stepKey="setUnsecureBaseURL"/>
+            <magentoCLI command="config:set web/secure/base_url http://{$hostname}/" stepKey="setSecureBaseURL"/>
+            <magentoCLI command="config:set web/secure/use_in_frontend 1" stepKey="useSecureURLsOnStorefront"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <amOnPage url="/" stepKey="goToHomePage"/>
+            <executeJS function="return window.location.host" stepKey="hostname"/>
+            <magentoCLI command="config:set web/unsecure/base_url http://{$hostname}/" stepKey="setUnsecureBaseURL"/>
+            <magentoCLI command="config:set web/secure/base_url http://{$hostname}/" stepKey="setSecureBaseURL"/>
+            <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="useSecureURLsOnStorefront"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </after>
+        <amOnPage url="/" stepKey="goToHomePage"/>
+        <executeJS function="return window.cookiesConfig.secure ? 'true' : 'false'" stepKey="isCookieSecure"/>
+        <assertEquals stepKey="assertCookieIsSecure">
+            <actualResult type="variable">isCookieSecure</actualResult>
+            <expectedResult type="string">false</expectedResult>
+        </assertEquals>
+        <executeJS function="return jQuery.mage.cookies.defaults.secure ? 'true' : 'false'" stepKey="isCookieSecure2"/>
+        <assertEquals stepKey="assertCookieIsSecure2">
+            <actualResult type="variable">isCookieSecure2</actualResult>
+            <expectedResult type="string">false</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

@@ -1,0 +1,162 @@
+<?php
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Button;
+
+use Magento\Ui\Component\Control\Container;
+use Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Generic;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
+
+class Save extends Generic
+{
+    /**
+     * @inheritdoc
+     */
+    public function getButtonData()
+    {
+        if ($this->getProduct()->isReadonly()) {
+            return [];
+        }
+
+        return [
+            'label' => __('Save'),
+            'class' => 'save primary',
+            'data_attribute' => [
+                'mage-init' => [
+                    'buttonAdapter' => [
+                        'actions' => [
+                            [
+                                'targetName' => $this->getSaveTarget(),
+                                'actionName' => $this->getSaveAction(),
+                                'params' => [
+                                    false
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'class_name' => Container::SPLIT_BUTTON,
+            'options' => $this->getOptions(),
+            'dropdown_button_aria_label' => __('Save options'),
+        ];
+    }
+
+    /**
+     * Retrieve options
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        $options[] = [
+            'id_hard' => 'save_and_new',
+            'label' => __('Save & New'),
+            'data_attribute' => [
+                'mage-init' => [
+                    'buttonAdapter' => [
+                        'actions' => [
+                            [
+                                'targetName' => $this->getSaveTarget(),
+                                'actionName' => $this->getSaveAction(),
+                                'params' => [
+                                    true,
+                                    [
+                                        'back' => 'new'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+        ];
+
+        if (!$this->context->getRequestParam('popup') && $this->getProduct()->isDuplicable()) {
+            $options[] = [
+                'label' => __('Save & Duplicate'),
+                'id_hard' => 'save_and_duplicate',
+                'data_attribute' => [
+                    'mage-init' => [
+                        'buttonAdapter' => [
+                            'actions' => [
+                                [
+                                    'targetName' => $this->getSaveTarget(),
+                                    'actionName' => $this->getSaveAction(),
+                                    'params' => [
+                                        true,
+                                        [
+                                            'back' => 'duplicate'
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+            ];
+        }
+
+        $options[] = [
+            'id_hard' => 'save_and_close',
+            'label' => __('Save & Close'),
+            'data_attribute' => [
+                'mage-init' => [
+                    'buttonAdapter' => [
+                        'actions' => [
+                            [
+                                'targetName' => $this->getSaveTarget(),
+                                'actionName' => $this->getSaveAction(),
+                                'params' => [
+                                    true
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+        ];
+
+        return $options;
+    }
+
+    /**
+     * Retrieve target for button.
+     *
+     * @return string
+     */
+    protected function getSaveTarget()
+    {
+        $target = 'product_form.product_form';
+        if ($this->isConfigurableProduct()) {
+            $target = 'product_form.product_form.configurableVariations';
+        }
+        return $target;
+    }
+
+    /**
+     * Retrieve action for button.
+     *
+     * @return string
+     */
+    protected function getSaveAction()
+    {
+        $action = 'save';
+        if ($this->isConfigurableProduct()) {
+            $action = 'saveFormHandler';
+        }
+        return $action;
+    }
+
+    /**
+     * Is configurable product.
+     *
+     * @return boolean
+     */
+    protected function isConfigurableProduct()
+    {
+        return !$this->getProduct()->isComposite() || $this->getProduct()->getTypeId() === ConfigurableType::TYPE_CODE;
+    }
+}

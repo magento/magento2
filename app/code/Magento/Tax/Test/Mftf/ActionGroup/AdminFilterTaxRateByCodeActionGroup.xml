@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFilterTaxRateByCodeActionGroup">
+        <annotations>
+            <description>Filter Tax Rates by tax rate code.</description>
+        </annotations>
+        <arguments>
+            <argument name="taxRateCode" type="string"/>
+        </arguments>
+
+        <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="{{taxRateCode}}" stepKey="fillNameFilter"/>
+        <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch"/>
+        <waitForPageLoad stepKey="waitForTaxRuleSearch"/>
+    </actionGroup>
+</actionGroups>

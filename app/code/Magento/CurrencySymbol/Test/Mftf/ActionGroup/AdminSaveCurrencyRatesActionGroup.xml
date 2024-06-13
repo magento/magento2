@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSaveCurrencyRatesActionGroup">
+        <click selector="{{AdminCurrencyRatesSection.saveCurrencyRates}}" stepKey="clickSaveCurrencyRates"/>
+        <waitForPageLoad stepKey="waitForSave"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="All valid rates have been saved." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

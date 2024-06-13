@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCategoryPageSortProductActionGroup">
+        <annotations>
+            <description>Select "Sort by" parameter for sorting Products on Category page</description>
+        </annotations>
+        <arguments>
+           <argument name="sortBy" type="string" defaultValue="Price"/>
+        </arguments>
+        <selectOption selector="{{StorefrontCategoryTopToolbarSection.sortByDropdown}}" userInput="{{sortBy}}" stepKey="selectSortByParameter"/>
+    </actionGroup>
+</actionGroups>

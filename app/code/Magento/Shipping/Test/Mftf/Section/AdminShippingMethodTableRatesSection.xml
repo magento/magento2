@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminShippingMethodTableRatesSection">
+        <element name="carriersTableRateTab" type="button" selector="#carriers_tablerate-head"/>
+        <element name="enabledUseSystemValue" type="checkbox" selector="#carriers_tablerate_active_inherit"/>
+        <element name="carriersTableRateActive" type="select" selector="#carriers_tablerate_active"/>
+        <element name="condition" type="select" selector="#carriers_tablerate_condition_name"/>
+        <element name="importFile" type="input" selector="#carriers_tablerate_import"/>
+        <element name="carriersTableRateTitle" type="input" selector="#carriers_tablerate_title_inherit"/>
+        <element name="carriersTableRateName" type="input" selector="#carriers_tablerate_name_inherit"/>
+        <element name="carriersTableRateConditionName" type="input" selector="#carriers_tablerate_condition_name_inherit"/>
+        <element name="carriersTableRateIncludeVirtualPrice" type="input" selector="#carriers_tablerate_include_virtual_price_inherit"/>
+        <element name="carriersTableRateHandlingType" type="input" selector="#carriers_tablerate_handling_type_inherit"/>
+        <element name="carriersTableRateSpecificErrMsg" type="input" selector="#carriers_tablerate_specificerrmsg_inherit"/>
+        <element name="carriersTableRateAllowSpecific" type="input" selector="#carriers_tablerate_sallowspecific_inherit"/>
+        <element name="carriersTableRateSpecificCountry" type="input" selector="#carriers_tablerate_specificcountry"/>
+        <element name="carriersTableRateIncludeVirtualPriceDropdown" type="select" selector="#carriers_tablerate_include_virtual_price"/>
+    </section>
+</sections>

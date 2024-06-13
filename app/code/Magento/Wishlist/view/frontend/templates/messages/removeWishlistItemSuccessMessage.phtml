@@ -1,0 +1,11 @@
+<?php
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+
+<?= $block->escapeHtml(__('%1 has been removed from your Wish List.', $block->getData('product_name'))); ?>
+

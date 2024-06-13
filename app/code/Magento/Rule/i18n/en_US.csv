@@ -1,0 +1,34 @@
+Apply,Apply
+"Please choose a valid discount amount.","Please choose a valid discount amount."
+"End Date must follow Start Date.","End Date must follow Start Date."
+"Please specify a website.","Please specify a website."
+"Please specify Customer Groups.","Please specify Customer Groups."
+to,to
+by,by
+"Please choose an action to add.","Please choose an action to add."
+"Perform following actions","Perform following actions"
+is,is
+"is not","is not"
+"equals or greater than","equals or greater than"
+"equals or less than","equals or less than"
+"greater than","greater than"
+"less than","less than"
+contains,contains
+"does not contain","does not contain"
+"is one of","is one of"
+"is not one of","is not one of"
+"Please choose a condition to add.","Please choose a condition to add."
+Add,Add
+Remove,Remove
+ALL,ALL
+ANY,ANY
+TRUE,TRUE
+FALSE,FALSE
+"If %1 of these conditions are %2:","If %1 of these conditions are %2:"
+"Conditions Combination","Conditions Combination"
+"Attribute Set","Attribute Set"
+Category,Category
+"Open Chooser","Open Chooser"
+"Unknown condition operator","Unknown condition operator"
+"There is no information about associated entity type ""%1"".","There is no information about associated entity type ""%1""."
+"This won't take long . . .","This won't take long . . ."

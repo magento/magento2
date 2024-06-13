@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <multishipping>
+            <options>
+                <checkout_multiple>1</checkout_multiple>
+                <checkout_multiple_maximum_qty>100</checkout_multiple_maximum_qty>
+            </options>
+        </multishipping>
+        <sales>
+            <minimum_order>
+                <multi_address_error_message>The current cart does not match multi shipping criteria, please review or contact the store administrator</multi_address_error_message>
+            </minimum_order>
+        </sales>
+        <csp>
+            <mode>
+                <storefront_multishipping_checkout_billing>
+                    <report_only>0</report_only>
+                </storefront_multishipping_checkout_billing>
+            </mode>
+            <policies>
+                <storefront_multishipping_checkout_billing>
+                    <scripts>
+                        <inline>0</inline>
+                        <event_handlers>1</event_handlers>
+                    </scripts>
+                </storefront_multishipping_checkout_billing>
+            </policies>
+        </csp>
+    </default>
+</config>

@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+<div id="gift-options-cart" data-bind="scope:'giftOptionsCart'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <script type="text/x-magento-init">
+        {
+            "#gift-options-cart": {
+                "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
+            }
+        }
+    </script>
+<?= /* @noEscape */ $secureRenderer->renderTag(
+    'script',
+    [],
+    'window.giftOptionsConfig = '. /* @noEscape */ $block->getGiftOptionsConfigJson(),
+    false
+) ?>
+</div>

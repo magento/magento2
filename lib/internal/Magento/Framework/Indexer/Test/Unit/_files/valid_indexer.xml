@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Indexer/etc/indexer.xsd">
+    <indexer id="indexer_internal_name" view_id="view01" class="Index\Class\Name">
+        <title translate="true">Indexer public name</title>
+        <description translate="true">Indexer public description</description>
+    </indexer>
+    <indexer id="second_indexer_internal_name" view_id="view02" class="Some\Class\Name">
+        <title translate="true">Indexer public name</title>
+        <description translate="true">Indexer public description</description>
+    </indexer>
+    <indexer id="third_indexer_internal_name" view_id="view03" class="Some1\Class\Name">
+        <title translate="true">Indexer public name</title>
+        <description translate="true">Indexer public description</description>
+    </indexer>
+</config>

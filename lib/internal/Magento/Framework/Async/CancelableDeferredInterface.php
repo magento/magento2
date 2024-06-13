@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Framework\Async;
+
+/**
+ * Described deferred operation that can be canceled.
+ *
+ * @api
+ */
+interface CancelableDeferredInterface extends DeferredInterface
+{
+    /**
+     * Cancels the operation.
+     *
+     * Will not cancel the operation when it has already started and given $force is not true.
+     *
+     * @param bool $force Cancel operation even if it's already started.
+     * @return void
+     * @throws CancelingDeferredException When failed to cancel.
+     */
+    public function cancel(bool $force = false): void;
+
+    /**
+     * Whether the operation has been cancelled already.
+     *
+     * @return bool
+     */
+    public function isCancelled(): bool;
+}

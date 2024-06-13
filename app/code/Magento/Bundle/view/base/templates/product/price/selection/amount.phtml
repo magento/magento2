@@ -1,0 +1,10 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+
+<?php /** @var \Magento\Framework\Pricing\Render\Amount $block */ ?>
+
+<?= /* @noEscape */ $block->formatCurrency($block->getDisplayValue(), (bool) $block->getIncludeContainer()) ?>

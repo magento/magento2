@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding="utf-8" ?>
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<layout>
+    <node1 translate="description, label">
+        <description>Phrase 1</description>
+        <label>Phrase 2</label>
+        <title translate="true">Phrase 3</title>
+    </node1>
+    <node2>
+        <title translate="true">Phrase 1</title>
+    </node2>
+</layout>

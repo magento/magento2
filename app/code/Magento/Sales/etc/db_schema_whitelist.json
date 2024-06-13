@@ -1,0 +1,1275 @@
+{
+    "sales_order": {
+        "column": {
+            "entity_id": true,
+            "state": true,
+            "status": true,
+            "coupon_code": true,
+            "protect_code": true,
+            "shipping_description": true,
+            "is_virtual": true,
+            "store_id": true,
+            "customer_id": true,
+            "base_discount_amount": true,
+            "base_discount_canceled": true,
+            "base_discount_invoiced": true,
+            "base_discount_refunded": true,
+            "base_grand_total": true,
+            "base_shipping_amount": true,
+            "base_shipping_canceled": true,
+            "base_shipping_invoiced": true,
+            "base_shipping_refunded": true,
+            "base_shipping_tax_amount": true,
+            "base_shipping_tax_refunded": true,
+            "base_subtotal": true,
+            "base_subtotal_canceled": true,
+            "base_subtotal_invoiced": true,
+            "base_subtotal_refunded": true,
+            "base_tax_amount": true,
+            "base_tax_canceled": true,
+            "base_tax_invoiced": true,
+            "base_tax_refunded": true,
+            "base_to_global_rate": true,
+            "base_to_order_rate": true,
+            "base_total_canceled": true,
+            "base_total_invoiced": true,
+            "base_total_invoiced_cost": true,
+            "base_total_offline_refunded": true,
+            "base_total_online_refunded": true,
+            "base_total_paid": true,
+            "base_total_qty_ordered": true,
+            "base_total_refunded": true,
+            "discount_amount": true,
+            "discount_canceled": true,
+            "discount_invoiced": true,
+            "discount_refunded": true,
+            "grand_total": true,
+            "shipping_amount": true,
+            "shipping_canceled": true,
+            "shipping_invoiced": true,
+            "shipping_refunded": true,
+            "shipping_tax_amount": true,
+            "shipping_tax_refunded": true,
+            "store_to_base_rate": true,
+            "store_to_order_rate": true,
+            "subtotal": true,
+            "subtotal_canceled": true,
+            "subtotal_invoiced": true,
+            "subtotal_refunded": true,
+            "tax_amount": true,
+            "tax_canceled": true,
+            "tax_invoiced": true,
+            "tax_refunded": true,
+            "total_canceled": true,
+            "total_invoiced": true,
+            "total_offline_refunded": true,
+            "total_online_refunded": true,
+            "total_paid": true,
+            "total_qty_ordered": true,
+            "total_refunded": true,
+            "can_ship_partially": true,
+            "can_ship_partially_item": true,
+            "customer_is_guest": true,
+            "customer_note_notify": true,
+            "billing_address_id": true,
+            "customer_group_id": true,
+            "edit_increment": true,
+            "email_sent": true,
+            "send_email": true,
+            "forced_shipment_with_invoice": true,
+            "payment_auth_expiration": true,
+            "quote_address_id": true,
+            "quote_id": true,
+            "shipping_address_id": true,
+            "adjustment_negative": true,
+            "adjustment_positive": true,
+            "base_adjustment_negative": true,
+            "base_adjustment_positive": true,
+            "base_shipping_discount_amount": true,
+            "base_subtotal_incl_tax": true,
+            "base_total_due": true,
+            "payment_authorization_amount": true,
+            "shipping_discount_amount": true,
+            "subtotal_incl_tax": true,
+            "total_due": true,
+            "weight": true,
+            "customer_dob": true,
+            "increment_id": true,
+            "applied_rule_ids": true,
+            "base_currency_code": true,
+            "customer_email": true,
+            "customer_firstname": true,
+            "customer_lastname": true,
+            "customer_middlename": true,
+            "customer_prefix": true,
+            "customer_suffix": true,
+            "customer_taxvat": true,
+            "discount_description": true,
+            "ext_customer_id": true,
+            "ext_order_id": true,
+            "global_currency_code": true,
+            "hold_before_state": true,
+            "hold_before_status": true,
+            "order_currency_code": true,
+            "original_increment_id": true,
+            "relation_child_id": true,
+            "relation_child_real_id": true,
+            "relation_parent_id": true,
+            "relation_parent_real_id": true,
+            "remote_ip": true,
+            "shipping_method": true,
+            "store_currency_code": true,
+            "store_name": true,
+            "x_forwarded_for": true,
+            "customer_note": true,
+            "created_at": true,
+            "updated_at": true,
+            "total_item_count": true,
+            "customer_gender": true,
+            "discount_tax_compensation_amount": true,
+            "base_discount_tax_compensation_amount": true,
+            "shipping_discount_tax_compensation_amount": true,
+            "base_shipping_discount_tax_compensation_amnt": true,
+            "discount_tax_compensation_invoiced": true,
+            "base_discount_tax_compensation_invoiced": true,
+            "discount_tax_compensation_refunded": true,
+            "base_discount_tax_compensation_refunded": true,
+            "shipping_incl_tax": true,
+            "base_shipping_incl_tax": true,
+            "coupon_rule_name": true
+        },
+        "index": {
+            "SALES_ORDER_STATUS": true,
+            "SALES_ORDER_STATE": true,
+            "SALES_ORDER_STORE_ID": true,
+            "SALES_ORDER_STORE_ID_STATE_CREATED_AT": true,
+            "SALES_ORDER_CREATED_AT": true,
+            "SALES_ORDER_CUSTOMER_ID": true,
+            "SALES_ORDER_EXT_ORDER_ID": true,
+            "SALES_ORDER_QUOTE_ID": true,
+            "SALES_ORDER_UPDATED_AT": true,
+            "SALES_ORDER_SEND_EMAIL": true,
+            "SALES_ORDER_EMAIL_SENT": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_ORDER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "SALES_ORDER_STORE_ID_STORE_STORE_ID": true,
+            "SALES_ORDER_INCREMENT_ID_STORE_ID": true
+        }
+    },
+    "sales_order_grid": {
+        "column": {
+            "entity_id": true,
+            "status": true,
+            "store_id": true,
+            "store_name": true,
+            "customer_id": true,
+            "base_grand_total": true,
+            "base_total_paid": true,
+            "grand_total": true,
+            "total_paid": true,
+            "increment_id": true,
+            "base_currency_code": true,
+            "order_currency_code": true,
+            "shipping_name": true,
+            "billing_name": true,
+            "created_at": true,
+            "updated_at": true,
+            "billing_address": true,
+            "shipping_address": true,
+            "shipping_information": true,
+            "customer_email": true,
+            "customer_group": true,
+            "subtotal": true,
+            "shipping_and_handling": true,
+            "customer_name": true,
+            "payment_method": true,
+            "total_refunded": true
+        },
+        "index": {
+            "SALES_ORDER_GRID_STATUS": true,
+            "SALES_ORDER_GRID_STORE_ID": true,
+            "SALES_ORDER_GRID_BASE_GRAND_TOTAL": true,
+            "SALES_ORDER_GRID_BASE_TOTAL_PAID": true,
+            "SALES_ORDER_GRID_GRAND_TOTAL": true,
+            "SALES_ORDER_GRID_TOTAL_PAID": true,
+            "SALES_ORDER_GRID_SHIPPING_NAME": true,
+            "SALES_ORDER_GRID_BILLING_NAME": true,
+            "SALES_ORDER_GRID_CREATED_AT": true,
+            "SALES_ORDER_GRID_CUSTOMER_ID": true,
+            "SALES_ORDER_GRID_UPDATED_AT": true,
+            "FTI_65B9E9925EC58F0C7C2E2F6379C233E7": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_ORDER_GRID_INCREMENT_ID_STORE_ID": true
+        }
+    },
+    "sales_order_address": {
+        "column": {
+            "entity_id": true,
+            "parent_id": true,
+            "customer_address_id": true,
+            "quote_address_id": true,
+            "region_id": true,
+            "customer_id": true,
+            "fax": true,
+            "region": true,
+            "postcode": true,
+            "lastname": true,
+            "street": true,
+            "city": true,
+            "email": true,
+            "telephone": true,
+            "country_id": true,
+            "firstname": true,
+            "address_type": true,
+            "prefix": true,
+            "middlename": true,
+            "suffix": true,
+            "company": true,
+            "vat_id": true,
+            "vat_is_valid": true,
+            "vat_request_id": true,
+            "vat_request_date": true,
+            "vat_request_success": true
+        },
+        "index": {
+            "SALES_ORDER_ADDRESS_PARENT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_ORDER_ADDRESS_PARENT_ID_SALES_ORDER_ENTITY_ID": true
+        }
+    },
+    "sales_order_status_history": {
+        "column": {
+            "entity_id": true,
+            "parent_id": true,
+            "is_customer_notified": true,
+            "is_visible_on_front": true,
+            "comment": true,
+            "status": true,
+            "created_at": true,
+            "entity_name": true
+        },
+        "index": {
+            "SALES_ORDER_STATUS_HISTORY_PARENT_ID": true,
+            "SALES_ORDER_STATUS_HISTORY_CREATED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_ORDER_STATUS_HISTORY_PARENT_ID_SALES_ORDER_ENTITY_ID": true
+        }
+    },
+    "sales_order_item": {
+        "column": {
+            "item_id": true,
+            "order_id": true,
+            "parent_item_id": true,
+            "quote_item_id": true,
+            "store_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "product_id": true,
+            "product_type": true,
+            "product_options": true,
+            "weight": true,
+            "is_virtual": true,
+            "sku": true,
+            "name": true,
+            "description": true,
+            "applied_rule_ids": true,
+            "additional_data": true,
+            "is_qty_decimal": true,
+            "no_discount": true,
+            "qty_backordered": true,
+            "qty_canceled": true,
+            "qty_invoiced": true,
+            "qty_ordered": true,
+            "qty_refunded": true,
+            "qty_shipped": true,
+            "base_cost": true,
+            "price": true,
+            "base_price": true,
+            "original_price": true,
+            "base_original_price": true,
+            "tax_percent": true,
+            "tax_amount": true,
+            "base_tax_amount": true,
+            "tax_invoiced": true,
+            "base_tax_invoiced": true,
+            "discount_percent": true,
+            "discount_amount": true,
+            "base_discount_amount": true,
+            "discount_invoiced": true,
+            "base_discount_invoiced": true,
+            "amount_refunded": true,
+            "base_amount_refunded": true,
+            "row_total": true,
+            "base_row_total": true,
+            "row_invoiced": true,
+            "base_row_invoiced": true,
+            "row_weight": true,
+            "base_tax_before_discount": true,
+            "tax_before_discount": true,
+            "ext_order_item_id": true,
+            "locked_do_invoice": true,
+            "locked_do_ship": true,
+            "price_incl_tax": true,
+            "base_price_incl_tax": true,
+            "row_total_incl_tax": true,
+            "base_row_total_incl_tax": true,
+            "discount_tax_compensation_amount": true,
+            "base_discount_tax_compensation_amount": true,
+            "discount_tax_compensation_invoiced": true,
+            "base_discount_tax_compensation_invoiced": true,
+            "discount_tax_compensation_refunded": true,
+            "base_discount_tax_compensation_refunded": true,
+            "tax_canceled": true,
+            "discount_tax_compensation_canceled": true,
+            "tax_refunded": true,
+            "base_tax_refunded": true,
+            "discount_refunded": true,
+            "base_discount_refunded": true
+        },
+        "index": {
+            "SALES_ORDER_ITEM_ORDER_ID": true,
+            "SALES_ORDER_ITEM_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_ORDER_ITEM_ORDER_ID_SALES_ORDER_ENTITY_ID": true,
+            "SALES_ORDER_ITEM_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "sales_order_payment": {
+        "column": {
+            "entity_id": true,
+            "parent_id": true,
+            "base_shipping_captured": true,
+            "shipping_captured": true,
+            "amount_refunded": true,
+            "base_amount_paid": true,
+            "amount_canceled": true,
+            "base_amount_authorized": true,
+            "base_amount_paid_online": true,
+            "base_amount_refunded_online": true,
+            "base_shipping_amount": true,
+            "shipping_amount": true,
+            "amount_paid": true,
+            "amount_authorized": true,
+            "base_amount_ordered": true,
+            "base_shipping_refunded": true,
+            "shipping_refunded": true,
+            "base_amount_refunded": true,
+            "amount_ordered": true,
+            "base_amount_canceled": true,
+            "quote_payment_id": true,
+            "additional_data": true,
+            "cc_exp_month": true,
+            "cc_ss_start_year": true,
+            "echeck_bank_name": true,
+            "method": true,
+            "cc_debug_request_body": true,
+            "cc_secure_verify": true,
+            "protection_eligibility": true,
+            "cc_approval": true,
+            "cc_last_4": true,
+            "cc_status_description": true,
+            "echeck_type": true,
+            "cc_debug_response_serialized": true,
+            "cc_ss_start_month": true,
+            "echeck_account_type": true,
+            "last_trans_id": true,
+            "cc_cid_status": true,
+            "cc_owner": true,
+            "cc_type": true,
+            "po_number": true,
+            "cc_exp_year": true,
+            "cc_status": true,
+            "echeck_routing_number": true,
+            "account_status": true,
+            "anet_trans_method": true,
+            "cc_debug_response_body": true,
+            "cc_ss_issue": true,
+            "echeck_account_name": true,
+            "cc_avs_status": true,
+            "cc_number_enc": true,
+            "cc_trans_id": true,
+            "address_status": true,
+            "additional_information": true
+        },
+        "index": {
+            "SALES_ORDER_PAYMENT_PARENT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_ORDER_PAYMENT_PARENT_ID_SALES_ORDER_ENTITY_ID": true
+        }
+    },
+    "sales_shipment": {
+        "column": {
+            "entity_id": true,
+            "store_id": true,
+            "total_weight": true,
+            "total_qty": true,
+            "email_sent": true,
+            "send_email": true,
+            "order_id": true,
+            "customer_id": true,
+            "shipping_address_id": true,
+            "billing_address_id": true,
+            "shipment_status": true,
+            "increment_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "packages": true,
+            "shipping_label": true,
+            "customer_note": true,
+            "customer_note_notify": true
+        },
+        "index": {
+            "SALES_SHIPMENT_STORE_ID": true,
+            "SALES_SHIPMENT_TOTAL_QTY": true,
+            "SALES_SHIPMENT_ORDER_ID": true,
+            "SALES_SHIPMENT_CREATED_AT": true,
+            "SALES_SHIPMENT_UPDATED_AT": true,
+            "SALES_SHIPMENT_SEND_EMAIL": true,
+            "SALES_SHIPMENT_EMAIL_SENT": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_SHIPMENT_ORDER_ID_SALES_ORDER_ENTITY_ID": true,
+            "SALES_SHIPMENT_STORE_ID_STORE_STORE_ID": true,
+            "SALES_SHIPMENT_INCREMENT_ID_STORE_ID": true
+        }
+    },
+    "sales_shipment_grid": {
+        "column": {
+            "entity_id": true,
+            "increment_id": true,
+            "store_id": true,
+            "order_increment_id": true,
+            "order_id": true,
+            "order_created_at": true,
+            "customer_name": true,
+            "total_qty": true,
+            "shipment_status": true,
+            "order_status": true,
+            "billing_address": true,
+            "shipping_address": true,
+            "billing_name": true,
+            "shipping_name": true,
+            "customer_email": true,
+            "customer_group_id": true,
+            "payment_method": true,
+            "shipping_information": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "SALES_SHIPMENT_GRID_STORE_ID": true,
+            "SALES_SHIPMENT_GRID_TOTAL_QTY": true,
+            "SALES_SHIPMENT_GRID_ORDER_INCREMENT_ID": true,
+            "SALES_SHIPMENT_GRID_SHIPMENT_STATUS": true,
+            "SALES_SHIPMENT_GRID_ORDER_STATUS": true,
+            "SALES_SHIPMENT_GRID_CREATED_AT": true,
+            "SALES_SHIPMENT_GRID_UPDATED_AT": true,
+            "SALES_SHIPMENT_GRID_ORDER_CREATED_AT": true,
+            "SALES_SHIPMENT_GRID_SHIPPING_NAME": true,
+            "SALES_SHIPMENT_GRID_BILLING_NAME": true,
+            "SALES_SHIPMENT_GRID_ORDER_ID": true,
+            "FTI_086B40C8955F167B8EA76653437879B4": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_SHIPMENT_GRID_INCREMENT_ID_STORE_ID": true
+        }
+    },
+    "sales_shipment_item": {
+        "column": {
+            "entity_id": true,
+            "parent_id": true,
+            "row_total": true,
+            "price": true,
+            "weight": true,
+            "qty": true,
+            "product_id": true,
+            "order_item_id": true,
+            "additional_data": true,
+            "description": true,
+            "name": true,
+            "sku": true
+        },
+        "index": {
+            "SALES_SHIPMENT_ITEM_PARENT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_SHIPMENT_ITEM_PARENT_ID_SALES_SHIPMENT_ENTITY_ID": true
+        }
+    },
+    "sales_shipment_track": {
+        "column": {
+            "entity_id": true,
+            "parent_id": true,
+            "weight": true,
+            "qty": true,
+            "order_id": true,
+            "track_number": true,
+            "description": true,
+            "title": true,
+            "carrier_code": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "SALES_SHIPMENT_TRACK_PARENT_ID": true,
+            "SALES_SHIPMENT_TRACK_ORDER_ID": true,
+            "SALES_SHIPMENT_TRACK_CREATED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_SHIPMENT_TRACK_PARENT_ID_SALES_SHIPMENT_ENTITY_ID": true
+        }
+    },
+    "sales_shipment_comment": {
+        "column": {
+            "entity_id": true,
+            "parent_id": true,
+            "is_customer_notified": true,
+            "is_visible_on_front": true,
+            "comment": true,
+            "created_at": true,
+            "user_id": true,
+            "user_type": true,
+            "updated_at": true
+        },
+        "index": {
+            "SALES_SHIPMENT_COMMENT_CREATED_AT": true,
+            "SALES_SHIPMENT_COMMENT_PARENT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_SHIPMENT_COMMENT_PARENT_ID_SALES_SHIPMENT_ENTITY_ID": true,
+            "SALES_SHIPMENT_COMMENT_ENTITY_ID_USER_ID_USER_TYPE": true
+        }
+    },
+    "sales_invoice": {
+        "column": {
+            "entity_id": true,
+            "store_id": true,
+            "base_grand_total": true,
+            "shipping_tax_amount": true,
+            "tax_amount": true,
+            "base_tax_amount": true,
+            "store_to_order_rate": true,
+            "base_shipping_tax_amount": true,
+            "base_discount_amount": true,
+            "base_to_order_rate": true,
+            "grand_total": true,
+            "shipping_amount": true,
+            "subtotal_incl_tax": true,
+            "base_subtotal_incl_tax": true,
+            "store_to_base_rate": true,
+            "base_shipping_amount": true,
+            "total_qty": true,
+            "base_to_global_rate": true,
+            "subtotal": true,
+            "base_subtotal": true,
+            "discount_amount": true,
+            "billing_address_id": true,
+            "is_used_for_refund": true,
+            "order_id": true,
+            "email_sent": true,
+            "send_email": true,
+            "can_void_flag": true,
+            "state": true,
+            "shipping_address_id": true,
+            "store_currency_code": true,
+            "transaction_id": true,
+            "order_currency_code": true,
+            "base_currency_code": true,
+            "global_currency_code": true,
+            "increment_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "discount_tax_compensation_amount": true,
+            "base_discount_tax_compensation_amount": true,
+            "shipping_discount_tax_compensation_amount": true,
+            "base_shipping_discount_tax_compensation_amnt": true,
+            "shipping_incl_tax": true,
+            "base_shipping_incl_tax": true,
+            "base_total_refunded": true,
+            "discount_description": true,
+            "customer_note": true,
+            "customer_note_notify": true
+        },
+        "index": {
+            "SALES_INVOICE_STORE_ID": true,
+            "SALES_INVOICE_GRAND_TOTAL": true,
+            "SALES_INVOICE_ORDER_ID": true,
+            "SALES_INVOICE_STATE": true,
+            "SALES_INVOICE_CREATED_AT": true,
+            "SALES_INVOICE_UPDATED_AT": true,
+            "SALES_INVOICE_SEND_EMAIL": true,
+            "SALES_INVOICE_EMAIL_SENT": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_INVOICE_ORDER_ID_SALES_ORDER_ENTITY_ID": true,
+            "SALES_INVOICE_STORE_ID_STORE_STORE_ID": true,
+            "SALES_INVOICE_INCREMENT_ID_STORE_ID": true
+        }
+    },
+    "sales_invoice_grid": {
+        "column": {
+            "entity_id": true,
+            "increment_id": true,
+            "state": true,
+            "store_id": true,
+            "store_name": true,
+            "order_id": true,
+            "order_increment_id": true,
+            "order_created_at": true,
+            "customer_name": true,
+            "customer_email": true,
+            "customer_group_id": true,
+            "payment_method": true,
+            "store_currency_code": true,
+            "order_currency_code": true,
+            "base_currency_code": true,
+            "global_currency_code": true,
+            "billing_name": true,
+            "billing_address": true,
+            "shipping_address": true,
+            "shipping_information": true,
+            "subtotal": true,
+            "shipping_and_handling": true,
+            "grand_total": true,
+            "created_at": true,
+            "updated_at": true,
+            "base_grand_total": true
+        },
+        "index": {
+            "SALES_INVOICE_GRID_STORE_ID": true,
+            "SALES_INVOICE_GRID_GRAND_TOTAL": true,
+            "SALES_INVOICE_GRID_ORDER_ID": true,
+            "SALES_INVOICE_GRID_STATE": true,
+            "SALES_INVOICE_GRID_ORDER_INCREMENT_ID": true,
+            "SALES_INVOICE_GRID_CREATED_AT": true,
+            "SALES_INVOICE_GRID_UPDATED_AT": true,
+            "SALES_INVOICE_GRID_ORDER_CREATED_AT": true,
+            "SALES_INVOICE_GRID_BILLING_NAME": true,
+            "FTI_95D9C924DD6A8734EB8B5D01D60F90DE": true,
+            "SALES_INVOICE_GRID_BASE_GRAND_TOTAL": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_INVOICE_GRID_INCREMENT_ID_STORE_ID": true
+        }
+    },
+    "sales_invoice_item": {
+        "column": {
+            "entity_id": true,
+            "parent_id": true,
+            "base_price": true,
+            "tax_amount": true,
+            "base_row_total": true,
+            "discount_amount": true,
+            "row_total": true,
+            "base_discount_amount": true,
+            "price_incl_tax": true,
+            "base_tax_amount": true,
+            "base_price_incl_tax": true,
+            "qty": true,
+            "base_cost": true,
+            "price": true,
+            "base_row_total_incl_tax": true,
+            "row_total_incl_tax": true,
+            "product_id": true,
+            "order_item_id": true,
+            "additional_data": true,
+            "description": true,
+            "sku": true,
+            "name": true,
+            "discount_tax_compensation_amount": true,
+            "base_discount_tax_compensation_amount": true,
+            "tax_ratio": true
+        },
+        "index": {
+            "SALES_INVOICE_ITEM_PARENT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_INVOICE_ITEM_PARENT_ID_SALES_INVOICE_ENTITY_ID": true
+        }
+    },
+    "sales_invoice_comment": {
+        "column": {
+            "entity_id": true,
+            "parent_id": true,
+            "is_customer_notified": true,
+            "is_visible_on_front": true,
+            "comment": true,
+            "created_at": true,
+            "user_id": true,
+            "user_type": true,
+            "updated_at": true
+        },
+        "index": {
+            "SALES_INVOICE_COMMENT_CREATED_AT": true,
+            "SALES_INVOICE_COMMENT_PARENT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_INVOICE_COMMENT_PARENT_ID_SALES_INVOICE_ENTITY_ID": true,
+            "SALES_INVOICE_COMMENT_ENTITY_ID_USER_ID_USER_TYPE": true
+        }
+    },
+    "sales_creditmemo": {
+        "column": {
+            "entity_id": true,
+            "store_id": true,
+            "adjustment_positive": true,
+            "base_shipping_tax_amount": true,
+            "store_to_order_rate": true,
+            "base_discount_amount": true,
+            "base_to_order_rate": true,
+            "grand_total": true,
+            "base_adjustment_negative": true,
+            "base_subtotal_incl_tax": true,
+            "shipping_amount": true,
+            "subtotal_incl_tax": true,
+            "adjustment_negative": true,
+            "base_shipping_amount": true,
+            "store_to_base_rate": true,
+            "base_to_global_rate": true,
+            "base_adjustment": true,
+            "base_subtotal": true,
+            "discount_amount": true,
+            "subtotal": true,
+            "adjustment": true,
+            "base_grand_total": true,
+            "base_adjustment_positive": true,
+            "base_tax_amount": true,
+            "shipping_tax_amount": true,
+            "tax_amount": true,
+            "order_id": true,
+            "email_sent": true,
+            "send_email": true,
+            "creditmemo_status": true,
+            "state": true,
+            "shipping_address_id": true,
+            "billing_address_id": true,
+            "invoice_id": true,
+            "store_currency_code": true,
+            "order_currency_code": true,
+            "base_currency_code": true,
+            "global_currency_code": true,
+            "transaction_id": true,
+            "increment_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "discount_tax_compensation_amount": true,
+            "base_discount_tax_compensation_amount": true,
+            "shipping_discount_tax_compensation_amount": true,
+            "base_shipping_discount_tax_compensation_amnt": true,
+            "shipping_incl_tax": true,
+            "base_shipping_incl_tax": true,
+            "discount_description": true,
+            "customer_note": true,
+            "customer_note_notify": true
+        },
+        "index": {
+            "SALES_CREDITMEMO_STORE_ID": true,
+            "SALES_CREDITMEMO_ORDER_ID": true,
+            "SALES_CREDITMEMO_CREDITMEMO_STATUS": true,
+            "SALES_CREDITMEMO_STATE": true,
+            "SALES_CREDITMEMO_CREATED_AT": true,
+            "SALES_CREDITMEMO_UPDATED_AT": true,
+            "SALES_CREDITMEMO_SEND_EMAIL": true,
+            "SALES_CREDITMEMO_EMAIL_SENT": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_CREDITMEMO_ORDER_ID_SALES_ORDER_ENTITY_ID": true,
+            "SALES_CREDITMEMO_STORE_ID_STORE_STORE_ID": true,
+            "SALES_CREDITMEMO_INCREMENT_ID_STORE_ID": true
+        }
+    },
+    "sales_creditmemo_grid": {
+        "column": {
+            "entity_id": true,
+            "increment_id": true,
+            "created_at": true,
+            "updated_at": true,
+            "order_id": true,
+            "order_increment_id": true,
+            "order_created_at": true,
+            "billing_name": true,
+            "state": true,
+            "base_grand_total": true,
+            "order_status": true,
+            "store_id": true,
+            "billing_address": true,
+            "shipping_address": true,
+            "customer_name": true,
+            "customer_email": true,
+            "customer_group_id": true,
+            "payment_method": true,
+            "shipping_information": true,
+            "subtotal": true,
+            "shipping_and_handling": true,
+            "adjustment_positive": true,
+            "adjustment_negative": true,
+            "order_base_grand_total": true
+        },
+        "index": {
+            "SALES_CREDITMEMO_GRID_ORDER_INCREMENT_ID": true,
+            "SALES_CREDITMEMO_GRID_CREATED_AT": true,
+            "SALES_CREDITMEMO_GRID_UPDATED_AT": true,
+            "SALES_CREDITMEMO_GRID_ORDER_CREATED_AT": true,
+            "SALES_CREDITMEMO_GRID_STATE": true,
+            "SALES_CREDITMEMO_GRID_BILLING_NAME": true,
+            "SALES_CREDITMEMO_GRID_ORDER_STATUS": true,
+            "SALES_CREDITMEMO_GRID_BASE_GRAND_TOTAL": true,
+            "SALES_CREDITMEMO_GRID_STORE_ID": true,
+            "SALES_CREDITMEMO_GRID_ORDER_BASE_GRAND_TOTAL": true,
+            "SALES_CREDITMEMO_GRID_ORDER_ID": true,
+            "FTI_32B7BA885941A8254EE84AE650ABDC86": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_CREDITMEMO_GRID_INCREMENT_ID_STORE_ID": true
+        }
+    },
+    "sales_creditmemo_item": {
+        "column": {
+            "entity_id": true,
+            "parent_id": true,
+            "base_price": true,
+            "tax_amount": true,
+            "base_row_total": true,
+            "discount_amount": true,
+            "row_total": true,
+            "base_discount_amount": true,
+            "price_incl_tax": true,
+            "base_tax_amount": true,
+            "base_price_incl_tax": true,
+            "qty": true,
+            "base_cost": true,
+            "price": true,
+            "base_row_total_incl_tax": true,
+            "row_total_incl_tax": true,
+            "product_id": true,
+            "order_item_id": true,
+            "additional_data": true,
+            "description": true,
+            "sku": true,
+            "name": true,
+            "discount_tax_compensation_amount": true,
+            "base_discount_tax_compensation_amount": true,
+            "tax_ratio": true
+        },
+        "index": {
+            "SALES_CREDITMEMO_ITEM_PARENT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_CREDITMEMO_ITEM_PARENT_ID_SALES_CREDITMEMO_ENTITY_ID": true
+        }
+    },
+    "sales_creditmemo_comment": {
+        "column": {
+            "entity_id": true,
+            "parent_id": true,
+            "is_customer_notified": true,
+            "is_visible_on_front": true,
+            "comment": true,
+            "created_at": true,
+            "user_id": true,
+            "user_type": true,
+            "updated_at": true
+        },
+        "index": {
+            "SALES_CREDITMEMO_COMMENT_CREATED_AT": true,
+            "SALES_CREDITMEMO_COMMENT_PARENT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_CREDITMEMO_COMMENT_PARENT_ID_SALES_CREDITMEMO_ENTITY_ID": true,
+            "SALES_CREDITMEMO_COMMENT_ENTITY_ID_USER_ID_USER_TYPE": true
+        }
+    },
+    "sales_invoiced_aggregated": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "order_status": true,
+            "orders_count": true,
+            "orders_invoiced": true,
+            "invoiced": true,
+            "invoiced_captured": true,
+            "invoiced_not_captured": true
+        },
+        "index": {
+            "SALES_INVOICED_AGGREGATED_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_INVOICED_AGGREGATED_STORE_ID_STORE_STORE_ID": true,
+            "SALES_INVOICED_AGGREGATED_PERIOD_STORE_ID_ORDER_STATUS": true
+        }
+    },
+    "sales_invoiced_aggregated_order": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "order_status": true,
+            "orders_count": true,
+            "orders_invoiced": true,
+            "invoiced": true,
+            "invoiced_captured": true,
+            "invoiced_not_captured": true
+        },
+        "index": {
+            "SALES_INVOICED_AGGREGATED_ORDER_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_INVOICED_AGGREGATED_ORDER_STORE_ID_STORE_STORE_ID": true,
+            "SALES_INVOICED_AGGREGATED_ORDER_PERIOD_STORE_ID_ORDER_STATUS": true
+        }
+    },
+    "sales_order_aggregated_created": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "order_status": true,
+            "orders_count": true,
+            "total_qty_ordered": true,
+            "total_qty_invoiced": true,
+            "total_income_amount": true,
+            "total_revenue_amount": true,
+            "total_profit_amount": true,
+            "total_invoiced_amount": true,
+            "total_canceled_amount": true,
+            "total_paid_amount": true,
+            "total_refunded_amount": true,
+            "total_tax_amount": true,
+            "total_tax_amount_actual": true,
+            "total_shipping_amount": true,
+            "total_shipping_amount_actual": true,
+            "total_discount_amount": true,
+            "total_discount_amount_actual": true
+        },
+        "index": {
+            "SALES_ORDER_AGGREGATED_CREATED_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_ORDER_AGGREGATED_CREATED_STORE_ID_STORE_STORE_ID": true,
+            "SALES_ORDER_AGGREGATED_CREATED_PERIOD_STORE_ID_ORDER_STATUS": true
+        }
+    },
+    "sales_order_aggregated_updated": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "order_status": true,
+            "orders_count": true,
+            "total_qty_ordered": true,
+            "total_qty_invoiced": true,
+            "total_income_amount": true,
+            "total_revenue_amount": true,
+            "total_profit_amount": true,
+            "total_invoiced_amount": true,
+            "total_canceled_amount": true,
+            "total_paid_amount": true,
+            "total_refunded_amount": true,
+            "total_tax_amount": true,
+            "total_tax_amount_actual": true,
+            "total_shipping_amount": true,
+            "total_shipping_amount_actual": true,
+            "total_discount_amount": true,
+            "total_discount_amount_actual": true
+        },
+        "index": {
+            "SALES_ORDER_AGGREGATED_UPDATED_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_ORDER_AGGREGATED_UPDATED_STORE_ID_STORE_STORE_ID": true,
+            "SALES_ORDER_AGGREGATED_UPDATED_PERIOD_STORE_ID_ORDER_STATUS": true
+        }
+    },
+    "sales_payment_transaction": {
+        "column": {
+            "transaction_id": true,
+            "parent_id": true,
+            "order_id": true,
+            "payment_id": true,
+            "txn_id": true,
+            "parent_txn_id": true,
+            "txn_type": true,
+            "is_closed": true,
+            "additional_information": true,
+            "created_at": true
+        },
+        "index": {
+            "SALES_PAYMENT_TRANSACTION_PARENT_ID": true,
+            "SALES_PAYMENT_TRANSACTION_PAYMENT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_PAYMENT_TRANSACTION_ORDER_ID_SALES_ORDER_ENTITY_ID": true,
+            "FK_B99FF1A06402D725EBDB0F3A7ECD47A2": true,
+            "SALES_PAYMENT_TRANSACTION_PAYMENT_ID_SALES_ORDER_PAYMENT_ENTT_ID": true,
+            "SALES_PAYMENT_TRANSACTION_ORDER_ID_PAYMENT_ID_TXN_ID": true
+        }
+    },
+    "sales_refunded_aggregated": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "order_status": true,
+            "orders_count": true,
+            "refunded": true,
+            "online_refunded": true,
+            "offline_refunded": true
+        },
+        "index": {
+            "SALES_REFUNDED_AGGREGATED_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_REFUNDED_AGGREGATED_STORE_ID_STORE_STORE_ID": true,
+            "SALES_REFUNDED_AGGREGATED_PERIOD_STORE_ID_ORDER_STATUS": true
+        }
+    },
+    "sales_refunded_aggregated_order": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "order_status": true,
+            "orders_count": true,
+            "refunded": true,
+            "online_refunded": true,
+            "offline_refunded": true
+        },
+        "index": {
+            "SALES_REFUNDED_AGGREGATED_ORDER_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_REFUNDED_AGGREGATED_ORDER_STORE_ID_STORE_STORE_ID": true,
+            "SALES_REFUNDED_AGGREGATED_ORDER_PERIOD_STORE_ID_ORDER_STATUS": true
+        }
+    },
+    "sales_shipping_aggregated": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "order_status": true,
+            "shipping_description": true,
+            "orders_count": true,
+            "total_shipping": true,
+            "total_shipping_actual": true
+        },
+        "index": {
+            "SALES_SHIPPING_AGGREGATED_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_SHIPPING_AGGREGATED_STORE_ID_STORE_STORE_ID": true,
+            "SALES_SHPP_AGGRED_PERIOD_STORE_ID_ORDER_STS_SHPP_DESCRIPTION": true
+        }
+    },
+    "sales_shipping_aggregated_order": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "order_status": true,
+            "shipping_description": true,
+            "orders_count": true,
+            "total_shipping": true,
+            "total_shipping_actual": true
+        },
+        "index": {
+            "SALES_SHIPPING_AGGREGATED_ORDER_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_SHIPPING_AGGREGATED_ORDER_STORE_ID_STORE_STORE_ID": true,
+            "UNQ_C05FAE47282EEA68654D0924E946761F": true
+        }
+    },
+    "sales_bestsellers_aggregated_daily": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "product_id": true,
+            "product_name": true,
+            "product_price": true,
+            "qty_ordered": true,
+            "rating_pos": true
+        },
+        "index": {
+            "SALES_BESTSELLERS_AGGREGATED_DAILY_STORE_ID": true,
+            "SALES_BESTSELLERS_AGGREGATED_DAILY_PRODUCT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_BESTSELLERS_AGGREGATED_DAILY_STORE_ID_STORE_STORE_ID": true,
+            "SALES_BESTSELLERS_AGGREGATED_DAILY_PERIOD_STORE_ID_PRODUCT_ID": true
+        }
+    },
+    "sales_bestsellers_aggregated_monthly": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "product_id": true,
+            "product_name": true,
+            "product_price": true,
+            "qty_ordered": true,
+            "rating_pos": true
+        },
+        "index": {
+            "SALES_BESTSELLERS_AGGREGATED_MONTHLY_STORE_ID": true,
+            "SALES_BESTSELLERS_AGGREGATED_MONTHLY_PRODUCT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_BESTSELLERS_AGGREGATED_MONTHLY_STORE_ID_STORE_STORE_ID": true,
+            "SALES_BESTSELLERS_AGGREGATED_MONTHLY_PERIOD_STORE_ID_PRODUCT_ID": true
+        }
+    },
+    "sales_bestsellers_aggregated_yearly": {
+        "column": {
+            "id": true,
+            "period": true,
+            "store_id": true,
+            "product_id": true,
+            "product_name": true,
+            "product_price": true,
+            "qty_ordered": true,
+            "rating_pos": true
+        },
+        "index": {
+            "SALES_BESTSELLERS_AGGREGATED_YEARLY_STORE_ID": true,
+            "SALES_BESTSELLERS_AGGREGATED_YEARLY_PRODUCT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_BESTSELLERS_AGGREGATED_YEARLY_STORE_ID_STORE_STORE_ID": true,
+            "SALES_BESTSELLERS_AGGREGATED_YEARLY_PERIOD_STORE_ID_PRODUCT_ID": true
+        }
+    },
+    "sales_order_tax": {
+        "column": {
+            "tax_id": true,
+            "order_id": true,
+            "code": true,
+            "title": true,
+            "percent": true,
+            "amount": true,
+            "priority": true,
+            "position": true,
+            "base_amount": true,
+            "process": true,
+            "base_real_amount": true
+        },
+        "index": {
+            "SALES_ORDER_TAX_ORDER_ID_PRIORITY_POSITION": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "sales_order_tax_item": {
+        "column": {
+            "tax_item_id": true,
+            "tax_id": true,
+            "item_id": true,
+            "tax_percent": true,
+            "amount": true,
+            "base_amount": true,
+            "real_amount": true,
+            "real_base_amount": true,
+            "associated_item_id": true,
+            "taxable_item_type": true
+        },
+        "index": {
+            "SALES_ORDER_TAX_ITEM_ITEM_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_ORDER_TAX_ITEM_ASSOCIATED_ITEM_ID_SALES_ORDER_ITEM_ITEM_ID": true,
+            "SALES_ORDER_TAX_ITEM_TAX_ID_SALES_ORDER_TAX_TAX_ID": true,
+            "SALES_ORDER_TAX_ITEM_ITEM_ID_SALES_ORDER_ITEM_ITEM_ID": true,
+            "SALES_ORDER_TAX_ITEM_TAX_ID_ITEM_ID": true
+        }
+    },
+    "sales_order_status": {
+        "column": {
+            "status": true,
+            "label": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "sales_order_status_state": {
+        "column": {
+            "status": true,
+            "state": true,
+            "is_default": true,
+            "visible_on_front": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_ORDER_STATUS_STATE_STATUS_SALES_ORDER_STATUS_STATUS": true
+        }
+    },
+    "sales_order_status_label": {
+        "column": {
+            "status": true,
+            "store_id": true,
+            "label": true
+        },
+        "index": {
+            "SALES_ORDER_STATUS_LABEL_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_ORDER_STATUS_LABEL_STATUS_SALES_ORDER_STATUS_STATUS": true,
+            "SALES_ORDER_STATUS_LABEL_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "sales_order_status_change_history": {
+        "column": {
+            "entity_id": true,
+            "order_id": true,
+            "status": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_ORDER_STATUS_CHANGE_HISTORY_ORDER_ID_SALES_ORDER_ENTITY_ID": true
+        }
+    }
+}

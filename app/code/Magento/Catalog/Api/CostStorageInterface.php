@@ -1,0 +1,51 @@
+<?php
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+
+namespace Magento\Catalog\Api;
+
+/**
+ * Product cost storage.
+ * @api
+ * @since 102.0.0
+ */
+interface CostStorageInterface
+{
+    /**
+     * Return product prices. In case of at least one of skus is not found exception will be thrown.
+     *
+     * @param string[] $skus
+     * @return \Magento\Catalog\Api\Data\CostInterface[]
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @since 102.0.0
+     */
+    public function get(array $skus);
+
+    /**
+     * Add or update product cost.
+     * Input item should correspond to \Magento\Catalog\Api\Data\CostInterface.
+     * If any items will have invalid cost, store id or sku, they will be marked as failed and excluded from
+     * update list and \Magento\Catalog\Api\Data\PriceUpdateResultInterface[] with problem description will be returned.
+     * If there were no failed items during update empty array will be returned.
+     * If error occurred during the update exception will be thrown.
+     *
+     * @param \Magento\Catalog\Api\Data\CostInterface[] $prices
+     * @return \Magento\Catalog\Api\Data\PriceUpdateResultInterface[]
+     * @since 102.0.0
+     */
+    public function update(array $prices);
+
+    /**
+     * Delete product cost. In case of at least one of skus is not found exception will be thrown.
+     * If error occurred during the delete exception will be thrown.
+     *
+     * @param string[] $skus
+     * @return bool Will return True if deleted.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @since 102.0.0
+     */
+    public function delete(array $skus);
+}

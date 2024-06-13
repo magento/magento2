@@ -1,0 +1,6 @@
+# Copyright 2019 Adobe
+# All Rights Reserved.
+
+interface CategoryInterface {
+    cms_block: CmsBlock @doc(description: "Contains a category CMS block.") @resolver(class: "Magento\\CatalogCmsGraphQl\\Model\\Resolver\\Category\\Block")
+}

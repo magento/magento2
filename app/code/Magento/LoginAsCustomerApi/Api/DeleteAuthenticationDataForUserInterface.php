@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\LoginAsCustomerApi\Api;
+
+/**
+ * Delete authentication data by user id
+ *
+ * @api
+ */
+interface DeleteAuthenticationDataForUserInterface
+{
+    /**
+     * Delete authentication data by user id
+     *
+     * @param int $userId
+     * @return void
+     */
+    public function execute(int $userId): void;
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="OpenOrderByIdActionGroup" extends="FilterOrderGridByIdActionGroup">
+        <annotations>
+            <description>EXTENDS: FilterOrderGridByIdActionGroup. Clicks on the 1st row of the Admin Orders grid.</description>
+        </annotations>
+
+        <click selector="{{AdminOrdersGridSection.exactOrderId(orderId)}}" after="clickOrderApplyFilters" stepKey="openOrderViewPage"/>
+        <waitForPageLoad after="openOrderViewPage" stepKey="waitForOrderViewPageOpened"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,39 @@
+<?php
+/**
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Sales\Block\Adminhtml\Items;
+
+/**
+ * @magentoAppArea adminhtml
+ */
+class AbstractTest extends \PHPUnit\Framework\TestCase
+{
+    public function testGetItemExtraInfoHtml()
+    {
+        /** @var $layout \Magento\Framework\View\Layout */
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\View\LayoutInterface::class
+        );
+        /** @var $block \Magento\Sales\Block\Adminhtml\Items\AbstractItems */
+        $block = $layout->createBlock(\Magento\Sales\Block\Adminhtml\Items\AbstractItems::class, 'block');
+
+        $item = new \Magento\Framework\DataObject();
+
+        $this->assertEmpty($block->getItemExtraInfoHtml($item));
+
+        $expectedHtml = '<html><body>some data</body></html>';
+        /** @var $childBlock \Magento\Framework\View\Element\Text */
+        $childBlock = $layout->addBlock(
+            \Magento\Framework\View\Element\Text::class,
+            'other_block',
+            'block',
+            'order_item_extra_info'
+        );
+        $childBlock->setText($expectedHtml);
+
+        $this->assertEquals($expectedHtml, $block->getItemExtraInfoHtml($item));
+        $this->assertSame($item, $childBlock->getItem());
+    }
+}

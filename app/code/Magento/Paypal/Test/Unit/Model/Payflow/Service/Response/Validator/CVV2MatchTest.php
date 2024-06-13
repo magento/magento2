@@ -1,0 +1,148 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Validator;
+
+use Magento\Framework\DataObject;
+use Magento\Payment\Model\Method\ConfigInterface;
+use Magento\Paypal\Model\Payflow\Service\Response\Validator\CVV2Match;
+use Magento\Paypal\Model\Payflow\Transparent;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Class CVV2MatchTest
+ *
+ * Test class for \Magento\Paypal\Model\Payflow\Service\Response\Validator\CVV2Match
+ */
+class CVV2MatchTest extends TestCase
+{
+    /**
+     * @var CVV2Match
+     */
+    protected $validator;
+
+    /**
+     * @var ConfigInterface|MockObject
+     */
+    protected $configMock;
+
+    /**
+     * @var Transparent|MockObject
+     */
+    protected $payflowproFacade;
+
+    /**
+     * Set up
+     *
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->configMock = $this->createMock(ConfigInterface::class);
+        $this->payflowproFacade = $this->createMock(Transparent::class);
+
+        $this->validator = new CVV2Match();
+    }
+
+    /**
+     * @param bool $expectedResult
+     * @param DataObject $response
+     * @param string $avsSecurityCodeFlag
+     *
+     */
+    #[DataProvider('validationDataProvider')]
+    public function testValidation(
+        $expectedResult,
+        DataObject $response,
+        $avsSecurityCodeFlag
+    ) {
+        $this->payflowproFacade->expects(static::once())
+            ->method('getConfig')
+            ->willReturn($this->configMock);
+
+        $this->configMock->expects($this->once())
+            ->method('getValue')
+            ->with(CVV2Match::CONFIG_NAME)
+            ->willReturn($avsSecurityCodeFlag);
+
+        $this->assertEquals($expectedResult, $this->validator->validate($response, $this->payflowproFacade));
+
+        if (!$expectedResult) {
+            $this->assertNotEmpty($response->getRespmsg());
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public static function validationDataProvider()
+    {
+        return [
+            [
+                'expectedResult' => true,
+                'response' => new DataObject(
+                    [
+                        'cvv2match' => 'Y',
+                    ]
+                ),
+                'avsSecurityCodeFlag' => '0',
+            ],
+            [
+                'expectedResult' => true,
+                'response' => new DataObject(
+                    [
+                        'cvv2match' => 'Y',
+                    ]
+                ),
+                'avsSecurityCodeFlag' => '1',
+            ],
+            [
+                'expectedResult' => true,
+                'response' => new DataObject(
+                    [
+                        'cvv2match' => 'X',
+                    ]
+                ),
+                'avsSecurityCodeFlag' => '1',
+            ],
+            [
+                'expectedResult' => false,
+                'response' => new DataObject(
+                    [
+                        'cvv2match' => 'N',
+                    ]
+                ),
+                'avsSecurityCodeFlag' => '1',
+            ],
+            [
+                'expectedResult' => true,
+                'response' => new DataObject(
+                    [
+                        'cvv2match' => null,
+                    ]
+                ),
+                'avsSecurityCodeFlag' => '1',
+            ],
+            [
+                'expectedResult' => true,
+                'response' => new DataObject(),
+                'avsSecurityCodeFlag' => '1',
+            ],
+            [
+                'expectedResult' => true,
+                'response' => new DataObject(
+                    [
+                        'cvv2match' => 'N',
+                    ]
+                ),
+                'avsSecurityCodeFlag' => '0',
+            ],
+        ];
+    }
+}

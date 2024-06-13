@@ -1,0 +1,56 @@
+<?php
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+
+namespace Magento\Framework\EntityManager\Operation;
+
+use Magento\Framework\ObjectManagerInterface;
+
+/**
+ * Class AttributePool
+ */
+class AttributePool
+{
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @var object[]
+     */
+    private $actions;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param array $extensionActions
+     */
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        array $extensionActions = []
+    ) {
+        $this->objectManager = $objectManager;
+        $this->actions = $extensionActions;
+    }
+
+    /**
+     * @param string $entityType
+     * @param string $actionName
+     * @return object[]
+     * @throws \Exception
+     */
+    public function getActions($entityType, $actionName)
+    {
+        $actions = [];
+        foreach ($this->actions as $name => $actionGroup) {
+            if (isset($actionGroup[$entityType][$actionName])) {
+                $actions[$name] = $this->objectManager->get($actionGroup[$entityType][$actionName]);
+            } elseif (isset($actionGroup['default'][$actionName])) {
+                $actions[$name] = $this->objectManager->get($actionGroup['default'][$actionName]);
+            }
+        }
+        return $actions;
+    }
+}

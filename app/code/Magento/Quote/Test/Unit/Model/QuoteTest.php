@@ -1,0 +1,1419 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Quote\Test\Unit\Model;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type\Simple;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\Address\AbstractAddress;
+use Magento\Customer\Model\CustomerFactory;
+use Magento\Customer\Model\GroupManagement;
+use Magento\Directory\Model\Currency;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Config;
+use Magento\Framework\DataObject;
+use Magento\Framework\DataObject\Copy;
+use Magento\Framework\DataObject\Factory;
+use Magento\Framework\Event\Manager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Phrase;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\AddressFactory;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item\Processor;
+use Magento\Quote\Model\Quote\Payment;
+use Magento\Quote\Model\Quote\PaymentFactory;
+use Magento\Quote\Model\ResourceModel\Quote\Address\Collection;
+use Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory;
+use Magento\Sales\Model\OrderIncrementIdChecker;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Magento\Quote\Test\Unit\Helper\QuoteAddressTestHelper;
+use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
+use Magento\Quote\Model\ResourceModel\Quote\Item\Collection as QuoteItemCollection;
+
+/**
+ * Test class for \Magento\Quote\Model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
+class QuoteTest extends TestCase
+{
+    /**
+     * @var AddressFactory|MockObject
+     */
+    protected $quoteAddressFactoryMock;
+
+    /**
+     * @var Address|MockObject
+     */
+    protected $quoteAddressMock;
+
+    /**
+     * @var Collection|MockObject
+     */
+    protected $quoteAddressCollectionMock;
+
+    /**
+     * @var MockObject
+     */
+    protected $storeManagerMock;
+
+    /**
+     * @var MockObject
+     */
+    protected $resourceMock;
+
+    /**
+     * @var MockObject
+     */
+    protected $contextMock;
+
+    /**
+     * @var MockObject
+     */
+    protected $customerFactoryMock;
+
+    /**
+     * @var MockObject
+     */
+    protected $eventManagerMock;
+
+    /**
+     * @var MockObject
+     */
+    protected $groupRepositoryMock;
+
+    /**
+     * @var Quote
+     */
+    protected $quote;
+
+    /**
+     * @var Product|MockObject
+     */
+    protected $productMock;
+
+    /**
+     * @var Factory|MockObject
+     */
+    protected $objectFactoryMock;
+
+    /**
+     * @var CollectionFactory|MockObject
+     */
+    protected $quoteItemCollectionFactoryMock;
+
+    /**
+     * @var PaymentFactory
+     */
+    protected $paymentFactoryMock;
+
+    /**
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Payment\CollectionFactory
+     */
+    protected $quotePaymentCollectionFactoryMock;
+
+    /**
+     * @var Config|MockObject
+     */
+    protected $scopeConfig;
+
+    /**
+     * @var AddressRepositoryInterface|MockObject
+     */
+    protected $addressRepositoryMock;
+
+    /**
+     * @var SearchCriteriaBuilder|MockObject
+     */
+    protected $criteriaBuilderMock;
+
+    /**
+     * @var FilterBuilder|MockObject
+     */
+    protected $filterBuilderMock;
+
+    /**
+     * @var ExtensibleDataObjectConverter|MockObject
+     */
+    protected $extensibleDataObjectConverterMock;
+
+    /**
+     * @var CustomerRepositoryInterface|MockObject
+     */
+    protected $customerRepositoryMock;
+
+    /**
+     * @var Copy|MockObject
+     */
+    protected $objectCopyServiceMock;
+
+    /**
+     * @var JoinProcessorInterface|MockObject
+     */
+    private $extensionAttributesJoinProcessorMock;
+
+    /**
+     * @var CustomerInterfaceFactory|MockObject
+     */
+    private $customerDataFactoryMock;
+
+    /**
+     * @var MockObject
+     */
+    private $itemProcessor;
+
+    /**
+     * @var OrderIncrementIdChecker|MockObject
+     */
+    private $orderIncrementIdChecker;
+
+    /**
+     * @inheritDoc
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    protected function setUp(): void
+    {
+        $this->quoteAddressFactoryMock = $this->createPartialMock(
+            AddressFactory::class,
+            ['create']
+        );
+        $this->quoteAddressMock = $this->createPartialMock(
+            QuoteAddressTestHelper::class,
+            [
+                'getAddressType',
+                'getDeleteImmediately',
+                'isDeleted',
+                'getCollection',
+                'getId',
+                'getCustomerAddressId',
+                'validateMinimumAmount',
+                'setData'
+            ]
+        );
+        $this->quoteAddressCollectionMock = $this->createMock(
+            Collection::class
+        );
+        $this->extensibleDataObjectConverterMock = $this->createPartialMock(
+            ExtensibleDataObjectConverter::class,
+            ['toFlatArray']
+        );
+        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
+        $this->objectCopyServiceMock = $this->createPartialMock(
+            Copy::class,
+            ['copyFieldsetToTarget']
+        );
+        $this->productMock = $this->createMock(Product::class);
+        $this->objectFactoryMock = $this->createPartialMock(Factory::class, ['create']);
+        $this->quoteAddressFactoryMock->method('create')->willReturn(
+            $this->quoteAddressMock
+        );
+        $this->quoteAddressMock->method('getCollection')->willReturn(
+            $this->quoteAddressCollectionMock
+        );
+        $this->eventManagerMock = $this->getMockBuilder(Manager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeManagerMock = $this->getMockBuilder(StoreManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resourceMock = $this->getMockBuilder(\Magento\Quote\Model\ResourceModel\Quote::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->customerFactoryMock = $this->getMockBuilder(CustomerFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
+        $this->groupRepositoryMock = $this->createMock(GroupRepositoryInterface::class);
+        $this->contextMock->method('getEventDispatcher')->willReturn($this->eventManagerMock);
+        $this->quoteItemCollectionFactoryMock = $this->createPartialMock(
+            CollectionFactory::class,
+            ['create']
+        );
+        $this->quotePaymentCollectionFactoryMock = $this->createPartialMock(
+            \Magento\Quote\Model\ResourceModel\Quote\Payment\CollectionFactory::class,
+            ['create']
+        );
+        $this->paymentFactoryMock = $this->createPartialMock(
+            PaymentFactory::class,
+            ['create']
+        );
+        $this->scopeConfig = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
+
+        $this->criteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->filterBuilderMock = $this->getMockBuilder(FilterBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->itemProcessor = $this->getMockBuilder(Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->extensionAttributesJoinProcessorMock = $this->createMock(
+            JoinProcessorInterface::class
+        );
+        $this->customerDataFactoryMock = $this->createPartialMock(
+            CustomerInterfaceFactory::class,
+            ['create']
+        );
+        $this->orderIncrementIdChecker = $this->createMock(OrderIncrementIdChecker::class);
+        $this->quote = (new ObjectManager($this))
+            ->getObject(
+                Quote::class,
+                [
+                    'quoteAddressFactory' => $this->quoteAddressFactoryMock,
+                    'storeManager' => $this->storeManagerMock,
+                    'resource' => $this->resourceMock,
+                    'context' => $this->contextMock,
+                    'customerFactory' => $this->customerFactoryMock,
+                    'groupRepository' => $this->groupRepositoryMock,
+                    'objectFactory' => $this->objectFactoryMock,
+                    'addressRepository' => $this->addressRepositoryMock,
+                    'criteriaBuilder' => $this->criteriaBuilderMock,
+                    'filterBuilder' => $this->filterBuilderMock,
+                    'quoteItemCollectionFactory' => $this->quoteItemCollectionFactoryMock,
+                    'quotePaymentCollectionFactory' => $this->quotePaymentCollectionFactoryMock,
+                    'quotePaymentFactory' => $this->paymentFactoryMock,
+                    'scopeConfig' => $this->scopeConfig,
+                    'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
+                    'customerRepository' => $this->customerRepositoryMock,
+                    'objectCopyService' => $this->objectCopyServiceMock,
+                    'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
+                    'customerDataFactory' => $this->customerDataFactoryMock,
+                    'itemProcessor' => $this->itemProcessor,
+                    'orderIncrementIdChecker' => $this->orderIncrementIdChecker,
+                    'data' => [
+                        'reserved_order_id' => 1000001
+                    ]
+                ]
+            );
+    }
+
+    /**
+     * @param array $addresses
+     * @param bool $expected
+     *
+     * @return void
+     */
+    #[DataProvider('isMultipleShippingAddressesDataProvider')]
+    public function testIsMultipleShippingAddresses($addresses, $expected): void
+    {
+        $finalAddress = [];
+        foreach ($addresses as $address) {
+            $finalAddress[] = $address($this);
+        }
+
+        $this->quoteAddressCollectionMock->method('setQuoteFilter')->willReturn(
+            $this->quoteAddressCollectionMock
+        );
+        $this->quoteAddressCollectionMock->expects(
+            $this->once()
+        )->method(
+            'getIterator'
+        )->willReturn(
+            new \ArrayIterator($finalAddress)
+        );
+
+        $this->assertEquals($expected, $this->quote->isMultipleShippingAddresses());
+    }
+
+    /**
+     * Customer group ID is not set to quote object and customer data is not available.
+     *
+     * @return void
+     */
+    public function testGetCustomerGroupIdNotSet(): void
+    {
+        $this->assertEquals(
+            GroupManagement::NOT_LOGGED_IN_ID,
+            $this->quote->getCustomerGroupId(),
+            "Customer group ID is invalid"
+        );
+    }
+
+    /**
+     * Customer group ID is set to quote object.
+     *
+     * @return void
+     */
+    public function testGetCustomerGroupId(): void
+    {
+        /** Preconditions */
+        $customerGroupId = 33;
+        $this->quote->setCustomerGroupId($customerGroupId);
+
+        /** SUT execution */
+        $this->assertEquals(
+            $customerGroupId,
+            $this->quote->getCustomerGroupId(),
+            "Customer group ID is invalid"
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function isMultipleShippingAddressesDataProvider(): array
+    {
+        return [
+            [
+                [static fn (self $testCase) => $testCase->getAddressMock(Address::TYPE_SHIPPING),
+                    static fn (self $testCase) => $testCase->getAddressMock(Address::TYPE_SHIPPING)],
+                true,
+            ],
+            [
+                [static fn (self $testCase) => $testCase->getAddressMock(Address::TYPE_SHIPPING),
+                    static fn (self $testCase) => $testCase->getAddressMock(Address::TYPE_BILLING)],
+                false
+            ]
+        ];
+    }
+
+    /**
+     * @param string $type One of \Magento\Customer\Model\Address\AbstractAddress::TYPE_ const
+     *
+     * @return MockObject
+     */
+    protected function getAddressMock($type): MockObject
+    {
+        $shippingAddressMock = $this->createPartialMock(
+            QuoteAddressTestHelper::class,
+            ['getAddressType', '__wakeup', 'isDeleted']
+        );
+
+        $shippingAddressMock->method('getAddressType')->willReturn($type);
+        $shippingAddressMock->method('isDeleted')->willReturn(false);
+        return $shippingAddressMock;
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetStoreIdNoId(): void
+    {
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(null);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($storeMock);
+
+        $result = $this->quote->getStoreId();
+        $this->assertNull($result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetStoreId(): void
+    {
+        $storeId = 1;
+
+        $result = $this->quote->setStoreId($storeId)->getStoreId();
+        $this->assertEquals($storeId, $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetStore(): void
+    {
+        $storeId = 1;
+
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->with($storeId)
+            ->willReturn($storeMock);
+
+        $this->quote->setStoreId($storeId);
+        $result = $this->quote->getStore();
+        $this->assertInstanceOf(Store::class, $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSetStore(): void
+    {
+        $storeId = 1;
+
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($storeId);
+
+        $result = $this->quote->setStore($storeMock);
+        $this->assertInstanceOf(Quote::class, $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetSharedWebsiteStoreIds(): void
+    {
+        $sharedIds = null;
+        $storeIds = [1, 2, 3];
+
+        $websiteMock = $this->getMockBuilder(Website::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $websiteMock->expects($this->once())
+            ->method('getStoreIds')
+            ->willReturn($storeIds);
+
+        $this->quote->setData('shared_store_ids', $sharedIds);
+        $this->quote->setWebsite($websiteMock);
+        $result = $this->quote->getSharedStoreIds();
+        $this->assertEquals($storeIds, $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetSharedStoreIds(): void
+    {
+        $sharedIds = null;
+        $storeIds = [1, 2, 3];
+        $storeId = 1;
+
+        $websiteMock = $this->getMockBuilder(Website::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $websiteMock->expects($this->once())
+            ->method('getStoreIds')
+            ->willReturn($storeIds);
+
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeMock->expects($this->once())
+            ->method('getWebsite')
+            ->willReturn($websiteMock);
+
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->with($storeId)
+            ->willReturn($storeMock);
+
+        $this->quote->setData('shared_store_ids', $sharedIds);
+        $this->quote->setStoreId($storeId);
+        $result = $this->quote->getSharedStoreIds();
+        $this->assertEquals($storeIds, $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testLoadActive(): void
+    {
+        $quoteId = 1;
+
+        $this->resourceMock->expects($this->once())
+            ->method('loadActive')
+            ->with($this->quote, $quoteId);
+
+        $this->eventManagerMock->expects($this->any())
+            ->method('dispatch');
+
+        $result = $this->quote->loadActive($quoteId);
+        $this->assertInstanceOf(Quote::class, $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testloadByIdWithoutStore(): void
+    {
+        $quoteId = 1;
+
+        $this->resourceMock->expects($this->once())
+            ->method('loadByIdWithoutStore')
+            ->with($this->quote, $quoteId);
+
+        $this->eventManagerMock->expects($this->any())
+            ->method('dispatch');
+
+        $result = $this->quote->loadByIdWithoutStore($quoteId);
+        $this->assertInstanceOf(Quote::class, $result);
+    }
+
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    public function testSetCustomerAddressData(): void
+    {
+        $customerId = 1;
+        $addressMock = $this->createMock(AddressInterface::class);
+        $addressMock->method('getId')->willReturn(null);
+
+        $addresses = [$addressMock];
+
+        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerResultMock = $this->createMock(CustomerInterface::class);
+        $requestMock = $this->createMock(
+            DataObject::class
+        );
+
+        $this->extensibleDataObjectConverterMock->method('toFlatArray')->willReturn(['customer_id' => $customerId]);
+
+        $this->customerRepositoryMock->method('getById')->willReturn($customerMock);
+        $this->customerDataFactoryMock->method('create')->willReturn($customerMock);
+        $this->customerRepositoryMock->expects($this->never())
+            ->method('save')
+            ->willReturn($customerMock);
+        $customerMock->method('getAddresses')->willReturn($addresses);
+        $this->objectFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['customer_id' => $customerId])
+            ->willReturn($requestMock);
+        $result = $this->quote->setCustomerAddressData([$addressMock]);
+        $this->assertInstanceOf(Quote::class, $result);
+        $this->assertEquals($customerResultMock, $this->quote->getCustomer());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetCustomerTaxClassId(): void
+    {
+        $groupId = 1;
+        $taxClassId = 1;
+        $groupMock = $this->createMock(GroupInterface::class);
+        $groupMock->expects($this->once())
+            ->method('getTaxClassId')
+            ->willReturn($taxClassId);
+        $this->groupRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->with($groupId)
+            ->willReturn($groupMock);
+        $this->quote->setData('customer_group_id', $groupId);
+        $result = $this->quote->getCustomerTaxClassId();
+        $this->assertEquals($taxClassId, $result);
+    }
+
+    /**
+     * Test case when non-existent customer group is stored into the quote.
+     * In such a case we should get a NoSuchEntityException exception and try
+     * to get a valid customer group from the current customer object.
+     *
+     * @return void
+     */
+    public function testGetCustomerTaxClassIdForNonExistentCustomerGroup(): void
+    {
+        $customerId = 1;
+        $nonExistentGroupId = 100;
+        $groupId = 1;
+        $taxClassId = 1;
+        $groupMock = $this->createMock(GroupInterface::class);
+
+        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock->expects($this->once())
+            ->method('getGroupId')
+            ->willReturn($groupId);
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customerMock);
+
+        $this->groupRepositoryMock
+            ->method('getById')
+            ->willReturnCallback(
+                function ($id) use ($nonExistentGroupId, $groupId, $groupMock) {
+                    if ($id === $nonExistentGroupId) {
+                        throw new NoSuchEntityException(new Phrase('Entity Id does not exist'));
+                    } elseif ($id === $groupId) {
+                        return $groupMock;
+                    }
+                }
+            );
+
+        $groupMock->expects($this->once())
+            ->method('getTaxClassId')
+            ->willReturn($taxClassId);
+        $this->quote->setData('customer_id', $customerId);
+        $this->quote->setData('customer_group_id', $nonExistentGroupId);
+        $result = $this->quote->getCustomerTaxClassId();
+        $this->assertEquals($taxClassId, $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetAllAddresses(): void
+    {
+        $id = 1;
+        $this->quoteAddressCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->with($id)->willReturnSelf();
+
+        $this->quoteAddressMock->expects($this->once())
+            ->method('isDeleted')
+            ->willReturn(false);
+
+        $iterator = new \ArrayIterator([$this->quoteAddressMock]);
+        $this->quoteAddressCollectionMock->method('getIterator')->willReturn($iterator);
+
+        $this->quote->setId($id);
+        $result = $this->quote->getAllAddresses();
+        $this->assertEquals([$this->quoteAddressMock], $result);
+    }
+
+    /**
+     * @return void
+     */
+    #[DataProvider('dataProviderGetAddress')]
+    public function testGetAddressById($addressId, $expected): void
+    {
+        $id = 1;
+        $this->quoteAddressCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->with($id)->willReturnSelf();
+
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($id);
+
+        $iterator = new \ArrayIterator([$this->quoteAddressMock]);
+        $this->quoteAddressCollectionMock->method('getIterator')->willReturn($iterator);
+
+        $this->quote->setId($id);
+        $result = $this->quote->getAddressById($addressId);
+
+        $this->assertEquals((bool)$expected, (bool)$result);
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderGetAddress(): array
+    {
+        return [
+            [1, true],
+            [2, false]
+        ];
+    }
+
+    /**
+     * @param $isDeleted
+     * @param $customerAddressId
+     * @param $expected
+     *
+     * @return void
+     */
+    #[DataProvider('dataProviderGetAddressByCustomer')]
+    public function testGetAddressByCustomerAddressId($isDeleted, $customerAddressId, $expected): void
+    {
+        $id = 1;
+        $this->quoteAddressCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->with($id)->willReturnSelf();
+
+        $this->quoteAddressMock->expects($this->once())
+            ->method('isDeleted')
+            ->willReturn($isDeleted);
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getCustomerAddressId')
+            ->willReturn($customerAddressId);
+
+        $iterator = new \ArrayIterator([$this->quoteAddressMock]);
+        $this->quoteAddressCollectionMock->method('getIterator')->willReturn($iterator);
+
+        $this->quote->setId($id);
+        $result = $this->quote->getAddressByCustomerAddressId($id);
+
+        $this->assertEquals((bool)$expected, (bool)$result);
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderGetAddressByCustomer(): array
+    {
+        return [
+            [false, 1, true],
+            [false, 2, false]
+        ];
+    }
+
+    /**
+     * @param $isDeleted
+     * @param $addressType
+     * @param $customerAddressId
+     * @param $expected
+     *
+     * @return void
+     */
+    #[DataProvider('dataProviderShippingAddress')]
+    public function testGetShippingAddressByCustomerAddressId(
+        $isDeleted,
+        $addressType,
+        $customerAddressId,
+        $expected
+    ): void {
+        $id = 1;
+
+        $this->quoteAddressCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->with($id)->willReturnSelf();
+
+        $this->quoteAddressMock->expects($this->once())
+            ->method('isDeleted')
+            ->willReturn($isDeleted);
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getCustomerAddressId')
+            ->willReturn($customerAddressId);
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getAddressType')
+            ->willReturn($addressType);
+
+        $iterator = new \ArrayIterator([$this->quoteAddressMock]);
+        $this->quoteAddressCollectionMock->method('getIterator')->willReturn($iterator);
+
+        $this->quote->setId($id);
+
+        $result = $this->quote->getShippingAddressByCustomerAddressId($id);
+        $this->assertEquals($expected, (bool)$result);
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderShippingAddress(): array
+    {
+        return [
+            [false, AbstractAddress::TYPE_SHIPPING, 1, true],
+            [false, AbstractAddress::TYPE_SHIPPING, 2, false]
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testRemoveAddress(): void
+    {
+        $id = 1;
+
+        $this->quoteAddressCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->with($id)->willReturnSelf();
+
+        $this->quoteAddressMock->expects($this->once())
+            ->method('isDeleted')
+            ->with(true);
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($id);
+
+        $iterator = new \ArrayIterator([$this->quoteAddressMock]);
+        $this->quoteAddressCollectionMock->method('getIterator')->willReturn($iterator);
+
+        $this->quote->setId($id);
+
+        $result = $this->quote->removeAddress($id);
+        $this->assertInstanceOf(Quote::class, $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testRemoveAllAddresses(): void
+    {
+        $id = 1;
+
+        $this->quoteAddressCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->with($id)->willReturnSelf();
+
+        $this->quoteAddressMock->method('getAddressType')->willReturn(AbstractAddress::TYPE_SHIPPING);
+        $this->quoteAddressMock->method('getAddressType')->willReturn(AbstractAddress::TYPE_SHIPPING);
+        $this->quoteAddressMock->method('isDeleted')->willReturn(false);
+        $this->quoteAddressMock->expects($this->any())
+            ->method('setData')->willReturnSelf();
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($id);
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getDeleteImmediately')
+            ->willReturn(true);
+
+        $iterator = new \ArrayIterator([$id => $this->quoteAddressMock]);
+        $this->quoteAddressCollectionMock->method('getIterator')->willReturn($iterator);
+        $this->quoteAddressCollectionMock->expects($this->once())
+            ->method('removeItemByKey')
+            ->with($id)
+            ->willReturn($iterator);
+
+        $this->quote->setId($id);
+
+        $result = $this->quote->removeAllAddresses();
+        $this->assertInstanceOf(Quote::class, $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddProductException(): void
+    {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->quote->addProduct($this->productMock, 'test');
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddProductNoCandidates(): void
+    {
+        $expectedResult = 'test_string';
+        $requestMock = $this->createMock(
+            DataObject::class
+        );
+        $this->objectFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['qty' => 1])
+            ->willReturn($requestMock);
+
+        $this->productMock->expects($this->once())
+            ->method('isSalable')
+            ->willReturn(true);
+
+        $typeInstanceMock = $this->createPartialMock(
+            Simple::class,
+            [
+                'prepareForCartAdvanced'
+            ]
+        );
+        $typeInstanceMock->expects($this->once())
+            ->method('prepareForCartAdvanced')
+            ->willReturn($expectedResult);
+        $this->productMock->expects($this->once())
+            ->method('getTypeInstance')
+            ->willReturn($typeInstanceMock);
+
+        $result = $this->quote->addProduct($this->productMock, null);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddProductItemPreparation(): void
+    {
+        $itemMock = $this->createMock(Item::class);
+
+        $expectedResult = $itemMock;
+        $requestMock = $this->createMock(
+            DataObject::class
+        );
+        $this->objectFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['qty' => 1])
+            ->willReturn($requestMock);
+
+        $typeInstanceMock = $this->createPartialMock(
+            Simple::class,
+            [
+                'prepareForCartAdvanced'
+            ]
+        );
+
+        $productMock = $this->createPartialMock(
+            ProductTestHelper::class,
+            ['getParentProductId', 'setStickWithinParent', '__wakeup', 'getId']
+        );
+
+        $collectionMock = $this->createMock(QuoteItemCollection::class);
+
+        $itemMock->method('representProduct')->willReturn(true);
+        $itemMock->method('getProduct')->willReturn($this->productMock);
+
+        $iterator = new \ArrayIterator([$itemMock]);
+        $collectionMock->method('getIterator')->willReturn($iterator);
+
+        $productMock->method('getId')->willReturn(123);
+
+        $collectionMock->expects($this->any())
+            ->method('getItemsByColumnValue')
+            ->with('product_id', 123)
+            ->willReturn([$itemMock]);
+
+        $this->quoteItemCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($collectionMock);
+
+        $this->productMock->expects($this->once())
+            ->method('isSalable')
+            ->willReturn(true);
+
+        $typeInstanceMock->expects($this->once())
+            ->method('prepareForCartAdvanced')
+            ->willReturn([$productMock]);
+        $this->productMock->expects($this->once())
+            ->method('getTypeInstance')
+            ->willReturn($typeInstanceMock);
+
+        $result = $this->quote->addProduct($this->productMock, null);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    /**
+     * @param $request
+     * @param $hasError
+     * @return void
+     * @throws LocalizedException
+     */
+    #[DataProvider('dataProviderForTestAddProductItem')]
+    public function testAddProductItemNew($request, $hasError): void
+    {
+        $itemMock = $this->createPartialMock(
+            \Magento\Quote\Test\Unit\Helper\QuoteItemUpdaterTestHelper::class,
+            ['getHasError', 'representProduct', 'setProduct', 'setOptions', 'setQuote', 'getProduct']
+        );
+        $itemMock->expects($this->once())->method('getHasError')->willReturn($hasError);
+        $product = $this->createMock(Product::class);
+        $itemMock->method('getProduct')->willReturn($product);
+
+        $expectedResult = $itemMock;
+        $requestMock = $this->createMock(
+            DataObject::class
+        );
+        $this->objectFactoryMock->expects($this->any())
+            ->method('create')
+            ->with(['qty' => 1])
+            ->willReturn($requestMock);
+
+        $typeInstanceMock = $this->createPartialMock(
+            Simple::class,
+            [
+                'prepareForCartAdvanced'
+            ]
+        );
+
+        $productMock = $this->createPartialMock(
+            ProductTestHelper::class,
+            ['getId']
+        );
+
+        $collectionMock = $this->createMock(QuoteItemCollection::class);
+
+        $itemMock->method('representProduct')->willReturn(false);
+
+        $iterator = new \ArrayIterator([$itemMock]);
+        $collectionMock->method('getIterator')->willReturn($iterator);
+
+        $productMock->method('getId')->willReturn(123);
+
+        $collectionMock->expects($this->any())
+            ->method('getItemsByColumnValue')
+            ->with('product_id', 123)
+            ->willReturn([$itemMock]);
+
+        $this->quoteItemCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($collectionMock);
+
+        $this->productMock->expects($this->once())
+            ->method('isSalable')
+            ->willReturn(true);
+        $this->itemProcessor
+            ->expects($this->once())
+            ->method('init')
+            ->willReturn($itemMock);
+        $itemMock->expects($this->once())
+            ->method('setProduct');
+        $itemMock->expects($this->once())
+            ->method('setOptions');
+        $itemMock->expects($this->any())
+            ->method('setQuote')
+            ->with($this->quote);
+        $typeInstanceMock->expects($this->once())
+            ->method('prepareForCartAdvanced')
+            ->willReturn([$productMock]);
+        $this->productMock->expects($this->once())
+            ->method('getTypeInstance')
+            ->willReturn($typeInstanceMock);
+
+        $result = $this->quote->addProduct($this->productMock, $request);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function dataProviderForTestAddProductItem(): array
+    {
+        return [
+            'not_invalid_product_add' => [null, false],
+            'invalid_product_add' => [
+                new DataObject(
+                    [
+                        'add_to_cart_invalid_product' => true,
+                        'qty' => 1
+                    ]
+                ),
+                true
+            ]
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testValidateMinimumAmount(): void
+    {
+        $storeId = 1;
+        $this->quote->setStoreId($storeId);
+
+        $valueMap = [
+            ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/multi_address', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
+            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true]
+        ];
+        $this->scopeConfig->expects($this->any())
+            ->method('isSetFlag')
+            ->willReturnMap($valueMap);
+
+        $this->quoteAddressMock->expects($this->once())
+            ->method('validateMinimumAmount')
+            ->willReturn(true);
+
+        $this->quoteAddressCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->willReturn([$this->quoteAddressMock]);
+
+        $this->assertTrue($this->quote->validateMinimumAmount());
+    }
+
+    /**
+     * @return void
+     */
+    public function testValidateMinimumAmountNegative(): void
+    {
+        $storeId = 1;
+        $this->quote->setStoreId($storeId);
+
+        $valueMap = [
+            ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/multi_address', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
+            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true]
+        ];
+        $this->scopeConfig->expects($this->any())
+            ->method('isSetFlag')
+            ->willReturnMap($valueMap);
+
+        $this->quoteAddressMock->expects($this->once())
+            ->method('validateMinimumAmount')
+            ->willReturn(false);
+
+        $this->quoteAddressCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->willReturn([$this->quoteAddressMock]);
+
+        $this->assertFalse($this->quote->validateMinimumAmount());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetPaymentIsNotDeleted(): void
+    {
+        $this->quote->setId(1);
+        $payment = $this->createPartialMock(
+            Payment::class,
+            ['setQuote', 'isDeleted', '__wakeup']
+        );
+        $payment->expects($this->once())
+            ->method('setQuote');
+        $payment->expects($this->once())
+            ->method('isDeleted')
+            ->willReturn(false);
+        $quotePaymentCollectionMock = $this->createPartialMock(
+            \Magento\Quote\Model\ResourceModel\Quote\Payment\Collection::class,
+            ['setQuoteFilter', 'getFirstItem']
+        );
+        $quotePaymentCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->with(1)->willReturnSelf();
+        $quotePaymentCollectionMock->expects($this->once())
+            ->method('getFirstItem')
+            ->willReturn($payment);
+        $this->quotePaymentCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($quotePaymentCollectionMock);
+
+        $this->assertInstanceOf(Payment::class, $this->quote->getPayment());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetPaymentIsDeleted(): void
+    {
+        $this->quote->setId(1);
+        $payment = $this->createPartialMock(
+            Payment::class,
+            ['setQuote', 'isDeleted', 'getId', '__wakeup']
+        );
+        $payment->expects($this->exactly(2))
+            ->method('setQuote');
+        $payment->expects($this->once())
+            ->method('isDeleted')
+            ->willReturn(true);
+        $payment->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $quotePaymentCollectionMock = $this->createPartialMock(
+            \Magento\Quote\Model\ResourceModel\Quote\Payment\Collection::class,
+            ['setQuoteFilter', 'getFirstItem']
+        );
+        $quotePaymentCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->with(1)->willReturnSelf();
+        $quotePaymentCollectionMock->expects($this->once())
+            ->method('getFirstItem')
+            ->willReturn($payment);
+        $this->quotePaymentCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($quotePaymentCollectionMock);
+
+        $this->paymentFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($payment);
+
+        $this->assertInstanceOf(Payment::class, $this->quote->getPayment());
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddItem(): void
+    {
+        $item = $this->createPartialMock(Item::class, ['setQuote', 'getId']);
+        $item->expects($this->once())
+            ->method('setQuote');
+        $item->expects($this->once())
+            ->method('getId')
+            ->willReturn(false);
+        $itemsMock = $this->createPartialMock(
+            QuoteItemCollection::class,
+            ['setQuote', 'addItem']
+        );
+        $itemsMock->expects($this->once())
+            ->method('addItem')
+            ->with($item);
+        $this->quoteItemCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($itemsMock);
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch');
+
+        $this->quote->addItem($item);
+    }
+
+    /**
+     * @param array $productTypes
+     * @param int $expected
+     *
+     * @return void
+     */
+    #[DataProvider('dataProviderForTestBeforeSaveIsVirtualQuote')]
+    public function testBeforeSaveIsVirtualQuote(array $productTypes, $expected): void
+    {
+        $storeId = 1;
+        $currencyMock = $this->getMockBuilder(Currency::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $currencyMock->method('getCode')->willReturn('test_code');
+        $currencyMock->method('getRate')->willReturn('test_rate');
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeMock->expects($this->once())
+            ->method('getBaseCurrency')
+            ->willReturn($currencyMock);
+        $storeMock->expects($this->once())
+            ->method('getCurrentCurrency')
+            ->willReturn($currencyMock);
+
+        $this->storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->with($storeId)
+            ->willReturn($storeMock);
+        $this->quote->setStoreId($storeId);
+
+        $collectionMock = $this->createMock(QuoteItemCollection::class);
+        $items = [];
+        foreach ($productTypes as $type) {
+            $productMock = $this->createMock(Product::class);
+            $productMock->method('getIsVirtual')->willReturn($type);
+
+            $itemMock = $this->createPartialMock(
+                \Magento\Quote\Test\Unit\Helper\QuoteItemUpdaterTestHelper::class,
+                ['getParentItemId', 'isDeleted', 'getProduct']
+            );
+            $itemMock->method('isDeleted')->willReturn(false);
+            $itemMock->method('getParentItemId')->willReturn(false);
+            $itemMock->method('getProduct')->willReturn($productMock);
+            $items[] = $itemMock;
+        }
+        $iterator = new \ArrayIterator($items);
+        $collectionMock->method('getIterator')->willReturn($iterator);
+        $this->quoteItemCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($collectionMock);
+
+        $this->quote->beforeSave();
+        $this->assertEquals($expected, $this->quote->getDataByKey(CartInterface::KEY_IS_VIRTUAL));
+        $this->assertNull($this->quote->getUpdatedAt());
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderForTestBeforeSaveIsVirtualQuote(): array
+    {
+        return [
+            [[true], 1],
+            [[true, true], 1],
+            [[false], 0],
+            [[true, false], 0],
+            [[false, false], 0]
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetItemsCollection(): void
+    {
+        $itemCollectionMock = $this->createPartialMock(
+            \Magento\Quote\Test\Unit\Helper\QuoteCollectionTestHelper::class,
+            ['setQuote']
+        );
+        $this->quoteItemCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($itemCollectionMock);
+
+        $this->extensionAttributesJoinProcessorMock->expects($this->once())
+            ->method('process')
+            ->with(
+                $this->isInstanceOf(\Magento\Quote\Model\ResourceModel\Quote\Collection::class)
+            );
+        $itemCollectionMock->expects($this->once())->method('setQuote')->with($this->quote);
+
+        $this->quote->getItemsCollection();
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetAllItems(): void
+    {
+        $itemOneMock = $this->createPartialMock(
+            Item::class,
+            ['isDeleted', 'getProduct']
+        );
+        $itemOneMock->expects($this->once())
+            ->method('isDeleted')
+            ->willReturn(false);
+        $itemOneMock->expects($this->once())
+            ->method('getProduct')
+            ->willReturn($this->productMock);
+
+        $itemTwoMock = $this->createPartialMock(
+            Item::class,
+            ['isDeleted', 'getProduct']
+        );
+        $itemTwoMock->expects($this->once())
+            ->method('isDeleted')
+            ->willReturn(true);
+        $itemTwoMock->expects($this->once())
+            ->method('getProduct')
+            ->willReturn($this->productMock);
+
+        $items = [$itemOneMock, $itemTwoMock];
+        $itemResult = [$itemOneMock];
+        $this->quote->setData('items_collection', $items);
+
+        $this->assertEquals($itemResult, $this->quote->getAllItems());
+    }
+
+    /**
+     * Test to verify if existing reserved_order_id in use.
+     *
+     * @param bool $isReservedOrderIdExist
+     * @param int $reservedOrderId
+     *
+     * @return void
+     */
+    #[DataProvider('reservedOrderIdDataProvider')]
+    public function testReserveOrderId(bool $isReservedOrderIdExist, int $reservedOrderId): void
+    {
+        $this->orderIncrementIdChecker
+            ->expects($this->once())
+            ->method('isIncrementIdUsed')
+            ->with(1000001)->willReturn($isReservedOrderIdExist);
+        $this->resourceMock->method('getReservedOrderId')->willReturn($reservedOrderId);
+        $this->quote->reserveOrderId();
+        $this->assertEquals($reservedOrderId, $this->quote->getReservedOrderId());
+    }
+
+    /**
+     * @return array
+     */
+    public static function reservedOrderIdDataProvider(): array
+    {
+        return [
+            'id_already_in_use' => [true, 100002],
+            'id_not_in_use' => [false, 1000001]
+        ];
+    }
+}

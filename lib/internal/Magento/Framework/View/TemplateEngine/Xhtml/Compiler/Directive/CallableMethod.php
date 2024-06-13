@@ -1,0 +1,49 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive;
+
+use Magento\Framework\DataObject;
+
+class CallableMethod implements DirectiveInterface
+{
+    /**
+     * Execute directive
+     *
+     * @param array $directive
+     * @param DataObject $processedObject
+     * @return string
+     */
+    public function execute($directive, DataObject $processedObject)
+    {
+        $object = $processedObject;
+        $result = '';
+        foreach (explode('.', $directive[1] ?? '') as $method) {
+            $method = (string)$method;
+            $methodName = substr($method, 0, strpos($method, '('));
+            if (is_callable([$object, $methodName])) {
+                $result = $object->$methodName();
+                if (is_scalar($result)) {
+                    break;
+                }
+                $object = $result;
+                continue;
+            }
+            break;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get regexp search pattern
+     *
+     * @return string
+     */
+    public function getPattern()
+    {
+        return '#\{\{((?:[\w_0-9]+\(\)){1}(?:(?:\.[\w_0-9]+\(\))+)?)\}\}#';
+    }
+}

@@ -1,0 +1,39 @@
+<?php
+/**
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
+
+/**
+ * Adminhtml system templates grid block type item renderer
+ */
+class Type extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+{
+    /**
+     * Email template types
+     *
+     * @var array
+     */
+    protected static $_types = [
+        \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML => 'HTML',
+        \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT => 'Text',
+    ];
+
+    /**
+     * Render grid column
+     *
+     * @param \Magento\Framework\DataObject $row
+     * @return \Magento\Framework\Phrase
+     */
+    public function render(\Magento\Framework\DataObject $row)
+    {
+        $str = __('Unknown');
+
+        if (isset(self::$_types[$row->getTemplateType()])) {
+            $str = self::$_types[$row->getTemplateType()];
+        }
+
+        return __($str);
+    }
+}

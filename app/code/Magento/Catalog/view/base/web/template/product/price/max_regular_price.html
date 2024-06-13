@@ -1,0 +1,22 @@
+<!--
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+-->
+<span if="showMaxRegularPrice($row())"
+      class="old-price">
+    <span class="price-container"
+          css="getAdjustmentCssClasses($row())">
+        <span if="label"
+              class="price-label"
+              text="label"></span>
+
+        <span class="price-wrapper"
+              css="priceWrapperCssClasses"
+              attr="priceWrapperAttr"
+              data-price-amount=""
+              data-price-type=""
+              html="getMaxRegularPriceUnsanitizedHtml($row())"></span>
+    </span>
+</span>

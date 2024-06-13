@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2018 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="Const" type="constant">
+        <data key="one">1</data>
+        <data key="two">2</data>
+        <data key="fifty">50</data>
+    </entity>
+    <entity name="OrderLinks" type="constant">
+        <data key="linkToNewOrder">Link to the New Order</data>
+        <data key="linkToPreviousOrder">Link to the Previous Order</data>
+    </entity>
+</entities>

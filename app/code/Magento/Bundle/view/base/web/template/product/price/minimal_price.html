@@ -1,0 +1,25 @@
+<!--
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+-->
+<if args="getMinimalPriceAmount($row()) < getMaximumPriceAmount($row())">
+    <span class="price-container"
+          css="getAdjustmentCssClasses($row())">
+        <span if="label"
+              class="price-label"
+              text="label"></span>
+
+        <span class="price-wrapper"
+              css="priceWrapperCssClasses"
+              attr="priceWrapperAttr"
+              data-price-amount=""
+              data-price-type=""
+              html="getMinimalPriceUnsanitizedHtml($row())"></span>
+
+        <each args="data: getAdjustments(), as: '$adj'">
+                <render args="$adj.getBody()"></render>
+        </each>
+    </span>
+</if>

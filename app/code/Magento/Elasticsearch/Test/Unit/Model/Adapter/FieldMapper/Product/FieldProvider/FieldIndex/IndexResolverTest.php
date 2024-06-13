@@ -1,0 +1,99 @@
+<?php
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex;
+
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\IndexResolver;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+
+/**
+ * @SuppressWarnings(PHPMD)
+ */
+class IndexResolverTest extends TestCase
+{
+    /**
+     * @var IndexResolver
+     */
+    private $resolver;
+
+    /**
+     * @var ConverterInterface
+     */
+    private $converter;
+
+    /**
+     * Set up test environment
+     *
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->converter = $this->createPartialMock(ConverterInterface::class, ['convert']);
+        $objectManager = new ObjectManagerHelper($this);
+
+        $this->resolver = $objectManager->getObject(
+            IndexResolver::class,
+            [
+                'converter' => $this->converter
+            ]
+        );
+    }
+
+    /**
+     * @param $isSearchable
+     * @param $isAlwaysIndexable
+     * @param $serviceFieldType
+     * @param $expected
+     * @return void
+     */
+    #[DataProvider('getFieldIndexProvider')]
+    public function testGetFieldName(
+        $isSearchable,
+        $isAlwaysIndexable,
+        $serviceFieldType,
+        $expected
+    ) {
+        $this->converter->expects($this->any())
+            ->method('convert')
+            ->willReturn('something');
+        $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([
+                'isSearchable',
+                'isAlwaysIndexable',
+            ])
+            ->getMock();
+        $attributeMock->expects($this->any())
+            ->method('isSearchable')
+            ->willReturn($isSearchable);
+        $attributeMock->expects($this->any())
+            ->method('isAlwaysIndexable')
+            ->willReturn($isAlwaysIndexable);
+
+        $this->assertEquals(
+            $expected,
+            $this->resolver->getFieldIndex($attributeMock, $serviceFieldType)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function getFieldIndexProvider()
+    {
+        return [
+            [true, true, 'string', null],
+            [false, false, 'string', 'something'],
+            [true, false, 'string', null],
+            [false, true, 'string', null],
+        ];
+    }
+}

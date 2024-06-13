@@ -1,0 +1,85 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+// phpcs:disable Generic.Files.LineLength
+/**
+ * @var \Magento\AdminNotification\Block\ToolbarEntry $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+    $notificationCount = $block->getUnreadNotificationCount();
+    $notificationCounterMax = $block->getNotificationCounterMax();
+?>
+<div
+    data-mage-init='{"toolbarEntry": {}}'
+    class="notifications-wrapper admin__action-dropdown-wrap"
+    data-notification-count="<?= (int)$notificationCount ?>">
+    <?php if ($notificationCount > 0): ?>
+        <a
+            href="<?= $escaper->escapeUrl($block->getUrl('adminhtml/notification/index')) ?>"
+            class="notifications-action admin__action-dropdown"
+            data-mage-init='{"dropdown":{}}'
+            title="<?= $escaper->escapeHtmlAttr(__('Notifications')) ?>"
+            data-toggle="dropdown">
+            <span class="notifications-counter">
+                <?= /* @noEscape */ ($notificationCount > $notificationCounterMax) ? (int)$notificationCounterMax . '+' : (int)$notificationCount ?>
+            </span>
+        </a>
+        <ul
+            class="admin__action-dropdown-menu"
+            data-mark-as-read-url="<?= $escaper->escapeUrl($block->getUrl('adminhtml/notification/ajaxMarkAsRead')) ?>">
+            <?php foreach ($block->getLatestUnreadNotifications() as $notification): ?>
+                <?php /** @var $notification \Magento\AdminNotification\Model\Inbox */ ?>
+                <li class="notifications-entry<?php if ($notification->getSeverity() == 1): ?> notifications-critical<?php endif; ?>"
+                    data-notification-id="<?= $escaper->escapeHtmlAttr($notification->getId()) ?>"
+                    data-notification-severity="<?php if ($notification->getSeverity() == 1): ?>1<?php endif; ?>">
+                    <?php
+                        $notificationDescription = $notification->getDescription() ?? '';
+                        $notificationDescriptionLength = $block->getNotificationDescriptionLength();
+                    ?>
+                    <strong class="notifications-entry-title">
+                        <?= $escaper->escapeHtml($notification->getTitle()) ?>
+                    </strong>
+                    <?php if (strlen($notificationDescription) > $notificationDescriptionLength): ?>
+                        <p class="notifications-entry-description _cutted">
+                            <span class="notifications-entry-description-start">
+                                <?= $escaper->escapeHtml(substr($notificationDescription, 0, $notificationDescriptionLength)) ?>
+                            </span>
+                            <span class="notifications-entry-description-end">
+                                <?= $escaper->escapeHtml(substr($notificationDescription, $notificationDescriptionLength)) ?>
+                            </span>
+                        </p>
+                    <?php else: ?>
+                        <p class="notifications-entry-description">
+                            <?= $escaper->escapeHtml($notificationDescription) ?>
+                        </p>
+                    <?php endif; ?>
+                    <time class="notifications-entry-time">
+                        <?= $escaper->escapeHtml($block->formatNotificationDate($notification->getDateAdded())) ?>
+                    </time>
+                    <button
+                        type="button"
+                        class="notifications-close"
+                        title="<?= $escaper->escapeHtmlAttr(__('Close')) ?>"
+                        ></button>
+                </li>
+            <?php endforeach; ?>
+            <li class="notifications-entry notifications-entry-last">
+                <a
+                    href="<?= $escaper->escapeUrl($block->getUrl('adminhtml/notification/index')) ?>"
+                    class="action-tertiary action-more">
+                    <?= $escaper->escapeHtml(__('See All (')) ?><span
+                        class="notifications-counter"><?= (int)$notificationCount ?></span>
+                    <?= $escaper->escapeHtml(__(' unread)')) ?>
+                </a>
+            </li>
+        </ul>
+    <?php else: ?>
+        <a
+            class="notifications-action admin__action-dropdown"
+            href="<?= $escaper->escapeUrl($block->getUrl('adminhtml/notification/index')) ?>"
+            title="<?= $escaper->escapeHtmlAttr(__('Notifications')) ?>">
+        </a>
+    <?php endif; ?>
+</div>

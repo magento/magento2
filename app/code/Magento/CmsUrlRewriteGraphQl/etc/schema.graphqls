@@ -1,0 +1,6 @@
+# Copyright 2018 Adobe
+# All Rights Reserved.
+
+enum UrlRewriteEntityTypeEnum {
+    CMS_PAGE
+}

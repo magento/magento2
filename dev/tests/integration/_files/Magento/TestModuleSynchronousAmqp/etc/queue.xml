@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
+    <broker topic="synchronous.rpc.test.deprecated" type="amqp" exchange="magento">
+        <queue consumer="synchronousRpcTestConsumer.deprecated" name="synchronous.rpc.test.deprecated" consumerInstance="Magento\Framework\MessageQueue\Rpc\Consumer"/>
+    </broker>
+</config>

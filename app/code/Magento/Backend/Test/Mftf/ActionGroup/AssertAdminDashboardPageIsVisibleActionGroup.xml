@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminDashboardPageIsVisibleActionGroup">
+        <annotations>
+            <description>Validate the Backend Admin Dashboard URI is correct. Validate the Backend Admin Dashboard Title is present and correct.</description>
+        </annotations>
+
+        <seeInCurrentUrl url="{{AdminDashboardPage.url}}" stepKey="seeDashboardUrl"/>
+        <see userInput="Dashboard" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeDashboardTitle"/>
+    </actionGroup>
+</actionGroups>

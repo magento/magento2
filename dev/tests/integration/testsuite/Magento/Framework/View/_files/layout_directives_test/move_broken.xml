@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+-->
+<layout>
+    <container name="container1" label="Container 1"/>
+    <move element="no_name3"/>
+    <block class="Magento\Framework\View\Element\Text" name="no_name3"/>
+</layout>

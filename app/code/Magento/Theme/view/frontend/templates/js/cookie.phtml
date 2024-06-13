@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * Cookie settings initialization script
+ *
+ * @var $block \Magento\Framework\View\Element\Js\Cookie
+ */
+?>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "mage/cookies": {
+                "expires": null,
+                "path": "<?= $block->escapeJs($block->getPath()) ?>",
+                "domain": "<?= $block->escapeJs($block->getDomain()) ?>",
+                "secure": <?= $block->getSessionConfig()->getCookieSecure() ? 'true' : 'false'; ?>,
+                "lifetime": "<?= $block->escapeJs($block->getLifetime()) ?>"
+            }
+        }
+    }
+</script>

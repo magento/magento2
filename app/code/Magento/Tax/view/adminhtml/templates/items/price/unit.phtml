@@ -1,0 +1,35 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+?>
+<?php
+/** @var \Magento\Tax\Block\Adminhtml\Items\Price\Renderer $block */
+
+$_item = $block->getItem();
+?>
+
+<?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displaySalesBothPrices() || $this->helper(\Magento\Tax\Helper\Data::class)->displaySalesPriceExclTax()) : ?>
+    <div class="price-excl-tax">
+        <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displaySalesBothPrices()) : ?>
+            <span class="label"><?= $block->escapeHtml(__('Excl. Tax')) ?>:</span>
+        <?php endif; ?>
+
+        <?= /* @noEscape */ $block->displayPrices($_item->getBasePrice(), $_item->getPrice()) ?>
+    </div>
+<?php endif; ?>
+<?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displaySalesBothPrices() || $this->helper(\Magento\Tax\Helper\Data::class)->displaySalesPriceInclTax()) : ?>
+    <div class="price-incl-tax">
+        <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displaySalesBothPrices()) : ?>
+            <span class="label"><?= $block->escapeHtml(__('Incl. Tax')) ?>:</span>
+        <?php endif; ?>
+        <?php $_incl = $this->helper(\Magento\Checkout\Helper\Data::class)->getPriceInclTax($_item); ?>
+        <?php $_baseIncl = $this->helper(\Magento\Checkout\Helper\Data::class)->getBasePriceInclTax($_item); ?>
+
+        <?= /* @noEscape */ $block->displayPrices($_baseIncl, $_incl) ?>
+
+    </div>
+<?php endif; ?>

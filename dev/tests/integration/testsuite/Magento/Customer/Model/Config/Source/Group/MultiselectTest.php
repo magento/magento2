@@ -1,0 +1,59 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Customer\Model\Config\Source\Group;
+
+use Magento\TestFramework\Helper\Bootstrap;
+
+/**
+ * Class \Magento\Customer\Model\Config\Source\Group\Multiselect
+ */
+class MultiselectTest extends \PHPUnit\Framework\TestCase
+{
+    public function testToOptionArray()
+    {
+        /** @var Multiselect $multiselect */
+        $multiselect = Bootstrap::getObjectManager()->get(
+            \Magento\Customer\Model\Config\Source\Group\Multiselect::class
+        );
+
+        $options = $multiselect->toOptionArray();
+        $optionsToCompare = [];
+        foreach ($options as $option) {
+            if (is_array($option['value'])) {
+                $optionsToCompare[] = $option['value'];
+            } else {
+                $optionsToCompare[] = [$option];
+            }
+        }
+        $optionsToCompare = array_merge([], ...$optionsToCompare);
+        sort($optionsToCompare);
+        foreach ($optionsToCompare as $item) {
+            $this->assertTrue(
+                in_array(
+                    $item,
+                    [
+                        [
+                            'value' => 1,
+                            'label' => 'Default (General)',
+                        ],
+                        [
+                            'value' => 1,
+                            'label' => 'General',
+                        ],
+                        [
+                            'value' => 2,
+                            'label' => 'Wholesale',
+                        ],
+                        [
+                            'value' => 3,
+                            'label' => 'Retailer',
+                        ],
+                    ]
+                )
+            );
+        }
+    }
+}

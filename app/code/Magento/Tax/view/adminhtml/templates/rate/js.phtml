@@ -1,0 +1,97 @@
+<?php
+/**
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\Tax\Block\Adminhtml\Rate\Form $tmpBlock */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+
+<?php /** @var \Magento\Directory\Helper\Data $jsonHelper */
+$jsonHelper = $tmpBlock->getData('directoryHelper');
+$regionJson = /* @noEscape */ $jsonHelper->getRegionJson();
+$scriptString = <<<script
+require([
+    "jquery",
+    "mage/adminhtml/form"
+], function(jQuery){
+
+    var updater = new RegionUpdater('tax_country_id', 'tax_region', 'tax_region_id', {$regionJson}, 'disable', true);
+    updater.disableRegionValidation();
+
+    (function ($) {
+        $(document).ready(function () {
+            'use strict';
+
+            function enforceWildcard() {
+                var country = $('#tax_country_id').val(),
+                    selectEl = document.getElementById('tax_region_id'),
+                    textEl = document.getElementById('tax_region'),
+                    hasRegions = !!(window.updater && window.updater.sortedRegions &&
+                        window.updater.sortedRegions[country] &&
+                        window.updater.sortedRegions[country].length);
+
+                if (!hasRegions && selectEl) {
+                    var i, zeroOptIndex = -1, emptyOptIndex = -1;
+
+                    for (i = 0; i < selectEl.options.length; i++) {
+                        if (selectEl.options[i].value === '0') { zeroOptIndex = i; break; }
+                        if (emptyOptIndex === -1 && selectEl.options[i].value === '') { emptyOptIndex = i; }
+                    }
+
+                    if (zeroOptIndex !== -1) {
+                        selectEl.selectedIndex = zeroOptIndex;
+                    } else if (emptyOptIndex !== -1) {
+                        selectEl.selectedIndex = emptyOptIndex;
+                    } else if (selectEl.options.length) {
+                        selectEl.selectedIndex = 0;
+                    }
+
+                    selectEl.disabled = true; // keep disable mode
+                }
+                if (!hasRegions && textEl) {
+                    textEl.value = '';
+                }
+            }
+            $('#tax_country_id').on('change', function () { setTimeout(enforceWildcard, 0); });
+            setTimeout(enforceWildcard, 0);
+
+            var zipIsRange = $('#zip_is_range')
+                .on('change.zipRange', function(){
+                    var elem = $(this),
+                        zipIsRangeChecked = elem.is(':checked'),
+                        zipFrom = $('.field-zip_from'),
+                        zipTo = $('.field-zip_to'),
+                        zipCode = $('.field-tax_postcode'),
+                        setState = function(element, visibility) {
+                            var input = element.find(':input');
+                            if (visibility) {
+                                element
+                                    .addClass('required')
+                                    .removeClass('hidden');
+                                input.addClass('required-entry');
+                            } else {
+                                element
+                                    .removeClass('required')
+                                    .addClass('hidden');
+                                input.removeClass('required-entry');
+                            }
+                        };
+                    elem.val(zipIsRangeChecked ? 1 : 0);
+                    setState(zipCode, !zipIsRangeChecked);
+                    setState(zipFrom, zipIsRangeChecked);
+                    setState(zipTo, zipIsRangeChecked);
+                });
+            if (zipIsRange.val()) {
+                zipIsRange.attr({checked: 'checked'})
+            }
+            zipIsRange.trigger('change');
+        });
+    })(jQuery);
+
+    window.updater = updater;
+});
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

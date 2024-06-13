@@ -1,0 +1,53 @@
+<?php
+/**
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Customer\Model\Customer\Attribute\Backend;
+
+/**
+ * Customer default shipping address backend
+ */
+class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+{
+    /**
+     * Before save
+     *
+     * @param \Magento\Framework\DataObject $object
+     * @return void
+     */
+    public function beforeSave($object)
+    {
+        $defaultShipping = $object->getDefaultShipping();
+        if ($defaultShipping === null) {
+            $object->unsetDefaultShipping();
+        }
+    }
+
+    /**
+     * After save
+     *
+     * @param \Magento\Framework\DataObject $object
+     * @return void
+     */
+    public function afterSave($object)
+    {
+        if ($defaultShipping = $object->getDefaultShipping()) {
+            $addressId = false;
+            /**
+             * post_index set in customer save action for address
+             * this is $_POST array index for address
+             */
+            foreach ($object->getAddresses() as $address) {
+                if ($address->getPostIndex() == $defaultShipping) {
+                    $addressId = $address->getId();
+                }
+            }
+
+            if ($addressId) {
+                $object->setDefaultShipping($addressId);
+                $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getAttributeCode());
+            }
+        }
+    }
+}

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckCurrencyConverterApiConfigurationTest">
+        <annotations>
+            <features value="CurrencySymbol"/>
+            <stories value="Currency Rates"/>
+            <title value="Currency Converter API configuration"/>
+            <description value="Admin should be able to import currency rates using Currency Converter API"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-28786"/>
+            <useCaseId value="MAGETWO-94919"/>
+            <group value="currency"/>
+            <!--      Remove this group when Subscription is finalized or Mocking is enabled      -->
+            <group value="pr_exclude" />
+            <!-- added skip tag for test because of api key issue -->
+            <skip>
+                <issueId value="Issue with currency converter api key" />
+            </skip>
+        </annotations>
+        <before>
+            <!--Set currency configuration-->
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForRHD.value}}" stepKey="setAllowedCurrencyRHDAndUSD"/>
+            <magentoCLI command="config:set {{CurrencyConverterApiKeyConfigData.path}} {{CurrencyConverterApiKeyConfigData.value}}" stepKey="setCurrencyConverterApiKey"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <!--Create product-->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="gotToCurrencyRatesPage"/>
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="revertCurrencyRates">
+                <argument name="firstCurrency" value="USD"/>
+                <argument name="secondCurrency" value="EUR"/>
+                <argument name="rate" value="0.7067"/>
+            </actionGroup>
+            <!--Set currency allow previous config-->
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="setDefaultAllowedCurrencies"/>
+            <magentoCLI command="config:set {{DefaultCurrencyConverterApiKeyConfigData.path}} {{DefaultCurrencyConverterApiKeyConfigData.value}}" stepKey="setDefaultCurrencyConverterApiKey"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <!--Delete created data-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Import rates from Currency Converter API-->
+        <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="openCurrencyRatesPage"/>
+        <actionGroup ref="AdminImportUnsupportedCurrencyRatesActionGroup" stepKey="importCurrencyRates">
+            <argument name="rateService" value="Currency Converter API"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeWarningMessageForRHD">
+            <argument name="message" value="We can't retrieve a rate from https://free.currconv.com for RHD."/>
+            <argument name="messageType" value="warning"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeWarningMessageSaved">
+            <argument name="message" value='Click "Save" to apply the rates we found.'/>
+            <argument name="messageType" value="warning"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCurrencyRatesActionGroup" stepKey="saveCurrencyRates"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeRHDMessageAfterSave">
+            <argument name="message" value="{{AdminSaveCurrencyRatesMessageData.success}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeValidRatesSaved">
+            <argument name="message" value='Please correct the input data for "USD => RHD" rate'/>
+            <argument name="messageType" value="warning"/>
+        </actionGroup>
+        <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForEUR.value}}" stepKey="setAllowedCurrencyEURAndUSD"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="openCurrencyRatesPageAfterSetEUR"/>
+        <actionGroup ref="AdminImportCurrencyRatesActionGroup" stepKey="importCurrencyRatesAfterEUR">
+            <argument name="rateService" value="Currency Converter API"/>
+        </actionGroup>
+        <dontSee selector="{{AdminMessagesSection.warning}}" userInput="We can't retrieve a rate from https://free.currconv.com for EUR." stepKey="dontSeeWarningMessageForEUR"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessageForSaveRates">
+            <argument name="message" value='Click "Save" to apply the rates we found.'/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCurrencyRatesActionGroup" stepKey="saveCurrencyRatesAfterEUR"/>
+        <dontSee selector="{{AdminMessagesSection.warning}}" userInput='Please correct the input data for "USD => EUR" rate' stepKey="dontSeeWarningMessageCorrectForEUR"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeValidRatesEURSaved">
+            <argument name="message" value="{{AdminSaveCurrencyRatesMessageData.success}}"/>
+        </actionGroup>
+        <!--Go to the Storefront and check currency rates-->
+        <amOnPage url="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}" stepKey="openCreatedProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchToEURCurrency">
+            <argument name="currency" value="EUR"/>
+        </actionGroup>
+        <see selector="{{StorefrontCategoryMainSection.productPrice}}" userInput="€" stepKey="seeEURCurrencySymbolInPrice"/>
+        <!--Set allowed currencies greater then 10-->
+        <magentoCLI command="config:set currency/options/allow RHD,CHW,YER,ZMK,CHE,EUR,USD,AMD,RUB,DZD,ARS,AWG" stepKey="setGreaterThanTenAllowedCurrencies"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches2">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!--Import rates from Currency Converter API with currencies greater then 10-->
+        <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="openCurrencyRatesPageAfterChangeAllowed"/>
+        <actionGroup ref="AdminImportUnsupportedCurrencyRatesActionGroup" stepKey="importCurrencyRatesGreaterThen10">
+            <argument name="rateService" value="Currency Converter API"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeTooManyPairsMessage">
+            <argument name="message" value="Too many pairs. Maximum of 2 is supported for this free version."/>
+            <argument name="messageType" value="warning"/>
+        </actionGroup>
+    </test>
+</tests>

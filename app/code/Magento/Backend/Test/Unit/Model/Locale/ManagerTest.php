@@ -1,0 +1,149 @@
+<?php
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Backend\Test\Unit\Model\Locale;
+
+use Magento\Backend\App\ConfigInterface;
+use Magento\Backend\Model\Auth\Session as AuthSession;
+use Magento\Backend\Model\Locale\Manager;
+use Magento\Backend\Model\Session;
+use Magento\Framework\DataObject;
+use Magento\Framework\Locale\Resolver;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TranslateInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ManagerTest extends TestCase
+{
+    use MockCreationTrait;
+    /**
+     * @var Manager
+     */
+    private $_model;
+
+    /**
+     * @var MockObject|TranslateInterface
+     */
+    private $_translator;
+
+    /**
+     * @var Session
+     */
+    private $_session;
+
+    /**
+     * @var MockObject|AuthSession
+     */
+    private $_authSession;
+
+    /**
+     * @var MockObject|ConfigInterface
+     */
+    private $_backendConfig;
+
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        $this->objectManager = new ObjectManager($this);
+        $this->_session = $this->createMock(Session::class);
+
+        $this->_authSession = $this->createPartialMockWithReflection(
+            AuthSession::class,
+            ['getUser']
+        );
+
+        $this->_backendConfig = $this->createMock(ConfigInterface::class);
+
+        $userMock = new DataObject();
+
+        $this->_authSession->expects($this->any())->method('getUser')->willReturn($userMock);
+
+        $this->_translator = $this->createPartialMockWithReflection(
+            TranslateInterface::class,
+            ['init', 'setLocale', 'loadData', 'getData', 'getLocale', 'getTheme']
+        );
+
+        $this->_translator->expects($this->any())->method('setLocale')->willReturn($this->_translator);
+
+        $this->_translator->expects($this->any())->method('init')->willReturn(false);
+
+        $this->_model = new Manager(
+            $this->_session,
+            $this->_authSession,
+            $this->_translator,
+            $this->_backendConfig
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function switchBackendInterfaceLocaleDataProvider()
+    {
+        return ['case1' => ['locale' => 'de_DE'], 'case2' => ['locale' => 'en_US']];
+    }
+
+    /**
+     * @param string $locale
+     * @covers \Magento\Backend\Model\Locale\Manager::switchBackendInterfaceLocale
+     */
+    #[DataProvider('switchBackendInterfaceLocaleDataProvider')]
+    public function testSwitchBackendInterfaceLocale($locale)
+    {
+        $this->_model->switchBackendInterfaceLocale($locale);
+
+        $userInterfaceLocale = $this->_authSession->getUser()->getInterfaceLocale();
+        $this->assertEquals($userInterfaceLocale, $locale);
+
+        $sessionLocale = $this->_session->getSessionLocale();
+        $this->assertEquals($sessionLocale, null);
+    }
+
+    /**
+     * @covers \Magento\Backend\Model\Locale\Manager::getUserInterfaceLocale
+     */
+    public function testGetUserInterfaceLocaleDefault()
+    {
+        $locale = $this->_model->getUserInterfaceLocale();
+
+        $this->assertEquals($locale, Resolver::DEFAULT_LOCALE);
+    }
+
+    /**
+     * @covers \Magento\Backend\Model\Locale\Manager::getUserInterfaceLocale
+     */
+    public function testGetUserInterfaceLocale()
+    {
+        $this->_model->switchBackendInterfaceLocale('de_DE');
+        $locale = $this->_model->getUserInterfaceLocale();
+
+        $this->assertEquals($locale, 'de_DE');
+    }
+
+    /**
+     * @covers \Magento\Backend\Model\Locale\Manager::getUserInterfaceLocale
+     */
+    public function testGetUserInterfaceGeneralLocale()
+    {
+        $this->_backendConfig->expects($this->any())
+            ->method('getValue')
+            ->with('general/locale/code')
+            ->willReturn('test_locale');
+        $locale = $this->_model->getUserInterfaceLocale();
+        $this->assertEquals($locale, 'test_locale');
+    }
+}

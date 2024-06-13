@@ -1,0 +1,10 @@
+{
+    "tests": [
+        "actionGroupArguments",
+        "deprecatedEntityUsage",
+        "annotations",
+        "pauseActionUsage",
+        "classFileNamingCheck",
+        "testDependencies"
+    ]
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCategoriesSetStaticBlockActionGroup">
+        <arguments>
+            <argument name="block" defaultValue="_defaultBlock"/>
+        </arguments>
+        <selectOption selector="{{AdminCategoryContentSection.AddCMSBlock}}" stepKey="selectBlock" userInput="{{block.title}}"/>
+    </actionGroup>
+</actionGroups>

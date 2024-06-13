@@ -1,0 +1,27 @@
+
+File "/var/www/html/app/code/Magento/GroupedProduct/Test/Mftf/Test/AdminDeleteGroupedProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StoreFrontQuickSearchActionGroup from module(s): magento/module-search
+	 AssertStorefrontProductNotOnSearchPageActionGroup from module(s): magento/module-catalog-search
+	 AssertStorefrontNoResultsMessageOnSearchPageActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/GroupedProduct/Test/Mftf/Test/AdvanceCatalogSearchGroupedProductTest/AdvanceCatalogSearchGroupedProductByDescriptionTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchAdvancedResultMainSection from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/GroupedProduct/Test/Mftf/Test/AdvanceCatalogSearchGroupedProductTest/AdvanceCatalogSearchGroupedProductByNameTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchAdvancedResultMainSection from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/GroupedProduct/Test/Mftf/Test/AdvanceCatalogSearchGroupedProductTest/AdvanceCatalogSearchGroupedProductByPriceTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchAdvancedResultMainSection from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/GroupedProduct/Test/Mftf/Test/AdvanceCatalogSearchGroupedProductTest/AdvanceCatalogSearchGroupedProductByShortDescriptionTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchAdvancedResultMainSection from module(s): magento/module-catalog-search

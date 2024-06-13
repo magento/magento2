@@ -1,0 +1,62 @@
+<?php
+/**
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\Downloadable\Block\Adminhtml\Sales\Items\Column\Downloadable\Name $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+
+<?php
+/** @var \Magento\Catalog\Helper\Data  $catalogHelper */
+/** @var \Magento\Framework\Escaper $escaper */
+$catalogHelper = $block->getData('catalogHelper');
+if ($_item = $block->getItem()): ?>
+    <div class="product-title"><?= $escaper->escapeHtml($_item->getName()) ?></div>
+    <div class="product-sku-block">
+        <span><?= $escaper->escapeHtml(__('SKU')) ?>:</span>
+        <?= /* @noEscape */ implode('<br />', $catalogHelper->splitSku($escaper->escapeHtml($block->getSku()))) ?>
+    </div>
+    <?php if ($block->getOrderOptions()): ?>
+        <dl class="item-options">
+        <?php foreach ($block->getOrderOptions() as $_option): ?>
+            <dt><?= $escaper->escapeHtml($_option['label']) ?>:</dt>
+            <dd>
+            <?php if (isset($_option['custom_view']) && $_option['custom_view']): ?>
+                <?= $escaper->escapeHtml($_option['value']) ?>
+            <?php else: ?>
+                <?= $escaper->escapeHtml($block->truncateString($_option['value'], 55, '', $_remainder)) ?>
+                <?php if ($_remainder):?>
+                    ... <span id="<?= $escaper->escapeHtmlAttr($_id = 'id' . uniqid()) ?>">
+                        <?= $escaper->escapeHtml($_remainder) ?>
+                    </span>
+                    <?php $escapedId = /* @noEscape */ $escaper->escapeJs($_id);
+                    $scriptString = <<<script
+                        require(['prototype'], function(){
+                            $('{$escapedId}').hide();
+                            $('{$escapedId}').up().observe('mouseover', function(){ $('{$escapedId}').show();});
+                            $('{$escapedId}').up().observe('mouseout',  function(){ $('{$escapedId}').hide();});
+                        });
+script;
+                    ?>
+                    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+                <?php endif;?>
+            <?php endif;?>
+            </dd>
+        <?php endforeach; ?>
+        </dl>
+    <?php endif; ?>
+    <?php if ($block->getLinks()): ?>
+        <dl class="item-options">
+            <dt><?= $escaper->escapeHtml($block->getLinksTitle()) ?>:</dt>
+            <?php foreach ($block->getLinks()->getPurchasedItems() as $_link): ?>
+                <dd><?= $escaper->escapeHtml($_link->getLinkTitle()) ?>
+                    (<?= $escaper->escapeHtml($_link->getNumberOfDownloadsUsed() . ' / ' .
+                        ($_link->getNumberOfDownloadsBought() ? $_link->getNumberOfDownloadsBought() : __('U'))) ?>)
+                </dd>
+            <?php endforeach; ?>
+        </dl>
+    <?php endif; ?>
+    <?= $escaper->escapeHtml($_item->getDescription()) ?>
+<?php endif; ?>

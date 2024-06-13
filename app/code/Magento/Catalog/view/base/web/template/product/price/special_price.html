@@ -1,0 +1,27 @@
+<!--
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+-->
+<if args="hasSpecialPrice($row())">
+    <span class="special-price">
+        <span class="price-container"
+              css="getAdjustmentCssClasses($row())">
+            <span if="label"
+                  class="price-label"
+                  text="label"></span>
+
+            <span class="price-wrapper"
+                  css="priceWrapperCssClasses"
+                  attr="priceWrapperAttr"
+                  data-price-amount=""
+                  data-price-type="finalPrice"
+                  html="getPriceUnsanitizedHtml($row())"></span>
+
+            <each args="data: getAdjustments(), as: '$adj'">
+                <render args="$adj.getBody()"></render>
+            </each>
+        </span>
+    </span>
+</if>

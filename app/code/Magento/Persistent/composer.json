@@ -1,0 +1,33 @@
+{
+    "name": "magento/module-persistent",
+    "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~8.2.0||~8.3.0||~8.4.0",
+        "magento/framework": "*",
+        "magento/module-checkout": "*",
+        "magento/module-cron": "*",
+        "magento/module-customer": "*",
+        "magento/module-page-cache": "*",
+        "magento/module-quote": "*",
+        "magento/module-store": "*"
+    },
+    "suggest": {
+        "magento/module-login-as-customer-api": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\Persistent\\": ""
+        }
+    }
+}

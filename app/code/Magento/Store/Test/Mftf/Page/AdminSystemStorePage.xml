@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
+-->
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+    <page name="AdminSystemStorePage" url="/admin/system_store/" area="admin" module="Magento_Store">
+        <section name="AdminStoresMainActionsSection"/>
+        <section name="AdminStoresGridSection"/>
+    </page>
+</pages>

@@ -1,0 +1,20 @@
+<!--
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+-->
+<if args="isAllowed()">
+    <a class="product-item-photo"
+       attr="href: $row().url">
+        <img if="imageExists($row())"
+             class="product-image-photo"
+             loading="lazy"
+             attr="src: getImageUrl($row()),
+               alt: getLabel($row()),
+               title: getLabel($row()),
+               width: getResizedImageWidth($row()),
+               height: getResizedImageHeight($row())"/>
+    </a>
+</if>
+

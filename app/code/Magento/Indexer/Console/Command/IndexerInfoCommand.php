@@ -1,0 +1,37 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Indexer\Console\Command;
+
+use Magento\Framework\Console\Cli;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+/**
+ * Command for displaying information related to indexers.
+ */
+class IndexerInfoCommand extends AbstractIndexerCommand
+{
+    /**
+     * @inheritdoc
+     */
+    protected function configure()
+    {
+        $this->setName('indexer:info')->setDescription('Shows allowed Indexers');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $indexers = $this->getAllIndexers();
+        foreach ($indexers as $indexer) {
+            $output->writeln(sprintf('%-40s %s', $indexer->getId(), $indexer->getTitle()));
+        }
+
+        return Cli::RETURN_SUCCESS;
+    }
+}

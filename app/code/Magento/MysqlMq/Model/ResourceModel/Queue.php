@@ -1,0 +1,336 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\MysqlMq\Model\ResourceModel;
+
+use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Sql\Expression;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\MysqlMq\Model\QueueManagement;
+
+/**
+ * Resource model for queue.
+ */
+class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+{
+    /**
+     *
+     */
+    private const CHUNK_SIZE = 10000;
+
+    /**
+     * @var int|mixed
+     */
+    private int $chunkSize;
+
+    /**
+     * @param Context $context
+     * @param string|null $connectionName
+     * @param int|null $chunkSize
+     */
+    public function __construct(Context $context, $connectionName = null, ?int $chunkSize = null)
+    {
+        parent::__construct($context, $connectionName);
+        if ($chunkSize) {
+            $this->chunkSize = $chunkSize;
+        } else {
+            $this->chunkSize = self::CHUNK_SIZE;
+        }
+    }
+
+    /**
+     * Model initialization
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_init('queue', 'id');
+    }
+
+    /**
+     * Save message to 'queue_message' table.
+     *
+     * @param string $messageTopic
+     * @param string $messageBody
+     * @return int ID of the inserted record
+     */
+    public function saveMessage($messageTopic, $messageBody)
+    {
+        $this->getConnection()->insert(
+            $this->getMessageTable(),
+            ['topic_name' => $messageTopic, 'body' => $messageBody]
+        );
+        return $this->getConnection()->lastInsertId($this->getMessageTable());
+    }
+
+    /**
+     * Save messages in bulk to 'queue_message' table.
+     *
+     * @param string $messageTopic
+     * @param array $messages
+     * @return array List of IDs of inserted records
+     */
+    public function saveMessages($messageTopic, array $messages)
+    {
+        $data = [];
+        foreach ($messages as $message) {
+            $data[] = ['topic_name' => $messageTopic, 'body' => $message];
+        }
+        $rowCount = $this->getConnection()->insertMultiple($this->getMessageTable(), $data);
+        $firstId = $this->getConnection()->lastInsertId($this->getMessageTable());
+        $select = $this->getConnection()->select()
+            ->from(['qm' => $this->getMessageTable()], ['id'])
+            ->where('qm.id >= ?', $firstId)
+            ->limit($rowCount);
+        return $this->getConnection()->fetchCol($select);
+    }
+
+    /**
+     * Add associations between the specified message and queues.
+     *
+     * @param int $messageId
+     * @param string[] $queueNames
+     * @return $this
+     */
+    public function linkQueues($messageId, $queueNames)
+    {
+        return $this->linkMessagesWithQueues([$messageId], $queueNames);
+    }
+
+    /**
+     * Add associations between the specified messages and queues.
+     *
+     * @param array $messageIds
+     * @param string[] $queueNames
+     * @return $this
+     */
+    public function linkMessagesWithQueues(array $messageIds, array $queueNames)
+    {
+        $connection = $this->getConnection();
+        $queueIds = $this->getQueueIdsByNames($queueNames);
+        $data = [];
+        foreach ($messageIds as $messageId) {
+            foreach ($queueIds as $queueId) {
+                $data[] = [
+                    $queueId,
+                    $messageId,
+                    QueueManagement::MESSAGE_STATUS_NEW
+                ];
+            }
+        }
+        if (!empty($data)) {
+            $connection->insertArray(
+                $this->getMessageStatusTable(),
+                ['queue_id', 'message_id', 'status'],
+                $data
+            );
+        }
+        return $this;
+    }
+
+    /**
+     * Retrieve array of queue IDs corresponding to the specified array of queue names.
+     *
+     * @param string[] $queueNames
+     * @return int[]
+     */
+    protected function getQueueIdsByNames($queueNames)
+    {
+        $selectObject = $this->getConnection()->select();
+        $selectObject->from(['queue' => $this->getQueueTable()])
+            ->columns(['id'])
+            ->where('queue.name IN (?)', $queueNames);
+        return $this->getConnection()->fetchCol($selectObject);
+    }
+
+    /**
+     * Retrieve messages from the specified queue.
+     *
+     * @param string $queueName
+     * @param int|null $limit
+     * @return array
+     */
+    public function getMessages($queueName, $limit = null)
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()
+            ->from(
+                ['queue_message' => $this->getMessageTable()],
+                [QueueManagement::MESSAGE_TOPIC => 'topic_name', QueueManagement::MESSAGE_BODY => 'body']
+            )->join(
+                ['queue_message_status' => $this->getMessageStatusTable()],
+                'queue_message.id = queue_message_status.message_id',
+                [
+                    QueueManagement::MESSAGE_QUEUE_RELATION_ID => 'id',
+                    QueueManagement::MESSAGE_QUEUE_ID => 'queue_id',
+                    QueueManagement::MESSAGE_ID => 'message_id',
+                    QueueManagement::MESSAGE_STATUS => 'status',
+                    QueueManagement::MESSAGE_UPDATED_AT => 'updated_at',
+                    QueueManagement::MESSAGE_NUMBER_OF_TRIALS => 'number_of_trials'
+                ]
+            )->join(
+                ['queue' => $this->getQueueTable()],
+                'queue.id = queue_message_status.queue_id',
+                [QueueManagement::MESSAGE_QUEUE_NAME => 'name']
+            )->where(
+                'queue_message_status.status IN (?)',
+                [QueueManagement::MESSAGE_STATUS_NEW, QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED]
+            )->where('queue.name = ?', $queueName)
+            ->order(['queue_message_status.updated_at ASC', 'queue_message_status.id ASC']);
+
+        if ($limit) {
+            $select->limit($limit);
+        }
+
+        return $connection->fetchAll($select);
+    }
+
+    /**
+     * Delete messages if there is no queue where the message is not in status TO BE DELETED
+     *
+     * @return void
+     */
+    public function deleteMarkedMessages(): void
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()
+            ->from(['queue_message_status' => $this->getMessageStatusTable()], ['message_id'])
+            ->joinLeft(
+                ['message_status2' => $this->getMessageStatusTable()],
+                'queue_message_status.message_id = message_status2.message_id AND message_status2.status <> ' .
+                QueueManagement::MESSAGE_STATUS_TO_BE_DELETED,
+                []
+            )
+            ->where('queue_message_status.status = ?', QueueManagement::MESSAGE_STATUS_TO_BE_DELETED)
+            ->where('message_status2.message_id IS NULL')
+            ->distinct();
+
+        $messageIds = $connection->fetchCol($select);
+        foreach (array_chunk($messageIds, $this->chunkSize) as $messageIdsChunk) {
+            $connection->delete($this->getMessageTable(), ['id IN (?)' => $messageIdsChunk]);
+        }
+    }
+
+    /**
+     * Mark specified messages with 'in progress' status.
+     *
+     * @param int[] $relationIds
+     * @return int[] IDs of messages which should be taken in progress by current process.
+     */
+    public function takeMessagesInProgress($relationIds)
+    {
+        $takenMessagesRelationIds = [];
+        foreach ($relationIds as $relationId) {
+            $affectedRows = $this->getConnection()->update(
+                $this->getMessageStatusTable(),
+                ['status' => QueueManagement::MESSAGE_STATUS_IN_PROGRESS],
+                ['id = ?' => $relationId]
+            );
+            if ($affectedRows) {
+                /**
+                 * If status was set to 'in progress' by some other process (due to race conditions),
+                 * current process should not process the same message.
+                 * So message will be processed only if current process was able to change its status.
+                 */
+                $takenMessagesRelationIds[] = $relationId;
+            }
+        }
+        return $takenMessagesRelationIds;
+    }
+
+    /**
+     * Set status of message to 'retry required' and increment number of processing trials.
+     *
+     * @param int $relationId
+     * @return void
+     */
+    public function pushBackForRetry($relationId)
+    {
+        $this->getConnection()->update(
+            $this->getMessageStatusTable(),
+            [
+                'status' => QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED,
+                'number_of_trials' => new \Zend_Db_Expr('number_of_trials+1')
+            ],
+            ['id = ?' => $relationId]
+        );
+    }
+
+    /**
+     * Change message status.
+     *
+     * @param int[] $relationIds
+     * @param int $status
+     * @return void
+     */
+    public function changeStatus($relationIds, $status)
+    {
+        $this->getConnection()->update(
+            $this->getMessageStatusTable(),
+            ['status' => $status],
+            ['id IN (?)' => $relationIds]
+        );
+    }
+
+    /**
+     * Get number of pending messages in the queue
+     *
+     * @param string $queueName
+     * @return int
+     */
+    public function getMessagesCount(string $queueName): int
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()
+            ->from(
+                ['queue_message' => $this->getMessageTable()],
+            )->join(
+                ['queue_message_status' => $this->getMessageStatusTable()],
+                'queue_message.id = queue_message_status.message_id'
+            )->join(
+                ['queue' => $this->getQueueTable()],
+                'queue.id = queue_message_status.queue_id'
+            )->where(
+                'queue_message_status.status IN (?)',
+                [QueueManagement::MESSAGE_STATUS_NEW, QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED]
+            )->where('queue.name = ?', $queueName);
+
+        $select->reset(Select::COLUMNS);
+        $select->columns(new Expression('COUNT(*)'));
+
+        return (int) $connection->fetchOne($select);
+    }
+
+    /**
+     * Get name of table storing message statuses and associations to queues.
+     *
+     * @return string
+     */
+    protected function getMessageStatusTable()
+    {
+        return $this->getTable('queue_message_status');
+    }
+
+    /**
+     * Get name of table storing declared queues.
+     *
+     * @return string
+     */
+    protected function getQueueTable()
+    {
+        return $this->getTable('queue');
+    }
+
+    /**
+     * Get name of table storing message body and topic.
+     *
+     * @return string
+     */
+    protected function getMessageTable()
+    {
+        return $this->getTable('queue_message');
+    }
+}

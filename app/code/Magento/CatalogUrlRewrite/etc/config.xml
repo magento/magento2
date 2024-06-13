@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <catalog>
+            <seo>
+                <generate_category_product_rewrites>0</generate_category_product_rewrites>
+                <product_rewrite_context>store_view</product_rewrite_context>
+            </seo>
+        </catalog>
+    </default>
+</config>

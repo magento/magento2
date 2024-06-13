@@ -1,0 +1,111 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Tax\Test\Unit\Model;
+
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Tax\Api\Data\TaxRateInterface;
+use Magento\Tax\Api\Data\TaxRuleInterface;
+use Magento\Tax\Api\Data\TaxRuleSearchResultsInterface;
+use Magento\Tax\Api\TaxRateRepositoryInterface;
+use Magento\Tax\Api\TaxRuleRepositoryInterface;
+use Magento\Tax\Model\TaxRateManagement;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class TaxRateManagementTest extends TestCase
+{
+    /**
+     * @var TaxRateManagement
+     */
+    protected $model;
+
+    /**
+     * @var MockObject
+     */
+    protected $searchCriteriaBuilderMock;
+
+    /**
+     * @var MockObject
+     */
+    protected $filterBuilderMock;
+
+    /**
+     * @var MockObject
+     */
+    protected $taxRuleRepositoryMock;
+
+    /**
+     * @var MockObject
+     */
+    protected $taxRateRepositoryMock;
+
+    protected function setUp(): void
+    {
+        $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
+        $this->taxRuleRepositoryMock = $this->createMock(TaxRuleRepositoryInterface::class);
+        $this->taxRateRepositoryMock = $this->createMock(TaxRateRepositoryInterface::class);
+        $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
+        $this->model = new TaxRateManagement(
+            $this->taxRuleRepositoryMock,
+            $this->taxRateRepositoryMock,
+            $this->filterBuilderMock,
+            $this->searchCriteriaBuilderMock
+        );
+    }
+
+    public function testGetRatesByCustomerAndProductTaxClassId()
+    {
+        $customerTaxClassId = 4;
+        $productTaxClassId = 42;
+        $rateIds = [10];
+        $productFilterMock = $this->createMock(Filter::class);
+        $customerFilterMock = $this->createMock(Filter::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteria::class);
+        $searchResultsMock = $this->createMock(TaxRuleSearchResultsInterface::class);
+        $taxRuleMock = $this->createMock(TaxRuleInterface::class);
+        $taxRateMock = $this->createMock(TaxRateInterface::class);
+
+        $this->filterBuilderMock->expects($this->exactly(2))->method('setField')
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'customer_tax_class_ids' || $arg1 == 'product_tax_class_ids') {
+                    return $this->filterBuilderMock;
+                }
+            });
+
+        $this->filterBuilderMock->expects($this->exactly(2))->method('setValue')
+            ->willReturnCallback(function ($arg1) use ($customerTaxClassId, $productTaxClassId) {
+                if ($arg1 == [$customerTaxClassId] || $arg1 == [$productTaxClassId]) {
+                    return $this->filterBuilderMock;
+                }
+            });
+        $this->filterBuilderMock->expects($this->exactly(2))->method('create')->willReturnOnConsecutiveCalls(
+            $customerFilterMock,
+            $productFilterMock
+        );
+        $this->searchCriteriaBuilderMock->expects($this->exactly(2))->method('addFilters')
+            ->willReturnCallback(function ($arg1) use ($customerFilterMock, $productFilterMock) {
+                if ($arg1 == [$customerFilterMock] || $arg1 == [$productFilterMock]) {
+                    return $this->filterBuilderMock;
+                }
+            });
+        $this->searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
+        $this->taxRuleRepositoryMock->expects($this->once())->method('getList')->with($searchCriteriaMock)
+            ->willReturn($searchResultsMock);
+        $searchResultsMock->expects($this->once())->method('getItems')->willReturn([$taxRuleMock]);
+        $taxRuleMock->expects($this->once())->method('getTaxRateIds')->willReturn($rateIds);
+        $this->taxRateRepositoryMock->expects($this->once())->method('get')->with($rateIds[0])
+            ->willReturn($taxRateMock);
+        $this->assertEquals(
+            [$taxRateMock],
+            $this->model->getRatesByCustomerAndProductTaxClassId($customerTaxClassId, $productTaxClassId)
+        );
+    }
+}

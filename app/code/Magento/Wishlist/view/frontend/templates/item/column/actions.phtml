@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Actions $block */
+?>
+<?php $children = $block->getChildNames(); ?>
+<?php if ($children) : ?>
+    <div class="<?= $block->escapeHtmlAttr($block->getCssClass()) ?>">
+        <?php foreach ($children as $childName) : ?>
+            <?= /* @noEscape */ $block->getLayout()->renderElement($childName, false) ?>
+        <?php endforeach;?>
+    </div>
+<?php endif; ?>

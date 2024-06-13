@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminImportValidationMessagesSection">
+        <element name="notice" type="text" selector="#import_validation_messages .message-notice"/>
+        <element name="validationNotice" type="text" selector="//div[@id='import_validation_messages']//div[@class='message message-notice notice']"/>
+        <element name="success" type="text" selector="#import_validation_messages .message-success"/>
+        <element name="messageByType" type="text" selector="#import_validation_messages .message-{{messageType}}" parameterized="true" />
+        <element name="importErrorList" type="text" selector="#import_validation_messages .import-error-list"/>
+    </section>
+</sections>

@@ -1,0 +1,18 @@
+<!--
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+-->
+<if args="showMinimalPrice">
+    <if args="useLinkForAsLowAs">
+        <a attr="href: $row().url"
+           class="minimal-price-link"
+           html="getMinimalPriceUnsanitizedHtml($row())"></a>
+    </if>
+
+    <ifnot args="useLinkForAsLowAs">
+        <span class="minimal-price-link"
+              html="getMinimalPriceUnsanitizedHtml($row())"></span>
+    </ifnot>
+</if>

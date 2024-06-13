@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Default test suites declaration: run verification of coding standards and code integrity test suites
+ *
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
+ */
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         colors="true" columns="max"
+         beStrictAboutTestsThatDoNotTestAnything="false"
+         bootstrap="./framework/bootstrap.php">
+    <testsuites>
+        <testsuite name="Less Static Code Analysis">
+            <file>testsuite/Magento/Test/Less/LiveCodeTest.php</file>
+        </testsuite>
+        <testsuite name="HTML Static Code Analysis">
+            <file>testsuite/Magento/Test/Html/LiveCodeTest.php</file>
+        </testsuite>
+        <testsuite name="GraphQL Static Code Analysis">
+            <file>testsuite/Magento/Test/GraphQl/LiveCodeTest.php</file>
+        </testsuite>
+        <testsuite name="XML Coding Standard Verification">
+            <file>testsuite/Magento/Test/Xml/LiveCodeTest.php</file>
+        </testsuite>
+        <testsuite name="PHP Coding Standard Verification">
+            <file>testsuite/Magento/Test/Php/LiveCodeTest.php</file>
+        </testsuite>
+        <testsuite name="Code Integrity Tests">
+            <directory>testsuite/Magento/Test/Integrity</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <ini name="date.timezone" value="America/Los_Angeles"/>
+        <!-- TESTCODESTYLE_IS_FULL_SCAN - specify if full scan should be performed for test code style test -->
+        <const name="TESTCODESTYLE_IS_FULL_SCAN" value="0"/>
+        <!-- TESTS_COMPOSER_PATH - specify the path to composer binary, if a relative reference cannot be resolved -->
+        <!--<const name="TESTS_COMPOSER_PATH" value="/usr/local/bin/composer"/>-->
+    </php>
+    <extensions>
+        <bootstrap class="Qameta\Allure\PHPUnit\AllureExtension">
+            <!-- Path to config file (default is config/allure.config.php) -->
+            <parameter name="config" value="allure/allure.config.php" />
+        </bootstrap>
+    </extensions>
+</phpunit>

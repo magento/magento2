@@ -1,0 +1,201 @@
+<?php
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Backend\Test\Unit\Model\Dashboard;
+
+use Magento\Backend\Helper\Dashboard\Order as OrderHelper;
+use Magento\Backend\Model\Dashboard\Chart;
+use Magento\Backend\Model\Dashboard\Chart\Date as DateRetriever;
+use Magento\Backend\Model\Dashboard\Period;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Reports\Model\ResourceModel\Order\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
+class ChartTest extends TestCase
+{
+    /**
+     * @var Chart
+     */
+    private $model;
+
+    /**
+     * @var ObjectManager
+     */
+    private $objectManagerHelper;
+
+    /**
+     * @var DateRetriever|MockObject
+     */
+    private $dateRetrieverMock;
+
+    /**
+     * @var OrderHelper|MockObject
+     */
+    private $orderHelperMock;
+
+    /**
+     * @var Collection|MockObject
+     */
+    private $collectionMock;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
+    {
+        $this->objectManagerHelper = new ObjectManager($this);
+
+        $this->dateRetrieverMock = $this->createMock(DateRetriever::class);
+
+        $this->orderHelperMock = $this->createMock(OrderHelper::class);
+
+        $this->collectionMock = $this->createMock(Collection::class);
+        $this->orderHelperMock->method('getCollection')
+            ->willReturn($this->collectionMock);
+
+        $period = $this->objectManagerHelper->getObject(Period::class);
+
+        $this->model = $this->objectManagerHelper->getObject(
+            Chart::class,
+            [
+                'dateRetriever' => $this->dateRetrieverMock,
+                'orderHelper' => $this->orderHelperMock,
+                'period' => $period
+            ]
+        );
+    }
+
+    /**
+     * @param string $period
+     * @param string $chartParam
+     * @param array $result
+     *
+     * @return void
+     */
+    #[DataProvider('getByPeriodDataProvider')]
+    public function testGetByPeriod(string $period, string $chartParam, array $result): void
+    {
+        $this->orderHelperMock
+            ->method('setParam')
+            ->willReturnCallback(function ($arg1, $arg2) use ($period) {
+                if ($arg1 == 'period' && $arg2 == $period) {
+                    return $this;
+                } elseif ($arg1 == 'store' || $arg1=='website' || $arg1 == 'group') {
+                    return $this;
+                }
+            });
+
+        $this->dateRetrieverMock->expects($this->once())
+            ->method('getByPeriod')
+            ->with($period)
+            ->willReturn(array_map(static function ($item) {
+                return $item['x'];
+            }, $result));
+
+        $this->collectionMock->method('count')
+            ->willReturn(2);
+
+        $valueMap = [];
+        foreach ($result as $resultItem) {
+            $dataObjectMock = $this->createMock(DataObject::class);
+            $dataObjectMock->method('getData')
+                ->with($chartParam)
+                ->willReturn($resultItem['y']);
+
+            $valueMap[] = [
+                'range',
+                $resultItem['x'],
+                $dataObjectMock
+            ];
+        }
+        $this->collectionMock->method('getItemByColumnValue')
+            ->willReturnMap($valueMap);
+
+        $this->assertEquals(
+            $result,
+            $this->model->getByPeriod($period, $chartParam)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function getByPeriodDataProvider(): array
+    {
+        return [
+            [
+                Period::PERIOD_7_DAYS,
+                'revenue',
+                [
+                    [
+                        'x' => '2020-01-21',
+                        'y' => 0
+                    ],
+                    [
+                        'x' => '2020-01-22',
+                        'y' => 2
+                    ],
+                    [
+                        'x' => '2020-01-23',
+                        'y' => 0
+                    ],
+                    [
+                        'x' => '2020-01-24',
+                        'y' => 7
+                    ]
+                ]
+            ],
+            [
+                Period::PERIOD_1_MONTH,
+                'quantity',
+                [
+                    [
+                        'x' => '2020-01-21',
+                        'y' => 0
+                    ],
+                    [
+                        'x' => '2020-01-22',
+                        'y' => 2
+                    ],
+                    [
+                        'x' => '2020-01-23',
+                        'y' => 0
+                    ],
+                    [
+                        'x' => '2020-01-24',
+                        'y' => 7
+                    ]
+                ]
+            ],
+            [
+                Period::PERIOD_1_YEAR,
+                'quantity',
+                [
+                    [
+                        'x' => '2020-01',
+                        'y' => 0
+                    ],
+                    [
+                        'x' => '2020-02',
+                        'y' => 2
+                    ],
+                    [
+                        'x' => '2020-03',
+                        'y' => 0
+                    ],
+                    [
+                        'x' => '2020-04',
+                        'y' => 7
+                    ]
+                ]
+            ]
+        ];
+    }
+}

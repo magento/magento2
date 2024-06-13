@@ -1,0 +1,23 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * Product media data template
+ *
+ * @var $block \Magento\ProductVideo\Block\Product\View\Gallery
+ */
+?>
+<script type="text/x-magento-init">
+    {
+        "[data-gallery-role=gallery-placeholder]": {
+            "Magento_ProductVideo/js/fotorama-add-video-events": {
+                "videoData": <?= /* @noEscape */ $block->getMediaGalleryDataJson() ?>,
+                "videoSettings": <?= /* @noEscape */ $block->getVideoSettingsJson() ?>,
+                "optionsVideoData": <?= /* @noEscape */ $block->getOptionsMediaGalleryDataJson() ?>
+            }
+        }
+    }
+</script>

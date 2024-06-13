@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminChangeFlatRateShippingMethodStatusActionGroup">
+        <arguments>
+            <argument name="status" type="string" defaultValue="1"/>
+        </arguments>
+        <conditionalClick selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTab}}" dependentSelector="{{AdminShippingMethodFlatRateSection.carriersFlatRateActive}}" visible="false" stepKey="expandTab"/>
+        <selectOption selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateActive}}" userInput="{{status}}" stepKey="changeFlatRateMethodStatus"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfigs"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

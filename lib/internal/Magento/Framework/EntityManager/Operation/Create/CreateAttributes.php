@@ -1,0 +1,64 @@
+<?php
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Framework\EntityManager\Operation\Create;
+
+use Magento\Framework\EntityManager\TypeResolver;
+use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Framework\EntityManager\Operation\AttributePool;
+
+/**
+ * Class CreateAttributes
+ */
+class CreateAttributes
+{
+    /**
+     * @var TypeResolver
+     */
+    private $typeResolver;
+
+    /**
+     * @var HydratorPool
+     */
+    private $hydratorPool;
+
+    /**
+     * @var AttributePool
+     */
+    private $attributePool;
+
+    /**
+     * @param TypeResolver $typeResolver
+     * @param HydratorPool $hydratorPool
+     * @param AttributePool $attributePool
+     */
+    public function __construct(
+        TypeResolver $typeResolver,
+        HydratorPool $hydratorPool,
+        AttributePool $attributePool
+    ) {
+        $this->typeResolver = $typeResolver;
+        $this->hydratorPool = $hydratorPool;
+        $this->attributePool = $attributePool;
+    }
+
+    /**
+     * @param object $entity
+     * @param array $arguments
+     * @return object
+     */
+    public function execute($entity, $arguments = [])
+    {
+        $entityType = $this->typeResolver->resolve($entity);
+        $hydrator = $this->hydratorPool->getHydrator($entityType);
+        $entityData = array_merge($hydrator->extract($entity), $arguments);
+        $actions = $this->attributePool->getActions($entityType, 'create');
+        foreach ($actions as $action) {
+            $action->execute($entityType, $entityData, $arguments);
+        }
+        $entity = $hydrator->hydrate($entity, $entityData);
+        return $entity;
+    }
+}

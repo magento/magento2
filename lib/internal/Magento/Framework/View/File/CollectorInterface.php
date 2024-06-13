@@ -1,0 +1,32 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Framework\View\File;
+
+use Magento\Framework\View\Design\ThemeInterface;
+
+/**
+ * Interface of locating view files in the file system
+ *
+ * @api
+ * @since 100.0.2
+ */
+interface CollectorInterface
+{
+    /**
+     * Retrieve instances of view files
+     *
+     * File path supports the following glob patterns which are translated into regular expressions:
+     *   1. ? -> [^\]
+     *   2. * -> [^\]*
+     *   3. [...], [!...] -> [...], [^...]
+     *   4. {..,..,...} -> (?:..|..|...)
+     *
+     * @param ThemeInterface $theme Theme that defines the design context
+     * @param string $filePath
+     * @return \Magento\Framework\View\File[]
+     */
+    public function getFiles(ThemeInterface $theme, $filePath);
+}

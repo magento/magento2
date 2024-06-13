@@ -1,0 +1,54 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Customer\Model\ResourceModel\Address\Attribute\Backend;
+
+/**
+ * Address region attribute backend
+ */
+class Region extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+{
+    /**
+     * @var \Magento\Directory\Model\RegionFactory
+     */
+    protected $_regionFactory;
+
+    /**
+     * @param \Magento\Directory\Model\RegionFactory $regionFactory
+     */
+    public function __construct(\Magento\Directory\Model\RegionFactory $regionFactory)
+    {
+        $this->_regionFactory = $regionFactory;
+    }
+
+    /**
+     * Prepare object for save
+     *
+     * @param \Magento\Framework\DataObject $object
+     * @return $this
+     */
+    public function beforeSave($object)
+    {
+        $region = $object->getData('region');
+        if (is_numeric($region)) {
+            $regionModel = $this->_createRegionInstance();
+            $regionModel->load($region);
+            if ($regionModel->getId() && $object->getCountryId() == $regionModel->getCountryId()) {
+                $object->setRegionId($regionModel->getId())->setRegion($regionModel->getName());
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Return new region object
+     *
+     * @return \Magento\Directory\Model\Region
+     */
+    protected function _createRegionInstance()
+    {
+        return $this->_regionFactory->create();
+    }
+}

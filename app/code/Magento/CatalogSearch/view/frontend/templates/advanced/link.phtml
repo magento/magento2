@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
+ /** @var \Magento\CatalogSearch\Helper\Data $helper */
+$helper = $this->helper(\Magento\CatalogSearch\Helper\Data::class);
+?>
+<div class="nested">
+    <a class="action advanced" href="<?= $block->escapeUrl($helper->getAdvancedSearchUrl()) ?>" data-action="advanced-search">
+        <?= $block->escapeHtml(__('Advanced Search')) ?>
+    </a>
+</div>

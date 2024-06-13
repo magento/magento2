@@ -1,0 +1,114 @@
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+
+.customer_form_areas_address_address_customer_address_update_modal_update_customer_address_form_loader {
+    .admin__field {
+        .admin__field {
+            .admin__field-label {
+                background: none;
+            }
+        }
+    }
+}
+
+.customer-address-form {
+
+    *,
+    *:after,
+    *:before {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    address {
+        font-style: normal;
+    }
+
+    .customer-default-address-wrapper {
+        align-items: flex-start;
+        display: flex;
+        float: left;
+        position: relative;
+        width: 50%;
+
+        .action-additional {
+            margin: 2px 0 0 8px;
+        }
+    }
+
+    .customer_form_areas_address_address_customer_address_listing {
+        clear: both;
+    }
+
+    .add-new-address-button {
+        clear: both;
+        float: right;
+        margin-bottom: 30px;
+        position: relative;
+    }
+
+    .address-information {
+        float: left;
+        margin-bottom: 20px;
+
+        address {
+            float: left;
+
+            .address_caption {
+                font-size: 18px;
+                font-weight: bold;
+                margin-bottom: 16px;
+            }
+        }
+    }
+}
+
+.customer-newsletter-fieldset.admin__fieldset {
+    &.multi-website {
+        > .admin__field > .admin__field-control {
+            width: ~'calc(100% * 0.75 - 30px)';
+
+            table {
+                th.subscriber-status {
+                    text-align: center;
+                }
+
+                td {
+                    &.subscriber-status {
+                        text-align: center;
+                    }
+
+                    select.admin__control-select {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+& when (@media-target = 'all') {
+
+    @media all and (min-width: @screen__l) {
+        .customer-index-edit {
+            .page-actions-buttons {
+                button {
+                    font-size: 1rem;
+                }
+            }
+        }
+    }
+
+    @media all and (min-width: @screen__xl) {
+        .customer-index-edit {
+            .page-actions-buttons {
+                button {
+                    font-size: 1.6rem;
+                }
+            }
+        }
+    }
+}

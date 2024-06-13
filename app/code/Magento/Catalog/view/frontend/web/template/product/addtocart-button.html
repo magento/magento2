@@ -1,0 +1,24 @@
+<!--
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+-->
+<if args="isAllowed()">
+    <if args="isSalable($row())">
+        <button class="action tocart primary"
+                attr="'data-mage-init': getDataMageInit($row()),
+                      'data-post': getDataPost($row()),
+                       title: getLabel()"
+                type="button">
+            <span text="getLabel()"></span>
+        </button>
+    </if>
+
+    <if args="isAvailable($row()) === false">
+        <div class="stock unavailable">
+            <text args="$t('Availability')"></text>
+            <span translate="'Out of stock'"></span>
+        </div>
+    </if>
+</if>

@@ -1,0 +1,18 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/* @var $block \Magento\Sales\Block\Order\Creditmemo */
+?>
+<div class="order-details-items creditmemo">
+    <?= $block->getChildHtml('creditmemo_items') ?>
+    <div class="actions-toolbar">
+        <div class="secondary">
+            <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
+                <span><?= $block->escapeHtml($block->getBackTitle()) ?></span>
+            </a>
+        </div>
+    </div>
+</div>

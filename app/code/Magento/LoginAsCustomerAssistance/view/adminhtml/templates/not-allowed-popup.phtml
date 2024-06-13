@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+/** @var \Magento\LoginAsCustomerAssistance\Block\Adminhtml\NotAllowedPopup $block */
+?>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout();?>
+        }
+    }
+ </script>

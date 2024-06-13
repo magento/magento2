@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * Creates simple Catalog Rule with the following data:
+ * active, applied to all products, without time limits, with 10% off for Not Logged In Customers
+ */
+
+/** @var $banner \Magento\CatalogRule\Model\Rule */
+$catalogRule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\CatalogRule\Model\Rule::class
+);
+
+$catalogRule
+    ->setIsActive(1)
+    ->setName('Test Catalog Rule')
+    ->setCustomerGroupIds(\Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID)
+    ->setDiscountAmount(10)
+    ->setWebsiteIds([0 => 1])
+    ->setSimpleAction('by_percent')
+    ->setStopRulesProcessing(false)
+    ->setSortOrder(0)
+    ->setSubIsEnable(0)
+    ->setSubDiscountAmount(0)
+    ->save();
+
+/** @var \Magento\CatalogRule\Model\Indexer\IndexBuilder $indexBuilder */
+$indexBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\CatalogRule\Model\Indexer\IndexBuilder::class);
+$indexBuilder->reindexFull();
+sleep(1);

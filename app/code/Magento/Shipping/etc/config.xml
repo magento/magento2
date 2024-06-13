@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <shipping>
+            <origin>
+                <country_id>US</country_id>
+                <postcode>90034</postcode>
+                <region_id>12</region_id>
+            </origin>
+            <shipping_policy>
+                <enable_shipping_policy>0</enable_shipping_policy>
+            </shipping_policy>
+        </shipping>
+    </default>
+</config>

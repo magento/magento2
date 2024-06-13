@@ -1,0 +1,39 @@
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+define([
+    'jquery'
+], function ($) {
+    'use strict';
+
+    var selector = '[data-role="spinner"]',
+        spinner = $(selector);
+
+    return {
+        /**
+         * Show spinner.
+         */
+        show: function () {
+            spinner.show();
+        },
+
+        /**
+         * Hide spinner.
+         */
+        hide: function () {
+            spinner.hide();
+        },
+
+        /**
+         * Get spinner by selector.
+         *
+         * @param {String} id
+         * @return {jQuery}
+         */
+        get: function (id) {
+            return $(selector + '[data-component="' + id + '"]');
+        }
+    };
+});

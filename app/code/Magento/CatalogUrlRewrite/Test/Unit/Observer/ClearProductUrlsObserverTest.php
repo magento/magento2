@@ -1,0 +1,131 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
+
+use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
+use Magento\CatalogUrlRewrite\Observer\ClearProductUrlsObserver;
+use Magento\Framework\Event\Test\Unit\Helper\EventTestHelper;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\UrlRewrite\Model\UrlPersistInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ClearProductUrlsObserverTest extends TestCase
+{
+    /**
+     * @var ClearProductUrlsObserver
+     */
+    protected $clearProductUrlsObserver;
+
+    /**
+     * @var UrlPersistInterface|MockObject
+     */
+    protected $urlPersist;
+
+    /**
+     * @var Observer|MockObject
+     */
+    protected $observer;
+
+    /**
+     * @var Event|MockObject
+     */
+    protected $event;
+
+    /**
+     * @var ObjectManagerHelper
+     */
+    protected $objectManagerHelper;
+
+    /**
+     * Test products returned by getBunch method of event object.
+     *
+     * @var array
+     */
+    protected $products = [
+        [
+            'sku' => 'sku',
+            'url_key' => 'value1',
+        ],
+        [
+            'sku' => 'sku3',
+            'url_key' => 'value3',
+        ],
+        [
+            'sku' => 'SKU5',
+            'url_key' => 'value5',
+        ]
+    ];
+    /**
+     * @var SkuStorage|MockObject
+     */
+    private $skuStorage;
+
+    /**
+     * @SuppressWarnings(PHPMD.TooManyFields)
+     */
+    protected function setUp(): void
+    {
+        $objectManager = new ObjectManagerHelper($this);
+        $this->skuStorage = $this->createMock(SkuStorage::class);
+        $this->event = $objectManager->createPartialMockWithReflection(
+            EventTestHelper::class,
+            ['getBunch']
+        );
+        $this->event->expects($this->once())
+            ->method('getBunch')
+            ->willReturn($this->products);
+        $this->observer = $this->createPartialMock(
+            Observer::class,
+            ['getEvent']
+        );
+        $this->observer->expects($this->exactly(1))
+            ->method('getEvent')
+            ->willReturn($this->event);
+        $this->urlPersist = $this->createMock(UrlPersistInterface::class);
+
+        $this->clearProductUrlsObserver = new ClearProductUrlsObserver($this->urlPersist, $this->skuStorage);
+    }
+
+    /**
+     * Test for clearProductUrls()
+     */
+    public function testClearProductUrls()
+    {
+        $oldSKus = [
+            'sku' => ['entity_id' => 1],
+            'sku5' => ['entity_id' => 5],
+        ];
+
+        $this->skuStorage->method('has')
+            ->willReturnCallback(function ($sku) use ($oldSKus) {
+                return isset($oldSKus[strtolower($sku)]);
+            });
+
+        $this->skuStorage->method('get')
+            ->willReturnCallback(function ($sku) use ($oldSKus) {
+                return $oldSKus[strtolower($sku)] ?? null;
+            });
+
+        $this->urlPersist->expects($this->once())
+            ->method('deleteByData')
+            ->with([
+                'entity_id' => [1, 5],
+                'entity_type' => 'product'
+            ]);
+
+        $this->clearProductUrlsObserver->execute($this->observer);
+    }
+}

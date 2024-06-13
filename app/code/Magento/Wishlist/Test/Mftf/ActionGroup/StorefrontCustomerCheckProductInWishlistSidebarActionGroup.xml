@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCustomerCheckProductInWishlistSidebarActionGroup">
+        <annotations>
+            <description>Validates that the provided Product details (Name) are present in the Wish List side bar menu.</description>
+        </annotations>
+        <arguments>
+            <argument name="productVar"/>
+        </arguments>
+        <wait time="10" stepKey="waitForMessageToPopulate"/>
+        <scrollTo selector="{{StorefrontCustomerWishlistSidebarSection.WishlistBlock}}" stepKey="scrollToTopOfPage"/>
+        <click selector="{{StorefrontCustomerWishlistSidebarSection.ProductPriceByName(productVar.name)}}" stepKey="clickProductPrize"/>
+        <waitForElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductTitleByName(productVar.name)}}" time="30" stepKey="assertWishlistSidebarProductName"/>
+        <waitForText userInput="${{productVar.price}}.00" selector="{{StorefrontCustomerWishlistSidebarSection.ProductPriceByName(productVar.name)}}" stepKey="AssertWishlistSidebarProductPrice"/>
+        <waitForElementVisible selector="{{StorefrontCustomerWishlistSidebarSection.ProductAddToCartByName(productVar.name)}}" stepKey="AssertWishlistSidebarAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontCustomerWishlistSidebarSection.ProductImageByName(productVar.name)}}" stepKey="AssertWishlistSidebarProductImage"/>
+    </actionGroup>
+</actionGroups>

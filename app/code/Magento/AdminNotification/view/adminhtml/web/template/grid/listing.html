@@ -1,0 +1,32 @@
+<!--
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+-->
+<div id="system_messages" class="message-system" collapsible visible="totalRecords">
+    <div class="message-system-inner" outerClick="fixLoaderHeight.bind($data, true)">
+        <div class="message-system-short">
+            <button class="message-system-action-dropdown" toggleCollapsible>
+                <span>
+                    <translate args="'System Messages'"></translate>:
+                    <text args="totalRecords"></text>
+                </span>
+            </button>
+            <div class="message-system-short-wrapper" if="rows[0]" repeat="foreach: [rows[0]], item: '$row'" visible="!$collapsible.opened()">
+                <fastForEach args="data: getVisible(), as: '$col'" >
+                    <render args="$col.getBody()"></render>
+                </fastForEach>
+            </div>
+        </div>
+        <div class="message-system-collapsible">
+            <ul class="message-system-list">
+                <li repeat="foreach: rows, item: '$row'">
+                    <fastForEach args="data: getVisible(), as: '$col'" >
+                        <render args="$col.getBody()"></render>
+                    </fastForEach>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

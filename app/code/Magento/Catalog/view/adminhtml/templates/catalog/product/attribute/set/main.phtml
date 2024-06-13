@@ -1,0 +1,156 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var $block Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<div class="attribute-set">
+
+    <div class="admin__data-grid-loading-mask"
+         data-role="spinner">
+        <div class="spinner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </div>
+    </div>
+    <div class="edit-attribute-set attribute-set-col">
+        <?= $block->getSetFormHtml() ?>
+        <?php $scriptString = <<<script
+            require([
+                "jquery",
+                "mage/mage"
+            ], function(jQuery){
+
+                jQuery('#set-prop-form').mage('validation', {errorClass: 'mage-error'});
+
+            });
+script;
+        ?>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+    </div>
+    <div class="attribute-set-col fieldset-wrapper">
+        <div class="fieldset-wrapper-title">
+            <span class="title"><?= $escaper->escapeHtml(__('Groups')) ?></span>
+        </div>
+        <?php if (!$block->getIsReadOnly()):?>
+            <?= /* @noEscape */ $block->getAddGroupButton() ?>&nbsp;
+            <?= /* @noEscape */ $block->getDeleteGroupButton() ?>
+            <p class="note-block"><?= $escaper->escapeHtml(__('Double click on a group to rename it.')) ?></p>
+        <?php endif; ?>
+
+        <?= $block->getSetsFilterHtml() ?>
+        <?= $block->getGroupTreeHtml() ?>
+    </div>
+    <div class="attribute-set-col fieldset-wrapper">
+        <div class="fieldset-wrapper-title">
+            <span class="title"><?= $escaper->escapeHtml(__('Unassigned Attributes')) ?></span>
+        </div>
+        <div id="tree-div2" class="attribute-set-tree"></div>
+        <?php
+        $readOnly = $block->getIsReadOnly() ? 'true' : 'false';
+        $saveUrl = $escaper->escapeJs($block->getMoveUrl());
+        $groupTree = /* @noEscape */ $block->getGroupTreeJson();
+        $attributeTreeJson = /* @noEscape */ $block->getAttributeTreeJson();
+        $newGroupModalTitle = $escaper->escapeJs($escaper->escapeHtml(__('Add New Group')));
+        $newGroupModalContent = $escaper->escapeJs($escaper->escapeHtml(__('Please enter a new group name.')));
+        $cannotSaveAlert = $escaper->escapeJs(__('Sorry, we\'re unable to complete this request.'));
+        $cannotUnassignAttributeAlert = $escaper->escapeJs(__('You can\'t remove attributes from this attribute set.'));
+        $cannotDeleteGroupAlert =  $escaper->escapeJs(
+            __('This group contains system attributes. Please move system attributes to another group and try again.')
+        );
+        $groupNotSelectedAlert = $escaper->escapeJs(__('Please select a node.'));
+        $groupNameAlreadyExistsAlert = $escaper->escapeJs(__('An attribute group named "/name/" already exists.'));
+        $emptyText = $escaper->escapeJs(__('Empty'));
+        $configJson = <<<JSON
+{
+    "saveUrl": "$saveUrl",
+    "readOnly": $readOnly,
+    "tree": {
+        "assigned": {
+            "selector": "#tree-div1",
+            "placeholder": false,
+            "data": $groupTree
+        },
+        "unassigned": {
+            "selector": "#tree-div2",
+            "placeholder": {
+                "text": "$emptyText"
+            },
+            "data": $attributeTreeJson
+        }
+    },
+    "newGroupModal": {
+        "title": "$newGroupModalTitle",
+        "content": "$newGroupModalContent"
+    },
+    "errors": {
+        "save": {
+            "message": "$cannotSaveAlert"
+        },
+        "unassign": {
+            "message": "$cannotUnassignAttributeAlert"
+        },
+        "delete_group": {
+            "message": "$cannotDeleteGroupAlert"
+        },
+        "group_not_selected": {
+            "message": "$groupNotSelectedAlert"
+        },
+        "validation": {
+            "isUnique": {
+                "message": "$groupNameAlreadyExistsAlert",
+                "bindings": {
+                    "/name/": "value"
+                }
+            }
+        }
+    }
+}
+JSON;
+
+        $scriptString = <<<JS
+define(
+    'tree-panel',
+    ['jquery', 'Magento_Catalog/js/product/set/editor', 'prototype', 'domReady!'],
+    function(jQuery, Editor) {
+        window.editSet = new Editor($configJson);
+
+        window.editSet.beforeSave = window.editSet.beforeSave.wrap(function(_super) {
+            if ($('messages')) {
+                $('messages').update();
+            } else {
+                jQuery('.page-main-actions').after(jQuery('<div/>').attr('id', 'messages'));
+            }
+            if(!jQuery('#set-prop-form').valid()) {
+                return;
+            }
+            this.req.attribute_set_name = $('attribute_set_name').value;
+            if (!this.req.form_key && window.FORM_KEY) {
+                this.req.form_key = window.FORM_KEY;
+            }
+            _super();
+        });
+
+        window.editSet.afterSave = window.editSet.afterSave.wrap(function(_super, response) {
+            if (response.error || response.message) {
+                jQuery('#messages').html(response.message);
+            } else {
+                _super(response);
+            }
+        });
+
+        jQuery("[data-role='spinner']").hide();
+
+        return window.editSet;
+    }
+);
+require(['tree-panel']);
+JS;
+        ?>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+    </div>
+</div>

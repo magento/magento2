@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+
+<div class="admin__page-section-title">
+    <span class="title"><?= $block->escapeHtml($block->getHeaderText()) ?></span>
+    <?php if ($block->getButtonsHtml()) : ?>
+        <div class="actions"><?= $block->getButtonsHtml() ?></div>
+    <?php endif; ?>
+</div>
+
+<?= $block->getChildHtml('', true) ?>

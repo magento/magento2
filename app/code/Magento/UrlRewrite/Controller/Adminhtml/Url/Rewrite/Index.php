@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
+
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implements HttpGetActionInterface
+{
+    /**
+     * Show URL rewrites index page
+     *
+     * @return void
+     */
+    public function execute()
+    {
+        $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_UrlRewrite::urlrewrite');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('URL Rewrites'));
+        $this->_view->renderLayout();
+    }
+}

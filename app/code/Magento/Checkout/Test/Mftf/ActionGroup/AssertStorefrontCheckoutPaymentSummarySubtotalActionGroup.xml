@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontCheckoutPaymentSummarySubtotalActionGroup">
+        <arguments>
+            <argument name="orderSubtotal" type="string"/>
+        </arguments>
+        <waitForPageLoad time="30" stepKey="waitForCartFullyLoaded"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" time="30" stepKey="waitForOrderSummaryBlock"/>
+        <see selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" userInput="{{orderSubtotal}}" stepKey="seeCorrectSubtotal"/>
+    </actionGroup>
+</actionGroups>

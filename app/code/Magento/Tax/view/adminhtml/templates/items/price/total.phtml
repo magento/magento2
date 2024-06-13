@@ -1,0 +1,13 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+<?php
+/** @var \Magento\Tax\Block\Adminhtml\Items\Price\Renderer $block */
+
+$_item = $block->getItem();
+?>
+
+<?= /* @noEscape */ $block->displayPrices($block->getBaseTotalAmount($_item), $block->getTotalAmount($_item)) ?>

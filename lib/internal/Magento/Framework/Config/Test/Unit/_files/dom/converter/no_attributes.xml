@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+<root>
+    <node_one>
+        <subnode>Value1</subnode>
+    </node_one>
+    <node_two>
+        <subnode>Value2</subnode>
+        <subnode>Value3</subnode>
+    </node_two>
+    <node_three>Value4</node_three>
+</root>

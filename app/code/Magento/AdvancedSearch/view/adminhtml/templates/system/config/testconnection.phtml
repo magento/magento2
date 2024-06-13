@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<button class="scalable" type="button" id="<?= $block->getHtmlId() ?>" data-mage-init='{"testConnection":{
+    "url": "<?= $escaper->escapeUrl($block->getAjaxUrl()) ?>",
+    "elementId": "<?= $block->getHtmlId() ?>",
+    "successText": "<?= $escaper->escapeHtmlAttr(__('Successful! Test again?')) ?>",
+    "failedText": "<?= $escaper->escapeHtmlAttr(__('Connection failed! Test again?')) ?>",
+    "fieldMapping": "<?= /* @noEscape */ $block->getFieldMapping() ?>"}, "validation": {}}'>
+    <span id="<?= $block->getHtmlId() ?>_result"><?= $escaper->escapeHtml($block->getButtonLabel()) ?></span>
+</button>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CategoryContentSection">
+        <element name="SelectFromGalleryBtn" type="button" selector="//label[text()='Select from Gallery']"/>
+        <element name="ImagePlaceHolder" type="button" selector=".file-uploader-summary.product-image-wrapper"/>
+        <element name="Upload" type="button" selector=".file-uploader-area input"/>
+    </section>
+</sections>

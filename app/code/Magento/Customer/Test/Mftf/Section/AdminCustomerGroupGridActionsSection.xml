@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2018 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerGroupGridActionsSection">
+        <element name="selectButton" type="button" selector="//div[text()='{{groupName}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell data-action-position']//button[text()='Select']" timeout="30" parameterized="true"/>
+        <element name="deleteAction" type="button" selector="//div[text()='{{groupName}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell data-action-position']//a[text()='Delete']" timeout="30" parameterized="true"/>
+        <element name="actionsMenuButton" type="text" selector="//div[text()='{{groupName}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//a[text()='{{selectItem}}']" timeout="30" parameterized="true"/>
+    </section>
+</sections>

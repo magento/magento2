@@ -1,0 +1,79 @@
+{
+    "cms_block": {
+        "column": {
+            "block_id": true,
+            "title": true,
+            "identifier": true,
+            "content": true,
+            "creation_time": true,
+            "update_time": true,
+            "is_active": true
+        },
+        "index": {
+            "CMS_BLOCK_TITLE_IDENTIFIER_CONTENT": true,
+            "CMS_BLOCK_IDENTIFIER": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "cms_block_store": {
+        "column": {
+            "block_id": true,
+            "store_id": true
+        },
+        "index": {
+            "CMS_BLOCK_STORE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CMS_BLOCK_STORE_BLOCK_ID_CMS_BLOCK_BLOCK_ID": true,
+            "CMS_BLOCK_STORE_STORE_ID_STORE_STORE_ID": true
+        }
+    },
+    "cms_page": {
+        "column": {
+            "page_id": true,
+            "title": true,
+            "page_layout": true,
+            "meta_keywords": true,
+            "meta_description": true,
+            "identifier": true,
+            "content_heading": true,
+            "content": true,
+            "creation_time": true,
+            "update_time": true,
+            "is_active": true,
+            "sort_order": true,
+            "layout_update_xml": true,
+            "custom_theme": true,
+            "custom_root_template": true,
+            "custom_layout_update_xml": true,
+            "custom_theme_from": true,
+            "custom_theme_to": true,
+            "meta_title": true,
+            "layout_update_selected": true
+        },
+        "index": {
+            "CMS_PAGE_IDENTIFIER": true,
+            "CMS_PAGE_TITLE_META_KEYWORDS_META_DESCRIPTION_IDENTIFIER_CONTENT": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "cms_page_store": {
+        "column": {
+            "page_id": true,
+            "store_id": true
+        },
+        "index": {
+            "CMS_PAGE_STORE_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CMS_PAGE_STORE_PAGE_ID_CMS_PAGE_PAGE_ID": true,
+            "CMS_PAGE_STORE_STORE_ID_STORE_STORE_ID": true
+        }
+    }
+}

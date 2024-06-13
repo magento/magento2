@@ -1,0 +1,51 @@
+<?php
+/**
+ * Application configuration object. Used to access configuration when application is initialized and installed.
+ *
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Framework\App\Config;
+
+class ConfigSourceAggregated implements ConfigSourceInterface
+{
+    /**
+     * @var ConfigSourceInterface[]
+     */
+    private $sources;
+
+    /**
+     * ConfigSourceAggregated constructor.
+     *
+     * @param array $sources
+     */
+    public function __construct(array $sources = [])
+    {
+        $this->sources = $sources;
+        uasort($this->sources, function ($firstItem, $secondItem) {
+            return $firstItem['sortOrder'] <=> $secondItem['sortOrder'];
+        });
+    }
+
+    /**
+     * Retrieve aggregated configuration from all available sources.
+     *
+     * @param string $path
+     * @return string|array
+     */
+    public function get($path = '')
+    {
+        $data = [];
+        foreach ($this->sources as $sourceConfig) {
+            /** @var ConfigSourceInterface $source */
+            $source = $sourceConfig['source'];
+            $configData = $source->get($path);
+            if (!is_array($configData)) {
+                $data = $configData;
+            } elseif (!empty($configData)) {
+                $data = array_replace_recursive(is_array($data) ? $data : [], $configData);
+            }
+        }
+        return $data;
+    }
+}

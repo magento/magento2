@@ -1,0 +1,33 @@
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+ <div class="field-tooltip toggle">
+
+    <!-- ko if: (tooltip.link)-->
+    <a class="field-tooltip-action action-help"
+       target="_blank"
+       data-toggle="dropdown"
+       data-bind="attr: {href: tooltip.link}, mageInit: {'dropdown':{'activeClass': '_active'}}"></a>
+     <!-- /ko -->
+
+     <span class="label" data-bind="attr: { id: $data.tooltipId ? $data.tooltipId : 'tooltip-label' }"><!-- ko i18n: 'Tooltip' --><!-- /ko --></span>
+     <!-- ko if: (!tooltip.link)-->
+         <span
+             class="field-tooltip-action action-help"
+             tabindex="0"
+             data-toggle="dropdown"
+             data-bind="
+                mageInit: {'dropdown':{'activeClass': '_active', 'parent': '.field-tooltip.toggle'}},
+                attr: { 'aria-labelledby': $data.tooltipId ? $data.tooltipId : 'tooltip-label' }
+            "
+         >
+         </span>
+     <!-- /ko -->
+
+     <div class="field-tooltip-content"
+         data-target="dropdown" translate="tooltip.description">
+    </div>
+</div>

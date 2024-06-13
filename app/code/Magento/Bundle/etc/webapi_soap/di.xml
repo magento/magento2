@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Helper\Product\ConfigurationPool">
+        <arguments>
+            <argument name="instancesByType" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\Bundle\Helper\Catalog\Product\Configuration</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Bundle\Api\ProductLinkManagementInterface">
+        <plugin name="reindex_after_add_child_by_sku" type="Magento\Bundle\Plugin\Api\ProductLinkManagement\ReindexAfterAddChildBySkuPlugin"/>
+        <plugin name="reindex_after_remove_child" type="Magento\Bundle\Plugin\Api\ProductLinkManagement\ReindexAfterRemoveChildPlugin"/>
+    </type>
+</config>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="customer_form_register">
+            <container name="fieldset.create.info.additional" as="fieldset_create_info_additional"/>
+        </referenceBlock>
+        <referenceContainer name="fieldset.create.info.additional">
+            <block name="login_as_customer_opt_in_create"
+                   template="Magento_LoginAsCustomerAssistance::shopping-assistance.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">
+                        Magento\LoginAsCustomerAssistance\ViewModel\ShoppingAssistanceViewModel
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

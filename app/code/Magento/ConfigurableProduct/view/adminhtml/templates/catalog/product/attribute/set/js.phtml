@@ -1,0 +1,53 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Escaper $escaper */
+
+$cannotDeleteGroupAlert = $escaper->escapeJs(
+    __(
+        'This group contains attributes used in configurable products. '
+        . 'Please move these attributes to another group and try again.'
+    )
+);
+
+$cannotUnassignAttributeAlert = $escaper->escapeJs(
+    __('This attribute is used in configurable products. You cannot remove it from the attribute set.')
+);
+?>
+
+<?php $scriptString = <<<script
+
+require([
+    "Magento_Ui/js/modal/alert",
+    "tree-panel"
+], function(alert){
+function check(tree, data) {
+    if (tree.isGroup(data.node) && tree.find(data.node, [{is_configurable: 1}])) {
+        alert({
+            content: '$cannotDeleteGroupAlert'
+        });
+        return false;
+    } else if (tree.getOriginalNode(data.node).is_configurable) {
+        alert({
+            content: '$cannotUnassignAttributeAlert'
+        });
+        return false;
+    } else {
+        return true;
+    }
+}
+editSet.beforeUnassign = editSet.beforeUnassign.wrap(function(original, tree, data) {
+    return check.call(this, this.assigned, data) && original(tree, data);
+});
+editSet.beforeDelete = editSet.beforeDelete.wrap(function(original, tree, data) {
+    return check.call(this, tree, data) && original(tree, data);
+});
+});
+script;
+?>
+<?= /* @noEscape */
+$secureRenderer->renderTag('script', [], $scriptString, false) ?>

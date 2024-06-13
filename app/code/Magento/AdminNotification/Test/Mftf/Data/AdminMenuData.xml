@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminMenuSystem">
+        <data key="pageTitle">System</data>
+        <data key="title">Notifications</data>
+        <data key="dataUiId">magento-backend-system</data>
+    </entity>
+    <entity name="AdminMenuSystemOtherSettingsNotifications">
+        <data key="pageTitle">Notifications</data>
+        <data key="title">Notifications</data>
+        <data key="dataUiId">magento-adminnotification-system-adminnotification</data>
+    </entity>
+</entities>

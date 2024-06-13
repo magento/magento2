@@ -1,0 +1,138 @@
+<?php
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Tax\Test\Unit\Model\System\Message;
+
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Tax\Model\Config as TaxConfig;
+use Magento\Tax\Model\System\Message\NotificationInterface;
+use Magento\Tax\Model\System\Message\Notifications;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Test class for @see \Magento\Tax\Model\System\Message\Notifications.
+ */
+class NotificationsTest extends TestCase
+{
+    /**
+     * @var Notifications
+     */
+    private $notifications;
+
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManagerMock;
+
+    /**
+     * @var UrlInterface|MockObject
+     */
+    private $urlBuilderMock;
+
+    /**
+     * @var TaxConfig|MockObject
+     */
+    private $taxConfigMock;
+
+    /**
+     * @var NotificationInterface|MockObject
+     */
+    private $notificationMock;
+
+    /**
+     * @var Escaper|MockObject
+     */
+    private $escaperMock;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->taxConfigMock = $this->createMock(TaxConfig::class);
+        $this->notificationMock = $this->createMock(NotificationInterface::class);
+        $this->escaperMock = $this->createMock(Escaper::class);
+        $this->notifications = (new ObjectManager($this))->getObject(
+            Notifications::class,
+            [
+                'storeManager' => $this->storeManagerMock,
+                'urlBuilder' => $this->urlBuilderMock,
+                'taxConfig' => $this->taxConfigMock,
+                'notifications' => [$this->notificationMock],
+                'escaper' => $this->escaperMock,
+            ]
+        );
+    }
+
+    #[DataProvider('dataProviderIsDisplayed')]
+    public function testIsDisplayed(
+        bool $isNotificationDisplayed,
+        bool $expectedResult
+    ): void {
+        $this->notificationMock->expects($this->once())->method('isDisplayed')->willReturn($isNotificationDisplayed);
+        $this->assertEquals($expectedResult, $this->notifications->isDisplayed());
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderIsDisplayed(): array
+    {
+        return [
+            [true, true],
+            [false, false]
+        ];
+    }
+
+    /**
+     * Unit test for getText method.
+     *
+     * @return void
+     */
+    public function testGetText(): void
+    {
+        $url = 'http://info-url';
+        $this->notificationMock->expects($this->once())->method('getText')->willReturn('Notification Text.');
+        $this->taxConfigMock->expects($this->once())->method('getInfoUrl')->willReturn($url);
+        $this->urlBuilderMock->expects($this->once())->method('getUrl')
+            ->with('adminhtml/system_config/edit/section/tax')->willReturn('http://tax-config-url');
+        $this->escaperMock->expects($this->once())
+            ->method('escapeUrl')
+            ->with($url)
+            ->willReturn($url);
+
+        $this->assertEquals(
+            'Notification Text.<p>Please see <a href="http://info-url">documentation</a> for more details. '
+            . 'Click here to go to <a href="http://tax-config-url">Tax Configuration</a> and change your settings.</p>',
+            $this->notifications->getText()
+        );
+    }
+
+    /**
+     * Unit test for getInfoUrl method.
+     *
+     * @return void
+     */
+    public function testGetInfoUrl(): void
+    {
+        $url = 'http://info-url';
+        $this->taxConfigMock->expects($this->once())->method('getInfoUrl')->willReturn($url);
+        $this->escaperMock->expects($this->once())
+            ->method('escapeUrl')
+            ->with($url)
+            ->willReturn($url);
+
+        $this->assertEquals($url, $this->notifications->getInfoUrl());
+    }
+}

@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * @var \Magento\AdvancedSearch\Block\SearchData $block
+ * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
+<?php
+/** @var \Magento\Search\Model\QueryResult[] $data */
+$data = $block->getItems();
+if (count($data)): ?>
+    <dl class="block">
+        <dt class="title"><?= $escaper->escapeHtml(__($block->getTitle())) ?></dt>
+        <?php foreach ($data as $additionalInfo): ?>
+            <dd class="item">
+                <a href="<?= $escaper->escapeUrl($block->getLink($additionalInfo->getQueryText())) ?>"
+                    ><?= $escaper->escapeHtml($additionalInfo->getQueryText()) ?></a>
+                <?php if ($block->isShowResultsCount()): ?>
+                    <span class="count">
+                        <?= /* @noEscape */ $localeFormatter->formatNumber((int)$additionalInfo->getResultsCount()) ?>
+                    </span>
+                <?php endif; ?>
+            </dd>
+        <?php endforeach; ?>
+    </dl>
+<?php endif; ?>

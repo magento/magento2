@@ -1,0 +1,11 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+
+?>
+<p><?= $block->escapeHtml(__('Your current currency is: %1.', $currency->getCode())) ?></p>
+<p><a href="<?= $block->escapeUrl($block->getBaseUrl()) ?>" class="action continue"><span><?= $block->escapeHtml(__('Continue')) ?></span></a></p>

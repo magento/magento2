@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="EndToEndB2CLoggedInUserTest">
+        <!-- Step 5: Add products to wishlist -->
+        <comment userInput="Start of adding products to wishlist" stepKey="startOfAddingProductsToWishlist" after="endOfComparingProducts" />
+        <!-- Add Simple Product 1 to wishlist -->
+        <comment userInput="Add Simple Product 1 to wishlist" stepKey="commentAddSimpleProduct1ToWishlist" after="startOfAddingProductsToWishlist" />
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" after="commentAddSimpleProduct1ToWishlist" stepKey="wishlistGotoCategory1"/>
+        <actionGroup ref="StorefrontCustomerAddCategoryProductToWishlistActionGroup" after="wishlistGotoCategory1" stepKey="wishlistAddSimpleProduct1ToWishlist">
+            <argument name="productVar" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistActionGroup" after="wishlistAddSimpleProduct1ToWishlist" stepKey="wishlistCheckSimpleProduct1InWishlist">
+            <argument name="productVar" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" after="wishlistCheckSimpleProduct1InWishlist" stepKey="wishlistCheckSimpleProduct1InWishlistSidebar">
+            <argument name="productVar" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+
+        <!-- Add Simple Product 2 to wishlist -->
+        <comment userInput="Add Simple Product 2 to wishlist" stepKey="commentAddSimpleProduct2ToWishlist" after="wishlistCheckSimpleProduct1InWishlistSidebar" />
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" after="commentAddSimpleProduct2ToWishlist" stepKey="wishlistGotoCategory2"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" after="wishlistGotoCategory2" stepKey="wishlistClickSimpleProduct2"/>
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" after="wishlistClickSimpleProduct2" stepKey="wishlistAddSimpleProduct2ToWishlist">
+            <argument name="productVar" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <!-- clear cache -->
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache" after="wishlistAddSimpleProduct2ToWishlist" >
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!-- reload wish list page -->
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage" after="cleanCache"/>
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistActionGroup" after="refreshPage" stepKey="wishlistCheckSimpleProduct2InWishlist">
+            <argument name="productVar" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" after="wishlistCheckSimpleProduct2InWishlist" stepKey="wishlistCheckSimpleProduct2InWishlistSidebar">
+            <argument name="productVar" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <comment userInput="End of adding products to wishlist" after="wishlistCheckSimpleProduct2InWishlistSidebar" stepKey="endOfAddingProductsToWishlist" />
+    </test>
+</tests>

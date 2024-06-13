@@ -1,0 +1,316 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var $block \Magento\Catalog\Block\Adminhtml\Category\Tree */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+<?php $root = $block->getRoot(); ?>
+
+<div class="categories-side-col">
+    <div class="sidebar-actions">
+        <?php if ($root):?>
+            <?= $block->getAddRootButtonHtml() ?><br/>
+            <?= $block->getAddSubButtonHtml() ?>
+        <?php endif; ?>
+    </div>
+    <div class="tree-actions">
+        <?php if ($root):?>
+            <a id="colapseAll" href="#"><?= $escaper->escapeHtml(__('Collapse All')) ?></a>
+            <span class="separator">|</span>
+            <a id="expandAll" href="#"><?= $escaper->escapeHtml(__('Expand All')) ?></a>
+        <?php endif; ?>
+    </div>
+    <?php if ($root):?>
+        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            'TreeConfig.collapseAll(); event.preventDefault();',
+            '#colapseAll'
+        ) ?>
+        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            'TreeConfig.expandAll();event.preventDefault();',
+            '#expandAll'
+        ) ?>
+    <div class="tree-holder" >
+        <div id="tree-div" class="tree-wrapper x-tree"></div>
+    </div>
+</div>
+
+    <div data-id="information-dialog-tree" class="messages">
+        <div class="message message-notice">
+            <div><?= $escaper->escapeHtml(__('This operation can take a long time')) ?></div>
+        </div>
+    </div>
+
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+            'display: none;',
+            'div[data-id="information-dialog-tree"]'
+        ) ?>
+        <?php $divElement = '<div id="tree-div" class="tree-wrapper x-tree"></div>'; ?>
+
+        <?php $scriptString = <<<script
+            let TreeConfig, expandAll = false;
+            require([
+                'jquery',
+                'jquery/jstree/jquery.jstree'
+            ], function($) {
+                let registry = {
+                    data: [],
+
+                    set: function (key, value) {
+                        this.data[key] = value;
+                    },
+
+                    get: function (key) {
+                        return this.data[key];
+                    }
+                };
+
+                let treeDiv = $('#tree-div'),
+                treeInstance,
+script;
+        $scriptString .= 'currentNodeId = ' . (int)$block->getCategoryId() . ',
+         defaultTree = '. $block->getTreeJson() .',
+         defaultParams = {
+                text: ' . /* @noEscape */ json_encode(htmlentities($root->getName())) . ',
+                allowDrop: ' . ($root->getIsVisible() ? 'true' : 'false') . ',
+                id: ' . (int)$root->getId() . ',
+                expanded: ' . (int)$block->getIsWasExpanded() . ',
+                store_id: ' . (int)$block->getStore()->getId() . ',
+                category_id: ' . (int)$block->getCategoryId() . ',
+                parent: ' . (int)$block->getRequest()->getParam('parent') . '
+        };' . PHP_EOL;
+
+        $scriptString .= <<<script
+        TreeConfig = function () {
+            return {
+                createTree: function () {
+                    /**
+                     * Initialize the jstree with tree root
+                     */
+                    treeDiv.jstree({
+                        core: {
+                            'data' : function (obj, callback) {
+                                if(obj.id != '#' && obj.children.length === 0){
+                                    let data = {
+                                        id: obj.id,
+                                        store: defaultParams.store_id,
+                                        form_key: FORM_KEY
+                                    };
+
+                                    $.ajax({
+                                        url: '{$block->escapeJs($block->getLoadTreeUrl())}',
+                                        type: "POST",
+                                        data: data,
+                                        dataType: 'json',
+                                        success: function (response) {
+                                            TreeConfig.updateChildrenKey(response);
+                                            callback.call(this, response);
+                                        },
+                                        error: function (jqXHR, status, error) {
+                                            console.log(status + ': ' + error);
+                                        }
+                                    });
+                                }else{
+                                    TreeConfig.updateChildrenKey(defaultTree);
+                                    callback.call(this, defaultTree);
+                                }
+                            },
+                            check_callback: function (operation, node) {
+                               //Draggable false for root categories
+                                return !(operation === 'move_node' &&
+                                    node.original !== undefined && node.original.allowDrag === false);
+                            }
+                        },
+                        plugins: ['dnd'],
+                    }).bind('move_node.jstree', function (e, data) {
+                        TreeConfig.categoryMove(data);
+                    }).bind('ready.jstree', function(e, data) {
+                        TreeConfig.selectNode(data);
+                    });
+                    treeInstance = treeDiv.jstree(true);
+                },
+
+                categoryMove : function (obj){
+                    let data = {id: obj.node.id, form_key: FORM_KEY};
+
+                    if(obj.node.parent === '#'){
+                        data.pid = defaultParams.id;
+                    }else{
+                        data.pid = obj.node.parent;
+                    }
+
+                    data.paid = obj.old_parent;
+                    data.aid = this.getSiblings(obj.node.parent,obj.position);
+
+                    let pd = [];
+                    for (let key in data) {
+                        pd.push(encodeURIComponent(key), '=', encodeURIComponent(data[key]), '&');
+                    }
+
+                    pd.splice(pd.length - 1, 1);
+                    registry.set('pd', pd.join(''));
+
+                    $('[data-id="information-dialog-category"]').modal({
+                        modalClass: 'confirm',
+                        title:  $.mage.__('Warning message'),
+                        buttons: [{
+                            text: $.mage.__('Cancel'),
+                            class: 'action-secondary',
+                            click: function () {
+                                TreeConfig.reRenderTree();
+                                this.closeModal();
+                            }
+                        }, {
+                            text: $.mage.__('Ok'),
+                            class: 'action-primary',
+                            click: function () {
+                                (function ($) {
+                                    $.ajax({
+                                        url: '{$block->escapeJs($block->getMoveUrl())}',
+                                        method: 'POST',
+                                        data: registry.get('pd'),
+                                        showLoader: true
+                                    }).done(function (response) {
+                                        if (response.error) {
+                                            TreeConfig.reRenderTree();
+                                        } else {
+                                            treeInstance.trigger('TreeConfig.categoryMove');
+                                        }
+                                        $('.page-main-actions').next('.messages').remove();
+                                        $('.page-main-actions').next('#messages').remove();
+                                        $('.page-main-actions').after(response.messages);
+                                    }).fail(function (jqXHR, textStatus) {
+                                        if (window.console) {
+                                            console.log(textStatus);
+                                        }
+                                        location.reload();
+                                    });
+                                })(jQuery);
+                                this.closeModal();
+                            }
+                        }],
+                        keyEventHandlers: {
+                            enterKey: function (event) {
+                                this.buttons[1].click();
+                                event.preventDefault();
+                            }
+                        }
+                    }).trigger('openModal');
+                },
+
+                getSiblings : function (parent,position) {
+                    let parentNode = treeInstance.get_node(parent);
+                    let sibling = treeInstance.get_node(parentNode.children[position - 1]);
+                    return sibling.id;
+                },
+
+                reRenderTree : function(){
+                     $('.tree-holder').empty().append('{$divElement}');
+                     treeDiv = $('#tree-div');
+                     TreeConfig.createTree();
+
+                     treeDiv.on('changed.jstree', function (e, data) {
+                        TreeConfig.categoryClick(data);
+                     });
+                },
+
+                updateChildrenKey : function(treeJson) {
+                    treeJson.forEach(node => {
+                        if (Array.isArray(node.children) && node.children.length === 0) {
+                            node.children = true;
+                        } else if (Array.isArray(node.children)) {
+                            TreeConfig.updateChildrenKey(node.children);
+                        }
+                    });
+                },
+
+                selectNode : function(data){
+                    if (defaultParams.expanded) {
+                        treeInstance.open_all();
+                    } else {
+                        let catId = treeInstance.get_node(defaultParams.category_id);
+                        if (catId) {
+                            currentNodeId = defaultParams.category_id;
+                        } else if (defaultParams.parent > 0 && defaultParams.category_id === 0) {
+                            currentNodeId = defaultParams.parent;
+                        }
+
+                        let selectedNode = treeInstance.get_node(currentNodeId);
+                        treeInstance.select_node(selectedNode, true);
+                        treeInstance.open_node(selectedNode);
+                    }
+                },
+
+                categoryClick : function(data){
+                    let baseUrl = '{$block->escapeJs($block->getEditUrl())}';
+                    if(data.node !== undefined && data.node.original !== undefined)
+                    {
+                        let storeId = data.node.original.store,
+                            id = data.node.original.id;
+                        if (storeId !== 0) {
+                            baseUrl = baseUrl + 'store/' + storeId + '/';
+                        }
+                        let url = baseUrl + 'id/' + id + '/';
+                        setLocation(url);
+                    }
+                },
+
+                expandAll : function(){
+                    expandAll = true;
+                    treeInstance.open_all();
+                },
+
+                collapseAll : function(){
+                    treeInstance.close_all();
+                    let selectedNode = treeDiv.jstree('get_selected');
+                    if(selectedNode.length > 0){
+                        let nodeObj = treeInstance.get_node(selectedNode),
+                            parents = nodeObj.parents;
+                        if(parents.indexOf('#') > -1){
+                           parents.splice(parents.indexOf('#'), 1);
+                        }
+
+                        treeInstance.select_node(selectedNode, true);
+                        treeInstance.open_node(parents);
+                   }
+                }
+            };
+        }();
+
+        /**
+         * jstree changed event i.e. when a node clicked
+         */
+        treeDiv.on('changed.jstree', function (e, data) {
+             TreeConfig.categoryClick(data);
+        });
+
+        /**
+         * create default tree
+         */
+        TreeConfig.createTree();
+
+        function addNew(url, isRoot) {
+            if (isRoot) {
+                currentNodeId = defaultParams.id;
+            }
+
+            if (/store\/\d+/.test(url)) {
+                url = url.replace(/store\/\d+/, 'store/' + defaultParams.store_id);
+            }
+            else {
+                url += 'store/' + defaultParams.store_id + '/';
+            }
+
+            url += 'parent/' + currentNodeId;
+            location.href = url;
+        }
+        window.addNew = addNew;
+    });
+script;
+        ?>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
+<?php endif; ?>

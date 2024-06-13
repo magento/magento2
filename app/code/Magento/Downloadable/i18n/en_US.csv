@@ -1,0 +1,122 @@
+"Downloadable Information","Downloadable Information"
+"Add New Link","Add New Link"
+"Upload Files","Upload Files"
+"All Files","All Files"
+Unlimited,Unlimited
+"Something went wrong while getting the requested content.","Something went wrong while getting the requested content."
+"My Downloadable Products","My Downloadable Products"
+"We can't find the link you requested.","We can't find the link you requested."
+"Please sign in to download your product or purchase <a href=""%1"">%2</a>.","Please sign in to download your product or purchase <a href=""%1"">%2</a>."
+"Please sign in to download your product.","Please sign in to download your product."
+"The link has expired.","The link has expired."
+"The link is not available.","The link is not available."
+"Sorry, there was an error getting requested content. Please contact the store owner.","Sorry, there was an error getting requested content. Please contact the store owner."
+"Please set resource file and link type.","Please set resource file and link type."
+"Invalid download link type.","Invalid download link type."
+"Something went wrong while saving the file(s).","Something went wrong while saving the file(s)."
+"Provided content must be valid base64 encoded data.","Provided content must be valid base64 encoded data."
+"Provided file name contains forbidden characters.","Provided file name contains forbidden characters."
+"Link file not provided","Link file not provided"
+"Link price must have numeric positive value.","Link price must have numeric positive value."
+"Number of downloads must be a positive integer.","Number of downloads must be a positive integer."
+"Sort order must be a positive integer.","Sort order must be a positive integer."
+"Link URL must have valid format.","Link URL must have valid format."
+"Provided file content must be valid base64 encoded data.","Provided file content must be valid base64 encoded data."
+"Sample URL must have valid format.","Sample URL must have valid format."
+"Order id cannot be null","Order id cannot be null"
+"Order item id cannot be null","Order item id cannot be null"
+"Provided product must be type 'downloadable'.","Provided product must be type 'downloadable'."
+"Provided link information is invalid.","Provided link information is invalid."
+"Invalid link type.","Invalid link type."
+"Link title cannot be empty.","Link title cannot be empty."
+"There is no downloadable link with provided ID.","There is no downloadable link with provided ID."
+"Provided downloadable link is not related to given product.","Provided downloadable link is not related to given product."
+"Cannot delete link with id %1","Cannot delete link with id %1"
+"Please specify product link(s).","Please specify product link(s)."
+"Sample file not provided","Sample file not provided"
+"Provided sample information is invalid.","Provided sample information is invalid."
+"Invalid sample type.","Invalid sample type."
+"Sample title cannot be empty.","Sample title cannot be empty."
+"There is no downloadable sample with provided ID.","There is no downloadable sample with provided ID."
+"Provided downloadable sample is not related to given product.","Provided downloadable sample is not related to given product."
+"Cannot delete sample with id %1","Cannot delete sample with id %1"
+Yes,Yes
+No,No
+"Use config","Use config"
+"Upload File","Upload File"
+URL,URL
+attachment,attachment
+inline,inline
+Pending,Pending
+Invoiced,Invoiced
+"To enable the option set the weight to no","To enable the option set the weight to no"
+"Is this downloadable Product?","Is this downloadable Product?"
+Links,Links
+Title,Title
+"Links can be purchased separately","Links can be purchased separately"
+"Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with '_'.","Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with '_'."
+"Add Link","Add Link"
+Price,Price
+File,File
+Sample,Sample
+Shareable,Shareable
+"Max. Downloads","Max. Downloads"
+Samples,Samples
+"Use Default Value","Use Default Value"
+sample,sample
+"Is this a downloadable Product?","Is this a downloadable Product?"
+"Add links to your product files here.","Add links to your product files here."
+"[STORE VIEW]","[STORE VIEW]"
+[GLOBAL],[GLOBAL]
+"Sort Order","Sort Order"
+"Attach File or Enter Link","Attach File or Enter Link"
+"Sort Variations","Sort Variations"
+"Browse Files...","Browse Files..."
+Delete,Delete
+"Add product preview files here.","Add product preview files here."
+SKU,SKU
+U,U
+"Select all","Select all"
+"Unselect all","Unselect all"
+Availability,Availability
+"In stock","In stock"
+"Out of stock","Out of stock"
+"Go to <a href=""%1"">My Downloadable Products</a>","Go to <a href=""%1"">My Downloadable Products</a>"
+"Downloadable Products","Downloadable Products"
+"Order #","Order #"
+Date,Date
+Status,Status
+"Remaining Downloads","Remaining Downloads"
+"View Order","View Order"
+"Start Download","Start Download"
+"You have not purchased any downloadable products yet.","You have not purchased any downloadable products yet."
+Back,Back
+download,download
+"Gift Message","Gift Message"
+From:,From:
+To:,To:
+Message:,Message:
+"Product Name","Product Name"
+Qty,Qty
+Subtotal,Subtotal
+"Discount Amount","Discount Amount"
+"Row Total","Row Total"
+"Qty Invoiced","Qty Invoiced"
+Ordered,Ordered
+Shipped,Shipped
+Canceled,Canceled
+Refunded,Refunded
+"We could not detect a size.","We could not detect a size."
+"Downloadable Product Section","Downloadable Product Section"
+Downloads,Downloads
+"Downloadable Product Options","Downloadable Product Options"
+"Order Item Status to Enable Downloads","Order Item Status to Enable Downloads"
+"Default Maximum Number of Downloads","Default Maximum Number of Downloads"
+"Default Sample Title","Default Sample Title"
+"Default Link Title","Default Link Title"
+"Open Links in New Window","Open Links in New Window"
+"Use Content-Disposition","Use Content-Disposition"
+"Disable Guest Checkout if Cart Contains Downloadable Items","Disable Guest Checkout if Cart Contains Downloadable Items"
+"Guest checkout will only work with shareable.","Guest checkout will only work with shareable."
+"Link URL's domain is not in list of downloadable_domains in env.php.","Link URL's domain is not in list of downloadable_domains in env.php."
+"Sample URL's domain is not in list of downloadable_domains in env.php.","Sample URL's domain is not in list of downloadable_domains in env.php."

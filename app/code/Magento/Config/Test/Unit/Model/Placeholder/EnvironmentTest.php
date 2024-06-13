@@ -1,0 +1,132 @@
+<?php
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Config\Test\Unit\Model\Placeholder;
+
+use Magento\Config\Model\Placeholder\Environment;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
+class EnvironmentTest extends TestCase
+{
+    /**
+     * @var Environment
+     */
+    private $model;
+
+    /**
+     * @var DeploymentConfig|Mock
+     */
+    private $deploymentConfigMock;
+
+    protected function setUp(): void
+    {
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+
+        $this->model = new Environment(
+            $this->deploymentConfigMock
+        );
+    }
+
+    /**
+     * @param string $path
+     * @param string $scope
+     * @param string $scopeId
+     * @param string $expected
+     */
+    #[DataProvider('getGenerateDataProvider')]
+    public function testGenerate($path, $scope, $scopeId, $expected)
+    {
+        $this->assertSame(
+            $expected,
+            $this->model->generate($path, $scope, $scopeId)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function getGenerateDataProvider()
+    {
+        return [
+            [
+                'web/unsecure/base_url',
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                null,
+                Environment::PREFIX . 'DEFAULT__WEB__UNSECURE__BASE_URL'
+            ],
+            [
+                'web/unsecure/base_url',
+                'web',
+                'test',
+                Environment::PREFIX . 'WEB__TEST__WEB__UNSECURE__BASE_URL'
+            ],
+            [
+                'web/unsecure/base_url',
+                'web',
+                null,
+                Environment::PREFIX . 'WEB__WEB__UNSECURE__BASE_URL'
+            ],
+        ];
+    }
+
+    /**
+     * @param string $placeholder
+     * @param bool $expected
+     */
+    #[DataProvider('getIsPlaceholderDataProvider')]
+    public function testIsApplicable($placeholder, $expected)
+    {
+        $this->assertSame(
+            $expected,
+            $this->model->isApplicable($placeholder)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function getIsPlaceholderDataProvider()
+    {
+        return [
+            [Environment::PREFIX . 'TEST', true],
+            ['TEST', false],
+            [Environment::PREFIX . 'TEST_test', true],
+            [Environment::PREFIX . '-:A', false],
+            [Environment::PREFIX . '_A', false],
+            [Environment::PREFIX . 'A@#$', false]
+        ];
+    }
+
+    /**
+     * @param string $template
+     * @param string $expected
+     */
+    #[DataProvider('restoreDataProvider')]
+    public function testRestore($template, $expected)
+    {
+        $this->assertSame(
+            $expected,
+            $this->model->restore($template)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function restoreDataProvider()
+    {
+        return [
+            [Environment::PREFIX . 'TEST__CONFIG', 'test/config'],
+            [Environment::PREFIX . 'TEST__CONFIG__VALUE', 'test/config/value'],
+            [Environment::PREFIX . 'TEST__CONFIG_VALUE', 'test/config_value'],
+        ];
+    }
+}

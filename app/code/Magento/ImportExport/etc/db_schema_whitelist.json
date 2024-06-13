@@ -1,0 +1,29 @@
+{
+    "importexport_importdata": {
+        "column": {
+            "id": true,
+            "entity": true,
+            "behavior": true,
+            "data": true,
+            "is_processed": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "import_history": {
+        "column": {
+            "history_id": true,
+            "started_at": true,
+            "user_id": true,
+            "imported_file": true,
+            "execution_time": true,
+            "summary": true,
+            "error_file": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

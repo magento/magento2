@@ -1,0 +1,148 @@
+<?php
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Backend\Test\Unit\Block;
+
+use Magento\Backend\Block\AnchorRenderer;
+use Magento\Backend\Block\MenuItemChecker;
+use Magento\Backend\Model\Menu\Item;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
+class AnchorRendererTest extends TestCase
+{
+    /**
+     * @var Item|MockObject
+     */
+    private $activeMenuItemMock;
+
+    /**
+     * @var Item|MockObject
+     */
+    private $menuItemMock;
+
+    /**
+     * @var Escaper|MockObject
+     */
+    private $escaperMock;
+
+    /**
+     * @var MenuItemChecker|MockObject
+     */
+    private $menuItemCheckerMock;
+
+    /**
+     * @var AnchorRenderer
+     */
+    private $anchorRenderer;
+    /**
+     * @var MockObject
+     */
+    private $menuItemWithoutChildrenMock;
+
+    protected function setUp(): void
+    {
+        $this->activeMenuItemMock = $this->createMock(Item::class);
+        $this->menuItemMock = $this->createMock(Item::class);
+        $this->menuItemWithoutChildrenMock = $this->createMock(Item::class);
+        $this->menuItemCheckerMock = $this->createMock(MenuItemChecker::class);
+        $this->escaperMock = $this->createMock(Escaper::class);
+
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->anchorRenderer =  $objectManagerHelper->getObject(
+            AnchorRenderer::class,
+            [
+                'menuItemChecker' => $this->menuItemCheckerMock,
+                'escaper' => $this->escaperMock
+            ]
+        );
+    }
+
+    public function testRenderAnchorLevelIsOne()
+    {
+        $title = 'Title';
+        $html =  'Test html';
+        $this->menuItemMock->expects($this->once())->method('getUrl')->willReturn('#');
+        $this->menuItemMock->expects($this->once())->method('getTitle')->willReturn($title);
+        $this->menuItemMock->expects($this->once())->method('hasChildren')->willReturn(true);
+        $this->escaperMock->expects($this->once())->method('escapeHtml')->with(__($title))->willReturn($html);
+
+        $expected =  '<strong class="submenu-group-title" role="presentation">'
+            . '<span>' . $html . '</span>'
+            . '</strong>';
+
+        $this->assertEquals(
+            $expected,
+            $this->anchorRenderer->renderAnchor($this->activeMenuItemMock, $this->menuItemMock, 1)
+        );
+    }
+
+    public function testRenderAnchorWithoutChildrenAndLevelIsOne()
+    {
+        $this->menuItemWithoutChildrenMock->expects($this->once())->method('getUrl')->willReturn('#');
+        $this->menuItemWithoutChildrenMock->expects($this->once())->method('hasChildren')->willReturn(false);
+
+        $expected =  '';
+
+        $this->assertEquals(
+            $expected,
+            $this->anchorRenderer->renderAnchor($this->activeMenuItemMock, $this->menuItemWithoutChildrenMock, 1)
+        );
+    }
+
+    /**
+     * @param bool $hasTarget
+     */
+    #[DataProvider('targetDataProvider')]
+    public function testRenderAnchorLevelIsNotOne($hasTarget)
+    {
+        $level = 0;
+        $title = 'Title';
+        $html =  'Test html';
+        $url = 'test/url';
+        $tooltip = 'Anchor title';
+        $onclick = '';
+        $target = '_blank';
+        $finalTarget = $hasTarget ? ('target=' . $target) : '';
+        $this->menuItemMock->expects($this->any())->method('getTarget')->willReturn($hasTarget ? $target : null);
+        $this->menuItemMock->expects($this->once())->method('getUrl')->willReturn($url);
+        $this->menuItemMock->expects($this->once())->method('getTitle')->willReturn($title);
+        $this->escaperMock->expects($this->once())->method('escapeHtml')->with(__($title))->willReturn($html);
+        $this->menuItemMock->expects($this->once())->method('hasTooltip')->willReturn(true);
+        $this->menuItemMock->expects($this->any())->method('getTooltip')->willReturn(__($tooltip));
+        $this->menuItemMock->expects($this->once())->method('hasClickCallback')->willReturn(true);
+        $this->menuItemMock->expects($this->once())->method('getClickCallback')->willReturn($onclick);
+        $this->menuItemCheckerMock->expects($this->once())
+            ->method('isItemActive')
+            ->with($this->activeMenuItemMock, $this->menuItemMock, $level)->willReturn(true);
+
+        $expected = '<a href="' . $url . '" ' . $finalTarget . ' ' . 'title="' . $tooltip . '"'
+            . ' onclick="' . $onclick . '"'
+            . ' class="' . '_active'
+            . '">' . '<span>' . $html
+            . '</span>' . '</a>';
+
+        $this->assertEquals(
+            $expected,
+            $this->anchorRenderer->renderAnchor($this->activeMenuItemMock, $this->menuItemMock, $level)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function targetDataProvider()
+    {
+        return [
+            'item has target' => [true],
+            'item does not have target' => [false]
+        ];
+    }
+}

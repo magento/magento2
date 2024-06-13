@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminMenuMarketing">
+        <data key="pageTitle">Marketing</data>
+        <data key="title">Marketing</data>
+        <data key="dataUiId">magento-backend-marketing</data>
+    </entity>
+    <entity name="AdminMenuMarketingPromotionsCatalogPriceRule">
+        <data key="pageTitle">Catalog Price Rule</data>
+        <data key="title">Catalog Price Rule</data>
+        <data key="dataUiId">magento-catalogrule-promo-catalog</data>
+    </entity>
+</entities>

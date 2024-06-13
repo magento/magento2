@@ -1,0 +1,56 @@
+{
+    "name": "magento/module-catalog",
+    "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~8.2.0||~8.3.0||~8.4.0",
+        "magento/framework": "*",
+        "magento/framework-bulk": "*",
+        "magento/module-authorization": "*",
+        "magento/module-asynchronous-operations": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog-inventory": "*",
+        "magento/module-catalog-rule": "*",
+        "magento/module-catalog-url-rewrite": "*",
+        "magento/module-checkout": "*",
+        "magento/module-cms": "*",
+        "magento/module-config": "*",
+        "magento/module-customer": "*",
+        "magento/module-directory": "*",
+        "magento/module-eav": "*",
+        "magento/module-indexer": "*",
+        "magento/module-media-storage": "*",
+        "magento/module-msrp": "*",
+        "magento/module-page-cache": "*",
+        "magento/module-product-alert": "*",
+        "magento/module-quote": "*",
+        "magento/module-store": "*",
+        "magento/module-tax": "*",
+        "magento/module-theme": "*",
+        "magento/module-ui": "*",
+        "magento/module-url-rewrite": "*",
+        "magento/module-widget": "*",
+        "magento/module-wishlist": "*",
+        "magento/module-aws-s3": "*"
+    },
+    "suggest": {
+        "magento/module-cookie": "*",
+        "magento/module-sales": "*",
+        "magento/module-catalog-sample-data": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\Catalog\\": ""
+        }
+    }
+}

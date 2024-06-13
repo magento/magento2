@@ -1,0 +1,122 @@
+<?php
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Contact\Test\Unit\Model;
+
+use Magento\Contact\Model\ConfigInterface;
+use Magento\Contact\Model\Mail;
+use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\Mail\TransportInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Translate\Inline\StateInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @covers \Magento\Contact\Model\Mail
+ */
+class MailTest extends TestCase
+{
+    /**
+     * @var ConfigInterface|MockObject
+     */
+    private $configMock;
+
+    /**
+     * @var TransportBuilder|MockObject
+     */
+    private $transportBuilderMock;
+
+    /**
+     * @var StateInterface|MockObject
+     */
+    private $inlineTranslationMock;
+
+    /**
+     * @var MockObject
+     */
+    private $storeManagerMock;
+
+    /**
+     * @var Mail
+     */
+    private $mail;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
+    {
+        $this->configMock = $this->createMock(ConfigInterface::class);
+        $this->transportBuilderMock = $this->createMock(TransportBuilder::class);
+        $this->inlineTranslationMock = $this->createMock(StateInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+
+        $objectManager = new ObjectManagerHelper($this);
+        $this->mail = $objectManager->getObject(
+            Mail::class,
+            [
+                'contactsConfig' => $this->configMock,
+                'transportBuilder' => $this->transportBuilderMock,
+                'inlineTranslation' => $this->inlineTranslationMock,
+                'storeManager' => $this->storeManagerMock
+            ]
+        );
+    }
+
+    /**
+     * Test SendMail
+     */
+    public function testSendMail(): void
+    {
+        $email = 'reply-to@example.com';
+        $templateVars = ['comment' => 'Comment'];
+
+        $transport = $this->createMock(TransportInterface::class);
+
+        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock->expects($this->once())->method('getId')->willReturn(555);
+
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
+
+        $this->transportBuilderMock->expects($this->once())
+            ->method('setTemplateIdentifier')->willReturnSelf();
+        $this->transportBuilderMock->expects($this->once())
+            ->method('setTemplateOptions')
+            ->with(
+                [
+                    'area' => 'frontend',
+                    'store' => 555,
+                ]
+            )->willReturnSelf();
+        $this->transportBuilderMock->expects($this->once())
+            ->method('setTemplateVars')
+            ->with($templateVars)->willReturnSelf();
+        $this->transportBuilderMock->expects($this->once())
+            ->method('setFrom')->willReturnSelf();
+        $this->transportBuilderMock->expects($this->once())
+            ->method('addTo')->willReturnSelf();
+        $this->transportBuilderMock->expects($this->once())
+            ->method('setReplyTo')
+            ->with($email)->willReturnSelf();
+        $this->transportBuilderMock->expects($this->once())
+            ->method('getTransport')
+            ->willReturn($transport);
+
+        $transport->expects($this->once())
+            ->method('sendMessage');
+
+        $this->inlineTranslationMock->expects($this->once())
+            ->method('resume');
+        $this->inlineTranslationMock->expects($this->once())
+            ->method('suspend');
+
+        $this->mail->send($email, $templateVars);
+    }
+}

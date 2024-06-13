@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
+-->
+<root>
+    <node>
+        <subnode attr="text">
+            <![CDATA[Some Phrase]]>
+        </subnode>
+    </node>
+</root>

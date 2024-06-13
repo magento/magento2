@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist $block */
+?>
+<?php if ($block->isAllowInCart() && $block->isProductVisibleInSiteVisibility()) : ?>
+    <a href="#"
+       data-post='<?= /* @noEscape */ $block->getMoveFromCartParams() ?>'
+       class="use-ajax action towishlist action-towishlist">
+        <span><?= $block->escapeHtml(__('Move to Wishlist')) ?></span>
+    </a>
+<?php endif ?>

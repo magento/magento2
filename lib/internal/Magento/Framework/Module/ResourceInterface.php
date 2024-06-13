@@ -1,0 +1,46 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Framework\Module;
+
+/**
+ * Resource Model Interface
+ */
+interface ResourceInterface
+{
+    /**
+     * Get Module version from DB
+     *
+     * @param string $moduleName
+     * @return false|string
+     */
+    public function getDbVersion($moduleName);
+
+    /**
+     * Get resource data version
+     *
+     * @param string $moduleName
+     * @return string|false
+     */
+    public function getDataVersion($moduleName);
+
+    /**
+     * Set Module version
+     *
+     * @param string $moduleName
+     * @param string $version
+     * @return int
+     */
+    public function setDbVersion($moduleName, $version);
+
+    /**
+     * Set resource data version
+     *
+     * @param string $moduleName
+     * @param string $version
+     * @return void
+     */
+    public function setDataVersion($moduleName, $version);
+}

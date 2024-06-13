@@ -1,0 +1,13 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+<?php if ($block->getCanDisplayTotalPaid()) : ?>
+<tr>
+    <td class="label"><strong><?= $block->escapeHtml(__('Total Paid')) ?></strong></td>
+    <td class="emph"><?= /* @noEscape */ $block->displayPriceAttribute('total_paid', true) ?>
+    </td>
+</tr>
+<?php endif; ?>

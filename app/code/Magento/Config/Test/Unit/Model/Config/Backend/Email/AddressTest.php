@@ -1,0 +1,60 @@
+<?php
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Config\Test\Unit\Model\Config\Backend\Email;
+
+use Magento\Config\Model\Config\Backend\Email\Address;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
+class AddressTest extends TestCase
+{
+    /**
+     * @var Address
+     */
+    private $model;
+
+    protected function setUp(): void
+    {
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(Address::class);
+    }
+
+    /**
+     * @param string|null $value
+     * @param string|bool $expectedValue false if exception to be thrown
+     * @return void
+     */
+    #[DataProvider('beforeSaveDataProvider')]
+    public function testBeforeSave($value, $expectedValue)
+    {
+        $this->model->setValue($value);
+
+        if ($expectedValue === false) {
+            $this->expectException(LocalizedException::class);
+        }
+
+        $this->model->beforeSave();
+        $this->assertEquals($expectedValue, $this->model->getValue());
+    }
+
+    /**
+     * @return array
+     */
+    public static function beforeSaveDataProvider()
+    {
+        return [
+            ['someone@magento.com', 'someone@magento.com'],
+            ['real+email@magento.com', 'real+email@magento.com'],
+            ['not.a.real.email', false],
+            [null, false],
+            ['', false]
+        ];
+    }
+}

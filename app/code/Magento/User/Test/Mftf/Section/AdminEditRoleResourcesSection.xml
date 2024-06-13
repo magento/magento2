@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminEditRoleResourcesSection">
+        <element name="resourceAccess" type="select" selector="#all"/>
+        <element name="resources" type="checkbox" selector="#role_info_tabs_account"/>
+        <element name="storeName" type="checkbox" selector="//label[contains(text(),'{{var1}}')]" parameterized="true"/>
+        <element name="reportsCheckbox" type="text" selector="//li[@data-id='Magento_Reports::report']//a[text()='Reports']"/>
+        <element name="resourceCheckboxLink" type="checkbox" selector="//li[@data-id='{{resourceId}}']//a[text()='{{resourceName}}']" timeout="30" parameterized="true"/>
+        <element name="resourceCheckbox" type="checkbox" selector="//li[@data-id='{{resourceId}}']/a[@aria-selected='true']" timeout="30" parameterized="true"/>
+        <element name="userRoles" type="text" selector="//span[contains(text(), 'User Roles')]"/>
+        <element name="inventoryCheckbox" type="checkbox" selector="//li[@id='Magento_InventoryApi::inventory']/i"/>
+        <element name="stockCheckbox" type="checkbox" selector="//a[@id='Magento_InventoryApi::stock_anchor']/i[@class='jstree-icon jstree-checkbox']"/>
+        <element name="editStockCheckbox" type="checkbox" selector="//a[@id='Magento_InventoryApi::stock_edit_anchor']/i[@class='jstree-icon jstree-checkbox']"/>
+        <element name="deleteStockCheckbox" type="checkbox" selector="//a[@id='Magento_InventoryApi::stock_delete_anchor']/i[@class='jstree-icon jstree-checkbox']"/>
+        <element name="twoFactorAuth" type="checkbox" selector="//a[@id='Magento_TwoFactorAuth::tfa_anchor']/i[@class='jstree-icon jstree-checkbox']"/>
+        <element name="resourceId" type="checkbox" selector="//a[@id='{{resourceId}}']" timeout="30" parameterized="true"/>
+    </section>
+</sections>

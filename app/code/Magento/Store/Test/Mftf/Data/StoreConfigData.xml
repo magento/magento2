@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="StorefrontDisableAddStoreCodeToUrls">
+        <!-- Magento default value -->
+        <data key="path">web/url/use_store</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="StorefrontEnableAddStoreCodeToUrls">
+        <data key="path">web/url/use_store</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="StorefrontSingleStoreModeEnabledConfigData">
+        <data key="path">general/single_store_mode/enabled</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="StorefrontSingleStoreModeDisabledConfigData">
+        <data key="path">general/single_store_mode/enabled</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="MinifyJavaScriptFilesDisableConfigData">
+        <!-- Default value -->
+        <data key="path">dev/js/minify_files</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="MinifyJavaScriptFilesEnableConfigData">
+        <data key="path">dev/js/minify_files</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="MinifyHtmlFilesEnableConfigData">
+        <data key="path">dev/template/minify_html</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="MinifyHtmlFilesDisableConfigData">
+        <data key="path">dev/template/minify_html</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+</entities>

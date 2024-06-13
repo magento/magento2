@@ -1,0 +1,115 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\ImportExport\Test\Unit\Model\Import\Source;
+
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\ImportExport\Model\Import\Source\Zip;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ZipTest extends TestCase
+{
+    /**
+     * @var Write|MockObject
+     */
+    private $directory;
+
+    /**
+     * @var Zip|MockObject
+     */
+    private $zip;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        $this->directory = $this->getMockBuilder(Write::class)->disableOriginalConstructor()
+            ->onlyMethods(['getRelativePath'])
+            ->getMock();
+    }
+
+    /**
+     * Test destination argument for the second getRelativePath after preg_replace.
+     *
+     * @return void
+     */
+    #[DataProvider('constructorFileDestinationMatchDataProvider')]
+    public function testConstructorFileDestinationMatch($fileName, $expectedfileName): void
+    {
+        $this->markTestSkipped('The implementation of constructor has changed. Rewrite test to cover changes.');
+
+        $this->directory->method('getRelativePath')
+            ->willReturnCallback(function ($arg) use ($fileName, $expectedfileName) {
+                if ($arg == $fileName || $arg == $expectedfileName) {
+                    return null;
+                }
+            });
+        $this->invokeConstructor($fileName);
+    }
+
+    /**
+     * @return array
+     */
+    public static function constructorFileDestinationMatchDataProvider(): array
+    {
+        return [
+            [
+                'fileName' => 'test_file.txt',
+                'expectedfileName' => 'test_file.txt'
+            ],
+            [
+                'fileName' => 'test_file.zip',
+                'expectedfileName' => 'test_file.csv'
+            ],
+            [
+                'fileName' => '.ziptest_.zip.file.zip.ZIP',
+                'expectedfileName' => '.ziptest_.zip.file.zip.csv'
+            ]
+        ];
+    }
+
+    /**
+     * Instantiate zip mock and invoke its constructor.
+     *
+     * @return void
+     * @param string $fileName
+     */
+    private function invokeConstructor($fileName): void
+    {
+        try {
+            $this->zip = $this->getMockBuilder(
+                Zip::class
+            )
+                ->setConstructorArgs(
+                    [
+                        $fileName,
+                        $this->directory,
+                        [],
+                    ]
+                )
+                ->getMock();
+
+            $reflectedClass = new \ReflectionClass(
+                Zip::class
+            );
+            $constructor = $reflectedClass->getConstructor();
+            $constructor->invoke(
+                $this->zip,
+                [
+                    $fileName,
+                    $this->directory,
+                    [],
+                ]
+            );
+        } catch (\Throwable $e) {
+            throw $e;
+        }
+    }
+}

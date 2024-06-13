@@ -1,0 +1,22 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+<?php $_source  = $block->getSource() ?>
+<?php $_order   = $block->getOrder() ?>
+<?php $block->setPriceDataObject($_source) ?>
+
+<?php if ((float) $_source->getDiscountAmount()) : ?>
+    <tr>
+        <td class="label">
+            <?php if ($_order->getCouponCode()) : ?>
+                <?= $block->escapeHtml(__('Discount (%1)', $_order->getCouponCode())) ?>
+            <?php else : ?>
+                <?= $block->escapeHtml(__('Discount')) ?>
+            <?php endif; ?>
+        </td>
+        <td><?= /* @noEscape */ $block->displayPriceAttribute('discount_amount') ?></td>
+    </tr>
+<?php endif; ?>

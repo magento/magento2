@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerMultishippingLoggingTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Place order and reorder"/>
+            <title value="Admin User login as Customer and place Order with Multiple Addresses"/>
+            <description value="Verify that Admin user can place Order with Multiple Addresses using 'Login as customer' functionality "/>
+            <severity value="MAJOR"/>
+            <group value="login_as_customer"/>
+            <group value="multishipping"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="CliEnableFreeShippingMethodActionGroup" stepKey="enableFreeShipping"/>
+            <actionGroup ref="CliEnableFlatRateShippingMethodActionGroup" stepKey="enableFlatRateShipping"/>
+            <actionGroup ref="CliEnableCheckMoneyOrderPaymentMethodActionGroup" stepKey="enableCheckMoneyOrderPaymentMethod"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct2"/>
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
+            <!-- Create new User -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminCreateUserWithRoleActionGroup" stepKey="createAdminUser">
+                <argument name="user" value="activeAdmin"/>
+                <argument name="role" value="roleDefaultAdministrator"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutMasterAdmin"/>
+
+            <!-- Login as new User -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToNewAdmin">
+                <argument name="username" value="{{activeAdmin.username}}"/>
+                <argument name="password" value="{{activeAdmin.password}}"/>
+            </actionGroup>
+
+            <!--Go to All Customers Page to open the customer-->
+            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToAllCustomersPage2"/>
+            <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="OpenEditCustomerFrom2">
+                <argument name="customer" value="$$createCustomer$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenAccountInformationTabFromCustomerEditPageAllowAssistanceActionGroup" stepKey="clickOnAllowAssistanceConfig2"/>
+            <!--Verify that changes are saved successfully-->
+            <actionGroup ref="AdminSaveCustomerAndAssertSuccessMessage" stepKey="assertThatChangesAreSavedSuccessfully2"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearAllOrdersGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Delete new User -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminDeleteUserActionGroup" stepKey="deleteUser">
+                <argument name="user" value="activeAdmin"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShipping"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
+        </after>
+
+        <!-- Login as Customer from Customer page -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                     stepKey="loginAsCustomerFromCustomerPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+        <!-- Add Products to Cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProduct1ToCart">
+            <argument name="product" value="$$createProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProduct2ToCart">
+            <argument name="product" value="$$createProduct2$$"/>
+        </actionGroup>
+
+        <!-- Place Order -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <actionGroup ref="CheckingWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <waitForPageLoad stepKey="waitForShippingInfoPageLoad"/>
+        <actionGroup ref="SelectMultiShippingInfoActionGroup" stepKey="checkoutWithMultipleShipping"/>
+        <!-- Selects the 'Check / Money Order' Payment Method -->
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.paymentMethod('Check / Money order')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.paymentMethod('Check / Money order')}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
+        <!-- Select Billing Info -->
+        <actionGroup ref="SelectBillingInfoActionGroup" stepKey="checkoutWithPaymentMethod"/>
+        <waitForPageLoad stepKey="waitForReviewOrderPageLoad"/>
+        <actionGroup ref="ReviewOrderForMultiShipmentActionGroup" stepKey="reviewOrderForMultiShipment">
+            <argument name="totalNameForFirstOrder" value="Shipping &amp; Handling"/>
+            <argument name="totalPositionForFirstOrder" value="1"/>
+            <argument name="totalNameForSecondOrder" value="Shipping &amp; Handling"/>
+            <argument name="totalPositionForSecondOrder" value="2"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPlaceOrderPageLoad"/>
+        <actionGroup ref="StorefrontPlaceOrderForMultipleAddressesActionGroup" stepKey="placeOrder">
+            <argument name="firstOrderPosition" value="1"/>
+            <argument name="secondOrderPosition" value="2"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForOrderPageLoad"/>
+
+        <!-- Assert Storefront First Order page contains message about Order created by a Store Administrator -->
+        <actionGroup ref="StorefrontNavigateToCustomerOrdersHistoryPageActionGroup" stepKey="goToOrderHistoryPage"/>
+        <click selector="{{OrdersGridSection.viewOrder({$getFirstOrderIdPlaceOrder})}}" stepKey="verifyStorefrontMessageFirstOrder"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabFirstOrderId"/>
+        <waitForText selector="{{StorefrontCustomerOrderSection.orderComments}}" userInput="Order Placed by Store Administrator" stepKey="seeMessageOrderCreatedByAdmin"/>
+
+        <!-- Assert Storefront Second Order page contains message about Order created by a Store Administrator -->
+        <actionGroup ref="StorefrontNavigateToCustomerOrdersHistoryPageActionGroup" stepKey="goToOrderHistoryPage2"/>
+        <click selector="{{OrdersGridSection.viewOrder({$getSecondOrderIdPlaceOrder})}}" stepKey="verifyStorefrontMessageSecondOrder"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabSecondOrderId"/>
+        <waitForText selector="{{StorefrontCustomerOrderSection.orderComments}}" userInput="Order Placed by Store Administrator" stepKey="seeMessageOrderCreatedByAdmin2"/>
+
+        <!-- Assert Admin Order page contains message about Order created by a Store Administrator -->
+        <actionGroup ref="AdminAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyAdminMessageFirstOrder">
+            <argument name="orderId" value="{$grabFirstOrderId}"/>
+            <argument name="adminUserFullName" value="{{activeAdmin.firstname}} {{activeAdmin.lastname}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyAdminMessageSecondOrder">
+            <argument name="orderId" value="{$grabSecondOrderId}"/>
+            <argument name="adminUserFullName" value="{{activeAdmin.firstname}} {{activeAdmin.lastname}}"/>
+        </actionGroup>
+    </test>
+</tests>

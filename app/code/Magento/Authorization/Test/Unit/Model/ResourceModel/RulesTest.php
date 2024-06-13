@@ -1,0 +1,215 @@
+<?php
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Authorization\Test\Unit\Model\ResourceModel;
+
+use Magento\Authorization\Model\ResourceModel\Rules;
+use Magento\Authorization\Model\Rules as RulesModel;
+use Magento\Framework\Acl\Builder;
+use Magento\Framework\Acl\Data\CacheInterface;
+use Magento\Framework\Acl\RootResource;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Phrase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+/**
+ * @covers \Magento\Authorization\Model\ResourceModel\Rules
+ *
+ * Covers control flow logic.
+ * The resource saving is covered with integration test in \Magento\Authorization\Model\RulesTest.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class RulesTest extends TestCase
+{
+    use MockCreationTrait;
+
+    /**
+     * Test constants
+     */
+    private const TEST_ROLE_ID = 13;
+
+    /**
+     * @var Rules
+     */
+    private $model;
+
+    /**
+     * @var Context|MockObject
+     */
+    private $contextMock;
+
+    /**
+     * @var Builder|MockObject
+     */
+    private $aclBuilderMock;
+
+    /**
+     * @var LoggerInterface|MockObject
+     */
+    private $loggerMock;
+
+    /**
+     * @var RootResource|MockObject
+     */
+    private $rootResourceMock;
+
+    /**
+     * @var CacheInterface|MockObject
+     */
+    private $aclDataCacheMock;
+
+    /**
+     * @var ResourceConnection|MockObject
+     */
+    private $resourceConnectionMock;
+
+    /**
+     * @var AdapterInterface|MockObject
+     */
+    private $connectionMock;
+
+    /**
+     * @var RulesModel|MockObject
+     */
+    private $rulesModelMock;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
+    {
+        $this->contextMock = $this->createPartialMock(Context::class, ['getResources']);
+
+        $this->resourceConnectionMock = $this->createPartialMock(
+            ResourceConnection::class,
+            ['getConnection', 'getTableName']
+        );
+
+        $this->contextMock->expects($this->once())
+            ->method('getResources')
+            ->willReturn($this->resourceConnectionMock);
+
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
+
+        $this->resourceConnectionMock->expects($this->once())
+            ->method('getConnection')
+            ->with('default')
+            ->willReturn($this->connectionMock);
+
+        $this->resourceConnectionMock->method('getTableName')
+            ->with('authorization_rule', 'default')
+            ->willReturnArgument(0);
+
+        $this->aclBuilderMock = $this->createPartialMockWithReflection(
+            Builder::class,
+            ['getConfigCache']
+        );
+
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+
+        $this->rootResourceMock = $this->createMock(RootResource::class);
+
+        $this->aclDataCacheMock = $this->createMock(CacheInterface::class);
+
+        $this->aclBuilderMock->method('getConfigCache')
+            ->willReturn($this->aclDataCacheMock);
+
+        $this->rulesModelMock = $this->createPartialMockWithReflection(
+            RulesModel::class,
+            ['getRoleId']
+        );
+
+        $this->rulesModelMock->method('getRoleId')
+            ->willReturn(self::TEST_ROLE_ID);
+
+        $this->model = new Rules(
+            $this->contextMock,
+            $this->aclBuilderMock,
+            $this->loggerMock,
+            $this->rootResourceMock,
+            $this->aclDataCacheMock,
+            'default'
+        );
+    }
+
+    /**
+     * Test save with no resources posted.
+     */
+    public function testSaveRelNoResources()
+    {
+        $this->connectionMock->expects($this->once())
+            ->method('beginTransaction');
+        $this->connectionMock->expects($this->once())
+            ->method('delete')
+            ->with('authorization_rule', ['role_id = ?' => self::TEST_ROLE_ID]);
+        $this->connectionMock->expects($this->once())
+            ->method('commit');
+
+        $this->aclDataCacheMock->expects($this->once())
+            ->method('clean');
+
+        $this->model->saveRel($this->rulesModelMock);
+    }
+
+    /**
+     * Test LocalizedException throw case.
+     */
+    public function testLocalizedExceptionOccurrence()
+    {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage("TestException");
+
+        $exceptionPhrase = $this->getMockBuilder(Phrase::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['render'])
+            ->getMock();
+
+        $exceptionPhrase->method('render')->willReturn('TestException');
+
+        $exception = new LocalizedException($exceptionPhrase);
+
+        $this->connectionMock->expects($this->once())
+            ->method('beginTransaction');
+
+        $this->connectionMock->expects($this->once())
+            ->method('delete')
+            ->with('authorization_rule', ['role_id = ?' => self::TEST_ROLE_ID])
+            ->willThrowException($exception);
+
+        $this->connectionMock->expects($this->once())->method('rollBack');
+
+        $this->model->saveRel($this->rulesModelMock);
+    }
+
+    /**
+     * Test generic exception throw case.
+     */
+    public function testGenericExceptionOccurrence()
+    {
+        $exception = new \Exception('GenericException');
+
+        $this->connectionMock->expects($this->once())
+            ->method('beginTransaction');
+
+        $this->connectionMock->expects($this->once())
+            ->method('delete')
+            ->with('authorization_rule', ['role_id = ?' => self::TEST_ROLE_ID])
+            ->willThrowException($exception);
+
+        $this->connectionMock->expects($this->once())->method('rollBack');
+        $this->loggerMock->expects($this->once())->method('critical')->with($exception);
+
+        $this->model->saveRel($this->rulesModelMock);
+    }
+}

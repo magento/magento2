@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
+ */
+-->
+<validation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Validator/etc/validation.xsd">
+    <entity name="customer">
+        <rules>
+            <rule name="check_eav">
+                <entity_constraints>
+                    <constraint alias="eav_data_validator" class="Magento\Eav\Model\Validator\Attribute\Data" />
+                </entity_constraints>
+            </rule>
+            <rule name="metadata_form_data">
+                <entity_constraints>
+                    <constraint alias="metadata_data_validator" class="Magento\Customer\Model\Metadata\Validator" />
+                </entity_constraints>
+            </rule>
+            <rule name="check_name">
+                <entity_constraints>
+                    <constraint alias="name_validator" class="Magento\Customer\Model\Validator\Name" />
+                </entity_constraints>
+            </rule>
+            <rule name="check_dob">
+                <entity_constraints>
+                    <constraint alias="dob_validator" class="Magento\Customer\Model\Validator\Dob" />
+                </entity_constraints>
+            </rule>
+        </rules>
+        <groups>
+            <group name="save">
+                <uses>
+                    <use rule="check_eav"/>
+                    <use rule="check_name"/>
+                    <use rule="check_dob"/>
+                </uses>
+            </group>
+            <group name="form">
+                <uses>
+                    <use rule="metadata_form_data"/>
+                </uses>
+            </group>
+        </groups>
+    </entity>
+
+    <entity name="customer_address">
+        <rules>
+            <rule name="check_eav">
+                <entity_constraints>
+                    <constraint alias="eav_data_validator" class="Magento\Eav\Model\Validator\Attribute\Data" />
+                </entity_constraints>
+            </rule>
+            <rule name="check_name">
+                <entity_constraints>
+                    <constraint alias="name_validator" class="Magento\Customer\Model\Validator\Name" />
+                </entity_constraints>
+            </rule>
+            <rule name="check_street">
+                <entity_constraints>
+                    <constraint alias="street_validator" class="Magento\Customer\Model\Validator\Street" />
+                </entity_constraints>
+            </rule>
+            <rule name="check_city">
+                <entity_constraints>
+                    <constraint alias="city_validator" class="Magento\Customer\Model\Validator\City" />
+                </entity_constraints>
+            </rule>
+            <rule name="check_telephone">
+                <entity_constraints>
+                    <constraint alias="telephone_validator" class="Magento\Customer\Model\Validator\Telephone" />
+                </entity_constraints>
+            </rule>
+        </rules>
+        <groups>
+            <group name="save">
+                <uses>
+                    <use rule="check_eav"/>
+                    <use rule="check_name"/>
+                    <use rule="check_street"/>
+                    <use rule="check_city"/>
+                    <use rule="check_telephone"/>
+                </uses>
+            </group>
+        </groups>
+    </entity>
+</validation>

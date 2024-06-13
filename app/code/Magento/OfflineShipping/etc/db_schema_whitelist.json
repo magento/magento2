@@ -1,0 +1,44 @@
+{
+    "shipping_tablerate": {
+        "column": {
+            "pk": true,
+            "website_id": true,
+            "dest_country_id": true,
+            "dest_region_id": true,
+            "dest_zip": true,
+            "condition_name": true,
+            "condition_value": true,
+            "price": true,
+            "cost": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "UNQ_D60821CDB2AFACEE1566CFC02D0D4CAA": true
+        }
+    },
+    "salesrule": {
+        "column": {
+            "simple_free_shipping": true
+        }
+    },
+    "sales_order_item": {
+        "column": {
+            "free_shipping": true
+        }
+    },
+    "quote_address": {
+        "column": {
+            "free_shipping": true
+        }
+    },
+    "quote_item": {
+        "column": {
+            "free_shipping": true
+        }
+    },
+    "quote_address_item": {
+        "column": {
+            "free_shipping": true
+        }
+    }
+}

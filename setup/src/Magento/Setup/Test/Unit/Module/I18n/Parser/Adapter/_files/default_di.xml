@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding="utf-8" ?>
+<!--
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<config>
+    <node>
+        <title translatable="true">Phrase 1</title>
+    </node>
+</config>

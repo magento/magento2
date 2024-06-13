@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+-->
+<search_terms> <!-- Content of Search Terms -->
+    <search_term>
+        <term>iphone 6</term>
+        <count>50</count>
+    </search_term>
+    <search_term>
+        <term>galaxy s3</term>
+        <count>100</count>
+    </search_term>
+</search_terms>

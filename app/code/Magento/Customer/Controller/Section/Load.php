@@ -1,0 +1,93 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Customer\Controller\Section;
+
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Customer\CustomerData\Section\Identifier;
+use Magento\Customer\CustomerData\SectionPoolInterface;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\JsonFactory;
+
+/**
+ * Customer section controller
+ */
+class Load extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
+{
+    /**
+     * @var JsonFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
+     * @var Identifier
+     * @deprecated 101.0.0
+     * @see Used only for backward compatibility for do not break current class implementation with its dependencies
+     */
+    protected $sectionIdentifier;
+
+    /**
+     * @var SectionPoolInterface
+     */
+    protected $sectionPool;
+
+    /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
+     * @param Context $context
+     * @param JsonFactory $resultJsonFactory
+     * @param Identifier $sectionIdentifier
+     * @param SectionPoolInterface $sectionPool
+     * @param Escaper $escaper
+     */
+    public function __construct(
+        Context $context,
+        JsonFactory $resultJsonFactory,
+        Identifier $sectionIdentifier,
+        SectionPoolInterface $sectionPool,
+        ?\Magento\Framework\Escaper $escaper = null
+    ) {
+        parent::__construct($context);
+        $this->resultJsonFactory = $resultJsonFactory;
+        $this->sectionIdentifier = $sectionIdentifier;
+        $this->sectionPool = $sectionPool;
+        $this->escaper = $escaper ?: $this->_objectManager->get(\Magento\Framework\Escaper::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function execute()
+    {
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        $resultJson = $this->resultJsonFactory->create();
+        $resultJson->setHeader('Cache-Control', 'max-age=0, must-revalidate, no-cache, no-store', true);
+        $resultJson->setHeader('Pragma', 'no-cache', true);
+        try {
+            $sectionNames = $this->getRequest()->getParam('sections');
+            $sectionNames = $sectionNames
+                ? array_unique(is_array($sectionNames) ? $sectionNames : explode(',', $sectionNames))
+                : null;
+
+            $forceNewSectionTimestamp = $this->getRequest()->getParam('force_new_section_timestamp');
+            if ('false' === $forceNewSectionTimestamp) {
+                $forceNewSectionTimestamp = false;
+            }
+            $response = $this->sectionPool->getSectionsData($sectionNames, (bool)$forceNewSectionTimestamp);
+        } catch (\Exception $e) {
+            $resultJson->setStatusHeader(
+                \Laminas\Http\Response::STATUS_CODE_400,
+                \Laminas\Http\AbstractMessage::VERSION_11,
+                'Bad Request'
+            );
+            $response = ['message' => $this->escaper->escapeHtml($e->getMessage())];
+        }
+
+        return $resultJson->setData($response);
+    }
+}

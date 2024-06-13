@@ -1,0 +1,29 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * @see \Magento\AdminNotification\Block\Window
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
+<ul class="message-system-list"
+    data-mage-init='{
+        "Magento_Ui/js/modal/modal": {
+            "autoOpen": true,
+            "buttons": false,
+            "modalClass": "modal-system-messages",
+            "title": "<?= $escaper->escapeHtmlAttr($block->getHeaderText()) ?>"
+        }
+    }'>
+    <li class="message message-warning warning">
+        <?= $escaper->escapeHtml($block->getNoticeMessageText()) ?><br/>
+        <a href="<?= $escaper->escapeUrl($block->getNoticeMessageUrl()) ?>">
+            <?= $escaper->escapeHtml($block->getReadDetailsText()) ?>
+        </a>
+    </li>
+</ul>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', '.message-system-list'); ?>

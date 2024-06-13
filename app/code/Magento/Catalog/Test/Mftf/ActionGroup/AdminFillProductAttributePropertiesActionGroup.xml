@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillProductAttributePropertiesActionGroup">
+        <arguments>
+            <argument name="attributeName" type="string"/>
+            <argument name="attributeType" type="string"/>
+        </arguments>
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{attributeName}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="{{attributeType}}" stepKey="selectInputType"/>
+    </actionGroup>
+</actionGroups>

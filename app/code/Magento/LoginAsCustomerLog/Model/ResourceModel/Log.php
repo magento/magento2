@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\LoginAsCustomerLog\Model\ResourceModel;
+
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\LoginAsCustomerLog\Api\Data\LogInterface;
+
+/**
+ * Login as customer log resource model.
+ */
+class Log extends AbstractDb
+{
+    const TABLE_NAME_LOG = 'magento_login_as_customer_log';
+
+    /**
+     * @inheritdoc
+     */
+    protected function _construct()
+    {
+        $this->_init(self::TABLE_NAME_LOG, LogInterface::LOG_ID);
+    }
+}

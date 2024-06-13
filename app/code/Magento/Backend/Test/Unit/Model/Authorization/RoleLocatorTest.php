@@ -1,0 +1,56 @@
+<?php
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Backend\Test\Unit\Model\Authorization;
+
+use Magento\Backend\Model\Auth\Session;
+use Magento\Backend\Model\Authorization\RoleLocator;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RoleLocatorTest extends TestCase
+{
+    use MockCreationTrait;
+
+    /**
+     * @var RoleLocator
+     */
+    private $_model;
+
+    /**
+     * @var MockObject
+     */
+    private $_sessionMock = [];
+
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        $this->objectManager = new ObjectManager($this);
+        $this->_sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getUser', 'getAclRole', 'hasUser']
+        );
+        $this->_model = new RoleLocator($this->_sessionMock);
+    }
+
+    public function testGetAclRoleIdReturnsCurrentUserAclRoleId()
+    {
+        $this->_sessionMock->expects($this->once())->method('hasUser')->willReturn(true);
+        $this->_sessionMock->expects($this->once())->method('getUser')->willReturnSelf();
+        $this->_sessionMock->expects($this->once())->method('getAclRole')->willReturn('some_role');
+        $this->assertEquals('some_role', $this->_model->getAclRoleId());
+    }
+}

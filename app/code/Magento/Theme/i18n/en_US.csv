@@ -1,0 +1,196 @@
+Back,Back
+"Save and Continue","Save and Continue"
+"Save Configuration","Save Configuration"
+%1,%1
+Default,Default
+Themes,Themes
+"Save and Continue Edit","Save and Continue Edit"
+"Are you sure you want to delete this theme?","Are you sure you want to delete this theme?"
+"Theme: %1","Theme: %1"
+"New Theme","New Theme"
+"Theme CSS","Theme CSS"
+"Theme CSS Assets","Theme CSS Assets"
+"Custom CSS","Custom CSS"
+"Select CSS File to Upload","Select CSS File to Upload"
+"Upload CSS File","Upload CSS File"
+"Download CSS File","Download CSS File"
+Manage,Manage
+"Upload Images","Upload Images"
+"Images Assets","Images Assets"
+"Upload Fonts","Upload Fonts"
+"Fonts Assets","Fonts Assets"
+"Edit custom.css","Edit custom.css"
+"Allowed file types *.css.","Allowed file types *.css."
+"This file will replace the current custom.css file and can't be more than 2 MB.","This file will replace the current custom.css file and can't be more than 2 MB."
+"Max file size to upload %1M","Max file size to upload %1M"
+"Something is wrong with the file upload settings.","Something is wrong with the file upload settings."
+"CSS Editor","CSS Editor"
+"Theme Settings","Theme Settings"
+"Parent Theme","Parent Theme"
+"Theme Path","Theme Path"
+"Theme Title","Theme Title"
+"Theme Preview Image","Theme Preview Image"
+General,General
+"Copy of %1","Copy of %1"
+"Max image size %1M","Max image size %1M"
+"Theme JavaScript","Theme JavaScript"
+"Select JS Files to Upload","Select JS Files to Upload"
+"Upload JS Files","Upload JS Files"
+"JS Editor","JS Editor"
+"Allowed file types *.js.","Allowed file types *.js."
+Theme,Theme
+"Media Storage","Media Storage"
+"Create Folder","Create Folder"
+"Delete Folder","Delete Folder"
+"Delete File","Delete File"
+"Insert File","Insert File"
+"New Folder Name:","New Folder Name:"
+"Are you sure you want to delete this folder?","Are you sure you want to delete this folder?"
+"Are you sure you want to delete this file?","Are you sure you want to delete this file?"
+"Storage Root","Storage Root"
+welcome,welcome
+Global,Global
+"Design Configuration","Design Configuration"
+"You saved the configuration.","You saved the configuration."
+"Something went wrong while saving this configuration:","Something went wrong while saving this configuration:"
+"You deleted the theme.","You deleted the theme."
+"We cannot delete the theme.","We cannot delete the theme."
+"File not found: ""%1"".","File not found: ""%1""."
+"We can't find file.","We can't find file."
+"We cannot find theme ""%1"".","We cannot find theme ""%1""."
+"We cannot find the theme.","We cannot find the theme."
+"This theme is not editable.","This theme is not editable."
+"You saved the theme.","You saved the theme."
+"We can't upload the CSS file right now.","We can't upload the CSS file right now."
+"We cannot find a theme with id ""%1"".","We cannot find a theme with id ""%1""."
+"We can't upload the JS file right now.","We can't upload the JS file right now."
+"Sorry, something went wrong. That's all we know.","Sorry, something went wrong. That's all we know."
+"Invalid type","Invalid type"
+"Invalid scope or scope id","Invalid scope or scope id"
+"%1 does not contain field '%2'","%1 does not contain field '%2'"
+"Invalid regular expression: ""%1"".","Invalid regular expression: ""%1""."
+"%1 does not contain field 'file'","%1 does not contain field 'file'"
+"Backend model is not specified for %1","Backend model is not specified for %1"
+"The %templateName contains an incorrect configuration. The template has a reference to itself. Either remove or change the reference.","The %templateName contains an incorrect configuration. The template has a reference to itself. Either remove or change the reference."
+"Can not save empty config","Can not save empty config"
+label,label
+"-- Please Select --","-- Please Select --"
+"The start date can't follow the end date.","The start date can't follow the end date."
+"The date range for this design change overlaps another design change for the specified store.","The date range for this design change overlaps another design change for the specified store."
+Copy,Copy
+"Theme id should be set","Theme id should be set"
+"Circular-reference in theme inheritance detected for ""%1""","Circular-reference in theme inheritance detected for ""%1"""
+"The CSS file must be less than %1M.","The CSS file must be less than %1M."
+"The JS file must be less than %1M.","The JS file must be less than %1M."
+"We can't upload the file right now.","We can't upload the file right now."
+"Use only standard alphanumeric, dashes and underscores.","Use only standard alphanumeric, dashes and underscores."
+"We found a directory with the same name.","We found a directory with the same name."
+"We cannot find a directory with this name.","We cannot find a directory with this name."
+"We can't delete root directory %1 right now.","We can't delete root directory %1 right now."
+"Theme isn't deletable.","Theme isn't deletable."
+"Exception message","Exception message"
+"localized exception","localized exception"
+Message,Message
+"Test Label","Test Label"
+Phrase,Phrase
+testMessage,testMessage
+Edit,Edit
+"We found no files.","We found no files."
+"thumbnail","thumbnail"
+"Browse Files","Browse Files"
+Scope:,Scope:
+Remove,Remove
+"Help Us Keep Magento Healthy","Help Us Keep Magento Healthy"
+"Report All Bugs","Report All Bugs"
+"Welcome, %1!","Welcome, %1!"
+"Toggle Nav","Toggle Nav"
+"JavaScript seems to be disabled in your browser.","JavaScript seems to be disabled in your browser."
+"For the best experience on our site, be sure to turn on Javascript in your browser.","For the best experience on our site, be sure to turn on Javascript in your browser."
+"Local Storage seems to be disabled in your browser.","Local Storage seems to be disabled in your browser."
+"For the best experience on our site, be sure to turn on Local Storage in your browser.","For the best experience on our site, be sure to turn on Local Storage in your browser."
+"This is a demo store. No orders will be fulfilled.","This is a demo store. No orders will be fulfilled."
+"Items %1 to %2 of %3 total","Items %1 to %2 of %3 total"
+"%1 Item","%1 Item"
+"%1 Item(s)","%1 Item(s)"
+Page,Page
+Previous,Previous
+"You're currently reading page","You're currently reading page"
+Next,Next
+Show,Show
+"per page","per page"
+"About the calendar","About the calendar"
+Close,Close
+"Go Today","Go Today"
+WK,WK
+Time,Time
+Hour,Hour
+Minute,Minute
+"%name,","%name,"
+"Welcome to %store_name.","Welcome to %store_name."
+"To sign in to our site, use these credentials during checkout or on the <a href=""%customer_url"">My Account</a> page:","To sign in to our site, use these credentials during checkout or on the <a href=""%customer_url"">My Account</a> page:"
+Email:,Email:
+Password:,Password:
+"Password you set when creating account","Password you set when creating account"
+"Forgot your account password? Click <a href=""%reset_url"">here</a> to reset it.","Forgot your account password? Click <a href=""%reset_url"">here</a> to reset it."
+"When you sign in to your account, you will be able to:","When you sign in to your account, you will be able to:"
+"Proceed through checkout faster","Proceed through checkout faster"
+"Check the status of orders","Check the status of orders"
+"View past orders","View past orders"
+"Store alternative addresses (for shipping to multiple family members and friends)","Store alternative addresses (for shipping to multiple family members and friends)"
+"We could not detect a size.","We could not detect a size."
+"We don't recognize this file extension.","We don't recognize this file extension."
+Empty,Empty
+"1 column","1 column"
+Configuration,Configuration
+"Default welcome msg!","Default welcome msg!"
+"Copyright © 2013-present Magento, Inc. All rights reserved.","Copyright © 2013-present Magento, Inc. All rights reserved."
+"Design Config Grid","Design Config Grid"
+"Rebuild design config grid index","Rebuild design config grid index"
+"Admin empty","Admin empty"
+"Admin 1column","Admin 1column"
+"Admin 2 columns with left bar","Admin 2 columns with left bar"
+"Theme Information","Theme Information"
+"Other Settings","Other Settings"
+"HTML Head","HTML Head"
+"Allowed file types: ico, png, gif, jpg, jpeg, apng. Not all browsers support all these formats!","Allowed file types: ico, png, gif, jpg, jpeg, apng. Not all browsers support all these formats!"
+"Not all browsers support all these formats! Note: ICO file type is supported by ImageMagik adapter that can be set from Store / Configuration / Developer / Image Processing Settings.","Not all browsers support all these formats! Note: ICO file type is supported by ImageMagik adapter that can be set from Store / Configuration / Developer / Image Processing Settings."
+"Favicon Icon","Favicon Icon"
+"Default Page Title","Default Page Title"
+"Page Title Prefix","Page Title Prefix"
+"Page Title Suffix","Page Title Suffix"
+"Default Meta Description","Default Meta Description"
+"Default Meta Keywords","Default Meta Keywords"
+"This will be included before head closing tag in page HTML.","This will be included before head closing tag in page HTML."
+"Scripts and Style Sheets","Scripts and Style Sheets"
+"Display Demo Store Notice","Display Demo Store Notice"
+Header,Header
+"Allowed file types: png, gif, jpg, jpeg.","Allowed file types: png, gif, jpg, jpeg."
+"Logo Image","Logo Image"
+"Logo Attribute Width","Logo Attribute Width"
+"Logo Attribute Height","Logo Attribute Height"
+"Welcome Text","Welcome Text"
+"Logo Image Alt","Logo Image Alt"
+Footer,Footer
+"This will be displayed just before the body closing tag.","This will be displayed just before the body closing tag."
+"Miscellaneous HTML","Miscellaneous HTML"
+"Use {YYYY} to insert the current year (updates on cache refresh).","Use {YYYY} to insert the current year (updates on cache refresh)."
+Copyright,Copyright
+"Default Robots","Default Robots"
+"Edit custom instruction of robots.txt File","Edit custom instruction of robots.txt File"
+"This action will delete your custom instructions and reset robots.txt file to system's default settings.","This action will delete your custom instructions and reset robots.txt file to system's default settings."
+"Reset To Defaults","Reset To Defaults"
+Website,Website
+Store,Store
+"Store View","Store View"
+"Skip to Content","Skip to Content"
+Menu,Menu
+Account,Account
+Settings,Settings
+"2 columns with left bar","2 columns with left bar"
+"2 columns with right bar","2 columns with right bar"
+"3 columns","3 columns"
+ID,ID
+View,View
+Action,Action
+"Display Report Bugs Link","Display Report Bugs Link"
+"Using Default Theme","Using Default Theme"

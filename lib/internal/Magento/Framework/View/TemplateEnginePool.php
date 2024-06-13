@@ -1,0 +1,51 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Framework\View;
+
+/**
+ * @api
+ * @since 100.0.2
+ */
+class TemplateEnginePool
+{
+    /**
+     * Factory
+     *
+     * @var TemplateEngineFactory
+     */
+    protected $factory;
+
+    /**
+     * Template engines
+     *
+     * @var \Magento\Framework\View\TemplateEngineInterface[]
+     */
+    protected $engines = [];
+
+    /**
+     * Constructor
+     *
+     * @param TemplateEngineFactory $factory
+     */
+    public function __construct(TemplateEngineFactory $factory)
+    {
+        $this->factory = $factory;
+    }
+
+    /**
+     * Retrieve a template engine instance by its unique name
+     *
+     * @param string $name
+     * @return \Magento\Framework\View\TemplateEngineInterface
+     */
+    public function get($name)
+    {
+        if (!isset($this->engines[$name])) {
+            $this->engines[$name] = $this->factory->create($name);
+        }
+        return $this->engines[$name];
+    }
+}

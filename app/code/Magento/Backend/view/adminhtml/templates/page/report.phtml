@@ -1,0 +1,11 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+?>
+<?php if ($block->getBugreportUrl()) : ?>
+    <a class="link-report" href="<?= $block->escapeUrl($block->getBugreportUrl()) ?>" id="footer_bug_tracking" target="_blank">
+        <?= $block->escapeHtml(__('Report an Issue')) ?>
+    </a>
+<?php endif; ?>

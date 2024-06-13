@@ -1,0 +1,92 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Bundle\Test\Unit\Controller\Adminhtml\Bundle\Selection;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Bundle\Controller\Adminhtml\Bundle\Selection\Search;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\ViewInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\App\Test\Unit\Helper\ResponseTestHelper;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search as SearchBlock;
+
+class SearchTest extends TestCase
+{
+    /** @var Search */
+    protected $controller;
+
+    /** @var ObjectManagerHelper */
+    protected $objectManagerHelper;
+
+    /**
+     * @var MockObject|RequestInterface
+     */
+    protected $request;
+
+    /**
+     * @var MockObject|ResponseInterface
+     */
+    protected $response;
+
+    /**
+     * @var MockObject|ViewInterface
+     */
+    protected $view;
+
+    /**
+     * @var MockObject|Context
+     */
+    protected $context;
+
+    protected function setUp(): void
+    {
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+
+        $this->context = $this->createMock(Context::class);
+        $this->request = $this->createMock(RequestInterface::class);
+
+        /** @var ResponseInterface $response */
+        $this->response = new ResponseTestHelper();
+
+        $this->view = $this->createMock(ViewInterface::class);
+
+        $this->context->method('getRequest')->willReturn($this->request);
+        $this->context->method('getResponse')->willReturn($this->response);
+        $this->context->method('getView')->willReturn($this->view);
+
+        $this->controller = $this->objectManagerHelper->getObject(
+            Search::class,
+            [
+                'context' => $this->context
+            ]
+        );
+    }
+
+    public function testExecute()
+    {
+        $layout = $this->createMock(LayoutInterface::class);
+
+        // Use partial mock - only mock toHtml(), all setters work via magic methods (DataObject)
+        $block = $this->createPartialMock(SearchBlock::class, ['toHtml']);
+        $block->method('toHtml')->willReturn('');
+
+        $this->response->setBody('');
+        $this->request->expects($this->once())->method('getParam')->with('index')->willReturn('index');
+        $this->view->expects($this->once())->method('getLayout')->willReturn($layout);
+        $layout->expects($this->once())->method('createBlock')->willReturn($block);
+        // These setters work via DataObject's __call magic method
+        $block->setIndex('index');
+        $block->setFirstShow(true);
+
+        $this->assertEquals($this->response, $this->controller->execute());
+    }
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config>
+    <words>
+        <word>any</word>
+    </words>
+    <whitelist>
+        <item></item>
+    </whitelist>
+</config>

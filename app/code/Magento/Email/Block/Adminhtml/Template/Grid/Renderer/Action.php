@@ -1,0 +1,62 @@
+<?php
+/**
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
+
+/**
+ * Email templates grid block action item renderer
+ */
+class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
+{
+    /**
+     * Render grid column
+     *
+     * @param \Magento\Framework\DataObject $row
+     * @return string
+     */
+    public function render(\Magento\Framework\DataObject $row)
+    {
+        $actions = [];
+
+        $actions[] = [
+            'url' => $this->getUrl('adminhtml/*/preview', ['id' => $row->getId()]),
+            'caption' => __('Preview'),
+            'target' => '_blank'
+        ];
+
+        $this->getColumn()->setActions($actions);
+
+        return parent::render($row);
+    }
+
+    /**
+     * Get escaped value
+     *
+     * @param string $value
+     * @return string
+     */
+    protected function _getEscapedValue($value)
+    {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        return addcslashes($this->escapeHtml($value), '\\\'');
+    }
+
+    /**
+     * Convert actions to html
+     *
+     * @param array $actions
+     * @return string
+     */
+    protected function _actionsToHtml(array $actions)
+    {
+        $html = [];
+        $attributesObject = new \Magento\Framework\DataObject();
+        foreach ($actions as $action) {
+            $attributesObject->setData($action['@']);
+            $html[] = '<a ' . $attributesObject->serialize() . '>' . $action['#'] . '</a>';
+        }
+        return implode(' <span class="separator">&nbsp;|&nbsp;</span> ', $html);
+    }
+}

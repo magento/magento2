@@ -1,0 +1,196 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Customer\Test\Unit\Model;
+
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Customer\Model\CustomerExtractor;
+use Magento\Customer\Model\Metadata\Form;
+use Magento\Customer\Model\Metadata\FormFactory;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\RequestInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Unit test CustomerExtractorTest
+ */
+class CustomerExtractorTest extends TestCase
+{
+    /** @var CustomerExtractor */
+    protected $customerExtractor;
+
+    /** @var FormFactory|MockObject */
+    protected $formFactory;
+
+    /** @var CustomerInterfaceFactory|MockObject */
+    protected $customerFactory;
+
+    /** @var StoreManagerInterface|MockObject */
+    protected $storeManager;
+
+    /** @var GroupManagementInterface|MockObject */
+    protected $customerGroupManagement;
+
+    /** @var DataObjectHelper|MockObject */
+    protected $dataObjectHelper;
+
+    /** @var RequestInterface|MockObject */
+    protected $request;
+
+    /** @var Form|MockObject */
+    protected $customerForm;
+
+    /** @var CustomerInterface|MockObject */
+    protected $customerData;
+
+    /** @var StoreInterface|MockObject */
+    protected $store;
+
+    /** @var GroupInterface|MockObject */
+    protected $customerGroup;
+
+    protected function setUp(): void
+    {
+        $this->formFactory = $this->createMock(
+            FormFactory::class
+        );
+        $this->customerFactory = $this->createMock(
+            CustomerInterfaceFactory::class
+        );
+        $this->storeManager = $this->createMock(
+            StoreManagerInterface::class
+        );
+        $this->customerGroupManagement = $this->createMock(
+            GroupManagementInterface::class
+        );
+        $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->customerForm = $this->createMock(Form::class);
+        $this->customerData = $this->createMock(
+            CustomerInterface::class
+        );
+        $this->store = $this->createMock(
+            StoreInterface::class
+        );
+        $this->customerGroup = $this->createMock(
+            GroupInterface::class
+        );
+        $this->customerExtractor = new CustomerExtractor(
+            $this->formFactory,
+            $this->customerFactory,
+            $this->storeManager,
+            $this->customerGroupManagement,
+            $this->dataObjectHelper
+        );
+    }
+
+    /**
+     * @param int $storeId
+     * @param int $websiteId
+     * @param array $customerData
+     * @return void
+     */
+    #[DataProvider('getDataProvider')]
+    public function testExtract(int $storeId, int $websiteId, array $customerData)
+    {
+        $this->initializeExpectation($storeId, $websiteId, $customerData);
+
+        $this->assertSame($this->customerData, $this->customerExtractor->extract('form-code', $this->request));
+    }
+
+    /**
+     * @param int $storeId
+     * @param int $websiteId
+     * @param array $customerData
+     */
+    private function initializeExpectation(int $storeId, int $websiteId, array $customerData): void
+    {
+        $this->formFactory->expects($this->once())
+            ->method('create')
+            ->with('customer', 'form-code')
+            ->willReturn($this->customerForm);
+        $this->customerForm->expects($this->once())
+            ->method('extractData')
+            ->with($this->request)
+            ->willReturn($customerData);
+        $this->customerForm->expects($this->once())
+            ->method('compactData')
+            ->with($customerData)
+            ->willReturn($customerData);
+        $this->customerForm->expects($this->once())
+            ->method('getAllowedAttributes')
+            ->willReturn(['group_id' => 'attribute object']);
+        $this->customerFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->customerData);
+        $this->dataObjectHelper->expects($this->once())
+            ->method('populateWithArray')
+            ->with($this->customerData, $customerData, CustomerInterface::class)
+            ->willReturn($this->customerData);
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->once())
+            ->method('getId')
+            ->willReturn($storeId);
+        $this->store->expects($this->once())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+        $this->customerData->expects($this->once())
+            ->method('setWebsiteId')
+            ->with($websiteId);
+        $this->customerData->expects($this->once())
+            ->method('setStoreId')
+            ->with($storeId);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getDataProvider()
+    {
+        return [
+            'extract data when group id is null' => [
+                1,
+                1,
+                [
+                    'firstname' => 'firstname-1',
+                    'lastname' => 'firstname-1',
+                    'email' => 'email-1.example.com',
+                    'group_id' => null
+                ]
+            ],
+            'extract data when group id is not null and default' => [
+                1,
+                2,
+                [
+                    'firstname' => 'firstname-2',
+                    'lastname' => 'firstname-3',
+                    'email' => 'email-2.example.com',
+                    'group_id' => 1
+                ]
+            ],
+            'extract data when group id is different from default' => [
+                1,
+                1,
+                [
+                    'firstname' => 'firstname-3',
+                    'lastname' => 'firstname-3',
+                    'email' => 'email-3.example.com',
+                    'group_id' => 2
+                ]
+            ],
+        ];
+    }
+}

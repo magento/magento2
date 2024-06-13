@@ -1,0 +1,149 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Payment\Test\Unit\Gateway\Request;
+
+use Magento\Framework\ObjectManager\TMap;
+use Magento\Framework\ObjectManager\TMapFactory;
+use Magento\Payment\Gateway\Request\BuilderComposite;
+use Magento\Payment\Gateway\Request\BuilderInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
+class BuilderCompositeTest extends TestCase
+{
+    public function testBuildEmpty()
+    {
+        $tMapFactory = $this->createPartialMock(TMapFactory::class, ['create']);
+        $tMap = $this->createMock(TMap::class);
+
+        $tMapFactory->expects(static::once())
+            ->method('create')
+            ->with(
+                [
+                    'array' => [],
+                    'type' => BuilderInterface::class
+                ]
+            )
+            ->willReturn($tMap);
+        $tMap->expects(static::once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([]));
+
+        $builder = new BuilderComposite($tMapFactory, []);
+        static::assertEquals([], $builder->build([]));
+    }
+
+    /**
+     * @param array $expected
+     * @covers \Magento\Payment\Gateway\Request\BuilderComposite::build
+     */
+    #[DataProvider('buildDataProvider')]
+    public function testBuild(array $expected)
+    {
+        $tMapFactory = $this->createPartialMock(TMapFactory::class, ['create']);
+        $tMap = $this->createMock(TMap::class);
+        $customerBuilder = $this->createMock(BuilderInterface::class);
+        $productBuilder = $this->createMock(BuilderInterface::class);
+        $magentoBuilder = $this->createMock(BuilderInterface::class);
+
+        $customerBuilder->expects(static::once())
+            ->method('build')
+            ->willReturn(
+                [
+                    'user' => $expected['user'],
+                    'address' => $expected['address']
+                ]
+            );
+        $productBuilder->expects(static::once())
+            ->method('build')
+            ->willReturn(
+                [
+                    'amount' => $expected['amount'],
+                    'currency' => $expected['currency'],
+                    'item' => $expected['item'],
+                    'quantity' => $expected['quantity'],
+                    'options' => ['product' => $expected['options']['product']]
+                ]
+            );
+        $magentoBuilder->expects(static::once())
+            ->method('build')
+            ->willReturn(
+                [
+                    'url' => $expected['url'],
+                    'options' => ['magento' => $expected['options']['magento']]
+                ]
+            );
+
+        $tMapFactory->expects(static::once())
+            ->method('create')
+            ->with(
+                [
+                    'array' => [
+                        'customer' => BuilderInterface::class,
+                        'product' => BuilderInterface::class,
+                        'magento' => BuilderInterface::class
+                    ],
+                    'type' => BuilderInterface::class
+                ]
+            )
+            ->willReturn($tMap);
+        $tMap->expects(static::once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$customerBuilder, $productBuilder, $magentoBuilder]));
+
+        $builder = new BuilderComposite(
+            $tMapFactory,
+            [
+                'customer' => BuilderInterface::class,
+                'product' => BuilderInterface::class,
+                'magento' => BuilderInterface::class
+            ]
+        );
+
+        static::assertEquals($expected, $builder->build([]));
+    }
+
+    /**
+     * Get list of variations
+     */
+    public static function buildDataProvider()
+    {
+        return [
+            [[
+                'user' => 'Mrs G. Crump',
+                'address' => '46 Egernon Crescent',
+                'amount' => 10.00,
+                'currency' => 'pound',
+                'item' => 'gas cooker',
+                'quantity' => 1,
+                'options' => ['product' => '', 'magento' => 'magento'],
+                'url' => 'https://url.in',
+            ]],
+            [[
+                'user' => 'John Doe',
+                'address' => '46 Main Street',
+                'amount' => 250.00,
+                'currency' => 'usd',
+                'item' => 'phone',
+                'quantity' => 2,
+                'options' => ['product' => 'product', 'magento' => 'magento'],
+                'url' => 'https://url.io',
+            ]],
+            [[
+                'user' => 'John Smit',
+                'address' => '46 Egernon Crescent',
+                'amount' => 1100.00,
+                'currency' => 'usd',
+                'item' => 'notebook',
+                'quantity' => 1,
+                'options' => ['product' => ['discount' => ['price' => 2.00]], 'magento' => 'magento'],
+                'url' => 'http://url.ua',
+            ]],
+        ];
+    }
+}

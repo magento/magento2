@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminCategoryGridPageImageColumnActionGroup">
+        <arguments>
+            <argument name="file" type="string" defaultValue="magento"/>
+        </arguments>
+        <annotations>
+            <description>Assert category grid page image column a specific category</description>
+        </annotations>
+
+        <grabAttributeFrom selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.image}}" userInput="src"
+                           stepKey="getImageSrc"/>
+        <assertStringContainsString stepKey="assertImageSrc">
+            <actualResult type="string">{$getImageSrc}</actualResult>
+            <expectedResult type="string">{{file}}</expectedResult>
+        </assertStringContainsString>
+    </actionGroup>
+</actionGroups>

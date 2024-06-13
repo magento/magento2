@@ -1,0 +1,89 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
+
+use Magento\Customer\Api\Data\ValidationRuleInterface;
+use Magento\Customer\Ui\Component\Listing\Column\ValidationRules;
+use Magento\Framework\DataObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ValidationRulesTest extends TestCase
+{
+    /** @var ValidationRules */
+    protected $validationRules;
+
+    /** @var ValidationRuleInterface|MockObject */
+    protected $validationRule;
+
+    protected function setUp(): void
+    {
+        $this->validationRule = $this->createMock(ValidationRuleInterface::class);
+
+        $this->validationRules = new ValidationRules();
+    }
+
+    /**
+     * Tests input validation rules
+     *
+     * @param String $validationRule - provided input validation rules
+     * @param String $validationClass - expected input validation class */
+    #[DataProvider('validationRulesDataProvider')]
+    public function testGetValidationRules(String $validationRule, String $validationClass): void
+    {
+        $expectsRules = [
+            'required-entry' => true,
+            $validationClass => true,
+        ];
+        $this->validationRule->method('getName')
+            ->willReturn('input_validation');
+
+        $this->validationRule->method('getValue')
+            ->willReturn($validationRule);
+
+        self::assertEquals(
+            $expectsRules,
+            $this->validationRules->getValidationRules(
+                true,
+                [
+                    $this->validationRule,
+                    new DataObject(),
+                ]
+            )
+        );
+    }
+
+    /**
+     * Provides possible validation rules.
+     *
+     * @return array
+     */
+    public static function validationRulesDataProvider(): array
+    {
+        return [
+            ['alpha', 'validate-alpha'],
+            ['numeric', 'validate-number'],
+            ['alphanumeric', 'validate-alphanum'],
+            ['alphanum-with-spaces', 'validate-alphanum-with-spaces'],
+            ['url', 'validate-url'],
+            ['email', 'validate-email']
+        ];
+    }
+
+    public function testGetValidationRulesWithOnlyRequiredRule()
+    {
+        $expectsRules = [
+            'required-entry' => true,
+        ];
+        $this->assertEquals(
+            $expectsRules,
+            $this->validationRules->getValidationRules(true, [])
+        );
+    }
+}

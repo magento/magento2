@@ -1,0 +1,183 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Reports\Test\Unit\Model\ResourceModel\Event;
+
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Reports\Model\ResourceModel\Event\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+class CollectionTest extends TestCase
+{
+    use MockCreationTrait;
+
+    /**
+     * @var Collection
+     */
+    protected $collection;
+
+    /**
+     * @var EntityFactoryInterface|MockObject
+     */
+    protected $entityFactoryMock;
+
+    /**
+     * @var LoggerInterface|MockObject
+     */
+    protected $loggerMock;
+
+    /**
+     * @var FetchStrategyInterface|MockObject
+     */
+    protected $fetchStrategyMock;
+
+    /**
+     * @var ManagerInterface|MockObject
+     */
+    protected $managerMock;
+
+    /**
+     * @var AbstractDb|MockObject
+     */
+    protected $resourceMock;
+
+    /**
+     * @var AdapterInterface|MockObject
+     */
+    protected $dbMock;
+
+    /**
+     * @var Select|MockObject
+     */
+    protected $selectMock;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void
+    {
+        $this->entityFactoryMock = $this->getMockBuilder(
+            EntityFactoryInterface::class
+        )->getMock();
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->getMock();
+        $this->fetchStrategyMock = $this->getMockBuilder(
+            FetchStrategyInterface::class
+        )->getMock();
+        $this->managerMock = $this->getMockBuilder(ManagerInterface::class)
+            ->getMock();
+
+        $this->selectMock = $this->getMockBuilder(Select::class)
+            ->onlyMethods(['where', 'from'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->selectMock->expects($this->any())
+            ->method('from')
+            ->willReturnSelf();
+        $this->selectMock->expects($this->any())
+            ->method('where')
+            ->willReturnSelf();
+
+        $this->dbMock = $this->getMockBuilder(Mysql::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dbMock->expects($this->any())
+            ->method('select')
+            ->willReturn($this->selectMock);
+
+        $this->resourceMock = $this->createPartialMockWithReflection(
+            AbstractDb::class,
+            ['getConnection', '_construct', 'getMainTable', 'getTable', 'getCurrentStoreIds']
+        );
+        $this->resourceMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->dbMock);
+
+        $this->collection = new Collection(
+            $this->entityFactoryMock,
+            $this->loggerMock,
+            $this->fetchStrategyMock,
+            $this->managerMock,
+            null,
+            $this->resourceMock
+        );
+    }
+
+    /**
+     * @param mixed $ignoreData
+     * @param string $ignoreSql
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    #[DataProvider('ignoresDataProvider')]
+    public function testAddStoreFilter($ignoreData, string $ignoreSql): void
+    {
+        $typeId = 1;
+        $subjectId =2;
+        $subtype = 3;
+        $limit = 0;
+        $stores = [1, 2];
+
+        $this->resourceMock
+            ->expects($this->once())
+            ->method('getCurrentStoreIds')
+            ->willReturn($stores);
+        $this->selectMock
+            ->method('where')
+            ->willReturnCallback(function (
+                $arg1,
+                $arg2
+            ) use (
+                $typeId,
+                $subjectId,
+                $stores,
+                $ignoreSql,
+                $ignoreData
+            ) {
+                if ($arg1 == 'event_type_id = ?' && $arg2 == $typeId) {
+                    return null;
+                } elseif ($arg1 == 'subject_id = ?' && $arg2 == $subjectId) {
+                    return null;
+                } elseif ($arg1 == 'subtype = ?' && $arg2 == $typeId) {
+                    return null;
+                } elseif ($arg1 == 'store_id IN(?)' && $arg2 == $stores) {
+                    return null;
+                } elseif ($arg1 == $ignoreSql && $arg2 == $ignoreData) {
+                    return null;
+                }
+            });
+        $this->collection->addRecentlyFiler($typeId, $subjectId, $subtype, $ignoreData, $limit);
+    }
+
+    /**
+     * @return array
+     */
+    public static function ignoresDataProvider(): array
+    {
+        return [
+            [
+                'ignoreData' => 1,
+                'ignoreSql' => 'object_id <> ?'
+            ],
+            [
+                'ignoreData' => [1],
+                'ignoreSql' => 'object_id NOT IN(?)'
+            ]
+        ];
+    }
+}

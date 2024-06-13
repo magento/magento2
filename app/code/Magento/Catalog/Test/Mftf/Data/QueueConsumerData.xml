@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminProductAttributeUpdateConsumerData">
+        <data key="consumerName">product_action_attribute.update</data>
+        <data key="messageLimit">100</data>
+    </entity>
+    <entity name="AdminProductAttributeWebsiteUpdateConsumerData">
+        <data key="consumerName">product_action_attribute.website.update</data>
+        <data key="messageLimit">100</data>
+    </entity>
+</entities>

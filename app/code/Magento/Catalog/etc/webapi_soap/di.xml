@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Catalog\Model\Product\Option\Type\Date" type="Magento\Catalog\Model\Webapi\Product\Option\Type\Date" />
+    <type name="Magento\Catalog\Helper\Product\ConfigurationPool">
+        <arguments>
+            <argument name="instancesByType" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Catalog\Helper\Product\Configuration</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\ResourceConnection">
+        <plugin name="get_catalog_category_product_index_table_name" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\TableResolver"/>
+        <plugin name="get_catalog_product_price_index_table_name" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\TableResolver"/>
+    </type>
+    <type name="Magento\Catalog\Api\ProductCustomOptionRepositoryInterface">
+        <plugin name="updateProductCustomOptionsAttributes" type="Magento\Catalog\Plugin\Model\Product\Option\UpdateProductCustomOptionsAttributes"/>
+    </type>
+    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="product_authorization" type="Magento\Catalog\Plugin\ProductAuthorization" />
+    </type>
+    <type name="Magento\Catalog\Api\CategoryRepositoryInterface">
+        <plugin name="category_authorization" type="Magento\Catalog\Plugin\CategoryAuthorization" />
+    </type>
+    <type name="Magento\Framework\Reflection\DataObjectProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="Magento\Catalog\Model\Product" xsi:type="object">Magento\Catalog\Model\Product\Webapi\ProductOutputProcessor\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Webapi\ProductOutputProcessor">
+        <arguments>
+            <argument name="deserializer" xsi:type="object">Magento\Framework\Webapi\Rest\Request\Deserializer\Xml</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Api\ProductLinkRepositoryInterface">
+        <plugin name="reindex_after_save_product_links" type="Magento\Catalog\Plugin\Api\ProductLinkRepositoryInterface\ReindexAfterSaveProductLinksPlugin"/>
+        <plugin name="reindex_after_delete_by_id_product_links" type="Magento\Catalog\Plugin\Api\ProductLinkRepositoryInterface\ReindexAfterDeleteByIdProductLinksPlugin"/>
+    </type>
+    <type name="Magento\Catalog\Model\ProductRenderList">
+        <plugin name="customerGroupContextForPricing"
+                type="Magento\Catalog\Plugin\Model\ProductRenderListPlugin" />
+    </type>
+</config>

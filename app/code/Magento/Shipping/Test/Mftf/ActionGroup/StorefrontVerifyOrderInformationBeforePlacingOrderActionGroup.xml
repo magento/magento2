@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontVerifyOrderInformationBeforePlacingOrderActionGroup">
+        <annotations>
+            <description>Before placing order verifying the shipping method is selected for each address.</description>
+        </annotations>
+        <!-- Verify shipping method is present for Berlin address -->
+        <waitForElementVisible selector="{{StorefrontMultishippingCheckoutOverviewReviewSection.shippingMethodForCity('Berlin')}}" stepKey="waitForBerlinReviewOrderInformation"/>
+        <!-- Verify shipping method is present for London address -->
+        <waitForElementVisible selector="{{StorefrontMultishippingCheckoutOverviewReviewSection.shippingMethodForCity('London')}}" stepKey="waitForLondonReviewOrderInformation"/>
+        <!-- Verify shipping method is present for New York address -->
+        <waitForElementVisible selector="{{StorefrontMultishippingCheckoutOverviewReviewSection.shippingMethodForCity('New York')}}" stepKey="waitForNewYorkReviewOrderInformation"/>
+        <!-- Verify shipping method is present for Culver City address -->
+        <waitForElementVisible selector="{{StorefrontMultishippingCheckoutOverviewReviewSection.shippingMethodForCity('Culver City')}}" stepKey="waitForCulverCityReviewOrderInformation"/>
+        <waitForElementClickable selector="{{AdminShipmentAddressInformationSection.placeOrder}}" stepKey="waitForPlaceOrder"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertPayPalButtonLayoutInPaypalLabelActionGroup" extends="AssertPayPalButtonLayoutActionGroup">
+        <annotations>
+            <description>Assert Paypal button layout when layout is horizontal</description>
+        </annotations>
+        <arguments>
+        </arguments>
+        <dontSeeElement selector="{{StorefrontPayPalSmartButtonStylesSection.labelText(label)}}" stepKey="seeButtonLabelText"/>
+    </actionGroup>
+</actionGroups>

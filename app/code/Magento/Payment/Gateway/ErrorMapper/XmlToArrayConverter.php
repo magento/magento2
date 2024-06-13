@@ -1,0 +1,29 @@
+<?php
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Payment\Gateway\ErrorMapper;
+
+use Magento\Framework\Config\ConverterInterface;
+
+/**
+ * Reads xml in `<message code="code">message</message>` format and converts it to [code => message] array format.
+ */
+class XmlToArrayConverter implements ConverterInterface
+{
+    /**
+     * @inheritdoc
+     */
+    public function convert($source)
+    {
+        $result = [];
+        $messageList = $source->getElementsByTagName('message');
+        foreach ($messageList as $messageNode) {
+            $result[(string) $messageNode->getAttribute('code')] = (string) $messageNode->nodeValue;
+        }
+        return $result;
+    }
+}

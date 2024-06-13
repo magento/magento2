@@ -1,0 +1,43 @@
+{
+    "name": "magento/module-wishlist",
+    "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~8.2.0||~8.3.0||~8.4.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog": "*",
+        "magento/module-catalog-inventory": "*",
+        "magento/module-checkout": "*",
+        "magento/module-customer": "*",
+        "magento/module-rss": "*",
+        "magento/module-sales": "*",
+        "magento/module-store": "*",
+        "magento/module-theme": "*",
+        "magento/module-ui": "*",
+        "magento/module-captcha": "*"
+    },
+    "suggest": {
+        "magento/module-configurable-product": "*",
+        "magento/module-downloadable": "*",
+        "magento/module-bundle": "*",
+        "magento/module-cookie": "*",
+        "magento/module-grouped-product": "*",
+        "magento/module-wishlist-sample-data": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\Wishlist\\": ""
+        }
+    }
+}

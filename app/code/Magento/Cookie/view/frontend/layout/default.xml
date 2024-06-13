@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="after.body.start">
+            <block class="Magento\Cookie\Block\Html\Notices" name="cookie_notices" template="Magento_Cookie::html/notices.phtml"/>
+            <block class="Magento\Framework\View\Element\Js\Cookie" name="cookie_config" template="Magento_Cookie::html/cookie.phtml">
+                <arguments>
+                    <argument name="session_config" xsi:type="object">Magento\Cookie\Block\DataProviders\SessionConfig</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

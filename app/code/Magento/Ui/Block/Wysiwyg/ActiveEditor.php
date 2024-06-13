@@ -1,0 +1,64 @@
+<?php
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Ui\Block\Wysiwyg;
+
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Ui\Model;
+
+/**
+ * ActiveEditor block
+ *
+ * @api
+ * @since 101.1.0
+ */
+class ActiveEditor extends \Magento\Framework\View\Element\Template
+{
+    public const DEFAULT_EDITOR_PATH = 'mage/adminhtml/wysiwyg/tiny_mce/tinymceAdapter';
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @var array
+     */
+    private $availableAdapterPaths;
+
+    /**
+     * ActiveEditor constructor.
+     * @param Context $context
+     * @param ScopeConfigInterface $scopeConfig
+     * @param array $availableAdapterPaths
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        ScopeConfigInterface $scopeConfig,
+        $availableAdapterPaths = [],
+        array $data = []
+    ) {
+        parent::__construct($context, $data);
+        $this->scopeConfig = $scopeConfig;
+        $this->availableAdapterPaths = $availableAdapterPaths;
+    }
+
+    /**
+     * Get active wysiwyg adapter path
+     *
+     * @return string
+     * @since 101.1.0
+     */
+    public function getWysiwygAdapterPath()
+    {
+        $adapterPath = $this->scopeConfig->getValue(Model\Config::WYSIWYG_EDITOR_CONFIG_PATH);
+        if ($adapterPath !== self::DEFAULT_EDITOR_PATH && !isset($this->availableAdapterPaths[$adapterPath])) {
+            $adapterPath = self::DEFAULT_EDITOR_PATH;
+        }
+        return $this->escapeHtml($adapterPath);
+    }
+}

@@ -1,0 +1,45 @@
+<?php
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Cookie\Block\DataProviders;
+
+use Magento\Framework\Session\Config\ConfigInterface;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
+
+/**
+ * Provide cookie configuration
+ */
+class SessionConfig implements ArgumentInterface
+{
+    /**
+     * Session config
+     *
+     * @var ConfigInterface
+     */
+    private $sessionConfig;
+
+    /**
+     * Constructor
+     *
+     * @param ConfigInterface $sessionConfig
+     */
+    public function __construct(
+        ConfigInterface $sessionConfig
+    ) {
+        $this->sessionConfig = $sessionConfig;
+    }
+    /**
+     * Get session.cookie_secure
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function getCookieSecure()
+    {
+        return $this->sessionConfig->getCookieSecure();
+    }
+}

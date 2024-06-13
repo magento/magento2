@@ -1,0 +1,10 @@
+<?php
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column $block */
+$product = $block->getItem()->getProduct();
+?>
+<?= $block->getReviewsSummaryHtml($product, 'short') ?>

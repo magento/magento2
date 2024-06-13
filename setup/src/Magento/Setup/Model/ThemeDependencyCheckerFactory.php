@@ -1,0 +1,40 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+
+namespace Magento\Setup\Model;
+
+use Magento\Theme\Model\Theme\ThemeDependencyChecker;
+
+/**
+ * Class ThemeDependencyCheckerFactory creates instance of ThemeDependencyChecker
+ */
+class ThemeDependencyCheckerFactory
+{
+    /**
+     * @var ObjectManagerProvider
+     */
+    private $objectManagerProvider;
+
+    /**
+     * Constructor
+     *
+     * @param ObjectManagerProvider $objectManagerProvider
+     */
+    public function __construct(ObjectManagerProvider $objectManagerProvider)
+    {
+        $this->objectManagerProvider = $objectManagerProvider;
+    }
+
+    /**
+     * Creates ThemeDependencyChecker object
+     *
+     * @return ThemeDependencyChecker
+     */
+    public function create()
+    {
+        return $this->objectManagerProvider->get()->get(\Magento\Theme\Model\Theme\ThemeDependencyChecker::class);
+    }
+}

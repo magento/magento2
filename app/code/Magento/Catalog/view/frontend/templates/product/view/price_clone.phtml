@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+<?php /** @var \Magento\Catalog\Block\Product\AbstractProduct $block */ ?>
+<?php $_product = $block->getProduct() ?>
+<?= $block->getProductPriceHtml(
+    $_product,
+    \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+    \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW,
+    [
+        'price_id_suffix' => '_clone'
+    ]
+) ?>

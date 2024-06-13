@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <attribute name="class" value="page-product-bundle"/>
+        <referenceBlock name="product.info">
+            <block class="Magento\Catalog\Block\Product\View" name="bundle.summary" as="form_bottom" template="Magento_Bundle::catalog/product/view/summary.phtml">
+                <block class="Magento\Catalog\Pricing\Render" name="product.price.render.bundle.customization">
+                    <arguments>
+                        <argument name="price_render" xsi:type="string">product.price.render.default</argument>
+                        <argument name="price_type_code" xsi:type="string">configured_price</argument>
+                        <argument name="zone" xsi:type="string">item_view</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart.bundle" as="addtocart" template="Magento_Catalog::product/view/addtocart.phtml">
+                    <block class="Magento\Catalog\Block\ShortcutButtons\InCatalog" name="addtocart.shortcut.buttons"/>
+                </block>
+                <block class="Magento\Catalog\Block\Product\View" name="product.info.addto.bundle" as="addto" template="Magento_Catalog::product/view/addto.phtml"/>
+            </block>
+        </referenceBlock>
+        <referenceBlock name="product.info.options.wrapper">
+            <block class="Magento\Catalog\Block\Product\View" name="bundle.product.view.options.notice" template="Magento_Bundle::catalog/product/view/options/notice.phtml"/>
+            <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle" name="product.info.bundle.options" as="type_bundle_options" template="Magento_Bundle::catalog/product/view/type/bundle/options.phtml" before="-">
+                <container name="product.info.bundle.options.top" as="product_info_bundle_options_top">
+                    <block class="Magento\Catalog\Block\Product\View" name="bundle.back.button" as="backButton" before="-" template="Magento_Bundle::catalog/product/view/backbutton.phtml"/>
+                </container>
+                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select" name="product.info.bundle.options.select" as="select">
+                    <arguments>
+                        <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
+                        <argument name="validateQuantityViewModel" xsi:type="object">Magento\Bundle\ViewModel\ValidateQuantity</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Multi" name="product.info.bundle.options.multi" as="multi"/>
+                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio" name="product.info.bundle.options.radio" as="radio">
+                    <arguments>
+                        <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
+                        <argument name="validateQuantityViewModel" xsi:type="object">Magento\Bundle\ViewModel\ValidateQuantity</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox" name="product.info.bundle.options.checkbox" as="checkbox">
+                    <arguments>
+                        <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
+                    </arguments>
+                </block>
+            </block>
+        </referenceBlock>
+        <referenceBlock name="product.info.form.options">
+            <container name="bundle.product.options.wrapper" htmlTag="div" htmlClass="bundle-options-wrapper"/>
+        </referenceBlock>
+        <move element="product.info.options.wrapper" destination="bundle.product.options.wrapper" before="-" />
+        <move element="product.info.options.wrapper.bottom" destination="bundle.product.options.wrapper" after="product.info.options.wrapper" />
+        <move element="product.price.tier" destination="product.info.options.wrapper.bottom" before="-" />
+        <referenceBlock name="product.info.options.wrapper.bottom">
+            <block class="Magento\CatalogInventory\Block\Qtyincrements" name="product.info.qtyincrements" before="-" template="Magento_CatalogInventory::qtyincrements.phtml"/>
+            <action method="unsetChild">
+                <argument name="block" xsi:type="string">product.info.addtocart</argument>
+            </action>
+            <action method="setHideRequiredNotice">
+                <argument name="flag" xsi:type="string">1</argument>
+            </action>
+            <action method="unsetChild">
+                <argument name="block" xsi:type="string">product.info.addto</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <container name="bundle.options.container" htmlTag="div" htmlClass="bundle-options-container" after="product.info.main"/>
+        </referenceContainer>
+        <referenceContainer name="product.info.type">
+            <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle" name="product.info.bundle" as="product_type_data" template="Magento_Bundle::catalog/product/view/type/bundle.phtml"/>
+            <container name="product.info.bundle.extra" after="product.info.bundle" as="product_type_data_extra" label="Product Extra Info"/>
+        </referenceContainer>
+        <referenceContainer name="product.info.main">
+            <block class="Magento\Catalog\Block\Product\View" name="customize.button" as="customize_button" template="Magento_Bundle::catalog/product/view/customize.phtml" after="product.info.price" />
+        </referenceContainer>
+        <move element="product.info" destination="bundle.options.container" before="-"/>
+    </body>
+</page>

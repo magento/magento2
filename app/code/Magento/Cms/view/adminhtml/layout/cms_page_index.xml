@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
+    <body>
+        <referenceContainer name="content">
+            <uiComponent name="cms_page_listing"/>
+            <block class="Magento\Backend\Block\Template" template="Magento_Cms::url_filter_applier.phtml" name="page_list_url_filter_applier">
+                <arguments>
+                    <argument name="listing_namespace" xsi:type="string">cms_page_listing</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

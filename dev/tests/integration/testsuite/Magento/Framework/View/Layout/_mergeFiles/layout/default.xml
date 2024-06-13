@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+<page>
+    <body>
+        <container name="content" as="content" label="Main Content Area"/>
+    </body>
+</page>

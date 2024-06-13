@@ -1,0 +1,39 @@
+<!--
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+-->
+<div class="file-uploader-summary">
+    <div class="file-uploader-preview image-uploader-preview">
+        <a class="image-uploader-preview-link" attr="href: $parent.getFilePreview($file)" target="_blank">
+            <div class="file-uploader-spinner image-uploader-spinner"></div>
+            <img
+                class="preview-image"
+                tabindex="0"
+                event="load: $parent.onPreviewLoad.bind($parent)"
+                attr="
+                    src: $parent.getFilePreview($file),
+                    alt: $file.name,
+                    title: $file.name">
+        </a>
+
+        <div class="actions">
+            <button
+                type="button"
+                class="action-remove"
+                data-role="delete-button"
+                attr="title: $t('Delete image')"
+                disable="$parent.disabled"
+                click="$parent.removeFile.bind($parent, $file)">
+                <span translate="'Delete image'"></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="file-uploader-filename" text="$file.name"></div>
+    <div class="file-uploader-meta">
+        <text args="$file.previewWidth"></text>x<text args="$file.previewHeight"></text>,
+        <text args="$parent.formatSize($file.size)"></text>
+    </div>
+</div>

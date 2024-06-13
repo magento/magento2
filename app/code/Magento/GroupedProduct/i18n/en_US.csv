@@ -1,0 +1,35 @@
+"Grouped Products","Grouped Products"
+"Please specify the quantity of product(s).","Please specify the quantity of product(s)."
+"Cannot process the item.","Cannot process the item."
+"Add Products to Group","Add Products to Group"
+Cancel,Cancel
+"Add Selected Products","Add Selected Products"
+"A grouped product is made up of multiple, standalone products that are presented as a group. You can offer variations of a single product, or group them by season or theme to create a coordinated set. Each product can be purchased separately, or as part of the group.","A grouped product is made up of multiple, standalone products that are presented as a group. You can offer variations of a single product, or group them by season or theme to create a coordinated set. Each product can be purchased separately, or as part of the group."
+Remove,Remove
+ID,ID
+Thumbnail,Thumbnail
+Name,Name
+"Attribute Set","Attribute Set"
+Status,Status
+SKU,SKU
+Price,Price
+"Default Quantity","Default Quantity"
+Actions,Actions
+"Associated Products","Associated Products"
+Availability:,Availability:
+"Out of stock","Out of stock"
+"Product Name","Product Name"
+Qty,Qty
+"No options of this product are available.","No options of this product are available."
+"There are no grouped products.","There are no grouped products."
+"Default Qty","Default Qty"
+"Starting at","Starting at"
+Availability,Availability
+"In stock","In stock"
+"Grouped product items","Grouped product items"
+"Grouped Product Image","Grouped Product Image"
+Select...,Select...
+Type,Type
+Quantity,Quantity
+AttributeSetText,AttributeSetText
+StatusText,StatusText

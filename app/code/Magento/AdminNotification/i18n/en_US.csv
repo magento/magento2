@@ -1,0 +1,51 @@
+"Read Details","Read Details"
+"Mark as Read","Mark as Read"
+"Are you sure?","Are you sure?"
+Remove,Remove
+"Messages Inbox","Messages Inbox"
+"You have %1 new system messages","You have %1 new system messages"
+"You have %1 new system message","You have %1 new system message"
+"Incoming Message","Incoming Message"
+close,close
+Notifications,Notifications
+"The message has been marked as Read.","The message has been marked as Read."
+"We couldn't mark the notification as Read because of an error.","We couldn't mark the notification as Read because of an error."
+"Please select messages.","Please select messages."
+"A total of %1 record(s) have been marked as Read.","A total of %1 record(s) have been marked as Read."
+"Total of %1 record(s) have been removed.","Total of %1 record(s) have been removed."
+"We couldn't remove the messages because of an error.","We couldn't remove the messages because of an error."
+"The message has been removed.","The message has been removed."
+"1 Hour","1 Hour"
+"2 Hours","2 Hours"
+"6 Hours","6 Hours"
+"12 Hours","12 Hours"
+"24 Hours","24 Hours"
+critical,critical
+major,major
+minor,minor
+notice,notice
+"Wrong message type","Wrong message type"
+"Wrong notification ID specified.","Wrong notification ID specified."
+"{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure URL / Base Secure URL. We highly recommend changing this value in your Magento <a href=""%1"">configuration</a>.","{{base_url}} is not recommended to use in a production environment to declare the Base Unsecure URL / Base Secure URL. We highly recommend changing this value in your Magento <a href=""%1"">configuration</a>."
+"One or more of the Cache Types are invalidated: %1. ","One or more of the Cache Types are invalidated: %1. "
+"Please go to <a href=""%1"">Cache Management</a> and refresh cache types.","Please go to <a href=""%1"">Cache Management</a> and refresh cache types."
+"We were unable to synchronize one or more media files. Please refer to the log file for details.","We were unable to synchronize one or more media files. Please refer to the log file for details."
+"Synchronization of media storages has been completed.","Synchronization of media storages has been completed."
+"Your web server is set up incorrectly and allows unauthorized access to sensitive files. Please contact your hosting provider.","Your web server is set up incorrectly and allows unauthorized access to sensitive files. Please contact your hosting provider."
+"System Messages:","System Messages:"
+"Critical System Messages","Critical System Messages"
+"Major System Messages","Major System Messages"
+"System messages","System messages"
+Close,Close
+"See All (","See All ("
+" unread)"," unread)"
+"Show Toolbar","Show Toolbar"
+"Show List","Show List"
+"Use HTTPS to Get Feed","Use HTTPS to Get Feed"
+"Update Frequency","Update Frequency"
+"Last Update","Last Update"
+Severity,Severity
+"Date Added","Date Added"
+Message,Message
+Actions,Actions
+"You have viewed and resolved all recent system notices. Please refresh the web page to clear the notice alert.","You have viewed and resolved all recent system notices. Please refresh the web page to clear the notice alert."

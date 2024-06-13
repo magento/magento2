@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * @var \Magento\AdminNotification\Block\System\Messages\UnreadMessagePopup $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
+
+<div id="system_messages_list" data-role="system_messages_list"
+     title="<?= $escaper->escapeHtmlAttr($block->getPopupTitle()) ?>">
+    <ul class="message-system-list messages">
+        <?php foreach ($block->getUnreadMessages() as $message): ?>
+            <li class="message message-warning <?= $escaper->escapeHtmlAttr($block->getItemClass($message)) ?>">
+                <?= $escaper->escapeHtml($message->getText()) ?>
+            </li>
+        <?php endforeach;?>
+    </ul>
+</div>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', '#system_messages_list'); ?>
+
+<script type="text/x-magento-init">
+    {
+        "[data-role=system_messages_list]": {
+            "Magento_AdminNotification/js/system/messages/popup": {
+                "class":"modal-system-messages ui-popup-message"
+            }
+        }
+    }
+</script>

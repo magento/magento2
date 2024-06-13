@@ -1,0 +1,18 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+
+<?php /** @var \Magento\Tax\Pricing\Render\Adjustment $block */ ?>
+<?php /** @var $escaper \Magento\Framework\Escaper */ ?>
+
+<?php if ($block->displayBothPrices()): ?>
+    <span id="<?= $escaper->escapeHtmlAttr($block->buildIdWithPrefix('price-excluding-tax-')) ?>"
+          data-label="<?= $escaper->escapeHtmlAttr(__('Excl. Tax')) ?>"
+          data-price-amount="<?= /* @noEscape */ $block->getRawAmount() ?>"
+          data-price-type="<?= $escaper->escapeHtmlAttr($block->getDataPriceType()); ?>"
+          class="price-wrapper price-excluding-tax">
+        <span class="price"><?= /* @noEscape */ $block->getDisplayAmountExclTax() ?></span></span>
+<?php endif; ?>

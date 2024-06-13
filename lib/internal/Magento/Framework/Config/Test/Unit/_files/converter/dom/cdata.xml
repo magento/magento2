@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+<root>
+    <cdata>
+        <node_one><![CDATA[<valueOne>]]></node_one>
+    </cdata>
+    <cdata_next>
+        <![CDATA[<valueTwo>]]>
+    </cdata_next>
+</root>

@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Reports\Model\ResourceModel\Quote;
+
+/**
+ * @api
+ * @since 100.0.2
+ */
+interface CollectionFactoryInterface
+{
+    /**
+     * Create class instance with specified parameters
+     *
+     * @param array $data
+     * @return \Magento\Reports\Model\ResourceModel\Quote\Collection
+     */
+    public function create(array $data = []);
+}

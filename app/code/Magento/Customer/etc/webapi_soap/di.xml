@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+     <type name="Magento\Framework\Authorization">
+        <plugin name="customerAuthorization" type="Magento\Customer\Model\Plugin\CustomerAuthorization" />
+    </type>
+    <type name="Magento\Customer\Model\Customer\AuthorizationComposite">
+        <arguments>
+            <argument name="authorizationChecks" xsi:type="array">
+                <item name="soap_customer_authorization" xsi:type="object">
+                    Magento\Customer\Model\Customer\Authorization
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Customer\Api\AccountManagementInterface"
+                type="Magento\Customer\Model\AccountManagementApi" />
+    <type name="Magento\Customer\Model\Group\Retriever">
+        <plugin name="customerGroupRetrieverApiPlugin"
+                type="Magento\Customer\Plugin\Model\Group\RetrieverPlugin" />
+    </type>
+    <type name="Magento\Customer\Model\Session">
+        <plugin name="customerSessionApiPlugin"
+                type="Magento\Customer\Plugin\Model\SessionPlugin" />
+    </type>
+</config>

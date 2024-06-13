@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+
+?>
+<?php /** @var \Magento\Cookie\Block\RequireCookie $block */ ?>
+<script type="text/x-magento-init">
+    {
+        "body": {
+            "requireCookie": <?= /* @noEscape */ $block->getScriptOptions() ?>
+        }
+    }
+</script>

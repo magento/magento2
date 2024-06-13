@@ -1,0 +1,13 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+<?php
+/** @var \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid $block */
+$_item = $block->getItem();
+?>
+<div class="price-excl-tax">
+    <?= /* @noEscape */ $block->formatPrice($_item->getRowTotal()) ?>
+</div>

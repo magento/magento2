@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding="utf-8" ?>
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<layout>
+    <referenceBlock  translate="description, label">
+        <description>Module layout description</description>
+        <label>Module layout label</label>
+        <title translate="true">Module layout title</title>
+    </referenceBlock>
+</layout>

@@ -1,0 +1,17 @@
+<?php
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
+?>
+<?php if ($block->getSearchTermsLog()->isPageCacheable()) : ?>
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_CatalogSearch/js/search-terms-log": {
+                "url": "<?= $block->escapeUrl($block->getUrl('catalogsearch/searchTermsLog/save')) ?>"
+            }
+        }
+    }
+</script>
+<?php endif; ?>

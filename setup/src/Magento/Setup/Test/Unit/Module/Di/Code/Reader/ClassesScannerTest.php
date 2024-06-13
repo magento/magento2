@@ -1,0 +1,48 @@
+<?php
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
+use PHPUnit\Framework\TestCase;
+
+class ClassesScannerTest extends TestCase
+{
+    /**
+     * @var ClassesScanner
+     */
+    private $model;
+
+    /**
+     * the /var/generation directory realpath
+     *
+     * @var string
+     */
+
+    private $generation;
+
+    protected function setUp(): void
+    {
+        $this->generation = realpath(__DIR__ . '/../../_files/var/generation');
+        $mock = $this->getMockBuilder(DirectoryList::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(
+                ['getPath']
+            )->getMock();
+        $mock->method('getPath')->willReturn($this->generation);
+        $this->model = new ClassesScanner([], $mock);
+    }
+
+    public function testGetList()
+    {
+        $pathToScan = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files/app/code/Magento/SomeModule');
+        $actual = $this->model->getList($pathToScan);
+        $this->assertIsArray($actual);
+        $this->assertCount(7, $actual);
+    }
+}

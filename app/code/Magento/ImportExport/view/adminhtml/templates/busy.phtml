@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+<div class="fieldset">
+    <div class="legend">
+        <span><?= $block->escapeHtml(__('Status')) ?></span>
+    </div><br>
+    <div class="messages">
+        <div class="message message-success success">
+            <div><?= $block->escapeHtml($block->getStatusMessage()) ?></div>
+        </div>
+    </div>
+</div>

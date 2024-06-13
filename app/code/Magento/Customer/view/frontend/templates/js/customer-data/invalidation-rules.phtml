@@ -1,0 +1,25 @@
+<?php
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+
+/* @var $block \Magento\Customer\Block\CustomerScopeData */
+?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Customer/js/invalidation-processor": {
+                "invalidationRules": {
+                    "website-rule": {
+                        "Magento_Customer/js/invalidation-rules/website-rule": {
+                            "scopeConfig": {
+                                "websiteId": "<?= $block->escapeJs($block->getWebsiteId()) ?>"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>

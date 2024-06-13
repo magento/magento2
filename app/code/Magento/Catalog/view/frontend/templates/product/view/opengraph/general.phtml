@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var $block \Magento\Catalog\Block\Product\View */
+/** @var $escaper \Magento\Framework\Escaper */
+
+$product = $block->getProduct();
+?>
+
+<meta property="og:type" content="product" />
+<meta property="og:title"
+      content="<?= $escaper->escapeHtmlAttr($block->stripTags($product->getName())) ?>" />
+<meta property="og:image"
+      content="<?= $escaper->escapeUrl($block->getImage($product, 'product_base_image')->getImageUrl()) ?>" />
+<meta property="og:description"
+      content="<?= $escaper->escapeHtmlAttr($block->stripTags($product->getShortDescription())) ?>" />
+<meta property="og:url" content="<?= $escaper->escapeUrl($product->getProductUrl()) ?>" />
+<?php if ($product->getCanShowPrice() !== false && $priceAmount = $product
+          ->getPriceInfo()
+          ->getPrice(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)
+          ->getAmount()):?>
+    <meta property="product:price:amount" content="<?= $escaper->escapeHtmlAttr($priceAmount) ?>"/>
+    <?= $block->getChildHtml('meta.currency') ?>
+<?php endif;?>

@@ -1,0 +1,110 @@
+<?php
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Customer\Test\Unit\Model\Plugin;
+
+use Magento\Customer\Model\Plugin\CustomerFlushFormKey;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\PageCache\FormKey as CookieFormKey;
+use Magento\Framework\Data\Form\FormKey as DataFormKey;
+use Magento\Framework\Event\Observer;
+use Magento\PageCache\Observer\FlushFormKey;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+
+class CustomerFlushFormKeyTest extends TestCase
+{
+    use MockCreationTrait;
+
+    /**
+     * @var CookieFormKey | MockObject
+     */
+    private $cookieFormKey;
+
+    /**
+     * @var Session | MockObject
+     */
+    private $customerSession;
+
+    /**
+     * @var DataFormKey | MockObject
+     */
+    private $dataFormKey;
+
+    protected function setUp(): void
+    {
+
+        /** @var CookieFormKey | MockObject */
+        $this->cookieFormKey = $this->createMock(CookieFormKey::class);
+
+        /** @var DataFormKey | MockObject */
+        $this->dataFormKey = $this->createMock(DataFormKey::class);
+
+        /** @var Session | MockObject */
+        $this->customerSession = $this->createPartialMockWithReflection(
+            Session::class,
+            [
+                'getBeforeRequestParams',
+                'setBeforeRequestParams'
+            ]
+        );
+    }
+
+    /**
+     * @param $beforeFormKey
+     * @param $currentFormKey
+     * @param $getFormKeyTimes
+     * @param $setBeforeParamsTimes
+     */
+    #[DataProvider('aroundFlushFormKeyProvider')]
+    public function testAroundFlushFormKey(
+        $beforeFormKey,
+        $currentFormKey,
+        $getFormKeyTimes,
+        $setBeforeParamsTimes
+    ) {
+        $observerDto = new Observer();
+        $observer = new FlushFormKey($this->cookieFormKey, $this->dataFormKey);
+        $plugin = new CustomerFlushFormKey($this->customerSession, $this->dataFormKey);
+
+        $beforeParams['form_key'] = $beforeFormKey;
+
+        $this->dataFormKey->expects($this->exactly($getFormKeyTimes))
+            ->method('getFormKey')
+            ->willReturn($currentFormKey);
+
+        $this->customerSession->expects($this->once())
+            ->method('getBeforeRequestParams')
+            ->willReturn($beforeParams);
+
+        $this->customerSession->expects($this->exactly($setBeforeParamsTimes))
+            ->method('setBeforeRequestParams')
+            ->with($beforeParams);
+
+        $proceed = function ($observerDto) use ($observer) {
+            return $observer->execute($observerDto);
+        };
+
+        $plugin->aroundExecute($observer, $proceed, $observerDto);
+    }
+
+    /**
+     * Data provider for testAroundFlushFormKey
+     *
+     * @return array
+     */
+    public static function aroundFlushFormKeyProvider()
+    {
+        return [
+            ['form_key_value', 'form_key_value', 2, 1],
+            ['form_old_key_value', 'form_key_value', 1, 0],
+            [null, 'form_key_value', 1, 0]
+        ];
+    }
+}

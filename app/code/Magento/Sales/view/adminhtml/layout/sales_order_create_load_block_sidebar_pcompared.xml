@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2025 Adobe.
+ * All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Pcompared" template="Magento_Sales::order/create/sidebar/items.phtml" name="sidebar_pcompared">
+                <arguments>
+                    <argument name="sideBarPermissionCheck" xsi:type="object">Magento\Sales\ViewModel\Order\Create\SidebarPermissionCheck</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,236 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\GroupedProduct\Test\Unit\Model\Product\Type\Grouped;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GroupedProduct\Model\Product\Type\Grouped;
+use Magento\GroupedProduct\Model\Product\Type\Grouped\Price;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+#[CoversClass(\Magento\GroupedProduct\Model\Product\Type\Grouped\Price::class)]
+class PriceTest extends TestCase
+{
+    /**
+     * @var Price
+     */
+    protected $finalPriceModel;
+
+    /**
+     * @var MockObject
+     */
+    protected $productMock;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
+    {
+        $this->productMock = $this->createMock(Product::class);
+
+        $helper = new ObjectManager($this);
+        $this->finalPriceModel = $helper->getObject(
+            Price::class,
+            []
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetFinalPriceIfQtyIsNullAndFinalPriceExist(): void
+    {
+        $finalPrice = 15;
+
+        $this->productMock->method('getCalculatedFinalPrice')->willReturn(
+            $finalPrice
+        );
+
+        $this->productMock->expects($this->never())->method('hasCustomOptions');
+
+        $this->assertEquals($finalPrice, $this->finalPriceModel->getFinalPrice(null, $this->productMock));
+    }
+
+    /**
+     * @param array $associatedProducts
+     * @param array $options
+     * @param $expectedPriceCall
+     * @param $expectedFinalPrice
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    #[DataProvider('getFinalPriceDataProvider')]
+    public function testGetFinalPrice(
+        array $associatedProducts,
+        array $options,
+        $expectedPriceCall,
+        $expectedFinalPrice
+    ): void {
+        $newOptions = [];
+        foreach ($options as $option) {
+            if (!empty($option)) {
+                if (is_callable($option[1])) {
+                    $option[1] = $option[1]($this);
+                }
+            }
+            $newOptions[] = $option;
+        }
+        $rawFinalPrice = 10;
+
+        if (!empty($associatedProducts) && is_callable($associatedProducts[0])) {
+            $associatedProducts = $associatedProducts[0]($this);
+        }
+
+        $this->productMock->method('getCalculatedFinalPrice')->willReturn(
+            $rawFinalPrice
+        );
+
+        //mock for parent::getFinal price call
+        $this->productMock->method('getPrice')->willReturn($rawFinalPrice);
+
+        $this->productMock
+            ->method('setFinalPrice')
+            ->willReturnCallback(function ($arg1) use ($rawFinalPrice) {
+                if ($arg1 === $rawFinalPrice) {
+                    return $this->productMock;
+                } else {
+                    return null;
+                }
+            });
+
+        $expectedPriceCallWithArgs = [];
+
+        for ($index = 0; $index < $expectedPriceCall; $index++) {
+            $expectedPriceCallWithArgs[] = [];
+        }
+        $expectedPriceCallWithArgs[] = [$expectedFinalPrice];
+
+        $this->productMock
+            ->method('setFinalPrice')
+             ->willReturnCallback(function (...$expectedPriceCallWithArgs) {
+                if (!empty($expectedPriceCallWithArgs)) {
+                    return null;
+                }
+             });
+
+        $this->productMock->expects(
+            $this->any()
+        )->method(
+            'getData'
+        )->with(
+            'final_price'
+        )->willReturn(
+            $rawFinalPrice
+        );
+
+        //test method
+        $this->productMock->expects($this->once())->method('hasCustomOptions')->willReturn(true);
+
+        $productTypeMock = $this->createMock(Grouped::class);
+
+        $this->productMock->expects(
+            $this->once()
+        )->method(
+            'getTypeInstance'
+        )->willReturn(
+            $productTypeMock
+        );
+
+        $this->productMock->method('getStore')->willReturn('store1');
+
+        $productTypeMock->expects(
+            $this->once()
+        )->method(
+            'setStoreFilter'
+        )->with(
+            'store1',
+            $this->productMock
+        )->willReturn(
+            $productTypeMock
+        );
+
+        $productTypeMock->expects(
+            $this->once()
+        )->method(
+            'getAssociatedProducts'
+        )->with(
+            $this->productMock
+        )->willReturn(
+            $associatedProducts
+        );
+
+        $this->productMock->expects($this->any())->method('getCustomOption')->willReturnMap($newOptions);
+
+        $this->assertEquals($rawFinalPrice, $this->finalPriceModel->getFinalPrice(1, $this->productMock));
+    }
+
+    protected function getMockForOptionsClass()
+    {
+        $optionMock = $this->createMock(Option::class);
+        /* quantity of options */
+        $optionMock->setValue(5);
+        return $optionMock;
+    }
+
+    /**
+     * Data provider for testGetFinalPrice.
+     *
+     * @return array
+     */
+    public static function getFinalPriceDataProvider(): array
+    {
+        $optionMock = static fn (self $testCase) => $testCase->getMockForOptionsClass();
+        return [
+            'custom_option_null' => [
+                'associatedProducts' => [],
+                'options' => [[], []],
+                'expectedPriceCall' => 5, /* product call number to check final price formed correctly */
+                'expectedFinalPrice' => 10 /* 10(product price) + 2(options count) * 5(qty) * 5(option price) */
+            ],
+            'custom_option_exist' => [
+                'associatedProducts' => [static fn (self $testCase) => $testCase->generateAssociatedProducts()],
+                'options' => [
+                    ['associated_product_1', false],
+                    ['associated_product_2', $optionMock],
+                    ['associated_product_3', $optionMock]
+                ],
+                'expectedPriceCall' => 15, /* product call number to check final price formed correctly */
+                'expectedFinalPrice' => 35 /* 10(product price) + 2(options count) * 5(qty) * 5(option price) */
+            ]
+        ];
+    }
+
+    /**
+     * Generate associated product for every custom option.
+     *
+     * @return array
+     */
+    protected function generateAssociatedProducts(): array
+    {
+        $childProductMock = $this->createPartialMock(
+            Product::class,
+            ['getId', 'getFinalPrice', '__wakeup']
+        );
+        /* price for option taking into account quantity discounts */
+        $childProductMock->expects($this->any())->method('getFinalPrice')->with(5)->willReturn(5);
+
+        $associatedProducts = [];
+        for ($i = 0; $i <= 2; $i++) {
+            $childProduct = clone $childProductMock;
+            $childProduct->expects($this->once())->method('getId')->willReturn($i);
+            $associatedProducts[] = $childProduct;
+        }
+
+        return $associatedProducts;
+    }
+}

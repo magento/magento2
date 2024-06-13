@@ -1,0 +1,22 @@
+<!--
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+-->
+<if args="isAllowed()">
+    <a if="imageExists($row())"
+       class="product-item-photo"
+       attr="href: $row().url">
+        <span class="product-image-container"
+              data-bind="style: {width: getWidth($row()) + 'px'}">
+            <span class="product-image-wrapper"
+                  data-bind="style: {'padding-bottom': getHeight($row())/getWidth($row()) * 100 + '%'}">
+                <img class="product-image-photo"
+                     loading="lazy"
+                     data-bind="attr: {src: getImageUrl($row()),
+                                       alt: getLabel($row()), title: getLabel($row())}" />
+            </span>
+        </span>
+    </a>
+</if>

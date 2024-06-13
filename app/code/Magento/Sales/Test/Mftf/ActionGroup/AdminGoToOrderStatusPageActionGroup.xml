@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminGoToOrderStatusPageActionGroup">
+        <annotations>
+            <description>Goes to Stores->Order Status->Order Status Page.</description>
+        </annotations>
+
+        <amOnPage url="{{AdminOrderStatusPage.url}}" stepKey="goToOrderStatusPage"/>
+        <waitForPageLoad stepKey="waitForPageLoaded"/>
+    </actionGroup>
+</actionGroups>

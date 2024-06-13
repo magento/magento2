@@ -1,0 +1,21 @@
+<!--
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+-->
+<!-- ko if: getBillingAgreementCode() -->
+<input type="checkbox"
+    data-bind='
+        attr: {id: getBillingAgreementCode(), name: "payment[" + getBillingAgreementCode() + "]"},
+        checked: billingAgreement
+        enable: isActive($parent) && getBillingAgreementCode(),
+        click: selectPaymentMethod'
+    value="1" class="checkbox">
+<label
+    data-bind='
+        attr: {for: getBillingAgreementCode()}'
+    class="label">
+    <span><!-- ko i18n: 'Sign a billing agreement to streamline further purchases with PayPal.' --><!-- /ko --></span>
+</label>
+<!-- /ko -->

@@ -1,0 +1,78 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Framework\App\Cache\Type;
+
+use Magento\Framework\Cache\Frontend\Decorator\TagScope;
+use Magento\Framework\Config\CacheInterface;
+
+/**
+ * System / Cache Management / Cache type "Configuration"
+ *
+ * @api
+ */
+class Config extends TagScope implements CacheInterface
+{
+    /**
+     * Cache type code unique among all cache types
+     */
+    public const TYPE_IDENTIFIER = 'config';
+
+    /**
+     * Cache tag used to distinguish the cache type from all other cache
+     */
+    public const CACHE_TAG = 'CONFIG';
+
+    /**
+     * @var \Magento\Framework\App\Cache\Type\FrontendPool
+     */
+    private $cacheFrontendPool;
+
+    /**
+     * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
+     */
+    public function __construct(\Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool)
+    {
+        $this->cacheFrontendPool = $cacheFrontendPool;
+    }
+
+    /**
+     * Retrieve cache frontend instance being decorated
+     *
+     * @return \Magento\Framework\Cache\FrontendInterface
+     */
+    protected function _getFrontend()
+    {
+        $frontend = parent::_getFrontend();
+        if (!$frontend) {
+            $frontend = $this->cacheFrontendPool->get(self::TYPE_IDENTIFIER);
+            $this->setFrontend($frontend);
+        }
+        return $frontend;
+    }
+
+    /**
+     * Retrieve cache tag name
+     *
+     * @return string
+     */
+    public function getTag()
+    {
+        return self::CACHE_TAG;
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
+    }
+}

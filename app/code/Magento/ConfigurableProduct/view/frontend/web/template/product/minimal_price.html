@@ -1,0 +1,26 @@
+<!--
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+-->
+<span class="price-container" css="getAdjustmentCssClasses($row())">
+    <ifnot args="hasSpecialPrice($row())">
+        <if args="useLinkForAsLowAs">
+            <a attr="href: $row().url"
+               class="minimal-price-link"
+               html="getMinimalPriceUnsanitizedHtml($row())"></a>
+        </if>
+
+        <ifnot args="useLinkForAsLowAs">
+            <span class="price-wrapper price-including-tax">
+                      <span class="minimal-price-link"
+                            html="getMinimalPriceUnsanitizedHtml($row())"></span>
+            </span>
+        </ifnot>
+
+        <each args="data: getAdjustments(), as: '$adj'">
+            <render args="$adj.getBody()"></render>
+        </each>
+    </ifnot>
+</span>

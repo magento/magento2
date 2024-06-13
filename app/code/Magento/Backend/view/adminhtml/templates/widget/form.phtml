@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var $block \Magento\Backend\Block\Widget\Form */
+?>
+<?php /* @todo replace .form-inline with better class name */?>
+<?php /* ToDo UI: check if we need this wrapper in the process of global forms refactoring */ ?>
+
+<div class="entry-edit form-inline">
+    <?= $block->getFormHtml() ?>
+</div>
+<?= $block->getChildHtml('form_after') ?>

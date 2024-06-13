@@ -1,0 +1,18 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\Eav\Block\Adminhtml\Attribute\Edit\Js $block */
+?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "eavInputTypes": {
+                "inputTypes": <?= /* @noEscape */ json_encode($block->getComaptibleInputTypes())?>,
+                "hints": <?= /* @noEscape */ json_encode($block->getInputTypeHints())?>
+            }
+        }
+    }
+</script>

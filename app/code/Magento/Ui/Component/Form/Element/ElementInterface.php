@@ -1,0 +1,36 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+namespace Magento\Ui\Component\Form\Element;
+
+use Magento\Framework\View\Element\UiComponentInterface;
+
+/**
+ * Interface ElementInterface
+ * @api
+ * @since 100.0.2
+ */
+interface ElementInterface extends UiComponentInterface
+{
+    /**
+     * @return string
+     */
+    public function getHtmlId();
+
+    /**
+     * @return string
+     */
+    public function getFormInputName();
+
+    /**
+     * @return bool
+     */
+    public function isReadonly();
+
+    /**
+     * @return string
+     */
+    public function getCssClasses();
+}

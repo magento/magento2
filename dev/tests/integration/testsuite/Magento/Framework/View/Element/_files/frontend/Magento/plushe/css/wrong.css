@@ -1,0 +1,5 @@
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+.test {background: url(../images/nonexistent_file.png);}

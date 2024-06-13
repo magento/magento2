@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+<div data-mage-init='{"floatingHeader": {}}' class="page-actions">
+    <?= $block->getBackButtonHtml() ?>
+    <?= $block->getResetButtonHtml() ?>
+    <span class="hidden" id="formButtons">
+        <?= $block->getSaveButtonHtml() ?>
+    </span>
+</div>
+<div class="hidden" id="formContainer">
+    <?= $block->getFormHtml() ?>
+</div>
+<?php $scriptString = <<<script
+
+require([
+    "jquery",
+    "mage/mage",
+    "mage/backend/form",
+    "mage/backend/validation"
+], function($){
+
+   $('#edit_form').mage('form').mage('validation');
+
+});
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

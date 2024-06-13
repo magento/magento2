@@ -1,0 +1,72 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Framework\App\Test\Unit\Cache\Type;
+
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\Cache\Type\AccessProxy;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
+use PHPUnit\Framework\TestCase;
+
+class AccessProxyTest extends TestCase
+{
+    /**
+     * @param string $method
+     * @param array $params
+     * @param bool $disabledResult
+     * @param mixed $enabledResult
+     *
+     * @return void
+     * @dataProvider proxyMethodDataProvider
+     */
+    public function testProxyMethod($method, $params, $disabledResult, $enabledResult): void
+    {
+        $identifier = 'cache_type_identifier';
+
+        $frontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
+
+        $cacheEnabler = $this->getMockForAbstractClass(StateInterface::class);
+        $cacheEnabler
+            ->method('isEnabled')
+            ->willReturnCallback(function ($arg1) use ($identifier) {
+                static $callCount = 0;
+                if ($callCount == 0 && $arg1 == $identifier) {
+                    $callCount++;
+                    return false;
+                } elseif ($callCount == 1 && $arg1 == $identifier) {
+                    $callCount++;
+                    return true;
+                }
+            });
+
+        $object = new AccessProxy($frontendMock, $cacheEnabler, $identifier);
+        $helper = new ProxyTesting();
+
+        // For the first call the cache is disabled - so fake default result is returned
+        $result = $helper->invokeWithExpectations($object, $frontendMock, $method, $params, $enabledResult);
+        $this->assertSame($disabledResult, $result);
+
+        // For the second call the cache is enabled - so real cache result is returned
+        $result = $helper->invokeWithExpectations($object, $frontendMock, $method, $params, $enabledResult);
+        $this->assertSame($enabledResult, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public static function proxyMethodDataProvider(): array
+    {
+        return [
+            ['test', ['record_id'], false, 111],
+            ['load', ['record_id'], false, '111'],
+            ['save', ['record_value', 'record_id', ['tag'], 555], true, false],
+            ['remove', ['record_id'], true, false],
+            ['clean', [\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, ['tag']], true, false]
+        ];
+    }
+}

@@ -1,0 +1,82 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Config\Test\Unit\Model\Config\Structure\Mapper\Helper;
+
+use Magento\Config\Model\Config\Structure\Mapper\Helper\RelativePathConverter;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
+class RelativePathConverterTest extends TestCase
+{
+    /**
+     * @var RelativePathConverter
+     */
+    protected $_sut;
+
+    protected function setUp(): void
+    {
+        $this->_sut = new RelativePathConverter();
+    }
+
+    public function testConvertWithInvalidRelativePath()
+    {
+        $nodePath = 'node/path';
+        $relativePath = '*/*/*/relativePath';
+
+        $exceptionMessage = sprintf('Invalid relative path %s in %s node', $relativePath, $nodePath);
+
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage($exceptionMessage);
+        $this->_sut->convert($nodePath, $relativePath);
+    }
+
+    /**
+     * @param string $nodePath
+     * @param string $relativePath
+     */
+    #[DataProvider('convertWithInvalidArgumentsDataProvider')]
+    public function testConvertWithInvalidArguments($nodePath, $relativePath)
+    {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Invalid arguments');
+        $this->_sut->convert($nodePath, $relativePath);
+    }
+
+    /**
+     * @param string $nodePath
+     * @param string $relativePath
+     * @param string $result
+     */
+    #[DataProvider('convertDataProvider')]
+    public function testConvert($nodePath, $relativePath, $result)
+    {
+        $this->assertEquals($result, $this->_sut->convert($nodePath, $relativePath));
+    }
+
+    /**
+     * @return array
+     */
+    public static function convertWithInvalidArgumentsDataProvider()
+    {
+        return [['', ''], ['some/node', ''], ['', 'some/node']];
+    }
+
+    /**
+     * @return array
+     */
+    public static function convertDataProvider()
+    {
+        return [
+            ['currentNode', 'relativeNode', 'relativeNode'],
+            ['current/node/path', 'relative/node/path', 'relative/node/path'],
+            ['current/node', 'siblingRelativeNode', 'current/siblingRelativeNode'],
+            ['current/node', '*/siblingNode', 'current/siblingNode'],
+            ['very/deep/node/hierarchy', '*/*/sourceNode', 'very/deep/sourceNode']
+        ];
+    }
+}

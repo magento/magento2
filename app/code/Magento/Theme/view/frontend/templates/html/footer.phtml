@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+?>
+<div class="footer-container">
+    <div class="footer">
+        <?= $block->getChildHtml() ?>
+        <p class="bugs"><?= $block->escapeHtml(__('Help Us Keep Magento Healthy')) ?> - <a
+            href="https://github.com/magento/magento2/issues"
+            target="_blank"><strong><?= $block->escapeHtml(__('Report All Bugs')) ?></strong></a>
+        </p>
+        <address><?= $block->escapeHtml($block->getCopyright()) ?></address>
+    </div>
+</div>

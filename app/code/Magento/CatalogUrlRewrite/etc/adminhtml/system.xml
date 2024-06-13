@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="catalog">
+            <group id="seo">
+                <label>Search Engine Optimization</label>
+                <field id="category_url_suffix" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Category URL Suffix</label>
+                    <backend_model>Magento\Catalog\Model\System\Config\Backend\Catalog\Url\Rewrite\Suffix</backend_model>
+                    <comment>You need to refresh the cache.</comment>
+                </field>
+                <field id="product_url_suffix" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Product URL Suffix</label>
+                    <backend_model>Magento\Catalog\Model\System\Config\Backend\Catalog\Url\Rewrite\Suffix</backend_model>
+                    <comment>You need to refresh the cache.</comment>
+                </field>
+                <field id="product_use_categories" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Use Categories Path for Product URLs</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="save_rewrites_history" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Create Permanent Redirect for URLs if URL Key Changed</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="generate_category_product_rewrites" translate="label comment" type="select" sortOrder="6" showInDefault="1" canRestore="1">
+                    <label>Generate "category/product" URL Rewrites</label>
+                    <backend_model>Magento\CatalogUrlRewrite\Model\TableCleaner</backend_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[<strong class="colorRed">Warning!</strong> Turning this option off will result in permanent removal of category/product URL rewrites without an ability to restore them.]]></comment>
+                    <frontend_class>generate_category_product_rewrites</frontend_class>
+                </field>
+                <field id="product_rewrite_context" translate="label comment" type="select" sortOrder="7" showInDefault="1" canRestore="1">
+                    <label>Product URL Rewrite Scope</label>
+                    <source_model>Magento\CatalogUrlRewrite\Model\System\Config\Source\UrlRewriteContext</source_model>
+                    <comment>When editing a product URL rewrites can be generated in website or in view scope.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

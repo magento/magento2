@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateEmptyExtensionAttribute" dataType="empty_extension_attribute" type="create">
+    </operation>
+    <operation name="UpdateEmptyExtensionAttribute" dataType="empty_extension_attribute" type="update">
+    </operation>
+</operations>

@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="StorefrontPaypalEnableConfigData">
+        <data key="path">payment/paypal_express/active</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="StorefrontPaypalDisableConfigData">
+        <data key="path">payment/paypal_express/active</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="StorefrontPaypalMerchantAccountIdConfigData">
+        <data key="path">payment/paypal_express/merchant_id</data>
+        <data key="scope_id">1</data>
+        <data key="value">''</data>
+    </entity>
+    <entity name="StorefrontPaypalEnableSkipOrderReviewStepConfigData">
+        <data key="path">payment/paypal_express/skip_order_review_step</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="StorefrontPaypalDisableSkipOrderReviewStepConfigData">
+        <data key="path">payment/paypal_express/skip_order_review_step</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="StorefrontPaypalEnableInContextCheckoutConfigData">
+        <data key="path">payment/paypal_express/in_context</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="StorefrontPaypalDisableInContextCheckoutConfigData">
+        <data key="path">payment/paypal_express/active</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="StorefrontPaypalEnableTransferCartLineConfigData">
+        <data key="path">payment/paypal_express/line_items_enabled</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="StorefrontPaypalDisableTransferCartLineConfigData">
+        <data key="path">payment/paypal_express/line_items_enabled</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="StorefrontPaypalEnableTransferShippingOptionConfigData">
+        <data key="path">payment/paypal_express/transfer_shipping_options</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="StorefrontPaypalDisableTransferShippingOptionConfigData">
+        <data key="path">payment/paypal_express/transfer_shipping_options</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData">
+        <data key="path">payment/paypal_express/payment_action</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">Authorization</data>
+    </entity>
+    <entity name="StorefrontPaypalExpressSalePaymentActionOptionConfigData">
+        <data key="path">payment/paypal_express/payment_action</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">Sale</data>
+    </entity>
+    <entity name="StorefrontPaypalExpressOrderPaymentActionOptionConfigData">
+        <data key="path">payment/paypal_express/payment_action</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">Order</data>
+    </entity>
+    <entity name="StorefrontPaypalExpressEnableCheckoutAsGuestConfigData">
+        <data key="path">payment/paypal_express/solution_type</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">Sole</data>
+    </entity>
+    <entity name="StorefrontPaypalExpressDisableCheckoutAsGuestConfigData">
+        <data key="path">payment/paypal_express/solution_type</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">Mark</data>
+    </entity>
+    <entity name="StorefrontPaypalCheckoutPageEnableCustomizeButtonConfigData">
+        <data key="path">paypal/style/checkout_page_button_customize</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="StorefrontPaypalCheckoutPageDisableCustomizeButtonConfigData">
+        <data key="path">paypal/style/checkout_page_button_customize</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="StorefrontPaypalCheckoutPageButtonPayPalLabelConfigData">
+        <data key="path">paypal/style/checkout_page_button_label</data>
+        <data key="scope_id">1</data>
+        <data key="label">PayPal</data>
+        <data key="value">paypal</data>
+    </entity>
+    <entity name="StorefrontPaypalCheckoutPageButtonPayLabelConfigData">
+        <data key="path">paypal/style/checkout_page_button_label</data>
+        <data key="scope_id">1</data>
+        <data key="label">Pay</data>
+        <data key="value">pay</data>
+    </entity>
+    <entity name="StorefrontPaypalCheckoutPageButtonHorizontalLayoutConfigData">
+        <data key="path">paypal/style/checkout_page_button_layout</data>
+        <data key="scope_id">1</data>
+        <data key="label">Horizontal</data>
+        <data key="value">horizontal</data>
+    </entity>
+    <entity name="StorefrontPaypalCheckoutPageButtonVerticalLayoutConfigData">
+        <data key="path">paypal/style/checkout_page_button_layout</data>
+        <data key="scope_id">1</data>
+        <data key="label">Vertical</data>
+        <data key="value">vertical</data>
+    </entity>
+    <entity name="StorefrontPaypalCheckoutPageButtonPillShapeConfigData">
+        <data key="path">paypal/style/checkout_page_button_shape</data>
+        <data key="scope_id">1</data>
+        <data key="label">Pill</data>
+        <data key="value">pill</data>
+    </entity>
+    <entity name="StorefrontPaypalCheckoutPageButtonRectangleShapeConfigData">
+        <data key="path">paypal/style/checkout_page_button_shape</data>
+        <data key="scope_id">1</data>
+        <data key="label">Rectangle</data>
+        <data key="value">rect</data>
+    </entity>
+    <entity name="StorefrontPaypalCheckoutPageButtonBlueColorConfigData">
+        <data key="path">paypal/style/checkout_page_button_color</data>
+        <data key="scope_id">1</data>
+        <data key="label">Blue</data>
+        <data key="value">blue</data>
+    </entity>
+    <entity name="StorefrontPaypalProductPageEnableCustomizeButtonConfigData">
+        <data key="path">paypal/style/product_page_button_customize</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="StorefrontPaypalProductPageDisableCustomizeButtonConfigData">
+        <data key="path">paypal/style/product_page_button_customize</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="StorefrontPaypalProductPageButtonPayPalLabelConfigData">
+        <data key="path">paypal/style/product_page_button_label</data>
+        <data key="scope_id">1</data>
+        <data key="label">PayPal</data>
+        <data key="value">paypal</data>
+    </entity>
+    <entity name="StorefrontPaypalProductPageButtonBuyNowLabelConfigData">
+        <data key="path">paypal/style/product_page_button_label</data>
+        <data key="scope_id">1</data>
+        <data key="label">Buy Now</data>
+        <data key="value">buynow</data>
+    </entity>
+    <entity name="StorefrontPaypalProductPageButtonHorizontalLayoutConfigData">
+        <data key="path">paypal/style/product_page_button_layout</data>
+        <data key="scope_id">1</data>
+        <data key="label">Horizontal</data>
+        <data key="value">horizontal</data>
+    </entity>
+    <entity name="StorefrontPaypalProductPageButtonVerticalLayoutConfigData">
+        <data key="path">paypal/style/product_page_button_layout</data>
+        <data key="scope_id">1</data>
+        <data key="label">Vertical</data>
+        <data key="value">vertical</data>
+    </entity>
+    <entity name="StorefrontPaypalProductPageButtonPillShapeConfigData">
+        <data key="path">paypal/style/product_page_button_shape</data>
+        <data key="scope_id">1</data>
+        <data key="label">Pill</data>
+        <data key="value">pill</data>
+    </entity>
+    <entity name="StorefrontPaypalProductPageButtonRectangleShapeConfigData">
+        <data key="path">paypal/style/product_page_button_shape</data>
+        <data key="scope_id">1</data>
+        <data key="label">Rectangle</data>
+        <data key="value">rect</data>
+    </entity>
+    <entity name="StorefrontPaypalProductPageButtonSilverColorConfigData">
+        <data key="path">paypal/style/product_page_button_color</data>
+        <data key="scope_id">1</data>
+        <data key="label">Silver</data>
+        <data key="value">silver</data>
+    </entity>
+    <entity name="StorefrontPaypalCartPageEnableCustomizeButtonConfigData">
+        <data key="path">paypal/style/cart_page_button_customize</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="StorefrontPaypalCartPageDisableCustomizeButtonConfigData">
+        <data key="path">paypal/style/cart_page_button_customize</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="StorefrontPaypalCartPageButtonCheckoutLabelConfigData">
+        <data key="path">paypal/style/cart_page_button_label</data>
+        <data key="scope_id">1</data>
+        <data key="label">Checkout</data>
+        <data key="value">checkout</data>
+    </entity>
+    <entity name="StorefrontPaypalCartPageButtonPayLabelConfigData">
+        <data key="path">paypal/style/cart_page_button_label</data>
+        <data key="scope_id">1</data>
+        <data key="label">Pay</data>
+        <data key="value">pay</data>
+    </entity>
+    <entity name="StorefrontPaypalCartPageButtonVerticalLayoutConfigData">
+        <data key="path">paypal/style/cart_page_button_layout</data>
+        <data key="scope_id">1</data>
+        <data key="label">Vertical</data>
+        <data key="value">vertical</data>
+    </entity>
+    <entity name="StorefrontPaypalCartPageButtonResponsiveSizeConfigData">
+        <data key="path">paypal/style/cart_page_button_size</data>
+        <data key="scope_id">1</data>
+        <data key="label">Responsive</data>
+        <data key="value">responsive</data>
+    </entity>
+    <entity name="StorefrontPaypalCartPageButtonPillShapeConfigData">
+        <data key="path">paypal/style/cart_page_button_shape</data>
+        <data key="scope_id">1</data>
+        <data key="label">Pill</data>
+        <data key="value">pill</data>
+    </entity>
+    <entity name="StorefrontPaypalCartPageButtonRectangleShapeConfigData">
+        <data key="path">paypal/style/cart_page_button_shape</data>
+        <data key="scope_id">1</data>
+        <data key="label">Rectangle</data>
+        <data key="value">rect</data>
+    </entity>
+    <entity name="StorefrontPaypalCartPageButtonGoldColorConfigData">
+        <data key="path">paypal/style/cart_page_button_color</data>
+        <data key="scope_id">1</data>
+        <data key="label">Gold</data>
+        <data key="value">gold</data>
+    </entity>
+    <entity name="StorefrontPaypalMiniCartEnableCustomizeButtonConfigData">
+        <data key="path">paypal/style/mini_cart_page_button_customize</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="StorefrontPaypalMiniCartDisableCustomizeButtonConfigData">
+        <data key="path">paypal/style/mini_cart_page_button_customize</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="StorefrontPaypalMiniCartButtonBuyNowLabelConfigData">
+        <data key="path">paypal/style/mini_cart_page_button_label</data>
+        <data key="scope_id">1</data>
+        <data key="label">Buy Now</data>
+        <data key="value">buynow</data>
+    </entity>
+    <entity name="StorefrontPaypalMiniCartButtonInstallmentLabelConfigData">
+        <data key="path">paypal/style/mini_cart_page_button_label</data>
+        <data key="scope_id">1</data>
+        <data key="label">Installment</data>
+        <data key="value">installment</data>
+    </entity>
+    <entity name="StorefrontPaypalMiniCartButtonVerticalLayoutConfigData">
+        <data key="path">paypal/style/mini_cart_page_button_layout</data>
+        <data key="scope_id">1</data>
+        <data key="label">Vertical</data>
+        <data key="value">vertical</data>
+    </entity>
+    <entity name="StorefrontPaypalMiniCartButtonPillShapeConfigData">
+        <data key="path">paypal/style/mini_cart_page_button_shape</data>
+        <data key="scope_id">1</data>
+        <data key="label">Pill</data>
+        <data key="value">pill</data>
+    </entity>
+    <entity name="StorefrontPaypalMiniCartButtonRectangleShapeConfigData">
+        <data key="path">paypal/style/mini_cart_page_button_shape</data>
+        <data key="scope_id">1</data>
+        <data key="label">Rectangle</data>
+        <data key="value">rect</data>
+    </entity>
+    <entity name="StorefrontPaypalMiniCartButtonBlackColorConfigData">
+        <data key="path">paypal/style/mini_cart_page_button_color</data>
+        <data key="scope_id">1</data>
+        <data key="label">Black</data>
+        <data key="value">black</data>
+    </entity>
+    <entity name="DisableVaultPayflowPro">
+        <data key="path">payment/payflowpro_cc_vault/active</data>
+        <data key="value">0</data>
+    </entity>
+      <entity name="StorefrontPaypalPayflowProSalePaymentActionOptionConfigData">
+        <data key="path">payment/payflowpro/payment_action</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">Sale</data>
+    </entity>
+    <entity name="StorefrontPaypalPayflowProAuthorizationPaymentActionOptionConfigData">
+        <data key="path">payment/payflowpro/payment_action</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">Authorization</data>
+    </entity>
+    <entity name="StorefrontPaypalExpressAuthorizationBillingAgreementPaymentActionOptionConfigData">
+        <data key="path">payment/paypal_billing_agreement/payment_action</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">Authorization</data>
+    </entity>
+    <entity name="StorefrontPaypalStandardAuthorizationPaymentActionOptionConfigData">
+        <data key="path">payment/paypal_standard/payment_action</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">Authorization</data>
+    </entity>
+    <entity name="StorefrontPaypalStandardAuthorizationPaymentActionOptionConfigDataToDefaultValue">
+        <data key="path">payment/paypal_standard/payment_action</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">Order</data>
+    </entity>
+</entities>

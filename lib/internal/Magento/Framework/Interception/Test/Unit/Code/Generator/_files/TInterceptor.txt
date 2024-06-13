@@ -1,0 +1,77 @@
+namespace Magento\Framework\Interception\Code\Generator\TSample;
+
+/**
+ * Interceptor class for @see \Magento\Framework\Interception\Code\Generator\TSample
+ */
+class Interceptor extends \Magento\Framework\Interception\Code\Generator\TSample implements \Magento\Framework\Interception\InterceptorInterface
+{
+    use \Magento\Framework\Interception\Interceptor;
+
+    public function __construct()
+    {
+        $this->___init();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function returnVoid() : void
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'returnVoid');
+        $pluginInfo ? $this->___callPlugins('returnVoid', func_get_args(), $pluginInfo) : parent::returnVoid();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNullableValue() : ?string
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getNullableValue');
+        return $pluginInfo ? $this->___callPlugins('getNullableValue', func_get_args(), $pluginInfo) : parent::getNullableValue();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValue() : string
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getValue');
+        return $pluginInfo ? $this->___callPlugins('getValue', func_get_args(), $pluginInfo) : parent::getValue();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValue(string $value)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'setValue');
+        return $pluginInfo ? $this->___callPlugins('setValue', func_get_args(), $pluginInfo) : parent::setValue($value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function typeHintedFirstVariadicParameter(string ... $variadicValue)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'typeHintedFirstVariadicParameter');
+        return $pluginInfo ? $this->___callPlugins('typeHintedFirstVariadicParameter', func_get_args(), $pluginInfo) : parent::typeHintedFirstVariadicParameter(... $variadicValue);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function typeHintedSecondVariadicParameter(string $value, string ... $variadicValue)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'typeHintedSecondVariadicParameter');
+        return $pluginInfo ? $this->___callPlugins('typeHintedSecondVariadicParameter', func_get_args(), $pluginInfo) : parent::typeHintedSecondVariadicParameter($value, ... $variadicValue);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function byRefTypeHintedVariadic(string &... $variadicValue)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'byRefTypeHintedVariadic');
+        return $pluginInfo ? $this->___callPlugins('byRefTypeHintedVariadic', func_get_args(), $pluginInfo) : parent::byRefTypeHintedVariadic(... $variadicValue);
+    }
+}

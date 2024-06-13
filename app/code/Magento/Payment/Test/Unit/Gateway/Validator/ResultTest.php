@@ -1,0 +1,51 @@
+<?php
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
+
+namespace Magento\Payment\Test\Unit\Gateway\Validator;
+
+use Magento\Framework\Phrase;
+use Magento\Payment\Gateway\Validator\Result;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
+class ResultTest extends TestCase
+{
+    /** @var Result */
+    protected $model;
+
+    /**
+     * @param $isValid mixed
+     * @param $failsDescription array
+     * @param $expectedIsValid mixed
+     * @param $expectedFailsDescription array
+     */
+    #[DataProvider('resultDataProvider')]
+    public function testResult($isValid, $failsDescription, $expectedIsValid, $expectedFailsDescription)
+    {
+        $this->model = new Result($isValid, $failsDescription);
+        $this->assertEquals($expectedIsValid, $this->model->isValid());
+        $this->assertEquals($expectedFailsDescription, $this->model->getFailsDescription());
+    }
+
+    protected function getMockForPhrase()
+    {
+        $phraseMock = $this->createMock(Phrase::class);
+        return $phraseMock;
+    }
+
+    /**
+     * @return array
+     */
+    public static function resultDataProvider()
+    {
+        $phraseMock = static fn (self $testCase) => $testCase->getMockForPhrase();
+        return [
+            [true, [$phraseMock, $phraseMock], true, [$phraseMock, $phraseMock]],
+            ['', [], false, []],
+        ];
+    }
+}

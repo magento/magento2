@@ -1,0 +1,67 @@
+<?php
+/**
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ */
+
+// phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
+
+use Magento\Backend\Block\GlobalSearch;
+use Magento\Framework\Json\Helper\Data;
+
+/** @var $block GlobalSearch */
+/** @var Data $helper */
+$helper = $this->helper(Data::class);
+
+?>
+<div class="search-global" data-mage-init='{"globalSearch": {}}'>
+    <form action="#" id="form-search">
+        <div class="search-global-field">
+            <label class="search-global-label" for="search-global"></label>
+            <input
+                    type="text"
+                    class="search-global-input"
+                    id="search-global"
+                    name="query"
+                    data-mage-init='<?= /* @noEscape */ $helper->jsonEncode($block->getWidgetInitOptions()) ?>'>
+            <button
+                type="submit"
+                class="search-global-action"
+                title="<?= $block->escapeHtmlAttr(__('Search')) ?>"
+                ></button>
+        </div>
+    </form>
+    <script data-template="search-suggest" type="text/x-magento-template">
+        <ul class="search-global-menu">
+        <li class="item">
+            <a id="searchPreviewProducts" href="<?= $block->escapeUrl($block->getUrl('catalog/product/index/')) ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Products</a>
+        </li>
+        <li class="item">
+            <a id="searchPreviewOrders" href="<?= $block->escapeUrl($block->getUrl('sales/order/index/')) ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Orders</a>
+        </li>
+        <li class="item">
+            <a id="searchPreviewCustomers" href="<?= $block->escapeUrl($block->getUrl('customer/index/index/')) ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Customers</a>
+        </li>
+        <li class="item">
+            <a id="searchPreviewPages" href="<?= $block->escapeUrl($block->getUrl('cms/page/index/')) ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Pages</a>
+        </li>
+            <% if (data.items.length) { %>
+            <% _.each(data.items, function(value){ %>
+            <li class="item"
+                <%= data.optionData(value) %>
+                >
+                <a href="<%- value.url %>" class="title"><%- value.name %></a>
+                <span class="type"><%- value.type %></span>
+                <%- value.description || "" %>
+            </li>
+            <% }); %>
+        <% } else { %>
+            <li>
+                <span class="mage-suggest-no-records">
+                    <?= $block->escapeHtml(__('No records found.')) ?>
+                </span>
+            </li>
+        <% } %>
+        </ul>
+    </script>
+</div>
