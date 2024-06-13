@@ -1187,7 +1187,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
         $data['rowWebsites'] = $rowWebsites;
         $data['rowCategories'] = $rowCategories;
-        $data['mediaGalery'] = $this->getMediaGallery($productLinkIds);
+        $data['mediaGallery'] = $this->getMediaGallery($productLinkIds);
         $data['linksRows'] = $this->prepareLinks($productLinkIds);
 
         $data['customOptionsData'] = $this->getCustomOptionsData($productLinkIds);
@@ -1299,11 +1299,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $websiteCodes);
                 $multiRawData['rowWebsites'][$productId] = [];
             }
-            if (!empty($multiRawData['mediaGalery'][$productLinkId])) {
+            if (!empty($multiRawData['mediaGallery'][$productLinkId])) {
                 $additionalImages = [];
                 $additionalImageLabels = [];
                 $additionalImageIsDisabled = [];
-                foreach ($multiRawData['mediaGalery'][$productLinkId] as $mediaItem) {
+                foreach ($multiRawData['mediaGallery'][$productLinkId] as $mediaItem) {
                     if ((int)$mediaItem['_media_store_id'] === Store::DEFAULT_STORE_ID) {
                         $additionalImages[] = $mediaItem['_media_image'];
                         $additionalImageLabels[] = $mediaItem['_media_label'];
@@ -1319,7 +1319,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImageLabels);
                 $dataRow['hide_from_product_page'] =
                     implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImageIsDisabled);
-                $multiRawData['mediaGalery'][$productLinkId] = [];
+                $multiRawData['mediaGallery'][$productLinkId] = [];
             }
             foreach ($this->_linkTypeProvider->getLinkTypes() as $linkTypeName => $linkId) {
                 if (!empty($multiRawData['linksRows'][$productLinkId][$linkId])) {
@@ -1346,8 +1346,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $dataRow = $this->rowCustomizer->addData($dataRow, $productId);
         } else {
             $additionalImageIsDisabled = [];
-            if (!empty($multiRawData['mediaGalery'][$productLinkId])) {
-                foreach ($multiRawData['mediaGalery'][$productLinkId] as $mediaItem) {
+            if (!empty($multiRawData['mediaGallery'][$productLinkId])) {
+                foreach ($multiRawData['mediaGallery'][$productLinkId] as $mediaItem) {
                     if ((int)$mediaItem['_media_store_id'] === $storeId) {
                         if ($mediaItem['_media_is_disabled'] == true) {
                             $additionalImageIsDisabled[] = $mediaItem['_media_image'];
