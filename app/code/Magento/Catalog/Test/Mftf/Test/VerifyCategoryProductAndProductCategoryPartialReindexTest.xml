@@ -22,10 +22,11 @@
                 <issueId value="DEPRECATED">Use StorefrontVerifyCategoryProductAndProductCategoryPartialReindexTest instead.</issueId>
             </skip>
             <group value="pr_exclude"/>
+            <group value="indexers_by_schedule_mode_only"/>
         </annotations>
         <before>
             <!-- Change "Category Products" and "Product Categories" indexers to "Update by Schedule" mode -->
-            <magentoCLI command="indexer:set-mode" arguments="schedule catalog_category_product catalog_product_category" stepKey="setIndexerMode"/>
+            <comment userInput="Adding the comment to replace 'indexer:set-mode schedule' command for preserving Backward Compatibility" stepKey="setIndexerMode"/>
 
             <!-- Create categories K, L, M, N with different nesting in the tree and Anchor = Yes/No-->
             <!-- Category K is an anchor category -->
@@ -67,7 +68,7 @@
         </before>
         <after>
             <!-- Change "Category Products" and "Product Categories" indexers to "Update on Save" mode -->
-            <magentoCLI command="indexer:set-mode" arguments="realtime" stepKey="setRealtimeMode"/>
+            <comment userInput="Adding the comment to replace 'indexer:set-mode realtime' command for preserving Backward Compatibility" stepKey="setRealtimeMode"/>
             <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
             <!-- Delete data -->

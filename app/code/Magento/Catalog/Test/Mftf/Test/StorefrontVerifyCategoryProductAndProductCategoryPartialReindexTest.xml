@@ -20,10 +20,11 @@
             <group value="catalog"/>
             <group value="indexer"/>
             <group value="pr_exclude"/>
+            <group value="indexers_by_schedule_mode_only"/>
         </annotations>
         <before>
             <!-- Change "Category Products", "Product Categories" and "Catalog Search" indexers to "Update by Schedule" mode -->
-            <magentoCLI command="indexer:set-mode" arguments="schedule catalog_category_product catalog_product_category catalogsearch_fulltext" stepKey="setIndexerMode"/>
+            <comment userInput="Adding the comment to replace 'indexer:set-mode schedule' command for preserving Backward Compatibility" stepKey="setIndexerMode"/>
 
             <!-- Create categories K, L, M, N with different nesting in the tree and Anchor = Yes/No-->
             <!-- Category K is an anchor category -->
@@ -64,7 +65,7 @@
         </before>
         <after>
             <!-- Change indexers to "Update on Save" mode -->
-            <magentoCLI command="indexer:set-mode" arguments="realtime" stepKey="setRealtimeMode"/>
+            <comment userInput="Adding the comment to replace 'indexer:set-mode realtime' command for preserving Backward Compatibility" stepKey="setRealtimeMode"/>
 
             <!-- Delete data -->
             <deleteData createDataKey="productA" stepKey="deleteProductA"/>
