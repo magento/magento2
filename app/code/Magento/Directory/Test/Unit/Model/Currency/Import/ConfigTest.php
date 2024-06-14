@@ -42,7 +42,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function constructorExceptionDataProvider()
+    public static function constructorExceptionDataProvider()
     {
         return [
             'numeric name' => [
@@ -90,7 +90,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getServiceClassDataProvider()
+    public static function getServiceClassDataProvider()
     {
         return ['known' => ['service_one', 'Service_One'], 'unknown' => ['unknown', null]];
     }
@@ -108,7 +108,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getServiceLabelDataProvider()
+    public static function getServiceLabelDataProvider()
     {
         return ['known' => ['service_one', 'Service One'], 'unknown' => ['unknown', null]];
     }

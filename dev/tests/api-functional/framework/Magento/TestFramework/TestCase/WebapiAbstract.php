@@ -89,14 +89,14 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      *
      * @var \Magento\TestFramework\TestCase\Webapi\AdapterInterface[]
      */
-    protected static $_webApiAdapters;
+    protected $_webApiAdapters;
 
     /**
      * The list of available Web API adapters.
      *
      * @var array
      */
-    protected static $_webApiAdaptersMap = [
+    protected $_webApiAdaptersMap = [
         self::ADAPTER_SOAP => \Magento\TestFramework\TestCase\Webapi\Adapter\Soap::class,
         self::ADAPTER_REST => \Magento\TestFramework\TestCase\Webapi\Adapter\Rest::class,
     ];
@@ -166,7 +166,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      * @param \Magento\Integration\Model\Integration|null $integration
      * @return array|int|string|float|bool Web API call results
      */
-    protected static function _webApiCall(
+    protected function _webApiCall(
         $serviceInfo,
         $arguments = [],
         $webApiAdapterCode = null,
@@ -177,7 +177,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
             /** Default adapter code is defined in PHPUnit configuration */
             $webApiAdapterCode = strtolower(TESTS_WEB_API_ADAPTER);
         }
-        return self::_getWebApiAdapter($webApiAdapterCode)->call($serviceInfo, $arguments, $storeCode, $integration);
+        return $this->_getWebApiAdapter($webApiAdapterCode)->call($serviceInfo, $arguments, $storeCode, $integration);
     }
 
     /**
@@ -295,19 +295,19 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      * @return \Magento\TestFramework\TestCase\Webapi\AdapterInterface
      * @throws \LogicException When requested Web API adapter is not declared
      */
-    protected static function _getWebApiAdapter($webApiAdapterCode)
+    protected function _getWebApiAdapter($webApiAdapterCode)
     {
-        if (!isset(self::$_webApiAdapters[$webApiAdapterCode])) {
-            if (!isset(self::$_webApiAdaptersMap[$webApiAdapterCode])) {
+        if (!isset($this->_webApiAdapters[$webApiAdapterCode])) {
+            if (!isset($this->_webApiAdaptersMap[$webApiAdapterCode])) {
                 throw new \LogicException(
                     sprintf('Declaration of the requested Web API adapter "%s" was not found.', $webApiAdapterCode)
                 );
             }
-            self::$_webApiAdapters[$webApiAdapterCode] = Bootstrap::getObjectManager()->get(
-                self::$_webApiAdaptersMap[$webApiAdapterCode]
+            $this->_webApiAdapters[$webApiAdapterCode] = Bootstrap::getObjectManager()->get(
+                $this->_webApiAdaptersMap[$webApiAdapterCode]
             );
         }
-        return self::$_webApiAdapters[$webApiAdapterCode];
+        return $this->_webApiAdapters[$webApiAdapterCode];
     }
 
     /**

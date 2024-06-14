@@ -467,7 +467,7 @@ class CustomerCompositeTest extends TestCase
     /**
      * @return array
      */
-    public function getRowDataProvider()
+    public static function getRowDataProvider()
     {
         return [
             'customer and address rows, append behavior' => [
@@ -629,7 +629,7 @@ class CustomerCompositeTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderTestImportData()
+    public static function dataProviderTestImportData()
     {
         return [
             'add_update_behavior_customer_true_address_true' => [

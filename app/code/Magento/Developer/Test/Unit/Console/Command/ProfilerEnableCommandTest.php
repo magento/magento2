@@ -62,7 +62,7 @@ class ProfilerEnableCommandTest extends TestCase
      *
      * @return array
      */
-    public function commandDataProvider()
+    public static function commandDataProvider()
     {
         return [
             [

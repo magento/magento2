@@ -119,7 +119,7 @@ class CurrencyConfigTest extends TestCase
      *
      * @return array
      */
-    public function getConfigCurrenciesDataProvider()
+    public static function getConfigCurrenciesDataProvider()
     {
         return [
             ['areaCode' => Area::AREA_ADMINHTML],

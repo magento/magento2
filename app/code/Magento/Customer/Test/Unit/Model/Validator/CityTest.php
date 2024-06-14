@@ -61,7 +61,7 @@ class CityTest extends TestCase
     /**
      * @return array
      */
-    public function expectedPunctuationInNamesDataProvider(): array
+    public static function expectedPunctuationInNamesDataProvider(): array
     {
         return [
             [

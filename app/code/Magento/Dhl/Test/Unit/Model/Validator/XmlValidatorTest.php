@@ -112,7 +112,7 @@ class XmlValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function invalidXmlResponseProvider()
+    public static function invalidXmlResponseProvider()
     {
         return [
             [

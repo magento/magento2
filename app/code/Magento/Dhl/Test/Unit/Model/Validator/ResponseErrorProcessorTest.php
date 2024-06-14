@@ -62,7 +62,7 @@ class ResponseErrorProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function processProvider()
+    public static function processProvider()
     {
         return [
             [

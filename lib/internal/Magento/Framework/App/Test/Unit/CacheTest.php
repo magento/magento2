@@ -161,7 +161,7 @@ class CacheTest extends TestCase
     /**
      * @return array
      */
-    public function saveDataProvider()
+    public static function saveDataProvider()
     {
         $configTag = Config::CACHE_TAG;
         return [
@@ -207,7 +207,7 @@ class CacheTest extends TestCase
     /**
      * @return array
      */
-    public function successFailureDataProvider()
+    public static function successFailureDataProvider()
     {
         return ['success' => [true], 'failure' => [false]];
     }
