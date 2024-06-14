@@ -11,7 +11,7 @@ use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterfac
 class Edit extends \Magento\Newsletter\Controller\Adminhtml\Template implements HttpGetActionInterface
 {
     /**
-     * Registry core variable
+     * Core registry
      *
      * @var \Magento\Framework\Registry
      */
