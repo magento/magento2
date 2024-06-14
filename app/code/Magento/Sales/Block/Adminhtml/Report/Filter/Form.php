@@ -15,8 +15,6 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter;
 class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
 {
     /**
-     * Order config
-     *
      * @var \Magento\Sales\Model\Order\ConfigFactory
      */
     protected $_orderConfig;

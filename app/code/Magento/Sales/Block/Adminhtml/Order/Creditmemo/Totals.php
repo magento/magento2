@@ -16,8 +16,6 @@ use Magento\Sales\Model\Order\Creditmemo;
 class Totals extends \Magento\Sales\Block\Adminhtml\Totals
 {
     /**
-     * Creditmemo
-     *
      * @var Creditmemo|null
      */
     protected $_creditmemo;

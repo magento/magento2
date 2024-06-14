@@ -41,8 +41,6 @@ class Tax extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTota
     }
 
     /**
-     * Template
-     *
      * @var string
      */
     protected $_template = 'Magento_Sales::order/create/totals/tax.phtml';

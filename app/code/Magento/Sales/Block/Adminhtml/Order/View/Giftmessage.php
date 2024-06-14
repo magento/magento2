@@ -21,22 +21,16 @@ class Giftmessage extends \Magento\Backend\Block\Widget
     protected $_entity;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Message factory
-     *
      * @var \Magento\GiftMessage\Model\MessageFactory
      */
     protected $_messageFactory;
 
     /**
-     * Message helper
-     *
      * @var \Magento\GiftMessage\Helper\Message
      */
     protected $_messageHelper;

@@ -11,12 +11,11 @@ namespace Magento\Sales\Block\Adminhtml\Order;
  * @deprecated 101.0.6
  * @api
  * @since 100.0.2
+ * @see Nothing
  */
 class Totalbar extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
     /**
-     * Totals
-     *
      * @var array
      */
     protected $_totals = [];

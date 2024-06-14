@@ -16,8 +16,6 @@ use Magento\Payment\Model\Info;
 class Payment extends \Magento\Backend\Block\Template
 {
     /**
-     * Payment data
-     *
      * @var \Magento\Payment\Helper\Data
      */
     protected $_paymentData = null;

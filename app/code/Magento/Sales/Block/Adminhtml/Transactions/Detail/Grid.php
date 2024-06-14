@@ -14,15 +14,11 @@ namespace Magento\Sales\Block\Adminhtml\Transactions\Detail;
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Collection factory
-     *
      * @var \Magento\Framework\Data\CollectionFactory
      */
     protected $_collectionFactory;

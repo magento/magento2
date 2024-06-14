@@ -24,8 +24,6 @@ class Detail extends \Magento\Backend\Block\Widget\Container
     protected $_txn;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

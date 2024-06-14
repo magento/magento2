@@ -114,7 +114,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
      */
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabLabel()
     {
@@ -122,7 +122,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabTitle()
     {
@@ -130,7 +130,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canShowTab()
     {
@@ -138,7 +138,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isHidden()
     {

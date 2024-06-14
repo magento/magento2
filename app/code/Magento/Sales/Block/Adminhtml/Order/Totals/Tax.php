@@ -17,29 +17,21 @@ use Magento\Framework\Math\Random;
 class Tax extends \Magento\Tax\Block\Sales\Order\Tax
 {
     /**
-     * Tax helper
-     *
      * @var \Magento\Tax\Helper\Data
      */
     protected $_taxHelper;
 
     /**
-     * Tax calculation
-     *
      * @var \Magento\Tax\Model\Calculation
      */
     protected $_taxCalculation;
 
     /**
-     * Tax factory
-     *
      * @var \Magento\Tax\Model\Sales\Order\TaxFactory
      */
     protected $_taxOrderFactory;
 
     /**
-     * Sales admin helper
-     *
      * @var \Magento\Sales\Helper\Admin
      */
     protected $_salesAdminHelper;
@@ -88,10 +80,11 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
         }
 
         $taxClassAmount = [];
+        //phpcs:disable
         if (empty($source)) {
             return $taxClassAmount;
         }
-
+        //phpcs:enable
         $taxClassAmount = $this->_taxHelper->getCalculatedTaxes($source);
         if (empty($taxClassAmount)) {
             $rates = $this->_taxOrderFactory->create()->getCollection()->loadByOrder($this->getOrder())->toArray();

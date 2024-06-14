@@ -14,8 +14,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Invoice\View;
 class Comments extends \Magento\Backend\Block\Text\ListText
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

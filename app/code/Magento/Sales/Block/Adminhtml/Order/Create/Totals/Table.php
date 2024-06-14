@@ -13,8 +13,6 @@ use Magento\Store\Model\ResourceModel\Website\Collection;
 class Table extends \Magento\Backend\Block\Template
 {
     /**
-     * Website collection
-     *
      * @var Collection|null
      */
     protected $_websiteCollection = null;

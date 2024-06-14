@@ -22,15 +22,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     protected $_session;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Backend session
-     *
      * @var \Magento\Backend\Model\Auth\Session
      */
     protected $_backendSession;

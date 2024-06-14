@@ -18,8 +18,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     protected $_actions = [];
 
     /**
-     * Sales reorder
-     *
      * @var \Magento\Sales\Helper\Reorder
      */
     protected $_salesReorder = null;

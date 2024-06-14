@@ -14,8 +14,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo;
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
