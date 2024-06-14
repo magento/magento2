@@ -84,10 +84,12 @@ class SchemaBuilder
     {
         $data = $this->readerComposite->read(FileResolverByModule::ALL_MODULES);
         $tablesWithJsonTypeField = [];
-        foreach ($data['table'] as $keyTable => $tableColumns) {
-            foreach ($tableColumns['column'] as $keyColumn => $columnData) {
-                if ($columnData['type'] == 'json') {
-                    $tablesWithJsonTypeField[$keyTable] = $keyColumn;
+        if (isset($data['table'])) {
+            foreach ($data['table'] as $keyTable => $tableColumns) {
+                foreach ($tableColumns['column'] as $keyColumn => $columnData) {
+                    if ($columnData['type'] == 'json') {
+                        $tablesWithJsonTypeField[$keyTable] = $keyColumn;
+                    }
                 }
             }
         }
