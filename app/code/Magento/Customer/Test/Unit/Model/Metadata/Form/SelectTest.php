@@ -164,7 +164,7 @@ class SelectTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function outputValueDataProvider()
+    public static function outputValueDataProvider()
     {
         return [
             'empty' => ['', ''],

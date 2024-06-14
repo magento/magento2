@@ -234,7 +234,7 @@ class DynamicFieldTest extends TestCase
     /**
      * @return array
      */
-    public function attributeProvider(): array
+    public static function attributeProvider(): array
     {
         return [
             [

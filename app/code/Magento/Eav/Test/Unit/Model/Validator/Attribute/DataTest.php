@@ -312,7 +312,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function allowDenyListProvider(): array
+    public static function allowDenyListProvider(): array
     {
         $allowedCallbackList = function ($validator) {
             $validator->setAllowedAttributesList(['attribute']);

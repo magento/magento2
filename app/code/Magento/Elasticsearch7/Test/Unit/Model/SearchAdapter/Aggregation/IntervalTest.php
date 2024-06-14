@@ -227,7 +227,7 @@ class IntervalTest extends TestCase
     /**
      * @return array
      */
-    public function loadParamsProvider(): array
+    public static function loadParamsProvider(): array
     {
         return [
             [
@@ -254,7 +254,7 @@ class IntervalTest extends TestCase
     /**
      * @return array
      */
-    public function loadPrevParamsProvider(): array
+    public static function loadPrevParamsProvider(): array
     {
         return [
             [
@@ -290,7 +290,7 @@ class IntervalTest extends TestCase
     /**
      * @return array
      */
-    public function loadNextParamsProvider(): array
+    public static function loadNextParamsProvider(): array
     {
         return [
             [

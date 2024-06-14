@@ -97,7 +97,7 @@ class FileTest extends TestCase
     /**
      * @return array
      */
-    public function outputValueDataProvider()
+    public static function outputValueDataProvider()
     {
         return [
             [

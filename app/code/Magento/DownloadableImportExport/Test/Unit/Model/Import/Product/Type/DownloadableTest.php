@@ -270,7 +270,7 @@ class DownloadableTest extends AbstractImportTestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataForSave(): array
+    public static function dataForSave(): array
     {
         return [
             [
@@ -587,7 +587,7 @@ class DownloadableTest extends AbstractImportTestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function isRowValidData(): array
+    public static function isRowValidData(): array
     {
         return [
             [
@@ -763,7 +763,7 @@ class DownloadableTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function dataForUploaderDir(): array
+    public static function dataForUploaderDir(): array
     {
         return [
             [

@@ -140,32 +140,32 @@ class LinksTest extends TestCase
     /**
      * @return array
      */
-    public function getLinksTitleDataProvider()
+    public static function getLinksTitleDataProvider()
     {
         return [
             [
                 'id' => 1,
                 'typeId' => Type::TYPE_DOWNLOADABLE,
-                'expectedGetTitle' => $this->once(),
-                'expectedGetValue' => $this->never(),
+                'expectedGetTitle' => self::once(),
+                'expectedGetValue' => self::never(),
             ],
             [
                 'id' => null,
                 'typeId' => Type::TYPE_DOWNLOADABLE,
-                'expectedGetTitle' => $this->never(),
-                'expectedGetValue' => $this->once(),
+                'expectedGetTitle' => self::never(),
+                'expectedGetValue' => self::once(),
             ],
             [
                 'id' => 1,
                 'typeId' => 'someType',
-                'expectedGetTitle' => $this->never(),
-                'expectedGetValue' => $this->once(),
+                'expectedGetTitle' => self::never(),
+                'expectedGetValue' => self::once(),
             ],
             [
                 'id' => null,
                 'typeId' => 'someType',
-                'expectedGetTitle' => $this->never(),
-                'expectedGetValue' => $this->once(),
+                'expectedGetTitle' => self::never(),
+                'expectedGetValue' => self::once(),
             ],
         ];
     }

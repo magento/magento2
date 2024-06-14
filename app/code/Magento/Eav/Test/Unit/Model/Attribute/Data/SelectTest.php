@@ -60,7 +60,7 @@ class SelectTest extends TestCase
     /**
      * @return array
      */
-    public function outputValueDataProvider()
+    public static function outputValueDataProvider()
     {
         return [
             [

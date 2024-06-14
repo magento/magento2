@@ -104,7 +104,7 @@ class MultiselectTest extends TestCase
     /**
      * @return array
      */
-    public function outputValueDataProvider()
+    public static function outputValueDataProvider()
     {
         return [
             [

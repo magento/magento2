@@ -121,7 +121,7 @@ class AttributeTest extends TestCase
     /**
      * @return array
      */
-    public function getSortWeightDataProvider()
+    public static function getSortWeightDataProvider()
     {
         return [
             'empty set info' => ['sortWeights' => null, 'expectedWeight' => 0],
