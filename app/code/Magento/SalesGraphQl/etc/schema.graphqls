@@ -117,9 +117,23 @@ interface OrderItemInterface @doc(description: "Order item details.") @typeResol
     quantity_canceled: Float @doc(description: "The number of canceled items.")
     quantity_returned: Float @doc(description: "The number of returned items.")
     product: ProductInterface @doc(description: "The ProductInterface object, which contains details about the base product") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\ProductResolver")
+    prices: OrderItemPrices @doc(description: "Contains details about the price of the item, including taxes and discounts.") @resolver(class: "\\Magento\\SalesGraphQl\\Model\\Resolver\\OrderItemPrices")
 }
 
 type OrderItem implements OrderItemInterface {
+}
+
+type OrderItemPrices {
+    price: Money! @doc(description: "The price of the item before any discounts were applied. The price that might include tax, depending on the configured display settings for cart.")
+    price_including_tax:  Money! @doc(description: "The price of the item before any discounts were applied. The price that might include tax, depending on the configured display settings for cart.")
+    row_total: Money! @doc(description: "The value of the price multiplied by the quantity of the item.")
+    row_total_including_tax: Money! @doc(description: "The value of `row_total` plus the tax applied to the item.")
+    discounts: [Discount] @doc(description: "An array of discounts to be applied to the cart item.")
+    total_item_discount: Money! @doc(description: "The total of all discounts applied to the item.")
+    original_price: Money @doc(description: "The original price of the item.")
+    original_price_including_tax: Money @doc(description: "The original price of the item including tax.")
+    original_row_total: Money! @doc(description: "The value of the original price multiplied by the quantity of the item.")
+    original_row_total_including_tax: Money! @doc(description: "The value of the original price multiplied by the quantity of the item including tax.")
 }
 
 type OrderItemOption @doc(description: "Represents order item options like selected or entered.") {

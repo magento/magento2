@@ -32,3 +32,7 @@ enum FixedProductTaxDisplaySettings @doc(description: "Lists display settings fo
     EXCLUDE_FPT_WITHOUT_DETAILS @doc(description: "The displayed price does not include the FPT amount. The values from `ProductPrice.fixed_product_taxes` are not displayed. This value corresponds to 'Excluding FPT'.")
     FPT_DISABLED @doc(description: "The FPT feature is not enabled. You can omit `ProductPrice.fixed_product_taxes` from your query.")
 }
+
+type OrderItemPrices {
+    fixed_product_taxes: [FixedProductTax!]! @resolver(class: "\\Magento\\WeeeGraphQl\\Model\\Resolver\\FixedProductTaxes")
+}
