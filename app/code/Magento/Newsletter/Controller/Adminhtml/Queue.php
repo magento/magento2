@@ -19,4 +19,15 @@ abstract class Queue extends \Magento\Backend\App\Action
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_Newsletter::queue';
+
+    /**
+     * Checks the acl permission
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return ($this->_authorization->isAllowed(self::ADMIN_RESOURCE) &&
+            $this->_authorization->isAllowed('Magento_Newsletter::template'));
+    }
 }
