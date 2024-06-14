@@ -16,7 +16,7 @@
             <severity value="BLOCKER"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
-            <group name="indexers_by_schedule_mode_only_wysiwyg_disabled"/>
+            <group value="indexers_by_schedule_mode_only_wysiwyg_disabled"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
