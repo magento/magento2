@@ -65,15 +65,25 @@ class CartPrices implements ResolverInterface
         $cartTotals = $this->totalsCollector->collectQuoteTotals($quote);
         $currency = $quote->getQuoteCurrencyCode();
 
+        $appliedTaxes = $this->getAppliedTaxes($cartTotals, $currency);
+        $grandTotal = $cartTotals->getGrandTotal();
+
+        $totalAppliedTaxes = 0;
+        foreach ($appliedTaxes as $appliedTax) {
+            $totalAppliedTaxes += $appliedTax['amount']['value'];
+        }
+        $grandTotalExclTax = $grandTotal - $totalAppliedTaxes;
+
         return [
-            'grand_total' => ['value' => $cartTotals->getGrandTotal(), 'currency' => $currency],
+            'grand_total' => ['value' => $grandTotal, 'currency' => $currency],
+            'grand_total_excluding_tax' => ['value' => $grandTotalExclTax, 'currency' => $currency],
             'subtotal_including_tax' => ['value' => $cartTotals->getSubtotalInclTax(), 'currency' => $currency],
             'subtotal_excluding_tax' => ['value' => $cartTotals->getSubtotal(), 'currency' => $currency],
             'subtotal_with_discount_excluding_tax' => [
                 'value' => $this->getSubtotalWithDiscountExcludingTax($cartTotals),
                 'currency' => $currency
             ],
-            'applied_taxes' => $this->getAppliedTaxes($cartTotals, $currency),
+            'applied_taxes' => $appliedTaxes,
             'discount' => $this->getDiscount($cartTotals, $currency),
             'model' => $quote
         ];
