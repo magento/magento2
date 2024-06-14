@@ -67,5 +67,4 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Template implements 
 
         $this->_view->renderLayout();
     }
-
 }
