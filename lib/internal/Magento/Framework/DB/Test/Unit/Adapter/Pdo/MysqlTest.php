@@ -853,6 +853,129 @@ class MysqlTest extends TestCase
     }
 
     /**
+     * @param array $actual
+     * @param int|string|\Zend_Db_Expr $expected
+     * @dataProvider columnDataAndValueForTest
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testPrepareColumnValue(array $actual, int|string|\Zend_Db_Expr $expected)
+    {
+        $adapter = $this->getMysqlPdoAdapterMock([]);
+
+        $result = $this->invokeModelMethod($adapter, 'prepareColumnValue', [$actual[0], $actual[1]]);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Data provider for testPrepareColumnValue
+     *
+     * @return array[]
+     */
+    public function columnDataAndValueForTest(): array
+    {
+        return [
+            [
+                'actual' => [
+                    [
+                        'DATA_TYPE' => 'int',
+                        'DEFAULT' => ''
+                    ],
+                    '10'
+                ],
+                'expected' => 10
+            ],
+            [
+                'actual' => [
+                    [
+                        'DATA_TYPE' => 'datetime /* mariadb-5.3 */',
+                        'DEFAULT' => 'CURRENT_TIMESTAMP'
+                    ],
+                    'null'
+                ],
+                'expected' => new \Zend_Db_Expr('NULL')
+            ],
+            [
+                'actual' => [
+                    [
+                        'DATA_TYPE' => 'date /* mariadb-5.3 */',
+                        'DEFAULT' => ''
+                    ],
+                    'null'
+                ],
+                'expected' => new \Zend_Db_Expr('NULL')
+            ],
+            [
+                'actual' => [
+                    [
+                        'DATA_TYPE' => 'timestamp /* mariadb-5.3 */',
+                        'DEFAULT' => 'CURRENT_TIMESTAMP'
+                    ],
+                    'null'
+                ],
+                'expected' => new \Zend_Db_Expr('NULL')
+            ],
+            [
+                'actual' => [
+                    [
+                        'DATA_TYPE' => 'varchar',
+                        'NULLABLE' => false,
+                        'DEFAULT' => ''
+                    ],
+                    10
+                ],
+                'expected' => '10'
+            ]
+        ];
+    }
+
+    /**
+     * @param string $actual
+     * @param string $expected
+     * @dataProvider providerForSanitizeColumnDataType
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testSanitizeColumnDataType(string $actual, string $expected)
+    {
+        $adapter = $this->getMysqlPdoAdapterMock([]);
+        $result = $this->invokeModelMethod($adapter, 'sanitizeColumnDataType', [$actual]);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Data provider for testSanitizeColumnDataType
+     *
+     * @return array[]
+     */
+    public function providerForSanitizeColumnDataType()
+    {
+        return [
+            [
+                'actual' => 'int',
+                'expected' => 'int'
+            ],
+            [
+                'actual' => 'varchar',
+                'expected' => 'varchar'
+            ],
+            [
+                'actual' => 'datetime /* mariadb-5.3 */',
+                'expected' => 'datetime'
+            ],
+            [
+                'actual' => 'date /* mariadb-5.3 */',
+                'expected' => 'date'
+            ],
+            [
+                'actual' => 'timestamp /* mariadb-5.3 */',
+                'expected' => 'timestamp'
+            ]
+        ];
+    }
+
+    /**
      * @param string $method
      * @param array $parameters
      * @return mixed
