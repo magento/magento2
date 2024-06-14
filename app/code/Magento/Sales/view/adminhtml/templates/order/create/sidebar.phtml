@@ -21,7 +21,7 @@ use Magento\Sales\ViewModel\Order\Create\SidebarPermissionCheck;
 $sideBarPermissionCheck = $block->getData('sideBarPermissionCheck');
 
 ?>
-<?php  if ($sideBarPermissionCheck->isAllowedAction()): ?>
+<?php  if ($sideBarPermissionCheck->isAllowed()): ?>
 <div class="customer-current-activity-inner">
     <h4 class="customer-activity-title"><?= $escaper->escapeHtml(__('Customer\'s Activities')) ?></h4>
     <div class="create-order-sidebar-container">

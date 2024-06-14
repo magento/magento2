@@ -35,7 +35,7 @@ class SidebarPermissionCheck implements ArgumentInterface
      *
      * @return bool
      */
-    public function isAllowedAction(): bool
+    public function isAllowed(): bool
     {
         return $this->authorization->isAllowed('Magento_Customer::customer');
     }
