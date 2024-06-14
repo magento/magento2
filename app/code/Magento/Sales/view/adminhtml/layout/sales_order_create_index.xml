@@ -36,6 +36,9 @@
                     </block>
                     <block class="Magento\Sales\Block\Adminhtml\Order\Create\Data" template="Magento_Sales::order/create/data.phtml" name="data">
                         <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar" template="Magento_Sales::order/create/sidebar.phtml" name="sidebar">
+                            <arguments>
+                                <argument name="sideBarPermissionCheck" xsi:type="object">Magento\Sales\ViewModel\Order\Create\SidebarPermissionCheck</argument>
+                            </arguments>
                             <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Cart" template="Magento_Sales::order/create/sidebar/items.phtml" name="cart"/>
                             <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Wishlist" template="Magento_Sales::order/create/sidebar/items.phtml" name="wishlist"/>
                             <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Reorder" template="Magento_Sales::order/create/sidebar/items.phtml" name="reorder"/>

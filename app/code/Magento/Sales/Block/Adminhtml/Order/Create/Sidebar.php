@@ -3,20 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
-
-use Magento\Backend\Block\Widget\Button;
-use Magento\Framework\DataObject;
 
 /**
  * Adminhtml sales order create sidebar
  *
  * @api
+ * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
-class Sidebar extends AbstractCreate
+class Sidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
      * Preparing global layout
@@ -27,7 +23,7 @@ class Sidebar extends AbstractCreate
     {
         if ($this->getCustomerId()) {
             $button = $this->getLayout()->createBlock(
-                Button::class
+                \Magento\Backend\Block\Widget\Button::class
             )->setData(
                 [
                     'label' => __('Update Changes'),
@@ -38,7 +34,9 @@ class Sidebar extends AbstractCreate
                 ]
             );
             $this->setChild('top_button', $button);
+        }
 
+        if ($this->getCustomerId()) {
             $button = clone $button;
             $button->unsId();
             $this->setChild('bottom_button', $button);
@@ -49,7 +47,7 @@ class Sidebar extends AbstractCreate
     /**
      * Check if can display
      *
-     * @param DataObject $child
+     * @param \Magento\Framework\DataObject $child
      * @return true
      */
     public function canDisplay($child)
@@ -58,15 +56,5 @@ class Sidebar extends AbstractCreate
             return $child->canDisplay();
         }
         return true;
-    }
-
-    /**
-     * To check customer permission
-     *
-     * @return bool
-     */
-    public function isAllowedAction(): bool
-    {
-        return $this->_authorization->isAllowed('Magento_Customer::customer');
     }
 }

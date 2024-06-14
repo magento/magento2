@@ -4,13 +4,24 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
+use Magento\Sales\ViewModel\Order\Create\SidebarPermissionCheck;
+
 /**
- * @var \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar $block
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
- * @var \Magento\Framework\Escaper $escaper
+ * @var Sidebar $block
+ * @var SecureHtmlRenderer $secureRenderer
+ * @var Escaper $escaper
  */
+
+/**
+ * @var SidebarPermissionCheck $sideBarPermissionCheck
+ */
+$sideBarPermissionCheck = $block->getData('sideBarPermissionCheck');
+
 ?>
-<?php  if ($block->isAllowedAction()): ?>
+<?php  if ($sideBarPermissionCheck->isAllowedAction()): ?>
 <div class="customer-current-activity-inner">
     <h4 class="customer-activity-title"><?= $escaper->escapeHtml(__('Customer\'s Activities')) ?></h4>
     <div class="create-order-sidebar-container">
