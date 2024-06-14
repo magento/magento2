@@ -107,6 +107,8 @@ class ReportWriterTest extends TestCase
      */
     public function testWrite(array $configData, array $fileData, array $expectedFileData): void
     {
+        $fileData = new \IteratorIterator(new \ArrayIterator($fileData));
+        $emptyFileData = new \IteratorIterator(new \ArrayIterator([]));
         $errors = [];
         $this->configInterfaceMock
             ->expects($this->once())
@@ -121,10 +123,10 @@ class ReportWriterTest extends TestCase
         $parameterName = isset(reset($configData)[0]['parameters']['name'])
             ? reset($configData)[0]['parameters']['name']
             : '';
-        $this->reportProviderMock->expects($this->once())
-            ->method('getReport')
+        $this->reportProviderMock->expects($this->exactly(2))
+            ->method('getBatchReport')
             ->with($parameterName ?: null)
-            ->willReturn($fileData);
+            ->willReturnOnConsecutiveCalls($fileData, $emptyFileData);
         $errorStreamMock = $this->getMockBuilder(
             FileWriteInterface::class
         )->getMockForAbstractClass();
