@@ -17,9 +17,6 @@
             deleted in S3 and in the local file system."/>
             <severity value="CRITICAL"/>
             <group value="remote_storage_aws_s3_media_gallery_ui"/>
-            <skip>
-                <issueId value="AC-11388">Excluding to make s3 backward compatible with flysystem lib</issueId>
-            </skip>
         </annotations>
 
         <before>
