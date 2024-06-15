@@ -21,8 +21,10 @@ define([
         if (totals()) {
             couponCode(totals()['coupon_code']);
         }
+
         //Captcha can only be required for adding a coupon so we need to know if one was added already.
-        isApplied = ko.observable(couponCode() != null);
+        var couponCodeValue = couponCode();
+        isApplied = ko.observable(typeof couponCodeValue === 'string' && couponCodeValue.length > 0);
 
         return defaultCaptcha.extend({
             /** @inheritdoc */
