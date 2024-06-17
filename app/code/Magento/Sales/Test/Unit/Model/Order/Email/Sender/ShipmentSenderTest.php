@@ -22,7 +22,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * @deprecated since ShipmentSender is deprecated
  * @see \Magento\Sales\Model\Order\Email\Sender\ShipmentSender
  */
-class ShipmentSenderTest extends AbstractSenderTest
+class ShipmentSenderTest extends AbstractSenderTestCase
 {
     private const SHIPMENT_ID = 1;
 
@@ -231,9 +231,14 @@ class ShipmentSenderTest extends AbstractSenderTest
         } else {
             $this->shipmentResourceMock
                 ->method('saveAttribute')
-                ->withConsecutive(
-                    [$this->shipmentMock, 'email_sent'],
-                    [$this->shipmentMock, 'send_email']
+                ->willReturnCallback(
+                    function ($arg1, $arg2) {
+                        if ($arg1 === $this->shipmentMock && $arg2 === 'email_sent') {
+                            return null;
+                        } elseif ($arg1 === $this->shipmentMock && $arg2 === 'send_email') {
+                            return null;
+                        }
+                    }
                 );
 
             $this->assertFalse(
@@ -245,7 +250,7 @@ class ShipmentSenderTest extends AbstractSenderTest
     /**
      * @return array
      */
-    public function sendDataProvider(): array
+    public static function sendDataProvider(): array
     {
         return [
             [0, 0, 1, true],
@@ -353,7 +358,7 @@ class ShipmentSenderTest extends AbstractSenderTest
     /**
      * @return array
      */
-    public function sendVirtualOrderDataProvider(): array
+    public static function sendVirtualOrderDataProvider(): array
     {
         return [
             [true, 1, null],

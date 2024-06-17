@@ -58,7 +58,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
      * Data provider for testGetNewFileName
      * @return array
      */
-    public function getNewFileNameDataProvider()
+    public static function getNewFileNameDataProvider()
     {
         return [
             [DirectoryList::VAR_DIR, 'image.jpg', 'image.jpg'],

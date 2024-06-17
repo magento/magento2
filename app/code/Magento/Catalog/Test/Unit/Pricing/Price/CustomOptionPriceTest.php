@@ -14,12 +14,14 @@ use Magento\Catalog\Model\Product\Option\Type\DefaultType;
 use Magento\Catalog\Model\Product\Option\Type\Select;
 use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
+use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
 use Magento\Framework\DataObject;
 use Magento\Framework\Pricing\Adjustment\Calculator;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Pricing\PriceInfoInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -80,11 +82,17 @@ class CustomOptionPriceTest extends TestCase
 
         $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
 
+        $customOptionPriceCalculator = $this->getMockBuilder(CustomOptionPriceCalculator::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
         $this->object = new CustomOptionPrice(
             $this->product,
             PriceInfoInterface::PRODUCT_QUANTITY_DEFAULT,
             $this->calculator,
-            $this->priceCurrencyMock
+            $this->priceCurrencyMock,
+            null,
+            $customOptionPriceCalculator
         );
     }
 
@@ -292,8 +300,12 @@ class CustomOptionPriceTest extends TestCase
         $optionMaxValue = $option2MaxPrice + $option1MaxPrice;
         $this->priceCurrencyMock
             ->method('convertAndRound')
-            ->willReturnCallback(function ($arg1)
- use ($option1MinPrice, $convertMinValue, $optionMaxValue, $convertedMaxValue) {
+            ->willReturnCallback(function ($arg1) use (
+                $option1MinPrice,
+                $convertMinValue,
+                $optionMaxValue,
+                $convertedMaxValue
+            ) {
                 if ($arg1 == $option1MinPrice) {
                     return $convertMinValue;
                 } elseif ($arg1 == $optionMaxValue) {
