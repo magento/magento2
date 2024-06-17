@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\TaxImportExport\Controller\Adminhtml;
 
 /**
@@ -15,7 +18,7 @@ abstract class Rate extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Tax::manage_tax';
+    public const ADMIN_RESOURCE = 'Magento_Tax::manage_tax';
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
@@ -32,5 +35,20 @@ abstract class Rate extends \Magento\Backend\App\Action
     ) {
         $this->fileFactory = $fileFactory;
         parent::__construct($context);
+    }
+
+    /**
+     * Check ACL permission
+     *
+     * @return bool
+     */
+    protected function _isAllowed(): bool
+    {
+        return match (strtolower($this->getRequest()->getActionName())) {
+            'importexport','importpost','exportcsv','exportxml', 'exportpost' =>
+            $this->_authorization->isAllowed('Magento_TaxImportExport::import_export'),
+            default =>
+            $this->_authorization->isAllowed(self::ADMIN_RESOURCE),
+        };
     }
 }

@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -85,17 +88,5 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         $fileContent = ['type' => 'string', 'value' => $content, 'rm' => true];
 
         return $this->fileFactory->create('tax_rates.csv', $fileContent, DirectoryList::VAR_DIR);
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed(
-            'Magento_Tax::manage_tax'
-        ) || $this->_authorization->isAllowed(
-            'Magento_TaxImportExport::import_export'
-        );
     }
 }

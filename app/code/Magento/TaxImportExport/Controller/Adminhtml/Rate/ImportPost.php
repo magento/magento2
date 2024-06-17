@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
 
 use Magento\Framework\Controller\ResultFactory;
@@ -10,7 +13,7 @@ use Magento\Framework\Controller\ResultFactory;
 class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 {
     /**
-     * import action from import/export tax
+     * Import action from import/export tax
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
@@ -38,17 +41,5 @@ class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setUrl($this->_redirect->getRedirectUrl());
         return $resultRedirect;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed(
-            'Magento_Tax::manage_tax'
-        ) || $this->_authorization->isAllowed(
-            'Magento_TaxImportExport::import_export'
-        );
     }
 }
