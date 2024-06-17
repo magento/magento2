@@ -38,13 +38,13 @@ class JsTest extends \PHPUnit\Framework\TestCase
             [
                 'phrase' => 'text single quote',
                 'file' => $file,
-                'line' => 2,
+                'line' => 1,
                 'quote' => '\''
             ],
             [
                 'phrase' => 'text "some',
                 'file' => $file,
-                'line' => 3,
+                'line' => 1,
                 'quote' => '\''
             ]
         ];

@@ -28,14 +28,14 @@ class ServiceLocator
     private static $_context;
 
     /**
-     * Dictionary generator
+     * I18n Dictionary generator
      *
      * @var \Magento\Setup\Module\I18n\Dictionary\Generator
      */
     private static $_dictionaryGenerator;
 
     /**
-     * Pack generator
+     * I18n Pack generator
      *
      * @var \Magento\Setup\Module\I18n\Pack\Generator
      */

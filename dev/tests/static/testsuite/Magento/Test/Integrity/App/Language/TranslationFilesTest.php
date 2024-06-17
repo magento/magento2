@@ -17,7 +17,7 @@ use Magento\Setup\Module\I18n\Pack\Writer\File\Csv;
 class TranslationFilesTest extends TranslationFiles
 {
     /**
-     * Context
+     * I18n\Context
      *
      * @var \Magento\Setup\Module\I18n\Context
      */
