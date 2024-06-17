@@ -10,7 +10,7 @@ namespace Magento\Elasticsearch\Catalog\Controller\Adminhtml\Product\Attribute;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\AbstractSaveAttributeTest;
 
 /**
- * Test cases related to creating attribute and elasticsearch.
+ * Test cases related to creating attribute and search engine.
  */
 class SaveTest extends AbstractSaveAttributeTest
 {
@@ -59,7 +59,7 @@ class SaveTest extends AbstractSaveAttributeTest
     /**
      * @return array
      */
-    public function createAttributeWithErrorDataProvider(): array
+    public static function createAttributeWithErrorDataProvider(): array
     {
         return [
             'should not create attribute with reserved code "category_name"' => [

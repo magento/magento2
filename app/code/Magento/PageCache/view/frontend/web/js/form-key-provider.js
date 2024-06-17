@@ -5,7 +5,7 @@
 define(function () {
     'use strict';
 
-    return function () {
+    return function (settings) {
         var formKey,
             inputElements,
             inputSelector = 'input[name="form_key"]';
@@ -56,6 +56,14 @@ define(function () {
         }
 
         /**
+         * Get form key from UI input hidden
+         * @private
+         */
+        function getFormKeyFromUI() {
+            return document.querySelector(inputSelector).value;
+        }
+
+        /**
          * Generate form key string
          * @private
          */
@@ -77,6 +85,11 @@ define(function () {
          */
         function initFormKey() {
             formKey = getFormKeyCookie();
+
+            if (settings && settings.isPaginationCacheEnabled && !formKey) {
+                formKey = getFormKeyFromUI();
+                setFormKeyCookie(formKey);
+            }
 
             if (!formKey) {
                 formKey = generateFormKeyString();

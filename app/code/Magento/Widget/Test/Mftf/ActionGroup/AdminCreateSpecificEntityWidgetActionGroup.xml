@@ -17,6 +17,6 @@
         <click selector="{{AdminNewWidgetSection.specificEntitySelectRadio}}" stepKey="clickSpecificEntityRadio" after="seeSpecificEntityRadio"/>
         <seeElement selector="{{AdminNewWidgetSection.specificEntityOptionsChooser}}" stepKey="seeChooserTrigger" after="clickSpecificEntityRadio"/>
         <click selector="{{AdminNewWidgetSection.specificEntityOptionsChooser}}" stepKey="clickChooserTrigger" after="seeChooserTrigger"/>
-        <waitForAjaxLoad stepKey="waitForAjaxCategoryLoad" after="clickChooserTrigger"/>
+        <waitForPageLoad stepKey="waitForAjaxCategoryLoad" after="clickChooserTrigger"/>
     </actionGroup>
 </actionGroups>

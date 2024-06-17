@@ -42,17 +42,21 @@ class ZipTest extends TestCase
      */
     public function testConstructorFileDestinationMatch($fileName, $expectedfileName): void
     {
-        $this->markTestIncomplete('The implementation of constructor has changed. Rewrite test to cover changes.');
+        $this->markTestSkipped('The implementation of constructor has changed. Rewrite test to cover changes.');
 
         $this->directory->method('getRelativePath')
-            ->withConsecutive([$fileName], [$expectedfileName]);
+            ->willReturnCallback(function ($arg) use ($fileName, $expectedfileName) {
+                if ($arg == $fileName || $arg == $expectedfileName) {
+                    return null;
+                }
+            });
         $this->invokeConstructor($fileName);
     }
 
     /**
      * @return array
      */
-    public function constructorFileDestinationMatchDataProvider(): array
+    public static function constructorFileDestinationMatchDataProvider(): array
     {
         return [
             [

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateConfigProductBasedOnVisualSwatchAttributeWithImagesAndCustomLabelOnDifferentStoreViewsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product attributes"/>
+            <title value="Create Configurable product based on Visual Swatch attribute with Images and custom labels on different Store Views"/>
+            <description value="Create Configurable product based on Visual Swatch attribute with Images and custom labels on different Store Views"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5691"/>
+            <group value="product"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create a second Store View -->
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="storeView" value="customStoreEN"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete all created product -->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProducts">
+                <argument name="sku" value="$$createConfigurableProduct.sku$$"/>
+            </actionGroup>
+            <!-- Delete Category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Delete product attribute and clear grid filter -->
+            <deleteData createDataKey="createVisualSwatchAttribute" stepKey="deleteVisualSwatchAttribute"/>
+            <!-- Delete Store view -->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Step1: Create Visual Swatch attribute -->
+        <createData entity="VisualSwatchProductAttributeForm" stepKey="createVisualSwatchAttribute"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="reindexPostCreatingVisualSwatchAttribute"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCachePostCreatingVisualSwatchAttribute">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!-- Go to the edit page for the visual Swatch attribute -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributesToEditVisualSwatchAttribute"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="$createVisualSwatchAttribute.attribute_code$" stepKey="fillFilterToEditVisualSwatchAttribute"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearchToEditVisualSwatchAttribute"/>
+        <click selector="{{AdminProductAttributeGridSection.AttributeCode('$createVisualSwatchAttribute.attribute_code$')}}" stepKey="clickVisualSwatchRowToEdit"/>
+        <grabValueFrom selector="{{AdminManageSwatchSection.defaultLabelField}}" stepKey="grabAttributeValue"/>
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatchButtonForOption1"/>
+        <click selector="{{AdminManageSwatchSection.nthSwatchWindowEdit('1','1')}}" stepKey="clickSwatchButtonToEditForOption1"/>
+        <click selector="{{AdminManageSwatchSection.nthUploadFile('1')}}" stepKey="clickUploadFile1ForOption1"/>
+        <attachFile selector="input[name='datafile']" userInput="adobe-thumb.jpg" stepKey="attachFile1ForOption1"/>
+        <waitForPageLoad stepKey="waitFileAttachedForOption1"/>
+        <click selector="{{AdminManageSwatchSection.updateSwatchTextValues('1','4')}}" stepKey="clickOutsideTheDropdownForOption1"/>
+        <fillField selector="{{AdminManageSwatchSection.updateSwatchTextValues('1','4')}}" userInput="A1" stepKey="addA1valueToAdmin"/>
+        <fillField selector="{{AdminManageSwatchSection.updateSwatchTextValues('1','5')}}" userInput="B1" stepKey="addB1valueToDefault"/>
+        <fillField selector="{{AdminManageSwatchSection.updateSwatchTextValues('1','6')}}" userInput="C1" stepKey="addC1valueToSecondStore"/>
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatchButtonForOption2"/>
+        <click selector="{{AdminManageSwatchSection.nthSwatchWindowEdit('2','1')}}" stepKey="clickSwatchButtonToEditForOption2"/>
+        <click selector="{{AdminManageSwatchSection.nthUploadFile('2')}}" stepKey="clickUploadFile1ForOption2"/>
+        <attachFile selector="input[name='datafile']" userInput="adobe-thumb.jpg" stepKey="attachFile1ForOption2"/>
+        <waitForPageLoad stepKey="waitFileAttachedForOption2"/>
+        <click selector="{{AdminManageSwatchSection.updateSwatchTextValues('2','4')}}" stepKey="clickOutsideTheDropdownForOption2"/>
+        <fillField selector="{{AdminManageSwatchSection.updateSwatchTextValues('2','4')}}" userInput="A2" stepKey="addA2valueToAdmin"/>
+        <fillField selector="{{AdminManageSwatchSection.updateSwatchTextValues('2','5')}}" userInput="B2" stepKey="addB2valueToDefault"/>
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatchButtonForOption3"/>
+        <click selector="{{AdminManageSwatchSection.nthSwatchWindowEdit('3','1')}}" stepKey="clickSwatchButtonToEditForOption3"/>
+        <click selector="{{AdminManageSwatchSection.nthUploadFile('3')}}" stepKey="clickUploadFile1ForOption3"/>
+        <attachFile selector="input[name='datafile']" userInput="adobe-thumb.jpg" stepKey="attachFile1ForOption3"/>
+        <waitForPageLoad stepKey="waitFileAttachedForOption3"/>
+        <click selector="{{AdminManageSwatchSection.updateSwatchTextValues('3','4')}}" stepKey="clickOutsideTheDropdownForOption3"/>
+        <fillField selector="{{AdminManageSwatchSection.updateSwatchTextValues('3','4')}}" userInput="A3" stepKey="addA3valueToAdmin"/>
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatchButtonForOption4"/>
+        <fillField selector="{{AdminManageSwatchSection.updateSwatchTextValues('4','4')}}" userInput="A4" stepKey="addA4valueToAdmin"/>
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEditForVisualSwatchAttribute"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessForVisualSwatchAttribute"/>
+        <!-- Add created product attribute to the Default set -->
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+        <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="$$createVisualSwatchAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+        <!-- Step2: Create configurable product -->
+        <createData entity="_defaultCategory" stepKey="createCategory" />
+        <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProduct">
+            <requiredEntity createDataKey="createCategory"/>
+        </createData>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForConfigurableProduct1">
+            <argument name="product" value="$$createConfigurableProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductForConfigurableProduct1">
+            <argument name="product" value="$$createConfigurableProduct$$"/>
+        </actionGroup>
+        <!-- Click "Create Configurations" button, select created product attribute using the same Quantity for all products. Click "Generate products" button -->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnTheCreateConfigurationsButtonForConfigProd1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadForConfigProd1"/>
+        <click selector="{{AdminGridRow.checkboxByValue('$createVisualSwatchAttribute.frontend_label[0]$')}}" stepKey="selectVisualSwatchAttributeForConfigProd1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToSecondStepForConfigProd1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="selectOption1ForConfigProd1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToThirdStepForConfigProd1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="clickOnApplySinglePriceToAllSKUsForConfigProd1"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="10" stepKey="fillPriceForEachSKUForConfigProd1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQtyToEachSKUsForConfigProd1"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="10" stepKey="fillQuantityForEachSKUForConfigProd1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToFourthStepForConfigProd1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="doneGeneratingConfigurableVariationsForConfigProd1"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableProductForConfigProd1"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="confirmDefaultAttributeSetForConfigurableProductForConfigProd1"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkProductSavedMessageForConfigProd1"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPostProductConfiguration">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <!-- Step3: Navigate to default store view -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goToStorefrontCategoryPageForDefaultStoreLayeredNavigation">
+            <argument name="categoryName" value="$$createCategory.name$$" />
+        </actionGroup>
+        <!-- Step4 5 and 8: Verify the attributes in Layered Navigation and Product details for Default Store view -->
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle('{$grabAttributeValue}')}}" stepKey="expandVisualSwatchAttributeInLayeredNavForDefaultStoreView"/>
+        <waitForElementVisible selector="{{StorefrontLayeredNavigationSection.layeredNavigationNthSwatch('B1')}}" stepKey="waitForSwatchSystemValueVisibleForDefaultStore"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.layeredNavigationNthSwatch('B1')}}" stepKey="seeB1SwatchAttributeForDefaultStoreInLayeredNav"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.layeredNavigationNthSwatch('B2')}}" stepKey="seeB2SwatchAttributeForDefaultStoreInLayeredNav"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.layeredNavigationNthSwatch('A3')}}" stepKey="seeA3SwatchAttributeForDefaultStoreInLayeredNav"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.layeredNavigationNthSwatch('A4')}}" stepKey="seeA4SwatchAttributeForDefaultStoreInLayeredNav"/>
+        <!-- Verify the attributes in Product Details -->
+        <seeElement selector="{{StorefrontCategoryMainSection.ListedProductAttributes('{$grabAttributeValue}','B1')}}" stepKey="seeB1SwatchAttributeForDefaultStoreInListedProduct"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.ListedProductAttributes('{$grabAttributeValue}','B2')}}" stepKey="seeB2SwatchAttributeForDefaultStoreInListedProduct"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.ListedProductAttributes('{$grabAttributeValue}','A3')}}" stepKey="seeA3SwatchAttributeForDefaultStoreInListedProduct"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.ListedProductAttributes('{$grabAttributeValue}','A4')}}" stepKey="seeA4SwatchAttributeForDefaultStoreInListedProduct"/>
+        <!-- Step4 5 and 8: Verify the attributes in Layered Navigation and Product details for Secondary Store view -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="SwitchToSecondStoreViewForLayeredNavigation">
+            <argument name="storeView" value="customStoreEN"/>
+        </actionGroup>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="clickOnCreatedCategory"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoadForSecondaryStore"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle('{$grabAttributeValue}')}}" stepKey="expandVisualSwatchAttributeInLayeredNavForSecondaryStoreView"/>
+        <waitForElementVisible selector="{{StorefrontLayeredNavigationSection.layeredNavigationNthSwatch('C1')}}" stepKey="waitForSwatchSystemValueVisibleForSecondaryView"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.layeredNavigationNthSwatch('C1')}}" stepKey="seeC1SwatchAttributeForSecondaryStoreInLayeredNav"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.layeredNavigationNthSwatch('A2')}}" stepKey="seeA2SwatchAttributeForSecondaryStoreInLayeredNav"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.layeredNavigationNthSwatch('A3')}}" stepKey="seeA3SwatchAttributeForSecondaryStoreInLayeredNav"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.layeredNavigationNthSwatch('A4')}}" stepKey="seeA4SwatchAttributeForSecondaryStoreInLayeredNav"/>
+        <!-- Step8: Verify the attributes in Products page in Secondary Store view -->
+        <seeElement selector="{{StorefrontCategoryMainSection.ListedProductAttributes('{$grabAttributeValue}','C1')}}" stepKey="seeC1SwatchAttributeForSecondaryStoreInListedProduct"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.ListedProductAttributes('{$grabAttributeValue}','A2')}}" stepKey="seeA2SwatchAttributeForSecondaryStoreInListedProduct"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.ListedProductAttributes('{$grabAttributeValue}','A3')}}" stepKey="seeA3SwatchAttributeForSecondaryStoreInListedProduct"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.ListedProductAttributes('{$grabAttributeValue}','A4')}}" stepKey="seeA4SwatchAttributeForSecondaryStoreInListedProduct"/>
+        <!-- Verify the product present in product page of the storefront defult view -->
+        <amOnPage url="$$createConfigurableProduct.sku$$.html" stepKey="navigateToProductPageOnDefaultStorefront"/>
+        <actionGroup ref="StorefrontSwitchDefaultStoreViewActionGroup" stepKey="AdminSwitchDefaultStoreViewForProductPage"/>
+        <!-- Verify the attributes in Product Details page for Default Store -->
+        <seeElement selector="{{StorefrontCategoryProductSection.listedProductOnProductPage('$createVisualSwatchAttribute.attribute_code$','B1')}}" stepKey="seeB1SwatchAttributeForDefaultStoreInProductDetailsPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.listedProductOnProductPage('$createVisualSwatchAttribute.attribute_code$','B2')}}" stepKey="seeB2SwatchAttributeForDefaultStoreInProductDetailsPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.listedProductOnProductPage('$createVisualSwatchAttribute.attribute_code$','A3')}}" stepKey="seeA3SwatchAttributeForDefaultStoreInProductDetailsPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.listedProductOnProductPage('$createVisualSwatchAttribute.attribute_code$','A4')}}" stepKey="seeA4SwatchAttributeForDefaultStoreInProductDetailsPage"/>
+        <!-- Verify the product present in product page of the storefront secondary view -->
+        <amOnPage url="$$createConfigurableProduct.sku$$.html" stepKey="navigateToProductPageOnSecondaryStorefront"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="AdminSwitchToSecondaryStoreViewForProductPage">
+            <argument name="storeView" value="customStoreEN"/>
+        </actionGroup>
+        <!-- Verify the attributes in Product Details page for Secondary Store View -->
+        <seeElement selector="{{StorefrontCategoryProductSection.listedProductOnProductPage('$createVisualSwatchAttribute.attribute_code$','C1')}}" stepKey="seeC1SwatchAttributeForSecondaryStoreInProductDetailsPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.listedProductOnProductPage('$createVisualSwatchAttribute.attribute_code$','A2')}}" stepKey="seeA2SwatchAttributeForSecondaryStoreInProductDetailsPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.listedProductOnProductPage('$createVisualSwatchAttribute.attribute_code$','A3')}}" stepKey="seeA3SwatchAttributeForSecondaryStoreInProductDetailsPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.listedProductOnProductPage('$createVisualSwatchAttribute.attribute_code$','A4')}}" stepKey="seeA4SwatchAttributeForSecondaryStoreInProductDetailsPage"/>
+        <!-- Verify the attributes for Product Search page for Default Store View -->
+        <actionGroup ref="StorefrontSwitchDefaultStoreViewActionGroup" stepKey="AdminSwitchDefaultStoreViewForProductSearchPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchProductOnStorefrontForDefaultStoreView">
+            <argument name="phrase" value="$$createConfigurableProduct.name$$"/>
+        </actionGroup>
+        <seeElement selector="{{StorefrontCategoryMainSection.ListedProductAttributes('{$grabAttributeValue}','B1')}}" stepKey="seeB1SwatchAttributeForProductSearchInDefaultStore"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.ListedProductAttributes('{$grabAttributeValue}','B2')}}" stepKey="seeB2SwatchAttributeForProductSearchInDefaultStore"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.ListedProductAttributes('{$grabAttributeValue}','A3')}}" stepKey="seeA3SwatchAttributeForProductSearchInDefaultStore"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.ListedProductAttributes('{$grabAttributeValue}','A4')}}" stepKey="seeA4SwatchAttributeForProductSearchInDefaultStore"/>
+        <!-- Verify the attributes for Product Search page for Secondary Store View -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="AdminSwitchToSecondaryStoreViewForProductSearchPage">
+            <argument name="storeView" value="customStoreEN"/>
+        </actionGroup>
+        <seeElement selector="{{StorefrontCategoryMainSection.ListedProductAttributes('{$grabAttributeValue}','C1')}}" stepKey="seeC1SwatchAttributeForProductSearchInSecondaryStore"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.ListedProductAttributes('{$grabAttributeValue}','A2')}}" stepKey="seeA2SwatchAttributeForProductSearchInSecondaryStore"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.ListedProductAttributes('{$grabAttributeValue}','A3')}}" stepKey="seeA3SwatchAttributeForProductSearchInSecondaryStore"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.ListedProductAttributes('{$grabAttributeValue}','A4')}}" stepKey="seeA4SwatchAttributeForProductSearchInSecondaryStore"/>
+        <!-- Verify the attributes for Product in cart for Default Store View -->
+        <amOnPage url="$$createConfigurableProduct.sku$$.html" stepKey="navigateToProductPageOnDefaultStorefrontForShoppingCart"/>
+        <actionGroup ref="StorefrontSwitchDefaultStoreViewActionGroup" stepKey="AdminSwitchDefaultStoreViewForProductPageToAddToCart"/>
+        <click selector="{{StorefrontCategoryProductSection.listedProductOnProductPage('$createVisualSwatchAttribute.attribute_code$','B1')}}" stepKey="clickB1SwatchAttributeForDefaultStoreInProductDetailsPage"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addB1productToCartFromDefaultStoreView"/>
+        <waitForPageLoad stepKey="waitForPageLoadForB1addedToCartFromDefaultStoreView"/>
+        <click selector="{{StorefrontCategoryProductSection.listedProductOnProductPage('$createVisualSwatchAttribute.attribute_code$','B2')}}" stepKey="clickB2SwatchAttributeForDefaultStoreInProductDetailsPage"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addB2productToCartFromDefaultStoreView"/>
+        <waitForPageLoad stepKey="waitForPageLoadForB2addedToCartFromDefaultStoreView"/>
+        <click selector="{{StorefrontCategoryProductSection.listedProductOnProductPage('$createVisualSwatchAttribute.attribute_code$','A3')}}" stepKey="clickA3SwatchAttributeForDefaultStoreInProductDetailsPage"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addA3productToCartFromDefaultStoreView"/>
+        <waitForPageLoad stepKey="waitForPageLoadForA3addedToCartFromDefaultStoreView"/>
+        <click selector="{{StorefrontCategoryProductSection.listedProductOnProductPage('$createVisualSwatchAttribute.attribute_code$','A4')}}" stepKey="clickA4SwatchAttributeForDefaultStoreInProductDetailsPage"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addA4productToCartFromDefaultStoreView"/>
+        <waitForPageLoad stepKey="waitForPageLoadForA4addedToCartFromDefaultStoreView"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMiniCartForDefaultStore"/>
+        <waitForPageLoad stepKey="waitForViewAndEditCartToOpenForDefaultStore"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearForDefaultStore"/>
+        <seeElement selector="{{CheckoutCartProductSection.attributeText('$$createConfigurableProduct.name$$','{$grabAttributeValue}','B1')}}" stepKey="seeB1SwatchAttributeForProductInCartInDefaultStore"/>
+        <seeElement selector="{{CheckoutCartProductSection.attributeText('$$createConfigurableProduct.name$$','{$grabAttributeValue}','B2')}}" stepKey="seeB2SwatchAttributeForProductInCartInDefaultStore"/>
+        <seeElement selector="{{CheckoutCartProductSection.attributeText('$$createConfigurableProduct.name$$','{$grabAttributeValue}','A3')}}" stepKey="seeA3SwatchAttributeForProductInCartInDefaultStore"/>
+        <seeElement selector="{{CheckoutCartProductSection.attributeText('$$createConfigurableProduct.name$$','{$grabAttributeValue}','A4')}}" stepKey="seeA4SwatchAttributeForProductInCartInDefaultStore"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="AdminSwitchToSecondaryStoreViewForProductInCartPage">
+            <argument name="storeView" value="customStoreEN"/>
+        </actionGroup>
+        <seeElement selector="{{CheckoutCartProductSection.attributeText('$$createConfigurableProduct.name$$','{$grabAttributeValue}','C1')}}" stepKey="seeC1SwatchAttributeForProductInCartInSecondaryStore"/>
+        <seeElement selector="{{CheckoutCartProductSection.attributeText('$$createConfigurableProduct.name$$','{$grabAttributeValue}','A2')}}" stepKey="seeA2SwatchAttributeForProductInCartInSecondaryStore"/>
+        <seeElement selector="{{CheckoutCartProductSection.attributeText('$$createConfigurableProduct.name$$','{$grabAttributeValue}','A3')}}" stepKey="seeA3SwatchAttributeForProductInCartInSecondaryStore"/>
+        <seeElement selector="{{CheckoutCartProductSection.attributeText('$$createConfigurableProduct.name$$','{$grabAttributeValue}','A4')}}" stepKey="seeA4SwatchAttributeForProductInCartInSecondaryStore"/>
+    </test>
+</tests>

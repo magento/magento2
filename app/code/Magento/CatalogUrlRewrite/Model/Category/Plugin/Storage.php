@@ -6,6 +6,7 @@
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 use Magento\UrlRewrite\Model\StorageInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
@@ -27,15 +28,23 @@ class Storage
     private $productResource;
 
     /**
+     * @var MergeDataProviderFactory
+     */
+    private $mergeDataProviderFactory;
+
+    /**
      * @param UrlFinderInterface $urlFinder
      * @param Product $productResource
+     * @param MergeDataProviderFactory $mergeDataProviderFactory
      */
     public function __construct(
         UrlFinderInterface $urlFinder,
-        Product $productResource
+        Product $productResource,
+        MergeDataProviderFactory $mergeDataProviderFactory
     ) {
         $this->urlFinder = $urlFinder;
         $this->productResource = $productResource;
+        $this->mergeDataProviderFactory = $mergeDataProviderFactory;
     }
 
     /**
@@ -101,7 +110,17 @@ class Storage
                 }
             }
         }
-        return $data ? $this->urlFinder->findAllByData($data) : [];
+
+        $existingUrls = $data ? $this->urlFinder->findAllByData($data) : [];
+        $mergeDataProviderForNewUrls = $this->mergeDataProviderFactory->create();
+        $mergeDataProviderForOldUrls = $this->mergeDataProviderFactory->create();
+        $mergeDataProviderForNewUrls->merge($filteredUrls);
+        $mergeDataProviderForOldUrls->merge($existingUrls);
+
+        return array_intersect_key(
+            $mergeDataProviderForOldUrls->getData(),
+            $mergeDataProviderForNewUrls->getData()
+        );
     }
 
     /**

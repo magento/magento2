@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Translate library
@@ -18,17 +19,15 @@ use Magento\Framework\Filesystem\DriverInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class Translate implements \Magento\Framework\TranslateInterface
+class Translate implements \Magento\Framework\TranslateInterface, ResetAfterRequestInterface
 {
-    const CONFIG_AREA_KEY = 'area';
-    const CONFIG_LOCALE_KEY = 'locale';
-    const CONFIG_SCOPE_KEY = 'scope';
-    const CONFIG_THEME_KEY = 'theme';
-    const CONFIG_MODULE_KEY = 'module';
+    public const CONFIG_AREA_KEY = 'area';
+    public const CONFIG_LOCALE_KEY = 'locale';
+    public const CONFIG_SCOPE_KEY = 'scope';
+    public const CONFIG_THEME_KEY = 'theme';
+    public const CONFIG_MODULE_KEY = 'module';
 
     /**
-     * Locale code
-     *
      * @var string
      */
     protected $_localeCode;
@@ -592,6 +591,7 @@ class Translate implements \Magento\Framework\TranslateInterface
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated 101.0.0
+     * @see we don't recommend this approach anymore
      */
     private function getSerializer()
     {
@@ -600,5 +600,17 @@ class Translate implements \Magento\Framework\TranslateInterface
                 ->get(Serialize\SerializerInterface::class);
         }
         return $this->serializer;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_config = [];
+        $this->_data = [];
+        $this->_localeCode = null;
+        $this->_cacheId = null;
+        $this->serializer = null;
     }
 }

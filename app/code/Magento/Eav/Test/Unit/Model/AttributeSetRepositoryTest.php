@@ -227,7 +227,7 @@ class AttributeSetRepositoryTest extends TestCase
 
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getItems',
                 'getSize',
             ])
@@ -281,7 +281,7 @@ class AttributeSetRepositoryTest extends TestCase
 
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getItems',
                 'getSize',
             ])

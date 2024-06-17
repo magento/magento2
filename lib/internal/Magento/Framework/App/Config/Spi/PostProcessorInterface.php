@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\Reader\Source\SourceInterface;
  * @see SourceInterface
  * @see ConfigTypeInterface
  * @package Magento\Framework\App\Config\Spi
+ * @api
  */
 interface PostProcessorInterface
 {

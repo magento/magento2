@@ -15,7 +15,7 @@ use Magento\Analytics\Model\ReportWriterInterface;
 use Magento\Framework\Archive;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -127,31 +127,23 @@ class ExportDataHandlerTest extends TestCase
         $this->filesystemMock
             ->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::SYS_TMP)
+            ->with(DirectoryList::TMP)
             ->willReturn($this->directoryMock);
         $this->directoryMock
             ->expects($this->exactly(4))
             ->method('delete')
-            ->withConsecutive(
-                [$tmpFilesDirectoryPath],
-                [$archiveRelativePath]
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$tmpFilesDirectoryPath] => true,
+                [$archiveRelativePath] => true
+            });
 
         $this->directoryMock
             ->expects($this->exactly(4))
             ->method('getAbsolutePath')
-            ->withConsecutive(
-                [$tmpFilesDirectoryPath],
-                [$tmpFilesDirectoryPath],
-                [$archiveRelativePath],
-                [$archiveRelativePath]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $archiveSource,
-                $archiveSource,
-                $archiveAbsolutePath,
-                $archiveAbsolutePath
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$tmpFilesDirectoryPath] => $archiveSource,
+                [$archiveRelativePath] => $archiveAbsolutePath
+            });
 
         $this->reportWriterMock
             ->expects($this->once())
@@ -161,14 +153,10 @@ class ExportDataHandlerTest extends TestCase
         $this->directoryMock
             ->expects($this->exactly(2))
             ->method('isExist')
-            ->withConsecutive(
-                [$tmpFilesDirectoryPath],
-                [$archiveRelativePath]
-            )
-            ->willReturnOnConsecutiveCalls(
-                true,
-                true
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$tmpFilesDirectoryPath] => true,
+                [$archiveRelativePath] => true
+            });
 
         $this->directoryMock
             ->expects($this->once())
@@ -208,7 +196,7 @@ class ExportDataHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function prepareExportDataDataProvider()
+    public static function prepareExportDataDataProvider()
     {
         return [
             'Data source for archive is directory' => [true],
@@ -228,7 +216,7 @@ class ExportDataHandlerTest extends TestCase
         $this->filesystemMock
             ->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::SYS_TMP)
+            ->with(DirectoryList::TMP)
             ->willReturn($this->directoryMock);
         $this->reportWriterMock
             ->expects($this->once())
@@ -237,11 +225,10 @@ class ExportDataHandlerTest extends TestCase
         $this->directoryMock
             ->expects($this->exactly(3))
             ->method('delete')
-            ->withConsecutive(
-                [$tmpFilesDirectoryPath],
-                [$tmpFilesDirectoryPath],
-                [$archivePath]
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$tmpFilesDirectoryPath] => true,
+                [$archivePath] => true
+            });
         $this->directoryMock
             ->expects($this->exactly(2))
             ->method('getAbsolutePath')

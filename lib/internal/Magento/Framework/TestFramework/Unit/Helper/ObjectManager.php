@@ -6,12 +6,15 @@
 namespace Magento\Framework\TestFramework\Unit\Helper;
 
 use Magento\Framework\GetParameterClassTrait;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Helper class for basic object retrieving, such as blocks, models etc...
  *
  * @deprecated Class under test should be instantiated with `new` keyword with explicit dependencies declaration
+ * @see https://github.com/magento/magento2/pull/29272
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ObjectManager
@@ -29,8 +32,6 @@ class ObjectManager
     ];
 
     /**
-     * Test object
-     *
      * @var \PHPUnit\Framework\TestCase
      */
     protected $_testObject;
@@ -97,7 +98,7 @@ class ObjectManager
             ->disableOriginalClone()
             ->disableArgumentCloning()
             ->disallowMockingUnknownTypes()
-            ->setMethods(['getIdFieldName', '__sleep', '__wakeup'])
+            ->onlyMethods(['getIdFieldName', '__sleep', '__wakeup'])
             ->getMock();
         $resourceMock->expects(
             $this->_testObject->any()
@@ -158,10 +159,7 @@ class ObjectManager
      */
     public function getObject($className, array $arguments = [])
     {
-        // phpstan:ignore
-        if (is_subclass_of($className, \Magento\Framework\Api\AbstractSimpleObjectBuilder::class)
-            || is_subclass_of($className, \Magento\Framework\Api\Builder::class)
-        ) {
+        if (is_subclass_of($className, \Magento\Framework\Api\AbstractSimpleObjectBuilder::class)) {
             return $this->getBuilder($className, $arguments);
         }
         $constructArguments = $this->getConstructArguments($className, $arguments);
@@ -198,7 +196,8 @@ class ObjectManager
                 ->disableOriginalClone()
                 ->disableArgumentCloning()
                 ->disallowMockingUnknownTypes()
-                ->setMethods(['populateWithArray', 'populate', 'create'])
+                ->addMethods(['populateWithArray', 'populate'])
+                ->onlyMethods(['create'])
                 ->getMock();
 
             $objectFactory->expects($this->_testObject->any())
@@ -362,5 +361,25 @@ class ObjectManager
         $reflectionProperty = $reflection->getProperty($propertyName);
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $propertyValue);
+    }
+
+    /**
+     * Helper method to get mock of ObjectManagerInterface
+     *
+     * @param array $map
+     */
+    public function prepareObjectManager(array $map = [])
+    {
+        $objectManagerMock = $this->_testObject->getMockBuilder(ObjectManagerInterface::class)
+            ->addMethods(['getInstance'])
+            ->onlyMethods(['get'])
+            ->getMockForAbstractClass();
+
+        $objectManagerMock->method('getInstance')->willReturnSelf();
+        $objectManagerMock->method('get')->willReturnMap($map);
+
+        $reflectionProperty = new \ReflectionProperty(AppObjectManager::class, '_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock, $objectManagerMock);
     }
 }

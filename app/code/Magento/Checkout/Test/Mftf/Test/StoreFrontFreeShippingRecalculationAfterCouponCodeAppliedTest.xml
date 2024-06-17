@@ -17,6 +17,7 @@
             <testCaseId value="MC-28548"/>
             <useCaseId value="MAGETWO-96431"/>
             <group value="Checkout"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -52,6 +53,7 @@
             <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>
             <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
             <createData entity="DefaultMinimumOrderAmount" stepKey="defaultMinimumOrderAmount"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>

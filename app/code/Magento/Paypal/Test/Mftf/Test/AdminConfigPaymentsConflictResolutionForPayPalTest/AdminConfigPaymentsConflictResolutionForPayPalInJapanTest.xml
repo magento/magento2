@@ -15,7 +15,9 @@
             <description value="A popup should show when enabling different paypal solutions when one is already enabled for merchant country Japan"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-13146"/>
+            <group value="pr_exclude" />
             <group value="paypal"/>
+            <group value="cloud"/>
         </annotations>
         <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="Japan" stepKey="setMerchantCountry"/>
         <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="EnableWPSExpress">

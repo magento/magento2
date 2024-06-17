@@ -137,6 +137,11 @@ class FileClassScanner
             // `class` token is not used with a valid class name
             } elseif ($triggerClass && !$tokenIsArray) {
                 $triggerClass = false;
+            // `class` token was used as a string; not to define class
+            // phpstan:ignore
+            } elseif ($triggerClass && empty($class) && $token[0] === T_DOUBLE_ARROW) {
+                $triggerClass = false;
+                continue;
             // The class keyword was found in the last loop
             } elseif ($triggerClass && $token[0] === T_STRING) {
                 $triggerClass = false;

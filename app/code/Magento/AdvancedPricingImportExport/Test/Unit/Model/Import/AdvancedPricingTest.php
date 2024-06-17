@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import;
 
+use Magento\AdvancedPricingImportExport\Model\CurrencyResolver;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPrice;
@@ -39,8 +40,8 @@ class AdvancedPricingTest extends AbstractImportTestCase
     /**
      * DB Table data
      */
-    const TABLE_NAME = 'tableName';
-    const LINK_FIELD = 'linkField';
+    public const TABLE_NAME = 'tableName';
+    public const LINK_FIELD = 'linkField';
 
     /**
      * @var ResourceFactory|MockObject
@@ -136,6 +137,11 @@ class AdvancedPricingTest extends AbstractImportTestCase
      * @var ProcessingErrorAggregatorInterface
      */
     protected $errorAggregator;
+
+    /**
+     * @var MockObject|CurrencyResolver
+     */
+    private $currencyResolver;
 
     /**
      * @inheritDoc
@@ -328,7 +334,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
             ]
         ];
         $this->dataSourceModel
-            ->method('getNextBunch')
+            ->method('getNextUniqueBunch')
             ->willReturnOnConsecutiveCalls($testBunch);
         $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(false);
         $this->advancedPricing->method('saveProductPrices')->willReturnSelf();
@@ -400,7 +406,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
             ->method('getBehavior')
             ->willReturn(Import::BEHAVIOR_APPEND);
         $this->dataSourceModel
-            ->method('getNextBunch')
+            ->method('getNextUniqueBunch')
             ->willReturnOnConsecutiveCalls($data);
         $advancedPricing->method('validateRow')->willReturn(true);
 
@@ -524,7 +530,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
             Import::BEHAVIOR_REPLACE
         );
         $this->dataSourceModel
-            ->method('getNextBunch')
+            ->method('getNextUniqueBunch')
             ->willReturnOnConsecutiveCalls($data);
         $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(true);
 
@@ -537,23 +543,23 @@ class AdvancedPricingTest extends AbstractImportTestCase
 
         $this->advancedPricing
             ->method('deleteProductTierPrices')
-            ->withConsecutive(
-                [
-                    $listSku,
-                    AdvancedPricing::TABLE_TIER_PRICE
-                ]
-            )
-            ->willReturn(true);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($listSku) {
+                    if ($arg1 == $listSku && $arg2 == AdvancedPricing::TABLE_TIER_PRICE) {
+                        return true;
+                    }
+                }
+            );
 
         $this->advancedPricing
             ->method('saveProductPrices')
-            ->withConsecutive(
-                [
-                    $expectedTierPrices,
-                    AdvancedPricing::TABLE_TIER_PRICE
-                ]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($expectedTierPrices) {
+                    if ($arg1 == $expectedTierPrices && $arg2 == AdvancedPricing::TABLE_TIER_PRICE) {
+                        return $this->advancedPricing;
+                    }
+                }
+            );
 
         $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
     }
@@ -577,16 +583,20 @@ class AdvancedPricingTest extends AbstractImportTestCase
         ];
 
         $this->dataSourceModel
-            ->method('getNextBunch')
+            ->method('getNextUniqueBunch')
             ->willReturnOnConsecutiveCalls($data);
         $this->advancedPricing->method('validateRow')->willReturn(true);
         $expectedSkuList = ['sku value'];
         $this->advancedPricing
             ->expects($this->once())
             ->method('deleteProductTierPrices')
-            ->withConsecutive(
-                [$expectedSkuList, AdvancedPricing::TABLE_TIER_PRICE]
-            )->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($expectedSkuList) {
+                    if ($arg1 == $expectedSkuList && $arg2 == AdvancedPricing::TABLE_TIER_PRICE) {
+                        return $this->advancedPricing;
+                    }
+                }
+            );
 
         $this->advancedPricing->deleteAdvancedPricing();
     }
@@ -630,7 +640,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function saveAndReplaceAdvancedPricesAppendBehaviourDataProvider(): array
+    public static function saveAndReplaceAdvancedPricesAppendBehaviourDataProvider(): array
     {
         // @codingStandardsIgnoreStart
         return [
@@ -759,7 +769,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function validateRowResultDataProvider(): array
+    public static function validateRowResultDataProvider(): array
     {
         return [
             [
@@ -791,7 +801,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function validateRowAddRowErrorCallDataProvider(): array
+    public static function validateRowAddRowErrorCallDataProvider(): array
     {
         return [
             [
@@ -836,7 +846,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function saveProductPricesDataProvider(): array
+    public static function saveProductPricesDataProvider(): array
     {
         return [
             [[], ['oSku1' => 'product1', 'oSku2' => 'product2'], [], 0],
@@ -912,7 +922,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function deleteProductTierPricesDataProvider(): array
+    public static function deleteProductTierPricesDataProvider(): array
     {
         return [
             [
@@ -991,7 +1001,11 @@ class AdvancedPricingTest extends AbstractImportTestCase
             ->willReturn($oldSkus);
         $this->advancedPricing->expects($this->exactly($numCall))
             ->method('incrementCounterUpdated')
-            ->withConsecutive($args);
+            ->willReturnCallback(function ($args) {
+                if (!empty($args)) {
+                    return null;
+                }
+            });
 
         $this->invokeMethod($this->advancedPricing, 'processCountExistingPrices', [$prices, 'table']);
     }
@@ -999,7 +1013,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function processCountExistingPricesDataProvider(): array
+    public static function processCountExistingPricesDataProvider(): array
     {
         return [
             [
@@ -1095,10 +1109,11 @@ class AdvancedPricingTest extends AbstractImportTestCase
             ->method('getMetaData')
             ->with(ProductInterface::class)
             ->willReturn($metadataMock);
+        $this->currencyResolver = $this->createMock(CurrencyResolver::class);
         $advancedPricingMock = $this->getMockBuilder(
             \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class
         )
-            ->setMethods($methods)
+            ->onlyMethods($methods)
             ->setConstructorArgs(
                 [
                     $this->jsonHelper,
@@ -1115,7 +1130,8 @@ class AdvancedPricingTest extends AbstractImportTestCase
                     $this->importProduct,
                     $this->validator,
                     $this->websiteValidator,
-                    $this->tierPriceValidator
+                    $this->tierPriceValidator,
+                    $this->currencyResolver
                 ]
             )
             ->getMock();

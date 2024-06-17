@@ -41,11 +41,11 @@ class SortTest extends TestCase
     {
         $this->attributeAdapterProvider = $this->getMockBuilder(AttributeProvider::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getByAttributeCode'])
+            ->onlyMethods(['getByAttributeCode'])
             ->getMock();
         $this->fieldNameResolver = $this->getMockBuilder(FieldNameResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFieldName'])
+            ->onlyMethods(['getFieldName'])
             ->getMock();
 
         $this->sortBuilder = (new ObjectManager($this))->getObject(
@@ -59,6 +59,7 @@ class SortTest extends TestCase
 
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @dataProvider getSortProvider
      * @param array $sortItems
      * @param $isSortable
@@ -72,20 +73,21 @@ class SortTest extends TestCase
         $isSortable,
         $isFloatType,
         $isIntegerType,
+        $isComplexType,
         $fieldName,
         array $expected
     ) {
         /** @var MockObject|RequestInterface $request */
         $request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSort'])
+            ->addMethods(['getSort'])
             ->getMockForAbstractClass();
         $request->expects($this->any())
             ->method('getSort')
             ->willReturn($sortItems);
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isSortable', 'isFloatType', 'isIntegerType'])
+            ->onlyMethods(['isSortable', 'isFloatType', 'isIntegerType', 'isComplexType'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('isSortable')
@@ -96,6 +98,9 @@ class SortTest extends TestCase
         $attributeMock->expects($this->any())
             ->method('isIntegerType')
             ->willReturn($isIntegerType);
+        $attributeMock->expects($this->any())
+            ->method('isComplexType')
+            ->willReturn($isComplexType);
         $this->attributeAdapterProvider->expects($this->any())
             ->method('getByAttributeCode')
             ->with($this->anything())
@@ -136,6 +141,7 @@ class SortTest extends TestCase
                 false,
                 false,
                 false,
+                false,
                 null,
                 []
             ],
@@ -150,6 +156,7 @@ class SortTest extends TestCase
                         'direction' => 'DESC'
                     ],
                 ],
+                false,
                 false,
                 false,
                 false,
@@ -176,6 +183,7 @@ class SortTest extends TestCase
                 true,
                 true,
                 true,
+                false,
                 'price',
                 [
                     [
@@ -197,6 +205,7 @@ class SortTest extends TestCase
                     ],
                 ],
                 true,
+                false,
                 false,
                 false,
                 'name',
@@ -222,10 +231,35 @@ class SortTest extends TestCase
                 false,
                 false,
                 false,
+                false,
                 'not_eav_attribute',
                 [
                     [
                         'not_eav_attribute' => [
+                            'order' => 'desc'
+                        ]
+                    ]
+                ]
+            ],
+            [
+                [
+                    [
+                        'field' => 'entity_id',
+                        'direction' => 'DESC'
+                    ],
+                    [
+                        'field' => 'color',
+                        'direction' => 'DESC'
+                    ],
+                ],
+                true,
+                false,
+                false,
+                true,
+                'color',
+                [
+                    [
+                        'color_value.sort_color' => [
                             'order' => 'desc'
                         ]
                     ]

@@ -38,8 +38,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 class SaveTest extends AbstractBackendController
 {
     /**
-     * Base controller URL
-     *
      * @var string
      */
     private $baseControllerUrl = 'backend/customer/index/';
@@ -121,10 +119,10 @@ class SaveTest extends AbstractBackendController
      *
      * @return array
      */
-    public function createCustomerProvider(): array
+    public static function createCustomerProvider(): array
     {
-        $defaultCustomerData = $this->getDefaultCustomerData();
-        $expectedCustomerData = $this->getExpectedCustomerData($defaultCustomerData);
+        $defaultCustomerData = self::getDefaultCustomerData();
+        $expectedCustomerData = self::getExpectedCustomerData($defaultCustomerData);
         return [
             "fill_all_fields" => [
                 'post_data' => $defaultCustomerData,
@@ -193,9 +191,9 @@ class SaveTest extends AbstractBackendController
      *
      * @return array
      */
-    public function createCustomerErrorsProvider(): array
+    public static function createCustomerErrorsProvider(): array
     {
-        $defaultCustomerData = $this->getDefaultCustomerData();
+        $defaultCustomerData = self::getDefaultCustomerData();
         return [
             'without_some_require_fields' => [
                 'post_data' => array_replace_recursive(
@@ -483,7 +481,7 @@ class SaveTest extends AbstractBackendController
      *
      * @return array
      */
-    private function getDefaultCustomerData(): array
+    private static function getDefaultCustomerData(): array
     {
         return [
             'customer' => [
@@ -511,7 +509,7 @@ class SaveTest extends AbstractBackendController
      * @param array $defaultCustomerData
      * @return array
      */
-    private function getExpectedCustomerData(array $defaultCustomerData): array
+    private static function getExpectedCustomerData(array $defaultCustomerData): array
     {
         unset($defaultCustomerData['customer']['sendemail_store_id']);
         return array_replace_recursive(
@@ -613,13 +611,13 @@ class SaveTest extends AbstractBackendController
         $name = $this->customerViewHelper->getCustomerName($customer);
 
         $transportMock = $this->getMockBuilder(TransportInterface::class)
-            ->setMethods(['sendMessage'])
+            ->onlyMethods(['sendMessage'])
             ->getMockForAbstractClass();
         $transportMock->expects($this->exactly($occurrenceNumber))
             ->method('sendMessage');
         $transportBuilderMock = $this->getMockBuilder(TransportBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'addTo',
                     'setFrom',

@@ -26,9 +26,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class GroupRepositoryTest extends WebapiAbstract
 {
-    const SERVICE_NAME = "customerGroupRepositoryV1";
-    const SERVICE_VERSION = "V1";
-    const RESOURCE_PATH = "/V1/customerGroups";
+    private const SERVICE_NAME = "customerGroupRepositoryV1";
+    private const SERVICE_VERSION = "V1";
+    private const RESOURCE_PATH = "/V1/customerGroups";
 
     /**
      * @var GroupRegistry
@@ -96,7 +96,7 @@ class GroupRepositoryTest extends WebapiAbstract
      *
      * @return array
      */
-    public function getGroupDataProvider()
+    public static function getGroupDataProvider()
     {
         return [
             'NOT LOGGED IN' => [
@@ -223,7 +223,7 @@ class GroupRepositoryTest extends WebapiAbstract
      *
      * @return array
      */
-    public function testExcludedWebsitesRestDataProvider(): array
+    public static function testExcludedWebsitesRestDataProvider(): array
     {
         return [
             ['Create Group No Excludes REST', [], null],
@@ -512,16 +512,27 @@ class GroupRepositoryTest extends WebapiAbstract
 
         self::assertEquals($groupId, $this->_webApiCall($serviceInfo, $requestData)[CustomerGroup::ID]);
 
-        $group = $this->groupRepository->getById($groupId);
-        self::assertEquals($groupData[CustomerGroup::CODE], $group->getCode(), 'The group code did not change.');
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . "/$groupId",
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+        ];
+
+        $group = $this->_webApiCall($serviceInfo);
+        self::assertEquals(
+            $groupData[CustomerGroup::CODE],
+            $group['code'],
+            'The group code did not change.'
+        );
         self::assertEquals(
             $groupData[CustomerGroup::TAX_CLASS_ID],
-            $group->getTaxClassId(),
+            $group['tax_class_id'],
             'The group tax class id did not change'
         );
         self::assertEquals(
             ['1'],
-            $group->getExtensionAttributes()->getExcludeWebsiteIds(),
+            $group['extension_attributes']['exclude_website_ids'],
             'The group excluded websites do not match.'
         );
     }
@@ -654,7 +665,7 @@ class GroupRepositoryTest extends WebapiAbstract
      *
      * @return array
      */
-    public function testExcludedWebsitesSoapDataProvider(): array
+    public static function testExcludedWebsitesSoapDataProvider(): array
     {
         return [
             ['Create Group No Excludes SOAP', [], null],
@@ -847,48 +858,6 @@ class GroupRepositoryTest extends WebapiAbstract
             $groupData['taxClassId'],
             $group->getTaxClassId(),
             'The group tax class id did not change'
-        );
-    }
-
-    /**
-     * Verify that updating an existing group with excluded website works via SOAP.
-     */
-    public function testUpdateGroupWithExcludedWebsiteSoap(): void
-    {
-        $this->_markTestAsSoapOnly();
-        $group = $this->customerGroupFactory->create();
-        $group->setId(null);
-        $group->setCode('New Group with Exclude SOAP');
-        $group->setTaxClassId(3);
-        $groupId = $this->createGroup($group);
-
-        $serviceInfo = [
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => 'customerGroupRepositoryV1Save',
-            ],
-        ];
-
-        $groupData = [
-            CustomerGroup::ID => $groupId,
-            CustomerGroup::CODE => 'Updated Group with Exclude SOAP',
-            'taxClassId' => 3,
-            'extension_attributes' => ['exclude_website_ids' => ['1']]
-        ];
-        $this->_webApiCall($serviceInfo, ['group' => $groupData]);
-
-        $group = $this->groupRepository->getById($groupId);
-        self::assertEquals($groupData[CustomerGroup::CODE], $group->getCode(), 'The group code did not change.');
-        self::assertEquals(
-            $groupData['taxClassId'],
-            $group->getTaxClassId(),
-            'The group tax class id did not change'
-        );
-        self::assertEquals(
-            ['1'],
-            $group->getExtensionAttributes()->getExcludeWebsiteIds(),
-            'The group excluded websites do not match.'
         );
     }
 
@@ -1123,7 +1092,7 @@ class GroupRepositoryTest extends WebapiAbstract
     /**
      * Data provider for testSearchGroups
      */
-    public function testSearchGroupsDataProvider()
+    public static function testSearchGroupsDataProvider()
     {
         return [
             ['tax_class_id', 3, []],

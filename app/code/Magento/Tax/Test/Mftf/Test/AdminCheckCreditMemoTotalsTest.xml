@@ -46,6 +46,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <!--Delete customer-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Reset admin order filter -->
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clearOrderFilters"/>
@@ -62,7 +63,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Create new order-->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrder">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrder">
             <argument name="customer" value="Simple_US_Customer_NY"/>
         </actionGroup>
         <!--Add product to order-->

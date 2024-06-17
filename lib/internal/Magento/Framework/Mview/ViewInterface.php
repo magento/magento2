@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Mview;
 
 /**
  * Interface \Magento\Framework\Mview\ViewInterface
  *
+ * @api
  */
 interface ViewInterface
 {
@@ -57,12 +60,13 @@ interface ViewInterface
     public function subscribe();
 
     /**
-     * Remove subscriptions
+     * Remove subscriptions and optionally drop the changelog table
      *
+     * @param bool $dropTable
      * @throws \Exception
      * @return ViewInterface
      */
-    public function unsubscribe();
+    public function unsubscribe(bool $dropTable = true): ViewInterface;
 
     /**
      * Materialize view by IDs in changelog

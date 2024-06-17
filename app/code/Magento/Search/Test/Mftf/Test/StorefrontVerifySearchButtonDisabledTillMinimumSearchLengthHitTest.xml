@@ -19,6 +19,10 @@
             <group value="pr_exclude"/>
         </annotations>
 
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
 
         <actionGroup ref="StoreFrontFillSearchActionGroup" stepKey="fillSearchByTextLessThanMinimumSearchLength">

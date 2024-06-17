@@ -100,6 +100,18 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * @param string $source - path to local file or json structure with paths by storage type.
+     * @param string $destination - path to file or json structure with paths by storage type.
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function copyFromLocal($source, $destination): void
+    {
+        $this->helperInstance->copyFromLocal($this->extractFilePath($source), $this->extractFilePath($destination));
+    }
+
+    /**
      * Create directory in the storage
      *
      * @param string $path - path to file or json structure with paths by storage type.
@@ -285,7 +297,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
      * @param string $filePathJson - path to file or json structure with paths by storage type.
      * @return mixed
      */
-    private function extractFilePath($filePathJson)
+    public function extractFilePath($filePathJson)
     {
         $filePathArgs = json_decode($filePathJson, true);
         if (isset($filePathArgs[$this->storageType])) {

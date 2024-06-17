@@ -66,7 +66,7 @@ class DeployTranslationsDictionaryTest extends TestCase
 
         $this->deployStaticFile = $this->getMockBuilder(DeployStaticFile::class)
             ->disableOriginalConstructor()
-            ->setMethods(['deployFile'])
+            ->onlyMethods(['deployFile'])
             ->getMock();
         $this->deployStaticFile->expects($this->exactly(1))->method('deployFile')
             ->willReturnCallback(
@@ -76,12 +76,14 @@ class DeployTranslationsDictionaryTest extends TestCase
                     $this->assertEquals($area, $params['area']);
                     $this->assertEquals($theme, $params['theme']);
                     $this->assertEquals($locale, $params['locale']);
+
+                    return $dictionary;
                 }
             );
 
         $this->state = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
-            ->setMethods(['emulateAreaCode'])
+            ->onlyMethods(['emulateAreaCode'])
             ->getMock();
         $this->state->expects($this->exactly(1))->method('emulateAreaCode')
             ->willReturnCallback(

@@ -73,7 +73,7 @@ class AttributeProviderTest extends TestCase
         /** @var Attribute|MockObject $attribute */
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setEntity',
                     'getName',
@@ -137,6 +137,7 @@ class AttributeProviderTest extends TestCase
                     'dataType' => $attrBackendType,
                     'entity' => Customer::ENTITY,
                     'bind' => null,
+                    'index' => false
                 ],
             ],
             ],
@@ -175,7 +176,7 @@ class AttributeProviderTest extends TestCase
         /** @var Attribute|MockObject $attribute */
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setEntity',
                     'getName',
@@ -213,8 +214,12 @@ class AttributeProviderTest extends TestCase
         $attribute->expects($this->any())
             ->method('canBeSearchableInGrid')
             ->willReturn(true);
-        $attribute->expects($this->never())
-            ->method('canBeFilterableInGrid');
+        $attribute->expects($this->once())
+            ->method('canBeFilterableInGrid')
+            ->willReturn(false);
+        $attribute->expects($this->once())
+            ->method('getName')
+            ->willReturn($attrName);
 
         $this->assertEquals(
             ['fields' => [
@@ -225,6 +230,7 @@ class AttributeProviderTest extends TestCase
                     'type' => 'searchable',
                     'filters' => ['filter'],
                     'dataType' => 'data_type',
+                    'index' => false
                 ],
             ],
             ],
@@ -273,7 +279,7 @@ class AttributeProviderTest extends TestCase
         /** @var Attribute|MockObject $attribute */
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setEntity',
                     'getName',
@@ -336,6 +342,7 @@ class AttributeProviderTest extends TestCase
                     'dataType' => 'varchar',
                     'entity' => Customer::ENTITY,
                     'bind' => 'to_field',
+                    'index' => false
                 ],
             ],
                 'references' => [

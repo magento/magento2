@@ -82,7 +82,7 @@ class FrontTabPluginTest extends TestCase
             ->getMockForAbstractClass();
         $this->childBlockMock = $this->getMockBuilder(AbstractBlock::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addFieldMap', 'addFieldDependence'])
+            ->addMethods(['addFieldMap', 'addFieldDependence'])
             ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -111,6 +111,7 @@ class FrontTabPluginTest extends TestCase
                 [
                     'name' => 'search_weight',
                     'label' => __('Search Weight'),
+                    'note' => __('10 is the highest priority/heaviest weighting.'),
                     'values' => $weightOptions
                 ],
                 'is_searchable',

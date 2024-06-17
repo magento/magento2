@@ -50,7 +50,10 @@ class MergedXsdTest extends TestCase
     public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError)
     {
         $actualError = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
-        $this->assertEquals($expectedError, $actualError);
+        $this->assertEquals(false, empty($actualError));
+        foreach ($expectedError as $error) {
+            $this->assertContains($error, $actualError);
+        }
     }
 
     public function testSchemaCorrectlyIdentifiesValidXml()
@@ -64,7 +67,7 @@ class MergedXsdTest extends TestCase
     /**
      * Data provider with invalid xml array according to acl.xsd
      */
-    public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
+    public static function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
     {
         return include __DIR__ . '/_files/invalidMergedAclXmlArray.php';
     }

@@ -4,9 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main;
 
 use Magento\Backend\Block\Widget\Form;
@@ -14,6 +11,8 @@ use Magento\Backend\Block\Widget\Form;
 class Formattribute extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
+     * Prepare the form
+     *
      * @return void
      */
     protected function _prepareForm()

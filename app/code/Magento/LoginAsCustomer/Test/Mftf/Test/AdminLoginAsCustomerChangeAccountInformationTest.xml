@@ -15,20 +15,26 @@
             <title value="Admin user login as customer and edit customer's first and last name"/>
             <description value="Verify Admin can access customer's personal cabinet and change his first and last name using Login as Customer functionality"/>
             <group value="login_as_customer"/>
-            <severity value="MINOR"></severity>
+            <severity value="MINOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1" stepKey="enableLoginAsCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0" stepKey="enableLoginAsCustomerAutoDetection"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheBeforeTestRun">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0" stepKey="disableLoginAsCustomer"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTestRun">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </after>
 
         <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"

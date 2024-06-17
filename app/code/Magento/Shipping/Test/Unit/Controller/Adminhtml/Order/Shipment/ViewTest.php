@@ -88,7 +88,6 @@ class ViewTest extends TestCase
     protected $pageTitleMock;
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\Shipment\View
      * @var RedirectFactory|MockObject
      */
     protected $resultRedirectFactoryMock;
@@ -126,7 +125,7 @@ class ViewTest extends TestCase
         );
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
@@ -134,7 +133,7 @@ class ViewTest extends TestCase
         $this->resultForwardFactoryMock = $this->getMockBuilder(
             ForwardFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultForwardMock = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
@@ -146,7 +145,7 @@ class ViewTest extends TestCase
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
@@ -219,11 +218,13 @@ class ViewTest extends TestCase
             ->willReturn($this->pageTitleMock);
         $this->pageTitleMock->expects($this->exactly(2))
             ->method('prepend')
-            ->withConsecutive(
-                ['Shipments'],
-                ["#" . $incrementId]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1) use ($incrementId) {
+                if ($arg1 == 'Shipments') {
+                    return $this->pageTitleMock;
+                } elseif ($arg1 == 'View Shipment #' . $incrementId) {
+                    return $this->pageTitleMock;
+                }
+            });
 
         $this->assertEquals($this->resultPageMock, $this->controller->execute());
     }

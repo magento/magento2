@@ -13,12 +13,13 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Currency\Exception\CurrencyException;
+use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\UrlInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Escaper;
 
 /**
  * Associated products helper
@@ -232,7 +233,7 @@ class AssociatedProducts
      * Prepare variations
      *
      * @return void
-     * @throws \Zend_Currency_Exception
+     * @throws CurrencyException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
      */
@@ -298,7 +299,7 @@ class AssociatedProducts
                             ['id' => $product->getId()]
                         ) . '" target="_blank">' . $this->escaper->escapeHtml($product->getName()) . '</a>',
                         'sku' => $product->getSku(),
-                        'name' => $this->escaper->escapeHtml($product->getName()),
+                        'name' => $product->getName(),
                         'qty' => $this->getProductStockQty($product),
                         'price' => $price,
                         'price_string' => $currency->toCurrency(sprintf("%f", $price)),

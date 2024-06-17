@@ -49,21 +49,14 @@
                             <field id="caching_application">1</field>
                         </depends>
                     </field>
-                    <field id="export_button_version4" translate="label" type="button" sortOrder="35" showInDefault="1">
-                        <label>Export Configuration</label>
-                        <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish4</frontend_model>
-                        <depends>
-                            <field id="caching_application">1</field>
-                        </depends>
-                    </field>
-                    <field id="export_button_version5" type="button" sortOrder="40" showInDefault="1">
-                        <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish5</frontend_model>
-                        <depends>
-                            <field id="caching_application">1</field>
-                        </depends>
-                    </field>
                     <field id="export_button_version6" type="button" sortOrder="40" showInDefault="1">
                         <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish6</frontend_model>
+                        <depends>
+                            <field id="caching_application">1</field>
+                        </depends>
+                    </field>
+                    <field id="export_button_version7" type="button" sortOrder="40" showInDefault="1">
+                        <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish7</frontend_model>
                         <depends>
                             <field id="caching_application">1</field>
                         </depends>
@@ -77,6 +70,10 @@
                     <validate>validate-zero-or-greater validate-digits</validate>
                     <comment>Public content cache lifetime in seconds. If field is empty default value 86400 will be saved. </comment>
                     <backend_model>Magento\PageCache\Model\System\Config\Backend\Ttl</backend_model>
+                </field>
+                <field id="handles_size" type="text" translate="label comment" sortOrder="5" showInDefault="1" canRestore="1">
+                    <label>Handles params size</label>
+                    <comment>Handles params size. For better performance use handles parameter size between 50 and 100. </comment>
                 </field>
             </group>
         </section>

@@ -23,7 +23,7 @@ class DateGroupDataProvider
      *
      * @return array
      */
-    public function getData(): array
+    public static function getData(): array
     {
         return [
             'type_date_required' => [

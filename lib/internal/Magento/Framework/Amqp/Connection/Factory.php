@@ -38,8 +38,15 @@ class Factory
             $parameters['ssl_options'] = $options->getSslOptions() !== null
                 ? $options->getSslOptions()
                 : ['verify_peer' => true];
+            return ObjectManager::getInstance()->create($connectionType, $parameters);
         }
-
-        return ObjectManager::getInstance()->create($connectionType, $parameters);
+        // need to revert the changes in scope of this ticket - AC-11673
+        return new AMQPStreamConnection(
+            $parameters['host'],
+            $parameters['port'],
+            $parameters['user'],
+            $parameters['password'],
+            $parameters['vhost']
+        );
     }
 }

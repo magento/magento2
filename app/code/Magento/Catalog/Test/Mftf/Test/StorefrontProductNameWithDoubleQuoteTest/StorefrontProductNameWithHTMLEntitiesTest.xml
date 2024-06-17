@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontProductNameWithHTMLEntitiesTest">
         <annotations>
             <features value="Catalog"/>
@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="product"/>
             <testCaseId value="MAGETWO-93794"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategoryOne"/>

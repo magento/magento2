@@ -18,6 +18,11 @@ use PHPUnit\Framework\TestCase;
 class TaxTest extends TestCase
 {
     /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
+    /**
      * @var Tax
      */
     protected $model;
@@ -75,7 +80,7 @@ class TaxTest extends TestCase
         foreach ($orderData['previous_invoices'] as $previousInvoiceData) {
             $previousInvoice = $this->getMockBuilder(Invoice::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['isCanceled'])
+                ->onlyMethods(['isCanceled'])
                 ->getMock();
             $previousInvoice->setData('shipping_amount', $previousInvoiceData['shipping_amount']);
             $previousInvoices[] = $previousInvoice;
@@ -115,13 +120,13 @@ class TaxTest extends TestCase
 
         //verify invoice data
         foreach ($expectedResults['invoice_data'] as $key => $value) {
-            $this->assertEquals($value, $this->invoice->getData($key));
+            $this->assertEqualsWithDelta($value, $this->invoice->getData($key), self::EPSILON);
         }
         //verify invoice item data
         foreach ($expectedResults['invoice_items'] as $itemKey => $itemData) {
             $invoiceItem = $invoiceItems[$itemKey];
             foreach ($itemData as $key => $value) {
-                $this->assertEquals($value, $invoiceItem->getData($key));
+                $this->assertEqualsWithDelta($value, $invoiceItem->getData($key), self::EPSILON);
             }
         }
     }

@@ -50,7 +50,7 @@ class SqlVersionProviderTest extends TestCase
     private $supportedVersionPatterns = [
         'MySQL-8' => '^8\.0\.',
         'MySQL-5.7' => '^5\.7\.',
-        'MariaDB-(10.2-10.4)' => '^10\.[2-4]\.'
+        'MariaDB-(10.2-10.6)' => '^10\.[2-6]\.'
     ];
 
     /**
@@ -60,11 +60,11 @@ class SqlVersionProviderTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->resourceConnection = $this->getMockBuilder(ResourceConnection::class)
-            ->setMethods(['getConnection'])
+            ->onlyMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->mysqlAdapter = $this->getMockBuilder(Mysql::class)
-            ->setMethods(['fetchPairs'])
+            ->onlyMethods(['fetchPairs'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceConnection->expects($this->atLeastOnce())
@@ -94,7 +94,7 @@ class SqlVersionProviderTest extends TestCase
      */
     public function testSqlVersionProviderThrowsExceptionWhenNonSupportedEngineUsed(): void
     {
-        $this->prepareSqlProviderAndMySQLAdapter(['version' => '10.5.0-MariaDB-1:10.5.0+maria~bionic']);
+        $this->prepareSqlProviderAndMySQLAdapter(['version' => '10.7.0-MariaDB-1:10.7.0+maria~bionic']);
         $this->expectExceptionMessage('Current version of RDBMS is not supported.');
         $this->expectException(ConnectionException::class);
         $this->sqlVersionProvider->getSqlVersion();
@@ -103,9 +103,13 @@ class SqlVersionProviderTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
+            'MariaDB-10.6' => [
+                ['version' => '10.6.12-MariaDB'],
+                '10.6.'
+            ],
             'MariaDB-10.4' => [
                 ['version' => '10.4.12-MariaDB-1:10.4.12+maria~bionic'],
                 '10.4.'

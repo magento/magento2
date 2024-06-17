@@ -9,14 +9,17 @@ namespace Magento\Framework\Logger\Handler;
 
 use InvalidArgumentException;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
 /**
  * Base stream handler
+ *
+ * @api
  */
-class Base extends StreamHandler
+class Base extends StreamHandler implements ResetAfterRequestInterface
 {
     /**
      * @var string
@@ -58,6 +61,14 @@ class Base extends StreamHandler
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->close();
+    }
+
+    /**
      * Remove dots from file name
      *
      * @param string $fileName
@@ -85,5 +96,15 @@ class Base extends StreamHandler
         }
 
         parent::write($record);
+    }
+
+    /**
+     * Retrieve debug info
+     *
+     * @return string[]
+     */
+    public function __debugInfo()
+    {
+        return ['fileName' => $this->fileName];
     }
 }

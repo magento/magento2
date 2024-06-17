@@ -10,15 +10,13 @@ namespace Magento\Catalog\Api;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class ProductTierPriceManagementTest
- *
- * @package Magento\Catalog\Api
+ * ProductTierPriceManagementTest API operations test
  */
 class ProductTierPriceManagementTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductTierPriceManagementV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/products/';
+    private const SERVICE_NAME = 'catalogProductTierPriceManagementV1';
+    private const SERVICE_VERSION = 'V1';
+    private const RESOURCE_PATH = '/V1/products/';
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
@@ -82,7 +80,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
             ],
         ];
         $requestData = ['sku' => $productSku, 'customerGroupId' => $customerGroupId, 'qty' => $qty];
-        $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
+        $this->assertTrue($this->_webApiCall($serviceInfo, $requestData, null, "all"));
     }
 
     public function deleteDataProvider()
@@ -198,7 +196,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
             'qty' => $qty,
             'price' => $price,
         ];
-        $this->_webApiCall($serviceInfo, $requestData);
+        $this->_webApiCall($serviceInfo, $requestData, null, "all");
         $objectManager = \Magento\TestFramework\ObjectManager::getInstance();
         /** @var \Magento\Catalog\Api\ProductTierPriceManagementInterface $service */
         $service = $objectManager->get(\Magento\Catalog\Api\ProductTierPriceManagementInterface::class);
