@@ -39,4 +39,7 @@
     <event name="cms_page_prepare_save">
         <observer name="validate_cms_page" instance="Magento\Cms\Observer\PageValidatorObserver" />
     </event>
+    <event name="clean_cache_by_tags">
+        <observer name="invalidate_layout_cache" instance="Magento\Cms\Observer\InvalidateLayoutCacheObserver"/>
+    </event>
 </config>

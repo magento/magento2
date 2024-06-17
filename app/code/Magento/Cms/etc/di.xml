@@ -316,4 +316,13 @@
             </argument>
         </arguments>
     </virtualType>
+     <type name="Magento\Framework\App\Cache\Tag\Strategy\Factory">
+        <arguments>
+            <argument name="customStrategies" xsi:type="array">
+                <item name="Magento\Cms\Model\Page" xsi:type="object">
+                    Magento\Cms\Model\TagsStrategy
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
