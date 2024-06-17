@@ -7,6 +7,7 @@
 namespace Magento\Sales\Model\ResourceModel\Order\Handler;
 
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice;
 
 /**
  * Checking order status and adjusting order status before saving
@@ -27,7 +28,11 @@ class State
                 ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING));
             $currentState = Order::STATE_PROCESSING;
         }
-        if ($order->isCanceled() || $order->canUnhold() || $order->canInvoice()) {
+        if ($order->isCanceled() ||
+            $order->canUnhold() ||
+            $order->canInvoice() ||
+            ($this->orderHasOpenInvoices($order) && (int) $order->getTotalDue() > 0)
+        ) {
             return $this;
         }
 
@@ -57,6 +62,24 @@ class State
     {
         if ($currentState === Order::STATE_PROCESSING && !$order->canShip()) {
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if order has unpaid invoices
+     *
+     * @param Order $order
+     * @return bool
+     */
+    private function orderHasOpenInvoices(Order $order): bool
+    {
+        /** @var Invoice $invoice */
+        foreach ($order->getInvoiceCollection()->getItems() as $invoice) {
+            if ($invoice->getState() == Invoice::STATE_OPEN) {
+                return true;
+            }
         }
 
         return false;
