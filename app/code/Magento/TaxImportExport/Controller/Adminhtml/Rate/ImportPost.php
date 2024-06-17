@@ -9,8 +9,10 @@ declare(strict_types=1);
 namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
 
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\TaxImportExport\Controller\Adminhtml\Rate;
 
-class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
+class ImportPost extends Rate implements HttpPostActionInterface
 {
     /**
      * Import action from import/export tax
