@@ -98,7 +98,7 @@ class DataTest extends TestCase
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getServer'])
+            ->addMethods(['getServer'])
             ->getMockForAbstractClass();
 
         $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
@@ -132,13 +132,8 @@ class DataTest extends TestCase
 
         $this->wishlistItem = $this->getMockBuilder(WishlistItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getProduct',
-                    'getWishlistItemId',
-                    'getQty',
-                ]
-            )->getMock();
+            ->addMethods([ 'getWishlistItemId', 'getQty'])
+            ->onlyMethods(['getProduct'])->getMock();
 
         $this->wishlist = $this->getMockBuilder(Wishlist::class)
             ->disableOriginalConstructor()

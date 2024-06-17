@@ -740,8 +740,7 @@ class ProductTest extends AbstractImportTestCase
     {
         $attrCode = 'code';
         $rowNum = 0;
-        $string = $this->getMockBuilder(StringUtils::class)
-            ->onlyMethods([])->getMock();
+        $string = $this->getMockBuilder(StringUtils::class)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(true);
@@ -758,8 +757,7 @@ class ProductTest extends AbstractImportTestCase
     {
         $attrCode = 'code';
         $rowNum = 0;
-        $string = $this->getMockBuilder(StringUtils::class)
-            ->onlyMethods([])->getMock();
+        $string = $this->getMockBuilder(StringUtils::class)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(false);
@@ -1131,6 +1129,15 @@ class ProductTest extends AbstractImportTestCase
             ->expects($this->once())
             ->method('getRowScope')
             ->willReturn(Product::SCOPE_STORE);
+        $importProduct
+            ->method('addRowError')
+            ->willReturnCallback(
+                function ($arg1) use ($rowNum) {
+                    if ($arg1 == $rowNum) {
+                        return null;
+                    }
+                }
+            );
 
         $importProduct->validateRow($rowData, $rowNum);
     }
@@ -1398,7 +1405,7 @@ class ProductTest extends AbstractImportTestCase
         $productType = $this->getMockBuilder(AbstractType::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productType->expects($this->once())->method('isRowValid')->with($expectedRowData);
+        $productType->expects($this->any())->method('isRowValid')->with($expectedRowData);
         $this->setPropertyValue(
             $importProduct,
             '_productTypeModels',

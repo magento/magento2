@@ -48,7 +48,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EavTest extends AbstractModifierTest
+class EavTest extends AbstractModifierTestCase
 {
     /**
      * @var Config|MockObject

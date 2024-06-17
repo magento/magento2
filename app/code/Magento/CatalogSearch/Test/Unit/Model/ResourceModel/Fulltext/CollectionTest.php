@@ -226,7 +226,7 @@ class CollectionTest extends TestCase
 
         $searchResultApplier = $this->getMockBuilder(SearchResultApplierInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['apply'])
+            ->onlyMethods(['apply'])
             ->getMockForAbstractClass();
         $this->searchResultApplierFactory->expects($this->any())
             ->method('create')

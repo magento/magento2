@@ -448,7 +448,7 @@ class LinkManagementTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function errorsDataProvider(): array
+    public static function errorsDataProvider(): array
     {
         return [
             'simple_instead_of_configurable' => [

@@ -60,19 +60,19 @@ class TotalsTest extends TestCase
         $this->block->setOrder($this->orderFactory->create())->setTemplate('order/totals.phtml');
         $context = $this->objectManager->get(Context::class);
         $childOne = $this->getMockBuilder(Text::class)
-            ->setMethods(['initTotals'])
+            ->addMethods(['initTotals'])
             ->setConstructorArgs([$context])
             ->getMock();
         $childOne->expects($this->once())->method('initTotals');
         $this->layout->addBlock($childOne, 'child1', 'block');
         $childTwo = $this->getMockBuilder(Text::class)
-            ->setMethods(['initTotals'])
+            ->addMethods(['initTotals'])
             ->setConstructorArgs([$context])
             ->getMock();
         $childTwo->expects($this->once())->method('initTotals');
         $this->layout->addBlock($childTwo, 'child2', 'block');
         $childThree = $this->getMockBuilder(Text::class)
-            ->setMethods(['initTotals'])
+            ->addMethods(['initTotals'])
             ->setConstructorArgs([$context])
             ->getMock();
         $childThree->expects($this->once())->method('initTotals');

@@ -35,7 +35,7 @@ class FixedBundleProductTest extends AbstractBundleProductSaveTest
     /**
      * @return array
      */
-    public function fixedBundleProductDataProvider(): array
+    public static function fixedBundleProductDataProvider(): array
     {
         return [
             'with_dropdown_option' => [
@@ -128,7 +128,7 @@ class FixedBundleProductTest extends AbstractBundleProductSaveTest
     /**
      * @return array
      */
-    public function multiOptionsDataProvider(): array
+    public static function multiOptionsDataProvider(): array
     {
         return [
             'with_two_options_few_selections' => [
@@ -184,7 +184,7 @@ class FixedBundleProductTest extends AbstractBundleProductSaveTest
     /**
      * @return array
      */
-    public function updateProductDataProvider(): array
+    public static function updateProductDataProvider(): array
     {
         return [
             'update_existing_product' => [
