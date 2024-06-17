@@ -102,7 +102,7 @@ class LayoutPluginTest extends TestCase
     /**
      * @return array
      */
-    public function afterGenerateElementsDataProvider(): array
+    public static function afterGenerateElementsDataProvider(): array
     {
         return [
             'Full_cache state is true, Layout is cache-able' => [true, true, false],

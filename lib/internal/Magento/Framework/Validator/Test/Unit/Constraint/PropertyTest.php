@@ -106,7 +106,7 @@ class PropertyTest extends TestCase
      *
      * @return array
      */
-    public function isValidDataProvider()
+    public static function isValidDataProvider()
     {
         return [
             [[self::PROPERTY_NAME => 'Property value', 'foo' => 'Foo value'], 'Property value', true],
