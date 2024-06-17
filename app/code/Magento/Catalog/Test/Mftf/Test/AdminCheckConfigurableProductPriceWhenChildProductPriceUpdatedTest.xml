@@ -87,8 +87,10 @@
             </createData>
 
             <!--Open Index Management Page and Select Index mode "Update by Schedule" -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJobs">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <comment userInput="Adding the comment to replace 'indexer:set-mode schedule' command for preserving Backward Compatibility" stepKey="setIndexerMode"/>
-            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="runIndexCronJobs"/>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
             <!-- Wait till cron job runs for schedule updates -->

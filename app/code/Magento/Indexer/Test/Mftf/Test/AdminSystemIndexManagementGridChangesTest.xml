@@ -51,6 +51,7 @@
         </actionGroup>
         <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+        <wait time="60" stepKey="waitForCronToRun"/>
 
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToIndexManagementPageSecond">
             <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
