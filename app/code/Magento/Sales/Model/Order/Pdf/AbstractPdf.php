@@ -6,19 +6,18 @@
 
 namespace Magento\Sales\Model\Order\Pdf;
 
+
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Framework\Translate\Inline\StateInterface;
-use Magento\Payment\Helper\Data;
-use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\File\Pdf\Image;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\Payment\Helper\Data;
 use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Sales\Model\Order\Pdf\Total\Factory;
 use Magento\Sales\Model\RtlTextHandler;
@@ -67,17 +66,17 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      *
      * @var \Zend_Pdf
      */
-    protected \Zend_Pdf $_pdf;
+    protected $_pdf;
 
     /**
      * @var RtlTextHandler
      */
-    private mixed $rtlTextHandler;
+    private $rtlTextHandler;
 
     /**
-     * @var Image
+     * @var \Magento\Framework\File\Pdf\Image
      */
-    private mixed $image;
+    private $image;
 
     /**
      * Retrieve PDF
@@ -87,76 +86,76 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     abstract public function getPdf();
 
     /**
-     * @var Data
+     * @var \Magento\Payment\Helper\Data
      */
-    protected Data $_paymentData;
+    protected $_paymentData;
 
     /**
-     * @var StringUtils
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
-    protected StringUtils $string;
+    protected $string;
 
     /**
-     * @var TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
-    protected TimezoneInterface $_localeDate;
+    protected $_localeDate;
 
     /**
      * Core store config
      *
-     * @var ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected ScopeConfigInterface $_scopeConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var WriteInterface
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
-    protected WriteInterface $_mediaDirectory;
+    protected $_mediaDirectory;
 
     /**
-     * @var ReadInterface
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
-    protected ReadInterface $_rootDirectory;
+    protected $_rootDirectory;
 
     /**
      * @var Config
      */
-    protected Config $_pdfConfig;
+    protected $_pdfConfig;
 
     /**
-     * @var Factory
+     * @var \Magento\Sales\Model\Order\Pdf\Total\Factory
      */
-    protected Factory $_pdfTotalFactory;
+    protected $_pdfTotalFactory;
 
     /**
-     * @var ItemsFactory
+     * @var \Magento\Sales\Model\Order\Pdf\ItemsFactory
      */
-    protected ItemsFactory $_pdfItemsFactory;
+    protected $_pdfItemsFactory;
 
     /**
-     * @var StateInterface
+     * @var \Magento\Framework\Translate\Inline\StateInterface
      */
-    protected StateInterface $inlineTranslation;
+    protected $inlineTranslation;
 
     /**
-     * @var Renderer
+     * @var \Magento\Sales\Model\Order\Address\Renderer
      */
-    protected Renderer $addressRenderer;
+    protected $addressRenderer;
 
     /**
-     * @var TaxHelper|Data
+     * @var Magento\Tax\Helper\Data
      */
-    protected TaxHelper|Data $taxHelper;
+    private $taxHelper;
 
     /**
      * @var array $pageSettings
      */
-    private array $pageSettings;
+    private $pageSettings;
 
     /**
      * @var Database
      */
-    private mixed $fileStorageDatabase;
+    private $fileStorageDatabase;
 
     /**
      * @param Data $paymentData
@@ -178,21 +177,21 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        Data $paymentData,
-        StringUtils $string,
-        ScopeConfigInterface $scopeConfig,
-        Filesystem $filesystem,
-        Config $pdfConfig,
-        Factory $pdfTotalFactory,
-        ItemsFactory  $pdfItemsFactory,
-        TimezoneInterface $localeDate,
-        StateInterface $inlineTranslation,
-        Renderer $addressRenderer,
-        array $data = [],
-        ?TaxHelper $taxHelper = null,
-        Database $fileStorageDatabase = null,
-        ?RtlTextHandler $rtlTextHandler = null,
-        ?Image $image = null
+        \Magento\Payment\Helper\Data $paymentData,
+        \Magento\Framework\Stdlib\StringUtils                $string,
+        \Magento\Framework\App\Config\ScopeConfigInterface   $scopeConfig,
+        \Magento\Framework\Filesystem                        $filesystem,
+        Config                                               $pdfConfig,
+        \Magento\Sales\Model\Order\Pdf\Total\Factory         $pdfTotalFactory,
+        \Magento\Sales\Model\Order\Pdf\ItemsFactory          $pdfItemsFactory,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Translate\Inline\StateInterface   $inlineTranslation,
+        \Magento\Sales\Model\Order\Address\Renderer          $addressRenderer,
+        array                                                $data = [],
+        ?TaxHelper                                            $taxHelper = null,
+        Database                                             $fileStorageDatabase = null,
+        ?RtlTextHandler                                      $rtlTextHandler = null,
+        ?Image                                               $image = null
     ) {
         $this->addressRenderer = $addressRenderer;
         $this->_paymentData = $paymentData;
