@@ -21,7 +21,9 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\File\Read;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\AbstractSource;
@@ -177,6 +179,14 @@ class CustomerCompositeTest extends TestCase
      */
     protected function _createModelMock($data)
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Json::class,
+                $this->createMock(Json::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         return new CustomerComposite(
             $this->_string,
             $this->_scopeConfigMock,
