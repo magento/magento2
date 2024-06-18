@@ -209,4 +209,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\AccountManagement">
+        <plugin name="merge_order_after_customer_signup"
+                type="Magento\CustomerGraphQl\Plugin\Model\MergeGuestOrder" />
+    </type>
 </config>
