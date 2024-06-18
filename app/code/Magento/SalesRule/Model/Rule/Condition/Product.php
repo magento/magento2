@@ -7,8 +7,6 @@ namespace Magento\SalesRule\Model\Rule\Condition;
 
 /**
  * Product rule condition data model
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
