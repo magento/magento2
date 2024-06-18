@@ -168,7 +168,7 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    public function getMappedSqlFieldPriceDataProvider(): array
+    public static function getMappedSqlFieldPriceDataProvider(): array
     {
         return [
             [
@@ -228,7 +228,7 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    public function getBindArgumentValueDataProvider(): array
+    public static function getBindArgumentValueDataProvider(): array
     {
         return [
             [

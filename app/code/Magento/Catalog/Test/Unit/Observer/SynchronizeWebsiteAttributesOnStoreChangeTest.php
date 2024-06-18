@@ -37,7 +37,7 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
     /**
      * @return array
      */
-    public function executeInvalidStoreDataProvider()
+    public static function executeInvalidStoreDataProvider()
     {
         return [
             [

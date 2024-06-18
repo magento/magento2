@@ -355,7 +355,7 @@ class AbstractAddressTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         $countryId = 1;
         $data = [

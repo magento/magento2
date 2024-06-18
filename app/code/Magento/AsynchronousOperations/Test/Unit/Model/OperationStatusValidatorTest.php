@@ -77,7 +77,7 @@ class OperationStatusValidatorTest extends TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderForTestSetStatus()
+    public static function dataProviderForTestSetStatus()
     {
         return [
             [

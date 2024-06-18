@@ -104,7 +104,7 @@ class ContainerTest extends TestCase
     /**
      * @return array
      */
-    public function processDataProvider()
+    public static function processDataProvider()
     {
         return [
             'sample_data' => [

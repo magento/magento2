@@ -176,7 +176,7 @@ class CrosssellTest extends TestCase
     /**
      * @return array
      */
-    public function getItemsDataProvider(): array
+    public static function getItemsDataProvider(): array
     {
         $links = [
             1001 => [

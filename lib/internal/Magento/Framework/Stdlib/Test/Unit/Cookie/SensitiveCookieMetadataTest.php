@@ -174,7 +174,7 @@ class SensitiveCookieMetadataTest extends TestCase
     /**
      * @return array
      */
-    public function toArrayDataProvider()
+    public static function toArrayDataProvider()
     {
         return [
             'with secure' => [

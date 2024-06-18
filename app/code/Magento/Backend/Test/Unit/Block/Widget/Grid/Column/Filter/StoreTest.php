@@ -62,7 +62,7 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function getConditionDataProvider()
+    public static function getConditionDataProvider()
     {
         return [
             [null, null],

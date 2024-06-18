@@ -105,7 +105,7 @@ class FilterAttributeReaderTest extends TestCase
         }
     }
 
-    public function readDataProvider(): array
+    public static function readDataProvider(): array
     {
         return [
             [

@@ -29,7 +29,7 @@ class PropertyMapperTest extends TestCase
     /**
      * @return array
      */
-    public function caseProvider(): array
+    public static function caseProvider(): array
     {
         return [
             [

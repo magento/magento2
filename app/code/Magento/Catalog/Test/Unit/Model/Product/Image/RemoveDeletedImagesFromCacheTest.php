@@ -183,17 +183,17 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider(): array
+    public static function createDataProvider(): array
     {
         return [
-            $this->getTestDataWithAttributes()
+            self::getTestDataWithAttributes()
         ];
     }
 
     /**
      * @return array
      */
-    private function getTestDataWithAttributes(): array
+    private static function getTestDataWithAttributes(): array
     {
         return [
             'data' => [

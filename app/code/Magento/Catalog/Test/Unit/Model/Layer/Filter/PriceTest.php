@@ -222,7 +222,7 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function applyWithEmptyRequestDataProvider(): array
+    public static function applyWithEmptyRequestDataProvider(): array
     {
         return [
             [

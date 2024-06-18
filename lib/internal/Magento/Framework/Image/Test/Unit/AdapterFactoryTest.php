@@ -77,7 +77,7 @@ class AdapterFactoryTest extends TestCase
      * @see self::testCreate()
      * @return array
      */
-    public function createDataProvider()
+    public static function createDataProvider()
     {
         return [
             ['GD2', Gd2::class],

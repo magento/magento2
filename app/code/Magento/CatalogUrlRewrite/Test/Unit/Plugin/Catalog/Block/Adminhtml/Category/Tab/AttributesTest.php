@@ -109,7 +109,7 @@ class AttributesTest extends TestCase
      *
      * @return array
      */
-    public function attributesMetaDataProvider(): array
+    public static function attributesMetaDataProvider(): array
     {
         return [
             'save rewrite history config enabled' => [true, self::STUB_URL_KEY, self::STUB_URL_KEY],

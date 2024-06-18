@@ -62,7 +62,7 @@ class DbTableTest extends TestCase
      *
      * @return array
      */
-    public function readDataProvider()
+    public static function readDataProvider()
     {
         return [
             'session_encoded' => ['$dataEncoded' => true],

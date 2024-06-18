@@ -171,7 +171,7 @@ class CategoryRepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function filterExtraFieldsOnUpdateCategoryDataProvider()
+    public static function filterExtraFieldsOnUpdateCategoryDataProvider()
     {
         return [
             [
@@ -312,7 +312,7 @@ class CategoryRepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function saveWithValidateCategoryExceptionDataProvider()
+    public static function saveWithValidateCategoryExceptionDataProvider()
     {
         return [
             [

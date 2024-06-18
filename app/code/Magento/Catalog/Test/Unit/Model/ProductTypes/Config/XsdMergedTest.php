@@ -58,7 +58,7 @@ class XsdMergedTest extends TestCase
     /**
      * Data provider with invalid xml array according to product_types_merged.xsd
      */
-    public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
+    public static function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
     {
         return include __DIR__ . '/_files/invalidProductTypesMergedXmlArray.php';
     }

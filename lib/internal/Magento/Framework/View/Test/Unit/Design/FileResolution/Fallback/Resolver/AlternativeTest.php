@@ -69,7 +69,7 @@ class AlternativeTest extends TestCase
     /**
      * @return array
      */
-    public function constructorExceptionDataProvider()
+    public static function constructorExceptionDataProvider()
     {
         return [
             'numerical keys'   => [['css', 'less']],

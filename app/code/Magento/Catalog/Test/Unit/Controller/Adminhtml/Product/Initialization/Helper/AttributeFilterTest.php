@@ -85,7 +85,7 @@ class AttributeFilterTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setupInputDataProvider(): array
+    public static function setupInputDataProvider(): array
     {
         return [
             'test case for create new product without custom attribute' => [

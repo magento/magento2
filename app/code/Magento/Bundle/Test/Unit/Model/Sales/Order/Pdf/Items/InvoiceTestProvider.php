@@ -18,7 +18,7 @@ class InvoiceTestProvider
      * @return array[]
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getData(): array
+    public static function getData(): array
     {
         return [
             'display_both' => [

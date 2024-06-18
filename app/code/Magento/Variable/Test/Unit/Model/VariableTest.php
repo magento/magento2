@@ -204,7 +204,7 @@ class VariableTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         $variable = [
             'variable_id' => 'matching_id',

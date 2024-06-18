@@ -106,7 +106,7 @@ class MaintenanceDisableCommandTest extends TestCase
     /**
      * return array
      */
-    public function isSetAddressInfoDataProvider()
+    public static function isSetAddressInfoDataProvider()
     {
         return [
             [

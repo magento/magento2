@@ -165,7 +165,7 @@ class DomTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             'valid' => ['<root><node id="id1"/><node id="id2"/></root>', []],

@@ -46,7 +46,7 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function calcPriceRuleDataProvider()
+    public static function calcPriceRuleDataProvider()
     {
         return [
             ['to_fixed', 10, 10, 10],

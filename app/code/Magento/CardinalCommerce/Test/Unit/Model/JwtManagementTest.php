@@ -80,7 +80,7 @@ class JwtManagementTest extends TestCase
     /**
      * @return array
      */
-    public function decodeWithExceptionDataProvider(): array
+    public static function decodeWithExceptionDataProvider(): array
     {
         return [
             [
@@ -96,11 +96,11 @@ class JwtManagementTest extends TestCase
                 'errorMessage' => 'Unable to unserialize value. Error: Syntax error',
             ],
             [
-                'jwt' => $this->getHS512Jwt(),
+                'jwt' => self::getHS512Jwt(),
                 'errorMessage' => 'Algorithm HS512 is not supported',
             ],
             [
-                'jwt' => $this->getJwtWithInvalidSignature(),
+                'jwt' => self::getJwtWithInvalidSignature(),
                 'errorMessage' => 'JWT signature verification failed',
             ],
         ];
@@ -125,7 +125,7 @@ class JwtManagementTest extends TestCase
      *
      * @return string
      */
-    private function getHS512Jwt(): string
+    private static function getHS512Jwt(): string
     {
         return 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJhNWE1OWJmYi1hYzA2LTRjNWYtYmU1Yy0zNTFiNjR' .
                'hZTYwOGUiLCJpc3MiOiI1NjU2MGEzNThiOTQ2ZTBjODQ1MjM2NWRzIiwiaWF0IjoiMTQ0ODk5Nzg2NSIsIk9yZ1V' .
@@ -140,7 +140,7 @@ class JwtManagementTest extends TestCase
      *
      * @return string
      */
-    private function getJwtWithInvalidSignature(): string
+    private static function getJwtWithInvalidSignature(): string
     {
         return 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJhNWE1OWJmYi1hYzA2LTRjNWYtYmU1Yy0zNTFiNjR' .
             'hZTYwOGUiLCJpc3MiOiI1NjU2MGEzNThiOTQ2ZTBjODQ1MjM2NWRzIiwiaWF0IjoiMTQ0ODk5Nzg2NSIsIk9yZ1Vua' .
@@ -154,7 +154,7 @@ class JwtManagementTest extends TestCase
      *
      * @return array
      */
-    private function getTokenPayload(): array
+    private static function getTokenPayload(): array
     {
         return [
             'jti' => 'a5a59bfb-ac06-4c5f-be5c-351b64ae608e',

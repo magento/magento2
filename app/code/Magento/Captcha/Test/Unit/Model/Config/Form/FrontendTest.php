@@ -69,7 +69,7 @@ class FrontendTest extends TestCase
      *
      * @return array
      */
-    public function toOptionArrayDataProvider()
+    public static function toOptionArrayDataProvider()
     {
         return [
             'Empty captcha frontend areas' => [

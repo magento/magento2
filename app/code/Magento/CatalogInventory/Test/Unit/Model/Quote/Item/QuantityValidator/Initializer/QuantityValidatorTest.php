@@ -372,7 +372,7 @@ class QuantityValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateWithOptionsDataProvider(): array
+    public static function validateWithOptionsDataProvider(): array
     {
         return [
             'when product is enabled and in stock' =>

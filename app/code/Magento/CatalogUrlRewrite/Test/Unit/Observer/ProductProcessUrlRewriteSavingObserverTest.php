@@ -144,7 +144,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function urlKeyDataProvider()
+    public static function urlKeyDataProvider()
     {
         return [
             'websites changed' => [

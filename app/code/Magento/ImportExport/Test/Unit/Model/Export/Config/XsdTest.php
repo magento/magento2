@@ -84,7 +84,7 @@ class XsdTest extends TestCase
     /**
      * Data provider with valid xml array according to schema
      */
-    public function schemaCorrectlyIdentifiesValidXmlDataProvider()
+    public static function schemaCorrectlyIdentifiesValidXmlDataProvider()
     {
         return [
             'product_options' => ['export.xsd', 'export_valid.xml'],

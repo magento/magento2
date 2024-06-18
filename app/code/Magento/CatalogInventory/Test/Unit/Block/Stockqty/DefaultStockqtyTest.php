@@ -165,7 +165,7 @@ class DefaultStockqtyTest extends TestCase
     /**
      * @return array
      */
-    public function getStockQtyDataProvider()
+    public static function getStockQtyDataProvider()
     {
         return [
             [

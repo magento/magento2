@@ -72,7 +72,7 @@ class IsActiveTest extends TestCase
     /**
      * @return array
      */
-    public function getAvailableStatusesDataProvider()
+    public static function getAvailableStatusesDataProvider()
     {
         return [
             [

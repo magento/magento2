@@ -144,7 +144,7 @@ class PreProcessorTest extends TestCase
      *
      * @return array
      */
-    public function processDataProvider()
+    public static function processDataProvider()
     {
         return [
             [

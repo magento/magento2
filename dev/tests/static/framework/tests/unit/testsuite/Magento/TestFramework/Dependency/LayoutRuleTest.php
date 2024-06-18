@@ -25,7 +25,7 @@ class LayoutRuleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $model->getDependencyInfo('Magento\SomeModule', 'layout', 'any', $contents));
     }
 
-    public function getDependencyInfoDataProvider()
+    public static function getDependencyInfoDataProvider()
     {
         return [
             [
@@ -175,34 +175,34 @@ class LayoutRuleTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function layoutGetDependencyInfoDataProvider()
+    public static function layoutGetDependencyInfoDataProvider()
     {
         return [
             [
-                $this->_getLayoutFileContent('layout_handle.xml'),
+                self::_getLayoutFileContent('layout_handle.xml'),
                 \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
                 true,
             ],
             [
-                $this->_getLayoutFileContent('layout_handle_parent.xml'),
+                self::_getLayoutFileContent('layout_handle_parent.xml'),
                 \Magento\Test\Integrity\DependencyTest::TYPE_HARD,
                 true
             ],
             [
-                $this->_getLayoutFileContent('layout_handle_update.xml'),
+                self::_getLayoutFileContent('layout_handle_update.xml'),
                 \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
                 true
             ]
         ];
     }
 
-    public function layoutGetDependencyInfoWithReferenceDataProvider()
+    public static function layoutGetDependencyInfoWithReferenceDataProvider()
     {
         return array_merge(
-            $this->layoutGetDependencyInfoDataProvider(),
+            self::layoutGetDependencyInfoDataProvider(),
             [
                 [
-                    $this->_getLayoutFileContent('layout_reference.xml'),
+                    self::_getLayoutFileContent('layout_reference.xml'),
                     \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
                     false,
                 ]
@@ -216,7 +216,7 @@ class LayoutRuleTest extends \PHPUnit\Framework\TestCase
      * @param string $fileName
      * @return string
      */
-    protected function _getLayoutFileContent($fileName)
+    protected static function _getLayoutFileContent($fileName)
     {
         return file_get_contents(str_replace('\\', '/', realpath(__DIR__)) . '/_files/' . $fileName);
     }

@@ -626,7 +626,7 @@ class ThemeTest extends TestCase
     /**
      * @return array
      */
-    public function populateFromArrayDataProvider(): array
+    public static function populateFromArrayDataProvider(): array
     {
         return [
             'valid data' => [

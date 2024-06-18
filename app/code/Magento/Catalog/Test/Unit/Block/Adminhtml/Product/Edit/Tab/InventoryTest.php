@@ -512,7 +512,7 @@ class InventoryTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderModuleEnabled()
+    public static function dataProviderModuleEnabled()
     {
         return [
             [
@@ -529,7 +529,7 @@ class InventoryTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderGetFieldValue()
+    public static function dataProviderGetFieldValue()
     {
         return [
             [
@@ -555,7 +555,7 @@ class InventoryTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderGetConfigFieldValue()
+    public static function dataProviderGetConfigFieldValue()
     {
         return [
             [
@@ -581,7 +581,7 @@ class InventoryTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderGetId()
+    public static function dataProviderGetId()
     {
         return [
             [

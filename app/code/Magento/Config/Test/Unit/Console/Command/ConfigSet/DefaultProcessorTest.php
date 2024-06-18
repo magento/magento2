@@ -121,7 +121,7 @@ class DefaultProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function processDataProvider()
+    public static function processDataProvider()
     {
         return [
             ['test/test/test', 'value', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],

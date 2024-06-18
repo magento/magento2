@@ -122,7 +122,7 @@ class AbstractConfigTest extends TestCase
      *
      * @return array
      */
-    public function getValueDataProvider()
+    public static function getValueDataProvider()
     {
         return [
             [

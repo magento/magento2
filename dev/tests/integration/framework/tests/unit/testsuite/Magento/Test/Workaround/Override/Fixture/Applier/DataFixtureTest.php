@@ -76,7 +76,7 @@ class DataFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function fixturesProvider(): array
+    public static function fixturesProvider(): array
     {
         return [
             'sort_fixtures_before_all' => [
@@ -164,7 +164,7 @@ class DataFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function removeFixturesProvider(): array
+    public static function removeFixturesProvider(): array
     {
         return [
             'remove_fixture' => [
@@ -233,7 +233,7 @@ class DataFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function replaceFixturesProvider(): array
+    public static function replaceFixturesProvider(): array
     {
         return [
             'replace_one_fixture' => [

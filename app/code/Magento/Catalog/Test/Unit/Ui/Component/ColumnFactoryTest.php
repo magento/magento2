@@ -132,7 +132,7 @@ class ColumnFactoryTest extends TestCase
      *
      * @return array
      */
-    public function filterModifiersProvider(): array
+    public static function filterModifiersProvider(): array
     {
         return [
             'without' => [
@@ -229,7 +229,7 @@ class ColumnFactoryTest extends TestCase
      *
      * @return array
      */
-    public function createDateColumnDataProvider(): array
+    public static function createDateColumnDataProvider(): array
     {
         return [
             [

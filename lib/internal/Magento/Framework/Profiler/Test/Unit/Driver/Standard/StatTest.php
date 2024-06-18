@@ -195,7 +195,7 @@ class StatTest extends TestCase
     /**
      * @return array
      */
-    public function timersSortingDataProvider()
+    public static function timersSortingDataProvider()
     {
         return [
             'Without sorting' => [

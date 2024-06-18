@@ -126,7 +126,7 @@ class InlineTest extends TestCase
      *
      * @return array
      */
-    public function isAllowedDataProvider(): array
+    public static function isAllowedDataProvider(): array
     {
         return [
             [true, true, true, Area::AREA_FRONTEND, true],

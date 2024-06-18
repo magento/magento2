@@ -69,7 +69,7 @@ class AllowedProductTypesTest extends TestCase
     /**
      * @return array
      */
-    public function isAllowedProductTypeDataProvider()
+    public static function isAllowedProductTypeDataProvider()
     {
         return [
             ['typeId' => 'simple', 'expectedResult' => true],

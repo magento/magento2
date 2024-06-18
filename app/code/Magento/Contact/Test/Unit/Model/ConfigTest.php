@@ -69,7 +69,7 @@ class ConfigTest extends TestCase
      *
      * @return array
      */
-    public function isEnabledDataProvider(): array
+    public static function isEnabledDataProvider(): array
     {
         return [
             [true, true],

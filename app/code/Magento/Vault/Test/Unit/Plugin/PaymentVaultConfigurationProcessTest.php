@@ -115,7 +115,7 @@ class PaymentVaultConfigurationProcessTest extends TestCase
      *
      * @return array
      */
-    public function beforeProcessDataProvider()
+    public static function beforeProcessDataProvider()
     {
         $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
         ['children']['payment']['children']['renders']['children'] = [

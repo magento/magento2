@@ -92,7 +92,7 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function storeGroupDataProvider(): array
+    public static function storeGroupDataProvider(): array
     {
         return [['once', true], ['never', false]];
     }
@@ -100,7 +100,7 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function storeDataProvider(): array
+    public static function storeDataProvider(): array
     {
         return [['once', null], ['never', 1]];
     }

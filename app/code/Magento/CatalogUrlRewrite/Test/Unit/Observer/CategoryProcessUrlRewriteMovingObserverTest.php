@@ -165,7 +165,7 @@ class CategoryProcessUrlRewriteMovingObserverTest extends TestCase
     /**
      * @return array
      */
-    public function getCategoryRewritesConfigProvider(): array
+    public static function getCategoryRewritesConfigProvider(): array
     {
         return [
             [true],

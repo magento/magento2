@@ -86,7 +86,7 @@ class ButtonTest extends TestCase
     /**
      * @return array
      */
-    public function getAttributesHtmlDataProvider()
+    public static function getAttributesHtmlDataProvider()
     {
         return [
             [

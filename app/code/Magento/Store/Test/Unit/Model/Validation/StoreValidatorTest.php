@@ -85,7 +85,7 @@ class StoreValidatorTest extends TestCase
         $this->assertEquals($messages, $this->model->getMessages());
     }
 
-    public function isValidDataProvider(): array
+    public static function isValidDataProvider(): array
     {
         return [
             'true' => [

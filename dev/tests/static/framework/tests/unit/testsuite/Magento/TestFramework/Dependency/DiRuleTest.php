@@ -30,22 +30,22 @@ class DiRuleTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getDependencyInfoDataProvider()
+    public static function getDependencyInfoDataProvider()
     {
         return [
             'Di without dependencies' => [
                 'Magento\SomeModule',
-                $this->getFileContent('di_no_dependency.xml'),
+                self::getFileContent('di_no_dependency.xml'),
                 []
             ],
             'Di only in module dependencies' => [
                 'Magento\SomeModule',
-                $this->getFileContent('di_in_module_dependency.xml'),
+                self::getFileContent('di_in_module_dependency.xml'),
                 []
             ],
             'Di external dependencies' => [
                 'Magento\SomeModule',
-                $this->getFileContent('di_external_dependency.xml'),
+                self::getFileContent('di_external_dependency.xml'),
                 [
                     [
                         'modules' => ['Magento\ExternalModule3'],
@@ -81,7 +81,7 @@ class DiRuleTest extends \PHPUnit\Framework\TestCase
             ],
             'Di virtual dependencies' => [
                 'Magento\SomeModule',
-                $this->getFileContent('di_virtual_dependency.xml'),
+                self::getFileContent('di_virtual_dependency.xml'),
                 [
                     [
                         'modules' => ['Magento\AnotherModule'],
@@ -104,7 +104,7 @@ class DiRuleTest extends \PHPUnit\Framework\TestCase
      * @param string $fileName
      * @return string
      */
-    private function getFileContent($fileName)
+    private static function getFileContent($fileName)
     {
         return file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . $fileName);
     }

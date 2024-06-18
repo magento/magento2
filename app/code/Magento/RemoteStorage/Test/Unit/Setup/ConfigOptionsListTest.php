@@ -116,7 +116,7 @@ class ConfigOptionsListTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             'Local File Storage Before Deployment Config Exists' => [

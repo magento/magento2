@@ -224,7 +224,7 @@ class QueryFactoryTest extends TestCase
      *
      * @return array
      */
-    public function queryDataProvider(): array
+    public static function queryDataProvider(): array
     {
         return [
             [

@@ -251,7 +251,7 @@ class IndexTest extends TestCase
      *
      * @return array
      */
-    public function sessionRegenerationDataProvider(): array
+    public static function sessionRegenerationDataProvider(): array
     {
         return [
             [

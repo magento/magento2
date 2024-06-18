@@ -176,7 +176,7 @@ class AddressRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
         return [
             [null, null],

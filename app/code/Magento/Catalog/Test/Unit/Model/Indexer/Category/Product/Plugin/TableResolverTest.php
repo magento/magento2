@@ -59,7 +59,7 @@ class TableResolverTest extends TestCase
      *
      * @return array
      */
-    public function afterGetTableNameDataProvider(): array
+    public static function afterGetTableNameDataProvider(): array
     {
         return [
             [

@@ -154,7 +154,7 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function refreshAclDataProvider()
+    public static function refreshAclDataProvider()
     {
         return [
             'User set via params' => [true],

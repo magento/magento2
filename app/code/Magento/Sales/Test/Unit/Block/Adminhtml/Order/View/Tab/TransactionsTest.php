@@ -107,7 +107,7 @@ class TransactionsTest extends TestCase
     /**
      * @return array
      */
-    public function canShowTabDataProvider()
+    public static function canShowTabDataProvider()
     {
         return [
             [OnlineMethod::class, true],
@@ -136,7 +136,7 @@ class TransactionsTest extends TestCase
     /**
      * @return array
      */
-    public function isHiddenDataProvider()
+    public static function isHiddenDataProvider()
     {
         return [
             [true, false],

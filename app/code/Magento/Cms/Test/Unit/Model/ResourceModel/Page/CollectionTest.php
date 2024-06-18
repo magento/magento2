@@ -132,7 +132,7 @@ class CollectionTest extends AbstractCollectionTestCase
     /**
      * @return array
      */
-    public function getItemsDataProvider()
+    public static function getItemsDataProvider()
     {
         return [
             [

@@ -269,7 +269,7 @@ class RepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function filterableDataProvider(): array
+    public static function filterableDataProvider(): array
     {
         return [
             [ProductAttributeInterface::IS_FILTERABLE, 'getIsFilterable', true],

@@ -70,7 +70,7 @@ class StockDataFilterTest extends TestCase
      *
      * @return array
      */
-    public function filterDataProvider()
+    public static function filterDataProvider()
     {
         return [
             'case1' => [

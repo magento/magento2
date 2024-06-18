@@ -294,7 +294,7 @@ class VaultTest extends TestCase
      * List of variations for testing isAvailable method
      * @return array
      */
-    public function isAvailableDataProvider()
+    public static function isAvailableDataProvider()
     {
         return [
             ['isAvailableProvider' => true, 'isActiveVault' => false, 'expected' => false],

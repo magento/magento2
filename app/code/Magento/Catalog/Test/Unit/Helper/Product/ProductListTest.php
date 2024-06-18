@@ -55,7 +55,7 @@ class ProductListTest extends TestCase
         $this->assertSame($expectedReturn, $returnedValue);
     }
 
-    public function defaultAvailableLimitsDataProvider(): array
+    public static function defaultAvailableLimitsDataProvider(): array
     {
         return [
             'limit-available' => [

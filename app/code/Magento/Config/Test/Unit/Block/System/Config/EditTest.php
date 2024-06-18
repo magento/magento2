@@ -221,7 +221,7 @@ class EditTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigSearchParamsJsonData()
+    public static function getConfigSearchParamsJsonData()
     {
         return [
             [

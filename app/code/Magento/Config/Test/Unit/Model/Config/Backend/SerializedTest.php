@@ -72,7 +72,7 @@ class SerializedTest extends TestCase
     /**
      * @return array
      */
-    public function afterLoadDataProvider()
+    public static function afterLoadDataProvider()
     {
         return [
             'empty value' => [
@@ -124,7 +124,7 @@ class SerializedTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider()
     {
         return [
             'string' => [

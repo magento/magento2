@@ -103,7 +103,7 @@ class BulkSummaryMapperTest extends TestCase
     /**
      * @return array
      */
-    public function entityToDatabaseDataProvider()
+    public static function entityToDatabaseDataProvider()
     {
         return [
             [1, ['uuid' => 'bulk-1', 'id' => 1]],

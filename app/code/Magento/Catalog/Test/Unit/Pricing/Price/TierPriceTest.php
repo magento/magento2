@@ -38,7 +38,7 @@ class TierPriceTest extends TestCase
      *
      * @var int
      */
-    private $customerGroup = Group::NOT_LOGGED_IN_ID;
+    private static $customerGroup = Group::NOT_LOGGED_IN_ID;
 
     /**
      * @var MockObject
@@ -108,7 +108,7 @@ class TierPriceTest extends TestCase
             ->getMockForAbstractClass();
         $this->session = $this->createMock(Session::class);
         $this->session->expects($this->any())->method('getCustomerGroupId')
-            ->willReturn($this->customerGroup);
+            ->willReturn(self::$customerGroup);
         $this->customerGroupRetriever = $this->getMockForAbstractClass(RetrieverInterface::class);
         $this->calculator = $this->createMock(Calculator::class);
         $this->groupManagement = $this->getMockForAbstractClass(GroupManagementInterface::class);
@@ -157,7 +157,7 @@ class TierPriceTest extends TestCase
     /**
      * @return array
      */
-    public function providerForBaseInitialization()
+    public static function providerForBaseInitialization()
     {
         return [
             'case for getValue' => [
@@ -184,7 +184,7 @@ class TierPriceTest extends TestCase
                         'website_price' => '10.',
                         'price' => '10.',
                         'price_qty' => '1.',
-                        'cust_group' => $this->customerGroup + 1
+                        'cust_group' => self::$customerGroup + 1
                     ],
                     // tier is higher than product qty
                     [
@@ -205,7 +205,7 @@ class TierPriceTest extends TestCase
                         'website_price' => '5.',
                         'price' => '10.',
                         'price_qty' => '1.',
-                        'cust_group' => $this->customerGroup
+                        'cust_group' => self::$customerGroup
                     ],
                     [
                         'website_price' => '1.',
@@ -230,7 +230,7 @@ class TierPriceTest extends TestCase
         $this->product->expects($this->once())->method('hasCustomerGroupId')
             ->willReturn(true);
         $this->product->expects($this->once())->method('getCustomerGroupId')
-            ->willReturn($this->customerGroup);
+            ->willReturn(self::$customerGroup);
 
         $backendMock = $this->createMock(AbstractBackend::class);
 
@@ -307,7 +307,7 @@ class TierPriceTest extends TestCase
     /**
      * @return array
      */
-    public function providerForGetterTierPriceList()
+    public static function providerForGetterTierPriceList()
     {
         return [
             'base case' => [
@@ -317,7 +317,7 @@ class TierPriceTest extends TestCase
                         'price'         => '21.3',
                         'website_price' => '21.3',
                         'price_qty'     => '1.3',
-                        'cust_group'    => $this->customerGroup + 1
+                        'cust_group'    => self::$customerGroup + 1
                     ],
                     [
                         'price'         => '20.4',
@@ -403,7 +403,7 @@ class TierPriceTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetSavePercent()
+    public static function dataProviderGetSavePercent()
     {
         return [
             ['basePrice' => '100', 'tierPrice' => '90', 'savedPercent' => '10'],
@@ -437,7 +437,7 @@ class TierPriceTest extends TestCase
     /**
      * @return array
      */
-    public function getQuantityDataProvider()
+    public static function getQuantityDataProvider()
     {
         return [
             [null, 1],

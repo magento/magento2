@@ -72,7 +72,7 @@ class PathValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             ['/directory/path/', '/directory/path/', '/', false, '/://'],

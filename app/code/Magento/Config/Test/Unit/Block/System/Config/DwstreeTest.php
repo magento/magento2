@@ -76,7 +76,13 @@ class DwstreeTest extends TestCase
                 'storeManager' => $this->storeManagerMock,
             ]
         );
-
+        $objects = [
+            [
+                Dwstree::class,
+                $this->createMock(Dwstree::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->object = $objectManager->getObject(
             Dwstree::class,
             ['context' => $this->context]
@@ -134,7 +140,7 @@ class DwstreeTest extends TestCase
     /**
      * @return array
      */
-    public function initTabsDataProvider()
+    public static function initTabsDataProvider()
     {
         return [
             'matchAll'  => [

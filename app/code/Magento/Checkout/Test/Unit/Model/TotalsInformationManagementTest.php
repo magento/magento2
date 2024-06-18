@@ -181,7 +181,7 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function dataProviderCalculate(): array
+    public static function dataProviderCalculate(): array
     {
         return [
             [

@@ -66,7 +66,7 @@ class AbstractWidgetTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigDataProvider()
+    public static function getConfigDataProvider()
     {
         return [['key', 'value'], [null, null]];
     }

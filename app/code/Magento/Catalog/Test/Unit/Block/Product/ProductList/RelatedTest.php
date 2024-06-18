@@ -83,7 +83,7 @@ class RelatedTest extends TestCase
     /**
      * @return array
      */
-    public function canItemsAddToCartDataProvider()
+    public static function canItemsAddToCartDataProvider()
     {
         return [
             [false, true, false, true],
