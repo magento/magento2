@@ -93,4 +93,12 @@ interface CacheInterface
      * @param string $path
      */
     public function storeFileNotExists(string $path): void;
+
+    /**
+     * Store flag that dir path does not exist
+     *
+     * @param string $path
+     * @return void
+     */
+    public function storeDirNotExists(string $path): void;
 }
