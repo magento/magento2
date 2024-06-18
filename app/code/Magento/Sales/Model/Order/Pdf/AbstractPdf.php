@@ -7,6 +7,7 @@
 namespace Magento\Sales\Model\Order\Pdf;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -163,16 +164,17 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param ScopeConfigInterface $scopeConfig
      * @param Filesystem $filesystem
      * @param Config $pdfConfig
-     * @param Total\Factory $pdfTotalFactory
+     * @param Factory $pdfTotalFactory
      * @param ItemsFactory $pdfItemsFactory
      * @param TimezoneInterface $localeDate
      * @param StateInterface $inlineTranslation
      * @param Renderer $addressRenderer
-     * @param TaxHelper $taxHelper
      * @param array $data
-     * @param Database $fileStorageDatabase
+     * @param TaxHelper|null $taxHelper
+     * @param Database|null $fileStorageDatabase
      * @param RtlTextHandler|null $rtlTextHandler
-     * @param Image $image
+     * @param Image|null $image
+     * @throws FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -186,8 +188,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         TimezoneInterface $localeDate,
         StateInterface $inlineTranslation,
         Renderer $addressRenderer,
-        TaxHelper $taxHelper,
         array $data = [],
+        ?TaxHelper $taxHelper = null,
         Database $fileStorageDatabase = null,
         ?RtlTextHandler $rtlTextHandler = null,
         ?Image $image = null
