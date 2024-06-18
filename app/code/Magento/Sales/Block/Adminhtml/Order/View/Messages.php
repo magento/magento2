@@ -17,8 +17,6 @@ use Magento\Sales\Model\Order;
 class Messages extends \Magento\Framework\View\Element\Messages
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $coreRegistry = null;
