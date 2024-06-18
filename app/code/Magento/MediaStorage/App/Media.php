@@ -230,10 +230,10 @@ class Media implements AppInterface
     /**
      * Create local vopy for the placeholder
      *
-     * @param string $relativeFileName
+     * @param ?string $relativeFileName
      * @return void
      */
-    private function createPlaceholderLocalCopy(string $relativeFileName): void
+    private function createPlaceholderLocalCopy(?string $relativeFileName): void
     {
         $synchronizer = $this->syncFactory->create(['directory' => $this->directoryMedia]);
         $synchronizer->synchronize($relativeFileName);
