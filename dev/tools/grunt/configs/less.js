@@ -24,7 +24,7 @@ var lessOptions = {
         sourceMapRootpath: '/',
         sourceMapBasepath: function (f) {
             this.sourceMapURL = this.sourceMapFilename.substr(this.sourceMapFilename.lastIndexOf('/') + 1);
-            return "/";
+            return 'pub/';
         },
         dumpLineNumbers: false, // use 'comments' instead false to output line comments for source
         ieCompat: false
