@@ -33,7 +33,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     /**
      * Empty layout xml
      */
-    private const LAYOUT_NODE = '<layout/>';
+    public const LAYOUT_NODE = '<layout/>';
 
     /**
      * Default cache life time
