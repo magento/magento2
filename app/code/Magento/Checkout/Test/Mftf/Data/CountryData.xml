@@ -42,4 +42,9 @@
             <item>United Kingdom</item>
         </array>
     </entity>
+    <entity name="WesternEurope" type="countryArray">
+        <array key="country">
+            <item>Belgium</item>
+        </array>
+    </entity>
 </entities>
