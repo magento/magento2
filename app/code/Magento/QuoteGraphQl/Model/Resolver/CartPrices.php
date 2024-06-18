@@ -44,6 +44,27 @@ class CartPrices implements ResolverInterface
         $this->totalsCollector = $totalsCollector;
         $this->scopeConfig = $scopeConfig ??  ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
+    public function getDiscountValue (Quote $quote){
+        $address = $quote->getShippingAddress();
+        $totalDiscounts = $address->getExtensionAttributes()->getDiscounts();
+        if ($totalDiscounts && is_array($totalDiscounts)) {
+            foreach ($totalDiscounts as $value) {
+                $discount = [];
+                $amount = [];
+                $discount['label'] = $value->getRuleLabel() ?: __('Discount');
+                /* @var \Magento\SalesRule\Api\Data\DiscountDataInterface $discountData */
+                $discountData = $value->getDiscountData();
+                $amount['value'] = $discountData->getAmount();
+                $amount['currency'] = $quote->getQuoteCurrencyCode();
+                $discount['amount'] = $amount;
+                $discountValues[] = $discount;
+            }
+            foreach ($discountValues as $individualDiscountValue) {
+                return $individualDiscountValue['amount']['value'];
+            }
+        }
+        return 0;
+    }
 
     /**
      * @inheritdoc
@@ -64,9 +85,11 @@ class CartPrices implements ResolverInterface
         $quote->setCartFixedRules([]);
         $cartTotals = $this->totalsCollector->collectQuoteTotals($quote);
         $currency = $quote->getQuoteCurrencyCode();
+        $discountValue = $this->getDiscountValue($quote);
+        $grandTotal = $cartTotals->getGrandTotal() - $discountValue;
 
         return [
-            'grand_total' => ['value' => $cartTotals->getGrandTotal(), 'currency' => $currency],
+            'grand_total' => ['value' => $grandTotal, 'currency' => $currency],
             'subtotal_including_tax' => ['value' => $cartTotals->getSubtotalInclTax(), 'currency' => $currency],
             'subtotal_excluding_tax' => ['value' => $cartTotals->getSubtotal(), 'currency' => $currency],
             'subtotal_with_discount_excluding_tax' => [
