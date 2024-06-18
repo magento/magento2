@@ -6,20 +6,10 @@
 
 namespace Magento\Sales\Model\Order\Pdf;
 
-
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\File\Pdf\Image;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Framework\Stdlib\StringUtils;
-use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\MediaStorage\Helper\File\Storage\Database;
-use Magento\Payment\Helper\Data;
-use Magento\Sales\Model\Order\Address\Renderer;
-use Magento\Sales\Model\Order\Pdf\Total\Factory;
 use Magento\Sales\Model\RtlTextHandler;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
@@ -56,9 +46,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * Predefined constants
      */
     public const XML_PATH_SALES_PDF_INVOICE_PUT_ORDER_ID = 'sales_pdf/invoice/put_order_id';
-
     public const XML_PATH_SALES_PDF_SHIPMENT_PUT_ORDER_ID = 'sales_pdf/shipment/put_order_id';
-
     public const XML_PATH_SALES_PDF_CREDITMEMO_PUT_ORDER_ID = 'sales_pdf/creditmemo/put_order_id';
 
     /**
@@ -145,7 +133,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     /**
      * @var Magento\Tax\Helper\Data
      */
-    private $taxHelper;
+    protected $taxHelper;
 
     /**
      * @var array $pageSettings
@@ -158,40 +146,33 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     private $fileStorageDatabase;
 
     /**
-     * @param Data $paymentData
-     * @param StringUtils $string
-     * @param ScopeConfigInterface $scopeConfig
-     * @param Filesystem $filesystem
+     * @param \Magento\Payment\Helper\Data $paymentData
+     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param Config $pdfConfig
-     * @param Factory $pdfTotalFactory
+     * @param Total\Factory $pdfTotalFactory
      * @param ItemsFactory $pdfItemsFactory
-     * @param TimezoneInterface $localeDate
-     * @param StateInterface $inlineTranslation
-     * @param Renderer $addressRenderer
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
+     * @param \Magento\Tax\Helper\Data $taxHelper
      * @param array $data
-     * @param TaxHelper|null $taxHelper
-     * @param Database|null $fileStorageDatabase
-     * @param RtlTextHandler|null $rtlTextHandler
-     * @param Image|null $image
-     * @throws FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Framework\Stdlib\StringUtils                $string,
-        \Magento\Framework\App\Config\ScopeConfigInterface   $scopeConfig,
-        \Magento\Framework\Filesystem                        $filesystem,
-        Config                                               $pdfConfig,
-        \Magento\Sales\Model\Order\Pdf\Total\Factory         $pdfTotalFactory,
-        \Magento\Sales\Model\Order\Pdf\ItemsFactory          $pdfItemsFactory,
+        \Magento\Framework\Stdlib\StringUtils $string,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Filesystem $filesystem,
+        Config $pdfConfig,
+        \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory,
+        \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Translate\Inline\StateInterface   $inlineTranslation,
-        \Magento\Sales\Model\Order\Address\Renderer          $addressRenderer,
-        array                                                $data = [],
-        ?TaxHelper                                            $taxHelper = null,
-        Database                                             $fileStorageDatabase = null,
-        ?RtlTextHandler                                      $rtlTextHandler = null,
-        ?Image                                               $image = null
+        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
+        \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
+        \Magento\Tax\Helper\Data $taxHelper,
+        array $data = []
     ) {
         $this->addressRenderer = $addressRenderer;
         $this->_paymentData = $paymentData;
@@ -205,11 +186,44 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $this->_pdfItemsFactory = $pdfItemsFactory;
         $this->inlineTranslation = $inlineTranslation;
         $this->taxHelper = $taxHelper;
-        $this->fileStorageDatabase = $fileStorageDatabase ?: ObjectManager::getInstance()->get(Database::class);
-        $this->rtlTextHandler = $rtlTextHandler ?: ObjectManager::getInstance()->get(RtlTextHandler::class);
-        $this->image = $image ?: ObjectManager::getInstance()->get(Image::class);
+
+        // Initialize optional dependencies using ObjectManager if not provided
+        $objectManager = ObjectManager::getInstance();
+        $this->fileStorageDatabase = $objectManager->get(Database::class);
+        $this->rtlTextHandler = $objectManager->get(RtlTextHandler::class);
+        $this->image = $objectManager->get(Image::class);
+
         parent::__construct($data);
     }
+
+    /**
+     * Set optional dependencies
+     *
+     * @param Database|null $fileStorageDatabase
+     * @param RtlTextHandler|null $rtlTextHandler
+     * @param Image|null $image
+     * @return void
+     */
+    public function setOptionalDependencies(
+        Database $fileStorageDatabase = null,
+        RtlTextHandler $rtlTextHandler = null,
+        Image $image = null
+
+    )
+    {
+        if ($fileStorageDatabase) {
+            $this->fileStorageDatabase = $fileStorageDatabase;
+        }
+        if ($rtlTextHandler) {
+            $this->rtlTextHandler = $rtlTextHandler;
+        }
+        if ($image) {
+            $this->image = $image;
+        }
+
+    }
+
+
 
     /**
      * Returns the total width in points of the string using the specified font and size.
