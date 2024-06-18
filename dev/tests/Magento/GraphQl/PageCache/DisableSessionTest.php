@@ -16,9 +16,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\PageCache;
 
-use Magento\Framework\App\PageCache\Version;
-use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\TestFramework\Fixture\Config;
+use Magento\Framework\App\PageCache\Version;
 
 /**
  * Test absence/presence of private_content_version cookie in GraphQl POST HTTP responses
