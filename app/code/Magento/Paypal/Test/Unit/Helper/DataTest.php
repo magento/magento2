@@ -71,7 +71,7 @@ class DataTest extends TestCase
 
         $configMockFactory = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $configMockFactory->expects($this->any())->method('create')->willReturn($this->configMock);
         $this->configMock->expects($this->any())->method('setMethod')->willReturnSelf();

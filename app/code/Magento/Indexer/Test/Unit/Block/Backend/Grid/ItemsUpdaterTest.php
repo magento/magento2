@@ -40,7 +40,7 @@ class ItemsUpdaterTest extends TestCase
     /**
      * @return array
      */
-    public function updateDataProvider()
+    public static function updateDataProvider()
     {
         return [
             [true],

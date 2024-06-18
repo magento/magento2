@@ -41,7 +41,7 @@ class QtyProcessorTest extends TestCase
         $this->qtyProcessor = new QtyProcessor($this->quoteItemQtyList);
         $this->itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParentItem', 'getProduct', '__wakeup'])
+            ->onlyMethods(['getParentItem', 'getProduct', '__wakeup'])
             ->getMock();
     }
 
@@ -85,7 +85,7 @@ class QtyProcessorTest extends TestCase
 
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', '__wakeup'])
+            ->onlyMethods(['getId', '__wakeup'])
             ->getMock();
         $productMock->expects($this->once())
             ->method('getId')
@@ -112,7 +112,7 @@ class QtyProcessorTest extends TestCase
 
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', '__wakeup'])
+            ->onlyMethods(['getId', '__wakeup'])
             ->getMock();
         $productMock->expects($this->once())
             ->method('getId')

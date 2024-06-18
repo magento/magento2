@@ -45,13 +45,12 @@
         "guzzlehttp/guzzle": "^7.5",
         "laminas/laminas-captcha": "^2.17",
         "laminas/laminas-code": "^4.13",
-        "laminas/laminas-di": "^3.13",
-        "laminas/laminas-file": "^2.13",
         "laminas/laminas-db": "^2.19",
-        "laminas/laminas-oauth": "^2.6",
+        "laminas/laminas-di": "^3.13",
         "laminas/laminas-escaper": "^2.13",
         "laminas/laminas-eventmanager": "^3.11",
         "laminas/laminas-feed": "^2.22",
+        "laminas/laminas-file": "^2.13",
         "laminas/laminas-filter": "^2.33",
         "laminas/laminas-http": "^2.15",
         "laminas/laminas-i18n": "^2.17",
@@ -59,6 +58,7 @@
         "laminas/laminas-mime": "^2.9",
         "laminas/laminas-modulemanager": "^2.11",
         "laminas/laminas-mvc": "^3.6",
+        "laminas/laminas-oauth": "^2.6",
         "laminas/laminas-permissions-acl": "^2.10",
         "laminas/laminas-server": "^2.16",
         "laminas/laminas-servicemanager": "^3.16",
@@ -77,9 +77,10 @@
         "monolog/monolog": "^2.7",
         "opensearch-project/opensearch-php": "^1.0 || ^2.0",
         "pelago/emogrifier": "^7.0",
-        "php-amqplib/php-amqplib": "^3.2, <3.6",
+        "php-amqplib/php-amqplib": "^3.2",
         "phpseclib/mcrypt_compat": "^2.0",
         "phpseclib/phpseclib": "^3.0",
+        "psr/log": "^2 || ^3",
         "ramsey/uuid": "^4.2",
         "symfony/console": "^6.4",
         "symfony/intl": "^6.4",
@@ -92,18 +93,17 @@
         "wikimedia/less.php": "^3.2"
     },
     "require-dev": {
-        "allure-framework/allure-phpunit": "^2",
+        "allure-framework/allure-phpunit": "^3",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7 || ^1.0",
         "dg/bypass-finals": "^1.4",
         "friendsofphp/php-cs-fixer": "^3.22",
         "lusitanian/oauth": "^0.8",
         "magento/magento-coding-standard": "*",
-        "magento/magento2-functional-testing-framework": "^4.7",
+        "magento/magento2-functional-testing-framework": "^4.8",
         "pdepend/pdepend": "^2.10",
         "phpmd/phpmd": "^2.12",
         "phpstan/phpstan": "^1.9",
-        "phpunit/phpunit": "^9.5",
-        "sebastian/phpcpd": "^6.0",
+        "phpunit/phpunit": "^10.5",
         "symfony/finder": "^6.4"
     },
     "suggest": {
@@ -387,7 +387,7 @@
         "exclude-from-classmap": [
             "**/dev/**",
             "**/update/**",
-            "**/Test/**"
+            "*/*/Test/**/*Test"
         ]
     },
     "autoload-dev": {

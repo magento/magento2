@@ -60,7 +60,7 @@ class ProductRenderListTest extends TestCase
     {
         $this->collectionFactoryMock = $this
             ->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->collectionProcessorMock = $this
@@ -73,13 +73,13 @@ class ProductRenderListTest extends TestCase
             ->getMock();
         $this->productRenderSearchResultsFactoryMock = $this
             ->getMockBuilder(ProductRenderSearchResultsFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productRenderFactoryMock = $this
             ->getMockBuilder(ProductRenderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()

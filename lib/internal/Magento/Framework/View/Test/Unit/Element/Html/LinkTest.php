@@ -55,19 +55,19 @@ class LinkTest extends TestCase
         $this->objectManager = new ObjectManager($this);
 
         $escaperMock = $this->getMockBuilder(Escaper::class)
-            ->setMethods(['escapeHtml'])->disableOriginalConstructor()->getMock();
+            ->onlyMethods(['escapeHtml'])->disableOriginalConstructor()->getMock();
         $escaperMock->expects($this->any())
             ->method('escapeHtml')
             ->willReturnArgument(0);
 
         $urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->setMethods(['getUrl'])->disableOriginalConstructor()->getMockForAbstractClass();
+            ->onlyMethods(['getUrl'])->disableOriginalConstructor()->getMockForAbstractClass();
         $urlBuilderMock->expects($this->any())
             ->method('getUrl')
             ->willReturn('http://site.com/link.html');
 
         $validtorMock = $this->getMockBuilder(Validator::class)
-            ->setMethods(['isValid'])->disableOriginalConstructor()
+            ->onlyMethods(['isValid'])->disableOriginalConstructor()
             ->getMock();
         $validtorMock->expects($this->any())
             ->method('isValid')
@@ -80,8 +80,7 @@ class LinkTest extends TestCase
             ->method('isSetFlag')
             ->willReturn(true);
 
-        $resolverMock = $this->getMockBuilder(Resolver::class)
-            ->setMethods([])->disableOriginalConstructor()
+        $resolverMock = $this->getMockBuilder(Resolver::class)->disableOriginalConstructor()
             ->getMock();
 
         $contextMock = $this->getMockBuilder(Context::class)

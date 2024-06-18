@@ -50,7 +50,7 @@ class UpgradeQuoteCustomerEmailObserverTest extends TestCase
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerDataObject', 'getOrigCustomerDataObject'])
+            ->addMethods(['getCustomerDataObject', 'getOrigCustomerDataObject'])
             ->getMock();
 
         $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
@@ -77,7 +77,7 @@ class UpgradeQuoteCustomerEmailObserverTest extends TestCase
             ->getMockForAbstractClass();
 
         $quoteMock = $this->getMockBuilder(Quote::class)
-            ->setMethods(['setCustomerEmail'])
+            ->addMethods(['setCustomerEmail'])
             ->disableOriginalConstructor()
             ->getMock();
 

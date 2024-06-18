@@ -77,12 +77,12 @@ class AbstractModelTest extends TestCase
 
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEventDispatcher'])
+            ->onlyMethods(['getEventDispatcher'])
             ->getMock();
 
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->getMockForAbstractClass();
         $this->contextMock->expects($this->any())
             ->method('getEventDispatcher')
@@ -127,7 +127,7 @@ class AbstractModelTest extends TestCase
     {
         $serializerMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
-            ->setMethods(['serialize', 'unserialize'])
+            ->onlyMethods(['serialize', 'unserialize'])
             ->getMock();
 
         $serializerMock->expects($this->any())
@@ -154,7 +154,8 @@ class AbstractModelTest extends TestCase
         $conditionsArray = ['conditions' => 'serialized'];
         $serializedConditions = json_encode($conditionsArray);
         $conditions = $this->getMockBuilder(Combine::class)
-            ->setMethods(['setRule', 'setId', 'setPrefix', 'loadArray'])
+            ->addMethods(['setRule', 'setId', 'setPrefix'])
+            ->onlyMethods(['loadArray'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -176,7 +177,8 @@ class AbstractModelTest extends TestCase
         $actionsArray = ['actions' => 'some_actions'];
         $actionsSerialized = json_encode($actionsArray);
         $actions = $this->getMockBuilder(Collection::class)
-            ->setMethods(['setRule', 'setId', 'setPrefix', 'loadArray'])
+            ->addMethods(['setRule', 'setId', 'setPrefix'])
+            ->onlyMethods(['loadArray'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -196,12 +198,12 @@ class AbstractModelTest extends TestCase
     public function testBeforeSave()
     {
         $conditions = $this->getMockBuilder(Combine::class)
-            ->setMethods(['asArray'])
+            ->onlyMethods(['asArray'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $actions = $this->getMockBuilder(Collection::class)
-            ->setMethods(['asArray'])
+            ->onlyMethods(['asArray'])
             ->disableOriginalConstructor()
             ->getMock();
 

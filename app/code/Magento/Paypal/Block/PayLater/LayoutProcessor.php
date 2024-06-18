@@ -88,7 +88,8 @@ class LayoutProcessor implements LayoutProcessorInterface
             $config['displayAmount'] = !$displayAmount || $this->payLaterConfig->isPPBillingAgreementEnabled()
                 ? false : true;
             $config['dataAttributes'] = [
-                'data-partner-attribution-id' => $this->paypalConfig->getBuildNotationCode()
+                'data-partner-attribution-id' => $this->paypalConfig->getBuildNotationCode(),
+                'data-csp-nonce' => $this->paypalConfig->getCspNonce(),
             ];
 
             $attributes = $this->payLaterConfig->getSectionConfig(

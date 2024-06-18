@@ -117,7 +117,7 @@ class AbstractProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function runDataProvider()
+    public static function runDataProvider()
     {
         return [
             [true],

@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 -->
-<if args="isSalable($row())">
     <if args="getRegularPrice($row())">
         <span css="'old-price': hasSpecialPrice($row()), 'regular-price': !hasSpecialPrice($row())">
             <span class="price-container"
@@ -28,4 +27,3 @@
             </span>
         </span>
     </if>
-</if>

@@ -78,7 +78,7 @@ class CacheContextTest extends TestCase
     /**
      * @return array[]
      */
-    public function getIdentitiesDataProvider(): array
+    public static function getIdentitiesDataProvider(): array
     {
         return [
             'should return entities and tags' => [

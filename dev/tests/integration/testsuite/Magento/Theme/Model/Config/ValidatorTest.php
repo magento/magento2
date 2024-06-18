@@ -73,16 +73,16 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
         $designConfigMock = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         $designConfigExtensionMock =
             $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         $designElementMock = $this->getMockBuilder(\Magento\Theme\Model\Data\Design\Config\Data::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods(['getFieldConfig','getPath','getValue'])
             ->getMock();
 
         $designConfigMock->expects($this->once())
@@ -120,16 +120,16 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
         $designConfigMock = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         $designConfigExtensionMock =
             $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         $designElementMock = $this->getMockBuilder(\Magento\Theme\Model\Data\Design\Config\Data::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods(['getFieldConfig', 'getPath', 'getValue'])
             ->getMock();
 
         $designConfigMock->expects($this->once())

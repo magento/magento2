@@ -41,7 +41,7 @@ class ContactFormTest extends TestCase
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUrlBuilder'])
+            ->onlyMethods(['getUrlBuilder'])
             ->getMock();
 
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)

@@ -108,8 +108,13 @@ class QueryFactoryTest extends TestCase
 
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->withConsecutive([Query::class, $data])
-            ->willReturn($this->query);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($data) {
+                    if ($arg1 == Query::class && $arg2 == $data) {
+                        return $this->query;
+                    }
+                }
+            );
 
         $result = $this->model->create($data);
 
@@ -186,8 +191,13 @@ class QueryFactoryTest extends TestCase
 
         $this->string->expects($this->any())
             ->method('substr')
-            ->withConsecutive([$cleanedRawText, 0, $maxQueryLength])
-            ->willReturn($subRawText);
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($cleanedRawText, $maxQueryLength, $subRawText) {
+                    if ($arg1 == $cleanedRawText && $arg2 == 0 && $arg3 == $maxQueryLength) {
+                        return $subRawText;
+                    }
+                }
+            );
 
         $this->mockString($cleanedRawText);
         $this->mockQueryLengths($maxQueryLength, $minQueryLength);
@@ -302,8 +312,13 @@ class QueryFactoryTest extends TestCase
     {
         $this->request->expects($this->any())
             ->method('getParam')
-            ->withConsecutive([QueryFactory::QUERY_VAR_NAME])
-            ->willReturn($rawQueryText);
+            ->willReturnCallback(
+                function ($arg) use ($rawQueryText) {
+                    if ($arg == QueryFactory::QUERY_VAR_NAME) {
+                        return $rawQueryText;
+                    }
+                }
+            );
     }
 
     /**
@@ -314,12 +329,22 @@ class QueryFactoryTest extends TestCase
     {
         $this->string->expects($this->any())
             ->method('cleanString')
-            ->withConsecutive([$cleanedRawText])
-            ->willReturnArgument(0);
+            ->willReturnCallback(
+                function ($arg) use ($cleanedRawText) {
+                    if ($arg == $cleanedRawText) {
+                        return $arg;
+                    }
+                }
+            );
         $this->string->expects($this->any())
             ->method('strlen')
-            ->withConsecutive([$cleanedRawText])
-            ->willReturn(strlen($cleanedRawText));
+            ->willReturnCallback(
+                function ($arg) use ($cleanedRawText) {
+                    if ($arg == $cleanedRawText) {
+                        return strlen($cleanedRawText);
+                    }
+                }
+            );
     }
 
     /**
@@ -329,8 +354,13 @@ class QueryFactoryTest extends TestCase
     {
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->withConsecutive([Query::class, []])
-            ->willReturn($this->query);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == Query::class && empty($arg2)) {
+                        return $this->query;
+                    }
+                }
+            );
     }
 
     /**
@@ -353,18 +383,35 @@ class QueryFactoryTest extends TestCase
         }
         $this->query->expects($this->once())
             ->method('loadByQueryText')
-            ->withConsecutive([$cleanedRawText])
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg) use ($cleanedRawText) {
+                    if ($arg == $cleanedRawText) {
+                        return $this->query;
+                    }
+                }
+            );
         $this->query->setData(['query_text' => $matchedQueryText]);
         $this->query->expects($this->any())
             ->method('getId')
             ->willReturn($queryId);
         $this->query->expects($this->once())
             ->method('setIsQueryTextExceeded')
-            ->withConsecutive([$isQueryTextExceeded]);
+            ->willReturnCallback(
+                function ($arg) use ($isQueryTextExceeded) {
+                    if ($arg == $isQueryTextExceeded) {
+                        return null;
+                    }
+                }
+            );
         $this->query->expects($this->once())
             ->method('setIsQueryTextShort')
-            ->withConsecutive([$isQueryTextShort]);
+            ->willReturnCallback(
+                function ($arg) use ($isQueryTextShort) {
+                    if ($arg == $isQueryTextShort) {
+                        return null;
+                    }
+                }
+            );
     }
 
     /**

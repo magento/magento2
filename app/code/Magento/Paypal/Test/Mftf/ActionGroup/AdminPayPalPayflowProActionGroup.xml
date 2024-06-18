@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminPayPalPayflowProActionGroup" extends="AdminPayPalPayflowProWithValutActionGroup">
         <annotations>
-            <description>Go to the 'Configuration' page for 'Payment Methods'. Fill in the provided Sample PayPal Payflow pro credentials and other details. Clicks on Save.</description>
+            <description>Goes to the 'Configuration' page for 'Payment Methods'. Fills in the provided Sample PayPal Payflow pro credentials and other details. Clicks on Save.</description>
         </annotations>
         <remove keyForRemoval="enableSolutionValut"/>
     </actionGroup>

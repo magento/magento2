@@ -27,7 +27,7 @@ class ProductVideoExternalSourceTest extends WebapiAbstract
      *
      * @return array
      */
-    public function externalVideoDataProvider(): array
+    public static function externalVideoDataProvider(): array
     {
         return [
             'youtube-external-video' => [
@@ -37,7 +37,7 @@ class ProductVideoExternalSourceTest extends WebapiAbstract
                     'label' => 'Test Video Created',
                     'types' => [],
                     'position' => 1,
-                    'content' => $this->getVideoThumbnailStub(),
+                    'content' => self::getVideoThumbnailStub(),
                     'extension_attributes' => [
                         'video_content' => [
                             'media_type' => 'external-video',
@@ -57,7 +57,7 @@ class ProductVideoExternalSourceTest extends WebapiAbstract
                     'label' => 'Test Video Updated',
                     'types' => [],
                     'position' => 1,
-                    'content' => $this->getVideoThumbnailStub(),
+                    'content' => self::getVideoThumbnailStub(),
                     'extension_attributes' => [
                         'video_content' => [
                             'media_type' => 'external-video',
@@ -78,7 +78,7 @@ class ProductVideoExternalSourceTest extends WebapiAbstract
      *
      * @return array|string[]
      */
-    private function getVideoThumbnailStub(): array
+    private static function getVideoThumbnailStub(): array
     {
         return [
             'type' => 'image/png',
