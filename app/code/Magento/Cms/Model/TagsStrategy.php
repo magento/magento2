@@ -22,7 +22,8 @@ class TagsStrategy implements StrategyInterface
         return [
             sprintf('%s_%s', Page::CACHE_TAG, $object->getId()),
             sprintf(
-                '%s_%s', 'CMS_PAGE_VIEW_ID',
+                '%s_%s',
+                'CMS_PAGE_VIEW_ID',
                 str_replace('-', '_', strtoupper($object->getIdentifier()))
             )
         ];

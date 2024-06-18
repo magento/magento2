@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Observer;
 
+use Magento\Cms\Model\Page;
 use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
 use Magento\Framework\App\Cache\Tag\Resolver;
@@ -71,6 +72,10 @@ class InvalidateLayoutCacheObserver implements ObserverInterface
         $object = $observer->getEvent()->getObject();
 
         if (!is_object($object)) {
+            return;
+        }
+
+        if (!$object->dataHasChangedFor(Page::PAGE_LAYOUT)) {
             return;
         }
 
