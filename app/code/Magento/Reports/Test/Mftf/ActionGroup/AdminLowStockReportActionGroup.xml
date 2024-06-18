@@ -13,8 +13,8 @@
             <description>Navigate to Low stock Product and search for Product</description>
         </annotations>
         <amOnPage url="{{LowStockReportPage.url}}" stepKey="navigateToLowStockReportPageWithZeroQuantity"/>
-        <fillField selector="{{LowStockProductGridSection.enterProduct}}" userInput="$$createSimpleProduct.name$$" stepKey="fillProductName"/>
-        <waitForElementClickable selector="{{LowStockProductGridSection.search($$createSimpleProduct.name$$)}}" stepKey="waitForSearchProduct"/>
-        <click selector="{{LowStockProductGridSection.search($$createSimpleProduct.name$$)}}" stepKey="searchForProduct"/>
+        <fillField selector="{{LowStockReportFilterSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="fillProductName"/>
+        <waitForElementClickable selector="{{LowStockReportFilterSection.searchButton($$createSimpleProduct.name$$)}}" stepKey="waitForSearchProduct"/>
+        <click selector="{{LowStockReportFilterSection.searchButton($$createSimpleProduct.name$$)}}" stepKey="searchForProduct"/>
     </actionGroup>
 </actionGroups>
