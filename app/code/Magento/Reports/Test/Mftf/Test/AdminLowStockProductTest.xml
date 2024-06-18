@@ -26,7 +26,6 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Go to Inventory configuration page -->
-        <!-- <actionGroup ref="AdminNavigateToInventoryConfigurationActionGroup" stepKey="navigateToInventoryConfiguration"/> -->
         <magentoCLI command="config:set cataloginventory/item_options/notify_stock_qty 2" stepKey="checkSystemValue1"/>
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="clearCacheAfterEnablingStockQuantity">
             <argument name="tags" value="config"/>
