@@ -4,7 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Customer\Helper\Address;
+use Magento\Customer\Block\Form\Register;
+use Magento\Customer\Block\Widget\City;
+use Magento\Customer\Block\Widget\Company;
+use Magento\Customer\Block\Widget\Fax;
+use Magento\Customer\Block\Widget\Telephone;
+use Magento\Customer\ViewModel\Address\RegionProvider;
+use Magento\Directory\Helper\Data;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /** @var \Magento\Customer\Block\Form\Register $block */
 if (!$block->getButtonLockManager()) {
@@ -18,9 +26,9 @@ if (!$block->getButtonLockManager()) {
 
 /** @var Magento\Customer\Helper\Address $addressHelper */
 $addressHelper = $block->getData('addressHelper');
-/** @var \Magento\Directory\Helper\Data $directoryHelper */
+/** @var Data $directoryHelper */
 $directoryHelper = $block->getData('directoryHelper');
-/** @var \Magento\Customer\ViewModel\Address\RegionProvider $regionProvider */
+/** @var RegionProvider $regionProvider */
 $regionProvider = $block->getRegionProvider();
 $formData = $block->getFormData();
 ?>
@@ -85,17 +93,17 @@ $formData = $block->getFormData();
             <legend class="legend"><span><?= $escaper->escapeHtml(__('Address Information')) ?></span></legend><br>
             <input type="hidden" name="create_address" value="1" />
 
-            <?php $_company = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Company::class) ?>
+            <?php $_company = $block->getLayout()->createBlock(Company::class) ?>
             <?php if ($_company->isEnabled()): ?>
                 <?= $_company->setCompany($formData->getCompany())->toHtml() ?>
             <?php endif ?>
 
-            <?php $_telephone = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Telephone::class) ?>
+            <?php $_telephone = $block->getLayout()->createBlock(Telephone::class) ?>
             <?php if ($_telephone->isEnabled()): ?>
                 <?= $_telephone->setTelephone($formData->getTelephone())->toHtml() ?>
             <?php endif ?>
 
-            <?php $_fax = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Fax::class) ?>
+            <?php $_fax = $block->getLayout()->createBlock(Fax::class) ?>
             <?php if ($_fax->isEnabled()): ?>
                 <?= $_fax->setFax($formData->getFax())->toHtml() ?>
             <?php endif ?>
@@ -190,19 +198,10 @@ $formData = $block->getFormData();
                 </div>
             </div>
 
-            <div class="field required">
-                <label for="city" class="label">
-                    <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('city') ?></span>
-                </label>
-                <div class="control">
-                    <input type="text"
-                           name="city"
-                           value="<?= $escaper->escapeHtmlAttr($formData->getCity()) ?>"
-                           title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('city') ?>"
-                           class="input-text <?= $escaper->escapeHtmlAttr($cityValidationClass) ?>"
-                           id="city">
-                </div>
-            </div>
+            <?php $_city = $block->getLayout()->createBlock(City::class) ?>
+            <?php if ($_city->isEnabled()): ?>
+                <?= $_city->setCity($formData->getCity())->toHtml() ?>
+            <?php endif ?>
 
             <div class="field zip required">
                 <label for="zip" class="label">

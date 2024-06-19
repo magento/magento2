@@ -266,6 +266,11 @@
                     <source_model>Magento\Config\Model\Config\Source\Nooptreq</source_model>
                     <backend_model>Magento\Customer\Model\Config\Backend\Show\AddressOnly</backend_model>
                 </field>
+                <field id="city_show" translate="label" type="select" sortOrder="130" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Show City</label>
+                    <source_model>Magento\Config\Model\Config\Source\Nooptreq</source_model>
+                    <backend_model>Magento\Customer\Model\Config\Backend\Show\AddressOnly</backend_model>
+                </field>
             </group>
             <group id="startup" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Login Options</label>

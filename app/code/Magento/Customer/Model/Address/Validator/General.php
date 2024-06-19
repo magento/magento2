@@ -75,10 +75,6 @@ class General implements ValidatorInterface
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'street']);
         }
 
-        if (!ValidatorChain::is($address->getCity(), NotEmpty::class)) {
-            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'city']);
-        }
-
         return $errors;
     }
 
@@ -88,6 +84,8 @@ class General implements ValidatorInterface
      * @param AbstractAddress $address
      * @return array
      * @throws LocalizedException|ValidateException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function checkOptionalFields(AbstractAddress $address)
     {
@@ -109,6 +107,12 @@ class General implements ValidatorInterface
             && !ValidatorChain::is($address->getCompany(), NotEmpty::class)
         ) {
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'company']);
+        }
+
+        if ($this->isCityRequired()
+            && !ValidatorChain::is($address->getCity(), NotEmpty::class)
+        ) {
+            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'city']);
         }
 
         $havingOptionalZip = $this->directoryData->getCountriesWithOptionalZip();
@@ -152,6 +156,17 @@ class General implements ValidatorInterface
     private function isFaxRequired()
     {
         return $this->eavConfig->getAttribute('customer_address', 'fax')->getIsRequired();
+    }
+
+    /**
+     * Check if city field required in configuration.
+     *
+     * @return bool
+     * @throws LocalizedException
+     */
+    private function isCityRequired()
+    {
+        return $this->eavConfig->getAttribute('customer_address', 'city')->getIsRequired();
     }
 
     /**
