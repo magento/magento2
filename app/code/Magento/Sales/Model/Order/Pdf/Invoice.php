@@ -73,7 +73,6 @@ class Invoice extends AbstractPdf
             $localeDate,
             $inlineTranslation,
             $addressRenderer,
-            $this->taxHelper,
             $data
         );
     }

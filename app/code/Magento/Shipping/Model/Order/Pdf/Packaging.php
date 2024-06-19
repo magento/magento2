@@ -89,7 +89,6 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
             $localeDate,
             $inlineTranslation,
             $addressRenderer,
-            $this->taxHelper,
             $data
         );
     }

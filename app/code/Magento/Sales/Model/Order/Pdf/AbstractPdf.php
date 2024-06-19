@@ -176,11 +176,12 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
-        TaxHelper $taxHelper,
         array $data = [],
         Database $fileStorageDatabase = null,
         ?RtlTextHandler $rtlTextHandler = null,
-        ?Image $image = null
+        ?Image $image = null,
+        ?TaxHelper $taxHelper = null
+
     ) {
         $this->addressRenderer = $addressRenderer;
         $this->_paymentData = $paymentData;
@@ -193,7 +194,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $this->_pdfTotalFactory = $pdfTotalFactory;
         $this->_pdfItemsFactory = $pdfItemsFactory;
         $this->inlineTranslation = $inlineTranslation;
-        $this->taxHelper = $taxHelper;
+        $this->taxHelper = $taxHelper ?: ObjectManager::getInstance()->get(TaxHelper::class);
         $this->fileStorageDatabase = $fileStorageDatabase ?: ObjectManager::getInstance()->get(Database::class);
         $this->rtlTextHandler = $rtlTextHandler ?: ObjectManager::getInstance()->get(RtlTextHandler::class);
         $this->image = $image ?: ObjectManager::getInstance()->get(Image::class);

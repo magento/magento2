@@ -72,7 +72,6 @@ class Shipment extends AbstractPdf
             $localeDate,
             $inlineTranslation,
             $addressRenderer,
-            $this->taxHelper,
             $data
         );
     }
