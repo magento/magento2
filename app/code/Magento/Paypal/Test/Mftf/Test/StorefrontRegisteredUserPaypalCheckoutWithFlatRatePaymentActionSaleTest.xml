@@ -7,7 +7,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="RegisteredPaypalCheckoutWithFlatRatePaymentActionSaleTest">
+    <test name="StorefrontRegisteredUserPaypalCheckoutWithFlatRatePaymentActionSaleTest">
         <annotations>
             <features value="PayPal"/>
             <stories value="Registered Checkout Using PayPal Smart Button and Flat Rate (Payment Action = Sale)"/>
