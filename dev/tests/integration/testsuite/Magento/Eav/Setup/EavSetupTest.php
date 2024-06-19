@@ -81,7 +81,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function addAttributeThrowExceptionDataProvider()
+    public static function addAttributeThrowExceptionDataProvider()
     {
         return [
             [null],
@@ -111,7 +111,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function addInvalidAttributeThrowExceptionDataProvider()
+    public static function addInvalidAttributeThrowExceptionDataProvider()
     {
         return [
             ['1first_character_is_not_letter'],

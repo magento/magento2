@@ -66,12 +66,12 @@ class NavigationTest extends TestCase
     {
         $wishListLinkMock = $this->getMockBuilder(WishListLink::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSortOrder'])
+            ->onlyMethods(['getSortOrder'])
             ->getMock();
 
         $customerAccountLinkMock = $this->getMockBuilder(CustomerAccountLink::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSortOrder'])
+            ->onlyMethods(['getSortOrder'])
             ->getMock();
 
         $wishListLinkMock->expects($this->any())
