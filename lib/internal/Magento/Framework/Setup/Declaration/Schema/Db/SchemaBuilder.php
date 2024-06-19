@@ -120,14 +120,10 @@ class SchemaBuilder
                     ]
                 );
 
-                $isJsonType = false;
-                if (count($tablesWithJsonTypeField) > 0 && isset($tablesWithJsonTypeField[$tableName])) {
-                    $isJsonType = true;
-                }
-
                 // Process columns
                 foreach ($columnsData as $columnData) {
-                    if ($isJsonType && $tablesWithJsonTypeField[$tableName] == $columnData['name']) {
+                    if (isset($tablesWithJsonTypeField[$tableName])
+                        && $tablesWithJsonTypeField[$tableName] === $columnData['name']) {
                         $columnData['type'] = 'json';
                     }
                     $columnData['table'] = $table;
