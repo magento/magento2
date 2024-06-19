@@ -14,11 +14,11 @@ use Magento\Framework\View\Design\Theme\FileInterface;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\Uploader\Service;
-use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest;
+use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
-class UploadJsTest extends ThemeTest
+class UploadJsTest extends ThemeTestCase
 {
     /**
      * @var string
@@ -94,18 +94,12 @@ class UploadJsTest extends ThemeTest
 
         $this->_objectManagerMock
             ->method('get')
-            ->withConsecutive(
-                [Service::class],
-                [FlyweightFactory::class],
-                [Js::class],
-                [Data::class]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $this->serviceModel,
-                $this->themeFactory,
-                $this->customizationJs,
-                $this->jsonHelper
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Service::class] => $this->serviceModel,
+                [FlyweightFactory::class] => $this->themeFactory,
+                [Js::class] => $this->customizationJs,
+                [Data::class] => $this->jsonHelper
+            });
 
         $this->themeFactory->expects($this->once())
             ->method('create')
@@ -140,20 +134,13 @@ class UploadJsTest extends ThemeTest
 
         $this->_objectManagerMock
             ->method('get')
-            ->withConsecutive(
-                [Service::class],
-                [FlyweightFactory::class],
-                [Js::class],
-                [LoggerInterface::class],
-                [Data::class]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $this->serviceModel,
-                $this->themeFactory,
-                $this->customizationJs,
-                $this->logger,
-                $this->jsonHelper
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Service::class] => $this->serviceModel,
+                [FlyweightFactory::class] => $this->themeFactory,
+                [Js::class] => $this->customizationJs,
+                [LoggerInterface::class] => $this->logger,
+                [Data::class] => $this->jsonHelper
+            });
         $this->logger->expects($this->once())
             ->method('critical');
 
@@ -197,18 +184,12 @@ class UploadJsTest extends ThemeTest
 
         $this->_objectManagerMock
             ->method('get')
-            ->withConsecutive(
-                [Service::class],
-                [FlyweightFactory::class],
-                [Js::class],
-                [Data::class]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $this->serviceModel,
-                $this->themeFactory,
-                $this->customizationJs,
-                $this->jsonHelper
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                    [Service::class] => $this->serviceModel,
+                    [FlyweightFactory::class] => $this->themeFactory,
+                    [Js::class] => $this->customizationJs,
+                    [Data::class] => $this->jsonHelper
+            });
 
         $this->themeFactory->expects($this->once())
             ->method('create')

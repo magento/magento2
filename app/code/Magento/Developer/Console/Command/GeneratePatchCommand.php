@@ -183,7 +183,7 @@ BOF;
         $fileWriter->writeFile($patchFile, $patchTemplateData);
 
         $outputPatchFile = str_replace($this->directoryList->getRoot() . '/', '', $patchDir . '/' . $patchFile);
-        $output->writeln(__('Patch %1 has been successfully generated.', $outputPatchFile));
+        $output->writeln(sprintf('Patch 1% has been successfully generated.', $outputPatchFile));
 
         return Cli::RETURN_SUCCESS;
     }

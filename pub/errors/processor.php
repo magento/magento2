@@ -188,7 +188,6 @@ class Processor
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
         $this->documentRoot = $documentRoot ?? ObjectManager::getInstance()->get(DocumentRoot::class);
-
         if (!empty($_SERVER['SCRIPT_NAME'])) {
             if (in_array(basename($_SERVER['SCRIPT_NAME'], '.php'), ['404', '503', 'report'])) {
                 $this->_scriptName = dirname($_SERVER['SCRIPT_NAME']);
@@ -196,10 +195,8 @@ class Processor
                 $this->_scriptName = $_SERVER['SCRIPT_NAME'];
             }
         }
-
         $this->_indexDir = $this->_getIndexDir();
         $this->_root  = is_dir($this->_indexDir . 'app');
-
         $this->_prepareConfig();
         if (isset($_GET['skin'])) {
             $this->_setSkin($_GET['skin']);
@@ -207,6 +204,7 @@ class Processor
         if (isset($_GET['id'])) {
             $this->loadReport($_GET['id']);
         }
+        $response->setMetadata("NotCacheable", true);
     }
 
     /**
@@ -449,7 +447,7 @@ class Processor
         $html = '';
         if ($baseTemplate && $contentTemplate) {
             ob_start();
-            require_once $baseTemplate;
+            require $baseTemplate;
             $html = ob_get_clean();
         }
         return $html;

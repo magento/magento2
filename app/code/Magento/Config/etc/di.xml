@@ -397,4 +397,16 @@
             </argument>
         </arguments>
     </type>
+    <!-- TODO: Move these to Framework's di.xml after issue with array_replace_recursive in configuration are resolved.
+    -->
+    <type name="Magento\Framework\ObjectManager\Resetter\WeakMapSorter">
+        <arguments>
+            <argument name="sortOrder" xsi:type="array">
+                <item name="Magento\Framework\Session\SessionManagerInterface" xsi:type="number">1000</item>
+                <item name="Magento\Framework\App\Cache\State" xsi:type="number">10000</item>
+                <item name="Magento\Framework\DB\Logger\LoggerProxy" xsi:type="number">9999</item>
+                <item name="Magento\Framework\DB\Adapter\Pdo\Mysql" xsi:type="number">9999</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

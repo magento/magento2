@@ -87,9 +87,11 @@
             <argument name="productName" value="{{_defaultProduct.name}}"/>
         </actionGroup>
 
-        <!-- Run cron -->
-        <magentoCron stepKey="runCron" />
-        <magentoCron stepKey="runCronTwice" />
+        <!-- We need the 'indexer_update_all_views' job to run. This is the best
+            way we can make that happen, but there is no guarantee that there is
+            such a job already scheduled in the queue. -->
+        <magentoCron groups="index" stepKey="runCron" />
+        <comment userInput="We need the indexer_update_all_views job to run" stepKey="runCronTwice"/>
 
         <!-- Check product is present in category after cron run -->
         <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">

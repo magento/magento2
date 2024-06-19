@@ -379,6 +379,7 @@
         <data key="company">Magento</data>
         <array key="street">
             <item>6161 West Centinela Avenue</item>
+            <item>16</item>
         </array>
         <data key="city">Culver City</data>
         <data key="country_id">US</data>

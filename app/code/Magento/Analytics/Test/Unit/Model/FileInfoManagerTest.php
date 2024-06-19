@@ -62,7 +62,7 @@ class FileInfoManagerTest extends TestCase
         $this->flagManagerMock = $this->createMock(FlagManager::class);
 
         $this->fileInfoFactoryMock = $this->getMockBuilder(FileInfoFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
