@@ -79,7 +79,7 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function gaDataProvider(): array
+    public static function gaDataProvider(): array
     {
         return [
             ['GA-XXXX', true, true],
@@ -110,7 +110,7 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function yesNoDataProvider(): array
+    public static function yesNoDataProvider(): array
     {
         return [
             ['Yes' => '1', 'result' => true],

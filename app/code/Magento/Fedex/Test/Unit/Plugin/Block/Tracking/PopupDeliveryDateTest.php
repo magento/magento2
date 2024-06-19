@@ -162,7 +162,7 @@ class PopupDeliveryDateTest extends TestCase
      *
      * @return array[]
      */
-    public function getDates(): array
+    public static function getDates(): array
     {
         return [
             'same day' => [

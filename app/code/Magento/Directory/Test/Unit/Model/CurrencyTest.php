@@ -136,7 +136,7 @@ class CurrencyTest extends TestCase
      *
      * @return array
      */
-    public function getOutputFormatDataProvider(): array
+    public static function getOutputFormatDataProvider(): array
     {
         $ar_DZ = "\u{062C}.\u{0645}.\u{200F}\u{00A0}%s";
         if (version_compare(PHP_VERSION, '8.3', '>=')) {

@@ -95,7 +95,7 @@ class XsdTest extends TestCase
     /**
      * Data provider with invalid xml array according to schema
      */
-    public function schemaCorrectlyIdentifiesExportOptionsDataProvider()
+    public static function schemaCorrectlyIdentifiesExportOptionsDataProvider()
     {
         return include __DIR__ . '/_files/invalidExportXmlArray.php';
     }
@@ -103,7 +103,7 @@ class XsdTest extends TestCase
     /**
      * Data provider with invalid xml array according to schema
      */
-    public function schemaCorrectlyIdentifiesInvalidExportMergedXmlDataProvider()
+    public static function schemaCorrectlyIdentifiesInvalidExportMergedXmlDataProvider()
     {
         return include __DIR__ . '/_files/invalidExportMergedXmlArray.php';
     }

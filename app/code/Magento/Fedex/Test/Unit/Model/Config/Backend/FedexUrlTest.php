@@ -102,7 +102,7 @@ class FedexUrlTest extends TestCase
      *
      * @return array
      */
-    public function validDataProvider(): array
+    public static function validDataProvider(): array
     {
         return [
             [],

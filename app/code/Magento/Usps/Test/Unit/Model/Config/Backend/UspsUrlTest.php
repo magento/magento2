@@ -99,7 +99,7 @@ class UspsUrlTest extends TestCase
         $this->urlConfig->beforeSave();
     }
 
-    public function validDataProvider(): array
+    public static function validDataProvider(): array
     {
         return [
             [],

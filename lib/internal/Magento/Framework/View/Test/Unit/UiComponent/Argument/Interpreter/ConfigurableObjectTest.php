@@ -155,7 +155,7 @@ class ConfigurableObjectTest extends TestCase
         self::assertSame('an object yay!', $actualResult);
     }
 
-    public function validDataProvider()
+    public static function validDataProvider()
     {
         return [
             // Test most basic syntax with no arguments

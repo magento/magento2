@@ -69,7 +69,7 @@ class XsdTest extends TestCase
     /**
      * @return array
      */
-    public function invalidXmlFileDataProvider()
+    public static function invalidXmlFileDataProvider()
     {
         return [
             [

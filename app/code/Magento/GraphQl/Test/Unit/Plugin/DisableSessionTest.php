@@ -77,7 +77,7 @@ class DisableSessionTest extends TestCase
      *
      * @return array[]
      */
-    public function testAfterCheckDataProvider()
+    public static function testAfterCheckDataProvider()
     {
         return [
             ['area' => 'graphql', 'config' => true, 'methodResult' =>  false, 'expected' => false],
@@ -114,7 +114,7 @@ class DisableSessionTest extends TestCase
      *
      * @return array[]
      */
-    public function testAfterCheckDataProviderNoAreaCode()
+    public static function testAfterCheckDataProviderNoAreaCode()
     {
         return [
             ['config' => true, 'methodResult' =>  true, 'expected' => true],
