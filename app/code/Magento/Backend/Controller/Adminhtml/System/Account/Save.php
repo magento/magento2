@@ -12,6 +12,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -25,8 +26,10 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account implemen
     /**
      * Get security cookie
      *
-     * @deprecated 100.1.0 The method getSecurityCookie() is deprecated and no longer needed.
-     *             Use dependency injection to get an instance of SecurityCookie instead.
+     * @deprecated 100.1.0 This method is deprecated because dependency injection should be used instead of
+     *                     directly accessing the SecurityCookie instance. 
+     *                     Use dependency injection to get an instance of SecurityCookie.
+     * @see \Magento\Backend\Controller\Adminhtml\System\Account::__construct()
      * @return SecurityCookie
      */
     private function getSecurityCookie()
@@ -100,13 +103,16 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account implemen
                     if ($countModifiedFields > 1) {
                         $lastModifiedField = array_pop($modifiedFields);
                         $modifiedFieldsText = implode(', ', $modifiedFields);
-                        $successMessage =
-                            __('The %1 and %2 of this account have been modified successfully.',
-                            $modifiedFieldsText,$lastModifiedField);
+                        $successMessage = __(
+                            'The %1 and %2 of this account have been modified successfully.',
+                            $modifiedFieldsText,
+                            $lastModifiedField
+                        );
                     } else {
-                        $successMessage =
-                            __('The %1 of this account has been modified successfully.',
-                            reset($modifiedFields));
+                        $successMessage = __(
+                            'The %1 of this account has been modified successfully.',
+                            reset($modifiedFields)
+                        );
                     }
                     $this->messageManager->addSuccessMessage($successMessage);
                 } else {
