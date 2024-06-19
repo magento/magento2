@@ -28,7 +28,7 @@ class PriorityTest extends TestCase
     {
         $this->priorityMock = $this->getMockBuilder(Priority::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->addMethods(['getValue'])
             ->getMock();
     }
 
@@ -70,7 +70,7 @@ class PriorityTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderTestBeforeSaveValueCorrect()
+    public static function dataProviderTestBeforeSaveValueCorrect()
     {
         return [
             ['0'], ['0.0'], ['0.5'], ['1']
@@ -82,7 +82,7 @@ class PriorityTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderTestBeforeSaveValueOutOfRange()
+    public static function dataProviderTestBeforeSaveValueOutOfRange()
     {
         return [
             ['-1'], ['2'], ['nan']

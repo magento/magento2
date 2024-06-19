@@ -49,7 +49,7 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
     protected function setUp(): void
     {
         $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->urlRewrite = $this->getMockBuilder(UrlRewrite::class)
@@ -130,12 +130,12 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
         $this->categoryRepositoryInterface
             ->expects($this->any())
             ->method('get')
-            ->withConsecutive(
-                [$categoryIds[0], $storeId],
-                [$categoryIds[1], $storeId],
-                [$categoryIds[2], $storeId]
-            )
-            ->willReturn($category);
+            ->willReturnCallback(function ($categoryIds, $storeId) use ($category) {
+                if ($categoryIds[0] || $categoryIds[1] || $categoryIds[2] && $storeId) {
+                    return $category;
+                }
+            });
+
         $this->categoryRegistry->expects($this->any())->method('getList')
             ->willReturn([$category]);
         $this->urlRewrite->expects($this->any())->method('setStoreId')

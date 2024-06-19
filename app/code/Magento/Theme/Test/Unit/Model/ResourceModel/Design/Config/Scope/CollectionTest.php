@@ -67,6 +67,7 @@ class CollectionTest extends TestCase
      * Test loadData
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testLoadData()
     {
@@ -119,16 +120,18 @@ class CollectionTest extends TestCase
             );
         $this->valueProcessor->expects($this->atLeastOnce())
             ->method('process')
-            ->withConsecutive(
-                ['DefaultValue', 'default', null, ['path' => 'second/field/path', 'use_in_grid' => 1]],
-                ['WebsiteValue', 'website', 1, ['path' => 'second/field/path', 'use_in_grid' => 1]],
-                ['WebsiteValue', 'store', 1, ['path' => 'second/field/path', 'use_in_grid' => 1]]
-            )
-            ->willReturnOnConsecutiveCalls(
-                'DefaultValue',
-                'WebsiteValue',
-                'WebsiteValue'
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3, $arg4) {
+                if ($arg1 == 'DefaultValue' && $arg2 == 'default' && $arg3 == null &&
+                    $arg4 == ['path' => 'second/field/path', 'use_in_grid' => 1]) {
+                    return 'DefaultValue';
+                } elseif ($arg1 == 'WebsiteValue' && $arg2 == 'website' && $arg3 == 1 &&
+                    $arg4 == ['path' => 'second/field/path', 'use_in_grid' => 1]) {
+                    return 'WebsiteValue';
+                } elseif ($arg1 == 'WebsiteValue' && $arg2 == 'store' && $arg3 == 1 &&
+                    $arg4 == ['path' => 'second/field/path', 'use_in_grid' => 1]) {
+                    return 'WebsiteValue';
+                }
+            });
 
         $expectedResult = [
             new DataObject([

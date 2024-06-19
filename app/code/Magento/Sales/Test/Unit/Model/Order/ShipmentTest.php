@@ -70,7 +70,7 @@ class ShipmentTest extends TestCase
 
         $shipmentItem = $this->getMockBuilder(ShipmentItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setShipment'])
+            ->onlyMethods(['setShipment'])
             ->getMock();
         $shipmentItem->method('setShipment')
             ->with($this->shipmentModel);
@@ -108,7 +108,7 @@ class ShipmentTest extends TestCase
 
         $shipmentItem = $this->getMockBuilder(ShipmentItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setShipment'])
+            ->onlyMethods(['setShipment'])
             ->getMock();
         $shipmentItem->expects(self::once())
             ->method('setShipment')
@@ -141,12 +141,12 @@ class ShipmentTest extends TestCase
     {
         $this->commentCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setShipmentFilter', 'setCreatedAtOrder', 'getItems', 'load'])
+            ->onlyMethods(['setShipmentFilter', 'setCreatedAtOrder', 'getItems', 'load'])
             ->getMock();
 
         $this->commentCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->commentCollectionFactory->method('create')

@@ -49,7 +49,7 @@
         <element name="ruleParameterSelect" type="select" selector="rule[conditions][{{arg}}][operator]" parameterized="true"/>
         <element name="ruleParameterInput" type="input" selector="rule[conditions][{{arg}}][value]" parameterized="true"/>
         <element name="openChooser" type="button" selector="//label[@for='conditions__{{arg}}__value']" parameterized="true"/>
-        <element name="categoryCheckbox" type="checkbox" selector="//span[contains(text(), '{{arg}}')]/parent::a/preceding-sibling::input[@type='checkbox']" parameterized="true"/>
+        <element name="categoryCheckbox" type="checkbox" selector="//a[contains(text(), '{{arg}}')]" parameterized="true"/>
         <element name="newCondition" type="button" selector=".rule-param.rule-param-new-child" timeout="30"/>
         <element name="conditionSelect" type="select" selector="select[name='rule[conditions][1][new_child]']"/>
         <element name="targetEllipsis" type="input" selector="//ul[contains(@id, 'conditions')]//a[.='...']"/>

@@ -7,39 +7,48 @@
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Library for working with client ip address.
  *
  * @api
  */
-class RemoteAddress
+class RemoteAddress implements ResetAfterRequestInterface
 {
     /**
      * Request object.
      *
      * @var RequestInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    protected $request;
+    protected readonly RequestInterface $request;
 
     /**
      * Remote address cache.
      *
-     * @var string
+     * @var string|null|bool|number
      */
     protected $remoteAddress;
 
     /**
      * @var array
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    protected $alternativeHeaders;
+    protected readonly array $alternativeHeaders;
 
     /**
      * @var string[]|null
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $trustedProxies;
+    private readonly ?array $trustedProxies;
 
     /**
+     * Constructor
+     *
      * @param RequestInterface $httpRequest
      * @param array $alternativeHeaders
      * @param string[]|null $trustedProxies
@@ -52,6 +61,14 @@ class RemoteAddress
         $this->request = $httpRequest;
         $this->alternativeHeaders = $alternativeHeaders;
         $this->trustedProxies = $trustedProxies;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->remoteAddress = null;
     }
 
     /**
