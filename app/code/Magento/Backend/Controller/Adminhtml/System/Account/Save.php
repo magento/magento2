@@ -27,7 +27,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account implemen
      * Get security cookie
      *
      * @deprecated 100.1.0 This method is deprecated because dependency injection should be used instead of
-     *                     directly accessing the SecurityCookie instance. 
+     *                     directly accessing the SecurityCookie instance.
      *                     Use dependency injection to get an instance of SecurityCookie.
      * @see \Magento\Backend\Controller\Adminhtml\System\Account::__construct()
      * @return SecurityCookie
