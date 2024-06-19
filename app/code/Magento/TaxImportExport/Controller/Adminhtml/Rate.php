@@ -45,10 +45,10 @@ abstract class Rate extends \Magento\Backend\App\Action
     protected function _isAllowed(): bool
     {
         return match (strtolower($this->getRequest()->getActionName())) {
-            'importexport','importpost','exportcsv','exportxml', 'exportpost' =>
-            $this->_authorization->isAllowed('Magento_TaxImportExport::import_export'),
+            'importexport', 'importpost', 'exportcsv', 'exportxml', 'exportpost' =>
+                $this->_authorization->isAllowed('Magento_TaxImportExport::import_export'),
             default =>
-            $this->_authorization->isAllowed(self::ADMIN_RESOURCE),
+                $this->_authorization->isAllowed(self::ADMIN_RESOURCE),
         };
     }
 }
