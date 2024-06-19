@@ -107,7 +107,8 @@ class FileFactory
                 'contentType' => $contentType,
                 'contentLength' => $contentLength,
                 'directoryCode' => $baseDir,
-                'remove' => is_array($content) && !empty($content['rm'])
+                'remove' => is_array($content) && !empty($content['rm']),
+                'attachment' => $content['attachment'] ?? true
             ]
         ]);
     }
