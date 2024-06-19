@@ -102,15 +102,16 @@ class ContextPluginTest extends TestCase
 
         $this->taxCalculationMock = $this->getMockBuilder(Calculation::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTaxRates'])
+            ->onlyMethods(['getTaxRates'])
             ->getMock();
 
         $this->customerSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(['isLoggedIn'])
+            ->addMethods(
                 [
                     'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId',
-                    'getWebsiteId', 'isLoggedIn'
+                    'getWebsiteId'
                 ]
             )
             ->getMock();

@@ -66,7 +66,6 @@ class CartPriceRulesFixture extends Fixture
      */
     public function execute()
     {
-        $this->fixtureModel->resetObjectManager();
         $this->cartPriceRulesCount = $this->fixtureModel->getValue('cart_price_rules', 0);
         if (!$this->cartPriceRulesCount) {
             return;

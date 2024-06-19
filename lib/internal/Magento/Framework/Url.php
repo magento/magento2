@@ -140,7 +140,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     protected $_routeConfig;
 
     /**
-     * @var \Magento\Framework\Url\RouteParamsResolverInterface
+     * @var \Magento\Framework\Url\RouteParamsResolverInterface|null
      */
     private $_routeParamsResolver;
 
@@ -177,7 +177,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     protected $routeParamsPreprocessor;
 
     /**
-     * @var \Magento\Framework\Url\ModifierInterface
+     * @var \Magento\Framework\Url\ModifierInterface|null
      */
     private $urlModifier;
 
@@ -1199,5 +1199,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         $this->_data = [];
         $this->cacheUrl = [];
         self::$_configDataCache = null;
+        $this->urlModifier = null;
+        $this->_routeParamsResolver = null;
     }
 }

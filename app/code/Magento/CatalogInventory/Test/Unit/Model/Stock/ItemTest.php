@@ -96,7 +96,7 @@ class ItemTest extends TestCase
     {
         $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->getMockForAbstractClass();
 
         $this->context = $this->createPartialMock(Context::class, ['getEventDispatcher']);

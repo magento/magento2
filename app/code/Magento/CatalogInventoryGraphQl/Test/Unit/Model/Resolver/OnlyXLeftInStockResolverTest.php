@@ -115,11 +115,11 @@ class OnlyXLeftInStockResolverTest extends TestCase
         $this->stockStatusMock = $this->getMockBuilder(StockStatusInterface::class)->getMock();
         $this->productModelMock->expects($this->any())->method('getId')
             ->willReturn(1);
-        $this->productModelMock->expects($this->once())->method('getStore')
+        $this->productModelMock->expects($this->atMost(1))->method('getStore')
             ->willReturn($this->storeMock);
-        $this->stockRegistryMock->expects($this->once())->method('getStockStatus')
+        $this->stockRegistryMock->expects($this->atMost(1))->method('getStockStatus')
             ->willReturn($this->stockStatusMock);
-        $this->storeMock->expects($this->once())->method('getWebsiteId')->willReturn(1);
+        $this->storeMock->expects($this->atMost(1))->method('getWebsiteId')->willReturn(1);
 
         $this->resolver = $this->objectManager->getObject(
             OnlyXLeftInStockResolver::class,
@@ -181,15 +181,10 @@ class OnlyXLeftInStockResolverTest extends TestCase
 
     public function testResolveNoThresholdQty()
     {
-        $stockCurrentQty = 3;
-        $minQty = 2;
         $thresholdQty = null;
-        $this->stockItemMock->expects($this->once())->method('getMinQty')
-            ->willReturn($minQty);
-        $this->stockStatusMock->expects($this->once())->method('getQty')
-            ->willReturn($stockCurrentQty);
-        $this->stockRegistryMock->expects($this->once())->method('getStockItem')
-            ->willReturn($this->stockItemMock);
+        $this->stockItemMock->expects($this->never())->method('getMinQty');
+        $this->stockStatusMock->expects($this->never())->method('getQty');
+        $this->stockRegistryMock->expects($this->never())->method('getStockItem');
         $this->scopeConfigMock->method('getValue')->willReturn($thresholdQty);
 
         $this->assertEquals(

@@ -50,7 +50,7 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function write(string $path, string $contents, Config $config): void
     {
@@ -63,7 +63,7 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function writeStream(string $path, $contents, Config $config): void
     {
@@ -76,7 +76,7 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function move(string $source, string $destination, Config $config): void
     {
@@ -85,7 +85,7 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function copy(string $source, string $destination, Config $config): void
     {
@@ -94,7 +94,7 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(string $path): void
     {
@@ -103,7 +103,7 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteDirectory(string $path): void
     {
@@ -112,7 +112,7 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createDirectory(string $path, Config $config): void
     {
@@ -123,7 +123,7 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setVisibility(string $path, string $visibility): void
     {
@@ -132,7 +132,7 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function fileExists(string $path): bool
     {
@@ -165,7 +165,40 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     */
+    public function directoryExists(string $path): bool
+    {
+        $cacheHas = $this->cache->exists($path);
+
+        if ($cacheHas !== null) {
+            return $cacheHas;
+        }
+
+        $exists = $this->adapter->directoryExists($path);
+
+        if (!$exists) {
+            try {
+                // check if target is a directory
+                $exists = iterator_count($this->adapter->listContents($path, false)) > 0;
+            } catch (\Throwable $e) {
+                // catch closed iterator
+                $exists = false;
+            }
+        }
+
+        if ($exists) {
+            $cacheEntry = ['type' => 'dir', 'path' => $path];
+            $this->cache->updateMetadata($path, $cacheEntry, true);
+        } else {
+            $this->cache->storeDirNotExists($path);
+        }
+
+        return $exists;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function read(string $path): string
     {
@@ -173,7 +206,7 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function readStream(string $path)
     {
@@ -181,7 +214,7 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function listContents(string $path, bool $deep): iterable
     {
@@ -189,7 +222,7 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function fileSize(string $path): FileAttributes
     {
@@ -198,7 +231,7 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function mimeType(string $path): FileAttributes
     {
@@ -207,7 +240,7 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function lastModified(string $path): FileAttributes
     {
@@ -216,7 +249,7 @@ class CachedAdapter implements CachedAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function visibility(string $path): FileAttributes
     {
