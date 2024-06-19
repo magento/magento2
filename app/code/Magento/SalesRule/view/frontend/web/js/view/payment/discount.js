@@ -21,7 +21,9 @@ define([
     if (totals()) {
         couponCode(totals()['coupon_code']);
     }
-    isApplied(couponCode() != null);
+
+    var couponCodeValue = couponCode();
+    isApplied(typeof couponCodeValue === 'string' && couponCodeValue.length > 0);
 
     return Component.extend({
         defaults: {
