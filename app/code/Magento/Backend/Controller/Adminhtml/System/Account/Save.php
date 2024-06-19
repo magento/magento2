@@ -11,11 +11,11 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
-
+use Magento\Framework\App\Action\HttpPostActionInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
+class Save extends \Magento\Backend\Controller\Adminhtml\System\Account implements HttpPostActionInterface
 {
     /**
      * @var SecurityCookie
