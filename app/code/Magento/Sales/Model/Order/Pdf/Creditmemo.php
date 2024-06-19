@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Model\Order\Pdf;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Tax\Helper\Data as TaxHelper;
+
 /**
  * Sales Order Creditmemo PDF model
  *
@@ -55,13 +58,14 @@ class Creditmemo extends AbstractPdf
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
-        \Magento\Tax\Helper\Data $taxHelper,
+        TaxHelper $taxHelper = null,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Store\Model\App\Emulation $appEmulation,
         array $data = []
     ) {
         $this->_storeManager = $storeManager;
         $this->appEmulation = $appEmulation;
+        $this->taxHelper = $taxHelper ?: ObjectManager::getInstance()->get(TaxHelper::class);
         parent::__construct(
             $paymentData,
             $string,
@@ -73,7 +77,7 @@ class Creditmemo extends AbstractPdf
             $localeDate,
             $inlineTranslation,
             $addressRenderer,
-            $taxHelper,
+            $this->taxHelper,
             $data
         );
     }

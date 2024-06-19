@@ -46,7 +46,9 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * Predefined constants
      */
     public const XML_PATH_SALES_PDF_INVOICE_PUT_ORDER_ID = 'sales_pdf/invoice/put_order_id';
+
     public const XML_PATH_SALES_PDF_SHIPMENT_PUT_ORDER_ID = 'sales_pdf/shipment/put_order_id';
+
     public const XML_PATH_SALES_PDF_CREDITMEMO_PUT_ORDER_ID = 'sales_pdf/creditmemo/put_order_id';
 
     /**
@@ -133,7 +135,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     /**
      * @var Magento\Tax\Helper\Data
      */
-    protected $taxHelper;
+    private $taxHelper;
 
     /**
      * @var array $pageSettings
@@ -156,8 +158,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
-     * @param \Magento\Tax\Helper\Data $taxHelper
+     * @param TaxHelper $taxHelper
      * @param array $data
+     * @param Database $fileStorageDatabase
+     * @param RtlTextHandler|null $rtlTextHandler
+     * @param Image $image
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -171,8 +176,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
-        \Magento\Tax\Helper\Data $taxHelper,
-        array $data = []
+        TaxHelper $taxHelper = null,
+        array $data = [],
+        Database $fileStorageDatabase = null,
+        ?RtlTextHandler $rtlTextHandler = null,
+        ?Image $image = null
     ) {
         $this->addressRenderer = $addressRenderer;
         $this->_paymentData = $paymentData;
@@ -185,45 +193,12 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $this->_pdfTotalFactory = $pdfTotalFactory;
         $this->_pdfItemsFactory = $pdfItemsFactory;
         $this->inlineTranslation = $inlineTranslation;
-        $this->taxHelper = $taxHelper;
-
-        // Initialize optional dependencies using ObjectManager if not provided
-        $objectManager = ObjectManager::getInstance();
-        $this->fileStorageDatabase = $objectManager->get(Database::class);
-        $this->rtlTextHandler = $objectManager->get(RtlTextHandler::class);
-        $this->image = $objectManager->get(Image::class);
-
+        $this->taxHelper = $taxHelper ?: ObjectManager::getInstance()->get(TaxHelper::class);
+        $this->fileStorageDatabase = $fileStorageDatabase ?: ObjectManager::getInstance()->get(Database::class);
+        $this->rtlTextHandler = $rtlTextHandler ?: ObjectManager::getInstance()->get(RtlTextHandler::class);
+        $this->image = $image ?: ObjectManager::getInstance()->get(Image::class);
         parent::__construct($data);
     }
-
-    /**
-     * Set optional dependencies
-     *
-     * @param Database|null $fileStorageDatabase
-     * @param RtlTextHandler|null $rtlTextHandler
-     * @param Image|null $image
-     * @return void
-     */
-    public function setOptionalDependencies(
-        Database $fileStorageDatabase = null,
-        RtlTextHandler $rtlTextHandler = null,
-        Image $image = null
-
-    )
-    {
-        if ($fileStorageDatabase) {
-            $this->fileStorageDatabase = $fileStorageDatabase;
-        }
-        if ($rtlTextHandler) {
-            $this->rtlTextHandler = $rtlTextHandler;
-        }
-        if ($image) {
-            $this->image = $image;
-        }
-
-    }
-
-
 
     /**
      * Returns the total width in points of the string using the specified font and size.
@@ -645,7 +620,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                 $totalShippingChargesText .= $order->formatPriceTxt($order->getShippingAmount());
             }
 
-            if($this->taxHelper->displayShippingBothPrices() && $order->getShippingInclTax() != $order->getShippingAmount()) {
+            if ($this->taxHelper->displayShippingBothPrices()
+                && $order->getShippingInclTax() != $order->getShippingAmount()) {
                 $totalShippingChargesText .= "(Incl. Tax " . $order->getShippingInclTax() . ")";
             }
             $totalShippingChargesText .= ")";
