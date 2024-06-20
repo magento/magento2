@@ -156,7 +156,7 @@ class InfoTest extends TestCase
      *
      * @return array
      */
-    public function additionalInfoDataProvider()
+    public static function additionalInfoDataProvider()
     {
         return include __DIR__ . '/_files/additional_info_data.php';
     }

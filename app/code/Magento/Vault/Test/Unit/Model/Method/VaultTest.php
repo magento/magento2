@@ -93,7 +93,7 @@ class VaultTest extends TestCase
      * Get list of additional information variations
      * @return array
      */
-    public function additionalInfoDataProvider()
+    public static function additionalInfoDataProvider()
     {
         return [
             ['additionalInfo' => []],
@@ -380,7 +380,7 @@ class VaultTest extends TestCase
      * Get list of variations for testing canUseInternal method
      * @return array
      */
-    public function internalUsageDataProvider()
+    public static function internalUsageDataProvider()
     {
         return [
             ['configValue' => true, 'paymentValue' => true, 'expected' => true],

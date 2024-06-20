@@ -341,7 +341,7 @@ class StatTest extends TestCase
     /**
      * @return array
      */
-    public function fetchDataProvider()
+    public static function fetchDataProvider()
     {
         return [
             [
@@ -393,7 +393,7 @@ class StatTest extends TestCase
                     [
                         'timerId' => 'root',
                         'key' => Stat::TIME,
-                        'expectedValue' => $this->greaterThan(microtime(true)),
+                        'expectedValue' => self::greaterThan(microtime(true)),
                     ],
                     [
                         'timerId' => 'root',
