@@ -5,13 +5,24 @@
  */
 namespace Magento\Security\Model\ResourceModel\PasswordResetRequestEvent;
 
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Security\Model\PasswordResetRequestEvent as ModelPasswordResetRequestEvent;
+use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent as ResourcePasswordResetRequestEvent;
+use Psr\Log\LoggerInterface;
+
 /**
  * Password reset request event collection
  *
  * @api
  * @since 100.1.0
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * @var string
@@ -20,31 +31,24 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_idFieldName = 'id';
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     * @since 100.1.0
-     */
-    protected $dateTime;
-
-    /**
-     * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource
+     * @param EntityFactoryInterface $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param DateTime $dateTime
+     * @param AdapterInterface|null $connection
+     * @param AbstractDb|null $resource
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        EntityFactoryInterface $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        protected readonly DateTime $dateTime,
+        AdapterInterface $connection = null,
+        AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
-        $this->dateTime = $dateTime;
     }
 
     /**
@@ -56,8 +60,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            \Magento\Security\Model\PasswordResetRequestEvent::class,
-            \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent::class
+            ModelPasswordResetRequestEvent::class,
+            ResourcePasswordResetRequestEvent::class
         );
     }
 

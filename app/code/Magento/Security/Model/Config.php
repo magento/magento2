@@ -5,6 +5,8 @@
  */
 namespace Magento\Security\Model;
 
+use Magento\Backend\Model\Auth\Session as AuthSession;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
@@ -32,7 +34,7 @@ class Config implements ConfigInterface
     /**
      * Configuration path to fronted area
      * @deprecated
-     * @see \Magento\Security\Model\Config::XML_PATH_FRONTEND_AREA
+     * @see Config::XML_PATH_FRONTEND_AREA
      */
     const XML_PATH_FRONTED_AREA = self::XML_PATH_FRONTEND_AREA;
 
@@ -62,27 +64,15 @@ class Config implements ConfigInterface
     const XML_PATH_EMAIL_RECIPIENT = 'contact/email/recipient_email';
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var ScopeInterface
-     */
-    private $scope;
-
-    /**
      * SecurityConfig constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
      * @param ScopeInterface $scope
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        ScopeInterface $scope
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly ScopeInterface $scope
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->scope = $scope;
     }
 
     /**
@@ -128,7 +118,7 @@ class Config implements ConfigInterface
      */
     public function getAdminSessionLifetime()
     {
-        return (int) $this->scopeConfig->getValue(\Magento\Backend\Model\Auth\Session::XML_PATH_SESSION_LIFETIME);
+        return (int) $this->scopeConfig->getValue(AuthSession::XML_PATH_SESSION_LIFETIME);
     }
 
     /**
@@ -138,7 +128,7 @@ class Config implements ConfigInterface
      */
     protected function getXmlPathPrefix()
     {
-        if ($this->scope->getCurrentScope() == \Magento\Framework\App\Area::AREA_ADMINHTML) {
+        if ($this->scope->getCurrentScope() == Area::AREA_ADMINHTML) {
             return self::XML_PATH_ADMIN_AREA;
         }
         return self::XML_PATH_FRONTEND_AREA;

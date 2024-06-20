@@ -5,8 +5,10 @@
  */
 namespace Magento\Security\Model\Plugin;
 
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Security\Model\AdminSessionsManager;
 use Magento\Backend\Controller\Adminhtml\Auth\Login;
+use Magento\Security\Model\SecurityCookie;
 
 /**
  * Magento\Backend\Controller\Adminhtml\Auth\Login decorator
@@ -14,33 +16,15 @@ use Magento\Backend\Controller\Adminhtml\Auth\Login;
 class LoginController
 {
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    private $messageManager;
-
-    /**
-     * @var AdminSessionsManager
-     */
-    private $sessionsManager;
-
-    /**
-     * @var \Magento\Security\Model\SecurityCookie
-     */
-    private $securityCookie;
-
-    /**
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param ManagerInterface $messageManager
      * @param AdminSessionsManager $sessionsManager
-     * @param \Magento\Security\Model\SecurityCookie $securityCookie
+     * @param SecurityCookie $securityCookie
      */
     public function __construct(
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        AdminSessionsManager $sessionsManager,
-        \Magento\Security\Model\SecurityCookie $securityCookie
+        private readonly ManagerInterface $messageManager,
+        private readonly AdminSessionsManager $sessionsManager,
+        private readonly SecurityCookie $securityCookie
     ) {
-        $this->messageManager = $messageManager;
-        $this->sessionsManager = $sessionsManager;
-        $this->securityCookie = $securityCookie;
     }
 
     /**

@@ -6,11 +6,13 @@
 
 namespace Magento\Security\Model\Config\Source;
 
+use Magento\Framework\Option\ArrayInterface;
+
 /**
  * Source model for setting "Limit Password Reset Requests Method"
  *
  */
-class ResetMethod implements \Magento\Framework\Option\ArrayInterface
+class ResetMethod implements ArrayInterface
 {
     const OPTION_BY_IP_AND_EMAIL = 1;
     const OPTION_BY_IP = 2;

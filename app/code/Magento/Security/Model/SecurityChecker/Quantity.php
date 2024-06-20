@@ -10,6 +10,7 @@ use Magento\Framework\Exception\SecurityViolationException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Security\Model\Config\Source\ResetMethod;
 use Magento\Security\Model\ConfigInterface;
+use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection as PasswordResetRequestEventCollection;
 use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory;
 
 /**
@@ -18,33 +19,15 @@ use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFac
 class Quantity implements SecurityCheckerInterface
 {
     /**
-     * @var \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory
-     */
-    protected $collectionFactory;
-
-    /**
-     * @var ConfigInterface
-     */
-    protected $securityConfig;
-
-    /**
-     * @var RemoteAddress
-     */
-    private $remoteAddress;
-
-    /**
      * @param ConfigInterface $securityConfig
      * @param CollectionFactory $collectionFactory
      * @param RemoteAddress $remoteAddress
      */
     public function __construct(
-        ConfigInterface $securityConfig,
-        CollectionFactory $collectionFactory,
-        RemoteAddress $remoteAddress
+        protected readonly ConfigInterface $securityConfig,
+        protected readonly CollectionFactory $collectionFactory,
+        private readonly RemoteAddress $remoteAddress
     ) {
-        $this->securityConfig = $securityConfig;
-        $this->collectionFactory = $collectionFactory;
-        $this->remoteAddress = $remoteAddress;
     }
 
     /**
@@ -74,7 +57,7 @@ class Quantity implements SecurityCheckerInterface
      * @param int $securityEventType
      * @param string $accountReference
      * @param int $longIp
-     * @return \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection
+     * @return PasswordResetRequestEventCollection
      */
     protected function prepareCollection($securityEventType, $accountReference, $longIp)
     {

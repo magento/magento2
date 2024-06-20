@@ -9,8 +9,11 @@ namespace Magento\Security\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Security\Model\ResourceModel\UserExpiration as UserExpirationResource;
+use Magento\Security\Model\UserExpiration;
 use Magento\Security\Model\UserExpirationFactory;
+use Magento\User\Model\User;
 
 /**
  * Save UserExpiration on admin user record.
@@ -18,28 +21,15 @@ use Magento\Security\Model\UserExpirationFactory;
 class AfterAdminUserSave implements ObserverInterface
 {
     /**
-     * @var UserExpirationFactory
-     */
-    private $userExpirationFactory;
-
-    /**
-     * @var UserExpirationResource
-     */
-    private $userExpirationResource;
-
-    /**
      * AfterAdminUserSave constructor.
      *
      * @param UserExpirationFactory $userExpirationFactory
      * @param UserExpirationResource $userExpirationResource
      */
     public function __construct(
-        UserExpirationFactory $userExpirationFactory,
-        UserExpirationResource $userExpirationResource
+        private readonly UserExpirationFactory $userExpirationFactory,
+        private readonly UserExpirationResource $userExpirationResource
     ) {
-
-        $this->userExpirationFactory = $userExpirationFactory;
-        $this->userExpirationResource = $userExpirationResource;
     }
 
     /**
@@ -47,15 +37,15 @@ class AfterAdminUserSave implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @throws AlreadyExistsException
      */
     public function execute(Observer $observer)
     {
-        /* @var $user \Magento\User\Model\User */
+        /* @var User $user */
         $user = $observer->getEvent()->getObject();
         if ($user->getId() && $user->hasData('expires_at')) {
             $expiresAt = $user->getExpiresAt();
-            /** @var \Magento\Security\Model\UserExpiration $userExpiration */
+            /** @var UserExpiration $userExpiration */
             $userExpiration = $this->userExpirationFactory->create();
             $this->userExpirationResource->load($userExpiration, $user->getId());
 

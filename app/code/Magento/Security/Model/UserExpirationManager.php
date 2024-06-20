@@ -9,6 +9,8 @@ namespace Magento\Security\Model;
 
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Security\Api\Data\UserExpirationInterface;
+use Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection as AdminSessionInfoCollection;
 use Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory as AdminSessionCollectionFactory;
 use Magento\Security\Model\ResourceModel\UserExpiration\Collection as ExpiredUsersCollection;
 use Magento\Security\Model\ResourceModel\UserExpiration\CollectionFactory as UserExpirationCollectionFactory;
@@ -22,37 +24,6 @@ use Magento\User\Model\ResourceModel\User\CollectionFactory as UserCollectionFac
  */
 class UserExpirationManager
 {
-
-    /**
-     * @var DateTime
-     */
-    private $dateTime;
-
-    /**
-     * @var ConfigInterface
-     */
-    private $securityConfig;
-
-    /**
-     * @var ResourceModel\AdminSessionInfo\CollectionFactory
-     */
-    private $adminSessionInfoCollectionFactory;
-
-    /**
-     * @var Session
-     */
-    private $authSession;
-
-    /**
-     * @var ResourceModel\UserExpiration\CollectionFactory
-     */
-    private $userExpirationCollectionFactory;
-
-    /**
-     * @var UserCollectionFactory
-     */
-    private $userCollectionFactory;
-
     /**
      * UserExpirationManager constructor.
      *
@@ -64,19 +35,13 @@ class UserExpirationManager
      * @param DateTime $dateTime
      */
     public function __construct(
-        Session $authSession,
-        ConfigInterface $securityConfig,
-        AdminSessionCollectionFactory $adminSessionInfoCollectionFactory,
-        UserExpirationCollectionFactory $userExpirationCollectionFactory,
-        UserCollectionFactory $userCollectionFactory,
-        DateTime $dateTime
+        private readonly Session $authSession,
+        private readonly ConfigInterface $securityConfig,
+        private readonly AdminSessionCollectionFactory $adminSessionInfoCollectionFactory,
+        private readonly UserExpirationCollectionFactory $userExpirationCollectionFactory,
+        private readonly UserCollectionFactory $userCollectionFactory,
+        private readonly DateTime $dateTime
     ) {
-        $this->dateTime = $dateTime;
-        $this->securityConfig = $securityConfig;
-        $this->adminSessionInfoCollectionFactory = $adminSessionInfoCollectionFactory;
-        $this->authSession = $authSession;
-        $this->userExpirationCollectionFactory = $userExpirationCollectionFactory;
-        $this->userCollectionFactory = $userCollectionFactory;
     }
 
     /**
@@ -111,12 +76,12 @@ class UserExpirationManager
     {
         if ($expiredRecords->getSize() > 0) {
             // get all active sessions for the users and set them to logged out
-            /** @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection $currentSessions */
+            /** @var AdminSessionInfoCollection $currentSessions */
             $currentSessions = $this->adminSessionInfoCollectionFactory->create()
                 ->addFieldToFilter('user_id', ['in' => $expiredRecords->getAllIds()])
                 ->filterExpiredSessions($this->securityConfig->getAdminSessionLifetime());
-            /** @var \Magento\Security\Model\AdminSessionInfo $currentSession */
-            $currentSessions->setDataToAll('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT)
+            /** @var AdminSessionInfo $currentSession */
+            $currentSessions->setDataToAll('status', AdminSessionInfo::LOGGED_OUT)
                 ->save();
         }
 
@@ -139,7 +104,7 @@ class UserExpirationManager
     public function isUserExpired(string $userId): bool
     {
         $isExpired = false;
-        /** @var \Magento\Security\Api\Data\UserExpirationInterface $expiredRecord */
+        /** @var UserExpirationInterface $expiredRecord */
         $expiredRecord = $this->userExpirationCollectionFactory->create()
             ->addExpiredRecordsForUserFilter($userId)
             ->getFirstItem();

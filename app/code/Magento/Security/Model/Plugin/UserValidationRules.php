@@ -7,35 +7,34 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model\Plugin;
 
+use Magento\Framework\Validator\DataObject as ValidatorDataObject;
 use Magento\Security\Model\UserExpiration\Validator;
+use Magento\User\Model\UserValidationRules as ModelUserValidationRules;
 
 /**
  * \Magento\User\Model\UserValidationRules decorator
  */
 class UserValidationRules
 {
-    /**@var Validator */
-    private $validator;
-
     /**
      * UserValidationRules constructor.
      *
      * @param Validator $validator
      */
-    public function __construct(Validator $validator)
-    {
-        $this->validator = $validator;
+    public function __construct(
+        private readonly Validator $validator
+    ) {
     }
 
     /**
      * Add the Expires At validator to user validation rules.
      *
-     * @param \Magento\User\Model\UserValidationRules $userValidationRules
-     * @param \Magento\Framework\Validator\DataObject $result
-     * @return \Magento\Framework\Validator\DataObject
+     * @param ModelUserValidationRules $userValidationRules
+     * @param ValidatorDataObject $result
+     * @return ValidatorDataObject
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterAddUserInfoRules(\Magento\User\Model\UserValidationRules $userValidationRules, $result)
+    public function afterAddUserInfoRules(ModelUserValidationRules $userValidationRules, $result)
     {
         return $result->addRule($this->validator, 'expires_at');
     }

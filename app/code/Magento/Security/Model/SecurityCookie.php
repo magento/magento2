@@ -5,7 +5,11 @@
  */
 namespace Magento\Security\Model;
 
+use Magento\Backend\Helper\Data as BackendHelper;
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
+use Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory;
 
 /**
  * Manager for a cookie with logout reason
@@ -22,41 +26,17 @@ class SecurityCookie
     const LOGOUT_REASON_CODE_COOKIE_NAME = 'loggedOutReasonCode';
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
-     */
-    private $phpCookieManager;
-
-    /**
-     * @var \Magento\Backend\Helper\Data
-     */
-    private $backendData;
-
-    /**
-     * @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory
-     */
-    private $cookieMetadataFactory;
-
-    /**
-     * @var CookieReaderInterface
-     */
-    private $cookieReader;
-
-    /**
-     * @param \Magento\Framework\Stdlib\Cookie\PhpCookieManager $phpCookieManager
-     * @param \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory $cookieMetadataFactory
+     * @param PhpCookieManager $phpCookieManager
+     * @param PublicCookieMetadataFactory $cookieMetadataFactory
      * @param CookieReaderInterface $cookieReader
-     * @param \Magento\Backend\Helper\Data $backendData
+     * @param BackendHelper $backendData
      */
     public function __construct(
-        \Magento\Framework\Stdlib\Cookie\PhpCookieManager $phpCookieManager,
-        \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory $cookieMetadataFactory,
-        CookieReaderInterface $cookieReader,
-        \Magento\Backend\Helper\Data $backendData
+        private readonly PhpCookieManager $phpCookieManager,
+        private readonly PublicCookieMetadataFactory $cookieMetadataFactory,
+        private readonly CookieReaderInterface $cookieReader,
+        private readonly BackendHelper $backendData
     ) {
-        $this->phpCookieManager = $phpCookieManager;
-        $this->cookieMetadataFactory = $cookieMetadataFactory;
-        $this->cookieReader = $cookieReader;
-        $this->backendData = $backendData;
     }
 
     /**
@@ -115,7 +95,7 @@ class SecurityCookie
     /**
      * Create Cookie Metadata instance
      *
-     * @return \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata
+     * @return PublicCookieMetadata
      */
     private function createCookieMetaData()
     {

@@ -5,6 +5,8 @@
  */
 namespace Magento\Security\Model\Plugin;
 
+use Magento\Backend\Model\Auth as BackendAuth;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Security\Model\AdminSessionsManager;
 
 /**
@@ -13,35 +15,23 @@ use Magento\Security\Model\AdminSessionsManager;
 class Auth
 {
     /**
-     * @var AdminSessionsManager
-     */
-    protected $sessionsManager;
-
-    /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    protected $messageManager;
-
-    /**
      * @param AdminSessionsManager $sessionsManager
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param ManagerInterface $messageManager
      */
     public function __construct(
-        AdminSessionsManager $sessionsManager,
-        \Magento\Framework\Message\ManagerInterface $messageManager
+        protected readonly AdminSessionsManager $sessionsManager,
+        protected readonly ManagerInterface $messageManager
     ) {
-        $this->sessionsManager = $sessionsManager;
-        $this->messageManager = $messageManager;
     }
 
     /**
      * Add warning message if other sessions terminated
      *
-     * @param \Magento\Backend\Model\Auth $authModel
+     * @param BackendAuth $authModel
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterLogin(\Magento\Backend\Model\Auth $authModel)
+    public function afterLogin(BackendAuth $authModel)
     {
         $this->sessionsManager->processLogin();
         if ($this->sessionsManager->getCurrentSession()->isOtherSessionsTerminated()) {
@@ -52,11 +42,11 @@ class Auth
     /**
      * Handle logout process
      *
-     * @param \Magento\Backend\Model\Auth $authModel
+     * @param BackendAuth $authModel
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeLogout(\Magento\Backend\Model\Auth $authModel)
+    public function beforeLogout(BackendAuth $authModel)
     {
         $this->sessionsManager->processLogout();
     }

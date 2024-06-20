@@ -11,6 +11,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\Plugin\AuthenticationException;
 use Magento\Security\Model\UserExpirationManager;
+use Magento\User\Model\User;
 use Magento\User\Model\UserFactory;
 
 /**
@@ -19,27 +20,15 @@ use Magento\User\Model\UserFactory;
 class AdminUserAuthenticateBefore implements ObserverInterface
 {
     /**
-     * @var UserExpirationManager
-     */
-    private $userExpirationManager;
-
-    /**
-     * @var UserFactory
-     */
-    private $userFactory;
-
-    /**
      * AdminUserAuthenticateBefore constructor.
      *
      * @param UserExpirationManager $userExpirationManager
      * @param UserFactory $userFactory
      */
     public function __construct(
-        UserExpirationManager $userExpirationManager,
-        UserFactory $userFactory
+        private readonly UserExpirationManager $userExpirationManager,
+        private readonly UserFactory $userFactory
     ) {
-        $this->userExpirationManager = $userExpirationManager;
-        $this->userFactory = $userFactory;
     }
 
     /**
@@ -53,7 +42,7 @@ class AdminUserAuthenticateBefore implements ObserverInterface
     {
         $username = $observer->getEvent()->getUsername();
         $user = $this->userFactory->create();
-        /** @var \Magento\User\Model\User $user */
+        /** @var User $user */
         $user->loadByUsername($username);
 
         if ($user->getId() && $this->userExpirationManager->isUserExpired($user->getId())) {

@@ -6,28 +6,27 @@
 
 namespace Magento\Security\Model\ResourceModel;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context as DbContext;
+use Magento\Framework\Stdlib\DateTime;
+
 /**
  * Password reset request event mysql resource model
  */
-class PasswordResetRequestEvent extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class PasswordResetRequestEvent extends AbstractDb
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param DbContext $context
+     * @param DateTime $dateTime
      * @param null $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        DbContext $context,
+        protected readonly DateTime $dateTime,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
-        $this->dateTime = $dateTime;
     }
 
     /**
@@ -45,7 +44,7 @@ class PasswordResetRequestEvent extends \Magento\Framework\Model\ResourceModel\D
      *
      * @param int $timestamp
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function deleteRecordsOlderThen($timestamp)
     {

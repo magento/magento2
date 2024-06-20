@@ -5,11 +5,12 @@
  */
 namespace Magento\Security\Model\ResourceModel\PasswordResetRequestEvent;
 
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Security\Model\Config\Source\ResetMethod;
 use Magento\Security\Model\ConfigInterface;
 
 /**
- * Factory class for @see \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection
+ * Factory class for @see Collection
  *
  * @api
  * @since 100.1.0
@@ -17,42 +18,17 @@ use Magento\Security\Model\ConfigInterface;
 class CollectionFactory
 {
     /**
-     * Object Manager instance
-     *
-     * @var \Magento\Framework\ObjectManagerInterface
-     * @since 100.1.0
-     */
-    protected $objectManager = null;
-
-    /**
-     * Instance name to create
-     *
-     * @var string
-     * @since 100.1.0
-     */
-    protected $instanceName = null;
-
-    /**
-     * @var ConfigInterface
-     * @since 100.1.0
-     */
-    protected $securityConfig;
-
-    /**
      * CollectionFactory constructor.
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param ConfigInterface $securityConfig
-     * @param string $instanceName
+     * @param string $instanceName Instance name to create
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        ConfigInterface $securityConfig,
-        $instanceName = Collection::class
+        protected readonly ObjectManagerInterface $objectManager,
+        protected readonly ConfigInterface $securityConfig,
+        protected $instanceName = Collection::class
     ) {
-        $this->objectManager = $objectManager;
-        $this->securityConfig = $securityConfig;
-        $this->instanceName = $instanceName;
     }
 
     /**
