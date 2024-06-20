@@ -18,12 +18,14 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Observer;
 
+use Magento\Catalog\Model\Product;
 use Magento\Cms\Model\Page;
 use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
 use Magento\Framework\App\Cache\Tag\Resolver;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Widget\Model\Widget\Instance;
 
 /**
  * Invalidates layout cache.
@@ -78,7 +80,7 @@ class InvalidateLayoutCacheObserver implements ObserverInterface
         if (!$this->cacheState->isEnabled(LayoutCache::TYPE_IDENTIFIER)) {
             return;
         }
-        
+
         if (!$object->dataHasChangedFor(Page::PAGE_LAYOUT)) {
             return;
         }
@@ -96,10 +98,23 @@ class InvalidateLayoutCacheObserver implements ObserverInterface
      */
     public function getAdditionalTags($object): string
     {
-        return sprintf(
-                '%s_%s',
-                'CMS_PAGE_VIEW_ID',
-                str_replace('-', '_', strtoupper($object->getIdentifier()))
-            );
+        $tag = '';
+        if ($object instanceof Page) {
+            $tag = sprintf(
+                    '%s_%s',
+                    'CMS_PAGE_VIEW_ID',
+                    str_replace('-', '_', strtoupper($object->getIdentifier()))
+                    );
+        } elseif ($object instanceof Product) {
+            $tag = sprintf(
+                    '%s',
+                    str_replace(
+                        '{{ID}}',
+                        (string) $object->getId(),
+                        Instance::SINGLE_PRODUCT_LAYOUT_HANDLE
+                    ),
+                 );
+        }
+        return $tag;
     }
 }
