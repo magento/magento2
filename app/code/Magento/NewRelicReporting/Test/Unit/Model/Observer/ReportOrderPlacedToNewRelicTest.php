@@ -42,11 +42,11 @@ class ReportOrderPlacedToNewRelicTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled'])
+            ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
         $this->newRelicWrapper = $this->getMockBuilder(NewRelicWrapper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addCustomParameter'])
+            ->onlyMethods(['addCustomParameter'])
             ->getMock();
 
         $this->model = new ReportOrderPlacedToNewRelic(
@@ -92,7 +92,7 @@ class ReportOrderPlacedToNewRelicTest extends TestCase
             ->method('isNewRelicEnabled')
             ->willReturn(true);
         $event = $this->getMockBuilder(Event::class)
-            ->setMethods(['getOrder'])
+            ->addMethods(['getOrder'])
             ->disableOriginalConstructor()
             ->getMock();
         $eventObserver->expects($this->once())

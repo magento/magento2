@@ -30,7 +30,7 @@ class AddressRegistryTest extends TestCase
     {
         $this->addressFactory = $this->getMockBuilder(AddressFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->unit = new AddressRegistry($this->addressFactory);
     }
@@ -40,7 +40,7 @@ class AddressRegistryTest extends TestCase
         $addressId = 1;
         $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', '__wakeup'])
+            ->onlyMethods(['load', 'getId', '__wakeup'])
             ->getMock();
         $address->expects($this->once())
             ->method('load')
@@ -64,7 +64,7 @@ class AddressRegistryTest extends TestCase
 
         $addressId = 1;
         $address = $this->getMockBuilder(Address::class)
-            ->setMethods(['load', 'getId', '__wakeup'])
+            ->onlyMethods(['load', 'getId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $address->expects($this->once())
@@ -85,7 +85,7 @@ class AddressRegistryTest extends TestCase
         $addressId = 1;
         $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', '__wakeup'])
+            ->onlyMethods(['load', 'getId', '__wakeup'])
             ->getMock();
         $address->expects($this->exactly(2))
             ->method('load')

@@ -452,6 +452,7 @@ type CartItemPrices @doc(description: "Contains details about the price of the i
     row_total_including_tax: Money! @doc(description: "The value of `row_total` plus the tax applied to the item.")
     discounts: [Discount] @doc(description: "An array of discounts to be applied to the cart item.")
     total_item_discount: Money @doc(description: "The total of all discounts applied to the item.")
+    original_row_total: Money! @doc(description: "The value of the original price multiplied by the quantity of the item.")
 }
 
 type SelectedCustomizableOption @doc(description: "Identifies a customized product that has been placed in a cart.") {
@@ -508,13 +509,20 @@ enum PlaceOrderErrorCodes {
 }
 
 type StoreConfig {
-    is_guest_checkout_enabled: Boolean @doc(description: "Extended Config Data - checkout/options/guest_checkout")
-    is_one_page_checkout_enabled: Boolean @doc(description: "Extended Config Data - checkout/options/onepage_checkout_enabled")
-    max_items_in_order_summary: Int @doc(description: "Extended Config Data - checkout/options/max_items_display_count")
-    cart_summary_display_quantity: Int @doc(description: "Extended Config Data - checkout/cart_link/use_qty")
-    minicart_display: Boolean @doc(description: "Extended Config Data - checkout/sidebar/display")
-    minicart_max_items: Int @doc(description: "Extended Config Data - checkout/sidebar/count")
-    cart_expires_in_days: Int @doc(description: "Extended Config Data - checkout/cart/delete_quote_after")
+    is_guest_checkout_enabled: Boolean @doc(description: "checkout/options/guest_checkout: whether the guest checkout is enabled or not.")
+    is_one_page_checkout_enabled: Boolean @doc(description: "checkout/options/onepage_checkout_enabled: whether the one page checkout is enabled or not")
+    max_items_in_order_summary: Int @doc(description: "checkout/options/max_items_display_count: maximum number of items to display in order summary.")
+    cart_summary_display_quantity: Int @doc(description: "checkout/cart_link/use_qty: what to show in the display cart summary, number of items or item quantities.")
+    minicart_display: Boolean @doc(description: "checkout/sidebar/display: whether to display the minicart or not.")
+    minicart_max_items: Int @doc(description: "checkout/sidebar/count: maximum number of items to show in minicart.")
+    cart_expires_in_days: Int @doc(description: "checkout/cart/delete_quote_after: quote lifetime in days.")
+    grouped_product_image: ProductImageThumbnail! @doc(description: "checkout/cart/grouped_product_image: which image to use for grouped products.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\StoreConfig")
+    configurable_product_image: ProductImageThumbnail! @doc(description: "checkout/cart/configurable_product_image: which image to use for configurable products.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\StoreConfig")
+}
+
+enum ProductImageThumbnail {
+    ITSELF @doc(description: "Use thumbnail of product as image.")
+    PARENT @doc(description: "Use thumbnail of product's parent as image.")
 }
 
 input EstimateTotalsInput {
