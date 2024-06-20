@@ -12,7 +12,7 @@ use Magento\Ui\Component\Form\Element\Select;
 /**
  * @method Select getModel
  */
-class SelectTest extends AbstractElementTest
+class SelectTest extends AbstractElementTestCase
 {
     /**
      * @inheritdoc

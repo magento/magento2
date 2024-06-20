@@ -244,7 +244,7 @@ QUERY;
     /**
      * @return array
      */
-    public function dataProviderUpdateWithMissedRequiredParameters(): array
+    public static function dataProviderUpdateWithMissedRequiredParameters(): array
     {
         return [
             'missed_cart_item_qty' => [

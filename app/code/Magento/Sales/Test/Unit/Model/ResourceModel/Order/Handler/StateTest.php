@@ -9,6 +9,7 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Handler;
 
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address;
+use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\ResourceModel\Order\Address\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Handler\State;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -45,7 +46,8 @@ class StateTest extends TestCase
                     'getIsVirtual',
                     'getIsNotVirtual',
                     'getStatus',
-                    'getAllItems'
+                    'getAllItems',
+                    'getTotalQtyOrdered'
                 ]
             )
             ->disableOriginalConstructor()
@@ -105,14 +107,25 @@ class StateTest extends TestCase
             ->willReturn($isInProcess);
         $this->orderMock->method('getIsNotVirtual')
             ->willReturn($isNotVirtual);
+        $shippedItem = $this->createMock(Item::class);
+        $shippedItem->expects($this->any())->method('getQtyShipped')->willReturn(1);
+        $shippedItem->expects($this->any())->method('getQtyRefunded')->willReturn(1);
+        $shippedItem->expects($this->any())->method('getProductType')->willReturn('simple');
+        $shippedItem->expects($this->any())->method('canShip')->willReturn(false);
+        $shippableItem = $this->createMock(Item::class);
+        $shippableItem->expects($this->any())->method('getQtyShipped')->willReturn(0);
+        $shippableItem->expects($this->any())->method('getQtyRefunded')->willReturn(0);
+        $shippableItem->expects($this->any())->method('getProductType')->willReturn('simple');
+        $shippableItem->expects($this->any())->method('canShip')->willReturn(true);
         $this->orderMock->method('getAllItems')
-            ->willReturn([]);
+            ->willReturn([$shippedItem, $shippableItem]);
         if (!$isNotVirtual) {
             $this->orderMock->method('getIsVirtual')
                 ->willReturn(!$isNotVirtual);
             $this->orderMock->method('getStatus')
                 ->willReturn($expectedState);
         }
+        $this->orderMock->expects($this->any())->method('getTotalQtyOrdered')->willReturn(2);
         $this->state->check($this->orderMock);
         $this->assertEquals($expectedState, $this->orderMock->getState());
     }
@@ -126,6 +139,20 @@ class StateTest extends TestCase
     public function stateCheckDataProvider()
     {
         return [
+            'processing - partiallyRefundedOrderShipped = true, hasPendingShipmentItems = true -> processing' => [
+                'can_credit_memo' => false,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => true,
+                'call_can_skip_num' => 2,
+                'current_state' => Order::STATE_PROCESSING,
+                'expected_state' => Order::STATE_PROCESSING,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
             'processing - !canCreditmemo!canShip -> closed' => [
                 'can_credit_memo' => false,
                 'can_credit_memo_invoke_count' => 1,
