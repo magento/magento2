@@ -193,8 +193,8 @@ define([
          */
         validateFields: function () {
             var addressFlat = addressConverter.formDataProviderToFlatData(
-                this.collectObservedData(),
-                'shippingAddress'
+                    this.collectObservedData(),
+                    'shippingAddress'
                 ),
                 address;
 
