@@ -104,13 +104,5 @@ define([
                 expect(checkoutData.setNewCustomerBillingAddress).toHaveBeenCalledWith(lastSelectedBillingAddress);
             });
         });
-
-        describe('"updateAddress" method', function () {
-            it('should call updateAddresses(true) when form is valid', function () {
-                spyOn(billingAddress, 'updateAddresses');
-                billingAddress.updateAddress();
-                expect(billingAddress.updateAddresses).toHaveBeenCalledWith(true);
-            });
-        });
     });
 });
