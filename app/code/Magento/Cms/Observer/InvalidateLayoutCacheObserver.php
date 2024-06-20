@@ -86,7 +86,20 @@ class InvalidateLayoutCacheObserver implements ObserverInterface
         $tags = $this->tagResolver->getTags($object);
 
         if (!empty($tags)) {
+            $tags[] = $this->getAdditionalTags($object);
             $this->layoutCache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $tags);
         }
+    }
+
+    /**
+     * Get additional tags
+     */
+    public function getAdditionalTags($object): string
+    {
+        return sprintf(
+                '%s_%s',
+                'CMS_PAGE_VIEW_ID',
+                str_replace('-', '_', strtoupper($object->getIdentifier()))
+            );
     }
 }
