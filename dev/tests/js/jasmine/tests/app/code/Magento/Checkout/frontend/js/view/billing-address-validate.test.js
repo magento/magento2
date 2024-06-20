@@ -11,8 +11,11 @@ define([
     'use strict';
 
     var injector = new Squire(),
-        checkoutData = jasmine.createSpyObj('checkoutData', ['setSelectedBillingAddress', 'setNewCustomerBillingAddress']),
-        createBillingAddress = jasmine.createSpy('createBillingAddress').and.callFake(function (addressData) {
+        checkoutData = jasmine.createSpyObj(
+            'checkoutData',
+            ['setSelectedBillingAddress', 'setNewCustomerBillingAddress']
+        ),
+        createBillingAddress = jasmine.createSpy('createBillingAddress').and.callFake(function () {
             return {
                 getKey: function () {
                     return 'new-billing-address-key';
@@ -35,8 +38,6 @@ define([
                 isVirtual: function () {
                     return false;
                 },
-                /** Stub */
-                getQuoteId: function () {},
                 paymentMethod: ko.observable(null)
             },
             'Magento_Customer/js/customer-data': {
@@ -45,7 +46,7 @@ define([
                         return {};
                     };
                 }
-            },
+            }
         },
         lastSelectedBillingAddress = {
             city: 'Culver City',
@@ -91,7 +92,10 @@ define([
                 }),
                 set: jasmine.createSpy('set'),
                 trigger: jasmine.createSpy('trigger').and.callFake(function (event) {
-                    if (event === billingAddress.dataScopePrefix + '.data.validate' || event === billingAddress.dataScopePrefix + '.custom_attributes.data.validate') {
+                    if (
+                        event === billingAddress.dataScopePrefix + '.data.validate'
+                        || event === billingAddress.dataScopePrefix + '.custom_attributes.data.validate'
+                    ) {
                         billingAddress.source.set('params.invalid', false); // Simulate valid form data
                     }
                 })
@@ -106,7 +110,7 @@ define([
             it('should not call updateAddresses when form is invalid', function () {
                 billingAddress.source.set.and.callFake(function (key, value) {
                     if (key === 'params.invalid' && value === true) {
-                        billingAddress.source.get.and.callFake(function (key) {
+                        billingAddress.source.get.and.callFake(function () {
                             if (key === 'params.invalid') {
                                 return true; // Simulate invalid form data
                             }
