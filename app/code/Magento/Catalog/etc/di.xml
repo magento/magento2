@@ -1345,6 +1345,13 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolverInterface"
+                type="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolver" />
+    <type name="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolverInterface">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\App\State\ReloadProcessorComposite">
         <arguments>
             <argument name="processors" xsi:type="array">
