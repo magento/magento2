@@ -75,11 +75,11 @@ class InvalidateLayoutCacheObserver implements ObserverInterface
             return;
         }
 
-        if (!$object->dataHasChangedFor(Page::PAGE_LAYOUT)) {
+        if (!$this->cacheState->isEnabled(LayoutCache::TYPE_IDENTIFIER)) {
             return;
         }
-
-        if (!$this->cacheState->isEnabled(LayoutCache::TYPE_IDENTIFIER)) {
+        
+        if (!$object->dataHasChangedFor(Page::PAGE_LAYOUT)) {
             return;
         }
 
