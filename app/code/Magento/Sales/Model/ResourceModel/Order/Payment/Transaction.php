@@ -139,7 +139,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
         $orderId = $transaction->getData('order_id');
         $paymentId = $transaction->getData('payment_id');
         $idFieldName = $this->getIdFieldName();
-
+        $txnType = $transaction->getData('txn_type');
         if ($parentTxnId) {
             if (!$txnId || !$orderId || !$paymentId) {
                 throw new \Magento\Framework\Exception\LocalizedException(
@@ -147,8 +147,15 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
                 );
             }
             $parentId = (int)$this->_lookupByTxnId($orderId, $paymentId, $parentTxnId, $idFieldName);
-            if ($parentId) {
+            if ($parentId && $txnType == 'authorization') {
                 $transaction->setData('parent_id', $parentId);
+                $transaction->setData('txn_type',\Magento\Sales\Model\Order\Payment\Transaction::TYPE_CAPTURE);
+            }
+        } else {
+            $result = $this->getParentId($orderId);
+            if ($result) {
+                $transaction->setData('parent_id', $result[0]['transaction_id']);
+                $transaction->setData('parent_txn_id', $result[0]['parent_txn_id']);
             }
         }
 
@@ -210,5 +217,24 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
             'txn_id = ?',
             $txnId
         );
+    }
+
+    /**
+     * Retrieve transaction by the unique key of order_id
+     *
+     * @param int $orderId
+     * @return array
+     */
+    protected function getParentId(int $orderId): array
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
+            $this->getMainTable(),
+            ['transaction_id','parent_txn_id']
+        )->where(
+            'order_id = ?',
+            $orderId
+        )->order('transaction_id','ASC')->limit(1);
+        return $connection->fetchAll($select);
     }
 }
