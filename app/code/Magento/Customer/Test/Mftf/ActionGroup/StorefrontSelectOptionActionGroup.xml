@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontSelectOptionActionGroup">
+        <annotations>
+            <description>Selects an option in a select tag or in radio button group.</description>
+        </annotations>
+        <arguments>
+            <argument name="userInput" type="string"/>
+            <argument name="fieldSelector" type="string"/>
+        </arguments>
+
+        <selectOption selector="{{fieldSelector}}" userInput="{{userInput}}" stepKey="selectOption"/>
+    </actionGroup>
+</actionGroups>

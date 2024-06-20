@@ -120,27 +120,6 @@
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToSidebarMenu">
             <argument name="menu" value="My Orders"/>
         </actionGroup>
-
-        <seeElement selector="{{StorefrontCustomerOrderSection.isMyOrdersSection}}" stepKey="waitOrderHistoryPage"/>
-
-        <scrollTo selector="{{StorefrontCustomerOrderSection.currentPage}}" stepKey="scrollToBottomToolbarSection"/>
-
-        <click selector="{{StorefrontCustomerOrderSection.pageNumber('2')}}" stepKey="clickOnPage2"/>
-
-        <scrollTo selector="{{StorefrontCustomerOrderSection.perPage}}" stepKey="scrollToLimiter"/>
-
-        <selectOption userInput="20" selector="{{StorefrontCustomerOrderSection.perPage}}" stepKey="selectLimitOnPage"/>
-
-        <waitForPageLoad stepKey="waitForLoadPage"/>
-
-        <seeElement selector="{{StorefrontCustomerOrderSection.isMyOrdersSection}}"
-                    stepKey="seeElementOrderHistoryPage"/>
-
-        <dontSee selector="{{StorefrontOrderInformationMainSection.emptyMessage}}"
-                 userInput="You have placed no orders." stepKey="dontSeeEmptyMessage"/>
-
-        <seeNumberOfElements selector="{{StorefrontCustomerOrderSection.rowsInColumn('id')}}" userInput="15"
-                             stepKey="seeRowsCount"/>
-
+        <actionGroup ref="StorefrontVerifyOrderGridListActionGroup" stepKey="verifyOrderGridList"/>
     </test>
 </tests>
