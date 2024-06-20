@@ -24,6 +24,6 @@
         <click selector="{{StorefrontOrderGiftSection.giftMessageUpdateButton}}" stepKey="saveGiftMessage"/>
         <waitForPageLoad stepKey="waitForPageLoaded" />
         <scrollTo selector="{{StorefrontOrderGiftSection.giftMessageSummary}}" stepKey="scrollToGiftMessage"/>
-        <seeInField selector="{{StorefrontOrderGiftSection.giftMessageSummary}}" userInput="This is gift message for ALL ORDERED ITEMS" stepKey="seeGiftMessage"/>
+        <see selector="{{StorefrontOrderGiftSection.giftMessageSummary}}" userInput="This is gift message for ALL ORDERED ITEMS" stepKey="seeGiftMessage"/>
     </actionGroup>
 </actionGroups>
