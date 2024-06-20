@@ -158,11 +158,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
-     * @param TaxHelper $taxHelper
      * @param array $data
      * @param Database $fileStorageDatabase
      * @param RtlTextHandler|null $rtlTextHandler
      * @param Image $image
+     * @param TaxHelper $taxHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -181,7 +181,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         ?RtlTextHandler $rtlTextHandler = null,
         ?Image $image = null,
         ?TaxHelper $taxHelper = null
-
     ) {
         $this->addressRenderer = $addressRenderer;
         $this->_paymentData = $paymentData;
