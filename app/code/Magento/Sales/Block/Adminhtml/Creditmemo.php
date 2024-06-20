@@ -11,6 +11,8 @@ namespace Magento\Sales\Block\Adminhtml;
 class Creditmemo extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
+     * Initialize
+     *
      * @return void
      */
     protected function _construct()

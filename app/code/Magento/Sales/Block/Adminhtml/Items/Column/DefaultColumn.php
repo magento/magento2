@@ -19,8 +19,6 @@ use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
 class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
     /**
-     * Option factory
-     *
      * @var \Magento\Catalog\Model\Product\OptionFactory
      */
     protected $_optionFactory;

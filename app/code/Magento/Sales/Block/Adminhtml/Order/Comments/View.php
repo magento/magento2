@@ -14,8 +14,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Comments;
 class View extends \Magento\Backend\Block\Template
 {
     /**
-     * Sales data
-     *
      * @var \Magento\Sales\Helper\Data
      */
     protected $_salesData = null;
@@ -85,6 +83,8 @@ class View extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Can send comment email
+     *
      * @return bool
      */
     public function canSendCommentEmail()

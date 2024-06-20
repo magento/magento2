@@ -14,8 +14,6 @@ namespace Magento\Sales\Block\Adminhtml\Order;
 class Create extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Session quote
-     *
      * @var \Magento\Backend\Model\Session\Quote
      */
     protected $_sessionQuote;
@@ -85,7 +83,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return $this
      */

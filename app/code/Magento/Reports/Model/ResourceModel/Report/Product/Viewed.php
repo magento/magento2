@@ -18,17 +18,17 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
     /**
      * Aggregation key daily
      */
-    const AGGREGATION_DAILY = 'report_viewed_product_aggregated_daily';
+    public const AGGREGATION_DAILY = 'report_viewed_product_aggregated_daily';
 
     /**
      * Aggregation key monthly
      */
-    const AGGREGATION_MONTHLY = 'report_viewed_product_aggregated_monthly';
+    public const AGGREGATION_MONTHLY = 'report_viewed_product_aggregated_monthly';
 
     /**
      * Aggregation key yearly
      */
-    const AGGREGATION_YEARLY = 'report_viewed_product_aggregated_yearly';
+    public const AGGREGATION_YEARLY = 'report_viewed_product_aggregated_yearly';
 
     /**
      * Product resource instance

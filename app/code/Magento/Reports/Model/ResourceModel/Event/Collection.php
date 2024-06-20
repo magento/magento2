@@ -16,8 +16,6 @@ namespace Magento\Reports\Model\ResourceModel\Event;
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
-     * Store Ids
-     *
      * @var array
      */
     protected $_storeIds;
@@ -34,8 +32,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * Add store ids filter
-     * @codeCoverageIgnore
      *
+     * @codeCoverageIgnore
      * @param array $storeIds
      * @return $this
      */

@@ -18,8 +18,6 @@ namespace Magento\Reports\Model\ResourceModel\Product\Index\Collection;
 abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
-     * Customer id
-     *
      * @var null|int
      */
     protected $_customerId = null;
