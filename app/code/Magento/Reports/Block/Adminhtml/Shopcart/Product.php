@@ -11,6 +11,8 @@ namespace Magento\Reports\Block\Adminhtml\Shopcart;
 class Product extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
+     * Initialize
+     *
      * @return void
      */
     protected function _construct()

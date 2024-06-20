@@ -35,6 +35,8 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
     protected $_indexFactory;
 
     /**
+     * Initialize
+     *
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Reports\Model\Product\Index\Factory $indexFactory
@@ -80,6 +82,7 @@ abstract class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractPr
 
     /**
      * Public method for retrieve Product Index model
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Reports\Model\Product\Index\AbstractIndex
      */

@@ -23,7 +23,7 @@ abstract class Shopcart extends \Magento\Backend\App\Action
     /**
      * Authorization of a shop cart report
      */
-    const ADMIN_RESOURCE = 'Magento_Reports::shopcart';
+    public const ADMIN_RESOURCE = 'Magento_Reports::shopcart';
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */

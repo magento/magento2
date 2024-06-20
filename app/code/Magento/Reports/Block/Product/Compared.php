@@ -10,13 +10,14 @@ namespace Magento\Reports\Block\Product;
  * Reports Recently Compared Products Block
  *
  * @deprecated 100.2.0
+ * @see nothing
  */
 class Compared extends \Magento\Reports\Block\Product\AbstractProduct
 {
     /**
      * Config path for compared products count
      */
-    const XML_PATH_RECENTLY_COMPARED_COUNT = 'catalog/recently_products/compared_count';
+    public const XML_PATH_RECENTLY_COMPARED_COUNT = 'catalog/recently_products/compared_count';
 
     /**
      * Compared Product Index type
@@ -42,8 +43,7 @@ class Compared extends \Magento\Reports\Block\Product\AbstractProduct
     }
 
     /**
-     * Prepare to html
-     * Check has compared products
+     * Prepare to html Check has compared products
      *
      * @return string
      */

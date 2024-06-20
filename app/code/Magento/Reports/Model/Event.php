@@ -26,17 +26,17 @@ namespace Magento\Reports\Model;
  */
 class Event extends \Magento\Framework\Model\AbstractModel
 {
-    const EVENT_PRODUCT_VIEW = 1;
+    public const EVENT_PRODUCT_VIEW = 1;
 
-    const EVENT_PRODUCT_SEND = 2;
+    public const EVENT_PRODUCT_SEND = 2;
 
-    const EVENT_PRODUCT_COMPARE = 3;
+    public const EVENT_PRODUCT_COMPARE = 3;
 
-    const EVENT_PRODUCT_TO_CART = 4;
+    public const EVENT_PRODUCT_TO_CART = 4;
 
-    const EVENT_PRODUCT_TO_WISHLIST = 5;
+    public const EVENT_PRODUCT_TO_WISHLIST = 5;
 
-    const EVENT_WISHLIST_SHARE = 6;
+    public const EVENT_WISHLIST_SHARE = 6;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTimeFactory

@@ -16,6 +16,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_productsFactory;
 
     /**
+     * Initialize
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\ResourceModel\Wishlist\Product\CollectionFactory $productsFactory
@@ -32,6 +34,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Initialize
+     *
      * @return void
      */
     protected function _construct()
@@ -43,6 +47,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepare collection
+     *
      * @return $this
      */
     protected function _prepareCollection()
@@ -61,6 +67,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepare Columns
+     *
      * @return \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
