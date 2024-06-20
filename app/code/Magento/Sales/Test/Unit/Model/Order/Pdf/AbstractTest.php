@@ -101,6 +101,7 @@ class AbstractTest extends TestCase
                 $localeMock,
                 $translate,
                 $addressRenderer,
+                $data = [],
                 $taxHelper
             ],
             '',
@@ -152,6 +153,7 @@ class AbstractTest extends TestCase
                 $localeMock,
                 $translate,
                 $addressRenderer,
+                $data = [],
                 $taxHelper
             ],
             '',
