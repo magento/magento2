@@ -126,7 +126,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
 
     /**
      * Lookup for parent_id in already saved transactions of this payment by the order_id
-     * 
+     *
      * Also serialize additional information, if any
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Sales\Model\Order\Payment\Transaction $transaction
