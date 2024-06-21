@@ -140,14 +140,15 @@ class TokensConfigProviderTest extends TestCase
             ->getMock();
         $this->session = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getReordered', 'getStoreId','getQuote'])
+            ->addMethods(['getCustomerId', 'getStoreId', 'getReordered'])
+            ->onlyMethods(['getQuote'])
             ->getMock();
         $this->dateTimeFactory = $this->getMockBuilder(DateTimeFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentDataHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMethodInstance'])
+            ->onlyMethods(['getMethodInstance'])
             ->getMock();
         $this->paymentTokenManagement = $this->getMockBuilder(PaymentTokenManagementInterface::class)
             ->getMockForAbstractClass();

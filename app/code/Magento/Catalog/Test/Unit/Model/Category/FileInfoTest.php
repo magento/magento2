@@ -78,7 +78,7 @@ class FileInfoTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())
             ->method('getStore')

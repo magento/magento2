@@ -368,7 +368,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * Data provider for testAddToCartSimpleProduct
      */
-    public function addAddProductDataProvider()
+    public static function addAddProductDataProvider()
     {
         return [
             'frontend' => ['frontend', 'expected_price' => 10],
@@ -422,7 +422,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @return array
      */
-    public function reorderItemsDataProvider()
+    public static function reorderItemsDataProvider()
     {
         return [
             [
