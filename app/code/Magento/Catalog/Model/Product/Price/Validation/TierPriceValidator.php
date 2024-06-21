@@ -557,18 +557,18 @@ class TierPriceValidator implements ResetAfterRequestInterface
      */
     private function compareWebsiteValueNewPrice(TierPriceInterface $price, TierPriceInterface $tierPrice): bool
     {
-        if ($price->getWebsiteId() != $this->allWebsitesValue ||
-            $tierPrice->getWebsiteId() != $this->allWebsitesValue
+        if ($price->getWebsiteId() == $this->allWebsitesValue ||
+            $tierPrice->getWebsiteId() == $this->allWebsitesValue
         ) {
-            return $price->getWebsiteId() == $tierPrice->getWebsiteId();
+            $baseCurrency = $this->scopeConfig->getValue(Currency::XML_PATH_CURRENCY_BASE, 'default');
+            $websiteId = max($price->getWebsiteId(), $tierPrice->getWebsiteId());
+            $website = $this->websiteRepository->getById($websiteId);
+            $websiteCurrency = $website->getBaseCurrencyCode();
+
+            return $price->getWebsiteId() == $tierPrice->getWebsiteId() && $baseCurrency == $websiteCurrency;
         }
 
-        $baseCurrency = $this->scopeConfig->getValue(Currency::XML_PATH_CURRENCY_BASE, 'default');
-        $websiteId = max($price->getWebsiteId(), $tierPrice->getWebsiteId());
-        $website = $this->websiteRepository->getById($websiteId);
-        $websiteCurrency = $website->getBaseCurrencyCode();
-
-        return $price->getWebsiteId() == $tierPrice->getWebsiteId() && $baseCurrency == $websiteCurrency;
+        return $price->getWebsiteId() == $tierPrice->getWebsiteId();
     }
 
     /**
