@@ -46,7 +46,7 @@ class CsvfileTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function displayDataProvider()
+    public static function displayDataProvider()
     {
         return [
             'Default delimiter & enclosure' => [
