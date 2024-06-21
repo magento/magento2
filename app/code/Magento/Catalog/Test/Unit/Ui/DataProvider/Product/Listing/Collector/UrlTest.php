@@ -58,7 +58,7 @@ class UrlTest extends TestCase
         $this->buttonFactoryMock = $this->getMockBuilder(
             ButtonInterfaceFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

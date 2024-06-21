@@ -55,7 +55,7 @@ class CollectionTest extends TestCase
         /** @var Pool|MockObject $adjustmentPool */
         $adjustmentPool = $this->getMockBuilder(Pool::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAdjustmentByCode'])
+            ->onlyMethods(['getAdjustmentByCode'])
             ->getMock();
         $adjustmentPool->expects($this->any())->method('getAdjustmentByCode')->willReturnCallback(
             function ($code) use ($adjustmentsData) {

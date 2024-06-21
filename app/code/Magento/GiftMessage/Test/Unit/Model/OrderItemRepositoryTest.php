@@ -90,7 +90,6 @@ class OrderItemRepositoryTest extends TestCase
             ->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
         $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
             ->disableOriginalConstructor()
