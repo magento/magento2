@@ -20,6 +20,9 @@
 
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="UnselectStatesForStatesOptionsActionGroup" stepKey="unselectStatesForStatesOptionsActionGroup">
+                <argument name="countries" value="WesternEurope"/>
+            </actionGroup>
             <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
             <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
                 <argument name="customer" value="CustomerEntityOne"/>
