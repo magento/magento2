@@ -77,7 +77,7 @@ class DisableSessionTest extends GraphQlAbstract
     private function isCookieSet(array $setCookieHeader, string $cookieName): bool
     {
         return count(array_filter($setCookieHeader, function ($cookie) use ($cookieName) {
-            return str_starts_with($cookie, $cookieName . '=');
+            return str_starts_with($cookie, $cookieName);
         })) > 0;
     }
 
