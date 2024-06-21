@@ -36,8 +36,8 @@ obtained from Adobe.
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
             <argument name="title" value="{{AdminMenuReportsProductsOrdered.pageTitle}}"/>
         </actionGroup>
-        <click stepKey="refresh" selector="{{OrderedProductsSection.refresh}}"/>
-        <waitForPageLoad stepKey="waitForOrderList" time="5"/>
+        <click selector="{{OrderedProductsSection.refresh}}" stepKey="refresh"/>
+        <waitForPageLoad time="5" stepKey="waitForOrderList"/>
         <click selector="{{OrderReportMainSection.fromDatePicker}}" stepKey="clickFromDatePicker"/>
         <waitForElementVisible selector="{{OrderReportMainSection.datePickerCalendar}}" stepKey="seePopupDatePicker1"/>
         <click selector="{{OrderReportMainSection.selectTodayButton}}" stepKey="clickOnTodayButton1"/>
