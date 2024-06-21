@@ -60,17 +60,17 @@ class CacheOutdatedTest extends TestCase
      * @param array $cacheTypes
      * @dataProvider getIdentityDataProvider
      */
-    public function testGetIdentity($expectedSum, $cacheTypes)
+    public function testGetIdentity($expectedSum, $types)
     {
-        $cacheType1 = [];
-        foreach($cacheTypes as $cacheType){
-            $cacheType1[] = $cacheType($this);
+        $cacheType = [];
+        foreach($types as $type){
+            $cacheType[] = $type($this);
         }
 
         $this->_cacheTypeListMock->method(
             'getInvalidated'
         )->willReturn(
-            $cacheType1
+            $cacheType
         );
         $this->assertEquals($expectedSum, $this->_messageModel->getIdentity());
     }
