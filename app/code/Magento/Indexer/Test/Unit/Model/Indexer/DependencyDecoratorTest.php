@@ -102,7 +102,7 @@ class DependencyDecoratorTest extends TestCase
     /**
      * @return array
      */
-    public function overloadDataProvider()
+    public static function overloadDataProvider()
     {
         return [
             ['getData', [], ['field_id' => 'field_value']],
@@ -169,7 +169,7 @@ class DependencyDecoratorTest extends TestCase
     /**
      * @return array
      */
-    public function transitMethodsWithParamsAndEmptyReturnDataProvider()
+    public static function transitMethodsWithParamsAndEmptyReturnDataProvider()
     {
         return [
             ['setScheduled', [true]],

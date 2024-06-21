@@ -47,7 +47,8 @@ class GetPaginatedCartItems
             ->addFieldToFilter('quote_id', $cart->getId())
             ->setOrder($orderBy, $order)
             ->setCurPage($offset)
-            ->setPageSize($pageSize);
+            ->setPageSize($pageSize)
+            ->setQuote($cart);
 
         $items = [];
         $itemDeletedCount = 0;

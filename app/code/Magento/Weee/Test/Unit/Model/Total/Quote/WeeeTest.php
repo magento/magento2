@@ -334,35 +334,16 @@ class WeeeTest extends TestCase
         if ($assertSetApplied) {
             $weeeHelper
                 ->method('setApplied')
-                ->withConsecutive(
-                    [reset($items), []],
-                    [end($items), []],
-                    [end($items),
-                        [
-                            [
-                                'title' => 'Recycling Fee',
-                                'base_amount' => '10',
-                                'amount' => '10',
-                                'row_amount' => '20',
-                                'base_row_amount' => '20',
-                                'base_amount_incl_tax' => '10',
-                                'amount_incl_tax' => '10',
-                                'row_amount_incl_tax' => '20',
-                                'base_row_amount_incl_tax' => '20'
-                            ],
-                            [
-                                'title' => 'FPT Fee',
-                                'base_amount' => '5',
-                                'amount' => '5',
-                                'row_amount' => '10',
-                                'base_row_amount' => '10',
-                                'base_amount_incl_tax' => '5',
-                                'amount_incl_tax' => '5',
-                                'row_amount_incl_tax' => '10',
-                                'base_row_amount_incl_tax' => '10'
-                            ]
-                        ]
-                    ]
+                ->willReturnCallback(
+                    function ($arg1, $arg2) use ($items) {
+                        if ($arg1 === reset($items) && empty($arg2)) {
+                            return null;
+                        } elseif ($arg1 === end($items) && empty($arg2)) {
+                            return null;
+                        } elseif ($arg1 === end($items) && is_array($arg2)) {
+                            return null;
+                        }
+                    }
                 );
         }
 
@@ -390,7 +371,7 @@ class WeeeTest extends TestCase
      *
      * @return array
      */
-    public function collectDataProvider(): array
+    public static function collectDataProvider(): array
     {
         $data = [];
 

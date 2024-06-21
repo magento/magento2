@@ -149,7 +149,7 @@ define([
         _.each(watchers.selectors, function (listeners, selector) {
             for (let data of listeners) {
                 if (!data.ctx.contains(node) || !$(node, data.ctx).is(selector)) {
-                    break;
+                    continue;
                 }
 
                 if (data.type === 'add') {

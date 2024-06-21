@@ -90,7 +90,7 @@ class StatPluginTest extends TestCase
         if (null === $this->newRelicWrapperMock) {
             $this->newRelicWrapperMock = $this->getMockBuilder(NewRelicWrapper::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['setTransactionName', 'endTransaction'])
+                ->onlyMethods(['setTransactionName', 'endTransaction'])
                 ->getMock();
         }
 

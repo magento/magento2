@@ -17,5 +17,7 @@
         <element name="paymentOnAccount" type="radio" selector="#companycredit" deprecated="Use StorefrontCheckoutPaymentSection.paymentOnAccount B2B repository"/>
         <element name="paymentOnAccountLabel" type="text" selector="//span[text()='Payment on Account']" deprecated="Use StorefrontCheckoutPaymentSection.paymentOnAccountLabel in B2B repository"/>
         <element name="purchaseOrderNumber" type="input" selector="#po_number"/>
+        <element name="checkPaypalExpress" type="radio" selector="//div/input[@id='paypal_express']"/>
+        <element name="checkPaypalExpressActive" type="radio" selector="//div[@class='payment-method _active']/div/input[@id='paypal_express']"/>
     </section>
 </sections>
