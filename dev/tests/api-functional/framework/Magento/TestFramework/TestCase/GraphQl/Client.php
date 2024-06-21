@@ -22,8 +22,6 @@ class Client
     public const GRAPHQL_METHOD_POST = 'POST';
     /**#@-*/
 
-    private const SET_COOKIE_HEADER_NAME = 'Set-Cookie';
-
     /** @var CurlClient */
     private $curlClient;
 
@@ -266,15 +264,7 @@ class Client
         foreach ($headerLines as $headerLine) {
             $headerParts = preg_split('/: /', $headerLine, 2);
             if (count($headerParts) == 2) {
-                $headerName = trim($headerParts[0]);
-                if ($headerName === self::SET_COOKIE_HEADER_NAME) {
-                    if (!isset($headersArray[self::SET_COOKIE_HEADER_NAME])) {
-                        $headersArray[self::SET_COOKIE_HEADER_NAME] = [];
-                    }
-                    $headersArray[self::SET_COOKIE_HEADER_NAME][] = trim($headerParts[1]);
-                } else {
-                    $headersArray[$headerName] = trim($headerParts[1]);
-                }
+                $headersArray[trim($headerParts[0])] = trim($headerParts[1]);
             } elseif (preg_match('/HTTP\/[\.0-9]+/', $headerLine)) {
                 $headersArray[trim('Status-Line')] = trim($headerLine);
             }
