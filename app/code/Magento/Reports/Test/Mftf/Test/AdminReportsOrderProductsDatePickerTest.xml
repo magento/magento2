@@ -39,9 +39,9 @@ obtained from Adobe.
         <click selector="{{OrderedProductsSection.refresh}}" stepKey="refresh"/>
         <waitForPageLoad time="5" stepKey="waitForOrderList"/>
         <click selector="{{OrderReportMainSection.fromDatePicker}}" stepKey="clickFromDatePicker"/>
-        <waitForElementVisible selector="{{OrderReportMainSection.datePickerCalendar}}" stepKey="seePopupDatePicker1"/>
-        <click selector="{{OrderReportMainSection.selectTodayButton}}" stepKey="clickOnTodayButton1"/>
-        <click selector="{{OrderReportMainSection.selectCloseButton}}" stepKey="clickOnCloseButton1"/>
+        <waitForElementVisible selector="{{OrderReportMainSection.datePickerCalendar}}" stepKey="seePopupDatePicker"/>
+        <click selector="{{OrderReportMainSection.selectTodayButton}}" stepKey="clickOnTodayButton"/>
+        <click selector="{{OrderReportMainSection.selectCloseButton}}" stepKey="clickOnCloseButton"/>
 
         <!-- Verify data -->
         <grabValueFrom selector="{{SoldReportFilterSection.dateTo}}" stepKey="fillToDate"/>
