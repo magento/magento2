@@ -68,7 +68,9 @@
             <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod"/>
             <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
             <!-- Checkout select Check/Money Order payment -->
-            <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money Order')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money Order')}}" visible="true" stepKey="selectCheckMoneyPaymentMethod"/>
+            <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
             <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementLink('Check / Money Order')}}" stepKey="waitForClickableForCheckAgreement"/>
             <click selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementLink('Check / Money Order')}}" stepKey="clickOnMoneyAgreement"/>
             <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.agreementClose}}" stepKey="waitForElementToCloseMoneyAgreement"/>
