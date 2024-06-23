@@ -54,11 +54,11 @@ class LinkTest extends TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->linkFactory = $this->getMockBuilder(LinkFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->linkResource = $this->getMockBuilder(\Magento\Downloadable\Model\ResourceModel\Link::class)
             ->disableOriginalConstructor()
-            ->setMethods(['deleteItems'])
+            ->onlyMethods(['deleteItems'])
             ->getMock();
         $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
@@ -229,22 +229,18 @@ class LinkTest extends TestCase
     {
         $link = $this->getMockBuilder(\Magento\Downloadable\Model\Link::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['setProductId','setStoreId','setWebsiteId','setProductWebsiteIds','getIsUnlimited'])
+            ->onlyMethods(
                 [
                     'setData',
                     'setLinkType',
-                    'setProductId',
-                    'setStoreId',
-                    'setWebsiteId',
-                    'setProductWebsiteIds',
                     'setPrice',
                     'setNumberOfDownloads',
                     'setSampleUrl',
                     'setSampleType',
                     'setLinkFile',
                     'setSampleFile',
-                    'save',
-                    'getIsUnlimited'
+                    'save'
                 ]
             )
             ->getMock();
@@ -287,14 +283,18 @@ class LinkTest extends TestCase
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
+                [
+                    'getLinksPurchasedSeparately',
+                    'setIsCustomOptionChanged'
+                ]
+            )
+            ->onlyMethods(
                 [
                     'getId',
                     'getStoreId',
                     'getStore',
                     'getWebsiteIds',
-                    'getLinksPurchasedSeparately',
-                    'setIsCustomOptionChanged',
                     'getData'
                 ]
             )
@@ -310,7 +310,7 @@ class LinkTest extends TestCase
             ->willReturn($websiteIds);
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsiteId'])
+            ->onlyMethods(['getWebsiteId'])
             ->getMock();
         $store->expects($this->any())
             ->method('getWebsiteId')

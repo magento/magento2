@@ -8,13 +8,14 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Helper\Query\Logger;
 
 use GraphQL\Error\SyntaxError;
+use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\AST\Node;
 use GraphQL\Language\AST\NodeKind;
-use GraphQL\Language\Parser;
-use GraphQL\Language\Source;
 use GraphQL\Language\Visitor;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\GraphQl\Query\QueryParser;
 use Magento\Framework\GraphQl\Schema;
 use Magento\GraphQl\Model\Query\Logger\LoggerInterface;
 
@@ -23,6 +24,19 @@ use Magento\GraphQl\Model\Query\Logger\LoggerInterface;
  */
 class LogData
 {
+    /**
+     * @var QueryParser
+     */
+    private $queryParser;
+
+    /**
+     * @param QueryParser|null $queryParser
+     */
+    public function __construct(QueryParser $queryParser = null)
+    {
+        $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
+    }
+
     /**
      * Extracts relevant information about the request
      *
@@ -43,8 +57,11 @@ class LogData
         $logData = array_merge($logData, $this->gatherRequestInformation($request));
 
         try {
-            $complexity = $this->getFieldCount($data['query'] ?? '');
+            $complexity = $this->getFieldCount($data['parsedQuery'] ?? $data['query'] ?? '');
             $logData[LoggerInterface::COMPLEXITY] = $complexity;
+            $logData[LoggerInterface::TOP_LEVEL_OPERATION_NAME] =
+                $this->getOperationName($data['parsedQuery'] ?? $data['query'] ?? '')
+                    ?: 'operationNameNotFound';
             if ($schema) {
                 $logData = array_merge($logData, $this->gatherQueryInformation($schema));
             }
@@ -82,12 +99,12 @@ class LogData
     private function gatherQueryInformation(Schema $schema) : array
     {
         $schemaConfig = $schema->getConfig();
-        $mutationOperations = $schemaConfig->getMutation()->getFields();
-        $queryOperations = $schemaConfig->getQuery()->getFields();
+        $mutationOperations = array_keys($schemaConfig->getMutation()->getFields());
+        $queryOperations = array_keys($schemaConfig->getQuery()->getFields());
         $queryInformation[LoggerInterface::HAS_MUTATION] = count($mutationOperations) > 0 ? 'true' : 'false';
         $queryInformation[LoggerInterface::NUMBER_OF_OPERATIONS] =
             count($mutationOperations) + count($queryOperations);
-        $operationNames = array_merge(array_keys($mutationOperations), array_keys($queryOperations));
+        $operationNames = array_merge($mutationOperations, $queryOperations);
         $queryInformation[LoggerInterface::OPERATION_NAMES] =
             count($operationNames) > 0 ? implode(",", $operationNames) : 'operationNameNotFound';
         return $queryInformation;
@@ -114,18 +131,20 @@ class LogData
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @param string $query
+     * @param DocumentNode|string $query
      * @return int
      * @throws SyntaxError
-     * @throws /Exception
+     * @throws \Exception
      */
-    private function getFieldCount(string $query): int
+    private function getFieldCount(DocumentNode|string $query): int
     {
         if (!empty($query)) {
             $totalFieldCount = 0;
-            $queryAst = Parser::parse(new Source($query ?: '', 'GraphQL'));
+            if (is_string($query)) {
+                $query = $this->queryParser->parse($query);
+            }
             Visitor::visit(
-                $queryAst,
+                $query,
                 [
                     'leave' => [
                         NodeKind::FIELD => function (Node $node) use (&$totalFieldCount) {
@@ -137,5 +156,38 @@ class LogData
             return $totalFieldCount;
         }
         return 0;
+    }
+
+    /**
+     * Gets top level OperationName
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     * @param DocumentNode|string $query
+     * @return string
+     * @throws SyntaxError
+     * @throws \Exception
+     */
+    private function getOperationName(DocumentNode|string $query): string
+    {
+        if (!empty($query)) {
+            $queryName = '';
+            if (is_string($query)) {
+                $query = $this->queryParser->parse($query);
+            }
+            Visitor::visit(
+                $query,
+                [
+                    'enter' => [
+                        NodeKind::NAME => function (Node $node) use (&$queryName) {
+                            $queryName = $node->value;
+                            return Visitor::stop();
+                        }
+                    ]
+                ]
+            );
+            return $queryName;
+        }
+        return '';
     }
 }

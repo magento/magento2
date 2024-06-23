@@ -46,6 +46,7 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
@@ -77,6 +78,8 @@
             <argument name="productCount" value="1"/>
         </actionGroup>
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCart"/>
+        <!--Select check money order payment if any other option is also there-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
         <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderId"/>
 

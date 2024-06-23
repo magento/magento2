@@ -7,6 +7,12 @@
 use Magento\Customer\Helper\Address;
 
 /** @var \Magento\Customer\Block\Form\Register $block */
+if (!$block->getButtonLockManager()) {
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $block->setButtonLockManager(
+        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
+    );
+}
 /** @var \Magento\Framework\Escaper $escaper */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 
@@ -17,8 +23,6 @@ $directoryHelper = $block->getData('directoryHelper');
 /** @var \Magento\Customer\ViewModel\Address\RegionProvider $regionProvider */
 $regionProvider = $block->getRegionProvider();
 $formData = $block->getFormData();
-/** @var \Magento\Customer\ViewModel\CreateAccountButton $createAccountButtonViewModel */
-$createAccountButtonViewModel = $block->getData('create_account_button_view_model');
 ?>
 <?php $displayAll = $block->getConfig('general/region/display_all'); ?>
 <?= $block->getChildHtml('form_fields_before') ?>
@@ -296,7 +300,9 @@ $createAccountButtonViewModel = $block->getData('create_account_button_view_mode
                     class="action submit primary"
                     title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>"
                     id="send2"
-                    <?php if ($createAccountButtonViewModel->disabled()): ?> disabled="disabled" <?php endif; ?>>
+                <?php if ($block->getButtonLockManager()->isDisabled('customer_create_form_submit')): ?>
+                    disabled="disabled"
+                <?php endif; ?>>
                 <span><?= $escaper->escapeHtml(__('Create an Account')) ?></span>
             </button>
         </div>

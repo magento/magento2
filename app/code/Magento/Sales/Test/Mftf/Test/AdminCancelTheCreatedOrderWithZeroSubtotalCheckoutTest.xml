@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-16067"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -42,7 +43,7 @@
         </before>
         <after>
             <!-- Disable shipping method for customer with default address -->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <!-- Disable Free Shipping -->
             <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
             <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
@@ -52,7 +53,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Create new customer order-->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
 

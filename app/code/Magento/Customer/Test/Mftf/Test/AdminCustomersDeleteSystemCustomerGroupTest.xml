@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <group value="customers"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

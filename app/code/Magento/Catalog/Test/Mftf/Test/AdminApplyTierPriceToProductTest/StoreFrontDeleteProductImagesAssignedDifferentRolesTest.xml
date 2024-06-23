@@ -16,6 +16,7 @@
             <description value="Test verifies the process of deleting product image"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4473"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -84,6 +85,7 @@
         </before>
         <after>
             <deleteData createDataKey="testCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="simpleProductOne" stepKey="deleteCustomer"/>
         </after>
 

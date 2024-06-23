@@ -10,6 +10,6 @@ For information about enabling or disabling a module in Magento 2, see [Enable o
 
 You can get more information at articles:
 
-- [GraphQl In Magento 2](https://devdocs.magento.com/guides/v2.4/graphql).
+- [GraphQl In Magento 2](https://developer.adobe.com/commerce/webapi/graphql/).
 - [customAttributeMetadata query](https://developer.adobe.com/commerce/webapi/graphql/schema/store/queries/custom-attribute-metadata/).
 - [2.4.x Release information](https://experienceleague.adobe.com/docs/commerce-operations/release/notes/overview.html)

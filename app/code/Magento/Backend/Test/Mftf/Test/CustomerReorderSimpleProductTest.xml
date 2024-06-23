@@ -17,6 +17,7 @@
             <testCaseId value="MC-27191"/>
             <severity value="MAJOR"/>
             <group value="reorder"/>
+            <group value="cloud"/>
         </annotations>
 
         <!-- Log in as admin-->

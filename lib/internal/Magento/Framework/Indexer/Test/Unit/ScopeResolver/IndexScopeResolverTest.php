@@ -39,7 +39,7 @@ class IndexScopeResolverTest extends TestCase
     protected function setUp(): void
     {
         $this->resource = $this->getMockBuilder(ResourceConnection::class)
-            ->setMethods(['getTableName'])
+            ->onlyMethods(['getTableName'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -135,7 +135,7 @@ class IndexScopeResolverTest extends TestCase
     private function createDimension($name, $value)
     {
         $dimension = $this->getMockBuilder(Dimension::class)
-            ->setMethods(['getName', 'getValue'])
+            ->onlyMethods(['getName', 'getValue'])
             ->disableOriginalConstructor()
             ->getMock();
         $dimension->expects($this->any())

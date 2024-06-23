@@ -86,38 +86,47 @@ class CurrencyTest extends TestCase
 
         $childBlockMock
             ->method('addChild')
-            ->withConsecutive(
-                [
-                    'save_button',
-                    Button::class,
-                    [
-                        'label' => __('Save Currency Rates'),
-                        'class' => 'save primary save-currency-rates',
-                        'data_attribute' => [
-                            'mage-init' => [
-                                'button' => ['event' => 'save', 'target' => '#rate-form']
+            ->willReturnCallback(function (...$args) use (&$callCount) {
+                $callCount++;
+
+                switch ($callCount) {
+                    case 1:
+                        $expectedArgs1 = ['save_button', Button::class, [
+                            'label' => __('Save Currency Rates'),
+                            'class' => 'save primary save-currency-rates',
+                            'data_attribute' => [
+                                'mage-init' => [
+                                    'button' => ['event' => 'save', 'target' => '#rate-form']
+                                ]
                             ]
-                        ]
-                    ]
-                ],
-                [
-                    'options_button',
-                    Button::class,
-                    [
-                        'label' => __('Options'),
-                        'onclick' => 'setLocation(\'' . self::STUB_OPTION_LINK_URL . '\')'
-                    ]
-                ],
-                [
-                    'reset_button',
-                    Button::class,
-                    [
-                        'label' => __('Reset'),
-                        'onclick' => 'document.location.reload()',
-                        'class' => 'reset'
-                    ]
-                ]
-            );
+                        ]];
+                        if ($args === $expectedArgs1) {
+                            return null;
+                        }
+                        break;
+                    case 2:
+                        $expectedArgs2 = ['options_button', Button::class, [
+                            'label' => __('Options'),
+                            'onclick' => 'setLocation(\'' . self::STUB_OPTION_LINK_URL . '\')'
+                        ]];
+                        if ($args === $expectedArgs2) {
+                            return null;
+                        } else {
+                            return null;
+                        }
+                        break;
+                    case 3:
+                        $expectedArgs3 = ['reset_button', Button::class, [
+                            'label' => __('Reset'),
+                            'onclick' => 'document.location.reload()',
+                            'class' => 'reset'
+                        ]];
+                        if ($args === $expectedArgs3) {
+                            return null;
+                        }
+                        break;
+                }
+            });
 
         /** @var Currency $block */
         $block = $this->objectManagerHelper->getObject(

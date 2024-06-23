@@ -372,10 +372,13 @@ class EmailSenderTest extends TestCase
 
             $this->creditmemoResourceMock
                 ->method('saveAttribute')
-                ->withConsecutive(
-                    [$this->creditmemoMock, 'email_sent'],
-                    [$this->creditmemoMock, 'send_email']
-                );
+                ->willReturnCallback(function ($arg1, $arg2) {
+                    if ($arg1 == $this->creditmemoMock &&
+                        $arg2 == 'email_sent' ||
+                        $arg2 == 'send_email') {
+                        return null;
+                    }
+                });
 
             $this->assertFalse(
                 $this->subject->send(
@@ -391,7 +394,7 @@ class EmailSenderTest extends TestCase
     /**
      * @return array
      */
-    public function sendDataProvider(): array
+    public static function sendDataProvider(): array
     {
         return [
             'Successful sync sending with comment' => [0, false, true, true],

@@ -20,7 +20,7 @@ $attributes = $block->getProductAttributes();
 <?php $dataScope = /* @noEscape */ $block->getData('config/dataScope');
 $nameStep = /* @noEscape */ $block->getData('config/nameStepWizard');
 $scriptString = <<<script
-    require(['jquery', 'uiRegistry', 'underscore'], function ($, registry, _) {
+    require(['jquery', 'uiRegistry', 'underscore', 'Magento_Ui/js/lib/step-wizard'], function ($, registry, _) {
         $('body').trigger('contentUpdated');
         $('.{$dataScope}[data-role=steps-wizard-main]').applyBindings();
 
