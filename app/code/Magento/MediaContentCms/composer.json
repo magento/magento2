@@ -1,11 +1,14 @@
 {
     "name": "magento/module-media-content-cms",
     "description": "Magento module provides the implementation of MediaContent functionality for Magento_Cms module",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
-        "magento/module-media-content-api": "*",
+        "magento/framework": "*",
         "magento/module-cms": "*",
-        "magento/framework": "*"
+        "magento/module-media-content-api": "*"
     },
     "type": "magento2-module",
     "license": [

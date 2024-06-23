@@ -5,6 +5,7 @@
         "sort-packages": true
     },
     "require": {
+        "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
@@ -12,8 +13,7 @@
         "magento/module-config": "*",
         "magento/module-customer": "*",
         "magento/module-search": "*",
-        "magento/module-store": "*",
-        "php": "~8.1.0||~8.2.0||~8.3.0"
+        "magento/module-store": "*"
     },
     "type": "magento2-module",
     "license": [

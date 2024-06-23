@@ -16,8 +16,8 @@
         "magento/module-ui": "*"
     },
     "suggest": {
-        "magento/module-import-export": "*",
-        "magento/module-catalog-rule-sample-data": "*"
+        "magento/module-catalog-rule-sample-data": "*",
+        "magento/module-import-export": "*"
     },
     "type": "magento2-module",
     "license": [

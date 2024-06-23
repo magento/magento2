@@ -8,6 +8,8 @@
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "ext-ctype": "*",
         "magento/framework": "*",
+        "magento/module-authorization": "*",
+        "magento/module-aws-s3": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-catalog-url-rewrite": "*",
@@ -16,9 +18,7 @@
         "magento/module-import-export": "*",
         "magento/module-media-storage": "*",
         "magento/module-store": "*",
-        "magento/module-tax": "*",
-        "magento/module-authorization": "*",
-        "magento/module-aws-s3": "*"
+        "magento/module-tax": "*"
     },
     "type": "magento2-module",
     "license": [

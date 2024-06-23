@@ -1,11 +1,14 @@
 {
     "name": "magento/module-login-as-customer-frontend-ui",
     "description": "",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
-        "magento/module-login-as-customer-api": "*",
         "magento/module-customer": "*",
+        "magento/module-login-as-customer-api": "*",
         "magento/module-store": "*"
     },
     "type": "magento2-module",

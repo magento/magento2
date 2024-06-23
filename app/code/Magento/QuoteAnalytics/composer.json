@@ -1,11 +1,14 @@
 {
     "name": "magento/module-quote-analytics",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
-        "magento/module-quote": "*",
-        "magento/module-analytics": "*"
+        "magento/module-analytics": "*",
+        "magento/module-quote": "*"
     },
     "type": "magento2-module",
     "license": [

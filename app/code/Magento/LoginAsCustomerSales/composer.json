@@ -1,12 +1,15 @@
 {
     "name": "magento/module-login-as-customer-sales",
     "description": "",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
-        "magento/module-user": "*",
-        "magento/module-login-as-customer-api": "*"
+        "magento/module-login-as-customer-api": "*",
+        "magento/module-user": "*"
     },
     "suggest": {
         "magento/module-sales": "*"

@@ -1,6 +1,9 @@
 {
     "name": "magento/module-instant-purchase",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
@@ -8,14 +11,14 @@
     ],
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
-        "magento/module-store": "*",
+        "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/module-customer": "*",
+        "magento/module-quote": "*",
         "magento/module-sales": "*",
         "magento/module-shipping": "*",
-        "magento/module-quote": "*",
-        "magento/module-vault": "*",
-        "magento/framework": "*"
+        "magento/module-store": "*",
+        "magento/module-vault": "*"
     },
     "autoload": {
         "files": [

@@ -6,15 +6,15 @@
     },
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
+        "laminas/laminas-captcha": "^2.12",
+        "laminas/laminas-db": "^2.19",
         "magento/framework": "*",
+        "magento/module-authorization": "*",
         "magento/module-backend": "*",
         "magento/module-checkout": "*",
         "magento/module-customer": "*",
         "magento/module-sales": "*",
-        "magento/module-store": "*",
-        "magento/module-authorization": "*",
-        "laminas/laminas-captcha": "^2.12",
-        "laminas/laminas-db": "^2.19"
+        "magento/module-store": "*"
     },
     "type": "magento2-module",
     "license": [

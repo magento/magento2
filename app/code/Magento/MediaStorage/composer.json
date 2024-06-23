@@ -8,13 +8,13 @@
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/framework-bulk": "*",
+        "magento/module-asynchronous-operations": "*",
+        "magento/module-authorization": "*",
         "magento/module-backend": "*",
+        "magento/module-catalog": "*",
         "magento/module-config": "*",
         "magento/module-store": "*",
-        "magento/module-catalog": "*",
-        "magento/module-theme": "*",
-        "magento/module-asynchronous-operations": "*",
-        "magento/module-authorization": "*"
+        "magento/module-theme": "*"
     },
     "type": "magento2-module",
     "license": [

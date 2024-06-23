@@ -13,6 +13,7 @@
         "magento/module-cms": "*",
         "magento/module-config": "*",
         "magento/module-customer": "*",
+        "magento/module-directory": "*",
         "magento/module-downloadable": "*",
         "magento/module-eav": "*",
         "magento/module-quote": "*",
@@ -22,8 +23,7 @@
         "magento/module-store": "*",
         "magento/module-tax": "*",
         "magento/module-widget": "*",
-        "magento/module-wishlist": "*",
-        "magento/module-directory": "*"
+        "magento/module-wishlist": "*"
     },
     "type": "magento2-module",
     "license": [

@@ -7,10 +7,12 @@
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
+        "magento/module-authorization": "*",
         "magento/module-captcha": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-config": "*",
+        "magento/module-csp": "*",
         "magento/module-customer": "*",
         "magento/module-directory": "*",
         "magento/module-eav": "*",
@@ -25,9 +27,7 @@
         "magento/module-store": "*",
         "magento/module-tax": "*",
         "magento/module-theme": "*",
-        "magento/module-ui": "*",
-        "magento/module-authorization": "*",
-        "magento/module-csp": "*"
+        "magento/module-ui": "*"
     },
     "suggest": {
         "magento/module-cookie": "*"

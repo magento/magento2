@@ -5,13 +5,13 @@
         "sort-packages": true
     },
     "require": {
+        "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
-        "magento/framework-message-queue": "*",
         "magento/framework-bulk": "*",
+        "magento/framework-message-queue": "*",
         "magento/module-authorization": "*",
         "magento/module-backend": "*",
-        "magento/module-ui": "*",
-        "php": "~8.1.0||~8.2.0||~8.3.0"
+        "magento/module-ui": "*"
     },
     "suggest": {
         "magento/module-admin-notification": "*",

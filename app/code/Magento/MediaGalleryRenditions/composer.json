@@ -1,13 +1,16 @@
 {
     "name": "magento/module-media-gallery-renditions",
     "description": "Magento module that implements height and width fields for for media gallery items.",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
-        "magento/module-media-gallery-renditions-api": "*",
-        "magento/module-media-gallery-api": "*",
         "magento/framework-message-queue": "*",
-        "magento/module-cms": "*"
+        "magento/module-cms": "*",
+        "magento/module-media-gallery-api": "*",
+        "magento/module-media-gallery-renditions-api": "*"
     },
     "suggest": {
         "magento/module-media-content-api": "*"

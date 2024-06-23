@@ -1,11 +1,14 @@
 {
     "name": "magento/module-catalog-analytics",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
-        "magento/module-catalog": "*",
-        "magento/module-analytics": "*"
+        "magento/module-analytics": "*",
+        "magento/module-catalog": "*"
     },
     "type": "magento2-module",
     "license": [

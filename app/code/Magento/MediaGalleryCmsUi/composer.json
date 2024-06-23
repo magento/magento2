@@ -1,11 +1,14 @@
 {
     "name": "magento/module-media-gallery-cms-ui",
     "description": "Cms related UI elements in the magento media gallery",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
-        "magento/module-cms": "*",
-        "magento/module-backend": "*"
+        "magento/module-backend": "*",
+        "magento/module-cms": "*"
     },
     "type": "magento2-module",
     "license": [

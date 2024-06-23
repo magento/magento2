@@ -8,10 +8,10 @@
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
+        "magento/module-deploy": "*",
         "magento/module-developer": "*",
         "magento/module-store": "*",
-        "magento/module-theme": "*",
-        "magento/module-deploy": "*"
+        "magento/module-theme": "*"
     },
     "suggest": {
         "magento/module-deploy": "*"

@@ -1,16 +1,19 @@
 {
     "name": "magento/module-wishlist-graph-ql",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "type": "magento2-module",
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
-        "magento/module-wishlist": "*",
-        "magento/module-store": "*",
-        "magento/module-quote-graph-ql": "*",
-        "magento/module-quote": "*",
         "magento/module-catalog": "*",
-        "magento/module-catalog-graph-ql": "*"
+        "magento/module-catalog-graph-ql": "*",
+        "magento/module-quote": "*",
+        "magento/module-quote-graph-ql": "*",
+        "magento/module-store": "*",
+        "magento/module-wishlist": "*"
     },
     "license": [
         "OSL-3.0",

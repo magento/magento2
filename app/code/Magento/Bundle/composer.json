@@ -14,6 +14,7 @@
         "magento/module-checkout": "*",
         "magento/module-config": "*",
         "magento/module-customer": "*",
+        "magento/module-directory": "*",
         "magento/module-eav": "*",
         "magento/module-gift-message": "*",
         "magento/module-media-storage": "*",
@@ -21,13 +22,12 @@
         "magento/module-sales": "*",
         "magento/module-store": "*",
         "magento/module-tax": "*",
-        "magento/module-ui": "*",
-        "magento/module-directory": "*"
+        "magento/module-ui": "*"
     },
     "suggest": {
-        "magento/module-webapi": "*",
         "magento/module-bundle-sample-data": "*",
-        "magento/module-sales-rule": "*"
+        "magento/module-sales-rule": "*",
+        "magento/module-webapi": "*"
     },
     "type": "magento2-module",
     "license": [

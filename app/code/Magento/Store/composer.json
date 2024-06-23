@@ -7,14 +7,14 @@
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
+        "magento/module-authorization": "*",
+        "magento/module-backend": "*",
         "magento/module-catalog": "*",
         "magento/module-config": "*",
+        "magento/module-customer": "*",
         "magento/module-directory": "*",
         "magento/module-media-storage": "*",
-        "magento/module-ui": "*",
-        "magento/module-customer": "*",
-        "magento/module-authorization": "*",
-        "magento/module-backend": "*"
+        "magento/module-ui": "*"
     },
     "suggest": {
         "magento/module-deploy": "*"

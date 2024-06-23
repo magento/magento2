@@ -1,17 +1,20 @@
 {
     "name": "magento/module-configurable-product-graph-ql",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "type": "magento2-module",
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
+        "magento/framework": "*",
         "magento/module-catalog": "*",
+        "magento/module-catalog-graph-ql": "*",
+        "magento/module-catalog-inventory": "*",
         "magento/module-configurable-product": "*",
         "magento/module-graph-ql": "*",
-        "magento/module-catalog-graph-ql": "*",
         "magento/module-quote": "*",
-        "magento/module-quote-graph-ql": "*",
-        "magento/module-catalog-inventory": "*",
-        "magento/framework": "*"
+        "magento/module-quote-graph-ql": "*"
     },
     "license": [
         "OSL-3.0",
