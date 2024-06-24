@@ -22,8 +22,7 @@ define([
          */
         onInputTypeChange: function (data) {
             data === 'checkbox' || data === 'multi' ?
-                this.reset()
-                    .visible(false) :
+                this.visible(false) :
                 this.visible(true);
         }
     });
