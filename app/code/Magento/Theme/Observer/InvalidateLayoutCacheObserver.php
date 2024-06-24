@@ -16,15 +16,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Cms\Observer;
+namespace Magento\Theme\Observer;
 
-use Magento\Cms\Model\Page;
 use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
 use Magento\Framework\App\Cache\Tag\Resolver;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Theme\Model\LayoutTagCacheFactory;
 
 /**
  * Invalidates layout cache.
@@ -47,18 +46,26 @@ class InvalidateLayoutCacheObserver implements ObserverInterface
     private $tagResolver;
 
     /**
+     * @var LayoutTagCacheFactory
+     */
+    private $layoutTagCacheFactory;
+
+    /**
      * @param LayoutCache $layoutCache
      * @param CacheState $cacheState
      * @param Resolver $tagResolver
+     * @param LayoutTagCacheFactory $layoutTagCacheFactory
      */
     public function __construct(
         LayoutCache $layoutCache,
         CacheState $cacheState,
-        Resolver $tagResolver
+        Resolver $tagResolver,
+        LayoutTagCacheFactory $layoutTagCacheFactory
     ) {
         $this->layoutCache = $layoutCache;
         $this->cacheState = $cacheState;
         $this->tagResolver = $tagResolver;
+        $this->layoutTagCacheFactory = $layoutTagCacheFactory;
     }
 
     /**
@@ -68,11 +75,12 @@ class InvalidateLayoutCacheObserver implements ObserverInterface
      *
      * @return void
      */
-    public function execute(Observer $observer)
+    public function execute(Observer $observer): void
     {
         $object = $observer->getEvent()->getObject();
+        $layoutTagCacheTagStrategy = $this->layoutTagCacheFactory->getStrategy($object);
 
-        if (!is_object($object)) {
+        if (!$layoutTagCacheTagStrategy || !is_object($object)) {
             return;
         }
 
@@ -80,34 +88,11 @@ class InvalidateLayoutCacheObserver implements ObserverInterface
             return;
         }
 
-        if (!$object instanceof Page || !$object->dataHasChangedFor(Page::PAGE_LAYOUT)) {
-            return;
-        }
-
         $tags = $this->tagResolver->getTags($object);
 
         if (!empty($tags)) {
-            $tags[] = $this->getAdditionalTags($object);
-            $this->layoutCache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $tags);
+            $additionalTags = $layoutTagCacheTagStrategy->getTags($object);
+            $this->layoutCache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array_merge($tags, $additionalTags));
         }
-    }
-
-    /**
-     * Get additional tags
-     *
-     * @param AbstractModel $object
-     * @return string
-     */
-    public function getAdditionalTags(AbstractModel $object): string
-    {
-        $tag = '';
-        if ($object instanceof Page) {
-            $tag = sprintf(
-                '%s_%s',
-                'CMS_PAGE_VIEW_ID',
-                str_replace('-', '_', strtoupper($object->getIdentifier()))
-            );
-        }
-        return $tag;
     }
 }
