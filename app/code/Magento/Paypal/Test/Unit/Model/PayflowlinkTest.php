@@ -66,12 +66,12 @@ class PayflowlinkTest extends TestCase
             ->getMock();
 
         $configFactoryMock = $this->getMockBuilder(ConfigInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $requestFactory = $this->getMockBuilder(RequestFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -105,6 +105,7 @@ class PayflowlinkTest extends TestCase
         $requestFactory->expects($this->any())->method('create')->willReturn($this->payflowRequest);
 
         $helper = new ObjectManagerHelper($this);
+        $helper->prepareObjectManager([]);
         $this->model = $helper->getObject(
             Payflowlink::class,
             [
@@ -163,12 +164,9 @@ class PayflowlinkTest extends TestCase
                         'verbosity' => null,
                         'BUTTONSOURCE' => 'build notation code',
                         'tender' => 'C',
-                    ],
-                    $this->returnSelf()
-                ],
-                ['USER1', 1, $this->returnSelf()],
-                ['USER2', 'a20d3dc6824c1f7780c5529dc37ae5e', $this->returnSelf()]
-            );
+                    ]
+                ]
+            )->willReturnSelf();
 
         $stateObject = new DataObject();
         $this->model->initialize(Config::PAYMENT_ACTION_AUTH, $stateObject);
@@ -197,7 +195,7 @@ class PayflowlinkTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestIsActive()
+    public static function dataProviderForTestIsActive()
     {
         return [
             [false, '0'],

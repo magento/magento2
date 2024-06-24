@@ -40,7 +40,7 @@ class WebsiteTest extends TestCase
     protected function setUp(): void
     {
         $this->webSiteModel = $this->getMockBuilder(Website::class)
-            ->setMethods(['getBaseCurrency'])
+            ->onlyMethods(['getBaseCurrency'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeResolver = $this->createPartialMock(
@@ -56,7 +56,7 @@ class WebsiteTest extends TestCase
         $this->website = $this->getMockBuilder(
             WebsiteValidator::class
         )
-            ->setMethods(['getAllWebsitesValue', '_clearMessages', '_addMessages'])
+            ->onlyMethods(['getAllWebsitesValue', '_clearMessages', '_addMessages'])
             ->setConstructorArgs([$this->storeResolver, $this->webSiteModel, $this->currencyResolver])
             ->getMock();
     }
@@ -121,7 +121,7 @@ class WebsiteTest extends TestCase
         $websiteString = $this->getMockBuilder(
             WebsiteValidator::class
         )
-            ->setMethods(['_clearMessages', '_addMessages'])
+            ->onlyMethods(['_clearMessages', '_addMessages'])
             ->setConstructorArgs([$this->storeResolver, $this->webSiteModel, $this->currencyResolver])
             ->getMock();
         $result = $websiteString->getAllWebsitesValue();
@@ -132,7 +132,7 @@ class WebsiteTest extends TestCase
     /**
      * @return array
      */
-    public function isValidReturnDataProvider()
+    public static function isValidReturnDataProvider()
     {
         return [
             // False cases.
