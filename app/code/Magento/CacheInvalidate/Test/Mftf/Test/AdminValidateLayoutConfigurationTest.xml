@@ -23,6 +23,7 @@
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
             <actionGroup ref="AdminGoToCacheManagementPageActionGroup" stepKey="goToCacheManagementPage"/>
+            <waitForText selector="{{AdminMessagesSection.assertCacheManagementConfigurationStatus}}" userInput="ENABLED" stepKey="verifyCacheTypeConfigurationIsENABLED"/>
         </before>
         <after>
             <!-- Delete category -->
@@ -31,11 +32,11 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!--Restore currency symbols to default-->
             <actionGroup ref="AdminNavigateToCurrencySymbolsPageActionGroup" stepKey="navigateToCurrencySymbolsPageToRestore"/>
-            <checkOption selector="{{InputCurrencySymbolSection.checkValue}}" stepKey="checkConfigSettingsMessage"/>
-            <waitForElementClickable selector="{{InputCurrencySymbolSection.saveCurrencySymbol}}" stepKey="waitForSaveCurrencySymbolAgain"/>
-            <click selector="{{InputCurrencySymbolSection.saveCurrencySymbol}}" stepKey="clickSaveCurrencySymbolsToRestore"/>
-            <!-- Reindex and Flush Cache-->
-            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCachesAfterModulesDisabled1">
+            <checkOption selector="{{AdminCurrencySymbolsGridSection.currencyCheckBox}}" stepKey="checkConfigSettingsMessage"/>
+            <waitForElementClickable selector="{{AdminCurrencySymbolsGridSection.saveCurrencySymbols}}" stepKey="waitForSaveCurrencySymbolAgain"/>
+            <click selector="{{AdminCurrencySymbolsGridSection.saveCurrencySymbols}}" stepKey="clickSaveCurrencySymbolsToRestore"/>
+            <!-- Flush Cache-->
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCachesAfterRevokingTheChangesToDefault">
                 <argument name="tags" value="" />
             </actionGroup>
             <!-- Log out -->
@@ -46,33 +47,33 @@
             <argument name="page" value="$$createProduct.name$$.html"/>
         </actionGroup>
         <!--Assert Currency symbol-->
-        <waitForText selector="{{InputCurrencySymbolSection.productSymbol}}" userInput="$" stepKey="waitForCurrencySymbolInStoreFront"/>
+        <waitForText selector="{{AdminCurrencySymbolsGridSection.currencySymbolOfProduct}}" userInput="$" stepKey="waitForCurrencySymbolInStoreFront"/>
         <!-- Navigate To Currency Symbol-->
         <actionGroup ref="AdminNavigateToCurrencySymbolsPageActionGroup" stepKey="navigateToCurrencySymbolsPage"/>
         <!--Replace standard currency symbol by custom currency symbol-->
-        <uncheckOption selector="{{InputCurrencySymbolSection.checkValue}}" stepKey="uncheckConfigSettingsMessage"/>
-        <fillField selector="{{InputCurrencySymbolSection.setCurrency}}" userInput="£" stepKey="fillDefaultLabel"/>
+        <uncheckOption selector="{{AdminCurrencySymbolsGridSection.currencyCheckBox}}" stepKey="uncheckConfigSettingsMessage"/>
+        <fillField selector="{{AdminCurrencySymbolsGridSection.inputCurrencySymbol}}" userInput="£" stepKey="fillDefaultLabel"/>
         <!--Save custom currency symbol-->
-        <waitForElementClickable selector="{{InputCurrencySymbolSection.saveCurrencySymbol}}" stepKey="waitForSaveCurrencySymbol"/>
-        <click selector="{{InputCurrencySymbolSection.saveCurrencySymbol}}" stepKey="clickSaveCurrencySymbols"/>
-        <waitForPageLoad stepKey="waitForSave"/>
+        <waitForElementClickable selector="{{AdminCurrencySymbolsGridSection.saveCurrencySymbols}}" stepKey="waitForSaveCurrencySymbol"/>
+        <click selector="{{AdminCurrencySymbolsGridSection.saveCurrencySymbols}}" stepKey="clickSaveCurrencySymbols"/>
         <waitForText selector="{{AdminMessagesSection.success}}" userInput="{{AdminSaveCurrencySymbolMessageData.success}}" stepKey="seeSuccessMessage"/>
+        <waitForText selector="{{AdminMessagesSection.assertFlushCacheWarningMessage}}" userInput="One or more of the Cache Types are invalidated: Configuration, Page Cache, Blocks HTML output, Layouts." stepKey="assertFlushCacheWarningMessageAppearAfterChangingConfig"/>
         <!--Navigate To Product Storefront-->
         <actionGroup ref="NavigateToStorefrontForCreatedPageActionGroup" stepKey="navigateToProductStorefront1">
             <argument name="page" value="$$createProduct.name$$.html"/>
         </actionGroup>
         <!--Assert Currency symbol is not changed-->
-        <waitForText selector="{{InputCurrencySymbolSection.productSymbol}}" userInput="$" stepKey="waitForCurrencySymbol"/>
+        <waitForText selector="{{AdminCurrencySymbolsGridSection.currencySymbolOfProduct}}" userInput="$" stepKey="verifyCurrencySymbolIsNotChangedBeforeFlushingTheChangesInStoreFront"/>
         <!--Navigate to Cache Management-->
         <actionGroup ref="AdminGoToCacheManagementPageActionGroup" stepKey="goToCacheManagementPage1"/>
-        <!-- Reindex and Flush Cache-->
-        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCachesAfterModulesDisabled1">
+        <!-- Flush Cache-->
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCachesAfterChangesMade">
             <argument name="tags" value="" />
         </actionGroup>
         <!--Navigate To Product Storefront-->
         <actionGroup ref="NavigateToStorefrontForCreatedPageActionGroup" stepKey="navigateToProductStorefront2">
             <argument name="page" value="$$createProduct.name$$.html"/>
         </actionGroup>
-        <waitForText selector="{{InputCurrencySymbolSection.productSymbol}}" userInput="£" stepKey="waitForCurrencySymbol1"/>
+        <waitForText selector="{{AdminCurrencySymbolsGridSection.currencySymbolOfProduct}}" userInput="£" stepKey="verifyCurrencySymbolIsChangedAfterFlushingTheChangesInStoreFront"/>
     </test>
 </tests>
