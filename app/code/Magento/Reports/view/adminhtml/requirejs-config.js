@@ -15,9 +15,7 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            uiParseDataDateRange: 'Magento_Reports/js/ui-parse-data'
-        }
-    }
+    deps: [
+        'Magento_Reports/js/ui-parse-data'
+    ]
 };
