@@ -52,18 +52,6 @@ class ProductStock
      */
     public function isProductAvailable(Item $cartItem): bool
     {
-        /**
-         * @var ProductInterface $variantProduct
-         * Configurable products cannot have stock, only its variants can. If the user adds a configurable product
-         * using its SKU and the selected options, we need to get the variant it refers to from the quote.
-         */
-        $variantProduct = null;
-
-        if ($cartItem->getProductType() === self::PRODUCT_TYPE_CONFIGURABLE) {
-            if ($cartItem->getChildren()[0] !== null) {
-                $variantProduct = $this->productRepositoryInterface->get($cartItem->getSku());
-            }
-        }
         $requestedQty = $cartItem->getQtyToAdd() ?? $cartItem->getQty();
         $previousQty = $cartItem->getPreviousQty() ?? 0;
 
@@ -71,6 +59,7 @@ class ProductStock
             return $this->isStockAvailableBundle($cartItem, $previousQty, $requestedQty);
         }
 
+        $variantProduct = $this->getVariantProduct($cartItem);
         $requiredItemQty =  $requestedQty + $previousQty;
         if ($variantProduct !== null) {
             return $this->isStockQtyAvailable($variantProduct, $requestedQty, $requiredItemQty, $previousQty);
@@ -103,6 +92,50 @@ class ProductStock
     }
 
     /**
+     * Returns the cart item's available stock value
+     *
+     * @param Item $cartItem
+     * @return float
+     * @throws NoSuchEntityException
+     */
+    public function getProductAvailableStock(Item $cartItem): float
+    {
+        if ($cartItem->getProductType() === self::PRODUCT_TYPE_BUNDLE) {
+            return $this->getLowestStockValueOfBundleProduct($cartItem);
+        }
+
+        $variantProduct = $this->getVariantProduct($cartItem);
+        if ($variantProduct !== null) {
+            return $this->getAvailableStock($variantProduct);
+        }
+        return $this->getAvailableStock($cartItem->getProduct());
+    }
+
+    /**
+     * Returns variant product if available
+     *
+     * @param Item $cartItem
+     * @return ProductInterface|null
+     * @throws NoSuchEntityException
+     */
+    private function getVariantProduct(Item $cartItem): ?ProductInterface
+    {
+        /**
+         * @var ProductInterface $variantProduct
+         * Configurable products cannot have stock, only its variants can. If the user adds a configurable product
+         * using its SKU and the selected options, we need to get the variant it refers to from the quote.
+         */
+        $variantProduct = null;
+
+        if ($cartItem->getProductType() === self::PRODUCT_TYPE_CONFIGURABLE) {
+            if ($cartItem->getChildren()[0] !== null) {
+                $variantProduct = $this->productRepositoryInterface->get($cartItem->getSku());
+            }
+        }
+        return $variantProduct;
+    }
+
+    /**
      * Check if product is available in stock
      *
      * @param ProductInterface $product
@@ -126,5 +159,33 @@ class ProductStock
         );
 
         return ((bool) $stockStatus->getHasError()) === false;
+    }
+
+    /**
+     * Returns the product's available stock value
+     *
+     * @param ProductInterface $product
+     * @return float
+     */
+    private function getAvailableStock(ProductInterface $product): float
+    {
+        return $this->stockState->getStockQty($product->getId());
+    }
+
+    /**
+     * Returns the lowest stock value of bundle product
+     *
+     * @param Item $cartItem
+     * @return float
+     */
+    private function getLowestStockValueOfBundleProduct(Item $cartItem): float
+    {
+        $bundleStock = [];
+        $qtyOptions = $cartItem->getQtyOptions();
+        foreach ($qtyOptions as $qtyOption) {
+            $bundleStock[] = $this->getAvailableStock($qtyOption->getProduct());
+        }
+
+        return min($bundleStock);
     }
 }

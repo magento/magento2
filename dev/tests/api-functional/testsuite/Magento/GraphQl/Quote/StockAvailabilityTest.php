@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2023 Adobe
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -20,10 +20,10 @@ use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixtu
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Quote\Test\Fixture\QuoteIdMask as QuoteMaskFixture;
+use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -35,11 +35,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class StockAvailabilityTest extends GraphQlAbstract
 {
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
     /**
      * @var DataFixtureStorage
      */
@@ -60,7 +55,6 @@ class StockAvailabilityTest extends GraphQlAbstract
     protected function setUp(): void
     {
         parent::setUp();
-        $this->objectManager = Bootstrap::getObjectManager();
         $this->fixtures = DataFixtureStorageManager::getStorage();
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
     }
@@ -82,6 +76,10 @@ class StockAvailabilityTest extends GraphQlAbstract
         self::assertFalse(
             $responseDataObject->getData('cart/itemsV2/items/0/is_available')
         );
+        self::assertEquals(
+            'Not enough items for sale. Please adjust the quantity to continue',
+            $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
+        );
     }
 
     #[
@@ -100,6 +98,9 @@ class StockAvailabilityTest extends GraphQlAbstract
         self::assertTrue(
             $responseDataObject->getData('cart/itemsV2/items/0/is_available')
         );
+        self::assertNull(
+            $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
+        );
     }
 
     #[
@@ -116,6 +117,9 @@ class StockAvailabilityTest extends GraphQlAbstract
         $responseDataObject = new DataObject($response);
         self::assertTrue(
             $responseDataObject->getData('addProductsToCart/cart/itemsV2/items/0/is_available')
+        );
+        self::assertNull(
+            $responseDataObject->getData('addProductsToCart/cart/itemsV2/items/0/not_available_message')
         );
     }
 
@@ -157,6 +161,10 @@ class StockAvailabilityTest extends GraphQlAbstract
 
         self::assertFalse(
             $responseDataObject->getData('cart/itemsV2/items/0/is_available')
+        );
+        self::assertEquals(
+            'Not enough items for sale. Please adjust the quantity to continue',
+            $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
         );
     }
 
@@ -225,6 +233,9 @@ class StockAvailabilityTest extends GraphQlAbstract
         self::assertTrue(
             $responseDataObject->getData('addProductsToCart/cart/itemsV2/items/0/is_available')
         );
+        self::assertNull(
+            $responseDataObject->getData('addProductsToCart/cart/itemsV2/items/0/not_available_message')
+        );
     }
 
     #[
@@ -268,6 +279,10 @@ class StockAvailabilityTest extends GraphQlAbstract
         self::assertFalse(
             $responseDataObject->getData('cart/itemsV2/items/0/is_available')
         );
+        self::assertEquals(
+            'Not enough items for sale. Please adjust the quantity to continue',
+            $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
+        );
     }
 
     #[
@@ -310,6 +325,9 @@ class StockAvailabilityTest extends GraphQlAbstract
 
         self::assertTrue(
             $responseDataObject->getData('cart/itemsV2/items/0/is_available')
+        );
+        self::assertNull(
+            $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
         );
     }
 
@@ -385,6 +403,30 @@ class StockAvailabilityTest extends GraphQlAbstract
         self::assertTrue(
             $responseDataObject->getData('addProductsToCart/cart/itemsV2/items/0/is_available')
         );
+        self::assertNull(
+            $responseDataObject->getData('addProductsToCart/cart/itemsV2/items/0/not_available_message')
+        );
+    }
+
+    #[
+        Config('cataloginventory/options/not_available_message', 1),
+        DataFixture(ProductFixture::class, ['price' => 100.00], as: 'product'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 100]),
+        DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+        DataFixture(ProductStockFixture::class, ['prod_id' => '$product.id$', 'prod_qty' => 90], 'prodStock')
+    ]
+    public function testNotAvailableMessageOption1(): void
+    {
+        $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlMutation($query);
+        $responseDataObject = new DataObject($response);
+
+        self::assertEquals(
+            'Only 90 available for sale. Please adjust the quantity to continue',
+            $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
+        );
     }
 
     /**
@@ -397,9 +439,10 @@ class StockAvailabilityTest extends GraphQlAbstract
 {
   cart(cart_id:"{$cartId}") {
     itemsV2 {
-        items {
-          is_available
-        }
+      items {
+        is_available
+        not_available_message
+      }
     }
   }
 }
@@ -419,11 +462,12 @@ mutation {
     }]
   ) {
     cart {
-        itemsV2 {
-              items {
-                is_available
-              }
+      itemsV2 {
+        items {
+          is_available
+          not_available_message
         }
+      }
     }
     user_errors {
       code
@@ -454,17 +498,18 @@ mutation {
     }]
   ) {
     cart {
-        itemsV2 {
-              items {
-                is_available
-                product {
-                  sku
-                }
-              }
+      itemsV2 {
+        items {
+          is_available
+          not_available_message
+          product {
+            sku
           }
         }
+      }
     }
   }
+}
 QUERY;
     }
 
@@ -489,14 +534,15 @@ mutation {
   ) {
   cart {
     itemsV2 {
-          items {
-            quantity
-            is_available
-            product {
-              sku
-              only_x_left_in_stock
-            }
-          }
+      items {
+        quantity
+        is_available
+        not_available_message
+        product {
+          sku
+          only_x_left_in_stock
+        }
+      }
       }
     }
     user_errors {
