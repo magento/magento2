@@ -1079,7 +1079,7 @@ class ProductOptionsTest extends ProductTestBase
     /**
      * @return array
      */
-    public function getProductCustomOptionDataProvider(): array
+    public static function getProductCustomOptionDataProvider(): array
     {
         return [
             [
