@@ -106,7 +106,7 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function dataProviderShippingMethods(): array
+    public static function dataProviderShippingMethods(): array
     {
         return [
             'Ground' => ['FEDEX_GROUND', 'Ground'],
@@ -165,7 +165,7 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function dataProviderShippingMethodsBasedOnCanadaAddress(): array
+    public static function dataProviderShippingMethodsBasedOnCanadaAddress(): array
     {
         return [
            'Ground' => ['FEDEX_GROUND', 'Ground'],

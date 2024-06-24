@@ -61,11 +61,11 @@ class SqlVersionProviderTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->resourceConnection = $this->getMockBuilder(ResourceConnection::class)
-            ->setMethods(['getConnection'])
+            ->onlyMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->mysqlAdapter = $this->getMockBuilder(Mysql::class)
-            ->setMethods(['fetchPairs'])
+            ->onlyMethods(['fetchPairs'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceConnection->expects($this->atLeastOnce())
@@ -104,7 +104,7 @@ class SqlVersionProviderTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             'MariaDB-10.6' => [
