@@ -8,3 +8,5 @@ lib/web/mage/**/*.js
 lib/web/magnifier/**/*.js
 lib/web/varien/**/*.js
 vendor/magento/**/*.js
+lib/web/prototype/**/*.js
+lib/web/legacy-build.min.js
