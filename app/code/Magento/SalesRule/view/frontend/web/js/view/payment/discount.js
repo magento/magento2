@@ -14,34 +14,39 @@ define([
 ], function ($, ko, Component, quote, setCouponCodeAction, cancelCouponAction, coupon) {
     'use strict';
 
-    var totals = quote.getTotals(),
-        couponCode = coupon.getCouponCode(),
-        isApplied = coupon.getIsApplied();
-
-    if (totals()) {
-        couponCode(totals()['coupon_code']);
-    }
-
-    var couponCodeValue = couponCode();
-    isApplied(typeof couponCodeValue === 'string' && couponCodeValue.length > 0);
-
     return Component.extend({
         defaults: {
             template: 'Magento_SalesRule/payment/discount'
         },
-        couponCode: couponCode,
+        couponCode: coupon.getCouponCode(),
 
         /**
          * Applied flag
          */
-        isApplied: isApplied,
+        isApplied: coupon.getIsApplied(),
+
+        initialize: function () {
+            var totals = quote.getTotals(),
+                couponCode = this.couponCode,
+                isApplied = this.isApplied,
+                couponCodeValue;
+
+            if (totals()) {
+                couponCode(totals()['coupon_code']);
+            }
+
+            couponCodeValue = couponCode();
+            isApplied(typeof couponCodeValue === 'string' && couponCodeValue.length > 0);
+
+            this._super();
+        },
 
         /**
          * Coupon code application procedure
          */
         apply: function () {
             if (this.validate()) {
-                setCouponCodeAction(couponCode(), isApplied);
+                setCouponCodeAction(this.couponCode(), this.isApplied);
             }
         },
 
@@ -50,8 +55,8 @@ define([
          */
         cancel: function () {
             if (this.validate()) {
-                couponCode('');
-                cancelCouponAction(isApplied);
+                this.couponCode('');
+                cancelCouponAction(this.isApplied);
             }
         },
 

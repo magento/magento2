@@ -13,23 +13,23 @@ define([
 ], function (defaultCaptcha, captchaList, setCouponCodeAction, cancelCouponAction, quote, ko) {
     'use strict';
 
-    var totals = quote.getTotals(),
-        couponCode = ko.observable(null),
-        isApplied;
-
-    if (totals()) {
-        couponCode(totals()['coupon_code']);
-    }
-
-    //Captcha can only be required for adding a coupon so we need to know if one was added already.
-    var couponCodeValue = couponCode();
-    isApplied = ko.observable(typeof couponCodeValue === 'string' && couponCodeValue.length > 0);
-
     return defaultCaptcha.extend({
         /** @inheritdoc */
         initialize: function () {
             var self = this,
-                currentCaptcha;
+                currentCaptcha,
+                totals = quote.getTotals(),
+                couponCode = ko.observable(null),
+                couponCodeValue,
+                isApplied;
+
+            if (totals()) {
+                couponCode(totals()['coupon_code']);
+            }
+
+            // Captcha can only be required for adding a coupon so we need to know if one was added already.
+            couponCodeValue = couponCode();
+            isApplied = ko.observable(typeof couponCodeValue === 'string' && couponCodeValue.length > 0);
 
             this._super();
             //Getting coupon captcha model.
