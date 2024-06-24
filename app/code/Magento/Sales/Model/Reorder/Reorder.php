@@ -112,6 +112,11 @@ class Reorder
     private $storeManager;
 
     /**
+     * @var bool
+     */
+    private bool $addToCartInvalidProduct;
+
+    /**
      * @param OrderFactory $orderFactory
      * @param CustomerCartResolver $customerCartProvider
      * @param GuestCartResolver $guestCartResolver
@@ -121,6 +126,9 @@ class Reorder
      * @param ProductCollectionFactory $productCollectionFactory
      * @param OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter
      * @param StoreManagerInterface|null $storeManager
+     * @param bool $addToCartInvalidProduct
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -131,7 +139,8 @@ class Reorder
         LoggerInterface $logger,
         ProductCollectionFactory $productCollectionFactory,
         OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter,
-        ?StoreManagerInterface   $storeManager = null
+        ?StoreManagerInterface   $storeManager = null,
+        bool $addToCartInvalidProduct = false
     ) {
         $this->orderFactory = $orderFactory;
         $this->cartRepository = $cartRepository;
@@ -143,6 +152,7 @@ class Reorder
         $this->orderInfoBuyRequestGetter = $orderInfoBuyRequestGetter;
         $this->storeManager = $storeManager
             ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->addToCartInvalidProduct = $addToCartInvalidProduct;
     }
 
     /**
@@ -276,6 +286,7 @@ class Reorder
 
         $addProductResult = null;
         try {
+            $infoBuyRequest->setAddToCartInvalidProduct($this->addToCartInvalidProduct);
             $addProductResult = $cart->addProduct($product, $infoBuyRequest);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->addError($this->getCartItemErrorMessage($orderItem, $product, $e->getMessage()));

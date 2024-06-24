@@ -70,6 +70,8 @@
                 <item name="minicart_display" xsi:type="string">checkout/sidebar/display</item>
                 <item name="minicart_max_items" xsi:type="string">checkout/sidebar/max_items_display_count</item>
                 <item name="cart_expires_in_days" xsi:type="string">checkout/cart/delete_quote_after</item>
+                <item name="grouped_product_image" xsi:type="string">checkout/cart/grouped_product_image</item>
+                <item name="configurable_product_image" xsi:type="string">checkout/cart/configurable_product_image</item>
             </argument>
         </arguments>
     </type>

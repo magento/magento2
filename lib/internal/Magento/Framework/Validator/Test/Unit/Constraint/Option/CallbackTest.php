@@ -46,8 +46,8 @@ class CallbackTest extends TestCase
             return 'Value from closure';
         };
 
-        $mock = $this->getMockBuilder('Foo')
-            ->setMethods(['getValue'])
+        $mock = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['getValue'])
             ->getMock();
         $mock->method('getValue')
             ->with('arg1', 'arg2')

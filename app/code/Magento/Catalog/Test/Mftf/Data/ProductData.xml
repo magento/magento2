@@ -934,6 +934,10 @@
         <data key="name" unique="suffix">Product With Long Name And Sku - But not too long</data>
         <data key="sku" unique="suffix">Product With Long Name And Sku - But not too long</data>
     </entity>
+    <entity name="ProductWithSpecialCharNameSku" extends="ApiSimpleProduct">
+        <data key="name" unique="suffix">Test "Config"</data>
+        <data key="sku" unique="suffix">Test "Config"</data>
+    </entity>
     <entity name="PaginationProduct" type="product">
         <data key="name" unique="suffix">pagi</data>
         <data key="sku" unique="suffix">pagisku</data>
@@ -1518,5 +1522,13 @@
         <data key="weight">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleProductWithPrice1" type="product2" extends="ApiSimpleOne">
+        <data key="price">1</data>
+        <data key="weight">1</data>
+    </entity>
+    <entity name="SimpleProductWithWeight" extends="SimpleProduct50" type="product">
+        <data key="weight">1</data>
+        <data key="price">10</data>
     </entity>
 </entities>

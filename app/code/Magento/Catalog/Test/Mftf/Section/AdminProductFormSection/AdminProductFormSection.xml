@@ -88,5 +88,9 @@
         <element name="btnAdvancedInventory" type="button" selector="//button//span[text()='Advanced Inventory']/.."/>
         <element name="saveCategory" type="button" selector="//button[@data-action='close-advanced-select']" timeout="30"/>
         <element name="attributeRequiredInputField" type="select" selector="//select[contains(@name, 'product[{{attributeCode}}]')]" parameterized="true"/>
+        <element name="customTextAttribute" type="input" selector="//input[@name='product[{{attribute_code}}]']" parameterized="true"/>
+        <element name="customSelectAttribute" type="select" selector="//select[@name='product[{{attribute_code}}]']" parameterized="true"/>
+        <element name="customSwitcherAttribute" type="checkbox" selector="//input[@name='product[{{attribute_code}}]' and @value='{{checked_value}}']/parent::div[@data-role='switcher']" parameterized="true"/>
+
     </section>
 </sections>
