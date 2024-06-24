@@ -132,6 +132,8 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Sales\Model\Order\Payment\Transaction $transaction
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $transaction)
     {
