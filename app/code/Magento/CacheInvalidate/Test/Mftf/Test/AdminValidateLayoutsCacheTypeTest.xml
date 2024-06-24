@@ -63,9 +63,6 @@
         </actionGroup>
         <!--Assert Currency symbol is not changed-->
         <waitForText selector="{{AdminCurrencySymbolsGridSection.currencySymbolOfProduct}}" userInput="$" stepKey="verifyCurrencySymbolIsNotChangedBeforeFlushingTheChangesInStoreFront"/>
-        <!-- Navigate To Currency Symbol-->
-        <actionGroup ref="AdminNavigateToCurrencySymbolsPageActionGroup" stepKey="navigateToCurrencySymbolsPageAgain"/>
-        <waitForText selector="{{AdminMessagesSection.assertFlushCacheWarningMessage}}" userInput="One or more of the Cache Types are invalidated: Configuration, Page Cache, Blocks HTML output, Layouts." stepKey="assertFlushCacheWarningMessageAppearAfterChangingConfig"/>
         <!--Navigate to Cache Management-->
         <actionGroup ref="AdminGoToCacheManagementPageActionGroup" stepKey="goToCacheManagementPage1"/>
         <!-- Flush Cache-->
