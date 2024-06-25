@@ -120,23 +120,6 @@ class Generic implements CacheInterface, ResetAfterRequestInterface
     /**
      * @inheritdoc
      */
-    public function storeDirNotExists(string $path): void
-    {
-        $object = [
-            'type' => 'dir',
-            'path' => $path,
-        ];
-        $this->cacheData[$path] = $object;
-        $this->cacheAdapter->save(
-            $this->serializer->serialize([$path => $this->cacheData[$path]]),
-            $this->prefix . $path,
-            [self::CACHE_TAG]
-        );
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function exists(string $path): ?bool
     {
         if (!isset($this->cacheData[$path])) {
