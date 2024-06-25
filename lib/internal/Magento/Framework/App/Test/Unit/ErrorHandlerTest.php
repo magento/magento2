@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\ErrorHandler;
+use Magento\Framework\Exception\ErrorHandlerException;
 use PHPUnit\Framework\TestCase;
 
 class ErrorHandlerTest extends TestCase
@@ -59,7 +60,7 @@ class ErrorHandlerTest extends TestCase
         $errorLine = 'test_error_line';
 
         $expectedExceptionMessage = sprintf('%s: %s in %s on line %s', $errorPhrase, $errorStr, $errorFile, $errorLine);
-        $this->expectException('Exception');
+        $this->expectException(ErrorHandlerException::class);
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $this->object->handler($errorNo, $errorStr, $errorFile, $errorLine);
