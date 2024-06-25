@@ -1734,15 +1734,15 @@ class Installer
             $request,
             function ($value, $key) {
                 return in_array(
-                        $key,
-                        [
+                    $key,
+                    [
                             AdminAccount::KEY_EMAIL,
                             AdminAccount::KEY_FIRST_NAME,
                             AdminAccount::KEY_LAST_NAME,
                             AdminAccount::KEY_USER,
                             AdminAccount::KEY_PASSWORD,
                         ]
-                    ) && $value !== null;
+                ) && $value !== null;
             },
             ARRAY_FILTER_USE_BOTH
         );
