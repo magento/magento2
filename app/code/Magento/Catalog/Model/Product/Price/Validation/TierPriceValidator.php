@@ -565,7 +565,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
             $website = $this->websiteRepository->getById($websiteId);
             $websiteCurrency = $website->getBaseCurrencyCode();
 
-            return $price->getWebsiteId() == $tierPrice->getWebsiteId() && $baseCurrency == $websiteCurrency;
+            return $baseCurrency == $websiteCurrency;
         }
 
         return $price->getWebsiteId() == $tierPrice->getWebsiteId();
