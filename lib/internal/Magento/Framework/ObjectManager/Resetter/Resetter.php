@@ -30,7 +30,6 @@ class Resetter implements ResetterInterface
     /** @var WeakMapSorter|null Note: We use temporal coupling here because of chicken/egg during bootstrapping */
     private ?WeakMapSorter $weakMapSorter = null;
 
-
     /**
      * @var array
      */
@@ -46,8 +45,8 @@ class Resetter implements ResetterInterface
         private ?ComponentRegistrarInterface $componentRegistrar = null,
         private array $classList = [],
     ) {
-        if (null === $componentRegistrar) {
-            $componentRegistrar = new ComponentRegistrar();
+        if (null === $this->componentRegistrar) {
+            $this->componentRegistrar = new ComponentRegistrar();
         }
         foreach ($this->getPaths() as $resetPath) {
             if (!\file_exists($resetPath)) {
