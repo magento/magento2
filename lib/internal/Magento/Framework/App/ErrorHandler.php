@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\App;
 
+use Magento\Framework\Exception\ErrorHandlerException;
+
 /**
  * An error handler that converts runtime errors into exceptions
  */
@@ -59,6 +61,6 @@ class ErrorHandler
         $msg = isset($this->errorPhrases[$errorNo]) ? $this->errorPhrases[$errorNo] : "Unknown error ({$errorNo})";
         $msg .= ": {$errorStr} in {$errorFile} on line {$errorLine}";
         // phpcs:ignore Magento2.Exceptions.DirectThrow
-        throw new \Exception($msg);
+        throw new ErrorHandlerException($msg, 0, $errorNo, $errorFile, $errorLine);
     }
 }
