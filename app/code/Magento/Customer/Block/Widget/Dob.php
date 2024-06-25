@@ -23,9 +23,9 @@ class Dob extends AbstractWidget
     /**
      * Constants for borders of date-type customer attributes
      */
-    const MIN_DATE_RANGE_KEY = 'date_range_min';
+    public const MIN_DATE_RANGE_KEY = 'date_range_min';
 
-    const MAX_DATE_RANGE_KEY = 'date_range_max';
+    public const MAX_DATE_RANGE_KEY = 'date_range_max';
 
     /**
      * @var array
