@@ -69,7 +69,7 @@ class ArchiveTest extends TestCase
     /**
      * @return array
      */
-    public function isArchiveProvider()
+    public static function isArchiveProvider()
     {
         return [
             ['archive.tar', true],
@@ -106,7 +106,7 @@ class ArchiveTest extends TestCase
     /**
      * @return array
      */
-    public function isTarProvider()
+    public static function isTarProvider()
     {
         return [
             ['archive.tar', true],
@@ -154,7 +154,7 @@ class ArchiveTest extends TestCase
     /**
      * @return array
      */
-    public function destinationProvider()
+    public static function destinationProvider()
     {
         return [
             ['archive.gz', 'zlib'],
@@ -214,7 +214,7 @@ class ArchiveTest extends TestCase
     /**
      * @return array
      */
-    public function tarProvider()
+    public static function tarProvider()
     {
         return [
             ['archive.tar', ''],

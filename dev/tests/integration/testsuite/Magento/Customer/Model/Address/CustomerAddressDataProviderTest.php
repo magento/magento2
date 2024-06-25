@@ -112,7 +112,7 @@ class CustomerAddressDataProviderTest extends TestCase
      *
      * @return array
      */
-    public function createAddressesDataProvider(): array
+    public static function createAddressesDataProvider(): array
     {
         return [
             'address_in_single_allowed_country' => [1, ['US']],

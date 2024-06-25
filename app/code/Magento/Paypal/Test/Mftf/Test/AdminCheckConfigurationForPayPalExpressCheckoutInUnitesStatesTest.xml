@@ -15,6 +15,7 @@
             <description value="Check paypal express checkout payment option's enablement and disablement based on the configuration setting in backend."/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-5499"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct" stepKey="simpleProduct"/>

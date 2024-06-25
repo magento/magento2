@@ -124,7 +124,7 @@ class NewActionTest extends AbstractController
     /**
      * @return array
      */
-    public function subscribersDataProvider(): array
+    public static function subscribersDataProvider(): array
     {
         return [
             'without_email' => [
@@ -163,7 +163,7 @@ class NewActionTest extends AbstractController
     /**
      * @return array
      */
-    public function emailAndStatusDataProvider()
+    public static function emailAndStatusDataProvider()
     {
         return [
             'customer' => ['new_customer@example.com', 2],

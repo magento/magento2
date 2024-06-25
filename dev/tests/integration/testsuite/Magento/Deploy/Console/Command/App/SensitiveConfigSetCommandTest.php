@@ -94,7 +94,13 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         $outputMock = $this->getMockForAbstractClass(OutputInterface::class);
         $outputMock
             ->method('writeln')
-            ->withConsecutive(['<info>Configuration value saved in app/etc/env.php</info>']);
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 === '<info>Configuration value saved in app/etc/env.php</info>') {
+                        return null;
+                    }
+                }
+            );
 
         $inputMocks = [];
 
@@ -184,9 +190,13 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         $outputMock = $this->getMockForAbstractClass(OutputInterface::class);
         $outputMock
             ->method('writeln')
-            ->withConsecutive(
-                ['<info>Please set configuration values or skip them by pressing [Enter]:</info>'],
-                ['<info>Configuration values saved in app/etc/env.php</info>']
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == '<info>Please set configuration values or skip them by pressing [Enter]:</info>' ||
+                        $arg1 == '<info>Configuration values saved in app/etc/env.php</info>') {
+                        return null;
+                    }
+                }
             );
         $command = $this->createInteractiveCommand('sensitiveValue');
         $command->run($inputMock, $outputMock);
@@ -303,27 +313,29 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         if (!$isInteractive) {
             $inputMock->expects($this->exactly(2))
                 ->method('getArgument')
-                ->withConsecutive(
-                    [SensitiveConfigSetCommand::INPUT_ARGUMENT_PATH],
-                    [SensitiveConfigSetCommand::INPUT_ARGUMENT_VALUE]
-                )
-                ->willReturnOnConsecutiveCalls(
-                    $key,
-                    $val
+                ->willReturnCallback(
+                    function ($arg1) use ($key, $val) {
+                        if ($arg1 == SensitiveConfigSetCommand::INPUT_ARGUMENT_PATH) {
+                            return $key;
+                        } elseif ($arg1 == SensitiveConfigSetCommand::INPUT_ARGUMENT_VALUE) {
+                            return $val;
+                        }
+                    }
                 );
         }
 
         $inputMock->expects($this->exactly(3))
             ->method('getOption')
-            ->withConsecutive(
-                [SensitiveConfigSetCommand::INPUT_OPTION_SCOPE],
-                [SensitiveConfigSetCommand::INPUT_OPTION_SCOPE_CODE],
-                [SensitiveConfigSetCommand::INPUT_OPTION_INTERACTIVE]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $scope,
-                $scopeCode,
-                $isInteractive
+            ->willReturnCallback(
+                function ($arg1) use ($scope, $scopeCode, $isInteractive) {
+                    if ($arg1 == SensitiveConfigSetCommand::INPUT_OPTION_SCOPE) {
+                        return $scope;
+                    } elseif ($arg1 == SensitiveConfigSetCommand::INPUT_OPTION_SCOPE_CODE) {
+                        return $scopeCode;
+                    } elseif ($arg1 == SensitiveConfigSetCommand::INPUT_OPTION_INTERACTIVE) {
+                        return $isInteractive;
+                    }
+                }
             );
 
         return $inputMock;

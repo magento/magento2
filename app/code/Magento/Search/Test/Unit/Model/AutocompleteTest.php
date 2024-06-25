@@ -37,11 +37,11 @@ class AutocompleteTest extends TestCase
 
         $this->firstDataProvider = $this->getMockBuilder(DataProviderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getItems'])
+            ->onlyMethods(['getItems'])
             ->getMockForAbstractClass();
         $this->secondDataProvider = $this->getMockBuilder(DataProviderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getItems'])
+            ->onlyMethods(['getItems'])
             ->getMockForAbstractClass();
         $dataProviders = [
             '20' => $this->firstDataProvider,

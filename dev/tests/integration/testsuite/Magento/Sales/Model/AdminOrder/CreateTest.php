@@ -546,7 +546,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @case #2 Changed after failed first place order action.
      * @return array
      */
-    public function createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider()
+    public static function createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider()
     {
         return [
             1 => ['customer@email.com', 'customer@email.com'],
@@ -988,7 +988,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     {
         $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Data\Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getId',
                     'getGroupId',
