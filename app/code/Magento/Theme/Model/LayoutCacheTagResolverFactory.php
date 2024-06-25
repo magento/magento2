@@ -24,31 +24,22 @@ use Magento\Framework\App\Cache\Tag\StrategyInterface;
 /**
  * Creates strategies for layout cache
  */
-class LayoutTagCacheFactory
+class LayoutCacheTagResolverFactory
 {
     /**
-     * @var array
-     */
-    private array $customLayoutTagCache= [];
-
-    /**
-     * Factory constructor.
-     *
-     * @param array $customLayoutTagCache
+     * Construct
      */
     public function __construct(
-        array $customLayoutTagCache  = []
-    ) {
-        $this->customLayoutTagCache  = $customLayoutTagCache ;
-    }
+        private readonly array $cacheTagsResolvers
+    ) {}
 
     /**
-     * Return tag strategy for specified object
+     * Return tag resolver for specified object
      *
      * @param object $object
      * @return StrategyInterface|null
      */
-    public function getStrategy(object $object): ?StrategyInterface
+    public function getResolver(object $object): ?StrategyInterface
     {
         if (!is_object($object)) {
             throw new InvalidArgumentException('Provided argument is not an object');
@@ -60,9 +51,9 @@ class LayoutTagCacheFactory
             class_implements($object)
         );
 
-        $result = array_intersect(array_keys($this->customLayoutTagCache), $classHierarchy);
+        $result = array_intersect(array_keys($this->cacheTagsResolvers), $classHierarchy);
         if ($result) {
-            return $this->customLayoutTagCache [array_shift($result)];
+            return $this->cacheTagsResolvers[array_shift($result)];
         }
         return null;
     }

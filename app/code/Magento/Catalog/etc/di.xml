@@ -1359,14 +1359,14 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Theme\Model\LayoutTagCacheFactory">
+    <type name="Magento\Theme\Model\LayoutCacheTagResolverFactory">
         <arguments>
-            <argument name="customLayoutTagCache" xsi:type="array">
+            <argument name="cacheTagsResolvers" xsi:type="array">
                 <item name="Magento\Catalog\Model\Product" xsi:type="object">
-                    Magento\Catalog\Model\Product\ProductLayoutTagCacheResolver
+                    Magento\Catalog\Model\Product\LayoutCacheTagResolver
                 </item>
                 <item name="Magento\Catalog\Model\Category" xsi:type="object">
-                    Magento\Catalog\Model\Category\CategoryLayoutTagCacheResolver
+                    Magento\Catalog\Model\Category\LayoutCacheTagResolver
                 </item>
             </argument>
         </arguments>

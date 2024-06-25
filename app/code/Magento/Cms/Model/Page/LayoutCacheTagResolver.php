@@ -18,13 +18,14 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Model\Page;
 
+use Magento\Cms\Model\Page;
 use Magento\Framework\App\Cache\Tag\StrategyInterface;
 use Magento\Framework\Model\AbstractModel;
 
 /**
  * Get additional layout cache tag for CMS layout.
  */
-class CmsLayoutTagCacheResolver implements StrategyInterface
+class LayoutCacheTagResolver implements StrategyInterface
 {
     /**
      * @inheritDoc
@@ -39,7 +40,6 @@ class CmsLayoutTagCacheResolver implements StrategyInterface
                 str_replace('-', '_', strtoupper($object->getIdentifier())))
             ];
         }
-
         return [];
     }
 
@@ -51,8 +51,7 @@ class CmsLayoutTagCacheResolver implements StrategyInterface
      */
     private function isExistingPageLayoutChange(AbstractModel $object): bool
     {
-        return !$object instanceof Page ||
-            !$object->dataHasChangedFor(Page::PAGE_LAYOUT) ||
-            $object->isObjectNew();
+        return $object instanceof Page && !$object->isObjectNew() &&
+            $object->dataHasChangedFor(Page::PAGE_LAYOUT);
     }
 }

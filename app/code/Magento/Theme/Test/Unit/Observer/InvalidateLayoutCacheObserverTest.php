@@ -18,11 +18,9 @@ declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Observer;
 
-use Magento\Framework\App\Cache\Tag\StrategyInterface;
-use Magento\Theme\Model\LayoutTagCacheFactory;
+use Magento\Theme\Model\LayoutCacheTagResolverFactory;
 use Magento\Theme\Observer\InvalidateLayoutCacheObserver;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
-use Magento\Framework\App\Cache\Tag\Resolver;
 use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event;
@@ -49,14 +47,9 @@ class InvalidateLayoutCacheObserverTest extends TestCase
     private $cacheStateMock;
 
     /**
-     * @var Resolver|MockObject
+     * @var LayoutCacheTagResolverFactory|MockObject
      */
     private $tagResolverMock;
-
-    /**
-     * @var LayoutTagCacheFactory|MockObject
-     */
-    private $layoutTagCacheFactory;
 
     /**
      * @var Observer|MockObject
@@ -84,15 +77,12 @@ class InvalidateLayoutCacheObserverTest extends TestCase
             ->onlyMethods(['clean'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->layoutTagCacheFactory = $this
-            ->getMockBuilder(LayoutTagCacheFactory::class)
-            ->onlyMethods(['getStrategy'])
+        $this->tagResolverMock = $this
+            ->getMockBuilder(LayoutCacheTagResolverFactory::class)
+            ->addMethods(['getTags'])
+            ->onlyMethods(['getResolver'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->tagResolverMock = $this
-            ->getMockBuilder(Resolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->observerMock = $this
             ->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
@@ -116,8 +106,7 @@ class InvalidateLayoutCacheObserverTest extends TestCase
         $this->invalidateLayoutCacheObserver = new InvalidateLayoutCacheObserver(
             $this->layoutCacheMock,
             $this->cacheStateMock,
-            $this->tagResolverMock,
-            $this->layoutTagCacheFactory
+            $this->tagResolverMock
         );
     }
 
@@ -165,6 +154,10 @@ class InvalidateLayoutCacheObserverTest extends TestCase
             ->willReturn(random_int(1, 100));
         $this->tagResolverMock
             ->expects($this->any())
+            ->method('getResolver')
+            ->willReturn($cacheStrategy);
+        $this->tagResolverMock
+            ->expects($this->any())
             ->method('getTags')
             ->with($this->objectMock)
             ->willReturn($tags);
@@ -172,10 +165,6 @@ class InvalidateLayoutCacheObserverTest extends TestCase
             ->expects($this->any())
             ->method('clean')
             ->willReturnSelf();
-        $this->layoutTagCacheFactory
-            ->expects($this->any())
-            ->method('getStrategy')
-            ->willReturn($cacheStrategy);
         $this->invalidateLayoutCacheObserver->execute($this->observerMock);
     }
 

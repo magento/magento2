@@ -26,7 +26,7 @@ use Magento\Widget\Model\Widget\Instance;
 /**
  * Get additional layout cache tag for category layout.
  */
-class CategoryLayoutTagCacheResolver implements StrategyInterface
+class LayoutCacheTagResolver implements StrategyInterface
 {
     /**
      * @inheritDoc
@@ -40,7 +40,6 @@ class CategoryLayoutTagCacheResolver implements StrategyInterface
                 str_replace('{{ID}}', $object->getId(), Instance::SINGLE_CATEGORY_LAYOUT_HANDLE))
             ];
         }
-
         return [];
     }
 
@@ -52,8 +51,8 @@ class CategoryLayoutTagCacheResolver implements StrategyInterface
      */
     private function isExistingCategoryLayoutChange(AbstractModel $object): bool
     {
-        return !$object instanceof Category || $this->isObjectChanged($object) ||
-            $object->isObjectNew();
+        return $object instanceof Category &&
+            !$object->isObjectNew() && $this->isObjectChanged($object);
     }
 
     /**
@@ -65,15 +64,10 @@ class CategoryLayoutTagCacheResolver implements StrategyInterface
     private function isObjectChanged(AbstractModel $object): bool
     {
         $isChanged = false;
-        if ($object->isDeleted() || $object->hasDataChanges()) {
+        $objectNewPageLayout = $object->getData('page_layout');
+        $objectOldPageLayout = $object->getOrigData('page_layout');
+        if ($objectNewPageLayout !== $objectOldPageLayout) {
             $isChanged = true;
-        } else {
-            $objectNewPageLayout = $object->getData('page_layout');
-            $objectOldPageLayout = $object->getOrigData('page_layout');
-
-            if ($objectNewPageLayout !== $objectOldPageLayout) {
-                $isChanged = true;
-            }
         }
         return $isChanged;
     }
