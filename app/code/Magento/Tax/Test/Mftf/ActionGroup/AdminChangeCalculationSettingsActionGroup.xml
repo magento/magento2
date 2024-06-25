@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminChangeCalculationSettingsActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Tax'. Change the 'Calculation Settings'.</description>
+        </annotations>
+        <!-- change configurations on tax calculation settings-->
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationSettings}}" visible="true" stepKey="openCalculationSettingsTab"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationAlgorithmInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationAlgorithmInherit}}" visible="true" stepKey="clickCalculationMethodBasedCheckBox"/>
+        <selectOption userInput="Total" selector="{{AdminConfigureTaxSection.taxCalculationAlgorithm}}" stepKey="fillCalculationMethodBased"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationBasedInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationBasedInherit}}" visible="true" stepKey="clickTaxCalculationBasedCheckBox"/>
+        <selectOption userInput="Shipping Origin" selector="{{AdminConfigureTaxSection.taxCalculationBased}}" stepKey="fillTaxCalculationBased"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationPricesInherit}}" visible="true" stepKey="clickCalculationPricesCheckBox"/>
+        <selectOption userInput="Including Tax" selector="{{AdminConfigureTaxSection.taxCalculationPrices}}" stepKey="setCalculationPriceToIncludingTax"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationShippingPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationShippingPricesInherit}}" visible="true" stepKey="clickShippingPricesCheckBox"/>
+        <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.taxCalculationShippingPrices}}" stepKey="setCalculationPriceToExcludingTax"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationApplyCustomerTaxInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationShippingPricesInherit}}" visible="true" stepKey="clickApplyCustomerTaxCheckBox"/>
+        <selectOption userInput="After Discount" selector="{{AdminConfigureTaxSection.taxCalculationApplyCustomerTax}}" stepKey="setApplyCustomerTaxAfterDiscount"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationApplyDiscountOnPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationShippingPricesInherit}}" visible="true" stepKey="clickApplyDiscountOnPricesCheckBox"/>
+        <selectOption userInput="Excluding Tax" selector="{{AdminConfigureTaxSection.taxCalculationApplyDiscountOnPrices}}" stepKey="setApplyDiscountOnPricesToExecludeTax"/>
+    </actionGroup>
+</actionGroups>
