@@ -34,11 +34,11 @@ class Resetter extends OriginalResetter
     /**
      * Constructor
      *
-     * @param ComponentRegistrarInterface $componentRegistrar
+     * @param ComponentRegistrarInterface|null $componentRegistrar
      * @param array $classList
      * @return void
      */
-    public function __construct(ComponentRegistrarInterface $componentRegistrar, array $classList = [])
+    public function __construct(?ComponentRegistrarInterface $componentRegistrar = null, array $classList = [])
     {
         $this->collectedWeakMap = new WeakMap;
         $this->skipListAndFilterList =  new SkipListAndFilterList;

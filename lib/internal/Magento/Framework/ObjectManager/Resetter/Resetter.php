@@ -37,15 +37,18 @@ class Resetter implements ResetterInterface
     private array $reflectionCache = [];
 
     /**
-     * @param ComponentRegistrarInterface $componentRegistrar
+     * @param ComponentRegistrarInterface|null $componentRegistrar
      * @param array $classList
      * @return void
      * @phpcs:disable Magento2.Functions.DiscouragedFunction
      */
     public function __construct(
-        private ComponentRegistrarInterface $componentRegistrar,
+        private ?ComponentRegistrarInterface $componentRegistrar = null,
         private array $classList = [],
     ) {
+        if (null === $componentRegistrar) {
+            $componentRegistrar = new ComponentRegistrar();
+        }
         foreach ($this->getPaths() as $resetPath) {
             if (!\file_exists($resetPath)) {
                 continue;
