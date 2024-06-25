@@ -279,6 +279,12 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     protected function updateUrlPathForCategory(Category $category, Category $parentCategory = null)
     {
         $category->unsUrlPath();
+
+        if ($parentCategory == null) {
+            $category->getResource()->saveAttribute($category, 'url_path');
+            return;
+        }
+
         if ($category->getStoreId()=== Store::DEFAULT_STORE_ID || $parentCategory->getUrlKey() !== null) {
             $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category, $parentCategory));
         }
