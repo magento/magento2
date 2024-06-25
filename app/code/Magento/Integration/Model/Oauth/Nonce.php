@@ -17,7 +17,7 @@ namespace Magento\Integration\Model\Oauth;
 class Nonce extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * Oauth data
+     * Oauth data function
      *
      * @var \Magento\Integration\Helper\Oauth\Data
      */

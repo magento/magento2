@@ -16,7 +16,7 @@ namespace Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts;
 class ListAssociatedProducts extends \Magento\Backend\Block\Template
 {
     /**
-     * Registry
+     * Registry variable
      *
      * @var \Magento\Framework\Registry
      */

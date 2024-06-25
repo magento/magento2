@@ -11,7 +11,7 @@ namespace Magento\Fedex\Model\Source;
 class Freemethod extends \Magento\Fedex\Model\Source\Method
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

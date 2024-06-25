@@ -20,6 +20,7 @@ class Edit extends Widget implements ContainerInterface
     /**
      * @var \Magento\Framework\Registry
      * @deprecated 101.0.0 since 2.3.0 in favor of stateful global objects elimination.
+     * @see Nothing
      */
     protected $_registryManager;
 
