@@ -11,10 +11,8 @@ define([
     $.validator.addMethod(
         'validate-date',
         function (value, element, params) {
-            if (params.dateFormat === 'M/dd/y') {
-                params.dateFormat = 'MM/dd/y';
-            }
             var dateFormat = utils.normalizeDate(params.dateFormat);
+
             if (value === '') {
                 return true;
             }
