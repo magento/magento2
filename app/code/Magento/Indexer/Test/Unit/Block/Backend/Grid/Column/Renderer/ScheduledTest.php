@@ -43,7 +43,7 @@ class ScheduledTest extends TestCase
     /**
      * @return array
      */
-    public function typeProvider()
+    public static function typeProvider()
     {
         return [
             ['customer_grid', true, 'grid-severity-major', __('Update by Schedule')],

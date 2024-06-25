@@ -34,7 +34,7 @@ class StoreCodeValidatorTest extends TestCase
     {
         $this->regexValidatorFactoryMock = $this->getMockBuilder(RegexFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->regexValidatorMock = $this->createMock(Regex::class);
         $this->regexValidatorFactoryMock->method('create')

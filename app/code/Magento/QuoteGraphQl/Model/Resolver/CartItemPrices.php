@@ -118,6 +118,29 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
     {
         $qty = $cartItem->getTotalQty();
         // Round unit price before multiplying to prevent losing 1 cent on subtotal
-        return $this->priceCurrency->round($cartItem->getOriginalPrice()) * $qty;
+        return $this->priceCurrency->round($cartItem->getOriginalPrice() + $this->getOptionsPrice($cartItem)) * $qty;
+    }
+
+    /**
+     * Get the product custom options price
+     *
+     * @param Item $cartItem
+     * @return float
+     */
+    private function getOptionsPrice(Item $cartItem): float
+    {
+        $price = 0.0;
+        $optionIds = $cartItem->getProduct()->getCustomOption('option_ids');
+        if (!$optionIds) {
+            return $price;
+        }
+        foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
+            $option = $cartItem->getProduct()->getOptionById($optionId);
+            if ($option) {
+                $price += $option->getRegularPrice();
+            }
+        }
+
+        return $price;
     }
 }

@@ -44,7 +44,7 @@ class ValidatorTest extends TestCase
         $this->validator = $this->getMockBuilder(
             \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator::class
         )
-            ->setMethods(['_clearMessages', '_addMessages'])
+            ->onlyMethods(['_clearMessages', '_addMessages'])
             ->setConstructorArgs([$this->validators])
             ->getMock();
     }
@@ -84,7 +84,7 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function isValidDataProvider()
+    public static function isValidDataProvider()
     {
         return [
             [

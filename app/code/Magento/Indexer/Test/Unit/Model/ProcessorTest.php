@@ -327,7 +327,7 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function sharedIndexDataProvider(): array
+    public static function sharedIndexDataProvider(): array
     {
         return [
             'Without dependencies' => [
@@ -361,9 +361,9 @@ class ProcessorTest extends TestCase
                     'indexer_3' => [StateInterface::STATUS_VALID]
                 ],
                 'expected_reindex_all_calls' => [
-                    'indexer_1' => $this->once(),
-                    'indexer_2' => $this->never(),
-                    'indexer_3' => $this->never()
+                    'indexer_1' => self::once(),
+                    'indexer_2' => self::never(),
+                    'indexer_3' => self::never()
                 ],
                 'executed_shared_indexers' => []
             ],
@@ -409,10 +409,10 @@ class ProcessorTest extends TestCase
                     'indexer_4' => [StateInterface::STATUS_VALID]
                 ],
                 'expected_reindex_all_calls' => [
-                    'indexer_1' => $this->once(),
-                    'indexer_2' => $this->never(),
-                    'indexer_3' => $this->once(),
-                    'indexer_4' => $this->never()
+                    'indexer_1' => self::once(),
+                    'indexer_2' => self::never(),
+                    'indexer_3' => self::once(),
+                    'indexer_4' => self::never()
                 ],
                 'executed_shared_indexers' => [['indexer_2'], ['indexer_3']]
             ]
@@ -422,7 +422,7 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function suspendedIndexDataProvider(): array
+    public static function suspendedIndexDataProvider(): array
     {
         return [
             'Indexers' => [
@@ -464,9 +464,9 @@ class ProcessorTest extends TestCase
                     ]
                 ],
                 'expected_reindex_all_calls' => [
-                    'indexer_1' => $this->once(),
-                    'indexer_2' => $this->never(),
-                    'indexer_3' => $this->never()
+                    'indexer_1' => self::once(),
+                    'indexer_2' => self::never(),
+                    'indexer_3' => self::never()
                 ]
             ]
         ];
@@ -496,8 +496,13 @@ class ProcessorTest extends TestCase
         $indexerRegistryMock
             ->expects($this->exactly(count($executedSharedIndexers)))
             ->method('get')
-            ->withConsecutive(...$executedSharedIndexers)
-            ->willReturn($emptyIndexer);
+            ->willReturnCallback(function ($arg1) use ($emptyIndexer, $executedSharedIndexers) {
+                static $callCount = 0;
+                if (in_array($arg1, $executedSharedIndexers[$callCount])) {
+                    $callCount++;
+                    return $emptyIndexer;
+                }
+            });
 
         return $indexerRegistryMock;
     }
