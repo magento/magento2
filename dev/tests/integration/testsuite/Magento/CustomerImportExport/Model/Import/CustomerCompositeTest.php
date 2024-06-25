@@ -205,26 +205,26 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
         $filesDirectory = __DIR__ . '/_files/';
         $sourceData = [
             'delete_behavior' => [
-                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
-                '$sourceFile' => $filesDirectory . self::DELETE_FILE_NAME,
-                '$dataBefore' => self::$_beforeImport,
-                '$dataAfter' => [],
-                '$updatedItemsCount' => 0,
-                '$createdItemsCount' => 0,
-                '$deletedItemsCount' => 1,
-                '$errors' => [],
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
+                'sourceFile' => $filesDirectory . self::DELETE_FILE_NAME,
+                'dataBefore' => self::$_beforeImport,
+                'dataAfter' => [],
+                'updatedItemsCount' => 0,
+                'createdItemsCount' => 0,
+                'deletedItemsCount' => 1,
+                'errors' => [],
             ],
         ];
 
         $sourceData['add_update_behavior'] = [
-            '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
-            '$sourceFile' => $filesDirectory . self::UPDATE_FILE_NAME,
-            '$dataBefore' => self::$_beforeImport,
-            '$dataAfter' => self::$_afterImport,
-            '$updatedItemsCount' => 1,
-            '$createdItemsCount' => 3,
-            '$deletedItemsCount' => 0,
-            '$errors' => [],
+            'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
+            'sourceFile' => $filesDirectory . self::UPDATE_FILE_NAME,
+            'dataBefore' => self::$_beforeImport,
+            'dataAfter' => self::$_afterImport,
+            'updatedItemsCount' => 1,
+            'createdItemsCount' => 3,
+            'deletedItemsCount' => 0,
+            'errors' => [],
         ];
 
         return $sourceData;

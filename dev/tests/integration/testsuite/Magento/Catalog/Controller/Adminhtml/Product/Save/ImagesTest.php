@@ -80,7 +80,7 @@ class ImagesTest extends AbstractBackendController
     {
         return [
             'simple_product_with_jpg_image' => [
-                'post_data' => [
+                'postData' => [
                     'product' => [
                         'media_gallery' => [
                             'images' => [

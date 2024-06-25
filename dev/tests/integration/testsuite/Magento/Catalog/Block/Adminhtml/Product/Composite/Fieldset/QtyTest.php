@@ -115,7 +115,7 @@ class QtyTest extends TestCase
     {
         return [
             'with_qty' => [
-                'is_qty' => true,
+                'isQty' => true,
                 'qty' => 5,
             ],
             'without_qty' => [],
