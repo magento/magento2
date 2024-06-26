@@ -1022,6 +1022,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
         $stream = $this->_directory->openFile($file, 'w+');
 
         $stream->lock();
+        $stream->write(pack('CCC', 0xef, 0xbb, 0xbf));
         $stream->writeCsv($this->_getExportHeaders());
         $this->_exportIterateCollection('_exportCsvItem', [$stream]);
 

@@ -63,8 +63,10 @@ class FrontendStorageManagerTest extends TestCase
         $this->model->setData('configuration', $configuration);
         $this->frontendStorageConfigurationPoolMock->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['first_key'], ['second_key'])
-            ->willReturnOnConsecutiveCalls($dynamicStorage, null);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['first_key'] => $dynamicStorage,
+                ['second_key'] => null
+            });
         $dynamicStorage->expects($this->once())
             ->method('get')
             ->willReturn(['second' => 'data']);

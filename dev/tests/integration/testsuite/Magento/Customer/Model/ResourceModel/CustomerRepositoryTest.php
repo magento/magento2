@@ -14,6 +14,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Api\FilterBuilder;
@@ -27,11 +28,10 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\Fixture\Config as ConfigFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Checks Customer insert, update, search with repository
@@ -74,6 +74,11 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $customerRegistry;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -88,6 +93,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->dataObjectHelper = $this->objectManager->create(DataObjectHelper::class);
         $this->encryptor = $this->objectManager->create(EncryptorInterface::class);
         $this->customerRegistry = $this->objectManager->create(CustomerRegistry::class);
+        $this->fixtures = DataFixtureStorageManager::getStorage();
 
         /** @var CacheInterface $cache */
         $cache = $this->objectManager->create(CacheInterface::class);
@@ -538,7 +544,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function updateCustomerDataProvider()
+    public static function updateCustomerDataProvider()
     {
         return [
             'Customer remove default shipping and billing' => [
@@ -557,7 +563,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function searchCustomersDataProvider()
+    public static function searchCustomersDataProvider()
     {
         $builder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
         return [
@@ -731,5 +737,22 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage('Attribute gender does not contain option with Id 123');
         $this->customerRepository->save($customer);
+    }
+
+    #[
+        DataFixture(
+            CustomerFixture::class,
+            [
+                'email' => 'émâíl123@example.com',
+                'rp_token' => 'random_token_123'
+            ],
+            as: 'customer'
+        )
+    ]
+    public function testSaveCustomerWithEmailWithDiacritics(): void
+    {
+        $customer = $this->fixtures->get('customer');
+        $this->assertEquals('émâíl123@example.com', $customer->getEmail());
+        $this->assertNotEquals('random_token_123', $customer->getRpToken());
     }
 }

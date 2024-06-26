@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-36889"/>
             <group value="multiselect"/>
+            <group value="pr_exclude" />
         </annotations>
         <before>
             <!--Set default flat rate shipping method settings-->
@@ -36,6 +37,7 @@
             <!--Delete product-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!--Delete customer-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!--Clear filters on orders grid-->
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersFilters"/>

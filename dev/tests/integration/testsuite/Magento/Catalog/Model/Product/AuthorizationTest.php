@@ -136,7 +136,7 @@ class AuthorizationTest extends TestCase
     public function testAuthorizedSavingOfWithException(array $data): void
     {
         $this->expectException(AuthorizationException::class);
-        $this->expectErrorMessage('Not allowed to edit the product\'s design attributes');
+        $this->expectExceptionMessage('Not allowed to edit the product\'s design attributes');
         $this->request->setPost(new Parameters($data));
 
         /** @var Product $product */

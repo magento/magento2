@@ -260,14 +260,4 @@ class Area implements \Magento\Framework\App\AreaInterface
         $this->_getDesign()->setArea($this->_code)->setDefaultDesignTheme();
         return $this;
     }
-
-    /**
-     * Reset area
-     *
-     * @return void
-     */
-    public function reset()
-    {
-        $this->_loadedParts = [];
-    }
 }

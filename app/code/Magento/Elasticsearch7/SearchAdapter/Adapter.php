@@ -7,17 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch7\SearchAdapter;
 
-use Magento\Framework\Search\RequestInterface;
-use Magento\Framework\Search\Response\QueryResponse;
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder as AggregationBuilder;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Elasticsearch\SearchAdapter\ResponseFactory;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\Search\AdapterInterface;
 use Magento\Elasticsearch\SearchAdapter\QueryContainerFactory;
+use Magento\Elasticsearch\SearchAdapter\ResponseFactory;
+use Magento\Framework\Search\AdapterInterface;
+use Magento\Framework\Search\RequestInterface;
+use Magento\Framework\Search\Response\QueryResponse;
+use Psr\Log\LoggerInterface;
 
 /**
  * Elasticsearch Search Adapter
+ * @deprecated 100.3.0 because of EOL for Elasticsearch7
+ * @see this class will be responsible for ES7 only
  */
 class Adapter implements AdapterInterface
 {
@@ -29,8 +31,6 @@ class Adapter implements AdapterInterface
     private $mapper;
 
     /**
-     * Response Factory
-     *
      * @var ResponseFactory
      */
     private $responseFactory;
@@ -56,15 +56,12 @@ class Adapter implements AdapterInterface
      * @var array
      */
     private static $emptyRawResponse = [
-        "hits" =>
-            [
+        "hits" => [
                 "hits" => []
             ],
-        "aggregations" =>
-            [
+        "aggregations" => [
                 "price_bucket" => [],
-                "category_bucket" =>
-                    [
+                "category_bucket" => [
                         "buckets" => []
 
                     ]
