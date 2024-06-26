@@ -54,7 +54,7 @@ class Utility
      */
     private function isHmac256(string $signatureMethod): bool
     {
-        if (strtoupper(preg_replace( '/[\W]/', '', $signatureMethod)) === 'HMACSHA256') {
+        if (strtoupper(preg_replace('/[\W]/', '', $signatureMethod)) === 'HMACSHA256') {
             return true;
         }
 
