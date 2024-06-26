@@ -49,7 +49,7 @@ class Signature extends \OAuth\OAuth1\Signature\Signature
 
         return $this->helper->sign(
             $signatureData,
-            'SHA256',
+            $this->algorithm,
             $this->credentials->getConsumerSecret(),
             $this->tokenSecret,
             $method,
