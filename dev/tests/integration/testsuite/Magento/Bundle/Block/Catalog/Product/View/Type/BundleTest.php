@@ -110,12 +110,12 @@ class BundleTest extends TestCase
     {
         return [
             'is_salable' => [
-                'is_salable' => true,
-                'expected_value' => 'In stock',
+                'isSalable' => true,
+                'expectedValue' => 'In stock',
             ],
             'is_not_salable' => [
-                'is_salable' => false,
-                'expected_value' => 'Out of stock',
+                'isSalable' => false,
+                'expectedValue' => 'Out of stock',
             ],
         ];
     }
@@ -143,12 +143,12 @@ class BundleTest extends TestCase
     {
         return [
             'is_salable' => [
-                'is_salable' => true,
-                'expected_value' => 'Customize and Add to Cart',
+                'isSalable' => true,
+                'expectedValue' => 'Customize and Add to Cart',
             ],
             'is_not_salable' => [
-                'is_salable' => false,
-                'expected_value' => '',
+                'isSalable' => false,
+                'expectedValue' => '',
             ],
         ];
     }

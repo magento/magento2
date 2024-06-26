@@ -133,33 +133,33 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'Create invoice w/o predefined qty' => [
-                'Qty to invoice' => [],
-                'Qty ordered' => [
+                'qtyToInvoice' => [],
+                'qtyInvoiced' => [
                     'bundle_1' => 2,
                     'bundle_simple_1' => 10,
                 ],
-                'Error msg' => 'Invoiced qty for product %s does not match.',
+                'errorMsg' => 'Invoiced qty for product %s does not match.',
             ],
             'Create invoice with predefined qty' => [
-                'Qty to invoice' => [
+                'qtyToInvoice' => [
                     'bundle_1' => 2,
                     'bundle_simple_1' => 10,
                 ],
-                'Qty ordered' => [
+                'qtyInvoiced' => [
                     'bundle_1' => 2,
                     'bundle_simple_1' => 10,
                 ],
-                'Error msg' => 'Invoiced qty for product %s does not match.',
+                'errorMsg' => 'Invoiced qty for product %s does not match.',
             ],
             'Create invoice with partial predefined qty for bundle' => [
-                'Qty to invoice' => [
+                'qtyToInvoice' => [
                     'bundle_1' => 1,
                 ],
-                'Qty ordered' => [
+                'qtyInvoiced' => [
                     'bundle_1' => 1,
                     'bundle_simple_1' => 5,
                 ],
-                'Error msg' => 'Invoiced qty for product %s does not match.',
+                'errorMsg' => 'Invoiced qty for product %s does not match.',
             ],
         ];
     }

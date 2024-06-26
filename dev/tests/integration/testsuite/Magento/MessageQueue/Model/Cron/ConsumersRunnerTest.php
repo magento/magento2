@@ -155,13 +155,13 @@ class ConsumersRunnerTest extends TestCase
         return [
           [
               'specificConsumer' => 'exportProcessor',
-              'max_messages' => 10,
+              'maxMessage' => 10,
               'command' => PHP_BINARY . ' ' . BP . '/bin/magento queue:consumers:start %s %s %s',
               'expectedArguments' => ['exportProcessor', '--single-thread', '--max-messages=10'],
           ],
           [
               'specificConsumer' => 'exportProcessor',
-              'max_messages' => 5000,
+              'maxMessage' => 5000,
               'command' => PHP_BINARY . ' ' . BP . '/bin/magento queue:consumers:start %s %s %s',
               'expectedArguments' => ['exportProcessor', '--single-thread', '--max-messages=100'],
           ],

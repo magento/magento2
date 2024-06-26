@@ -106,12 +106,12 @@ class CategoryIndexTest extends TestCase
     {
         return [
             'assign_to_category' => [
-                'category_name' => 'Parent category',
-                'expected_records_count' => 1,
+                'categoryName' => 'Parent category',
+                'expectedItemsCount' => 1,
             ],
             'assign_to_category_with_parent_anchor_category' => [
-                'category_name' => 'Child category',
-                'expected_records_count' => 2,
+                'categoryName' => 'Child category',
+                'expectedItemsCount' => 2,
             ],
         ];
     }
@@ -144,12 +144,12 @@ class CategoryIndexTest extends TestCase
     {
         return [
             'assign_product_to_category' => [
-                'category_name' => 'Parent category',
-                'expected_records_count' => 1,
+                'categoryName' => 'Parent category',
+                'expectedCount' => 1,
             ],
             'assign_product_to_category_with_parent_anchor_category' => [
-                'category_name' => 'Child category',
-                'expected_records_count' => 2,
+                'categoryName' => 'Child category',
+                'expectedCount' => 2,
             ],
         ];
     }

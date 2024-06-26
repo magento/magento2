@@ -318,12 +318,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             'all options are required' => [
                 true,
                 true,
-                'out-of-stock' => [
+                'outOfStockConfig' => [
                     'simple1' => [
                         'is_in_stock' => false
                     ],
                 ],
-                'in-stock' => [
+                'inStockConfig' => [
                     'simple1' => [
                         'is_in_stock' => true
                     ]
@@ -332,7 +332,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             'all options are optional' => [
                 false,
                 false,
-                'out-of-stock' => [
+                'outOfStockConfig' => [
                     'simple1' => [
                         'is_in_stock' => false
                     ],
@@ -340,7 +340,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                         'is_in_stock' => false
                     ],
                 ],
-                'in-stock' => [
+                'inStockConfig' => [
                     'simple1' => [
                         'is_in_stock' => true
                     ]
