@@ -35,9 +35,10 @@ class LayoutCacheTagResolver implements StrategyInterface
         if ($this->isExistingPageLayoutChange($object)) {
             return [
                 sprintf(
-                '%s_%s',
-                'CMS_PAGE_VIEW_ID',
-                str_replace('-', '_', strtoupper($object->getIdentifier())))
+                    '%s_%s',
+                    'CMS_PAGE_VIEW_ID',
+                    str_replace('-', '_', strtoupper($object->getIdentifier()))
+                )
             ];
         }
         return [];

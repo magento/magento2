@@ -36,8 +36,9 @@ class LayoutCacheTagResolver implements StrategyInterface
         if ($this->isExistingProductLayoutChange($object)) {
             return [
                 sprintf(
-                '%s',
-                str_replace('{{ID}}', $object->getId(), Instance::SINGLE_PRODUCT_LAYOUT_HANDLE))
+                    '%s',
+                    str_replace('{{ID}}', $object->getId(), Instance::SINGLE_PRODUCT_LAYOUT_HANDLE)
+                )
             ];
         }
         return [];

@@ -36,8 +36,9 @@ class LayoutCacheTagResolver implements StrategyInterface
         if ($this->isExistingCategoryLayoutChange($object)) {
             return [
                 sprintf(
-                '%s',
-                str_replace('{{ID}}', $object->getId(), Instance::SINGLE_CATEGORY_LAYOUT_HANDLE))
+                    '%s',
+                    str_replace('{{ID}}', $object->getId(), Instance::SINGLE_CATEGORY_LAYOUT_HANDLE)
+                )
             ];
         }
         return [];
