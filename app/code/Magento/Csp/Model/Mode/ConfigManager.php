@@ -1,8 +1,4 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
 declare(strict_types=1);
 
 namespace Magento\Csp\Model\Mode;
@@ -11,16 +7,12 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ObjectManager;
 use Magento\Csp\Api\Data\ModeConfiguredInterface;
 use Magento\Csp\Api\ModeConfigManagerInterface;
-use Magento\Csp\Model\Mode\Data\ModeConfigured;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
-/**
- * @inheritDoc
- */
 class ConfigManager implements ModeConfigManagerInterface
 {
     /**
@@ -44,28 +36,31 @@ class ConfigManager implements ModeConfigManagerInterface
     private Http $request;
 
     /**
+     * @var ModeConfiguredInterface
+     */
+    private $modeConfigured;
+
+    /**
      * @param ScopeConfigInterface $config
      * @param Store $store
      * @param State $state
      * @param Http|null $request
+     * @param ModeConfiguredInterface|null $modeConfigured
      */
     public function __construct(
         ScopeConfigInterface $config,
         Store $store,
         State $state,
-        ?Http $request = null
+        ?Http $request = null,
+        ModeConfiguredInterface $modeConfigured = null
     ) {
         $this->config = $config;
         $this->storeModel = $store;
         $this->state = $state;
-
-        $this->request = $request
-            ?? ObjectManager::getInstance()->get(Http::class);
+        $this->request = $request ?? ObjectManager::getInstance()->get(Http::class);
+        $this->modeConfigured = $modeConfigured ?? ObjectManager::getInstance()->get(ModeConfigured::class);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getConfigured(): ModeConfiguredInterface
     {
         $area = $this->state->getAreaCode();
@@ -118,7 +113,7 @@ class ConfigManager implements ModeConfigManagerInterface
             );
         }
 
-        return new ModeConfigured(
+        return $this->modeConfigured->setData(
             (bool) $reportOnly,
             !empty($reportUri) ? $reportUri : null
         );
