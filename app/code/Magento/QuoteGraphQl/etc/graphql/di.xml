@@ -75,4 +75,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Model\QuoteManagement">
+        <plugin name="merge_guest_orders_with_customer_after_place"
+                type="Magento\QuoteGraphQl\Plugin\Model\MergeGuestOrder" />
+    </type>
 </config>
