@@ -47,14 +47,14 @@ class Utility
     }
 
     /**
-     * Check if signature method is HMAC256
+     * Check if signature method is HMAC-SHA256
      *
      * @param string $signatureMethod
      * @return bool
      */
     private function isHmac256(string $signatureMethod): bool
     {
-        if (strtoupper(preg_replace( '/[\W]/', '', $signatureMethod)) === 'HMAC256') {
+        if (strtoupper(preg_replace( '/[\W]/', '', $signatureMethod)) === 'HMACSHA256') {
             return true;
         }
 

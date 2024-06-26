@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+declare(strict_types=1);
 
 namespace Magento\Framework\Oauth\Helper\Signature;
 
@@ -10,7 +15,7 @@ class Hmac256
      * Sign a request
      *
      * @param array $params
-     * @param string $signatureMethod
+     * @param string $algo
      * @param string $consumerSecret
      * @param string|null $tokenSecret
      * @param mixed $method
@@ -19,7 +24,7 @@ class Hmac256
      */
     public function sign(
         array   $params,
-        string  $signatureMethod,
+        string  $algo,
         string  $consumerSecret,
         ?string $tokenSecret = null,
         ?string $method = null,
@@ -29,7 +34,7 @@ class Hmac256
 
         $binaryHash = HMACEncryption::compute(
             $this->assembleKey($consumerSecret, $tokenSecret),
-            $signatureMethod,
+            $algo,
             $this->getBaseSignatureString($params, $method, $url),
             HMACEncryption::OUTPUT_BINARY
         );

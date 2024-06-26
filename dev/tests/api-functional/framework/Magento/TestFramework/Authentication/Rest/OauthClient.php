@@ -18,6 +18,8 @@ use OAuth\OAuth1\Service\AbstractService;
 use OAuth\OAuth1\Signature\SignatureInterface;
 use OAuth\OAuth1\Token\StdOAuth1Token;
 use OAuth\OAuth1\Token\TokenInterface;
+use Laminas\OAuth\Http\Utility as HTTPUtility;
+use Magento\Framework\Oauth\Helper\Signature\Hmac256;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -56,7 +58,7 @@ class OauthClient extends AbstractService
             $storage = new \OAuth\Common\Storage\Memory();
         }
         if (!isset($helper)) {
-            $helper = new Utility();
+            $helper = new Utility(new HTTPUtility(), new Hmac256());
         }
         if (!isset($signature)) {
             $signature = new \Magento\TestFramework\Authentication\Rest\OauthClient\Signature($helper, $credentials);
