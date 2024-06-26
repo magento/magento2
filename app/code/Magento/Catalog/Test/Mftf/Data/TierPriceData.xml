@@ -100,7 +100,7 @@
         <data key="customer_group">General</data>
         <data key="quantity">3</data>
     </entity>
-    <entity name="tierPriceForSimpleProduct" type="data">
+    <entity name="tierPriceForCustomProduct" type="data">
         <data key="website">All Websites [USD]</data>
         <data key="customer_group">ALL GROUPS</data>
         <data key="price">70.00</data>
@@ -112,6 +112,6 @@
         <data key="website_id">0</data>
         <data key="customer_group">ALL GROUPS</data>
         <data key="quantity">1</data>
-        <var key="sku" entityType="product" entityKey="sku"/>
+        <var key="sku" entityType="product" entityKey="sku" />
     </entity>
 </entities>
