@@ -10,3 +10,7 @@ enum ProductStockStatus @doc(description: "States whether a product stock status
     IN_STOCK
     OUT_OF_STOCK
 }
+
+interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemTypeResolver") @doc(description: "An interface for products in a cart.") {
+    not_available_message: String @doc(description: "Message to display when the product is not available with this selected option.") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\NotAvailableMessageResolver")
+}

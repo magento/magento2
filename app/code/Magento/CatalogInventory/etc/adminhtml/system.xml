@@ -35,6 +35,10 @@
                     <label>Display Products Availability in Stock on Storefront</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="not_available_message" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Not Available Message</label>
+                    <source_model>Magento\CatalogInventory\Model\Config\Source\NotAvailableMessage</source_model>
+                </field>
             </group>
             <group id="item_options" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <comment>
