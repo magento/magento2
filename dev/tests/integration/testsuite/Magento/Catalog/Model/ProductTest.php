@@ -8,10 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Copier;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Framework\App\Cache\Type\Block;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
@@ -21,8 +24,11 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\Math\Random;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Magento\Widget\Model\Widget\Instance;
 
 /**
  * Tests product model:
@@ -55,12 +61,18 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
+     * @var DataFixtureStorageManager
+     */
+    private $fixtures;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->fixtures = DataFixtureStorageManager::getStorage();
         $this->_model = $this->objectManager->create(Product::class);
     }
 
@@ -868,5 +880,34 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $product = $this->productRepository->get('some_sku', false, null, true);
         $this->assertEquals(9.95, $product->getPrice());
+    }
+
+    /**
+     * Tests case for product saving invalidate cache successfully
+     */
+    #[
+        DataFixture(ProductFixture::class,
+            ['sku' => 'simple1', 'price' => 10, 'page_layout' => '1column'], as: 'product'
+        ),
+    ]
+    public function testSavingProductInAdminWithLayoutChangeWillInvalidateCache()
+    {
+        /** @var ProductInterface $product */
+        $product = $this->fixtures->get('product');
+        $product->setStatus(Status::STATUS_ENABLED);
+        $this->productRepository->save($product);
+        $blockHtmlCache = $this->objectManager->get(
+            Block::class
+        );
+        $cacheKey = sprintf(
+                    '%s',
+                    str_replace('{{ID}}', (string) $product->getId(), Instance::SINGLE_PRODUCT_LAYOUT_HANDLE)
+                );
+
+        $product->setPageLayout('cms-full-width');
+        $this->productRepository->save($product);
+        $this->assertFalse(
+            $blockHtmlCache->test($cacheKey)
+        );
     }
 }
