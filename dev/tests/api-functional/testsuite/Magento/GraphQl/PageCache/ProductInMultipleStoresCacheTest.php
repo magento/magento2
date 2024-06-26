@@ -306,7 +306,7 @@ QUERY;
         // test cached response store + currency header with non existing currency, and no valid response, no cache
         $headerMap = ['Store' => $storeCodeFromFixture, 'Content-Currency' => 'SOMECURRENCY'];
         $this->expectExceptionMessage(
-            'GraphQL response contains errors: Please correct the target currency'
+            'GraphQL response contains errors: Requested store is not found (fixture_second_store)'
         );
         $this->graphQlQuery($query, [], '', $headerMap);
     }
