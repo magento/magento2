@@ -33,11 +33,11 @@
             <!--Fill tier price and save the product.-->
             <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="openAdvancedPricingDialog"/>
             <actionGroup ref="AdminProductFormAdvancedPricingAddTierPriceActionGroup" stepKey="addTierPrice">
-                <argument name="website" value="{{tierPriceForSimpleProduct.website}}"/>
-                <argument name="customerGroup" value="{{tierPriceForSimpleProduct.customer_group}}"/>
-                <argument name="quantity" value="{{tierPriceForSimpleProduct.qty}}"/>
+                <argument name="website" value="{{tierPriceForCustomProduct.website}}"/>
+                <argument name="customerGroup" value="{{tierPriceForCustomProduct.customer_group}}"/>
+                <argument name="quantity" value="{{tierPriceForCustomProduct.qty}}"/>
                 <argument name="priceType" value="Fixed"/>
-                <argument name="amount" value="{{tierPriceForSimpleProduct.price}}"/>
+                <argument name="amount" value="{{tierPriceForCustomProduct.price}}"/>
             </actionGroup>
             <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="clickOnDone"/>
             <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="saveProduct"/>
@@ -55,9 +55,9 @@
         <actionGroup ref="StorefrontAddSimpleProductCustomOptionCheckBoxActionGroup" stepKey="selectCustomOptionCheckBoxForValue1"/>
         <actionGroup ref="StorefrontAddQuantityOnProductPageActionGroup" stepKey="fillQty"/>
         <waitForElementVisible selector="{{StorefrontCategoryProductSection.productPriceFinal('110')}}" stepKey="assertProductFinalPrice"/>
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('1', tierPriceForSimpleProduct.qty)}}" stepKey="grabFirstTierPriceText"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('1', tierPriceForCustomProduct.qty)}}" stepKey="grabFirstTierPriceText"/>
         <assertEquals stepKey="assertTierPriceTextOnProductPage">
-            <expectedResult type="string">Buy {{tierPriceForSimpleProduct.qty}} for ${{tierPriceForSimpleProduct.price}} each and save 13%</expectedResult>
+            <expectedResult type="string">Buy {{tierPriceForCustomProduct.qty}} for ${{tierPriceForCustomProduct.price}} each and save 13%</expectedResult>
             <actualResult type="variable">grabFirstTierPriceText</actualResult>
         </assertEquals>
         <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart"/>
@@ -233,8 +233,8 @@
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <!-- Go to sales < Order open the created Order and verify order in admin portal -->
-        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="goToOrderInAdmin">
-            <argument name="entityId" value="{$grabOrderNumber}"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="goToOrderInAdmin">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
         <scrollTo selector="{{AdminOrderItemsOrderedSection.productNameColumn}}" stepKey="scrollToField"/>
         <!--validate Simple product, Price = 122.50$; subtotal=1347.50$;Option 1: Value 1 Option 2: Value 1 Option 3: test value in Admin order page .-->
