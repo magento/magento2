@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\GraphQlCache;
 
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -16,20 +15,16 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Response\Http as ResponseHttp;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Controller\HttpRequestProcessor;
 use Magento\GraphQlCache\Controller\Plugin\GraphQl;
 use Magento\GraphQlCache\Model\CacheableQuery;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\PageCache\Model\Config;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-
 
 class GraphQlTest extends GraphQlAbstract
 {
-
     /**
      * @var GraphQl
      */
@@ -44,11 +39,6 @@ class GraphQlTest extends GraphQlAbstract
      * @var Config|MockObject
      */
     private $configMock;
-
-    /**
-     * @var ResponseHttp|MockObject
-     */
-    private $responseMock;
 
     /**
      * @var HttpRequestProcessor|MockObject
@@ -163,6 +153,4 @@ MUTATION;
             ->method('critical');
         $this->assertNull($this->graphql->beforeDispatch($this->subjectMock, $this->requestMock));
     }
-
-
 }
