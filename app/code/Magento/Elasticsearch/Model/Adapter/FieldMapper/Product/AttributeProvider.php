@@ -10,42 +10,43 @@ namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product;
 use Magento\Eav\Model\Config;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter\DummyAttribute;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * Provide attribute adapter.
  */
-class AttributeProvider
+class AttributeProvider implements ResetAfterRequestInterface
 {
     /**
      * Object Manager instance
      *
      * @var ObjectManagerInterface
      */
-    private $objectManager;
+    private ObjectManagerInterface $objectManager;
 
     /**
      * Instance name to create
      *
      * @var string
      */
-    private $instanceName;
+    private string $instanceName;
 
     /**
      * @var Config
      */
-    private $eavConfig;
+    private Config $eavConfig;
 
     /**
      * @var array
      */
-    private $cachedPool = [];
+    private array $cachedPool = [];
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     /**
      * Factory constructor
@@ -100,5 +101,13 @@ class AttributeProvider
         if (isset($this->cachedPool[$attributeCode])) {
             unset($this->cachedPool[$attributeCode]);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->cachedPool = [];
     }
 }

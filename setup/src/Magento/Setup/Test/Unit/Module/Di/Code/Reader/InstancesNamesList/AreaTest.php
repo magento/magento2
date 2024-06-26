@@ -34,14 +34,14 @@ class AreaTest extends TestCase
     {
         $this->classesScannerMock = $this->getMockBuilder(ClassesScanner::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getList'])
+            ->onlyMethods(['getList'])
             ->getMock();
 
         $this->classReaderDecoratorMock = $this->getMockBuilder(
             ClassReaderDecorator::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['getConstructor'])
+            ->onlyMethods(['getConstructor'])
             ->getMock();
 
         $this->model = new Area(

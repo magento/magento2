@@ -68,7 +68,7 @@ class LinkProviderTest extends TestCase
     {
         $this->linkInterfaceFactoryMock = $this->getMockBuilder(LinkInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->fileInfoManagerMock = $this->createMock(FileInfoManager::class);
         $this->storeManagerInterfaceMock = $this->getMockBuilder(StoreManagerInterface::class)

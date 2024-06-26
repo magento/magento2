@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderCancellationReasonsConfigCreateEditTest">
+        <annotations>
+            <features value="Order Cancellation"/>
+            <stories value="Create order cancellation reasons through the admin."/>
+            <title value="Create order cancellation reasons through the admin."/>
+            <description value="Test adding, modifying and deleting order cancellation reasons through the admin."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="LYNX-189"/>
+            <group value="configuration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{AdminOrderCancellationConfigPage.url}}" stepKey="navigateToConfigurationPage"/>
+        <waitForPageLoad time="30" stepKey="waitForAdminSalesConfigPageLoad"/>
+        <conditionalClick selector="{{AdminOrderCancellationConfigSection.salesCancellationHead}}" dependentSelector="{{AdminOrderCancellationConfigSection.systemValueForSalesCancellationReasons}}" visible="false"  stepKey="clickElementToExpand"/>
+        <uncheckOption selector="{{AdminOrderCancellationConfigSection.systemValueForSalesCancellationReasons}}" stepKey="uncheckUseSystemValue"/>
+        <click selector="{{AdminOrderCancellationConfigSection.deleteFirstReason}}" stepKey="deleteDefaultReason"/>
+        <fillField selector="{{AdminOrderCancellationConfigSection.editFirstReason}}" userInput="Modified reason" stepKey="editDefaultReason"/>
+        <click selector="{{AdminOrderCancellationConfigSection.addReason}}" stepKey="addReason"/>
+        <fillField selector="{{AdminOrderCancellationConfigSection.editLastReason}}" userInput="New reason" stepKey="fillReason" />
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForElementVisible"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigSuccessMessage"/>
+    </test>
+</tests>

@@ -89,9 +89,6 @@ class NewRelicWrapper
      */
     public function isExtensionInstalled()
     {
-        if (extension_loaded('newrelic')) {
-            return true;
-        }
-        return false;
+        return extension_loaded('newrelic');
     }
 }

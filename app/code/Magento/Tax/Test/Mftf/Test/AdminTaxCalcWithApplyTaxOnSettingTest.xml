@@ -18,6 +18,7 @@
             <testCaseId value="MC-11026"/>
             <useCaseId value="MC-4316"/>
             <group value="Tax"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

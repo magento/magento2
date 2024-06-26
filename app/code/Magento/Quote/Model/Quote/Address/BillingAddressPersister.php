@@ -5,12 +5,13 @@
  */
 namespace Magento\Quote\Model\Quote\Address;
 
-use Magento\Framework\Exception\InputException;
-use Magento\Quote\Api\Data\CartInterface;
-use Magento\Quote\Api\Data\AddressInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Quote\Model\QuoteAddressValidator;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\QuoteAddressValidator;
 
 /**
  * Saves billing address for quotes.
@@ -47,7 +48,7 @@ class BillingAddressPersister
      * @param bool $useForShipping
      * @return void
      * @throws NoSuchEntityException
-     * @throws InputException
+     * @throws InputException|LocalizedException
      */
     public function save(CartInterface $quote, AddressInterface $address, $useForShipping = false)
     {
@@ -55,8 +56,6 @@ class BillingAddressPersister
         $this->addressValidator->validateForCart($quote, $address);
         $customerAddressId = $address->getCustomerAddressId();
         $shippingAddress = null;
-        $addressData = [];
-
         if ($useForShipping) {
             $shippingAddress = $address;
         }
@@ -64,15 +63,15 @@ class BillingAddressPersister
         if ($customerAddressId) {
             try {
                 $addressData = $this->addressRepository->getById($customerAddressId);
+                $address = $quote->getBillingAddress()->importCustomerAddressData($addressData);
+                if ($useForShipping) {
+                    $shippingAddress = $quote->getShippingAddress()->importCustomerAddressData($addressData);
+                    $shippingAddress->setSaveInAddressBook($saveInAddressBook);
+                }
             } catch (NoSuchEntityException $e) {
-                // do nothing if customer is not found by id
+                $address->setCustomerAddressId(null);
             }
-            $address = $quote->getBillingAddress()->importCustomerAddressData($addressData);
-            if ($useForShipping) {
-                $shippingAddress = $quote->getShippingAddress()->importCustomerAddressData($addressData);
-                $shippingAddress->setSaveInAddressBook($saveInAddressBook);
-            }
-        } elseif ($quote->getCustomerId()) {
+        } elseif ($quote->getCustomerId() && !$address->getEmail()) {
             $address->setEmail($quote->getCustomerEmail());
         }
         $address->setSaveInAddressBook($saveInAddressBook);

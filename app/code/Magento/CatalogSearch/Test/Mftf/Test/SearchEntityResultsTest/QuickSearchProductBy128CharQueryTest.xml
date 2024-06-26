@@ -16,6 +16,7 @@
             <testCaseId value="MC-14795"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="productWith130CharName" stepKey="createSimpleProduct">

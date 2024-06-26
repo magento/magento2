@@ -327,7 +327,9 @@ class ViewTest extends TestCase
         }
         $this->page
             ->method('addPageLayoutHandles')
-            ->withConsecutive(...$withArgs);
+            ->willReturnCallback(function (...$withArgs) {
+                return null;
+            });
     }
 
     /**
@@ -335,7 +337,7 @@ class ViewTest extends TestCase
      *
      * @return array
      */
-    public function getInvocationData(): array
+    public static function getInvocationData(): array
     {
         return [
             [

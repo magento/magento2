@@ -7,11 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller;
 
+use Magento\Bundle\Test\Fixture\Link as BundleSelectionFixture;
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Catalog\Model\Session;
+use Magento\Catalog\Test\Fixture\Category;
+use Magento\Catalog\Test\Fixture\Product;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\TestCase\AbstractController;
@@ -35,6 +45,11 @@ class ProductTest extends AbstractController
     private $session;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixture;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -53,6 +68,7 @@ class ProductTest extends AbstractController
         $this->registry = $this->_objectManager->get(Registry::class);
         $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
         $this->session = $this->_objectManager->get(Session::class);
+        $this->fixture = DataFixtureStorageManager::getStorage();
     }
 
     /**
@@ -254,5 +270,75 @@ class ProductTest extends AbstractController
             ->getUpdate()
             ->getHandles();
         $this->assertContains("catalog_product_view_selectable_{$sku}_{$file}", $handles);
+    }
+
+    /**
+     * Validate itemprop generation on different product types' page
+     *
+     * @return void
+     */
+    #[
+        DataFixture(Category::class, as: 'category'),
+        DataFixture(
+            Product::class,
+            ['category_ids' => ['$category.id$'], 'short_description' => 'Product Short Description'],
+            as: 'sp'
+        ),
+        DataFixture(AttributeFixture::class, ['options' => [['label' => 'option1', 'sort_order' => 0]]], as: 'attr'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            [
+                'short_description' => 'Configurable Product Short Description',
+                '_options' => ['$attr$'],
+                '_links' => ['$sp$']
+            ],
+            as: 'cp'
+        ),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$sp.sku$'], 'link1'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$link1$']], 'opt1'),
+        DataFixture(
+            BundleProductFixture::class,
+            [
+                'short_description' => 'Bundle Product Short Description',
+                'sku' => 'bundle1',
+                '_options' => ['$opt1$']
+            ],
+            as:'bp'
+        ),
+    ]
+    public function testItempropOnProductPage()
+    {
+        $product = $this->fixture->get('sp');
+        $this->checkItemProp($product);
+        $bundleProduct = $this->fixture->get('bp');
+        $this->checkItemProp($bundleProduct);
+        $configurableProduct = $this->fixture->get('cp');
+        $this->checkItemProp($configurableProduct);
+    }
+
+    /**
+     * Validate presence of itemprop for image and description
+     *
+     * @param ProductInterface $product
+     * @return void
+     */
+    private function checkItemProp(ProductInterface $product)
+    {
+        $this->dispatch(sprintf('catalog/product/view/id/%s', $product->getId()));
+        $html = $this->getResponse()->getBody();
+        $this->assertNotEmpty(
+            Xpath::getElementsCountForXpath(
+                '//*[@itemprop="image"]',
+                $html
+            ),
+            'itemprop image doesn\'t match for product type '.$product->getTypeId()
+        );
+        $this->assertNotEmpty(
+            Xpath::getElementsCountForXpath(
+                '//*[@itemprop="description"]',
+                $html
+            ),
+            'itemprop description doesn\'t match for product type '.$product->getTypeId()
+        );
     }
 }

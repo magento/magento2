@@ -241,4 +241,220 @@ class ProductSearchTest extends GraphQlAbstract
         }
         QUERY;
     }
+
+    #[
+        DataFixture(CategoryFixture::class, as: 'category'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'name' => 'Lifelong 1',
+                'sku' => 'lifelong1',
+                'description' => 'Life product 1',
+                'category_ids' => ['$category.id$'],
+            ],
+            'product1'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'name' => 'Life 2',
+                'sku' => 'life2',
+                'description' => 'Lifelong product 2',
+                'category_ids' => ['$category.id$'],
+            ],
+            'product2'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'name' => 'Life 3',
+                'sku' => 'life3',
+                'description' => 'Life product 3',
+                'category_ids' => ['$category.id$'],
+            ],
+            'product3'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'name' => 'Lifelong 4',
+                'sku' => 'lifelong4',
+                'description' => 'Lifelong product 4',
+                'category_ids' => ['$category.id$'],
+            ],
+            'product4'
+        ),
+    ]
+    public function testSearchProductsWithFilterAndMatchTypeInQuery(): void
+    {
+        $response1 = $this->graphQlQuery($this->getProductSearchQueryWithMatchType(true, false, '', ''));
+        $response2 = $this->graphQlQuery($this->getProductSearchQueryWithMatchType(true, false, 'FULL', ''));
+        $response3 = $this->graphQlQuery($this->getProductSearchQueryWithMatchType(true, false, 'PARTIAL', ''));
+
+        $response4 = $this->graphQlQuery($this->getProductSearchQueryWithMatchType(false, true, '', ''));
+        $response5 = $this->graphQlQuery($this->getProductSearchQueryWithMatchType(false, true, '', 'FULL'));
+        $response6 = $this->graphQlQuery($this->getProductSearchQueryWithMatchType(false, true, '', 'PARTIAL'));
+
+        $response7 = $this->graphQlQuery($this->getProductSearchQueryWithMatchType(true, true, '', ''));
+        $response8 = $this->graphQlQuery($this->getProductSearchQueryWithMatchType(true, true, 'FULL', 'FULL'));
+        $response9 = $this->graphQlQuery($this->getProductSearchQueryWithMatchType(true, true, 'PARTIAL', 'PARTIAL'));
+        $response10 = $this->graphQlQuery($this->getProductSearchQueryWithMatchType(true, true, 'FULL', 'PARTIAL'));
+        $response11 = $this->graphQlQuery($this->getProductSearchQueryWithMatchType(true, true, 'PARTIAL', 'FULL'));
+
+        $this->assertEquals($response1, $response2);
+        $this->assertNotEquals($response2, $response3);
+        $this->assertEquals(2, $response1['products']['total_count']); // product 2, product 3
+        $this->assertEquals(2, $response2['products']['total_count']); // product 2, product 3
+        $this->assertEquals(4, $response3['products']['total_count']); // all
+        $this->assertEquals('life2', $response1['products']['items'][1]['sku']);
+        $this->assertEquals('life2', $response2['products']['items'][1]['sku']);
+        $this->assertEquals('lifelong4', $response3['products']['items'][0]['sku']);
+
+        $this->assertEquals($response4, $response5);
+        $this->assertNotEquals($response5, $response6);
+        $this->assertEquals(2, $response4['products']['total_count']); // product 1, product 3
+        $this->assertEquals(2, $response5['products']['total_count']); // product 1, product 3
+        $this->assertEquals(4, $response6['products']['total_count']); // all
+        $this->assertEquals('lifelong1', $response4['products']['items'][1]['sku']);
+        $this->assertEquals('lifelong1', $response5['products']['items'][1]['sku']);
+        $this->assertEquals('lifelong4', $response6['products']['items'][0]['sku']);
+
+        $this->assertEquals($response7, $response8);
+        $this->assertNotEquals($response8, $response9);
+        $this->assertEquals(1, $response7['products']['total_count']); // product 3
+        $this->assertEquals(1, $response8['products']['total_count']); // product 3
+        $this->assertEquals(4, $response9['products']['total_count']); // all
+        $this->assertEquals(2, $response10['products']['total_count']); // product 2, product 3
+        $this->assertEquals(2, $response11['products']['total_count']); // product 1, product 3
+        $this->assertEquals('life3', $response7['products']['items'][0]['sku']);
+        $this->assertEquals('life3', $response8['products']['items'][0]['sku']);
+        $this->assertEquals('lifelong4', $response9['products']['items'][0]['sku']);
+        $this->assertEquals('life2', $response10['products']['items'][1]['sku']);
+        $this->assertEquals('lifelong1', $response11['products']['items'][1]['sku']);
+    }
+
+    /**
+     * Get a combinations of queries which contain different match_type
+     *
+     * @param bool $filterByName
+     * @param bool $filterByDescription
+     * @param string $matchTypeName
+     * @param string $matchTypeDescription
+     * @return string
+     */
+    private function getProductSearchQueryWithMatchType(
+        bool $filterByName,
+        bool $filterByDescription,
+        string $matchTypeName = '',
+        string $matchTypeDescription = ''
+    ): string {
+        $matchTypeName = $matchTypeName ? 'match_type:' . $matchTypeName : '';
+        $matchTypeDescription = $matchTypeDescription ? 'match_type:' . $matchTypeDescription : '';
+        $name = $filterByName ? 'name : { match : "Life", '.$matchTypeName.'}' : '';
+        $description = $filterByDescription ? 'description:  { match: "Life", '.$matchTypeDescription.'}' : '';
+        return <<<QUERY
+        {
+        products(filter :
+        {
+            $name
+            $description
+         }){
+            total_count
+            items {
+                name
+                sku
+                description {
+                    html
+                }
+            }
+           }
+        }
+        QUERY;
+    }
+
+    #[
+        DataFixture(CategoryFixture::class, as: 'category'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'price' => 0,
+                'category_ids' => ['$category.id$'],
+            ],
+            'product1'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'price' => 0.5,
+                'category_ids' => ['$category.id$'],
+            ],
+            'product2'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'price' => 1,
+                'category_ids' => ['$category.id$'],
+            ],
+            'product3'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'price' => 1.5,
+                'category_ids' => ['$category.id$'],
+            ],
+            'product4'
+        ),
+    ]
+    public function testProductSearchWithZeroPriceProducts()
+    {
+
+        $response = $this->graphQlQuery($this->getSearchQueryBasedOnPriceRange(0, null));
+        $this->assertEquals(4, $response['products']['totalResult']);
+
+        $response = $this->graphQlQuery($this->getSearchQueryBasedOnPriceRange(0, 0));
+        $this->assertEquals(1, $response['products']['totalResult']);
+
+        $response = $this->graphQlQuery($this->getSearchQueryBasedOnPriceRange(0.5, null));
+        $this->assertEquals(3, $response['products']['totalResult']);
+
+        $response = $this->graphQlQuery($this->getSearchQueryBasedOnPriceRange(0, 1));
+        $this->assertEquals(3, $response['products']['totalResult']);
+    }
+
+    /**
+     * Prepare search query for products with price range
+     *
+     * @param float $priceFrom
+     * @param float|null $priceTo
+     * @return string
+     */
+    private function getSearchQueryBasedOnPriceRange(float $priceFrom, null|float $priceTo): string
+    {
+        $priceToFilter = $priceTo !== null ? ',to:"' . $priceTo . '"' : '';
+        return <<<QUERY
+        query {
+          products(
+            pageSize: 10
+            currentPage: 1,
+            filter: {price:{from:"$priceFrom" $priceToFilter}}
+          ) {
+            totalResult: total_count
+            productItems: items {
+              sku
+              urlKey: url_key
+              price: price_range {
+                fullPrice: minimum_price {
+                  finalPrice: final_price {
+                    currency
+                    value
+                  }
+                }
+              }
+            }
+          }
+        }
+        QUERY;
+    }
 }

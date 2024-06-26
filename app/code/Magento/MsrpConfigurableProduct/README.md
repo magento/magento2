@@ -9,8 +9,8 @@ For information about a module installation in Magento 2, see [Enable or disable
 
 ## Structure
 
-`Pricing\` - directory contains implementation of msrp price calculation 
-for Grouped Product (`Magento\MsrpGroupedProduct\Pricing\MsrpPriceCalculator` class). 
+`Pricing\` - directory contains implementation of msrp price calculation
+for Grouped Product (`Magento\MsrpGroupedProduct\Pricing\MsrpPriceCalculator` class).
 
 For information about a typical file structure of a module in Magento 2,
  see [Module file structure](https://developer.adobe.com/commerce/php/development/build/component-file-structure/#module-file-structure).

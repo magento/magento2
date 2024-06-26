@@ -60,7 +60,7 @@ class SaveTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function saveConfigDataProvider(): array
+    public static function saveConfigDataProvider(): array
     {
         return [
             'configure_shipping_origin' => [

@@ -38,6 +38,12 @@
             <deleteData createDataKey="createSubTestCategory" stepKey="deleteSubCategory"/>
             <deleteData createDataKey="createTestCategory" stepKey="deleteMainCategory"/>
         </after>
+
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPage">
             <argument name="categoryName" value="$$createTestCategory.name$$"/>
         </actionGroup>
@@ -130,8 +136,12 @@
         </assertStringContainsString>
         <click selector="{{AdminCategoryBasicFieldSection.acceptPopUp}}" stepKey="acceptPopUp"/>
         <wait time="10" stepKey="waitCategoryTreeToLoad"/>
-        <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
-        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <actionGroup ref="AdminAssertParentChildCategoryTreeElementsActionGroup" stepKey="assertParentChildCategoryTreeElements4thTime">
             <argument name="parentCategoryName" value="Default Category"/>
             <argument name="childCategoryName" value="$createSubTestCategory.name$"/>
