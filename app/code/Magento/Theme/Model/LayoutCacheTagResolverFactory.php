@@ -28,10 +28,13 @@ class LayoutCacheTagResolverFactory
 {
     /**
      * Construct
+     *
+     * @param array $cacheTagsResolvers
      */
     public function __construct(
         private readonly array $cacheTagsResolvers
-    ) {}
+    ) {
+    }
 
     /**
      * Return tag resolver for specified object
