@@ -9,6 +9,7 @@ namespace Magento\Framework\ObjectManager\Resetter;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use WeakMap;
@@ -53,6 +54,9 @@ class Resetter implements ResetterInterface
                 continue;
             }
             $resetData = \json_decode(\file_get_contents($resetPath), true);
+            if (!$resetData) {
+                throw new LocalizedException(__('Error parsing %1', $resetPath));
+            }
             $this->classList = array_replace($this->classList, $resetData);
         }
         $this->resetAfterWeakMap = new WeakMap;
