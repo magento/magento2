@@ -105,7 +105,7 @@ class AuthorizationTest extends \Magento\TestFramework\TestCase\AbstractBackendC
     private function createSharedInstances()
     {
         $nvpMock = $this->getMockBuilder(Nvp::class)
-            ->setMethods(['call'])
+            ->onlyMethods(['call'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -114,7 +114,7 @@ class AuthorizationTest extends \Magento\TestFramework\TestCase\AbstractBackendC
 
         $apiFactoryMock = $this->getMockBuilder(ApiFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $apiFactoryMock->method('create')

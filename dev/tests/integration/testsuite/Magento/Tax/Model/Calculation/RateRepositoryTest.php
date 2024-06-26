@@ -601,7 +601,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function searchTaxRatesDataProvider()
+    public static function searchTaxRatesDataProvider()
     {
         $filterBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
 

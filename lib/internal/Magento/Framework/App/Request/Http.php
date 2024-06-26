@@ -7,11 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Framework\App\Request;
 
+use Laminas\Stdlib\Parameters;
 use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\App\RequestContentInterface;
 use Magento\Framework\App\RequestSafetyInterface;
 use Magento\Framework\App\Route\ConfigInterface;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 use Magento\Framework\Stdlib\StringUtils;
@@ -22,7 +24,11 @@ use Magento\Framework\Stdlib\StringUtils;
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @api
  */
-class Http extends Request implements RequestContentInterface, RequestSafetyInterface, HttpRequestInterface
+class Http extends Request implements
+    RequestContentInterface,
+    RequestSafetyInterface,
+    HttpRequestInterface,
+    ResetAfterRequestInterface
 {
     /**#@+
      * HTTP Ports
@@ -422,5 +428,36 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
             }
         }
         return $this->isSafeMethod;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->setEnv(new Parameters($_ENV));
+        $this->serverParams = new Parameters($_SERVER);
+        $this->setQuery(new Parameters([]));
+        $this->setPost(new Parameters([]));
+        $this->setFiles(new Parameters([]));
+        $this->module = null;
+        $this->controller= null;
+        $this->action = null;
+        $this->pathInfo = '';
+        $this->requestString = '';
+        $this->params = [];
+        $this->aliases = [];
+        $this->dispatched = false;
+        $this->forwarded = null;
+        $this->baseUrl = null;
+        $this->basePath = null;
+        $this->requestUri = null;
+        $this->method = 'GET';
+        $this->allowCustomMethods = true;
+        $this->uri = null;
+        $this->headers = null;
+        $this->metadata = [];
+        $this->content = '';
+        $this->distroBaseUrl = null;
     }
 }

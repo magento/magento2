@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="GuestVerifiesTheShipToDetailsOnStorefrontCheckoutPaymentActionGroup">
+        <annotations>
+            <description>Guest verifies the Shipping details on storefront checkout payment page.</description>
+        </annotations>
+        <arguments>
+            <argument name="firstName" type="string" defaultValue="{{CustomerAddressSimple.firstName}}"/>
+            <argument name="lastName" type="string" defaultValue="{{CustomerAddressSimple.lastName}}"/>
+            <argument name="street" type="string" defaultValue="{{CustomerAddressSimple.street[0]}}"/>
+            <argument name="city" type="string" defaultValue="{{CustomerAddressSimple.city}}"/>
+            <argument name="state" type="string" defaultValue="{{CustomerAddressSimple.state}}"/>
+            <argument name="postcode" type="string" defaultValue="{{CustomerAddressSimple.postcode}}"/>
+            <argument name="telephone" type="string" defaultValue="{{CustomerAddressSimple.telephone}}"/>
+        </arguments>
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{firstName}}" stepKey="assertShipToFirstName" />
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{lastName}}" stepKey="assertShipToLastName" />
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{street}}" stepKey="assertShipToStreet" />
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{city}}" stepKey="assertShipToCity" />
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{state}}" stepKey="assertShipToState" />
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{postcode}}" stepKey="assertShipToPostcode" />
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{telephone}}" stepKey="assertShipToTelephone" />
+    </actionGroup>
+</actionGroups>
+

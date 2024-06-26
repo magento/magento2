@@ -24,6 +24,7 @@ class StoreListCommand extends Command
     private $storeManager;
 
     /**
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -33,7 +34,7 @@ class StoreListCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -44,7 +45,7 @@ class StoreListCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

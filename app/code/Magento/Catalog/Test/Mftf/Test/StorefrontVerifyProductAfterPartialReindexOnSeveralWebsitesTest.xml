@@ -50,7 +50,9 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
-            <magentoCLI command="cache:clean" stepKey="cleanCacheBefore"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheBefore">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </before>
         <after>
             <!-- Change indexers to "Update on Save" mode -->
@@ -67,8 +69,12 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
             <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:clean" stepKey="cleanCacheAfter"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheCleanAfter">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </after>
 
         <!-- Open storefront on second store  -->
@@ -81,8 +87,11 @@
             <argument name="productName" value="{{_defaultProduct.name}}"/>
         </actionGroup>
 
-        <!-- Run cron -->
-        <magentoCLI command="cron:run" stepKey="runCron"/>
+        <!-- We need the 'indexer_update_all_views' job to run. This is the best
+            way we can make that happen, but there is no guarantee that there is
+            such a job already scheduled in the queue. -->
+        <magentoCron groups="index" stepKey="runCron" />
+        <comment userInput="We need the indexer_update_all_views job to run" stepKey="runCronTwice"/>
 
         <!-- Check product is present in category after cron run -->
         <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">

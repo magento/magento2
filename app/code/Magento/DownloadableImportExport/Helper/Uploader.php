@@ -6,6 +6,7 @@
 namespace Magento\DownloadableImportExport\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Driver\File;
 
 /**
@@ -76,7 +77,7 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $type
      * @param array $parameters
      * @return \Magento\CatalogImportExport\Model\Import\Uploader
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getUploader($type, $parameters)
     {
@@ -94,8 +95,14 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
             $tmpPath = $dirAddon . '/' . $this->mediaDirectory->getRelativePath('import');
         }
 
+        if (!$this->mediaDirectory->create($tmpPath)) {
+            throw new LocalizedException(
+                __('Directory \'%1\' could not be created.', $tmpPath)
+            );
+        }
+
         if (!$this->fileUploader->setTmpDir($tmpPath)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('File directory \'%1\' is not readable.', $tmpPath)
             );
         }
@@ -104,7 +111,7 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
 
         $this->mediaDirectory->create($destinationPath);
         if (!$this->fileUploader->setDestDir($destinationPath)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('File directory \'%1\' is not writable.', $destinationPath)
             );
         }

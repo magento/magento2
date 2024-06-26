@@ -108,6 +108,7 @@ class ShippingTest extends TestCase
     {
         $storeId = 1;
         $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
+        $this->quoteMock->expects($this->never())->method('getShippingAddress');
 
         $addressMock = $this->getMockObject(Address::class, [
             'all_items' => [],
@@ -168,6 +169,7 @@ class ShippingTest extends TestCase
 
     public function testFetch()
     {
+        $this->quoteMock->expects($this->never())->method('getShippingAddress');
         $value = 42;
         $total = new Total();
         $total->setShippingInclTax($value);
@@ -181,6 +183,8 @@ class ShippingTest extends TestCase
 
     public function testFetchWithZeroShipping()
     {
+        $this->quoteMock->expects($this->never())->method('getShippingAddress');
+
         $value = 0;
         $total = new Total();
         $total->setShippingInclTax($value);

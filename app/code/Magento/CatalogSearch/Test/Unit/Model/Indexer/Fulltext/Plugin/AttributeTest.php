@@ -89,7 +89,7 @@ class AttributeTest extends TestCase
         );
         $this->config =  $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['reset'])
+            ->onlyMethods(['reset'])
             ->getMock();
         $this->eavConfig = $this->createPartialMock(
             EavConfig::class,
