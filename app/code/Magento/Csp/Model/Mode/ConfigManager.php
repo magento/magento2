@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 declare(strict_types=1);
 
 namespace Magento\Csp\Model\Mode;
@@ -13,6 +17,9 @@ use Magento\Framework\App\State;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
+/**
+ * @inheritDoc
+ */
 class ConfigManager implements ModeConfigManagerInterface
 {
     /**
