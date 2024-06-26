@@ -6,6 +6,7 @@
 ?>
 
 <?php
+// @codingStandardsIgnoreFile
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 /** @var \Magento\Bundle\Pricing\Render\FinalPriceBox $block */
 
@@ -22,7 +23,7 @@ $regularPriceAttributes = [
     'display_label'     => __('Regular Price'),
     'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
     'include_container' => true,
-    'skip_adjustments'  => true
+    'skip_adjustments'  => false
 ];
 $renderMinimalRegularPrice = $block->renderAmount($minimalRegularPrice, $regularPriceAttributes);
 ?>

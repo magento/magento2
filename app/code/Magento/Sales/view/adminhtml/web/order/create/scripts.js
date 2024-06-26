@@ -157,8 +157,14 @@
             this.sidebarShow();
             //this.loadArea(['header', 'sidebar','data'], true);
             this.dataShow();
-            this.loadArea(['header', 'data'], true);
-            location.reload();
+            this.loadArea(
+                ['header', 'data'],
+                true,
+                null,
+                function () {
+                    location.reload();
+                }
+            );
         },
 
         setCurrencyId: function (id) {
@@ -185,7 +191,7 @@
             }
             this.selectAddressEvent = false;
 
-            var data = this.serializeData(container);
+            let data = this.serializeData(container).toObject();
             data[el.name] = id;
 
             this.resetPaymentMethod();
@@ -586,6 +592,19 @@
         applyCoupon: function (code) {
             this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {
                 'order[coupon][code]': code,
+                'order[coupon][append]': code,
+                reset_shipping: true
+            });
+            this.orderItemChanged = false;
+            jQuery('html, body').animate({
+                scrollTop: 0
+            });
+        },
+
+        removeCoupon: function (code) {
+            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {
+                'order[coupon][code]': '',
+                'order[coupon][remove]': code,
                 reset_shipping: true
             });
             this.orderItemChanged = false;
@@ -1164,7 +1183,7 @@
             }
         },
 
-        loadArea: function (area, indicator, params) {
+        loadArea: function (area, indicator, params, callback) {
             var deferred = new jQuery.Deferred();
             var url = this.loadBaseUrl;
             if (area) {
@@ -1183,6 +1202,9 @@
                     onSuccess: function (transport) {
                         var response = transport.responseText.evalJSON();
                         this.loadAreaResponseHandler(response);
+                        if (callback instanceof Function) {
+                            callback();
+                        }
                         deferred.resolve();
                     }.bind(this)
                 });

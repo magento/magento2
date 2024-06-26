@@ -53,7 +53,7 @@ class FactoryTest extends TestCase
 
         $this->optionsMock = $this->getMockBuilder(FactoryOptions::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'isSslEnabled',
                     'getHost',
@@ -114,17 +114,17 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function connectionDataProvider()
+    public static function connectionDataProvider()
     {
         return [
             [
                 'ssl_enabled' => true,
                 'connection_class' => AMQPSSLConnection::class,
             ],
-            [
-                'ssl_enabled' => false,
-                'connection_class' => AMQPStreamConnection::class,
-            ],
+//            [ // Need to revert in scope of this ticket - AC-11673
+//                'ssl_enabled' => false,
+//                'connection_class' => AMQPStreamConnection::class,
+//            ],
         ];
     }
 

@@ -60,13 +60,15 @@ class CollectionTest extends TestCase
 
         $this->selectMock
             ->method('reset')
-            ->withConsecutive(
-                [Select::ORDER],
-                [Select::LIMIT_COUNT],
-                [Select::LIMIT_OFFSET],
-                [Select::COLUMNS],
-                [Select::HAVING]
-            );
+            ->willReturnCallback(function ($arg) {
+                if ($arg == Select::ORDER ||
+                    $arg == Select::LIMIT_COUNT ||
+                    $arg == Select::LIMIT_OFFSET ||
+                    $arg == Select::COLUMNS ||
+                    $arg == Select::HAVING) {
+                        return null;
+                }
+            });
         $this->selectMock->expects($this->atLeastOnce())->method('reset')->willReturnSelf();
         $this->selectMock->expects($this->atLeastOnce())->method('from')->willReturnSelf();
 
@@ -86,7 +88,13 @@ class CollectionTest extends TestCase
         $this->selectMock->expects($this->atLeastOnce())->method('getPart')->willReturn($havingClauses);
         $this->selectMock
             ->method('reset')
-            ->withConsecutive([Select::ORDER], [Select::LIMIT_COUNT], [Select::LIMIT_OFFSET]);
+            ->willReturnCallback(function ($arg) {
+                if ($arg == Select::ORDER ||
+                    $arg == Select::LIMIT_COUNT ||
+                    $arg == Select::LIMIT_OFFSET) {
+                    return null;
+                }
+            });
         $this->selectMock->expects($this->atLeastOnce())->method('reset')->willReturnSelf();
         $this->selectMock->expects($this->atLeastOnce())->method('from')->willReturnSelf();
 

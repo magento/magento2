@@ -21,5 +21,7 @@
         <element name="printLink" type="button" selector=".print" timeout="30"/>
         <element name="orderNumberWithoutLink" type="text" selector="//div[contains(@class, 'checkout-success')]//p/span"/>
         <element name="orderLinkByOrderNumber" type="text" selector="//div[contains(@class,'success')]//a[contains(.,'{{orderNumber}}')]" parameterized="true" timeout="30"/>
+        <element name="purchaseOrderNumber" type="text" selector="div.checkout-success > p:nth-child(1) > a span"/>
+        <element name="billingAgreement" type="text" selector="//div[contains(@class, 'checkout-success')]/p[contains(text(), 'Your billing agreement # is:')]"/>
     </section>
 </sections>

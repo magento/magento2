@@ -52,6 +52,16 @@ class DeploymentConfig
     private $overrideData;
 
     /**
+     * @var array
+     */
+    private $envOverrides = [];
+
+    /**
+     * @var array
+     */
+    private $readerLoad = [];
+
+    /**
      * Constructor
      *
      * Data can be optionally injected in the constructor. This object's public interface is intentionally immutable
@@ -84,7 +94,9 @@ class DeploymentConfig
         }
         $result = $this->getByKey($key);
         if ($result === null) {
-            $this->reloadData();
+            if (empty($this->flatData) || count($this->getAllEnvOverrides())) {
+                $this->reloadData();
+            }
             $result = $this->getByKey($key);
         }
         return $result ?? $defaultValue;
@@ -114,13 +126,13 @@ class DeploymentConfig
     {
         if ($key === null) {
             if (empty($this->data)) {
-                $this->reloadData();
+                $this->reloadInitialData();
             }
             return $this->data;
         }
         $result = $this->getConfigDataByKey($key);
         if ($result === null) {
-            $this->reloadData();
+            $this->reloadInitialData();
             $result = $this->getConfigDataByKey($key);
         }
         return $result;
@@ -170,28 +182,55 @@ class DeploymentConfig
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    private function reloadData(): void
+    private function reloadInitialData(): void
     {
+        if (empty($this->readerLoad) || empty($this->data) || empty($this->flatData)) {
+            $this->readerLoad = $this->reader->load();
+        }
         $this->data = array_replace(
-            $this->reader->load(),
+            $this->readerLoad,
             $this->overrideData ?? [],
             $this->getEnvOverride()
         );
+    }
+
+    /**
+     * Loads the configuration data
+     *
+     * @return void
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
+    private function reloadData(): void
+    {
+        $this->reloadInitialData();
         // flatten data for config retrieval using get()
         $this->flatData = $this->flattenParams($this->data);
+        $this->flatData = $this->getAllEnvOverrides() + $this->flatData;
+    }
 
-        // allow reading values from env variables by convention
-        // MAGENTO_DC_{path}, like db/connection/default/host =>
-        // can be overwritten by MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST
-        foreach (getenv() as $key => $value) {
-            if (false !== \strpos($key, self::MAGENTO_ENV_PREFIX)
-                && $key !== self::OVERRIDE_KEY
-            ) {
-                // convert MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST into db/connection/default/host
-                $flatKey = strtolower(str_replace([self::MAGENTO_ENV_PREFIX, '__'], ['', '/'], $key));
-                $this->flatData[$flatKey] = $value;
+    /**
+     * Load all getenv() configs once
+     *
+     * @return array
+     */
+    private function getAllEnvOverrides(): array
+    {
+        if (empty($this->envOverrides)) {
+            // allow reading values from env variables by convention
+            // MAGENTO_DC_{path}, like db/connection/default/host =>
+            // can be overwritten by MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST
+            foreach (getenv() as $key => $value) {
+                if (false !== \strpos($key, self::MAGENTO_ENV_PREFIX)
+                    && $key !== self::OVERRIDE_KEY
+                ) {
+                    // convert MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST into db/connection/default/host
+                    $flatKey = strtolower(str_replace([self::MAGENTO_ENV_PREFIX, '__'], ['', '/'], $key));
+                    $this->envOverrides[$flatKey] = $value;
+                }
             }
         }
+        return $this->envOverrides;
     }
 
     /**
@@ -265,5 +304,16 @@ class DeploymentConfig
     private function getConfigDataByKey(?string $key)
     {
         return $this->data[$key] ?? null;
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

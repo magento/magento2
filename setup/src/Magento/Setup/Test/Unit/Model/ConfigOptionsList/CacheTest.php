@@ -49,7 +49,7 @@ class CacheTest extends TestCase
     public function testGetOptions()
     {
         $options = $this->configOptionsList->getOptions();
-        $this->assertCount(9, $options);
+        $this->assertCount(10, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -81,11 +81,15 @@ class CacheTest extends TestCase
 
         $this->assertArrayHasKey(7, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[7]);
-        $this->assertEquals('cache-id-prefix', $options[7]->getName());
+        $this->assertEquals('cache-backend-redis-use-lua', $options[7]->getName());
 
         $this->assertArrayHasKey(8, $options);
-        $this->assertInstanceOf(FlagConfigOption::class, $options[8]);
-        $this->assertEquals('allow-parallel-generation', $options[8]->getName());
+        $this->assertInstanceOf(TextConfigOption::class, $options[8]);
+        $this->assertEquals('cache-id-prefix', $options[8]->getName());
+
+        $this->assertArrayHasKey(9, $options);
+        $this->assertInstanceOf(FlagConfigOption::class, $options[9]);
+        $this->assertEquals('allow-parallel-generation', $options[9]->getName());
     }
 
     /**
@@ -107,6 +111,8 @@ class CacheTest extends TestCase
                             'password' => '',
                             'compress_data' => '',
                             'compression_lib' => '',
+                            '_useLua' => '',
+                            'use_lua' => ''
                         ],
                         'id_prefix' => $this->expectedIdPrefix(),
                     ]
@@ -126,25 +132,35 @@ class CacheTest extends TestCase
      */
     public function testCreateConfigWithRedisConfig()
     {
-        $this->deploymentConfigMock->method('get')->withConsecutive(
-            [CacheConfigOptionsList::CONFIG_PATH_CACHE_ID_PREFIX],
-            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_SERVER, '127.0.0.1'],
-            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_DATABASE, '0'],
-            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_PORT, '6379'],
-            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_PASSWORD, ''],
-            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA, '1'],
-            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB, ''],
-            [CacheConfigOptionsList::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION, 'false']
-        )->willReturnOnConsecutiveCalls(
-            'XXX_',
-            '127.0.0.1',
-            '0',
-            '6379',
-            '',
-            '1',
-            '',
-            null
-        );
+        $this->deploymentConfigMock->method('get')
+            ->willReturnCallback(
+                function ($arg1, $arg2 = null) {
+                    if ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_ID_PREFIX) {
+                        return 'XXX_';
+                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_SERVER &&
+                        $arg2 === '127.0.0.1') {
+                        return '127.0.0.1';
+                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_DATABASE &&
+                        $arg2 === '0') {
+                        return '0';
+                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_PORT &&
+                        $arg2 === '6379') {
+                        return '6379';
+                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_PASSWORD &&
+                        $arg2 === '') {
+                        return '';
+                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA &&
+                        $arg2 === '1') {
+                        return '1';
+                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB &&
+                        $arg2 === '') {
+                        return '';
+                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION &&
+                        $arg2 === 'false') {
+                        return null;
+                    }
+                }
+            );
 
         $expectedConfigData = [
             'cache' => [
@@ -158,6 +174,8 @@ class CacheTest extends TestCase
                             'password' => '',
                             'compress_data' => '1',
                             'compression_lib' => 'gzip',
+                            '_useLua' => null,
+                            'use_lua' => null
                         ],
                     ]
                 ],
@@ -238,7 +256,14 @@ class CacheTest extends TestCase
         ];
         $this->validatorMock->expects($this->once())
             ->method('isValidConnection')
-            ->with(['host' => 'localhost', 'db' => '', 'port' => '', 'password' => ''])
+            ->with([
+                'host' => 'localhost',
+                'db' => '',
+                'port' => '',
+                'password' => '',
+                '_useLua' => null,
+                'use_lua' => null
+            ])
             ->willReturn(true);
 
         $errors = $this->configOptionsList->validate($options, $this->deploymentConfigMock);

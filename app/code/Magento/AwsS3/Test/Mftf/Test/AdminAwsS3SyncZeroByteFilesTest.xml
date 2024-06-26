@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAwsS3SyncZeroByteFilesTest">
+        <annotations>
+            <features value="AwsS3"/>
+            <stories value="zero byte files are synced"/>
+            <title value="S3 - Verify zero byte files are synced"/>
+            <description value="Verifies that zero byte files are synced to AWS S3 with error."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-8252"/>
+            <useCaseId value="ACP2E-1608"/>
+            <group value="remote_storage_aws_s3"/>
+            <group value="skip_in_cloud_native_s3"/>
+            <group value="remote_storage_disabled"/>
+        </annotations>
+
+        <before>
+            <!-- Enable AWS S3 Remote Storage & Sync -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage"/>
+            <!-- Copy Images to Import Directory for Product Images -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProductBaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/empty.jpg</argument>
+                <argument name="destination">pub/media/empty.jpg</argument>
+            </helper>
+        </before>
+
+        <after>
+            <!-- Delete Images on Local File System -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteFileIfExists" stepKey="deleteLocalImage">
+                <argument name="filePath">pub/media/empty.jpg</argument>
+            </helper>
+            <!-- Delete Images on S3 System -->
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="deleteFileIfExists" stepKey="deleteS3Image">
+                <argument name="filePath">pub/media/empty.jpg</argument>
+            </helper>
+            <!-- Disable AWS S3 Remote Storage -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage"/>
+        </after>
+        <magentoCLI command="remote-storage:sync" timeout="200" stepKey="syncRemoteStorage"/>
+        <comment userInput="checking remote-storage:sync" stepKey="assertConfigTest"/>
+        <assertStringContainsString stepKey="checkingRemoteStorageSync">
+            <expectedResult type="string">Uploading media files to remote storage</expectedResult>
+            <actualResult type="variable">$syncRemoteStorage</actualResult>
+        </assertStringContainsString>
+    </test>
+</tests>

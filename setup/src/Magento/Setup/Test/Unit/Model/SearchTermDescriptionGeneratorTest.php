@@ -56,9 +56,14 @@ class SearchTermDescriptionGeneratorTest extends TestCase
         $this->searchTermManagerMock
             ->expects($this->exactly(2))
             ->method('applySearchTermsToDescription')
-            ->withConsecutive(
-                [$descriptionMock, $firstProductIndex],
-                [$descriptionMock, $secondProductIndex]
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($descriptionMock, $firstProductIndex, $secondProductIndex) {
+                    if ($arg1 === $descriptionMock && $arg2 === $firstProductIndex) {
+                        return null;
+                    } elseif ($arg1 === $descriptionMock && $arg2 === $secondProductIndex) {
+                        return null;
+                    }
+                }
             );
 
         $this->searchTermDescriptionGenerator->generate($firstProductIndex);

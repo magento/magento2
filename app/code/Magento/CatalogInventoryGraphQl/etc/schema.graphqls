@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 interface ProductInterface {
-    only_x_left_in_stock: Float @doc(description: "The value assigned to the Only X Left Threshold option in the Admin.") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\OnlyXLeftInStockResolver")
+    only_x_left_in_stock: Float @doc(description: "Remaining stock if it is below the value assigned to the Only X Left Threshold option in the Admin.") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\OnlyXLeftInStockResolver")
     stock_status: ProductStockStatus @doc(description: "The stock status of the product.") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\StockStatusProvider")
 }
 

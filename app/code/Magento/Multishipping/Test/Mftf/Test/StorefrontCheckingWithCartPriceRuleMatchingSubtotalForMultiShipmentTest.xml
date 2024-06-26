@@ -18,6 +18,7 @@
             <testCaseId value="MC-21738"/>
             <group value="Multishipment"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
         <actionGroup ref="AdminCreateCartPriceRuleActionsWithSubtotalActionGroup" before="goToProduct1" stepKey="createSubtotalCartPriceRuleActionsSection">
             <argument name="ruleName" value="CartPriceRuleConditionForSubtotalForMultiShipping"/>

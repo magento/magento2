@@ -1,0 +1,70 @@
+
+File "/var/www/html/app/code/Magento/Paypal/Test/Mftf/Test/AdminReportsPayPalSettlementNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Paypal/Test/Mftf/Test/StorefrontPaypalSmartButtonInCheckoutPageTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliDisableFreeShippingMethodActionGroup from module(s): magento/module-offline-shipping
+
+File "/var/www/html/app/code/Magento/Paypal/Test/Mftf/Test/StorefrontPaypalSmartButtonWithAUDCurrencyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 SetCurrencyAUDBaseConfig from module(s): magento/module-currency-symbol
+	 SetAllowedCurrenciesConfigForUSD from module(s): magento/module-currency-symbol
+	 SetAllowedCurrenciesConfigForAUD from module(s): magento/module-currency-symbol
+	 SetDefaultCurrencyAUDConfig from module(s): magento/module-currency-symbol
+	 AdminOrderRateDisplayedInOneLineTest from module(s): magento/module-currency-symbol
+
+File "/var/www/html/app/code/Magento/Paypal/Test/Mftf/Test/StorefrontPaypalSmartButtonWithCADCurrencyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 SetCurrencyCADBaseConfig from module(s): magento/module-currency-symbol
+	 SetAllowedCurrenciesConfigForUSD from module(s): magento/module-currency-symbol
+	 SetAllowedCurrenciesConfigForCAD from module(s): magento/module-currency-symbol
+	 SetDefaultCurrencyCADConfig from module(s): magento/module-currency-symbol
+	 SetCurrencyUSDBaseConfig from module(s): magento/module-currency-symbol
+	 AdminOrderRateDisplayedInOneLineTest from module(s): magento/module-currency-symbol
+
+File "/var/www/html/app/code/Magento/Paypal/Test/Mftf/Test/StorefrontPaypalSmartButtonWithEuroCurrencyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminOrderRateDisplayedInOneLineTest from module(s): magento/module-currency-symbol
+
+File "/var/www/html/app/code/Magento/Paypal/Test/Mftf/Test/StorefrontPaypalSmartButtonWithFranceMerchantCountryTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontSwitchCurrencyActionGroup from module(s): magento/module-currency-symbol
+	 AdminOrderRateDisplayedInOneLineTest from module(s): magento/module-currency-symbol
+
+File "/var/www/html/app/code/Magento/Paypal/Test/Mftf/Test/StorefrontPaypalSmartButtonWithHKDCurrencyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 SetCurrencyHKDBaseConfig from module(s): magento/module-currency-symbol
+	 SetAllowedCurrenciesConfigForUSD from module(s): magento/module-currency-symbol
+	 SetAllowedCurrenciesConfigForHKD from module(s): magento/module-currency-symbol
+	 SetDefaultCurrencyHKDConfig from module(s): magento/module-currency-symbol
+	 SetCurrencyUSDBaseConfig from module(s): magento/module-currency-symbol
+	 AdminOrderRateDisplayedInOneLineTest from module(s): magento/module-currency-symbol
+
+File "/var/www/html/app/code/Magento/Paypal/Test/Mftf/Test/StorefrontPaypalSmartButtonWithNZDCurrencyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 SetCurrencyNZDBaseConfig from module(s): magento/module-currency-symbol
+	 SetAllowedCurrenciesConfigForUSD from module(s): magento/module-currency-symbol
+	 SetAllowedCurrenciesConfigForNZD from module(s): magento/module-currency-symbol
+	 SetDefaultCurrencyNZDConfig from module(s): magento/module-currency-symbol
+	 SetCurrencyUSDBaseConfig from module(s): magento/module-currency-symbol
+	 AdminOrderRateDisplayedInOneLineTest from module(s): magento/module-currency-symbol
+
+File "/var/www/html/app/code/Magento/Paypal/Test/Mftf/Test/StorefrontPaypalSmartButtonWithYENCurrencyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 SetCurrencyYENBaseConfig from module(s): magento/module-currency-symbol
+	 SetAllowedCurrenciesConfigForUSD from module(s): magento/module-currency-symbol
+	 SetAllowedCurrenciesConfigForYEN from module(s): magento/module-currency-symbol
+	 SetDefaultCurrencyYENConfig from module(s): magento/module-currency-symbol
+	 SetCurrencyUSDBaseConfig from module(s): magento/module-currency-symbol
+	 AdminOrderRateDisplayedInOneLineTest from module(s): magento/module-currency-symbol
