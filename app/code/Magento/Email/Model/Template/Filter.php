@@ -284,7 +284,7 @@ class Filter extends Template
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @deprecated SID query parameter is not used in URLs anymore.
-     * @see setUseSessionInUrl
+     * @see SessionId's in URL
      */
     public function setUseSessionInUrl($flag)
     {
@@ -408,6 +408,7 @@ class Filter extends Template
     {
         $skipParams = ['class', 'id', 'output'];
         $blockParameters = $this->getParameters($construction[2]);
+
         $block = null;
 
         if (isset($blockParameters['class'])) {
@@ -694,7 +695,7 @@ class Filter extends Template
      * @param string $default assumed modifier if none present
      * @return array
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
-     * @see explodeModifiers
+     * @see Directive Processor Interfaces
      */
     protected function explodeModifiers($value, $default = null)
     {
@@ -714,7 +715,7 @@ class Filter extends Template
      * @param string $modifiers
      * @return string
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
-     * @see applyModifiers
+     * @see Directive Processor Interfaces
      */
     protected function applyModifiers($value, $modifiers)
     {
@@ -744,7 +745,7 @@ class Filter extends Template
      * @param string $type
      * @return string
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
-     * @see modifierEscape
+     * @see Directive Processor Interfacees
      */
     public function modifierEscape($value, $type = 'html')
     {
@@ -1124,16 +1125,16 @@ class Filter extends Template
         try {
             $value = parent::filter($value);
         } catch (Exception $e) {
-            // Since a single instance of this class can be used to filter content multiple times, reset callbacks to
-            // prevent callbacks running for unrelated content (e.g., email subject and email body)
-            $this->resetAfterFilterCallbacks();
-
             if ($this->_appState->getMode() == State::MODE_DEVELOPER) {
                 $value = sprintf(__('Error filtering template: %s')->render(), $e->getMessage());
             } else {
                 $value = (string) __("We're sorry, an error has occurred while generating this content.");
             }
             $this->_logger->critical($e);
+        } finally {
+            // Since a single instance of this class can be used to filter content multiple times, reset callbacks to
+            // prevent callbacks running for unrelated content (e.g., email subject and email body)
+            $this->resetAfterFilterCallbacks();
         }
         return $value;
     }

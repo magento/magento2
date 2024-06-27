@@ -77,7 +77,7 @@ class SaveTest extends AbstractController
     /**
      * @return array
      */
-    public function subscriptionDataProvider(): array
+    public static function subscriptionDataProvider(): array
     {
         return [
             'subscribe_customer' => [

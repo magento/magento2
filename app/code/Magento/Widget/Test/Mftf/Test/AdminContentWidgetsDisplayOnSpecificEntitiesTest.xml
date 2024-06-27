@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <group value="widget"/>
             <group value="cloud_smoke"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>

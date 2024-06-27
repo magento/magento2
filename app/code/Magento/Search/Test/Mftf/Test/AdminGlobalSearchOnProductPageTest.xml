@@ -18,6 +18,7 @@
             <testCaseId value="MC-6421"/>
             <group value="Search"/>
             <group value="cloud_smoke"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as admin -->

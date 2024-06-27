@@ -17,6 +17,10 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-101"/>
             <group value="ConfigurableProduct"/>
+            <group value="cloud"/>
+            <skip>
+                <issueId value="AC-12124">Fotorama lib isn't loaded</issueId>
+            </skip>
         </annotations>
 
         <before>
@@ -91,7 +95,9 @@
             <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="productIndexPage"/>

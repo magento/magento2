@@ -9,13 +9,9 @@ use Magento\Sales\Api\Data\ShippingInterface;
 use Magento\Sales\Api\Data\ShippingInterfaceFactory;
 use Magento\Sales\Api\Data\TotalInterface;
 use Magento\Sales\Api\Data\TotalInterfaceFactory;
-use Magento\Sales\Model\Order;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\OrderFactory;
 
-/**
- * Class ShippingBuilder
- * @package Magento\Sales\Model\Order
- */
 class ShippingBuilder
 {
     /**
@@ -24,7 +20,7 @@ class ShippingBuilder
     private $orderId = null;
 
     /**
-     * @var Order
+     * @var OrderInterface
      */
     private $order;
 
@@ -61,6 +57,8 @@ class ShippingBuilder
     }
 
     /**
+     * Setter for orderId property
+     *
      * @param int $orderId
      * @return void
      */
@@ -70,14 +68,27 @@ class ShippingBuilder
     }
 
     /**
+     * Setter for order property
+     *
+     * @param OrderInterface $order
+     * @return void
+     */
+    public function setOrder(OrderInterface $order)
+    {
+        $this->order = $order;
+        $this->orderId = $order->getEntityId();
+    }
+
+    /**
+     * Create shipping
+     *
      * @return ShippingInterface|null
      */
     public function create()
     {
         $shipping = null;
         if ($this->getOrderId()) {
-            $this->order = $this->orderFactory->create()->load($this->getOrderId());
-            if ($this->order->getEntityId()) {
+            if ($this->getOrder()->getEntityId()) {
                 /** @var ShippingInterface $shipping */
                 $shipping = $this->shippingFactory->create();
                 $shippingAddress = $this->order->getShippingAddress();
@@ -92,6 +103,8 @@ class ShippingBuilder
     }
 
     /**
+     * Getter for the $orderId property
+     *
      * @return int|null
      */
     private function getOrderId()
@@ -100,6 +113,21 @@ class ShippingBuilder
     }
 
     /**
+     * Get order by id
+     *
+     * @return OrderInterface
+     */
+    private function getOrder() : OrderInterface
+    {
+        if ($this->order === null) {
+            $this->order = $this->orderFactory->create()->load($this->getOrderId());
+        }
+        return $this->order;
+    }
+
+    /**
+     * Create total
+     *
      * @return TotalInterface
      */
     private function getTotal()

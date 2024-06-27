@@ -19,13 +19,14 @@
             <useCaseId value="MAGETWO-93978"/>
             <group value="Cms"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_longContentCmsPage" stepKey="createPreReqCMSPage"/>
         </before>
         <after>
             <deleteData createDataKey="createPreReqCMSPage" stepKey="deletePreReqCMSPage"/>
-            <resizeWindow width="1280" height="1024" stepKey="resizeWindowToDesktop"/>
+            <resizeWindow width="1920" height="1080" stepKey="resizeWindowToDesktop"/>
         </after>
         <resizeWindow width="375" height="812" stepKey="resizeWindowToMobile"/>
         <amOnPage url="$$createPreReqCMSPage.identifier$$" stepKey="amOnPageTestPage"/>

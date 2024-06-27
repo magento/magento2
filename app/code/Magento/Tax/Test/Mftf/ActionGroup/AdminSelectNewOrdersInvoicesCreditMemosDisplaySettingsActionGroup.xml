@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectNewOrdersInvoicesCreditMemosDisplaySettingsActionGroup">
+        <annotations>
+            <description>Admin select new settings for Orders Invoices Credit Memos Display settings</description>
+        </annotations>
+        <arguments>
+            <argument name="subtotal" type="entity" defaultValue="DisplaySubtotal"/>
+            <argument name="shippingAmount" type="entity" defaultValue="DisplayShippingAmount"/>
+            <argument name="orderTotalWithoutTax" type="entity" defaultValue="EnableOrderTotalWithoutTax"/>
+            <argument name="displayFullTaxSummarySales" type="entity" defaultValue="EnableDisplayFullTaxSummarySales"/>
+        </arguments>
+
+        <magentoCLI command="config:set {{subtotal.path}} {{subtotal.value}}" stepKey="SetInclAndExclSubtotalAmount"/>
+        <magentoCLI command="config:set {{shippingAmount.path}} {{shippingAmount.value}}" stepKey="SetInclAndExclShippingAmount"/>
+        <magentoCLI command="config:set {{orderTotalWithoutTax.path}} {{orderTotalWithoutTax.value}}" stepKey="EnableOrderTotal"/>
+        <magentoCLI command="config:set {{displayFullTaxSummarySales.path}} {{displayFullTaxSummarySales.value}}" stepKey="EnableFullTaxSummary"/>
+    </actionGroup>
+</actionGroups>

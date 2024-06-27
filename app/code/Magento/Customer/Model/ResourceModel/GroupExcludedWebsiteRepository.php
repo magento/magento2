@@ -26,7 +26,7 @@ class GroupExcludedWebsiteRepository implements GroupExcludedWebsiteRepositoryIn
      * @param GroupExcludedWebsite $groupExcludedWebsiteResourceModel
      */
     public function __construct(
-        GroupExcludedWebsite $groupExcludedWebsiteResourceModel
+        GroupExcludedWebsite $groupExcludedWebsiteResourceModel,
     ) {
         $this->groupExcludedWebsiteResourceModel = $groupExcludedWebsiteResourceModel;
     }
@@ -43,7 +43,6 @@ class GroupExcludedWebsiteRepository implements GroupExcludedWebsiteRepositoryIn
                 __('Could not save customer group website to exclude from customer group: "%1"', $e->getMessage())
             );
         }
-
         return $groupExcludedWebsite;
     }
 
@@ -78,8 +77,8 @@ class GroupExcludedWebsiteRepository implements GroupExcludedWebsiteRepositoryIn
 
         if (!empty($allExcludedWebsites)) {
             foreach ($allExcludedWebsites as $allExcludedWebsite) {
-                $customerGroupId = (int)$allExcludedWebsite['customer_group_id'];
-                $websiteId = (int)$allExcludedWebsite['website_id'];
+                $customerGroupId = (int) $allExcludedWebsite['customer_group_id'];
+                $websiteId = (int) $allExcludedWebsite['website_id'];
                 $excludedWebsites[$customerGroupId][] = $websiteId;
             }
         }
@@ -109,7 +108,7 @@ class GroupExcludedWebsiteRepository implements GroupExcludedWebsiteRepositoryIn
     public function deleteByWebsite(int $websiteId): bool
     {
         try {
-            return (bool)$this->groupExcludedWebsiteResourceModel->deleteByWebsite($websiteId);
+            return (bool) $this->groupExcludedWebsiteResourceModel->deleteByWebsite($websiteId);
         } catch (LocalizedException $e) {
             throw new LocalizedException(
                 __('Could not delete customer group excluded website by id.')

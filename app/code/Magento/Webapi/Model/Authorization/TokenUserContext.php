@@ -9,6 +9,7 @@ namespace Magento\Webapi\Model\Authorization;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Integration\Api\Exception\UserTokenException;
 use Magento\Integration\Api\UserTokenReaderInterface;
 use Magento\Integration\Api\UserTokenValidatorInterface;
@@ -22,8 +23,11 @@ use Magento\Integration\Helper\Oauth\Data as OauthHelper;
 
 /**
  * A user context determined by tokens in a HTTP request Authorization header.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
-class TokenUserContext implements UserContextInterface
+class TokenUserContext implements UserContextInterface, ResetAfterRequestInterface
 {
     /**
      * @var Request
@@ -57,13 +61,17 @@ class TokenUserContext implements UserContextInterface
 
     /**
      * @var UserTokenReaderInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $userTokenReader;
+    private readonly UserTokenReaderInterface $userTokenReader;
 
     /**
      * @var UserTokenValidatorInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $userTokenValidator;
+    private readonly UserTokenValidatorInterface $userTokenValidator;
 
     /**
      * Initialize dependencies.
@@ -78,7 +86,7 @@ class TokenUserContext implements UserContextInterface
      * @param UserTokenValidatorInterface|null $tokenValidator
      */
     public function __construct(
-        Request $request,
+        \Magento\Framework\App\RequestInterface $request,
         TokenFactory $tokenFactory,
         IntegrationServiceInterface $integrationService,
         DateTime $dateTime = null,
@@ -189,5 +197,15 @@ class TokenUserContext implements UserContextInterface
                 /* this is an unknown user type so reset the cached user type */
                 $this->userType = null;
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->isRequestProcessed = null;
+        $this->userId = null;
+        $this->userType = null;
     }
 }

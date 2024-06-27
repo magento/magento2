@@ -6,33 +6,23 @@
 
 namespace Magento\Catalog\Observer;
 
-use Magento\Catalog\Model\ResourceModel\Attribute\WebsiteAttributesSynchronizer;
+use Magento\Catalog\Model\Attribute\Backend\WebsiteSpecific\Scheduler;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\Store;
 
-/**
- * Class SynchronizeWebsiteAttributesOnStoreChange
- * @package Magento\Catalog\Observer
- */
 class SynchronizeWebsiteAttributesOnStoreChange implements ObserverInterface
 {
     /**
-     * @var WebsiteAttributesSynchronizer
+     * @param Scheduler $scheduler
      */
-    private $synchronizer;
-
-    /**
-     * SynchronizeWebsiteAttributesOnStoreChange constructor.
-     * @param WebsiteAttributesSynchronizer $synchronizer
-     */
-    public function __construct(WebsiteAttributesSynchronizer $synchronizer)
-    {
-        $this->synchronizer = $synchronizer;
+    public function __construct(
+        private Scheduler $scheduler
+    ) {
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute(Observer $observer)
     {
@@ -49,7 +39,7 @@ class SynchronizeWebsiteAttributesOnStoreChange implements ObserverInterface
         $isStoreNew = $store->isObjectNew();
 
         if ($isWebsiteIdChanged || $isStoreNew) {
-            $this->synchronizer->scheduleSynchronization();
+            $this->scheduler->execute((int) $store->getId());
         }
     }
 }

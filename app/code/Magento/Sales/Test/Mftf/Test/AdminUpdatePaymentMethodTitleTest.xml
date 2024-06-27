@@ -27,9 +27,9 @@
         </before>
 
         <after>
-            <actionGroup ref="AdminSelectFieldToColumnActionGroup" stepKey="DisablePaymentMethodOption">
-                <argument name="column" value="Payment Method"/>
-            </actionGroup>
+            <magentoCLI command="config:set {{DefaultCheckMoneyOrderTitle.path}} {{DefaultCheckMoneyOrderTitle.value}}" stepKey="setDefaultCheckMoneyOrderTitle"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="openOrdersGridAndClearFilters" />
+            <actionGroup ref="AdminResetColumnDropDownActionGroup" stepKey="DisablePaymentMethodOption" />
         </after>
 
         <!-- Log in as admin-->
@@ -51,7 +51,6 @@
         <actionGroup ref="AdminVerifyPaymentInformationTitleActionGroup" stepKey="seePaymentMethod">
             <argument name="paymentText" value="Test"/>
         </actionGroup>
-
     </test>
 </tests>
 

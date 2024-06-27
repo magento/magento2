@@ -82,7 +82,7 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     /**
      * @return array
      */
-    public function expectedLabelsDataProvider(): array
+    public static function expectedLabelsDataProvider(): array
     {
         return [
             [
@@ -149,7 +149,7 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     /**
      * @return array
      */
-    public function expectedProductDataProvider(): array
+    public static function expectedProductDataProvider(): array
     {
         return [
             [

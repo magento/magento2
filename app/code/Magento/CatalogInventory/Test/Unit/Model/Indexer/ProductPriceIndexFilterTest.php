@@ -83,8 +83,17 @@ class ProductPriceIndexFilterTest extends TestCase
         $connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
         $selectMock
             ->method('where')
-            ->withConsecutive([], [], ['stock_item.product_id IN (?)', $entityIds])
-            ->willReturnOnConsecutiveCalls(null, null, $selectMock);
+            ->willReturnCallback(function (...$args) use ($entityIds, $selectMock) {
+                static $index = 0;
+                $expectedArgs = [
+                    [],
+                    [],
+                    ['stock_item.product_id IN (?)', $entityIds]
+                ];
+                $returnValue = $index === 2 ? $selectMock : null;
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue : null;
+            });
         $this->generator->expects($this->once())
             ->method('generate')
             ->willReturnCallback(

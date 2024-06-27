@@ -41,6 +41,15 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->setCode('shipping');
+    }
+
+    /**
      * Collect totals information about shipping
      *
      * @param \Magento\Quote\Model\Quote $quote
