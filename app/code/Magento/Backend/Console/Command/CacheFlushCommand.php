@@ -15,7 +15,7 @@ namespace Magento\Backend\Console\Command;
 class CacheFlushCommand extends AbstractCacheTypeManageCommand
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -32,12 +32,15 @@ class CacheFlushCommand extends AbstractCacheTypeManageCommand
      */
     protected function performAction(array $cacheTypes)
     {
-        $this->eventManager->dispatch('adminhtml_cache_flush_all');
+        if ($cacheTypes === [] || in_array('full_page', $cacheTypes)) {
+            $this->eventManager->dispatch('adminhtml_cache_flush_all');
+        }
+
         $this->cacheManager->flush($cacheTypes);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getDisplayMessage()
     {

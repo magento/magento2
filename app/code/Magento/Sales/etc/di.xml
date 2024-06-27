@@ -1038,4 +1038,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Order\Email\Container\IdentityInterface">
+        <plugin name="applyStoreEmailConfigToSalesEmail"
+                type="Magento\Sales\Plugin\ApplyStoreEmailConfigToSalesEmail"/>
+    </type>
 </config>

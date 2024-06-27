@@ -67,6 +67,6 @@ class ScopeCodeResolverTest extends TestCase
         $this->scope->expects($this->once())
             ->method('getCode')
             ->willReturn($scopeCode);
-        $this->assertEquals(strtolower($scopeCode), $this->scopeCodeResolver->resolve($scopeType, $scopeId));
+        $this->assertEquals($scopeCode, $this->scopeCodeResolver->resolve($scopeType, $scopeId));
     }
 }

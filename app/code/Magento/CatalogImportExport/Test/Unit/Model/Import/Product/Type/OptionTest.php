@@ -12,6 +12,7 @@ use Magento\Catalog\Helper\Data;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\Option;
+use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\AbstractDb;
@@ -235,6 +236,11 @@ class OptionTest extends AbstractImportTestCase
     protected $metadataPoolMock;
 
     /**
+     * @var SkuStorage
+     */
+    private $skuStorageMock;
+
+    /**
      * Init entity adapter model
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -245,10 +251,10 @@ class OptionTest extends AbstractImportTestCase
 
         $addExpectations = false;
         $deleteBehavior = false;
-        $testName = $this->getName(true);
+        $testName = $this->name() . $this->dataSetAsString();
         if ($testName == 'testImportDataAppendBehavior' || $testName == 'testImportDataDeleteBehavior') {
             $addExpectations = true;
-            $deleteBehavior = $this->getName() == 'testImportDataDeleteBehavior' ? true : false;
+            $deleteBehavior = $this->name() == 'testImportDataDeleteBehavior' ? true : false;
         }
 
         $doubleOptions = false;
@@ -283,6 +289,9 @@ class OptionTest extends AbstractImportTestCase
             ->willReturn($this->createMock(\Traversable::class));
         $optionValueCollectionFactoryMock->expects($this->any())
             ->method('create')->willReturn($optionValueCollectionMock);
+
+        $this->skuStorageMock = $this->createMock(SkuStorage::class);
+
         $modelClassArgs = [
             $this->createMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class),
             $this->createMock(ResourceConnection::class),
@@ -300,6 +309,7 @@ class OptionTest extends AbstractImportTestCase
             $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions),
             $optionValueCollectionFactoryMock,
             $this->createMock(\Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface::class),
+            $this->skuStorageMock
         ];
 
         $modelClassName = Option::class;
@@ -307,7 +317,7 @@ class OptionTest extends AbstractImportTestCase
         // Create model mock with rewritten _getMultiRowFormat method to support test data with the old format.
         $this->modelMock = $this->getMockBuilder($modelClassName)
             ->setConstructorArgs($modelClassArgs)
-            ->setMethods(['_getMultiRowFormat'])
+            ->onlyMethods(['_getMultiRowFormat'])
             ->getMock();
         $reflection = new \ReflectionClass(Option::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
@@ -447,6 +457,18 @@ class OptionTest extends AbstractImportTestCase
         )->willReturn(
             $products
         );
+
+        $this->skuStorageMock->method('get')->willReturnCallback(function ($sku) use ($products) {
+            $skuLowered = strtolower($sku);
+
+            return $products[$skuLowered] ?? null;
+        });
+
+        $this->skuStorageMock->method('has')->willReturnCallback(function ($sku) use ($products) {
+            $skuLowered = strtolower($sku);
+
+            return isset($products[$skuLowered]);
+        });
 
         $fetchStrategy = $this->getMockForAbstractClass(
             FetchStrategyInterface::class
@@ -853,7 +875,7 @@ class OptionTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function validateRowStoreViewCodeFieldDataProvider(): array
+    public static function validateRowStoreViewCodeFieldDataProvider(): array
     {
         return [
             'with_store_view_code' => [
@@ -908,7 +930,7 @@ class OptionTest extends AbstractImportTestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function validateRowDataProvider(): array
+    public static function validateRowDataProvider(): array
     {
         return [
             'main_valid' => [
@@ -1005,7 +1027,7 @@ class OptionTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function validateAmbiguousDataDataProvider(): array
+    public static function validateAmbiguousDataDataProvider(): array
     {
         return [
             'ambiguity_several_input_rows' => [

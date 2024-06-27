@@ -10,6 +10,7 @@ namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 use Magento\Eav\Model\Attribute;
 use Magento\Eav\Model\Attribute\Data\Text;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\Entity\TypeFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
@@ -223,12 +224,18 @@ class TextTest extends TestCase
             ['eavTypeFactory' => $eavTypeFactory, 'data' => $attributeData]
         );
 
+        $entityTypeMock = $this->createMock(Type::class);
+
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|MockObject $attribute
          */
         $attribute = $this->getMockBuilder($attributeClass)
-            ->setMethods(['_init'])
+            ->onlyMethods(['_init', 'getEntityType'])
             ->setConstructorArgs($arguments)
             ->getMock();
+
+        $attribute->expects($this->any())
+            ->method('getEntityType')
+            ->willReturn($entityTypeMock);
         return $attribute;
     }
 }

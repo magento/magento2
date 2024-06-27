@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Bundle\Pricing\Price;
 
 use Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Catalog\Model\Product;
@@ -15,7 +16,7 @@ use Magento\Catalog\Model\Product;
 /**
  * Bundle option price calculation model.
  */
-class BundleOptions
+class BundleOptions implements ResetAfterRequestInterface
 {
     /**
      * @var BundleCalculatorInterface
@@ -91,6 +92,7 @@ class BundleOptions
             /** @var \Magento\Bundle\Pricing\Price\BundleSelectionPrice $selectionPriceList */
             $selectionPriceList = $this->calculator->createSelectionPriceList($option, $bundleProduct);
             $selectionPriceList = $this->calculator->processOptions($option, $selectionPriceList, $searchMin);
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $priceList = array_merge($priceList, $selectionPriceList);
         }
         $amount = $this->calculator->calculateBundleAmount(0., $bundleProduct, $priceList);
@@ -134,5 +136,13 @@ class BundleOptions
         }
 
         return $this->optionSelectionAmountCache[$cacheKey];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->optionSelectionAmountCache = [];
     }
 }

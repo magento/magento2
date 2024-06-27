@@ -13,7 +13,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class AttributesTest extends AbstractModifierTest
+class AttributesTest extends AbstractModifierTestCase
 {
     /**
      * @var UrlInterface|MockObject

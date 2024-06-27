@@ -6,16 +6,17 @@
 
 namespace Magento\Catalog\Pricing\Render;
 
-use Magento\Catalog\Pricing\Price;
-use Magento\Framework\Pricing\Render\PriceBox as BasePriceBox;
-use Magento\Msrp\Pricing\Price\MsrpPrice;
 use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Framework\Pricing\SaleableInterface;
-use Magento\Framework\Pricing\Price\PriceInterface;
-use Magento\Framework\Pricing\Render\RendererPool;
-use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Pricing\Price;
 use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
+use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\Render\PriceBox as BasePriceBox;
+use Magento\Framework\Pricing\Render\RendererPool;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Msrp\Pricing\Price\MsrpPrice;
 
 /**
  * Class for final_price rendering
@@ -140,7 +141,7 @@ class FinalPriceBox extends BasePriceBox
                 'display_label'     => __('As low as'),
                 'price_id'          => $id,
                 'include_container' => false,
-                'skip_adjustments' => true
+                'skip_adjustments' => false
             ]
         );
     }
@@ -152,9 +153,18 @@ class FinalPriceBox extends BasePriceBox
      */
     public function hasSpecialPrice()
     {
-        $displayRegularPrice = $this->getPriceType(Price\RegularPrice::PRICE_CODE)->getAmount()->getValue();
-        $displayFinalPrice = $this->getPriceType(Price\FinalPrice::PRICE_CODE)->getAmount()->getValue();
-        return $displayFinalPrice < $displayRegularPrice;
+        if ($this->isProductList()) {
+            if (!$this->getData('special_price_map')) {
+                return false;
+            }
+
+            return (bool)$this->getData('special_price_map')[$this->saleableItem->getId()];
+        } else {
+            $displayRegularPrice = $this->getPriceType(Price\RegularPrice::PRICE_CODE)->getAmount()->getValue();
+            $displayFinalPrice = $this->getPriceType(Price\FinalPrice::PRICE_CODE)->getAmount()->getValue();
+
+            return $displayFinalPrice < $displayRegularPrice;
+        }
     }
 
     /**
@@ -183,7 +193,7 @@ class FinalPriceBox extends BasePriceBox
     public function getCacheKey()
     {
         return parent::getCacheKey()
-            . ($this->getData('list_category_page') ? '-list-category-page': '')
+            . ($this->getData('list_category_page') ? '-list-category-page' : '')
             . ($this->getSaleableItem()->getCustomerGroupId() ?? '');
     }
 
