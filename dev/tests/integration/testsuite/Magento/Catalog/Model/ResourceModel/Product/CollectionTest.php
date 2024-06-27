@@ -248,11 +248,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'product_sku' => 'simple_saleable',
+                'productSku' => 'simple_saleable',
                 'order' => Collection::SORT_ORDER_DESC,
             ],
             [
-                'product_sku' => 'simple_not_saleable',
+                'productSku' => 'simple_not_saleable',
                 'order' => Collection::SORT_ORDER_ASC,
             ]
         ];
@@ -284,11 +284,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'product_sku' => 'simple',
+                'productSku' => 'simple',
                 'order' => Collection::SORT_ORDER_DESC,
             ],
             [
-                'product_sku' => 'simple-2',
+                'productSku' => 'simple-2',
                 'order' => Collection::SORT_ORDER_ASC,
             ]
         ];

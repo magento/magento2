@@ -74,13 +74,13 @@ class UserExpirationTest extends TestCase
     {
         return [
             'default' => [
-                'locale_code' => 'en_US',
+                'locale' => 'en_US',
             ],
             'non_default_english_textual' => [
-                'locale_code' => 'de_DE',
+                'locale' => 'de_DE',
             ],
             'non_default_non_english_textual' => [
-                'locale_code' => 'uk_UA',
+                'locale' => 'uk_UA',
             ],
         ];
     }

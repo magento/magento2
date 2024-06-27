@@ -64,8 +64,8 @@ class AttributeVisualSwatchTest extends AbstractAttributeTest
     {
         return [
             [
-                'firstProductSku' => 'simple2',
-                'secondProductSku' => 'simple-out-of-stock',
+                'firstSku' => 'simple2',
+                'secondSku' => 'simple-out-of-stock',
             ],
         ];
     }

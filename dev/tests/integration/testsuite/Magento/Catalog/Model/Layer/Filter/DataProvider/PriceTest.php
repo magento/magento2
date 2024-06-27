@@ -158,16 +158,16 @@ class PriceTest extends TestCase
     {
         return [
             'with_prior_filters' => [
-                'price_filters' => ['10-11', '20-21', '30-31'],
-                'expected_request' => ',10-11,20-21,30-31',
+                'priceFilters' => ['10-11', '20-21', '30-31'],
+                'expectedRequest' => ',10-11,20-21,30-31',
             ],
             'without_prior_filters' => [
-                'price_filters' => ['10-11'],
-                'expected_request' => ',10-11',
+                'priceFilters' => ['10-11'],
+                'expectedRequest' => ',10-11',
             ],
             'not_valid_prior_filters' => [
-                'price_filters' => ['10-11', '20-21', '31', '40-41'],
-                'expected_request' => ',10-11',
+                'priceFilters' => ['10-11', '20-21', '31', '40-41'],
+                'expectedRequest' => ',10-11',
             ],
         ];
     }
