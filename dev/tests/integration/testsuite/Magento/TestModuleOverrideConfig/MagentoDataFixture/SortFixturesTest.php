@@ -51,7 +51,7 @@ class SortFixturesTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public function sortFixturesProvider(): array
+    public static function sortFixturesProvider(): array
     {
         return [
             'first_data_set' => [

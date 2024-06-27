@@ -75,7 +75,7 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @return array
      */
-    public function paymentCcExpirationDateDataProvider(): array
+    public static function paymentCcExpirationDateDataProvider(): array
     {
         return [
             'Expiration year in current century' => [
