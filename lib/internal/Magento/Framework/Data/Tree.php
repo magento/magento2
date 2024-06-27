@@ -26,6 +26,9 @@ class Tree
      */
     protected $_nodes;
 
+    /**
+     * Initialize Tree
+     */
     public function __construct()
     {
         $this->_nodes = new NodeCollection($this);

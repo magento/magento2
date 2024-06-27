@@ -178,9 +178,9 @@ class Node extends \Magento\Framework\DataObject
      * Seemingyly useless method
      *
      * @param Node $node
-     *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedFunction
      */
     public function isChildOf($node)
     {

@@ -88,7 +88,7 @@ class Db extends \Magento\Framework\Data\Tree
         parent::__construct();
 
         if (!$connection) {
-            throw new \Exception('Wrong "$connection" parametr');
+            throw new \Exception('Wrong "$connection" parametr'); // phpcs:ignore
         }
 
         $this->_conn = $connection;
@@ -104,7 +104,7 @@ class Db extends \Magento\Framework\Data\Tree
             $fields[self::ORDER_FIELD]
         )
         ) {
-            throw new \Exception('"$fields" tree configuratin array');
+            throw new \Exception('"$fields" tree configuratin array'); // phpcs:ignore
         }
 
         $this->_idField = $fields[self::ID_FIELD];
@@ -141,8 +141,8 @@ class Db extends \Magento\Framework\Data\Tree
     /**
      * Load tree
      *
-     * @param   int|Node $parentNode
-     * @param   int $recursionLevel
+     * @param int|Node $parentNode
+     * @param int $recursionLevel
      *
      * @return $this
      * @throws \Exception
@@ -158,7 +158,7 @@ class Db extends \Magento\Framework\Data\Tree
             $parentId = $parentNode;
             $parentNode = null;
         } else {
-            throw new \Exception('root node id is not defined');
+            throw new \Exception('root node id is not defined'); // phpcs:ignore
         }
 
         $select = clone $this->_select;
@@ -285,7 +285,7 @@ class Db extends \Magento\Framework\Data\Tree
             $this->_conn->commit();
         } catch (\Exception $e) {
             $this->_conn->rollBack();
-            throw new \Exception('Can\'t move tree node');
+            throw new \Exception('Can\'t move tree node'); // phpcs:ignore
         }
     }
 
@@ -376,7 +376,7 @@ class Db extends \Magento\Framework\Data\Tree
             $this->_conn->commit();
         } catch (\Exception $e) {
             $this->_conn->rollBack();
-            throw new \Exception('Can\'t remove tree node');
+            throw new \Exception('Can\'t remove tree node'); // phpcs:ignore
         }
 
         parent::removeNode($node);
