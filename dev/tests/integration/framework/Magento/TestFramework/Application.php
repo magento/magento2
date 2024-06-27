@@ -835,7 +835,7 @@ class Application
      *
      * @return void
      */
-    public function makeIndexStatusRealtime(): void
+    private function makeIndexStatusRealtime(): void
     {
         $overriddenParams = $this->getOverriddenParams();
         $directoryList = $this->getDirectoryList($overriddenParams);

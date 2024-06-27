@@ -1801,7 +1801,7 @@ class Installer
     }
 
     /**
-     * Reindxing
+     * Reindexing
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
