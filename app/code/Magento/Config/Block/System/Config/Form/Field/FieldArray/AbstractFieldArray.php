@@ -197,7 +197,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
     public function renderCellTemplate($columnName)
     {
         if (empty($this->_columns[$columnName])) {
-            throw new \Exception('Wrong column name specified.');
+            throw new \Exception('Wrong column name specified.'); // phpcs:ignore
         }
         $column = $this->_columns[$columnName];
         $inputName = $this->_getCellInputElementName($columnName);
@@ -256,7 +256,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
             $this->_isPreparedToRender = true;
         }
         if (empty($this->_columns)) {
-            throw new \Exception('At least one column must be defined.');
+            throw new \Exception('At least one column must be defined.'); // phpcs:ignore
         }
         return parent::_toHtml();
     }
