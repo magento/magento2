@@ -291,6 +291,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Retrieve product header
      *
      * @deprecated 102.0.0
+     * @see nothing
      * @return string
      */
     public function getHeader()

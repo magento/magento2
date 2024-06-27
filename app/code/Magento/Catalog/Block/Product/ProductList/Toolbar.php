@@ -77,6 +77,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     /**
      * @var bool $_paramsMemorizeAllowed
      * @deprecated 103.0.1
+     * @see nothing
      */
     protected $_paramsMemorizeAllowed = true;
 
@@ -93,6 +94,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     /**
      * @var \Magento\Catalog\Model\Session
      * @deprecated 103.0.1
+     * @see nothing
      */
     protected $_catalogSession;
 
@@ -182,6 +184,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      *
      * @return $this
      * @deprecated 103.0.1
+     * @see nothing
      */
     public function disableParamsMemorizing()
     {
@@ -196,6 +199,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      * @param mixed $value parameter value
      * @return $this
      * @deprecated 103.0.1
+     * @see nothing
      */
     protected function _memorizeParam($param, $value)
     {
