@@ -1150,6 +1150,45 @@ class LayoutTest extends TestCase
     }
 
     /**
+     * @param string $expectedResult
+     * @param string $blockHtml
+     *
+     * @return void
+     * @dataProvider trimWhitespaceContainingBlockHtmlDataProvider
+     */
+    public function testTrimWhitespaceContainingBlockHtml($expectedResult, $blockHtml): void
+    {
+        $name = 'test_container';
+        $child = 'child_block';
+        $children = [$child => true];
+        $displayValue = true;
+
+        $this->structureMock->expects($this->atLeastOnce())
+            ->method('getAttribute')
+            ->willReturnMap(
+                [
+                    [$name, 'display', $displayValue],
+                    [$child, 'display', $displayValue],
+                    [$child, 'type', Element::TYPE_BLOCK]
+                ]
+            );
+
+        $this->structureMock->expects($this->atLeastOnce())->method('hasElement')
+            ->willReturnMap([[$child, true]]);
+
+        $this->structureMock->expects($this->once())
+            ->method('getChildren')
+            ->with($name)
+            ->willReturn($children);
+
+        $block = $this->createMock(AbstractBlock::class);
+        $block->expects($this->once())->method('toHtml')->willReturn($blockHtml);
+
+        $this->model->setBlock($child, $block);
+        $this->assertEquals($expectedResult, $this->model->renderElement($name, false));
+    }
+
+    /**
      * @return array
      */
     public static function renderElementDoNotDisplayDataProvider(): array
@@ -1158,6 +1197,17 @@ class LayoutTest extends TestCase
             ['false'],
             ['0'],
             [0]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function trimWhitespaceContainingBlockHtmlDataProvider(): array
+    {
+        return [
+            ['', ' '],
+            [' <html/>', ' <html/>']
         ];
     }
 
