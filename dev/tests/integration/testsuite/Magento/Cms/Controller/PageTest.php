@@ -168,10 +168,10 @@ class PageTest extends AbstractController
         );
         $page = $this->pageRetriever->execute($pageIdentifier, 0);
         $cacheKey = sprintf(
-                    '%s_%s',
-                    'CMS_PAGE_VIEW_ID',
-                    str_replace('-', '_', strtoupper($page->getId()))
-                );
+            '%s_%s',
+            'CMS_PAGE_VIEW_ID',
+            str_replace('-', '_', strtoupper($page->getId()))
+        );
 
         $this->dispatch('/cms/page/view/page_id/' . $page->getId());
         $this->assertStringContainsString(

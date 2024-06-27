@@ -260,7 +260,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $mediaDirectory->create($config->getBaseTmpMediaPath());
         $targetFile = $config->getTmpMediaPath(basename($sourceFile));
-        $mediaDirectory->getDriver()->filePutContents($mediaDirectory->getAbsolutePath($targetFile), file_get_contents($sourceFile));
+        $mediaDirectory->getDriver()
+            ->filePutContents(
+                $mediaDirectory->getAbsolutePath($targetFile),
+                file_get_contents($sourceFile)
+            );
 
         return $targetFile;
     }
@@ -298,36 +302,43 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         try {
             $this->assertNotEquals(
-                $customScopeDuplicate->getId(), $customScopeProduct->getId(),
+                $customScopeDuplicate->getId(),
+                $customScopeProduct->getId(),
                 'Duplicate product Id should not equal to source product Id'
             );
             $this->assertNotEquals(
-                $customScopeDuplicate->getSku(), $customScopeProduct->getSku(),
+                $customScopeDuplicate->getSku(),
+                $customScopeProduct->getSku(),
                 'Duplicate product SKU should not equal to source product SKU'
             );
             $this->assertNotEquals(
-                $customScopeDuplicate->getShortDescription(), $defaultScopeDuplicate->getShortDescription(),
+                $customScopeDuplicate->getShortDescription(),
+                $defaultScopeDuplicate->getShortDescription(),
                 'Short description of the duplicated product on custom scope should not equal to ' .
                 'duplicate product description on default scope'
             );
             $this->assertEquals(
-                $customScopeProduct->getShortDescription(), $customScopeDuplicate->getShortDescription(),
+                $customScopeProduct->getShortDescription(),
+                $customScopeDuplicate->getShortDescription(),
                 'Short description of the duplicated product on custom scope should equal to ' .
                 'source product description on custom scope'
             );
             $this->assertEquals(
-                $customScopeProduct->getStoreId(), $customScopeDuplicate->getStoreId(),
+                $customScopeProduct->getStoreId(),
+                $customScopeDuplicate->getStoreId(),
                 'Store Id of the duplicated product on custom scope should equal to ' .
                 'store Id of source product on custom scope'
             );
             $this->assertEquals(
-                $defaultScopeProduct->getStoreId(), $defaultScopeDuplicate->getStoreId(),
+                $defaultScopeProduct->getStoreId(),
+                $defaultScopeDuplicate->getStoreId(),
                 'Store Id of the duplicated product on default scope should equal to ' .
                 'store Id of source product on default scope'
             );
 
             $this->assertEquals(
-                Status::STATUS_DISABLED, $defaultScopeDuplicate->getStatus(),
+                Status::STATUS_DISABLED,
+                $defaultScopeDuplicate->getStatus(),
                 'Duplicate should be disabled'
             );
 
@@ -886,8 +897,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * Tests case for product saving invalidate cache successfully
      */
     #[
-        DataFixture(ProductFixture::class,
-            ['sku' => 'simple1', 'price' => 10, 'page_layout' => '1column'], as: 'product'
+        DataFixture(
+            ProductFixture::class,
+            ['sku' => 'simple1', 'price' => 10, 'page_layout' => '1column'],
+            as: 'product'
         ),
     ]
     public function testSavingProductInAdminWithLayoutChangeWillInvalidateCache()
@@ -900,9 +913,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             Block::class
         );
         $cacheKey = sprintf(
-                    '%s',
-                    str_replace('{{ID}}', (string) $product->getId(), Instance::SINGLE_PRODUCT_LAYOUT_HANDLE)
-                );
+            '%s',
+            str_replace('{{ID}}', (string)$product->getId(), Instance::SINGLE_PRODUCT_LAYOUT_HANDLE)
+        );
 
         $product->setPageLayout('cms-full-width');
         $this->productRepository->save($product);
