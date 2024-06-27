@@ -43,7 +43,7 @@ class GetPageByIdentifierTest extends TestCase
     {
         $this->pageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor(true)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->pageResource = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page::class)
@@ -52,7 +52,8 @@ class GetPageByIdentifierTest extends TestCase
 
         $this->page = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setStoreId', 'getId'])
+            ->addMethods(['setStoreId'])
+            ->onlyMethods(['getId'])
             ->getMock();
 
         $this->getPageByIdentifierCommand = new GetPageByIdentifier($this->pageFactory, $this->pageResource);

@@ -171,10 +171,10 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertMagentoConventions($dir, $packageType, \StdClass $json)
     {
-        $this->assertObjectHasAttribute('name', $json);
-        $this->assertObjectHasAttribute('license', $json);
-        $this->assertObjectHasAttribute('type', $json);
-        $this->assertObjectHasAttribute('require', $json);
+        $this->assertObjectHasProperty('name', $json);
+        $this->assertObjectHasProperty('license', $json);
+        $this->assertObjectHasProperty('type', $json);
+        $this->assertObjectHasProperty('require', $json);
         $this->assertEquals($packageType, $json->type);
         if ($packageType !== 'project') {
             self::$dependencies[] = $json->name;
@@ -251,8 +251,8 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     private function assertAutoloadRegistrar(\StdClass $json, $dir)
     {
         $error = 'There must be an "autoload->files" node in composer.json of each Magento component.';
-        $this->assertObjectHasAttribute('autoload', $json, $error);
-        $this->assertObjectHasAttribute('files', $json->autoload, $error);
+        $this->assertObjectHasProperty('autoload', $json, $error);
+        $this->assertObjectHasProperty('files', $json->autoload, $error);
         $this->assertTrue(in_array("registration.php", $json->autoload->files), $error);
         $this->assertFileExists("$dir/registration.php");
     }
@@ -268,7 +268,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     {
         if (!in_array($json->name, self::$rootComposerModuleBlacklist)) {
             $errorMessage = 'Version must not be specified in the root and package composer JSON files in Git';
-            $this->assertObjectNotHasAttribute('version', $json, $errorMessage);
+            $this->assertObjectNotHasProperty('version', $json, $errorMessage);
         }
     }
 
@@ -280,8 +280,8 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     private function assertAutoload(\StdClass $json)
     {
         $errorMessage = 'There must be an "autoload->psr-4" section in composer.json of each Magento component.';
-        $this->assertObjectHasAttribute('autoload', $json, $errorMessage);
-        $this->assertObjectHasAttribute('psr-4', $json->autoload, $errorMessage);
+        $this->assertObjectHasProperty('autoload', $json, $errorMessage);
+        $this->assertObjectHasProperty('psr-4', $json->autoload, $errorMessage);
     }
 
     /**
@@ -292,7 +292,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     private function assertNoMap(\StdClass $json)
     {
         $error = 'There is no "extra->map" node in composer.json of each Magento component.';
-        $this->assertObjectNotHasAttribute('extra', $json, $error);
+        $this->assertObjectNotHasProperty('extra', $json, $error);
     }
 
     /**
@@ -321,7 +321,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertDependsOnPhp(\StdClass $json)
     {
-        $this->assertObjectHasAttribute('php', $json, 'This component is expected to depend on certain PHP version(s)');
+        $this->assertObjectHasProperty('php', $json, 'This component is expected to depend on certain PHP version(s)');
     }
 
     /**
@@ -331,7 +331,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertDependsOnFramework(\StdClass $json)
     {
-        $this->assertObjectHasAttribute(
+        $this->assertObjectHasProperty(
             self::$magentoFrameworkLibraryName,
             $json,
             'This component is expected to depend on ' . self::$magentoFrameworkLibraryName

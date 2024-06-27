@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="https://github.com/magento/magento2/pull/24845"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Enable flat rate shipping-->

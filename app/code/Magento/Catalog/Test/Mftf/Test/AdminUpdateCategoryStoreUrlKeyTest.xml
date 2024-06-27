@@ -17,6 +17,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-92338"/>
             <group value="category"/>
+            <group value="cloud"/>
         </annotations>
         <after>
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">

@@ -10,6 +10,8 @@ namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 use Magento\Eav\Model\Attribute;
 use Magento\Eav\Model\Attribute\Data\Multiline;
 use Magento\Eav\Model\AttributeDataFactory;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Model\AbstractModel;
@@ -109,7 +111,6 @@ class MultilineTest extends TestCase
 
         /** @var MockObject|Attribute $attributeMock */
         $attributeMock = $this->createMock(Attribute::class);
-
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);
         $this->assertEquals($expectedResult, $this->model->outputValue($format));
@@ -158,6 +159,8 @@ class MultilineTest extends TestCase
             ->method('getDataUsingMethod')
             ->willReturn("value1\nvalue2");
 
+        $entityTypeMock = $this->createMock(Type::class);
+
         /** @var MockObject|Attribute $attributeMock */
         $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->expects($this->any())->method('getMultilineCount')->willReturn(2);
@@ -169,6 +172,10 @@ class MultilineTest extends TestCase
         $attributeMock->expects($this->any())
             ->method('getIsRequired')
             ->willReturn($isAttributeRequired);
+
+        $attributeMock->expects($this->any())
+            ->method('getEntityType')
+            ->willReturn($entityTypeMock);
 
         $this->stringMock->expects($this->any())->method('strlen')->willReturn(5);
 

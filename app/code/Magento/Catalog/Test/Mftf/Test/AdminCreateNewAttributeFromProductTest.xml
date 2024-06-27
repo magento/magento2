@@ -18,6 +18,7 @@
             <testCaseId value="MC-12296"/>
             <useCaseId value="MAGETWO-59055"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
@@ -55,7 +56,9 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
             <argument name="customStore" value="customStoreFR"/>
         </actionGroup>
-        <magentoCron groups="index" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!--Go to created product page and create new attribute-->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminEditPage">
