@@ -24,7 +24,7 @@ use Magento\Store\Model\Store;
 class ConfigManager implements ModeConfigManagerInterface
 {
     /**
-     * @var ScopeConfigInterfaceFactory
+     * @var ScopeConfigInterface
      */
     private $config;
 
