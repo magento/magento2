@@ -998,6 +998,9 @@ class AccountManagementTest extends TestCase
         $customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $customer->expects($this->atLeastOnce())
+            ->method('getEmail')
+            ->willReturn('email@email.com');
         $this->accountManagement->createAccount($customer, $password);
     }
 
@@ -1021,6 +1024,9 @@ class AccountManagementTest extends TestCase
         $customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $customer->expects($this->atLeastOnce())
+            ->method('getEmail')
+            ->willReturn('email@email.com');
         $this->accountManagement->createAccount($customer, $password);
     }
 
