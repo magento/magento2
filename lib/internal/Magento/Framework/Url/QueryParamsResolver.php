@@ -5,7 +5,10 @@
  */
 namespace Magento\Framework\Url;
 
-class QueryParamsResolver extends \Magento\Framework\DataObject implements QueryParamsResolverInterface
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
+class QueryParamsResolver extends \Magento\Framework\DataObject implements QueryParamsResolverInterface,
+    ResetAfterRequestInterface
 {
     /**
      * @inheritdoc
