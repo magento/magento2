@@ -22,8 +22,6 @@
             <createData entity="_defaultProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
-            <actionGroup ref="AdminGoToCacheManagementPageActionGroup" stepKey="goToCacheManagementPage"/>
-            <waitForText selector="{{AdminMessagesSection.assertCacheManagementLayoutsStatus}}" userInput="ENABLED" stepKey="verifyCacheTypeLayoutsIsENABLED"/>
         </before>
         <after>
             <!-- Delete category -->
@@ -63,8 +61,6 @@
         </actionGroup>
         <!--Assert Currency symbol is not changed-->
         <waitForText selector="{{AdminCurrencySymbolsGridSection.currencySymbolOfProduct}}" userInput="$" stepKey="verifyCurrencySymbolIsNotChangedBeforeFlushingTheChangesInStoreFront"/>
-        <!--Navigate to Cache Management-->
-        <actionGroup ref="AdminGoToCacheManagementPageActionGroup" stepKey="goToCacheManagementPage1"/>
         <!-- Flush Cache-->
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCachesAfterChangesMade">
             <argument name="tags" value="" />
