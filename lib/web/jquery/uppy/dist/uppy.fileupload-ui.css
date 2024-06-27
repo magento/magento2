@@ -1,20 +1,5 @@
-@charset "UTF-8";
-/*
- * jQuery File Upload UI Plugin CSS
- * https://github.com/blueimp/jQuery-File-Upload
- *
- * Copyright 2010, Sebastian Tschan
- * https://blueimp.net
- *
- * Licensed under the MIT license:
- * https://opensource.org/licenses/MIT
- */
+/** css related to Uppy-UI **/
 
-.progress-animated .progress-bar,
-.progress-animated .bar {
-  background: url('../img/progressbar.gif') !important;
-  filter: none;
-}
 .fileupload-process {
   float: right;
   display: none;
@@ -24,7 +9,6 @@
   display: block;
   width: 32px;
   height: 32px;
-  background: url('../img/loading.gif') center no-repeat;
   background-size: contain;
 }
 .files audio,
