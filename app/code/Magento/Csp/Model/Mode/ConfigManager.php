@@ -11,7 +11,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ObjectManager;
 use Magento\Csp\Api\Data\ModeConfiguredInterface;
 use Magento\Csp\Api\ModeConfigManagerInterface;
-use Magento\Csp\Model\Mode\Data\ModeConfigured;
+use Magento\Csp\Model\Mode\Data\ModeConfiguredFactory;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
@@ -24,9 +24,14 @@ use Magento\Store\Model\Store;
 class ConfigManager implements ModeConfigManagerInterface
 {
     /**
-     * @var ScopeConfigInterface
+     * @var ScopeConfigInterfaceFactory
      */
     private $config;
+
+    /**
+     * @var ModeConfiguredFactory
+     */
+    private $modeConfiguredFactory;
 
     /**
      * @var Store
@@ -45,17 +50,20 @@ class ConfigManager implements ModeConfigManagerInterface
 
     /**
      * @param ScopeConfigInterface $config
+     * @param ModeConfiguredFactory $modeConfiguredFactory
      * @param Store $store
      * @param State $state
      * @param Http|null $request
      */
     public function __construct(
         ScopeConfigInterface $config,
+        ModeConfiguredFactory $modeConfiguredFactory,
         Store $store,
         State $state,
         ?Http $request = null
     ) {
         $this->config = $config;
+        $this->modeConfiguredFactory = $modeConfiguredFactory;
         $this->storeModel = $store;
         $this->state = $state;
 
@@ -118,9 +126,9 @@ class ConfigManager implements ModeConfigManagerInterface
             );
         }
 
-        return new ModeConfigured(
-            (bool) $reportOnly,
-            !empty($reportUri) ? $reportUri : null
-        );
+        return $this->modeConfiguredFactory->create([
+            'reportOnly' => $reportOnly,
+            'reportUri' => !empty($reportUri) ? $reportUri : null,
+        ]);
     }
 }
