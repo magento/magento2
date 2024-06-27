@@ -217,7 +217,8 @@ class WriteTest extends TestCase
                 'path/to/source.file',
                 'path/to/target.file',
                 $this->getMockBuilder(WriteInterface::class)
-                    ->setMethods(['isExists', 'getAbsolutePath', 'create'])
+                    ->onlyMethods(['getAbsolutePath', 'create'])
+                    ->addMethods(['isExists'])
                     ->getMockForAbstractClass(),
             ],
         ];

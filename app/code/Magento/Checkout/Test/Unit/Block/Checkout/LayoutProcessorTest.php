@@ -57,22 +57,22 @@ class LayoutProcessorTest extends TestCase
     {
         $this->attributeDataProvider = $this->getMockBuilder(AttributeMetadataDataProvider::class)
             ->disableOriginalConstructor()
-            ->setMethods(['loadAttributesCollection'])
+            ->onlyMethods(['loadAttributesCollection'])
             ->getMock();
 
         $this->attributeMapper = $this->getMockBuilder(AttributeMapper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['map'])
+            ->onlyMethods(['map'])
             ->getMock();
 
         $this->attributeMerger = $this->getMockBuilder(AttributeMerger::class)
             ->disableOriginalConstructor()
-            ->setMethods(['merge'])
+            ->onlyMethods(['merge'])
             ->getMock();
 
         $this->dataHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isDisplayBillingOnPaymentMethodAvailable'])
+            ->onlyMethods(['isDisplayBillingOnPaymentMethodAvailable'])
             ->getMock();
 
         $options = $this->getMockBuilder(Options::class)

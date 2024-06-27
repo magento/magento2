@@ -113,6 +113,9 @@
             <argument name="product" value="$$createConfigProductCreateConfigurableProduct2$$"/>
             <argument name="productCount" value="4"/>
         </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAfterConfigurationChange">
+                <argument name="indices" value=""/>
+        </actionGroup>
         <!-- Discount  amount is applied -->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToCart2"/>
         <see selector="{{CheckoutCartSummarySection.discountTotal}}" userInput="-$100.00" stepKey="discountIsApply"/>

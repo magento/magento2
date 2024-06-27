@@ -53,17 +53,17 @@ class CollectTest extends TestCase
     protected function setUp(): void
     {
         $this->moduleListMock = $this->getMockBuilder(ModuleListInterface::class)
-            ->setMethods(['getNames', 'has', 'getAll', 'getOne'])
+            ->onlyMethods(['getNames', 'has', 'getAll', 'getOne'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->fullModuleListMock = $this->getMockBuilder(FullModuleList::class)
-            ->setMethods(['getNames', 'getAll'])
+            ->onlyMethods(['getNames', 'getAll'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->moduleManagerMock = $this->getMockBuilder(Manager::class)
-            ->setMethods(['isOutputEnabled'])
+            ->onlyMethods(['isOutputEnabled'])
             ->disableOriginalConstructor()
             ->getMock();
 

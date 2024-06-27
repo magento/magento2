@@ -22,6 +22,8 @@
             <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>
         </before>
         <after>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
+            <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="resetProductFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
             <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 0" stepKey="DisablingGuestCheckoutLogin"/>
         </after>

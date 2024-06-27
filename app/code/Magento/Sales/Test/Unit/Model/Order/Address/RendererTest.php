@@ -9,6 +9,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Address;
 
 use Magento\Customer\Block\Address\Renderer\RendererInterface as CustomerAddressBlockRenderer;
 use Magento\Customer\Model\Address\Config as CustomerAddressConfig;
+use Magento\Directory\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface as EventManager;
@@ -16,8 +17,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address as OrderAddress;
 use Magento\Sales\Model\Order\Address\Renderer as OrderAddressRenderer;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -96,7 +97,7 @@ class RendererTest extends TestCase
 
         $this->storeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->storeManagerMck = $this->getMockBuilder(StoreManagerInterface::class)
-            ->onlyMethods(['setCurrentStore'])
+            ->onlyMethods(['setCurrentStore', 'getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -106,7 +107,7 @@ class RendererTest extends TestCase
                 'addressConfig' => $this->customerAddressConfigMock,
                 'eventManager' => $this->eventManagerMock,
                 'scopeConfig' => $this->storeConfigMock,
-                'storeManager' => $this->storeManagerMck,
+                'storeManager' => $this->storeManagerMck
             ]
         );
     }
@@ -131,7 +132,7 @@ class RendererTest extends TestCase
             ->willReturn($addressData);
         $this->storeConfigMock->expects($this->once())
             ->method('getValue')
-            ->willReturn(1);
+            ->willReturn('1');
         $this->customerAddressBlockRendererMock->expects(static::once())
             ->method('renderArray')
             ->with($addressData, null)
@@ -162,11 +163,34 @@ class RendererTest extends TestCase
      */
     private function setStoreExpectations(): void
     {
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
+        $originalStoreMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getId'])
+            ->getMockForAbstractClass();
+
         $this->orderMock->expects(self::once())->method('getStore')->willReturn($storeMock);
-        $this->storeManagerMck->expects(self::once())->method('setCurrentStore')->with($storeMock);
+
+        // One call to setup the store from the order, and an other one to rollback to the original store value
+        $expected = [$storeMock, $originalStoreMock];
+        $matcher = $this->exactly(count($expected));
+        $this->storeManagerMck->expects(self::once())->method('getStore')->willReturn($originalStoreMock);
+        $this->storeManagerMck->expects(self::any())->method('setCurrentStore')->with(
+            $this->callback(function ($store) use ($matcher, $expected) {
+                $this->assertEquals($store, $expected[$matcher->numberOfInvocations()]);
+                return true;
+            })
+        );
+
+        // One call to setup the store from the order, and an other one to rollback to the original store value
+        $this->customerAddressConfigMock->expects(self::any())->method('setStore')->with(
+            $this->callback(function ($store) use ($matcher, $expected) {
+                $this->assertEquals($store, $expected[$matcher->numberOfInvocations()]);
+                return true;
+            })
+        );
     }
 }
