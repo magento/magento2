@@ -7,14 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\BundleGraphQl\Model\Resolver;
 
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Bundle\Model\Product\Type;
 use Magento\BundleGraphQl\Model\Resolver\Options\Collection;
+use Magento\BundleGraphQl\Model\Resolver\Options\CollectionFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
  * @inheritdoc
@@ -22,39 +24,41 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class BundleItems implements ResolverInterface
 {
     /**
-     * @var Collection
+     * @var CollectionFactory
      */
-    private $bundleOptionCollection;
+    private CollectionFactory $bundleOptionCollectionFactory;
 
     /**
      * @var ValueFactory
      */
-    private $valueFactory;
+    private ValueFactory $valueFactory;
 
     /**
      * @var MetadataPool
      */
-    private $metadataPool;
+    private MetadataPool $metadataPool;
 
     /**
-     * @param Collection $bundleOptionCollection
+     * @param Collection $bundleOptionCollection Deprecated. Use $bundleOptionCollectionFactory
      * @param ValueFactory $valueFactory
      * @param MetadataPool $metadataPool
+     * @param CollectionFactory|null $bundleOptionCollectionFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Collection $bundleOptionCollection,
         ValueFactory $valueFactory,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        CollectionFactory $bundleOptionCollectionFactory = null
     ) {
-        $this->bundleOptionCollection = $bundleOptionCollection;
+        $this->bundleOptionCollectionFactory = $bundleOptionCollectionFactory
+            ?: ObjectManager::getInstance()->get(CollectionFactory::class);
         $this->valueFactory = $valueFactory;
         $this->metadataPool = $metadataPool;
     }
 
     /**
-     * Fetch and format bundle option items.
-     *
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
@@ -68,17 +72,15 @@ class BundleItems implements ResolverInterface
             };
             return $this->valueFactory->create($result);
         }
-
-        $this->bundleOptionCollection->addParentFilterData(
+        $bundleOptionCollection = $this->bundleOptionCollectionFactory->create();
+        $bundleOptionCollection->addParentFilterData(
             (int)$value[$linkField],
             (int)$value['entity_id'],
             $value[ProductInterface::SKU]
         );
-
-        $result = function () use ($value, $linkField) {
-            return $this->bundleOptionCollection->getOptionsByParentId((int)$value[$linkField]);
+        $result = function () use ($value, $linkField, $bundleOptionCollection) {
+            return $bundleOptionCollection->getOptionsByParentId((int)$value[$linkField]);
         };
-
         return $this->valueFactory->create($result);
     }
 }

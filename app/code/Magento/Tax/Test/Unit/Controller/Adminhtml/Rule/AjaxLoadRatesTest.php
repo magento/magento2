@@ -110,7 +110,7 @@ class AjaxLoadRatesTest extends TestCase
 
         $jsonObject= $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setData'])
+            ->onlyMethods(['setData'])
             ->getMock();
 
         $jsonObject->expects($this->once())

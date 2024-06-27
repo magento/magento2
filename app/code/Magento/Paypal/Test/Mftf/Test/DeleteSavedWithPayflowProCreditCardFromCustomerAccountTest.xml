@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DeleteSavedWithPayflowProCreditCardFromCustomerAccountTest">
+        <annotations>
+            <stories value="Stored Payment Method"/>
+            <title value="Delete saved with Payflow Pro credit card from customer account"/>
+            <description value="Delete saved with Payflow Pro credit card from customer account"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4838"/>
+            <group value="paypal"/>
+            <group value="3rd_party_integration" />
+            <group value="pr_exclude" />
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminPayPalPayflowProWithValutActionGroup" stepKey="ConfigPayPalExpress">
+                <argument name="credentials" value="SamplePaypalPaymentsProConfig"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Login as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct1.custom_attributes[url_key]$$)}}" stepKey="goToStorefront"/>
+        <!-- Add product 1 to cart -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$createSimpleProduct1.name$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <!-- Select shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatrate">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+        <!-- Go to Order review -->
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage"/>
+        <!-- Checkout select Credit Card (Payflow Pro) and place order-->
+        <waitForPageLoad stepKey="waitForLoadingMask"/>
+        <waitForPageLoad stepKey="waitForPaymentPageLoad"/>
+        <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
+        <!--Fill Card Data -->
+        <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
+            <argument name="cardData" value="VisaDefaultCard"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForFillCardData"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <!-- 2nd time order-->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct1.custom_attributes[url_key]$$)}}" stepKey="goToStorefront2"/>
+        <!-- Add product 1 to cart -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage2">
+            <argument name="productName" value="$createSimpleProduct1.name$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
+        <!-- Select shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatrate2">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+        <!-- Go to Order review -->
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage2"/>
+        <!-- Checkout select Credit Card (Payflow Pro) and place order-->
+        <waitForPageLoad stepKey="waitForLoadingMask2ndTime"/>
+        <waitForPageLoad stepKey="waitForPaymentPageLoad2ndTime"/>
+        <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectCheckmoPaymentMethod2"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection2"/>
+        <!--Fill Card Data -->
+        <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal2">
+            <argument name="cardData" value="Visa3DSecureCard"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForFillCardData2ndTime"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder2"/>
+        <!-- Go to My Account -->
+        <!-- Open My Account > Stored Payment Methods -->
+        <amOnPage stepKey="goToMyAccountPage" url="{{StorefrontCustomerDashboardPage.url}}"/>
+        <waitForPageLoad stepKey="waitForSideBarPageLoad2ndTime"/>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToSidebarMenu2">
+            <argument name="menu" value="Stored Payment Methods"/>
+        </actionGroup>
+        <!-- Assert Card number that ends with 1111 and exp Date-->
+        <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertCustomerPaymentMethod">
+            <argument name="card" value="VisaDefaultCardInfo"/>
+        </actionGroup>
+        <!-- Assert Card number that ends with 0002 and exp Date-->
+        <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertCustomerPaymentMethod2">
+            <argument name="card" value="Visa3DSecureCardInfo"/>
+        </actionGroup>
+        <!-- Delete second card-->
+        <actionGroup ref="StorefrontDeleteStoredPaymentMethodActionGroup" stepKey="deleteStoredCard">
+            <argument name="card" value="Visa3DSecureCardInfo"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -346,24 +346,28 @@ class RepositoryTest extends TestCase
             ->with($identityFieldsForCache, $cacheStorage)
             ->willReturn(false);
         $this->filterBuilder->expects($this->exactly(2))->method('setField')
-            ->withConsecutive(
-                [TransactionInterface::TXN_TYPE],
-                [TransactionInterface::PAYMENT_ID]
-            )->willReturnSelf();
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == TransactionInterface::TXN_TYPE || $arg1 ==  TransactionInterface::PAYMENT_ID) {
+                    return $this->filterBuilder;
+                }
+            });
         $this->filterBuilder->expects($this->exactly(2))->method('setValue')
-            ->withConsecutive(
-                [$transactionType],
-                [$paymentId]
-            )->willReturnSelf();
+            ->willReturnCallback(function ($arg1) use ($transactionType, $paymentId) {
+                if ($arg1 == $transactionType || $arg1 ==  $paymentId) {
+                    return $this->filterBuilder;
+                }
+            });
         $this->filterBuilder->expects($this->exactly(2))->method('create')->willReturn($this->filter);
 
         $transactionIdSort = "TransactionIdSort";
         $createdAtSort = "createdAtSort";
         $this->sortOrderBuilder->expects($this->exactly(2))->method('setField')
-            ->withConsecutive(
-                ['transaction_id'],
-                ['created_at']
-            )->willReturnSelf();
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'transaction_id' || $arg1 ==  'created_at') {
+                    return $this->sortOrderBuilder;
+                }
+            });
+
         $this->sortOrderBuilder->expects($this->exactly(2))->method('setDirection')
             ->with(\Magento\Framework\Data\Collection::SORT_ORDER_DESC)->willReturnSelf();
         $this->sortOrderBuilder->expects($this->exactly(2))->method('create')->willReturnOnConsecutiveCalls(
@@ -376,10 +380,11 @@ class RepositoryTest extends TestCase
             ->willReturnSelf();
         $this->searchCriteriaBuilder->expects($this->exactly(2))
             ->method('addSortOrder')
-            ->withConsecutive(
-                [$transactionIdSort],
-                [$createdAtSort]
-            )->willReturnSelf();
+            ->willReturnCallback(function ($arg1) use ($transactionIdSort, $createdAtSort) {
+                if ($arg1 == $transactionIdSort || $arg1 ==  $createdAtSort) {
+                    return $this->searchCriteriaBuilder;
+                }
+            });
         $this->searchCriteriaBuilder->expects($this->once())
             ->method('create')
             ->willReturn($this->searchCriteria);

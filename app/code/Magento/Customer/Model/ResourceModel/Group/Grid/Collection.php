@@ -1,7 +1,5 @@
 <?php
 /**
- * Customer group collection
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -20,6 +18,12 @@ class Collection extends GroupCollection implements SearchResultInterface
      * @var AggregationInterface
      */
     protected $aggregations;
+
+    /** @var string */
+    private $model;
+
+    /** @var string */
+    private $resourceModel;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
@@ -49,6 +53,8 @@ class Collection extends GroupCollection implements SearchResultInterface
         $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
+        $this->resourceModel = $resourceModel;
+        $this->model = $model;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -59,12 +65,22 @@ class Collection extends GroupCollection implements SearchResultInterface
         );
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
-        $this->_init($model, $resourceModel);
+        $this->_init($this->model, $this->resourceModel);
         $this->setMainTable($mainTable);
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_init($this->model, $this->resourceModel);
+    }
+
+    /**
      * Resource initialization
+     *
      * @return $this
      */
     protected function _initSelect()
@@ -75,6 +91,8 @@ class Collection extends GroupCollection implements SearchResultInterface
     }
 
     /**
+     *  Return aggregations
+     *
      * @return AggregationInterface
      */
     public function getAggregations()
@@ -83,6 +101,8 @@ class Collection extends GroupCollection implements SearchResultInterface
     }
 
     /**
+     * Set aggregations
+     *
      * @param AggregationInterface $aggregations
      * @return $this
      */

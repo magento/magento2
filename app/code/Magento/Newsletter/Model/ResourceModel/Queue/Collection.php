@@ -28,8 +28,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_isStoreFilter = false;
 
     /**
-     * Date
-     *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_date;

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateUserRoleWithLimitedPermissionTest">
+        <annotations>
+            <features value="User"/>
+            <stories value="Create User Role with limited permission"/>
+            <title value="User with limited right can't amend Stocks"/>
+            <description value="The testcase purpose to verify User cannot make changes in stock with limited access"/>
+            <testCaseId value="AC-6618"/>
+            <group value="user"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logIn"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <!--Delete new user-->
+            <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNewUser">
+                <argument name="user" value="activeAdmin"/>
+            </actionGroup>
+            <!--Delete new Role-->
+            <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteCustomRole">
+                <argument name="roleName" value="{{roleSales.rolename}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
+        </after>
+        <!--Create a new role with custom access-->
+        <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="goToNewRolePage"/>
+        <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillNewRoleForm">
+            <argument name="role" value="roleSales"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectCustomStockUserRoleResourcesActionGroup" stepKey="selectStockAndTwoFactor"/>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveNewRole"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="You saved the role."/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateUserWithRoleActionGroup" stepKey="createUser">
+            <argument name="role" value="roleSales"/>
+            <argument name="user" value="activeAdmin"/>
+        </actionGroup>
+
+        <!--Log out of admin and login with newly created user-->
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
+            <argument name="username" value="{{activeAdmin.username}}"/>
+            <argument name="password" value="{{activeAdmin.password}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutNewUserFromAdmin" after="verifyDeleteStockButtonNotVisible"/>
+    </test>
+</tests>

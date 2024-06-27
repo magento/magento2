@@ -15,6 +15,7 @@ use Magento\Framework\App\Response\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\Response\FileFactory;
 
 class FileFactoryTest extends TestCase
 {
@@ -46,6 +47,14 @@ class FileFactoryTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
+        $objects = [
+            [
+                FileFactory::class,
+                $this->createMock(FileFactory::class)
+            ]
+        ];
+        $helper->prepareObjectManager($objects);
+
         $this->_responseMock = $this->createPartialMock(
             Http::class,
             ['setRedirect', '__wakeup']
