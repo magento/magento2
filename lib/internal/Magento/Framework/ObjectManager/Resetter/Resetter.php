@@ -57,7 +57,7 @@ class Resetter implements ResetterInterface
             if (!$resetData) {
                 throw new LocalizedException(__('Error parsing %1', $resetPath));
             }
-            $this->classList = array_replace($this->classList, $resetData);
+            $this->classList += $resetData;
         }
         $this->resetAfterWeakMap = new WeakMap;
     }
@@ -85,7 +85,7 @@ class Resetter implements ResetterInterface
     {
         if ($instance instanceof ResetAfterRequestInterface
             || \method_exists($instance, self::RESET_STATE_METHOD)
-            || isset($this->classList[\get_class($instance)])
+            || $this->isObjectInClassList($instance)
         ) {
             $this->resetAfterWeakMap[$instance] = true;
         }
@@ -129,8 +129,18 @@ class Resetter implements ResetterInterface
         $this->objectManager = $objectManager;
     }
 
+    public function isObjectInClassList(object $object)
+    {
+        foreach ($this->classList as $key => $value) {
+            if ($object instanceof $key) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
-     * State reset without reflection
+     * State reset using reflection (or RESET_STATE_METHOD instead if it exists)
      *
      * @param object $instance
      * @return void
@@ -142,29 +152,23 @@ class Resetter implements ResetterInterface
             $instance->{self::RESET_STATE_METHOD}();
             return;
         }
-        $className = \get_class($instance);
+        foreach ($this->classList as $className => $value) {
+            if ($instance instanceof $className) {
+                $this->resetStateWithReflectionByClassName($instance, $className);
+            }
+        }
+    }
+    private function resetStateWithReflectionByClassName(object $instance, string $className)
+    {
+        $classResetValues = $this->classList[$className] ?? [];
         $reflectionClass = $this->reflectionCache[$className]
             ?? $this->reflectionCache[$className] = new \ReflectionClass($className);
         foreach ($reflectionClass->getProperties() as $property) {
-            $type = $property->getType()?->getName();
-            if (empty($type) && preg_match('/@var\s+([^\s]+)/', $property->getDocComment(), $matches)) {
-                $type = $matches[1];
-                if (\str_contains($type, '[]')) {
-                    $type = 'array';
-                }
-            }
             $name = $property->getName();
-            if (!in_array($type, ['bool', 'array', 'null', 'true', 'false'], true)) {
+            if (!array_key_exists($name, $classResetValues)) {
                 continue;
             }
-            $value = $this->classList[$className][$name] ??
-            match ($type) {
-                'bool' => false,
-                'true' => true,
-                'false' => false,
-                'array' => [],
-                'null' => null,
-            };
+            $value = $classResetValues[$name];
             $property->setAccessible(true);
             $property->setValue($instance, $value);
             $property->setAccessible(false);
