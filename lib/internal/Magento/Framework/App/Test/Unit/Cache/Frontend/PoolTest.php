@@ -106,7 +106,11 @@ class PoolTest extends TestCase
         $frontendFactory = $this->createMock(Factory::class);
         $frontendFactory
             ->method('create')
-            ->withConsecutive([$expectedFactoryArg]);
+            ->willReturnCallback(function ($arg1) use ($expectedFactoryArg) {
+                if ($arg1 == $expectedFactoryArg) {
+                    return null;
+                }
+            });
 
         $model = new Pool($deploymentConfig, $frontendFactory, $frontendSettings);
         $model->current();
@@ -115,11 +119,16 @@ class PoolTest extends TestCase
     /**
      * @return array
      */
-    public function initializationParamsDataProvider(): array
+    public static function initializationParamsDataProvider(): array
     {
         return [
             'no deployment config, default settings' => [
                 ['frontend' => []],
+                [Pool::DEFAULT_FRONTEND_ID => ['default_option' => 'default_value']],
+                ['default_option' => 'default_value']
+            ],
+            'deployment config, default settings but no frontend cache' => [
+                [],
                 [Pool::DEFAULT_FRONTEND_ID => ['default_option' => 'default_value']],
                 ['default_option' => 'default_value']
             ],

@@ -11,7 +11,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Page unique identifier
  */
-class Identifier
+class Identifier implements IdentifierInterface
 {
     /**
      * @var \Magento\Framework\App\Request\Http

@@ -1,7 +1,5 @@
 <?php
 /**
- * ObjectManager configuration loader
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -28,8 +26,6 @@ class ConfigLoader implements ConfigLoaderInterface
     protected $_readerFactory;
 
     /**
-     * Cache
-     *
      * @var \Magento\Framework\Config\CacheInterface
      */
     protected $_cache;
@@ -42,13 +38,17 @@ class ConfigLoader implements ConfigLoaderInterface
     /**
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Framework\ObjectManager\Config\Reader\DomFactory $readerFactory
+     * @param Serialize|null $serializer
      */
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
-        \Magento\Framework\ObjectManager\Config\Reader\DomFactory $readerFactory
+        \Magento\Framework\ObjectManager\Config\Reader\DomFactory $readerFactory,
+        Serialize $serializer = null
     ) {
         $this->_cache = $cache;
         $this->_readerFactory = $readerFactory;
+        $this->serializer = $serializer
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(Serialize::class);
     }
 
     /**
@@ -65,7 +65,7 @@ class ConfigLoader implements ConfigLoaderInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function load($area)
     {
@@ -74,25 +74,11 @@ class ConfigLoader implements ConfigLoaderInterface
 
         if (!$data) {
             $data = $this->_getReader()->read($area);
-            $this->_cache->save($this->getSerializer()->serialize($data), $cacheId);
+            $this->_cache->save($this->serializer->serialize($data), $cacheId);
         } else {
-            $data = $this->getSerializer()->unserialize($data);
+            $data = $this->serializer->unserialize($data);
         }
 
         return $data;
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return SerializerInterface
-     * @deprecated 101.0.0
-     */
-    private function getSerializer()
-    {
-        if (null === $this->serializer) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(Serialize::class);
-        }
-        return $this->serializer;
     }
 }

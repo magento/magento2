@@ -42,15 +42,15 @@ class Validate extends ImportResultController implements HttpPostActionInterface
         //phpcs:disable Magento2.Security.Superglobal
         if ($data) {
             // common actions
-            $resultBlock->addAction(
-                'show',
-                'import_validation_container'
-            );
-
+            $resultBlock->addAction('show', 'import_validation_container');
             $import = $this->getImport()->setData($data);
             try {
                 $source = $import->uploadFileAndGetSource();
                 $this->processValidationResult($import->validateSource($source), $resultBlock);
+                $ids = $import->getValidatedIds();
+                if (count($ids) > 0) {
+                    $resultBlock->addAction('value', Import::FIELD_IMPORT_IDS, $ids);
+                }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $resultBlock->addError($e->getMessage());
             } catch (\Exception $e) {
@@ -83,7 +83,9 @@ class Validate extends ImportResultController implements HttpPostActionInterface
 
         if ($import->getProcessedRowsCount()) {
             if ($validationResult) {
-                $this->addMessageForValidResult($resultBlock);
+                $totalError = $errorAggregator->getErrorsCount();
+                $totalRows = $import->getProcessedRowsCount();
+                $this->addMessageForValidResult($resultBlock, $totalError, $totalRows);
             } else {
                 $resultBlock->addError(
                     __('Data validation failed. Please fix the following errors and upload the file again.')
@@ -117,7 +119,6 @@ class Validate extends ImportResultController implements HttpPostActionInterface
      * Provides import model.
      *
      * @return Import
-     * @deprecated 100.1.0
      */
     private function getImport()
     {
@@ -155,12 +156,14 @@ class Validate extends ImportResultController implements HttpPostActionInterface
      * 2. Add message for case when imported data was checked and result is valid, but import is not allowed.
      *
      * @param Result $resultBlock
+     * @param Import $totalError
+     * @param Import $totalRows
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function addMessageForValidResult(Result $resultBlock)
+    private function addMessageForValidResult(Result $resultBlock, $totalError, $totalRows)
     {
-        if ($this->getImport()->isImportAllowed()) {
+        if ($this->getImport()->isImportAllowed() && $totalRows > $totalError) {
             $resultBlock->addSuccess(__('File is valid! To start import process press "Import" button'), true);
         } else {
             $resultBlock->addError(__('The file is valid, but we can\'t import it for some reason.'));

@@ -57,17 +57,17 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->gateway = $this->getMockBuilder(Gateway::class)
             ->disableOriginalConstructor()
-            ->setMethods(['postRequest'])
+            ->onlyMethods(['postRequest'])
             ->getMock();
 
         $requestFactory = $this->getMockBuilder(RequestFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->payflowRequest = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__call','setData'])
+            ->onlyMethods(['__call','setData'])
             ->getMock();
         $this->payflowRequest->method('__call')
             ->willReturnCallback(
@@ -136,6 +136,10 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
       order {
         order_number
       }
+      errors {
+        message
+        code
+      }
     }
 }
 QUERY;
@@ -156,22 +160,25 @@ QUERY;
             ->willReturn($payflowLinkResponse);
 
         $this->payflowRequest
+            ->expects($this->any())
             ->method('setData')
             ->willReturnMap(
                 [
                     [
-                        'user' => null,
-                        'vendor' => null,
-                        'partner' => null,
-                        'pwd' => null,
-                        'verbosity' => null,
-                        'BUTTONSOURCE' => $button,
-                        'tender' => 'C',
+                        [
+                            'user' => null,
+                            'vendor' => null,
+                            'partner' => null,
+                            'pwd' => null,
+                            'verbosity' => null,
+                            'BUTTONSOURCE' => $button,
+                            'tender' => 'C',
+                        ],
+                        $this->returnSelf()
                     ],
-                    $this->returnSelf()
+                    ['USER1', 1, $this->returnSelf()],
+                    ['USER2', 'USER2SilentPostHash', $this->returnSelf()]
                 ],
-                ['USER1', 1, $this->returnSelf()],
-                ['USER2', 'USER2SilentPostHash', $this->returnSelf()]
             );
 
         $response = $this->graphQlRequest->send($query);
@@ -238,6 +245,10 @@ QUERY;
       order {
         order_number
       }
+      errors {
+        message
+        code
+      }
     }
 }
 QUERY;
@@ -245,8 +256,7 @@ QUERY;
         $resultCode = Payflowlink::RESPONSE_CODE_DECLINED_BY_FILTER;
         $exception = new RuntimeException(__('Declined response message from PayPal gateway')->render());
         //Exception message is transformed into more controlled message
-        $expectedExceptionMessage =
-            "Unable to place order: Payment Gateway is unreachable at the moment. Please use another payment option.";
+        $expectedErrorCode = 'UNDEFINED';
 
         $this->payflowRequest->method('setData')
             ->with(
@@ -268,12 +278,11 @@ QUERY;
 
         $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
-        $this->assertArrayHasKey('errors', $responseData);
-        $actualError = $responseData['errors'][0];
+        $this->assertArrayHasKey('errors', $responseData['data']['placeOrder']);
+        $actualError = $responseData['data']['placeOrder']['errors'][0];
         $this->assertEquals(
-            $expectedExceptionMessage,
-            $actualError['message']
+            $expectedErrorCode,
+            $actualError['code']
         );
-        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['extensions']['category']);
     }
 }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductGridCustomViewColumnDisplayTest">
+        <annotations>
+            <stories value="Product grid columns visibility can be toggled by clicking on their names in the Columns drop-down menu, not just on their respective checkboxes."/>
+            <title value="Product grid columns visibility can be toggled by clicking on their names in the Columns drop-down menu, not just on their respective checkboxes."/>
+            <description value="Assert that after rearranging columns order on the product grid in Admin, it will still be possible to toggle the visibility of the columns by clicking on their names in the Columns dropdown menu, and not only on their respective checkboxes."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-6229"/>
+            <useCaseId value="ACP2E-1073"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Log in as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="beginWithLogout"/>
+        </after>
+        <!-- Navigate to products list page -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <!-- Sort SKU and Name column position -->
+        <dragAndDrop selector1="{{AdminProductGridSection.columnHeader('SKU')}}" selector2="{{AdminProductGridSection.columnHeader('Name')}}" stepKey="dragAndDropColumnName"/>
+        <!-- Check if price column is visible in grid -->
+        <seeElement selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="seeProductPriceColumn"/>
+        <!-- Click on columns, in dropdown uncheck price -->
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdownMenuToTogglePrice"/>
+        <actionGroup ref="AdminToggleProductGridColumnByClickingItsNameActionGroup" stepKey="hidePriceColumn">
+            <argument name="optionName" value="Price"/>
+        </actionGroup>
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdownMenuAfterTogglePrice"/>
+        <!-- Price column is not visible in product grid -->
+        <dontSeeElement selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="dontSeeProductPriceColumn"/>
+        <!-- Check weight column is not visible in product grid -->
+        <dontSeeElement selector="{{AdminProductGridSection.columnHeader('Weight')}}" stepKey="dontSeeWeightColumn"/>
+        <!-- Click on columns, in dropdown click on column name weight -->
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdownMenuToToggleWeight"/>
+        <actionGroup ref="AdminToggleProductGridColumnByClickingItsNameActionGroup" stepKey="showWeightColumn">
+            <argument name="optionName" value="Weight"/>
+        </actionGroup>
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdownMenuAfterToggleWeight"/>
+        <seeElement selector="{{AdminProductGridSection.columnHeader('Weight')}}" stepKey="seeWeightColumn"/>
+    </test>
+</tests>

@@ -18,6 +18,7 @@
             <useCaseId value="MAGETWO-69181"/>
             <group value="catalogSearch"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create the category -->

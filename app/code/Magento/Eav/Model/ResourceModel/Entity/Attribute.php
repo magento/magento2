@@ -17,6 +17,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
@@ -54,22 +55,31 @@ class Attribute extends AbstractDb
     private $config;
 
     /**
+     * @var PoisonPillPutInterface
+     */
+    private $pillPut;
+
+    /**
      * Class constructor
      *
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param Type $eavEntityType
      * @param string $connectionName
+     * @param PoisonPillPutInterface|null $pillPut
      * @codeCoverageIgnore
      */
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManager,
         Type $eavEntityType,
-        $connectionName = null
+        $connectionName = null,
+        PoisonPillPutInterface $pillPut = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavEntityType = $eavEntityType;
+        $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(PoisonPillPutInterface::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -235,6 +245,7 @@ class Attribute extends AbstractDb
             $object
         );
         $this->getConfig()->clear();
+        $this->pillPut->put();
         return parent::_afterSave($object);
     }
 
@@ -249,6 +260,7 @@ class Attribute extends AbstractDb
     protected function _afterDelete(AbstractModel $object)
     {
         $this->getConfig()->clear();
+        $this->pillPut->put();
         return $this;
     }
 
@@ -256,7 +268,6 @@ class Attribute extends AbstractDb
      * Returns config instance
      *
      * @return Config
-     * @deprecated 100.0.7
      */
     private function getConfig()
     {
@@ -386,6 +397,10 @@ class Attribute extends AbstractDb
                 $object->setDefault([]);
             }
             $defaultValue = $this->_processAttributeOptions($object, $option);
+        }
+
+        if ($object->getDefaultValue()) {
+            $defaultValue[] = $object->getDefaultValue();
         }
 
         $this->_saveDefaultValue($object, $defaultValue);

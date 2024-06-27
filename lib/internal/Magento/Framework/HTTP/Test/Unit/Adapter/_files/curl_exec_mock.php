@@ -18,5 +18,19 @@ use Magento\Framework\HTTP\Test\Unit\Adapter\CurlTest;
  */
 function curl_exec($resource)
 {
-    return call_user_func(CurlTest::$curlExectClosure);
+    return CurlTest::$curlMock->exec($resource);
+}
+
+/**
+ * Override global PHP function curl_setopt
+ *
+ * @param mixed $handle
+ * @param int $option
+ * @param mixed $value
+ * @return bool
+ * @see \curl_setopt()
+ */
+function curl_setopt(mixed $handle, int $option, mixed $value): bool
+{
+    return CurlTest::$curlMock->setopt($handle, $option, $value);
 }

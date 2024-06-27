@@ -81,8 +81,9 @@
                            'data-cart-item-id': product_sku
                            }, value: qty"
                            type="number"
+                           min="0"
                            size="4"
-                           class="item-qty cart-item-qty"/>
+                           class="item-qty cart-item-qty">
                 <button data-bind="attr: {
                            id: 'update-cart-item-'+item_id,
                            'data-cart-item': item_id,

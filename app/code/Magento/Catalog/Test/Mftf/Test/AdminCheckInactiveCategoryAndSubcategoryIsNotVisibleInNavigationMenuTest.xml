@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13637"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Login as Admin -->

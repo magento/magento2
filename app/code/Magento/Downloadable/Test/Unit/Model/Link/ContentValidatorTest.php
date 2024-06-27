@@ -173,7 +173,7 @@ class ContentValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function getInvalidSortOrder()
+    public static function getInvalidSortOrder()
     {
         return [
             [-1],
@@ -209,7 +209,7 @@ class ContentValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function getInvalidPrice()
+    public static function getInvalidPrice()
     {
         return [
             [-1],
@@ -244,7 +244,7 @@ class ContentValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function getInvalidNumberOfDownloads()
+    public static function getInvalidNumberOfDownloads()
     {
         return [
             [-1],
@@ -260,12 +260,16 @@ class ContentValidatorTest extends TestCase
     protected function getLinkMock(array $linkData)
     {
         $linkMock = $this->getMockBuilder(LinkInterface::class)
-            ->setMethods(
+            ->addMethods(
+                [
+                    'isShareable'
+                ]
+            )
+            ->onlyMethods(
                 [
                     'getTitle',
                     'getPrice',
                     'getSortOrder',
-                    'isShareable',
                     'getNumberOfDownloads',
                     'getLinkType',
                     'getLinkFile',

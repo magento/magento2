@@ -109,10 +109,11 @@ class ImportWithNotExistImagesTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
-     *
+     * @dataProvider unexistingImagesDataProvider
+     * @param string $imagesPath
      * @return void
      */
-    public function testImportWithUnexistingImages(): void
+    public function testImportWithUnexistingImages(string $imagesPath): void
     {
         $cache = $this->objectManager->get(\Magento\Framework\App\Cache::class);
         $cache->clean();
@@ -132,7 +133,7 @@ class ImportWithNotExistImagesTest extends TestCase
         $this->assertTrue($this->directory->isExist($this->filePath), 'Products were not imported to file');
         $fileContent = $this->getCsvData($this->directory->getAbsolutePath($this->filePath));
         $this->assertCount(2, $fileContent);
-        $this->updateFileImagesToInvalidValues();
+        $this->updateFileImagesToInvalidValues($imagesPath);
         $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory->create('import');
         $this->import->setParameters([
@@ -142,6 +143,17 @@ class ImportWithNotExistImagesTest extends TestCase
         ]);
         $this->assertImportErrors();
         $this->assertProductImages('/m/a/magento_image.jpg', 'simple');
+    }
+
+    /**
+     * @return array
+     */
+    public function unexistingImagesDataProvider(): array
+    {
+        return [
+            ['/m/a/invalid_image.jpg'],
+            ['http://127.0.0.1/pub/static/nonexistent_image.jpg'],
+        ];
     }
 
     /**
@@ -158,9 +170,10 @@ class ImportWithNotExistImagesTest extends TestCase
     /**
      * Change image names in an export file
      *
+     * @param string $imagesPath
      * @return void
      */
-    private function updateFileImagesToInvalidValues(): void
+    private function updateFileImagesToInvalidValues(string $imagesPath): void
     {
         $absolutePath = $this->directory->getAbsolutePath($this->filePath);
         $csv = $this->getCsvData($absolutePath);
@@ -171,7 +184,7 @@ class ImportWithNotExistImagesTest extends TestCase
         }
 
         foreach ($imagesPositions as $imagesPosition) {
-            $csv[1][$imagesPosition] = '/m/a/invalid_image.jpg';
+            $csv[1][$imagesPosition] = $imagesPath;
         }
 
         $this->appendCsvData($absolutePath, $csv);
@@ -209,9 +222,6 @@ class ImportWithNotExistImagesTest extends TestCase
             RowValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
             $importError->getErrorCode()
         );
-        $errorMsg = (string)__('Imported resource (image) could not be downloaded ' .
-            'from external resource due to timeout or access permissions');
-        $this->assertEquals($errorMsg, $importError->getErrorMessage());
     }
 
     /**

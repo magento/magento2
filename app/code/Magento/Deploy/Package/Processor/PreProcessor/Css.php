@@ -149,7 +149,12 @@ class Css implements ProcessorInterface
             $imports = [];
             $this->map[$fullPath] = [];
 
-            $content = $this->staticDir->readFile($this->minification->addMinifiedSign($fullPath));
+            $tmpFilename = $this->minification->addMinifiedSign($fullPath);
+            if ($this->staticDir->isReadable($tmpFilename)) {
+                $content = $this->staticDir->readFile($tmpFilename);
+            } else {
+                $content = '';
+            }
 
             $callback = function ($matchContent) use ($packagePath, $filePath, &$imports) {
                 if ($this->isLocal($matchContent['path'])) {

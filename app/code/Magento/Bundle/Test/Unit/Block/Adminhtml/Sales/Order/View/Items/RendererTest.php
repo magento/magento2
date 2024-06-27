@@ -9,6 +9,8 @@ declare(strict_types=1);
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Sales\Order\View\Items;
 
 use Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items\Renderer;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order\Item;
@@ -35,6 +37,17 @@ class RendererTest extends TestCase
             ->getMock();
         $this->serializer = $this->createMock(Json::class);
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->model = $objectManager->getObject(
             Renderer::class,
             ['serializer' => $this->serializer]
@@ -222,6 +235,33 @@ class RendererTest extends TestCase
             [true, ['product_calculations' => 0], true],
             [false, [], true],
             [false, ['product_calculations' => 0], false],
+        ];
+    }
+
+    /**
+     * @dataProvider getValueHtmlWithoutShipmentSeparatelyDataProvider
+     */
+    public function testGetValueHtmlWithoutShipmentSeparately($qty)
+    {
+        $model = $this->getMockBuilder(Renderer::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['escapeHtml', 'isShipmentSeparately', 'getSelectionAttributes', 'isChildCalculated'])
+            ->getMock();
+        $model->expects($this->any())->method('escapeHtml')->willReturn('Test');
+        $model->expects($this->any())->method('isShipmentSeparately')->willReturn(false);
+        $model->expects($this->any())->method('isChildCalculated')->willReturn(true);
+        $model->expects($this->any())->method('getSelectionAttributes')->willReturn(['qty' => $qty]);
+        $this->assertSame($qty . ' x Test', $model->getValueHtml($this->orderItem));
+    }
+
+    /**
+     * @return array
+     */
+    public function getValueHtmlWithoutShipmentSeparatelyDataProvider()
+    {
+        return [
+            [1],
+            [1.5],
         ];
     }
 }

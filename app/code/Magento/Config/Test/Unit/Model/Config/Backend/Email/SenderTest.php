@@ -51,6 +51,7 @@ class SenderTest extends TestCase
     {
         return [
             ['Mr. Real Name', 'Mr. Real Name'],
+            ['No colons:', false],
             [str_repeat('a', 256), false],
             [null, false],
             ['', false],

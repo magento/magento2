@@ -16,6 +16,7 @@
             <description value="Customer should be automatically redirected to account dashboard after login"/>
             <severity value="MINOR"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -25,7 +26,7 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <magentoCLI command="config:set {{DisableCustomerRedirectToDashboardConfigData.path}} {{DisableCustomerRedirectToDashboardConfigData.value}}" stepKey="disableRedirectAfterLogin"/>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">

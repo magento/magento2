@@ -52,7 +52,6 @@ var config = {
         }
     },
     shim: {
-        'jquery/jquery-migrate': ['jquery'],
         'mage/adminhtml/backup': ['prototype'],
         'mage/captcha': ['prototype'],
         'mage/new-gallery': ['jquery'],
@@ -67,7 +66,7 @@ var config = {
     },
     paths: {
         'jquery/validate': 'jquery/jquery.validate',
-        'jquery/file-uploader': 'jquery/fileUploader/jquery.fileuploader',
+        'jquery/uppy-core': 'jquery/uppy/dist/uppy.min',
         'prototype': 'legacy-build.min',
         'jquery/jquery-storageapi': 'js-storage/storage-wrapper',
         'text': 'mage/requirejs/text',
@@ -76,9 +75,6 @@ var config = {
         'tinycolor': 'jquery/spectrum/tinycolor',
         'jquery-ui-modules': 'jquery/ui-modules'
     },
-    deps: [
-        'jquery/jquery-migrate'
-    ],
     config: {
         text: {
             'headers': {
