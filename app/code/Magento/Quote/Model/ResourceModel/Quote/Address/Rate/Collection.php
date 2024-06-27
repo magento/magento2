@@ -131,9 +131,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         $itemsToDelete = [];
         $itemsToSave = [];
         /** @var Rate $item */
-        foreach ($this->getItems() as $item) {
+        foreach ($this->getItems() as $key => $item) {
             if ($item->isDeleted()) {
                 $itemsToDelete[] = $item;
+                $this->removeItemByKey($key);
             } else {
                 $itemsToSave[] = $item;
             }

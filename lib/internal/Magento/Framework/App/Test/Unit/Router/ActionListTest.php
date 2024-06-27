@@ -133,12 +133,17 @@ class ActionListTest extends TestCase
     public function getDataProvider()
     {
         $mockClassName = 'Mock_Action_Class';
-        $actionClass = $this->getMockClass(
+        $actionClassObject = $this->getMockForAbstractClass(
             ActionInterface::class,
-            ['execute', 'getResponse'],
             [],
-            $mockClassName
+            $mockClassName,
+            true,
+            true,
+            true,
+            ['execute', 'getResponse']
         );
+
+        $actionClass = get_class($actionClassObject);
 
         return [
             [

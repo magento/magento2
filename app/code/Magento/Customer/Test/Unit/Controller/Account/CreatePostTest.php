@@ -218,7 +218,7 @@ class CreatePostTest extends TestCase
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             RedirectFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectFactoryMock->expects($this->any())

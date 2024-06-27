@@ -88,8 +88,11 @@ class FilterTest extends TestCase
             ->getMock();
         $block->expects($this->exactly(2))
             ->method('setValue')
-            ->withConsecutive(...$expect)
-            ->willReturnSelf();
+            ->willReturnCallback(function (...$expect) use ($block) {
+                if (!empty($expect)) {
+                    return $block;
+                }
+            });
         $this->layout->expects($this->once())
             ->method('createBlock')
             ->with($type)
@@ -105,7 +108,7 @@ class FilterTest extends TestCase
     /**
      * @return array[]
      */
-    public function dateFilterDataProvider(): array
+    public static function dateFilterDataProvider(): array
     {
         return  [
             [
@@ -161,7 +164,7 @@ class FilterTest extends TestCase
     /**
      * @return array[]
      */
-    public function selectFilterDataProvider(): array
+    public static function selectFilterDataProvider(): array
     {
         return  [
             [
@@ -247,7 +250,7 @@ class FilterTest extends TestCase
     /**
      * @return array[]
      */
-    public function inputFilterDataProvider(): array
+    public static function inputFilterDataProvider(): array
     {
         return  [
             [
@@ -291,7 +294,7 @@ class FilterTest extends TestCase
     /**
      * @return array[]
      */
-    public function numberFilterDataProvider(): array
+    public static function numberFilterDataProvider(): array
     {
         return [
             [

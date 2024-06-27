@@ -130,7 +130,7 @@ class DateTest extends AbstractFormTestCase
         $validationRules = [];
         $validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getValue'])
+            ->onlyMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
         $validationRule->expects($this->any())
             ->method('getName')
@@ -144,7 +144,7 @@ class DateTest extends AbstractFormTestCase
             foreach ($validation as $ruleName => $ruleValue) {
                 $validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
                     ->disableOriginalConstructor()
-                    ->setMethods(['getName', 'getValue'])
+                    ->onlyMethods(['getName', 'getValue'])
                     ->getMockForAbstractClass();
                 $validationRule->expects($this->any())
                     ->method('getName')

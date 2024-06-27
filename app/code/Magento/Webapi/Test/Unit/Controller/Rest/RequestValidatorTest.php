@@ -55,7 +55,7 @@ class RequestValidatorTest extends TestCase
     protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(Request::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'isSecure',
                     'getRequestData',
@@ -72,7 +72,7 @@ class RequestValidatorTest extends TestCase
             ->method('getHttpHost')
             ->willReturn('testHostName.com');
         $routerMock = $this->getMockBuilder(Router::class)
-            ->setMethods(['match'])
+            ->onlyMethods(['match'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->routeMock = $this->getMockBuilder(Route::class)

@@ -165,14 +165,16 @@ class DbTest extends TestCase
             $this->exactly(3)
         )->method(
             'prepareSqlCondition'
-        )->withConsecutive(
-            ["`weight`", ['in' => [1, 3]]],
-            ['`name`', ['like' => 'M%']],
-            ['`is_imported`', $this->anything()]
-        )->willReturnOnConsecutiveCalls(
-            'weight in (1, 3)',
-            "name like 'M%'",
-            'is_imported = 1'
+        )->willReturnCallback(
+            function ($arg1, $arg2) {
+                if ($arg1 == "`weight`" && $arg2 == ['in' => [1, 3]]) {
+                    return 'weight in (1, 3)';
+                } elseif ($arg1 == "`name`" && $arg2 == ['like' => 'M%']) {
+                    return "name like 'M%'";
+                } elseif ($arg1 == "`is_imported`") {
+                    return 'is_imported = 1';
+                }
+            }
         );
         $renderer = $this->getSelectRenderer($this->objectManager);
         $select = new Select($adapter, $renderer);
@@ -316,7 +318,7 @@ class DbTest extends TestCase
     /**
      * @return array
      */
-    public function printLogQueryPrintingDataProvider()
+    public static function printLogQueryPrintingDataProvider()
     {
         return [
             [false, false, 'some_query', ''],
@@ -342,7 +344,7 @@ class DbTest extends TestCase
     /**
      * @return array
      */
-    public function printLogQueryLoggingDataProvider()
+    public static function printLogQueryLoggingDataProvider()
     {
         return [
             [true, false, 1],
@@ -403,7 +405,7 @@ class DbTest extends TestCase
             ['select', 'quoteInto', 'prepareSqlCondition', 'fetchOne']
         );
         $selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['orWhere', 'where', 'reset', 'columns'])
+            ->onlyMethods(['orWhere', 'where', 'reset', 'columns'])
             ->setConstructorArgs(
                 [
                     'adapter' => $adapterMock,
@@ -463,7 +465,7 @@ class DbTest extends TestCase
     {
         $adapterMock = $this->createPartialMock(Mysql::class, ['select']);
         $selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['__toString'])
+            ->onlyMethods(['__toString'])
             ->setConstructorArgs(
                 [
                     'adapter' => $adapterMock,
@@ -493,7 +495,7 @@ class DbTest extends TestCase
             ['select', 'quoteInto', 'prepareSqlCondition', 'fetchOne']
         );
         $selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['orWhere', 'where', 'reset', 'columns'])
+            ->onlyMethods(['orWhere', 'where', 'reset', 'columns'])
             ->setConstructorArgs(
                 [
                     'adapter' => $adapterMock,
@@ -529,7 +531,7 @@ class DbTest extends TestCase
     {
         $adapterMock = $this->createPartialMock(Mysql::class, ['select']);
         $selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['distinct'])
+            ->onlyMethods(['distinct'])
             ->setConstructorArgs(
                 [
                     'adapter' => $adapterMock,
@@ -552,7 +554,7 @@ class DbTest extends TestCase
     /**
      * @return array
      */
-    public function distinctDataProvider()
+    public static function distinctDataProvider()
     {
         return [
             [true, true],
