@@ -57,7 +57,7 @@ class ErrorHandlerTest extends TestCase
     {
         $errorStr = 'test_string';
         $errorFile = 'test_file';
-        $errorLine = 'test_error_line';
+        $errorLine = 1;
 
         $expectedExceptionMessage = sprintf('%s: %s in %s on line %s', $errorPhrase, $errorStr, $errorFile, $errorLine);
         $this->expectException(ErrorHandlerException::class);
