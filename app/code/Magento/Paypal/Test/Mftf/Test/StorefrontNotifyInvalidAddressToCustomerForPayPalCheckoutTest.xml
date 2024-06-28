@@ -16,8 +16,8 @@
             <description value="Verify that customer is notified with error message about wrong address for PayPal on all Magento Storefront pages"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-3995"/>
-            <!--<group value="paypal"/>-->
-            <!--<group value="paypalExpress"/>-->
+            <group value="paypal"/>
+            <group value="paypalExpress"/>
             <!--<group value="pr_exclude"/>-->
         </annotations>
         <before>
