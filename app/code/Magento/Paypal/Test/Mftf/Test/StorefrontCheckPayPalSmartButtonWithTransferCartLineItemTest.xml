@@ -22,7 +22,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="setPaymentActionAuthorization"/>-->
             <magentoCLI command="config:set {{StorefrontPaypalEnableTransferCartLineConfigData.path}} {{StorefrontPaypalEnableTransferCartLineConfigData.value}}" stepKey="enableTransferCartLine"/>
-                        <!-- New Customer -->
+            <!-- New Customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer">
                 <field key="firstname">John1</field>
                 <field key="lastname">Doe1</field>
