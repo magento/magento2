@@ -6,6 +6,7 @@
 namespace Magento\Setup\Module\I18n;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  *  Service Locator (instead DI container)
@@ -52,10 +53,11 @@ class ServiceLocator
             $filesCollector = new FilesCollector();
 
             $phraseCollector = new Parser\Adapter\Php\Tokenizer\PhraseCollector(new Parser\Adapter\Php\Tokenizer());
+            $fileSystem = new File;
             $adapters = [
                 'php' => new Parser\Adapter\Php($phraseCollector),
                 'html' => new Parser\Adapter\Html(),
-                'js' => new Parser\Adapter\Js(),
+                'js' => new Parser\Adapter\Js($fileSystem),
                 'xml' => new Parser\Adapter\Xml(),
             ];
 
