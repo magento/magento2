@@ -7,7 +7,8 @@ namespace Magento\Framework\Url;
 
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
-class QueryParamsResolver extends \Magento\Framework\DataObject implements QueryParamsResolverInterface,
+class QueryParamsResolver extends \Magento\Framework\DataObject implements
+    QueryParamsResolverInterface,
     ResetAfterRequestInterface
 {
     /**

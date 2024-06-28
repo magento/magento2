@@ -129,6 +129,13 @@ class Resetter implements ResetterInterface
         $this->objectManager = $objectManager;
     }
 
+    /**
+     * Checks if the object is in the class list uses inheritance (via instanceof)
+     *
+     * @param object $object
+     * @return bool
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function isObjectInClassList(object $object)
     {
         foreach ($this->classList as $key => $value) {
@@ -145,6 +152,7 @@ class Resetter implements ResetterInterface
      * @param object $instance
      * @return void
      * @throws \ReflectionException
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function resetStateWithReflection(object $instance)
     {
@@ -158,6 +166,14 @@ class Resetter implements ResetterInterface
             }
         }
     }
+
+    /**
+     * State reset using reflection using specific className
+     *
+     * @param object $instance
+     * @param string $className
+     * @return void
+     */
     private function resetStateWithReflectionByClassName(object $instance, string $className)
     {
         $classResetValues = $this->classList[$className] ?? [];
