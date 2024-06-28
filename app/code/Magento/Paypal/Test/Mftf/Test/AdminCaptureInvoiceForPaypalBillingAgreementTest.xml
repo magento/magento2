@@ -31,33 +31,45 @@
                 <argument name="countryCode" value="us"/>
             </actionGroup>
             <magentoCLI command="config:set payment/paypal_express/allow_ba_signup auto" stepKey="enableAutoBilling"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJob">
+                <argument name="indices" value="cataloginventory_stock"/>
+            </actionGroup>
+            <!-- Login to StoreFront -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+                <argument name="Customer" value="$$createCustomer$$"/>
+            </actionGroup>
+            <!-- Add product to cart -->
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+                <argument name="product" value="$$createProduct$$"/>
+            </actionGroup>
+            <!-- Go to Checkout Page -->
+            <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+            <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping"/>
+            <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+            <!-- Click on PayPal payment radio button -->
+            <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPayPalRadioButton"/>
+            <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="selectPaypalPayment"/>
+            <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+            <!-- Login to Paypal in-context-->
+            <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
+            <!-- Click PayPal button and go back to Magento site -->
+            <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
         </before>
-        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
-            <argument name="tags" value="config full_page"/>
-        </actionGroup>
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJob">
-            <argument name="indices" value="cataloginventory_stock"/>
-        </actionGroup>
-        <!-- Login to StoreFront -->
-        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
-            <argument name="Customer" value="$$createCustomer$$"/>
-        </actionGroup>
-        <!-- Add product to cart -->
-        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
-            <argument name="product" value="$$createProduct$$"/>
-        </actionGroup>
-        <!-- Go to Checkout Page -->
-        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
-        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping" />
-        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
-        <!-- Click on PayPal payment radio button -->
-        <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPayPalRadioButton"/>
-        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="selectPaypalPayment"/>
-        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
-        <!-- Login to Paypal in-context-->
-        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
-        <!-- Click PayPal button and go back to Magento site -->
-        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <after>
+            <actionGroup ref="AdminPayPalExpressCheckoutDisableActionGroup" stepKey="disablePaypalExpressCheckout"/>
+            <!-- Login to Paypal in-context-->
+            <actionGroup ref="AdminClearPayPalExpressCheckoutDataActionGroup" stepKey="clearPaypalExpressCheckoutFields"/>
+            <actionGroup ref="AdminPayPalExpressCheckoutDisableBillingAgreementActionGroup" stepKey="disableBillingAgreement">
+                <argument name="countryCode" value="us"/>
+            </actionGroup>
+            <magentoCLI command="config:set payment/paypal_express/allow_ba_signup never" stepKey="disableAutoBilling"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
         <!-- I see order successful Page -->
         <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
@@ -69,22 +81,9 @@
         <assertNotEmpty stepKey="assertBillingAgreementIsNotEmpty">
             <actualResult type="const">$billingAgreement</actualResult>
         </assertNotEmpty>
-        <after>
-            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
-            <actionGroup ref="AdminPayPalExpressCheckoutDisableBillingAgreementActionGroup" stepKey="disableBillingAgreement">
-                <argument name="countryCode" value="us"/>
-            </actionGroup>
-            <magentoCLI command="config:set payment/paypal_express/allow_ba_signup never" stepKey="disableAutoBilling"/>
-            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-        </after>
-        <!--Grab order number-->
-        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="waitForOrderNumberToBeGrabbed"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="grabOrderNumber"/>
         <!--Go to admin sales page and open the order id-->
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
-            <argument name="orderId" value="{$grabOrderNumber}"/>
+            <argument name="orderId" value="{$orderNumber}"/>
         </actionGroup>
         <!--Submit invoice-->
         <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButton"/>
