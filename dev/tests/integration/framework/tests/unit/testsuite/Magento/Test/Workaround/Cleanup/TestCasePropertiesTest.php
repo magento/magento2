@@ -36,7 +36,7 @@ class TestCasePropertiesTest extends TestCase
      */
     public function testEndTestSuiteDestruct(): void
     {
-        $phpUnitTestSuite = new TestSuite();
+        $phpUnitTestSuite = TestSuite::empty('TestSuite');
         $phpUnitTestSuite->addTestFile(__DIR__ . '/TestCasePropertiesTest/DummyTestCase.php');
         // Because addTestFile() adds classes from file to tests array, use first testsuite
         /** @var TestSuite $testSuite */

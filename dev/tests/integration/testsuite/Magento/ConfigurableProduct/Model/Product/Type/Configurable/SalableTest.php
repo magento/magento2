@@ -60,7 +60,7 @@ class SalableTest extends TestCase
     /**
      * @return array
      */
-    public function salableDataProvider(): array
+    public static function salableDataProvider(): array
     {
         return [
             'all children enabled_and_in_stock' => [
