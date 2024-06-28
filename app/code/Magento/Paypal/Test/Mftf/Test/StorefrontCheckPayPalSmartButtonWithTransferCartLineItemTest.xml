@@ -15,12 +15,14 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-3928"/>
             <group value="3rd_party_integration"/>
-<!--            <group value="paypalExpress"/>-->
+            <group value="paypalExpress"/>
             <!--            <group value="pr_exclude" />-->
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <!-- New Customer -->
+            <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="setPaymentActionAuthorization"/>-->
+            <magentoCLI command="config:set {{StorefrontPaypalEnableTransferCartLineConfigData.path}} {{StorefrontPaypalEnableTransferCartLineConfigData.value}}" stepKey="enableTransferCartLine"/>
+                        <!-- New Customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer">
                 <field key="firstname">John1</field>
                 <field key="lastname">Doe1</field>
@@ -28,13 +30,9 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
                 <field key="price">1</field>
             </createData>
-            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
-                <argument name="credentials" value="SamplePaypalExpressConfig2"/>
-            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountry"/>
-            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
             <magentoCLI command="config:set payment/wps_express/active 0" stepKey="disableWPSExpress"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
@@ -76,6 +74,6 @@
         <waitForElementClickable selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="waitForInvoicesTabClickable" />
         <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="openInvoicesTab"/>
         <!--Check Invoice Section -->
-        <waitForElementVisible selector="{{AdminOrderDetailsMainActionsSection.invoiceTabContent1}}" stepKey="waitForInvoiceSectionContentToBeAppeared"/>
+        <waitForText selector="{{AdminOrderDetailsMainActionsSection.invoiceTabContent1}}" userInput="We couldn't find any records." stepKey="verifyThereIsNoInvoiceCreated"/>
     </test>
 </tests>
