@@ -36,7 +36,7 @@ class NameResolverTest extends TestCase
     {
         $this->nameResolverMock = $this->getMockBuilder(NameResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName'])
+            ->onlyMethods(['getName'])
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

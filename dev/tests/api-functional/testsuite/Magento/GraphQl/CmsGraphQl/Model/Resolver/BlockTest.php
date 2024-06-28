@@ -10,9 +10,17 @@ namespace Magento\GraphQl\CmsGraphQl\Model\Resolver;
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Cms\Model\Block;
-use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
-use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
+use Magento\CmsGraphQl\Model\Resolver\Blocks;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Test\Fixture\Store;
+use Magento\Cms\Test\Fixture\Block as BlockFixture;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
@@ -20,6 +28,8 @@ use Magento\Widget\Model\Template\FilterEmulate;
 
 /**
  * Test for cms block resolver cache
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BlockTest extends ResolverCacheAbstract
 {
@@ -43,6 +53,11 @@ class BlockTest extends ResolverCacheAbstract
      */
     private $storeManager;
 
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
     protected function setUp(): void
     {
         $objectManager = ObjectManager::getInstance();
@@ -50,25 +65,25 @@ class BlockTest extends ResolverCacheAbstract
         $this->graphQlResolverCache = $objectManager->get(GraphQlResolverCache::class);
         $this->widgetFilter = $objectManager->get(FilterEmulate::class);
         $this->storeManager = $objectManager->get(StoreManagerInterface::class);
+        $this->fixtures = $objectManager->get(DataFixtureStorageManager::class)->getStorage();
 
         parent::setUp();
     }
 
-    /**
-     * @magentoConfigFixture default_store web/seo/use_rewrites 1
-     * @magentoDataFixture Magento/Cms/_files/blocks.php
-     */
+    #[
+        DataFixture(BlockFixture::class, as: 'guest_block')
+    ]
     public function testCmsSingleBlockResolverCacheAndInvalidationAsGuest()
     {
-        $block = $this->blockRepository->getById('enabled_block');
+        $block = $this->fixtures->get('guest_block');
 
         $query = $this->getQuery([
             $block->getIdentifier(),
         ]);
 
-        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$block]);
+        $cacheIdentityString = $this->getResolverCacheKeyFromBlocks([$block]);
 
         $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
@@ -93,29 +108,27 @@ class BlockTest extends ResolverCacheAbstract
         );
     }
 
-    /**
-     * @magentoConfigFixture default_store web/seo/use_rewrites 1
-     * @magentoDataFixture Magento/Cms/_files/block.php
-     * @magentoDataFixture Magento/Cms/_files/blocks.php
-     */
+    #[
+        DataFixture(BlockFixture::class, as: 'block', count: 2)
+    ]
     public function testCmsMultipleBlockResolverCacheAndInvalidationAsGuest()
     {
-        $block1 = $this->blockRepository->getById('enabled_block');
-        $block2 = $this->blockRepository->getById('fixture_block');
+        $block1 = $this->fixtures->get('block1');
+        $block2 = $this->fixtures->get('block2');
 
         $query = $this->getQuery([
             $block1->getIdentifier(),
             $block2->getIdentifier(),
         ]);
 
-        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [
+        $cacheKey = $this->getResolverCacheKeyFromBlocks([
             $block1,
             $block2,
         ]);
 
-        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheKey);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -124,7 +137,7 @@ class BlockTest extends ResolverCacheAbstract
         );
 
         $this->assertTagsByCacheIdentityAndBlocks(
-            $cacheIdentityString,
+            $cacheKey,
             [$block1, $block2]
         );
 
@@ -133,28 +146,27 @@ class BlockTest extends ResolverCacheAbstract
         $this->blockRepository->save($block2);
 
         $this->assertFalse(
-            $this->graphQlResolverCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheKey),
             'Cache entry should be invalidated after block content change'
         );
     }
 
-    /**
-     * @magentoConfigFixture default_store web/seo/use_rewrites 1
-     * @magentoDataFixture Magento/Cms/_files/block.php
-     */
+    #[
+        DataFixture(BlockFixture::class, as: 'deleted_block')
+    ]
     public function testCmsBlockResolverCacheInvalidatesWhenBlockGetsDeleted()
     {
-        $block = $this->blockRepository->getById('fixture_block');
+        $block = $this->fixtures->get('deleted_block');
 
         $query = $this->getQuery([
             $block->getIdentifier(),
         ]);
 
-        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$block]);
+        $cacheKey = $this->getResolverCacheKeyFromBlocks([$block]);
 
-        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheKey);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -163,7 +175,7 @@ class BlockTest extends ResolverCacheAbstract
         );
 
         $this->assertTagsByCacheIdentityAndBlocks(
-            $cacheIdentityString,
+            $cacheKey,
             [$block]
         );
 
@@ -171,28 +183,27 @@ class BlockTest extends ResolverCacheAbstract
         $this->blockRepository->delete($block);
 
         $this->assertFalse(
-            $this->graphQlResolverCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheKey),
             'Cache entry should be invalidated after block deletion'
         );
     }
 
-    /**
-     * @magentoConfigFixture default_store web/seo/use_rewrites 1
-     * @magentoDataFixture Magento/Cms/_files/blocks.php
-     */
+    #[
+        DataFixture(BlockFixture::class, as: 'enabled_block')
+    ]
     public function testCmsBlockResolverCacheInvalidatesWhenBlockGetsDisabled()
     {
-        $block = $this->blockRepository->getById('enabled_block');
+        $block = $this->fixtures->get('enabled_block');
 
         $query = $this->getQuery([
             $block->getIdentifier(),
         ]);
 
-        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$block]);
+        $cacheKey = $this->getResolverCacheKeyFromBlocks([$block]);
 
-        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheKey);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -201,7 +212,7 @@ class BlockTest extends ResolverCacheAbstract
         );
 
         $this->assertTagsByCacheIdentityAndBlocks(
-            $cacheIdentityString,
+            $cacheKey,
             [$block]
         );
 
@@ -210,49 +221,55 @@ class BlockTest extends ResolverCacheAbstract
         $this->blockRepository->save($block);
 
         $this->assertFalse(
-            $this->graphQlResolverCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheKey),
             'Cache entry should be invalidated after block disablement'
         );
     }
 
     /**
-     * @magentoConfigFixture default_store web/seo/use_rewrites 1
-     * @magentoDataFixture Magento/Cms/_files/block.php
-     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @throws LocalizedException
+     * @throws \Zend_Cache_Exception
      */
+    #[
+        DataFixture(BlockFixture::class, as: 'block'),
+        DataFixture(Store::class, as: 'second_store'),
+    ]
     public function testCmsBlockResolverCacheIsInvalidatedAfterChangingItsStoreView()
     {
         /** @var Block $block */
-        $block = $this->blockRepository->getById('fixture_block');
+        $block = $this->fixtures->get('block');
+
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $this->fixtures->get('second_store');
 
         $query = $this->getQuery([
             $block->getIdentifier(),
         ]);
 
-        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$block]);
+        $cacheKey = $this->getResolverCacheKeyFromBlocks([$block]);
 
-        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheKey);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
-            $this->generateExpectedDataFromBlocks([$block]),
-            $cacheEntryDecoded
+            $cacheEntryDecoded,
+            $this->generateExpectedDataFromBlocks([$block])
         );
 
         $this->assertTagsByCacheIdentityAndBlocks(
-            $cacheIdentityString,
+            (string)$cacheKey,
             [$block]
         );
 
         // assert that cache is invalidated after changing block's store view
-        $secondStoreViewId = $this->storeManager->getStore('fixture_second_store')->getId();
+        $secondStoreViewId = $store->getId();
         $block->setStoreId($secondStoreViewId);
         $this->blockRepository->save($block);
 
         $this->assertFalse(
-            $this->graphQlResolverCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheKey),
             'Cache entry should be invalidated after changing block\'s store view'
         );
     }
@@ -269,58 +286,55 @@ class BlockTest extends ResolverCacheAbstract
         $query = $this->getQuery([$nonExistentBlock->getIdentifier()]);
 
         try {
-            $response = $this->graphQlQueryWithResponseHeaders($query);
+            $this->graphQlQueryWithResponseHeaders($query);
             $this->fail('Expected exception was not thrown');
         } catch (ResponseContainsErrorsException $e) {
             // expected exception
         }
 
-        $response['headers'] = $e->getResponseHeaders();
-
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$nonExistentBlock]);
+        $cacheIdentityString = $this->getResolverCacheKeyFromBlocks([$nonExistentBlock]);
 
         $this->assertFalse(
             $this->graphQlResolverCache->load($cacheIdentityString)
         );
     }
 
-    /**
-     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
-     * @magentoDataFixture Magento/Cms/_files/block.php
-     * @magentoDataFixture Magento/Cms/_files/blocks.php
-     */
+    #[
+        Config('system/full_page_cache/caching_application', '2'),
+        DataFixture(BlockFixture::class, as: 'block', count: 2)
+    ]
     public function testCmsBlockResolverCacheRetainsEntriesThatHaveNotBeenUpdated()
     {
         // query block1
-        $block1 = $this->blockRepository->getById('fixture_block');
+        $block1 = $this->fixtures->get('block1');
 
         $queryBlock1 = $this->getQuery([
             $block1->getIdentifier(),
         ]);
 
-        $responseBlock1 = $this->graphQlQueryWithResponseHeaders($queryBlock1);
+        $this->graphQlQueryWithResponseHeaders($queryBlock1);
 
-        $cacheIdentityStringBlock1 = $this->getResolverCacheKeyFromResponseAndBlocks($responseBlock1, [$block1]);
+        $cacheKeyBlock1 = $this->getResolverCacheKeyFromBlocks([$block1]);
 
         // query block2
-        $block2 = $this->blockRepository->getById('enabled_block');
+        $block2 = $this->fixtures->get('block2');
 
         $queryBlock2 = $this->getQuery([
             $block2->getIdentifier(),
         ]);
 
-        $responseBlock2 = $this->graphQlQueryWithResponseHeaders($queryBlock2);
+        $this->graphQlQueryWithResponseHeaders($queryBlock2);
 
-        $cacheIdentityStringBlock2 = $this->getResolverCacheKeyFromResponseAndBlocks($responseBlock2, [$block2]);
+        $cacheKeyBlock2 = $this->getResolverCacheKeyFromBlocks([$block2]);
 
         // assert both cache entries are present
         $this->assertIsNumeric(
-            $this->graphQlResolverCache->test($cacheIdentityStringBlock1),
+            $this->graphQlResolverCache->test($cacheKeyBlock1),
             'Cache entry for block1 should be present'
         );
 
         $this->assertIsNumeric(
-            $this->graphQlResolverCache->test($cacheIdentityStringBlock2),
+            $this->graphQlResolverCache->test($cacheKeyBlock2),
             'Cache entry for block2 should be present'
         );
 
@@ -329,13 +343,13 @@ class BlockTest extends ResolverCacheAbstract
         $this->blockRepository->save($block1);
 
         $this->assertFalse(
-            $this->graphQlResolverCache->test($cacheIdentityStringBlock1),
+            $this->graphQlResolverCache->test($cacheKeyBlock1),
             'Cache entry for block1 should be invalidated after block1 update'
         );
 
         // assert that cache is not invalidated after block1 update
         $this->assertIsNumeric(
-            $this->graphQlResolverCache->test($cacheIdentityStringBlock2),
+            $this->graphQlResolverCache->test($cacheKeyBlock2),
             'Cache entry for block2 should be present after block1 update'
         );
     }
@@ -424,25 +438,33 @@ QUERY;
      * @param BlockInterface[] $blocks
      * @return string
      */
-    private function getResolverCacheKeyFromResponseAndBlocks(array $response, array $blocks): string
+    private function getResolverCacheKeyFromBlocks(array $blocks): string
     {
-        $cacheIdValue = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $resolverMock = $this->getMockBuilder(Blocks::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        /** @var ProviderInterface $cacheKeyCalculatorProvider */
+        $cacheKeyCalculatorProvider = ObjectManager::getInstance()->get(ProviderInterface::class);
+        $cacheKeyFactor = $cacheKeyCalculatorProvider
+            ->getKeyCalculatorForResolver($resolverMock)
+            ->calculateCacheKey();
 
         $blockIdentifiers = array_map(function (BlockInterface $block) {
             return $block->getIdentifier();
         }, $blocks);
 
-        $cacheIdQueryPayloadMetadata = sprintf('CmsBlocks%s', json_encode([
+        $cacheKeyQueryPayloadMetadata = sprintf(Blocks::class . '\Interceptor%s', json_encode([
             'identifiers' => $blockIdentifiers,
         ]));
 
-        $cacheIdParts = [
+        $cacheKeyParts = [
             GraphQlResolverCache::CACHE_TAG,
-            $cacheIdValue,
-            sha1($cacheIdQueryPayloadMetadata)
+            $cacheKeyFactor,
+            sha1($cacheKeyQueryPayloadMetadata)
         ];
 
         // strtoupper is called in \Magento\Framework\Cache\Frontend\Adapter\Zend::_unifyId
-        return strtoupper(implode('_', $cacheIdParts));
+        return strtoupper(implode('_', $cacheKeyParts));
     }
 }

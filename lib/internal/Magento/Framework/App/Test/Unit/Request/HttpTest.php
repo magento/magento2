@@ -78,7 +78,7 @@ class HttpTest extends TestCase
         $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->converterMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
-            ->setMethods(['cleanString'])
+            ->onlyMethods(['cleanString'])
             ->getMock();
 
         // Stash the $_SERVER array to protect it from modification in test
@@ -381,7 +381,7 @@ class HttpTest extends TestCase
         $configOffloadHeader = 'Header-From-Proxy';
         $configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $configMock->expects($this->exactly($configCall))
             ->method('getValue')

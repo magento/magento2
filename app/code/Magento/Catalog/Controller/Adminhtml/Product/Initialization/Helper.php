@@ -20,8 +20,10 @@ use Magento\Catalog\Model\Product\Filter\DateTime as DateTimeFilter;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Store\Model\StoreManagerInterface;
@@ -123,24 +125,6 @@ class Helper
     private $categoryLinkFactory;
 
     /**
-     * @var array
-     */
-    private $productDataKeys = [
-        'weight',
-        'special_price',
-        'cost',
-        'country_of_manufacture',
-        'description',
-        'short_description',
-        'meta_description',
-        'meta_keyword',
-        'meta_title',
-        'page_layout',
-        'custom_design',
-        'gift_wrapping_price'
-    ];
-
-    /**
      * Constructor
      *
      * @param RequestInterface $request
@@ -222,12 +206,6 @@ class Helper
             $productData['product_has_weight'] = 0;
         }
 
-        foreach ($productData as $key => $value) {
-            if (in_array($key, $this->productDataKeys) && $value === '') {
-                $productData[$key] = null;
-            }
-        }
-
         foreach (['category_ids', 'website_ids'] as $field) {
             if (!isset($productData[$field])) {
                 $productData[$field] = [];
@@ -302,6 +280,7 @@ class Helper
      * @param Product $product
      * @return Product
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws NoSuchEntityException
      * @since 101.0.0
      */
     protected function setProductLinks(Product $product)
@@ -325,20 +304,18 @@ class Helper
         }
 
         foreach ($linkTypes as $linkType => $readonly) {
-            if (isset($links[$linkType]) && !$readonly) {
-                foreach ((array) $links[$linkType] as $linkData) {
-                    if (empty($linkData['id'])) {
-                        continue;
-                    }
-
-                    $linkProduct = $this->productRepository->getById($linkData['id']);
-                    $link = $this->productLinkFactory->create();
-                    $link->setSku($product->getSku())
-                        ->setLinkedProductSku($linkProduct->getSku())
-                        ->setLinkType($linkType)
-                        ->setPosition(isset($linkData['position']) ? (int) $linkData['position'] : 0);
-                    $productLinks[] = $link;
-                }
+            $isReadOnlyLinks = $readonly && in_array($linkType, ['upsell', 'related']);
+            if ($isReadOnlyLinks) {
+                $productLinks = null;
+                break;
+            } else {
+                $productLinks = $this->setProductLinksForNotReadOnlyItems(
+                    $productLinks,
+                    $product,
+                    $links,
+                    $linkType,
+                    $readonly
+                );
             }
         }
 
@@ -425,6 +402,9 @@ class Helper
                         $option['is_delete_store_title'] = 1;
                     }
                 }
+                if (CustomOptions::FIELD_TITLE_NAME === $fieldName) {
+                    $option[CustomOptions::FIELD_IS_USE_DEFAULT] = $overwrite;
+                }
             }
         }
 
@@ -448,9 +428,9 @@ class Helper
     }
 
     /**
-     * Remove ids of non selected websites from $websiteIds array and return filtered data
+     * Remove ids of non-selected websites from $websiteIds array and return filtered data
      *
-     * $websiteIds parameter expects array with website ids as keys and 1 (selected) or 0 (non selected) as values
+     * $websiteIds parameter expects array with website ids as keys and id (selected) or 0 (non-selected) as values
      * Only one id (default website ID) will be set to $websiteIds array when the single store mode is turned on
      *
      * @param array $websiteIds
@@ -461,7 +441,8 @@ class Helper
         if (!$this->storeManager->isSingleStoreMode()) {
             $websiteIds = array_filter((array) $websiteIds);
         } else {
-            $websiteIds[$this->storeManager->getWebsite(true)->getId()] = 1;
+            $websiteId = $this->storeManager->getWebsite(true)->getId();
+            $websiteIds[$websiteId] = $websiteId;
         }
 
         return $websiteIds;
@@ -545,5 +526,40 @@ class Helper
 
         $extensionAttributes->setCategoryLinks(!empty($newCategoryLinks) ? $newCategoryLinks : null);
         $product->setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * Set product links when readonly is false
+     *
+     * @param array $productLinks
+     * @param Product $product
+     * @param array $links
+     * @param string $linkType
+     * @param mixed $readonly
+     * @return array
+     * @throws NoSuchEntityException
+     */
+    private function setProductLinksForNotReadOnlyItems(
+        array $productLinks,
+        Product $product,
+        array $links,
+        string $linkType,
+        mixed $readonly
+    ): array {
+        if (isset($links[$linkType]) && !$readonly) {
+            foreach ((array)$links[$linkType] as $linkData) {
+                if (empty($linkData['id'])) {
+                    continue;
+                }
+                $linkProduct = $this->productRepository->getById($linkData['id']);
+                $link = $this->productLinkFactory->create();
+                $link->setSku($product->getSku())
+                ->setLinkedProductSku($linkProduct->getSku())
+                ->setLinkType($linkType)
+                ->setPosition(isset($linkData['position']) ? (int)$linkData['position'] : 0);
+                $productLinks[] = $link;
+            }
+        }
+        return $productLinks;
     }
 }

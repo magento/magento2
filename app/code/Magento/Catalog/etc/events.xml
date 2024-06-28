@@ -67,4 +67,7 @@
     <event name="catalog_category_prepare_save">
         <observer name="additional_authorization" instance="Magento\Catalog\Observer\CategoryDesignAuthorization" />
     </event>
+    <event name="admin_system_config_changed_section_general">
+        <observer name="move_store_level_catalog_data_to_website_scope_on_single_store_mode" instance="Magento\Catalog\Observer\MoveStoreLevelCatalogDataToWebsiteScopeOnSingleStoreMode" />
+    </event>
 </config>

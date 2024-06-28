@@ -6,12 +6,32 @@
 
 namespace Magento\Catalog\Helper\Product;
 
+use Magento\Catalog\Helper\Data;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Customer\Model\Visitor;
+
 class CompareTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Helper\Product\Compare
      */
     protected $_helper;
+
+    /** @var StoreManagerInterface */
+    private $storeManager;
+
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -22,6 +42,8 @@ class CompareTest extends \PHPUnit\Framework\TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_helper = $this->_objectManager->get(\Magento\Catalog\Helper\Product\Compare::class);
+        $this->fixtures = $this->_objectManager->get(DataFixtureStorageManager::class)->getStorage();
+        $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
     }
 
     public function testGetListUrl()
@@ -74,24 +96,21 @@ class CompareTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @see testGetListUrl() for coverage of customer case
-     */
-    public function testGetItemCollection()
-    {
-        $this->assertInstanceOf(
-            \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection::class,
-            $this->_helper->getItemCollection()
-        );
-    }
-
-    /**
      * calculate()
      * getItemCount()
      * hasItems()
      *
-     * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoDbIsolation disabled
      */
+    #[
+        Config(Data::XML_PATH_PRICE_SCOPE, Data::PRICE_SCOPE_WEBSITE),
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1]], as: 'product1'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1, '$website2.id$']], as: 'product2'),
+        DataFixture(ProductFixture::class, ['website_ids' => ['$website2.id$']], as: 'product3'),
+    ]
     public function testCalculate()
     {
         /** @var \Magento\Catalog\Model\Session $session */
@@ -101,16 +120,51 @@ class CompareTest extends \PHPUnit\Framework\TestCase
             $this->assertFalse($this->_helper->hasItems());
             $this->assertEquals(0, $session->getCatalogCompareItemsCount());
 
-            $this->_populateCompareList();
+            $visitor = $this->_objectManager->get(Visitor::class);
+            $visitor->setVisitorId(1);
+            $this->_populateCompareList('product1');
+            $this->_populateCompareList('product2');
             $this->_helper->calculate();
             $this->assertEquals(2, $session->getCatalogCompareItemsCount());
             $this->assertTrue($this->_helper->hasItems());
 
+            $secondStore = $this->fixtures->get('store2')->getCode();
+            $this->storeManager->setCurrentStore($secondStore);
+            $this->_helper->calculate();
+            $this->assertEquals(0, $session->getCatalogCompareItemsCount());
+            $this->_populateCompareList('product3');
+            $this->_helper->calculate();
+            $this->assertEquals(1, $session->getCatalogCompareItemsCount());
+            $this->assertTrue($this->_helper->hasItems());
+            $this->_populateCompareList('product2');
+            $this->_helper->calculate();
+            $this->assertEquals(2, $session->getCatalogCompareItemsCount());
+            $this->assertTrue($this->_helper->hasItems());
+            $compareItems = $this->_helper->getItemCollection();
+            $compareItems->clear();
+            $session->unsCatalogCompareItemsCountPerWebsite();
+            $this->assertFalse($this->_helper->hasItems());
+            $this->assertEquals(0, $session->getCatalogCompareItemsCount());
+            $this->storeManager->setCurrentStore(1);
+            $this->_helper->calculate();
+            $this->assertEquals(2, $session->getCatalogCompareItemsCount());
+            $this->assertTrue($this->_helper->hasItems());
             $session->unsCatalogCompareItemsCount();
         } catch (\Exception $e) {
             $session->unsCatalogCompareItemsCount();
             throw $e;
         }
+    }
+
+    /**
+     * @see testGetListUrl() for coverage of customer case
+     */
+    public function testGetItemCollection()
+    {
+        $this->assertInstanceOf(
+            \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection::class,
+            $this->_helper->getItemCollection()
+        );
     }
 
     public function testSetGetAllowUsedFlat()
@@ -130,14 +184,14 @@ class CompareTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Add products from fixture to compare list
+     *
+     * @param string $sku
      */
-    protected function _populateCompareList()
+    protected function _populateCompareList(string $sku)
     {
-        $productRepository = $this->_objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-        $productOne = $productRepository->get('simple1');
-        $productTwo = $productRepository->get('simple2');
+        $product = $this->fixtures->get($sku);
         /** @var $compareList \Magento\Catalog\Model\Product\Compare\ListCompare */
         $compareList = $this->_objectManager->create(\Magento\Catalog\Model\Product\Compare\ListCompare::class);
-        $compareList->addProduct($productOne)->addProduct($productTwo);
+        $compareList->addProduct($product);
     }
 }

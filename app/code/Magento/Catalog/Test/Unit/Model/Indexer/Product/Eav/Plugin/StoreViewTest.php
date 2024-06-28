@@ -46,7 +46,8 @@ class StoreViewTest extends TestCase
 
         $this->objectMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'dataHasChangedFor', 'getIsActive'])
+            ->addMethods(['getIsActive'])
+            ->onlyMethods(['getId', 'dataHasChangedFor'])
             ->getMock();
 
         $this->storeViewPlugin = new StoreView($this->eavProcessorMock);
@@ -85,7 +86,7 @@ class StoreViewTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider(): array
+    public static function beforeSaveDataProvider(): array
     {
         return [
             [

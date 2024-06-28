@@ -54,7 +54,8 @@
             <argument name="email" value="@example.com"/>
         </actionGroup>
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.customerEmail}}" stepKey="generatedCustomerEmail"/>
-        <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
             <argument name="email" value="$generatedCustomerEmail"/>
         </actionGroup>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>

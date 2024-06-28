@@ -257,7 +257,7 @@ class DocumentTest extends TestCase
     {
         $this->attributeValueFactory = $this->getMockBuilder(AttributeValueFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $attributeValue = new AttributeValue();

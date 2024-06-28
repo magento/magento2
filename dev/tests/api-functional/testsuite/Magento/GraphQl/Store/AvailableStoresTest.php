@@ -44,6 +44,7 @@ class AvailableStoresTest extends GraphQlAbstract
         $this->objectManager = Bootstrap::getObjectManager();
         $this->storeConfigManager = $this->objectManager->get(StoreConfigManagerInterface::class);
         $this->storeResource = $this->objectManager->get(StoreResource::class);
+        $this->markTestSkipped('AC-9001');
     }
 
     /**

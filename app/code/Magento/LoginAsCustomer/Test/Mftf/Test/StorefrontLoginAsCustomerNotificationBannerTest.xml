@@ -29,6 +29,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"

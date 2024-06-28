@@ -43,6 +43,7 @@
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
         </after>

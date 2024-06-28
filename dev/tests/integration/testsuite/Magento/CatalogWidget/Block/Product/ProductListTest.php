@@ -173,7 +173,7 @@ class ProductListTest extends TestCase
     /**
      * @return array
      */
-    public function createCollectionForSkuDataProvider()
+    public static function createCollectionForSkuDataProvider()
     {
         return [
             'contains' => ['^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,'
@@ -289,7 +289,7 @@ class ProductListTest extends TestCase
         $this->assertEmpty(array_diff($matches, $skus));
     }
 
-    public function priceFilterDataProvider(): array
+    public static function priceFilterDataProvider(): array
     {
         return [
             [

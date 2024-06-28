@@ -1,10 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * Unit test for Magento\Customer\Test\Unit\Model\Account\Redirect
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Account;
 
@@ -111,21 +110,25 @@ class RedirectTest extends TestCase
         $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 [
                     'getLastCustomerId',
-                    'isLoggedIn',
-                    'getId',
                     'setLastCustomerId',
                     'unsBeforeAuthUrl',
                     'getBeforeAuthUrl',
-                    'setBeforeAuthUrl',
-                    'getAfterAuthUrl',
-                    'setAfterAuthUrl',
                     'getBeforeRequestParams',
+                    'getAfterAuthUrl',
                     'getBeforeModuleName',
                     'getBeforeControllerName',
                     'getBeforeAction',
+                ]
+            )
+            ->onlyMethods(
+                [
+                    'isLoggedIn',
+                    'getId',
+                    'setBeforeAuthUrl',
+                    'setAfterAuthUrl'
                 ]
             )
             ->getMock();
@@ -136,9 +139,9 @@ class RedirectTest extends TestCase
         $this->url = $this->getMockForAbstractClass(UrlInterface::class);
         $this->urlDecoder = $this->getMockForAbstractClass(DecoderInterface::class);
         $this->customerUrl = $this->getMockBuilder(\Magento\Customer\Model\Url::class)
-            ->setMethods(
+            ->addMethods(['DashboardUrl'])
+            ->onlyMethods(
                 [
-                    'DashboardUrl',
                     'getAccountUrl',
                     'getLoginUrl',
                     'getLogoutUrl',
@@ -263,7 +266,7 @@ class RedirectTest extends TestCase
      *
      * @return array
      */
-    public function getRedirectDataProvider()
+    public static function getRedirectDataProvider()
     {
         /**
          * Customer ID

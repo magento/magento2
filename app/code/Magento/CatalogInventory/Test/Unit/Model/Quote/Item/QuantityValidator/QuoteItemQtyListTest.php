@@ -49,6 +49,10 @@ class QuoteItemQtyListTest extends TestCase
 
         $qty = $this->quoteItemQtyList->getQty(125, 1, 11232, 1);
         $this->assertEquals($this->itemQtyTestValue, $qty);
+
+        $this->itemQtyTestValue = 2;
+        $qty = $this->quoteItemQtyList->getQty(125, null, 11232, 1);
+        $this->assertNotEquals($this->itemQtyTestValue, $qty);
     }
 
     /**

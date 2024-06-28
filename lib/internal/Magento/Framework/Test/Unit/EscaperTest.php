@@ -133,7 +133,7 @@ class EscaperTest extends TestCase
     /**
      * @return array
      */
-    public function escapeJsDataProvider()
+    public static function escapeJsDataProvider()
     {
         return [
             'zero length string' => ['', ''],
@@ -210,7 +210,7 @@ class EscaperTest extends TestCase
      *
      * @return array
      */
-    public function escapeHtmlAttributeWithInlineTranslateEnabledDataProvider(): array
+    public static function escapeHtmlAttributeWithInlineTranslateEnabledDataProvider(): array
     {
         return [
             [
@@ -243,7 +243,7 @@ class EscaperTest extends TestCase
     /**
      * @return array
      */
-    public function escapeHtmlDataProvider()
+    public static function escapeHtmlDataProvider()
     {
         return [
             'array -> [text with no tags, text with no allowed tags]' => [
@@ -339,7 +339,7 @@ class EscaperTest extends TestCase
     /**
      * @return array
      */
-    public function escapeHtmlInvalidDataProvider()
+    public static function escapeHtmlInvalidDataProvider()
     {
         return [
             'text with allowed script tag' => [
@@ -387,7 +387,7 @@ class EscaperTest extends TestCase
     /**
      * @return array
      */
-    public function escapeCssDataProvider(): array
+    public static function escapeCssDataProvider(): array
     {
         return [
             [
@@ -418,7 +418,7 @@ class EscaperTest extends TestCase
     /**
      * @return array
      */
-    public function encodeUrlParamDataProvider(): array
+    public static function encodeUrlParamDataProvider(): array
     {
         return [
             [
@@ -443,7 +443,7 @@ class EscaperTest extends TestCase
     /**
      * @return array
      */
-    public function escapeUrlDataProvider(): array
+    public static function escapeUrlDataProvider(): array
     {
         return [
             [
@@ -501,7 +501,7 @@ class EscaperTest extends TestCase
      * Get escape variations
      * @return array
      */
-    public function escapeDataProvider()
+    public static function escapeDataProvider()
     {
         return [
             [

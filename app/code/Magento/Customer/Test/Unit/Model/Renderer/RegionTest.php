@@ -135,7 +135,7 @@ class RegionTest extends TestCase
 
         $static = new \ReflectionProperty(Region::class, '_regionCollections');
         $static->setAccessible(true);
-        $static->setValue([]);
+        $static->setValue(null, null);
 
         $html = $model->render($elementMock);
 

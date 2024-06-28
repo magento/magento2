@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Validation;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -46,6 +48,14 @@ class CanRefundTest extends TestCase
 
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                ScopeConfigInterface::class,
+                $this->createMock(ScopeConfigInterface::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();

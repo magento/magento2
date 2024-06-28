@@ -469,7 +469,6 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             true,
             'catalog_product'
         );
-        print_r($errors->getAllErrors());
         $this->assertEquals(0, $errors->getErrorsCount(), 'Product import validation error');
         $this->model->importData();
 
