@@ -31,10 +31,14 @@ class Resetter implements ResetterInterface
     /** @var WeakMapSorter|null Note: We use temporal coupling here because of chicken/egg during bootstrapping */
     private ?WeakMapSorter $weakMapSorter = null;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private array $reflectionCache = [];
+
+    /** @var array */
+    private array $isObjectInClassListCache = [];
+
+    /** @var array */
+    private readonly array $classList;
 
     /**
      * @param ComponentRegistrarInterface|null $componentRegistrar
@@ -44,7 +48,7 @@ class Resetter implements ResetterInterface
      */
     public function __construct(
         private ?ComponentRegistrarInterface $componentRegistrar = null,
-        private array $classList = [],
+        array $classList = [],
     ) {
         if (null === $this->componentRegistrar) {
             $this->componentRegistrar = new ComponentRegistrar();
@@ -57,8 +61,9 @@ class Resetter implements ResetterInterface
             if (!$resetData) {
                 throw new LocalizedException(__('Error parsing %1', $resetPath));
             }
-            $this->classList += $resetData;
+            $classList += $resetData;
         }
+        $this->classList = $classList;
         $this->resetAfterWeakMap = new WeakMap;
     }
 
@@ -138,11 +143,18 @@ class Resetter implements ResetterInterface
      */
     public function isObjectInClassList(object $object)
     {
+        $className = \get_class($object);
+        $isObjectInClassListCachedValue = $this->isObjectInClassListCache[$className] ?? null;
+        if (null !== $isObjectInClassListCachedValue) {
+            return $isObjectInClassListCachedValue;
+        }
         foreach ($this->classList as $key => $value) {
             if ($object instanceof $key) {
+                $this->isObjectInClassListCache[$className] = true;
                 return true;
             }
         }
+        $this->isObjectInClassListCache[$className] = false;
         return false;
     }
 
