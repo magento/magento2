@@ -47,6 +47,7 @@ class Js extends AbstractAdapter
 
     /**
      * @inheritdoc
+     *
      * @throws FileSystemException
      */
     protected function _parse()
