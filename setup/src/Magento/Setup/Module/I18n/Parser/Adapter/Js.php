@@ -15,18 +15,18 @@ use Magento\Framework\Filesystem\Driver\File;
 class Js extends AbstractAdapter
 {
     /**
-     * @var \Magento\Framework\Filesystem\Driver\File
+     * @var File
      */
-    protected $_filesystem;
+    private $filesystem;
 
     /**
      * Adapter construct
      *
-     * @param \Magento\Framework\Filesystem\Driver\File $fileSystem
+     * @param File $filesystem
      */
-    public function __construct()
+    public function __construct(File $filesystem)
     {
-        $this->_filesystem = new \Magento\Framework\Filesystem\Driver\File();
+        $this->filesystem = $filesystem;
     }
     /**
      * Covers
@@ -47,10 +47,12 @@ class Js extends AbstractAdapter
 
     /**
      * @inheritdoc
+     *
+     * @throws FileSystemException
      */
     protected function _parse()
     {
-        $fileHandle = $this->_filesystem->fileOpen($this->_file, 'r');
+        $fileHandle = $this->filesystem->fileOpen($this->_file, 'r');
         $lineNumber = 0;
         try {
             while (($line = $this->fileReadLine($fileHandle, 0)) !== false) {
@@ -74,12 +76,12 @@ class Js extends AbstractAdapter
                 }
             }
         } catch (\Exception $e) {
-            $this->_filesystem->fileClose($fileHandle);
+            $this->filesystem->fileClose($fileHandle);
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('Stream get line failed %1', [$e->getMessage()])
             );
         }
-        $this->_filesystem->fileClose($fileHandle);
+        $this->filesystem->fileClose($fileHandle);
     }
 
     /**
