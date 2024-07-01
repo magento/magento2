@@ -76,7 +76,7 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
     {
         return [
             // Dictionary that will be requested
-            'language_code' => 'en_AU',
+            'languageCode' => 'en_AU',
             // Expected merged dictionary data
             'expectation' => [
                 'one' => '1.0',
@@ -98,7 +98,7 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
     {
         return [
             // Dictionary that will be requested
-            'language_code' => 'ru_RU',
+            'languageCode' => 'ru_RU',
             // Expected merged dictionary data
             'expectation' => [
                 'one' => '1.0',
@@ -115,7 +115,7 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
     {
         return [
             // Dictionary that will be requested
-            'language_code' => 'en_AZ',
+            'languageCode' => 'en_AZ',
             // Expected merged dictionary data
             'expectation' => [
                 'one' => '1.0',
@@ -154,7 +154,7 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
     {
         return [
             // Dictionary that will be requested
-            'language_code' => 'en_AK',
+            'languageCode' => 'en_AK',
             // Expected merged dictionary data
             'expectation' => [
                 'one' => 'en_us_package_one',

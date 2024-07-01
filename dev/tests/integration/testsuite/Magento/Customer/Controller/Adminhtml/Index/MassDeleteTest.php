@@ -159,12 +159,12 @@ class MassDeleteTest extends AbstractBackendController
     {
         return [
             [
-                'customerEmails' => ['customer1@example.com'],
+                'emails' => ['customer1@example.com'],
                 'constraint' => self::equalTo(['A total of 1 record(s) were deleted.']),
                 'messageType' => MessageInterface::TYPE_SUCCESS,
             ],
             [
-                'customerEmails' => ['customer2@example.com', 'customer3@example.com'],
+                'emails' => ['customer2@example.com', 'customer3@example.com'],
                 'constraint' => self::equalTo(['A total of 2 record(s) were deleted.']),
                 'messageType' => MessageInterface::TYPE_SUCCESS,
             ],

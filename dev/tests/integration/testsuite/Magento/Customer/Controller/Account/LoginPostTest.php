@@ -83,28 +83,28 @@ class LoginPostTest extends AbstractController
             'missing_email' => [
                 'email' => null,
                 'password' => 'password',
-                'expected_error_message' => 'A login and a password are required.',
+                'expectedErrorMessage' => 'A login and a password are required.',
             ],
             'missing_password' => [
                 'email' => 'customer@example.com',
                 'password' => null,
-                'expected_error_message' => 'A login and a password are required.',
+                'expectedErrorMessage' => 'A login and a password are required.',
             ],
             'missing_both_parameters' => [
                 'email' => null,
                 'password' => null,
-                'expected_error_message' => 'A login and a password are required.',
+                'expectedErrorMessage' => 'A login and a password are required.',
             ],
             'wrong_email' => [
                 'email' => 'wrongemail@example.com',
                 'password' => 'password',
-                'expected_error_message' => 'The account sign-in was incorrect or your account is disabled temporarily.'
+                'expectedErrorMessage' => 'The account sign-in was incorrect or your account is disabled temporarily.'
                     . ' Please wait and try again later.',
             ],
             'wrong_password' => [
                 'email' => 'customer@example.com',
                 'password' => 'wrongpassword',
-                'expected_error_message' => 'The account sign-in was incorrect or your account is disabled temporarily.'
+                'expectedErrorMessage' => 'The account sign-in was incorrect or your account is disabled temporarily.'
                     . ' Please wait and try again later.',
             ],
         ];

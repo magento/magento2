@@ -147,15 +147,15 @@ class UpdateTest extends AbstractBackendController
     {
         return [
             'with_quote_item_id' => [
-                'has_quote_item' => true,
-                'expected_update_result' => [
+                'hasQuoteItem' => true,
+                'expectedUpdateResult' => [
                     'ok' => true,
                     'js_var_name' => 'iFrameResponse',
                 ],
             ],
             'without_quote_item_id' => [
-                'has_quote_item' => false,
-                'expected_update_result' => [
+                'hasQuoteItem' => false,
+                'expectedUpdateResult' => [
                     'error' => true,
                     'message' => (string)__('The quote items are incorrect. Verify the quote items and try again.'),
                     'js_var_name' => 'iFrameResponse',

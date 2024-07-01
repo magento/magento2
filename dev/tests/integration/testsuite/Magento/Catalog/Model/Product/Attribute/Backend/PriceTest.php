@@ -429,7 +429,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'attributes' => ['attr1', 'attr2', 'attr3'],
-                'set' => [
+                'updates' => [
                     'attr1' => [
                         'admin' => 9,
                     ],

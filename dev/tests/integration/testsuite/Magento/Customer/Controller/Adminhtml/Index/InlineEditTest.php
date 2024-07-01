@@ -124,11 +124,15 @@ class InlineEditTest extends AbstractBackendController
     {
         return [
             [
-                'items' => [],
-                'isAjax' => true,
+                'params' => [
+                    'items' => [],
+                    'isAjax' => true,
+                ]
             ],
             [
-                'items' => [],
+                'params' => [
+                    'items' => [],
+                ]
             ],
         ];
     }

@@ -104,12 +104,12 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
     {
         $data = [
             'basic model' => [
-                '$actualClassName' => self::TEST_CLASS_INJECTION,
-                '$properties' => ['_object' => self::TEST_CLASS],
+                'actualClassName' => self::TEST_CLASS_INJECTION,
+                'properties' => ['_object' => self::TEST_CLASS],
             ],
             'model with interface' => [
-                '$actualClassName' => self::TEST_CLASS_WITH_INTERFACE,
-                '$properties' => ['_object' => self::TEST_INTERFACE_IMPLEMENTATION],
+                'actualClassName' => self::TEST_CLASS_WITH_INTERFACE,
+                'properties' => ['_object' => self::TEST_INTERFACE_IMPLEMENTATION],
             ],
         ];
 
@@ -119,7 +119,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
                 $propertyName = self::$_numerableProperties[$i];
                 $properties[$propertyName] = self::TEST_CLASS;
             }
-            $data[$number . ' arguments'] = ['$actualClassName' => $className, '$properties' => $properties];
+            $data[$number . ' arguments'] = ['actualClassName' => $className, 'properties' => $properties];
         }
 
         return $data;

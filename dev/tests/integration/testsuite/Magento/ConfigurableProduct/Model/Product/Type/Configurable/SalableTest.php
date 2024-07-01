@@ -64,39 +64,39 @@ class SalableTest extends TestCase
     {
         return [
             'all children enabled_and_in_stock' => [
-                'product_skus' => [],
+                'productSkus' => [],
                 'data' => [],
-                'expected_value' => true,
+                'expectedValue' => true,
             ],
             'one_child_out_of_stock' => [
-                'product_skus' => ['simple_10'],
+                'productSkus' => ['simple_10'],
                 'data' => [
                     'stock_data' => [
                         'use_config_manage_stock' => 1,
                         'is_in_stock' => StockStatusInterface::STATUS_OUT_OF_STOCK,
                     ],
                 ],
-                'expected_value' => true,
+                'expectedValue' => true,
             ],
             'one_child_disabled' => [
-                'product_skus' => ['simple_10'],
+                'productSkus' => ['simple_10'],
                 'data' => ['status' => Status::STATUS_DISABLED],
-                'expected_value' => true,
+                'expectedValue' => true,
             ],
             'all_children_disabled' => [
-                'product_skus' => ['simple_10', 'simple_20'],
+                'productSkus' => ['simple_10', 'simple_20'],
                 'data' => ['status' => Status::STATUS_DISABLED],
-                'expected_value' => false,
+                'expectedValue' => false,
             ],
             'all_children_out_of_stock' => [
-                'product_skus' => ['simple_10', 'simple_20'],
+                'productSkus' => ['simple_10', 'simple_20'],
                 'data' => [
                     'stock_data' => [
                         'use_config_manage_stock' => 1,
                         'is_in_stock' => StockStatusInterface::STATUS_OUT_OF_STOCK,
                     ],
                 ],
-                'expected_value' => false,
+                'expectedValue' => false,
             ]
         ];
     }

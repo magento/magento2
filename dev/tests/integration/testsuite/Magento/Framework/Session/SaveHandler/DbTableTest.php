@@ -195,8 +195,8 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
         // phpcs:ignore Magento2.Security.InsecureFunction
         $sessionData = serialize(self::$_sourceData[self::SESSION_NEW]);
         return [
-            'session_encoded' => ['$sessionData' => base64_encode($sessionData)],
-            'session_not_encoded' => ['$sessionData' => $sessionData]
+            'session_encoded' => ['sessionData' => base64_encode($sessionData)],
+            'session_not_encoded' => ['sessionData' => $sessionData]
         ];
     }
 
