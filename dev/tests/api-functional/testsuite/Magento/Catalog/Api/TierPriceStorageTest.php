@@ -379,7 +379,7 @@ class TierPriceStorageTest extends WebapiAbstract
                 'price_type' => TierPriceInterface::PRICE_TYPE_FIXED,
                 'website_id' => 0,
                 'sku' => self::SIMPLE_PRODUCT_SKU,
-                'customer_group' => self::WRONG_CUSTOMER_GROUP_NAME,
+                'customer_group' => self::CUSTOMER_ALL_GROUPS_NAME,
                 'quantity' => 2
             ],
             [
@@ -387,7 +387,7 @@ class TierPriceStorageTest extends WebapiAbstract
                 'price_type' => TierPriceInterface::PRICE_TYPE_FIXED,
                 'website_id' => 1,
                 'sku' => self::SIMPLE_PRODUCT_SKU,
-                'customer_group' => self::WRONG_CUSTOMER_GROUP_NAME,
+                'customer_group' => self::CUSTOMER_ALL_GROUPS_NAME,
                 'quantity' => 2
             ]
         ];
