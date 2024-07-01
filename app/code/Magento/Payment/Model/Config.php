@@ -19,10 +19,7 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Config
 {
-    /**
-     * Years range
-     */
-    const YEARS_RANGE = 10;
+    public const YEARS_RANGE = 10;
 
     /**
      * @var array
@@ -49,8 +46,6 @@ class Config
     protected $localeResolver;
 
     /**
-     * Payment method factory
-     *
      * @var \Magento\Payment\Model\Method\Factory
      */
     protected $_paymentMethodFactory;
@@ -89,7 +84,6 @@ class Config
      * Retrieve active system payments
      *
      * @return array
-     * @api
      */
     public function getActiveMethods()
     {
@@ -111,7 +105,6 @@ class Config
      * Get list of credit card types
      *
      * @return array
-     * @api
      */
     public function getCcTypes()
     {
@@ -122,7 +115,6 @@ class Config
      * Retrieve array of payment methods information
      *
      * @return array
-     * @api
      */
     public function getMethodsInfo()
     {
@@ -133,7 +125,6 @@ class Config
      * Get payment groups
      *
      * @return array
-     * @api
      */
     public function getGroups()
     {
@@ -144,7 +135,6 @@ class Config
      * Retrieve list of months translation
      *
      * @return array
-     * @api
      */
     public function getMonths()
     {
@@ -163,7 +153,6 @@ class Config
      * Retrieve array of available years
      *
      * @return array
-     * @api
      */
     public function getYears()
     {

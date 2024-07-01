@@ -11,7 +11,11 @@
             <block class="Magento\Framework\View\Element\Js\Components" name="newsletter_head_components" template="Magento_Newsletter::js/components.phtml" ifconfig="newsletter/general/active"/>
         </referenceBlock>
         <referenceContainer name="footer">
-            <block class="Magento\Newsletter\Block\Subscribe" name="form.subscribe" as="subscribe" before="-" template="Magento_Newsletter::subscribe.phtml" ifconfig="newsletter/general/active"/>
+            <block class="Magento\Newsletter\Block\Subscribe" name="form.subscribe" as="subscribe" before="-" template="Magento_Newsletter::subscribe.phtml" ifconfig="newsletter/general/active">
+                <arguments>
+                    <argument name="button_lock_manager" xsi:type="object">Magento\Framework\View\Element\ButtonLockManager</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>

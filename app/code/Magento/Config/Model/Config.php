@@ -198,6 +198,10 @@ class Config extends DataObject
             return $this;
         }
 
+        /**
+         * Reload config to make sure config data is consistent with the database at this point.
+         */
+        $this->_appConfig->reinit();
         $oldConfig = $this->_getConfig(true);
 
         /** @var Transaction $deleteTransaction */
@@ -546,7 +550,7 @@ class Config extends DataObject
      */
     public function setDataByPath($path, $value)
     {
-        $path = trim($path);
+        $path = $path !== null ? trim($path) : '';
         if ($path === '') {
             throw new \UnexpectedValueException('Path must not be empty');
         }

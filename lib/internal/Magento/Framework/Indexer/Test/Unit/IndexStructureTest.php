@@ -48,28 +48,27 @@ class IndexStructureTest extends TestCase
      */
     private $target;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->connectionInterface = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->resource = $this->getMockBuilder(ResourceConnection::class)
-            ->setMethods(['getConnection'])
+            ->onlyMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->atLeastOnce())
             ->method('getConnection')
             ->willReturn($this->connectionInterface);
-        $this->indexScopeResolver = $this->getMockBuilder(
-            IndexScopeResolver::class
-        )
-            ->setMethods(['resolve'])
+        $this->indexScopeResolver = $this->getMockBuilder(IndexScopeResolver::class)
+            ->onlyMethods(['resolve'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->flatScopeResolver = $this->getMockBuilder(
-            FlatScopeResolver::class
-        )
-            ->setMethods(['resolve'])
+        $this->flatScopeResolver = $this->getMockBuilder(FlatScopeResolver::class)
+            ->onlyMethods(['resolve'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -86,17 +85,15 @@ class IndexStructureTest extends TestCase
     }
 
     /**
-     * @param string $table
-     * @param array $dimensions
-     * @param bool $isTableExist
+     * @return void
      */
-    public function testDelete()
+    public function testDelete(): void
     {
         $index = 'index_name';
         $dimensions = [
             'index_name_scope_3' => $this->createDimensionMock('scope', 3),
             'index_name_scope_5' => $this->createDimensionMock('scope', 5),
-            'index_name_scope_1' => $this->createDimensionMock('scope', 1),
+            'index_name_scope_1' => $this->createDimensionMock('scope', 1)
         ];
         $expectedTable = 'index_name_scope3_scope5_scope1';
         $this->indexScopeResolver->expects($this->once())
@@ -107,48 +104,70 @@ class IndexStructureTest extends TestCase
             ->method('resolve')
             ->with($index, $dimensions)
             ->willReturn($index . '_flat');
-        $position = 0;
-        $position = $this->mockDropTable($position, $expectedTable, true);
-        $this->mockDropTable($position, $index . '_flat', true);
+        $this->connectionInterface
+            ->method('isTableExists')
+            ->willReturnCallback(
+                function ($arg) use ($expectedTable, $index) {
+                    if ($arg == $expectedTable) {
+                        return true;
+                    } elseif ($arg == $index . '_flat') {
+                        return true;
+                    }
+                }
+            );
+        $this->connectionInterface
+            ->method('dropTable')
+            ->willReturnCallback(
+                function ($arg) use ($expectedTable, $index) {
+                    if ($arg == $expectedTable) {
+                        return true;
+                    } elseif ($arg == $index . '_flat') {
+                        return true;
+                    }
+                }
+            );
 
         $this->target->delete($index, $dimensions);
     }
 
-    public function testCreateWithEmptyFields()
+    /**
+     * @return void
+     */
+    public function testCreateWithEmptyFields(): void
     {
         $fields = [
             [
                 'name' => 'fieldName1',
                 'type' => 'fieldType1',
-                'size' => 'fieldSize1',
+                'size' => 'fieldSize1'
             ],
             [
                 'name' => 'fieldName2',
                 'type' => 'fieldType2',
-                'size' => 'fieldSize2',
+                'size' => 'fieldSize2'
             ],
             [
                 'name' => 'fieldName3',
                 'type' => 'fieldType3',
-                'size' => 'fieldSize3',
+                'size' => 'fieldSize3'
             ],
             [
                 'name' => 'fieldName3',
                 'dataType' => 'varchar',
                 'type' => 'text',
-                'size' => '255',
+                'size' => '255'
             ],
             [
                 'name' => 'fieldName3',
                 'dataType' => 'mediumtext',
                 'type' => 'text',
-                'size' => '16777216',
+                'size' => '16777216'
             ],
             [
                 'name' => 'fieldName3',
                 'dataType' => 'text',
                 'type' => 'text',
-                'size' => '65536',
+                'size' => '65536'
             ]
         ];
         $index = 'index_name';
@@ -156,9 +175,8 @@ class IndexStructureTest extends TestCase
         $dimensions = [
             'index_name_scope_3' => $this->createDimensionMock('scope', 3),
             'index_name_scope_5' => $this->createDimensionMock('scope', 5),
-            'index_name_scope_1' => $this->createDimensionMock('scope', 1),
+            'index_name_scope_1' => $this->createDimensionMock('scope', 1)
         ];
-        $position = 0;
         $this->indexScopeResolver->expects($this->once())
             ->method('resolve')
             ->with($index, $dimensions)
@@ -167,8 +185,30 @@ class IndexStructureTest extends TestCase
             ->method('resolve')
             ->with($index, $dimensions)
             ->willReturn($index . '_flat');
-        $position = $this->mockFulltextTable($position, $expectedTable);
-        $this->mockFlatTable($position, $index . '_flat');
+        $table = $this->mockFulltextTable();
+        $table2 = $this->mockFlatTable();
+
+        $this->connectionInterface
+            ->method('newTable')
+            ->willReturnCallback(
+                function ($arg) use ($expectedTable, $index, $table, $table2) {
+                    if ($arg == $expectedTable) {
+                        return $table;
+                    } elseif ($arg == $index . '_flat') {
+                        return $table2;
+                    }
+                }
+            );
+
+        $this->connectionInterface
+            ->method('createTable')
+            ->willReturnCallback(
+                function ($arg) use ($table, $table2) {
+                    if ($arg == $table || $arg == $table2) {
+                        return $this->connectionInterface;
+                    }
+                }
+            );
 
         $this->target->create($index, $fields, $dimensions);
     }
@@ -176,12 +216,13 @@ class IndexStructureTest extends TestCase
     /**
      * @param string $name
      * @param string $value
+     *
      * @return MockObject
      */
-    private function createDimensionMock($name, $value)
+    private function createDimensionMock($name, $value): MockObject
     {
         $dimension = $this->getMockBuilder(Dimension::class)
-            ->setMethods(['getName', 'getValue'])
+            ->onlyMethods(['getName', 'getValue'])
             ->disableOriginalConstructor()
             ->getMock();
         $dimension->expects($this->any())
@@ -194,116 +235,70 @@ class IndexStructureTest extends TestCase
     }
 
     /**
-     * @param $callNumber
-     * @param $tableName
-     * @param $isTableExist
-     * @return mixed
+     * @return MockObject
      */
-    private function mockDropTable($callNumber, $tableName, $isTableExist)
-    {
-        $this->connectionInterface->expects($this->at($callNumber++))
-            ->method('isTableExists')
-            ->with($tableName)
-            ->willReturn($isTableExist);
-        if ($isTableExist) {
-            $this->connectionInterface->expects($this->at($callNumber++))
-                ->method('dropTable')
-                ->with($tableName)
-                ->willReturn(true);
-        }
-        return $callNumber;
-    }
-
-    /**
-     * @param $callNumber
-     * @param $tableName
-     * @return mixed
-     */
-    private function mockFlatTable($callNumber, $tableName)
+    private function mockFlatTable(): MockObject
     {
         $table = $this->getMockBuilder(Table::class)
-            ->setMethods(['addColumn', 'getColumns'])
+            ->onlyMethods(['addColumn', 'getColumns'])
             ->disableOriginalConstructor()
             ->getMock();
         $table->expects($this->any())
             ->method('addColumn')
             ->willReturnSelf();
 
-        $this->connectionInterface->expects($this->at($callNumber++))
-            ->method('newTable')
-            ->with($tableName)
-            ->willReturn($table);
-        $this->connectionInterface->expects($this->at($callNumber++))
-            ->method('createTable')
-            ->with($table)
-            ->willReturnSelf();
-
-        return $callNumber;
+        return $table;
     }
 
     /**
-     * @param $callNumber
-     * @param $tableName
-     * @return mixed
+     * @return MockObject
      */
-    private function mockFulltextTable($callNumber, $tableName)
+    private function mockFulltextTable(): MockObject
     {
         $table = $this->getMockBuilder(Table::class)
-            ->setMethods(['addColumn', 'addIndex'])
+            ->onlyMethods(['addColumn', 'addIndex'])
             ->disableOriginalConstructor()
             ->getMock();
-        $table->expects($this->at(0))
-            ->method('addColumn')
-            ->with(
-                'entity_id',
-                Table::TYPE_INTEGER,
-                10,
-                ['unsigned' => true, 'nullable' => false],
-                'Entity ID'
-            )->willReturnSelf();
-        $table->expects($this->at(1))
-            ->method('addColumn')
-            ->with(
-                'attribute_id',
-                Table::TYPE_TEXT,
-                255,
-                ['unsigned' => true, 'nullable' => true]
-            )->willReturnSelf();
 
-        $table->expects($this->at(2))
+        $table
             ->method('addColumn')
-            ->with(
-                'data_index',
-                Table::TYPE_TEXT,
-                '4g',
-                ['nullable' => true],
-                'Data index'
-            )->willReturnSelf();
-
-        $table->expects($this->at(3))
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3, $arg4, $arg5) use ($table) {
+                    if ($arg1 == 'entity_id' &&
+                        $arg2 == Table::TYPE_INTEGER &&
+                        $arg3 == 10 && $arg4 == ['unsigned' => true, 'nullable' => false] &&
+                        $arg5 == 'Entity ID') {
+                        return $table;
+                    } elseif ($arg1 == 'attribute_id' &&
+                        $arg2 == Table::TYPE_TEXT &&
+                        $arg3 == 255 &&
+                        $arg4 == ['unsigned' => true, 'nullable' => true]) {
+                        return $table;
+                    } elseif ($arg1 == 'data_index' &&
+                        $arg2 == Table::TYPE_TEXT &&
+                        $arg3 == '4g' &&
+                        $arg4 == ['nullable' => true] &&
+                        $arg5 == 'Data index') {
+                        return $table;
+                    }
+                }
+            );
+        $table
             ->method('addIndex')
-            ->with(
-                'idx_primary',
-                ['entity_id', 'attribute_id'],
-                ['type' => AdapterInterface::INDEX_TYPE_PRIMARY]
-            )->willReturnSelf();
-        $table->expects($this->at(4))
-            ->method('addIndex')
-            ->with(
-                'FTI_FULLTEXT_DATA_INDEX',
-                ['data_index'],
-                ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
-            )->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($table) {
+                    if ($arg1 == 'idx_primary' &&
+                        $arg2 == ['entity_id', 'attribute_id'] &&
+                        $arg3 == ['type' => AdapterInterface::INDEX_TYPE_PRIMARY]) {
+                        return $table;
+                    } elseif ($arg1 == 'FTI_FULLTEXT_DATA_INDEX' &&
+                        $arg2 == ['data_index'] &&
+                        $arg3 == ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]) {
+                        return $table;
+                    }
+                }
+            );
 
-        $this->connectionInterface->expects($this->at($callNumber++))
-            ->method('newTable')
-            ->with($tableName)
-            ->willReturn($table);
-        $this->connectionInterface->expects($this->at($callNumber++))
-            ->method('createTable')
-            ->with($table)
-            ->willReturnSelf();
-
-        return $callNumber;
+        return $table;
     }
 }

@@ -23,14 +23,14 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
 {
-   /** @var \Magento\Framework\GraphQl\Config  */
+    /** @var \Magento\Framework\GraphQl\Config  */
     private $model;
 
     protected function setUp(): void
     {
         /** @var ObjectManagerInterface $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-       /** @var Cache $cache */
+        /** @var Cache $cache */
         $cache = $objectManager->get(Cache::class);
         $cache->clean();
         $fileResolverMock = $this->getMockBuilder(
@@ -48,16 +48,16 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
             ['fileResolver' => $fileResolverMock]
         );
         $reader = $objectManager->create(
-            // phpstan:ignore
+        // phpstan:ignore
             \Magento\Framework\GraphQlSchemaStitching\Reader::class,
             ['readers' => ['graphql_reader' => $graphQlReader]]
         );
         $data = $objectManager->create(
-            // phpstan:ignore
-            \Magento\Framework\GraphQl\Config\Data ::class,
+        // phpstan:ignore
+            \Magento\Framework\GraphQl\Config\Data::class,
             ['reader' => $reader]
         );
-         $this->model = $objectManager->create(\Magento\Framework\GraphQl\Config::class, ['data' =>$data]);
+        $this->model = $objectManager->create(\Magento\Framework\GraphQl\Config::class, ['data' =>$data]);
     }
 
     /**
@@ -87,19 +87,19 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
                 ]
             ];
             $this->assertResponseFields($expectedOutputArray['Query']['fields'][$fieldKey], $fieldAssertionMap);
-            /** @var \Magento\Framework\GraphQl\Config\Element\Argument $queryFieldArguments */
+            /** @var \Magento\Framework\GraphQl\Config\Element\Argument[] $queryFieldArguments */
             $queryFieldArguments = $queryFields[$fieldKey]->getArguments();
             foreach (array_keys($queryFieldArguments) as $argumentKey) {
                 $argumentAssertionMap = [
-                   ['response_field' => 'name', 'expected_value' => $queryFieldArguments[$argumentKey]->getName()],
-                   ['response_field' => 'type', 'expected_value' => $queryFieldArguments[$argumentKey]->getTypeName()],
-                   ['response_field' => 'description', 'expected_value' => $queryFieldArguments[$argumentKey]
-                       ->getDescription()],
-                   ['response_field' => 'required', 'expected_value' => $queryFieldArguments[$argumentKey]
-                       ->isRequired()],
-                   ['response_field' => 'isList', 'expected_value' => $queryFieldArguments[$argumentKey]->isList()],
-                   ['response_field' => 'itemsRequired', 'expected_value' => $queryFieldArguments[$argumentKey]
-                       ->areItemsRequired()]
+                    ['response_field' => 'name', 'expected_value' => $queryFieldArguments[$argumentKey]->getName()],
+                    ['response_field' => 'type', 'expected_value' => $queryFieldArguments[$argumentKey]->getTypeName()],
+                    ['response_field' => 'description', 'expected_value' => $queryFieldArguments[$argumentKey]
+                        ->getDescription()],
+                    ['response_field' => 'required', 'expected_value' => $queryFieldArguments[$argumentKey]
+                        ->isRequired()],
+                    ['response_field' => 'isList', 'expected_value' => $queryFieldArguments[$argumentKey]->isList()],
+                    ['response_field' => 'itemsRequired', 'expected_value' => $queryFieldArguments[$argumentKey]
+                        ->areItemsRequired()]
                 ];
                 $this->assertResponseFields(
                     $expectedOutputArray['Query']['fields'][$fieldKey]['arguments'][$argumentKey],
@@ -121,7 +121,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         $queryEnum = 'PriceAdjustmentDescriptionEnum';
         /** @var \Magento\Framework\GraphQl\Config\Element\Enum $outputEnum */
         $outputEnum = $this->model->getConfigElement($queryEnum);
-        /** @var EnumValue $outputEnumValues */
+        /** @var EnumValue[] $outputEnumValues */
         $outputEnumValues = $outputEnum->getValues();
         $expectedOutputArray = require __DIR__ . '/_files/query_array_output.php';
         $this->assertEquals($outputEnum->getName(), $queryEnum);
@@ -154,7 +154,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         $expectedOutputArray = require __DIR__ . '/_files/query_array_output.php';
         $this->assertEquals($outputInterface->getName(), $typeThatImplements);
         $outputInterfaceValues = $outputInterface->getInterfaces();
-        /** @var \Magento\Framework\GraphQl\Config\Element\Field $outputInterfaceFields */
+        /** @var \Magento\Framework\GraphQl\Config\Element\Field[] $outputInterfaceFields */
         $outputInterfaceFields =$outputInterface->getFields();
         foreach (array_keys($outputInterfaceValues) as $outputInterfaceValue) {
             $this->assertEquals(

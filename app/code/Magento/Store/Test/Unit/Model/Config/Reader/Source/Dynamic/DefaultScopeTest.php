@@ -24,7 +24,7 @@ class DefaultScopeTest extends TestCase
         ];
         $collectionFactory = $this->getMockBuilder(ScopedFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $collectionFactory->expects($this->once())
             ->method('create')

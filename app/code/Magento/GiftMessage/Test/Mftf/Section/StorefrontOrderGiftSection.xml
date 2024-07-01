@@ -11,5 +11,14 @@
     <section name="StorefrontOrderGiftSection">
         <element name="giftMessageLink" type="button" selector=".table-wrapper.order-items .options .action.show"/>
         <element name="giftMessage" type="text" selector=".order-gift-message .item-message" />
+        <element name="giftMessageTitle" type="text" selector=".cart-gift-item > .gift-item-block > .title > span"/>
+        <element name="giftMessageToLabel" type="text" selector=".gift-options-content  .field-to  .label  span"/>
+        <element name="giftMessageFromLabel" type="text" selector=".gift-options-content .field-from .label span"/>
+        <element name="giftMessageMessageLabel" type="text" selector=".gift-options-content .text .label span"/>
+        <element name="giftMessageToField" type="input" selector=".gift-options-content  .field-to  input"/>
+        <element name="giftMessageFromField" type="input" selector=".gift-options-content  .field-from  input"/>
+        <element name="giftMessageTextField" type="input" selector=".gift-options-content  .text  textarea"/>
+        <element name="giftMessageSummary" type="text" selector=".gift-message-summary"/>
+        <element name="giftMessageUpdateButton" type="button" selector="button.action-update"/>
     </section>
 </sections>

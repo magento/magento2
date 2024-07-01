@@ -28,8 +28,6 @@ class Dob extends AbstractWidget
     const MAX_DATE_RANGE_KEY = 'date_range_max';
 
     /**
-     * Date inputs
-     *
      * @var array
      */
     protected $_dateInputs = [];
@@ -422,7 +420,8 @@ class Dob extends AbstractWidget
                 'monthNamesShort' => array_values(iterator_to_array($monthsData['format']['abbreviated'])),
                 'dayNames' => array_values(iterator_to_array($daysData['format']['wide'])),
                 'dayNamesShort' => array_values(iterator_to_array($daysData['format']['abbreviated'])),
-                'dayNamesMin' => array_values(iterator_to_array($daysData['format']['short'])),
+                'dayNamesMin' =>
+                 array_values(iterator_to_array(($daysData['format']['short']) ?: $daysData['format']['abbreviated'])),
             ]
         );
     }

@@ -9,13 +9,15 @@ define([
     'uiElement',
     'uiLayout',
     'Magento_Paypal/js/in-context/paypal-sdk',
+    'Magento_Customer/js/customer-data',
     'domReady!'
 ], function (
     $,
     ko,
     Component,
     layout,
-    paypalSdk
+    paypalSdk,
+    customerData
 ) {
     'use strict';
 
@@ -27,6 +29,7 @@ define([
             attributes: {
                 class: 'pay-later-message'
             },
+            dataAttributes: {},
             refreshSelector: '',
             displayAmount: false,
             amountComponentConfig: {
@@ -36,6 +39,7 @@ define([
         },
         paypal: null,
         amount: null,
+        buyerCountry: null,
 
         /**
          * Initialize
@@ -43,6 +47,9 @@ define([
          * @returns {*}
          */
         initialize: function () {
+            let buyerCountry = customerData.get('paypal-buyer-country');
+
+            this.buyerCountry = buyerCountry().code;
             this._super()
                 .observe(['amount']);
 
@@ -51,7 +58,7 @@ define([
             }
 
             if (this.sdkUrl !== '') {
-                this.loadPayPalSdk(this.sdkUrl)
+                this.loadPayPalSdk(this.sdkUrl, this.dataAttributes)
                     .then(this._setPayPalObject.bind(this));
             }
 
@@ -76,10 +83,11 @@ define([
         /**
          * Load PP SDK with preconfigured options
          *
-         * @param {String} sdkUrl
+         * @param {String} sdkUrl - the url of the PayPal SDK
+         * @param {Array} dataAttributes - Array of the Attributes for PayPal SDK Script tag
          */
-        loadPayPalSdk: function (sdkUrl) {
-            return paypalSdk(sdkUrl);
+        loadPayPalSdk: function (sdkUrl, dataAttributes) {
+            return paypalSdk(sdkUrl, dataAttributes);
         },
 
         /**

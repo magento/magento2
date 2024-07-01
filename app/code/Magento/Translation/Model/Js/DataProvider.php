@@ -30,8 +30,6 @@ class DataProvider implements DataProviderInterface
     protected $config;
 
     /**
-     * Files utility
-     *
      * @var \Magento\Framework\App\Utility\Files
      */
     protected $filesUtility;
@@ -142,7 +140,7 @@ class DataProvider implements DataProviderInterface
             if ($result) {
                 if (isset($matches[2])) {
                     foreach ($matches[2] as $match) {
-                        $phrases[] = str_replace(["\'", '\"'], ["'", '"'], $match);
+                        $phrases[] = $match !== null ? str_replace(["\'", '\"'], ["'", '"'], $match) : '';
                     }
                 }
             }

@@ -6,8 +6,6 @@
 
 /**
  * Import proxy product model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogImportExport\Model\Import\Proxy;
 
@@ -17,6 +15,7 @@ class Product extends \Magento\Catalog\Model\Product
      * DO NOT Initialize resources.
      *
      * @return void
+     * @phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedFunction
      */
     protected function _construct()
     {

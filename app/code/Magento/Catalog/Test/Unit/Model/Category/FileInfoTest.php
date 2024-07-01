@@ -78,7 +78,7 @@ class FileInfoTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())
             ->method('getStore')
@@ -115,6 +115,9 @@ class FileInfoTest extends TestCase
 
         $this->pubDirectory->method('getAbsolutePath')
             ->willReturn('/a/b/c/pub/');
+
+        $this->store->method('getBaseUrl')
+            ->willReturn('https://example.com/');
 
         $this->model = new FileInfo(
             $this->filesystem,

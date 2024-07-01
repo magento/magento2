@@ -19,7 +19,9 @@ use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -95,21 +97,21 @@ class BlockRepositoryTest extends TestCase
             ->getMock();
         $blockFactory = $this->getMockBuilder(BlockFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $blockDataFactory = $this->getMockBuilder(BlockInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $blockSearchResultFactory = $this->getMockBuilder(
             BlockSearchResultsInterfaceFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
@@ -128,7 +130,7 @@ class BlockRepositoryTest extends TestCase
             ->getMock();
         $this->collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter', 'getSize', 'setCurPage', 'setPageSize', 'load', 'addOrder'])
+            ->onlyMethods(['addFieldToFilter', 'getSize', 'setCurPage', 'setPageSize', 'load', 'addOrder'])
             ->getMock();
 
         $blockFactory->expects($this->any())
@@ -156,6 +158,10 @@ class BlockRepositoryTest extends TestCase
         $this->collectionProcessor = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMockForAbstractClass();
 
+        $hydrator = $this->getMockBuilder(HydratorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->repository = new BlockRepository(
             $this->blockResource,
             $blockFactory,
@@ -165,7 +171,8 @@ class BlockRepositoryTest extends TestCase
             $this->dataHelper,
             $this->dataObjectProcessor,
             $this->storeManager,
-            $this->collectionProcessor
+            $this->collectionProcessor,
+            $hydrator
         );
     }
 

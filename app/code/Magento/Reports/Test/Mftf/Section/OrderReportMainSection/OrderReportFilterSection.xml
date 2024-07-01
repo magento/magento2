@@ -14,5 +14,6 @@
         <element name="optionAny" type="select" selector="//select[@id='sales_report_show_order_statuses']/option[contains(text(), 'Any')]"/>
         <element name="optionSpecified" type="select" selector="//select[@id='sales_report_show_order_statuses']/option[contains(text(), 'Specified')]"/>
         <element name="orderStatusSpecified" type="select" selector="#sales_report_order_statuses"/>
+        <element name="orderStatusNote" type="text" selector="#show_order_statuses-note"/>
     </section>
 </sections>

@@ -28,7 +28,7 @@
                     <if args="isAllowed()">
                         <each args="data: getPrices($row()), as: '$price'">
                             <with args="$price">
-                                <render args="getBody()"/>
+                                <render args="getBody()"></render>
                             </with>
                         </each>
                     </if>
@@ -38,7 +38,7 @@
 
         <div class="map-form-addtocart">
             <with args="$parent.getComponentByCode('addtocart-button')">
-                <render args="getBody()"/>
+                <render args="getBody()"></render>
             </with>
         </div>
     </div>

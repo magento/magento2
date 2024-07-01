@@ -36,7 +36,7 @@
             <!--Create additional Store View in Main Website Store -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAll">
-                <argument name="indices" value="catalog_category_product"/>
+                <argument name="indices" value=""/>
             </actionGroup>
         </before>
 
@@ -47,6 +47,9 @@
             <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearWebsitesGridFilters"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 

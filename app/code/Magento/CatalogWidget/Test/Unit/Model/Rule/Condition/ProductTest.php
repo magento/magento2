@@ -15,7 +15,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
 use Magento\CatalogWidget\Model\Rule\Condition\Product as ProductWidget;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\AbstractEntity;
-use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesRule\Model\Rule;
@@ -63,7 +63,10 @@ class ProductTest extends TestCase
         $this->productResource = $this->createMock(Product::class);
         $this->productResource->expects($this->once())->method('loadAllAttributes')->willReturnSelf();
         $this->productResource->expects($this->once())->method('getAttributesByCode')->willReturn([]);
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connection = $this->getMockBuilder(Mysql::class)
+            ->onlyMethods(['_connect'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->productResource->method('getConnection')->willReturn($connection);
         $productCategoryList = $this->getMockBuilder(ProductCategoryList::class)
             ->disableOriginalConstructor()
@@ -186,7 +189,95 @@ class ProductTest extends TestCase
             [
                 false,
                 false,
-                'e.entity_id'
+                'at_price.value'
+            ],
+            [
+                false,
+                true,
+                'price_index.min_price'
+            ],
+        ];
+    }
+
+    /**
+     * @param array $conditionArray
+     * @param array $attributeConfig
+     * @param array $attributeValues
+     * @param mixed $expected
+     * @dataProvider getBindArgumentValueDataProvider
+     */
+    public function testGetBindArgumentValue(
+        array $conditionArray,
+        array $attributeConfig,
+        array $attributeValues,
+        $expected
+    ): void {
+        $conditionArray['type'] = ProductWidget::class;
+        $attributeConfig['getAttributeCode'] = $conditionArray['attribute'];
+        $collectionMock = $this->mockCollection(
+            [
+                'getAllAttributeValues' => $attributeValues,
+            ]
+        );
+        $this->mockAttribute($attributeConfig);
+        $this->model->loadArray($conditionArray);
+        $this->model->collectValidatedAttributes($collectionMock);
+        $this->assertEquals($expected, $this->model->getBindArgumentValue());
+    }
+
+    /**
+     * @return array
+     */
+    public function getBindArgumentValueDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'attribute' => 'attr_1',
+                    'value' => '2',
+                    'operator' => '==',
+                ],
+                [
+                    'isScopeGlobal' => false,
+                    'getBackendType' => 'int'
+                ],
+                [
+                    1 => [
+                        0 => 1,
+                        1 => 2
+                    ],
+                    2 => [
+                        0 => 1
+                    ],
+                    3 => [
+                        1 => 2
+                    ]
+                ],
+                '2'
+            ],
+            [
+                [
+                    'attribute' => 'attr_1',
+                    'value' => '2',
+                    'operator' => '==',
+                ],
+                [
+                    'isScopeGlobal' => true,
+                    'getBackendType' => 'int'
+                ],
+                [
+                    1 => [
+                        0 => 1,
+                        1 => 2
+                    ],
+                    2 => [
+                        0 => 1
+                    ],
+                    3 => [
+                        1 => 2
+                    ]
+                ],
+                '2'
             ],
         ];
     }

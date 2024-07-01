@@ -16,6 +16,7 @@
             <testCaseId value="MC-35612"/>
             <useCaseId value="MC-31892"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -52,7 +53,9 @@
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

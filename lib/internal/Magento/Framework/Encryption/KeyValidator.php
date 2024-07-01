@@ -1,7 +1,5 @@
 <?php
 /**
- * Protocol validator
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -27,7 +25,13 @@ class KeyValidator
      */
     public function isValid($value) : bool
     {
-        return strlen($value) === ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE
-            && preg_match('/^\S+$/', $value);
+        if (str_starts_with($value, ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX)) {
+            return (bool)$value
+                && preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $value);
+        } else {
+            return $value
+                && strlen($value) === ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE
+                && preg_match('/^\S+$/', $value);
+        }
     }
 }

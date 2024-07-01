@@ -8,48 +8,60 @@ namespace Magento\Webapi\Model\Authorization;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Integration\Model\Oauth\Token;
 use Magento\Integration\Model\Oauth\TokenFactory;
 use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Framework\Webapi\Request;
-use Magento\Framework\Stdlib\DateTime\DateTime as Date;
-use Magento\Framework\Stdlib\DateTime;
-use Magento\Integration\Helper\Oauth\Data as OauthHelper;
+use Magento\Integration\Model\Validator\BearerTokenValidator;
 
 /**
  * SOAP specific user context based on opaque tokens.
  */
-class SoapUserContext implements UserContextInterface
+class SoapUserContext implements UserContextInterface, ResetAfterRequestInterface
 {
     /**
      * @var Request
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $request;
+    private readonly Request $request;
 
     /**
-     * @var Token
+     * @var TokenFactory
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $tokenFactory;
+    private readonly TokenFactory $tokenFactory;
 
     /**
-     * @var int
+     * @var int|null
      */
     private $userId;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $userType;
 
     /**
-     * @var bool
+     * @var bool|null
      */
     private $isRequestProcessed;
 
     /**
      * @var IntegrationServiceInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $integrationService;
+    private readonly IntegrationServiceInterface $integrationService;
+
+    /**
+     * @var BearerTokenValidator
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
+    private readonly BearerTokenValidator $bearerTokenValidator;
 
     /**
      * Initialize dependencies.
@@ -57,18 +69,19 @@ class SoapUserContext implements UserContextInterface
      * @param Request $request
      * @param TokenFactory $tokenFactory
      * @param IntegrationServiceInterface $integrationService
-     * @param DateTime|null $dateTime
-     * @param Date|null $date
-     * @param OauthHelper|null $oauthHelper
+     * @param BearerTokenValidator|null $bearerTokenValidator
      */
     public function __construct(
         Request $request,
         TokenFactory $tokenFactory,
-        IntegrationServiceInterface $integrationService
+        IntegrationServiceInterface $integrationService,
+        ?BearerTokenValidator $bearerTokenValidator = null
     ) {
         $this->request = $request;
         $this->tokenFactory = $tokenFactory;
         $this->integrationService = $integrationService;
+        $this->bearerTokenValidator = $bearerTokenValidator ?? ObjectManager::getInstance()
+            ->get(BearerTokenValidator::class);
     }
 
     /**
@@ -114,6 +127,7 @@ class SoapUserContext implements UserContextInterface
             $this->isRequestProcessed = true;
             return;
         }
+
         $bearerToken = $headerPieces[1];
 
         /** @var Token $token */
@@ -123,9 +137,22 @@ class SoapUserContext implements UserContextInterface
             return;
         }
         if (((int) $token->getUserType()) === UserContextInterface::USER_TYPE_INTEGRATION) {
-            $this->userId = $this->integrationService->findByConsumerId($token->getConsumerId())->getId();
-            $this->userType = UserContextInterface::USER_TYPE_INTEGRATION;
+            $integration = $this->integrationService->findByConsumerId($token->getConsumerId());
+            if ($this->bearerTokenValidator->isIntegrationAllowedAsBearerToken($integration)) {
+                $this->userId = $integration->getId();
+                $this->userType = UserContextInterface::USER_TYPE_INTEGRATION;
+            }
         }
         $this->isRequestProcessed = true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->userId = null;
+        $this->userType = null;
+        $this->isRequestProcessed = null;
     }
 }

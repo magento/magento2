@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-117"/>
             <group value="Downloadable"/>
+            <skip>
+                <issueId value="AC-12124">Fotorama lib isn't loaded</issueId>
+            </skip>
         </annotations>
         <before>
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
@@ -26,6 +29,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>

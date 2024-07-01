@@ -6,7 +6,14 @@
 
 namespace Magento\Paypal\Model;
 
+use Exception;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
 use Magento\Framework\Exception\RemoteServiceUnavailableException;
+use Magento\Framework\HTTP\Adapter\Curl;
+use Magento\Framework\HTTP\Adapter\CurlFactory;
+use Psr\Log\LoggerInterface;
+use Throwable;
 
 /**
  * Abstract Ipn class for paypal
@@ -33,30 +40,30 @@ class AbstractIpn
     protected $_debugData = [];
 
     /**
-     * @var \Magento\Paypal\Model\ConfigFactory
+     * @var ConfigFactory
      */
     protected $_configFactory;
 
     /**
-     * @var \Magento\Framework\HTTP\Adapter\CurlFactory
+     * @var CurlFactory
      */
     protected $_curlFactory;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @param \Magento\Paypal\Model\ConfigFactory $configFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
+     * @param ConfigFactory $configFactory
+     * @param LoggerInterface $logger
+     * @param CurlFactory $curlFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Paypal\Model\ConfigFactory $configFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
+        ConfigFactory $configFactory,
+        LoggerInterface $logger,
+        CurlFactory $curlFactory,
         array $data = []
     ) {
         $this->_configFactory = $configFactory;
@@ -84,20 +91,21 @@ class AbstractIpn
      *
      * @return void
      * @throws RemoteServiceUnavailableException
-     * @throws \Exception
+     * @throws Exception
      */
     protected function _postBack()
     {
+        /** @var Curl $httpAdapter */
         $httpAdapter = $this->_curlFactory->create();
         $postbackQuery = http_build_query($this->getRequestData()) . '&cmd=_notify-validate';
         $postbackUrl = $this->_config->getPayPalIpnUrl();
         $this->_addDebugData('postback_to', $postbackUrl);
 
-        $httpAdapter->setConfig(['verifypeer' => $this->_config->getValue('verifyPeer')]);
-        $httpAdapter->write(\Zend_Http_Client::POST, $postbackUrl, '1.1', ['Connection: close'], $postbackQuery);
+        $httpAdapter->setOptions(['verifypeer' => $this->_config->getValue('verifyPeer')]);
+        $httpAdapter->write(Request::METHOD_POST, $postbackUrl, '1.1', ['Connection: close'], $postbackQuery);
         try {
             $postbackResult = $httpAdapter->read();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->_addDebugData('http_error', ['error' => $e->getMessage(), 'code' => $e->getCode()]);
             throw $e;
         }
@@ -105,7 +113,7 @@ class AbstractIpn
         /*
          * Handle errors on PayPal side.
          */
-        $responseCode = \Zend_Http_Response::extractCode($postbackResult);
+        $responseCode = $this->extractCodeFromResponse($postbackResult);
         if (empty($postbackResult) || in_array($responseCode, ['500', '502', '503'])) {
             if (empty($postbackResult)) {
                 $reason = 'Empty response.';
@@ -117,12 +125,12 @@ class AbstractIpn
         }
 
         $response = preg_split('/^\r?$/m', $postbackResult, 2);
-        $response = trim($response[1]);
+        $response = isset($response[1]) ? trim($response[1]) : '';
         if ($response != 'VERIFIED') {
             $this->_addDebugData('postback', $postbackQuery);
             $this->_addDebugData('postback_result', $postbackResult);
             // phpcs:ignore Magento2.Exceptions.DirectThrow
-            throw new \Exception('PayPal IPN postback failure. See system.log for details.');
+            throw new Exception('PayPal IPN postback failure. See system.log for details.');
         }
     }
 
@@ -190,5 +198,23 @@ class AbstractIpn
     {
         $this->_debugData[$key] = $value;
         return $this;
+    }
+
+    /**
+     * Extract the response code from a response string
+     *
+     * @param string $responseString
+     *
+     * @return false|int
+     */
+    private function extractCodeFromResponse(string $responseString)
+    {
+        try {
+            $responseCode = Response::fromString($responseString)->getStatusCode();
+        } catch (Throwable $e) {
+            $responseCode = false;
+        }
+
+        return $responseCode;
     }
 }

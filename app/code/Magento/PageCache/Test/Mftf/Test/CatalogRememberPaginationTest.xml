@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CatalogRememberPaginationTest">
+        <annotations>
+            <features value="PageCache"/>
+            <stories value="FormKey"/>
+            <title value="Form Key value should be updated from UI if pagination remember is enabled"/>
+            <description value="Form Key value should be updated from UI in cookies, if catalog remember pagination is enabled and the form key is set"/>
+            <testCaseId value="AC-2887"/>
+            <useCaseId value="ACP2E-711"/>
+            <severity value="MAJOR"/>
+            <group value="pageCache"/>
+        </annotations>
+        <before>
+            <!-- Create Data -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <createData entity="RememberPaginationCatalogStorefrontConfig" stepKey="setRememberPaginationCatalogStorefrontConfig"/>
+
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="full_page config"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete and revert data -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <createData entity="DefaultCatalogStorefrontConfiguration" stepKey="setDefaultCatalogStorefrontConfiguration"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="full_page config"/>
+            </actionGroup>
+        </after>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPage">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <grabValueFrom selector="{{StorefrontProductActionSection.inputFormKey}}" stepKey="grabCachedValue"/>
+        <resetCookie userInput="PHPSESSID" stepKey="resetSessionCookie"/>
+        <resetCookie userInput="form_key" stepKey="resetFormKeyCookie"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="reopenCategoryPage">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <grabValueFrom selector="{{StorefrontProductActionSection.inputFormKey}}" stepKey="grabCachedValue2"/>
+        <assertEquals stepKey="matchFromKey">
+            <expectedResult type="variable">grabCachedValue</expectedResult>
+            <actualResult type="variable">grabCachedValue2</actualResult>
+        </assertEquals>
+    </test>
+</tests>

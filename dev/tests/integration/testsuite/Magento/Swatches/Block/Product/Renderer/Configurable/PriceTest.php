@@ -91,7 +91,7 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function childProductsDataProvider(): array
+    public static function childProductsDataProvider(): array
     {
         return [
             [

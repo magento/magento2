@@ -14,6 +14,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Access to "custom layout" page property.
+ *
+ * @api
  */
 interface CustomLayoutRepositoryInterface
 {

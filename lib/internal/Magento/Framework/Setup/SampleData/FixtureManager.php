@@ -39,6 +39,8 @@ class FixtureManager
     }
 
     /**
+     * Method to get fixture.
+     *
      * @param string $fileId
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -61,7 +63,7 @@ class FixtureManager
      */
     public static function normalizePath($path)
     {
-        $parts = explode('/', $path);
+        $parts = $path !== null ? explode('/', $path) : [];
         $result = [];
 
         foreach ($parts as $part) {

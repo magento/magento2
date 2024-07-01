@@ -157,7 +157,7 @@ define([
 
                 this._initialize();
 
-                this.element.append('<div/>');
+                this.element.append('<div></div>');
 
                 this._on(window, {
 
@@ -321,7 +321,7 @@ define([
                     timestamp +
                     additionalParams;
                 this.element.append(
-                    $('<iframe/>')
+                    $('<iframe></iframe>')
                         .attr('frameborder', 0)
                         .attr('id', 'vimeo' + this._code + timestamp)
                         .attr('width', this._width)
@@ -606,7 +606,7 @@ define([
              * @private
              */
             _formatVimeoDuration: function (seconds) {
-                return (new Date(seconds * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
+                return new Date(seconds * 1000).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
             },
 
             /**

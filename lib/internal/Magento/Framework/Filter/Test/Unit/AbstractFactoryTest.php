@@ -111,8 +111,8 @@ class AbstractFactoryTest extends TestCase
         $property = new \ReflectionProperty(AbstractFactory::class, 'sharedInstances');
         $property->setAccessible(true);
 
-        $filterMock = $this->getMockBuilder('FactoryInterface')
-            ->setMethods(['filter'])->getMock();
+        $filterMock = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['filter'])->getMock();
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(

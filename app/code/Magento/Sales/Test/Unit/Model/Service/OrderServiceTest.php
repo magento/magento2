@@ -11,6 +11,9 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -19,11 +22,14 @@ use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 use Magento\Sales\Model\Order\Status\History;
+use Magento\Sales\Model\OrderMutex;
 use Magento\Sales\Model\OrderNotifier;
 use Magento\Sales\Model\Service\OrderService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  *
@@ -72,7 +78,7 @@ class OrderServiceTest extends TestCase
     protected $orderNotifierMock;
 
     /**
-     * @var MockObject|\Magento\Sales\Model\Order
+     * @var MockObject|Order
      */
     protected $orderMock;
 
@@ -95,6 +101,16 @@ class OrderServiceTest extends TestCase
      * @var MockObject|OrderCommentSender
      */
     protected $orderCommentSender;
+
+    /**
+     * @var MockObject|AdapterInterface
+     */
+    private $adapterInterfaceMock;
+
+    /**
+     * @var MockObject|ResourceConnection
+     */
+    private $resourceConnectionMock;
 
     protected function setUp(): void
     {
@@ -165,6 +181,14 @@ class OrderServiceTest extends TestCase
         /** @var LoggerInterface|MockObject $logger */
         $logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
+        $this->adapterInterfaceMock = $this->getMockBuilder(AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->orderService = new OrderService(
             $this->orderRepositoryMock,
             $this->orderStatusHistoryRepositoryMock,
@@ -174,7 +198,8 @@ class OrderServiceTest extends TestCase
             $this->eventManagerMock,
             $this->orderCommentSender,
             $paymentFailures,
-            $logger
+            $logger,
+            new OrderMutex($this->resourceConnectionMock)
         );
     }
 
@@ -183,9 +208,11 @@ class OrderServiceTest extends TestCase
      */
     public function testCancel()
     {
+        $orderId = 123;
+        $this->mockConnection($orderId);
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
-            ->with(123)
+            ->with($orderId)
             ->willReturn($this->orderMock);
         $this->orderMock->expects($this->once())
             ->method('cancel')
@@ -201,9 +228,11 @@ class OrderServiceTest extends TestCase
      */
     public function testCancelFailed()
     {
+        $orderId = 123;
+        $this->mockConnection($orderId);
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
-            ->with(123)
+            ->with($orderId)
             ->willReturn($this->orderMock);
         $this->orderMock->expects($this->never())
             ->method('cancel')
@@ -256,8 +285,7 @@ class OrderServiceTest extends TestCase
             ->method('addStatusHistory')
             ->with($this->orderStatusHistoryMock)
             ->willReturn($this->orderMock);
-        $this->orderStatusHistoryMock->expects($this->once())
-            ->method('getComment')
+        $this->orderStatusHistoryMock->method('getComment')
             ->willReturn("<h1>" . $clearComment);
         $this->orderRepositoryMock->expects($this->once())
             ->method('save')
@@ -267,6 +295,22 @@ class OrderServiceTest extends TestCase
             ->method('send')
             ->with($this->orderMock, false, $clearComment);
         $this->assertTrue($this->orderService->addComment(123, $this->orderStatusHistoryMock));
+    }
+
+    /**
+     * test for add comment with order status change case
+     */
+    public function testAddCommentWithStatus()
+    {
+        $params = ['status' => 'holded'];
+        $inputException = new LocalizedException(
+            new Phrase('Unable to add comment: The status "%1" is not part of the order
+            status history.', $params)
+        );
+        $this->orderStatusHistoryMock->method('getStatus')
+            ->willThrowException($inputException);
+        $this->expectException(LocalizedException::class);
+        $this->orderService->addComment(123, $this->orderStatusHistoryMock);
     }
 
     public function testNotify()
@@ -324,5 +368,35 @@ class OrderServiceTest extends TestCase
             ->method('unHold')
             ->willReturn($this->orderMock);
         $this->assertTrue($this->orderService->unHold(123));
+    }
+
+    /**
+     * @param int $orderId
+     */
+    private function mockConnection(int $orderId): void
+    {
+        $select = $this->createMock(Select::class);
+        $select->expects($this->once())
+            ->method('from')
+            ->with('sales_order', 'entity_id')
+            ->willReturnSelf();
+        $select->expects($this->once())
+            ->method('where')
+            ->with('entity_id = ?', $orderId)
+            ->willReturnSelf();
+        $select->expects($this->once())
+            ->method('forUpdate')
+            ->with(true)
+            ->willReturnSelf();
+        $this->adapterInterfaceMock->expects($this->once())
+            ->method('select')
+            ->willReturn($select);
+        $this->resourceConnectionMock->expects($this->once())
+            ->method('getConnection')
+            ->with('sales')
+            ->willReturn($this->adapterInterfaceMock);
+        $this->resourceConnectionMock->expects($this->once())
+            ->method('getTableName')
+            ->willReturnArgument(0);
     }
 }

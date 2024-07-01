@@ -10,6 +10,7 @@ namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Attribute\Edit\Tab;
 use Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Config\Model\Config\Source\Yesno;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
 use Magento\Eav\Helper\Data as EavHelper;
 use Magento\Eav\Model\Entity\Type as EntityType;
@@ -19,6 +20,7 @@ use Magento\Framework\Data\Form\Element\Text;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
@@ -79,6 +81,18 @@ class AdvancedTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         $this->registry = $this->createMock(Registry::class);
         $this->formFactory = $this->createMock(FormFactory::class);
         $this->yesNo = $this->createMock(Yesno::class);

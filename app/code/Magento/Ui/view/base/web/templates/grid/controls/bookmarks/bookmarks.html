@@ -20,8 +20,8 @@
             <div class="action-dropdown-menu-item-edit" visible="customVisible">
                 <input class="admin__control-text" type="text"
                     data-bind="
+                        attr: {'aria-label': $t('New View')},
                         value: customLabel,
-                        autoselect,
                         hasFocus: isCustomVisible(),
                         keyboard: {
                             13: applyCustom.bind($data),

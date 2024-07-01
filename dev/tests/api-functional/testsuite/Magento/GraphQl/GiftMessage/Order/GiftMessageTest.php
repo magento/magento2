@@ -49,6 +49,44 @@ class GiftMessageTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store sales/gift_options/allow_order 1
+     * @magentoConfigFixture default_store sales/gift_options/allow_items 1
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GiftMessage/_files/customer/order_with_message.php
+     * @throws AuthenticationException
+     * @throws Exception
+     */
+    public function testGiftMessageForCustomerOrder()
+    {
+        $query = <<<QUERY
+query {
+  customer {
+   orders(filter:{number:{eq:"999999991"}}){
+    total_count
+    items
+    {
+      gift_message {
+        from
+        to
+        message
+      }
+     }
+   }
+ }
+}
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        foreach ($response['customer']['orders']['items'] as $order) {
+            self::assertArrayHasKey('gift_message', $order);
+            self::assertSame('Jane Roe', $order['gift_message']['to']);
+            self::assertSame('John Doe', $order['gift_message']['from']);
+            self::assertSame('Gift Message Text', $order['gift_message']['message']);
+        }
+    }
+
+    /**
      * @magentoConfigFixture default_store sales/gift_options/allow_order 0
      * @magentoConfigFixture default_store sales/gift_options/allow_items 0
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
@@ -59,9 +97,16 @@ class GiftMessageTest extends GraphQlAbstract
         $query = $this->getCustomerOrdersQuery();
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Can\'t load gift message for order');
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
+        self::assertEquals(1, count($response['customerOrders']));
+        foreach ($response['customerOrders']['items'] as $order) {
+            self::assertArrayHasKey('gift_message', $order);
+        }
     }
 
     /**

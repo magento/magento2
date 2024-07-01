@@ -9,11 +9,12 @@ namespace Magento\Bundle\Model\Plugin\Frontend;
 
 use Magento\Bundle\Model\Product\Type as BundleType;
 use Magento\Catalog\Model\Product as CatalogProduct;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Add child identities to product identities on storefront.
  */
-class ProductIdentitiesExtender
+class ProductIdentitiesExtender implements ResetAfterRequestInterface
 {
     /**
      * @var BundleType
@@ -67,5 +68,13 @@ class ProductIdentitiesExtender
         }
 
         return $this->cacheChildrenIds[$entityId];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->cacheChildrenIds = [];
     }
 }

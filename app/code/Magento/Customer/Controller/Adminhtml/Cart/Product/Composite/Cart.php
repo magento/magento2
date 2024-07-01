@@ -8,11 +8,13 @@ namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\QuoteFactory;
+use Magento\Quote\Model\ResourceModel\QuoteItemRetriever;
 
 /**
  * Catalog composite product configuration controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class Cart extends \Magento\Backend\App\Action
 {
@@ -21,7 +23,7 @@ abstract class Cart extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+    public const ADMIN_RESOURCE = 'Magento_Customer::manage';
 
     /**
      * Customer we're working with
@@ -40,32 +42,39 @@ abstract class Cart extends \Magento\Backend\App\Action
     /**
      * Quote item we're working with
      *
-     * @var \Magento\Quote\Model\Quote\Item
+     * @var Item
      */
     protected $_quoteItem = null;
 
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var CartRepositoryInterface
      */
     protected $quoteRepository;
 
     /**
-     * @var \Magento\Quote\Model\QuoteFactory
+     * @var QuoteFactory
      */
     protected $quoteFactory;
 
     /**
+     * @var QuoteItemRetriever
+     */
+    private $quoteItemRetriever;
+    /**
      * @param Action\Context $context
-     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
-     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
+     * @param CartRepositoryInterface $quoteRepository
+     * @param QuoteFactory $quoteFactory
+     * @param QuoteItemRetriever $quoteItemRetriever
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
-        \Magento\Quote\Model\QuoteFactory $quoteFactory
+        CartRepositoryInterface $quoteRepository,
+        QuoteFactory $quoteFactory,
+        QuoteItemRetriever $quoteItemRetriever
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->quoteFactory = $quoteFactory;
+        $this->quoteItemRetriever = $quoteItemRetriever;
         parent::__construct($context);
     }
 
@@ -86,7 +95,9 @@ abstract class Cart extends \Magento\Backend\App\Action
         $websiteId = (int)$this->getRequest()->getParam('website_id');
 
         try {
-            $this->_quote = $this->quoteRepository->getForCustomer($this->_customerId);
+            /** @var Item $quoteItem */
+            $quoteItem = $this->quoteItemRetriever->getById($quoteItemId);
+            $this->_quote = $this->quoteRepository->getForCustomer($this->_customerId, [$quoteItem->getStoreId()]);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $this->_quote = $this->quoteFactory->create();
         }

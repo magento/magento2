@@ -18,6 +18,8 @@
             <testCaseId value="MC-28500"/>
             <group value="customer"/>
             <group value="create"/>
+            <group value="cloud_smoke"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -26,6 +28,11 @@
 
         <after>
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomersFilter"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 

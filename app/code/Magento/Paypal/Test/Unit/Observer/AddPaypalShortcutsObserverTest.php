@@ -27,37 +27,38 @@ use PHPUnit\Framework\TestCase;
  */
 class AddPaypalShortcutsObserverTest extends TestCase
 {
-    const PAYMENT_CODE = 'code';
+    public const PAYMENT_CODE = 'code';
 
-    const PAYMENT_AVAILABLE = 'isAvailable';
+    public const PAYMENT_AVAILABLE = 'isAvailable';
 
-    const PAYMENT_IS_BML = 'isBml';
+    public const PAYMENT_IS_BML = 'isBml';
 
     /**
      * @param array $blocks
      *
-     * @dataProvider dataProviderShortcutsButtons
-     *
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @dataProvider dataProviderShortcutsButtons
      */
-    public function testAddShortcutsButtons(array $blocks)
+    public function testAddShortcutsButtons(array $blocks): void
     {
         /** @var ShortcutButtons|MockObject $shortcutButtonsMock */
         $shortcutButtonsMock = $this->getMockBuilder(ShortcutButtons::class)
-            ->setMethods(['getLayout', 'addShortcut'])
+            ->onlyMethods(['getLayout', 'addShortcut'])
             ->disableOriginalConstructor()
             ->getMock();
 
         /** @var ShortcutButtons|MockObject $shortcutButtonsMock */
         $eventMock = $this->getMockBuilder(DataObject::class)
-            ->setMethods(
+            ->addMethods(
                 [
                     'getContainer',
                     'getCheckoutSession',
                     'getIsCatalogProduct',
                     'getOrPosition'
                 ]
-            )->disableOriginalConstructor()
+            )
+            ->disableOriginalConstructor()
             ->getMock();
 
         $eventMock->expects(self::once())
@@ -73,7 +74,7 @@ class AddPaypalShortcutsObserverTest extends TestCase
             ->getMock();
         /** @var Factory|MockObject $shortcutFactoryMock */
         $shortcutFactoryMock = $this->getMockBuilder(Factory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -84,7 +85,7 @@ class AddPaypalShortcutsObserverTest extends TestCase
 
         /** @var Layout|MockObject $layoutMock */
         $layoutMock = $this->getMockBuilder(Layout::class)
-            ->setMethods(['createBlock'])
+            ->onlyMethods(['createBlock'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -93,27 +94,25 @@ class AddPaypalShortcutsObserverTest extends TestCase
         $callIndexAvailable = 0;
         $callIndexSession = 0;
 
+        $paypalConfigMockWithArgs = $paypalConfigMockReturnArgs = [];
+        $shortcutFactoryMockWithArgs = $shortcutFactoryMockReturnArgs = [];
+        $layoutMockWithArgs = $layoutMockReturnArgs = [];
+
         foreach ($blocks as $instanceName => $blockData) {
             $params = [];
-
-            $paypalConfigMock->expects(self::at($callIndexAvailable))
-                ->method('isMethodAvailable')
-                ->with($blockData[self::PAYMENT_CODE])
-                ->willReturn($blockData[self::PAYMENT_AVAILABLE]);
+            $paypalConfigMockWithArgs[] = [$blockData[self::PAYMENT_CODE]];
+            $paypalConfigMockReturnArgs[] = $blockData[self::PAYMENT_AVAILABLE];
 
             ++$callIndexAvailable;
 
             if (!$blockData[self::PAYMENT_AVAILABLE]) {
                 continue;
             }
-
             ++$callIndexSession;
             $params['shortcutValidator'] = 'test-shortcut-validator';
 
-            $shortcutFactoryMock->expects(self::at($callIndexShortcutFactory))
-                ->method('create')
-                ->with('test-checkout-session')
-                ->willReturn('test-shortcut-validator');
+            $shortcutFactoryMockWithArgs[] = ['test-checkout-session'];
+            $shortcutFactoryMockReturnArgs[] = 'test-shortcut-validator';
 
             ++$callIndexShortcutFactory;
 
@@ -123,7 +122,7 @@ class AddPaypalShortcutsObserverTest extends TestCase
             }
 
             $blockMock = $this->getMockBuilder(MinicartButton::class)
-                ->setMethods(['setIsInCatalogProduct', 'setShowOrPosition'])
+                ->addMethods(['setIsInCatalogProduct', 'setShowOrPosition'])
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
 
@@ -134,13 +133,36 @@ class AddPaypalShortcutsObserverTest extends TestCase
                 ->method('setShowOrPosition')
                 ->willReturnSelf();
 
-            $layoutMock->expects(self::at($callIndexBlock))
-                ->method('createBlock')
-                ->with($instanceName, '', $params)
-                ->willReturn($blockMock);
+            $layoutMockWithArgs[] = [$instanceName, '', $params];
+            $layoutMockReturnArgs[] = $blockMock;
 
             ++$callIndexBlock;
         }
+        $paypalConfigMock
+            ->method('isMethodAvailable')
+            ->willReturnCallback(function ($paypalConfigMockWithArgs) use ($paypalConfigMockReturnArgs) {
+                static $callCount = 0;
+                $returnValue = $paypalConfigMockReturnArgs[$callCount] ?? null;
+                $callCount++;
+                return $returnValue;
+            });
+        $shortcutFactoryMock
+            ->method('create')
+            ->willReturnCallback(function ($shortcutFactoryMockWithArgs) use ($shortcutFactoryMockReturnArgs) {
+                static $callCount = 0;
+                $returnValue = $shortcutFactoryMockReturnArgs[$callCount] ?? null;
+                $callCount++;
+                return $returnValue;
+            });
+        $layoutMock
+            ->method('createBlock')
+            ->willReturnCallback(function ($layoutMockWithArgs) use ($layoutMockReturnArgs) {
+                static $callCount = 0;
+                $returnValue = $layoutMockReturnArgs[$callCount] ?? null;
+                $callCount++;
+                return $returnValue;
+            });
+
         $shortcutButtonsMock->expects(self::exactly($callIndexBlock))
             ->method('addShortcut')
             ->with(self::isInstanceOf(ShortcutInterface::class));
@@ -157,7 +179,7 @@ class AddPaypalShortcutsObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderShortcutsButtons()
+    public static function dataProviderShortcutsButtons(): array
     {
         return [
             [
@@ -165,48 +187,48 @@ class AddPaypalShortcutsObserverTest extends TestCase
                     MinicartButton::class => [
                         self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
                         self::PAYMENT_AVAILABLE => true,
-                        self::PAYMENT_IS_BML => false,
+                        self::PAYMENT_IS_BML => false
                     ],
                     Button::class => [
                         self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
                         self::PAYMENT_AVAILABLE => true,
-                        self::PAYMENT_IS_BML => false,
+                        self::PAYMENT_IS_BML => false
                     ],
                     Shortcut::class => [
                         self::PAYMENT_CODE => Config::METHOD_WPP_EXPRESS,
                         self::PAYMENT_AVAILABLE => true,
-                        self::PAYMENT_IS_BML => false,
+                        self::PAYMENT_IS_BML => false
                     ],
                     \Magento\Paypal\Block\Bml\Shortcut::class => [
                         self::PAYMENT_CODE => Config::METHOD_WPP_EXPRESS,
                         self::PAYMENT_AVAILABLE => true,
-                        self::PAYMENT_IS_BML => true,
+                        self::PAYMENT_IS_BML => true
                     ]
-                ],
+                ]
             ],
             [
                 'blocks2' => [
                     MinicartButton::class => [
                         self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
                         self::PAYMENT_AVAILABLE => false,
-                        self::PAYMENT_IS_BML => false,
+                        self::PAYMENT_IS_BML => false
                     ],
                     Button::class => [
                         self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
                         self::PAYMENT_AVAILABLE => true,
-                        self::PAYMENT_IS_BML => false,
+                        self::PAYMENT_IS_BML => false
                     ],
                     Shortcut::class => [
                         self::PAYMENT_CODE => Config::METHOD_WPP_EXPRESS,
                         self::PAYMENT_AVAILABLE => false,
-                        self::PAYMENT_IS_BML => false,
+                        self::PAYMENT_IS_BML => false
                     ],
                     \Magento\Paypal\Block\Bml\Shortcut::class => [
                         self::PAYMENT_CODE => Config::METHOD_WPP_EXPRESS,
                         self::PAYMENT_AVAILABLE => false,
-                        self::PAYMENT_IS_BML => true,
+                        self::PAYMENT_IS_BML => true
                     ]
-                ],
+                ]
             ]
         ];
     }

@@ -13,6 +13,8 @@
             <description>Click save button for saving product.</description>
         </annotations>
 
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveButton"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
         <waitForPageLoad stepKey="waitForProductSaving"/>
     </actionGroup>

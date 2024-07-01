@@ -1,12 +1,13 @@
 <?php
 /**
- * Converter of event observers configuration from \DOMDocument to tree array
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Event\Config;
 
+/**
+ * Converter of event observers configuration from \DOMDocument to tree array.
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
@@ -38,7 +39,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $config['name'] = $observerNameNode->nodeValue;
                 $eventObservers[$observerNameNode->nodeValue] = $config;
             }
-            $output[mb_strtolower($eventName)] = $eventObservers;
+            $output[mb_strtolower($eventName ?? '')] = $eventObservers;
         }
         return $output;
     }

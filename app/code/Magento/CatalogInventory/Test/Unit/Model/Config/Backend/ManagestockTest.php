@@ -9,12 +9,18 @@ namespace Magento\CatalogInventory\Test\Unit\Model\Config\Backend;
 
 use Magento\CatalogInventory\Model\Config\Backend\Managestock;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ManagestockTest extends TestCase
 {
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $configMock;
+
     /** @var  Processor|MockObject */
     protected $stockIndexerProcessor;
 
@@ -27,10 +33,15 @@ class ManagestockTest extends TestCase
             Processor::class
         )->disableOriginalConstructor()
             ->getMock();
+        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = (new ObjectManager($this))->getObject(
             Managestock::class,
             [
-                'stockIndexerProcessor' => $this->stockIndexerProcessor,
+                'config' => $this->configMock,
+                'stockIndexerProcessor' => $this->stockIndexerProcessor
             ]
         );
     }
@@ -57,6 +68,8 @@ class ManagestockTest extends TestCase
     {
         $this->model->setValue($newStockValue);
         $this->stockIndexerProcessor->expects($this->exactly($callCount))->method('markIndexerAsInvalid');
+        $this->configMock->method('getValue')->willReturn(0);   // old value for stock status
+
         $this->model->afterSave();
     }
 }

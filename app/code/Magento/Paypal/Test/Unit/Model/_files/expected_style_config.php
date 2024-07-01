@@ -27,7 +27,11 @@ return [
             ],
             'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true,
-            'sdkUrl' => 'http://mock.url'
+            'sdkUrl' => 'http://mock.url',
+            'dataAttributes' => [
+                'data-partner-attribution-id' => '',
+                'data-csp-nonce' => ''
+            ]
         ]
     ],
     'checkout' => [
@@ -51,7 +55,11 @@ return [
             ],
             'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true,
-            'sdkUrl' => 'http://mock.url'
+            'sdkUrl' => 'http://mock.url',
+            'dataAttributes' => [
+                'data-partner-attribution-id' => '',
+                'data-csp-nonce' => ''
+            ]
         ]
     ],
     'mini_cart' => [
@@ -74,7 +82,11 @@ return [
             ],
             'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true,
-            'sdkUrl' => 'http://mock.url'
+            'sdkUrl' => 'http://mock.url',
+            'dataAttributes' => [
+                'data-partner-attribution-id' => '',
+                'data-csp-nonce' => ''
+            ]
         ]
     ],
     'product' => [
@@ -97,7 +109,11 @@ return [
             ],
             'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true,
-            'sdkUrl' => 'http://mock.url'
+            'sdkUrl' => 'http://mock.url',
+            'dataAttributes' => [
+                'data-partner-attribution-id' => '',
+                'data-csp-nonce' => ''
+            ]
         ]
     ],
 ];

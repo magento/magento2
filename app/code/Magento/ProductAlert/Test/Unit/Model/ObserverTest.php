@@ -78,12 +78,14 @@ class ObserverTest extends TestCase
 
     /**
      * Test process alerts with exception in loading websites
+     *
+     * @return void
      */
     public function testGetWebsitesThrowsException(): void
     {
         $message = 'get website exception';
         $this->expectException(\Exception::class);
-        $this->expectErrorMessage($message);
+        $this->expectExceptionMessage($message);
 
         $this->scopeConfigMock->method('isSetFlag')->willReturn(false);
         $this->storeManagerMock->method('getWebsites')
@@ -94,12 +96,14 @@ class ObserverTest extends TestCase
 
     /**
      * Test process alerts with exception in creating price collection
+     *
+     * @return void
      */
     public function testProcessPriceThrowsException(): void
     {
         $message = 'create collection exception';
         $this->expectException(\Exception::class);
-        $this->expectErrorMessage($message);
+        $this->expectExceptionMessage($message);
 
         $groupMock = $this->createMock(\Magento\Store\Model\Group::class);
         $storeMock = $this->createMock(Store::class);
@@ -120,12 +124,14 @@ class ObserverTest extends TestCase
 
     /**
      * Test process alerts with exception in creating stock collection
+     *
+     * @return void
      */
     public function testProcessStockThrowsException(): void
     {
         $message = 'create collection exception';
         $this->expectException(\Exception::class);
-        $this->expectErrorMessage($message);
+        $this->expectExceptionMessage($message);
 
         $groupMock = $this->createMock(\Magento\Store\Model\Group::class);
         $storeMock = $this->createMock(Store::class);
@@ -135,8 +141,9 @@ class ObserverTest extends TestCase
         $websiteMock->method('getDefaultGroup')->willReturn($groupMock);
         $this->storeManagerMock->method('getWebsites')->willReturn([$websiteMock]);
 
-        $this->scopeConfigMock->expects($this->at(0))->method('getValue')->willReturn(false);
-        $this->scopeConfigMock->expects($this->at(1))->method('getValue')->willReturn(true);
+        $this->scopeConfigMock
+            ->method('getValue')
+            ->willReturnOnConsecutiveCalls(false, true);
 
         $this->stockColFactoryMock->expects($this->once())
             ->method('create')

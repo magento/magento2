@@ -15,7 +15,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-14797"/>
             <group value="CatalogSearch"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
@@ -27,6 +27,15 @@
                 <argument name="defaultValue" value="{{_defaultProduct.name}}"/>
             </actionGroup>
         </before>
+        <after>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute" before="clearFilters">
+                <argument name="productAttributeLabel" value="$$product1.name$$"/>
+            </actionGroup>
+            <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="clearFilters" before="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex" before="logoutOfAdmin">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
         <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertProduct1Position">
             <argument name="productName" value="$product1.name$"/>
             <argument name="index" value="1"/>

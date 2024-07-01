@@ -125,7 +125,7 @@ class DataTest extends TestCase
                 'arguments' => $dependencies,
             ]
         );
-        $this->assertEquals($expectedData, $object->getNextBunch());
+        $this->assertEquals($expectedData, $object->getNextUniqueBunch());
     }
 
     /**
