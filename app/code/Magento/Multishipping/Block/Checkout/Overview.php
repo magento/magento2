@@ -27,7 +27,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Block alias fallback
      */
-    const DEFAULT_TYPE = 'default';
+    public const DEFAULT_TYPE = 'default';
 
     /**
      * @var \Magento\Multishipping\Model\Checkout\Type\Multishipping
@@ -417,8 +417,9 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Get billin address totals
      *
-     * @return     mixed
+     * @return mixed
      * @deprecated 100.2.3
+     * @see nothing
      * typo in method name, see getBillingAddressTotals()
      */
     public function getBillinAddressTotals()

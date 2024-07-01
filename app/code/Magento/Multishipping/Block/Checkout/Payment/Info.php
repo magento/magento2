@@ -47,6 +47,8 @@ class Info extends \Magento\Payment\Block\Info\AbstractContainer
     }
 
     /**
+     * To Html
+     *
      * @return string
      */
     protected function _toHtml()

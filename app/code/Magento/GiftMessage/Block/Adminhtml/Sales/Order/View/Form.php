@@ -14,8 +14,6 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
 class Form extends \Magento\Backend\Block\Template
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

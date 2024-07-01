@@ -14,7 +14,7 @@ abstract class Storage extends \Magento\Backend\App\Action
     /**
      * Authorization level of a basic admin session
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::system';
+    public const ADMIN_RESOURCE = 'Magento_Backend::system';
 
     /**
      * Return file storage singleton

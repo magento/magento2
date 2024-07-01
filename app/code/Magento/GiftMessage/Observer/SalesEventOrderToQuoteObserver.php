@@ -13,8 +13,6 @@ use Magento\Framework\Event\ObserverInterface;
 class SalesEventOrderToQuoteObserver implements ObserverInterface
 {
     /**
-     * Gift message message
-     *
      * @var \Magento\GiftMessage\Helper\Message|null
      */
     protected $_giftMessageMessage = null;

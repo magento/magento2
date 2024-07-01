@@ -18,27 +18,27 @@ class Flag extends \Magento\Framework\Flag
     /**
      * There was no synchronization
      */
-    const STATE_INACTIVE = 0;
+    public const STATE_INACTIVE = 0;
 
     /**
      * Synchronize process is active
      */
-    const STATE_RUNNING = 1;
+    public const STATE_RUNNING = 1;
 
     /**
      * Synchronization finished
      */
-    const STATE_FINISHED = 2;
+    public const STATE_FINISHED = 2;
 
     /**
      * Synchronization finished and notify message was formed
      */
-    const STATE_NOTIFIED = 3;
+    public const STATE_NOTIFIED = 3;
 
     /**
      * Flag time to life in seconds
      */
-    const FLAG_TTL = 300;
+    public const FLAG_TTL = 300;
 
     /**
      * Synchronize flag code
