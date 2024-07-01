@@ -340,7 +340,7 @@ MUTATION;
     public function testCreateCustomerAddressWithMissingAttribute()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Required parameters are missing: firstname');
+        $this->expectExceptionMessage('"firstname" is required. Enter and try again.');
 
         $mutation
             = <<<MUTATION
