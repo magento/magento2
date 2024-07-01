@@ -336,7 +336,7 @@
     </type>
     <type name="Magento\Theme\Observer\InvalidateLayoutCacheObserver">
         <arguments>
-            <argument name="strategyFactory" xsi:type="object">LayoutCacheTagResolverFactory</argument>
+            <argument name="strategyFactory" xsi:type="object">Magento\Theme\Model\LayoutCacheTagResolverFactory</argument>
         </arguments>
     </type>
 </config>

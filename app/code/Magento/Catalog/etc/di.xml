@@ -1359,7 +1359,7 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="LayoutCacheTagResolverFactory" type="Magento\Framework\App\Cache\Tag\Strategy\Factory">
+    <virtualType name="Magento\Theme\Model\LayoutCacheTagResolverFactory" type="Magento\Framework\App\Cache\Tag\Strategy\Factory">
         <arguments>
             <argument name="customStrategies" xsi:type="array">
                 <item name="Magento\Catalog\Model\Product" xsi:type="object">
