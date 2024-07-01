@@ -18,7 +18,8 @@ declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Observer;
 
-use Magento\Theme\Model\LayoutCacheTagResolverFactory;
+use Magento\Framework\App\Cache\Tag\Strategy\Factory;
+use Magento\Framework\App\Cache\Tag\StrategyInterface;
 use Magento\Theme\Observer\InvalidateLayoutCacheObserver;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
 use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
@@ -27,7 +28,6 @@ use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Random\RandomException;
 
 class InvalidateLayoutCacheObserverTest extends TestCase
 {
@@ -47,9 +47,9 @@ class InvalidateLayoutCacheObserverTest extends TestCase
     private $cacheStateMock;
 
     /**
-     * @var LayoutCacheTagResolverFactory|MockObject
+     * @var Factory|MockObject
      */
-    private $tagResolverMock;
+    private $strategyFactory;
 
     /**
      * @var Observer|MockObject
@@ -76,13 +76,12 @@ class InvalidateLayoutCacheObserverTest extends TestCase
             ->getMockBuilder(LayoutCache::class)
             ->onlyMethods(['clean'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->tagResolverMock = $this
-            ->getMockBuilder(LayoutCacheTagResolverFactory::class)
-            ->addMethods(['getTags'])
-            ->onlyMethods(['getResolver'])
+            ->getMock();
+        $this->strategyFactory = $this
+            ->getMockBuilder(Factory::class)
+            ->onlyMethods(['getStrategy'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->observerMock = $this
             ->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
@@ -106,7 +105,7 @@ class InvalidateLayoutCacheObserverTest extends TestCase
         $this->invalidateLayoutCacheObserver = new InvalidateLayoutCacheObserver(
             $this->layoutCacheMock,
             $this->cacheStateMock,
-            $this->tagResolverMock
+            $this->strategyFactory
         );
     }
 
@@ -116,7 +115,6 @@ class InvalidateLayoutCacheObserverTest extends TestCase
      * @param bool $cacheIsEnabled
      * @param bool $isDataChangedFor
      * @param bool $isObjectNew
-     * @param object|null $cacheStrategy
      * @param array $tags
      * @throws RandomException
      * @dataProvider invalidateLayoutCacheDataProvider
@@ -125,9 +123,13 @@ class InvalidateLayoutCacheObserverTest extends TestCase
         bool    $cacheIsEnabled,
         bool    $isDataChangedFor,
         bool    $isObjectNew,
-        ?object $cacheStrategy,
         array   $tags
     ): void {
+        $cacheStrategy = $this
+            ->getMockBuilder(StrategyInterface::class)
+            ->onlyMethods(['getTags'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->observerMock
             ->expects($this->atLeastOnce())
             ->method('getEvent')
@@ -152,11 +154,11 @@ class InvalidateLayoutCacheObserverTest extends TestCase
             ->expects($this->any())
             ->method('getIdentifier')
             ->willReturn(random_int(1, 100));
-        $this->tagResolverMock
+        $this->strategyFactory
             ->expects($this->any())
-            ->method('getResolver')
+            ->method('getStrategy')
             ->willReturn($cacheStrategy);
-        $this->tagResolverMock
+        $cacheStrategy
             ->expects($this->any())
             ->method('getTags')
             ->with($this->objectMock)
@@ -176,11 +178,11 @@ class InvalidateLayoutCacheObserverTest extends TestCase
     public static function invalidateLayoutCacheDataProvider(): array
     {
         return [
-            'when layout cache is not enabled' => [false, true, false, null, []],
-            'when cache is not changed' => [true, false, false, null, []],
-            'when object is new' => [true, true, false, null, []],
-            'when tag is empty' => [true, true, false, null, []],
-            'when tag is not empty' => [true, true, false, null, ['cms_p']],
+            'when layout cache is not enabled' => [false, true, false, []],
+            'when cache is not changed' => [true, false, false, []],
+            'when object is new' => [true, true, false, []],
+            'when tag is empty' => [true, true, false, []],
+            'when tag is not empty' => [true, true, false, ['cms_p']],
         ];
     }
 }
