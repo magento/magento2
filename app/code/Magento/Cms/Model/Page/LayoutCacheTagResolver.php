@@ -20,7 +20,6 @@ namespace Magento\Cms\Model\Page;
 
 use Magento\Cms\Model\Page;
 use Magento\Framework\App\Cache\Tag\StrategyInterface;
-use Magento\Framework\Model\AbstractModel;
 
 /**
  * Get additional layout cache tag for CMS layout.
@@ -34,11 +33,8 @@ class LayoutCacheTagResolver implements StrategyInterface
     {
         if ($this->isExistingPageLayoutChange($object)) {
             return [
-                sprintf(
-                    '%s_%s',
-                    'CMS_PAGE_VIEW_ID',
-                    str_replace('-', '_', strtoupper($object->getIdentifier()))
-                )
+                'CMS_PAGE_VIEW_ID_'.
+                str_replace('-', '_', strtoupper($object->getIdentifier()))
             ];
         }
         return [];
@@ -47,12 +43,12 @@ class LayoutCacheTagResolver implements StrategyInterface
     /**
      * Check if existing CMS page layout change
      *
-     * @param AbstractModel $object
+     * @param Page $object
      * @return bool
      */
-    private function isExistingPageLayoutChange(AbstractModel $object): bool
+    private function isExistingPageLayoutChange(Page $object): bool
     {
-        return $object instanceof Page && !$object->isObjectNew() &&
+        return !$object->isObjectNew() &&
             $object->dataHasChangedFor(Page::PAGE_LAYOUT);
     }
 }

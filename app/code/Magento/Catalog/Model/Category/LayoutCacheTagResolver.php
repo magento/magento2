@@ -35,10 +35,7 @@ class LayoutCacheTagResolver implements StrategyInterface
     {
         if ($this->isExistingCategoryLayoutChange($object)) {
             return [
-                sprintf(
-                    '%s',
-                    str_replace('{{ID}}', (string) $object->getId(), Instance::SINGLE_CATEGORY_LAYOUT_HANDLE)
-                )
+                str_replace('{{ID}}', (string) $object->getId(), Instance::SINGLE_CATEGORY_LAYOUT_HANDLE)
             ];
         }
         return [];
@@ -47,13 +44,12 @@ class LayoutCacheTagResolver implements StrategyInterface
     /**
      * Check if existing category page layout change
      *
-     * @param AbstractModel $object
+     * @param Category $object
      * @return bool
      */
-    private function isExistingCategoryLayoutChange(AbstractModel $object): bool
+    private function isExistingCategoryLayoutChange(Category $object): bool
     {
-        return $object instanceof Category &&
-            !$object->isObjectNew() && $this->isObjectChanged($object);
+        return !$object->isObjectNew() && $this->isObjectChanged($object);
     }
 
     /**

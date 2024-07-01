@@ -35,10 +35,7 @@ class LayoutCacheTagResolver implements StrategyInterface
     {
         if ($this->isExistingProductLayoutChange($object)) {
             return [
-                sprintf(
-                    '%s',
-                    str_replace('{{ID}}', (string) $object->getId(), Instance::SINGLE_PRODUCT_LAYOUT_HANDLE)
-                )
+                str_replace('{{ID}}', (string) $object->getId(), Instance::SINGLE_PRODUCT_LAYOUT_HANDLE)
             ];
         }
         return [];
@@ -47,13 +44,12 @@ class LayoutCacheTagResolver implements StrategyInterface
     /**
      * Check if existing Product page layout change
      *
-     * @param AbstractModel $object
+     * @param Product $object
      * @return bool
      */
-    private function isExistingProductLayoutChange(AbstractModel $object): bool
+    private function isExistingProductLayoutChange(Product $object): bool
     {
-        return $object instanceof Product &&
-            !$object->isObjectNew() && $this->isObjectChanged($object);
+        return !$object->isObjectNew() && $this->isObjectChanged($object);
     }
 
     /**
