@@ -13,9 +13,9 @@ use Magento\Theme\Model\Theme;
 use Magento\Theme\Model\Theme\Customization\File\CustomCss;
 use Magento\Theme\Model\Theme\Data;
 use Magento\Theme\Model\Theme\SingleFile;
-use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest;
+use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTestCase;
 
-class SaveTest extends ThemeTest
+class SaveTest extends ThemeTestCase
 {
     /**
      * @var string

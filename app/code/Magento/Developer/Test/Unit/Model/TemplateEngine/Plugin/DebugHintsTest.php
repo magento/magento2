@@ -77,7 +77,7 @@ class DebugHintsTest extends TestCase
         $this->debugHintsFactoryMock = $this->getMockBuilder(
             DebugHintsFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -75,7 +75,7 @@ class ImageTest extends TestCase
         $this->attributeCollectionFactory = $this->getMockBuilder(
             CollectionFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeCollectionFactory->expects($this->any())->method('create')->willReturn(
@@ -90,7 +90,7 @@ class ImageTest extends TestCase
             Escaper::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['escapeHtml'])
+            ->onlyMethods(['escapeHtml'])
             ->getMock();
 
         $helper = new ObjectManager($this);
@@ -122,7 +122,7 @@ class ImageTest extends TestCase
 
         /** @var AbstractFrontend|MockObject $frontend */
         $frontend = $this->getMockBuilder(AbstractFrontend::class)
-            ->setMethods(['getLabel'])
+            ->onlyMethods(['getLabel'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $frontend->expects($this->once())->method('getLabel')->willReturn($actualLabel);

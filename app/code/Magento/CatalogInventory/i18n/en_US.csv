@@ -73,3 +73,6 @@ Stock,Stock
 "Done","Done"
 "The requested qty exceeds the maximum qty allowed in shopping cart","The requested qty exceeds the maximum qty allowed in shopping cart"
 "You cannot use decimal quantity for this product.","You cannot use decimal quantity for this product."
+"Not enough items for sale. Please adjust the quantity to continue","Not enough items for sale. Please adjust the quantity to continue"
+"Only X available for sale. Please adjust the quantity to continue","Only X available for sale. Please adjust the quantity to continue"
+"Only %s available for sale. Please adjust the quantity to continue","Only %s available for sale. Please adjust the quantity to continue"

@@ -71,7 +71,7 @@ class BillingAddressPersister
             } catch (NoSuchEntityException $e) {
                 $address->setCustomerAddressId(null);
             }
-        } elseif ($quote->getCustomerId()) {
+        } elseif ($quote->getCustomerId() && !$address->getEmail()) {
             $address->setEmail($quote->getCustomerEmail());
         }
         $address->setSaveInAddressBook($saveInAddressBook);

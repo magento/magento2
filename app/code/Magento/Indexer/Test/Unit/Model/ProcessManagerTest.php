@@ -9,6 +9,7 @@ namespace Magento\Indexer\Test\Unit\Model;
 
 use Magento\Framework\Amqp\ConfigPool as AmqpConfigPool;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Registry;
 use Magento\Indexer\Model\ProcessManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -30,11 +31,12 @@ class ProcessManagerTest extends TestCase
     public function testFailureInChildProcessHandleMultiThread(array $userFunctions, int $threadsCount): void
     {
         $connectionMock = $this->createMock(ResourceConnection::class);
+        $registryMock = $this->createMock(Registry::class);
         $loggerMock = $this->createMock(LoggerInterface::class);
         $amqpConfigPoolMock = $this->createMock(AmqpConfigPool::class);
         $processManager = new ProcessManager(
             $connectionMock,
-            null,
+            $registryMock,
             $threadsCount,
             $loggerMock,
             $amqpConfigPoolMock
@@ -59,7 +61,7 @@ class ProcessManagerTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function functionsWithErrorProvider(): array
+    public static function functionsWithErrorProvider(): array
     {
         return [
             'more_threads_than_functions' => [
@@ -122,11 +124,12 @@ class ProcessManagerTest extends TestCase
     public function testSuccessChildProcessHandleMultiThread(array $userFunctions, int $threadsCount): void
     {
         $connectionMock = $this->createMock(ResourceConnection::class);
+        $registryMock = $this->createMock(Registry::class);
         $loggerMock = $this->createMock(LoggerInterface::class);
         $amqpConfigPoolMock = $this->createMock(AmqpConfigPool::class);
         $processManager = new ProcessManager(
             $connectionMock,
-            null,
+            $registryMock,
             $threadsCount,
             $loggerMock,
             $amqpConfigPoolMock
@@ -150,7 +153,7 @@ class ProcessManagerTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function successFunctionsProvider(): array
+    public static function successFunctionsProvider(): array
     {
         return [
             'more_threads_than_functions' => [

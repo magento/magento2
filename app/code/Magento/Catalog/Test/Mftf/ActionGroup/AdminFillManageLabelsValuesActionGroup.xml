@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillManageLabelsValuesActionGroup">
+        <annotations>
+            <description>Filling manage label values in product attribute page.</description>
+        </annotations>
+        <arguments>
+            <argument name="customStoreViewValue" type="string"/>
+            <argument name="newStoreViewValue" type="string"/>
+        </arguments>
+            <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.customStoreViewField(customStoreViewValue)}}" stepKey="waitForCustomStoreViewField"/>
+            <fillField selector="{{AdminCreateNewProductAttributeSection.customStoreViewField(customStoreViewValue)}}" userInput="{{newStoreViewValue}}" stepKey="fillCustomStoreViewValue"/>
+    </actionGroup>
+</actionGroups>

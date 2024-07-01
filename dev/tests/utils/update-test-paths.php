@@ -222,7 +222,7 @@ function getDefaultSuites(string $testType): array
                 ],
                 'exclude' => [
                     'testsuite/Magento/MemoryUsageTest.php',
-                    'testsuite/Magento/IntegrationTest.php'
+                    'testsuite/Magento/IntegrationTestCase.php'
                 ]
             ];
             break;
