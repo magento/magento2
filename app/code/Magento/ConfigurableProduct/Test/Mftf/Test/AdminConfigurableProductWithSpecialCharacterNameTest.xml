@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductWithSpecialCharacterNameTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create configurable product with name having special character"/>
+            <title value="Admin is able to create an product with name having special character"/>
+            <description value="Try to create a product with with name having special character init"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-10535 "/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+<!--            Create product attribute with options-->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <!--Create Category-->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        </before>
+
+        <after>
+            <!--Clean up products-->
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductPage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
+            <actionGroup ref="DeleteProductByNameActionGroup" stepKey="cleanUpProducts">
+                <argument name="sku" value="{{ProductWithSpecialCharNameSku.sku}}"/>
+                <argument name="name" value="{{ProductWithSpecialCharNameSku.name}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <!--Clean up attribute-->
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <!--Clean up category-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <!--Create a configurable product with long name and sku-->
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToProductCreatePage">
+            <argument name="attributeSetId" value="{{AddToDefaultSet.attributeSetId}}"/>
+            <argument name="productType" value="configurable"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{ProductWithSpecialCharNameSku.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{ProductWithSpecialCharNameSku.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{ProductWithSpecialCharNameSku.price}}" stepKey="fillProductPrice"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="selectCategory"/>
+        <!--Setup configurations-->
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="setupConfigurations">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+
+        <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="waitForCreateConfigurationsButtonToBeClickable"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct1"/>
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductPage"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
+
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{ProductWithSpecialCharNameSku.name}}-$$getConfigAttributeOption1.label$$" stepKey="fillSku" />
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <waitForPageLoad stepKey="waitForProductSearchAfterApplyingFilters"/>
+        <see selector="{{AdminProductGridSection.firstProductRow}}" userInput="{{ProductWithSpecialCharNameSku.name}}-$$getConfigAttributeOption1.label$$" stepKey="seeProductWithSku"/>
+        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyProduct"/>
+        <waitForPageLoad stepKey="waitClickFirstRowToVerifyProduct"/>
+        <grabValueFrom selector="{{AdminProductFormSection.productSku}}" stepKey="assertProductSku"/>
+
+        <assertEquals stepKey="validateDateFormat">
+            <expectedResult type="string">{{ProductWithSpecialCharNameSku.name}}-$$getConfigAttributeOption1.label$$</expectedResult>
+            <actualResult type="variable">$assertProductSku</actualResult>
+        </assertEquals>
+    </test>
+</tests>

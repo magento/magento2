@@ -57,11 +57,11 @@ class FormTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getParam'])
+            ->onlyMethods(['getParam'])
             ->getMockForAbstractClass();
 
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->setMethods(['getUrl'])
+            ->onlyMethods(['getUrl'])
             ->getMockForAbstractClass();
 
         $context = $objectManagerHelper->getObject(
@@ -76,12 +76,10 @@ class FormTest extends TestCase
             ->getMock();
 
         $this->checkoutSessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
         $paymentConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -148,7 +146,7 @@ class FormTest extends TestCase
      *
      * @return array
      */
-    public function getMethodConfigDataDataProvider()
+    public static function getMethodConfigDataDataProvider()
     {
         return [
             ['gateway_name', 'payment_gateway', 'payment_gateway'],
@@ -189,7 +187,7 @@ class FormTest extends TestCase
      *
      * @return array
      */
-    public function getCgiUrlDataProvider()
+    public static function getCgiUrlDataProvider()
     {
         return [
             [

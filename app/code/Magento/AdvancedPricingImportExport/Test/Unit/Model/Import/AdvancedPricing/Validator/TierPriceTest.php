@@ -54,7 +54,7 @@ class TierPriceTest extends TestCase
     {
         $this->groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getList'])
+            ->onlyMethods(['getList'])
             ->getMockForAbstractClass();
 
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
@@ -65,7 +65,7 @@ class TierPriceTest extends TestCase
         $this->tierPrice = $this->getMockBuilder(
             TierPrice::class
         )
-            ->setMethods(['isValidValueAndLength', 'hasEmptyColumns', '_addMessages'])
+            ->onlyMethods(['isValidValueAndLength', 'hasEmptyColumns', '_addMessages'])
             ->setConstructorArgs([$this->groupRepository, $this->searchCriteriaBuilder, $this->storeResolver])
             ->getMock();
     }
@@ -87,7 +87,7 @@ class TierPriceTest extends TestCase
 
         $groupTest = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode', 'getId'])
+            ->onlyMethods(['getCode', 'getId'])
             ->getMockForAbstractClass();
         $groupTest->expects($this->once())->method('getCode');
         $groupTest->method('getId');
@@ -114,7 +114,7 @@ class TierPriceTest extends TestCase
 
         $groupTest = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode', 'getId'])
+            ->onlyMethods(['getCode', 'getId'])
             ->getMockForAbstractClass();
 
         $expectedCode = 'code';
@@ -184,7 +184,7 @@ class TierPriceTest extends TestCase
 
         $groupTest = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode', 'getId'])
+            ->onlyMethods(['getCode', 'getId'])
             ->getMockForAbstractClass();
         $groupTest->expects($this->once())->method('getCode');
         $groupTest->method('getId');
@@ -198,7 +198,7 @@ class TierPriceTest extends TestCase
     /**
      * @return array
      */
-    public function isValidResultFalseDataProvider()
+    public static function isValidResultFalseDataProvider()
     {
         return [
             // First if condition cases.
@@ -306,7 +306,7 @@ class TierPriceTest extends TestCase
     /**
      * @return array
      */
-    public function isValidAddMessagesCallDataProvider()
+    public static function isValidAddMessagesCallDataProvider()
     {
         return [
             // First if condition cases.

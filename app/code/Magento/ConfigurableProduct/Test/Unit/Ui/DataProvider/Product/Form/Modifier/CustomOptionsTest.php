@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
+use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTestCase;
 use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\CustomOptions as CustomOptionsModifier;
 
-class CustomOptionsTest extends AbstractModifierTest
+class CustomOptionsTest extends AbstractModifierTestCase
 {
     protected function setUp(): void
     {

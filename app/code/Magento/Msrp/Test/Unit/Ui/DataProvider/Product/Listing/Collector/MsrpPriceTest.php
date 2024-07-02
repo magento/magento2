@@ -77,11 +77,11 @@ class MsrpPriceTest extends TestCase
             MsrpPriceInfoInterfaceFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->priceInfoExtensionFactory = $this->getMockBuilder(PriceInfoExtensionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->adjustmentCalculator = $this->getMockForAbstractClass(CalculatorInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -115,11 +115,12 @@ class MsrpPriceTest extends TestCase
         $extensionAttributes = $this->getMockBuilder(
             PriceInfoExtensionInterface::class
         )
-            ->setMethods(['setMsrp'])
+            ->addMethods(['setMsrp'])
             ->getMockForAbstractClass();
 
         $priceInfo = $this->getMockBuilder(MsrpPriceInfoInterface::class)
-            ->setMethods(['getPrice', 'getExtensionAttributes'])
+            ->addMethods(['getPrice'])
+            ->onlyMethods(['getExtensionAttributes'])
             ->getMockForAbstractClass();
         $amountInterface = $this->getMockForAbstractClass(AmountInterface::class);
         $amountInterface->expects($this->once())

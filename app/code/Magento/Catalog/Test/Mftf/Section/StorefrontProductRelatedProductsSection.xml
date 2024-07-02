@@ -15,5 +15,6 @@
         <element name="relatedProductName" type="button" selector="//*[@class='block related']//a[contains(text(), '{{productName}}')]" parameterized="true"/>
         <element name="relatedProductCheckBoxButton" type="button" selector="//*[@class='block related']//a[contains(text(), '{{productName}}')]/parent::*/parent::*//input[@class='checkbox related']" parameterized="true"/>
         <element name="selectAll" type="button" selector="//div[@class='block-actions']/button"/>
+        <element name="relatedSection" type="text" selector=".related"/>
     </section>
 </sections>
