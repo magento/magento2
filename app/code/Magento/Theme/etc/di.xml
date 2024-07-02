@@ -334,4 +334,5 @@
     <type name="Magento\Config\Console\Command\LocaleEmulator">
         <plugin name="themeForLocaleEmulator" type="Magento\Theme\Plugin\LocaleEmulator"/>
     </type>
+
 </config>
