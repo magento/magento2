@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace Magento\Customer\Ui\Component;
 
 use Magento\Backend\Model\Locale\Resolver;
+use Magento\Customer\Model\Customer;
 use Magento\Framework\Api\Filter;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -37,6 +39,9 @@ class DataProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->initLocaleResolverMock();
+        $indexerRegistry = Bootstrap::getObjectManager()->create(IndexerRegistry::class);
+        $indexer = $indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+        $indexer->reindexAll();
     }
 
     /**
