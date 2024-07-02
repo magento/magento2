@@ -59,6 +59,7 @@ class OauthClient extends AbstractService
             $storage = new \OAuth\Common\Storage\Memory();
         }
         if (!isset($helper)) {
+            /** @phpstan-ignore-next-line */
             $helper = new Utility(new HTTPUtility(), new HmacFactory(ObjectManager::getInstance()));
         }
         if (!isset($signature)) {
