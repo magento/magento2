@@ -9,32 +9,63 @@ namespace Magento\Framework\Oauth\Helper\Signature;
 
 use Laminas\Crypt\Hmac as HMACEncryption;
 
-class Hmac256
+class Hmac
 {
+    /**
+     * @var string|null
+     */
+    private ?string $hashAlgorithm = null;
+
+    /**
+     * @var string
+     */
+    private string $key;
+
+    /**
+     * @var string
+     */
+    private string $consumerSecret;
+
+    /**
+     * @var string
+     */
+    private string $tokenSecret = '';
+
+    /**
+     * @param string $consumerSecret
+     * @param string|null $tokenSecret
+     * @param string|null $hashAlgo
+     */
+    public function __construct(string $consumerSecret, ?string $tokenSecret = null, ?string $hashAlgo = null)
+    {
+        $this->consumerSecret = $consumerSecret;
+        if (isset($tokenSecret)) {
+            $this->tokenSecret = $tokenSecret;
+        }
+        $this->key = $this->assembleKey();
+        if (isset($hashAlgo)) {
+            $this->hashAlgorithm = $hashAlgo;
+        }
+    }
+
     /**
      * Sign a request
      *
      * @param array $params
-     * @param string $algo
-     * @param string $consumerSecret
-     * @param string|null $tokenSecret
      * @param mixed $method
      * @param mixed $url
      * @return string
      */
     public function sign(
         array   $params,
-        string  $algo,
-        string  $consumerSecret,
-        ?string $tokenSecret = null,
         ?string $method = null,
         ?string $url = null
     ): string {
         unset($params['oauth_signature']);
 
         $binaryHash = HMACEncryption::compute(
-            $this->assembleKey($consumerSecret, $tokenSecret),
-            $algo,
+            $this->key,
+            $this->hashAlgorithm,
             $this->getBaseSignatureString($params, $method, $url),
             HMACEncryption::OUTPUT_BINARY
         );
@@ -45,20 +76,17 @@ class Hmac256
     /**
      * Assemble key from consumer and token secrets
      *
-     * @param string $consumerSecret
-     * @param string|null $tokenSecret
      * @return string
      */
-    private function assembleKey(string $consumerSecret, ?string $tokenSecret): string
+    private function assembleKey(): string
     {
-        $parts = [$consumerSecret];
-        if ($tokenSecret !== null) {
-            $parts[] = $tokenSecret;
+        $parts = [$this->consumerSecret];
+        if ($this->tokenSecret !== null) {
+            $parts[] = $this->tokenSecret;
         }
         foreach ($parts as $key => $secret) {
             $parts[$key] = $this->urlEncode($secret);
         }
-
         return implode('&', $parts);
     }
 

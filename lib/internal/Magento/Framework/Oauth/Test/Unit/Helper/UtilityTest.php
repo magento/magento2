@@ -9,7 +9,8 @@ namespace Magento\Framework\Oauth\Test\Unit\Helper;
 
 use Magento\Framework\Oauth\Helper\Utility as OauthUtility;
 use Laminas\OAuth\Http\Utility as LaminasUtility;
-use Magento\Framework\Oauth\Helper\Signature\Hmac256;
+use Magento\Framework\Oauth\Helper\Signature\Hmac;
+use Magento\Framework\Oauth\Helper\Signature\HmacFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,14 +22,20 @@ class UtilityTest extends TestCase
     private LaminasUtility $httpUtility;
 
     /**
-     * @var Hmac256|MockObject
+     * @var Hmac|MockObject
      */
-    private Hmac256 $hmac256;
+    private Hmac $hmac;
+
+    /**
+     * @var HmacFactory|MockObject
+     */
+    private HmacFactory $hmacFactory;
 
     protected function setUp(): void
     {
         $this->httpUtility = $this->createMock(LaminasUtility::class);
-        $this->hmac256 = $this->createMock(Hmac256::class);
+        $this->hmac = $this->createMock(Hmac::class);
+        $this->hmacFactory = $this->createMock(HmacFactory::class);
     }
 
     /**
@@ -45,12 +52,16 @@ class UtilityTest extends TestCase
 
         $expectedSignature = 'expectedSignature';
 
-        $this->hmac256->expects($this->once())
+        $this->hmac->expects($this->once())
             ->method('sign')
-            ->with($params, 'sha256', $consumerSecret, $tokenSecret, $method, $url)
+            ->with($params, $method, $url)
             ->willReturn($expectedSignature);
+        $this->hmacFactory->expects($this->once())
+            ->method('create')
+            ->with(['consumerSecret' => $consumerSecret, 'tokenSecret' => $tokenSecret, 'hashAlgo' => 'sha256'])
+            ->willReturn($this->hmac);
 
-        $utility = new OauthUtility($this->httpUtility, $this->hmac256);
+        $utility = new OauthUtility($this->httpUtility, $this->hmacFactory);
 
         $signature = $utility->sign($params, $signatureMethod, $consumerSecret, $tokenSecret, $method, $url);
 
@@ -76,7 +87,7 @@ class UtilityTest extends TestCase
             ->with($params, $signatureMethod, $consumerSecret, $tokenSecret, $method, $url)
             ->willReturn($expectedSignature);
 
-        $utility = new OauthUtility($this->httpUtility, $this->hmac256);
+        $utility = new OauthUtility($this->httpUtility, $this->hmacFactory);
 
         $signature = $utility->sign($params, $signatureMethod, $consumerSecret, $tokenSecret, $method, $url);
 

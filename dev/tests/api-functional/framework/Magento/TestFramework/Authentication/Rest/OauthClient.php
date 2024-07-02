@@ -8,6 +8,7 @@ namespace Magento\TestFramework\Authentication\Rest;
 
 use Magento\Framework\Oauth\Helper\Utility;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use OAuth\Common\Consumer\Credentials;
 use OAuth\Common\Http\Client\ClientInterface;
 use OAuth\Common\Http\Exception\TokenResponseException;
@@ -19,7 +20,7 @@ use OAuth\OAuth1\Signature\SignatureInterface;
 use OAuth\OAuth1\Token\StdOAuth1Token;
 use OAuth\OAuth1\Token\TokenInterface;
 use Laminas\OAuth\Http\Utility as HTTPUtility;
-use Magento\Framework\Oauth\Helper\Signature\Hmac256;
+use Magento\Framework\Oauth\Helper\Signature\HmacFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -58,7 +59,7 @@ class OauthClient extends AbstractService
             $storage = new \OAuth\Common\Storage\Memory();
         }
         if (!isset($helper)) {
-            $helper = new Utility(new HTTPUtility(), new Hmac256());
+            $helper = new Utility(new HTTPUtility(), new HmacFactory(ObjectManager::getInstance()));
         }
         if (!isset($signature)) {
             $signature = new \Magento\TestFramework\Authentication\Rest\OauthClient\Signature($helper, $credentials);

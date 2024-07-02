@@ -8,15 +8,16 @@ declare(strict_types=1);
 namespace Magento\Framework\Oauth\Helper;
 
 use Laminas\OAuth\Http\Utility as LaminasUtility;
-use Magento\Framework\Oauth\Helper\Signature\Hmac256;
+use Magento\Framework\Oauth\Helper\Signature\Hmac;
+use Magento\Framework\Oauth\Helper\Signature\HmacFactory;
 
 class Utility
 {
     /**
      * @param LaminasUtility $httpUtility
-     * @param Hmac256 $hmac256
+     * @param HmacFactory $hmacFactory
      */
-    public function __construct(private readonly LaminasUtility $httpUtility, private readonly Hmac256 $hmac256)
+    public function __construct(private readonly LaminasUtility $httpUtility, private readonly HmacFactory $hmacFactory)
     {
     }
 
@@ -40,7 +41,10 @@ class Utility
         ?string $url = null
     ): string {
         if ($this->isHmac256($signatureMethod)) {
-            return $this->hmac256->sign($params, 'sha256', $consumerSecret, $tokenSecret, $method, $url);
+            /** @var Hmac $hmac */
+            $hmac = $this->hmacFactory->create(['consumerSecret' => $consumerSecret, 'tokenSecret' => $tokenSecret, 'hashAlgo' => 'sha256']);
+
+            return $hmac->sign($params, $method, $url);
         } else {
             return $this->httpUtility->sign($params, $signatureMethod, $consumerSecret, $tokenSecret, $method, $url);
         }
@@ -65,22 +69,12 @@ class Utility
      * Cast to authorization header
      *
      * @param array $params
+     * @param string|null $realm
      * @param bool $excludeCustomParams
-     * @return string
      */
-    public function toAuthorizationHeader(array $params, bool $excludeCustomParams = true): string
+    public function toAuthorizationHeader(array $params, ?string $realm = null, bool $excludeCustomParams = true)
     {
-        $headerValue = [];
-        foreach ($params as $key => $value) {
-            if ($excludeCustomParams) {
-                if (! preg_match("/^oauth_/", $key)) {
-                    continue;
-                }
-            }
-            $headerValue[] = $this->httpUtility::urlEncode((string)$key)
-                . '="'
-                . $this->httpUtility::urlEncode((string)$value) . '"';
-        }
-        return 'OAuth ' . implode(",", $headerValue);
+        $authorizationHeader = $this->httpUtility->toAuthorizationHeader($params, $realm, $excludeCustomParams);
+        return str_replace('realm="",', '', $authorizationHeader);
     }
 }

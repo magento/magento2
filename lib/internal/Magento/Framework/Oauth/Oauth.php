@@ -34,7 +34,7 @@ class Oauth implements OauthInterface
     /**
      * @var Utility
      */
-    private Utility $hmacSignatureHelper;
+    private Utility $httpUtility;
 
     /**
      * @param Helper\Oauth $oauthHelper
@@ -51,7 +51,7 @@ class Oauth implements OauthInterface
         $this->_oauthHelper = $oauthHelper;
         $this->_nonceGenerator = $nonceGenerator;
         $this->_tokenProvider = $tokenProvider;
-        $this->hmacSignatureHelper = $utility;
+        $this->httpUtility = $utility;
     }
 
     /**
@@ -154,7 +154,7 @@ class Oauth implements OauthInterface
             'oauth_version' => '1.0',
         ];
         $headerParameters = array_merge($headerParameters, $params);
-        $headerParameters['oauth_signature'] = $this->hmacSignatureHelper->sign(
+        $headerParameters['oauth_signature'] = $this->httpUtility->sign(
             $params,
             $signatureMethod,
             $headerParameters['oauth_consumer_secret'],
@@ -163,7 +163,7 @@ class Oauth implements OauthInterface
             $requestUrl
         );
 
-        return $this->hmacSignatureHelper->toAuthorizationHeader($headerParameters);
+        return $this->httpUtility->toAuthorizationHeader($headerParameters);
     }
 
     /**
@@ -188,7 +188,7 @@ class Oauth implements OauthInterface
             );
         }
 
-        $calculatedSign = $this->hmacSignatureHelper->sign(
+        $calculatedSign = $this->httpUtility->sign(
             $params,
             $params['oauth_signature_method'],
             $consumerSecret,
