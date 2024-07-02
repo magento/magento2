@@ -33,7 +33,6 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * Used to save configuration
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -88,7 +87,7 @@ class Config extends DataObject
     protected $_objectFactory;
 
     /**
-     * TransactionFactory
+     * DB transaction factory
      *
      * @var TransactionFactory
      */
