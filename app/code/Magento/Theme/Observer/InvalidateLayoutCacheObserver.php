@@ -22,7 +22,7 @@ use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\App\Cache\Tag\Strategy\Factory;
+use Magento\Theme\Model\LayoutCacheTagResolverFactory;
 
 /**
  * Invalidates layout cache.
@@ -40,25 +40,23 @@ class InvalidateLayoutCacheObserver implements ObserverInterface
     private $cacheState;
 
     /**
-     * Tag strategies factory
-     *
-     * @var Factory
+     * @var LayoutCacheTagResolverFactory
      */
-    private $strategyFactory;
+    private $layoutCacheTagResolver;
 
     /**
      * @param LayoutCache $layoutCache
      * @param CacheState $cacheState
-     * @param Factory $factory
+     * @param LayoutCacheTagResolverFactory $layoutCacheTagResolver
      */
     public function __construct(
         LayoutCache $layoutCache,
         CacheState $cacheState,
-        Factory $factory
+        LayoutCacheTagResolverFactory $layoutCacheTagResolver
     ) {
         $this->layoutCache = $layoutCache;
         $this->cacheState = $cacheState;
-        $this->strategyFactory = $factory;
+        $this->layoutCacheTagResolver = $layoutCacheTagResolver;
     }
 
     /**
@@ -71,8 +69,9 @@ class InvalidateLayoutCacheObserver implements ObserverInterface
     public function execute(Observer $observer): void
     {
         $object = $observer->getEvent()->getObject();
+        $tagResolver = $this->layoutCacheTagResolver->getStrategy($object);
 
-        if (!is_object($object)) {
+        if (!$tagResolver || !is_object($object)) {
             return;
         }
 
@@ -80,7 +79,7 @@ class InvalidateLayoutCacheObserver implements ObserverInterface
             return;
         }
 
-        $tags = $this->strategyFactory->getStrategy($object)->getTags($object);
+        $tags = $tagResolver->getTags($object);
 
         if (!empty($tags)) {
             $this->layoutCache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $tags);

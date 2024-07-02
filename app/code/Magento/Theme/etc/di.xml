@@ -334,9 +334,4 @@
     <type name="Magento\Config\Console\Command\LocaleEmulator">
         <plugin name="themeForLocaleEmulator" type="Magento\Theme\Plugin\LocaleEmulator"/>
     </type>
-    <type name="Magento\Theme\Observer\InvalidateLayoutCacheObserver">
-        <arguments>
-            <argument name="strategyFactory" xsi:type="object">Magento\Theme\Model\LayoutCacheTagResolverFactory</argument>
-        </arguments>
-    </type>
 </config>

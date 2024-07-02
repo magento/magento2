@@ -316,13 +316,13 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Theme\Model\LayoutCacheTagResolverFactory" type="Magento\Framework\App\Cache\Tag\Strategy\Factory">
+    <type name="Magento\Theme\Model\LayoutCacheTagResolverFactory">
         <arguments>
-            <argument name="customStrategies" xsi:type="array">
+            <argument name="cacheTagsResolvers" xsi:type="array">
                 <item name="Magento\Cms\Model\Page" xsi:type="object">
                     Magento\Cms\Model\Page\LayoutCacheTagResolver
                 </item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
 </config>
