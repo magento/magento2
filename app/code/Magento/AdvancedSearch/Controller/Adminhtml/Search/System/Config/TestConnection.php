@@ -22,7 +22,7 @@ class TestConnection extends Action implements HttpPostActionInterface
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Catalog::config_catalog';
+    public const ADMIN_RESOURCE = 'Magento_Catalog::config_catalog';
 
     /**
      * @var ClientResolver
