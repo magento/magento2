@@ -114,7 +114,7 @@ class IndexerTest extends TestCase
         );
         $structureFactory = $this->getMockBuilder(StructureFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->dependencyInfoProviderMock = $this->createMock(DependencyInfoProviderInterface::class);
@@ -214,7 +214,7 @@ class IndexerTest extends TestCase
     /**
      * @return array
      */
-    public function getLatestUpdatedDataProvider()
+    public static function getLatestUpdatedDataProvider()
     {
         return [
             [false, '06-Jan-1944', '06-Jan-1944'],
@@ -523,19 +523,25 @@ class IndexerTest extends TestCase
      */
     public function testSetScheduled($scheduled, $method)
     {
-        $stateMock = $this->createPartialMock(State::class, ['load', 'save']);
+        $stateMock = $this->createPartialMock(State::class, ['load', 'save', 'setStatus']);
 
         $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
         $this->viewMock->expects($this->once())->method('load')->willReturnSelf();
-        $this->viewMock->expects($this->once())->method($method)->willReturn(true);
-        $stateMock->expects($this->once())->method('save')->willReturnSelf();
+        $this->viewMock->expects($this->once())->method($method)->willReturnSelf();
+        $stateMock->expects($this->atLeastOnce())->method('save')->willReturnSelf();
+        if (!$scheduled) {
+            $stateMock->expects($this->once())
+                ->method('setStatus')
+                ->with(StateInterface::STATUS_INVALID)
+                ->willReturnSelf();
+        }
         $this->model->setScheduled($scheduled);
     }
 
     /**
      * @return array
      */
-    public function setScheduledDataProvider()
+    public static function setScheduledDataProvider()
     {
         return [
             [true, 'subscribe'],
@@ -570,7 +576,7 @@ class IndexerTest extends TestCase
     /**
      * @return array
      */
-    public function statusDataProvider()
+    public static function statusDataProvider()
     {
         return [
             ['isValid', StateInterface::STATUS_VALID],

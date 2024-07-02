@@ -31,11 +31,11 @@ class TransactionTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(['getEventDispatcher'])
+            ->onlyMethods(['getEventDispatcher'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->getMockForAbstractClass();
 
         $this->contextMock->expects($this->once())

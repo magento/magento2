@@ -78,6 +78,13 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     protected $entityManager;
 
     /**
+     * Store associated with rule entities information map
+     *
+     * @var array
+     */
+    protected $_associatedEntitiesMap = [];
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Product\ConditionFactory $conditionFactory
@@ -90,6 +97,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param PriceCurrencyInterface $priceCurrency
      * @param string|null $connectionName
      * @param EntityManager|null $entityManager
+     * @param \Magento\Framework\DataObject|null $associatedEntityMap
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -105,7 +113,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         \Magento\Framework\Stdlib\DateTime $dateTime,
         PriceCurrencyInterface $priceCurrency,
         $connectionName = null,
-        ?EntityManager $entityManager = null
+        ?EntityManager $entityManager = null,
+        \Magento\Framework\DataObject $associatedEntityMap = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_conditionFactory = $conditionFactory;
@@ -117,7 +126,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         $this->dateTime = $dateTime;
         $this->priceCurrency = $priceCurrency;
         $this->entityManager = $entityManager ?? ObjectManager::getInstance()->get(EntityManager::class);
-        $this->_associatedEntitiesMap = ObjectManager::getInstance()
+        $this->_associatedEntitiesMap = $associatedEntityMap ?? ObjectManager::getInstance()
             // phpstan:ignore this is a virtual class
             ->get(\Magento\CatalogRule\Model\ResourceModel\Rule\AssociatedEntityMap::class)
             ->getData();
