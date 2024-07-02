@@ -198,14 +198,14 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'image' => self::$fileName,
-                'small_image' => self::$fileName,
-                'swatch_image' => self::$fileName,
+                'smallImage' => self::$fileName,
+                'swatchImage' => self::$fileName,
                 'thumbnail' => self::$fileName,
             ],
             [
                 'image' => 'no_selection',
-                'small_image' => 'no_selection',
-                'swatch_image' => 'no_selection',
+                'smallImage' => 'no_selection',
+                'swatchImage' => 'no_selection',
                 'thumbnail' => 'no_selection',
             ],
         ];

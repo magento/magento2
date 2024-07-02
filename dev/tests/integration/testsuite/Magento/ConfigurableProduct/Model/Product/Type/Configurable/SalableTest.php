@@ -65,12 +65,12 @@ class SalableTest extends TestCase
         return [
             'all children enabled_and_in_stock' => [
                 'productSkus' => [],
-                'data' => [],
+                'productData' => [],
                 'expectedValue' => true,
             ],
             'one_child_out_of_stock' => [
                 'productSkus' => ['simple_10'],
-                'data' => [
+                'productData' => [
                     'stock_data' => [
                         'use_config_manage_stock' => 1,
                         'is_in_stock' => StockStatusInterface::STATUS_OUT_OF_STOCK,
@@ -80,17 +80,17 @@ class SalableTest extends TestCase
             ],
             'one_child_disabled' => [
                 'productSkus' => ['simple_10'],
-                'data' => ['status' => Status::STATUS_DISABLED],
+                'productData' => ['status' => Status::STATUS_DISABLED],
                 'expectedValue' => true,
             ],
             'all_children_disabled' => [
                 'productSkus' => ['simple_10', 'simple_20'],
-                'data' => ['status' => Status::STATUS_DISABLED],
+                'productData' => ['status' => Status::STATUS_DISABLED],
                 'expectedValue' => false,
             ],
             'all_children_out_of_stock' => [
                 'productSkus' => ['simple_10', 'simple_20'],
-                'data' => [
+                'productData' => [
                     'stock_data' => [
                         'use_config_manage_stock' => 1,
                         'is_in_stock' => StockStatusInterface::STATUS_OUT_OF_STOCK,

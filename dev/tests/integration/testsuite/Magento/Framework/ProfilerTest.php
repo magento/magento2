@@ -39,7 +39,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
     public static function applyConfigDataProvider()
     {
         return [
-            'Empty config does not create any driver' => ['config' => [], 'drivers' => []],
+            'Empty config does not create any driver' => ['config' => [], 'expectedDrivers' => []],
             'Integer 0 does not create any driver' => [
                 'config' => ['drivers' => [0]],
                 'expectedDrivers' => [],
