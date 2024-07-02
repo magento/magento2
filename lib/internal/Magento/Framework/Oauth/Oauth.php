@@ -156,16 +156,14 @@ class Oauth implements OauthInterface
         $headerParameters = array_merge($headerParameters, $params);
         $headerParameters['oauth_signature'] = $this->hmacSignatureHelper->sign(
             $params,
-            'SHA256',
+            $signatureMethod,
             $headerParameters['oauth_consumer_secret'],
             $headerParameters['oauth_token_secret'],
             $httpMethod,
             $requestUrl
         );
-        $authorizationHeader = $this->hmacSignatureHelper->toAuthorizationHeader($headerParameters);
-        // toAuthorizationHeader adds an optional realm="" which is not required for now.
-        // http://tools.ietf.org/html/rfc2617#section-1.2
-        return str_replace('realm="",', '', $authorizationHeader);
+
+        return $this->hmacSignatureHelper->toAuthorizationHeader($headerParameters);
     }
 
     /**
@@ -192,7 +190,7 @@ class Oauth implements OauthInterface
 
         $calculatedSign = $this->hmacSignatureHelper->sign(
             $params,
-            'SHA256',
+            $params['oauth_signature_method'],
             $consumerSecret,
             $tokenSecret,
             $httpMethod,

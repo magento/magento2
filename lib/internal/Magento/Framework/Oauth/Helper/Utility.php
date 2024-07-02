@@ -1,28 +1,25 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Oauth\Helper;
 
-use Laminas\Crypt\Hmac as HMACEncryption;
-use Laminas\OAuth\Http\Utility as HTTPUtility;
+use Laminas\OAuth\Http\Utility as LaminasUtility;
+use Magento\Framework\Oauth\Helper\Signature\Hmac256;
 
-class Utility extends HTTPUtility
+class Utility
 {
+    /**
+     * @param LaminasUtility $httpUtility
+     * @param Hmac256 $hmac256
+     */
+    public function __construct(private readonly LaminasUtility $httpUtility, private readonly Hmac256 $hmac256)
+    {
+    }
+
     /**
      * Generate signature string
      *
@@ -35,97 +32,55 @@ class Utility extends HTTPUtility
      * @return string
      */
     public function sign(
-        array $params,
-        $signatureMethod,
-        $consumerSecret,
-        $tokenSecret = null,
-        $method = null,
-        $url = null
+        array  $params,
+        string $signatureMethod,
+        string $consumerSecret,
+        ?string $tokenSecret = null,
+        ?string $method = null,
+        ?string $url = null
     ): string {
-        unset($params['oauth_signature']);
-
-        $binaryHash = HMACEncryption::compute(
-            $this->assembleKey($consumerSecret, $tokenSecret),
-            $signatureMethod,
-            $this->getBaseSignatureString($params, $method, $url),
-            HMACEncryption::OUTPUT_BINARY
-        );
-
-        return base64_encode($binaryHash);
+        if ($this->isHmac256($signatureMethod)) {
+            return $this->hmac256->sign($params, 'sha256', $consumerSecret, $tokenSecret, $method, $url);
+        } else {
+            return $this->httpUtility->sign($params, $signatureMethod, $consumerSecret, $tokenSecret, $method, $url);
+        }
     }
 
     /**
-     * Assemble key from consumer and token secrets
+     * Check if signature method is HMAC-SHA256
      *
-     * @param string $consumerSecret
-     * @param string|null $tokenSecret
-     * @return string
+     * @param string $signatureMethod
+     * @return bool
      */
-    private function assembleKey(string $consumerSecret, ?string $tokenSecret): string
+    private function isHmac256(string $signatureMethod): bool
     {
-        $parts = [$consumerSecret];
-        if ($tokenSecret !== null) {
-            $parts[] = $tokenSecret;
-        }
-        foreach ($parts as $key => $secret) {
-            $parts[$key] = self::urlEncode($secret);
+        if (strtoupper(preg_replace('/[\W]/', '', $signatureMethod)) === 'HMACSHA256') {
+            return true;
         }
 
-        return implode('&', $parts);
+        return false;
     }
 
     /**
-     * Get base signature string
+     * Cast to authorization header
      *
-     * @param  array $params
-     * @param  null|string $method
-     * @param  null|string $url
+     * @param array $params
+     * @param bool $excludeCustomParams
      * @return string
      */
-    private function getBaseSignatureString(array $params, $method = null, $url = null): string
+    public function toAuthorizationHeader(array $params, bool $excludeCustomParams = true): string
     {
-        $encodedParams = [];
+        $headerValue = [];
         foreach ($params as $key => $value) {
-            $encodedParams[self::urlEncode($key)] =
-                self::urlEncode($value);
-        }
-        $baseStrings = [];
-        if (isset($method)) {
-            $baseStrings[] = strtoupper($method);
-        }
-        if (isset($url)) {
-            $baseStrings[] = self::urlEncode($url);
-        }
-        if (isset($encodedParams['oauth_signature'])) {
-            unset($encodedParams['oauth_signature']);
-        }
-        $baseStrings[] = self::urlEncode(
-            $this->toByteValueOrderedQueryString($encodedParams)
-        );
-
-        return implode('&', $baseStrings);
-    }
-
-    /**
-     * Transform an array to a byte value ordered query string
-     *
-     * @param  array $params
-     * @return string
-     */
-    private function toByteValueOrderedQueryString(array $params): string
-    {
-        $return = [];
-        uksort($params, 'strnatcmp');
-        foreach ($params as $key => $value) {
-            if (is_array($value)) {
-                natsort($value);
-                foreach ($value as $keyduplicate) {
-                    $return[] = $key . '=' . $keyduplicate;
+            if ($excludeCustomParams) {
+                if (! preg_match("/^oauth_/", $key)) {
+                    continue;
                 }
-            } else {
-                $return[] = $key . '=' . $value;
             }
+            $headerValue[] = $this->httpUtility::urlEncode((string)$key)
+                . '="'
+                . $this->httpUtility::urlEncode((string)$value) . '"';
         }
-        return implode('&', $return);
+        return 'OAuth ' . implode(",", $headerValue);
     }
 }

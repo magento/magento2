@@ -55,7 +55,7 @@ class OauthTest extends TestCase
     /** @var \Magento\Framework\Oauth\Oauth */
     private $_oauth;
 
-    /** @var  \Zend_Oauth_Http_Utility */
+    /** @var  Utility */
     private $utility;
 
     /** @var DateTime */
@@ -160,9 +160,7 @@ class OauthTest extends TestCase
         $this->_oauthHelperMock = $this->getMockBuilder(Oauth::class)
             ->setConstructorArgs([new Random()])
             ->getMock();
-        $this->utility = $this->getMockBuilder(Utility::class)
-            ->onlyMethods(['sign'])
-            ->getMock();
+        $this->utility = $this->createMock(Utility::class);
         $this->_dateMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -791,7 +789,13 @@ class OauthTest extends TestCase
     public function testBuildAuthorizationHeader()
     {
         $signature = 'valid_signature';
-        $this->utility->expects($this->any())->method('sign')->willReturn($signature);
+        $this->utility->expects($this->once())->method('sign')->willReturn($signature);
+        $this->utility->expects($this->once())
+            ->method('toAuthorizationHeader')
+            ->willReturn('OAuth oauth_nonce="tyukmnjhgfdcvxstyuioplkmnhtfvert",oauth_timestamp="1657789046",' .
+            'oauth_version="1.0",oauth_consumer_key="edf957ef88492f0a32eb7e1731e85da2",' .
+            'oauth_consumer_secret="asdawwewefrtyh2f0a32eb7e1731e85d",oauth_token="7c0709f789e1f38a17aa4b9a28e1b06c",' .
+            'oauth_token_secret="a6agsfrsfgsrjjjjyy487939244ssggg",oauth_signature="valid_signature"');
 
         $this->_setupConsumer(false);
         $this->_oauthHelperMock->expects(
