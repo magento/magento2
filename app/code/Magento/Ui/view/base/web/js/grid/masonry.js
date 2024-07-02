@@ -7,7 +7,8 @@ define([
     'Magento_Ui/js/lib/view/utils/raf',
     'jquery',
     'ko',
-    'underscore'
+    'underscore',
+    'domReady!'
 ], function (Listing, raf, $, ko, _) {
     'use strict';
 
@@ -100,8 +101,7 @@ define([
             }
             this.imageMargin = parseInt(this.imageMargin, 10);
             this.container = $('[data-id="' + this.containerId + '"]')[0];
-
-            this.setLayoutStyles();
+            this.setLayoutStylesWhenLoaded();
             this.setEventListener();
 
             return this;
@@ -194,7 +194,7 @@ define([
             if (typeof this.container === 'undefined') {
                 setTimeout(function () {
                     this.waitForContainer(callback);
-                }.bind(this), 500);
+                }.bind(this), 1000);
             } else {
                 setTimeout(callback, 0);
             }
