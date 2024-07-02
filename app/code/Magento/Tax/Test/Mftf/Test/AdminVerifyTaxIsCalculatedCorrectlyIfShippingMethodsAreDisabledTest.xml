@@ -96,6 +96,10 @@
             <argument name="state" value="California"/>
             <argument name="postcode" value="90310"/>
         </actionGroup>
+        <!-- Cache Flush-->
+    	<actionGroup ref="CliCacheFlushActionGroup" stepKey="flushConfigCache">
+    	    <argument name="tags" value="config"/>
+    	</actionGroup>
         <!-- Assert tax and order amount -->
         <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="8.25" stepKey="assertTaxAmount"/>
         <actionGroup ref="AssertStorefrontShoppingCartSummaryItemsActionGroup" stepKey="assertCartTotals">
