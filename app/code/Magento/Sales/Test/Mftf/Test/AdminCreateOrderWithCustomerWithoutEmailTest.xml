@@ -58,6 +58,6 @@
             <argument name="email" value="$generatedCustomerEmail"/>
         </actionGroup>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
-        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutCustomer"/>
+        <comment userInput="Adding the comment to replace customer logout action for preserving Backward Compatibility" stepKey="logoutCustomer"/>
     </test>
 </tests>
