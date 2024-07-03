@@ -12,6 +12,8 @@ use Magento\Developer\Model\Logger\Handler\Syslog;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Logger\Monolog;
+use Monolog\Handler\AbstractHandler;
+use Monolog\Level;
 use Monolog\LogRecord;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
 use PHPUnit\Framework\TestCase;
@@ -37,10 +39,14 @@ class SyslogTest extends TestCase
     private $deploymentConfigMock;
 
     /**
-     * @var LogRecord|Mock
+     * @var LogRecord
      */
-    private $logRecordMock;
+    private $logRecord;
 
+    /**
+     * @var AbstractHandler|Mock
+     */
+    private $abstractHandlerMock;
     /**
      * @inheritdoc
      */
@@ -48,7 +54,12 @@ class SyslogTest extends TestCase
     {
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
-        $this->logRecordMock = $this->createMock(LogRecord::class);
+        $this->logRecord = new LogRecord(
+            new \DateTimeImmutable(),
+            'testChannel',
+            Level::Debug,
+            'testMessage'
+        );
 
         $this->model = new Syslog(
             $this->deploymentConfigMock,
@@ -61,10 +72,6 @@ class SyslogTest extends TestCase
      */
     public function testIsHandling(): void
     {
-//        $record = [
-//            'level' => Monolog::DEBUG,
-//        ];
-
         $this->scopeConfigMock
             ->expects($this->never())
             ->method('getValue');
@@ -79,7 +86,7 @@ class SyslogTest extends TestCase
             ->willReturn(1);
 
         $this->assertTrue(
-            $this->model->isHandling($this->logRecordMock)
+            $this->model->isHandling($this->logRecord)
         );
     }
 
@@ -88,10 +95,6 @@ class SyslogTest extends TestCase
      */
     public function testIsHandlingNotInstalled(): void
     {
-//        $record = [
-//            'level' => Monolog::DEBUG,
-//        ];
-
         $this->scopeConfigMock
             ->expects($this->never())
             ->method('getValue');
@@ -101,7 +104,7 @@ class SyslogTest extends TestCase
             ->willReturn(false);
 
         $this->assertFalse(
-            $this->model->isHandling($this->logRecordMock)
+            $this->model->isHandling($this->logRecord)
         );
     }
 
@@ -110,10 +113,6 @@ class SyslogTest extends TestCase
      */
     public function testIsHandlingDisabled(): void
     {
-//        $record = [
-//            'level' => Monolog::DEBUG,
-//        ];
-
         $this->scopeConfigMock
             ->expects($this->never())
             ->method('getValue');
@@ -128,7 +127,7 @@ class SyslogTest extends TestCase
             ->willReturn(0);
 
         $this->assertFalse(
-            $this->model->isHandling($this->logRecordMock)
+            $this->model->isHandling($this->logRecord)
         );
     }
 }
