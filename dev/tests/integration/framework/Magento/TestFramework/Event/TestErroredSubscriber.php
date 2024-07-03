@@ -24,12 +24,12 @@ class TestErroredSubscriber implements ErroredSubscriber
     {
         $className = $event->test()->className();
         $methodName = $event->test()->methodName();
-
         $objectManager = Bootstrap::getObjectManager();
-        $assetRepo = $objectManager->create($className, ['name' => $methodName]);
 
-        $mageEvent = Magento::getDefaultEventManager();
-        $mageEvent->fireEvent('endTest', [$assetRepo], true);
+        $testObj = $objectManager->create($className, ['name' => $methodName]);
+        $phpUnit = $objectManager->create(PhpUnit::class);
+        $phpUnit->endTest($testObj, 0);
+        
         Magento::setCurrentEventObject(null);
         Magento::setTestPrepared(false);
     }
