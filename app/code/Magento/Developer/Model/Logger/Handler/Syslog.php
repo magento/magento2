@@ -23,8 +23,6 @@ class Syslog extends \Magento\Framework\Logger\Handler\Syslog
     public const CONFIG_PATH = 'dev/syslog/syslog_logging';
 
     /**
-     * Deployment config.
-     *
      * @var DeploymentConfig
      */
     private $deploymentConfig;

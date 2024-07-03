@@ -44,10 +44,6 @@ class SyslogTest extends TestCase
     private $logRecord;
 
     /**
-     * @var AbstractHandler|Mock
-     */
-    private $abstractHandlerMock;
-    /**
      * @inheritdoc
      */
     protected function setUp(): void

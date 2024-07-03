@@ -61,6 +61,8 @@ class DebugTest extends TestCase
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function setUp(): void
     {
