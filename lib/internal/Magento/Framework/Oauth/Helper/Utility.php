@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Framework\Oauth\Helper;
 
 use Laminas\OAuth\Http\Utility as LaminasUtility;
-use Magento\Framework\Oauth\Helper\Signature\Hmac;
 use Magento\Framework\Oauth\Helper\Signature\HmacFactory;
 
 class Utility
@@ -41,8 +40,12 @@ class Utility
         ?string $url = null
     ): string {
         if ($this->isHmac256($signatureMethod)) {
-            /** @var Hmac $hmac */
-            $hmac = $this->hmacFactory->create(['consumerSecret' => $consumerSecret, 'tokenSecret' => $tokenSecret, 'hashAlgo' => 'sha256']);
+            $hmac = $this->hmacFactory->create(
+                ['consumerSecret' => $consumerSecret,
+                    'tokenSecret' => $tokenSecret,
+                    'hashAlgo' => 'sha256'
+                ]
+            );
 
             return $hmac->sign($params, $method, $url);
         } else {
