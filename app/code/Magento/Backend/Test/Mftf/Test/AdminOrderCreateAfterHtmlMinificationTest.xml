@@ -47,11 +47,9 @@
         <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeDashboardTitle">
             <argument name="value" value="Dashboard"/>
         </actionGroup>
-        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="CreateOrderActionGroup" stepKey="createOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="customer" value="$$createSimpleCustomer$$"/>
-        </actionGroup>
-        <actionGroup ref="AdminAddSimpleProductToOrderAndCheckCheckboxActionGroup" stepKey="clickAddProducts">
-            <argument name="product" value="$createSimpleProduct$"/>
         </actionGroup>
     </test>
 </tests>
