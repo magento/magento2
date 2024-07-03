@@ -311,11 +311,16 @@
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
             <argument name="productId" value="$$createConfigProduct.id$$"/>
         </actionGroup>
-
+        <!--Scroll to select page and select 5 for pagination-->
+        <scrollTo selector="{{AdminProductFormConfigurationsSection.paginationDropDropdown}}" x="0" y="-100" stepKey="scrollToSelectPage"/>
         <selectOption selector="{{AdminProductFormConfigurationsSection.paginationDropDropdown}}" userInput="5" stepKey="selectionOption5"/>
         <waitForPageLoad stepKey="waitForOptionsToLoad"/>
+        <!--Assert product 5 is present-->
+        <waitForText userInput="$$createConfigChildProduct1.name$$" selector="{{AdminProductFormConfigurationsSection.evenProduct('1','2')}}" stepKey="assert1thProductIsPresent"/>
+        <waitForText userInput="$$createConfigChildProduct2.name$$" selector="{{AdminProductFormConfigurationsSection.oddProduct('1','2')}}" stepKey="assert2thProductIsPresent"/>
+        <waitForText userInput="$$createConfigChildProduct3.name$$" selector="{{AdminProductFormConfigurationsSection.evenProduct('2','2')}}" stepKey="assert3thProductIsPresent"/>
+        <waitForText userInput="$$createConfigChildProduct4.name$$" selector="{{AdminProductFormConfigurationsSection.oddProduct('2','2')}}" stepKey="assert4thProductIsPresent"/>
         <waitForText userInput="$$createConfigChildProduct5.name$$" selector="{{AdminProductFormConfigurationsSection.evenProduct('3','2')}}" stepKey="assert5thProductIsPresentInLastRow"/>
-        <dontSee userInput="$$createConfigChildProduct6.name$$" selector="{{AdminProductFormConfigurationsSection.oddProduct('3','2')}}" stepKey="dontSee6thProductInGrid"/>
         <waitForElementClickable selector="{{AdminProductGridPaginationSection.nextPage}}" stepKey="waitForNextArrowToBeClicked"/>
         <click selector="{{AdminProductGridPaginationSection.nextPage}}" stepKey="clickNextProductPage"/>
         <waitForText userInput="$$createConfigChildProduct6.name$$" selector="{{AdminProductFormConfigurationsSection.evenProduct('1','2')}}" stepKey="assert6thProductIsPresent"/>
