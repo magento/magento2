@@ -185,8 +185,10 @@ class ConfigureProductToAddTest extends TestCase
             ->willReturn($productId);
         $this->objectManagerMock
             ->method('get')
-            ->withConsecutive([Quote::class], [Composite::class])
-            ->willReturnOnConsecutiveCalls($this->quoteSessionMock, $this->compositeHelperMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Quote::class] => $this->quoteSessionMock,
+                [Composite::class] => $this->compositeHelperMock
+            });
         $this->quoteSessionMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);

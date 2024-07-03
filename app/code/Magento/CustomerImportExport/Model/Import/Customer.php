@@ -10,9 +10,11 @@ namespace Magento\CustomerImportExport\Model\Import;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Indexer\Processor;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\DateTime;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Customer entity import
@@ -403,17 +405,13 @@ class Customer extends AbstractCustomer
     protected function _prepareDataForUpdate(array $rowData)
     {
         $multiSeparator = $this->getMultipleValueSeparator();
-        $entitiesToCreate = [];
-        $entitiesToUpdate = [];
-        $attributesToSave = [];
+        $entitiesToCreate = $entitiesToUpdate = $attributesToSave = [];
 
         // entity table data
         $now = new \DateTime();
-        if (empty($rowData['created_at'])) {
-            $createdAt = $now;
-        } else {
-            $createdAt = (new \DateTime())->setTimestamp(strtotime($rowData['created_at']));
-        }
+        $createdAt = empty($rowData['created_at'])
+            ? $now
+            : (new \DateTime())->setTimestamp(strtotime($rowData['created_at']));
         $emailInLowercase = strtolower(trim($rowData[self::COLUMN_EMAIL]));
         $newCustomer = false;
         $entityId = $this->_getCustomerId($emailInLowercase, $rowData[self::COLUMN_WEBSITE]);
@@ -439,14 +437,18 @@ class Customer extends AbstractCustomer
                 }
             } elseif ('multiselect' == $attributeParameters['type']) {
                 $ids = [];
-                $values = $value !== null ? explode($multiSeparator, mb_strtolower($value)) : [];
+                if (!is_array($value)) {
+                    $values = $value !== null ? explode($multiSeparator, mb_strtolower($value)) : [];
+                } else {
+                    $values = array_map('mb_strtolower', $value);
+                }
                 foreach ($values as $subValue) {
                     $ids[] = $this->getSelectAttrIdByValue($attributeParameters, $subValue);
                 }
                 $value = implode(',', $ids);
             } elseif ('datetime' == $attributeParameters['type'] && !empty($value)) {
                 $value = (new \DateTime())->setTimestamp(strtotime($value));
-                $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+                $value = $value->format(DateTime::DATETIME_PHP_FORMAT);
             }
             if (!$this->_attributes[$attributeCode]['is_static']) {
                 /** @var $attribute \Magento\Customer\Model\Attribute */
@@ -458,8 +460,7 @@ class Customer extends AbstractCustomer
                     $attribute->getBackend()->beforeSave($this->_customerModel->setData($attributeCode, $value));
                     $value = $this->_customerModel->getData($attributeCode);
                 }
-                $attributesToSave[$attribute->getBackend()
-                    ->getTable()][$entityId][$attributeParameters['id']] = $value;
+                $attributesToSave[$attribute->getBackend()->getTable()][$entityId][$attributeParameters['id']] = $value;
 
                 // restore 'backend_model' to avoid default setting
                 $attribute->setBackendModel($backendModel);
@@ -472,16 +473,16 @@ class Customer extends AbstractCustomer
             // create
             $entityRow['group_id'] = empty($rowData['group_id']) ? self::DEFAULT_GROUP_ID : $rowData['group_id'];
             $entityRow['store_id'] = empty($rowData[self::COLUMN_STORE])
-                ? \Magento\Store\Model\Store::DEFAULT_STORE_ID : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
-            $entityRow['created_at'] = $createdAt->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
-            $entityRow['updated_at'] = $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+                ? Store::DEFAULT_STORE_ID : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
+            $entityRow['created_at'] = $createdAt->format(DateTime::DATETIME_PHP_FORMAT);
+            $entityRow['updated_at'] = $now->format(DateTime::DATETIME_PHP_FORMAT);
             $entityRow['website_id'] = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
             $entityRow['email'] = $emailInLowercase;
             $entityRow['is_active'] = 1;
             $entitiesToCreate[] = $entityRow;
         } else {
             // edit
-            $entityRow['updated_at'] = $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+            $entityRow['updated_at'] = $now->format(DateTime::DATETIME_PHP_FORMAT);
             if (!empty($rowData[self::COLUMN_STORE])) {
                 $entityRow['store_id'] = $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
             } else {
@@ -617,27 +618,32 @@ class Customer extends AbstractCustomer
                 $isFieldRequired = $attributeParams['is_required'];
                 $isFieldNotSetAndCustomerDoesNotExist =
                     !isset($rowData[$attributeCode]) && !$this->_getCustomerId($email, $website);
-                $isFieldSetAndTrimmedValueIsEmpty
-                    = isset($rowData[$attributeCode]) && '' === trim((string)$rowData[$attributeCode]);
+                $isFieldSetAndTrimmedValueIsEmpty = false;
+                $isFieldValueNotEmpty = false;
+
+                if (isset($rowData[$attributeCode])) {
+                    if (is_array($rowData[$attributeCode])) {
+                        $isFieldSetAndTrimmedValueIsEmpty = empty(array_filter($rowData[$attributeCode], 'trim'));
+                        $isFieldValueNotEmpty = count(array_filter($rowData[$attributeCode], 'strlen')) > 0;
+                    } else {
+                        $isFieldSetAndTrimmedValueIsEmpty = '' === trim((string)$rowData[$attributeCode]);
+                        $isFieldValueNotEmpty = strlen((string)$rowData[$attributeCode]) > 0;
+                    }
+                }
 
                 if ($isFieldRequired && ($isFieldNotSetAndCustomerDoesNotExist || $isFieldSetAndTrimmedValueIsEmpty)) {
                     $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
                     continue;
                 }
 
-                if (isset($rowData[$attributeCode]) && strlen((string)$rowData[$attributeCode])) {
-                    if ($attributeParams['type'] == 'select') {
-                        continue;
-                    }
-
+                if (isset($rowData[$attributeCode]) && $isFieldValueNotEmpty && $attributeParams['type'] != 'select') {
                     $this->isAttributeValid(
                         $attributeCode,
                         $attributeParams,
                         $rowData,
                         $rowNumber,
-                        isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])
-                            ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
-                            : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                        $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
+                        ?? Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
                     );
                 }
             }
@@ -696,7 +702,7 @@ class Customer extends AbstractCustomer
         $storeId = $this->getCustomerStorage()->getCustomerStoreId($email, $websiteId);
         if ($storeId === null || $storeId === false) {
             $defaultStore = $this->_storeManager->getWebsite($websiteId)->getDefaultStore();
-            $storeId = $defaultStore ? $defaultStore->getId() : \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+            $storeId = $defaultStore ? $defaultStore->getId() : Store::DEFAULT_STORE_ID;
         }
         return $storeId;
     }

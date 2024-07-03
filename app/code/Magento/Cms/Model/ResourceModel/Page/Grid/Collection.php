@@ -34,6 +34,12 @@ class Collection extends PageCollection implements SearchResultInterface
      */
     protected $aggregations;
 
+    /** @var mixed */
+    private $model;
+
+    /** @var string */
+    private $resourceModel;
+
     /**
      * @param EntityFactoryInterface $entityFactory
      * @param LoggerInterface $logger
@@ -68,6 +74,8 @@ class Collection extends PageCollection implements SearchResultInterface
         AbstractDb $resource = null,
         TimezoneInterface $timeZone = null
     ) {
+        $this->resourceModel = $resourceModel;
+        $this->model = $model;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -80,9 +88,18 @@ class Collection extends PageCollection implements SearchResultInterface
         );
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
-        $this->_init($model, $resourceModel);
+        $this->_init($this->model, $this->resourceModel);
         $this->setMainTable($mainTable);
         $this->timeZone = $timeZone ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_init($this->model, $this->resourceModel);
     }
 
     /**

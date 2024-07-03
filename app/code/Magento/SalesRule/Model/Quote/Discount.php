@@ -110,6 +110,15 @@ class Discount extends AbstractTotal
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->setCode(self::COLLECTOR_TYPE_CODE);
+    }
+
+    /**
      * Collect address discount amount
      *
      * @param Quote $quote
@@ -172,32 +181,36 @@ class Discount extends AbstractTotal
                     $child->setDiscountPercent(0);
                 }
             }
+            $item->getAddress()->setBaseDiscountAmount(0);
         }
-        $this->calculator->init($store->getWebsiteId(), $quote->getCustomerGroupId(), $quote->getCouponCode());
+        $this->calculator->initFromQuote($quote);
         $this->calculator->initTotals($items, $address);
         $items = $this->calculator->sortItemsByPriority($items, $address);
         $itemsToApplyRules = $items;
         $rules = $this->calculator->getRules($address);
+        $totalDiscount = 0;
+        $address->setBaseDiscountAmount(0);
         /** @var Rule $rule */
         foreach ($rules as $rule) {
             /** @var Item $item */
             foreach ($itemsToApplyRules as $key => $item) {
-                if ($quote->getIsMultiShipping() && $item->getAddress()->getId() !== $address->getId()) {
-                    continue;
-                }
                 if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item) || $item->getParentItem()) {
                     continue;
                 }
                 $eventArgs['item'] = $item;
                 $this->eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
+
                 $this->calculator->process($item, $rule);
                 $appliedRuleIds = $item->getAppliedRuleIds() ? explode(',', $item->getAppliedRuleIds()) : [];
                 if ($rule->getStopRulesProcessing() && in_array($rule->getId(), $appliedRuleIds)) {
                     unset($itemsToApplyRules[$key]);
                 }
+
+                $totalDiscount += $item->getBaseDiscountAmount();
             }
-            $this->calculator->initTotals($items, $address);
+            $address->setBaseDiscountAmount($totalDiscount);
         }
+        $this->calculator->initTotals($items, $address);
         foreach ($items as $item) {
             if (!isset($itemsAggregate[$item->getId()])) {
                 continue;

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateProductAttributeWithCustomChangesActionGroup">
+        <annotations>
+            <description>Creating a product attribute with required custom changes.</description>
+        </annotations>
+        <arguments>
+            <argument name="defaultLabel" type="string" defaultValue="Text_EN"/>
+            <argument name="attributeType" type="string" defaultValue="text"/>
+            <argument name="tabName" type="string" defaultValue="Manage Labels"/>
+            <argument name="labelName" type="string" defaultValue="Text_DE"/>
+            <argument name="catalogType" type="string" defaultValue="Yes"/>
+        </arguments>
+
+        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
+        <waitForPageLoad stepKey="waitForAttributePageLoad"/>
+        <waitForElementVisible selector="{{AttributePropertiesSection.DefaultLabel}}" stepKey="waitForDefaultLabelFieldToBeVisible"/>
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{defaultLabel}}" stepKey="fillDefaultLabel"/>
+        <waitForElement selector="{{AttributePropertiesSection.InputType}}" stepKey="waitForInputTypeElement"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="{{attributeType}}" stepKey="selectInputType"/>
+        <waitForElementClickable selector="{{AdminEditProductAttributesSection.tabButton(tabName)}}" stepKey="waitForManageLabelElementToBeClickable"/>
+        <click selector="{{AdminEditProductAttributesSection.tabButton(tabName)}}" stepKey="clickManageLabel"/>
+        <waitForElementVisible selector="{{AdminProductAttributeManageLabelsSection.customStoreLabel}}" stepKey="waitForCustomStoreViewLabelToBeVisible"/>
+        <fillField selector="{{AdminProductAttributeManageLabelsSection.customStoreLabel}}" userInput="{{labelName}}" stepKey="fillCustomStoreViewLabel"/>
+        <waitForElementClickable selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="waitForStorefrontPropertiesTabToBeClickable"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
+        <waitForElement selector="{{StorefrontPropertiesSection.visibleOnCatalogPagesOnStorefront}}" stepKey="waitForVisibleOnCatalogElement"/>
+        <selectOption selector="{{StorefrontPropertiesSection.visibleOnCatalogPagesOnStorefront}}" userInput="{{catalogType}}" stepKey="enableVisibleOnStorefront"/>
+        <waitForElementVisible selector="{{AttributePropertiesSection.Save}}" stepKey="waitForSaveButton"/>
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForAttributeToSave"/>
+    </actionGroup>
+</actionGroups>

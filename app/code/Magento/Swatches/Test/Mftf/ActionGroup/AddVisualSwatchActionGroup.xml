@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AddVisualSwatchActionGroup">
         <annotations>
             <description>Add visual image swatch property attribute.</description>
@@ -50,6 +50,7 @@
         <scrollToTopOfPage stepKey="scrollToTop2"/>
         <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="goToStorefrontProperties"/>
         <selectOption selector="{{AttributePropertiesSection.useInLayeredNavigation}}" userInput="1" stepKey="selectUseInLayeredNavigation"/>
+        <selectOption selector="{{AdminNewAttributePanel.useInSearch}}" userInput="Yes" stepKey="selectYesForUseInSearch"/>
         <!-- Save the new product attribute -->
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSaveAndEdit"/>
         <wait stepKey="waitToLoad" time="3"/>

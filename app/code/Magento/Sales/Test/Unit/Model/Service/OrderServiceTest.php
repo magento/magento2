@@ -28,6 +28,8 @@ use Magento\Sales\Model\Service\OrderService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  *
@@ -293,6 +295,22 @@ class OrderServiceTest extends TestCase
             ->method('send')
             ->with($this->orderMock, false, $clearComment);
         $this->assertTrue($this->orderService->addComment(123, $this->orderStatusHistoryMock));
+    }
+
+    /**
+     * test for add comment with order status change case
+     */
+    public function testAddCommentWithStatus()
+    {
+        $params = ['status' => 'holded'];
+        $inputException = new LocalizedException(
+            new Phrase('Unable to add comment: The status "%1" is not part of the order
+            status history.', $params)
+        );
+        $this->orderStatusHistoryMock->method('getStatus')
+            ->willThrowException($inputException);
+        $this->expectException(LocalizedException::class);
+        $this->orderService->addComment(123, $this->orderStatusHistoryMock);
     }
 
     public function testNotify()
