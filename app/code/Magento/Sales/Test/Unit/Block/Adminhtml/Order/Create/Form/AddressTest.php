@@ -251,20 +251,17 @@ class AddressTest extends TestCase
             ->willReturn($this->defaultCountryId);
         $this->formFactory
             ->method('create')
-            ->withConsecutive(
-                [
-                    'customer_address',
-                    'adminhtml_customer_address',
-                    [AddressInterface::COUNTRY_ID => $this->defaultCountryId]
-                ],
-                [
-                    'customer_address',
-                    'adminhtml_customer_address',
-                    [],
-                    false,
-                    false
-                ]
-            )->willReturnOnConsecutiveCalls($emptyForm, $addressForm);
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3 = [], $arg4 = false, $arg5 = false) use ($emptyForm, $addressForm) {
+                    if ($arg1 === 'customer_address' && $arg2 === 'adminhtml_customer_address' &&
+                        $arg3 === [AddressInterface::COUNTRY_ID => $this->defaultCountryId]) {
+                        return $emptyForm;
+                    } elseif ($arg1 === 'customer_address' && $arg2 === 'adminhtml_customer_address' &&
+                        empty($arg3) && $arg4 === false && $arg5 === false) {
+                        return $addressForm;
+                    }
+                }
+            );
 
         $this->address->getAddressCollectionJson();
     }

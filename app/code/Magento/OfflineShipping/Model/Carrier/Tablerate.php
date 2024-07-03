@@ -151,9 +151,6 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
                     $freeWeight += (int) $item->getWeight();
                 }
             }
-
-            $request->setPackageValue($request->getPackageValue() - $freePackageValue);
-            $request->setPackageValueWithDiscount($request->getPackageValueWithDiscount() - $freePackageValue);
         }
 
         if ($freeWeight > 0) {

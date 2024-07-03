@@ -70,8 +70,10 @@ class MassactionKeyTest extends TestCase
     ): void {
         $this->requestMock
             ->method('getPost')
-            ->withConsecutive(['massaction_prepare_key'], ['key'])
-            ->willReturnOnConsecutiveCalls('key', $postData);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['massaction_prepare_key'] => 'key',
+                ['key'] => $postData
+            });
         $this->requestMock->expects($this->once())
             ->method('setPostValue')
             ->with('key', $convertedData);
@@ -82,7 +84,7 @@ class MassactionKeyTest extends TestCase
     /**
      * @return array
      */
-    public function beforeDispatchDataProvider(): array
+    public static function beforeDispatchDataProvider(): array
     {
         return [
             'post_data_is_array' => [['key'], ['key']],
