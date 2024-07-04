@@ -299,19 +299,13 @@ class CustomerTest extends ResolverCacheAbstract
      * @param CustomerInterface $customer
      * @return void
      */
-    private static function assertCurrentCustomerCacheRecordExists(CustomerInterface $customer)
+    private function assertCurrentCustomerCacheRecordExists(CustomerInterface $customer)
     {
-        $cacheKey = self::getCacheKeyForCustomerResolver();
-
-        if(is_callable($cacheKey[1]))
-        {
-            $cacheKey[1] = $cacheKey[1](CustomerTest::class);
-        }
-        $cacheKey = strtoupper(implode('_', $cacheKey));
+        $cacheKey = $this->getCacheKeyForCustomerResolver();
         $cacheEntry = Bootstrap::getObjectManager()->get(GraphQlResolverCache::class)->load($cacheKey);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
-        self::assertEquals(
+        $this->assertEquals(
             $customer->getEmail(),
             $cacheEntryDecoded['email']
         );
@@ -324,13 +318,7 @@ class CustomerTest extends ResolverCacheAbstract
      */
     private function assertCurrentCustomerCacheRecordDoesNotExist()
     {
-        $cacheKey = self::getCacheKeyForCustomerResolver();
-
-        if(is_callable($cacheKey[1]))
-        {
-            $cacheKey[1] = $cacheKey[1](CustomerTest::class);
-        }
-        $cacheKey = strtoupper(implode('_', $cacheKey));
+        $cacheKey = $this->getCacheKeyForCustomerResolver();
         $this->assertFalse(
             Bootstrap::getObjectManager()->get(GraphQlResolverCache::class)->test($cacheKey)
         );
@@ -362,13 +350,7 @@ class CustomerTest extends ResolverCacheAbstract
             ['Authorization' => 'Bearer ' . $customer1Token]
         );
 
-        $customer1CacheKey = self::getCacheKeyForCustomerResolver();
-
-        if(is_callable($customer1CacheKey[1]))
-        {
-            $customer1CacheKey[1] = $customer1CacheKey[1]($this);
-        }
-        $customer1CacheKey = strtoupper(implode('_', $customer1CacheKey));
+        $customer1CacheKey = $this->getCacheKeyForCustomerResolver();
 
         $this->assertIsNumeric(
             $this->graphQlResolverCache->test($customer1CacheKey)
@@ -388,13 +370,7 @@ class CustomerTest extends ResolverCacheAbstract
             ['Authorization' => 'Bearer ' . $customer2Token]
         );
 
-        $customer2CacheKey = self::getCacheKeyForCustomerResolver();
-
-        if(is_callable($customer2CacheKey[1]))
-        {
-            $customer2CacheKey[1] = $customer2CacheKey[1]($this);
-        }
-        $customer2CacheKey = strtoupper(implode('_', $customer2CacheKey));
+        $customer2CacheKey = $this->getCacheKeyForCustomerResolver();
 
         $this->assertIsNumeric(
             $this->graphQlResolverCache->test($customer2CacheKey)
@@ -441,13 +417,7 @@ class CustomerTest extends ResolverCacheAbstract
             ['Authorization' => 'Bearer ' . $token]
         );
 
-        $cacheKey = self::getCacheKeyForCustomerResolver();
-
-        if(is_callable($cacheKey[1]))
-        {
-            $cacheKey[1] = $cacheKey[1]($this);
-        }
-        $cacheKey = strtoupper(implode('_', $cacheKey));
+        $cacheKey = $this->getCacheKeyForCustomerResolver();
 
         $this->assertIsNumeric(
             $this->graphQlResolverCache->test($cacheKey)
@@ -511,13 +481,7 @@ class CustomerTest extends ResolverCacheAbstract
             ['Authorization' => 'Bearer ' . $customer1Token]
         );
 
-        $customer1CacheKey = self::getCacheKeyForCustomerResolver();
-
-        if(is_callable($customer1CacheKey[1]))
-        {
-            $customer1CacheKey[1] = $customer1CacheKey[1]($this);
-        }
-        $customer1CacheKey = strtoupper(implode('_', $customer1CacheKey));
+        $customer1CacheKey = $this->getCacheKeyForCustomerResolver();
         $customer1CacheEntry = $this->graphQlResolverCache->load($customer1CacheKey);
         $customer1CacheEntryDecoded = json_decode($customer1CacheEntry, true);
         $this->assertEquals(
@@ -543,13 +507,7 @@ class CustomerTest extends ResolverCacheAbstract
             ]
         );
 
-        $customer2CacheKey = self::getCacheKeyForCustomerResolver();
-
-        if(is_callable($customer2CacheKey[1]))
-        {
-            $customer2CacheKey[1] = $customer2CacheKey[1]($this);
-        }
-        $customer2CacheKey = strtoupper(implode('_', $customer2CacheKey));
+        $customer2CacheKey = $this->getCacheKeyForCustomerResolver();
 
         $customer2CacheEntry = $this->graphQlResolverCache->load($customer2CacheKey);
         $customer2CacheEntryDecoded = json_decode($customer2CacheEntry, true);
@@ -588,13 +546,7 @@ class CustomerTest extends ResolverCacheAbstract
             // expected exception
         }
 
-        $cacheKey = self::getCacheKeyForCustomerResolver();
-
-        if(is_callable($cacheKey[1]))
-        {
-            $cacheKey[1] = $cacheKey[1]($this);
-        }
-        $cacheKey = strtoupper(implode('_', $cacheKey));
+        $cacheKey = $this->getCacheKeyForCustomerResolver();
 
         $this->assertFalse(
             $this->graphQlResolverCache->test($cacheKey)
@@ -666,7 +618,7 @@ class CustomerTest extends ResolverCacheAbstract
         );
     }
 
-    public static function invalidationMechanismProvider(): array
+    public function invalidationMechanismProvider(): array
     {
         // provider is invoked before setUp() is called so need to init here
         $repo = Bootstrap::getObjectManager()->get(
@@ -689,51 +641,51 @@ class CustomerTest extends ResolverCacheAbstract
             'add and delete address' => [
                 function (CustomerInterface $customer, $tokenString) {
                     // create new address because default billing address cannot be deleted
-                    self::graphQlMutation(
-                        self::getCreateAddressMutation("4000 Polk St"),
+                    $this->graphQlMutation(
+                        $this->getCreateAddressMutation("4000 Polk St"),
                         [],
                         '',
                         ['Authorization' => 'Bearer ' . $tokenString]
                     );
                     // query for customer to cache data after address creation
-                    $result = self::graphQlQuery(
-                        self::getCustomerQuery(),
+                    $result = $this->graphQlQuery(
+                        $this->getCustomerQuery(),
                         [],
                         '',
                         ['Authorization' => 'Bearer ' . $tokenString]
                     );
                     // assert that cache record exists for given customer
-                    self::assertCurrentCustomerCacheRecordExists($customer);
+                    $this->assertCurrentCustomerCacheRecordExists($customer);
 
                     $addressId = $result['customer']['addresses'][1]['id'];
-                    $result = self::graphQlMutation(
-                        self::getDeleteAddressMutation($addressId),
+                    $result = $this->graphQlMutation(
+                        $this->getDeleteAddressMutation($addressId),
                         [],
                         '',
                         ['Authorization' => 'Bearer ' . $tokenString]
                     );
-                    self::assertTrue($result['deleteCustomerAddress']);
+                    $this->assertTrue($result['deleteCustomerAddress']);
                 },
             ],
             'update address' => [
                 function (CustomerInterface $customer, $tokenString) {
                     // query for customer to cache data after address creation
-                    $result = self::graphQlQuery(
-                        self::getCustomerQuery(),
+                    $result = $this->graphQlQuery(
+                        $this->getCustomerQuery(),
                         [],
                         '',
                         ['Authorization' => 'Bearer ' . $tokenString]
                     );
 
                     $addressId = $result['customer']['addresses'][0]['id'];
-                    $result = self::graphQlMutation(
-                        self::getUpdateAddressStreetMutation($addressId, "8000 New St"),
+                    $result = $this->graphQlMutation(
+                        $this->getUpdateAddressStreetMutation($addressId, "8000 New St"),
                         [],
                         '',
                         ['Authorization' => 'Bearer ' . $tokenString]
                     );
-                    self::assertEquals($addressId, $result['updateCustomerAddress']['id']);
-                    self::assertEquals("8000 New St", $result['updateCustomerAddress']['street'][0]);
+                    $this->assertEquals($addressId, $result['updateCustomerAddress']['id']);
+                    $this->assertEquals("8000 New St", $result['updateCustomerAddress']['street'][0]);
                 },
             ],
         ];
@@ -743,7 +695,7 @@ class CustomerTest extends ResolverCacheAbstract
      * @param string $streetAddress
      * @return string
      */
-    private static function getCreateAddressMutation($streetAddress)
+    private function getCreateAddressMutation($streetAddress)
     {
         return <<<MUTATIONCREATE
 mutation{
@@ -781,7 +733,7 @@ MUTATIONCREATE;
      * @param string $streetAddress
      * @return string
      */
-    private static function getUpdateAddressStreetMutation($addressId, $streetAddress)
+    private function getUpdateAddressStreetMutation($addressId, $streetAddress)
     {
         return <<<MUTATIONUPDATE
 mutation{
@@ -828,7 +780,7 @@ MUTATIONDELETE;
         );
     }
 
-    private function getProviderInterfaceMock()
+    private function getCacheKeyForCustomerResolver(): string
     {
         $resolverMock = $this->getMockBuilder(CustomerResolver::class)
             ->disableOriginalConstructor()
@@ -841,13 +793,6 @@ MUTATIONDELETE;
             ->getKeyCalculatorForResolver($resolverMock)
             ->calculateCacheKey();
 
-        return $cacheKeyFactor;
-    }
-
-    private static function getCacheKeyForCustomerResolver(): array
-    {
-        $cacheKeyFactor = static fn (self $testCase) => $testCase->getProviderInterfaceMock();
-
         $cacheKeyQueryPayloadMetadata = CustomerResolver::class . '\Interceptor[]';
 
         $cacheKeyParts = [
@@ -857,10 +802,10 @@ MUTATIONDELETE;
         ];
 
         // strtoupper is called in \Magento\Framework\Cache\Frontend\Adapter\Zend::_unifyId
-        return $cacheKeyParts;
+        return strtoupper(implode('_', $cacheKeyParts));
     }
 
-    private static function getCustomerQuery(): string
+    private function getCustomerQuery(): string
     {
         return <<<QUERY
         {

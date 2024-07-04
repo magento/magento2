@@ -19,7 +19,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
      *
      * @var \Magento\TestFramework\TestCase\GraphQl\Client
      */
-    private static $graphQlClient;
+    private $graphQlClient;
 
     /**
      * @var \Magento\Framework\App\Cache
@@ -37,17 +37,17 @@ abstract class GraphQlAbstract extends WebapiAbstract
      * @return array|int|string|float|bool GraphQL call results
      * @throws \Exception
      */
-    public static function graphQlQuery(
+    public function graphQlQuery(
         string $query,
         array $variables = [],
         string $operationName = '',
         array $headers = []
     ) {
-        return self::getGraphQlClient()->get(
+        return $this->getGraphQlClient()->get(
             $query,
             $variables,
             $operationName,
-            self::composeHeaders($headers)
+            $this->composeHeaders($headers)
         );
     }
 
@@ -62,17 +62,17 @@ abstract class GraphQlAbstract extends WebapiAbstract
      * @return array|int|string|float|bool GraphQL call results
      * @throws \Exception
      */
-    public static function graphQlMutation(
+    public function graphQlMutation(
         string $query,
         array $variables = [],
         string $operationName = '',
         array $headers = []
     ) {
-        return self::getGraphQlClient()->post(
+        return $this->getGraphQlClient()->post(
             $query,
             $variables,
             $operationName,
-            self::composeHeaders($headers)
+            $this->composeHeaders($headers)
         );
     }
 
@@ -128,7 +128,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
      * @param array $headers
      * @return string[]
      */
-    private static function composeHeaders(array $headers): array
+    private function composeHeaders(array $headers): array
     {
         $headersArray = [];
         foreach ($headers as $key => $value) {
@@ -165,14 +165,14 @@ abstract class GraphQlAbstract extends WebapiAbstract
      *
      * @return \Magento\TestFramework\TestCase\GraphQl\Client
      */
-    private static function getGraphQlClient()
+    private function getGraphQlClient()
     {
-        if (self::$graphQlClient === null) {
-            self::$graphQlClient = Bootstrap::getObjectManager()->get(
+        if ($this->graphQlClient === null) {
+            $this->graphQlClient = Bootstrap::getObjectManager()->get(
                 \Magento\TestFramework\TestCase\GraphQl\Client::class
             );
         }
-        return self::$graphQlClient;
+        return $this->graphQlClient;
     }
 
     /**
