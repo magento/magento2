@@ -36,8 +36,17 @@ class ChildSku implements ResolverInterface
 
         /** @var Product $product */
         $product = $value['model'];
-        $optionProduct = $product->getCustomOption('simple_product')->getProduct();
 
-        return $optionProduct->getSku();
+        /** to handle no child sku selected at add to wishlist time */
+        $optionsArray = json_decode($product->getCustomOption('info_buyRequest')->getValue(), true);
+        $superAttribute = $optionsArray['super_attribute'];
+        $totalSelected = array_filter($superAttribute);
+
+        if (count($totalSelected) > 0) {
+            $optionProduct = $product->getCustomOption('simple_product')->getProduct();
+            return $optionProduct->getSku();
+        } else {
+            return "";
+        }
     }
 }

@@ -144,7 +144,7 @@ class SubscriberTest extends TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->customerFactory = $this->getMockBuilder(CustomerInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectHelper = $this->getMockBuilder(DataObjectHelper::class)

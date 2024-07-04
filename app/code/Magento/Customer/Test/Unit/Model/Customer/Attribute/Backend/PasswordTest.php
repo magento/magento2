@@ -35,7 +35,7 @@ class PasswordTest extends TestCase
         /** @var DataObject|MockObject $object */
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPassword', 'getPasswordConfirm'])
+            ->addMethods(['getPassword', 'getPasswordConfirm'])
             ->getMock();
 
         $object->expects($this->once())->method('getPassword')->willReturn($password);
@@ -47,7 +47,7 @@ class PasswordTest extends TestCase
     /**
      * @return array
      */
-    public function passwordNegativeDataProvider()
+    public static function passwordNegativeDataProvider()
     {
         return [
             'less-then-6-char' => ['less6'],
@@ -66,7 +66,7 @@ class PasswordTest extends TestCase
         /** @var DataObject|MockObject $object */
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPassword'])
+            ->addMethods(['getPassword'])
             ->getMock();
 
         $object->expects($this->once())->method('getPassword')->willReturn($password);
@@ -82,7 +82,7 @@ class PasswordTest extends TestCase
         /** @var DataObject|MockObject $object */
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPassword', 'setPasswordHash', 'hashPassword'])
+            ->addMethods(['getPassword', 'setPasswordHash', 'hashPassword'])
             ->getMock();
 
         $object->expects($this->once())->method('getPassword')->willReturn($password);
@@ -95,7 +95,7 @@ class PasswordTest extends TestCase
     /**
      * @return array
      */
-    public function randomValuesProvider()
+    public static function randomValuesProvider()
     {
         return [
             [false],
@@ -119,7 +119,7 @@ class PasswordTest extends TestCase
         /** @var Customer|MockObject $customer */
         $customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $customer->expects($this->exactly(2))->method('getData')->willReturn($randomValue);

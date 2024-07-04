@@ -7,6 +7,7 @@ namespace Magento\GroupedImportExport\Model\Import\Product\Type;
 
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Model\Import;
 
@@ -48,12 +49,18 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
     private $productEntityIdentifierField;
 
     /**
+     * @var SkuStorage
+     */
+    private SkuStorage $skuStorage;
+
+    /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param array $params
      * @param Grouped\Links $links
      * @param ConfigInterface|null $config
+     * @param SkuStorage|null $skuStorage
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -61,12 +68,15 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
         \Magento\Framework\App\ResourceConnection $resource,
         array $params,
         Grouped\Links $links,
-        ConfigInterface $config = null
+        ConfigInterface $config = null,
+        SkuStorage $skuStorage = null
     ) {
         $this->links = $links;
         $this->config = $config ?: ObjectManager::getInstance()->get(ConfigInterface::class);
         $this->allowedProductTypes = $this->config->getComposableTypes();
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
+        $this->skuStorage = $skuStorage ?: ObjectManager::getInstance()
+            ->get(SkuStorage::class);
     }
 
     /**
@@ -80,7 +90,6 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
     public function saveData()
     {
         $newSku = $this->_entityModel->getNewSku();
-        $oldSku = $this->_entityModel->getOldSku();
         $attributes = $this->links->getAttributes();
         $productData = [];
         while ($bunch = $this->_entityModel->getNextBunch()) {
@@ -109,10 +118,11 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                         in_array($newSku[$associatedSku]['type_id'], $this->allowedProductTypes)
                     ) {
                         $linkedProductId = $newSku[$associatedSku][$this->getProductEntityIdentifierField()];
-                    } elseif (isset($oldSku[$associatedSku]) &&
-                        in_array($oldSku[$associatedSku]['type_id'], $this->allowedProductTypes)
+                    } elseif ($associatedSku && $this->skuStorage->has($associatedSku) &&
+                        in_array($this->skuStorage->get($associatedSku)['type_id'], $this->allowedProductTypes)
                     ) {
-                        $linkedProductId = $oldSku[$associatedSku][$this->getProductEntityIdentifierField()];
+                        $oldProductData = $this->skuStorage->get($associatedSku);
+                        $linkedProductId = $oldProductData[$this->getProductEntityIdentifierField()];
                     } else {
                         continue;
                     }

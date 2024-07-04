@@ -10,7 +10,7 @@
 & when (@media-common = true) {
     .masonry-image {
         &-grid {
-            margin: @admin__masonry_grid_image__space/2 -(@admin__masonry_grid_image__space/2);
+            margin: (@admin__masonry_grid_image__space/2) -(@admin__masonry_grid_image__space/2);
             overflow: hidden;
             position: relative;
 
@@ -25,7 +25,7 @@
         &-column {
             background-color: @admin__masonry_grid_background_color;
             float: left;
-            margin: @admin__masonry_grid_image__space/2;
+            margin: (@admin__masonry_grid_image__space/2);
             overflow: hidden;
 
             .masonry-image-block {
