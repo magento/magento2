@@ -120,7 +120,7 @@
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProductOne"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-<!--            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>-->
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <!-- Set Magento back to default configuration -->
             <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
