@@ -60,8 +60,8 @@ define([
         });
 
         describe('check initComponent', function () {
-            it('verify setLayoutstyles called and grid iniztilized', function () {
-                var setlayoutStyles = spyOn(Component, 'setLayoutStyles');
+            it('verify setLayoutStylesWhenLoaded called and grid iniztilized', function () {
+                var setlayoutStyles = spyOn(Component, 'setLayoutStylesWhenLoaded');
 
                 Object.defineProperty(Component.container, 'clientWidth', {value: '', configurable: true});
                 expect(Component).toBeDefined();
@@ -74,7 +74,7 @@ define([
                 expect(setlayoutStyles).toHaveBeenCalled();
             });
             it('verify events triggered', function () {
-                var setLayoutStyles = spyOn(Component, 'setLayoutStyles');
+                var setLayoutStyles = spyOn(Component, 'setLayoutStylesWhenLoaded');
 
                 Component.initComponent(rows);
                 Component.container = {};
