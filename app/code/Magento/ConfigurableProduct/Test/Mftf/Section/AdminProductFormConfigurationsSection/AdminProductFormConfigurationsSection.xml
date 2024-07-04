@@ -63,6 +63,6 @@
         <element name="paginationDropDropdown" type="button" selector="//*[@data-index='configurable-matrix'][1]//div[@class='admin__control-table-pagination']//select"/>
         <element name="evenProduct" type="text" selector="//tr[@class='data-row'][{{row}}]/td[{{column}}]//a" parameterized="true"/>
         <element name="oddProduct" type="text" selector="//tr[@class='data-row _odd-row'][{{row}}]/td[{{column}}]//a" parameterized="true"/>
-        <element name="nextPageArrow" type="text" selector="(//*[@class=‘action-next’])[2]"/>
+        <element name="nextPageArrow" type="text" selector="(//*[@class='action-next'])[2]"/>
     </section>
 </sections>
