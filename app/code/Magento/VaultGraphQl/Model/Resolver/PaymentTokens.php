@@ -24,7 +24,7 @@ class PaymentTokens implements ResolverInterface
     /**
      * Cart types
      */
-    const BASE_CART_TYPES = [
+    private const BASE_CART_TYPES = [
         'VI' => 'Visa',
         'MC' => 'MasterCard',
         'AE' => 'American Express',
@@ -98,7 +98,7 @@ class PaymentTokens implements ResolverInterface
      */
     private function getCartDetailsInformation(?string $tokenDetails): ?string
     {
-        if (is_null($tokenDetails)) {
+        if ($tokenDetails === null) {
             return $tokenDetails;
         }
 
