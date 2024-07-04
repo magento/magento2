@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddWidgetToWYSIWYGWithBundleProductWithRequiredOptionWidgetTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Admin Add New Bundle Product Widget To checkout"/>
+            <group value="Cms"/>
+            <title value="Admin Add New Bundle Product Widget To checkout"/>
+            <description value="Admin Add New Bundle Product Widget To checkout"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="AC-11779"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ImportProductSimple2_Bundle" stepKey="simpleProduct1"/>
+            <createData entity="ImportProductSimple1_Bundle" stepKey="simpleProduct2"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
+        </before>
+
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <!-- Entering Bundle Product name,SKU, category, url key -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{BundleProduct.name}}" stepKey="fillProductName"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+
+        <!-- Add two bundle items -->
+        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
+        <!-- Add bundle option to the product -->
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="clickAddSelectedBundleProducts">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+            <argument name="prodTwoSku" value="$$simpleProduct2.sku$$"/>
+            <argument name="optionTitle" value="{{DropDownBundleOption.title}}"/>
+            <argument name="inputType" value="{{DropDownBundleOption.type}}"/>
+        </actionGroup>
+
+        <!-- Check that Bundle Options initialized with proper quantity -->
+        <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" stepKey="grabbedFirstBundleOptionQuantity"/>
+        <assertEquals stepKey="assertFirstBundleOptionDefaultQuantity">
+            <expectedResult type="string">50</expectedResult>
+            <actualResult type="string">$grabbedFirstBundleOptionQuantity</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" stepKey="grabbedSecondBundleOptionQuantity"/>
+        <assertEquals stepKey="assertSecondBundleOptionDefaultQuantity">
+            <expectedResult type="string">50</expectedResult>
+            <actualResult type="string">$grabbedSecondBundleOptionQuantity</actualResult>
+        </assertEquals>
+
+        <wait stepKey="k1" time="10"/>
+        <click selector="{{AdminProductFormBundleSection.isDefault('$$simpleProduct1.name$$')}}" stepKey="clickIsDefault"/>
+
+        <!--Save the product-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+
+        <!--Main test-->
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToPage"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE"/>
+        <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
+        <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
+        <waitForPageLoad stepKey="waitForPageLoad" />
+        <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
+        <!--see Insert Widget button disabled-->
+        <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetDisabled" />
+        <!--see Cancel button enabled-->
+        <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
+        <!--Select "Widget Type"-->
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Products List" stepKey="selectCatalogNewProductsList" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
+        <!--see Insert Widget button enabled-->
+        <see selector="{{WidgetSection.InsertWidgetBtnEnabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetEnabled" />
+<!--        <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="New Products Grid Template" stepKey="selectTemplate" />-->
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
+        <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSavePage"/>
+        <!-- Clear indices and cache      -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexerAfterBundle">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value=""/>
+        </actionGroup>
+
+        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
+        <waitForPageLoad stepKey="wait5" />
+
+        <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
+        <waitForPageLoad stepKey="waitForStorefront"/>
+
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
+
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
+        <after>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProductOne"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteProductTwo"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+<!--            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>-->
+            <!-- Set Magento back to default configuration -->
+            <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>
