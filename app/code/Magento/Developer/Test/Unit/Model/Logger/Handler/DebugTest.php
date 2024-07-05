@@ -61,8 +61,6 @@ class DebugTest extends TestCase
 
     /**
      * @inheritdoc
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function setUp(): void
     {
@@ -96,10 +94,7 @@ class DebugTest extends TestCase
             new \DateTimeImmutable(),
             'testChannel',
             Level::Debug,
-            'testMessage',
-            $context = [],
-            $extra = [],
-            $formatted = false
+            'testMessage'
         );
     }
 
@@ -178,10 +173,7 @@ class DebugTest extends TestCase
                 new \DateTimeImmutable(),
                 'testChannel',
                 Level::Error,
-                'testMessage',
-                $context = [],
-                $extra = [],
-                $formatted = false
+                'testMessage'
             )
         ));
     }

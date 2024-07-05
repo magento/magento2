@@ -73,9 +73,12 @@ class Logger extends Monolog
      * @param DateTimeImmutable|null $datetime Optional log date to log into the past or future
      * @return bool Whether the record has been processed
      */
-    public function addRecord(int|Level $level, string $message, array $context = [], DateTimeImmutable|null $datetime = null)
-    : bool
-    {
+    public function addRecord(
+        int|Level $level,
+        string $message,
+        array $context = [],
+        DateTimeImmutable|null $datetime = null
+    ): bool {
         if ($level <= $this->minimumErrorLevel) {
             $this->messages[] = [
                 'level' => $this->getLevelName($level),

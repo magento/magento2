@@ -93,10 +93,7 @@ class SystemTest extends TestCase
             'test',
             $level,
             $message,
-            $exception,
-            [],
-            [],
-            $message
+            $exception
         );
     }
 }
