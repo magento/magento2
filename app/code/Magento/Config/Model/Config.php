@@ -6,24 +6,24 @@
 namespace Magento\Config\Model;
 
 use Exception;
-use Magento\Config\Model\Config\Loader;
-use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
-use Magento\Config\Model\Config\Structure;
-use Magento\Config\Model\Config\Structure\Element\Group;
-use Magento\Config\Model\Config\Structure\Element\Field;
+use Magento\Config\Model\Config\Loader as ConfigLoader;
+use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker as ConfigSettingChecker;
+use Magento\Config\Model\Config\Structure as ConfigStructure;
+use Magento\Config\Model\Config\Structure\Element\Group as GroupElement;
+use Magento\Config\Model\Config\Structure\Element\Field as FieldElement;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Config\ValueFactory;
-use Magento\Framework\App\Config\ValueInterface;
+use Magento\Framework\App\Config\ValueFactory as ConfigValueFactory;
+use Magento\Framework\App\Config\ValueInterface as ConfigValueInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Transaction;
 use Magento\Framework\DB\TransactionFactory;
-use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
-use Magento\Framework\Simplexml\Element;
+use Magento\Framework\Simplexml\Element as SimplexmlElement;
 use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Store\Model\ScopeTypeNormalizer;
 use Magento\Store\Model\StoreManagerInterface;
@@ -61,14 +61,14 @@ class Config extends DataObject
     /**
      * Event dispatcher
      *
-     * @var ManagerInterface
+     * @var EventManagerInterface
      */
     protected $_eventManager;
 
     /**
      * System configuration structure
      *
-     * @var Structure
+     * @var ConfigStructure
      */
     protected $_configStructure;
 
@@ -96,14 +96,14 @@ class Config extends DataObject
     /**
      * Config data loader
      *
-     * @var Loader
+     * @var ConfigLoader
      */
     protected $_configLoader;
 
     /**
      * Config data factory
      *
-     * @var ValueFactory
+     * @var ConfigValueFactory
      */
     protected $_configValueFactory;
 
@@ -113,9 +113,9 @@ class Config extends DataObject
     protected $_storeManager;
 
     /**
-     * @var Config\Reader\Source\Deployed\SettingChecker
+     * @var ConfigSettingChecker
      */
-    private $settingChecker;
+    private $configSettingChecker;
 
     /**
      * @var ScopeResolverPool
@@ -134,13 +134,13 @@ class Config extends DataObject
 
     /**
      * @param ReinitableConfigInterface $config
-     * @param ManagerInterface $eventManager
-     * @param Structure $configStructure
+     * @param EventManagerInterface $eventManager
+     * @param ConfigStructure $configStructure
      * @param TransactionFactory $transactionFactory
-     * @param Loader $configLoader
-     * @param ValueFactory $configValueFactory
+     * @param ConfigLoader $configLoader
+     * @param ConfigValueFactory $configValueFactory
      * @param StoreManagerInterface $storeManager
-     * @param Config\Reader\Source\Deployed\SettingChecker|null $settingChecker
+     * @param ConfigSettingChecker|null $configSettingChecker
      * @param array $data
      * @param ScopeResolverPool|null $scopeResolverPool
      * @param ScopeTypeNormalizer|null $scopeTypeNormalizer
@@ -149,13 +149,13 @@ class Config extends DataObject
      */
     public function __construct(
         ReinitableConfigInterface $config,
-        ManagerInterface $eventManager,
-        Structure $configStructure,
+        EventManagerInterface $eventManager,
+        ConfigStructure $configStructure,
         TransactionFactory $transactionFactory,
-        Loader $configLoader,
-        ValueFactory $configValueFactory,
+        ConfigLoader $configLoader,
+        ConfigValueFactory $configValueFactory,
         StoreManagerInterface $storeManager,
-        SettingChecker $settingChecker = null,
+        ConfigSettingChecker $configSettingChecker = null,
         array $data = [],
         ScopeResolverPool $scopeResolverPool = null,
         ScopeTypeNormalizer $scopeTypeNormalizer = null,
@@ -169,8 +169,8 @@ class Config extends DataObject
         $this->_configLoader = $configLoader;
         $this->_configValueFactory = $configValueFactory;
         $this->_storeManager = $storeManager;
-        $this->settingChecker = $settingChecker
-            ?? ObjectManager::getInstance()->get(SettingChecker::class);
+        $this->configSettingChecker = $configSettingChecker
+            ?? ObjectManager::getInstance()->get(ConfigSettingChecker::class);
         $this->scopeResolverPool = $scopeResolverPool
             ?? ObjectManager::getInstance()->get(ScopeResolverPool::class);
         $this->scopeTypeNormalizer = $scopeTypeNormalizer
@@ -258,16 +258,16 @@ class Config extends DataObject
     /**
      * Map field name if they were cloned
      *
-     * @param Group $group
+     * @param GroupElement $group
      * @param string $fieldId
      * @return string
      */
-    private function getOriginalFieldId(Group $group, string $fieldId): string
+    private function getOriginalFieldId(GroupElement $group, string $fieldId): string
     {
         if ($group->shouldCloneFields()) {
             $cloneModel = $group->getCloneModel();
 
-            /** @var Field $field */
+            /** @var FieldElement $field */
             foreach ($group->getChildren() as $field) {
                 foreach ($cloneModel->getPrefixes() as $prefix) {
                     if ($prefix['field'] . $field->getId() === $fieldId) {
@@ -287,11 +287,11 @@ class Config extends DataObject
      * @param string $sectionId
      * @param string $groupId
      * @param string $fieldId
-     * @return Field
+     * @return FieldElement
      */
-    private function getField(string $sectionId, string $groupId, string $fieldId): Field
+    private function getField(string $sectionId, string $groupId, string $fieldId): FieldElement
     {
-        /** @var Group $group */
+        /** @var GroupElement $group */
         $group = $this->_configStructure->getElement($sectionId . '/' . $groupId);
         $fieldPath = $group->getPath() . '/' . $this->getOriginalFieldId($group, $fieldId);
         $field = $this->_configStructure->getElement($fieldPath);
@@ -302,13 +302,13 @@ class Config extends DataObject
     /**
      * Get field path
      *
-     * @param Field $field
+     * @param FieldElement $field
      * @param string $fieldId Need for support of clone_field feature
      * @param array $oldConfig Need for compatibility with _processGroup()
      * @param array $extraOldGroups Need for compatibility with _processGroup()
      * @return string
      */
-    private function getFieldPath(Field $field, string $fieldId, array &$oldConfig, array &$extraOldGroups): string
+    private function getFieldPath(FieldElement $field, string $fieldId, array &$oldConfig, array &$extraOldGroups): string
     {
         $path = $field->getGroupPath() . '/' . $fieldId;
 
@@ -422,7 +422,7 @@ class Config extends DataObject
         $groupPath = $sectionPath . '/' . $groupId;
 
         if (isset($groupData['fields'])) {
-            /** @var Group $group */
+            /** @var GroupElement $group */
             $group = $this->_configStructure->getElement($groupPath);
 
             // set value for group field entry by fieldname
@@ -433,7 +433,7 @@ class Config extends DataObject
             }
 
             foreach ($groupData['fields'] as $fieldId => $fieldData) {
-                $isReadOnly = $this->settingChecker->isReadOnly(
+                $isReadOnly = $this->configSettingChecker->isReadOnly(
                     $groupPath . '/' . $fieldId,
                     $this->getScope(),
                     $this->getScopeCode()
@@ -444,7 +444,7 @@ class Config extends DataObject
                 }
 
                 $field = $this->getField($sectionPath, $groupId, $fieldId);
-                /** @var ValueInterface $backendModel */
+                /** @var ConfigValueInterface $backendModel */
                 $backendModel = $field->hasBackendModel()
                     ? $field->getBackendModel()
                     : $this->_configValueFactory->create();
@@ -672,12 +672,12 @@ class Config extends DataObject
     /**
      * Set correct scope if isSingleStoreMode = true
      *
-     * @param Field $fieldConfig
-     * @param ValueInterface $dataObject
+     * @param FieldElement $fieldConfig
+     * @param ConfigValueInterface $dataObject
      * @return void
      */
     protected function _checkSingleStoreMode(
-        Field $fieldConfig,
+        FieldElement $fieldConfig,
         $dataObject
     ) {
         $isSingleStoreMode = $this->_storeManager->isSingleStoreMode();
@@ -700,7 +700,7 @@ class Config extends DataObject
      * @param string $path
      * @param null|bool $inherit
      * @param null|array $configData
-     * @return Element
+     * @return SimplexmlElement
      */
     public function getConfigDataValue($path, &$inherit = null, $configData = null)
     {
