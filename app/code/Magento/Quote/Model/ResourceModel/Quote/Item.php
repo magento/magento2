@@ -25,7 +25,7 @@ class Item extends AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(AbstractModel $object)
     {
@@ -61,7 +61,7 @@ class Item extends AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function prepareDataForUpdate($object)
     {

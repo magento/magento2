@@ -11,7 +11,7 @@ namespace Magento\ProductAlert\Model\ResourceModel\Stock\Customer;
 class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collection
 {
     /**
-     * join productalert stock data to customer collection
+     * Join productalert stock data to customer collection
      *
      * @param int $productId
      * @param int $websiteId

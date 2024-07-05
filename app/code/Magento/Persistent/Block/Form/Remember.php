@@ -14,8 +14,6 @@ namespace Magento\Persistent\Block\Form;
 class Remember extends \Magento\Framework\View\Element\Template
 {
     /**
-     * Persistent data
-     *
      * @var \Magento\Persistent\Helper\Data
      */
     protected $_persistentData = null;

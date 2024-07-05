@@ -25,8 +25,6 @@ class Additional extends \Magento\Framework\View\Element\Html\Link
     protected $_persistentSessionHelper;
 
     /**
-     * Customer repository
-     *
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
     protected $customerRepository;

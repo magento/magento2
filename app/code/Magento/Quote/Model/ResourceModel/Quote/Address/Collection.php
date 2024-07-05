@@ -11,8 +11,6 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Address;
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_quote_address_collection';
@@ -38,8 +36,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
-     * Setting filter on quote_id field but if quote_id is 0
-     * we should exclude loading junk data from DB
+     * Setting filter on quote_id field but if quote_id is 0 we should exclude loading junk data from DB
      *
      * @param int $quoteId
      * @return $this
