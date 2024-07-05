@@ -170,7 +170,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     {
         return [
             [
-                'expected_data' => [
+                'expectedData' => [
                     [
                         'request_path' => 'new-url-key%suffix%',
                         'target_path' => 'catalog/product/view/id/%id%',
