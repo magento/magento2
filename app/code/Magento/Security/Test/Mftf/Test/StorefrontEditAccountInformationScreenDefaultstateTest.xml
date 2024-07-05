@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontEditAccountInformationScreenDefaultstateTest">
+        <annotations>
+            <features value="Security"/>
+            <stories value="Account Information screen has default state"/>
+            <title value="First/Last Names fields are available by default and check boxes for Change Email and Change Password are unchecked"/>
+            <description value="First/Last Names fields are available by default and check boxes for Change Email and Change Password are unchecked"/>
+            <testCaseId value="MC-27360"/>
+            <severity value="MAJOR"/>
+            <group value="security"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- TEST BODY -->
+        <!-- Go to storefront home page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
+        <!-- Login as created customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!-- Navigate to My Account tab -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
+        <!-- Go to customer Account Information -->
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAccountInformation">
+            <argument name="menu" value="Account Information"/>
+        </actionGroup>
+        <!-- Verify First/Last name fields are present -->
+        <seeElement selector="{{StorefrontCustomerAccountInformationSection.firstName}}" stepKey="seeFirstName"/>
+        <seeElement selector="{{StorefrontCustomerAccountInformationSection.lastName}}" stepKey="seeLastName"/>
+        <!-- See Change Email and Change Password Checkboxs are Unchecked -->
+        <dontSeeCheckboxIsChecked selector="{{StorefrontCustomerAccountInformationSection.changeEmail}}"  stepKey="seeChangeEmailCheckBoxIsUnchecked"/>
+        <dontSeeCheckboxIsChecked selector="{{StorefrontCustomerAccountInformationSection.changePassword}}"  stepKey="seeChangePasswordCheckBoxIsUnchecked"/>
+        <!-- Navigate to My Account tab -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage2"/>
+        <click selector="{{StorefrontCustomerDashboardAccountInformationSection.editLink}}" stepKey="clickEditContactInformation"/>
+        <!-- Verify First/Last name fields are present -->
+        <seeElement selector="{{StorefrontCustomerAccountInformationSection.firstName}}" stepKey="seeFirstName2"/>
+        <seeElement selector="{{StorefrontCustomerAccountInformationSection.lastName}}" stepKey="seeLastName2"/>
+        <!-- See Change Email and Change Password Checkboxs are Unchecked -->
+        <dontSeeCheckboxIsChecked selector="{{StorefrontCustomerAccountInformationSection.changeEmail}}"  stepKey="seeChangeEmailCheckBoxIsUnchecked2"/>
+        <dontSeeCheckboxIsChecked selector="{{StorefrontCustomerAccountInformationSection.changePassword}}"  stepKey="seeChangePasswordCheckBoxIsUnchecked2"/>
+    </test>
+</tests>

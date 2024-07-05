@@ -18,6 +18,7 @@
             <testCaseId value="MC-38532"/>
             <useCaseId value="MC-38509"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
 
         <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>

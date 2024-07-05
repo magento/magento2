@@ -17,6 +17,7 @@
             <testCaseId value="MC-16490"/>
             <group value="checkout"/>
             <group value="cloud_smoke"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

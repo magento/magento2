@@ -159,7 +159,11 @@ class ImporterTest extends TestCase
             ->with([]);
         $this->scopeMock
             ->method('setCurrentScope')
-            ->withConsecutive([Area::AREA_ADMINHTML], ['oldScope'], ['oldScope']);
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == Area::AREA_ADMINHTML || $arg1 == 'oldScope') {
+                    return null;
+                }
+            });
         $this->flagManagerMock->expects($this->once())
             ->method('saveFlag')
             ->with(Importer::FLAG_CODE, $data);

@@ -43,11 +43,11 @@ class RendererListTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
 
         $this->blockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->setMethods(['setRenderedBlock', 'getTemplate', 'setTemplate'])->disableOriginalConstructor()
+            ->addMethods(['setRenderedBlock', 'getTemplate', 'setTemplate'])->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->setMethods(['getBlock', 'getChildName'])->disableOriginalConstructor()
+            ->onlyMethods(['getBlock', 'getChildName'])->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->layoutMock->expects($this->any())
@@ -55,7 +55,7 @@ class RendererListTest extends TestCase
             ->willReturn($this->blockMock);
 
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(['getLayout'])->disableOriginalConstructor()
+            ->onlyMethods(['getLayout'])->disableOriginalConstructor()
             ->getMock();
 
         $this->contextMock->expects($this->any())

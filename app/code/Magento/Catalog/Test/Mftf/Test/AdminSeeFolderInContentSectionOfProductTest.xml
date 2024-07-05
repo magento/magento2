@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSeeFolderInContentSectionOfProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Check default folder is visible for any product types"/>
+            <title value="Admin should be able to see default folder is visible Simple Product in Content short description"/>
+            <description value="Admin should be able to see default folder is visible Simple Product in Content short description"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="AC-9638"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <magentoCLI command="config:set cms/pagebuilder/enabled 0" stepKey="disablePageBuilder"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
+            <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="enableOldMediaGallery">
+                <argument name="enabled" value="1"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="enableOldMediaGallery">
+                <argument name="enabled" value="0"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+            <magentoCLI command="config:set cms/pagebuilder/enabled 1" stepKey="enablePageBuilder"/>
+        </after>
+
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct"/>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillBasicProductInfo" />
+        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
+        <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDescription"/>
+        <waitForElementVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForDescription" />
+        <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDescriptionAgain"/>
+        <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon1" />
+        <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse1" />
+        <waitForPageLoad stepKey="waitForBrowseModal" />
+        <waitForElement selector="{{MediaGallerySection.CancelBtn}}" stepKey="waitForCancelBtn1" />
+        <see selector="{{MediaGallerySection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn1" />
+        <see selector="{{MediaGallerySection.UploadImageNew}}" userInput="Upload Image" stepKey="seeUploadImage" />
+        <waitForElement selector="{{MediaGallerySection.wysiwygAnchor}}" stepKey="waitForWysiwygAnchor" />
+        <see selector="{{MediaGallerySection.wysiwygAnchor}}" userInput="wysiwyg" stepKey="seeWysiwygAnchor" />
+
+    </test>
+</tests>

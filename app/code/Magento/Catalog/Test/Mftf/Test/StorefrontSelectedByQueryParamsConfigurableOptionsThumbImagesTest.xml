@@ -20,6 +20,7 @@
                 to selected needed option."/>
             <severity value="MAJOR"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
 
         <!-- Select first option using product query params URL -->

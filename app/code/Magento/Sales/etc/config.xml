@@ -36,6 +36,7 @@
         <sales_email>
             <general>
                 <async_sending>0</async_sending>
+                <async_sending_attempts>3</async_sending_attempts>
                 <sending_limit>50</sending_limit>
             </general>
             <order>
@@ -127,5 +128,20 @@
               <email_required_create_order>1</email_required_create_order>
           </create_account>
         </customer>
+        <csp>
+            <mode>
+                <admin_sales_order_create_index>
+                    <report_only>0</report_only>
+                </admin_sales_order_create_index>
+            </mode>
+            <policies>
+                <admin_sales_order_create_index>
+                    <scripts>
+                        <inline>0</inline>
+                        <event_handlers>1</event_handlers>
+                    </scripts>
+                </admin_sales_order_create_index>
+            </policies>
+        </csp>
     </default>
 </config>

@@ -21,6 +21,7 @@
                 to selected needed option."/>
             <severity value="MAJOR"/>
             <group value="swatches"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Go to created attribute (attribute page) -->
