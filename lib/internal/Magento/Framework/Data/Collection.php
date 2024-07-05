@@ -77,7 +77,7 @@ class Collection implements
     /**
      * Pager page size
      *
-     * if page size is false, then we works with all items
+     * if page size is false, then we work with all items
      *
      * @var int|false
      */
@@ -161,8 +161,8 @@ class Collection implements
      * - ["finset" => $valueInSet]
      * </pre>
      *
-     * If non matched - sequential parallel arrays are expected and OR conditions
-     * will be built using above mentioned structure.
+     * If non-matched - sequential parallel arrays are expected and OR conditions
+     * will be built using above-mentioned structure.
      *
      * Example:
      * <pre>
@@ -825,7 +825,7 @@ class Collection implements
      * Retrieve item by id
      *
      * @param string|int $idValue
-     * @return DataObject
+     * @return DataObject|null
      */
     public function getItemById($idValue)
     {

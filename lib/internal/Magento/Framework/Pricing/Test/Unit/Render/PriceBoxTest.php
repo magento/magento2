@@ -66,7 +66,7 @@ class PriceBoxTest extends TestCase
 
         $this->rendererPool = $this->getMockBuilder(RendererPool::class)
             ->disableOriginalConstructor()
-            ->setMethods(['createAmountRender'])
+            ->onlyMethods(['createAmountRender'])
             ->getMock();
 
         $layout = $this->getMockForAbstractClass(LayoutInterface::class);
@@ -75,7 +75,7 @@ class PriceBoxTest extends TestCase
         $cacheState = $this->getMockBuilder(StateInterface::class)
             ->getMockForAbstractClass();
         $this->context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getLayout', 'getEventManager', 'getScopeConfig', 'getCacheState'])
+            ->onlyMethods(['getLayout', 'getEventManager', 'getScopeConfig', 'getCacheState'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())
@@ -187,7 +187,7 @@ class PriceBoxTest extends TestCase
 
         $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
-            ->setMethods(['toHtml'])
+            ->onlyMethods(['toHtml'])
             ->getMock();
         $amountRender->expects($this->once())
             ->method('toHtml')

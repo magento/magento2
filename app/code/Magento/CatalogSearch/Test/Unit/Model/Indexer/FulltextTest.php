@@ -11,6 +11,7 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
 use Magento\Elasticsearch\Model\Indexer\IndexerHandler;
+use Magento\Framework\Amqp\ConfigPool as AmqpConfigPool;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
 use Magento\CatalogSearch\Model\Indexer\Scope\State;
@@ -21,6 +22,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Indexer\Model\ProcessManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -80,6 +82,22 @@ class FulltextTest extends TestCase
             ->getMock();
         $objectManagerHelper = new ObjectManagerHelper($this);
 
+        $objects = [
+            [
+                \Magento\Framework\Registry::class,
+                $this->createMock(\Magento\Framework\Registry::class)
+            ],
+            [
+                LoggerInterface::class,
+                $this->createMock(LoggerInterface::class)
+            ],
+            [
+                AmqpConfigPool::class,
+                $this->createMock(AmqpConfigPool::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
+
         $this->processManager = new ProcessManager(
             $this->getClassMock(ResourceConnection::class)
         );
@@ -131,8 +149,15 @@ class FulltextTest extends TestCase
         );
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
-            ->withConsecutive(...$consecutiveStoreRebuildArguments)
-            ->willReturn(new \ArrayObject([$indexData, $indexData]));
+            ->willReturnCallback(function ($arg1, $arg2) use ($consecutiveStoreRebuildArguments, $indexData) {
+                if ($arg1 == $consecutiveStoreRebuildArguments[0][0] &&
+                    $arg2 == $consecutiveStoreRebuildArguments[0][1]) {
+                    return new \ArrayObject([$indexData, $indexData]);
+                } elseif ($arg1 == $consecutiveStoreRebuildArguments[1][0] &&
+                    $arg2 == $consecutiveStoreRebuildArguments[1][1]) {
+                    return new \ArrayObject([$indexData, $indexData]);
+                }
+            });
 
         $this->model->execute($ids);
     }
@@ -165,8 +190,11 @@ class FulltextTest extends TestCase
         );
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
-            ->withConsecutive(...$consecutiveStoreRebuildArguments)
-            ->willReturn(new \ArrayObject([$indexData, $indexData]));
+            ->willReturnCallback(function (...$consecutiveStoreRebuildArguments) use ($indexData) {
+                if (!empty($consecutiveStoreRebuildArguments)) {
+                    return new \ArrayObject([$indexData, $indexData]);
+                }
+            });
 
         $this->model->execute($ids);
     }
@@ -208,8 +236,11 @@ class FulltextTest extends TestCase
         );
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
-            ->withConsecutive(...$consecutiveStoreRebuildArguments)
-            ->willReturn($indexData);
+            ->willReturnCallback(function (...$consecutiveStoreRebuildArguments) use ($indexData) {
+                if (!empty($consecutiveStoreRebuildArguments)) {
+                    return $indexData;
+                }
+            });
 
         $this->fulltextResource->expects($this->exactly(2))->method('resetSearchResultsByStore');
 

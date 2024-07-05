@@ -307,8 +307,8 @@ class CollectionTest extends TestCase
      */
     public function testCallsCallableArrayWithEachItemNoArgs()
     {
-        $mockCallbackObject = $this->getMockBuilder('DummyEachCallbackInstance')
-            ->setMethods(['testObjCallback'])
+        $mockCallbackObject = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['testObjCallback'])
             ->getMock();
         $mockCallbackObject->method('testObjCallback')->willReturnCallback(function ($item, ...$args) {
             $item->testItemCallback(...$args);
@@ -333,8 +333,8 @@ class CollectionTest extends TestCase
      */
     public function testCallsCallableArrayWithEachItemAndArgs()
     {
-        $mockCallbackObject = $this->getMockBuilder('DummyEachCallbackInstance')
-            ->setMethods(['testObjCallback'])
+        $mockCallbackObject = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['testObjCallback'])
             ->getMock();
         $mockCallbackObject->method('testObjCallback')->willReturnCallback(function ($item, ...$args) {
             $item->testItemCallback(...$args);

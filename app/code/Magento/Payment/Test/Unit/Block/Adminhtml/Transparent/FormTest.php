@@ -44,12 +44,10 @@ class FormTest extends TestCase
             ->getMock();
 
         $this->checkoutSessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
         $paymentConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 

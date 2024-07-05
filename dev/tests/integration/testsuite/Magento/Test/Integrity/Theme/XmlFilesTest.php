@@ -43,7 +43,7 @@ class XmlFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function viewConfigFileDataProvider()
+    public static function viewConfigFileDataProvider()
     {
         $result = [];
         /** @var \Magento\Framework\Component\DirSearch $componentDirSearch */
@@ -68,7 +68,7 @@ class XmlFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function themeConfigFileExistsDataProvider()
+    public static function themeConfigFileExistsDataProvider()
     {
         $result = [];
         /** @var \Magento\Framework\Component\ComponentRegistrar $componentRegistrar */
@@ -109,7 +109,7 @@ class XmlFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function themeConfigFileDataProvider()
+    public static function themeConfigFileDataProvider()
     {
         $result = [];
         /** @var \Magento\Framework\Component\DirSearch $componentDirSearch */

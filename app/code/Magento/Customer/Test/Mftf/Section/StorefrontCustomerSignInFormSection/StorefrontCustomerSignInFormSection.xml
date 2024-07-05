@@ -15,5 +15,6 @@
         <element name="forgotPasswordLink" type="button" selector=".action.remind" timeout="10"/>
         <element name="customerLoginBlock" type="text" selector=".login-container .block.block-customer-login"/>
         <element name="signInAccountLink" type="button" selector="//header[@class='page-header']//li/a[contains(.,'Sign In')]"/>
+        <element name="signInClick" type="button" selector="#html-body > div.page-wrapper > header > div.panel.wrapper > div > ul > li.link.authorization-link > a" timeout="30"/>
     </section>
 </sections>

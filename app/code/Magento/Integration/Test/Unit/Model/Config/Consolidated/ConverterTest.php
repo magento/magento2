@@ -30,7 +30,6 @@ class ConverterTest extends TestCase
     {
         $this->resourceProviderMock = $this->getMockBuilder(ProviderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(

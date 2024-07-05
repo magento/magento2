@@ -193,8 +193,8 @@ define([
          */
         validateFields: function () {
             var addressFlat = addressConverter.formDataProviderToFlatData(
-                this.collectObservedData(),
-                'shippingAddress'
+                    this.collectObservedData(),
+                    'shippingAddress'
                 ),
                 address;
 
@@ -202,6 +202,8 @@ define([
                 addressFlat = uiRegistry.get('checkoutProvider').shippingAddress;
                 address = addressConverter.formAddressDataToQuoteAddress(addressFlat);
                 selectShippingAddress(address);
+            } else {
+                shippingService.isLoading(false);
             }
         },
 

@@ -248,8 +248,13 @@ class ConfirmTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['id', false], ['key', false])
-            ->willReturnOnConsecutiveCalls($customerId, $key);
+            ->willReturnCallback(function ($arg1, $arg2) use ($customerId, $key) {
+                if ($arg1 == 'id' && $arg2 == false) {
+                    return $customerId;
+                } elseif ($arg1 == 'key ' && $arg2 == false) {
+                    return $key;
+                }
+            });
 
         $this->messageManagerMock->expects($this->once())
             ->method('addErrorMessage')
@@ -277,7 +282,7 @@ class ConfirmTest extends TestCase
     /**
      * @return array
      */
-    public function getParametersDataProvider(): array
+    public static function getParametersDataProvider(): array
     {
         return [
             [true, false],
@@ -382,7 +387,7 @@ class ConfirmTest extends TestCase
     /**
      * @return array
      */
-    public function getSuccessMessageDataProvider(): array
+    public static function getSuccessMessageDataProvider(): array
     {
         return [
             [1, 1, false, null, 'some-datetime', null],
@@ -516,7 +521,7 @@ class ConfirmTest extends TestCase
     /**
      * @return array
      */
-    public function getSuccessRedirectDataProvider(): array
+    public static function getSuccessRedirectDataProvider(): array
     {
         return [
             [

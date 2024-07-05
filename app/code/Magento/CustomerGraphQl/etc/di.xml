@@ -30,9 +30,6 @@
                 <item name="Magento\Customer\Model\Address" xsi:type="object">
                     Magento\CustomerGraphQl\Model\Resolver\Cache\Customer\Address\TagsStrategy
                 </item>
-                <item name="Magento\Newsletter\Model\Subscriber" xsi:type="object">
-                    Magento\CustomerGraphQl\Model\Resolver\Cache\Subscriber\TagsStrategy
-                </item>
             </argument>
         </arguments>
     </type>
