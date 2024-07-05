@@ -11,6 +11,8 @@ namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
 class Blanknumber extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Number
 {
     /**
+     * Get Value
+     *
      * @param \Magento\Framework\DataObject $row
      *
      * @return string

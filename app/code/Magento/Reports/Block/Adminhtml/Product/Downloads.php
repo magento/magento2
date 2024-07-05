@@ -11,6 +11,8 @@ namespace Magento\Reports\Block\Adminhtml\Product;
 class Downloads extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
+     * Initialize Downloads
+     *
      * @return void
      */
     protected function _construct()

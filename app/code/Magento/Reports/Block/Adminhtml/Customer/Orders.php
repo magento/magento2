@@ -21,6 +21,8 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_blockGroup = 'Magento_Reports';
 
     /**
+     * Initialize Orders
+     *
      * @return void
      */
     protected function _construct()

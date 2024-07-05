@@ -14,14 +14,12 @@ namespace Magento\Reports\Block\Adminhtml\Sales;
 class Bestsellers extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
-     * Template
-     *
      * @var string
      */
     protected $_template = 'Magento_Reports::report/grid/container.phtml';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {

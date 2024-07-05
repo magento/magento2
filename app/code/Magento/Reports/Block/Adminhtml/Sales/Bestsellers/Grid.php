@@ -20,7 +20,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     protected $_columnGroupBy = 'period';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @codeCoverageIgnore
      */
     protected function _construct()
@@ -30,7 +31,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @codeCoverageIgnore
      */
     public function getResourceCollectionName()
@@ -39,7 +41,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareColumns()
     {

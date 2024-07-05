@@ -19,6 +19,8 @@ class Totals extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_blockGroup = 'Magento_Reports';
 
     /**
+     * Initialize Totals
+     *
      * @return void
      */
     protected function _construct()

@@ -21,7 +21,7 @@ class Invoiced extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_template = 'Magento_Reports::report/grid/container.phtml';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {

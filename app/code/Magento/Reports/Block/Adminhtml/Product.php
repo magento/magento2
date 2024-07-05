@@ -11,7 +11,7 @@ namespace Magento\Reports\Block\Adminhtml;
 class Product extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {

@@ -133,6 +133,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int | \Magento\Catalog\Model\Product $product
      * @return array
+     * phpcs:disable
      */
     public function getOptionsByProduct($product)
     {

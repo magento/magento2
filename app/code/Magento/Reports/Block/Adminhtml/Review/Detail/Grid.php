@@ -16,6 +16,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_reviewsFactory;
 
     /**
+     * Initialize
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\ResourceModel\Review\CollectionFactory $reviewsFactory
@@ -32,6 +34,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Initialize
+     *
      * @return void
      */
     protected function _construct()

@@ -19,6 +19,8 @@ class Viewed extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_template = 'Magento_Reports::report/grid/container.phtml';
 
     /**
+     * Initialize Viewed
+     *
      * @return void
      */
     protected function _construct()
