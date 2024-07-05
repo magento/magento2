@@ -11,6 +11,8 @@ namespace Magento\OfflineShipping\Block\Adminhtml\Form\Field;
 class Import extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
+     * Initialize Import
+     *
      * @return void
      */
     protected function _construct()

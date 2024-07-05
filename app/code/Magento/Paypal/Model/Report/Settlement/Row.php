@@ -50,8 +50,6 @@ class Row extends \Magento\Framework\Model\AbstractModel
     private $eventLabelsList = [];
 
     /**
-     * Cast amount relation
-     *
      * @var array
      */
     private $castAmountRelation = [
@@ -70,8 +68,7 @@ class Row extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Return description of Reference ID Type
-     * If no code specified, return full list of codes with their description
+     * Return description of Reference ID Type If no code specified, return full list of codes with their description
      *
      * @param string $code
      * @return string

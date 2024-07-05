@@ -42,6 +42,8 @@ class Tablerate extends \Magento\Framework\App\Config\Value
     }
 
     /**
+     * After save
+     *
      * @return $this
      */
     public function afterSave()

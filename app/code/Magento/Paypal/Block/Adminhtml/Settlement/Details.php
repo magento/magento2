@@ -11,8 +11,7 @@ namespace Magento\Paypal\Block\Adminhtml\Settlement;
 class Details extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Block construction
-     * Initialize titles, buttons
+     * Block construction Initialize titles, buttons
      *
      * @return void
      */

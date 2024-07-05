@@ -11,8 +11,7 @@ namespace Magento\Paypal\Block\Hosted\Pro;
 class Iframe extends \Magento\Paypal\Block\Iframe
 {
     /**
-     * Internal constructor
-     * Set payment method code
+     * Internal constructor Set payment method code
      *
      * @return void
      */
