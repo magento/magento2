@@ -116,8 +116,6 @@ class CacheTest extends TestCase
      */
     public function testCachingNotSkippedWhenKeysOk()
     {
-        $this->markTestSkipped("Test Skip for debug the issue");
-
         $this->preconfigureMocks();
         $this->configurePlugin();
         $this->loggerMock->expects($this->never())->method('warning');
