@@ -323,7 +323,7 @@
         <waitForText userInput="$$createConfigChildProduct5.name$$" selector="{{AdminProductFormConfigurationsSection.evenProduct('3','2')}}" stepKey="assert5thProductIsPresentInLastRow"/>
         <!--Click on next icon and assert next 5 products are present-->
         <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.nextPageArrow}}" stepKey="waitForNextArrowToBeClicked"/>
-        <click selector="{{AdminProductGridPaginationSection.nextPageArrow}}" stepKey="clickNextProductPage"/>
+        <click selector="{{AdminProductFormConfigurationsSection.nextPageArrow}}" stepKey="clickNextProductPage"/>
         <waitForText userInput="$$createConfigChildProduct6.name$$" selector="{{AdminProductFormConfigurationsSection.evenProduct('1','2')}}" stepKey="assert6thProductIsPresent"/>
         <waitForText userInput="$$createConfigChildProduct7.name$$" selector="{{AdminProductFormConfigurationsSection.oddProduct('1','2')}}" stepKey="assert7thProductIsPresent"/>
         <waitForText userInput="$$createConfigChildProduct8.name$$" selector="{{AdminProductFormConfigurationsSection.evenProduct('2','2')}}" stepKey="assert8thProductIsPresent"/>
