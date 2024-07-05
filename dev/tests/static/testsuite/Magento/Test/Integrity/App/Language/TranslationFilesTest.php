@@ -10,6 +10,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory;
 use Magento\Setup\Module\I18n\Locale;
 use Magento\Setup\Module\I18n\Pack\Writer\File\Csv;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -17,7 +18,7 @@ use Magento\Setup\Module\I18n\Pack\Writer\File\Csv;
 class TranslationFilesTest extends TranslationFiles
 {
     /**
-     * Context
+     * I18n\Context
      *
      * @var \Magento\Setup\Module\I18n\Context
      */
@@ -104,9 +105,10 @@ class TranslationFilesTest extends TranslationFiles
         $phraseCollector = new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector(
             new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer()
         );
+        $fileSystem = new File;
         $adapters = [
             'php' => new \Magento\Setup\Module\I18n\Parser\Adapter\Php($phraseCollector),
-            'js' =>  new \Magento\Setup\Module\I18n\Parser\Adapter\Js(),
+            'js' =>  new \Magento\Setup\Module\I18n\Parser\Adapter\Js($fileSystem),
             'xml' => new \Magento\Setup\Module\I18n\Parser\Adapter\Xml(),
             'html' => new \Magento\Setup\Module\I18n\Parser\Adapter\Html(),
         ];
