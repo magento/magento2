@@ -7,153 +7,31 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Oauth\Helper\Signature;
 
-use Laminas\Crypt\Hmac as HMACEncryption;
+use Laminas\Uri;
+use Laminas\OAuth\Signature\Hmac as HmacSignature;
+use Magento\Framework\Oauth\Helper\Uri\Http;
 
-class Hmac
+class Hmac extends HmacSignature
 {
     /**
-     * @var string|null
+     * @inheritDoc
      */
-    private ?string $hashAlgorithm = null;
-
-    /**
-     * @var string
-     */
-    private string $key;
-
-    /**
-     * @var string
-     */
-    private string $consumerSecret;
-
-    /**
-     * @var string
-     */
-    private string $tokenSecret = '';
-
-    /**
-     * @param string $consumerSecret
-     * @param string|null $tokenSecret
-     * @param string|null $hashAlgo
-     */
-    public function __construct(string $consumerSecret, ?string $tokenSecret = null, ?string $hashAlgo = null)
+    public function normaliseBaseSignatureUrl($url): string
     {
-        $this->consumerSecret = $consumerSecret;
-        if (isset($tokenSecret)) {
-            $this->tokenSecret = $tokenSecret;
-        }
-        $this->key = $this->assembleKey();
-        if (isset($hashAlgo)) {
-            $this->hashAlgorithm = $hashAlgo;
-        }
-    }
+        Uri\UriFactory::registerScheme('http', Http::class);
+        Uri\UriFactory::registerScheme('https', Http::class);
 
-    /**
-     * Sign a request
-     *
-     * @param array $params
-     * @param mixed $method
-     * @param mixed $url
-     * @return string
-     */
-    public function sign(
-        array   $params,
-        ?string $method = null,
-        ?string $url = null
-    ): string {
-        unset($params['oauth_signature']);
-
-        $binaryHash = HMACEncryption::compute(
-            $this->key,
-            $this->hashAlgorithm,
-            $this->getBaseSignatureString($params, $method, $url),
-            HMACEncryption::OUTPUT_BINARY
-        );
-
-        return base64_encode($binaryHash);
-    }
-
-    /**
-     * Assemble key from consumer and token secrets
-     *
-     * @return string
-     */
-    private function assembleKey(): string
-    {
-        $parts = [$this->consumerSecret];
-        if ($this->tokenSecret !== null) {
-            $parts[] = $this->tokenSecret;
+        $uri = Uri\UriFactory::factory($url);
+        $uri->normalize();
+        if ($uri->getScheme() == 'http' && $uri->getPort() == '80') {
+            $uri->setPort('');
+        } elseif ($uri->getScheme() == 'https' && $uri->getPort() == '443') {
+            $uri->setPort('');
+        } elseif (! in_array($uri->getScheme(), ['http', 'https'])) {
+            throw new \InvalidArgumentException('Invalid URL provided; must be an HTTP or HTTPS scheme');
         }
-        foreach ($parts as $key => $secret) {
-            $parts[$key] = $this->urlEncode($secret);
-        }
-        return implode('&', $parts);
-    }
-
-    /**
-     * Get base signature string
-     *
-     * @param array $params
-     * @param null|string $method
-     * @param null|string $url
-     * @return string
-     */
-    private function getBaseSignatureString(array $params, $method = null, $url = null): string
-    {
-        $encodedParams = [];
-        foreach ($params as $key => $value) {
-            $encodedParams[$this->urlEncode($key)] =
-                $this->urlEncode($value);
-        }
-        $baseStrings = [];
-        if (isset($method)) {
-            $baseStrings[] = strtoupper($method);
-        }
-        if (isset($url)) {
-            $baseStrings[] = $this->urlEncode($url);
-        }
-        if (isset($encodedParams['oauth_signature'])) {
-            unset($encodedParams['oauth_signature']);
-        }
-        $baseStrings[] = $this->urlEncode(
-            $this->toByteValueOrderedQueryString($encodedParams)
-        );
-
-        return implode('&', $baseStrings);
-    }
-
-    /**
-     * Transform an array to a byte value ordered query string
-     *
-     * @param array $params
-     * @return string
-     */
-    private function toByteValueOrderedQueryString(array $params): string
-    {
-        $return = [];
-        uksort($params, 'strnatcmp');
-        foreach ($params as $key => $value) {
-            if (is_array($value)) {
-                natsort($value);
-                foreach ($value as $keyduplicate) {
-                    $return[] = $key . '=' . $keyduplicate;
-                }
-            } else {
-                $return[] = $key . '=' . $value;
-            }
-        }
-        return implode('&', $return);
-    }
-
-    /**
-     * URL encode a value
-     *
-     * @param string $value
-     * @return string
-     */
-    private function urlEncode(string $value): string
-    {
-        $encoded = rawurlencode($value);
-        return str_replace('%7E', '~', $encoded);
+        $uri->setQuery('');
+        $uri->setFragment('');
+        return $uri->toString();
     }
 }
