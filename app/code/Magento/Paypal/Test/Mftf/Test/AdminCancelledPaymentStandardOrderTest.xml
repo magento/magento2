@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCancelledPaymentStandardOrderTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment standard method"/>
+            <title value="Complete a Sales Order Paid with PayPal Payments Standard"/>
+            <description value="Complete order paid with PayPalStandard and cancelled in backend"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4808"/>
+            <group value="paypalStandard"/>
+            <group value="3rd_party_integration" />
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Login to admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Simple product is created -->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct">
+                <field key="price">140.98</field>
+            </createData>
+            <!-- US Customer is created -->
+            <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Customer Log Out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Navigate to StoreFront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <!-- Click Next button -->
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <!-- Click on PayPal payment radio button and click on continue btn -->
+        <actionGroup ref="AdminSelectPaypalStandardPaymentInPaymentPageActionGroup" stepKey="selectPaypalStandardPaymentAndClickOnContinueButton"/>
+        <!-- Login to PayPal in-context and verify order total on PayPal page-->
+        <actionGroup ref="StorefrontLoginToPayPalStandardPaymentActionGroup" stepKey="loginToPayPal"/>
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <!-- Go to order page -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderedPage">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOption">
+            <argument name="orderStatus" value="Canceled"/>
+        </actionGroup>
+        <!--Grab the transaction id-->
+        <waitForElementVisible selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForTransactionIDFieldToBeAppeared"/>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabTransactionID"/>
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Canceled order')}}" userInput="Canceled order online Amount: $145.98. Transaction ID: &quot;{$grabTransactionID}&quot;" stepKey="seeOrderHistoryNotesAfterCancelingOrder"/>
+        <actionGroup ref="AdminOpenTransactionsTabActionGroup" stepKey="openTransactionTypeHasAuthorization">
+            <argument name="transactionType" value="authorization"/>
+        </actionGroup>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForAuthorization"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClicked"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>
+        <actionGroup ref="AdminOpenTransactionsTabActionGroup" stepKey="openTransactionTypeHasVoid">
+            <argument name="transactionType" value="void"/>
+        </actionGroup>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForVoid"/>
+    </test>
+</tests>
