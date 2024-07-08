@@ -30,9 +30,10 @@ define(['Magento_Bundle/js/components/bundle-dynamic-rows', 'uiRegistry', 'uiCol
             describe('test removeBundleItemsFromOption method', function () {
                 it('Check if bundle items are removed from option', function () {
                     let bundleSelections = new uiCollection;
+
                     bundleSelections._elems = {
                         clear: jasmine.createSpy('clear')
-                    }
+                    };
 
                     spyOn(bundleSelections, 'destroyChildren').and.callThrough();
                     spyOn(registry, 'get').and.returnValue(bundleSelections);
