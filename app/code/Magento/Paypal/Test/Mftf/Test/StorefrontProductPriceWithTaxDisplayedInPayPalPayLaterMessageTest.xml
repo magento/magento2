@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductPriceWithTaxDisplayedInPayPalPayLaterMessageTest">
+        <annotations>
+            <features value="Paypal"/>
+            <stories value="Payment methods"/>
+            <title value="Product Price with tax calculation displays on Paypal Pay Later message in Product page"/>
+            <description value="Product Price with tax calculation displays on Paypal Pay Later message in Product page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5616"/>
+            <group value="3rd_party_integration" />
+<!--            <group value="pr_exclude" />-->
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="configPayPalExpress">
+                <argument name="credentials" value="SamplePaypalExpressConfig2"/>
+            </actionGroup>
+<!--            <actionGroup ref="AdminEnablePayPalExpressCheckoutPayLaterActionGroup" stepKey="enablePayPalPayLater"/>-->
+            <actionGroup ref="AdminPayPalExpressCheckoutPayLaterEnableActionGroup" stepKey="activePayLater">
+                <argument name="countryCode" value="us"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete Product -->
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+            <!-- Disable Paypal -->
+            <actionGroup ref="AdminPayPalExpressCheckoutDisableActionGroup" stepKey="configPaypalExpressCheckoutDisable"/>
+            <!-- Revert to default tax setting-->
+            <magentoCLI command="config:set tax/calculation/price_includes_tax 0" stepKey="disableCatalogIncludingTax"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Go to StoreFront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+        <!-- Add simple product to cart -->
+        <actionGroup ref="StorefrontAddSimpleProductWithQtyActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <!-- Open mini cart from product page  -->
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniShoppingCart"/>
+        <!--Click Paypal button-->
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+        <!--Login to Paypal in-context-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
+        <!--Scroll down to paypal pay later option and verify message-->
+        <waitForText userInput="4 payments of $25.00 due every 2 weeks, starting today." selector="{{StorefrontPayPalPayLaterSection.payPalPayLaterMessage}}" stepKey="verifyPayPalPayLaterMessage1"/>
+        <closeTab stepKey="closeCurrentTab"/>
+        <!-- Set up catalog to store product price including tax -->
+        <magentoCLI command="config:set tax/calculation/price_includes_tax 1" stepKey="enableCatalogIncludingTax"/>
+        <!-- Go to StoreFront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFrontAgain"/>
+        <!-- Empty the cart -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <actionGroup ref="DeleteProductFromShoppingCartActionGroup" stepKey="deleteFirstProductFromCart">
+            <argument name="productName" value="$$createProduct.name$"/>
+        </actionGroup>
+        <!-- Add simple product to cart -->
+        <actionGroup ref="StorefrontAddSimpleProductWithQtyActionGroup" stepKey="addSimpleProductToCartAgain">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <!-- Open mini cart from product page  -->
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniShoppingCartAgain"/>
+        <!--Click Paypal button-->
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtnAgain"/>
+        <!--Scroll down to paypal pay later option and verify message-->
+        <switchToNextTab stepKey="switchToInContentTab"/>
+        <waitForText userInput="4 payments of $23.10 due every 2 weeks, starting today." selector="{{StorefrontPayPalPayLaterSection.payPalPayLaterMessage}}" stepKey="verifyPayPalPayLaterMessageAfterTax"/>
+    </test>
+</tests>
