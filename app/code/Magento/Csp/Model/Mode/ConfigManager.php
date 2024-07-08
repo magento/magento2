@@ -127,7 +127,7 @@ class ConfigManager implements ModeConfigManagerInterface
         }
 
         return $this->modeConfiguredFactory->create([
-            'reportOnly' => $reportOnly,
+            'reportOnly' => (bool)$reportOnly,
             'reportUri' => !empty($reportUri) ? $reportUri : null,
         ]);
     }
