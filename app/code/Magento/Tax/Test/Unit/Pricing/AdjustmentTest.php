@@ -17,6 +17,11 @@ use PHPUnit\Framework\TestCase;
 class AdjustmentTest extends TestCase
 {
     /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
+    /**
      * @var Adjustment
      */
     protected $adjustment;
@@ -117,7 +122,11 @@ class AdjustmentTest extends TestCase
             ->with($object, $amount)
             ->willReturn($price);
 
-        $this->assertEquals($expectedResult, $this->adjustment->extractAdjustment($amount, $object));
+        $this->assertEqualsWithDelta(
+            $expectedResult,
+            $this->adjustment->extractAdjustment($amount, $object),
+            self::EPSILON
+        );
     }
 
     /**

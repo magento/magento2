@@ -160,10 +160,21 @@ class OrderService implements OrderManagementInterface
      * @param int $id
      * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface $statusHistory
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addComment($id, \Magento\Sales\Api\Data\OrderStatusHistoryInterface $statusHistory)
     {
         $order = $this->orderRepository->get($id);
+
+        /**
+         * change order status is not allowed during add comment to the order
+         */
+        if ($statusHistory->getStatus() && $statusHistory->getStatus() != $order->getStatus()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Unable to add comment: The status "%1" is not part of the order
+                 status history.', $statusHistory->getStatus())
+            );
+        }
         $order->addStatusHistory($statusHistory);
         $this->orderRepository->save($order);
         $notify = $statusHistory['is_customer_notified'] ?? false;

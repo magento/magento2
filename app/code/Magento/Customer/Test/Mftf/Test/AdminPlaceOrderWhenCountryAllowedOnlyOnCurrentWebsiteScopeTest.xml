@@ -15,6 +15,7 @@
             <description value="Place an order when country allowed only on current website scope"/>
             <severity value="MAJOR"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
              <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
@@ -27,13 +28,14 @@
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <createData entity="DisableAdminAccountAllowCountry" stepKey="setDefaultValueForAllowCountries"/>
             <createData entity="SetAdminAccountAllowCountryToDefaultForDefaultWebsite" stepKey="setDefaultValueForAllowCountriesForDefaultWebsites"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$createCustomer$"/>
         </actionGroup>
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">

@@ -16,6 +16,7 @@
             <description value="Apply tax and fpt for simple product with canadian pst origin test"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4061"/>
+            <group value="tax_isolated" />
         </annotations>
         <before>
              <!-- Create a new user with canadian address -->
@@ -33,6 +34,8 @@
             </actionGroup>
             <!-- Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
             <!-- change tax classes configuration -->
             <actionGroup ref="SetTaxClassForShippingActionGroup" stepKey="setTaxClass"/>
             <actionGroup ref="AdminChangeTaxAndFptConfigActionGroup" stepKey="changeTaxConfigs"/>
@@ -106,7 +109,9 @@
                 <argument name="valueForFPT" value="10"/>
             </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
                 <argument name="tags" value="full_page"/>
             </actionGroup>
@@ -151,13 +156,16 @@
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="Simple_CA_Customer.email"/>
             </actionGroup>
             <!-- Logout from admin -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
             <!-- reindex -->
-            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <!-- Navigate to the product -->
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProduct2Page">

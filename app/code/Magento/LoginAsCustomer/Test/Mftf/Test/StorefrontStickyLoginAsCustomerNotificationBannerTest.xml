@@ -19,6 +19,7 @@
             <testCaseId value=""/>
             <group value="login_as_customer"/>
             <severity value="CRITICAL"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
@@ -31,6 +32,7 @@
         </before>
 
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
                         stepKey="disableLoginAsCustomer"/>

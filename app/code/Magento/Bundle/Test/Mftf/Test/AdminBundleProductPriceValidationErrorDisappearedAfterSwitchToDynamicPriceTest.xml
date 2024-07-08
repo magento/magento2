@@ -17,6 +17,7 @@
             <testCaseId value="MC-40309"/>
             <useCaseId value="MC-30152"/>
             <group value="bundle"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

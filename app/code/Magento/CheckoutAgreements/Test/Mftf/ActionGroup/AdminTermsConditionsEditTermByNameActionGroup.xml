@@ -13,7 +13,7 @@
             <description>Filters Terms and Conditions grid and opens the first result Edit page</description>
         </annotations>
 
-        <doubleClick selector="{{AdminTermGridSection.firstRowConditionId}}" stepKey="clickFirstRow"/>
+        <click selector="{{AdminTermGridSection.firstRowConditionId}}" stepKey="clickFirstRow"/>
         <waitForPageLoad stepKey="waitForEditTermPageLoad"/>
     </actionGroup>
 </actionGroups>

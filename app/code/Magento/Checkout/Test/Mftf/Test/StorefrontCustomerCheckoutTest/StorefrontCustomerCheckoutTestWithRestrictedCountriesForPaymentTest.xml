@@ -60,7 +60,7 @@
         <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectAddress"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNextButton"/>
         <waitForPageLoad stepKey="waitBillingForm"/>
-        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
         <dontSee selector="{{CheckoutPaymentSection.paymentMethodByName('Check / Money order')}}" stepKey="paymentMethodDoesNotAvailable"/>
 
         <!-- Fill UK Address and verify that payment available and checkout successful -->

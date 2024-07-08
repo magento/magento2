@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94470"/>
             <group value="sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -34,6 +35,7 @@
             <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="Simple_US_Customer.email"/>
             </actionGroup>
@@ -42,7 +44,7 @@
         </after>
 
         <!--Proceed to Admin panel > SALES > Orders. Created order should be in Processing status-->
-        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>
+        <actionGroup ref="AdminNavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>
 
         <!--Check if order can be submitted without the required fields including email address-->
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage"/>

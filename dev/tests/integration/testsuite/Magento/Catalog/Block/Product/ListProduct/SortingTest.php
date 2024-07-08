@@ -99,7 +99,7 @@ class SortingTest extends TestCase
         string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
-            $this->markTestIncomplete($incompleteReason);
+            $this->markTestSkipped($incompleteReason);
         }
         $category = $this->updateCategorySortBy('Category 1', Store::DEFAULT_STORE_ID, $sortBy);
         $this->renderBlock($category, $direction);
@@ -122,7 +122,7 @@ class SortingTest extends TestCase
         string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
-            $this->markTestIncomplete($incompleteReason);
+            $this->markTestSkipped($incompleteReason);
         }
         $this->assertProductListSortOrderWithConfig($sortBy, $direction, $expectation);
     }
@@ -199,7 +199,7 @@ class SortingTest extends TestCase
         string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
-            $this->markTestIncomplete($incompleteReason);
+            $this->markTestSkipped($incompleteReason);
         }
         $secondStoreId = (int)$this->storeManager->getStore('fixture_second_store')->getId();
         $this->updateCategorySortBy('Category 1', Store::DEFAULT_STORE_ID, $defaultSortBy);
@@ -227,7 +227,7 @@ class SortingTest extends TestCase
         string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
-            $this->markTestIncomplete($incompleteReason);
+            $this->markTestSkipped($incompleteReason);
         }
         $this->objectManager->removeSharedInstance(Config::class);
         $secondStoreId = (int)$this->storeManager->getStore('fixture_second_store')->getId();

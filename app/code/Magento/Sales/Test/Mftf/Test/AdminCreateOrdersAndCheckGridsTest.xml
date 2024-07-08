@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateOrdersAndCheckGridsTest">
         <annotations>
             <stories value="Create orders and check grids"/>
@@ -16,11 +16,14 @@
             <useCaseId value="ACP2E-1367" />
             <testCaseId value="AC-7106" />
             <group value="sales"/>
+            <group value="async_operations" />
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <magentoCLI command="config:set {{AsyncGridsIndexingConfigData.enable_option}}" stepKey="enableAsyncIndexing"/>
-            <magentoCLI command="cache:clean" stepKey="cacheCleanBefore"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheCleanBefore">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -29,7 +32,9 @@
 
         <after>
             <magentoCLI command="config:set {{AsyncGridsIndexingConfigData.disable_option}}" stepKey="disableAsyncIndexing"/>
-            <magentoCLI command="cache:clean" stepKey="cacheCleanAfter"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheCleanAfter">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -47,11 +52,13 @@
             <requiredEntity createDataKey="createGuestCartOne"/>
         </updateData>
 
-        <magentoCLI command="cron:run --group=default" stepKey="runCronOne"/>
+        <magentoCron groups="default" stepKey="runCronOne"/>
 
         <createData entity="Invoice" stepKey="invoiceOrderOne">
             <requiredEntity createDataKey="createGuestCartOne"/>
         </createData>
+
+        <magentoCron groups="default" stepKey="runCronTwo"/>
 
         <createData entity="GuestCart" stepKey="createGuestCartTwo"/>
         <createData entity="SimpleCartItem" stepKey="addCartItemTwo">
@@ -65,11 +72,13 @@
             <requiredEntity createDataKey="createGuestCartTwo"/>
         </updateData>
 
+        <magentoCron groups="default" stepKey="runCronThree"/>
+
         <createData entity="Shipment" stepKey="shipOrderOne">
             <requiredEntity createDataKey="createGuestCartOne"/>
         </createData>
 
-        <magentoCLI command="cron:run --group=default" stepKey="runCronTwo"/>
+        <magentoCron groups="default" stepKey="runCronFour"/>
 
         <createData entity="GuestCart" stepKey="createGuestCartThree"/>
         <createData entity="SimpleCartItem" stepKey="addCartItemThree">
@@ -83,19 +92,25 @@
             <requiredEntity createDataKey="createGuestCartThree"/>
         </updateData>
 
+        <magentoCron groups="default" stepKey="runCronFive"/>
+
         <createData entity="CreditMemo" stepKey="refundOrderOne">
             <requiredEntity createDataKey="createGuestCartOne"/>
         </createData>
+
+        <magentoCron groups="default" stepKey="runCronSix"/>
 
         <createData entity="Invoice" stepKey="invoiceOrderThree">
             <requiredEntity createDataKey="createGuestCartThree"/>
         </createData>
 
+        <magentoCron groups="default" stepKey="runCronSeven"/>
+
         <createData entity="Shipment" stepKey="shipOrderTwo">
             <requiredEntity createDataKey="createGuestCartTwo"/>
         </createData>
 
-        <magentoCLI command="cron:run --group=default" stepKey="runCronThree"/>
+        <magentoCron groups="default" stepKey="runCronEight"/>
 
         <createData entity="Invoice" stepKey="invoiceOrderTwo">
             <requiredEntity createDataKey="createGuestCartTwo"/>
@@ -109,33 +124,26 @@
             <requiredEntity createDataKey="createGuestCartTwo"/>
         </createData>
 
-        <magentoCLI command="cron:run --group=default" stepKey="runCronFour"/>
-
         <createData entity="CreditMemo" stepKey="refundOrderThree">
             <requiredEntity createDataKey="createGuestCartThree"/>
         </createData>
 
-        <magentoCLI command="cron:run --group=default" stepKey="runCronFive"/>
-        <magentoCLI command="cron:run --group=default" stepKey="runCronSix"/>
-        <magentoCLI command="cron:run --group=default" stepKey="runCronSeven"/>
-        <magentoCLI command="cron:run --group=default" stepKey="runCronEight"/>
-        <magentoCLI command="cron:run --group=default" stepKey="runCronNine"/>
+        <magentoCron groups="default" stepKey="runCronNine"/>
+
+        <magentoCron groups="default" stepKey="runCronTen"/>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
-        <waitForPageLoad time="60" stepKey="waitForGrid"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
-
-        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createGuestCartOne.return$)}}" stepKey="getOrderOneId"/>
-        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createGuestCartTwo.return$)}}" stepKey="getOrderTwoId"/>
-        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createGuestCartThree.return$)}}" stepKey="getOrderThreeId"/>
 
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderOne">
             <argument name="entityId" value="$createGuestCartOne.return$"/>
         </actionGroup>
 
         <waitForPageLoad time="30" stepKey="waitForPageLoadOne"/>
+
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderIdOne"/>
 
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageOne"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask1" after="openInvoicesTabOrdersPageOne"/>
@@ -152,6 +160,8 @@
 
         <waitForPageLoad time="30" stepKey="waitForPageLoadTwo"/>
 
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderIdTwo"/>
+
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageTwo"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask2" after="openInvoicesTabOrdersPageTwo"/>
         <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpenedTwo"/>
@@ -167,6 +177,8 @@
 
         <waitForPageLoad time="30" stepKey="waitForPageLoadThree"/>
 
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderIdThree"/>
+
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageThree"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask3" after="openInvoicesTabOrdersPageThree"/>
         <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpenedThree"/>
@@ -175,5 +187,24 @@
         <seeElement selector="{{AdminOrderShipmentsTabSection.viewShipment}}" stepKey="seeForShipmentTabOpenedThree"/>
         <actionGroup ref="AdminGoToCreditMemoTabActionGroup" stepKey="goToCreditMemoTabThree"/>
         <see selector="{{AdminOrderCreditMemosTabSection.gridRowCell('1', 'Status')}}" userInput="Refunded" stepKey="seeCreditMemoStatusInGridThree"/>
+
+
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdOne">
+            <argument name="orderId" value="{$grabOrderIdOne}"/>
+        </actionGroup>
+
+        <see selector="{{AdminDataGridTableSection.gridCell('1', 'Status')}}" userInput="Closed" stepKey="seeOrderClosedInGridOne"/>
+
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdTwo">
+            <argument name="orderId" value="{$grabOrderIdTwo}"/>
+        </actionGroup>
+
+        <see selector="{{AdminDataGridTableSection.gridCell('1', 'Status')}}" userInput="Closed" stepKey="seeOrderClosedInGridTwo"/>
+
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdThree">
+            <argument name="orderId" value="{$grabOrderIdThree}"/>
+        </actionGroup>
+
+        <see selector="{{AdminDataGridTableSection.gridCell('1', 'Status')}}" userInput="Closed" stepKey="seeOrderClosedInGridThree"/>
     </test>
 </tests>

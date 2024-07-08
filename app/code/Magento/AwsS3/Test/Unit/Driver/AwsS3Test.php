@@ -537,4 +537,42 @@ class AwsS3Test extends TestCase
         $this->assertEquals(false, $this->driver->fileClose(null));
         $this->assertEquals(false, $this->driver->fileClose(false));
     }
+
+    /**
+     * @dataProvider fileOpenModesDataProvider
+     */
+    public function testFileOppenedMode($mode, $expected): void
+    {
+        $this->adapterMock->method('fileExists')->willReturn(true);
+        if ($mode !== 'w') {
+            $this->adapterMock->expects($this->once())->method('read')->willReturn('aaa');
+        } else {
+            $this->adapterMock->expects($this->never())->method('read');
+        }
+        $resource = $this->driver->fileOpen('test/path', $mode);
+        $this->assertEquals($expected, ftell($resource));
+    }
+
+    /**
+     * Data provider for testFileOppenedMode
+     *
+     * @return array[]
+     */
+    public function fileOpenModesDataProvider(): array
+    {
+        return [
+            [
+                "mode" => "a",
+                "expected" => 3
+            ],
+            [
+                "mode" => "r",
+                "expected" => 0
+            ],
+            [
+                "mode" => "w",
+                "expected" => 0
+            ]
+        ];
+    }
 }

@@ -14,5 +14,6 @@
         <element name="useForPromoRuleConditions" type="select" selector="#is_used_for_promo_rules"/>
         <element name="StorefrontPropertiesSectionToggle" type="button" selector="#front_fieldset-wrapper"/>
         <element name="visibleOnCatalogPagesOnStorefront" type="select" selector="#is_visible_on_front"/>
+        <element name="usedForSortingInProductListing" type="select" selector="#used_for_sort_by"/>
     </section>
 </sections>
