@@ -21,9 +21,10 @@ define([
          * @param {String} data
          */
         onInputTypeChange: function (data) {
-            /*data === 'checkbox' || data === 'multi' ?
-                this.visible(false) :
-                this.visible(true);*/
+            data === 'checkbox' || data === 'multi' ?
+                this.clear()
+                    .visible(false) :
+                this.visible(true);
         }
     });
 });
