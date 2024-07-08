@@ -48,8 +48,8 @@ class MediaGalleryUiHelper extends Helper
             $rows = $webDriver->findElements(WebDriverBy::cssSelector($emptyRow));
             while (empty($rows)) {
                 $magentoWebDriver->click($deleteImagesButton);
-                $magentoWebDriver->waitForPageLoad(60);
-                $magentoWebDriver->waitForElementVisible($deleteSelectedButton, 60);
+                $magentoWebDriver->waitForPageLoad(30);
+                $magentoWebDriver->waitForElementVisible($deleteSelectedButton, 10);
 
                 // Check all images
                 /** @var RemoteWebElement[] $images */
@@ -59,10 +59,10 @@ class MediaGalleryUiHelper extends Helper
                     $imageCheckbox->click();
                 }
 
-                $magentoWebDriver->waitForPageLoad(60);
+                $magentoWebDriver->waitForPageLoad(30);
                 $magentoWebDriver->click($deleteSelectedButton);
-                $magentoWebDriver->waitForPageLoad(60);
-                $magentoWebDriver->waitForElementVisible($modalAcceptButton, 60);
+                $magentoWebDriver->waitForPageLoad(30);
+                $magentoWebDriver->waitForElementVisible($modalAcceptButton, 10);
                 $magentoWebDriver->click($modalAcceptButton);
                 $magentoWebDriver->waitForPageLoad(60);
                 $magentoWebDriver->waitForElementVisible($successMessageContainer, 60);
