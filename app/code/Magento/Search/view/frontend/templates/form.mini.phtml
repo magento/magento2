@@ -14,8 +14,7 @@ $configProvider = $block->getData('configProvider');
 $additionalSearchFormData = $block->getData('additionalSearchFormData');
 /** @var $helper \Magento\Search\Helper\Data */
 $helper = $configProvider->getSearchHelperData();
-$allowedSuggestion = $configProvider->isSuggestionsAllowed();
-$quickSearchUrl = $allowedSuggestion ? $escaper->escapeUrl($helper->getSuggestUrl()) : '';
+$quickSearchUrl = $escaper->escapeUrl($helper->getSuggestUrl());
 ?>
 <div class="block block-search">
     <div class="block block-title"><strong><?= $escaper->escapeHtml(__('Search')) ?></strong></div>

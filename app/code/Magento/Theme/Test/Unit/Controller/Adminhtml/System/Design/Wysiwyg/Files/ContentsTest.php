@@ -124,9 +124,10 @@ class ContentsTest extends TestCase
 
         $this->objectManager
             ->method('get')
-            ->withConsecutive([WysiwygStorage::class], [Data::class])
-            ->willReturnOnConsecutiveCalls($storage, $jsonData);
-
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [WysiwygStorage::class] => $storage,
+                [Data::class] => $jsonData
+            });
         $this->response->expects($this->once())
             ->method('representJson');
 

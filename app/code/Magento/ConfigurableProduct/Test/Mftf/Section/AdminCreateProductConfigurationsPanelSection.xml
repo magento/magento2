@@ -32,7 +32,7 @@
         <element name="attributeCheckboxByIndex" type="input" selector="li.attribute-option:nth-of-type({{var1}}) input" parameterized="true"/>
 
         <element name="applySingleSetOfImages" type="radio" selector=".admin__field-label[for='apply-single-set-radio']" timeout="30"/>
-        <element name="imageFileUpload" type="input" selector=".steps-wizard-section input[type='file'][name='image']"/>
+        <element name="imageFileUpload" type="input" selector=".steps-wizard-section .uppy-Dashboard-input"/>
         <element name="imageUploadButton" type="button" selector=".steps-wizard-section div.gallery"/>
 
         <element name="applyUniquePricesByAttributeToEachSku" type="radio" selector=".admin__field-label[for='apply-unique-prices-radio']"/>

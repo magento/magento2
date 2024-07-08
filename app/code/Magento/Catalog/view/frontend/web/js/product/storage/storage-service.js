@@ -117,7 +117,7 @@ define([
             /**
              * Subscribers list
              */
-            subsctibers = {};
+            subscribers = {};
 
         (function () {
             /**
@@ -189,12 +189,12 @@ define([
              * @return void
              */
             processSubscribers: function (initialized, config) {
-                if (subsctibers[config.namespace]) {
-                    _.each(subsctibers[config.namespace], function (callback) {
+                if (subscribers[config.namespace]) {
+                    _.each(subscribers[config.namespace], function (callback) {
                         callback(initialized);
                     });
 
-                    delete subsctibers[config.namespace];
+                    delete subscribers[config.namespace];
                 }
             },
 
@@ -209,9 +209,9 @@ define([
                 if (storages[namespace]) {
                     callback(storages[namespace]);
                 } else {
-                    subsctibers[namespace] ?
-                        subsctibers[namespace].push(callback) :
-                        subsctibers[namespace] = [callback];
+                    subscribers[namespace] ?
+                        subscribers[namespace].push(callback) :
+                        subscribers[namespace] = [callback];
                 }
             },
 

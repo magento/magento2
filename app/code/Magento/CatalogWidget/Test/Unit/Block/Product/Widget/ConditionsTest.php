@@ -84,7 +84,7 @@ class ConditionsTest extends TestCase
             ->getMock();
         $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->blockMock = $this->getMockBuilder(BlockInterface::class)
-            ->setMethods(['getWidgetValues'])
+            ->addMethods(['getWidgetValues'])
             ->getMockForAbstractClass();
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -112,6 +112,7 @@ class ConditionsTest extends TestCase
         $this->ruleMock->expects($this->never())
             ->method('loadPost');
 
+        $this->objectManagerHelper->prepareObjectManager();
         $this->objectManagerHelper->getObject(
             Conditions::class,
             [

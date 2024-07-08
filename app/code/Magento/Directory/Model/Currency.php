@@ -442,6 +442,9 @@ class Currency extends \Magento\Framework\Model\AbstractModel implements ResetAf
             && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
             $formattedCurrency = str_replace(' ', '', $formattedCurrency);
         }
+        if (preg_match('/^(\x{200F})/u', $formattedCurrency, $match)) {
+            $formattedCurrency = preg_replace('/^' . $match[1] . '/u', '', $formattedCurrency);
+        }
 
         return preg_replace('/^\s+|\s+$/u', '', $formattedCurrency);
     }

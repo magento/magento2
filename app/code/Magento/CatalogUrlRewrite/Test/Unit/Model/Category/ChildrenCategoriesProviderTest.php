@@ -113,8 +113,10 @@ class ChildrenCategoriesProviderTest extends TestCase
         $categoryLevel = 3;
         $this->select
             ->method('where')
-            ->withConsecutive(['path LIKE :c_path'], ['level <= :c_level'])
-            ->willReturnOnConsecutiveCalls($this->select, $this->select);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['path LIKE :c_path'] => $this->select,
+                ['level <= :c_level'] => $this->select
+            });
         $this->category->expects($this->once())->method('isObjectNew')->willReturn(false);
         $this->category->expects($this->once())->method('getLevel')->willReturn($categoryLevel);
         $bind = ['c_path' => 'category-path/%', 'c_level' => $categoryLevel + 1];
