@@ -90,7 +90,7 @@ class FixturesTest extends FixturesAbstractClass implements FixturesInterface
     /**
      * @return array
      */
-    public function interfaceDataProvider(): array
+    public static function interfaceDataProvider(): array
     {
         return [
             'first_data_set' => [
@@ -135,7 +135,7 @@ class FixturesTest extends FixturesAbstractClass implements FixturesInterface
     /**
      * @return array
      */
-    public function abstractDataProvider(): array
+    public static function abstractDataProvider(): array
     {
         return [
             'first_data_set' => [

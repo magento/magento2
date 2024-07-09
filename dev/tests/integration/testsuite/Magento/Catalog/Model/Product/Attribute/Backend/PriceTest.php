@@ -8,9 +8,18 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
+use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 
 /**
  * Test class for \Magento\Catalog\Model\Product\Attribute\Backend\Price.
@@ -125,16 +134,16 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('9.990000', $product->getPrice());
     }
 
-    /**
-     * @magentoDataFixture Magento\Store\Test\Fixture\Website as:website2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Group with:{"website_id":"$website2.id$"} as:store_group2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store3
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product as:product
-     * @magentoConfigFixture current_store catalog/price/scope 1
-     * @magentoDbIsolation disabled
-     * @magentoAppArea adminhtml
-     */
+    #[
+        AppArea('adminhtml'),
+        DbIsolation(false),
+        Config('catalog/price/scope', '1', 'store'),
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store3'),
+        DataFixture(ProductFixture::class, as: 'product'),
+    ]
     public function testAfterSaveWithDifferentStores()
     {
         /** @var Store $store */
@@ -333,22 +342,21 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento\Store\Test\Fixture\Website as:website2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Group with:{"website_id":"$website2.id$"} as:store_group2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store3
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute as:attr1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute as:attr2
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute as:attr3
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"website_ids":[1, "$website2.id"]} as:product
-     * @magentoDataFixtureDataProvider {"attr1":{"frontend_input":"price","is_filterable":1}}
-     * @magentoDataFixtureDataProvider {"attr2":{"frontend_input":"price","is_filterable":1}}
-     * @magentoDataFixtureDataProvider {"attr3":{"frontend_input":"price","is_filterable":1}}
-     * @magentoConfigFixture current_store catalog/price/scope 1
-     * @magentoDbIsolation disabled
-     * @magentoAppArea adminhtml
      * @dataProvider saveCustomPriceAttributeDataProvider
      */
+    #[
+        AppArea('adminhtml'),
+        DbIsolation(false),
+        Config('catalog/price/scope', '1', 'store'),
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store3'),
+        DataFixture(AttributeFixture::class, ['frontend_input' => 'price', 'is_filterable' => 1], 'attr1'),
+        DataFixture(AttributeFixture::class, ['frontend_input' => 'price', 'is_filterable' => 1], 'attr2'),
+        DataFixture(AttributeFixture::class, ['frontend_input' => 'price', 'is_filterable' => 1], 'attr3'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1, '$website2.id']], 'product'),
+    ]
     public function testSaveCustomPriceAttribute(
         array $attributes,
         array $updates,

@@ -42,15 +42,15 @@ class Filter extends \FilterIterator
     #[\ReturnTypeWillChange]
     public function accept()
     {
-        $current = str_replace('\\', '/', $this->current()->__toString());
-        $currentFilename = str_replace('\\', '/', $this->current()->getFilename());
+        $current = str_replace('\\', '/', $this->current()->__toString() ?? '');
+        $currentFilename = str_replace('\\', '/', $this->current()->getFilename() ?? '');
 
         if ($currentFilename == '.' || $currentFilename == '..') {
             return false;
         }
 
         foreach ($this->_filters as $filter) {
-            $filter = str_replace('\\', '/', $filter);
+            $filter = $filter !== null ? str_replace('\\', '/', $filter) : '';
             if (false !== strpos($current, $filter)) {
                 return false;
             }

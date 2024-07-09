@@ -142,7 +142,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
             $zipFrom = $this->getZipFrom();
             $zipTo = $this->getZipTo();
 
-            if (strlen($zipFrom) > 9 || strlen($zipTo) > 9) {
+            if (($zipFrom && strlen($zipFrom) > 9) || ($zipTo && strlen($zipTo) > 9)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __(
                         'The ZIP Code length is invalid. '

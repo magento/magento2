@@ -104,7 +104,7 @@ class Edit extends Widget implements ContainerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function updateButton($buttonId, $key, $data)
     {
@@ -113,7 +113,7 @@ class Edit extends Widget implements ContainerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canRender(\Magento\Backend\Block\Widget\Button\Item $item)
     {
@@ -121,7 +121,7 @@ class Edit extends Widget implements ContainerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function removeButton($buttonId)
     {
@@ -230,7 +230,7 @@ class Edit extends Widget implements ContainerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {
@@ -413,7 +413,7 @@ class Edit extends Widget implements ContainerInterface
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _getSystemConfigPathsParts($paths)
+    protected function _getSystemConfigPathsParts($paths) // phpcs:ignore Generic.Metrics.NestingLevel
     {
         $result = $urlParams = $prefixParts = [];
         $scopeLabel = __('Default Config');
@@ -431,7 +431,7 @@ class Edit extends Widget implements ContainerInterface
 
             $pathParts = $prefixParts;
             foreach ($paths as $pathData) {
-                $pathDataParts = explode('/', $pathData['path']);
+                $pathDataParts = explode('/', $pathData['path'] ?? '');
                 $sectionName = array_shift($pathDataParts);
 
                 $urlParams = ['section' => $sectionName];

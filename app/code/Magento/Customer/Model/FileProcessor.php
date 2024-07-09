@@ -119,7 +119,7 @@ class FileProcessor
      */
     public function getBase64EncodedData($fileName)
     {
-        $filePath = $this->entityTypeCode . '/' . ltrim($fileName, '/');
+        $filePath = $this->entityTypeCode . '/' . ($fileName === null ? '' : ltrim($fileName, '/'));
 
         $fileContent = $this->mediaDirectory->readFile($filePath);
 
@@ -134,7 +134,7 @@ class FileProcessor
      */
     public function getStat($fileName)
     {
-        $filePath = $this->entityTypeCode . '/' . ltrim($fileName, '/');
+        $filePath = $this->entityTypeCode . '/' . ($fileName === null ? '' : ltrim($fileName, '/'));
 
         return $this->mediaDirectory->stat($filePath);
     }
@@ -147,7 +147,7 @@ class FileProcessor
      */
     public function getMimeType($fileName)
     {
-        $filePath = $this->entityTypeCode . '/' . ltrim($fileName, '/');
+        $filePath = $this->entityTypeCode . '/' . ($fileName === null ? '' : ltrim($fileName, '/'));
         $absoluteFilePath = $this->mediaDirectory->getAbsolutePath($filePath);
 
         return $this->mime->getMimeType($absoluteFilePath);
@@ -161,7 +161,7 @@ class FileProcessor
      */
     public function isExist($fileName)
     {
-        $filePath = $this->entityTypeCode . '/' . ltrim($fileName, '/');
+        $filePath = $this->entityTypeCode . '/' . ($fileName === null ? '' : ltrim($fileName, '/'));
 
         return $this->mediaDirectory->isExist($filePath);
     }
@@ -180,14 +180,14 @@ class FileProcessor
         if ($this->entityTypeCode == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
             $viewUrl = $this->urlBuilder->getUrl(
                 $this->customerAddressFileUrlPath,
-                [$type => $this->urlEncoder->encode(ltrim($filePath, '/'))]
+                [$type => $filePath === null ? '' : $this->urlEncoder->encode(ltrim($filePath, '/'))]
             );
         }
 
         if ($this->entityTypeCode == CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER) {
             $viewUrl = $this->urlBuilder->getUrl(
                 $this->customerFileUrlPath,
-                [$type => $this->urlEncoder->encode(ltrim($filePath, '/'))]
+                [$type => $filePath === null ? '' : $this->urlEncoder->encode(ltrim($filePath, '/'))]
             );
         }
 
@@ -283,7 +283,7 @@ class FileProcessor
      */
     public function removeUploadedFile($fileName)
     {
-        $filePath = $this->entityTypeCode . '/' . ltrim($fileName, '/');
+        $filePath = $this->entityTypeCode . '/' . ($fileName === null ? '' : ltrim($fileName, '/'));
 
         return $this->mediaDirectory->delete($filePath);
     }

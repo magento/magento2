@@ -9,16 +9,15 @@ namespace Magento\TestFramework;
 
 use Magento\TestFramework\Workaround\Override\Config;
 use Magento\TestFramework\Workaround\Override\WrapperGenerator;
-use PHPUnit\Runner\StandardTestSuiteLoader;
 use PHPUnit\Runner\TestSuiteLoader;
 
 /**
  * Custom suite loader for adding wrapper for tests.
  */
-class SuiteLoader implements TestSuiteLoader
+class SuiteLoader
 {
     /**
-     * @var StandardTestSuiteLoader
+     * @var TestSuiteLoader
      */
     private $suiteLoader;
 
@@ -37,7 +36,7 @@ class SuiteLoader implements TestSuiteLoader
      */
     public function __construct()
     {
-        $this->suiteLoader = new StandardTestSuiteLoader();
+        $this->suiteLoader = new TestSuiteLoader();
         $this->generator = new WrapperGenerator();
         $this->testsConfig = Config::getInstance();
     }

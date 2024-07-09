@@ -63,12 +63,12 @@ class SaveHandlerTest extends TestCase
 
         $this->sessionMaxSizeConfigMock = $this->getMockBuilder(SaveHandlerFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSessionMaxSize'])
+            ->addMethods(['getSessionMaxSize'])
             ->getMock();
 
         $this->saveHandlerAdapterMock = $this->getMockBuilder(SaveHandlerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['write'])
+            ->onlyMethods(['write'])
             ->getMockForAbstractClass();
 
         $this->saveHandlerAdapterMock->expects($this->any())
@@ -77,7 +77,7 @@ class SaveHandlerTest extends TestCase
 
         $this->saveHandlerFactoryMock = $this->getMockBuilder(SaveHandlerFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->saveHandlerFactoryMock->expects($this->any())
@@ -132,13 +132,29 @@ class SaveHandlerTest extends TestCase
 
         $this->assertTrue($this->saveHandler->write("test_session_id", "testdata"));
     }
-    
+
     public function testReadMoreThanSessionMaxSize(): void
     {
         $this->sessionMaxSizeConfigMock
             ->expects($this->once())
             ->method('getSessionMaxSize')
             ->willReturn(1);
+
+        $this->saveHandlerAdapterMock
+            ->expects($this->once())
+            ->method('read')
+            ->with('test_session_id')
+            ->willReturn('test_session_data');
+
+        $this->assertEquals(null, $this->saveHandler->read("test_session_id"));
+    }
+
+    public function testReadSessionMaxZero(): void
+    {
+        $this->sessionMaxSizeConfigMock
+            ->expects($this->once())
+            ->method('getSessionMaxSize')
+            ->willReturn(0);
 
         $this->saveHandlerAdapterMock
             ->expects($this->once())

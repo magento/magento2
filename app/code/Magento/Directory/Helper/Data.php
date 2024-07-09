@@ -16,6 +16,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Json\Helper\Data as JsonData;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -26,7 +27,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Data extends AbstractHelper
+class Data extends AbstractHelper implements ResetAfterRequestInterface
 {
     private const STORE_ID = 'store_id';
 
@@ -35,12 +36,12 @@ class Data extends AbstractHelper
      */
     public const OPTIONAL_ZIP_COUNTRIES_CONFIG_PATH = 'general/country/optional_zip_countries';
 
-    /*
+    /**
      * Path to config value, which lists countries, for which state is required.
      */
     public const XML_PATH_STATES_REQUIRED = 'general/region/state_required';
 
-    /*
+    /**
      * Path to config value, which detects whether or not display the state for the country, if it is not required
      */
     public const XML_PATH_DISPLAY_ALL_STATES = 'general/region/display_all';
@@ -234,7 +235,7 @@ class Data extends AbstractHelper
     {
         if (null === $this->_optZipCountries) {
             $value = trim(
-                $this->scopeConfig->getValue(
+                (string)$this->scopeConfig->getValue(
                     self::OPTIONAL_ZIP_COUNTRIES_CONFIG_PATH,
                     ScopeInterface::SCOPE_STORE
                 )
@@ -268,7 +269,7 @@ class Data extends AbstractHelper
     public function getCountriesWithStatesRequired($asJson = false)
     {
         $value = trim(
-            $this->scopeConfig->getValue(
+            (string)$this->scopeConfig->getValue(
                 self::XML_PATH_STATES_REQUIRED,
                 ScopeInterface::SCOPE_STORE
             )
@@ -434,5 +435,14 @@ class Data extends AbstractHelper
         }
 
         return $scope;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_regionJson = null;
+        $this->_currencyCache = [];
     }
 }

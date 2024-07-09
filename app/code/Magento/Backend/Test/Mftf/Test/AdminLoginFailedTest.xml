@@ -19,10 +19,11 @@
             <group value="example"/>
             <group value="login"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin">
-            <argument name="password" value="INVALID!{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+            <argument name="password" value="INVALID!"/>
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="assertErrorMessage"/>
     </test>

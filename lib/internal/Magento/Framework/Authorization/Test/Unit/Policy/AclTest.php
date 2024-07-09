@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Authorization\Test\Unit\Policy;
 
+use Laminas\Permissions\Acl\Exception\InvalidArgumentException;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\Authorization\Policy\Acl;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -62,10 +63,9 @@ class AclTest extends TestCase
         $this->_aclMock->expects($this->once())
         ->method('isAllowed')
             ->with('some_role', 'some_resource')
-            ->willThrowException(new \Zend_Acl_Role_Registry_Exception());
+            ->willThrowException(new InvalidArgumentException());
 
-        $this->_aclMock->expects($this->once())->method('has')->with('some_resource')->willReturn(true);
-
+        $this->_aclMock->expects($this->once())->method('hasResource')->with('some_resource')->willReturn(true);
         $this->assertFalse($this->_model->isAllowed('some_role', 'some_resource'));
     }
 
@@ -76,13 +76,17 @@ class AclTest extends TestCase
     {
         $this->_aclMock
             ->method('isAllowed')
-            ->withConsecutive([ 'some_role', 'some_resource'], ['some_role', null])
-            ->willReturnOnConsecutiveCalls(
-                $this->throwException(new \Zend_Acl_Role_Registry_Exception()),
-                true
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'some_role' && $arg2 == 'some_resource') {
+                        throw new InvalidArgumentException();
+                    } elseif ($arg1 == 'some_role' && $arg2 == null) {
+                        return true;
+                    }
+                }
             );
 
-        $this->_aclMock->expects($this->once())->method('has')->with('some_resource')->willReturn(false);
+        $this->_aclMock->expects($this->once())->method('hasResource')->with('some_resource')->willReturn(false);
         $this->assertTrue($this->_model->isAllowed('some_role', 'some_resource'));
     }
 }

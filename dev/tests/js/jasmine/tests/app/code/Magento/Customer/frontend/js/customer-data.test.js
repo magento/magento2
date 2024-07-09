@@ -201,6 +201,7 @@ define([
             });
 
             it('Check it requests sections from the server if there are expired sections', function () {
+                clearLocalStorage();
                 setupLocalStorage({
                     'customer': {
                         'data_id': Math.floor(Date.now() / 1000) + 60 // invalidated,
@@ -279,6 +280,7 @@ define([
             });
 
             it('Check that result contains invalidated section names', function () {
+                clearLocalStorage();
                 setupLocalStorage({
                     'cart': { // without storage content
                         'data_id': Math.floor(Date.now() / 1000) + 60 // in 1 minute

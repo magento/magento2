@@ -38,4 +38,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Session\SessionStartChecker">
+        <plugin name="graphql_session_disable" type="Magento\GraphQl\Plugin\DisableSession"/>
+    </type>
 </config>

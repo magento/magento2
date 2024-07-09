@@ -9,6 +9,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Diff;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
+ * @api
  * @see DiffInterface
  */
 class DiffFactory

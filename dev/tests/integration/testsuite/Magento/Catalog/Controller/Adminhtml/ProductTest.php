@@ -481,7 +481,10 @@ class ProductTest extends AbstractBackendController
         //Trying to update product's design settings without proper permissions.
         //Expected list of sessions messages collected throughout the controller calls.
         $sessionMessages = ['Not allowed to edit the product\'s design attributes'];
-        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_product_design');
+        $this->aclBuilder->getAcl()->deny(
+            \Magento\TestFramework\Bootstrap::ADMIN_ROLE_ID,
+            'Magento_Catalog::edit_product_design'
+        );
         $requestData['product']['custom_design'] = '1';
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($requestData);
@@ -492,7 +495,10 @@ class ProductTest extends AbstractBackendController
         );
 
         //Trying again with the permissions.
-        $this->aclBuilder->getAcl()->allow(null, ['Magento_Catalog::products', 'Magento_Catalog::edit_product_design']);
+        $this->aclBuilder->getAcl()->allow(
+            \Magento\TestFramework\Bootstrap::ADMIN_ROLE_ID,
+            ['Magento_Catalog::products', 'Magento_Catalog::edit_product_design']
+        );
         $this->getRequest()->setDispatched(false);
         $this->dispatch($uri);
         /** @var ProductRepository $repo */
@@ -541,7 +547,10 @@ class ProductTest extends AbstractBackendController
         $uri = 'backend/catalog/product/save';
 
         //Updating product's design settings without proper permissions.
-        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_product_design');
+        $this->aclBuilder->getAcl()->deny(
+            \Magento\TestFramework\Bootstrap::ADMIN_ROLE_ID,
+            'Magento_Catalog::edit_product_design'
+        );
         //Testing that special "No Update" value is treated as no change.
         $requestData['product']['custom_layout_update_file'] = LayoutUpdate::VALUE_NO_UPDATE;
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);

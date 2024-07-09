@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="product"/>
             <testCaseId value="MAGETWO-93794"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategoryOne"/>

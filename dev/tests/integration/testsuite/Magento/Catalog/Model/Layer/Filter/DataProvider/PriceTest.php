@@ -121,6 +121,7 @@ class PriceTest extends TestCase
      * @magentoConfigFixture current_store catalog/layered_navigation/price_range_max_intervals 3
      * @magentoConfigFixture current_store catalog/layered_navigation/price_range_calculation manual
      * @magentoDataFixture Magento/Catalog/_files/products_for_search.php
+     * @magentoDbIsolation disabled
      * @return void
      */
     public function testGetRangeItemCountsManualCalculation(): void

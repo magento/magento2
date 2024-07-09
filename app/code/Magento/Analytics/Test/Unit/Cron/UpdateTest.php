@@ -100,10 +100,10 @@ class UpdateTest extends TestCase
         $this->flagManagerMock
             ->expects($this->exactly(2 * $isExecuted))
             ->method('deleteFlag')
-            ->withConsecutive(
-                [SubscriptionUpdateHandler::SUBSCRIPTION_UPDATE_REVERSE_COUNTER_FLAG_CODE],
-                [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE]
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [SubscriptionUpdateHandler::SUBSCRIPTION_UPDATE_REVERSE_COUNTER_FLAG_CODE] => $this->flagManagerMock,
+                [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE] => $this->flagManagerMock
+            });
         $this->configWriterMock
             ->expects($this->exactly((int)$isExecuted))
             ->method('delete')
@@ -143,7 +143,7 @@ class UpdateTest extends TestCase
      *
      * @return array
      */
-    public function executeWithEmptyReverseCounterDataProvider()
+    public static function executeWithEmptyReverseCounterDataProvider()
     {
         return [
             [null],
@@ -189,7 +189,7 @@ class UpdateTest extends TestCase
     /**
      * @return array
      */
-    public function executeRegularScenarioDataProvider()
+    public static function executeRegularScenarioDataProvider()
     {
         return [
             'The last attempt with command execution result False' => [

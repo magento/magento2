@@ -34,7 +34,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         /** @var \PHPUnit\Framework\MockObject\MockObject $vclTemplateLocator */
         $vclTemplateLocator = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclTemplateLocator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTemplate'])
+            ->onlyMethods(['getTemplate'])
             ->getMock();
         $vclTemplateLocator->expects($this->any())
             ->method('getTemplate')
@@ -43,7 +43,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         /** @var \PHPUnit\Framework\MockObject\MockObject $vclTemplateLocator */
         $vclGeneratorFactory = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclGeneratorFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $expectedParams = [
             'backendHost' => 'example.com',
@@ -85,7 +85,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     // @codingStandardsIgnoreEnd
     public function testGetVclFile()
     {
-        $result = $this->config->getVclFile(Config::VARNISH_5_CONFIGURATION_PATH);
+        $result = $this->config->getVclFile(Config::VARNISH_6_CONFIGURATION_PATH);
         $this->assertEquals(file_get_contents(__DIR__ . '/_files/result.vcl'), $result);
     }
 }

@@ -5,6 +5,7 @@
  */
 namespace Magento\Cms\Model\Wysiwyg;
 
+use Magento\Framework\View\DesignInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestModuleWysiwygConfig\Model\Config as TestModuleWysiwygConfig;
 
@@ -19,12 +20,18 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
+     * @var DesignInterface
+     */
+    private $design;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->model = $objectManager->create(\Magento\Cms\Model\Wysiwyg\Config::class);
+        $this->design = $objectManager->get(DesignInterface::class);
     }
 
     /**
@@ -46,7 +53,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetConfigCssUrls()
     {
         $config = $this->model->getConfig();
-        $publicPathPattern = 'http://localhost/static/%s/adminhtml/Magento/backend/en_US/%s';
+        $designTheme = $this->design->getConfigurationDesignTheme('adminhtml');
+        $publicPathPattern = "http://localhost/static/%s/adminhtml/{$designTheme}/en_US/%s";
         $tinyMceConfig = $config->getData('tinymce');
         $contentCss = $tinyMceConfig['content_css'];
         if (is_array($contentCss)) {

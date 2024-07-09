@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-$this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+$collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
 );
-$items = array_values($this->_collection->getItems());
+$items = array_values($collection->getItems());
 
 // type SPECIFIC with code
 $coupon = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\SalesRule\Model\Coupon::class);

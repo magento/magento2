@@ -19,7 +19,7 @@ class Profiler
     /**
      * Separator literal to assemble timer identifier from timer names
      */
-    const NESTING_SEPARATOR = '->';
+    public const NESTING_SEPARATOR = '->';
 
     /**
      * Whether profiling is active or not
@@ -262,7 +262,7 @@ class Profiler
             return;
         }
 
-        if (strpos($timerName, self::NESTING_SEPARATOR) !== false) {
+        if ($timerName !== null && strpos($timerName, self::NESTING_SEPARATOR) !== false) {
             throw new \InvalidArgumentException('Timer name must not contain a nesting separator.');
         }
 

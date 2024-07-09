@@ -9,6 +9,7 @@
     <module name="Magento_GoogleOptimizer" >
         <sequence>
             <module name="Magento_GoogleAnalytics"/>
+            <module name="Magento_GoogleGtag"/>
             <module name="Magento_Catalog"/>
             <module name="Magento_Cms"/>
             <module name="Magento_Ui"/>

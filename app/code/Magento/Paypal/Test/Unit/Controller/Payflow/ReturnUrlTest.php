@@ -30,9 +30,10 @@ use PHPUnit\Framework\TestCase;
  */
 class ReturnUrlTest extends TestCase
 {
-    const LAST_REAL_ORDER_ID = '000000001';
+   
+    public const LAST_REAL_ORDER_ID = '000000001';
 
-    const SILENT_POST_HASH = 'abcdfg';
+    public const SILENT_POST_HASH = 'abcdfg';
 
     /**
      * @var ReturnUrl
@@ -204,7 +205,7 @@ class ReturnUrlTest extends TestCase
      *
      * @return array
      */
-    public function allowedOrderStateDataProvider(): array
+    public static function allowedOrderStateDataProvider(): array
     {
         return [
             [Order::STATE_PROCESSING],
@@ -247,7 +248,7 @@ class ReturnUrlTest extends TestCase
      *
      * @return array
      */
-    public function invalidHashVariations(): array
+    public static function invalidHashVariations(): array
     {
         return [
             ['requestHash' => '', 'orderHash' => self::SILENT_POST_HASH],
@@ -296,7 +297,7 @@ class ReturnUrlTest extends TestCase
      *
      * @return array
      */
-    public function notAllowedOrderStateDataProvider(): array
+    public static function notAllowedOrderStateDataProvider(): array
     {
         return [
             [Order::STATE_NEW, false, ''],
@@ -376,7 +377,7 @@ class ReturnUrlTest extends TestCase
      *
      * @return array
      */
-    public function checkXSSEscapedDataProvider(): array
+    public static function checkXSSEscapedDataProvider(): array
     {
         return [
             ['simple', 'simple'],
@@ -500,10 +501,12 @@ class ReturnUrlTest extends TestCase
     {
         $this->block
             ->method('setData')
-            ->withConsecutive(
-                ['goto_section', self::equalTo($gotoSection)],
-                ['error_msg', self::equalTo(__($errMsg))]
-            )
-            ->willReturnOnConsecutiveCalls($this->block, $this->block);
+            ->willReturnCallback(function ($arg1, $arg2) use ($gotoSection, $errMsg) {
+                if ($arg1 == 'goto_section' && $arg2 == $gotoSection) {
+                    return $this->block;
+                } elseif ($arg1 == 'error_msg' && $arg2 == (__($errMsg))) {
+                    return $this->block;
+                }
+            });
     }
 }

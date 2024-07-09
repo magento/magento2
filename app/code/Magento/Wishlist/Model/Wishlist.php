@@ -353,6 +353,9 @@ class Wishlist extends AbstractModel implements IdentityInterface
             }
         } else {
             $qty = $forciblySetQty ? $qty : $item->getQty() + $qty;
+            if ($forciblySetQty) {
+                $item->setOptions($product->getCustomOptions());
+            }
             $item->setQty($qty)->save();
         }
 

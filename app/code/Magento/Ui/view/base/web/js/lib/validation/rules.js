@@ -605,38 +605,26 @@ define([
         ],
         'validate-not-negative-number': [
             function (value) {
-                if (utils.isEmptyNoTrim(value)) {
-                    return true;
-                }
-                value = utils.parseNumber(value);
-
-                return !isNaN(value) && value >= 0;
+                return utils.isEmptyNoTrim(value) || !isNaN(utils.parseNumber(value))
+                    && value >= 0 && (/^\s*-?\d+([,.]\d+)*\s*%?\s*$/).test(value);
 
             },
-            $.mage.__('Please enter a number 0 or greater in this field.')
+            $.mage.__('Please enter a number 0 or greater, without comma in this field.')
         ],
         // validate-not-negative-number should be replaced in all places with this one and then removed
         'validate-zero-or-greater': [
             function (value) {
-                if (utils.isEmptyNoTrim(value)) {
-                    return true;
-                }
-                value = utils.parseNumber(value);
-
-                return !isNaN(value) && value >= 0;
+                return utils.isEmptyNoTrim(value) || !isNaN(utils.parseNumber(value))
+                    && value >= 0 && (/^\s*-?\d+([,.]\d+)*\s*%?\s*$/).test(value);
             },
-            $.mage.__('Please enter a number 0 or greater in this field.')
+            $.mage.__('Please enter a number 0 or greater, without comma in this field.')
         ],
         'validate-greater-than-zero': [
             function (value) {
-                if (utils.isEmptyNoTrim(value)) {
-                    return true;
-                }
-                value = utils.parseNumber(value);
-
-                return !isNaN(value) && value > 0;
+                return utils.isEmptyNoTrim(value) || !isNaN(utils.parseNumber(value))
+                    && value > 0 && (/^\s*-?\d+([,.]\d+)*\s*%?\s*$/).test(value);
             },
-            $.mage.__('Please enter a number greater than 0 in this field.')
+            $.mage.__('Please enter a number greater than 0, without comma in this field.')
         ],
         'validate-css-length': [
             function (value) {
@@ -816,6 +804,12 @@ define([
                 return utils.isEmptyNoTrim(value) || /^[a-z0-9][a-z0-9_\/-]+(\.[a-z0-9_-]+)?$/.test(value);
             },
             $.mage.__('Please enter a valid URL Key (Ex: "example-page", "example-page.html" or "anotherlevel/example-page").')//eslint-disable-line max-len
+        ],
+        'validate-trailing-hyphen': [
+            function (value) {
+                return utils.isEmptyNoTrim(value) || /^(?!-)(?!.*-$).+$/.test(value);
+            },
+            $.mage.__('Trailing hyphens are not allowed.')
         ],
         'validate-zip-international': [
 

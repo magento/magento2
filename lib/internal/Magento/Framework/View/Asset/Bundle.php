@@ -230,7 +230,7 @@ class Bundle
         if (!isset($this->assetsContent[$assetContextCode][$assetContentType][$assetKey])) {
             $content = $asset->getContent();
             if (mb_detect_encoding($content) !== "UTF-8") {
-                $content = mb_convert_encoding($content, "UTF-8");
+                $content = $content !== null ? mb_convert_encoding($content, "UTF-8") : '';
             }
             $this->assetsContent[$assetContextCode][$assetContentType][$assetKey] = $content;
         }

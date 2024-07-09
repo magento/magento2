@@ -5,7 +5,7 @@
  */
 namespace Magento\NewRelicReporting\Model;
 
-use Exception;
+use Throwable;
 
 /**
  * Wrapper for New Relic functions
@@ -14,6 +14,8 @@ use Exception;
  */
 class NewRelicWrapper
 {
+    private const NEWRELIC_APPNAME = 'newrelic.appname';
+
     /**
      * Wrapper for 'newrelic_add_custom_parameter' function
      *
@@ -33,10 +35,10 @@ class NewRelicWrapper
     /**
      * Wrapper for 'newrelic_notice_error' function
      *
-     * @param  Exception $exception
+     * @param Throwable $exception
      * @return void
      */
-    public function reportError(Exception $exception)
+    public function reportError(Throwable $exception)
     {
         if ($this->isExtensionInstalled()) {
             newrelic_notice_error($exception->getMessage(), $exception);
@@ -70,6 +72,19 @@ class NewRelicWrapper
     }
 
     /**
+     * Wrapper to start background transaction
+     *
+     * @return void
+     */
+    public function startBackgroundTransaction()
+    {
+        if ($this->isExtensionInstalled()) {
+            newrelic_start_transaction(ini_get(self::NEWRELIC_APPNAME));
+            newrelic_background_job();
+        }
+    }
+
+    /**
      * Wrapper for 'newrelic_end_transaction'
      *
      * @param bool $ignore
@@ -89,9 +104,6 @@ class NewRelicWrapper
      */
     public function isExtensionInstalled()
     {
-        if (extension_loaded('newrelic')) {
-            return true;
-        }
-        return false;
+        return extension_loaded('newrelic');
     }
 }

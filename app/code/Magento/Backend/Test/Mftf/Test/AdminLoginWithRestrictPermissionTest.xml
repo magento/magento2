@@ -18,6 +18,7 @@
             <description value="Check login with restrict role."/>
             <group value="login"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

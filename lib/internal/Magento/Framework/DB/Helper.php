@@ -59,7 +59,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
     protected function _truncateAliasName($field, $reverse = false)
     {
         $string = $field;
-        if (!is_numeric($field) && (strpos($field, '.') !== false)) {
+        if ($field !== null && !is_numeric($field) && (strpos($field, '.') !== false)) {
             $size  = strpos($field, '.');
             if ($reverse) {
                 $string = substr($field, 0, $size);
@@ -121,7 +121,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
                 /**
                  * Looking for column expression in the having clause
                  */
-                if (strpos($having, $correlationName) !== false) {
+                if ($having !== null && strpos($having, $correlationName) !== false) {
                     if (is_string($column)) {
                         /**
                          * Replace column expression to column alias in having clause

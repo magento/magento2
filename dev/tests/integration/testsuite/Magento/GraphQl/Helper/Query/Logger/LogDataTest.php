@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
  */
 class LogDataTest extends TestCase
 {
-    const CONTENT_TYPE = 'application/json';
+    public const CONTENT_TYPE = 'application/json';
 
     /** @var ObjectManagerInterface */
     private $objectManager;
@@ -136,6 +136,7 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'false',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
                     LoggerInterface::OPERATION_NAMES => 'products',
+                    LoggerInterface::TOP_LEVEL_OPERATION_NAME => 'products',
                     LoggerInterface::COMPLEXITY => 5,
                     LoggerInterface::HTTP_RESPONSE_CODE => 200,
                     LoggerInterface::X_MAGENTO_CACHE_ID => '1234'
@@ -164,6 +165,7 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'false',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
                     LoggerInterface::OPERATION_NAMES => 'products',
+                    LoggerInterface::TOP_LEVEL_OPERATION_NAME => 'products',
                     LoggerInterface::COMPLEXITY => 5,
                     LoggerInterface::HTTP_RESPONSE_CODE => 200,
                     LoggerInterface::X_MAGENTO_CACHE_ID => ''
@@ -197,6 +199,7 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'false',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 0,
                     LoggerInterface::OPERATION_NAMES => 'operationNameNotFound',
+                    LoggerInterface::TOP_LEVEL_OPERATION_NAME => 'xyz',
                     LoggerInterface::COMPLEXITY => 5,
                     LoggerInterface::HTTP_RESPONSE_CODE => 200,
                     LoggerInterface::X_MAGENTO_CACHE_ID => '1234'
@@ -259,6 +262,7 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'true',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
                     LoggerInterface::OPERATION_NAMES => 'placeOrder',
+                    LoggerInterface::TOP_LEVEL_OPERATION_NAME => 'placeOrder',
                     LoggerInterface::COMPLEXITY => 3,
                     LoggerInterface::HTTP_RESPONSE_CODE => 200,
                     LoggerInterface::X_MAGENTO_CACHE_ID => '1234'
@@ -284,6 +288,7 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'true',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
                     LoggerInterface::OPERATION_NAMES => 'placeOrder',
+                    LoggerInterface::TOP_LEVEL_OPERATION_NAME => 'placeOrder',
                     LoggerInterface::COMPLEXITY => 3,
                     LoggerInterface::HTTP_RESPONSE_CODE => 200,
                     LoggerInterface::X_MAGENTO_CACHE_ID => ''
@@ -328,6 +333,7 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'false',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 2,
                     LoggerInterface::OPERATION_NAMES => 'cart,products',
+                    LoggerInterface::TOP_LEVEL_OPERATION_NAME => 'products',
                     LoggerInterface::COMPLEXITY => 8,
                     LoggerInterface::HTTP_RESPONSE_CODE => 200,
                     LoggerInterface::X_MAGENTO_CACHE_ID => '1234'

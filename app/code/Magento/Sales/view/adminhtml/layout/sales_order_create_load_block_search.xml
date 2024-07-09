@@ -11,6 +11,11 @@
             <block class="Magento\Sales\Block\Adminhtml\Order\Create\Search" template="Magento_Sales::order/create/abstract.phtml" name="search">
                 <block class="Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid" name="search.grid" as="grid"/>
             </block>
+            <referenceBlock name="search.grid">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Magento\Backend\ViewModel\LimitTotalNumberOfProductsInGrid</argument>
+                </arguments>
+            </referenceBlock>
         </referenceContainer>
     </body>
 </page>

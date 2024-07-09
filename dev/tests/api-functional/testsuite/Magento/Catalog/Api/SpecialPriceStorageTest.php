@@ -23,10 +23,10 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class SpecialPriceStorageTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogSpecialPriceStorageV1';
-    const SERVICE_VERSION = 'V1';
-    const SIMPLE_PRODUCT_SKU = 'simple';
-    const VIRTUAL_PRODUCT_SKU = 'virtual-product';
+    private const SERVICE_NAME = 'catalogSpecialPriceStorageV1';
+    private const SERVICE_VERSION = 'V1';
+    private const SIMPLE_PRODUCT_SKU = 'simple';
+    private const VIRTUAL_PRODUCT_SKU = 'virtual-product';
     private const PRODUCT_SKU_TWO_WEBSITES = 'simple-on-two-websites';
 
     /**
@@ -148,7 +148,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
      * Delete special price for specified store when price scope is global
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     *
+     * @magentoConfigFixture default_store catalog/price/scope 0
      * @return void
      */
     public function testDeleteWhenPriceIsGlobal(): void

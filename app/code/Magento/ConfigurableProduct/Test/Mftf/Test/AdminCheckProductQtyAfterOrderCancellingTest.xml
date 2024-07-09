@@ -19,9 +19,12 @@
             <testCaseId value="MAGETWO-97228"/>
             <useCaseId value="MAGETWO-82221"/>
             <group value="ConfigurableProduct"/>
+            <group value="cloud_smoke"/>
         </annotations>
 
         <before>
+             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+
             <createData entity="ApiCategory" stepKey="createCategory"/>
 
             <createData entity="defaultSimpleProduct" stepKey="createConfigProduct">

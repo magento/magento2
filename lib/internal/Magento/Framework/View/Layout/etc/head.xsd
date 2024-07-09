@@ -20,6 +20,15 @@
         <xs:attribute name="type" type="xs:string"/>
         <xs:attribute name="order" type="xs:integer"/>
         <xs:attribute name="src_type" type="xs:string"/>
+        <xs:attribute name="integrity" type="xs:string"/>
+        <xs:attribute name="crossorigin">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="anonymous" />
+                    <xs:enumeration value="use-credentials" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
         <xs:attribute name="as">
             <xs:simpleType>
                 <xs:restriction base="xs:string">
@@ -47,6 +56,15 @@
         <xs:attribute name="charset" type="xs:string"/>
         <xs:attribute name="type" type="xs:string"/>
         <xs:attribute name="src_type" type="xs:string"/>
+        <xs:attribute name="integrity" type="xs:string"/>
+        <xs:attribute name="crossorigin">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="anonymous" />
+                    <xs:enumeration value="use-credentials" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
     </xs:complexType>
 
     <xs:complexType name="headAttributeType">
