@@ -9,9 +9,8 @@
 define([
     'mage/translate',
     'Magento_Ui/js/form/element/abstract',
-    'Magento_Ui/js/lib/core/bindings/color-picker',
     'Magento_Ui/js/form/element/color-picker-palette'
-], function ($t, Abstract, ColorPicker, palette) {
+], function ($t, Abstract, palette) {
     'use strict';
 
     return Abstract.extend({
