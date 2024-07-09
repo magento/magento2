@@ -169,7 +169,67 @@ class Bestsellers extends AbstractReport
     private function clearByDateRange($from = null, $to = null): void
     {
         $subSelect = $this->getRangeSubSelect($from, $to);
-        $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect);
+        $this->clearTableRanges($this->getMainTable(), $from, $to, $subSelect);
+    }
+
+    /**
+     * Clear table by date range
+     *
+     * @param string $table
+     * @param ?string $from
+     * @param ?string $to
+     * @param null|\Magento\Framework\DB\Select|string $subSelect
+     * @return void
+     */
+    private function clearTableRanges($table, $from = null, $to = null, $subSelect = null): void
+    {
+        if ($from === null && $to === null) {
+            $this->_truncateTable($table);
+            return;
+        }
+
+        if ($subSelect !== null) {
+            $dataRange = $this->getRange($subSelect);
+            foreach ($dataRange as $date) {
+                $deleteCondition = $this->getConnection()->prepareSqlCondition('period', ['like' => $date]);
+                $this->getConnection()->delete($table, $deleteCondition);
+            }
+            return;
+        } else {
+            $condition = [];
+            if ($from !== null) {
+                $condition[] = $this->getConnection()->quoteInto('period >= ?', $from);
+            }
+
+            if ($to !== null) {
+                $condition[] = $this->getConnection()->quoteInto('period <= ?', $to);
+            }
+            $deleteCondition = implode(' AND ', $condition);
+        }
+        $this->getConnection()->delete($table, $deleteCondition);
+    }
+
+    /**
+     * Get dates range to clear the table
+     *
+     * @param \Magento\Framework\DB\Select $select
+     * @return array|false
+     */
+    private function getRange(\Magento\Framework\DB\Select $select)
+    {
+        $connection = $this->getConnection();
+        try {
+            $range = [];
+
+            $query = $connection->query($select);
+
+            while (true == ($date = $query->fetchColumn())) {
+                $range[] = $date;
+            }
+        } catch (\Exception $e) {
+            $range = false;
+        }
+        return $range;
     }
 
     /**
