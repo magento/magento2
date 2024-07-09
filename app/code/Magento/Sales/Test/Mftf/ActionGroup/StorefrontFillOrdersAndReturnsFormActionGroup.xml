@@ -15,11 +15,8 @@
         </arguments>
         <waitForElementVisible selector="{{StorefrontGuestOrderSearchSection.orderId}}" stepKey="waitForElementInputOrderId"/>
         <fillField selector="{{StorefrontGuestOrderSearchSection.orderId}}" userInput="{{orderNumber}}" stepKey="inputOrderId"/>
-        <waitForElementVisible selector="{{StorefrontGuestOrderSearchSection.billingLastName}}" stepKey="waitForElementInputBillingLastName"/>
         <fillField selector="{{StorefrontGuestOrderSearchSection.billingLastName}}" userInput="{{customer.lastname}}" stepKey="inputBillingLastName"/>
-        <waitForElementVisible selector="{{StorefrontGuestOrderSearchSection.findOrderBy}}" stepKey="waitForElementselectFindOrderByEmailToBeVisible"/>
         <selectOption selector="{{StorefrontGuestOrderSearchSection.findOrderBy}}" userInput="email" stepKey="selectFindOrderByEmail"/>
-        <waitForElementVisible selector="{{StorefrontGuestOrderSearchSection.email}}" stepKey="waitForElementInputEmail"/>
         <fillField selector="{{StorefrontGuestOrderSearchSection.email}}" userInput="{{customer.email}}" stepKey="inputEmail"/>
     </actionGroup>
 </actionGroups>
