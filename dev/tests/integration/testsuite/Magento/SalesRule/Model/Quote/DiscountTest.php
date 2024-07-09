@@ -656,7 +656,8 @@ class DiscountTest extends TestCase
                 'price' => 123,
                 'sku' => 'p1',
                 'category_ids' => ['$c1.id$']
-            ], 'p1'
+            ],
+            'p1'
         ),
         DataFixture(
             RuleFixture::class,
