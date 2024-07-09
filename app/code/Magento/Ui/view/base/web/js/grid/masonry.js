@@ -7,8 +7,7 @@ define([
     'Magento_Ui/js/lib/view/utils/raf',
     'jquery',
     'ko',
-    'underscore',
-    'domReady!'
+    'underscore'
 ], function (Listing, raf, $, ko, _) {
     'use strict';
 
@@ -101,7 +100,7 @@ define([
             }
             this.imageMargin = parseInt(this.imageMargin, 10);
             this.container = $('[data-id="' + this.containerId + '"]')[0];
-            this.setLayoutStylesWhenLoaded();
+            this.setLayoutStyles();
             this.setEventListener();
 
             return this;
@@ -129,38 +128,42 @@ define([
         /**
          * Set layout styles inside the container
          */
-        setLayoutStyles: function () {
-            var containerWidth = parseInt(this.container.clientWidth, 10),
-                rowImages = [],
-                ratio = 0,
-                rowHeight = 0,
-                calcHeight = 0,
-                isLastRow = false,
-                rowNumber = 1;
+        setLayoutStyles: function (callback) {
+            if (typeof this.container != 'undefined') {
+                var containerWidth = parseInt(this.container.clientWidth, 10),
+                    rowImages = [],
+                    ratio = 0,
+                    rowHeight = 0,
+                    calcHeight = 0,
+                    isLastRow = false,
+                    rowNumber = 1;
 
-            this.setMinRatio();
+                this.setMinRatio();
 
-            this.rows().forEach(function (image, index) {
-                ratio += parseFloat((image.width / image.height).toFixed(2));
-                rowImages.push(image);
+                this.rows().forEach(function (image, index) {
+                    ratio += parseFloat((image.width / image.height).toFixed(2));
+                    rowImages.push(image);
 
-                if (ratio < this.minRatio && index + 1 !== this.rows().length) {
-                    // Row has more space for images and the image is not the last one - proceed to the next iteration
-                    return;
-                }
+                    if (ratio < this.minRatio && index + 1 !== this.rows().length) {
+                        // Row has more space for images and the image is not the last one - proceed to the next iteration
+                        return;
+                    }
 
-                ratio = Math.max(ratio, this.minRatio);
-                calcHeight = (containerWidth - this.imageMargin * rowImages.length) / ratio;
-                rowHeight = calcHeight < this.maxImageHeight ? calcHeight : this.maxImageHeight;
-                isLastRow = index + 1 === this.rows().length;
+                    ratio = Math.max(ratio, this.minRatio);
+                    calcHeight = (containerWidth - this.imageMargin * rowImages.length) / ratio;
+                    rowHeight = calcHeight < this.maxImageHeight ? calcHeight : this.maxImageHeight;
+                    isLastRow = index + 1 === this.rows().length;
 
-                this.assignImagesToRow(rowImages, rowNumber, rowHeight, isLastRow);
+                    this.assignImagesToRow(rowImages, rowNumber, rowHeight, isLastRow);
 
-                rowImages = [];
-                ratio = 0;
-                rowNumber++;
+                    rowImages = [];
+                    ratio = 0;
+                    rowNumber++;
 
-            }.bind(this));
+                }.bind(this));
+            } else {
+                setTimeout(callback, 0);
+            }
         },
 
         /**
@@ -194,9 +197,9 @@ define([
             if (typeof this.container === 'undefined') {
                 setTimeout(function () {
                     this.waitForContainer(callback);
-                }.bind(this), 1000);
+                }.bind(this), 500);
             } else {
-                setTimeout(callback, 0);
+                setTimeout(callback, 500);
             }
         },
 
