@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 class ProductListTest extends TestCase
 {
-    const STUB_VIEW_MODE = 'grid';
+    private const STUB_VIEW_MODE = 'grid';
     /**
      * @var ScopeConfigInterface|MockObject
      */

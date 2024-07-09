@@ -29,9 +29,9 @@ use PHPUnit\Framework\TestCase;
  */
 class PriceTest extends TestCase
 {
-    const KEY_TIER_PRICE = 'tier_price';
-    const PRICE_SCOPE_GLOBAL = 0;
-    const PRICE_SCOPE_WEBSITE = 1;
+    private const KEY_TIER_PRICE = 'tier_price';
+    private const PRICE_SCOPE_GLOBAL = 0;
+    private const PRICE_SCOPE_WEBSITE = 1;
 
     /**
      * @var \Magento\Catalog\Model\Product\Type\Price

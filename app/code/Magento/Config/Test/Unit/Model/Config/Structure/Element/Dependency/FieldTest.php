@@ -15,22 +15,22 @@ class FieldTest extends TestCase
     /**#@+
      * SUT values
      */
-    const SIMPLE_VALUE = 'someValue';
+    private const SIMPLE_VALUE = 'someValue';
 
-    const EMPTY_VALUE = '';
+    private const EMPTY_VALUE = '';
 
-    const COMPLEX_VALUE1 = 'value_1';
+    private const COMPLEX_VALUE1 = 'value_1';
 
-    const COMPLEX_VALUE2 = 'value_2';
+    private const COMPLEX_VALUE2 = 'value_2';
 
-    const COMPLEX_VALUE3 = 'value_3';
+    private const COMPLEX_VALUE3 = 'value_3';
 
     /**#@-*/
 
     /**
      * Field prefix
      */
-    const PREFIX = 'prefix_';
+    private const PREFIX = 'prefix_';
 
     /**
      * Get simple data for creating SUT

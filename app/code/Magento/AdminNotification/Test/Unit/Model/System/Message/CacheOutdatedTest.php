@@ -63,7 +63,7 @@ class CacheOutdatedTest extends TestCase
     public function testGetIdentity($expectedSum, $types)
     {
         $cacheType = [];
-        foreach($types as $type){
+        foreach ($types as $type) {
             $cacheType[] = $type($this);
         }
 
@@ -107,7 +107,7 @@ class CacheOutdatedTest extends TestCase
     public function testIsDisplayed($expected, $allowed, $cacheTypes)
     {
         $cacheType1 = [];
-        foreach($cacheTypes as $cacheType){
+        foreach ($cacheTypes as $cacheType) {
             $cacheType1[] = $cacheType($this);
         }
         $this->_authorizationMock->expects($this->once())->method('isAllowed')->willReturn($allowed);

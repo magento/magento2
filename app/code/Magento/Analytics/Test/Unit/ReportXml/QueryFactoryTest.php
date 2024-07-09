@@ -30,8 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class QueryFactoryTest extends TestCase
 {
-    const STUB_QUERY_NAME = 'test_query';
-    const STUB_CONNECTION = 'default';
+    private const STUB_QUERY_NAME = 'test_query';
+    private const STUB_CONNECTION = 'default';
 
     /**
      * @var QueryFactory

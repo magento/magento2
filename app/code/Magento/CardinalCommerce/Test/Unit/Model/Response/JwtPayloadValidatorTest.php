@@ -154,7 +154,7 @@ class JwtPayloadValidatorTest extends TestCase
      *
      * @return array
      */
-    private static function createToken(string $eciFlag, string $errorNumber, string $actionCode, int $expTimestamp): array
+    private static function createToken(string $eciFlag, string $errorNumber, string $actionCode, int $expTimestamp): array // @codingStandardsIgnoreLine
     {
         return [
             [
