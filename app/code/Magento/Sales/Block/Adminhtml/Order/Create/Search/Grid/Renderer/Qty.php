@@ -11,8 +11,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer;
 class Qty extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Input
 {
     /**
-     * Type config
-     *
      * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
      */
     protected $typeConfig;

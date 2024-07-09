@@ -21,6 +21,7 @@ class Sidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     protected function _prepareLayout()
     {
         if ($this->getCustomerId()) {
+            // phpstan:ignore "Undefined variable"
             $button = $this->getLayout()->createBlock(
                 \Magento\Backend\Block\Widget\Button::class
             )->setData(

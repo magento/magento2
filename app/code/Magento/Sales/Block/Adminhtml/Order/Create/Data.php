@@ -16,8 +16,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
-     * Currency factory
-     *
      * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $_currencyFactory;

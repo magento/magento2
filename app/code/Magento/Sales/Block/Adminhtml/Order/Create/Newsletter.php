@@ -45,7 +45,8 @@ class Newsletter extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCre
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * phpcs:disable
      */
     protected function _toHtml()
     {

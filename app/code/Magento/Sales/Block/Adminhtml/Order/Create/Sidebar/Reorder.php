@@ -23,8 +23,6 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
     protected $_sidebarStorageAction = 'add_order_item';
 
     /**
-     * Orders factory
-     *
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_ordersFactory;

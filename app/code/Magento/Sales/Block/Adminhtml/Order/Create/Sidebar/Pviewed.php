@@ -16,15 +16,11 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 class Pviewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
 {
     /**
-     * Product factory
-     *
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
 
     /**
-     * Event factory
-     *
      * @var \Magento\Reports\Model\EventFactory
      */
     protected $_eventFactory;

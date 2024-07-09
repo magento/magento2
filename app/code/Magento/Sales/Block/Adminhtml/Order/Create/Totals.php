@@ -16,29 +16,21 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
-     * Total renderers
-     *
      * @var array
      */
     protected $_totalRenderers;
 
     /**
-     * Default renderer
-     *
      * @var string
      */
     protected $_defaultRenderer = \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals::class;
 
     /**
-     * Sales data
-     *
      * @var \Magento\Sales\Helper\Data
      */
     protected $_salesData = null;
 
     /**
-     * Sales config
-     *
      * @var \Magento\Sales\Model\Config
      */
     protected $_salesConfig;
@@ -164,6 +156,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Render totals
      *
+     * phpcs:disable
      * @param null $area
      * @param int $colspan
      * @return string

@@ -35,15 +35,11 @@ use Magento\Store\Model\ScopeInterface;
 class Account extends AbstractForm
 {
     /**
-     * Metadata form factory
-     *
      * @var MetadataFormFactory
      */
     protected $_metadataFormFactory;
 
     /**
-     * Customer repository
-     *
      * @var CustomerRepositoryInterface
      */
     protected $customerRepository;
@@ -98,8 +94,6 @@ class Account extends AbstractForm
     }
 
     /**
-     * Group Management
-     *
      * @var GroupManagementInterface
      */
     private $groupManagement;

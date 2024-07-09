@@ -13,8 +13,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 class DefaultTotals extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals
 {
     /**
-     * Template
-     *
      * @var string
      */
     protected $_template = 'Magento_Sales::order/create/totals/default.phtml';

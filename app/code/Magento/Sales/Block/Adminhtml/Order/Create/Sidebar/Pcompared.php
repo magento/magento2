@@ -16,15 +16,11 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
 {
     /**
-     * Product factory
-     *
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
 
     /**
-     * Event
-     *
      * @var \Magento\Reports\Model\ResourceModel\Event
      */
     protected $_event;
