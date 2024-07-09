@@ -130,15 +130,14 @@ define([
          */
         setLayoutStyles: function (callback) {
             var containerWidth, rowImages, ratio, rowHeight, calcHeight, isLastRow, rowNumber;
-
             if (typeof this.container != 'undefined') {
-                containerWidth = parseInt(this.container.clientWidth, 10);
-                rowImages = [];
-                ratio = 0;
-                rowHeight = 0;
-                calcHeight = 0;
-                isLastRow = false;
-                rowNumber = 1;
+                    containerWidth = parseInt(this.container.clientWidth, 10),
+                    rowImages = [],
+                    ratio = 0,
+                    rowHeight = 0,
+                    calcHeight = 0,
+                    isLastRow = false,
+                    rowNumber = 1;
 
                 this.setMinRatio();
 
