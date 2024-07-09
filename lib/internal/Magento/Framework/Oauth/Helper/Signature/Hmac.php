@@ -18,10 +18,13 @@ class Hmac extends HmacSignature
      */
     public function normaliseBaseSignatureUrl($url): string
     {
+        $registeredHttpScheme = Uri\UriFactory::getRegisteredSchemeClass('http');
+        $registeredHttpsScheme = Uri\UriFactory::getRegisteredSchemeClass('https');
         Uri\UriFactory::registerScheme('http', Http::class);
         Uri\UriFactory::registerScheme('https', Http::class);
-
         $uri = Uri\UriFactory::factory($url);
+        Uri\UriFactory::registerScheme('http', $registeredHttpScheme);
+        Uri\UriFactory::registerScheme('https', $registeredHttpsScheme);
         $uri->normalize();
         if ($uri->getScheme() == 'http' && $uri->getPort() == '80') {
             $uri->setPort('');
