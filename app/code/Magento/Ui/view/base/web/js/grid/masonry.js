@@ -129,8 +129,9 @@ define([
          * Set layout styles inside the container
          */
         setLayoutStyles: function (callback) {
+            var containerWidth, rowImages, ratio, rowHeight, calcHeight, isLastRow, rowNumber;
             if (typeof this.container != 'undefined') {
-                var containerWidth = parseInt(this.container.clientWidth, 10),
+                    containerWidth = parseInt(this.container.clientWidth, 10),
                     rowImages = [],
                     ratio = 0,
                     rowHeight = 0,
@@ -145,7 +146,10 @@ define([
                     rowImages.push(image);
 
                     if (ratio < this.minRatio && index + 1 !== this.rows().length) {
-                        // Row has more space for images and the image is not the last one - proceed to the next iteration
+                        /**
+                         * Row has more space for images and the image is not the last one -
+                         * Proceed to the next iteration
+                         */
                         return;
                     }
 
