@@ -37,6 +37,7 @@ class Sidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         }
 
         if ($this->getCustomerId()) {
+            // phpstan:ignore "Undefined variable"
             $button = clone $button;
             $button->unsId();
             $this->setChild('bottom_button', $button);
