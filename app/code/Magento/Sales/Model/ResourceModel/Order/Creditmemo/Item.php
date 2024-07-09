@@ -14,8 +14,6 @@ use Magento\Sales\Model\Spi\CreditmemoItemResourceInterface;
 class Item extends SalesResource implements CreditmemoItemResourceInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_creditmemo_item_resource';
@@ -31,6 +29,8 @@ class Item extends SalesResource implements CreditmemoItemResourceInterface
     }
 
     /**
+     * Before save
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */

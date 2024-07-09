@@ -17,22 +17,16 @@ use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
 class Collection extends AbstractCollection implements CreditmemoSearchResultInterface
 {
     /**
-     * Id field name
-     *
      * @var string
      */
     protected $_idFieldName = 'entity_id';
 
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_creditmemo_collection';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'order_creditmemo_collection';

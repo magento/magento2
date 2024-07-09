@@ -22,15 +22,11 @@ class Collection extends AbstractCollection implements ShipmentSearchResultInter
     protected $_idFieldName = 'entity_id';
 
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_shipment_collection';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'order_shipment_collection';

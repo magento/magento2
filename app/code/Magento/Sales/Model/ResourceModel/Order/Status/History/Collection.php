@@ -16,15 +16,11 @@ use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
 class Collection extends AbstractCollection implements OrderStatusHistorySearchResultInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_status_history_collection';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'order_status_history_collection';

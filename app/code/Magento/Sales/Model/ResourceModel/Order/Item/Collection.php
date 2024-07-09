@@ -16,15 +16,11 @@ use \Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
 class Collection extends AbstractCollection implements \Magento\Sales\Api\Data\OrderItemSearchResultInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_item_collection';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'order_item_collection';

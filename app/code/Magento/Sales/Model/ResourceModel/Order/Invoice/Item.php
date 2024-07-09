@@ -14,8 +14,6 @@ use Magento\Sales\Model\Spi\InvoiceItemResourceInterface;
 class Item extends SalesResource implements InvoiceItemResourceInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_invoice_item_resource';

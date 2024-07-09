@@ -22,10 +22,10 @@ class History extends EntityAbstract implements OrderStatusHistoryResourceInterf
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Sales\Model\ResourceModel\Attribute $attribute
-     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param Snapshot $entitySnapshot
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
+     * @param \Magento\Sales\Model\ResourceModel\Attribute $attribute
+     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param Validator $validator
      * @param string $connectionName
      */
@@ -50,8 +50,6 @@ class History extends EntityAbstract implements OrderStatusHistoryResourceInterf
     }
 
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_status_history_resource';

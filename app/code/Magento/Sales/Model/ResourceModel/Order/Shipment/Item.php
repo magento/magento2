@@ -14,8 +14,6 @@ use Magento\Sales\Model\Spi\ShipmentItemResourceInterface;
 class Item extends SalesResource implements ShipmentItemResourceInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_shipment_item_resource';

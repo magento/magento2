@@ -17,15 +17,11 @@ use Magento\Sales\Model\ResourceModel\Order\Comment\Collection\AbstractCollectio
 class Collection extends AbstractCollection implements ShipmentCommentSearchResultInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_shipment_comment_collection';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'order_shipment_comment_collection';

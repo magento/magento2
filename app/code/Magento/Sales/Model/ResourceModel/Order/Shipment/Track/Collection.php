@@ -17,22 +17,16 @@ use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
 class Collection extends AbstractCollection implements ShipmentTrackSearchResultInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_shipment_track_collection';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'order_shipment_track_collection';
 
     /**
-     * Order field
-     *
      * @var string
      */
     protected $_orderField = 'order_id';

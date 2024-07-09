@@ -11,15 +11,11 @@ namespace Magento\Sales\Model\ResourceModel\Order\Shipment\Item;
 class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_shipment_item_collection';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'order_shipment_item_collection';

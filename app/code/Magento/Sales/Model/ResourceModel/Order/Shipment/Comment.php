@@ -15,25 +15,21 @@ use Magento\Sales\Model\Spi\ShipmentCommentResourceInterface;
 class Comment extends EntityAbstract implements ShipmentCommentResourceInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_shipment_comment_resource';
 
     /**
-     * Validator
-     *
      * @var \Magento\Sales\Model\Order\Shipment\Comment\Validator
      */
     protected $validator;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Sales\Model\ResourceModel\Attribute $attribute
-     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param Snapshot $entitySnapshot
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
+     * @param \Magento\Sales\Model\ResourceModel\Attribute $attribute
+     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param \Magento\Sales\Model\Order\Shipment\Comment\Validator $validator
      * @param string $connectionName
      */
