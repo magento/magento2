@@ -141,19 +141,13 @@ define([
          * @returns {Object} Chainable.
          */
         initElements: function (data) {
-            var newData = this.getNewData(data),
-                recordIndex;
+            var newData = this.getNewData(data);
 
             this.parsePagesData(data);
 
             if (newData.length) {
                 if (this.insertData().length) {
-                    recordIndex = data.length - newData.length - 1;
-                    if (!isNaN(recordIndex)) {
-                        _.each(newData, function (newRecord) {
-                            this.processingAddChild(newRecord, ++recordIndex, newRecord[this.identificationProperty]);
-                        }, this);
-                    }
+                    this.parseProcessingAddChild(data, newData);
                 }
             }
 
@@ -182,6 +176,22 @@ define([
                     this.reload();
                 }
             }, this);
+        },
+
+        /**
+         * Processing add child if the record index is not a number.
+         *
+         * @param {Array} data
+         * @param {Array} newData
+         */
+        parseProcessingAddChild: function(data, newData) {
+            let recordIndex;
+            recordIndex = data.length - newData.length - 1;
+            if (!isNaN(recordIndex)) {
+                _.each(newData, function (newRecord) {
+                    this.processingAddChild(newRecord, ++recordIndex, newRecord[this.identificationProperty]);
+                }, this);
+            }
         }
     });
 });
