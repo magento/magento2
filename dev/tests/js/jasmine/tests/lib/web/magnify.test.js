@@ -11,56 +11,58 @@ define(['magnifier/magnify', 'mage/gallery/gallery', 'jquery'], function (Magnif
     'use strict';
 
     describe('magnifier/magnify', function () {
-        var gallery, options, magnify;
+        var gallery, options;
 
         beforeEach(function () {
             options = {
                 options: {
-                    "nav":"thumbs","loop":true,"keyboard":true,"arrows":true,"allowfullscreen":true,
-                    "showCaption":false,"width":700,"thumbwidth":88,"thumbheight":110,"height":700,
-                    "transitionduration":500,"transition":"slide","navarrows":true,"navtype":"slides",
-                    "navdir":"horizontal","whiteBorders":1
+                    'nav':'thumbs','loop':true,'keyboard':true,'arrows':true,'allowfullscreen':true,
+                    'showCaption':false,'width':700,'thumbwidth':88,'thumbheight':110,'height':700,
+                    'transitionduration':500,'transition':'slide','navarrows':true,'navtype':'slides',
+                    'navdir':'horizontal','whiteBorders':1
                 },
                 fullscreen: {
-                    "nav":"thumbs","loop":true,"navdir":"horizontal","navarrows":false,"navtype":"slides",
-                    "arrows":true,"showCaption":false,"transitionduration":500,"transition":"slide","whiteBorders":1
+                    'nav':'thumbs','loop':true,'navdir':'horizontal','navarrows':false,'navtype':'slides',
+                    'arrows':true,'showCaption':false,'transitionduration':500,'transition':'slide','whiteBorders':1
                 },
-                breakpoints: {"mobile":{"conditions":{"max-width":"767px"},"options":{"options":{"nav":"dots"}}}},
+                breakpoints: {'mobile':{'conditions':{'max-width':'767px'},'options':{'options':{'nav':'dots'}}}},
                 data: [
                     {
-                        "thumb":"dev/tests/acceptance/tests/_data/adobe-base.jpg",
-                        "img":"dev/tests/acceptance/tests/_data/adobe-base.jpg",
-                        "full":"dev/tests/acceptance/tests/_data/adobe-base.jpg",
-                        "caption":"simple1","position":"0","isMain":false,"type":"image","videoUrl":null
+                        'thumb':'dev/tests/acceptance/tests/_data/adobe-base.jpg',
+                        'img':'dev/tests/acceptance/tests/_data/adobe-base.jpg',
+                        'full':'dev/tests/acceptance/tests/_data/adobe-base.jpg',
+                        'caption':'simple1','position':'0','isMain':false,'type':'image','videoUrl':null
                     }
-                    ],
+                ],
                 magnifierOpts: {
-                    "fullscreenzoom":"20",
-                    "top":"",
-                    "left":"",
-                    "width":"",
-                    "height":"",
-                    "eventType":"hover",
-                    "enabled":false,
-                    "mode":"outside"
+                    'fullscreenzoom':'20',
+                    'top':'',
+                    'left':'',
+                    'width':'',
+                    'height':'',
+                    'eventType':'hover',
+                    'enabled':false,
+                    'mode':'outside'
                 }
             };
         });
 
         describe('test magnifierFullscreen method', function () {
             it('Check if the current image has event handlers set for tap and double tap', function () {
-                let pageWrapperDiv = document.createElement('div');
+                let pageWrapperDiv, productMediaDiv, mainDiv, img, activeImage, imageEvents;
+
+                pageWrapperDiv = document.createElement('div');
                 pageWrapperDiv.className = 'page-wrapper';
 
-                let productMediaDiv = document.createElement('div');
+                productMediaDiv = document.createElement('div');
                 productMediaDiv.className = 'product media';
 
-                let mainDiv = document.createElement('div');
+                mainDiv = document.createElement('div');
                 mainDiv.id = 'gallery_placeholder';
                 mainDiv.className = 'gallery-placeholder _block-content-loading';
                 mainDiv.setAttribute('data-gallery-role', 'gallery-placeholder');
 
-                let img = document.createElement('img');
+                img = document.createElement('img');
                 img.alt = 'main product photo';
                 img.id = 'main_product_photo';
                 img.className = 'gallery-placeholder__image';
@@ -71,17 +73,16 @@ define(['magnifier/magnify', 'mage/gallery/gallery', 'jquery'], function (Magnif
                 productMediaDiv.appendChild(mainDiv);
                 document.body.appendChild(pageWrapperDiv);
 
-                magnify = new Magnify(options, $('#gallery_placeholder'));
+                new Magnify(options, $('#gallery_placeholder'));
                 gallery = new Gallery(options, $('#gallery_placeholder'));
 
-                let activeImage = document.createElement('img');
+                activeImage = document.createElement('img');
                 activeImage.className = 'fotorama__img--full';
                 $('[data-gallery-role="stage-shaft"] [data-active="true"]').append(activeImage);
 
                 gallery.openFullScreen();
 
-                let imageEvents = $._data($('.fotorama__img--full')[0], "events");
-
+                imageEvents = $._data($('.fotorama__img--full')[0], 'events');
                 expect(imageEvents).toBeInstanceOf(Object);
                 expect(imageEvents.dblclick).toBeDefined();
             });
