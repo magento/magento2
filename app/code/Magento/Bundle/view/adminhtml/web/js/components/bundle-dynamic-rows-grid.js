@@ -179,7 +179,7 @@ define([
         },
 
         /**
-         * Processing add child if the record index is not a number.
+         * Parse and processing the add child method to update the latest records if the record index is not a number.
          *
          * @param {Array} data
          * @param {Array} newData
