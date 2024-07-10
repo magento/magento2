@@ -35,7 +35,8 @@ class CheapestMethodDeferredChooser implements DeferredShippingMethodChooserInte
      * @param Address $address
      * @return Rate[]
      */
-    private function getShippingRates(Address $address) : array {
+    private function getShippingRates(Address $address) : array
+    {
         if (!empty($shippingRates = $address->getAllShippingRates())) {
             // Favour previously collected rates over recomputing.
             return $shippingRates;
