@@ -13,7 +13,7 @@ use Magento\Quote\Model\Quote\Address\Rate;
  */
 class CheapestMethodDeferredChooser implements DeferredShippingMethodChooserInterface
 {
-    const METHOD_CODE = 'cheapest';
+    public const METHOD_CODE = 'cheapest';
 
     /**
      * @inheritdoc
