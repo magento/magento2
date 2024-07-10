@@ -64,7 +64,7 @@ class ReadHandler implements ExtensionInterface
 
         $this->addMediaDataToProduct(
             $entity,
-            $this->sortMediaEntriesByPosition($mediaEntries)
+            $mediaEntries
         );
 
         return $entity;
@@ -80,6 +80,7 @@ class ReadHandler implements ExtensionInterface
      */
     public function addMediaDataToProduct(Product $product, array $mediaEntries)
     {
+        $mediaEntries = $this->sortMediaEntriesByPosition($mediaEntries);
         $product->setData(
             $this->getAttribute()->getAttributeCode(),
             [
