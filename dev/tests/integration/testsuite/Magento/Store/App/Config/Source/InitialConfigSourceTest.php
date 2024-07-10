@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test that initial scopes config are loaded if database is available
  * @magentoAppIsolation enabled
+ * @magentoCache config disabled
  */
 class InitialConfigSourceTest extends TestCase
 {

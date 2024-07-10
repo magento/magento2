@@ -10,6 +10,7 @@ namespace Magento\Framework\Encryption;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Encryption\Adapter\EncryptionAdapterInterface;
 use Magento\Framework\Encryption\Adapter\Mcrypt;
 use Magento\Framework\Encryption\Adapter\SodiumChachaIetf;
@@ -265,7 +266,12 @@ class Encryptor implements EncryptorInterface
             throw new \InvalidArgumentException('Unknown hashing algorithm');
         }
 
-        return hash_hmac($this->hashVersionMap[$version], (string)$data, $this->keys[$this->keyVersion], false);
+        return hash_hmac(
+            $this->hashVersionMap[$version],
+            (string)$data,
+            $this->decodeKey($this->keys[$this->keyVersion]),
+            false
+        );
     }
 
     /**
@@ -375,7 +381,7 @@ class Encryptor implements EncryptorInterface
      */
     public function encrypt($data)
     {
-        $crypt = new SodiumChachaIetf($this->keys[$this->keyVersion]);
+        $crypt = new SodiumChachaIetf($this->decodeKey($this->keys[$this->keyVersion]));
 
         return $this->keyVersion .
             ':' . self::CIPHER_AEAD_CHACHA20POLY1305 .
@@ -445,7 +451,7 @@ class Encryptor implements EncryptorInterface
             if (!isset($this->keys[$keyVersion])) {
                 return '';
             }
-            $crypt = $this->getCrypt($this->keys[$keyVersion], $cryptVersion, $initVector);
+            $crypt = $this->getCrypt($this->decodeKey($this->keys[$keyVersion]), $cryptVersion, $initVector);
             if (null === $crypt) {
                 return '';
             }
@@ -520,7 +526,7 @@ class Encryptor implements EncryptorInterface
         }
 
         if (null === $key) {
-            $key = $this->keys[$this->keyVersion];
+            $key = $this->decodeKey($this->keys[$this->keyVersion]);
         }
 
         if (!$key) {
@@ -595,5 +601,18 @@ class Encryptor implements EncryptorInterface
                 SODIUM_CRYPTO_PWHASH_ALG_ARGON2ID13
             )
         );
+    }
+
+    /**
+     * Find out actual decode key
+     *
+     * @param string $key
+     * @return false|string
+     */
+    private function decodeKey(string $key) : string|bool
+    {
+        return (str_starts_with($key, ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX)) ?
+            base64_decode(substr($key, strlen(ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX))) :
+            $key;
     }
 }

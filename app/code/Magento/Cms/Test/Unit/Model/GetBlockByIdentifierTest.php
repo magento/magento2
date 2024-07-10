@@ -43,7 +43,7 @@ class GetBlockByIdentifierTest extends TestCase
     {
         $this->blockFactory = $this->getMockBuilder(BlockFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->blockResource = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Block::class)
@@ -52,7 +52,8 @@ class GetBlockByIdentifierTest extends TestCase
 
         $this->block = $this->getMockBuilder(Block::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setStoreId', 'getId'])
+            ->addMethods(['setStoreId'])
+            ->onlyMethods(['getId'])
             ->getMock();
 
         $this->getBlockByIdentifierCommand = new GetBlockByIdentifier($this->blockFactory, $this->blockResource);

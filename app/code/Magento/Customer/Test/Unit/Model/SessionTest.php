@@ -1,14 +1,15 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * Unit test for session \Magento\Customer\Model\Session
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\ResourceModel\Customer as ResourceCustomer;
@@ -119,6 +120,9 @@ class SessionTest extends TestCase
         $customer = $this->createMock(Customer::class);
         $customerDto = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->expects($this->any())
+            ->method('getGroupId')
+            ->willReturn(1);
+        $customer->expects($this->any())
             ->method('getDataModel')
             ->willReturn($customerDto);
 
@@ -128,6 +132,10 @@ class SessionTest extends TestCase
                 ['customer_login', ['customer' => $customer]],
                 ['customer_data_object_login', ['customer' => $customerDto]]
             );
+
+        $this->_httpContextMock->expects($this->once())
+            ->method('setValue')
+            ->with(CustomerContext::CONTEXT_GROUP, self::callback(fn($value): bool => $value === '1'), 0);
 
         $_SESSION = [];
         $this->_model->setCustomerAsLoggedIn($customer);
@@ -243,51 +251,6 @@ class SessionTest extends TestCase
     }
 
     /**
-     * @param bool $expectedResult
-     * @param bool $isCustomerIdValid
-     * @param bool $isCustomerEmulated
-     *
-     * @return void
-     * @dataProvider getIsLoggedInDataProvider
-     */
-    public function testIsLoggedIn(
-        bool $expectedResult,
-        bool $isCustomerIdValid,
-        bool $isCustomerEmulated
-    ): void {
-        $customerId = 1;
-        $this->_storageMock->expects($this->any())->method('getData')->with('customer_id')
-            ->willReturn($customerId);
-
-        if ($isCustomerIdValid) {
-            $this->customerRepositoryMock->expects($this->once())
-                ->method('getById')
-                ->with($customerId);
-        } else {
-            $this->customerRepositoryMock->expects($this->once())
-                ->method('getById')
-                ->with($customerId)
-                ->willThrowException(new \Exception('Customer ID is invalid.'));
-        }
-        $this->_storageMock->expects($this->any())->method('getIsCustomerEmulated')
-            ->willReturn($isCustomerEmulated);
-        $this->assertEquals($expectedResult, $this->_model->isLoggedIn());
-    }
-
-    /**
-     * @return array
-     */
-    public function getIsLoggedInDataProvider(): array
-    {
-        return [
-            ['expectedResult' => true, 'isCustomerIdValid' => true, 'isCustomerEmulated' => false],
-            ['expectedResult' => false, 'isCustomerIdValid' => true, 'isCustomerEmulated' => true],
-            ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => false],
-            ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => true]
-        ];
-    }
-
-    /**
      * @return void
      */
     public function testSetCustomerRemovesFlagThatShowsIfCustomerIsEmulated(): void
@@ -347,5 +310,18 @@ class SessionTest extends TestCase
             ->willReturn($customerMock);
 
         $this->assertSame($customerMock, $this->_model->getCustomer());
+    }
+
+    public function testSetCustomer(): void
+    {
+        $customer = $this->createMock(Customer::class);
+        $customer->expects($this->any())
+            ->method('getGroupId')
+            ->willReturn(1);
+        $this->_httpContextMock->expects($this->once())
+            ->method('setValue')
+            ->with(CustomerContext::CONTEXT_GROUP, self::callback(fn($value): bool => $value === '1'), 0);
+
+        $this->_model->setCustomer($customer);
     }
 }

@@ -36,6 +36,7 @@
         <sales_email>
             <general>
                 <async_sending>0</async_sending>
+                <async_sending_attempts>3</async_sending_attempts>
                 <sending_limit>50</sending_limit>
             </general>
             <order>

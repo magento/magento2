@@ -169,7 +169,7 @@ define([
          * Update image data when image preview is opened
          */
         updateImageData: function () {
-            var img = $(this.previewImageSelector + ' img');
+            var img = $(this.previewImageSelector + ' img'), self;
 
             if (!img.get(0)) {
                 setTimeout(function () {
@@ -179,10 +179,12 @@ define([
                 this.updateHeight();
                 this.scrollToPreview();
             } else {
-                img.load(function () {
-                    this.updateHeight();
-                    this.scrollToPreview();
-                }.bind(this));
+                self = this;
+
+                img.on('load', function () {
+                    self.updateHeight();
+                    self.scrollToPreview();
+                });
             }
         },
 

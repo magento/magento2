@@ -983,7 +983,7 @@ class ProductTest extends TestCase
     private function getNewProductProviderData(): array
     {
         return [
-            ['cat_p_1', 'cat_c_p_1'],
+            ['cat_p_1', 'cat_c_p_1', 'cat_p_new'],
             null,
             [
                 'id' => 1,

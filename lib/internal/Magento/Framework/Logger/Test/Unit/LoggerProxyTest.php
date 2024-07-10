@@ -99,4 +99,36 @@ class LoggerProxyTest extends TestCase
         $loggerProxy = new LoggerProxy($objectManager);
         $loggerProxy->log(LogLevel::ALERT, 'test');
     }
+
+    /**
+     * @test
+     *
+     * @param $method
+     *
+     * @return void
+     * @dataProvider methodsList
+     */
+    public function logException($method): void
+    {
+        $deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->getMockForAbstractClass();
+
+        $logger = $this->getMockBuilder(LoggerInterface::class)
+            ->getMockForAbstractClass();
+
+        $objectManager
+            ->method('get')
+            ->withConsecutive([DeploymentConfig::class], [Monolog::class])
+            ->willReturnOnConsecutiveCalls($deploymentConfig, $logger);
+
+        $message = new \Exception('This is an exception.');
+
+        $logger->expects($this->once())->method($method)->with($message);
+
+        $loggerProxy = new LoggerProxy($objectManager);
+        $loggerProxy->$method($message);
+    }
 }

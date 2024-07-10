@@ -137,7 +137,7 @@ class AttributeAdapter
     public function isComplexType(): bool
     {
         return in_array($this->getAttribute()->getFrontendInput(), ['select', 'multiselect'], true)
-            || $this->getAttribute()->usesSource();
+            || ($this->getAttribute()->usesSource() && $this->getAttribute()->getFrontendInput() !== 'boolean');
     }
 
     /**

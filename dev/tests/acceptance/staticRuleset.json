@@ -3,6 +3,7 @@
         "actionGroupArguments",
         "deprecatedEntityUsage",
         "annotations",
-        "pauseActionUsage"
+        "pauseActionUsage",
+        "testDependencies"
     ]
 }

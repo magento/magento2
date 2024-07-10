@@ -26,5 +26,6 @@
         <element name="shipBtn" type="button" selector="//button[@title='Ship']"/>
         <element name="shipmentsTab" type="button" selector="#sales_order_view_tabs_order_shipments"/>
         <element name="authorize" type="button" selector="#order_authorize"/>
+        <element name="ok" type="button" selector=".//*[@data-role='action']"/>
     </section>
 </sections>

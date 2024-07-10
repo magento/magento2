@@ -11,6 +11,9 @@ use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -219,18 +222,27 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_not_default_website.php
      * @dataProvider addProductNotAssignedToWebsiteDataProvider
-     * @param string $reservedOrderId
-     * @param string $sku
+     * @param string $cart
+     * @param string $product
      * @param array $headerMap
      */
-    public function testAddProductNotAssignedToWebsite(string $reservedOrderId, string $sku, array $headerMap)
+    #[
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1]], as: 'product1'),
+        DataFixture(ProductFixture::class, ['website_ids' => ['$website2.id$']], as: 'product2'),
+        DataFixture(GuestCartFixture::class, as: 'cart1'),
+        DataFixture(GuestCartFixture::class, as: 'cart2', scope: 'store2'),
+    ]
+    public function testAddProductNotAssignedToWebsite(string $cart, string $product, array $headerMap)
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $sku = $this->fixtures->get($product)->getSku();
+        $cartId = (int) $this->fixtures->get($cart)->getId();
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute($cartId);
         $query = $this->getAddToCartMutation($maskedQuoteId, 1, $sku);
+        $headerMap = array_map(fn ($store) => $this->fixtures->get($store)?->getCode() ?? $store, $headerMap);
         $response = $this->graphQlMutation($query, [], '', $headerMap);
         self::assertEmpty($response['addProductsToCart']['cart']['items']);
         self::assertArrayHasKey('user_errors', $response['addProductsToCart']);
@@ -386,9 +398,9 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     public function addProductNotAssignedToWebsiteDataProvider(): array
     {
         return [
-            ['test_order_1', 'simple-2', []],
-            ['test_order_1', 'simple-2', ['Store' => 'default']],
-            ['test_order_2', 'simple-1', ['Store' => 'fixture_second_store']],
+            ['cart1', 'product2', []],
+            ['cart1', 'product2', ['Store' => 'default']],
+            ['cart2', 'product1', ['Store' => 'store2']],
         ];
     }
 

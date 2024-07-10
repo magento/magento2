@@ -312,6 +312,10 @@ class Rule extends AbstractResource
             ['ea' => $this->getTable('eav_attribute')],
             'ea.attribute_id = a.attribute_id',
             []
+        )->joinInner(
+            ['sr' => $this->getTable('salesrule')],
+            'a.' . $this->getLinkField() . ' = sr.' . $this->getLinkField() . ' AND sr.is_active = 1',
+            []
         );
         return $connection->fetchAll($select);
     }

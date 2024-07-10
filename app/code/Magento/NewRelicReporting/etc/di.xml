@@ -50,7 +50,13 @@
         <arguments>
             <argument name="skipCommands" xsi:type="array">
                 <item xsi:type="boolean" name="cron:run">true</item>
+                <item xsi:type="boolean" name="server:run">true</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\NewRelicReporting\Model\Apm\Deployments">
+        <arguments>
+            <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Json</argument>
         </arguments>
     </type>
 </config>

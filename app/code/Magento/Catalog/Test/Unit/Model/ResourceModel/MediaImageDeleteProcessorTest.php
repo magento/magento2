@@ -70,27 +70,27 @@ class MediaImageDeleteProcessorTest extends TestCase
 
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getMediaGalleryImages'])
+            ->onlyMethods(['getId', 'getMediaGalleryImages'])
             ->getMock();
 
         $this->imageConfig = $this->getMockBuilder(MediaConfig::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseMediaUrl', 'getMediaUrl', 'getBaseMediaPath', 'getMediaPath'])
+            ->onlyMethods(['getBaseMediaUrl', 'getMediaUrl', 'getBaseMediaPath', 'getMediaPath'])
             ->getMock();
 
         $this->mediaDirectory = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRelativePath', 'isFile', 'delete'])
+            ->addMethods(['getRelativePath', 'isFile', 'delete'])
             ->getMock();
 
         $this->imageProcessor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['removeImage'])
+            ->onlyMethods(['removeImage'])
             ->getMock();
 
         $this->productGallery = $this->getMockBuilder(Gallery::class)
             ->disableOriginalConstructor()
-            ->setMethods(['deleteGallery', 'countImageUses'])
+            ->onlyMethods(['deleteGallery', 'countImageUses'])
             ->getMock();
 
         $this->mediaImageDeleteProcessor = $this->objectManager->getObject(
@@ -133,8 +133,10 @@ class MediaImageDeleteProcessorTest extends TestCase
 
         $this->mediaDirectory->expects($this->any())
             ->method('getRelativePath')
-            ->withConsecutive([$productImages[0]->getFile()], [$productImages[1]->getFile()])
-            ->willReturnOnConsecutiveCalls($productImages[0]->getPath(), $productImages[1]->getPath());
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$productImages[0]->getFile()] => $productImages[0]->getPath(),
+                [$productImages[1]->getFile()] => $productImages[1]->getPath()
+            });
 
         $this->productGallery->expects($this->any())
             ->method('countImageUses')
@@ -154,7 +156,7 @@ class MediaImageDeleteProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function executeCategoryProductMediaDeleteDataProvider(): array
+    public static function executeCategoryProductMediaDeleteDataProvider(): array
     {
         $imageDirectoryPath = '/media/dir1/dir2/catalog/product/';
         $image1FilePath = '/test/test1.jpg';

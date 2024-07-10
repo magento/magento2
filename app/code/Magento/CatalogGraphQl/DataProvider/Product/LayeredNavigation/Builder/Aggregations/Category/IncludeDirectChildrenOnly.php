@@ -9,6 +9,7 @@ namespace Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\
 
 use Magento\Catalog\Api\CategoryListInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Search\Response\Aggregation;
 use Magento\Framework\Search\Response\AggregationFactory;
 use Magento\Framework\Search\Response\BucketFactory;
@@ -18,7 +19,7 @@ use Magento\Framework\Api\Search\AggregationInterface;
 /**
  * Class to include only direct subcategories of category in aggregation
  */
-class IncludeDirectChildrenOnly
+class IncludeDirectChildrenOnly implements ResetAfterRequestInterface
 {
     /**
      * @var string
@@ -159,5 +160,13 @@ class IncludeDirectChildrenOnly
             }
         }
         return array_values($categoryBucketValues);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->filter = [];
     }
 }

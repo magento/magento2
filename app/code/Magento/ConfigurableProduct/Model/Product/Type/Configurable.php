@@ -18,6 +18,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\File\UploaderFactory;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Configurable product type implementation
@@ -31,7 +32,7 @@ use Magento\Framework\File\UploaderFactory;
  * @api
  * @since 100.0.2
  */
-class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
+class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType implements ResetAfterRequestInterface
 {
     /**
      * Product type code
@@ -1494,4 +1495,13 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         return array_unique(array_merge($productAttributes, $requiredAttributes, $usedAttributes));
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->isSaleableBySku = [];
+    }
+
 }

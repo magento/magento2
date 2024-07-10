@@ -202,10 +202,10 @@ class StorageTest extends TestCase
         $thumbnailPath = '/' . implode(
             '/',
             [
-                \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
-                \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY,
-                $image
-            ]
+                    \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
+                    \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY,
+                    $image
+                ]
         );
 
         $this->customization->expects(

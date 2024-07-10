@@ -203,7 +203,7 @@ class MigrationTest extends TestCase
      */
     public function testDoUpdateClassAliases($replaceRules, $tableData, $expected, $aliasesMap = [])
     {
-        $this->markTestIncomplete('Requires refactoring of class that is tested, covers to many methods');
+        $this->markTestSkipped('Requires refactoring of class that is tested, covers to many methods');
 
         $this->_actualUpdateResult = [];
         $tableRowsCount = count($tableData);

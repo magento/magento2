@@ -94,18 +94,12 @@ class UploadJsTest extends ThemeTest
 
         $this->_objectManagerMock
             ->method('get')
-            ->withConsecutive(
-                [Service::class],
-                [FlyweightFactory::class],
-                [Js::class],
-                [Data::class]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $this->serviceModel,
-                $this->themeFactory,
-                $this->customizationJs,
-                $this->jsonHelper
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Service::class] => $this->serviceModel,
+                [FlyweightFactory::class] => $this->themeFactory,
+                [Js::class] => $this->customizationJs,
+                [Data::class] => $this->jsonHelper
+            });
 
         $this->themeFactory->expects($this->once())
             ->method('create')
@@ -140,20 +134,13 @@ class UploadJsTest extends ThemeTest
 
         $this->_objectManagerMock
             ->method('get')
-            ->withConsecutive(
-                [Service::class],
-                [FlyweightFactory::class],
-                [Js::class],
-                [LoggerInterface::class],
-                [Data::class]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $this->serviceModel,
-                $this->themeFactory,
-                $this->customizationJs,
-                $this->logger,
-                $this->jsonHelper
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Service::class] => $this->serviceModel,
+                [FlyweightFactory::class] => $this->themeFactory,
+                [Js::class] => $this->customizationJs,
+                [LoggerInterface::class] => $this->logger,
+                [Data::class] => $this->jsonHelper
+            });
         $this->logger->expects($this->once())
             ->method('critical');
 
@@ -197,18 +184,12 @@ class UploadJsTest extends ThemeTest
 
         $this->_objectManagerMock
             ->method('get')
-            ->withConsecutive(
-                [Service::class],
-                [FlyweightFactory::class],
-                [Js::class],
-                [Data::class]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $this->serviceModel,
-                $this->themeFactory,
-                $this->customizationJs,
-                $this->jsonHelper
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                    [Service::class] => $this->serviceModel,
+                    [FlyweightFactory::class] => $this->themeFactory,
+                    [Js::class] => $this->customizationJs,
+                    [Data::class] => $this->jsonHelper
+            });
 
         $this->themeFactory->expects($this->once())
             ->method('create')

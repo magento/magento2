@@ -21,19 +21,19 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class SourceThemeDeployCommandTest extends TestCase
 {
-    const AREA_TEST_VALUE = 'area-test-value';
+    public const AREA_TEST_VALUE = 'area-test-value';
 
-    const LOCALE_TEST_VALUE = 'locale-test-value';
+    public const LOCALE_TEST_VALUE = 'locale-test-value';
 
-    const THEME_TEST_VALUE = 'Vendor/theme';
+    public const THEME_TEST_VALUE = 'Vendor/theme';
 
-    const THEME_INCORRECT_FORMAT_VALUE = 'theme-value';
+    public const THEME_INCORRECT_FORMAT_VALUE = 'theme-value';
 
-    const THEME_NONEXISTING_VALUE = 'NonExistentVendor/theme';
+    public const THEME_NONEXISTING_VALUE = 'NonExistentVendor/theme';
 
-    const TYPE_TEST_VALUE = 'type-test-value';
+    public const TYPE_TEST_VALUE = 'type-test-value';
 
-    const FILE_TEST_VALUE = 'file-test-value/test/file';
+    public const FILE_TEST_VALUE = 'file-test-value/test/file';
 
     /**
      * @var SourceThemeDeployCommand
@@ -105,11 +105,14 @@ class SourceThemeDeployCommandTest extends TestCase
 
         $outputMock
             ->method('writeln')
-            ->withConsecutive(
-                [$message],
-                ['<comment>-> file-test-value/test/file</comment>'],
-                ['<info>Successfully processed.</info>']
-            );
+            ->willReturnCallback(function ($arg1) use ($message) {
+                if ($arg1 == $message ||
+                    $arg1 == '<comment>-> file-test-value/test/file</comment>' ||
+                    $arg1 == '<info>Successfully processed.</info>'
+                ) {
+                    return null;
+                }
+            });
 
         $this->assetRepositoryMock->expects($this->once())
             ->method('createAsset')

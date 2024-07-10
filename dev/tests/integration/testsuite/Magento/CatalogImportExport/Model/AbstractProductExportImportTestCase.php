@@ -408,7 +408,6 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     {
         $csvfile = uniqid('importexport_') . '.csv';
         $this->csvFile = $csvfile;
-
         $exportProduct = $exportProduct ?: $this->objectManager->create(
             Product::class
         );
@@ -419,10 +418,8 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $exportProduct->setWriter($writer);
         $content = $exportProduct->export();
         $this->assertNotEmpty($content);
-
         $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
         $directory->getDriver()->filePutContents($directory->getAbsolutePath($csvfile), $content);
-
         return $csvfile;
     }
 
@@ -447,15 +444,12 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
                 'directory' => $directory
             ]
         );
-
         $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
             ->getInitParams()[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
         $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
-
         $mediaDir = $mediaDirectory->getDriver() instanceof File ?
             $appParams[DirectoryList::MEDIA][DirectoryList::PATH] : 'media';
-
         $mediaDirectory->create('catalog/product');
         $mediaDirectory->create('import');
         $importModel->setParameters(
@@ -466,17 +460,13 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $uploader = $importModel->getUploader();
         $this->assertTrue($uploader->setDestDir($mediaDir . '/catalog/product'));
         $this->assertTrue($uploader->setTmpDir($mediaDir . '/import'));
-
-        $errors = $importModel->setParameters(
-            [
-                'behavior' => $behavior,
-                'entity' => 'catalog_product',
-            ]
-        )->setSource(
-            $source
-        )->validateData();
+        $importModel->setParameters([
+            'behavior' => $behavior,
+            'entity' => 'catalog_product',
+        ]);
+        $importModel->setSource($source);
+        $errors = $importModel->validateData();
         $errorMessage = $this->extractErrorMessage($errors->getAllErrors());
-
         $this->assertEmpty(
             $errorMessage,
             'Product import from file ' . $csvfile . ' validation errors: ' . $errorMessage
@@ -502,7 +492,6 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         foreach ($errors as $error) {
             $errorMessage = "\n" . $error->getErrorMessage();
         }
-
         return $errorMessage;
     }
 

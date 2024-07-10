@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Data\Collection;
 
 use Magento\Framework\App\ResourceConnection;
@@ -19,6 +21,7 @@ use Psr\Log\LoggerInterface as Logger;
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 100.0.2
  */
 abstract class AbstractDb extends \Magento\Framework\Data\Collection
@@ -100,6 +103,170 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     protected $extensionAttributesJoinProcessor;
 
     /**
+     * @var array
+     * @see https://en.wikipedia.org/wiki/List_of_SQL_reserved_words
+     */
+    private array $sqlReservedWords = [
+        'ABORT', 'ABORTSESSION', 'ABS', 'ABSENT', 'ABSOLUTE', 'ACCESS',
+        'ACCESS_LOCK', 'ACCESSIBLE', 'ACCOUNT', 'ACOS', 'ACOSH', 'ACTION',
+        'ADD', 'ADD_MONTHS', 'ADMIN', 'AFTER', 'AGGREGATE', 'ALIAS', 'ALL',
+        'ALLOCATE', 'ALLOW', 'ALTER', 'ALTERAND', 'AMP', 'ANALYSE', 'ANALYZE',
+        'AND', 'ANSIDATE', 'ANY', 'ARE', 'ARRAY', 'ARRAY_AGG', 'ARRAY_EXISTS',
+        'ARRAY_MAX_CARDINALITY', 'AS', 'ASC', 'ASENSITIVE', 'ASIN', 'ASINH',
+        'ASSERTION', 'ASSOCIATE', 'ASUTIME', 'ASYMMETRIC', 'AT', 'ATAN',
+        'ATAN2', 'ATANH', 'ATOMIC', 'AUDIT', 'AUTHORIZATION', 'AUX',
+        'AUXILIARY', 'AVE', 'AVERAGE', 'AVG', 'BACKUP', 'BEFORE', 'BEGIN',
+        'BEGIN_FRAME', 'BEGIN_PARTITION', 'BETWEEN', 'BIGINT', 'BINARY', 'BIT',
+        'BLOB', 'BOOLEAN', 'BOTH', 'BREADTH', 'BREAK', 'BROWSE', 'BT',
+        'BUFFERPOOL', 'BULK', 'BUT', 'BY', 'BYTE', 'BYTEINT', 'BYTES', 'CALL',
+        'CALLED', 'CAPTURE', 'CARDINALITY', 'CASCADE', 'CASCADED', 'CASE',
+        'CASE_N', 'CASESPECIFIC', 'CAST', 'CATALOG', 'CCSID', 'CD', 'CEIL',
+        'CEILING', 'CHANGE', 'CHAR', 'CHAR_LENGTH', 'CHAR2HEXINT', 'CHARACTER',
+        'CHARACTER_LENGTH', 'CHARACTERS', 'CHARS', 'CHECK', 'CHECKPOINT',
+        'CLASS', 'CLASSIFIER', 'CLOB', 'CLONE', 'CLOSE', 'CLUSTER',
+        'CLUSTERED', 'CM', 'COALESCE', 'COLLATE', 'COLLATION', 'COLLECT',
+        'COLLECTION', 'COLLID', 'COLUMN', 'COLUMN_VALUE', 'COMMENT', 'COMMIT',
+        'COMPLETION', 'COMPRESS', 'COMPUTE', 'CONCAT', 'CONCURRENTLY',
+        'CONDITION', 'CONNECT', 'CONNECTION', 'CONSTRAINT', 'CONSTRAINTS',
+        'CONSTRUCTOR', 'CONTAINS', 'CONTAINSTABLE', 'CONTENT', 'CONTINUE',
+        'CONVERT', 'CONVERT_TABLE_HEADER', 'COPY', 'CORR', 'CORRESPONDING',
+        'COS', 'COSH', 'COUNT', 'COVAR_POP', 'COVAR_SAMP', 'CREATE', 'CROSS',
+        'CS', 'CSUM', 'CT', 'CUBE', 'CUME_DIST', 'CURRENT', 'CURRENT_CATALOG',
+        'CURRENT_DATE', 'CURRENT_DEFAULT_TRANSFORM_GROUP', 'CURRENT_LC_CTYPE',
+        'CURRENT_PATH', 'CURRENT_ROLE', 'CURRENT_ROW', 'CURRENT_SCHEMA',
+        'CURRENT_SERVER', 'CURRENT_TIME', 'CURRENT_TIMESTAMP',
+        'CURRENT_TIMEZONE', 'CURRENT_TRANSFORM_GROUP_FOR_TYPE', 'CURRENT_USER',
+        'CURRVAL', 'CURSOR', 'CV', 'CYCLE', 'DATA', 'DATABASE', 'DATABASES',
+        'DATABLOCKSIZE', 'DATE', 'DATEFORM', 'DAY', 'DAY_HOUR',
+        'DAY_MICROSECOND', 'DAY_MINUTE', 'DAY_SECOND', 'DAYS', 'DBCC',
+        'DBINFO', 'DEALLOCATE', 'DEC', 'DECFLOAT', 'DECIMAL', 'DECLARE',
+        'DEFAULT', 'DEFERRABLE', 'DEFERRED', 'DEFINE', 'DEGREES', 'DEL',
+        'DELAYED', 'DELETE', 'DENSE_RANK', 'DENY', 'DEPTH', 'DEREF', 'DESC',
+        'DESCRIBE', 'DESCRIPTOR', 'DESTROY', 'DESTRUCTOR', 'DETERMINISTIC',
+        'DIAGNOSTIC', 'DIAGNOSTICS', 'DICTIONARY', 'DISABLE', 'DISABLED',
+        'DISALLOW', 'DISCONNECT', 'DISK', 'DISTINCT', 'DISTINCTROW',
+        'DISTRIBUTED', 'DIV', 'DO', 'DOCUMENT', 'DOMAIN', 'DOUBLE', 'DROP',
+        'DSSIZE', 'DUAL', 'DUMP', 'DYNAMIC', 'EACH', 'ECHO', 'EDITPROC',
+        'ELEMENT', 'ELSE', 'ELSEIF', 'EMPTY', 'ENABLED', 'ENCLOSED',
+        'ENCODING', 'ENCRYPTION', 'END', 'END_FRAME', 'END_PARTITION',
+        'END-EXEC', 'ENDING', 'EQ', 'EQUALS', 'ERASE', 'ERRLVL', 'ERROR',
+        'ERRORFILES', 'ERRORTABLES', 'ESCAPE', 'ESCAPED', 'ET', 'EVERY',
+        'EXCEPT', 'EXCEPTION', 'EXCLUSIVE', 'EXEC', 'EXECUTE', 'EXISTS',
+        'EXIT', 'EXP', 'EXPLAIN', 'EXTERNAL', 'EXTRACT', 'FALLBACK', 'FALSE',
+        'FASTEXPORT', 'FENCED', 'FETCH', 'FIELDPROC', 'FILE', 'FILLFACTOR',
+        'FILTER', 'FINAL', 'FIRST', 'FIRST_VALUE', 'FLOAT', 'FLOAT4', 'FLOAT8',
+        'FLOOR', 'FOR', 'FORCE', 'FOREIGN', 'FORMAT', 'FOUND', 'FRAME_ROW',
+        'FREE', 'FREESPACE', 'FREETEXT', 'FREETEXTTABLE', 'FREEZE', 'FROM',
+        'FULL', 'FULLTEXT', 'FUNCTION', 'FUSION', 'GE', 'GENERAL', 'GENERATED',
+        'GET', 'GIVE', 'GLOBAL', 'GO', 'GOTO', 'GRANT', 'GRAPHIC', 'GROUP',
+        'GROUPING', 'GROUPS', 'GT', 'HANDLER', 'HASH', 'HASHAMP', 'HASHBAKAMP',
+        'HASHBUCKET', 'HASHROW', 'HAVING', 'HELP', 'HIGH_PRIORITY', 'HOLD',
+        'HOLDLOCK', 'HOST', 'HOUR', 'HOUR_MICROSECOND', 'HOUR_MINUTE',
+        'HOUR_SECOND', 'HOURS', 'IDENTIFIED', 'IDENTITY', 'IDENTITY_INSERT',
+        'IDENTITYCOL', 'IF', 'IGNORE', 'ILIKE', 'IMMEDIATE', 'IN', 'INCLUSIVE',
+        'INCONSISTENT', 'INCREMENT', 'INDEX', 'INDICATOR', 'INFILE', 'INHERIT',
+        'INITIAL', 'INITIALIZE', 'INITIALLY', 'INITIATE', 'INNER', 'INOUT',
+        'INPUT', 'INS', 'INSENSITIVE', 'INSERT', 'INSTEAD', 'INT', 'INT1',
+        'INT2', 'INT3', 'INT4', 'INT8', 'INTEGER', 'INTEGERDATE', 'INTERSECT',
+        'INTERSECTION', 'INTERVAL', 'INTO', 'IO_AFTER_GTIDS',
+        'IO_BEFORE_GTIDS', 'IS', 'ISNULL', 'ISOBID', 'ISOLATION', 'ITERATE',
+        'JAR', 'JOIN', 'JOURNAL', 'JSON', 'JSON_ARRAY', 'JSON_ARRAYAGG',
+        'JSON_EXISTS', 'JSON_OBJECT', 'JSON_OBJECTAGG', 'JSON_QUERY',
+        'JSON_TABLE', 'JSON_TABLE_PRIMITIVE', 'JSON_VALUE', 'KEEP', 'KEY',
+        'KEYS', 'KILL', 'KURTOSIS', 'LABEL', 'LAG', 'LANGUAGE', 'LARGE',
+        'LAST', 'LAST_VALUE', 'LATERAL', 'LC_CTYPE', 'LE', 'LEAD', 'LEADING',
+        'LEAVE', 'LEFT', 'LESS', 'LEVEL', 'LIKE', 'LIKE_REGEX', 'LIMIT',
+        'LINEAR', 'LINENO', 'LINES', 'LISTAGG', 'LN', 'LOAD', 'LOADING',
+        'LOCAL', 'LOCALE', 'LOCALTIME', 'LOCALTIMESTAMP', 'LOCATOR',
+        'LOCATORS', 'LOCK', 'LOCKING', 'LOCKMAX', 'LOCKSIZE', 'LOG', 'LOG10',
+        'LOGGING', 'LOGON', 'LONG', 'LONGBLOB', 'LONGTEXT', 'LOOP',
+        'LOW_PRIORITY', 'LOWER', 'LT', 'MACRO', 'MAINTAINED', 'MAP',
+        'MASTER_BIND', 'MASTER_SSL_VERIFY_SERVER_CERT', 'MATCH',
+        'MATCH_NUMBER', 'MATCH_RECOGNIZE', 'MATCHES', 'MATERIALIZED', 'MAVG',
+        'MAX', 'MAXEXTENTS', 'MAXIMUM', 'MAXVALUE', 'MCHARACTERS', 'MDIFF',
+        'MEDIUMBLOB', 'MEDIUMINT', 'MEDIUMTEXT', 'MEMBER', 'MERGE', 'METHOD',
+        'MICROSECOND', 'MICROSECONDS', 'MIDDLEINT', 'MIN', 'MINDEX', 'MINIMUM',
+        'MINUS', 'MINUTE', 'MINUTE_MICROSECOND', 'MINUTE_SECOND', 'MINUTES',
+        'MLINREG', 'MLOAD', 'MLSLABEL', 'MOD', 'MODE', 'MODIFIES', 'MODIFY',
+        'MODULE', 'MONITOR', 'MONRESOURCE', 'MONSESSION', 'MONTH', 'MONTHS',
+        'MSUBSTR', 'MSUM', 'MULTISET', 'NAMED', 'NAMES', 'NATIONAL', 'NATURAL',
+        'NCHAR', 'NCLOB', 'NE', 'NESTED_TABLE_ID', 'NEW', 'NEW_TABLE', 'NEXT',
+        'NEXTVAL', 'NO', 'NO_WRITE_TO_BINLOG', 'NOAUDIT', 'NOCHECK',
+        'NOCOMPRESS', 'NONCLUSTERED', 'NONE', 'NORMALIZE', 'NOT', 'NOTNULL',
+        'NOWAIT', 'NTH_VALUE', 'NTILE', 'NULL', 'NULLIF', 'NULLIFZERO',
+        'NULLS', 'NUMBER', 'NUMERIC', 'NUMPARTS', 'OBID', 'OBJECT', 'OBJECTS',
+        'OCCURRENCES_REGEX', 'OCTET_LENGTH', 'OF', 'OFF', 'OFFLINE', 'OFFSET',
+        'OFFSETS', 'OLD', 'OLD_TABLE', 'OMIT', 'ON', 'ONE', 'ONLINE', 'ONLY',
+        'OPEN', 'OPENDATASOURCE', 'OPENQUERY', 'OPENROWSET', 'OPENXML',
+        'OPERATION', 'OPTIMIZATION', 'OPTIMIZE', 'OPTIMIZER_COSTS', 'OPTION',
+        'OPTIONALLY', 'OR', 'ORDER', 'ORDINALITY', 'ORGANIZATION', 'OUT',
+        'OUTER', 'OUTFILE', 'OUTPUT', 'OVER', 'OVERLAPS', 'OVERLAY',
+        'OVERRIDE', 'PACKAGE', 'PAD', 'PADDED', 'PARAMETER', 'PARAMETERS',
+        'PART', 'PARTIAL', 'PARTITION', 'PARTITIONED', 'PARTITIONING',
+        'PASSWORD', 'PATH', 'PATTERN', 'PCTFREE', 'PER', 'PERCENT',
+        'PERCENT_RANK', 'PERCENTILE_CONT', 'PERCENTILE_DISC', 'PERIOD', 'PERM',
+        'PERMANENT', 'PIECESIZE', 'PIVOT', 'PLACING', 'PLAN', 'PORTION',
+        'POSITION', 'POSITION_REGEX', 'POSTFIX', 'POWER', 'PRECEDES',
+        'PRECISION', 'PREFIX', 'PREORDER', 'PREPARE', 'PRESERVE', 'PREVVAL',
+        'PRIMARY', 'PRINT', 'PRIOR', 'PRIQTY', 'PRIVATE', 'PRIVILEGES', 'PROC',
+        'PROCEDURE', 'PROFILE', 'PROGRAM', 'PROPORTIONAL', 'PROTECTION',
+        'PSID', 'PTF', 'PUBLIC', 'PURGE', 'QUALIFIED', 'QUALIFY', 'QUANTILE',
+        'QUERY', 'QUERYNO', 'RADIANS', 'RAISERROR', 'RANDOM', 'RANGE',
+        'RANGE_N', 'RANK', 'RAW', 'READ', 'READ_WRITE', 'READS', 'READTEXT',
+        'REAL', 'RECONFIGURE', 'RECURSIVE', 'REF', 'REFERENCES', 'REFERENCING',
+        'REFRESH', 'REGEXP', 'REGR_AVGX', 'REGR_AVGY', 'REGR_COUNT',
+        'REGR_INTERCEPT', 'REGR_R2', 'REGR_SLOPE', 'REGR_SXX', 'REGR_SXY',
+        'REGR_SYY', 'RELATIVE', 'RELEASE', 'RENAME', 'REPEAT', 'REPLACE',
+        'REPLICATION', 'REPOVERRIDE', 'REQUEST', 'REQUIRE', 'RESIGNAL',
+        'RESOURCE', 'RESTART', 'RESTORE', 'RESTRICT', 'RESULT',
+        'RESULT_SET_LOCATOR', 'RESUME', 'RET', 'RETRIEVE', 'RETURN',
+        'RETURNING', 'RETURNS', 'REVALIDATE', 'REVERT', 'REVOKE', 'RIGHT',
+        'RIGHTS', 'RLIKE', 'ROLE', 'ROLLBACK', 'ROLLFORWARD', 'ROLLUP',
+        'ROUND_CEILING', 'ROUND_DOWN', 'ROUND_FLOOR', 'ROUND_HALF_DOWN',
+        'ROUND_HALF_EVEN', 'ROUND_HALF_UP', 'ROUND_UP', 'ROUTINE', 'ROW',
+        'ROW_NUMBER', 'ROWCOUNT', 'ROWGUIDCOL', 'ROWID', 'ROWNUM', 'ROWS',
+        'ROWSET', 'RULE', 'RUN', 'RUNNING', 'SAMPLE', 'SAMPLEID', 'SAVE',
+        'SAVEPOINT', 'SCHEMA', 'SCHEMAS', 'SCOPE', 'SCRATCHPAD', 'SCROLL',
+        'SEARCH', 'SECOND', 'SECOND_MICROSECOND', 'SECONDS', 'SECQTY',
+        'SECTION', 'SECURITY', 'SECURITYAUDIT', 'SEEK', 'SEL', 'SELECT',
+        'SEMANTICKEYPHRASETABLE', 'SEMANTICSIMILARITYDETAILSTABLE',
+        'SEMANTICSIMILARITYTABLE', 'SENSITIVE', 'SEPARATOR', 'SEQUENCE',
+        'SESSION', 'SESSION_USER', 'SET', 'SETRESRATE', 'SETS', 'SETSESSRATE',
+        'SETUSER', 'SHARE', 'SHOW', 'SHUTDOWN', 'SIGNAL', 'SIMILAR', 'SIMPLE',
+        'SIN', 'SINH', 'SIZE', 'SKEW', 'SKIP', 'SMALLINT', 'SOME', 'SOUNDEX',
+        'SOURCE', 'SPACE', 'SPATIAL', 'SPECIFIC', 'SPECIFICTYPE', 'SPOOL',
+        'SQL', 'SQL_BIG_RESULT', 'SQL_CALC_FOUND_ROWS', 'SQL_SMALL_RESULT',
+        'SQLEXCEPTION', 'SQLSTATE', 'SQLTEXT', 'SQLWARNING', 'SQRT', 'SS',
+        'SSL', 'STANDARD', 'START', 'STARTING', 'STARTUP', 'STATE',
+        'STATEMENT', 'STATIC', 'STATISTICS', 'STAY', 'STDDEV_POP',
+        'STDDEV_SAMP', 'STEPINFO', 'STOGROUP', 'STORED', 'STORES',
+        'STRAIGHT_JOIN', 'STRING_CS', 'STRUCTURE', 'STYLE', 'SUBMULTISET',
+        'SUBSCRIBER', 'SUBSET', 'SUBSTR', 'SUBSTRING', 'SUBSTRING_REGEX',
+        'SUCCEEDS', 'SUCCESSFUL', 'SUM', 'SUMMARY', 'SUSPEND', 'SYMMETRIC',
+        'SYNONYM', 'SYSDATE', 'SYSTEM', 'SYSTEM_TIME', 'SYSTEM_USER',
+        'SYSTIMESTAMP', 'TABLE', 'TABLESAMPLE', 'TABLESPACE', 'TAN', 'TANH',
+        'TBL_CS', 'TEMPORARY', 'TERMINATE', 'TERMINATED', 'TEXTSIZE', 'THAN',
+        'THEN', 'THRESHOLD', 'TIME', 'TIMESTAMP', 'TIMEZONE_HOUR',
+        'TIMEZONE_MINUTE', 'TINYBLOB', 'TINYINT', 'TINYTEXT', 'TITLE', 'TO',
+        'TOP', 'TRACE', 'TRAILING', 'TRAN', 'TRANSACTION', 'TRANSLATE',
+        'TRANSLATE_CHK', 'TRANSLATE_REGEX', 'TRANSLATION', 'TREAT', 'TRIGGER',
+        'TRIM', 'TRIM_ARRAY', 'TRUE', 'TRUNCATE', 'TRY_CONVERT', 'TSEQUAL',
+        'TYPE', 'UC', 'UESCAPE', 'UID', 'UNDEFINED', 'UNDER', 'UNDO', 'UNION',
+        'UNIQUE', 'UNKNOWN', 'UNLOCK', 'UNNEST', 'UNPIVOT', 'UNSIGNED',
+        'UNTIL', 'UPD', 'UPDATE', 'UPDATETEXT', 'UPPER', 'UPPERCASE', 'USAGE',
+        'USE', 'USER', 'USING', 'UTC_DATE', 'UTC_TIME', 'UTC_TIMESTAMP',
+        'VALIDATE', 'VALIDPROC', 'VALUE', 'VALUE_OF', 'VALUES', 'VAR_POP',
+        'VAR_SAMP', 'VARBINARY', 'VARBYTE', 'VARCHAR', 'VARCHAR2',
+        'VARCHARACTER', 'VARGRAPHIC', 'VARIABLE', 'VARIADIC', 'VARIANT',
+        'VARYING', 'VCAT', 'VERBOSE', 'VERSIONING', 'VIEW', 'VIRTUAL',
+        'VOLATILE', 'VOLUMES', 'WAIT', 'WAITFOR', 'WHEN', 'WHENEVER', 'WHERE',
+        'WHILE', 'WIDTH_BUCKET', 'WINDOW', 'WITH', 'WITHIN', 'WITHIN_GROUP',
+        'WITHOUT', 'WLM', 'WORK', 'WRITE', 'WRITETEXT', 'XMLCAST', 'XMLEXISTS',
+        'XMLNAMESPACES', 'XOR', 'YEAR', 'YEAR_MONTH', 'YEARS', 'ZEROFILL',
+        'ZEROIFNULL', 'ZONE',
+    ];
+
+    /**
      * @param EntityFactoryInterface $entityFactory
      * @param Logger $logger
      * @param FetchStrategyInterface $fetchStrategy
@@ -116,7 +283,25 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         if ($connection !== null) {
             $this->setConnection($connection);
         }
+
         $this->_logger = $logger;
+        $this->sqlReservedWords = array_flip($this->sqlReservedWords);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->setConnection($this->_conn);
+        // Note: not resetting _idFieldName because some subclasses define it class property
+        $this->_bindParams = [];
+        $this->_data = null;
+        // Note: not resetting _map because some subclasses define it class property but not _construct method.
+        $this->_fetchStmt = null;
+        $this->_isOrdersRendered = false;
+        $this->extensionAttributesJoinProcessor = null;
     }
 
     /**
@@ -131,6 +316,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param string $name
      * @param mixed $value
+     *
      * @return $this
      */
     public function addBindParam($name, $value)
@@ -143,6 +329,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Specify collection objects id field name
      *
      * @param string $fieldName
+     *
      * @return $this
      */
     protected function _setIdFieldName($fieldName)
@@ -165,6 +352,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Get collection item identifier
      *
      * @param \Magento\Framework\DataObject $item
+     *
      * @return mixed
      */
     protected function _getItemId(\Magento\Framework\DataObject $item)
@@ -172,6 +360,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         if ($field = $this->getIdFieldName()) {
             return $item->getData($field);
         }
+
         return parent::_getItemId($item);
     }
 
@@ -179,6 +368,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Set database connection adapter
      *
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $conn
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -221,6 +411,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             $sql = $this->getSelectCountSql();
             $this->_totalRecords = $this->_totalRecords ?? $this->getConnection()->fetchOne($sql, $this->_bindParams);
         }
+
         return (int)$this->_totalRecords;
     }
 
@@ -247,30 +438,33 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
         $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
         $group = $this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP);
-        $countSelect->columns(new \Zend_Db_Expr(("COUNT(DISTINCT ".implode(", ", $group).")")));
+        $countSelect->columns(new \Zend_Db_Expr(("COUNT(DISTINCT " . implode(", ", $group) . ")")));
         return $countSelect;
     }
 
     /**
      * Get sql select string or object
      *
-     * @param   bool $stringMode
-     * @return  string|\Magento\Framework\DB\Select
+     * @param bool $stringMode
+     *
+     * @return string|\Magento\Framework\DB\Select
      */
     public function getSelectSql($stringMode = false)
     {
         if ($stringMode) {
             return $this->_select->__toString();
         }
+
         return $this->_select;
     }
 
     /**
      * Add select order
      *
-     * @param   string $field
-     * @param   string $direction
-     * @return  $this
+     * @param string $field
+     * @param string $direction
+     *
+     * @return $this
      */
     public function setOrder($field, $direction = self::SORT_ORDER_DESC)
     {
@@ -282,6 +476,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param string $field
      * @param string $direction
+     *
      * @return $this
      */
     public function addOrder($field, $direction = self::SORT_ORDER_DESC)
@@ -294,6 +489,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param string $field
      * @param string $direction
+     *
      * @return $this
      */
     public function unshiftOrder($field, $direction = self::SORT_ORDER_DESC)
@@ -307,6 +503,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param string $field
      * @param string $direction
      * @param bool $unshift
+     *
      * @return $this
      */
     private function _setOrder($field, $direction, $unshift = false)
@@ -322,10 +519,12 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             foreach ($this->_orders as $key => $dir) {
                 $orders[$key] = $dir;
             }
+
             $this->_orders = $orders;
         } else {
             $this->_orders[$field] = $direction;
         }
+
         return $this;
     }
 
@@ -361,6 +560,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                     $this->_select->where($condition);
             }
         }
+
         $this->_isFiltersRendered = true;
         return $this;
     }
@@ -383,6 +583,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param string|array $field
      * @param null|string|array $condition
+     *
      * @return $this
      */
     public function addFieldToFilter($field, $condition = null)
@@ -406,9 +607,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Build sql where condition part
      *
-     * @param   string|array $field
-     * @param   null|string|array $condition
-     * @return  string
+     * @param string|array $field
+     * @param null|string|array $condition
+     *
+     * @return string
      */
     protected function _translateCondition($field, $condition)
     {
@@ -419,8 +621,9 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Try to get mapped field name for filter to collection
      *
-     * @param   string $field
-     * @return  string
+     * @param string $field
+     *
+     * @return string
      */
     protected function _getMappedField($field)
     {
@@ -478,6 +681,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param string $fieldName
      * @param integer|string|array $condition
+     *
      * @return string
      */
     protected function _getConditionSql($fieldName, $condition)
@@ -489,6 +693,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Return the field name for the condition.
      *
      * @param string $fieldName
+     *
      * @return string
      */
     protected function _getConditionFieldName($fieldName)
@@ -505,8 +710,13 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     {
         if (!$this->_isOrdersRendered) {
             foreach ($this->_orders as $field => $direction) {
+                if (isset($this->sqlReservedWords[strtoupper($field)])) {
+                    $field = "`$field`";
+                }
+
                 $this->_select->order(new \Zend_Db_Expr($field . ' ' . $direction));
             }
+
             $this->_isOrdersRendered = true;
         }
 
@@ -530,8 +740,9 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Set select distinct
      *
-     * @param   bool $flag
-     * @return  $this
+     * @param bool $flag
+     *
+     * @return $this
      */
     public function distinct($flag)
     {
@@ -552,9 +763,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Load data
      *
-     * @param   bool $printQuery
-     * @param   bool $logQuery
-     * @return  $this
+     * @param bool $printQuery
+     * @param bool $logQuery
+     *
+     * @return $this
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -568,9 +780,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Load data with filter in place
      *
-     * @param   bool $printQuery
-     * @param   bool $logQuery
-     * @return  $this
+     * @param bool $printQuery
+     * @param bool $logQuery
+     *
+     * @return $this
      */
     public function loadWithFilter($printQuery = false, $logQuery = false)
     {
@@ -585,11 +798,13 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                 if ($this->getIdFieldName()) {
                     $item->setIdFieldName($this->getIdFieldName());
                 }
+
                 $item->addData($row);
                 $this->beforeAddLoadedItem($item);
                 $this->addItem($item);
             }
         }
+
         $this->_setIsLoaded();
         $this->_afterLoad();
         return $this;
@@ -599,6 +814,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Let do something before add loaded item in collection
      *
      * @param \Magento\Framework\DataObject $item
+     *
      * @return \Magento\Framework\DataObject
      */
     protected function beforeAddLoadedItem(\Magento\Framework\DataObject $item)
@@ -620,16 +836,19 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
             $this->_fetchStmt = $this->getConnection()->query($this->getSelect());
         }
+
         $data = $this->_fetchStmt->fetch();
         if (!empty($data) && is_array($data)) {
             $item = $this->getNewEmptyItem();
             if ($this->getIdFieldName()) {
                 $item->setIdFieldName($this->getIdFieldName());
             }
+
             $item->setData($data);
 
             return $item;
         }
+
         return false;
     }
 
@@ -639,6 +858,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @param string|null $valueField
      * @param string $labelField
      * @param array $additional
+     *
      * @return array
      */
     protected function _toOptionArray($valueField = null, $labelField = 'name', $additional = [])
@@ -646,21 +866,24 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         if ($valueField === null) {
             $valueField = $this->getIdFieldName();
         }
+
         return parent::_toOptionArray($valueField, $labelField, $additional);
     }
 
     /**
      * Overridden to use _idFieldName by default.
      *
-     * @param   string $valueField
-     * @param   string $labelField
-     * @return  array
+     * @param string $valueField
+     * @param string $labelField
+     *
+     * @return array
      */
     protected function _toOptionHash($valueField = null, $labelField = 'name')
     {
         if ($valueField === null) {
             $valueField = $this->getIdFieldName();
         }
+
         return parent::_toOptionHash($valueField, $labelField);
     }
 
@@ -677,6 +900,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             $this->_data = $this->_fetchAll($select);
             $this->_afterLoadData();
         }
+
         return $this->_data;
     }
 
@@ -716,6 +940,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param bool $printQuery
      * @param bool $logQuery
+     *
      * @return $this
      */
     public function loadData($printQuery = false, $logQuery = false)
@@ -726,10 +951,11 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Print and/or log query
      *
-     * @param   bool $printQuery
-     * @param   bool $logQuery
-     * @param   string $sql
-     * @return  $this
+     * @param bool $printQuery
+     * @param bool $logQuery
+     * @param string $sql
+     *
+     * @return $this
      */
     public function printLogQuery($printQuery = false, $logQuery = false, $sql = null)
     {
@@ -741,6 +967,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         if ($logQuery || $this->getFlag('log_query')) {
             $this->_logQuery($sql);
         }
+
         return $this;
     }
 
@@ -748,6 +975,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Log query
      *
      * @param string $sql
+     *
      * @return void
      */
     protected function _logQuery($sql)
@@ -775,6 +1003,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Fetch collection data
      *
      * @param Select $select
+     *
      * @return array
      */
     protected function _fetchAll(Select $select)
@@ -788,6 +1017,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                 );
             }
         }
+
         return $data;
     }
 
@@ -796,7 +1026,8 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param string $filter
      * @param string $alias
-     * @param string $group default 'fields'
+     * @param string $group  Default: 'fields'.
+     *
      * @return $this
      */
     public function addFilterToMap($filter, $alias, $group = 'fields')
@@ -806,6 +1037,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         } elseif (empty($this->_map[$group])) {
             $this->_map[$group] = [];
         }
+
         $this->_map[$group][$filter] = $alias;
 
         return $this;
@@ -840,6 +1072,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      *
      * @param JoinDataInterface $join
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
+     *
      * @return $this
      */
     public function joinExtensionAttribute(
@@ -857,12 +1090,14 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                 []
             );
         }
+
         $columns = [];
         foreach ($join->getSelectFields() as $selectField) {
             $fieldWIthDbPrefix = $selectField[JoinDataInterface::SELECT_FIELD_WITH_DB_PREFIX];
             $columns[$selectField[JoinDataInterface::SELECT_FIELD_INTERNAL_ALIAS]] = $fieldWIthDbPrefix;
             $this->addFilterToMap($selectField[JoinDataInterface::SELECT_FIELD_EXTERNAL_ALIAS], $fieldWIthDbPrefix);
         }
+
         $this->getSelect()->columns($columns);
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         return $this;
@@ -891,6 +1126,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                 return $tableAlias;
             }
         }
+
         throw new \LogicException("Main table cannot be identified.");
     }
 

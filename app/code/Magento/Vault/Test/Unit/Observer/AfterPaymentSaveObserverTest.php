@@ -14,6 +14,7 @@ use Magento\Framework\Math\Random;
 use Magento\Sales\Api\Data\OrderPaymentExtension;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Store\Model\Store;
 use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
@@ -67,6 +68,11 @@ class AfterPaymentSaveObserverTest extends TestCase
     protected $salesOrderPaymentMock;
 
     /**
+     * @var Store|MockObject
+     */
+    protected $storeMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -100,6 +106,11 @@ class AfterPaymentSaveObserverTest extends TestCase
 
         // Sales Order Model
         $this->salesOrderMock = $this->createMock(Order::class);
+
+        $this->storeMock = $this->getMockBuilder(Store::class)
+            ->setMethods(['getWebsiteId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         // Sales Order Payment Model
         $this->salesOrderPaymentMock = $this->getMockBuilder(Payment::class)
@@ -137,17 +148,26 @@ class AfterPaymentSaveObserverTest extends TestCase
      * @param array $additionalInfo
      * @dataProvider positiveCaseDataProvider
      */
-    public function testPositiveCase($customerId, $createdAt, $token, $isActive, $method, $additionalInfo)
+    public function testPositiveCase($customerId, $createdAt, $token, $isActive, $method, $websiteId, $additionalInfo)
     {
         $this->paymentTokenMock->setGatewayToken($token);
         $this->paymentTokenMock->setCustomerId($customerId);
         $this->paymentTokenMock->setCreatedAt($createdAt);
         $this->paymentTokenMock->setPaymentMethodCode($method);
         $this->paymentTokenMock->setIsActive($isActive);
+        $this->paymentTokenMock->setWebsiteId($websiteId);
 
         $this->paymentExtension->expects($this->exactly(2))
             ->method('getVaultPaymentToken')
             ->willReturn($this->paymentTokenMock);
+
+        $this->salesOrderMock->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+
+        $this->storeMock->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
 
         $this->salesOrderPaymentMock->method('getAdditionalInformation')->willReturn($additionalInfo);
 
@@ -193,6 +213,7 @@ class AfterPaymentSaveObserverTest extends TestCase
                 'asdfg',
                 true,
                 'paypal',
+                1,
                 [],
             ],
             [
@@ -201,6 +222,7 @@ class AfterPaymentSaveObserverTest extends TestCase
                 'asdfg',
                 true,
                 'paypal',
+                1,
                 [VaultConfigProvider::IS_ACTIVE_CODE => true],
             ],
             [
@@ -209,7 +231,26 @@ class AfterPaymentSaveObserverTest extends TestCase
                 'asdfg',
                 true,
                 'paypal',
+                1,
                 [VaultConfigProvider::IS_ACTIVE_CODE => false],
+            ],
+            [
+                1,
+                '10\20\2015',
+                'asdfg',
+                true,
+                'braintree_cc_vault',
+                2,
+                [VaultConfigProvider::IS_ACTIVE_CODE => true],
+            ],
+            [
+                1,
+                '10\20\2015',
+                'asdfg',
+                true,
+                'braintree_cc_vault',
+                1,
+                [VaultConfigProvider::IS_ACTIVE_CODE => true],
             ],
             [
                 null,
@@ -217,6 +258,7 @@ class AfterPaymentSaveObserverTest extends TestCase
                 null,
                 false,
                 null,
+                1,
                 [],
             ],
         ];

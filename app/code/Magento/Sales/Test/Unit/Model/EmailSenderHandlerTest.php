@@ -151,6 +151,7 @@ class EmailSenderHandlerTest extends TestCase
      * @param int $configValue
      * @param array|null $collectionItems
      * @param bool|null $emailSendingResult
+     * @param int|null $expectedIsEmailSent
      *
      * @return void
      * @dataProvider executeDataProvider
@@ -159,14 +160,20 @@ class EmailSenderHandlerTest extends TestCase
     public function testExecute(
         int $configValue,
         ?array $collectionItems,
-        ?bool $emailSendingResult
+        ?bool $emailSendingResult,
+        ?int $expectedIsEmailSent
     ): void {
-        $path = 'sales_email/general/async_sending';
-
         $this->globalConfig
             ->method('getValue')
-            ->withConsecutive([$path])
-            ->willReturnOnConsecutiveCalls($configValue);
+            ->willReturnCallback(function ($path) use ($configValue) {
+                if ($path === 'sales_email/general/async_sending') {
+                    return $configValue;
+                }
+                if ($path === 'sales_email/general/async_sending_attempts') {
+                    return 3;
+                }
+                return null;
+            });
 
         if ($configValue) {
             $nowDate = date('Y-m-d H:i:s');
@@ -175,7 +182,12 @@ class EmailSenderHandlerTest extends TestCase
                 ->method('addFieldToFilter')
                 ->withConsecutive(
                     ['send_email', ['eq' => 1]],
-                    ['email_sent', ['null' => true]],
+                    ['email_sent',
+                        [
+                            ['null' => true],
+                            ['lteq' => -1]
+                        ]
+                    ],
                     ['created_at', ['from' => $fromDate]]
                 );
 
@@ -245,18 +257,16 @@ class EmailSenderHandlerTest extends TestCase
                     ->method('isEnabled')
                     ->willReturn(true);
 
-                if ($emailSendingResult) {
-                    $collectionItem
-                        ->expects($this->once())
-                        ->method('setEmailSent')
-                        ->with(true)
-                        ->willReturn($collectionItem);
+                $collectionItem
+                    ->expects($this->once())
+                    ->method('setEmailSent')
+                    ->with($expectedIsEmailSent)
+                    ->willReturn($collectionItem);
 
-                    $this->entityResource
-                        ->expects($this->once())
-                        ->method('saveAttribute')
-                        ->with($collectionItem);
-                }
+                $this->entityResource
+                    ->expects($this->once())
+                    ->method('saveAttribute')
+                    ->with($collectionItem);
             }
         }
 
@@ -282,22 +292,26 @@ class EmailSenderHandlerTest extends TestCase
             [
                 'configValue' => 1,
                 'collectionItems' => [clone $entityModel],
-                'emailSendingResult' => true
+                'emailSendingResult' => true,
+                'expectedIsEmailSent' => 1
             ],
             [
                 'configValue' => 1,
                 'collectionItems' => [clone $entityModel],
-                'emailSendingResult' => false
+                'emailSendingResult' => false,
+                'expectedIsEmailSent' => -2
             ],
             [
                 'configValue' => 1,
                 'collectionItems' => [],
-                'emailSendingResult' => null
+                'emailSendingResult' => null,
+                'expectedIsEmailSent' => 1
             ],
             [
                 'configValue' => 0,
                 'collectionItems' => null,
-                'emailSendingResult' => null
+                'emailSendingResult' => null,
+                'expectedIsEmailSent' => 1
             ]
         ];
     }

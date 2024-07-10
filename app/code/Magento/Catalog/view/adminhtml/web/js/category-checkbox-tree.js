@@ -1,272 +1,222 @@
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ *
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ***********************************************************************
  */
-
-/* global Ext, varienWindowOnload, varienElementMethods */
 
 define([
     'jquery',
-    'prototype',
-    'extjs/ext-tree-checkbox',
+    'jquery/jstree/jquery.jstree',
     'mage/adminhtml/form'
-], function (jQuery) {
+], function ($) {
     'use strict';
 
+    /**
+     * Recursively adds the 'lastNode' property to the nodes in the nested object.
+     *
+     * @param {Array} nodes
+     * @returns {Array}
+     */
+    function addLastNodeProperty(nodes) {
+        return nodes.map(node => {
+            return node.children ? {
+                ...node,
+                children: addLastNodeProperty(node.children)
+            } : {
+                ...node,
+                lastNode: true
+            };
+        });
+    }
+
+    /**
+     * Main function that creates the jstree
+     *
+     * @param {Object} config - Configuration object containing various options
+     */
     return function (config) {
-        var tree,
-            options = {
-                dataUrl: config.dataUrl,
-                divId: config.divId,
-                rootVisible: config.rootVisible,
-                useAjax: config.useAjax,
-                currentNodeId: config.currentNodeId,
-                jsFormObject: window[config.jsFormObject],
-                name: config.name,
-                checked: config.checked,
-                allowDrop: config.allowDrop,
-                rootId: config.rootId,
-                expanded: config.expanded,
-                categoryId: config.categoryId,
-                treeJson: config.treeJson
-            },
-            data = {},
-            parameters = {},
-            root = {},
-            key = '';
+
+        let options = {
+            dataUrl: config.dataUrl,
+            divId: config.divId,
+            rootVisible: config.rootVisible,
+            useAjax: config.useAjax,
+            currentNodeId: config.currentNodeId,
+            jsFormObject: window[config.jsFormObject],
+            name: config.name,
+            checked: config.checked,
+            allowDrop: config.allowDrop,
+            rootId: config.rootId,
+            expanded: config.expanded,
+            categoryId: config.categoryId,
+            treeJson: addLastNodeProperty(config.treeJson)
+        },
+        checkedNodes = [];
 
         /**
-         * Fix ext compatibility with prototype 1.6
+         * Get the jstree element by its ID
          */
-        Ext.lib.Event.getTarget = function (e) {
-            var ee = e.browserEvent || e;
-
-            return ee.target ? Event.element(ee) : null;
-        };
+        const treeId = $('#' + options.divId);
 
         /**
-         * @param {Object} el
-         * @param {Object} nodeConfig
+         * Function to check child nodes based on the checkedNodes array
+         *
+         * @param {Object} node
          */
-        Ext.tree.TreePanel.Enhanced = function (el, nodeConfig) {
-            Ext.tree.TreePanel.Enhanced.superclass.constructor.call(this, el, nodeConfig);
-        };
+        function getCheckedNodeIds(node) {
+            if (node.children_d && node.children_d.length > 0) {
+                const selectChildrenNodes = node.children_d.filter(item => checkedNodes.includes(item));
 
-        Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
-            /**
-             * @param {Object} treeConfig
-             * @param {Boolean} firstLoad
-             */
-            loadTree: function (treeConfig, firstLoad) {
-                parameters = treeConfig.parameters,
-                    data = treeConfig.data,
-                    root = new Ext.tree.TreeNode(parameters);
-
-                if (typeof parameters.rootVisible !== 'undefined') {
-                    this.rootVisible = parameters.rootVisible * 1;
+                if (selectChildrenNodes.length > 0) {
+                    treeId.jstree(false).select_node(selectChildrenNodes);
                 }
+            }
+        }
 
-                this.nodeHash = {};
-                this.setRootNode(root);
-
-                if (firstLoad) {
-                    this.addListener('click', this.categoryClick.createDelegate(this));
-                }
-
-                this.loader.buildCategoryTree(root, data);
-                this.el.dom.innerHTML = '';
-                // render the tree
-                this.render();
+        /**
+         * Initialize the jstree with configuration options
+         */
+        treeId.jstree({
+            core: {
+                data: options.treeJson,
+                check_callback: true
             },
-
-            /**
-             * @param {Object} node
-             */
-            categoryClick: function (node) {
-                node.getUI().check(!node.getUI().checked());
+            plugins: ['checkbox'],
+            checkbox: {
+                three_state: false
             }
         });
 
-        jQuery(function () {
-            var categoryLoader = new Ext.tree.TreeLoader({
-                dataUrl: config.dataUrl
+        /**
+         * Event handler for 'loaded.jstree' event
+         */
+        treeId.on('loaded.jstree', function () {
+
+            /**
+             * Get each node in the tree
+             */
+            $(treeId.jstree().get_json('#', {
+                flat: false
+            })).each(function () {
+                let node = treeId.jstree().get_node(this.id, false);
+
+                if (node.original.expanded) {
+                    treeId.jstree(true).open_node(node);
+                }
+
+                if (options.jsFormObject.updateElement.defaultValue) {
+                    checkedNodes = options.jsFormObject.updateElement.defaultValue.split(',');
+                }
             });
+        });
+
+        /**
+         * Event handler for 'load_node.jstree' event
+         */
+        treeId.on('load_node.jstree', function (e, data) {
+            getCheckedNodeIds(data.node);
+        });
+
+        /**
+         * Add lastNode property to child who doesn't have children property
+         *
+         * @param {Object} treeData
+         */
+        function addLastNodeFlag(treeData) {
+            if (treeData.children) {
+                treeData.children.forEach((child) => addLastNodeFlag(child));
+            } else {
+                treeData.lastNode = true;
+            }
+        }
+
+        /**
+         * Function to handle the 'success' callback of the AJAX request
+         *
+         * @param {Array} response
+         * @param {Object} childNode
+         * @param {Object} data
+         */
+        function handleSuccessResponse(response, childNode, data) {
+            if (response.length > 0) {
+                response.forEach(function (newNode) {
+                    addLastNodeFlag(newNode);
+
+                    /**
+                     * Create the new node and execute node callback
+                     */
+                    data.instance.create_node(childNode, newNode, 'last', function (node) {
+                        if (checkedNodes.includes(node.id)) {
+                            treeId.jstree(false).select_node(node.id);
+                        }
+                        getCheckedNodeIds(node);
+                    });
+                });
+            }
+        }
+
+        /**
+         * Event handler for 'open_node.jstree' event
+         */
+        treeId.on('open_node.jstree', function (e, data) {
+            let parentNode = data.node;
+
+            if (parentNode.children.length > 0) {
+                let childNode = data.instance.get_node(parentNode.children, false);
+
+                /**
+                 * Check if the child node has no children (is not yet loaded)
+                 */
+                if (childNode.children && childNode.children.length === 0
+                    && childNode.original && !childNode.original.lastNode) {
+                    $.ajax({
+                        url: options.dataUrl,
+                        data: {
+                            id: childNode.id,
+                            selected: options.jsFormObject.updateElement.value
+                        },
+                        dataType: 'json',
+                        success: function (response) {
+                            handleSuccessResponse(response, childNode, data);
+                        },
+                        error: function (jqXHR, status, error) {
+                            console.log(status + ': ' + error + '\nResponse text:\n' + jqXHR.responseText);
+                        }
+                    });
+                }
+            }
+        });
+
+        /**
+         * Event handler for 'changed.jstree' event
+         */
+        treeId.on('changed.jstree', function (e, data) {
+            if (data.action === 'ready') {
+                return;
+            }
+            const clickedNodeID = data.node.id, currentCheckedNodes = data.instance.get_checked();
+
+            if (data.action === 'select_node' && !checkedNodes.includes(clickedNodeID)) {
+                checkedNodes = currentCheckedNodes;
+            } else if (data.action === 'deselect_node') {
+                checkedNodes = currentCheckedNodes.filter((nodeID) => nodeID !== clickedNodeID);
+            }
+            checkedNodes.sort((a, b) => a - b);
 
             /**
-             * @param {Object} response
-             * @param {Object} parent
-             * @param {Function} callback
+             * Update the value of the corresponding form element with the checked node IDs
              */
-            categoryLoader.processResponse = function (response, parent, callback) {
-                config = JSON.parse(response.responseText);
-
-                this.buildCategoryTree(parent, config);
-
-                if (typeof callback === 'function') {
-                    callback(this, parent);
-                }
-            };
-
-            /**
-             * @param {Object} nodeConfig
-             * @returns {Object}
-             */
-            categoryLoader.createNode = function (nodeConfig) {
-                var node;
-
-                nodeConfig.uiProvider = Ext.tree.CheckboxNodeUI;
-
-                if (nodeConfig.children && !nodeConfig.children.length) {
-                    delete nodeConfig.children;
-                    node = new Ext.tree.AsyncTreeNode(nodeConfig);
-                } else {
-                    node = new Ext.tree.TreeNode(nodeConfig);
-                }
-
-                return node;
-            };
-
-            /**
-             * @param {Object} parent
-             * @param {Object} nodeConfig
-             * @param {Integer} i
-             */
-            categoryLoader.processCategoryTree = function (parent, nodeConfig, i) {
-                var node,
-                    _node = {};
-
-                nodeConfig[i].uiProvider = Ext.tree.CheckboxNodeUI;
-
-                _node = Object.clone(nodeConfig[i]);
-
-                if (_node.children && !_node.children.length) {
-                    delete _node.children;
-                    node = new Ext.tree.AsyncTreeNode(_node);
-                } else {
-                    node = new Ext.tree.TreeNode(nodeConfig[i]);
-                }
-                parent.appendChild(node);
-                node.loader = node.getOwnerTree().loader;
-
-                if (_node.children) {
-                    categoryLoader.buildCategoryTree(node, _node.children);
-                }
-            };
-
-            /**
-             * @param {Object} parent
-             * @param {Object} nodeConfig
-             * @returns {void}
-             */
-            categoryLoader.buildCategoryTree = function (parent, nodeConfig) {
-                var i = 0;
-
-                if (!nodeConfig) {
-                    return null;
-                }
-
-                if (parent && nodeConfig && nodeConfig.length) {
-                    for (i; i < nodeConfig.length; i++) {
-                        categoryLoader.processCategoryTree(parent, nodeConfig, i);
-                    }
-                }
-            };
-
-            /**
-             *
-             * @param {Object} hash
-             * @param {Object} node
-             * @returns {Object}
-             */
-            categoryLoader.buildHashChildren = function (hash, node) {
-                var i = 0,
-                    len;
-
-                if (node.childNodes.length > 0 || node.loaded === false && node.loading === false) {
-                    hash.children = [];
-
-                    for (i, len = node.childNodes.length; i < len; i++) {
-                        hash.children = hash.children ? hash.children : [];
-                        hash.children.push(this.buildHash(node.childNodes[i]));
-                    }
-                }
-
-                return hash;
-            };
-
-            /**
-             * @param {Object} node
-             * @returns {Object}
-             */
-            categoryLoader.buildHash = function (node) {
-                var hash = {};
-
-                hash = this.toArray(node.attributes);
-
-                return categoryLoader.buildHashChildren(hash, node);
-            };
-
-            /**
-             * @param {Object} attributes
-             * @returns {Object}
-             */
-            categoryLoader.toArray = function (attributes) {
-                data = {};
-
-                for (key in attributes) {
-
-                    if (attributes[key]) {
-                        data[key] = attributes[key];
-                    }
-                }
-
-                return data;
-            };
-
-            categoryLoader.on('beforeload', function (treeLoader, node) {
-                treeLoader.baseParams.id = node.attributes.id;
-                treeLoader.baseParams.selected = options.jsFormObject.updateElement.value;
-            });
-
-            categoryLoader.on('load', function () {
-                varienWindowOnload();
-            });
-
-            tree = new Ext.tree.TreePanel.Enhanced(options.divId, {
-                animate: false,
-                loader: categoryLoader,
-                enableDD: false,
-                containerScroll: true,
-                selModel: new Ext.tree.CheckNodeMultiSelectionModel(),
-                rootVisible: options.rootVisible,
-                useAjax: options.useAjax,
-                currentNodeId: options.currentNodeId,
-                addNodeTo: false,
-                rootUIProvider: Ext.tree.CheckboxNodeUI
-            });
-
-            tree.on('check', function (node) {
-                options.jsFormObject.updateElement.value = this.getChecked().join(', ');
-                varienElementMethods.setHasChanges(node.getUI().checkbox);
-            }, tree);
-
-            // set the root node
-            //jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-            parameters = {
-                text: options.name,
-                draggable: false,
-                checked: options.checked,
-                uiProvider: Ext.tree.CheckboxNodeUI,
-                allowDrop: options.allowDrop,
-                id: options.rootId,
-                expanded: options.expanded,
-                category_id: options.categoryId
-            };
-            //jscs:enable requireCamelCaseOrUpperCaseIdentifiers
-
-            tree.loadTree({
-                parameters: parameters, data: options.treeJson
-            }, true);
+            options.jsFormObject.updateElement.value = checkedNodes.join(', ');
         });
     };
 });

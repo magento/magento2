@@ -6,8 +6,6 @@
 
 /**
  * Sales order view items block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Sales\Block\Order\Invoice;
 
@@ -20,8 +18,6 @@ namespace Magento\Sales\Block\Order\Invoice;
 class Items extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

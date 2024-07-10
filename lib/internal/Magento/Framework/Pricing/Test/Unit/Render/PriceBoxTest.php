@@ -74,11 +74,8 @@ class PriceBoxTest extends TestCase
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $cacheState = $this->getMockBuilder(StateInterface::class)
             ->getMockForAbstractClass();
-        $storeConfig = $this->getMockBuilder(\Magento\Store\Model\Store\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getLayout', 'getEventManager', 'getStoreConfig', 'getScopeConfig', 'getCacheState'])
+            ->setMethods(['getLayout', 'getEventManager', 'getScopeConfig', 'getCacheState'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())
@@ -87,9 +84,6 @@ class PriceBoxTest extends TestCase
         $this->context->expects($this->any())
             ->method('getEventManager')
             ->willReturn($eventManager);
-        $this->context->expects($this->any())
-            ->method('getStoreConfig')
-            ->willReturn($storeConfig);
         $this->context->expects($this->any())
             ->method('getScopeConfig')
             ->willReturn($scopeConfigMock);

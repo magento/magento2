@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminConfigureSalesGiftOptionsActionGroup">
+        <annotations>
+            <description>Sets Allow Gift Message For a product</description>
+        </annotations>
+        <arguments>
+            <argument name="allowGiftMsgOnOrderLevel" type="string"/>
+            <argument name="allowGiftMsgOnOrderItems" type="string"/>
+            <argument name="allowWrappingGiftOnOrderLevel" type="string"/>
+            <argument name="allowWrappingGiftOnItemLevel" type="string"/>
+            <argument name="allowGiftReceipt" type="string"/>
+            <argument name="allowPrintedCard" type="string"/>
+
+        </arguments>
+        <amOnPage url="{{AdminSalesConfigPage.url('')}}" stepKey="amOnSalesConfigurationPage"/>
+        <scrollTo selector="{{AdminSalesConfigSection.giftOptions}}" x="-200" y="-200" stepKey="scrollToGiftOptions"/>
+        <conditionalClick selector="{{AdminSalesConfigSection.expandGiftOptions('')}}" dependentSelector="{{AdminSalesConfigSection.giftOptions('')}}" visible="true" stepKey="expandGiftOptions"/>
+        <uncheckOption selector="{{AdminSalesConfigSection.chkAllowGiftMessagesOnOrderLevel}}" stepKey="uncheckGiftMessagesOnOrderLevel"/>
+        <uncheckOption selector="{{AdminSalesConfigSection.chkAllowGiftMessagesOnOrderItem}}" stepKey="uncheckGiftMessagesOnOrderItem"/>
+        <selectOption userInput="{{allowGiftMsgOnOrderLevel}}" selector="{{AdminSalesConfigSection.selectAllowGiftMessagesOnOrderLevel}}" stepKey="selectAllowGiftMsgOnOrderLevel"/>
+        <selectOption userInput="{{allowGiftMsgOnOrderItems}}" selector="{{AdminSalesConfigSection.selectAllowGiftMessagesOnOrderItem}}" stepKey="selectAllowGiftMsgOnOrderItems"/>
+        <selectOption userInput="{{allowWrappingGiftOnOrderLevel}}" selector="{{AdminSalesConfigSection.selectAllowWrappingGiftOnOrderLevel}}" stepKey="selectAllowWrappingGiftOnOrderLevel"/>
+        <selectOption userInput="{{allowWrappingGiftOnItemLevel}}" selector="{{AdminSalesConfigSection.selectAllowWrappingGiftOnItemLevel}}" stepKey="selectAllowWrappingGiftOnItemLevel"/>
+        <selectOption userInput="{{allowGiftReceipt}}" selector="{{AdminSalesConfigSection.selectAllowGiftReceipt}}" stepKey="selectAllowGiftReceipt"/>
+        <selectOption userInput="{{allowPrintedCard}}" selector="{{AdminSalesConfigSection.selectAllowPrintedCard}}" stepKey="selectAllowPrintedCard"/>
+        <conditionalClick selector="{{AdminSalesConfigSection.expandGiftOptions('open')}}" dependentSelector="{{AdminSalesConfigSection.giftOptions('open')}}" visible="true" stepKey="collapseGiftOptions"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveTheGiftOptionsConfig"/>
+    </actionGroup>
+</actionGroups>

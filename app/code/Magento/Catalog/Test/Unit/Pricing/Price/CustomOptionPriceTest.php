@@ -289,10 +289,17 @@ class CustomOptionPriceTest extends TestCase
 
         $convertMinValue = $option1MinPrice / 2;
         $convertedMaxValue = ($option2MaxPrice + $option1MaxPrice) / 2;
+        $optionMaxValue = $option2MaxPrice + $option1MaxPrice;
         $this->priceCurrencyMock
             ->method('convertAndRound')
-            ->withConsecutive([$option1MinPrice], [$option2MaxPrice + $option1MaxPrice])
-            ->willReturnOnConsecutiveCalls($convertMinValue, $convertedMaxValue);
+            ->willReturnCallback(function ($arg1)
+ use ($option1MinPrice, $convertMinValue, $optionMaxValue, $convertedMaxValue) {
+                if ($arg1 == $option1MinPrice) {
+                    return $convertMinValue;
+                } elseif ($arg1 == $optionMaxValue) {
+                    return $convertedMaxValue;
+                }
+            });
         $this->assertEquals($option1MinPrice / 2, $this->object->getCustomOptionRange(true));
         $this->assertEquals($convertedMaxValue, $this->object->getCustomOptionRange(false));
     }
@@ -395,9 +402,13 @@ class CustomOptionPriceTest extends TestCase
         $this->product->setCustomOptions($customOptions);
         $this->product
             ->method('getOptionById')
-            ->withConsecutive([$optionId1], [$optionId2])
-            ->willReturnOnConsecutiveCalls($optionMock, null);
-
+            ->willReturnCallback(function ($arg) use ($optionId1, $optionId2, $optionMock) {
+                if ($arg == $optionId1) {
+                    return $optionMock;
+                } elseif ($arg == $optionId2) {
+                    return null;
+                }
+            });
         // Return from cache
         $result = $this->object->getSelectedOptions();
         $this->assertEquals($optionValue, $result);

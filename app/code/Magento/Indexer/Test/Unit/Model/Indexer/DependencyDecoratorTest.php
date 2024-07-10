@@ -239,6 +239,9 @@ class DependencyDecoratorTest extends TestCase
             ->method('getIndexerIdsToRunAfter')
             ->with($indexerId)
             ->willReturn($dependentIds);
+        $this->dependencyInfoProviderMock
+            ->expects($this->never())
+            ->method('getIndexerIdsToRunBefore');
         $this->indexerRegistryMock
             ->expects($this->exactly(count($dependentIds)))
             ->method('get')

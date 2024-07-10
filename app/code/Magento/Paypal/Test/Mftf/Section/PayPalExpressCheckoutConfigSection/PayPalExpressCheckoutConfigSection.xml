@@ -27,5 +27,8 @@
         <element name="advancePaypalSettings" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_settings_ec_advanced-head" parameterized="true" />
         <element name="paypalBillingAgreement" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_settings_ec_advanced_express_checkout_billing_agreement-head" parameterized="true" />
         <element name="billingDisable" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_settings_ec_advanced_express_checkout_billing_agreement_active" parameterized="true" />
+        <element name="basicPayPalSetting" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec-head" parameterized="true" />
+        <element name="basicPayPalSettingOpen" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec-head.open" parameterized="true" />
+        <element name="paymentAction" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_payment_action" parameterized="true" />
     </section>
 </sections>

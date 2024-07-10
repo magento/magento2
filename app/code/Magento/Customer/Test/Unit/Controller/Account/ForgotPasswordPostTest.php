@@ -147,6 +147,8 @@ class ForgotPasswordPostTest extends TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
+        $this->session->expects($this->once())->method('destroy')->with(['send_expire_cookie']);
+
         $this->controller->execute();
     }
 

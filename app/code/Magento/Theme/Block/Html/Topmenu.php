@@ -312,12 +312,6 @@ class Topmenu extends Template implements IdentityInterface
             $classes[] = 'first';
         }
 
-        if ($item->getIsActive()) {
-            $classes[] = 'active';
-        } elseif ($item->getHasActive()) {
-            $classes[] = 'has-active';
-        }
-
         if ($item->getIsLast()) {
             $classes[] = 'last';
         }
@@ -354,17 +348,6 @@ class Topmenu extends Template implements IdentityInterface
     public function getIdentities()
     {
         return $this->identities;
-    }
-
-    /**
-     * Get tags array for saving cache
-     *
-     * @return array
-     * @since 100.1.0
-     */
-    protected function getCacheTags()
-    {
-        return array_merge(parent::getCacheTags(), $this->getIdentities());
     }
 
     /**

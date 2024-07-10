@@ -88,7 +88,6 @@ class ViewTest extends TestCase
     protected $pageTitleMock;
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\Shipment\View
      * @var RedirectFactory|MockObject
      */
     protected $resultRedirectFactoryMock;
@@ -221,7 +220,7 @@ class ViewTest extends TestCase
             ->method('prepend')
             ->withConsecutive(
                 ['Shipments'],
-                ["#" . $incrementId]
+                ['View Shipment #' . $incrementId]
             )
             ->willReturnSelf();
 

@@ -11,8 +11,8 @@ namespace Magento\Framework\Mview;
 use InvalidArgumentException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
-use Magento\Framework\Mview\View\ChangeLogBatchWalkerFactory;
-use Magento\Framework\Mview\View\ChangeLogBatchWalkerInterface;
+use Magento\Framework\Mview\View\ChangelogBatchWalkerFactory;
+use Magento\Framework\Mview\View\ChangelogBatchWalkerInterface;
 use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
 use Magento\Framework\Mview\View\SubscriptionFactory;
 use Exception;
@@ -66,9 +66,9 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
     private $changelogBatchSize;
 
     /**
-     * @var ChangeLogBatchWalkerFactory
+     * @var ChangelogBatchWalkerFactory
      */
-    private $changeLogBatchWalkerFactory;
+    private $changelogBatchWalkerFactory;
 
     /**
      * @param ConfigInterface $config
@@ -78,7 +78,7 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
      * @param SubscriptionFactory $subscriptionFactory
      * @param array $data
      * @param array $changelogBatchSize
-     * @param ChangeLogBatchWalkerFactory $changeLogBatchWalkerFactory
+     * @param ChangelogBatchWalkerFactory $changelogBatchWalkerFactory
      */
     public function __construct(
         ConfigInterface $config,
@@ -88,7 +88,7 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
         SubscriptionFactory $subscriptionFactory,
         array $data = [],
         array $changelogBatchSize = [],
-        ChangeLogBatchWalkerFactory $changeLogBatchWalkerFactory = null
+        ChangelogBatchWalkerFactory $changelogBatchWalkerFactory = null
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;
@@ -97,8 +97,8 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
         $this->subscriptionFactory = $subscriptionFactory;
         $this->changelogBatchSize = $changelogBatchSize;
         parent::__construct($data);
-        $this->changeLogBatchWalkerFactory = $changeLogBatchWalkerFactory ?:
-            ObjectManager::getInstance()->get(ChangeLogBatchWalkerFactory::class);
+        $this->changelogBatchWalkerFactory = $changelogBatchWalkerFactory ?:
+            ObjectManager::getInstance()->get(ChangelogBatchWalkerFactory::class);
     }
 
     /**
@@ -258,8 +258,11 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
         }
 
         $lastVersionId = (int)$this->getState()->getVersionId();
-        $action = $this->actionFactory->get($this->getActionClass());
+        if ($lastVersionId >= $currentVersionId) {
+            return;
+        }
 
+        $action = $this->actionFactory->get($this->getActionClass());
         try {
             $this->getState()->setStatus(View\StateInterface::STATUS_WORKING)->save();
 
@@ -302,15 +305,9 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
             ? (int) $this->changelogBatchSize[$this->getChangelog()->getViewId()]
             : self::DEFAULT_BATCH_SIZE;
 
-        $vsFrom = $lastVersionId;
-        while ($vsFrom < $currentVersionId) {
-            $walker = $this->getWalker();
-            $ids = $walker->walk($this->getChangelog(), $vsFrom, $currentVersionId, $batchSize);
+        $batches = $this->getWalker()->walk($this->getChangelog(), $lastVersionId, $currentVersionId, $batchSize);
 
-            if (empty($ids)) {
-                break;
-            }
-            $vsFrom += $batchSize;
+        foreach ($batches as $ids) {
             $action->execute($ids);
         }
     }
@@ -318,14 +315,13 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
     /**
      * Create and validate walker class for changelog
      *
-     * @return ChangeLogBatchWalkerInterface|mixed
-     * @throws Exception
+     * @return \Magento\Framework\Mview\View\ChangelogBatchWalkerInterface
      */
-    private function getWalker(): ChangeLogBatchWalkerInterface
+    private function getWalker(): ChangelogBatchWalkerInterface
     {
         $config = $this->config->getView($this->changelog->getViewId());
         $walkerClass = $config['walker'];
-        return $this->changeLogBatchWalkerFactory->create($walkerClass);
+        return $this->changelogBatchWalkerFactory->create($walkerClass);
     }
 
     /**

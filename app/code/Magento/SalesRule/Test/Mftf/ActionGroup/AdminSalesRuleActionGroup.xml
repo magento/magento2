@@ -21,7 +21,9 @@
         <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{ruleName}}" stepKey="filterByName"/>
         <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="doFilter"/>
         <click selector="{{AdminCartPriceRulesSection.rowByIndex('1')}}" stepKey="goToEditRulePage"/>
+        <waitForElementClickable selector="{{AdminCartPriceRulesFormSection.delete}}" stepKey="waitForDeleteButtonClickable" />
         <click selector="{{AdminCartPriceRulesFormSection.delete}}" stepKey="clickDeleteButton"/>
+        <waitForElementClickable selector="{{AdminCartPriceRulesFormSection.modalAcceptButton}}" stepKey="waitForConfirmButtonClickable" />
         <click selector="{{AdminCartPriceRulesFormSection.modalAcceptButton}}" stepKey="confirmDelete"/>
     </actionGroup>
 </actionGroups>

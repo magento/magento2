@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontGuestCheckoutWithPayPalPayflowProCreditCardWithSeveralProductsTest">
+        <annotations>
+            <stories value="Payflow Pro"/>
+            <title value="Guest Checkout with PayPal Payflow Pro credit card with several products"/>
+            <description value="As a guest, place an order using paypal payflow pro and assert the order details in order view page in the admin site"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5272"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct2"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct3"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminPayPalPayflowProActionGroup" stepKey="configPaypalPayflowPro">
+                <argument name="credentials" value="_CREDS"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
+            <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
+            <magentoCLI command="config:set payment/payflow_express/active 0" stepKey="disablePayPalExpress"/>
+            <magentoCLI command="config:set payment/payflow_express_bml/active 0" stepKey="disablePayPalExpressBML"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <!--Open product1 in storefront and add it to cart-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="gotToProduct1Page">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProduct1ToCart">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <!--Open product2 in storefront and add it to cart-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="gotToProduct2Page">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProduct2ToCart">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <!--Open product3 in storefront and add it to cart-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="gotToProduct3Page">
+            <argument name="product" value="$$createSimpleProduct3$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProduct3ToCart">
+            <argument name="product" value="$$createSimpleProduct3$$"/>
+        </actionGroup>
+        <!--Open cart page and proceed to checkout-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckoutCartPage"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <!--Fill Shipping Address-->
+        <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="fillShippingAddress">
+            <argument name="customer" value="$$createCustomer$$" />
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <!-- Select shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectShippingMethodAsFlatRate">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+        <!-- Go to Order review -->
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage"/>
+        <waitForPageLoad stepKey="waitForLoadingMask"/>
+        <!-- Checkout select Credit Card (Payflow Pro) and place order-->
+        <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" visible="true" stepKey="selectPaymentMethod"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
+        <!--Fill Card Data -->
+        <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDetails">
+            <argument name="cardData" value="VisaDefaultCard"/>
+        </actionGroup>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessMessage"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order # is: " stepKey="seeOrderMessageWithOrderId"/>
+        <actionGroup ref="AssertShoppingCartIsEmptyActionGroup" stepKey="seeEmptyShoppingCartAfterPlacingAnOrder"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminOrderPaymentInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForTransactionIDFieldToBeAppeared"/>
+        <grabTextFrom selector="{{AdminOrderPaymentInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabATransactionID"/>
+        <actionGroup ref="AdminAssertTotalsOnOrderViewPageActionGroup" stepKey="checkSubtotal">
+            <argument name="subtotal" value="$369.00"/>
+            <argument name="shippingAndHandling" value="$15.00"/>
+            <argument name="grandTotal" value="384.00"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderComment}}" userInput="Authorized amount of $384.00. Transaction ID: &quot;{$grabATransactionID}&quot;" stepKey="seeOrderHistoryNotes"/>
+    </test>
+</tests>

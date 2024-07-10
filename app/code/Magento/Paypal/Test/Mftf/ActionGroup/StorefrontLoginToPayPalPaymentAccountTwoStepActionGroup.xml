@@ -19,11 +19,11 @@
         <conditionalClick selector="{{PayPalPaymentSection.existingAccountLoginBtn}}" dependentSelector="{{PayPalPaymentSection.existingAccountLoginBtn}}" visible="true" stepKey="skipAccountCreationAndLogin"/>
         <waitForPageLoad stepKey="waitForLoginPageLoad"/>
         <waitForElement selector="{{PayPalPaymentSection.email}}" stepKey="waitForLoginForm" />
-        <fillField selector="{{PayPalPaymentSection.email}}" userInput="{{credentials.magento/paypal_sandbox_login_email}}" stepKey="fillEmail"/>
+        <fillField selector="{{PayPalPaymentSection.email}}" userInput="{{credentials.magento/PAYPAL_LOGIN}}" stepKey="fillEmail"/>
         <click selector="{{PayPalPaymentSection.nextButton}}" stepKey="clickNext"/>
         <waitForElementVisible selector="{{PayPalPaymentSection.password}}" stepKey="waitForPasswordField"/>
         <click selector="{{PayPalPaymentSection.password}}" stepKey="focusOnPasswordField"/>
-        <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{credentials.magento/paypal_sandbox_login_password}}" stepKey="fillPassword"/>
+        <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{credentials.magento/PAYPAL_PWD}}" stepKey="fillPassword"/>
         <click selector="{{PayPalPaymentSection.loginBtn}}" stepKey="login"/>
         <waitForPageLoad stepKey="wait"/>
     </actionGroup>

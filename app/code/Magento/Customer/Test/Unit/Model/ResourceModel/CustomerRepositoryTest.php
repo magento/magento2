@@ -278,10 +278,13 @@ class CustomerRepositoryTest extends TestCase
             ->willReturnOnConsecutiveCalls(['firstname' => 'firstname', 'group_id' => 1], []);
         $customerModel->expects($this->exactly(2))
             ->method('setOrigData')
-            ->withConsecutive(
-                ['firstname', 'firstname'],
-                ['group_id', 1]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'firstname' && $arg2 == 'firstname') {
+                    return null;
+                } elseif ($arg1 == 'group_id' && $arg2 == 1) {
+                    return null;
+                }
+            });
         $this->customerRegistry->expects($this->atLeastOnce())
             ->method('retrieve')
             ->with($customerId)

@@ -8,6 +8,7 @@ namespace Magento\Framework\Model;
 use Laminas\Validator\ValidatorChain;
 use Laminas\Validator\ValidatorInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
 /**
@@ -481,7 +482,6 @@ abstract class AbstractModel extends DataObject
                 new \Magento\Framework\Phrase('The resource isn\'t set.')
             );
         }
-
         return $this->_resource ?: \Magento\Framework\App\ObjectManager::getInstance()->get($this->_resourceName);
     }
 
@@ -511,7 +511,7 @@ abstract class AbstractModel extends DataObject
                 new \Magento\Framework\Phrase('Model collection resource name is not defined.')
             );
         }
-        return $this->_resourceCollection ? clone $this
+        return !$this->_collectionName ? clone $this
             ->_resourceCollection : \Magento\Framework\App\ObjectManager::getInstance()
             ->create(
                 $this->_collectionName
@@ -754,6 +754,7 @@ abstract class AbstractModel extends DataObject
      * Returns FALSE, if no validation rules exist.
      *
      * @return ValidatorInterface|bool
+     * @throws LocalizedException
      */
     protected function _createValidatorBeforeSave()
     {
@@ -763,17 +764,25 @@ abstract class AbstractModel extends DataObject
             return false;
         }
 
-        if ($modelRules && $resourceRules) {
-            $validator = new ValidatorChain();
-            $validator->addValidator($modelRules);
-            $validator->addValidator($resourceRules);
-        } elseif ($modelRules) {
-            $validator = $modelRules;
-        } else {
-            $validator = $resourceRules;
+        $validator = $this->getValidator();
+        if ($modelRules) {
+            $validator->attach($modelRules);
+        }
+        if ($resourceRules) {
+            $validator->attach($resourceRules);
         }
 
         return $validator;
+    }
+
+    /**
+     * Create validator instance
+     *
+     * @return ValidatorChain
+     */
+    private function getValidator(): ValidatorChain
+    {
+        return \Magento\Framework\App\ObjectManager::getInstance()->create(ValidatorChain::class);
     }
 
     /**
@@ -818,7 +827,7 @@ abstract class AbstractModel extends DataObject
     public function cleanModelCache()
     {
         $tags = $this->getCacheTags();
-        if ($tags !== false) {
+        if (!empty($tags)) {
             $this->_cacheManager->clean($tags);
         }
         return $this;

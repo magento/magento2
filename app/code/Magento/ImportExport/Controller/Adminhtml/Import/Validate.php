@@ -42,15 +42,15 @@ class Validate extends ImportResultController implements HttpPostActionInterface
         //phpcs:disable Magento2.Security.Superglobal
         if ($data) {
             // common actions
-            $resultBlock->addAction(
-                'show',
-                'import_validation_container'
-            );
-
+            $resultBlock->addAction('show', 'import_validation_container');
             $import = $this->getImport()->setData($data);
             try {
                 $source = $import->uploadFileAndGetSource();
                 $this->processValidationResult($import->validateSource($source), $resultBlock);
+                $ids = $import->getValidatedIds();
+                if (count($ids) > 0) {
+                    $resultBlock->addAction('value', Import::FIELD_IMPORT_IDS, $ids);
+                }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $resultBlock->addError($e->getMessage());
             } catch (\Exception $e) {
@@ -117,7 +117,6 @@ class Validate extends ImportResultController implements HttpPostActionInterface
      * Provides import model.
      *
      * @return Import
-     * @deprecated 100.1.0
      */
     private function getImport()
     {

@@ -10,7 +10,6 @@ namespace Magento\Framework\MessageQueue\Test\Unit;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\MessageValidator;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,17 +27,10 @@ class MessageValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-
-        $this->model = $objectManager->getObject(MessageValidator::class);
         $this->communicationConfigMock = $this->getMockBuilder(CommunicationConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManager->setBackwardCompatibleProperty(
-            $this->model,
-            'communicationConfig',
-            $this->communicationConfigMock
-        );
+        $this->model = new MessageValidator($this->communicationConfigMock);
     }
 
     public function testValidateInvalidTopic()
@@ -196,6 +188,14 @@ class MessageValidatorTest extends TestCase
                     CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
                     CommunicationConfig::TOPIC_REQUEST => 'string[]'
                 ],
+                [10 => 'string1', 20 => 'string2'],
+                null
+            ],
+            [
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'string[]'
+                ],
                 [],
                 null
             ],
@@ -206,6 +206,14 @@ class MessageValidatorTest extends TestCase
                 ],
                 'single string',
                 'Data in topic "topic" must be of type "string[]". "string" given.'
+            ],
+            [
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'string[]'
+                ],
+                ['string1', 2],
+                'Data in topic "topic" must be of type "string". "int" given.'
             ],
             [
                 [
@@ -229,6 +237,14 @@ class MessageValidatorTest extends TestCase
                     CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface[]'
                 ],
                 [$customerMock, $customerMockTwo],
+                null
+            ],
+            [
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface[]'
+                ],
+                [10 => $customerMock, 20 => $customerMockTwo],
                 null
             ],
             [
@@ -261,7 +277,15 @@ class MessageValidatorTest extends TestCase
                     CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface[]'
                 ],
                 [1=>23, 3=>545],
-                'Data in topic "topic" must be of type "Magento\Customer\Api\Data\CustomerInterface[]". '
+                'Data in topic "topic" must be of type "Magento\Customer\Api\Data\CustomerInterface".'
+            ],
+            [
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface[]'
+                ],
+                [$customerMock, 545],
+                'Data in topic "topic" must be of type "Magento\Customer\Api\Data\CustomerInterface".'
             ],
         ];
     }

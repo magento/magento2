@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="ACP2E-258"/>
             <group value="product"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

@@ -237,20 +237,10 @@ class RowsTest extends TestCase
             ->willReturn($categoryId);
         $this->indexerRegistry
             ->method('get')
-            ->withConsecutive(
-                [CategoryProductIndexer::INDEXER_ID],
-                [CategoryProductIndexer::INDEXER_ID],
-                [ProductCategoryIndexer::INDEXER_ID],
-                [CategoryProductIndexer::INDEXER_ID],
-                [ProductCategoryIndexer::INDEXER_ID]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $this->indexer,
-                $this->indexer,
-                $this->indexer,
-                $this->indexer,
-                $this->indexer
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [ProductCategoryIndexer::INDEXER_ID] => $this->indexer,
+                [CategoryProductIndexer::INDEXER_ID] => $this->indexer
+            });
         $this->indexer->expects($this->any())
             ->method('getId')
             ->willReturn(CategoryProductIndexer::INDEXER_ID);

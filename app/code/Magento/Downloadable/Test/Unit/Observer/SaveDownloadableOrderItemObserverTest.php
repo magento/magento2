@@ -95,28 +95,28 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
     {
         $this->scopeConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isSetFlag', 'getValue'])
+            ->onlyMethods(['isSetFlag', 'getValue'])
             ->getMock();
 
         $this->purchasedFactory = $this->getMockBuilder(PurchasedFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->productFactory = $this->getMockBuilder(ProductFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->itemFactory = $this->getMockBuilder(ItemFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->itemsFactory = $this->getMockBuilder(
             CollectionFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -126,7 +126,7 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
 
         $this->resultMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setIsAllowed'])
+            ->addMethods(['setIsAllowed'])
             ->getMock();
 
         $this->storeMock = $this->getMockBuilder(DataObject::class)
@@ -135,17 +135,17 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore', 'getResult', 'getQuote', 'getOrder'])
+            ->addMethods(['getStore', 'getResult', 'getQuote', 'getOrder'])
             ->getMock();
 
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getStoreId', 'getState', 'isCanceled', 'getAllItems'])
+            ->onlyMethods(['getId', 'getStoreId', 'getState', 'isCanceled', 'getAllItems'])
             ->getMock();
 
         $this->observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEvent'])
+            ->onlyMethods(['getEvent'])
             ->getMock();
 
         $this->saveDownloadableOrderItemObserver = (new ObjectManagerHelper($this))->getObject(
@@ -180,8 +180,7 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
             ->method('getRealProductType')
             ->willReturn(DownloadableProductType::TYPE_DOWNLOADABLE);
 
-        $this->orderMock->expects($this->once())
-            ->method('getStoreId')
+        $this->orderMock->method('getStoreId')
             ->willReturn(10500);
 
         $product = $this->getMockBuilder(Product::class)
@@ -225,7 +224,8 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
 
         $purchasedLink = $this->getMockBuilder(Purchased::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'setLinkSectionTitle', 'save'])
+            ->addMethods(['setLinkSectionTitle'])
+            ->onlyMethods(['load', 'save'])
             ->getMock();
         $purchasedLink->expects($this->once())
             ->method('load')
@@ -320,7 +320,8 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
 
         $purchasedLink = $this->getMockBuilder(Purchased::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'setLinkSectionTitle', 'save', 'getId'])
+            ->addMethods(['setLinkSectionTitle'])
+            ->onlyMethods(['load', 'save', 'getId'])
             ->getMock();
         $purchasedLink->expects($this->once())
             ->method('load')
@@ -357,7 +358,8 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
     {
         $linkItem = $this->getMockBuilder(\Magento\Downloadable\Model\Link\Purchased\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStatus', 'getOrderItemId', 'setStatus', 'save', 'setNumberOfDownloadsBought'])
+            ->addMethods(['getStatus', 'getOrderItemId', 'setStatus', 'setNumberOfDownloadsBought'])
+            ->onlyMethods(['save'])
             ->getMock();
         $linkItem->expects($this->any())
             ->method('getStatus')

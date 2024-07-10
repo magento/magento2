@@ -98,12 +98,15 @@ class CartPrices implements ResolverInterface
         $rates = [];
 
         foreach ($appliedTaxes as $appliedTax) {
+            $totalPercentage =  $appliedTax['percent'];
             foreach ($appliedTax['rates'] as $appliedTaxRate) {
                 $rateTitle = $appliedTaxRate['title'];
                 if (!array_key_exists($rateTitle, $rates)) {
                     $rates[$rateTitle] = 0.0;
                 }
-                $rates[$rateTitle] += $appliedTax['amount'];
+                $percentage = $appliedTaxRate['percent'];
+                $taxValue = ($percentage / $totalPercentage) * $appliedTax['amount'];
+                $rates[$rateTitle] += round((float) $taxValue, 2);
             }
         }
 

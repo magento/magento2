@@ -19,6 +19,7 @@
             <useCaseId value="MC-40780"/>
             <group value="catalog"/>
             <group value="urlRewrite"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create categories -->
@@ -34,7 +35,9 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createEnStoreView">
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete categories -->
@@ -47,7 +50,9 @@
             </actionGroup>
             <!-- Clear grid filters -->
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearStoreFilters"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 

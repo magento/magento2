@@ -14,13 +14,10 @@
         <arguments>
             <argument name="WidgetTitle" type="string" defaultValue="Catalog B Product Link"/>
         </arguments>
-
         <click selector="{{CmsNewWidgetOptionsSection.FirstWidget}}" stepKey="clickFirstWidgetSelect"/>
         <waitForPageLoad stepKey="wait2"/>
-
         <clearField selector="{{CmsNewWidgetStoreforntPropertiesSection.WidgetTitle}}" stepKey="clearWidgetTitle"/>
         <fillField selector="{{CmsNewWidgetStoreforntPropertiesSection.WidgetTitle}}" userInput="{{WidgetTitle}}" stepKey="fillFieldTitle"/>
-
         <click selector="{{CmsNewWidgetOptionsSection.WidgetOptions}}" stepKey="clickButton23"/>
         <waitForPageLoad stepKey="wait3"/>
         <click selector="{{CmsNewWidgetOptionsSection.SelectProduct}}" stepKey="clickSelectProductButton1"/>
@@ -29,8 +26,6 @@
         <waitForPageLoad stepKey="wait5"/>
         <click selector="{{CmsNewWidgetOptionsSection.SaveWidget}}" stepKey="clickSaveWidgetButton2"/>
         <waitForPageLoad stepKey="wait6"/>
-
         <magentoCLI command="cache:flush" stepKey="cleanCache"/>
-
     </actionGroup>
 </actionGroups>

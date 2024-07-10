@@ -75,6 +75,7 @@
     <virtualType name="Magento\OpenSearch\Model\Client\OpenSearchFactory" type="Magento\AdvancedSearch\Model\Client\ClientFactory">
         <arguments>
             <argument name="clientClass" xsi:type="string">Magento\OpenSearch\Model\SearchClient</argument>
+            <argument name="openSearch" xsi:type="string">Magento\OpenSearch\Model\OpenSearch</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Elasticsearch\Elasticsearch5\Model\Client\ClientFactoryProxy">

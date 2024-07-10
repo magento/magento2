@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Guest;
 
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
@@ -313,6 +314,25 @@ class CartTotalsTest extends GraphQlAbstract
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
         $this->graphQlQuery($query);
+    }
+
+    public function testGetCartTotalsWithNonExistingCartId(): void
+    {
+        $maskedQuoteId = 'NonExistingQuoteId';
+        $query = $this->getQuery($maskedQuoteId);
+        try {
+            $this->graphQlQuery($query);
+            $this->fail('Expected exception was not raised');
+        } catch (\Exception $exception) {
+            $response = $exception->getResponseData();
+            $this->assertArrayHasKey('errors', $response);
+            $actualError = reset($response['errors']);
+            $this->assertEquals("Could not find a cart with ID \"$maskedQuoteId\"", $actualError['message']);
+            $this->assertEquals(
+                GraphQlNoSuchEntityException::EXCEPTION_CATEGORY,
+                $actualError['extensions']['category']
+            );
+        }
     }
 
     /**

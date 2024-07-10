@@ -299,14 +299,12 @@ class CompiledTest extends TestCase
                 '_vac_' => [
                     'array_value' => 'value',
                     'array_configured_instance' => [
-                        '_i_' => \Magento\Framework\ObjectManager\Test\Unit::class
-                            . '\Factory\Fixture\Compiled\DependencySharedTesting',
+                        '_i_' => DependencySharedTesting::class,
                     ],
                     'array_configured_array' => [
                         'array_array_value' => 'value',
                         'array_array_configured_instance' => [
-                            '_ins_' => \Magento\Framework\ObjectManager::class
-                                . '\Test\Unit\Factory\Fixture\Compiled\DependencyTesting',
+                            '_ins_' => DependencyTesting::class,
                         ],
                     ],
                     'array_global_argument' => [

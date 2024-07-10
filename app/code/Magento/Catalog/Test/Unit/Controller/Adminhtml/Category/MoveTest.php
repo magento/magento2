@@ -74,11 +74,11 @@ class MoveTest extends TestCase
     protected function setUp(): void
     {
         $this->resultJsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->layoutFactoryMock = $this->getMockBuilder(LayoutFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->context = $this->createMock(Context::class);
@@ -98,7 +98,7 @@ class MoveTest extends TestCase
     {
         $this->request = $this
             ->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getPost'])
+            ->addMethods(['getPost'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->context->expects($this->once())->method('getRequest')->willReturn($this->request);

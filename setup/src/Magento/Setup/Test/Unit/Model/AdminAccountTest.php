@@ -180,14 +180,13 @@ class AdminAccountTest extends TestCase
                 'SELECT * FROM ' . $this->prefix .
                 'authorization_role WHERE parent_id = :parent_id AND tree_level = :tree_level ' .
                 'AND role_type = :role_type AND user_id = :user_id ' .
-                'AND user_type = :user_type AND role_name = :role_name',
+                'AND user_type = :user_type ORDER BY sort_order DESC',
                 [
                     'parent_id'  => 0,
                     'tree_level' => 1,
                     'role_type' => 'G',
                     'user_id' => 0,
                     'user_type' => 2,
-                    'role_name' => 'Administrators',
                 ],
                 null,
                 $administratorRoleData
@@ -298,14 +297,13 @@ class AdminAccountTest extends TestCase
                 'SELECT * FROM ' . $this->prefix .
                 'authorization_role WHERE parent_id = :parent_id AND tree_level = :tree_level ' .
                 'AND role_type = :role_type AND user_id = :user_id ' .
-                'AND user_type = :user_type AND role_name = :role_name',
+                'AND user_type = :user_type ORDER BY sort_order DESC',
                 [
                     'parent_id'  => 0,
                     'tree_level' => 1,
                     'role_type' => 'G',
                     'user_id' => 0,
                     'user_type' => 2,
-                    'role_name' => 'Administrators',
                 ],
                 null,
                 $administratorRoleData
@@ -375,7 +373,7 @@ class AdminAccountTest extends TestCase
     public function testSaveExceptionSpecialAdminRoleNotFound(): void
     {
         $this->expectException('Exception');
-        $this->expectExceptionMessage('No Administrators role was found, data fixture needs to be run');
+        $this->expectExceptionMessage('No administrators role was found, data fixture needs to be run');
         $this->dbAdapter->expects($this->exactly(3))->method('fetchRow')->willReturn([]);
         $this->dbAdapter->expects($this->once())->method('lastInsertId')->willReturn(1);
 

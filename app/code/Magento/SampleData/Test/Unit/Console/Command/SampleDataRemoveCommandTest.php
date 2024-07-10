@@ -89,7 +89,6 @@ class SampleDataRemoveCommandTest extends AbstractSampleDataCommandTest
                     "require" => [
                         "magento/product-community-edition" => "0.0.1",
                     ],
-                    "version" => "0.0.1"
                 ],
                 'expectedMsg' => 'There is an error during remove sample data.' . PHP_EOL,
             ],
@@ -103,7 +102,6 @@ class SampleDataRemoveCommandTest extends AbstractSampleDataCommandTest
                         "magento/product-community-edition" => "0.0.1",
                         "magento/module-cms-sample-data" => "1.0.0-beta",
                     ],
-                    "version" => "0.0.1"
                 ],
                 'expectedMsg' => '',
             ],

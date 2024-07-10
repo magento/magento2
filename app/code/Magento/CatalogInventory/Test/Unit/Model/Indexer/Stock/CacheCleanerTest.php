@@ -74,7 +74,7 @@ class CacheCleanerTest extends TestCase
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->getMock();
         $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
-            ->setMethods(['getStockThresholdQty'])
+            ->addMethods(['getStockThresholdQty'])
             ->getMockForAbstractClass();
         $this->cacheContextMock = $this->getMockBuilder(CacheContext::class)
             ->disableOriginalConstructor()
@@ -82,7 +82,8 @@ class CacheCleanerTest extends TestCase
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMock();
         $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->setMethods(['getMetadata', 'getLinkField'])
+            ->addMethods(['getLinkField'])
+            ->onlyMethods(['getMetadata'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->selectMock = $this->getMockBuilder(Select::class)
@@ -123,9 +124,6 @@ class CacheCleanerTest extends TestCase
             ->method('from')
             ->willReturnSelf();
         $this->selectMock->expects($this->any())
-            ->method('where')
-            ->willReturnSelf();
-        $this->selectMock->expects($this->any())
             ->method('joinLeft')
             ->willReturnSelf();
         $this->connectionMock->expects($this->exactly(3))
@@ -141,6 +139,21 @@ class CacheCleanerTest extends TestCase
                     ['product_id' => $productId, 'stock_status' => $stockStatusAfter, 'qty' => $qtyAfter],
                 ]
             );
+        $this->connectionMock->expects($this->exactly(3))
+            ->method('select')
+            ->willReturn($this->selectMock);
+        $this->selectMock->expects($this->exactly(7))
+            ->method('where')
+            ->withConsecutive(
+                ['product_id IN (?)'],
+                ['stock_id = ?'],
+                ['website_id = ?'],
+                ['product_id IN (?)'],
+                ['stock_id = ?'],
+                ['website_id = ?'],
+                ['product_id IN (?)', [123], \Zend_Db::INT_TYPE]
+            )
+            ->willReturnSelf();
         $this->connectionMock->expects($this->exactly(1))
             ->method('fetchCol')
             ->willReturn([$categoryId]);
@@ -171,7 +184,7 @@ class CacheCleanerTest extends TestCase
     /**
      * @return array
      */
-    public function cleanDataProvider(): array
+    public static function cleanDataProvider(): array
     {
         return [
             [true, false, 1, false],
@@ -233,7 +246,7 @@ class CacheCleanerTest extends TestCase
     /**
      * @return array
      */
-    public function notCleanCacheDataProvider(): array
+    public static function notCleanCacheDataProvider(): array
     {
         return [
             [true, true, 1, false],

@@ -35,13 +35,21 @@ abstract class AbstractCacheManageCommandTest extends AbstractCacheCommandTest
         return [
             'implicit all' => [
                 [],
-                ['A', 'B', 'C'],
-                $this->getExpectedExecutionOutput(['A', 'B', 'C']),
+                ['A', 'B', 'C', 'full_page'],
+                true,
+                $this->getExpectedExecutionOutput(['A', 'B', 'C', 'full_page']),
             ],
             'specified types' => [
                 ['types' => ['A', 'B']],
                 ['A', 'B'],
+                false,
                 $this->getExpectedExecutionOutput(['A', 'B']),
+            ],
+            'fpc_only' => [
+                ['types' => ['full_page']],
+                ['full_page'],
+                true,
+                $this->getExpectedExecutionOutput(['full_page']),
             ],
         ];
     }

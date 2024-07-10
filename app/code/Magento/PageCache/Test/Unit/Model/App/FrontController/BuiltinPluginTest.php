@@ -11,6 +11,7 @@ use Closure;
 use Laminas\Http\Header\GenericHeader;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\PageCache\Kernel;
+use Magento\Framework\App\PageCache\NotCacheableInterface;
 use Magento\Framework\App\PageCache\Version;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http;
@@ -240,6 +241,41 @@ class BuiltinPluginTest extends TestCase
         $this->assertSame(
             $this->responseMock,
             $this->plugin->aroundDispatch($this->frontControllerMock, $this->closure, $this->requestMock)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testAroundNotCacheableResponse(): void
+    {
+        $this->configMock
+            ->expects($this->once())
+            ->method('getType')
+            ->willReturn(Config::BUILT_IN);
+        $this->configMock->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(true);
+        $this->versionMock
+            ->expects($this->once())
+            ->method('process');
+        $this->kernelMock->expects($this->once())
+            ->method('load')
+            ->willReturn(false);
+        $this->stateMock->expects($this->never())
+            ->method('getMode');
+        $this->kernelMock->expects($this->never())
+            ->method('process');
+        $this->responseMock->expects($this->never())
+            ->method('setHeader');
+        $notCacheableResponse = $this->createMock(NotCacheableInterface::class);
+        $this->assertSame(
+            $notCacheableResponse,
+            $this->plugin->aroundDispatch(
+                $this->frontControllerMock,
+                fn () => $notCacheableResponse,
+                $this->requestMock
+            )
         );
     }
 

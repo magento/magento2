@@ -437,8 +437,10 @@ class StorageTest extends TestCase
 
         $this->directoryWrite
             ->method('getRelativePath')
-            ->withConsecutive([$this->storageRoot], [$this->storageRoot . '/' . $image])
-            ->willReturnOnConsecutiveCalls($this->storageRoot, $this->storageRoot . '/' . $image);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$this->storageRoot] => $this->storageRoot,
+                [$this->storageRoot . '/' . $image] => $this->storageRoot . '/' . $image
+            });
 
         $this->helperStorage->expects($this->once())
             ->method('getStorageRoot')

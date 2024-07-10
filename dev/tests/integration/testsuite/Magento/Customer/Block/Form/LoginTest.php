@@ -9,10 +9,10 @@ namespace Magento\Customer\Block\Form;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\View\Element\ButtonLockManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use PHPUnit\Framework\TestCase;
-use Magento\Customer\ViewModel\LoginButton;
 
 /**
  * Class checks login form view
@@ -47,9 +47,23 @@ class LoginTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->layout = $this->objectManager->get(LayoutInterface::class);
+
+        $code = 'customer_login_form_submit';
+        $buttonLock = $this->getMockBuilder(\Magento\ReCaptchaUi\Model\ButtonLock::class)
+            ->disableOriginalConstructor()
+            ->disableAutoload()
+            ->setMethods(['isDisabled', 'getCode'])
+            ->getMock();
+        $buttonLock->expects($this->any())->method('getCode')->willReturn($code);
+        $buttonLock->expects($this->any())->method('isDisabled')->willReturn(false);
+        $buttonLockManager = $this->objectManager->create(
+            ButtonLockManager::class,
+            ['buttonLockPool' => [$code => $buttonLock]]
+        );
+
         $this->block = $this->layout->createBlock(Login::class);
         $this->block->setTemplate('Magento_Customer::form/login.phtml');
-        $this->block->setLoginButtonViewModel($this->objectManager->get(LoginButton::class));
+        $this->block->setButtonLockManager($buttonLockManager);
 
         parent::setUp();
     }

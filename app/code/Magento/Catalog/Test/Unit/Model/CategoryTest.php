@@ -214,7 +214,7 @@ class CategoryTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Sorry, but we can\'t find the new parent category you selected.');
-        $this->markTestIncomplete('MAGETWO-31165');
+        $this->markTestSkipped('MAGETWO-31165');
         $parentCategory = $this->createPartialMock(
             Category::class,
             ['getId', 'setStoreId', 'load']
@@ -260,7 +260,7 @@ class CategoryTest extends TestCase
         $this->expectExceptionMessage(
             'We can\'t move the category because the parent category name matches the child category name.'
         );
-        $this->markTestIncomplete('MAGETWO-31165');
+        $this->markTestSkipped('MAGETWO-31165');
         $parentCategory = $this->createPartialMock(
             Category::class,
             ['getId', 'setStoreId', 'load']
