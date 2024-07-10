@@ -184,8 +184,9 @@ define([
          * @param {Array} data
          * @param {Array} newData
          */
-        parseProcessingAddChild: function(data, newData) {
+        parseProcessingAddChild: function (data, newData) {
             let recordIndex;
+
             recordIndex = data.length - newData.length - 1;
             if (!isNaN(recordIndex)) {
                 _.each(newData, function (newRecord) {
