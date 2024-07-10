@@ -42,7 +42,7 @@ class Collection extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
         )->group(
             'wi.product_id'
         );
-
+        // phpstan:ignore
         $this->getEntity()->setStore(0);
         return $this;
     }

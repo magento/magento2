@@ -227,6 +227,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
         }
 
         if (!is_array($fields)) {
+            // phpstan:ignore
             if (empty($fields)) {
                 $fields = [];
             } else {

@@ -45,7 +45,9 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
      */
     public function resetSelect()
     {
+        // phpstan:ignore "Call to an undefined static method"
         parent::resetSelect();
+        // phpstan:ignore
         $this->_joinFields();
         return $this;
     }
