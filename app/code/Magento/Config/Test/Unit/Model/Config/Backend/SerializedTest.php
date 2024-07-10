@@ -30,7 +30,7 @@ class SerializedTest extends TestCase
 
     /**
      * @var ScopeConfigInterface|MockObject
-    **/
+     */
     private $scopeConfigMock;
 
     protected function setUp(): void
