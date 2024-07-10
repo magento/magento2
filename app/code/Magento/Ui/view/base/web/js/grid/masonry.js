@@ -204,7 +204,7 @@ define([
                     this.waitForContainer(callback);
                 }.bind(this), 500);
             } else {
-                setTimeout(callback, 500);
+                setTimeout(callback, 0);
             }
         },
 
