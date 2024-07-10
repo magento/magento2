@@ -95,6 +95,7 @@
             <item>Magento_Payment::payment_services</item>
             <item>Magento_Newsletter::newsletter</item>
             <item>Magento_Catalog::config_catalog</item>
+            <item>Magento_CatalogSearch::config_catalog_search</item>
             <item>Magento_Shipping::config_shipping</item>
             <item>Magento_Shipping::shipping_policy</item>
             <item>Magento_Shipping::carriers</item>
