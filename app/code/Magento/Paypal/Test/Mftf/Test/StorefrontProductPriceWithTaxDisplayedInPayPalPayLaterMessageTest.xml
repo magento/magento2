@@ -65,6 +65,12 @@
         <closeTab stepKey="closeCurrentTab"/>
         <!-- Set up catalog to store product price including tax -->
         <magentoCLI command="config:set tax/calculation/price_includes_tax 1" stepKey="enableCatalogIncludingTax"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAgain">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!-- Go to StoreFront -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFrontAgain"/>
         <!-- Empty the cart -->
