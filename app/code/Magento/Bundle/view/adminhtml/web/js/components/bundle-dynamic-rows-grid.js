@@ -149,10 +149,11 @@ define([
             if (newData.length) {
                 if (this.insertData().length) {
                     recordIndex = data.length - newData.length - 1;
-
-                    _.each(newData, function (newRecord) {
-                        this.processingAddChild(newRecord, ++recordIndex, newRecord[this.identificationProperty]);
-                    }, this);
+                    if (!isNaN(recordIndex)) {
+                        _.each(newData, function (newRecord) {
+                            this.processingAddChild(newRecord, ++recordIndex, newRecord[this.identificationProperty]);
+                        }, this);
+                    }
                 }
             }
 
