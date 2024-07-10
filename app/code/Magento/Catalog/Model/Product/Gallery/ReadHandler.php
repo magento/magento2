@@ -112,6 +112,7 @@ class ReadHandler implements ExtensionInterface
      * @param string[] $image
      * @return string
      * @deprecated 101.0.1
+     * @see \Magento\Catalog\Model\Product\Gallery\ReadHandler::addMediaDataToProduct
      * @since 101.0.0
      */
     protected function findDefaultValue($key, &$image)
