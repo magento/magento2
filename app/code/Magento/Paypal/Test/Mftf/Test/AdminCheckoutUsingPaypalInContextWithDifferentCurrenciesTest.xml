@@ -39,7 +39,7 @@
         <after>
             <magentoCLI command="config:set {{SetDefaultCurrencyUSDConfig.path}} {{SetDefaultCurrencyUSDConfig.value}}" stepKey="resetDefaultCurrencyBaseBackToUSD"/>
             <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="resetAllowedCurrencyBaseBackToUSD"/>
-            <magentoCLI command="config:set {{SetCurrencyUSDBaseConfig.path}} " stepKey="setCurrencyBaseUSD"/>
+            <magentoCLI command="config:set {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseUSD"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
                 <argument name="tags" value="config full_page"/>
             </actionGroup>
