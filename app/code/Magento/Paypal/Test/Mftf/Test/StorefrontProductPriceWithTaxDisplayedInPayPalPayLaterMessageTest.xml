@@ -83,8 +83,11 @@
             <argument name="product" value="$$createProduct$$"/>
             <argument name="quantity" value="1"/>
         </actionGroup>
-        <!-- Open mini cart from product page  -->
+        <!-- Open mini cart from product page and verify price -->
         <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniShoppingCartAgain"/>
+        <actionGroup ref="AssertStorefrontMiniCartSubtotalActionGroup" stepKey="assertSubtotal">
+            <argument name="subtotal" value="$92.38"/>
+        </actionGroup>
         <!--Click Paypal button-->
         <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtnAgain"/>
         <!--Scroll down to paypal pay later option and verify message-->
