@@ -49,7 +49,7 @@ class GetCustomSelectedOptionAttributes implements GetAttributeSelectedOptionInt
         );
 
         $result = [];
-        $selectedValues = explode(',', $customAttribute['value']);
+        $selectedValues = explode(',', (string)$customAttribute['value']);
         foreach ($attr->getOptions() as $option) {
             if (!in_array($option->getValue(), $selectedValues)) {
                 continue;
