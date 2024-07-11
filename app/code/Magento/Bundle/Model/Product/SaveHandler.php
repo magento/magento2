@@ -95,12 +95,14 @@ class SaveHandler implements ExtensionInterface
     {
         /** @var OptionInterface[] $bundleProductOptions */
         $bundleProductOptions = $entity->getExtensionAttributes()->getBundleProductOptions() ?: [];
+        $existingBundleProductOptions = $this->optionRepository->getList($entity->getSku());
         //Only processing bundle products.
-        if ($entity->getTypeId() !== Type::TYPE_CODE || empty($bundleProductOptions)) {
+        if ($entity->getTypeId() !== Type::TYPE_CODE ||
+            (empty($bundleProductOptions) && empty($existingBundleProductOptions))
+        ) {
             return $entity;
         }
 
-        $existingBundleProductOptions = $this->optionRepository->getList($entity->getSku());
         $existingOptionsIds = !empty($existingBundleProductOptions)
             ? $this->getOptionIds($existingBundleProductOptions)
             : [];
