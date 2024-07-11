@@ -95,8 +95,8 @@ class CategoryAnchorTest extends GraphQlAbstract
         return [
             [
                 'query' => self::getQuery(22),
-                'store' => 'default',
-                'data' => [
+                'storeCode' => 'default',
+                'category' => [
                     'category' => [
                         'id' => 22,
                         'name' => 'Category_Anchor',
@@ -113,8 +113,8 @@ class CategoryAnchorTest extends GraphQlAbstract
             ],
             [
                 'query' => self::getQuery(11),
-                'store' => 'default',
-                'data' => [
+                'storeCode' => 'default',
+                'category' => [
                     'category' => [
                         'id' => 11,
                         'name' => 'Category_Default',

@@ -92,8 +92,8 @@ QUERY;
     {
         return [
             [
-                'category_to_delete' => 402,
-                'expected_result' => [
+                'categoryToDelete' => 402,
+                'expectedResult' => [
                     'categoryList' => [
                         [
                             'id' => 400,

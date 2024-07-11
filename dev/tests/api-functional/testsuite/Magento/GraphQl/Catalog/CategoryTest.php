@@ -784,16 +784,16 @@ QUERY;
     {
         return [
             'default_filename_strategy' => [
-                'image_prefix' => null
+                'imagePrefix' => null
             ],
             'just_filename_strategy' => [
-                'image_prefix' => ''
+                'imagePrefix' => ''
             ],
             'with_pub_media_strategy' => [
-                'image_prefix' => '/media/catalog/category/'
+                'imagePrefix' => '/media/catalog/category/'
             ],
             'catalog_category_strategy' => [
-                'image_prefix' => 'catalog/category/'
+                'imagePrefix' => 'catalog/category/'
             ],
         ];
     }

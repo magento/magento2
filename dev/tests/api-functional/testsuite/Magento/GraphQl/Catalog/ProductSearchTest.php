@@ -2910,11 +2910,11 @@ QUERY;
         return [
             [
                 'fieldName' => 'category_id',
-                'categoryId' => '333',
+                'queryCategoryId' => '333',
             ],
             [
                 'fieldName' => 'category_uid',
-                'categoryId' => base64_encode('333'),
+                'queryCategoryId' => base64_encode('333'),
             ],
         ];
     }

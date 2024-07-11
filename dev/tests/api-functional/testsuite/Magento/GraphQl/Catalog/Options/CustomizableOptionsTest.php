@@ -91,7 +91,7 @@ QUERY;
     {
         return [
             'products' => [
-                'items' => [
+                'optionDataProvider' => [
                     'options' => [
                         [
                             'title' => 'test_option_code_1'

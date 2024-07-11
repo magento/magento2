@@ -217,12 +217,12 @@ class CategoryRepositoryTest extends WebapiAbstract
     {
         return [
             'system_category' => [
-                'category_id' => Category::TREE_ROOT_ID,
-                'exception_message' => self::buildExceptionMessage(Category::TREE_ROOT_ID),
+                'categoryId' => Category::TREE_ROOT_ID,
+                'exceptionMsg' => self::buildExceptionMessage(Category::TREE_ROOT_ID),
             ],
             'root_category' => [
-                'category_id' => 2,
-                'exception_message' => self::buildExceptionMessage(2),
+                'categoryId' => 2,
+                'exceptionMsg' => self::buildExceptionMessage(2),
             ],
         ];
     }
