@@ -54,7 +54,7 @@ class ShippingDiscountTest extends TestCase
     {
         $this->validatorMock = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'reset',
                     'processShippingAmount',

@@ -98,7 +98,7 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function updateSetOutOfStockDataProvider(): array
+    public static function updateSetOutOfStockDataProvider(): array
     {
         return [
             'backorders_no' => [

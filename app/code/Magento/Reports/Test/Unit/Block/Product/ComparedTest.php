@@ -40,7 +40,7 @@ class ComparedTest extends TestCase
 
         $this->factoryMock = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
 
         $this->sut = new Compared($contextMock, $visibilityMock, $this->factoryMock);

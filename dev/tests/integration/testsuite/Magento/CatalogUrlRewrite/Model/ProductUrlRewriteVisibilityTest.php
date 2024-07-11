@@ -78,7 +78,7 @@ class ProductUrlRewriteVisibilityTest extends AbstractUrlRewriteTest
     /**
      * @return array
      */
-    public function invisibleProductDataProvider(): array
+    public static function invisibleProductDataProvider(): array
     {
         return [
             [

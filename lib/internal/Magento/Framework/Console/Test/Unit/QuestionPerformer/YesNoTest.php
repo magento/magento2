@@ -54,7 +54,7 @@ class YesNoTest extends TestCase
             ->getMockForAbstractClass();
         $this->questionFactoryMock = $this->getMockBuilder(QuestionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->questionHelperMock = $this->getMockBuilder(QuestionHelper::class)
             ->disableOriginalConstructor()

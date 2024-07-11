@@ -41,7 +41,7 @@ class AbstractCreateTest extends TestCase
     protected function setUp(): void
     {
         $this->model = $this->getMockBuilder(AbstractCreate::class)
-            ->setMethods(['convertPrice'])
+            ->onlyMethods(['convertPrice'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->priceInfoMock = $this->getMockBuilder(Base::class)
