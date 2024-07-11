@@ -53,6 +53,7 @@ class Categories extends AbstractModifier
     /**
      * @var array
      * @deprecated 101.0.0
+     * @see Nothing
      * @since 101.0.0
      */
     protected $categoriesTrees = [];
