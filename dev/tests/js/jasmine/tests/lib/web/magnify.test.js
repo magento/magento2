@@ -84,7 +84,7 @@ define(['magnifier/magnify', 'mage/gallery/gallery', 'jquery'], function (Magnif
 
                 imageEvents = $._data($('.fotorama__img--full')[0], 'events');
                 expect(imageEvents).toBeInstanceOf(Object);
-                expect(imageEvents.dblclick).toBeDefined();
+                expect(Object.getOwnPropertyNames(imageEvents)).toContain('touchend');
             });
         });
     });
