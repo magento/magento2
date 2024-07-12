@@ -126,8 +126,8 @@ class CategoryEnabledTest extends GraphQlAbstract
         return [
             [
                 'query' => self::getQuery(33),
-                'store' => 'english',
-                'data' => [
+                'storeCode' => 'english',
+                'category' => [
                     'category' => null,
                 ],
             ],
