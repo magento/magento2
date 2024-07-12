@@ -94,14 +94,9 @@ define([
                         element.remove();
                     }
                 },
-
-                /**
-                 * Reset Is Default option
-                 *
-                 */
                 reset: function () {
-                    jQuery('input[name="defaulttext[]"]').prop('checked', false);
-                    jQuery('input[name="reset_is_default_option"]').val(1);
+                    jQuery('input[name="default[]"]').prop('checked', false);
+                    jQuery('input[name="reset_is-default_option"]').val(1);
                 },
 
                 updateItemsCountField: function () {
@@ -115,6 +110,9 @@ define([
                 },
                 bindRemoveButtons: function () {
                     jQuery('#swatch-visual-options-panel').on('click', '.delete-option', this.remove.bind(this));
+                },
+                bindDefaultOptionChanges: function () {
+                    jQuery('#swatch-visual-options-panel').on('change', '.delete-option', this.remove.bind(this));
                 },
                 render: function () {
                     Element.insert($$('[data-role=options-container]')[0], this.elements);
@@ -162,9 +160,9 @@ define([
             Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption, {}, true));
         }
 
-        if ($('reset_is_default_option_button')) {
+        if ($('reset_default_options_option_button')) {
             Event.observe(
-                'reset_is-default_option_button',
+                'reset_default_options_option_button',
                 'click',
                 attributeOption.reset.bind(attributeOption, true)
             );
@@ -183,6 +181,7 @@ define([
             jQuery('body').trigger('processStart');
             attributeOption.renderWithDelay(config.attributesData, 0, 100, 300);
             attributeOption.bindRemoveButtons();
+            attributeOption.bindDefaultOptionChanges();
         });
 
         if (config.isSortable) {

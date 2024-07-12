@@ -152,8 +152,8 @@ define([
                  *
                  */
                 reset: function () {
-                    jQuery('input[name="defaulttext[]"]').prop('checked', false);
-                    jQuery('input[name="reset_is_default_option"]').val(1);
+                    jQuery('input[name="defaultvisual[]"]').prop('checked', false);
+                    jQuery('input[name="reset_is-default_option"]').val(1);
                 },
 
                 /**
@@ -238,9 +238,9 @@ define([
             );
         }
 
-        if ($('reset_is_default_option_button')) {
+        if ($('reset_default_swatch_visual_option_button')) {
             Event.observe(
-                'reset_is-default_option_button',
+                'reset_default_swatch_visual_option_button',
                 'click',
                 swatchVisualOption.reset.bind(swatchVisualOption, true)
             );
