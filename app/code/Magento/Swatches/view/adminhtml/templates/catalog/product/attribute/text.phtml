@@ -35,6 +35,7 @@ $stores = $block->getStoresSortedBySortOrder();
                 <th colspan="<?= (int)$colTotal ?>">
                     <input type="hidden" class="required-text-swatch-entry" name="text_swatch_validation"/>
                     <input type="hidden" class="required-text-swatch-unique" name="text_swatch_validation_unique"/>
+                    <input type="hidden" name="reset_is-default_option"/>
                 </th>
             </tr>
             <tr>
@@ -44,6 +45,12 @@ $stores = $block->getStoresSortedBySortOrder();
                                 title="<?= $block->escapeHtml(__('Add Swatch')) ?>"
                                 type="button" class="action- scalable add">
                             <span><?= $block->escapeHtml(__('Add Swatch')) ?></span>
+                        </button>
+
+                        <button id="reset_is-default_option_button"
+                                title="<?= $block->escapeHtml(__('Reset Is Default')) ?>"
+                                type="button" class="action- scalable reset">
+                            <span><?= $block->escapeHtml(__('Reset Is Default')) ?></span>
                         </button>
                     <?php endif; ?>
                 </th>

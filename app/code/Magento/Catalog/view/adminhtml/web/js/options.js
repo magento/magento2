@@ -94,6 +94,16 @@ define([
                         element.remove();
                     }
                 },
+
+                /**
+                 * Reset Is Default option
+                 *
+                 */
+                reset: function () {
+                    jQuery('input[name="defaulttext[]"]').prop('checked', false);
+                    jQuery('input[name="reset_is_default_option"]').val(1);
+                },
+
                 updateItemsCountField: function () {
                     $('option-count-check').value = this.totalItems > 0 ? '1' : '';
                 },
@@ -151,6 +161,15 @@ define([
         if ($('add_new_option_button')) {
             Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption, {}, true));
         }
+
+        if ($('reset_is_default_option_button')) {
+            Event.observe(
+                'reset_is-default_option_button',
+                'click',
+                attributeOption.reset.bind(attributeOption, true)
+            );
+        }
+
         $('manage-options-panel').on('click', '.delete-option', function (event) {
             attributeOption.remove(event);
         });
