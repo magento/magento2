@@ -117,6 +117,7 @@ Resources,Resources
 "New %changes for %user_name","New %changes for %user_name"
 "Hello,","Hello,"
 "We have received a request to change the following information associated with your account at %store_name: %changes.","We have received a request to change the following information associated with your account at %store_name: %changes."
+"We have received a request to reset the %changes associated with your account at %store_name.","We have received a request to reset the %changes associated with your account at %store_name."
 "If you have not authorized this action, please contact us immediately at %store_email","If you have not authorized this action, please contact us immediately at %store_email"
 "or call us at %store_phone","or call us at %store_phone"
 "Thanks,","Thanks,"
