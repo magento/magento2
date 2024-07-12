@@ -46,7 +46,7 @@ class AttributeDropdownTest extends AbstractAttributeTest
     /**
      * @inheritdoc
      */
-    public function productProvider(): array
+    public static function productProvider(): array
     {
         return [
             [
@@ -58,7 +58,7 @@ class AttributeDropdownTest extends AbstractAttributeTest
     /**
      * @inheritdoc
      */
-    public function uniqueAttributeValueProvider(): array
+    public static function uniqueAttributeValueProvider(): array
     {
         return [
             [

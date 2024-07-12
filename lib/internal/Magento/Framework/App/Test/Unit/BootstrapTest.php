@@ -120,7 +120,7 @@ class BootstrapTest extends TestCase
             ->willReturn($this->objectManager);
 
         $this->bootstrapMock = $this->getMockBuilder(Bootstrap::class)
-            ->setMethods(['assertMaintenance', 'assertInstalled', 'getIsExpected', 'isInstalled', 'terminate'])
+            ->onlyMethods(['assertMaintenance', 'assertInstalled', 'getIsExpected', 'isInstalled', 'terminate'])
             ->setConstructorArgs([$this->objectManagerFactory, '', ['value1', 'value2']])
             ->getMock();
     }
@@ -207,7 +207,7 @@ class BootstrapTest extends TestCase
     /**
      * @return array
      */
-    public function testIsDeveloperModeDataProvider()
+    public static function testIsDeveloperModeDataProvider()
     {
         return [
             [null, null, false],
@@ -279,7 +279,7 @@ class BootstrapTest extends TestCase
     /**
      * @return array
      */
-    public function assertMaintenanceDataProvider()
+    public static function assertMaintenanceDataProvider()
     {
         return [
             [true, false],
@@ -306,7 +306,7 @@ class BootstrapTest extends TestCase
     /**
      * @return array
      */
-    public function assertInstalledDataProvider()
+    public static function assertInstalledDataProvider()
     {
         return [
             [false, true],

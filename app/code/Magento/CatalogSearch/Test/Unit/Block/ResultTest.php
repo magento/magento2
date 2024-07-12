@@ -54,7 +54,7 @@ class ResultTest extends TestCase
         /** @var MockObject|Resolver $layerResolver */
         $layerResolver = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get', 'create'])
+            ->onlyMethods(['get', 'create'])
             ->getMock();
         $layerResolver->expects($this->any())
             ->method($this->anything())
@@ -65,7 +65,7 @@ class ResultTest extends TestCase
             ->getMock();
         $this->queryFactoryMock = $this->getMockBuilder(QueryFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
         $this->model = new Result($this->contextMock, $layerResolver, $this->dataMock, $this->queryFactoryMock);
     }
