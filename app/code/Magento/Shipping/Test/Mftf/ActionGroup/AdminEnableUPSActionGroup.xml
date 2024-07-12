@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+     /**
+      * Copyright © Magento, Inc. All rights reserved.
+      * See COPYING.txt for license details.
+      */
+    -->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnableUPSActionGroup">
+        <annotations>
+            <description>Enable United Parcel Service XML shipping method in backend</description>
+        </annotations>
+        <arguments>
+            <argument name="shipping" defaultValue="UPSShippingMethod"/>
+        </arguments>
+        <conditionalClick selector="{{AdminShippingMethodUPSSection.UPSTab}}" dependentSelector="{{AdminShippingMethodUPSSection.handlingFee}}" visible="false" stepKey="openUPSTab"/>
+        <uncheckOption selector="{{AdminShippingMethodUPSSection.enableCheckoutCheckbox}}" stepKey="unCheckEnableForCheckout"/>
+        <selectOption selector="{{AdminShippingMethodUPSSection.enableCheckoutSelect}}" userInput="{{shipping.enableCheckoutSelect}}" stepKey="selectEnableForCheckoutToYes"/>
+        <fillField selector="{{AdminShippingMethodUPSSection.accessLicenseNumber}}" userInput="{{_CREDS.magento/carriers_ups_access_license_number}}" stepKey="enterAccessLicenseNumber"/>
+        <fillField selector="{{AdminShippingMethodUPSSection.password}}" userInput="{{_CREDS.magento/carriers_ups_password}}" stepKey="enterPassword"/>
+        <fillField selector="{{AdminShippingMethodUPSSection.username}}" userInput="{{_CREDS.magento/carriers_ups_username}}" stepKey="enterUsername"/>
+        <uncheckOption selector="{{AdminShippingMethodUPSSection.modeCheckbox}}" stepKey="unCheckMode"/>
+        <selectOption selector="{{AdminShippingMethodUPSSection.modeSelect}}" userInput="{{shipping.modeSelect}}" stepKey="selectModeToDevelopment"/>
+        <fillField selector="{{AdminShippingMethodUPSSection.shipperNumberInput}}" userInput="{{_CREDS.magento/carriers_ups_shipper_number}}" stepKey="enterShipperNumber"/>
+        <selectOption selector="{{AdminShippingMethodUPSSection.showMethodIfNotApplicableSelect}}" userInput="{{shipping.showMethodIfNotApplicableSelect}}" stepKey="selectShowMethodIfNotApplicableToYes"/>
+        <selectOption selector="{{AdminShippingMethodUPSSection.debugSelect}}" userInput="{{shipping.debugSelect}}" stepKey="selectDebugToYes"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="assertConfigurationSaved"/>
+    </actionGroup>
+</actionGroups>
