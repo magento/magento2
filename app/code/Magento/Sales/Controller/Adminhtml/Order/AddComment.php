@@ -45,8 +45,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
                     throw new \Magento\Framework\Exception\LocalizedException(__($error));
                 }
 
-                $orderStatus = $this->getOrderStatus($order->getDataByKey('status'), $data['status']);
-                $order->setStatus($orderStatus);
+                $order->setStatus($data['status']);
                 $notify = $data['is_customer_notified'] ?? false;
                 $visible = $data['is_visible_on_front'] ?? false;
 
@@ -55,7 +54,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
                 }
 
                 $comment = trim(strip_tags($data['comment']));
-                $history = $order->addStatusHistoryComment($comment, $orderStatus);
+                $history = $order->addStatusHistoryComment($comment, $order->getStatus());
                 $history->setIsVisibleOnFront($visible);
                 $history->setIsCustomerNotified($notify);
                 $history->save();
@@ -80,18 +79,5 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
             }
         }
         return $this->resultRedirectFactory->create()->setPath('sales/*/');
-    }
-
-    /**
-     * Get order status to set
-     *
-     * @param string $orderStatus
-     * @param string $historyStatus
-     * @return string
-     */
-    private function getOrderStatus(string $orderStatus, string $historyStatus): string
-    {
-        return ($orderStatus === Order::STATE_PROCESSING || $orderStatus === Order::STATUS_FRAUD) ? $historyStatus
-            : $orderStatus;
     }
 }

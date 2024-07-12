@@ -21,6 +21,7 @@ use Magento\Sales\Controller\Adminhtml\Order\AddComment;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 use Magento\Sales\Model\Order\Status\History;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -126,20 +127,21 @@ class AddCommentTest extends TestCase
      * @param array $historyData
      * @param string $orderStatus
      * @param bool $userHasResource
+     * @param bool $visibleOnFront
      * @param bool $expectedNotify
      *
+     * @throws Exception
      * @dataProvider executeWillNotifyCustomerDataProvider
      */
     public function testExecuteWillNotifyCustomer(
         array $historyData,
         string $orderStatus,
         bool $userHasResource,
+        bool $visibleOnFront,
         bool $expectedNotify
     ) {
         $orderId = 30;
         $this->requestMock->expects($this->once())->method('getParam')->with('order_id')->willReturn($orderId);
-        $this->orderMock->expects($this->atLeastOnce())->method('getDataByKey')
-            ->with('status')->willReturn($orderStatus);
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->willReturn($this->orderMock);
@@ -148,76 +150,92 @@ class AddCommentTest extends TestCase
         $this->orderMock->expects($this->once())
             ->method('addStatusHistoryComment')
             ->willReturn($this->statusHistoryCommentMock);
+        $this->statusHistoryCommentMock->expects($this->once())->method('setIsVisibleOnFront')->with($visibleOnFront);
         $this->statusHistoryCommentMock->expects($this->once())->method('setIsCustomerNotified')->with($expectedNotify);
         $this->objectManagerMock->expects($this->once())->method('create')->willReturn(
             $this->createMock(OrderCommentSender::class)
         );
+
         $this->addCommentController->execute();
     }
 
     /**
      * @return array
      */
-    public function executeWillNotifyCustomerDataProvider()
+    public static function executeWillNotifyCustomerDataProvider(): array
     {
         return [
             'User Has Access - Notify True' => [
-                'postData' => [
+                [
                     'comment' => 'Great Product!',
                     'is_customer_notified' => true,
+                    'is_visible_on_front' => true,
                     'status' => 'processing'
                 ],
                 'orderStatus' =>'processing',
                 'userHasResource' => true,
-                'expectedNotify' => true
+                'expectedNotify' => true,
+                'visibleOnFront' => true
             ],
             'User Has Access - Notify False' => [
-                'postData' => [
+                [
                     'comment' => 'Great Product!',
                     'is_customer_notified' => false,
+                    'is_visible_on_front' => false,
                     'status' => 'processing'
                 ],
                 'orderStatus' =>'processing',
                 'userHasResource' => true,
-                'expectedNotify' => false
+                'expectedNotify' => false,
+                'visibleOnFront' => false
             ],
             'User Has Access - Notify Unset' => [
-                'postData' => [
+                [
                     'comment' => 'Great Product!',
+                    'is_customer_notified' => false,
+                    'is_visible_on_front' => false,
                     'status' => 'processing'
                 ],
                 'orderStatus' =>'fraud',
                 'userHasResource' => true,
-                'expectedNotify' => false
+                'expectedNotify' => false,
+                'visibleOnFront' => false
             ],
             'User No Access - Notify True' => [
-                'postData' => [
+                [
                     'comment' => 'Great Product!',
                     'is_customer_notified' => true,
+                    'is_visible_on_front' => false,
                     'status' => 'fraud'
                 ],
                 'orderStatus' =>'processing',
                 'userHasResource' => false,
-                'expectedNotify' => false
+                'expectedNotify' => false,
+                'visibleOnFront' => false
             ],
             'User No Access - Notify False' => [
-                'postData' => [
+                [
                     'comment' => 'Great Product!',
                     'is_customer_notified' => false,
+                    'is_visible_on_front' => false,
                     'status' => 'processing'
                 ],
                 'orderStatus' =>'complete',
                 'userHasResource' => false,
-                'expectedNotify' => false
+                'expectedNotify' => false,
+                'visibleOnFront' => false
             ],
             'User No Access - Notify Unset' => [
-                'postData' => [
+                [
                     'comment' => 'Great Product!',
+                    'is_customer_notified' => false,
+                    'is_visible_on_front' => false,
                     'status' => 'processing'
                 ],
                 'orderStatus' =>'complete',
                 'userHasResource' => false,
-                'expectedNotify' => false
+                'expectedNotify' => false,
+                'visibleOnFront' => false
             ],
         ];
     }
@@ -230,21 +248,17 @@ class AddCommentTest extends TestCase
     public function testExecuteForEmptyCommentMessage(): void
     {
         $orderId = 30;
-        $orderStatus = 'processing';
         $historyData = [
             'comment' => '',
             'is_customer_notified' => false,
-            'status' => 'processing'
+            'is_visible_on_front' => true
         ];
 
-        $this->requestMock->expects($this->once())->method('getParam')->with('order_id')->willReturn($orderId);
-        $this->orderMock->expects($this->atLeastOnce())->method('getDataByKey')
-            ->with('status')->willReturn($orderStatus);
-        $this->orderRepositoryMock->expects($this->once())
-            ->method('get')
-            ->willReturn($this->orderMock);
-        $this->requestMock->expects($this->once())->method('getPost')->with('history')->willReturn($historyData);
-
+        $this->requestMock->expects($this->once())->method('getParam')
+            ->with('order_id')->willReturn($orderId);
+        $this->orderRepositoryMock->expects($this->once())->method('get')->willReturn($this->orderMock);
+        $this->requestMock->expects($this->once())->method('getPost')
+            ->with('history')->willReturn($historyData);
         $this->resultJson->expects($this->once())
             ->method('setData')
             ->with(
@@ -258,7 +272,7 @@ class AddCommentTest extends TestCase
         $this->jsonFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
-
-        $this->assertSame($this->resultJson, $this->addCommentController->execute());
+        $result = $this->addCommentController->execute();
+        $this->assertSame($this->resultJson, $result);
     }
 }
