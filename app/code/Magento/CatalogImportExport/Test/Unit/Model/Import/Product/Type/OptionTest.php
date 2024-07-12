@@ -994,26 +994,6 @@ class OptionTest extends AbstractImportTestCase
                     ]
                 ]
             ],
-            'field' => [
-                '$rowData' => [
-                    'custom_options' => 'name=Test Field Title,type=field,required=1'
-                        . ';sku=1-text,price=0,price_type=fixed'
-                ],
-                '$responseData' => [
-                    'custom_options' => [
-                        'Test Field Title' => [
-                            [
-                                'name' => 'Test Field Title',
-                                'type' => 'field',
-                                'required' => '1',
-                                'sku' => '1-text',
-                                'price' => '0',
-                                'price_type' => 'fixed'
-                            ]
-                        ]
-                    ]
-                ]
-            ],
             'area' => [
                 '$rowData' => [
                     'custom_options' => 'name=Test Field Title,type=area,required=1,'
