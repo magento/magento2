@@ -43,7 +43,6 @@ class AttributeTest extends TestCase
         $this->_model = null;
     }
 
-
     /**
      * @return void
      */
