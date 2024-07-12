@@ -65,6 +65,7 @@ location ~* ^/setup($|/) {
 
     location ~ ^/setup/pub/ {
         add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-Content-Type-Options "nosniff";
     }
 }
 
@@ -88,6 +89,7 @@ location ~* ^/update($|/) {
 
     location ~ ^/update/pub/ {
         add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-Content-Type-Options "nosniff";
     }
 }
 
@@ -101,6 +103,7 @@ location /pub/ {
     }
     alias $MAGE_ROOT/pub/;
     add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
 }
 
 location /static/ {
@@ -115,6 +118,7 @@ location /static/ {
     location ~* \.(ico|jpg|jpeg|png|gif|svg|svgz|webp|avif|avifs|js|css|eot|ttf|otf|woff|woff2|html|json|webmanifest)$ {
         add_header Cache-Control "public";
         add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-Content-Type-Options "nosniff";
         expires +1y;
 
         if (!-f $request_filename) {
@@ -124,6 +128,7 @@ location /static/ {
     location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
         add_header Cache-Control "no-store";
         add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-Content-Type-Options "nosniff";
         expires    off;
 
         if (!-f $request_filename) {
@@ -134,6 +139,7 @@ location /static/ {
         rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
     }
     add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
 }
 
 location /media/ {
@@ -169,16 +175,19 @@ location /media/ {
     location ~* \.(ico|jpg|jpeg|png|gif|svg|svgz|webp|avif|avifs|js|css|eot|ttf|otf|woff|woff2)$ {
         add_header Cache-Control "public";
         add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-Content-Type-Options "nosniff";
         expires +1y;
         try_files $uri $uri/ /get.php$is_args$args;
     }
     location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
         add_header Cache-Control "no-store";
         add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-Content-Type-Options "nosniff";
         expires    off;
         try_files $uri $uri/ /get.php$is_args$args;
     }
     add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
 }
 
 location /media/customer/ {
@@ -204,11 +213,12 @@ location /errors/ {
 }
 
 # PHP entry point for main application
-location ~ ^/(index|get|static|errors/report|errors/404|errors/503|health_check)\.php$ {
+location ~ ^/(index|get|static|errors/report|errors/404|errors/503|health_check|test|opcache_.*)\.php$ {
     try_files $uri =404;
     fastcgi_pass   fastcgi_backend;
     fastcgi_buffers 16 16k;
     fastcgi_buffer_size 32k;
+    # fastcgi_param  MAGE_PROFILER html;
 
     fastcgi_param  PHP_FLAG  "session.auto_start=off \n suhosin.session.cryptua=off";
     fastcgi_param  PHP_VALUE "memory_limit=756M \n max_execution_time=18000";
