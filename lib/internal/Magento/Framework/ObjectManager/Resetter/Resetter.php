@@ -40,6 +40,9 @@ class Resetter implements ResetterInterface
     /** @var array */
     private readonly array $classList;
 
+    /** @var array */
+    private array $sortedClassListsByClass = [];
+
     /**
      * @param ComponentRegistrarInterface|null $componentRegistrar
      * @param array $classList
@@ -172,11 +175,67 @@ class Resetter implements ResetterInterface
             $instance->{self::RESET_STATE_METHOD}();
             return;
         }
-        foreach ($this->classList as $className => $value) {
-            if ($instance instanceof $className) {
-                $this->resetStateWithReflectionByClassName($instance, $className);
+        $className = get_class($instance);
+        if (!array_key_exists($className, $this->sortedClassListsByClass)) {
+            $temporaryClassList = [];
+            foreach ($this->classList as $key => $value) {
+                if ($instance instanceof $key) {
+                    $temporaryClassList[] = $key;
+                }
             }
+            $this->sortClasses($temporaryClassList);
+            $this->sortedClassListsByClass[$className] = $temporaryClassList;
         }
+        foreach ($this->sortedClassListsByClass[$className] as $currentClassName) {
+            $this->resetStateWithReflectionByClassName($instance, $currentClassName);
+        }
+    }
+
+    /**
+     * Sorts an array of strings that are class names and interface names
+     *
+     * Note: This sorting algorithm only takes arrays that are keyed by contiguous numbers starting at zero.
+     * Note: This sorting algorithm works with comparators that return false on unrelated items.
+     *
+     * @param array $array
+     * @return void
+     */
+    private function sortClasses(array &$array) : void
+    {
+        $i = 0;
+        $count = count($array);
+        while ($i + 1 < $count) {
+            for ($j = $i + 1; $j < $count; $j++) {
+                if ($this->sortClassesComparitor($array[$i], $array[$j])) {
+                    $swapTemp = $array[$i];
+                    $array[$i] = $array[$j];
+                    $array[$j] = $swapTemp;
+                    continue 2;
+                }
+            }
+            $i++;
+        }
+    }
+
+    /**
+     * Comparator for class/interface sorter that returns true if $b should come before $a.
+     *
+     * @param string $a
+     * @param string $b
+     * @return bool
+     */
+    private function sortClassesComparitor(string $a, string $b) : bool
+    {
+        if (is_a($a, $b, true)) {
+            return true;
+        }
+        if (is_a($b, $a, true)) {
+            return false;
+        }
+        if (interface_exists($a) && class_exists($b)) {
+            return true; // Note: If they aren't related, classes should come before interfaces
+        }
+        return false; // No relation
     }
 
     /**
