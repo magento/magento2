@@ -101,6 +101,9 @@
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryAfterAuthorizing"/>
         <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Authorized amount')}}" userInput="Authorized amount of $128.00. Transaction ID: &quot;{$grabLastTransactionID}&quot;" stepKey="seeOrderHistoryNotesAfterAuthorizing"/>
         <dontSee selector="{{AdminOrderDetailsMainActionsSection.authorize}}" stepKey="dontSeeAuthorizationButtonAfterAuthorizing"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <!--Assert the invoice button is present-->
         <waitForElementVisible selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="waitForInvoiceButtonToBeAppeared"/>
         <!--Assert the authorization transaction is present in transaction grid-->
