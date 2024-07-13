@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminResetSalesTaxSettingsActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page via the Admin Side Menu. Resets 'Order, Invoice, Credit Memo display Settings' to default values.</description>
+        </annotations>
+        <!-- change shopping cart display setting configurations -->
+        <conditionalClick selector="{{AdminConfigureTaxSection.salesDisplayPriceCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.salesDisplayPriceCheckBox}}" visible="true" stepKey="clickSalesDisplayPriceCheckBoxCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.salesDisplaySubtotalCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.salesDisplaySubtotalCheckBox}}" visible="true" stepKey="clickSalesDisplaySubtotalCheckBoxCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.salesDisplayShippingAmountCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.salesDisplayShippingAmountCheckBox}}" visible="true" stepKey="clickSalesDisplayShippingAmountCheckBoxCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalSales}}" visible="true" stepKey="clickSystemValueIncludeTaxTotalSalesCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummarySales}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummarySales}}" visible="true" stepKey="clickSystemValueDisplayTaxSummarySalesCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxSales}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxSales}}" visible="true" stepKey="clickSystemValueDisplayZeroTaxSalesCheckBox"/>
+        <scrollTo selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" x="0" y="-80" stepKey="scrollToTaxSalesDisplay"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" dependentSelector="{{AdminConfigureTaxSection.ordersInvoicesCreditSales}}" visible="true" stepKey="closeOrdersInvoicesCreditSales"/>
+    </actionGroup>
+</actionGroups>

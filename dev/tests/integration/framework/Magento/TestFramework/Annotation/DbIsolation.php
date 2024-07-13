@@ -92,7 +92,7 @@ class DbIsolation
             ExceptionHandler::handle(
                 'Unable to parse fixtures',
                 get_class($test),
-                $test->getName(false),
+                $test->name(),
                 $exception
             );
         }

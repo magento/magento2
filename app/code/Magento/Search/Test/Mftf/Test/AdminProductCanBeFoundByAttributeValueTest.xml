@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductCanBeFoundByAttributeValueTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Create simple product with attribute"/>
+            <title value="Product can be found by value of 'Searchable' attribute by admin"/>
+            <description value="Verifying that product can be found using value of 'searchable' attribute in QuickSearch by admin"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5226"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create new searchable product attribute-->
+            <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+            <actionGroup ref="AdminCreateSearchableProductAttributeActionGroup" stepKey="createSearchableAttribute">
+                <argument name="attribute" value="textProductAttribute"/>
+            </actionGroup>
+            <!--Assign attribute to the Default set-->
+            <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+            <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+                <argument name="group" value="Product Details"/>
+                <argument name="attribute" value="{{textProductAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+            <!--Create product and fill new attribute field-->
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+            <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createSimpleProduct">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductDetailsForm">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <waitForElementVisible selector="{{AdminProductFormSection.attributeRequiredInput(textProductAttribute.attribute_code)}}" stepKey="waitForAttributeElementToBeVisible"/>
+            <fillField selector="{{AdminProductFormSection.attributeRequiredInput(textProductAttribute.attribute_code)}}" userInput="searchable" stepKey="fillTheAttributeRequiredInputField"/>
+            <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveAttributeButton"/>
+        </before>
+        <after>
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
+                <argument name="productAttributeCode" value="{{textProductAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttributeByAttributeCode">
+                <argument name="productAttributeCode" value="{{textProductAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="assertProductAttributeDeletionSuccess"/>
+            <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttributeGrid"/>
+            <waitForElementClickable selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="waitForResetButtonToAppear"/>
+            <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
+            <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductCatalog"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteCreatedSimpleProduct"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForFirstSearchTerm">
+            <argument name="phrase" value="searchable"/>
+        </actionGroup>
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductName"/>
+    </test>
+</tests>

@@ -53,5 +53,8 @@
         <element name="stateProvinceWithoutAsterisk" type="text" selector="//div[@class='field' and @name='shippingAddress.region_id']" timeout="30"/>
         <element name="stateProvinceWithAsterisk" type="text" selector="//div[@class='field _required' and @name='shippingAddress.region_id']" timeout="30"/>
         <element name="selectCountry" type="select" selector="//div[@class='billing-address-form']//select[@name='country_id']"/>
+        <element name="customerAddressAttribute" type="input" selector="[id*='{{attribute}}']" parameterized="true"/>
+        <element name="savedAddress" type="text" selector="div[class='shipping-address-item selected-item']"/>
+        <element name="shippingAddressBox" type="text" selector="//div[@class='shipping-address-item selected-item']" timeout="30"/>
     </section>
 </sections>

@@ -50,7 +50,7 @@ foreach ($product->getOptions() as $option) {
 }
 
 $requestInfo = new DataObject(['qty' => 1, 'options' => $options]);
-$validatorFile = $objectManager->get(ValidatorFileMock::class)->getInstance();
+$validatorFile = $objectManager->create(ValidatorFileMock::class, ['name' => 'testName'])->getInstance();
 $objectManager->addSharedInstance($validatorFile, ValidatorFile::class);
 
 $quote->setReservedOrderId('test_order_item_with_items_and_custom_options');

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CustomerOrderCancellationFromViewOrderTest">
+        <annotations>
+            <features value="Customer Order Cancellation from View Order page."/>
+            <stories value="Customer cancels an order from view order page."/>
+            <title value="Customer cancels an order from view order page."/>
+            <description value="Customer cancels an order from view order page."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="LYNX-180"/>
+        </annotations>
+        <before>
+            <!-- Enable configuration -->
+            <magentoCLI command="config:set sales/cancellation/enabled 1" stepKey="EnablingSalesCancellation"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <!-- Disable configuration -->
+            <magentoCLI command="config:set sales/cancellation/enabled 0" stepKey="DisablingSalesCancellation"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Login to storefront from customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!--Open the details page of Simple Product and add to cart-->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+
+        <!--Place the order-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
+        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder">
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
+
+        <!--Grab Order Id for later usage-->
+        <grabTextFrom selector="{{CustomerOrderCancellationSection.linkToOrder}}" stepKey="getOrderNumber"/>
+
+        <!--Go to View Order page-->
+        <click selector="{{CustomerOrderCancellationSection.linkToOrder}}" stepKey="clickOnLinkToOrder"/>
+        <waitForPageLoad stepKey="waitForViewOrderPageLoad"/>
+
+        <!--Cancel order -->
+        <click selector="{{CustomerOrderCancellationSection.linkToOpenModal}}" stepKey="clickOnLinkToOpenModal"/>
+        <waitForElementVisible selector="{{CustomerOrderCancellationSection.valueForOrderCancellationReason}}" stepKey="waitForSelectVisible"/>
+        <selectOption selector="{{CustomerOrderCancellationSection.valueForOrderCancellationReason}}" userInput="Other" stepKey="valueForSalesCancellation"/>
+        <click selector="{{CustomerOrderCancellationSection.confirmOrderCancellation}}" stepKey="clickOnConfirmButton"/>
+
+        <!--Confirm order is cancelled-->
+        <waitForPageLoad stepKey="waitForViewOrderPageReload"/>
+        <grabTextFrom selector="{{CustomerOrderCancellationSection.textOrderStatus}}" stepKey="getOrderStatus"/>
+        <assertEquals message="Order should have status CANCELED" stepKey="assertOrderStatusIsCanceled" after="getOrderStatus">
+            <expectedResult type="string">CANCELED</expectedResult>
+            <actualResult type="variable">$getOrderStatus</actualResult>
+        </assertEquals>
+
+        <!--Go to Admin Sales Order View Page-->
+        <amOnPage url="{{AdminSalesOrderViewPage.url({$getOrderNumber})}}" stepKey="navigateToSalesOrderViewPage"/>
+        <waitForPageLoad stepKey="waitForAdminSalesOrderViewPageLoad"/>
+
+        <!--Check Order History block-->
+        <grabTextFrom selector="{{AdminSalesOrderViewSection.orderHistoryNoteListFirstComment}}" stepKey="getOrderCancellationReason"/>
+        <assertEquals message="Order cancellation reason should be Other." stepKey="assertOrderCancellationReason" after="getOrderCancellationReason">
+            <expectedResult type="string">Other</expectedResult>
+            <actualResult type="variable">getOrderCancellationReason</actualResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{AdminSalesOrderViewSection.orderHistoryNoteListLastComment}}" stepKey="getOrderCancellationNotification"/>
+        <assertEquals message="Order cancellation notification should be sent." stepKey="assertOrderCancellationNotification" after="getOrderCancellationNotification">
+            <expectedResult type="string">Order cancellation notification email was sent.</expectedResult>
+            <actualResult type="variable">getOrderCancellationNotification</actualResult>
+        </assertEquals>
+    </test>
+</tests>

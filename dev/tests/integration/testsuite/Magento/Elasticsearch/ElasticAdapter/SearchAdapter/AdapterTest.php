@@ -44,7 +44,8 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->clientMock = $this->getMockBuilder(\Magento\AdvancedSearch\Model\Client\ClientInterface::class)
-            ->setMethods(['query', 'testConnection'])
+            ->addMethods(['query'])
+            ->onlyMethods(['testConnection'])
             ->disableOriginalConstructor()
             ->getMock();
         $contentManager

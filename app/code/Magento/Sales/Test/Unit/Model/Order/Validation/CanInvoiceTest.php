@@ -46,12 +46,13 @@ class CanInvoiceTest extends TestCase
 
         $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStatus', 'getItems'])
+            ->onlyMethods(['getStatus', 'getItems'])
             ->getMockForAbstractClass();
 
         $this->orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQtyToInvoice', 'getLockedDoInvoice'])
+            ->addMethods(['getQtyToInvoice'])
+            ->onlyMethods(['getLockedDoInvoice'])
             ->getMockForAbstractClass();
 
         $this->model = new CanInvoice();
@@ -82,7 +83,7 @@ class CanInvoiceTest extends TestCase
      * Data provider for testCanInvoiceWrongState
      * @return array
      */
-    public function canInvoiceWrongStateDataProvider()
+    public static function canInvoiceWrongStateDataProvider()
     {
         return [
             [Order::STATE_PAYMENT_REVIEW],
@@ -143,7 +144,7 @@ class CanInvoiceTest extends TestCase
      *
      * @return array
      */
-    public function canInvoiceDataProvider()
+    public static function canInvoiceDataProvider()
     {
         return [
             [0, null, [__('The order does not allow an invoice to be created.')]],

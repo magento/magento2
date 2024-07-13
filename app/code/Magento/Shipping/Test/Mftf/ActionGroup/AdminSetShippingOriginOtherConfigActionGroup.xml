@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+     /**
+      * Copyright © Magento, Inc. All rights reserved.
+      * See COPYING.txt for license details.
+      */
+    -->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSetShippingOriginOtherConfigActionGroup">
+        <magentoCLI command="config:set {{AdminShippingSettingsOriginCityConfigData.path}} '{{US_Address_CA.city}}'" stepKey="setOriginCity"/>
+        <magentoCLI command="config:set {{AdminShippingSettingsOriginZipCodeConfigData.path}} {{US_Address_CA.postcode}}" stepKey="setOriginZipCode"/>
+        <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddressConfigData.path}} '{{US_Address_CA.street[0]}}'" stepKey="setOriginStreetAddress"/>
+        <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddress2ConfigData.path}} '{{US_Address_CA.street[1]}}'" stepKey="setOriginStreetAddress2"/>
+    </actionGroup>
+</actionGroups>

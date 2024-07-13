@@ -89,7 +89,7 @@ class ProductPageViewTest extends TestCase
     /**
      * @return array
      */
-    public function expectedTextSwatchDataProvider(): array
+    public static function expectedTextSwatchDataProvider(): array
     {
         return [
             [
@@ -145,7 +145,7 @@ class ProductPageViewTest extends TestCase
     /**
      * @return array
      */
-    public function expectedVisualSwatchDataProvider(): array
+    public static function expectedVisualSwatchDataProvider(): array
     {
         return [
             [
@@ -201,7 +201,7 @@ class ProductPageViewTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function expectedTwoAttributesProvider(): array
+    public static function expectedTwoAttributesProvider(): array
     {
         return [
             [
