@@ -9,13 +9,13 @@ namespace Magento\Weee\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory as EavAttributeFactory;
-use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
+use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTestCase;
 use Magento\Directory\Model\Config\Source\Country as SourceCountry;
 use Magento\Weee\Ui\DataProvider\Product\Form\Modifier\Manager\Website as WebsiteManager;
 use Magento\Weee\Ui\DataProvider\Product\Form\Modifier\Weee;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class WeeeTest extends AbstractModifierTest
+class WeeeTest extends AbstractModifierTestCase
 {
     /**
      * @var SourceCountry|MockObject
@@ -44,7 +44,7 @@ class WeeeTest extends AbstractModifierTest
             ->disableOriginalConstructor()
             ->getMock();
         $this->eavAttributeFactoryMock = $this->getMockBuilder(EavAttributeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->eavAttributeMock = $this->getMockBuilder(EavAttribute::class)

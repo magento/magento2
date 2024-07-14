@@ -167,7 +167,7 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
         }
     }
 
-    public function setAddressDataProvider()
+    public static function setAddressDataProvider()
     {
         return [
             [true],

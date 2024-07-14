@@ -55,7 +55,7 @@ class SdkUrlTest extends TestCase
         /** @var ConfigFactory|MockObject $configFactoryMock */
         $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $configFactoryMock->expects($this->any())->method('create')->willReturn($this->configMock);
 

@@ -46,7 +46,7 @@ class SpecialAttributeTest extends TestCase
     {
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode'])
+            ->onlyMethods(['getAttributeCode'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('getAttributeCode')

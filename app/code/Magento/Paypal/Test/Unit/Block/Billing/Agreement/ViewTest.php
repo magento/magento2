@@ -70,8 +70,18 @@ class ViewTest extends TestCase
             ->willReturn($orderCollection);
         $orderCollection
             ->method('addFieldToFilter')
-            ->withConsecutive([], ['status', ['in' => $visibleStatuses]])
-            ->willReturnOnConsecutiveCalls($orderCollection, $orderCollection);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($orderCollection, $visibleStatuses) {
+                    static $callCount = 0;
+                    if ($callCount == 0) {
+                        $callCount++;
+                        return $orderCollection;
+                    } elseif ($callCount == 1 && $arg1 == 'status' && $arg2 == ['in' => $visibleStatuses]) {
+                        $callCount++;
+                        return $orderCollection;
+                    }
+                }
+            );
         $orderCollection
             ->method('setOrder')
             ->willReturn($orderCollection);

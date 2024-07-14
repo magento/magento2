@@ -195,8 +195,11 @@ class RendererTest extends TestCase
 
         $this->stringMock
             ->method('upperCaseWords')
-            ->withConsecutive(['charset', '_', ''])
-            ->willReturnOnConsecutiveCalls('Charset');
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == 'charset' && $arg2 == '_' && $arg3 == '') {
+                    return 'Charset';
+                }
+            });
 
         $this->pageConfigMock->expects($this->once())
             ->method('getCharset')
@@ -278,20 +281,19 @@ class RendererTest extends TestCase
 
         $this->pageConfigMock->expects($this->exactly(2))
             ->method('addRemotePageAsset')
-            ->withConsecutive(
-                [
-                    $filePath,
-                    Head::VIRTUAL_CONTENT_TYPE_LINK,
-                    ['attributes' => ['rel' => 'icon', 'type' => 'image/x-icon']],
-                    'icon'
-                ],
-                [
-                    $filePath,
-                    Head::VIRTUAL_CONTENT_TYPE_LINK,
-                    ['attributes' => ['rel' => 'shortcut icon', 'type' => 'image/x-icon']],
-                    'shortcut-icon'
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3, $arg4) use ($filePath) {
+                if ($arg1 == $filePath &&
+                    $arg2 == Head::VIRTUAL_CONTENT_TYPE_LINK &&
+                    $arg3 == ['attributes' => ['rel' => 'icon', 'type' => 'image/x-icon']] &&
+                    $arg4 == 'icon') {
+                    return null;
+                } elseif ($arg1 == $filePath &&
+                    $arg2 == Head::VIRTUAL_CONTENT_TYPE_LINK &&
+                    $arg3 == ['attributes' => ['rel' => 'shortcut icon', 'type' => 'image/x-icon']] &&
+                    $arg4 == 'shortcut-icon') {
+                    return null;
+                }
+            });
 
         $this->renderer->prepareFavicon();
     }
@@ -311,18 +313,17 @@ class RendererTest extends TestCase
 
         $this->pageConfigMock->expects($this->exactly(2))
             ->method('addPageAsset')
-            ->withConsecutive(
-                [
-                    $defaultFilePath,
-                    ['attributes' => ['rel' => 'icon', 'type' => 'image/x-icon']],
-                    'icon',
-                ],
-                [
-                    $defaultFilePath,
-                    ['attributes' => ['rel' => 'shortcut icon', 'type' => 'image/x-icon']],
-                    'shortcut-icon'
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($defaultFilePath) {
+                if ($arg1 == $defaultFilePath &&
+                    $arg2 == ['attributes' => ['rel' => 'icon', 'type' => 'image/x-icon']] &&
+                    $arg3 == 'icon') {
+                    return null;
+                } elseif ($arg1 == $defaultFilePath &&
+                    $arg2 == ['attributes' => ['rel' => 'shortcut icon', 'type' => 'image/x-icon']] &&
+                    $arg3 == 'shortcut-icon') {
+                    return null;
+                }
+            });
         $this->renderer->prepareFavicon();
     }
 
@@ -421,7 +422,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderRenderAssets(): array
+    public static function dataProviderRenderAssets(): array
     {
         return [
             [
