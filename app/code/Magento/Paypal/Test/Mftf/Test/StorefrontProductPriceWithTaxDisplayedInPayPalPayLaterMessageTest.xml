@@ -83,8 +83,14 @@
             <argument name="product" value="$$createProduct$$"/>
             <argument name="quantity" value="1"/>
         </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!-- Open mini cart from product page and verify price -->
         <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniShoppingCartAgain"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <actionGroup ref="AssertStorefrontMiniCartSubtotalActionGroup" stepKey="assertSubtotal">
             <argument name="subtotal" value="$92.38"/>
         </actionGroup>
