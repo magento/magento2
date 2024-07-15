@@ -63,6 +63,7 @@
         <!--Scroll down to paypal pay later option and verify message-->
         <waitForText userInput="4 payments of $25.00 due every 2 weeks, starting today." selector="{{StorefrontPayPalPayLaterSection.payPalPayLaterMessage}}" stepKey="verifyPayPalPayLaterMessage1"/>
         <closeTab stepKey="closeCurrentTab"/>
+        <actionGroup ref="AdminOpenConfigurationStoresPageActionGroup" stepKey="openAdminPage"/>
         <!-- Set up catalog to store product price including tax -->
         <magentoCLI command="config:set tax/calculation/price_includes_tax 1" stepKey="enableCatalogIncludingTax"/>
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAgain">
