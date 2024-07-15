@@ -84,12 +84,12 @@
             <argument name="product" value="$$createProduct$$"/>
             <argument name="quantity" value="1"/>
         </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCacheAgain">
             <argument name="tags" value=""/>
         </actionGroup>
         <!-- Open mini cart from product page and verify price -->
         <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniShoppingCartAgain"/>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCacheRunAgain">
             <argument name="tags" value=""/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontMiniCartSubtotalActionGroup" stepKey="assertSubtotal">
