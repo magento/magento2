@@ -270,7 +270,7 @@ class TierPriceValidatorTest extends TestCase
     {
         $customerGroupName = 'test_Group';
         $customerGroup = $this->getMockBuilder(GroupInterface::class)
-            ->setMethods(['getCode', 'getId'])
+            ->onlyMethods(['getCode', 'getId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $customerGroup->expects($this->atLeastOnce())->method('getCode')->willReturn($customerGroupName);

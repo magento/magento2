@@ -136,7 +136,7 @@ class GetThumbnailUrlsTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getThumbnailUrlDataProvider(): array
+    public static function getThumbnailUrlDataProvider(): array
     {
         return [
             [

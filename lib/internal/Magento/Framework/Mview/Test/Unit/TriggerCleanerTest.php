@@ -117,6 +117,62 @@ class TriggerCleanerTest extends TestCase
         $this->model->removeTriggers();
     }
 
+    public function testRemoveTriggersNotLinked(): void
+    {
+        $DBTriggers = [
+            'trg_catalog_category_entity_int_after_insert' => [
+                'TRIGGER_NAME' => 'trg_catalog_category_entity_int_after_insert',
+                'ACTION_STATEMENT' => 'BEGIN statement; END',
+                'EVENT_OBJECT_TABLE' => 'catalog_category_entity_int'
+            ],
+            'not_linked_trg_catalog_category_entity_int_after_insert' => [
+                'TRIGGER_NAME' => 'trg_catalog_category_entity_int_after_insert',
+                'ACTION_STATEMENT' => 'BEGIN statement; END',
+                'EVENT_OBJECT_TABLE' => 'catalog_category_entity_int'
+            ]
+        ];
+
+        $connectionMock = $this->getConnectionMock();
+        $connectionMock->expects($this->once())
+            ->method('fetchAssoc')
+            ->willReturn($DBTriggers);
+
+        $this->resource->expects($this->once())->method('getConnection')->willReturn($connectionMock);
+
+        $triggerMock = $this->getMockBuilder(Trigger::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getName', 'getStatements'])
+            ->getMockForAbstractClass();
+        $triggerMock->expects($this->atLeastOnce())
+            ->method('getName')
+            ->willReturn('trg_catalog_category_entity_int_after_insert');
+        $triggerMock->expects($this->once())->method('getStatements')->willReturn(['statement;']);
+
+        $subscriptionMock = $this->createMock(Subscription::class);
+        $subscriptionMock->expects($this->once())->method('getTriggers')->willReturn([$triggerMock]);
+        $subscriptionMock->expects($this->once())->method('create')->willReturn($subscriptionMock);
+
+        $viewMock = $this->createMock(View::class);
+        $viewMock->expects($this->once())
+            ->method('getSubscriptions')
+            ->willReturn(['subscriptionConfig' => []]);
+        $viewMock->expects($this->once())->method('initSubscriptionInstance')->willReturn($subscriptionMock);
+
+        $viewCollectionMock = $this->getMockForAbstractClass(CollectionInterface::class);
+        $viewCollectionMock->expects($this->once())->method('getViewsByStateMode')->willReturn([$viewMock]);
+
+        $this->viewCollectionFactory->expects($this->once())->method('create')->willReturn($viewCollectionMock);
+
+        $subscriptionMock->expects($this->never())->method('saveTrigger');
+        $viewMock->expects($this->once())->method('unsubscribe');
+
+        $this->viewFactory->expects($this->once())->method('create')->willReturn($viewMock);
+        $state = $this->createMock(\Magento\Indexer\Model\Mview\View\State::class);
+        $viewMock->expects($this->once())->method('getActionClass')->willReturn(true);
+        $viewMock->expects($this->exactly(2))->method('getState')->willReturn($state);
+        $this->model->removeTriggers();
+    }
+
     /**
      * Prepare connection mock
      *

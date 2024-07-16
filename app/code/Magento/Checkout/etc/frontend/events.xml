@@ -12,4 +12,8 @@
     <event name="customer_logout">
         <observer name="unsetAll" instance="Magento\Checkout\Observer\UnsetAllObserver" />
     </event>
+    <event name="controller_action_predispatch_checkout_index_index">
+        <observer name="cps_storefront_checkout_index_index_predispatch"
+                  instance="Magento\Checkout\Observer\CspPolicyObserver"/>
+    </event>
 </config>

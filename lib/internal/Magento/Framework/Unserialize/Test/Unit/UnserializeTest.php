@@ -31,7 +31,7 @@ class UnserializeTest extends TestCase
     protected function setUp(): void
     {
         $this->serializerMock = $this->getMockBuilder(Serialize::class)
-            ->setMethods(
+            ->onlyMethods(
                 ['serialize', 'unserialize']
             )
             ->getMock();

@@ -82,7 +82,7 @@ class PriceTest extends TestCase
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getBaseCurrency', 'getBaseCurrencyCode'])
+            ->addMethods(['getBaseCurrency', 'getBaseCurrencyCode'])
             ->getMockForAbstractClass();
         $this->currencyMock = $this->getMockBuilder(Currency::class)
             ->disableOriginalConstructor()

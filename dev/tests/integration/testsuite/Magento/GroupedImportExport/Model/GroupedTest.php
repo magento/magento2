@@ -12,7 +12,7 @@ class GroupedTest extends AbstractProductExportImportTestCase
     /**
      * @return array
      */
-    public function exportImportDataProvider(): array
+    public static function exportImportDataProvider(): array
     {
         return [
             'grouped-product' => [
