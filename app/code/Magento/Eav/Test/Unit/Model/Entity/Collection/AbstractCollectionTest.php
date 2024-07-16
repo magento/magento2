@@ -269,7 +269,7 @@ class AbstractCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function getItemsDataProvider()
+    public static function getItemsDataProvider()
     {
         return [
             ['values' => [['id' => 1]], 'count' => 1],

@@ -60,7 +60,7 @@ class SetupInfoTest extends TestCase
     /**
      * @return array
      */
-    public function getUrlDataProvider()
+    public static function getUrlDataProvider()
     {
         return [
             [
@@ -159,7 +159,7 @@ class SetupInfoTest extends TestCase
     /**
      * @return array
      */
-    public function isAvailableDataProvider()
+    public static function isAvailableDataProvider()
     {
         $server = ['DOCUMENT_ROOT' => __DIR__, 'SCRIPT_FILENAME' => __FILE__];
         return [

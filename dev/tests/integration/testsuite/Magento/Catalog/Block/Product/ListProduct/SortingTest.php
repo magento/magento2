@@ -130,51 +130,51 @@ class SortingTest extends TestCase
     /**
      * @return array
      */
-    public function productListSortOrderDataProvider(): array
+    public static function productListSortOrderDataProvider(): array
     {
         return [
             'default_order_price_asc' => [
-                'sort' => 'price',
+                'sortBy' => 'price',
                 'direction' => 'asc',
                 'expectation' => ['simple1', 'simple2', 'simple3'],
             ],
             'default_order_price_desc' => [
-                'sort' => 'price',
+                'sortBy' => 'price',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
             ],
             'default_order_position_asc' => [
-                'sort' => 'position',
+                'sortBy' => 'position',
                 'direction' => 'asc',
                 'expectation' => ['simple1', 'simple2', 'simple3'],
             ],
             'default_order_position_desc' => [
-                'sort' => 'position',
+                'sortBy' => 'position',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
             ],
             'default_order_name_asc' => [
-                'sort' => 'name',
+                'sortBy' => 'name',
                 'direction' => 'asc',
                 'expectation' => ['simple1', 'simple2', 'simple3'],
             ],
             'default_order_name_desc' => [
-                'sort' => 'name',
+                'sortBy' => 'name',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
             ],
             'default_order_custom_attribute_asc' => [
-                'sort' => 'test_configurable',
+                'sortBy' => 'test_configurable',
                 'direction' => 'asc',
                 'expectation' => ['simple1', 'simple3', 'simple2'],
-                'incomplete_reason' => 'MC-33825:'
+                'incompleteReason' => 'MC-33825:'
                     . 'Stabilize skipped test cases for Integration SortingTest with elasticsearch',
             ],
             'default_order_custom_attribute_desc' => [
-                'sort' => 'test_configurable',
+                'sortBy' => 'test_configurable',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
-                'incomplete_reason' => 'MC-33825:'
+                'incompleteReason' => 'MC-33825:'
                     . 'Stabilize skipped test cases for Integration SortingTest with elasticsearch',
             ],
         ];
@@ -252,59 +252,59 @@ class SortingTest extends TestCase
     /**
      * @return array
      */
-    public function productListSortOrderDataProviderOnStoreView(): array
+    public static function productListSortOrderDataProviderOnStoreView(): array
     {
         return [
             'default_order_price_asc' => [
-                'sort' => 'price',
+                'sortBy' => 'price',
                 'direction' => 'asc',
                 'expectation' => ['simple1', 'simple2', 'simple3'],
-                'default_sort' => 'position'
+                'defaultSortBy' => 'position'
             ],
             'default_order_price_desc' => [
-                'sort' => 'price',
+                'sortBy' => 'price',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
-                'default_sort' => 'position'
+                'defaultSortBy' => 'position'
             ],
             'default_order_position_asc' => [
-                'sort' => 'position',
+                'sortBy' => 'position',
                 'direction' => 'asc',
                 'expectation' => ['simple1', 'simple2', 'simple3'],
-                'default_sort' => 'price'
+                'defaultSortBy' => 'price'
             ],
             'default_order_position_desc' => [
-                'sort' => 'position',
+                'sortBy' => 'position',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
-                'default_sort' => 'price'
+                'defaultSortBy' => 'price'
             ],
             'default_order_name_asc' => [
-                'sort' => 'name',
+                'sortBy' => 'name',
                 'direction' => 'asc',
                 'expectation' => ['simple1', 'simple2', 'simple3'],
-                'default_sort' => 'price'
+                'defaultSortBy' => 'price'
             ],
             'default_order_name_desc' => [
-                'sort' => 'name',
+                'sortBy' => 'name',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
-                'default_sort' => 'price'
+                'defaultSortBy' => 'price'
             ],
             'default_order_custom_attribute_asc' => [
-                'sort' => 'test_configurable',
+                'sortBy' => 'test_configurable',
                 'direction' => 'asc',
                 'expectation' => ['simple1', 'simple3', 'simple2'],
-                'default_sort' => 'price',
-                'incomplete_reason' => 'MC-33825:'
+                'defaultSortBy' => 'price',
+                'incompleteReason' => 'MC-33825:'
                     . 'Stabilize skipped test cases for Integration SortingTest with elasticsearch',
             ],
             'default_order_custom_attribute_desc' => [
-                'sort' => 'test_configurable',
+                'sortBy' => 'test_configurable',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
-            'default_sort' => 'price',
-                'incomplete_reason' => 'MC-33825:'
+                'defaultSortBy' => 'price',
+                'incompleteReason' => 'MC-33825:'
                     . 'Stabilize skipped test cases for Integration SortingTest with elasticsearch',
             ],
         ];
@@ -426,18 +426,18 @@ class SortingTest extends TestCase
      *
      * @return array
      */
-    public function productListWithOutOfStockSortOrderDataProvider(): array
+    public static function productListWithOutOfStockSortOrderDataProvider(): array
     {
         return [
             'default_order_price_asc' => [
-                'sort' => 'price',
+                'sortBy' => 'price',
                 'direction' => Collection::SORT_ORDER_ASC,
-                'expectation' => ['simple1', 'simple2', 'simple3', 'configurable'],
+                'expected' => ['simple1', 'simple2', 'simple3', 'configurable'],
             ],
             'default_order_price_desc' => [
-                'sort' => 'price',
+                'sortBy' => 'price',
                 'direction' => Collection::SORT_ORDER_DESC,
-                'expectation' => ['simple3', 'simple2', 'simple1', 'configurable'],
+                'expected' => ['simple3', 'simple2', 'simple1', 'configurable'],
             ],
         ];
     }

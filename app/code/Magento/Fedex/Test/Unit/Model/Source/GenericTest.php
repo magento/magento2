@@ -69,7 +69,7 @@ class GenericTest extends TestCase
      *
      * @return array
      */
-    public function toOptionArrayDataProvider(): array
+    public static function toOptionArrayDataProvider(): array
     {
         return [
             [

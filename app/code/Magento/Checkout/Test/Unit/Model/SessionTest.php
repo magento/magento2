@@ -161,7 +161,7 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function clearHelperDataDataProvider(): array
+    public static function clearHelperDataDataProvider(): array
     {
         return [
             ['redirect_url'],
@@ -278,7 +278,7 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function restoreQuoteDataProvider(): array
+    public static function restoreQuoteDataProvider(): array
     {
         return [[true, true], [true, false], [false, true], [false, false]];
     }

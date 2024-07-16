@@ -46,7 +46,7 @@ class ArrayTypeTest extends TestCase
     /**
      * @return array
      */
-    public function evaluateExceptionDataProvider()
+    public static function evaluateExceptionDataProvider()
     {
         return [
             'non-array item' => [['item' => 'non-array']],

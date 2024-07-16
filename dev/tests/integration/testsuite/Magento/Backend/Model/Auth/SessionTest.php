@@ -64,7 +64,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($loggedIn, $this->authSession->isLoggedIn());
     }
 
-    public function loginDataProvider()
+    public static function loginDataProvider()
     {
         return [[false], [true]];
     }

@@ -99,7 +99,7 @@ class AddressTest extends TestCase
     /**
      * @return array
      */
-    public function providerGetStreetLines()
+    public static function providerGetStreetLines()
     {
         return [
             [-1, 2],
@@ -218,7 +218,7 @@ class AddressTest extends TestCase
     /**
      * @return array
      */
-    public function getConvertStreetLinesDataProvider()
+    public static function getConvertStreetLinesDataProvider()
     {
         return [
             [['street1', 'street2', 'street3', 'street4'], 3, ['street1 street2', 'street3', 'street4']],
@@ -247,7 +247,7 @@ class AddressTest extends TestCase
     /**
      * @return array
      */
-    public function getVatValidationEnabledDataProvider()
+    public static function getVatValidationEnabledDataProvider()
     {
         return [
             [0, true],
@@ -277,7 +277,7 @@ class AddressTest extends TestCase
     /**
      * @return array
      */
-    public function getValidateOnEachTransactionDataProvider()
+    public static function getValidateOnEachTransactionDataProvider()
     {
         return [
             [0, true],
@@ -307,7 +307,7 @@ class AddressTest extends TestCase
     /**
      * @return array
      */
-    public function getTaxCalculationAddressTypeDataProvider()
+    public static function getTaxCalculationAddressTypeDataProvider()
     {
         return [
             [0, 'address_type_store_0'],
@@ -398,7 +398,7 @@ class AddressTest extends TestCase
     /**
      * @return array
      */
-    public function getFormatDataProvider()
+    public static function getFormatDataProvider()
     {
         return [
             ['valid_code', ['key' => 'value']],
@@ -431,7 +431,7 @@ class AddressTest extends TestCase
     /**
      * @return array
      */
-    public function isAttributeVisibleDataProvider()
+    public static function isAttributeVisibleDataProvider()
     {
         return [
             ['fax', true],

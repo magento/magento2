@@ -186,7 +186,7 @@ class ProductOptionProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderConvertToProductOption()
+    public static function dataProviderConvertToProductOption()
     {
         return [
             [

@@ -81,17 +81,17 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function convertDataProvider()
+    public static function convertDataProvider()
     {
         return [
-            $this->getSetOne() + $this->getSetTwo() + $this->getSetThree()
+            self::getSetOne() + self::getSetTwo() + self::getSetThree()
         ];
     }
 
     /**
      * @return array
      */
-    private function getSetOne()
+    private static function getSetOne()
     {
         return [
             [
@@ -129,7 +129,7 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    private function getSetTwo()
+    private static function getSetTwo()
     {
         return [
             'editorConfig' => [
@@ -171,7 +171,7 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    private function getSetThree()
+    private static function getSetThree()
     {
         return [
             'templates' => [

@@ -287,7 +287,7 @@ class CustomerTest extends TestCase
     /**
      * @return array
      */
-    public function isCustomerLockedDataProvider()
+    public static function isCustomerLockedDataProvider()
     {
         return [
             ['lockExpirationDate' => date("F j, Y", strtotime('-1 days')), 'expectedResult' => false],
@@ -325,7 +325,7 @@ class CustomerTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderIsConfirmationRequired()
+    public static function dataProviderIsConfirmationRequired()
     {
         return [
             [null, null, false, false],

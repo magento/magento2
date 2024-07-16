@@ -1652,7 +1652,7 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    public function priceDataProvider(): array
+    public static function priceDataProvider(): array
     {
         return [
             'receive empty array' => [[]],

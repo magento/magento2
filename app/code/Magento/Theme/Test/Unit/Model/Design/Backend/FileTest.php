@@ -277,7 +277,7 @@ class FileTest extends TestCase
      *
      * @return array
      */
-    public function beforeSaveDataProvider(): array
+    public static function beforeSaveDataProvider(): array
     {
         return [
             'Normal file name' => ['filename.jpg'],

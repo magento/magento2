@@ -62,7 +62,7 @@ class JsFooterPluginTest extends TestCase
      *
      * @return array
      */
-    public function renderResultDataProvider(): array
+    public static function renderResultDataProvider(): array
     {
         return [
             'content_with_script_tag' => [

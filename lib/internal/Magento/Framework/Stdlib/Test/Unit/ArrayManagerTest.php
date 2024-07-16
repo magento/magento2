@@ -213,7 +213,7 @@ class ArrayManagerTest extends TestCase
     /**
      * @return array
      */
-    public function moveDataProvider()
+    public static function moveDataProvider()
     {
         return [
             0 => [

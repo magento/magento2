@@ -110,7 +110,7 @@ class SearchConfigTest extends TestCase
         $this->searchConfig->saveConfiguration($installInput);
     }
 
-    public function installInputDataProvider()
+    public static function installInputDataProvider()
     {
         return [
             [

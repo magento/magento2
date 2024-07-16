@@ -204,7 +204,7 @@ class PreviewTest extends TestCase
      *
      * @return array
      */
-    public function toHtmlDataProvider()
+    public static function toHtmlDataProvider()
     {
         return [
             ['data 1' => [

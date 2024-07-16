@@ -32,7 +32,7 @@ class PatternTest extends TestCase
      *
      * @return array
      */
-    public function patternDataProvider()
+    public static function patternDataProvider()
     {
         $result = [
             0 => [

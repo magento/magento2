@@ -134,7 +134,7 @@ class DataTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getNextBunchDataProvider()
+    public static function getNextBunchDataProvider()
     {
         return [
             'address entity' => [

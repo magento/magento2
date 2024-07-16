@@ -32,7 +32,7 @@ class DirectoryListTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             ['', 'Unexpected value type.'],
@@ -93,7 +93,7 @@ class DirectoryListTest extends TestCase
     /**
      * @return array
      */
-    public function getUrlPathDataProvider()
+    public static function getUrlPathDataProvider()
     {
         return [
             [[], false],

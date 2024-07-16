@@ -53,7 +53,7 @@ class TypePoolTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderToTestIsPresent()
+    public static function dataProviderToTestIsPresent()
     {
         return [
             [
@@ -86,7 +86,7 @@ class TypePoolTest extends TestCase
                 'field' => 'some/wrong/field',
                 'typeList' => TypePool::TYPE_SENSITIVE,
                 'excludeListCallback' => function (MockObject $mockObject) {
-                    $mockObject->expects($this->once())
+                    $mockObject->expects(self::once())
                         ->method('isPresent')
                         ->willReturn(false);
                 },
@@ -106,7 +106,7 @@ class TypePoolTest extends TestCase
                 'field' => 'some/environment/field1',
                 'typeList' => TypePool::TYPE_SENSITIVE,
                 'excludeListCallback' =>  function (MockObject $mockObject) {
-                    $mockObject->expects($this->once())
+                    $mockObject->expects(self::once())
                         ->method('isPresent')
                         ->willReturn(false);
                 },
@@ -118,7 +118,7 @@ class TypePoolTest extends TestCase
                 'field' => 'some/sensitive-environment/field1',
                 'typeList' => TypePool::TYPE_SENSITIVE,
                 'excludeListCallback' =>  function (MockObject $mockObject) {
-                    $mockObject->expects($this->never())
+                    $mockObject->expects(self::never())
                         ->method('isPresent');
                 },
                 'expectedResult' => true,

@@ -115,7 +115,7 @@ class CustomerGroupTest extends TestCase
      *
      * @return array
      */
-    public function aroundSaveDataProvider()
+    public static function aroundSaveDataProvider()
     {
         return [
             'customer_group_id = 0' => [

@@ -353,7 +353,7 @@ class OauthTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForGetRequestTokenNonceTimestampRefusedTest()
+    public static function dataProviderForGetRequestTokenNonceTimestampRefusedTest()
     {
         return [
             [0],
@@ -672,7 +672,7 @@ class OauthTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForGetAccessTokenVerifierInvalidTest()
+    public static function dataProviderForGetAccessTokenVerifierInvalidTest()
     {
         // Verifier is not a string
         return [[3, 3], ['wrong_length', 'wrong_length'], ['verifier', 'doesn\'t match']];
@@ -852,7 +852,7 @@ class OauthTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderMissingParamForBuildAuthorizationHeaderTest()
+    public static function dataProviderMissingParamForBuildAuthorizationHeaderTest()
     {
         return [
             [

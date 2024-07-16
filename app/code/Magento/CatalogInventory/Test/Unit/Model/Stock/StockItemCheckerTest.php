@@ -104,7 +104,7 @@ class StockItemCheckerTest extends TestCase
      *
      * @return array
      */
-    public function stockItemModelDataProvider(): array
+    public static function stockItemModelDataProvider(): array
     {
         return [
             'Model is modified' => [

@@ -127,7 +127,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function aroundSaveDataProvider(): array
+    public static function aroundSaveDataProvider(): array
     {
         return [
             'with_new_name' => [

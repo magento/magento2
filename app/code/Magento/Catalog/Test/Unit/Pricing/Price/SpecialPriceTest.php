@@ -118,7 +118,7 @@ class SpecialPriceTest extends TestCase
     /**
      * @return array
      */
-    public function specialPriceDataProvider()
+    public static function specialPriceDataProvider()
     {
         return [
             'validInterval' => [

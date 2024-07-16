@@ -144,7 +144,7 @@ class FieldDataConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertDataProvider()
+    public static function convertDataProvider()
     {
         return [
             [false, 0],

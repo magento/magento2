@@ -115,7 +115,7 @@ class UseConfigSettingsTest extends TestCase
     /**
      * @return array
      */
-    public function prepareSourceDataProvider()
+    public static function prepareSourceDataProvider()
     {
         return [
             'valid' => [

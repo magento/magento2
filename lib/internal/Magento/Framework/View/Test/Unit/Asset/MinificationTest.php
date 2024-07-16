@@ -88,7 +88,7 @@ class MinificationTest extends TestCase
     /**
      * @return array
      */
-    public function isEnabledDataProvider()
+    public static function isEnabledDataProvider()
     {
         return [
             [false, State::MODE_DEFAULT, false],

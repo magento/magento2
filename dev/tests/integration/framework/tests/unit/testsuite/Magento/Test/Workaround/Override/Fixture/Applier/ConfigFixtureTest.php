@@ -43,7 +43,7 @@ class ConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function annotationsProvider(): array
+    public static function annotationsProvider(): array
     {
         return [
             'default_scope_record' => [
@@ -154,7 +154,7 @@ class ConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function wrongRecordsProvider(): array
+    public static function wrongRecordsProvider(): array
     {
         return [
             'default_scope_record' => [
@@ -241,7 +241,7 @@ class ConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function initFixtureProvider(): array
+    public static function initFixtureProvider(): array
     {
         return [
             'with_value' => [
@@ -309,7 +309,7 @@ class ConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function replaceFixturesProvider(): array
+    public static function replaceFixturesProvider(): array
     {
         return [
             'replace_one_fixture' => [
@@ -350,7 +350,7 @@ class ConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function addFixturesProvider(): array
+    public static function addFixturesProvider(): array
     {
         return [
             'add_one_fixture' => [
@@ -414,7 +414,7 @@ class ConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function removeFixturesProvider(): array
+    public static function removeFixturesProvider(): array
     {
         return [
             'remove_one_fixture' => [

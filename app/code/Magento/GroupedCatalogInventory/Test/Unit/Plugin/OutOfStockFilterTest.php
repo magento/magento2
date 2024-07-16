@@ -179,7 +179,7 @@ class OutOfStockFilterTest extends TestCase
      *
      * @return array
      */
-    public function nonArrayResultsProvider(): array
+    public static function nonArrayResultsProvider(): array
     {
         return [
             [123],

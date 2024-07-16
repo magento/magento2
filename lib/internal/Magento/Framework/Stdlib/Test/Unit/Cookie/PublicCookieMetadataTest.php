@@ -62,7 +62,7 @@ class PublicCookieMetadataTest extends TestCase
     /**
      * @return array
      */
-    public function toArrayDataProvider(): array
+    public static function toArrayDataProvider(): array
     {
         return [
             [

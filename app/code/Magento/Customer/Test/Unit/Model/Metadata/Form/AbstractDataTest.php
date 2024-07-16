@@ -146,7 +146,7 @@ class AbstractDataTest extends TestCase
     /**
      * @return array
      */
-    public function trueFalseDataProvider(): array
+    public static function trueFalseDataProvider(): array
     {
         return [[true], [false]];
     }
@@ -182,7 +182,7 @@ class AbstractDataTest extends TestCase
     /**
      * @return array
      */
-    public function applyInputFilterProvider(): array
+    public static function applyInputFilterProvider(): array
     {
         return [
             [false, false, false],
@@ -225,7 +225,7 @@ class AbstractDataTest extends TestCase
     /**
      * @return array
      */
-    public function dateFilterFormatProvider(): array
+    public static function dateFilterFormatProvider(): array
     {
         return [[null, 'Whatever I put'], [false, self::MODEL], ['something else', self::MODEL]];
     }
@@ -251,7 +251,7 @@ class AbstractDataTest extends TestCase
      *
      * @return array
      */
-    public function applyOutputFilterDataProvider(): array
+    public static function applyOutputFilterDataProvider(): array
     {
         return [
             [false, false, false],
@@ -297,7 +297,7 @@ class AbstractDataTest extends TestCase
     /**
      * @return array
      */
-    public function validateInputRuleDataProvider(): array
+    public static function validateInputRuleDataProvider(): array
     {
         return [
             [null, null, null, true],

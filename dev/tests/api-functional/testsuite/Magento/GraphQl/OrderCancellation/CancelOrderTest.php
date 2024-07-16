@@ -994,7 +994,7 @@ QUERY;
     /**
      * @return array[]
      */
-    public function orderStatusProvider(): array
+    public static function orderStatusProvider(): array
     {
         return [
             'On Hold status' => [

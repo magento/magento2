@@ -296,7 +296,7 @@ class QuoteRepositoryTest extends TestCase
         static::assertSame($isSame ? $this->quoteMock : $customerQuote, $this->model->getForCustomer($customerId));
     }
 
-    public function getForCustomerAfterGetDataProvider(): array
+    public static function getForCustomerAfterGetDataProvider(): array
     {
         return [
             [15, 15, true],

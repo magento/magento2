@@ -52,7 +52,7 @@ class UpsUrlTest extends TestCase
         $this->config->beforeSave();
     }
 
-    public function validDataProvider()
+    public static function validDataProvider()
     {
         return [
             [],

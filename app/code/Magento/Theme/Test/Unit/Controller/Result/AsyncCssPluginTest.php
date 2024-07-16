@@ -68,7 +68,7 @@ class AsyncCssPluginTest extends TestCase
      *
      * @return array
      */
-    public function renderResultDataProvider(): array
+    public static function renderResultDataProvider(): array
     {
         return [
             [

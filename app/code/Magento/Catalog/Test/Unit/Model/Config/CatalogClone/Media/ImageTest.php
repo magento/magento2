@@ -148,7 +148,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function getPrefixesDataProvider(): array
+    public static function getPrefixesDataProvider(): array
     {
         return [
             [
