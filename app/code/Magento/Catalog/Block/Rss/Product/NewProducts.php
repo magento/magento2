@@ -5,10 +5,10 @@
  */
 namespace Magento\Catalog\Block\Rss\Product;
 
-use Magento\Framework\App\Rss\DataProviderInterface;
+use Magento\Framework\App\Rss\DataProviderInterface as DProviderInterface;
+use Magento\Framework\DataObject\IdentityInterface as IdInterface;
 
-class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface,
-    \Magento\Framework\DataObject\IdentityInterface
+class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implements DProviderInterface, IdInterface
 {
     public const CACHE_TAG = 'rss_p_new';
 

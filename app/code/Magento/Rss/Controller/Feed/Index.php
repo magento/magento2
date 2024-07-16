@@ -9,7 +9,7 @@ namespace Magento\Rss\Controller\Feed;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NotFoundException;
 
-class Index extends \Magento\Rss\Controller\Feed
+class Index extends \Magento\Rss\Controller\Feed implements \Magento\Framework\App\Action\HttpGetActionInterface
 {
     /**
      * Index action
