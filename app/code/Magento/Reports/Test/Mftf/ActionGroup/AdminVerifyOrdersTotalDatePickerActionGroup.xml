@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminVerifyOrdersTotalDatePickerActionGroup">
+        <annotations>
+            <description>Clicks on 'FROM' and 'TO' From Date Picker.Verify the calendar UI does not show any button text after selecting date.</description>
+        </annotations>
+        <!-- Verify From Date Picker Does Not Show Button Text -->
+        <click selector="{{OrderReportMainSection.fromDatePicker}}" stepKey="clickFromDatePicker"/>
+        <waitForElementVisible selector="{{OrderReportMainSection.datePickerCalendar}}" stepKey="seePopupDatePicker1"/>
+        <click selector="{{OrderReportMainSection.selectTodayButton}}" stepKey="clickOnTodayButton1"/>
+        <click selector="{{OrderReportMainSection.selectCloseButton}}" stepKey="clickOnCloseButton1"/>
+        <see selector="{{OrderReportMainSection.fromDatePickerText}}" userInput="" stepKey="seeAssertNoFromButtonTextMessage"/>
+        <!-- Verify To Date Picker Does Not Show Button Text -->
+        <click selector="{{OrderReportMainSection.toDatePicker}}" stepKey="clickToDatePicker"/>
+        <waitForElementVisible selector="{{OrderReportMainSection.datePickerCalendar}}" stepKey="seePopupDatePicker2"/>
+        <click selector="{{OrderReportMainSection.selectTodayButton}}" stepKey="clickOnTodayButton2"/>
+        <click selector="{{OrderReportMainSection.selectCloseButton}}" stepKey="clickOnCloseButton2"/>
+        <see selector="{{OrderReportMainSection.toDatePickerText}}" userInput="" stepKey="seeAssertNoToButtonTextMessage"/>
+    </actionGroup>
+</actionGroups>

@@ -135,20 +135,8 @@ define([
                 if (productId && !images.file) {
                     images = product.images;
                 }
-                productDataFromGrid = _.pick(
-                    productDataFromGrid,
-                    'sku',
-                    'name',
-                    'weight',
-                    'status',
-                    'price',
-                    'qty'
-                );
+                productDataFromGrid = this.prepareProductDataFromGrid(productDataFromGrid);
 
-                if (productDataFromGrid.hasOwnProperty('qty')) {
-                    productDataFromGrid[this.quantityFieldName] = productDataFromGrid.qty;
-                }
-                delete productDataFromGrid.qty;
                 product = _.pick(
                     product || {},
                     'sku',
@@ -288,6 +276,32 @@ define([
          * Back.
          */
         back: function () {
+        },
+
+        /**
+         * Prepare product data from grid to have all the current fields values
+         *
+         * @param {Object} productDataFromGrid
+         * @return {Object}
+         */
+        prepareProductDataFromGrid: function (productDataFromGrid) {
+            productDataFromGrid = _.pick(
+                productDataFromGrid,
+                'sku',
+                'name',
+                'weight',
+                'status',
+                'price',
+                'qty'
+            );
+
+            if (productDataFromGrid.hasOwnProperty('qty')) {
+                productDataFromGrid[this.quantityFieldName] = productDataFromGrid.qty;
+            }
+
+            delete productDataFromGrid.qty;
+
+            return productDataFromGrid;
         }
     });
 });

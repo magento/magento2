@@ -5,12 +5,13 @@
  */
 namespace Magento\Framework\Amqp;
 
+use Magento\Framework\Amqp\Connection\Factory as ConnectionFactory;
 use Magento\Framework\Amqp\Connection\FactoryOptions;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
-use PhpAmqpLib\Connection\AbstractConnection;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use PhpAmqpLib\Channel\AMQPChannel;
-use Magento\Framework\Amqp\Connection\Factory as ConnectionFactory;
+use PhpAmqpLib\Connection\AbstractConnection;
 
 /**
  * Reads the Amqp config in the deployed environment configuration
@@ -18,7 +19,7 @@ use Magento\Framework\Amqp\Connection\Factory as ConnectionFactory;
  * @api
  * @since 103.0.0
  */
-class Config
+class Config implements ResetAfterRequestInterface
 {
     /**
      * Queue config key
@@ -116,6 +117,18 @@ class Config
      */
     public function __destruct()
     {
+        try {
+            $this->closeConnection();
+        } catch (\Throwable $e) {
+            error_log($e->getMessage());
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
         $this->closeConnection();
     }
 
@@ -140,7 +153,7 @@ class Config
      */
     private function createConnection(): AbstractConnection
     {
-        $sslEnabled = $this->getValue(self::SSL) && trim($this->getValue(self::SSL)) === 'true';
+        $sslEnabled = trim($this->getValue(self::SSL) ?? '') === 'true';
         $options = new FactoryOptions();
         $options->setHost($this->getValue(self::HOST));
         $options->setPort($this->getValue(self::PORT));
@@ -165,11 +178,19 @@ class Config
      */
     public function getChannel()
     {
-        if (!isset($this->connection) || !isset($this->channel)) {
+        if (!isset($this->connection)) {
             $this->connection = $this->createConnection();
-
+        }
+        if (!isset($this->channel)
+            || !$this->channel->getConnection()
+            || !$this->channel->getConnection()->isConnected()
+        ) {
+            if (!$this->connection->isConnected()) {
+                $this->connection->reconnect();
+            }
             $this->channel = $this->connection->channel();
         }
+
         return $this->channel;
     }
 

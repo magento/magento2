@@ -13,11 +13,11 @@ use Magento\Eav\Model\Attribute\Data\AbstractData;
 use Magento\Eav\Model\AttributeDataFactory;
 use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Eav\Model\Validator\Attribute\Data;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\StringUtils;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,21 +32,20 @@ class DataTest extends TestCase
     private $attrDataFactory;
 
     /**
-     * @var \Magento\Eav\Model\Validator\Attribute\Data
+     * @var Data
      */
     private $model;
 
     /**
-     * @var ObjectManager
+     * @var \Magento\Eav\Model\Config|MockObject
      */
-    private $objectManager;
+    private $eavConfigMock;
 
     /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
         $this->attrDataFactory = $this->getMockBuilder(AttributeDataFactory::class)
             ->onlyMethods(['create'])
             ->setConstructorArgs(
@@ -56,11 +55,13 @@ class DataTest extends TestCase
                 ]
             )
             ->getMock();
-
-        $this->model = $this->objectManager->getObject(
-            Data::class,
-            ['_attrDataFactory' => $this->attrDataFactory]
-        );
+        $this->createMock(ObjectManagerInterface::class);
+        ObjectManager::setInstance($this->createMock(ObjectManagerInterface::class));
+        $this->eavConfigMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+            ->onlyMethods(['getEntityType'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->model = new Data($this->attrDataFactory);
     }
 
     /**
@@ -190,7 +191,8 @@ class DataTest extends TestCase
                 ],
                 'attributeReturns' => ['Error'],
                 'isValid' => true,
-                'messages' => []
+                'messages' => [],
+                'data' => [],
             ],
         ];
     }
@@ -214,13 +216,17 @@ class DataTest extends TestCase
                 'is_visible' => true,
             ]
         );
+        $entityTypeCode = 'entity_type_code';
         $collection = $this->getMockBuilder(DataObject::class)
             ->addMethods(['getItems'])->getMock();
         $collection->expects($this->once())->method('getItems')->willReturn([$attribute]);
         $entityType = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getAttributeCollection'])
+            ->addMethods(['getAttributeCollection','getEntityTypeCode'])
             ->getMock();
+        $entityType->expects($this->atMost(2))->method('getEntityTypeCode')->willReturn($entityTypeCode);
         $entityType->expects($this->once())->method('getAttributeCollection')->willReturn($collection);
+        $this->eavConfigMock->expects($this->once())->method('getEntityType')
+            ->with($entityTypeCode)->willReturn($entityType);
         $entity = $this->_getEntityMock();
         $entity->expects($this->once())->method('getResource')->willReturn($resource);
         $entity->expects($this->once())->method('getEntityType')->willReturn($entityType);
@@ -244,7 +250,7 @@ class DataTest extends TestCase
         )->willReturn(
             $dataModel
         );
-        $validator = new Data($attrDataFactory);
+        $validator = new Data($attrDataFactory, $this->eavConfigMock);
 
         $validator->setData(['attribute' => 'new_test_data']);
         $this->assertTrue($validator->isValid($entity));
@@ -404,17 +410,23 @@ class DataTest extends TestCase
 
         $factory
             ->method('create')
-            ->withConsecutive(
-                [$firstAttribute, $entity],
-                [$secondAttribute, $entity],
-                [$firstAttribute, $entity],
-                [$secondAttribute, $entity]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $firstDataModel,
-                $secondDataModel,
-                $firstDataModel,
-                $secondDataModel
+            ->willReturnCallback(
+                function (
+                    $arg1,
+                    $arg2
+                ) use (
+                    $firstAttribute,
+                    $entity,
+                    $firstDataModel,
+                    $secondDataModel,
+                    $secondAttribute
+                ) {
+                    if ($arg1 === $firstAttribute && $arg2 === $entity) {
+                        return $firstDataModel;
+                    } elseif ($arg1 === $secondAttribute && $arg2 === $entity) {
+                        return $secondDataModel;
+                    }
+                }
             );
 
         $this->assertFalse($validator->isValid($entity));

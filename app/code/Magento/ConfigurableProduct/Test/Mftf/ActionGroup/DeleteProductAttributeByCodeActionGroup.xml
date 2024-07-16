@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DeleteProductAttributeByCodeActionGroup">
+        <annotations>
+            <description>Delete a Product Attribute from the Product Attribute creation/edit page by code.</description>
+        </annotations>
+        <arguments>
+            <argument name="attribute_code" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{attribute_code}}" stepKey="setAttributeCode"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
+        <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="clickOnAttributeRow"/>
+        <waitForPageLoad stepKey="waitForViewAdminProductAttributeLoad" time="30"/>
+        <click selector="{{AttributePropertiesSection.DeleteAttribute}}" stepKey="deleteAttribute"/>
+        <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="clickOnConfirmOk"/>
+        <waitForPageLoad stepKey="waitForViewProductAttributePageLoad"/>
+    </actionGroup>
+</actionGroups>

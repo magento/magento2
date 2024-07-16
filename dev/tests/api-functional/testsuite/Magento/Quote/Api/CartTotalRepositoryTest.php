@@ -54,11 +54,6 @@ class CartTotalRepositoryTest extends WebapiAbstract
      */
     private $fixtures;
 
-    /**
-     * @var Config
-     */
-    private $object;
-    
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -69,10 +64,6 @@ class CartTotalRepositoryTest extends WebapiAbstract
             \Magento\Framework\Api\FilterBuilder::class
         );
         $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
-        $this->object = $this->createPartialMock(
-            Config::class,
-            ['_getConfigValue', '_setConfigValue']
-        );
     }
 
     /**

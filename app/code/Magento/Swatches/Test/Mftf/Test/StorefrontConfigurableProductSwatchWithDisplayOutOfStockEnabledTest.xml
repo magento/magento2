@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductSwatchWithDisplayOutOfStockEnabledTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Configurable product with swatch attribute and display out of stock enabled"/>
+            <title value="Configurable product with swatch attribute and display out of stock enabled"/>
+            <description value="Storefront selection of out of stock child products of configurable products are
+            disabled when display of out of stock options are enabled and those child products that are in stock are enabled for selection"/>
+            <severity value="CRITICAL"/>
+            <group value="Swatches"/>
+        </annotations>
+        <before>
+            <!--Set Display out of stock product-->
+            <magentoCLI stepKey="setDisplayOutOfStockProduct" command="config:set cataloginventory/options/show_out_of_stock 1" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create a new product attribute of type "Text Swatch" -->
+            <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="goToNewProductAttributePage"/>
+            <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
+            <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="swatch_text" stepKey="selectInputType"/>
+            <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch0"/>
+            <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('0')}}" userInput="red" stepKey="fillSwatch0"/>
+            <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('0')}}" userInput="Something red." stepKey="fillDescription0"/>
+            <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch1"/>
+            <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('1')}}" userInput="green" stepKey="fillSwatch1"/>
+            <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('1')}}" userInput="Something green." stepKey="fillDescription1"/>
+            <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
+            <selectOption selector="{{AttributePropertiesSection.Scope}}" userInput="1" stepKey="selectGlobalScope"/>
+            <!-- Save and verify -->
+            <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSave"/>
+            <seeInField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeDefaultLabel"/>
+            <seeInField selector="{{AdminManageSwatchSection.nthSwatchText('1')}}" userInput="red" stepKey="seeSwatch0"/>
+            <seeInField selector="{{AdminManageSwatchSection.nthSwatchAdminDescription('1')}}" userInput="Something red." stepKey="seeDescription0"/>
+            <seeInField selector="{{AdminManageSwatchSection.nthSwatchText('2')}}" userInput="green" stepKey="seeSwatch1"/>
+            <seeInField selector="{{AdminManageSwatchSection.nthSwatchAdminDescription('2')}}" userInput="Something green." stepKey="seeDescription1"/>
+            <!-- Create a configurable product to verify the storefront with -->
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+            <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateConfigurableProduct">
+                <argument name="product" value="BaseConfigurableProduct"/>
+            </actionGroup>
+            <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+            <fillField userInput="{{_defaultProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+            <fillField selector="{{AdminProductFormSection.productName}}" userInput="configProductTest123" stepKey="fillProductName"/>
+            <fillField selector="{{AdminProductFormSection.productSku}}" userInput="configProductTest123" stepKey="fillProductSku"/>
+            <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="100" stepKey="fillProductPrice"/>
+            <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="fillProductQty"/>
+            <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="selectStockStatus"/>
+            <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has weight" stepKey="selectWeight"/>
+            <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="100" stepKey="fillProductWeight"/>
+            <!-- Create configurations based off the Text Swatch we created earlier -->
+            <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickFilters"/>
+            <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillFilterAttributeCodeField"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+            <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="1" stepKey="enterAttributeQuantity"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+            <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
+            <!-- Edit the quantity of child product -->
+            <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openAdminChildProductPage">
+                <argument name="productSku" value="configProductTest123-Something red."/>
+            </actionGroup>
+            <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="selectChildProductStockStatus"/>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton3"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <magentoCLI stepKey="setDisplayOutOfStockProduct" command="config:set cataloginventory/options/show_out_of_stock 0" />
+            <actionGroup ref="DeleteProductsByKeywordActionGroup" stepKey="deleteProductsByKeyword">
+                <argument name="keyword" value="configProductTest123"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteCreatedAttribute">
+                <argument name="productAttributeLabel" value="{{ProductAttributeFrontendLabel.label}}" />
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Go to the product page and see text swatch options-->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnProductPage"/>
+        <waitForPageLoad time='60' stepKey="waitForProductPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.swatchAttributeOptions}}" userInput="red" stepKey="seeRed"/>
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOptionText('1')}}" userInput="disabled" stepKey="grabRedAttribute"/>
+        <assertEquals stepKey="assertRedDisabled">
+            <expectedResult type="string">true</expectedResult>
+            <actualResult type="string">{$grabRedAttribute}</actualResult>
+        </assertEquals>
+        <click selector="{{StorefrontProductInfoMainSection.nthSwatchOptionText('2')}}" stepKey="selectGreenOption"/>
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButton"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickOnAddToCartButton"/>
+        <waitForPageLoad stepKey="waitForProductToAddInCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <seeElement selector="{{StorefrontProductPageSection.successMsg}}" stepKey="seeSuccessSaveMessage"/>
+    </test>
+</tests>

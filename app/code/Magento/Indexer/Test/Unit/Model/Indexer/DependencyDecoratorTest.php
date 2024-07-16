@@ -102,7 +102,7 @@ class DependencyDecoratorTest extends TestCase
     /**
      * @return array
      */
-    public function overloadDataProvider()
+    public static function overloadDataProvider()
     {
         return [
             ['getData', [], ['field_id' => 'field_value']],
@@ -169,7 +169,7 @@ class DependencyDecoratorTest extends TestCase
     /**
      * @return array
      */
-    public function transitMethodsWithParamsAndEmptyReturnDataProvider()
+    public static function transitMethodsWithParamsAndEmptyReturnDataProvider()
     {
         return [
             ['setScheduled', [true]],
@@ -239,6 +239,9 @@ class DependencyDecoratorTest extends TestCase
             ->method('getIndexerIdsToRunAfter')
             ->with($indexerId)
             ->willReturn($dependentIds);
+        $this->dependencyInfoProviderMock
+            ->expects($this->never())
+            ->method('getIndexerIdsToRunBefore');
         $this->indexerRegistryMock
             ->expects($this->exactly(count($dependentIds)))
             ->method('get')

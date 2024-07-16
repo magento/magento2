@@ -100,7 +100,8 @@ class MultishippingClearItemAddressTest extends TestCase
             ->willReturn($actionName);
         $this->checkoutSessionMock->method('getQuote')
             ->willReturn($quoteMock);
-
+        $this->checkoutSessionMock->method('clearQuote')
+            ->willReturnSelf();
         $addressMock = $this->createMock(Address::class);
         $addressMock->method('getId')
             ->willReturn($addressId);

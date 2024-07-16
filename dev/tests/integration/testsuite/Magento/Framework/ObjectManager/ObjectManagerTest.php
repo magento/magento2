@@ -12,25 +12,27 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
     /**#@+
      * Test class with type error
      */
-    const TEST_CLASS_WITH_TYPE_ERROR = \Magento\Framework\ObjectManager\TestAsset\ConstructorWithTypeError::class;
+    public const TEST_CLASS_WITH_TYPE_ERROR =
+        \Magento\Framework\ObjectManager\TestAsset\ConstructorWithTypeError::class;
 
     /**#@+
      * Test classes for basic instantiation
      */
-    const TEST_CLASS = \Magento\Framework\ObjectManager\TestAsset\Basic::class;
+    public const TEST_CLASS = \Magento\Framework\ObjectManager\TestAsset\Basic::class;
 
-    const TEST_CLASS_INJECTION = \Magento\Framework\ObjectManager\TestAsset\BasicInjection::class;
+    public const TEST_CLASS_INJECTION = \Magento\Framework\ObjectManager\TestAsset\BasicInjection::class;
 
     /**#@-*/
 
     /**#@+
      * Test classes and interface to test preferences
      */
-    const TEST_INTERFACE = \Magento\Framework\ObjectManager\TestAsset\TestAssetInterface::class;
+    public const TEST_INTERFACE = \Magento\Framework\ObjectManager\TestAsset\TestAssetInterface::class;
 
-    const TEST_INTERFACE_IMPLEMENTATION = \Magento\Framework\ObjectManager\TestAsset\InterfaceImplementation::class;
+    public const TEST_INTERFACE_IMPLEMENTATION =
+        \Magento\Framework\ObjectManager\TestAsset\InterfaceImplementation::class;
 
-    const TEST_CLASS_WITH_INTERFACE = \Magento\Framework\ObjectManager\TestAsset\InterfaceInjection::class;
+    public const TEST_CLASS_WITH_INTERFACE = \Magento\Framework\ObjectManager\TestAsset\InterfaceInjection::class;
 
     /**#@-*/
 
@@ -141,7 +143,8 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
         $object = new ReflectionClass($actualClassName);
         if ($properties) {
             foreach ($properties as $propertyName => $propertyClass) {
-                $this->assertClassHasAttribute($propertyName, $actualClassName);
+                $this->assertIsObject($testObject);
+                $this->assertTrue(property_exists($testObject, $propertyName));
                 $attribute = $object->getProperty($propertyName);
                 $attribute->setAccessible(true);
                 $propertyObject = $attribute->getValue($testObject);

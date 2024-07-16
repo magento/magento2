@@ -11,11 +11,12 @@ use GraphQL\Language\AST\FieldNode;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as AttributeCollection;
 use Magento\Eav\Model\Attribute;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Gather all eav and custom attributes to use in a GraphQL schema for products
  */
-class Collection
+class Collection implements ResetAfterRequestInterface
 {
     /**
      * @var AttributeCollectionFactory
@@ -94,5 +95,13 @@ class Collection
         }
 
         return $matchedAttributes;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->collection = null;
     }
 }

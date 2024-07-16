@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Translation\Test\Unit\Model\Inline;
 
+use Laminas\Filter\FilterInterface;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Escaper;
@@ -57,7 +58,7 @@ class ParserTest extends TestCase
     private $storeMock;
 
     /**
-     * @var \Zend_Filter_Interface|MockObject
+     * @var FilterInterface|MockObject
      */
     private $inputFilterMock;
 
@@ -84,6 +85,14 @@ class ParserTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                \Magento\Framework\Translate\InlineInterface::class,
+                $this->createMock(\Magento\Framework\Translate\InlineInterface::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
+
         $this->translateInlineMock =
             $this->getMockForAbstractClass(InlineInterface::class);
         $this->appCacheMock = $this->getMockForAbstractClass(TypeListInterface::class);
@@ -95,25 +104,22 @@ class ParserTest extends TestCase
             StringUtilsFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resourceMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
-        $this->inputFilterMock = $this->getMockForAbstractClass('Zend_Filter_Interface');
+        $this->inputFilterMock = $this->getMockForAbstractClass(FilterInterface::class);
 
         $this->resourceFactoryMock->method('create')
             ->willReturn($this->resourceMock);
         $this->cacheManagerMock = $this->getMockBuilder(CacheManager::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->appStateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
