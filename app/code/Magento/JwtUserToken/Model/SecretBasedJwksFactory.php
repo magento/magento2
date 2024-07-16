@@ -49,6 +49,8 @@ class SecretBasedJwksFactory
      * @param string $algorithm
      * @return Jwk[]
      * @throws \InvalidArgumentException When algorithm is not recognized.
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function createFor(string $algorithm): array
     {
