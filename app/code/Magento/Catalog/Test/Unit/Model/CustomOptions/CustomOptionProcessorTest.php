@@ -72,32 +72,33 @@ class CustomOptionProcessorTest extends TestCase
     protected function setUp(): void
     {
         $this->objectFactory = $this->getMockBuilder(Factory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productOptionFactory = $this->getMockBuilder(ProductOptionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->extensionFactory = $this->getMockBuilder(ProductOptionExtensionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->customOptionFactory = $this->getMockBuilder(
             CustomOptionFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->cartItem = $this->getMockBuilder(CartItemInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOptionByCode', 'getProductOption', 'setProductOption'])
+            ->addMethods(['getOptionByCode'])
+            ->onlyMethods(['getProductOption', 'setProductOption'])
             ->getMockForAbstractClass();
         $this->extensibleAttribute = $this->getMockBuilder(
             ProductOptionExtensionInterface::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['setCustomOptions', 'getCustomOptions'])
+            ->addMethods(['setCustomOptions', 'getCustomOptions'])
             ->getMockForAbstractClass();
         $this->productOption = $this->getMockBuilder(ProductOption::class)
             ->disableOriginalConstructor()
@@ -109,7 +110,7 @@ class CustomOptionProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->serializer = $this->getMockBuilder(Json::class)
-            ->setMethods(['unserialize'])
+            ->onlyMethods(['unserialize'])
             ->getMockForAbstractClass();
 
         $this->processor = new CustomOptionProcessor(

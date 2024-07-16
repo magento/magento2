@@ -12,7 +12,9 @@
         <element name="pageTitle" type="text" selector="h1.page-title"/>
         <element name="successMsg" type="text" selector="div.message-success.success.message"/>
         <element name="productItemNameText" type="text" selector=".products-grid .product-item-name a"/>
+        <element name="productLinkByProductName" type="text" selector="//a[contains(text(), '{{prodName}}') and contains(@class,'product-item-link')]" parameterized="true" timeout="30"/>
         <element name="removeWishlistButton" type="button" selector="//main//li[.//a[contains(text(), '{{prodName}}')]]//a[@data-role='remove']" parameterized="true" timeout="30"/>
         <element name="emptyWishlistText" type="text" selector=".message.info.empty>span"/>
+        <element name="wishListProductName" type="text" selector=".products-grid li:nth-child({{prodName}}) .product-item-name a" parameterized="true" timeout="30"/>
     </section>
 </sections>

@@ -52,7 +52,7 @@ class ConditionTest extends TestCase
     private function getMockedAbstractCollection()
     {
         $mockBuilder = $this->getMockBuilder(AbstractCollection::class)
-            ->setMethods(['joinTable'])
+            ->onlyMethods(['joinTable'])
             ->disableOriginalConstructor();
         $mock = $mockBuilder->getMockForAbstractClass();
 
@@ -70,7 +70,7 @@ class ConditionTest extends TestCase
         $mockedDbSelect = $this->getMockedDbSelect();
 
         $mockBuilder = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['select'])
+            ->onlyMethods(['select'])
             ->disableOriginalConstructor();
         $mock = $mockBuilder->getMockForAbstractClass();
 
@@ -87,7 +87,7 @@ class ConditionTest extends TestCase
     private function getMockedDbSelect()
     {
         $mockBuilder = $this->getMockBuilder(Select::class)
-            ->setMethods(['from'])
+            ->onlyMethods(['from'])
             ->disableOriginalConstructor();
         $mock = $mockBuilder->getMockForAbstractClass();
 

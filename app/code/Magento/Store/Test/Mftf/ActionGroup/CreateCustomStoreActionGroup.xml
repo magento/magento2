@@ -25,7 +25,8 @@
         <fillField userInput="{{store}}" selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" stepKey="fillStoreName"/>
         <fillField userInput="{{store}}" selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" stepKey="fillStoreCode"/>
         <selectOption userInput="{{rootCategory}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectStoreStatus"/>
-        <click selector="{{AdminStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreGroup"/>
+        <waitForPageLoad stepKey="waitForStoresPageLoadBeforeSavingStore"/>
+        <click selector="{{AdminStoreGroupActionsSection.btnSaveStore}}" stepKey="clickSaveStoreGroup"/>
         <waitForElementVisible selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="waitForStoreGridReload"/>
         <see userInput="You saved the store." stepKey="seeSavedMessage"/>
     </actionGroup>

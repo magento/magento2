@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CheckPagerInOrderAddProductsGridTest">
+        <annotations>
+            <stories value="Check Pager in order add products grid"/>
+            <title value="Check Pager in order add products grid"/>
+            <description value="Check Pager in order add products grid"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-7315"/>
+        </annotations>
+        <before>
+            <!-- Step1: Create new category and 21 products -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct3">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct4">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct5">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct6">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct7">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct8">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct9">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct10">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct11">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct12">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct13">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct14">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct15">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct16">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct17">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct18">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct19">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct20">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct21">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete created category and products -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <deleteData createDataKey="createSimpleProduct4" stepKey="deleteSimpleProduct4"/>
+            <deleteData createDataKey="createSimpleProduct5" stepKey="deleteSimpleProduct5"/>
+            <deleteData createDataKey="createSimpleProduct6" stepKey="deleteSimpleProduct6"/>
+            <deleteData createDataKey="createSimpleProduct7" stepKey="deleteSimpleProduct7"/>
+            <deleteData createDataKey="createSimpleProduct8" stepKey="deleteSimpleProduct8"/>
+            <deleteData createDataKey="createSimpleProduct9" stepKey="deleteSimpleProduct9"/>
+            <deleteData createDataKey="createSimpleProduct10" stepKey="deleteSimpleProduct10"/>
+            <deleteData createDataKey="createSimpleProduct11" stepKey="deleteSimpleProduct11"/>
+            <deleteData createDataKey="createSimpleProduct12" stepKey="deleteSimpleProduct12"/>
+            <deleteData createDataKey="createSimpleProduct13" stepKey="deleteSimpleProduct13"/>
+            <deleteData createDataKey="createSimpleProduct14" stepKey="deleteSimpleProduct14"/>
+            <deleteData createDataKey="createSimpleProduct15" stepKey="deleteSimpleProduct15"/>
+            <deleteData createDataKey="createSimpleProduct16" stepKey="deleteSimpleProduct16"/>
+            <deleteData createDataKey="createSimpleProduct17" stepKey="deleteSimpleProduct17"/>
+            <deleteData createDataKey="createSimpleProduct18" stepKey="deleteSimpleProduct18"/>
+            <deleteData createDataKey="createSimpleProduct19" stepKey="deleteSimpleProduct19"/>
+            <deleteData createDataKey="createSimpleProduct20" stepKey="deleteSimpleProduct20"/>
+            <deleteData createDataKey="createSimpleProduct21" stepKey="deleteSimpleProduct21"/>
+            <!-- Delete the created customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Step2: Create customer -->
+        <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        <!-- Step3: Login as admin-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!-- Step4: Navigate to Orders and create an order -->
+        <amOnPage stepKey="navigateToNewOrderPage" url="{{AdminOrderCreatePage.url}}"/>
+        <waitForPageLoad stepKey="waitForNewOrderPageOpened"/>
+        <click stepKey="chooseCustomer" selector="{{AdminOrdersGridSection.customerInOrdersSection('$$createCustomer.firstname$$')}}"/>
+        <waitForPageLoad stepKey="waitForStoresPageOpened"/>
+        <!-- Step5: Click on Add Products -->
+        <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickOnAddProducts"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnButtonClickForPage1"/>
+        <seeElement selector="{{OrdersGridSection.pageNumber('1')}}" stepKey="verifyPage1"/>
+        <waitForElementVisible selector="{{OrdersGridSection.displayedProducts}}" stepKey="verifyDisplayedProductsOnPage1"/>
+        <!-- Step6: Click on Next Page and verify products are listed on next page 2 -->
+        <click selector="{{OrdersGridSection.selectProductNextPage}}" stepKey="clickOnNextPageForSelectProuct"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnButtonClickForPage2"/>
+        <seeElement selector="{{OrdersGridSection.pageNumber('2')}}" stepKey="verifyPage2"/>
+        <waitForElementVisible selector="{{OrdersGridSection.displayedProducts}}" stepKey="verifyDisplayedProductsOnPage2"/>
+        <!-- Step6: Click on Previous Page and verify products are listed on previous page 1 -->
+        <click selector="{{OrdersGridSection.selectProductPreviousPage}}" stepKey="clickOnPreviousPageForSelectProuct"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnButtonClickForPreviousPage1"/>
+        <seeElement selector="{{OrdersGridSection.pageNumber('1')}}" stepKey="verifyPreviousPage1"/>
+        <waitForElementVisible selector="{{OrdersGridSection.displayedProducts}}" stepKey="verifyDisplayedProductsOnPreviousPage1"/>
+    </test>
+</tests>

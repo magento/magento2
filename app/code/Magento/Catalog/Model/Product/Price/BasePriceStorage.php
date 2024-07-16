@@ -157,9 +157,11 @@ class BasePriceStorage implements BasePriceStorageInterface
     {
         $prices = $this->retrieveValidPrices($prices);
         $formattedPrices = [];
+        $productIds = [];
 
         foreach ($prices as $price) {
             $ids = array_keys($this->productIdLocator->retrieveProductIdsBySkus([$price->getSku()])[$price->getSku()]);
+            $productIds[] = $ids[key($ids)];
             foreach ($ids as $id) {
                 $formattedPrices[] = [
                     'store_id' => $price->getStoreId(),
@@ -175,7 +177,14 @@ class BasePriceStorage implements BasePriceStorageInterface
             $formattedPrices = $this->applyWebsitePrices($formattedPrices);
         }
 
+        if ($priceAttribute !== null && $priceAttribute->isScopeGlobal()) {
+            foreach ($formattedPrices as &$price) {
+                $price['store_id'] = Store::DEFAULT_STORE_ID;
+            }
+        }
+
         $this->getPricePersistence()->update($formattedPrices);
+        $this->getPricePersistence()->updateLastUpdatedAt($productIds);
 
         return $this->validationResult->getFailedItems();
     }

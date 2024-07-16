@@ -10,8 +10,8 @@
             <tr each="data: getVisible(), as: '$col'" render="getHeader()"></tr>
         </thead>
         <tbody>
-            <tr class="data-row" repeat="foreach: rows, item: '$row'" css="'_odd-row': $index % 2">
-                <td outerfasteach="data: getVisible(), as: '$col'"
+            <tr if="rows" class="data-row" repeat="foreach: rows, item: '$row'" css="'_odd-row': $index % 2">
+                <td if="$row()" outerfasteach="data: getVisible(), as: '$col'"
                     css="getFieldClass($row())" click="getFieldHandler($row())" template="getBody()"></td>
             </tr>
             <tr ifnot="hasData()" class="data-grid-tr-no-data">

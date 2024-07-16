@@ -104,7 +104,7 @@ class Rule implements LoaderInterface
             $resource = $rule['resource_id'];
             $privileges = !empty($rule['privileges']) ? explode(',', $rule['privileges']) : null;
 
-            if ($acl->has($resource)) {
+            if ($acl->hasResource($resource)) {
                 $foundResources[$resource] = $resource;
                 if ($rule['permission'] == 'allow') {
                     if ($resource === $this->_rootResource->getId()) {

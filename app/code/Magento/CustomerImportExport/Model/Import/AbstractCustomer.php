@@ -6,6 +6,11 @@
 
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\Customer\Model\Config\Share;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Validator\EmailAddress;
+use Magento\Framework\Validator\ValidateException;
+use Magento\Framework\Validator\ValidatorChain;
 use Magento\ImportExport\Model\Import;
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
@@ -85,6 +90,11 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected $masterAttributeCode = '_email';
 
     /**
+     * @var Share
+     */
+    private $configShare;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -96,6 +106,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory
      * @param array $data
+     * @param Share|null $configShare
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -109,7 +120,8 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory,
-        array $data = []
+        array $data = [],
+        ?Share $configShare = null
     ) {
         $this->_storageFactory = $storageFactory;
         parent::__construct(
@@ -124,7 +136,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $eavConfig,
             $data
         );
-
+        $this->configShare = $configShare ?? ObjectManager::getInstance()->get(Share::class);
         $this->addMessageTemplate(self::ERROR_WEBSITE_IS_EMPTY, __('Please specify a website.'));
         $this->addMessageTemplate(
             self::ERROR_EMAIL_IS_EMPTY,
@@ -171,6 +183,11 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected function _getCustomerId($email, $websiteCode)
     {
         $email = strtolower(trim($email));
+
+        if ($this->configShare->isGlobalScope()) {
+            return $this->_customerStorage->getCustomerIdByEmail($email);
+        }
+
         if (isset($this->_websiteCodeToId[$websiteCode])) {
             $websiteId = $this->_websiteCodeToId[$websiteCode];
             return $this->_customerStorage->getCustomerId($email, $websiteId);
@@ -227,6 +244,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param array $rowData
      * @param int $rowNumber
      * @return bool
+     * @throws ValidateException
      */
     protected function _checkUniqueKey(array $rowData, $rowNumber)
     {
@@ -238,7 +256,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $email = strtolower($rowData[static::COLUMN_EMAIL]);
             $website = $rowData[static::COLUMN_WEBSITE];
 
-            if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
+            if (!ValidatorChain::is($email, EmailAddress::class)) {
                 $this->addRowError(static::ERROR_INVALID_EMAIL, $rowNumber, static::COLUMN_EMAIL);
             } elseif (!isset($this->_websiteCodeToId[$website])) {
                 $this->addRowError(static::ERROR_INVALID_WEBSITE, $rowNumber, static::COLUMN_WEBSITE);

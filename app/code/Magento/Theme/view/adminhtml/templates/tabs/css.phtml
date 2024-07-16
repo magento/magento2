@@ -16,69 +16,123 @@
 require([
     "jquery",
     "Magento_Ui/js/modal/alert",
-    "jquery/file-uploader",
+    "jquery/uppy-core",
     "mage/translate"
 ], function($, alert){
+    let targetElement = $('#css_file_uploader').parent()[0],
+    arrayFromObj = Array.from,
+    url = '{$block->escapeJs($block->getUrl('*/system_design_theme/uploadcss'))}',
+    options = {
+        proudlyDisplayPoweredByUppy: false,
+        target: targetElement,
+        hideUploadButton: false,
+        hideRetryButton: true,
+        hideCancelButton: true,
+        inline: true,
+        showRemoveButtonAfterComplete: true,
+        showProgressDetails: false,
+        showSelectedFiles: false,
+        allowMultipleUploads: false,
+        hideProgressAfterFinish: true
+    };
+    const uppy = new Uppy.Uppy({
+        restrictions: {
+            allowedFileTypes: ['.css']
+        },
 
-    $( '#css_file_uploader' ).fileupload({
-        dataType: 'json',
-        replaceFileInput: false,
-        url : '{$block->escapeJs($block->getUrl('*/system_design_theme/uploadcss'))}',
-        acceptFileTypes: /(.|\/)(css)$/i,
-
-        /**
-         * Add data
-         * @param e
-         * @param data
-         */
-        add: function (e, data) {
+        onBeforeFileAdded: (currentFile) => {
             var uploadButton = $('#css_uploader_button');
             /** Unbind click event on file change */
             uploadButton.off('click');
             uploadButton.prop('disabled', false);
 
-            uploadButton.on('click', function () {
-                $('#messages').html('');
-                $(this).attr('disabled', 'disabled');
-                data.submit();
-            });
+            // code to allow duplicate files from same folder
+            const modifiedFile = {
+                ...currentFile,
+                id:  currentFile.id + '-' + Date.now()
+            };
+            return modifiedFile;
         },
 
-        /**
-         * On done event
-         * @param e
-         * @param data
-         */
-        done: function (e, data) {
-            var contentArea = $('#custom_css_content');
-            $(this).val('');
+        meta: {
+            'form_key': window.FORM_KEY,
+            isAjax : true,
+            "theme['theme_id']" : $('#theme_id').val(),
+            "theme['theme_title']" : $('#theme_title').val()
+        }
+    });
 
-            $('#css_uploader_button').attr('disabled', 'disabled');
+    // initialize Uppy upload
+    uppy.use(Uppy.Dashboard, options);
 
-            if (!data.result.error) {
-                contentArea.trigger('focusin');
-                contentArea.val(data.result.content);
-                contentArea.trigger('focusout');
-            }
+    // drop area for file upload
+    uppy.use(Uppy.DropTarget, {
+        target: targetElement,
+        onDragOver: () => {
+            // override Array.from method of legacy-build.min.js file
+            Array.from = null;
         },
+        onDragLeave: () => {
+            Array.from = arrayFromObj;
+        }
+    });
 
-        /**
-         * Fail event
-         * @param e
-         * @param data
-         */
-        fail: function(e, data) {
-            $(this).val('');
+
+    // upload files on server
+    uppy.use(Uppy.XHRUpload, {
+        endpoint: url,
+        fieldName: 'css_file_uploader'
+    });
+
+    uppy.on('file-added', (file) => {
+        if($('#css_file_uploader').parent().find('.file-name').length > 0){
+            $('#css_file_uploader').parent().find('.file-name').html(file.name);
+        }else{
+            $('<span class="file-name">'+file.name+'</span>').insertAfter('#css_file_uploader');
+        }
+    });
+
+    uppy.on('upload-success', (file, response) => {
+        var contentArea = $('#custom_css_content');
+        $('#css_file_uploader').parent().find('.file-name').html('');
+
+        $('#css_uploader_button').attr('disabled', 'disabled');
+
+        if (!response.body.error) {
+            contentArea.trigger('focusin');
+            contentArea.val(response.body.content);
+            contentArea.trigger('focusout');
+        }else{
             alert({
-                content: $.mage.__("We don't recognize this file extension.")
+                content: $.mage.__(response.body.message)
             });
         }
     });
 
-    $(document).on('beforeSubmit', function() {
-        $('#css_file_uploader').val('');
+    uppy.on('upload-error', (file, error) => {
+       $('#css_file_uploader').parent().find('.file-name').html('');
+        alert({
+            content: $.mage.__("We don't recognize this file extension.")
+        });
     });
 
+    uppy.on('complete', () => {
+        Array.from = arrayFromObj;
+    });
+
+    $(document).on('click', '#css_file_uploader', function () {
+        $('#css_file_uploader').parent().find('.uppy-Dashboard-browse').trigger('click');
+    });
+
+    $(document).on('click', '#css_uploader_button', function () {
+        $('#messages').html('');
+        $(this).attr('disabled', 'disabled');
+        $('.uppy-StatusBar-actionBtn--upload').trigger('click');
+    });
+
+    $(document).on('beforeSubmit', function() {
+        $('#css_file_uploader').parent().find('.file-name').html('');
+    });
 });
 
 script;

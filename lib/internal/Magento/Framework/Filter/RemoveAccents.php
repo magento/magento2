@@ -5,10 +5,12 @@
  */
 namespace Magento\Framework\Filter;
 
+use Laminas\Filter\FilterInterface;
+
 /**
  * Remove accents from string
  */
-class RemoveAccents implements \Zend_Filter_Interface
+class RemoveAccents implements FilterInterface
 {
     /**
      * @var bool

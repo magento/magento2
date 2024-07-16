@@ -28,12 +28,18 @@ define([
                 '<!-- /ko -->',
             rowTmpl:
                 '<!-- ko with: _editor -->' +
-                    '<!-- ko if: isActive($row()._rowIndex, true) -->' +
-                        '<!-- ko with: getRecord($row()._rowIndex, true) -->' +
-                            '<!-- ko template: rowTmpl --><!-- /ko -->' +
-                        '<!-- /ko -->' +
-                        '<!-- ko if: isSingleEditing && singleEditingButtons -->' +
-                            '<!-- ko template: rowButtonsTmpl --><!-- /ko -->' +
+                    '<!-- ko if: typeof $row() !== "undefined" -->' +
+                        '<!-- ko if: isActive($row()._rowIndex, true) -->' +
+                            '<!-- ko if: typeof $row() !== "undefined" -->' +
+                                '<!-- ko with: getRecord($row()._rowIndex, true) -->' +
+                                    '<!-- ko template: rowTmpl --><!-- /ko -->' +
+                                '<!-- /ko -->' +
+                            '<!-- /ko -->' +
+                            '<!-- ko if: typeof $row() !== "undefined" -->' +
+                                '<!-- ko if: isSingleEditing && singleEditingButtons -->' +
+                                    '<!-- ko template: rowButtonsTmpl --><!-- /ko -->' +
+                                '<!-- /ko -->' +
+                            '<!-- /ko -->' +
                         '<!-- /ko -->' +
                     '<!-- /ko -->' +
                '<!-- /ko -->'
