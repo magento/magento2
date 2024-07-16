@@ -224,7 +224,7 @@ class SaveTest extends AbstractBackendController
                 'post_data' => [],
                 'expected_data' => [],
                 'expected_message' => [
-                    (string)__('The customer email is missing. Enter and try again.'),
+                    (string)__('The email address is required to create a customer account.'),
                 ],
             ],
             'with_invalid_form_data' => [
@@ -241,7 +241,7 @@ class SaveTest extends AbstractBackendController
                     ],
                 ],
                 'expected_message' => [
-                    (string)__('The customer email is missing. Enter and try again.'),
+                    (string)__('The email address is required to create a customer account.'),
                 ],
             ]
         ];
