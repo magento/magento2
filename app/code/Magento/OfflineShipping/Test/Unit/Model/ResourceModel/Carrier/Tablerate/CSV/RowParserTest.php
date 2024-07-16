@@ -40,7 +40,7 @@ class RowParserTest extends TestCase
     protected function setUp(): void
     {
         $this->locationDirectoryMock = $this->getMockBuilder(LocationDirectory::class)
-            ->setMethods(['hasCountryId', 'getCountryId', 'hasRegionId', 'getRegionIds'])
+            ->onlyMethods(['hasCountryId', 'getCountryId', 'hasRegionId', 'getRegionIds'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->columnResolverMock = $this->getMockBuilder(ColumnResolver::class)

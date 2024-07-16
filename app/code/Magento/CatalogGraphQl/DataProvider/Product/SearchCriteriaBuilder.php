@@ -70,6 +70,11 @@ class SearchCriteriaBuilder
     private SearchConfig $searchConfig;
 
     /**
+     * @var RequestDataBuilder|mixed
+     */
+    private RequestDataBuilder $localData;
+
+    /**
      * @param Builder $builder
      * @param ScopeConfigInterface $scopeConfig
      * @param FilterBuilder $filterBuilder
@@ -78,6 +83,7 @@ class SearchCriteriaBuilder
      * @param SortOrderBuilder|null $sortOrderBuilder
      * @param Config|null $eavConfig
      * @param SearchConfig|null $searchConfig
+     * @param RequestDataBuilder|null $localData
      */
     public function __construct(
         Builder $builder,
@@ -87,7 +93,8 @@ class SearchCriteriaBuilder
         Visibility $visibility,
         SortOrderBuilder $sortOrderBuilder = null,
         Config $eavConfig = null,
-        SearchConfig $searchConfig = null
+        SearchConfig $searchConfig = null,
+        RequestDataBuilder $localData = null,
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->filterBuilder = $filterBuilder;
@@ -97,6 +104,7 @@ class SearchCriteriaBuilder
         $this->sortOrderBuilder = $sortOrderBuilder ?? ObjectManager::getInstance()->get(SortOrderBuilder::class);
         $this->eavConfig = $eavConfig ?? ObjectManager::getInstance()->get(Config::class);
         $this->searchConfig = $searchConfig ?? ObjectManager::getInstance()->get(SearchConfig::class);
+        $this->localData = $localData ?? ObjectManager::getInstance()->get(RequestDataBuilder::class);
     }
 
     /**
@@ -169,7 +177,7 @@ class SearchCriteriaBuilder
                 }
             }
         }
-        $this->searchConfig->merge([$requestName => $data]);
+        $this->localData->setData([$requestName => $data]);
     }
 
     /**

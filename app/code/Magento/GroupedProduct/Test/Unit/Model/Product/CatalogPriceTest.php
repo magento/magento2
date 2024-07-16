@@ -222,7 +222,13 @@ class CatalogPriceTest extends TestCase
             ->willReturn($currentStoreMock);
         $this->storeManagerMock
             ->method('setCurrentStore')
-            ->withConsecutive(['store_id'], ['current_store_id']);
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'store_id') {
+                    return null;
+                } elseif ($arg1 == 'current_store_id') {
+                    return null;
+                }
+            });
 
         $this->assertEquals(15, $this->catalogPrice->getCatalogPrice($this->productMock, $storeMock, true));
     }

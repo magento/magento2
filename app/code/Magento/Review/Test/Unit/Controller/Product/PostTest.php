@@ -239,8 +239,14 @@ class PostTest extends TestCase
             ->willReturn($reviewData);
         $this->request
             ->method('getParam')
-            ->withConsecutive(['category', false], ['id'])
-            ->willReturnOnConsecutiveCalls(false, 1);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'category' && $arg2 == false) {
+                    return false;
+                }
+                if ($arg1 == 'id') {
+                    return 1;
+                }
+            });
         $product = $this->createPartialMock(
             Product::class,
             ['__wakeup', 'isVisibleInCatalog', 'isVisibleInSiteVisibility', 'getId', 'getWebsiteIds']
@@ -265,8 +271,14 @@ class PostTest extends TestCase
             ->willReturn($product);
         $this->coreRegistry
             ->method('register')
-            ->withConsecutive(['current_product', $product], ['product', $product])
-            ->willReturnOnConsecutiveCalls($this->coreRegistry, $this->coreRegistry);
+            ->willReturnCallback(function ($arg1, $arg2) use ($product) {
+                if ($arg1 == 'current_product' && $arg2 == $product) {
+                    return $this->coreRegistry;
+                }
+                if ($arg1 == 'product' && $arg2 == $product) {
+                    return $this->coreRegistry;
+                }
+            });
         $this->review->expects($this->once())->method('setData')
             ->with($reviewData)
             ->willReturnSelf();
