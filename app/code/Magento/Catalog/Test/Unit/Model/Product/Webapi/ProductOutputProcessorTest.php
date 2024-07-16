@@ -50,10 +50,14 @@ class ProductOutputProcessorTest extends TestCase
      */
     public function testGetByProductType(
         array $request,
-        ProductInterface $product,
+        $product,
         array $result,
         array $expectedResult
     ) {
+        if(is_callable($product))
+        {
+            $product = $product($this);
+        }
         $this->requestMock
             ->method('getContent')
             ->willReturn($request);
@@ -69,7 +73,7 @@ class ProductOutputProcessorTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getProductProcessorDataProvider()
+    public static function getProductProcessorDataProvider()
     {
         return [
             'request object contains `product_links` and `tier_prices`' => [
@@ -83,7 +87,7 @@ class ProductOutputProcessorTest extends TestCase
                         ]
                     ]
                 ],
-                'product' => $this->setProductInformation(
+                'product' => static fn (self $testCase) => $testCase->setProductInformation(
                     [
                         'sku' => 'MH01',
                         'status' => 1,
@@ -114,7 +118,7 @@ class ProductOutputProcessorTest extends TestCase
                         ]
                     ]
                 ],
-                'product' => $this->setProductInformation(
+                'product' => static fn (self $testCase) => $testCase->setProductInformation(
                     [
                         'sku' => 'MH01',
                         'status' => 1,
@@ -143,7 +147,7 @@ class ProductOutputProcessorTest extends TestCase
                         ]
                     ]
                 ],
-                'product' => $this->setProductInformation(
+                'product' => static fn (self $testCase) => $testCase->setProductInformation(
                     [
                         'sku' => 'MH03',
                         'status' => 1,
@@ -174,7 +178,7 @@ class ProductOutputProcessorTest extends TestCase
                         ]
                     ]
                 ],
-                'product' => $this->setProductInformation(
+                'product' => static fn (self $testCase) => $testCase->setProductInformation(
                     [
                         'sku' => 'MH01',
                         'status' => 1,
@@ -201,7 +205,7 @@ class ProductOutputProcessorTest extends TestCase
                         'product' => []
                     ]
                 ],
-                'product' => $this->setProductInformation(
+                'product' => static fn (self $testCase) => $testCase->setProductInformation(
                     [
                         'sku' => 'MH01',
                         'status' => 1,
@@ -231,7 +235,7 @@ class ProductOutputProcessorTest extends TestCase
                         ]
                     ]
                 ],
-                'product' => $this->setProductInformation(
+                'product' => static fn (self $testCase) => $testCase->setProductInformation(
                     [
                         'sku' => 'MH01',
                         'status' => 1,
@@ -263,7 +267,7 @@ class ProductOutputProcessorTest extends TestCase
                         ]
                     ]
                 ],
-                'product' => $this->setProductInformation(
+                'product' => static fn (self $testCase) => $testCase->setProductInformation(
                     [
                         'sku' => 'MH01',
                         'status' => 1,
@@ -286,7 +290,7 @@ class ProductOutputProcessorTest extends TestCase
             ],
             'request object has empty array' => [
                 'request' => [],
-                'product' => $this->setProductInformation(
+                'product' => static fn (self $testCase) => $testCase->setProductInformation(
                     [
                         'sku' => 'MH01',
                         'status' => 1,
