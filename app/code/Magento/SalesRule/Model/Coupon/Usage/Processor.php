@@ -89,7 +89,7 @@ class Processor
             }
 
             $rule->loadCouponCode();
-            if ($isIncrement || $rule->getTimesUsed() > 0) {
+            if ((!$updateInfo->isCouponAlreadyApplied() && $isIncrement) || !$isIncrement) {
                 $rule->setTimesUsed($rule->getTimesUsed() + ($isIncrement ? 1 : -1));
                 $rule->save();
             }

@@ -314,6 +314,7 @@ return [
         Magento\Catalog\Model\Category\Attribute\Backend\Image\Interceptor::class => null,
         Magento\Catalog\Model\Attribute\Backend\Startdate\Interceptor::class => null,
         Magento\Eav\Model\Entity\Attribute\Backend\Datetime\Interceptor::class => null,
+        Magento\Catalog\Model\Category\Attribute\Backend\DefaultSortby\Interceptor::class => null,
         Magento\Catalog\Model\Category\Attribute\Backend\Sortby\Interceptor::class => null,
         Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate\Interceptor::class => null,
         Magento\Catalog\Model\Attribute\Backend\Customlayoutupdate\Interceptor::class => null,

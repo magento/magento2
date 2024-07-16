@@ -49,6 +49,15 @@
             <magentoCLI command="config:set {{EnableFreeOrderStatusPending.path}} {{EnableFreeOrderStatusPending.value}}" stepKey="disablePaymentMethodsSettingConfig"/>
             <magentoCLI command="config:set {{EnableFreeOrderPaymentAutomaticInvoiceAction.path}} {{EnableFreeOrderPaymentAutomaticInvoiceAction.value}}" stepKey="enableFreeOrderPaymentAutomaticInvoiceAction"/>
             <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShippingConfig"/>
+            <!-- Unassign order status -->
+            <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatus"/>
+            <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterStatusGrid">
+                <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>
+                <argument name="statusCode" value="{{defaultOrderStatus.status}}"/>
+            </actionGroup>
+            <click selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="unassignOrderStatus"/>
+            <waitForPageLoad stepKey="waitForGridLoad"/>
+
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="simpleproduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteSalesRule"/>

@@ -301,7 +301,7 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function updateItemDataProvider(): array
+    public static function updateItemDataProvider(): array
     {
         return [
             [

@@ -112,7 +112,7 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
     /**
      * @return array
      */
-    public function executeWithIndexDataProvider()
+    public static function executeWithIndexDataProvider()
     {
         return [
             [

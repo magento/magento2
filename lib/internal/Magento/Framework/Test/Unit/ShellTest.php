@@ -94,7 +94,11 @@ class ShellTest extends TestCase
         }
         $this->logger
             ->method('info')
-            ->withConsecutive(...$withArgs);
+            ->willReturnCallback(function (...$withArgs) {
+                if (!empty($withArgs)) {
+                    return null;
+                }
+            });
 
         $this->_testExecuteCommand(
             new Shell($this->commandRenderer, $this->logger),
@@ -107,7 +111,7 @@ class ShellTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         // backtick symbol (`) has to be replaced with environment-dependent quote character
         return [

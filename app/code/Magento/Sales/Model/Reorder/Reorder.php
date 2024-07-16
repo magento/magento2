@@ -8,10 +8,11 @@ namespace Magento\Sales\Model\Reorder;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -24,12 +25,16 @@ use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
+use Magento\Customer\Model\Session as CustomerSession;
 use Psr\Log\LoggerInterface;
 
 /**
  * Allows customer quickly to reorder previously added products and put them to the Cart
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Reorder
 {
@@ -112,6 +117,16 @@ class Reorder
     private $storeManager;
 
     /**
+     * @var bool
+     */
+    private bool $addToCartInvalidProduct;
+
+    /**
+     * @var CustomerSession
+     */
+    private $customerSession;
+
+    /**
      * @param OrderFactory $orderFactory
      * @param CustomerCartResolver $customerCartProvider
      * @param GuestCartResolver $guestCartResolver
@@ -121,6 +136,9 @@ class Reorder
      * @param ProductCollectionFactory $productCollectionFactory
      * @param OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter
      * @param StoreManagerInterface|null $storeManager
+     * @param bool $addToCartInvalidProduct
+     * @param CustomerSession|null $customerSession
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -131,7 +149,9 @@ class Reorder
         LoggerInterface $logger,
         ProductCollectionFactory $productCollectionFactory,
         OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter,
-        ?StoreManagerInterface   $storeManager = null
+        ?StoreManagerInterface   $storeManager = null,
+        bool $addToCartInvalidProduct = false,
+        ?CustomerSession $customerSession = null
     ) {
         $this->orderFactory = $orderFactory;
         $this->cartRepository = $cartRepository;
@@ -143,6 +163,9 @@ class Reorder
         $this->orderInfoBuyRequestGetter = $orderInfoBuyRequestGetter;
         $this->storeManager = $storeManager
             ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->addToCartInvalidProduct = $addToCartInvalidProduct;
+        $this->customerSession = $customerSession
+            ?: ObjectManager::getInstance()->get(CustomerSession::class);
     }
 
     /**
@@ -153,7 +176,9 @@ class Reorder
      * @return Data\ReorderOutput
      * @throws InputException Order is not found
      * @throws NoSuchEntityException The specified customer does not exist.
-     * @throws \Magento\Framework\Exception\CouldNotSaveException Could not create customer Cart
+     * @throws CouldNotSaveException
+     * @throws AlreadyExistsException
+     * @throws LocalizedException
      */
     public function execute(string $orderNumber, string $storeId): Data\ReorderOutput
     {
@@ -164,10 +189,10 @@ class Reorder
                 __('Cannot find order number "%1" in store "%2"', $orderNumber, $storeId)
             );
         }
-        $customerId = (int)$order->getCustomerId();
+        $customerId = (int) $order->getCustomerId();
         $this->errors = [];
 
-        $cart = $customerId === 0
+        $cart = $this->isCustomerReorderAsGuest($customerId)
             ? $this->guestCartResolver->resolve()
             : $this->customerCartProvider->resolve($customerId);
         if (!$this->reorderHelper->isAllowed($order->getStore())) {
@@ -180,7 +205,7 @@ class Reorder
 
         try {
             $this->cartRepository->save($cart);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             // handle exception from \Magento\Quote\Model\QuoteRepository\SaveHandler::save
             $this->addError($e->getMessage());
         }
@@ -197,14 +222,15 @@ class Reorder
      * @param ItemCollection $orderItems
      * @param string $storeId
      * @return void
+     * @throws LocalizedException
      */
     private function addItemsToCart(Quote $cart, ItemCollection $orderItems, string $storeId): void
     {
         $orderItemProductIds = [];
-        /** @var \Magento\Sales\Model\Order\Item[] $orderItemsByProductId */
+        /** @var Item[] $orderItemsByProductId */
         $orderItemsByProductId = [];
 
-        /** @var \Magento\Sales\Model\Order\Item $item */
+        /** @var Item $item */
         foreach ($orderItems as $item) {
             if ($item->getParentItem() === null) {
                 $orderItemProductIds[] = $item->getProductId();
@@ -218,7 +244,7 @@ class Reorder
         $productsNotFound = array_diff($orderItemProductIds, array_keys($products));
         if (!empty($productsNotFound)) {
             foreach ($productsNotFound as $productId) {
-                /** @var \Magento\Sales\Model\Order\Item $orderItemProductNotFound */
+                /** @var Item $orderItemProductNotFound */
                 $this->addError(
                     (string)__('Could not find a product with ID "%1"', $productId),
                     self::ERROR_PRODUCT_NOT_FOUND
@@ -243,11 +269,10 @@ class Reorder
      * @param string $storeId
      * @param int[] $orderItemProductIds
      * @return Product[]
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getOrderProducts(string $storeId, array $orderItemProductIds): array
     {
-        /** @var Collection $collection */
         $collection = $this->productCollectionFactory->create();
         $collection->setFlag('has_stock_status_filter', true);
         $collection->setStore($storeId)
@@ -276,8 +301,9 @@ class Reorder
 
         $addProductResult = null;
         try {
+            $infoBuyRequest->setAddToCartInvalidProduct($this->addToCartInvalidProduct);
             $addProductResult = $cart->addProduct($product, $infoBuyRequest);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->addError($this->getCartItemErrorMessage($orderItem, $product, $e->getMessage()));
         } catch (\Throwable $e) {
             $this->logger->critical($e);
@@ -379,5 +405,16 @@ class Reorder
         return (string)($message
             ? __('Could not add the product with SKU "%1" to the shopping cart: %2', $sku, $message)
             : __('Could not add the product with SKU "%1" to the shopping cart', $sku));
+    }
+
+    /**
+     * Check customer re-order as guest customer
+     *
+     * @param int $customerId
+     * @return bool
+     */
+    private function isCustomerReorderAsGuest(int $customerId): bool
+    {
+        return $customerId === 0 || !$this->customerSession->isLoggedIn();
     }
 }

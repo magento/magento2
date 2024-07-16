@@ -21,6 +21,7 @@ interface CustomerTokenServiceInterface
      * @param string $password
      * @return string Token created
      * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws \Magento\Framework\Exception\EmailNotConfirmedException
      */
     public function createCustomerAccessToken($username, $password);
 

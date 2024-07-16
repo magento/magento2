@@ -290,7 +290,8 @@
         "constraint": {
             "PRIMARY": true,
             "EAV_ATTR_OPT_VAL_OPT_ID_EAV_ATTR_OPT_OPT_ID": true,
-            "EAV_ATTRIBUTE_OPTION_VALUE_STORE_ID_STORE_STORE_ID": true
+            "EAV_ATTRIBUTE_OPTION_VALUE_STORE_ID_STORE_STORE_ID": true,
+            "EAV_ATTRIBUTE_OPTION_VALUE_STORE_ID_OPTION_ID": true
         }
     },
     "eav_attribute_label": {
