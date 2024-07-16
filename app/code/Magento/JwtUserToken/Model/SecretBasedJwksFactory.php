@@ -35,6 +35,7 @@ class SecretBasedJwksFactory
     public function __construct(DeploymentConfig $deploymentConfig, JwkFactory $jwkFactory)
     {
         $this->keys = preg_split('/\s+/s', trim((string)$deploymentConfig->get('crypt/key')));
+        $this->keys = [end($this->keys)];
         //Making sure keys are large enough.
         foreach ($this->keys as &$key) {
             $key = str_pad($key, 2048, '&', STR_PAD_BOTH);
