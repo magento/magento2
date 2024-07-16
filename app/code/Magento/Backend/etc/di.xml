@@ -161,6 +161,7 @@
         <arguments>
             <argument name="headerProviderList" xsi:type="array">
                 <item name="x-frame-options" xsi:type="object">Magento\Framework\App\Response\HeaderProvider\XFrameOptions</item>
+                <item name="referrer-policy" xsi:type="object">Magento\Framework\App\Response\HeaderProvider\ReferrerPolicy</item>
             </argument>
         </arguments>
     </type>
