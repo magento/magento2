@@ -37,7 +37,7 @@
             </actionGroup>
         </before>
         <after>
-            <comment userInput="BIC" stepKey="resetAllowedCurrencyBaseBackToUSD"/>
+            <comment userInput="BIC" stepKey="resetDefaultCurrencyBaseBackToHKD"/>
             <magentoCLI command="config:set {{SetDefaultCurrencyUSDConfig.path}} {{SetDefaultCurrencyUSDConfig.value}}" stepKey="resetDefaultCurrencyBaseBackToUSD"/>
             <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="resetAllowedCurrencyBaseBackToUSD"/>
             <magentoCLI command="config:set {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseUSD"/>
