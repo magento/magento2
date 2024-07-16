@@ -12,6 +12,7 @@ use Magento\Framework\File\Pdf\Image;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Sales\Model\RtlTextHandler;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Sales Order PDF abstract model
@@ -132,6 +133,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     protected $addressRenderer;
 
     /**
+     * @var Magento\Tax\Helper\Data
+     */
+    private $taxHelper;
+
+    /**
      * @var array $pageSettings
      */
     private $pageSettings;
@@ -156,6 +162,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param Database $fileStorageDatabase
      * @param RtlTextHandler|null $rtlTextHandler
      * @param Image $image
+     * @param TaxHelper $taxHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -172,7 +179,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         array $data = [],
         Database $fileStorageDatabase = null,
         ?RtlTextHandler $rtlTextHandler = null,
-        ?Image $image = null
+        ?Image $image = null,
+        ?TaxHelper $taxHelper = null
     ) {
         $this->addressRenderer = $addressRenderer;
         $this->_paymentData = $paymentData;
@@ -185,6 +193,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $this->_pdfTotalFactory = $pdfTotalFactory;
         $this->_pdfItemsFactory = $pdfItemsFactory;
         $this->inlineTranslation = $inlineTranslation;
+        $this->taxHelper = $taxHelper ?: ObjectManager::getInstance()->get(TaxHelper::class);
         $this->fileStorageDatabase = $fileStorageDatabase ?: ObjectManager::getInstance()->get(Database::class);
         $this->rtlTextHandler = $rtlTextHandler ?: ObjectManager::getInstance()->get(RtlTextHandler::class);
         $this->image = $image ?: ObjectManager::getInstance()->get(Image::class);
@@ -604,11 +613,18 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             }
 
             $yShipments = $this->y;
-            $totalShippingChargesText = "("
-                . __('Total Shipping Charges')
-                . " "
-                . $order->formatPriceTxt($order->getShippingAmount())
-                . ")";
+            $totalShippingChargesText = "(" . __('Total Shipping Charges') . " ";
+            if ($this->taxHelper->displayShippingPriceIncludingTax()) {
+                $totalShippingChargesText .= $order->formatPriceTxt($order->getShippingInclTax());
+            } else {
+                $totalShippingChargesText .= $order->formatPriceTxt($order->getShippingAmount());
+            }
+
+            if ($this->taxHelper->displayShippingBothPrices()
+                && $order->getShippingInclTax() != $order->getShippingAmount()) {
+                $totalShippingChargesText .= "(Incl. Tax " . $order->getShippingInclTax() . ")";
+            }
+            $totalShippingChargesText .= ")";
 
             $page->drawText($totalShippingChargesText, 285, $yShipments - $topMargin, 'UTF-8');
             $yShipments -= $topMargin + 10;
