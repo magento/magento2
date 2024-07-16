@@ -16,7 +16,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
+use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTestCase;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeSetInterface;
 use Magento\Framework\Locale\CurrencyInterface;
@@ -30,7 +30,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GroupedTest extends AbstractModifierTest
+class GroupedTest extends AbstractModifierTestCase
 {
     private const PRODUCT_ID = 1;
     private const LINKED_PRODUCT_ID = 2;

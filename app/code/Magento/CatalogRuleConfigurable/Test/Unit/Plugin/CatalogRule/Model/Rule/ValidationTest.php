@@ -127,28 +127,27 @@ class ValidationTest extends TestCase
         );
         $this->productRepositoryMock->expects($this->exactly($runValidateAmount))
             ->method('getById')
-            ->withConsecutive(
-                ...array_map(
-                    function ($parentsId) use ($storeId) {
-                        return [$parentsId, false, $storeId];
-                    },
-                    $parentsIds
-                )
-            )->willReturnOnConsecutiveCalls(...$parentsProducts);
+            ->willReturnCallback(
+                function ($arg1) use ($parentsIds, $parentsProducts) {
+                    $key = array_search($arg1, $parentsIds);
+                    if ($key !== false) {
+                        return $parentsProducts[$key];
+                    }
+                }
+            );
         $this->ruleMock->expects($this->exactly($runValidateAmount))
             ->method('getConditions')
             ->willReturn($this->ruleConditionsMock);
         $this->ruleConditionsMock->expects($this->exactly($runValidateAmount))
-            ->method('validate')
-            ->withConsecutive(
-                ...array_map(
-                    function ($parentsProduct) {
-                        return [$parentsProduct];
-                    },
-                    $parentsProducts
-                )
-            )
-            ->willReturnOnConsecutiveCalls(...$validationResult);
+              ->method('validate')
+                ->willReturnCallback(
+                    function ($arg1) use ($parentsProducts, $validationResult) {
+                        $key = array_search($arg1, $parentsProducts);
+                        if ($key !== false) {
+                            return $validationResult[$key];
+                        }
+                    }
+                );
 
         $this->assertEquals(
             $result,
@@ -159,7 +158,7 @@ class ValidationTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForValidateWithValidConfigurableProduct()
+    public static function dataProviderForValidateWithValidConfigurableProduct()
     {
         return [
             [

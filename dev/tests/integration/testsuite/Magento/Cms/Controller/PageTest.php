@@ -140,7 +140,7 @@ class PageTest extends AbstractController
     /**
      * @return array
      */
-    public function pageLayoutDataProvider(): array
+    public static function pageLayoutDataProvider(): array
     {
         return [
             'Page with 1column layout' => ['page-with-1column-layout'],
