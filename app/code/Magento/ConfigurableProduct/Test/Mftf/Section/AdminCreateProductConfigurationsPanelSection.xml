@@ -32,7 +32,7 @@
         <element name="attributeCheckboxByIndex" type="input" selector="li.attribute-option:nth-of-type({{var1}}) input" parameterized="true"/>
 
         <element name="applySingleSetOfImages" type="radio" selector=".admin__field-label[for='apply-single-set-radio']" timeout="30"/>
-        <element name="imageFileUpload" type="input" selector=".steps-wizard-section input[type='file'][name='image']"/>
+        <element name="imageFileUpload" type="input" selector=".steps-wizard-section .uppy-Dashboard-input"/>
         <element name="imageUploadButton" type="button" selector=".steps-wizard-section div.gallery"/>
 
         <element name="applyUniquePricesByAttributeToEachSku" type="radio" selector=".admin__field-label[for='apply-unique-prices-radio']"/>
@@ -60,5 +60,7 @@
         <element name="attributeCheckboxByName" type="input" selector="//*[contains(@data-attribute-option-title,'{{arg}}')]//input[@type='checkbox']" parameterized="true"/>
         <element name="attributeColorCheckbox" type="select" selector="//div[contains(text(),'color') and @class='data-grid-cell-content']/../preceding-sibling::td/label/input"/>
         <element name="attributeRowByAttributeCode" type="block" selector="//td[count(../../..//th[./*[.='Attribute Code']]/preceding-sibling::th) + 1][./*[.='{{attribute_code}}']]/../td//input[@data-action='select-row']" parameterized="true"/>
+        <element name="qtyForColorAttribute" type="text" selector="//span[text()='{{var1}}']/../..//input[@type='text']" parameterized="true"/>
+        <element name="configProductName" type="text" selector="//table[@class='data-grid data-grid-configurable']//tbody//tr[{{row}}]//td[2]//span" parameterized="true"/>
     </section>
 </sections>

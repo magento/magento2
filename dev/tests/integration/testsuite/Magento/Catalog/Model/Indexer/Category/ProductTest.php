@@ -184,7 +184,36 @@ class ProductTest extends TestCase
         }
     }
 
-    public function testCategoryCreate()
+
+    /**
+     * Verify that indexer still valid after deleting inactive category
+     *
+     * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Catalog/_files/categories_disabled.php
+     *
+     * @return void
+     */
+    public function testDeleteInactiveCategory(): void
+    {
+        $this->indexer->reindexAll();
+        $isInvalidIndexer = $this->indexer->isInvalid();
+
+        $this->categoryRepository->deleteByIdentifier(8);
+
+        $state = $this->indexer->getState();
+        $state->loadByIndexer($this->indexer->getId());
+        $status = $state->getStatus();
+
+        $this->assertFalse($isInvalidIndexer);
+        $this->assertEquals(StateInterface::STATUS_VALID, $status);
+    }
+
+    /**
+     * Create category
+     *
+     * @return void
+     */
+    public function testCategoryCreate(): void
     {
         $this->testReindexAll();
         $categories = $this->getCategories(4);

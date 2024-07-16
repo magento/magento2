@@ -13,7 +13,10 @@
             <description>Clicks on the Browse button in the 'Insert/edit image' model.</description>
         </annotations>
 
+        <waitForElementVisible selector="{{MediaGallerySection.Browse}}" stepKey="waitForBrowseButton"/>
         <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForElementVisible selector="{{MediaGallerySection.mediaGalleryModal}}" stepKey="waitForMediaGallery"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
     </actionGroup>
 </actionGroups>

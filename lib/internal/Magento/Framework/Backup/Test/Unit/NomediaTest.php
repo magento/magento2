@@ -113,8 +113,8 @@ class NomediaTest extends TestCase
                 'rollBackFs' => $this->fsMock,
             ]
         );
-        $model->setRootDir($rootDir);
-        $model->setBackupsDir($rootDir);
+        $model->setRootDir($rootDir . '/');
+        $model->setBackupsDir($rootDir . '/');
         $model->{$action}();
         $this->assertTrue($model->getIsSuccess());
 

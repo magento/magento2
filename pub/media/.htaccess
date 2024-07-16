@@ -1,11 +1,11 @@
 Options -Indexes
 
-<IfModule mod_php5.c>
-php_flag engine 0
+<IfModule mod_php7.c>
+    php_flag engine 0
 </IfModule>
 
-<IfModule mod_php7.c>
-php_flag engine 0
+<IfModule mod_php.c>
+    php_flag engine 0
 </IfModule>
 
 AddHandler cgi-script .php .pl .py .jsp .asp .htm .shtml .sh .cgi
@@ -52,9 +52,12 @@ AddType image/gif gif
 AddType image/png png
 AddType image/jpeg jpg
 AddType image/jpeg jpeg
+AddType image/webp webp
+AddType image/avif avif
+AddType image/avif-sequence avifs
 
 # SVG
-AddType image/svg+xml svg
+AddType image/svg+xml svg svgz
 
 # Fonts
 AddType application/vnd.ms-fontobject eot
@@ -62,9 +65,6 @@ AddType application/x-font-ttf ttf
 AddType application/x-font-otf otf
 AddType application/x-font-woff woff
 AddType application/font-woff2 woff2
-
-# Flash
-AddType application/x-shockwave-flash swf
 
 # Archives and exports
 AddType application/zip gzip
@@ -75,7 +75,7 @@ AddType application/xml xml
 
 <IfModule mod_headers.c>
 
-    <FilesMatch .*\.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$>
+    <FilesMatch .*\.(ico|jpg|jpeg|png|gif|svg|svgz|webp|avif|avifs|js|css|eot|ttf|otf|woff|woff2)$>
         Header append Cache-Control public
     </FilesMatch>
 
@@ -111,8 +111,8 @@ AddType application/xml xml
     ExpiresByType text/css "access plus 1 year"
     ExpiresByType application/javascript "access plus 1 year"
 
-    # Favicon, images, flash
-    <FilesMatch \.(ico|gif|png|jpg|jpeg|swf|svg)$>
+    # Favicon, images
+    <FilesMatch \.(ico|gif|png|jpg|jpeg|svg|svgz|webp|avif|avifs)$>
         ExpiresDefault "access plus 1 year"
     </FilesMatch>
     ExpiresByType image/gif "access plus 1 year"
@@ -120,6 +120,9 @@ AddType application/xml xml
     ExpiresByType image/jpg "access plus 1 year"
     ExpiresByType image/jpeg "access plus 1 year"
     ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/avif "access plus 1 year"
+    ExpiresByType image/avif-sequence "access plus 1 year"
 
     # Fonts
     <FilesMatch \.(eot|ttf|otf|svg|woff|woff2)$>

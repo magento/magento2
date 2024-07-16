@@ -47,13 +47,13 @@ class AuthorizationTest extends TestCase
     protected function setUp(): void
     {
         $this->persistentSessionMock = $this->getMockBuilder(PersistentSession::class)
-            ->onlyMethods(['isPersistent'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->customerSessionMock = $this->getMockBuilder(CustomerSession::class)
-            ->onlyMethods(['isLoggedIn'])
             ->disableOriginalConstructor()
+            ->addMethods(['getIsCustomerEmulated'])
+            ->onlyMethods(['getCustomerId'])
             ->getMock();
 
         $this->persistentCustomerAuthorization = new PersistentAuthorization(
@@ -71,19 +71,23 @@ class AuthorizationTest extends TestCase
      *
      * @dataProvider persistentLoggedInCombinations
      * @param bool $isPersistent
-     * @param bool $isLoggedIn
-     * @param bool $isAllowedExpectation
+     * @param int|null $customerId
+     * @param bool|null $isCustomerEmulated
+     * @param bool $shouldBeAllowed
      */
     public function testIsAuthorized(
         bool $isPersistent,
-        bool $isLoggedIn,
-        bool $isAllowedExpectation
+        ?int $customerId,
+        ?bool $isCustomerEmulated,
+        bool $shouldBeAllowed
     ): void {
-        $this->persistentSessionMock->method('isPersistent')->willReturn($isPersistent);
-        $this->customerSessionMock->method('isLoggedIn')->willReturn($isLoggedIn);
+        $this->persistentSessionMock->expects($this->any())->method('isPersistent')->willReturn($isPersistent);
+        $this->customerSessionMock->expects($this->any())->method('getCustomerId')->willReturn($customerId);
+        $this->customerSessionMock->expects($this->any())->method('getIsCustomerEmulated')->willReturn($isCustomerEmulated);
+
         $isAllowedResult = $this->customerAuthorizationComposite->isAllowed('self');
 
-        $this->assertEquals($isAllowedExpectation, $isAllowedResult);
+        $this->assertEquals($shouldBeAllowed, $isAllowedResult);
     }
 
     /**
@@ -92,21 +96,30 @@ class AuthorizationTest extends TestCase
     public function persistentLoggedInCombinations(): array
     {
         return [
-            [
-                true,
-                false,
-                false
+            'Emulated persistent Customer ID#1 should not be authorized' => [
+                'isPersistent' => true,
+                'customerId' => 1,
+                'isCustomerEmulated' => true,
+                'shouldBeAllowed' => false
             ],
-            [
-                true,
-                true,
-                true
+            'Logged-in persistent Customer ID#1 should be authorized' => [
+                'isPersistent' => true,
+                'customerId' => 1,
+                'isCustomerEmulated' => false,
+                'shouldBeAllowed' => true
             ],
-            [
-                false,
-                false,
-                true
+            'Logged-in Customer ID#1 without persistency should be authorized' => [
+                'isPersistent' => false,
+                'customerId' => 1,
+                'isCustomerEmulated' => false,
+                'shouldBeAllowed' => true
             ],
+            'Persistent Customer ID/ isCustomerEmulated = null (API Request) should be authorized' => [
+                'isPersistent' => true,
+                'customerId' => null,
+                'isCustomerEmulated' => null,
+                'shouldBeAllowed' => true
+            ]
         ];
     }
 }

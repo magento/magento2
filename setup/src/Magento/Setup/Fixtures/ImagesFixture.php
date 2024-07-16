@@ -260,6 +260,8 @@ class ImagesFixture extends Fixture
         $productImagesDirectoryPath = $mediaDirectory->getRelativePath($this->mediaConfig->getBaseMediaPath());
 
         for ($i = 1; $i <= $this->getImagesToGenerate(); $i++) {
+            // md5() here is not for cryptographic use.
+            // phpcs:ignore Magento2.Security.InsecureFunction
             $imageName = md5($i) . '.jpg';
             $imageFullName = DIRECTORY_SEPARATOR . substr($imageName, 0, 1)
                 . DIRECTORY_SEPARATOR . substr($imageName, 1, 1)

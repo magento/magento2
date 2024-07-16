@@ -301,13 +301,15 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
 
     /**
      * @param string $optionType
-     *
+     * @param bool $includedExisting
+     * @param int $expectedOptionValuesCount
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_options.php
      * @magentoAppIsolation enabled
      * @dataProvider validOptionDataProvider
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function testUpdateOptionAddingNewValue($optionType)
+    public function testUpdateOptionAddingNewValue($optionType, $includedExisting, $expectedOptionValuesCount)
     {
         $fixtureOption = null;
         $valueData = [
@@ -334,17 +336,21 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         }
 
         $values = [];
-        foreach ($option->getValues() as $key => $value) {
-            $values[] =
-                [
-                    'price' => $value->getPrice(),
-                    'price_type' => $value->getPriceType(),
-                    'sku' => $value->getSku(),
-                    'title' => $value->getTitle(),
-                    'sort_order' => $value->getSortOrder(),
-                ];
-        }
         $values[] = $valueData;
+        // Keeps the existing Option Values when adding a new Option Value
+        if ($includedExisting) {
+            foreach ($option->getValues() as $key => $value) {
+                $values[] =
+                    [
+                        'price' => $value->getPrice(),
+                        'price_type' => $value->getPriceType(),
+                        'sku' => $value->getSku(),
+                        'title' => $value->getTitle(),
+                        'sort_order' => $value->getSortOrder(),
+                    ];
+            }
+        }
+
         $data = [
             'product_sku' => $option->getProductSku(),
             'title' => $option->getTitle(),
@@ -375,21 +381,31 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             $valueObject = $this->_webApiCall($serviceInfo, ['option' => $data]);
         }
 
-        $values = end($valueObject['values']);
+        $values = reset($valueObject['values']);
         $this->assertEquals($valueData['price'], $values['price']);
         $this->assertEquals($valueData['price_type'], $values['price_type']);
         $this->assertEquals($valueData['sku'], $values['sku']);
         $this->assertEquals('New Option Title', $values['title']);
         $this->assertEquals(100, $values['sort_order']);
+
+        $product = $productRepository->get('simple', false, null, true);
+        // Assert correct number of Option Values after Option is updated
+        foreach ($product->getOptions() as $option) {
+            if ($option->getId() === $fixtureOption->getId()) {
+                $this->assertEquals($expectedOptionValuesCount, count($option->getValues()));
+            }
+        }
     }
 
     public function validOptionDataProvider()
     {
         return [
-            'drop_down' => ['drop_down'],
-            'checkbox' => ['checkbox'],
-            'radio' => ['radio'],
-            'multiple' => ['multiple']
+            'drop_down including previous values' => ['drop_down', true, 3],
+            'drop_down with new value only' => ['drop_down', false, 1],
+            'checkbox including previous values' => ['checkbox', true, 3],
+            'checkbox with new value only' => ['checkbox', false, 1],
+            'radio including previous values' => ['radio', true, 3],
+            'multiple with new value only' => ['multiple', false, 1],
         ];
     }
 

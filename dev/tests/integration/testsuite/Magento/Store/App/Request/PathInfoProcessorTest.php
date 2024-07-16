@@ -5,110 +5,72 @@
  */
 namespace Magento\Store\App\Request;
 
-use \Magento\TestFramework\Helper\Bootstrap;
-use \Magento\Store\Model\ScopeInterface;
-use \Magento\Store\Model\Store;
+use Magento\Framework\App\RequestInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
-class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
+class PathInfoProcessorTest extends TestCase
 {
     /**
-     * @var \Magento\Store\App\Request\PathInfoProcessor
+     * @var PathInfoProcessor
      */
     private $pathProcessor;
 
     protected function setUp(): void
     {
-        $this->pathProcessor = Bootstrap::getObjectManager()->create(
-            \Magento\Store\App\Request\PathInfoProcessor::class
-        );
+        $this->pathProcessor = Bootstrap::getObjectManager()->create(PathInfoProcessor::class);
     }
 
     /**
      * @covers \Magento\Store\App\Request\PathInfoProcessor::process
+     * @magentoConfigFixture web/url/use_store 1
      * @dataProvider notValidStoreCodeDataProvider
+     * @param string $pathInfo
      */
-    public function testProcessNotValidStoreCode($pathInfo)
+    public function testProcessNotValidStoreCode(string $pathInfo)
     {
-        /** @var \Magento\Framework\App\RequestInterface $request */
-        $request = Bootstrap::getObjectManager()->create(\Magento\Framework\App\RequestInterface::class);
-        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
-        $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
-        $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
+        $request = Bootstrap::getObjectManager()->create(RequestInterface::class);
         $info = $this->pathProcessor->process($request, $pathInfo);
         $this->assertEquals($pathInfo, $info);
     }
 
-    public function notValidStoreCodeDataProvider()
+    public function notValidStoreCodeDataProvider(): array
     {
         return [
-            ['not_valid_store_code_int' => '/100500/m/c/a'],
-            ['not_valid_store_code_str' => '/test_string/m/c/a'],
+            ['default store id' => '/0/m/c/a'],
+            ['main store id' => '/1/m/c/a'],
+            ['nonexistent store code' => '/test_string/m/c/a'],
+            ['admin store code' => '/admin/m/c/a'],
+            ['empty path' => '/'],
         ];
     }
 
     /**
      * @covers \Magento\Store\App\Request\PathInfoProcessor::process
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     */
-    public function testProcessValidStoreDisabledStoreUrl()
-    {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = Bootstrap::getObjectManager()->get(\Magento\Store\Model\Store::class);
-        $store->load('fixturestore', 'code');
-
-        /** @var \Magento\Framework\App\RequestInterface $request */
-        $request = Bootstrap::getObjectManager()->create(\Magento\Framework\App\RequestInterface::class);
-
-        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
-        $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
-        $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
-        $config->setValue(Store::XML_PATH_STORE_IN_URL, false, ScopeInterface::SCOPE_STORE, $store->getCode());
-        $pathInfo = sprintf('/%s/m/c/a', $store->getCode());
-        $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
-    }
-
-    /**
-     * @covers \Magento\Store\App\Request\PathInfoProcessor::process
-     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoConfigFixture web/url/use_store 1
      */
     public function testProcessValidStoreCodeCaseProcessStoreName()
     {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = Bootstrap::getObjectManager()->get(\Magento\Store\Model\Store::class);
-        $store->load('fixturestore', 'code');
-
-        /** @var \Magento\Framework\App\RequestInterface $request */
-        $request = Bootstrap::getObjectManager()->create(\Magento\Framework\App\RequestInterface::class);
-
-        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
-        $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
-        $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
-        $config->setValue(Store::XML_PATH_STORE_IN_URL, true, ScopeInterface::SCOPE_STORE, $store->getCode());
-        $pathInfo = sprintf('/%s/m/c/a', $store->getCode());
+        $storeCode = 'fixturestore';
+        $request = Bootstrap::getObjectManager()->create(RequestInterface::class);
+        $pathInfo = sprintf('/%s/m/c/a', $storeCode);
         $this->assertEquals('/m/c/a', $this->pathProcessor->process($request, $pathInfo));
     }
 
     /**
      * @covers \Magento\Store\App\Request\PathInfoProcessor::process
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoConfigFixture web/url/use_store 1
      */
     public function testProcessValidStoreCodeWhenStoreIsDirectFrontNameWithFrontName()
     {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = Bootstrap::getObjectManager()->get(\Magento\Store\Model\Store::class);
-        $store->load('fixturestore', 'code');
-
-        /** @var \Magento\Framework\App\RequestInterface $request */
+        $storeCode = 'fixturestore';
         $request = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\App\RequestInterface::class,
-            ['directFrontNames' => [$store->getCode() => true]]
+            RequestInterface::class,
+            ['directFrontNames' => [$storeCode => true]]
         );
-
-        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
-        $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
-        $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
-        $config->setValue(Store::XML_PATH_STORE_IN_URL, true, ScopeInterface::SCOPE_STORE, $store->getCode());
-        $pathInfo = sprintf('/%s/m/c/a', $store->getCode());
+        $pathInfo = sprintf('/%s/m/c/a', $storeCode);
         $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
         $this->assertEquals(\Magento\Framework\App\Router\Base::NO_ROUTE, $request->getActionName());
     }
@@ -116,66 +78,13 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers \Magento\Store\App\Request\PathInfoProcessor::process
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     */
-    public function testProcessValidStoreCodeWhenStoreCodeInUrlIsDisabledWithFrontName()
-    {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = Bootstrap::getObjectManager()->get(\Magento\Store\Model\Store::class);
-        $store->load('fixturestore', 'code');
-
-        /** @var \Magento\Framework\App\RequestInterface $request */
-        $request = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\App\RequestInterface::class,
-            ['directFrontNames' => ['someFrontName' => true]]
-        );
-
-        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
-        $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
-        $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
-        $config->setValue(Store::XML_PATH_STORE_IN_URL, false, ScopeInterface::SCOPE_STORE, $store->getCode());
-        $pathInfo = sprintf('/%s/m/c/a', $store->getCode());
-        $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
-    }
-
-    /**
-     * @covers \Magento\Store\App\Request\PathInfoProcessor::process
-     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     */
-    public function testProcessValidStoreCodeWhenStoreCodeisAdmin()
-    {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = Bootstrap::getObjectManager()->get(\Magento\Store\Model\Store::class);
-        $store->load('fixturestore', 'code');
-
-        /** @var \Magento\Framework\App\RequestInterface $request */
-        $request = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\App\RequestInterface::class,
-            ['directFrontNames' => ['someFrontName' => true]]
-        );
-
-        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
-        $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
-        $config->setValue(Store::XML_PATH_STORE_IN_URL, true);
-        $config->setValue(Store::XML_PATH_STORE_IN_URL, false, ScopeInterface::SCOPE_STORE, $store->getCode());
-        $pathInfo = sprintf('/%s/m/c/a', 'admin');
-        $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
-    }
-
-    /**
-     * @covers \Magento\Store\App\Request\PathInfoProcessor::process
+     * @magentoConfigFixture web/url/use_store 0
      */
     public function testProcessValidStoreCodeWhenUrlConfigIsDisabled()
     {
-        /** @var \Magento\Framework\App\RequestInterface $request */
-        $request = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\App\RequestInterface::class,
-            ['directFrontNames' => ['someFrontName' => true]]
-        );
-
-        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
-        $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
-        $config->setValue(Store::XML_PATH_STORE_IN_URL, false);
-        $pathInfo = sprintf('/%s/m/c/a', 'whatever');
+        $storeCode = 'fixturestore';
+        $request = Bootstrap::getObjectManager()->create(RequestInterface::class);
+        $pathInfo = sprintf('/%s/m/c/a', $storeCode);
         $this->assertEquals($pathInfo, $this->pathProcessor->process($request, $pathInfo));
         $this->assertNull($request->getActionName());
     }

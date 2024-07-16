@@ -5,21 +5,23 @@
  */
 
 /** @var \Magento\Catalog\Block\Product\View\Details $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<?php if ($detailedInfoGroup = $block->getGroupSortedChildNames('detailed_info', 'getChildHtml')) :?>
+<?php if ($detailedInfoGroup = $block->getGroupSortedChildNames('detailed_info', 'getChildHtml')):?>
     <div class="product info detailed">
         <?php $layout = $block->getLayout(); ?>
         <div class="product data items" data-mage-init='{"tabs":{"openedState":"active"}}'>
-            <?php foreach ($detailedInfoGroup as $name) :?>
+            <?php $hideTabContent = false; ?>
+            <?php foreach ($detailedInfoGroup as $name):?>
                 <?php
                 $html = $layout->renderElement($name);
-                if (!trim($html)) {
+                if (!$html || !trim($html)) {
                     continue;
                 }
                 $alias = $layout->getElementAlias($name);
                 $label = $block->getChildData($alias, 'title');
                 ?>
-                <div class="data item title"
+                <div class="data item title <?= !$hideTabContent ? 'active' : ''?>"
                      data-role="collapsible" id="tab-label-<?= $block->escapeHtmlAttr($alias) ?>">
                     <a class="data switch"
                        tabindex="-1"
@@ -30,9 +32,17 @@
                     </a>
                 </div>
                 <div class="data item content"
-                     aria-labelledby="tab-label-<?= $block->escapeHtmlAttr($alias) ?>-title" id="<?= $block->escapeHtmlAttr($alias) ?>" data-role="content">
+                     aria-labelledby="tab-label-<?= $block->escapeHtmlAttr($alias) ?>-title"
+                     id="<?= $block->escapeHtmlAttr($alias) ?>" data-role="content">
                     <?= /* @noEscape */ $html ?>
                 </div>
+                <?= $hideTabContent
+                    ? /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                        'display: none;',
+                        '#' . $block->escapeHtmlAttr($alias)
+                    )
+                    : '' ?>
+                <?php $hideTabContent = true; ?>
             <?php endforeach;?>
         </div>
     </div>

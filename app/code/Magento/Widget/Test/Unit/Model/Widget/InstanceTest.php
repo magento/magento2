@@ -110,7 +110,7 @@ class InstanceTest extends TestCase
 
         /** @var Instance _model */
         $this->_model = $this->getMockBuilder(Instance::class)
-            ->setMethods(['_construct'])
+            ->onlyMethods(['_construct'])
             ->setConstructorArgs($args)
             ->getMock();
     }

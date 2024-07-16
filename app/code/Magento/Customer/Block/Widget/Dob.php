@@ -23,13 +23,11 @@ class Dob extends AbstractWidget
     /**
      * Constants for borders of date-type customer attributes
      */
-    const MIN_DATE_RANGE_KEY = 'date_range_min';
+    public const MIN_DATE_RANGE_KEY = 'date_range_min';
 
-    const MAX_DATE_RANGE_KEY = 'date_range_max';
+    public const MAX_DATE_RANGE_KEY = 'date_range_max';
 
     /**
-     * Date inputs
-     *
      * @var array
      */
     protected $_dateInputs = [];
@@ -305,6 +303,7 @@ class Dob extends AbstractWidget
     public function getDateFormat()
     {
         $dateFormat = $this->setTwoDayPlaces($this->_localeDate->getDateFormatWithLongYear());
+        $dateFormat = $this->setTwoMonthPlaces($dateFormat);
         /** Escape RTL characters which are present in some locales and corrupt formatting */
         $escapedDateFormat = preg_replace('/[^MmDdYy\/\.\-]/', '', $dateFormat);
 
@@ -422,7 +421,8 @@ class Dob extends AbstractWidget
                 'monthNamesShort' => array_values(iterator_to_array($monthsData['format']['abbreviated'])),
                 'dayNames' => array_values(iterator_to_array($daysData['format']['wide'])),
                 'dayNamesShort' => array_values(iterator_to_array($daysData['format']['abbreviated'])),
-                'dayNamesMin' => array_values(iterator_to_array($daysData['format']['short'])),
+                'dayNamesMin' =>
+                 array_values(iterator_to_array(($daysData['format']['short']) ?: $daysData['format']['abbreviated'])),
             ]
         );
     }
@@ -438,6 +438,21 @@ class Dob extends AbstractWidget
         return preg_replace(
             '/(?<!d)d(?!d)/',
             'dd',
+            $format
+        );
+    }
+
+    /**
+     * Set 2 places for month value in format string
+     *
+     * @param string $format
+     * @return string
+     */
+    private function setTwoMonthPlaces(string $format): string
+    {
+        return preg_replace(
+            '/(?<!M)M(?!M)/',
+            'MM',
             $format
         );
     }

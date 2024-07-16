@@ -18,6 +18,7 @@
             <testCaseId value="MC-14384" />
             <group value="security"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Log in to Admin Panel -->

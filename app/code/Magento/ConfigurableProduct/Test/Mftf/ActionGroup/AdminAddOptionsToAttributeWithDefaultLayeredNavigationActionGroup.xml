@@ -19,6 +19,8 @@
             <argument name="option3" defaultValue="colorProductAttribute3"/>
         </arguments>
 
+        <scrollTo selector="//div/strong[@class='admin__collapsible-title']/span[contains(text(),'Configurations')]" stepKey="scrollToConfigurableProductButton"/>
+        <waitForElementVisible selector="button[data-index='create_configurable_products_button']" time="30" stepKey="waitForELementVisible"/>
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickOnNewAttribute"/>
         <waitForPageLoad stepKey="waitForIFrame"/>

@@ -12,6 +12,11 @@ use Elasticsearch\Client;
 use Elasticsearch\Namespaces\IndicesNamespace;
 use Magento\AdvancedSearch\Model\Client\ClientInterface as ElasticsearchClient;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\AddDefaultSearchField;
+use Magento\Elasticsearch7\Model\Adapter\DynamicTemplates\IntegerMapper;
+use Magento\Elasticsearch7\Model\Adapter\DynamicTemplates\PositionMapper;
+use Magento\Elasticsearch7\Model\Adapter\DynamicTemplates\PriceMapper;
+use Magento\Elasticsearch7\Model\Adapter\DynamicTemplates\StringMapper;
+use Magento\Elasticsearch7\Model\Adapter\DynamicTemplatesProvider;
 use Magento\Elasticsearch7\Model\Client\Elasticsearch;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -51,28 +56,28 @@ class ElasticsearchTest extends TestCase
     protected function setUp(): void
     {
         $this->elasticsearchClientMock = $this->getMockBuilder(Client::class)
-            ->setMethods(
+            ->addMethods(['suggest'])
+            ->onlyMethods(
                 [
                     'indices',
                     'ping',
                     'bulk',
                     'search',
                     'scroll',
-                    'suggest',
                     'info',
                 ]
             )
             ->disableOriginalConstructor()
             ->getMock();
         $this->indicesMock = $this->getMockBuilder(IndicesNamespace::class)
-            ->setMethods(
+            ->addMethods(['deleteMapping'])
+            ->onlyMethods(
                 [
                     'exists',
                     'getSettings',
                     'create',
                     'delete',
                     'putMapping',
-                    'deleteMapping',
                     'getMapping',
                     'stats',
                     'updateAliases',
@@ -93,12 +98,21 @@ class ElasticsearchTest extends TestCase
             ->willReturn(['version' => ['number' => '7.0.0']]);
 
         $this->objectManager = new ObjectManagerHelper($this);
+        $dynamicTemplatesProvider = new DynamicTemplatesProvider(
+            [
+                new PriceMapper(),
+                new PositionMapper(),
+                new StringMapper(),
+                new IntegerMapper(),
+            ]
+        );
         $this->model = $this->objectManager->getObject(
             Elasticsearch::class,
             [
                 'options' => $this->getOptions(),
                 'elasticsearchClient' => $this->elasticsearchClientMock,
-                'fieldsMappingPreprocessors' => [new AddDefaultSearchField()]
+                'fieldsMappingPreprocessors' => [new AddDefaultSearchField()],
+                'dynamicTemplatesProvider' => $dynamicTemplatesProvider,
             ]
         );
     }
@@ -109,7 +123,7 @@ class ElasticsearchTest extends TestCase
         $result = $this->objectManager->getObject(
             Elasticsearch::class,
             [
-                'options' => []
+                'options' => [],
             ]
         );
         $this->assertNotNull($result);
@@ -123,7 +137,7 @@ class ElasticsearchTest extends TestCase
         $result = $this->objectManager->getObject(
             Elasticsearch::class,
             [
-                'options' => $this->getOptions()
+                'options' => $this->getOptions(),
             ]
         );
         $this->assertNotNull($result);
@@ -140,6 +154,13 @@ class ElasticsearchTest extends TestCase
      */
     public function testBuildConfig(array $options, $expectedResult): void
     {
+        $objects = [
+            [
+                DynamicTemplatesProvider::class,
+                $this->createMock(DynamicTemplatesProvider::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         $buildConfig = new Elasticsearch($options);
         $config = $this->getPrivateMethod(Elasticsearch::class, 'buildESConfig');
         $result = $config->invoke($buildConfig, $options);
@@ -166,7 +187,7 @@ class ElasticsearchTest extends TestCase
     /**
      * Get options data provider.
      */
-    public function getOptionsDataProvider()
+    public static function getOptionsDataProvider()
     {
         return [
             [
@@ -177,7 +198,7 @@ class ElasticsearchTest extends TestCase
                     'index' => 'magento2',
                     'enableAuth' => 0,
                 ],
-                'expected_result' => 'http://localhost:9200'
+                'expected_result' => 'http://localhost:9200',
             ],
             [
                 'with_protocol' => [
@@ -187,8 +208,8 @@ class ElasticsearchTest extends TestCase
                     'index' => 'magento2',
                     'enableAuth' => 0,
                 ],
-                'expected_result' => 'https://localhost:9200'
-            ]
+                'expected_result' => 'https://localhost:9200',
+            ],
         ];
     }
 
@@ -228,7 +249,7 @@ class ElasticsearchTest extends TestCase
             Elasticsearch::class,
             [
                 'options' => $this->getEmptyIndexOption(),
-                'elasticsearchClient' => $this->elasticsearchClientMock
+                'elasticsearchClient' => $this->elasticsearchClientMock,
             ]
         );
 
@@ -627,6 +648,7 @@ class ElasticsearchTest extends TestCase
 
     /**
      * Test query() method
+     *
      * @return void
      */
     public function testQuery()
@@ -641,6 +663,7 @@ class ElasticsearchTest extends TestCase
 
     /**
      * Test suggest() method
+     *
      * @return void
      */
     public function testSuggest()

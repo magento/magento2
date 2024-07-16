@@ -456,7 +456,8 @@ class ConfigTest extends TestCase
         );
 
         $this->validatorFactoryMock = $this->getMockBuilder(ValidatorFactory::class)
-            ->setMethods(['setInstanceName', 'create'])
+            ->onlyMethods(['create'])
+            ->addMethods(['setInstanceName'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->validatorFactoryMock->expects($this->any())

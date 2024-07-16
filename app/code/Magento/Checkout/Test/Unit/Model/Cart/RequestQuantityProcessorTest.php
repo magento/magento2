@@ -28,24 +28,24 @@ class RequestQuantityProcessorTest extends TestCase
     {
         $this->localeResolver = $this->getMockBuilder(ResolverInterface::class)
             ->getMockForAbstractClass();
-
-        $this->localeResolver->method('getLocale')
-            ->willReturn('en_US');
-
-        $this->requestProcessor = new RequestQuantityProcessor(
-            $this->localeResolver
-        );
     }
 
     /**
      * Test of cart data processing.
      *
      * @param array $cartData
+     * @param string $locale
      * @param array $expected
      * @dataProvider cartDataProvider
      */
-    public function testProcess($cartData, $expected)
+    public function testProcess(array $cartData, string $locale, array $expected): void
     {
+        $this->localeResolver->method('getLocale')
+            ->willReturn($locale);
+        $this->requestProcessor = new RequestQuantityProcessor(
+            $this->localeResolver
+        );
+
         $this->assertEquals($this->requestProcessor->process($cartData), $expected);
     }
 
@@ -57,6 +57,7 @@ class RequestQuantityProcessorTest extends TestCase
         return [
             'empty_array' => [
                 'cartData' => [],
+                'locale' => 'en_US',
                 'expected' => [],
             ],
             'strings_array' => [
@@ -64,6 +65,7 @@ class RequestQuantityProcessorTest extends TestCase
                     ['qty' => ' 10 '],
                     ['qty' => ' 0.5 ']
                 ],
+                'locale' => 'en_US',
                 'expected' => [
                     ['qty' => 10],
                     ['qty' => 0.5]
@@ -74,6 +76,7 @@ class RequestQuantityProcessorTest extends TestCase
                     ['qty' => 1],
                     ['qty' => 0.002]
                 ],
+                'locale' => 'en_US',
                 'expected' => [
                     ['qty' => 1],
                     ['qty' => 0.002]
@@ -83,8 +86,20 @@ class RequestQuantityProcessorTest extends TestCase
                 'cartData' => [
                     ['qty' => [1, 2 ,3]],
                 ],
+                'locale' => 'en_US',
                 'expected' => [
                     ['qty' => [1, 2, 3]],
+                ],
+            ],
+            'strings_array_spain_locale' => [
+                'cartData' => [
+                    ['qty' => ' 10 '],
+                    ['qty' => ' 0.5 ']
+                ],
+                'locale' => 'es_CL',
+                'expected' => [
+                    ['qty' => 10],
+                    ['qty' => 0.5]
                 ],
             ],
         ];

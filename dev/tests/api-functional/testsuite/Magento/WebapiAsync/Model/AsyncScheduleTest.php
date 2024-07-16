@@ -75,7 +75,7 @@ class AsyncScheduleTest extends WebapiAbstract
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
+        $logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
         $this->registry = $this->objectManager->get(Registry::class);
 
         $params = array_merge_recursive(
@@ -86,7 +86,7 @@ class AsyncScheduleTest extends WebapiAbstract
         /** @var PublisherConsumerController publisherConsumerController */
         $this->publisherConsumerController = $this->objectManager->create(PublisherConsumerController::class, [
             'consumers'     => $this->consumers,
-            'logFilePath'   => $this->logFilePath,
+            'logFilePath'   => $logFilePath,
             'appInitParams' => $params,
         ]);
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
@@ -202,11 +202,11 @@ class AsyncScheduleTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function productCreationProvider()
+    public static function productCreationProvider()
     {
         $productBuilder = function ($data) {
             return array_replace_recursive(
-                $this->getSimpleProductData(),
+                self::getSimpleProductData(),
                 $data
             );
         };
@@ -235,7 +235,7 @@ class AsyncScheduleTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function productGetDataProvider()
+    public static function productGetDataProvider()
     {
         return [
             ['psku-test-1', null],
@@ -248,7 +248,7 @@ class AsyncScheduleTest extends WebapiAbstract
      * @param array $productData
      * @return array
      */
-    private function getSimpleProductData($productData = [])
+    private static function getSimpleProductData($productData = [])
     {
         return [
             ProductInterface::SKU              => isset($productData[ProductInterface::SKU])
@@ -259,7 +259,6 @@ class AsyncScheduleTest extends WebapiAbstract
             ProductInterface::TYPE_ID          => 'simple',
             ProductInterface::PRICE            => 3.62,
             ProductInterface::STATUS           => 1,
-            ProductInterface::TYPE_ID          => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
             'custom_attributes'                => [
                 ['attribute_code' => 'cost', 'value' => ''],

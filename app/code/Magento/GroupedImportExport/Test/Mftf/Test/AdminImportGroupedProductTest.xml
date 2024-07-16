@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportGroupedProductTest">
+        <annotations>
+            <features value="GroupedImportExport"/>
+            <stories value="Import Products"/>
+            <title value="Import Grouped Product"/>
+            <description value="Imports a .csv file containing a grouped product. Verifies that product is imported
+            successfully and can be purchased."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-38408"/>
+            <group value="importExport"/>
+            <group value="GroupedProduct"/>
+        </annotations>
+
+        <before>
+            <!-- Create Category & Customer -->
+            <createData entity="ImportCategory_Grouped" stepKey="createImportCategory"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Copy Images to Import Directory for Product Images -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+                <argument name="path">var/import/images/{{ImportProduct_Grouped.name}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct1BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple1_Grouped.baseImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Grouped.name}}/{{ImportProductSimple1_Grouped.baseImage}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct2BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple2_Grouped.smallImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Grouped.name}}/{{ImportProductSimple2_Grouped.smallImage}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct3BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple3_Grouped.thumbnailImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Grouped.name}}/{{ImportProductSimple3_Grouped.thumbnailImage}}</argument>
+            </helper>
+
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <!-- Delete Data -->
+            <deleteData createDataKey="createImportCategory" stepKey="deleteImportCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+                <argument name="path">var/import/images/{{ImportProduct_Grouped.name}}</argument>
+            </helper>
+            <deleteData url="/V1/products/{{ImportProductSimple1_Grouped.urlKey}}" stepKey="deleteImportedSimpleProduct1"/>
+            <deleteData url="/V1/products/{{ImportProductSimple2_Grouped.urlKey}}" stepKey="deleteImportedSimpleProduct2"/>
+            <deleteData url="/V1/products/{{ImportProductSimple3_Grouped.urlKey}}" stepKey="deleteImportedSimpleProduct3"/>
+            <deleteData url="/V1/products/{{ImportProduct_Grouped.urlKey}}" stepKey="deleteImportedGroupedProduct"/>
+            <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="navigateToAndResetProductGridToDefaultView"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Import Grouped Product & Assert No Errors -->
+        <actionGroup ref="AdminNavigateToImportPageActionGroup" stepKey="navigateToImportPage"/>
+        <actionGroup ref="AdminFillImportFormActionGroup" stepKey="fillImportForm">
+            <argument name="importFile" value="{{ImportProduct_Grouped.fileName}}"/>
+            <argument name="imagesFileDirectory" value="{{ImportProduct_Grouped.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickCheckDataImportActionGroup" stepKey="clickCheckData"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="{{ImportCommonMessages.validFile}}" stepKey="seeCheckDataResultMessage"/>
+        <dontSeeElementInDOM selector="{{AdminImportValidationMessagesSection.importErrorList}}" stepKey="dontSeeErrorMessage"/>
+        <actionGroup ref="AdminClickImportActionGroup" stepKey="clickImport"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="{{ImportProduct_Grouped.importSummary}}" stepKey="seeNoticeMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.messageByType('success')}}" userInput="{{ImportCommonMessages.success}}" stepKey="seeImportMessage"/>
+        <dontSeeElementInDOM selector="{{AdminImportValidationMessagesSection.importErrorList}}" stepKey="dontSeeErrorMessage2"/>
+
+        <!-- Reindex -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!-- Admin: Verify Data on Import History Page -->
+        <actionGroup ref="AdminNavigateToImportHistoryPageActionGroup" stepKey="navigateToImportHistoryPage"/>
+        <actionGroup ref="AdminGridSortColumnDescendingActionGroup" stepKey="sortColumnByIdDescending">
+            <argument name="columnLabel" value="history_id"/>
+        </actionGroup>
+        <see userInput="{{ImportProduct_Grouped.fileName}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeImportedFile"/>
+        <see userInput="{{ImportProduct_Grouped.importSummary}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeSummary"/>
+
+        <!-- Admin: Verify Simple Product 1 on Edit Product Page -->
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToSimpleProduct1EditPage">
+            <argument name="product" value="ImportProductSimple1_Grouped"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="assertSimpleProduct1OnEditPage">
+            <argument name="productStatus" value="{{ImportProductSimple1_Grouped.status}}"/>
+            <argument name="productName" value="{{ImportProductSimple1_Grouped.name}}"/>
+            <argument name="productSku" value="{{ImportProductSimple1_Grouped.sku}}"/>
+            <argument name="productPrice" value="{{ImportProductSimple1_Grouped.price}}"/>
+            <argument name="productQuantity" value="{{ImportProductSimple1_Grouped.quantity}}"/>
+            <argument name="productWeight" value="{{ImportProductSimple1_Grouped.weight}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Grouped.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct1BaseImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple1_Grouped.baseImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple1_Grouped.baseImageName, 'image')}}" stepKey="seeBaseImageRole1"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct1SmallImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple1_Grouped.smallImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple1_Grouped.smallImageName, 'small_image')}}" stepKey="seeSmallImageRole1"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct1ThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple1_Grouped.thumbnailImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple1_Grouped.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRole1"/>
+
+        <!-- Admin: Verify Simple Product 2 on Edit Product Page -->
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToSimpleProduct2EditPage">
+            <argument name="product" value="ImportProductSimple2_Grouped"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="assertSimpleProduct2OnEditPage">
+            <argument name="productStatus" value="{{ImportProductSimple2_Grouped.status}}"/>
+            <argument name="productName" value="{{ImportProductSimple2_Grouped.name}}"/>
+            <argument name="productSku" value="{{ImportProductSimple2_Grouped.sku}}"/>
+            <argument name="productPrice" value="{{ImportProductSimple2_Grouped.price}}"/>
+            <argument name="productQuantity" value="{{ImportProductSimple2_Grouped.quantity}}"/>
+            <argument name="productWeight" value="{{ImportProductSimple2_Grouped.weight}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Grouped.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct2BaseImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple2_Grouped.baseImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple2_Grouped.baseImageName, 'image')}}" stepKey="seeBaseImageRole2"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct2SmallImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple2_Grouped.smallImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple2_Grouped.smallImageName, 'small_image')}}" stepKey="seeSmallImageRole2"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct2ThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple2_Grouped.thumbnailImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple2_Grouped.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRole2"/>
+
+        <!-- Admin: Verify Simple Product 3 on Edit Product Page -->
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToSimpleProduct3EditPage">
+            <argument name="product" value="ImportProductSimple3_Grouped"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="assertSimpleProduct3OnEditPage">
+            <argument name="productStatus" value="{{ImportProductSimple3_Grouped.status}}"/>
+            <argument name="productName" value="{{ImportProductSimple3_Grouped.name}}"/>
+            <argument name="productSku" value="{{ImportProductSimple3_Grouped.sku}}"/>
+            <argument name="productPrice" value="{{ImportProductSimple3_Grouped.price}}"/>
+            <argument name="productQuantity" value="{{ImportProductSimple3_Grouped.quantity}}"/>
+            <argument name="productWeight" value="{{ImportProductSimple3_Grouped.weight}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Grouped.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct3BaseImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple3_Grouped.baseImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple3_Grouped.baseImageName, 'image')}}" stepKey="seeBaseImageRole3"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct3SmallImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple3_Grouped.smallImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple3_Grouped.smallImageName, 'small_image')}}" stepKey="seeSmallImageRole3"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct3ThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple3_Grouped.thumbnailImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple3_Grouped.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRole3"/>
+
+        <!-- Admin: Verify Grouped Product Common Data on Edit Product Page -->
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToGroupedProductEditPage">
+            <argument name="product" value="ImportProduct_Grouped"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertGroupedProductGeneralInfoOnEditPageActionGroup" stepKey="assertGroupedProductOnEditPage">
+            <argument name="productStatus" value="{{ImportProduct_Grouped.status}}"/>
+            <argument name="productName" value="{{ImportProduct_Grouped.name}}"/>
+            <argument name="productSku" value="{{ImportProduct_Grouped.sku}}"/>
+            <argument name="productQuantity" value="{{ImportProduct_Grouped.quantity}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Grouped.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertGroupedProductBaseImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Grouped.baseImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Grouped.baseImageName, 'image')}}" stepKey="seeBaseImageRoleGrouped"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertGroupedProductSmallImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Grouped.smallImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Grouped.smallImageName, 'small_image')}}" stepKey="seeSmallImageRoleGrouped"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertGroupedProductThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Grouped.thumbnailImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Grouped.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRoleGrouped"/>
+
+        <!-- Admin: Verify Grouped Product Information on Edit Product Page -->
+        <seeNumberOfElements userInput="3" selector="{{AdminGroupedProductOptionGridSection.allRows}}" stepKey="see3RowsAdmin"/>
+        <actionGroup ref="AdminVerifyAssociatedProductForGroupedProductActionGroup" stepKey="verifyAssociatedProduct1Admin">
+            <argument name="image" value="{{ImportProductSimple2_Grouped.thumbnailImageName}}"/>
+            <argument name="name" value="{{ImportProductSimple2_Grouped.name}}"/>
+            <argument name="attributeSet" value="{{ImportProductSimple2_Grouped.attributeSetText}}"/>
+            <argument name="status" value="{{ImportProductSimple2_Grouped.statusText}}"/>
+            <argument name="sku" value="{{ImportProductSimple2_Grouped.sku}}"/>
+            <argument name="price" value="${{ImportProductSimple2_Grouped.price}}"/>
+            <argument name="defaultQuantity" value="{{ImportProductSimple2_Grouped.groupedDefaultQuantity}}"/>
+            <argument name="position" value="{{ImportProductSimple2_Grouped.groupedPosition}}"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminVerifyAssociatedProductForGroupedProductActionGroup" stepKey="verifyAssociatedProduct2Admin">
+            <argument name="image" value="{{ImportProductSimple1_Grouped.thumbnailImageName}}"/>
+            <argument name="name" value="{{ImportProductSimple1_Grouped.name}}"/>
+            <argument name="attributeSet" value="{{ImportProductSimple1_Grouped.attributeSetText}}"/>
+            <argument name="status" value="{{ImportProductSimple1_Grouped.statusText}}"/>
+            <argument name="sku" value="{{ImportProductSimple1_Grouped.sku}}"/>
+            <argument name="price" value="${{ImportProductSimple1_Grouped.price}}"/>
+            <argument name="defaultQuantity" value="{{ImportProductSimple1_Grouped.groupedDefaultQuantity}}"/>
+            <argument name="position" value="{{ImportProductSimple1_Grouped.groupedPosition}}"/>
+            <argument name="index" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminVerifyAssociatedProductForGroupedProductActionGroup" stepKey="verifyAssociatedProduct3Admin">
+            <argument name="image" value="{{ImportProductSimple3_Grouped.thumbnailImageName}}"/>
+            <argument name="name" value="{{ImportProductSimple3_Grouped.name}}"/>
+            <argument name="attributeSet" value="{{ImportProductSimple3_Grouped.attributeSetText}}"/>
+            <argument name="status" value="{{ImportProductSimple3_Grouped.statusText}}"/>
+            <argument name="sku" value="{{ImportProductSimple3_Grouped.sku}}"/>
+            <argument name="price" value="${{ImportProductSimple3_Grouped.price}}"/>
+            <argument name="defaultQuantity" value="{{ImportProductSimple3_Grouped.groupedDefaultQuantity}}"/>
+            <argument name="position" value="{{ImportProductSimple3_Grouped.groupedPosition}}"/>
+            <argument name="index" value="3"/>
+        </actionGroup>
+
+        <!-- Storefront: Verify Grouped Product In Category -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginStorefront">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryPage">
+            <argument name="categoryUrl" value="{{ImportCategory_Grouped.name}}"/>
+        </actionGroup>
+        <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productName}}" userInput="4" stepKey="see4Products"/>
+        <see userInput="{{ImportProductSimple1_Grouped.name}}" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeSimpleProduct1"/>
+        <see userInput="{{ImportProductSimple2_Grouped.name}}" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeSimpleProduct2"/>
+        <see userInput="{{ImportProductSimple3_Grouped.name}}" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeSimpleProduct3"/>
+        <see userInput="{{ImportProduct_Grouped.name}}" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeGroupedProduct"/>
+
+        <!-- Storefront: Verify Grouped Product Info & Images -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStorefrontPage">
+            <argument name="productUrl" value="{{ImportProduct_Grouped.urlKey}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="{{ImportProduct_Grouped.name}}"/>
+        </actionGroup>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Grouped.sku}}" stepKey="seeSku"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple1_Grouped.baseImageName)}}" stepKey="seeProduct1BaseImage"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple2_Grouped.baseImageName)}}" stepKey="seeProduct2BaseImage"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple3_Grouped.baseImageName)}}" stepKey="seeProduct3BaseImage"/>
+
+        <!-- Storefront: Verify Associated Grouped Products -->
+        <seeNumberOfElements userInput="3" selector="{{StorefrontProductInfoMainSection.groupedProductsTableAllRows}}" stepKey="see3RowsStorefront"/>
+        <actionGroup ref="StorefrontVerifyAssociatedProductForGroupedProductActionGroup" stepKey="verifyAssociatedProduct1Storefront">
+            <argument name="name" value="{{ImportProductSimple2_Grouped.name}}"/>
+            <argument name="price" value="${{ImportProductSimple2_Grouped.price}}"/>
+            <argument name="quantity" value="{{ImportProductSimple2_Grouped.groupedDefaultQuantity}}"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontVerifyAssociatedProductForGroupedProductActionGroup" stepKey="verifyAssociatedProduct2Storefront">
+            <argument name="name" value="{{ImportProductSimple1_Grouped.name}}"/>
+            <argument name="price" value="${{ImportProductSimple1_Grouped.price}}"/>
+            <argument name="quantity" value="{{ImportProductSimple1_Grouped.groupedDefaultQuantity}}"/>
+            <argument name="index" value="2"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontVerifyAssociatedProductForGroupedProductActionGroup" stepKey="verifyAssociatedProduct3Storefront">
+            <argument name="name" value="{{ImportProductSimple3_Grouped.name}}"/>
+            <argument name="price" value="${{ImportProductSimple3_Grouped.price}}"/>
+            <argument name="quantity" value="{{ImportProductSimple3_Grouped.groupedDefaultQuantity}}"/>
+            <argument name="index" value="3"/>
+        </actionGroup>
+
+        <!-- Purchase Grouped Product -->
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProductToCart"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="navigateToCheckoutPage"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextOnShippingStep"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlacePurchaseOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+
+        <!-- Confirm Purchased Grouped Product -->
+        <actionGroup ref="StorefrontOpenOrderFromSuccessPageActionGroup" stepKey="openOrderFromSuccessPage">
+            <argument name="orderNumber" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <executeJS function="return (Math.round(({{ImportProductSimple1_Grouped.price}}*{{ImportProductSimple1_Grouped.groupedDefaultQuantity}})*100)/100).toString()" stepKey="simpleProduct1Subtotal"/>
+        <executeJS function="return (Math.round(({{ImportProductSimple2_Grouped.price}}*{{ImportProductSimple2_Grouped.groupedDefaultQuantity}})*100)/100).toString()" stepKey="simpleProduct2Subtotal"/>
+        <executeJS function="return (Math.round(({{ImportProductSimple3_Grouped.price}}*{{ImportProductSimple3_Grouped.groupedDefaultQuantity}})*100)/100).toString()" stepKey="simpleProduct3Subtotal"/>
+        <actionGroup ref="StorefrontVerifyCustomerOrderProductRowDataActionGroup" stepKey="verifyProductRow1InOrder">
+            <argument name="name" value="{{ImportProductSimple2_Grouped.name}}"/>
+            <argument name="sku" value="{{ImportProductSimple2_Grouped.sku}}"/>
+            <argument name="price" value="${{ImportProductSimple2_Grouped.price}}"/>
+            <argument name="quantity" value="{{ImportProductSimple2_Grouped.groupedDefaultQuantity}}"/>
+            <argument name="subtotal" value="{$simpleProduct2Subtotal}"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontVerifyCustomerOrderProductRowDataActionGroup" stepKey="verifyProductRow2InOrder">
+            <argument name="name" value="{{ImportProductSimple1_Grouped.name}}"/>
+            <argument name="sku" value="{{ImportProductSimple1_Grouped.sku}}"/>
+            <argument name="price" value="${{ImportProductSimple1_Grouped.price}}"/>
+            <argument name="quantity" value="{{ImportProductSimple1_Grouped.groupedDefaultQuantity}}"/>
+            <argument name="subtotal" value="{$simpleProduct1Subtotal}"/>
+            <argument name="index" value="2"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontVerifyCustomerOrderProductRowDataActionGroup" stepKey="verifyProductRow3InOrder">
+            <argument name="name" value="{{ImportProductSimple3_Grouped.name}}"/>
+            <argument name="sku" value="{{ImportProductSimple3_Grouped.sku}}"/>
+            <argument name="price" value="${{ImportProductSimple3_Grouped.price}}"/>
+            <argument name="quantity" value="{{ImportProductSimple3_Grouped.groupedDefaultQuantity}}"/>
+            <argument name="subtotal" value="{$simpleProduct3Subtotal}"/>
+            <argument name="index" value="3"/>
+        </actionGroup>
+    </test>
+</tests>

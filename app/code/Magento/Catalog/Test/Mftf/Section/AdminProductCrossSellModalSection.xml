@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductCrossSellModalSection">
+        <element name="Modal" type="button" selector=".product_form_product_form_related_crosssell_modal"/>
         <element name="addSelectedProducts" type="button" selector=".product_form_product_form_related_crosssell_modal .action-primary"/>
     </section>
 </sections>

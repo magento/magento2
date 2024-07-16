@@ -13,6 +13,11 @@
             <resource>Magento_Checkout::checkout</resource>
             <group id="options" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Checkout Options</label>
+                <field id="enable_guest_checkout_login" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Guest Checkout Login</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enabling this setting will allow unauthenticated users to query if an e-mail address is already associated with a customer account. This can be used to enhance the checkout workflow for guests that do not realize they already have an account but comes at the cost of exposing information to unauthenticated users.</comment>
+                </field>
                 <field id="onepage_checkout_enabled" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable Onepage Checkout</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -23,7 +28,7 @@
                 </field>
                 <field id="display_billing_address_on" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Display Billing Address On</label>
-                    <source_model>\Magento\Checkout\Model\Adminhtml\BillingAddressDisplayOptions</source_model>
+                    <source_model>Magento\Checkout\Model\Adminhtml\BillingAddressDisplayOptions</source_model>
                 </field>
                 <field id="max_items_display_count" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Maximum Number of Items to Display in Order Summary</label>
@@ -99,6 +104,18 @@
                     <label>Send Payment Failed Email Copy Method</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Method</source_model>
                 </field>
+            </group>
+        </section>
+        <section id="csp">
+            <group id="mode">
+                <group id="storefront_checkout_index_index" translate="label" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Storefront > One Page Checkout</label>
+                    <field id="report_uri" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Report URI</label>
+                        <comment>If empty, Default Report URI for storefront will be used.</comment>
+                        <validate>validate-url</validate>
+                    </field>
+                </group>
             </group>
         </section>
     </system>

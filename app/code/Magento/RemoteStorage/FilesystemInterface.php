@@ -9,6 +9,7 @@ namespace Magento\RemoteStorage;
 
 /**
  * Provides extension for applicable directory codes.
+ * @api
  */
 interface FilesystemInterface
 {

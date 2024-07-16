@@ -107,7 +107,7 @@ class DisableOutputTest extends TestCase
             ->getMock();
 
         $this->moduleListMock = $this->getMockBuilder(ModuleListInterface::class)
-            ->setMethods(['getNames', 'has', 'getAll', 'getOne'])
+            ->onlyMethods(['getNames', 'has', 'getAll', 'getOne'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -125,12 +125,12 @@ class DisableOutputTest extends TestCase
             ->willReturn(null);
 
         $this->authSessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['getUser'])
+            ->addMethods(['getUser'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->userMock = $this->getMockBuilder(User::class)
-            ->setMethods(['getExtra'])
+            ->addMethods(['getExtra'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -139,7 +139,7 @@ class DisableOutputTest extends TestCase
             ->willReturn($this->userMock);
 
         $groupMock = $this->getMockBuilder(Group::class)
-            ->setMethods(['getFieldsetCss'])
+            ->onlyMethods(['getFieldsetCss'])
             ->disableOriginalConstructor()
             ->getMock();
         $groupMock->expects($this->any())->method('getFieldsetCss')->willReturn('test_fieldset_css');
@@ -181,16 +181,18 @@ class DisableOutputTest extends TestCase
             'secureRenderer' => $secureRendererMock
         ];
 
+        $this->objectManager->prepareObjectManager();
         $this->object = $this->objectManager->getObject(
             DisableOutput::class,
             $data
         );
 
         $this->elementMock = $this->getMockBuilder(Text::class)
-            ->setMethods(
+            ->addMethods(['getExpanded', 'getLegend', 'getComment', 'getTooltip', 'getIsNested'])
+            ->onlyMethods(
                 [
-                    'getId', 'getHtmlId', 'getName', 'getExpanded', 'getLegend', 'getComment', 'getTooltip', 'toHtml',
-                    'addField', 'setRenderer', 'getElements', 'getIsNested'
+                    'getId', 'getHtmlId', 'getName', 'toHtml',
+                    'addField', 'setRenderer', 'getElements'
                 ]
             )
             ->disableOriginalConstructor()

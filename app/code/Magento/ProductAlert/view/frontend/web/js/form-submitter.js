@@ -10,6 +10,6 @@ define([
 
     return function (data, element) {
 
-        $(element).submit();
+        $(element).trigger('submit');
     };
 });

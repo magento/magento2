@@ -98,7 +98,7 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
      *
      * @param string $indexerTitle
      * @param string $previousMode
-     * @param string $command
+     * @param array $command
      * @param string $consoleOutput
      * @dataProvider dimensionModesDataProvider
      * @return void
@@ -125,7 +125,7 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     /**
      * @return array
      */
-    public function dimensionModesDataProvider(): array
+    public static function dimensionModesDataProvider(): array
     {
         return [
             'was_changed'     => [

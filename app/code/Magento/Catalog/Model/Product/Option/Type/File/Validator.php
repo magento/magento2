@@ -6,7 +6,13 @@
 
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
+use Laminas\Validator\File\ExcludeExtension;
+use Laminas\Validator\File\Extension;
+use Laminas\Validator\File\FilesSize;
+use Laminas\Validator\File\ImageSize;
+use Laminas\Validator\ValidatorChain;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\File\Http;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -60,7 +66,7 @@ abstract class Validator
     /**
      * Get Error messages for validator Errors
      *
-     * @param string[] $errors Array of validation failure message codes @see \Zend_Validate::getErrors()
+     * @param string[] $errors Array of validation failure message codes @see ValidatorChain::getErrors()
      * @param array $fileInfo File info
      * @param \Magento\Catalog\Model\Product\Option $option
      * @return string[] Array of error messages
@@ -71,22 +77,22 @@ abstract class Validator
         $result = [];
         foreach ($errors as $errorCode) {
             switch ($errorCode) {
-                case \Zend_Validate_File_ExcludeExtension::FALSE_EXTENSION:
+                case ExcludeExtension::FALSE_EXTENSION:
                     $result[] = __(
                         "The file '%1' for '%2' has an invalid extension.",
                         $fileInfo['title'],
                         $option->getTitle()
                     );
                     break;
-                case \Zend_Validate_File_Extension::FALSE_EXTENSION:
+                case Extension::FALSE_EXTENSION:
                     $result[] = __(
                         "The file '%1' for '%2' has an invalid extension.",
                         $fileInfo['title'],
                         $option->getTitle()
                     );
                     break;
-                case \Zend_Validate_File_ImageSize::WIDTH_TOO_BIG:
-                case \Zend_Validate_File_ImageSize::HEIGHT_TOO_BIG:
+                case ImageSize::WIDTH_TOO_BIG:
+                case ImageSize::HEIGHT_TOO_BIG:
                     $result[] = __(
                         "The maximum allowed image size for '%1' is %2x%3 px.",
                         $option->getTitle(),
@@ -94,14 +100,14 @@ abstract class Validator
                         $option->getImageSizeY()
                     );
                     break;
-                case \Zend_Validate_File_FilesSize::TOO_BIG:
+                case FilesSize::TOO_BIG:
                     $result[] = __(
                         "The file '%1' you uploaded is larger than the %2 megabytes allowed by our server.",
                         $fileInfo['title'],
                         $this->fileSize->getMaxFileSizeInMb()
                     );
                     break;
-                case \Zend_Validate_File_ImageSize::NOT_DETECTED:
+                case ImageSize::NOT_DETECTED:
                     $result[] = __(
                         'The file "%1" is empty. Select another file and try again.',
                         $fileInfo['title']
@@ -126,17 +132,21 @@ abstract class Validator
      */
     protected function parseExtensionsString($extensions)
     {
-        if (preg_match_all('/(?<extension>[a-z0-9]+)/si', strtolower($extensions), $matches)) {
+        $extensions = is_string($extensions) ? strtolower($extensions) : '';
+
+        if (preg_match_all('/(?<extension>[a-z0-9]+)/si', $extensions, $matches)) {
             return $matches['extension'] ?: null;
         }
         return null;
     }
 
     /**
-     * @param \Zend_File_Transfer_Adapter_Http|\Zend_Validate $object
+     * Adds required validators to th $object
+     *
+     * @param Http|ValidatorChain $object
      * @param \Magento\Catalog\Model\Product\Option $option
      * @param array $fileFullPath
-     * @return \Zend_File_Transfer_Adapter_Http|\Zend_Validate $object
+     * @return Http|ValidatorChain $object
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function buildImageValidator($object, $option, $fileFullPath = null)
@@ -155,22 +165,22 @@ abstract class Validator
                     __('File \'%1\' is not an image.', $option->getTitle())
                 );
             }
-            $object->addValidator(new \Zend_Validate_File_ImageSize($dimensions));
+            $object->addValidator(new ImageSize($dimensions));
         }
 
         // File extension
         $allowed = $this->parseExtensionsString($option->getFileExtension());
         if ($allowed !== null) {
-            $object->addValidator(new \Zend_Validate_File_Extension($allowed));
+            $object->addValidator(new Extension($allowed));
         } else {
             $forbidden = $this->parseExtensionsString($this->getConfigData('forbidden_extensions'));
             if ($forbidden !== null) {
-                $object->addValidator(new \Zend_Validate_File_ExcludeExtension($forbidden));
+                $object->addValidator(new ExcludeExtension($forbidden));
             }
         }
 
         $object->addValidator(
-            new \Zend_Validate_File_FilesSize(['max' => $this->fileSize->getMaxFileSize()])
+            new FilesSize(['max' => $this->fileSize->getMaxFileSize()])
         );
         return $object;
     }
@@ -178,7 +188,7 @@ abstract class Validator
     /**
      * Simple check if file is image
      *
-     * @param array|string $fileInfo - either file data from \Zend_File_Transfer or file path
+     * @param array|string $fileInfo - either file data from \Laminas\File\Transfer\Transfer or file path
      * @return boolean
      * @see \Magento\Catalog\Model\Product\Option\Type\File::_isImage
      */
@@ -193,10 +203,12 @@ abstract class Validator
         if (!$this->rootDirectory->isReadable($this->rootDirectory->getRelativePath($fileInfo))) {
             return false;
         }
-        $imageInfo = getimagesize($fileInfo);
-        if (!$imageInfo) {
+
+        $fileContent = $this->rootDirectory->readFile($fileInfo);
+        if (empty($fileContent) || !getimagesizefromstring($fileContent)) {
             return false;
         }
+
         return true;
     }
 }

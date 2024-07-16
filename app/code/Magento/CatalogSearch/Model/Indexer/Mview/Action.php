@@ -11,6 +11,8 @@ use Magento\Framework\Indexer\IndexerInterfaceFactory;
 
 /**
  * Catalog search materialized view index action.
+ *
+ * @api
  */
 class Action implements ActionInterface
 {
@@ -32,7 +34,6 @@ class Action implements ActionInterface
      *
      * @param int[] $ids
      * @return void
-     * @api
      */
     public function execute($ids)
     {

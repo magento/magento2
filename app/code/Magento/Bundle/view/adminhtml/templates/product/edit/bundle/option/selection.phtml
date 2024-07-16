@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 
+// phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Selection */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
@@ -158,9 +159,9 @@ Bundle.Selection.prototype = {
             $grid.find('.checkbox').prop({checked: false});
 
             var checkRowBySku = function (sku) {
-                sku = $.trim(sku);
+                sku = sku.trim();
                 $grid.find('.sku').filter(function () {
-                    return $.trim($(this).text()) == sku;
+                    return $(this).text().trim() == sku;
                 }).closest('tr').find('.checkbox').prop({checked: true});
             };
             $.each(bSelection.gridSelection.values().pop().toArray(), function () {

@@ -73,10 +73,13 @@ class Aggregation
         switch ($bucket->getType()) {
             case BucketInterface::TYPE_TERM:
                 $searchQuery['body']['aggregations'][$bucket->getName()]= [
-                    'terms' => [
-                        'field' => $field,
-                        'size' => self::$maxTermBacketSize,
-                    ],
+                    'terms' => array_merge(
+                        $bucket->getParameters(),
+                        [
+                            'field' => $field,
+                            'size' => self::$maxTermBacketSize,
+                        ]
+                    ),
                 ];
                 break;
             case BucketInterface::TYPE_DYNAMIC:

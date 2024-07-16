@@ -7,7 +7,7 @@
         "AFL-3.0"
     ],
     "require": {
-        "php": "~5.5.22||~5.6.0||~7.0.0",
+        "php": "~8.1.0",
         "ext-ctype": "*",
         "ext-curl": "*",
         "ext-dom": "*",
@@ -171,9 +171,7 @@
             "linkorb/jsmin-php": "lib/internal/JSMin",
             "components/jquery": [
                 "lib/web/jquery.js",
-                "lib/web/jquery/jquery.min.js",
-                "lib/web/jquery/jquery-migrate.js",
-                "lib/web/jquery/jquery-migrate.min.js"
+                "lib/web/jquery/jquery.min.js"
             ],
             "blueimp/jquery-file-upload": "lib/web/jquery/fileUploader",
             "components/jqueryui": [
@@ -187,6 +185,9 @@
         }
     },
     "config": {
+        "allow-plugins": {
+            "magento/*": true
+        },
         "sort-packages": true,
         "use-include-path": true
     },

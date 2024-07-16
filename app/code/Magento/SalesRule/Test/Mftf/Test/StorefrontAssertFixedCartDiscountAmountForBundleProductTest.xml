@@ -33,8 +33,8 @@
             <argument name="productUrl" value="$$createBundleProductCreateBundleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
         <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
-        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Drop-down Option')}}" userInput="$$simpleProduct2CreateBundleProduct.sku$$ +$$$simpleProduct2CreateBundleProduct.price$$.00" stepKey="selectOption0Product1"/>
-        <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Drop-down Option')}}" userInput="$$simpleProduct2CreateBundleProduct.sku$$ +$$$simpleProduct2CreateBundleProduct.price$$.00" stepKey="checkOption0Product1"/>
+        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Drop-down Option')}}" userInput="$$simpleProduct2CreateBundleProduct.name$$ +$$$simpleProduct2CreateBundleProduct.price$$.00" stepKey="selectOption0Product1"/>
+        <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Drop-down Option')}}" userInput="$$simpleProduct2CreateBundleProduct.name$$ +$$$simpleProduct2CreateBundleProduct.price$$.00" stepKey="checkOption0Product1"/>
         <checkOption selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Radio Buttons Option', '1')}}" stepKey="selectOption1Product0"/>
         <seeCheckboxIsChecked selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Radio Buttons Option', '1')}}" stepKey="checkOption1Product0"/>
         <checkOption selector="{{StorefrontBundledSection.checkboxOptionThreeProducts('Checkbox Option', '1')}}" stepKey="selectOption2Product0"/>

@@ -87,14 +87,32 @@ class UpdateItemQtyTest extends \Magento\TestFramework\TestCase\AbstractControll
         $this->dispatch('checkout/cart/updateItemQty');
         $response = $this->getResponse()->getBody();
 
-        $this->assertEquals($this->json->unserialize($response), $expectedResponse);
+        $this->assertEquals($this->getErrorMessage($response), $this->getErrorMessage($expectedResponse));
+    }
+
+    /**
+     * @param $response
+     * @return string
+     */
+    protected function getErrorMessage($response)
+    {
+        $error = '';
+        try {
+            $data = is_array($response) ? $response : $this->json->unserialize($response);
+            $error = $this->json->unserialize($data['error_message'])[0]['error'];
+        } catch (\Exception $e) {
+            if (!empty($data['error_message'])) {
+                $error = $data['error_message'];
+            }
+        }
+        return $error;
     }
 
     /**
      * Variations of request data.
      * @returns array
      */
-    public function requestDataProvider(): array
+    public static function requestDataProvider(): array
     {
         return [
             [
@@ -115,7 +133,7 @@ class UpdateItemQtyTest extends \Magento\TestFramework\TestCase\AbstractControll
                 'request' => ['qty' => 230],
                 'response' => [
                     'success' => false,
-                    'error_message' => 'The requested qty is not available']
+                    'error_message' => '[{"error":"The requested qty is not available","itemId":3}]']
             ],
         ];
     }

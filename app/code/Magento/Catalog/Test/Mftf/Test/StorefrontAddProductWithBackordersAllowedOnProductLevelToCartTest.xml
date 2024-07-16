@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddProductWithBackordersAllowedOnProductLevelToCartTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Manage inventory, backorders"/>
+            <title value="Add Product to Cart, Backorders Allowed On Product Level"/>
+            <severity value="MAJOR"/>
+            <description value="Customer should be able to add products to Cart if product qty less or equal 0 and Backorders are allowed on Product level"/>
+            <group value="catalog"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleProductInStockQuantityZero" stepKey="createProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="openCreatedProductEditPage">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
+        <actionGroup ref="AdminSetBackordersOnProductAdvancedInventoryActionGroup" stepKey="allowBackorders"/>
+        <actionGroup ref="AdminFillAdvancedInventoryQtyActionGroup" stepKey="fillProductQty">
+            <argument name="qty" value="-5"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickDoneButton"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="gotoAndAddProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="gotoCart"/>
+        <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertProductItemInCheckOutCart">
+            <argument name="productName" value="$$createProduct.name$$"/>
+            <argument name="productSku" value="$$createProduct.sku$$"/>
+            <argument name="productPrice" value="$$createProduct.price$$"/>
+            <argument name="subtotal" value="$$createProduct.price$$" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+    </test>
+</tests>

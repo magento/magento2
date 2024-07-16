@@ -13,15 +13,6 @@ use Magento\CatalogInventory\Model\Configuration;
 
 class ProductLinks
 {
-    /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
-     * @var Stock
-     */
-    private $stockHelper;
 
     /**
      * ProductLinks constructor.
@@ -29,13 +20,15 @@ class ProductLinks
      * @param Configuration $configuration
      * @param Stock $stockHelper
      */
-    public function __construct(Configuration $configuration, Stock $stockHelper)
-    {
-        $this->configuration = $configuration;
-        $this->stockHelper = $stockHelper;
+    public function __construct(
+        private readonly Configuration $configuration,
+        private readonly Stock $stockHelper
+    ) {
     }
 
     /**
+     * Fixes simple products are shown as associated in grouped when set out of stock
+     *
      * @param Link $subject
      * @param Collection $collection
      * @return Collection
@@ -44,7 +37,7 @@ class ProductLinks
     public function afterGetProductCollection(Link $subject, Collection $collection)
     {
         if ($this->configuration->isShowOutOfStock() != 1) {
-            $this->stockHelper->addInStockFilterToCollection($collection);
+            $this->stockHelper->addIsInStockFilterToCollection($collection);
         }
         return $collection;
     }

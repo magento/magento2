@@ -98,11 +98,11 @@ class AfterAddressSaveObserverTest extends TestCase
         $this->appState = $this->createMock(AppState::class);
         $this->customerSessionMock = $this->createMock(Session::class);
         $this->group = $this->getMockBuilder(GroupInterface::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
         $this->group->expects($this->any())->method('getId')->willReturn(1);
         $this->groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
-            ->setMethods(['getDefaultGroup'])
+            ->onlyMethods(['getDefaultGroup'])
             ->getMockForAbstractClass();
         $this->groupManagement->expects($this->any())->method('getDefaultGroup')->willReturn($this->group);
 
@@ -129,15 +129,15 @@ class AfterAddressSaveObserverTest extends TestCase
      * @param bool $processedFlag
      * @param bool $forceProcess
      * @param int $addressId
-     * @param int $registeredAddressId
-     * @param string $configAddressType
+     * @param mixed $registeredAddressId
+     * @param mixed $configAddressType
      * @dataProvider dataProviderAfterAddressSaveRestricted
      */
     public function testAfterAddressSaveRestricted(
-        $isVatValidationEnabled,
-        $processedFlag,
-        $forceProcess,
-        $addressId,
+        bool $isVatValidationEnabled,
+        bool $processedFlag,
+        bool $forceProcess,
+        int  $addressId,
         $registeredAddressId,
         $configAddressType
     ) {
@@ -147,7 +147,8 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDefaultBilling', 'getStore', 'getDefaultShipping', 'getGroupId'])
+            ->addMethods(['getDefaultBilling', 'getDefaultShipping'])
+            ->onlyMethods(['getStore', 'getGroupId'])
             ->getMock();
         $customer->expects($this->any())
             ->method('getStore')
@@ -164,18 +165,17 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 [
-                    'getId',
                     'getIsDefaultBilling',
                     'getIsDefaultShipping',
                     'setForceProcess',
                     'getIsPrimaryBilling',
                     'getIsPrimaryShipping',
-                    'getCustomer',
                     'getForceProcess'
                 ]
             )
+            ->onlyMethods(['getId', 'getCustomer'])
             ->getMock();
         $address->expects($this->any())
             ->method('getId')
@@ -201,7 +201,7 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'getCustomerAddress',
             ])
             ->getMock();
@@ -231,7 +231,7 @@ class AfterAddressSaveObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderAfterAddressSaveRestricted()
+    public static function dataProviderAfterAddressSaveRestricted()
     {
         return [
             [false, false, false, 1, null, null],
@@ -257,11 +257,8 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getCustomer',
-                'getForceProcess',
-                'getVatId',
-            ])
+            ->addMethods(['getForceProcess', 'getVatId'])
+            ->onlyMethods(['getCustomer'])
             ->getMock();
         $address->expects($this->any())
             ->method('getCustomer')
@@ -275,7 +272,7 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'getCustomerAddress',
             ])
             ->getMock();
@@ -303,17 +300,21 @@ class AfterAddressSaveObserverTest extends TestCase
     }
 
     /**
-     * @param string $vatId
+     * @param mixed $vatId
      * @param int $countryId
      * @param bool $isCountryInEU
+     * @param int $customerGroupId
      * @param int $defaultGroupId
+     * @param bool $disableAutoGroupChange
      * @dataProvider dataProviderAfterAddressSaveDefaultGroup
      */
     public function testAfterAddressSaveDefaultGroup(
         $vatId,
-        $countryId,
-        $isCountryInEU,
-        $defaultGroupId
+        int    $countryId,
+        bool   $isCountryInEU,
+        int $customerGroupId,
+        int $defaultGroupId,
+        bool $disableAutoGroupChange
     ) {
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
@@ -327,12 +328,11 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods(['getDisableAutoGroupChange', 'setGroupId'])
+            ->onlyMethods([
                 'getStore',
-                'getDisableAutoGroupChange',
                 'getGroupId',
-                'setGroupId',
-                'save',
+                'save'
             ])
             ->getMock();
         $customer->expects($this->exactly(2))
@@ -340,24 +340,23 @@ class AfterAddressSaveObserverTest extends TestCase
             ->willReturn($store);
         $customer->expects($this->once())
             ->method('getDisableAutoGroupChange')
-            ->willReturn(false);
-        $customer->expects($this->exactly(2))
+            ->willReturn($disableAutoGroupChange);
+        $customer->expects($this->any())
             ->method('getGroupId')
-            ->willReturn(null);
-        $customer->expects($this->once())
+            ->willReturn($customerGroupId);
+        $customer->expects($this->any())
             ->method('setGroupId')
             ->with($defaultGroupId)
             ->willReturnSelf();
-        $customer->expects($this->once())
+        $customer->expects($this->any())
             ->method('save')
             ->willReturnSelf();
 
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods(['getForceProcess', 'getVatId'])
+            ->onlyMethods([
                 'getCustomer',
-                'getForceProcess',
-                'getVatId',
                 'getCountry',
             ])
             ->getMock();
@@ -376,7 +375,7 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'getCustomerAddress',
             ])
             ->getMock();
@@ -405,17 +404,20 @@ class AfterAddressSaveObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderAfterAddressSaveDefaultGroup()
+    public static function dataProviderAfterAddressSaveDefaultGroup()
     {
         return [
-            ['', 1, false, 1],
-            [1, 1, false, 1],
+            'when vatId is empty, non EU country and disable auto group false' => ['', 1, false, 1, 1, false],
+            'when vatId is empty, non EU country and disable auto group true' => ['', 1, false, 1, 1, true],
+            'when vatId is empty, non EU country, disable auto group true
+            and different groupId' => ['', 1, false, 1, 2, true],
+            'when vatId is not empty, non EU country and disable auto group false' => [1, 1, false, 1, 1, false],
         ];
     }
 
     /**
-     * @param string $vatId
-     * @param $vatClass
+     * @param mixed $vatId
+     * @param mixed $vatClass
      * @param int $countryId
      * @param string $country
      * @param int $newGroupId
@@ -432,15 +434,15 @@ class AfterAddressSaveObserverTest extends TestCase
     public function testAfterAddressSaveNewGroup(
         $vatId,
         $vatClass,
-        $countryId,
-        $country,
-        $newGroupId,
-        $areaCode,
-        $resultVatIsValid,
-        $resultRequestSuccess,
-        $resultValidMessage,
-        $resultInvalidMessage,
-        $resultErrorMessage
+        int    $countryId,
+        string $country,
+        int    $newGroupId,
+        string $areaCode,
+        bool   $resultVatIsValid,
+        bool   $resultRequestSuccess,
+        string $resultValidMessage,
+        string $resultInvalidMessage,
+        string $resultErrorMessage
     ) {
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
@@ -448,7 +450,7 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $validationResult = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'getIsValid',
                 'getRequestSuccess',
             ])
@@ -462,11 +464,10 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods(['getDisableAutoGroupChange', 'setGroupId'])
+            ->onlyMethods([
                 'getStore',
-                'getDisableAutoGroupChange',
                 'getGroupId',
-                'setGroupId',
                 'save',
             ])
             ->getMock();
@@ -494,13 +495,10 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods(['getForceProcess', 'getVatId', 'setVatValidationResult', 'getCountryId'])
+            ->onlyMethods([
                 'getCustomer',
-                'getForceProcess',
-                'getVatId',
-                'getCountryId',
-                'getCountry',
-                'setVatValidationResult',
+                'getCountry'
             ])
             ->getMock();
         $address->expects($this->any())
@@ -525,7 +523,7 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'getCustomerAddress',
             ])
             ->getMock();
@@ -597,7 +595,7 @@ class AfterAddressSaveObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderAfterAddressSaveNewGroup()
+    public static function dataProviderAfterAddressSaveNewGroup()
     {
         return [
             [

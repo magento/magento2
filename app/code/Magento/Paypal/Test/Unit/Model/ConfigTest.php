@@ -135,20 +135,22 @@ class ConfigTest extends TestCase
             $this->scopeConfig
                 ->method('getValue')
                 ->willReturnMap($valueMap);
-            $this->scopeConfig->expects($this->exactly(1))
-                ->method('isSetFlag')
-                ->withAnyParameters()
-                ->willReturn(true);
         } else {
             $this->scopeConfig
                 ->method('getValue')
                 ->with('paypal/general/merchant_country')
                 ->willReturn('US');
-            $this->scopeConfig->expects($this->exactly(2))
-                ->method('isSetFlag')
-                ->withAnyParameters()
-                ->willReturn(true);
         }
+        $flagMap = [
+            ['payment/'. Config::METHOD_WPS_EXPRESS . '/active', ScopeInterface::SCOPE_STORE, null, 0],
+            ['payment/'. Config::METHOD_WPS_BML . '/active', ScopeInterface::SCOPE_STORE, null, 0],
+            ['payment/'. Config::METHOD_WPP_EXPRESS . '/active', ScopeInterface::SCOPE_STORE, null, 1],
+            ['payment/'. Config::METHOD_PAYFLOWPRO . '/active', ScopeInterface::SCOPE_STORE, null, 1],
+            ['payment/'. Config::METHOD_WPP_PE_EXPRESS . '/active', ScopeInterface::SCOPE_STORE, null, 1],
+            ['payment/'. Config::METHOD_WPP_PE_BML . '/active', ScopeInterface::SCOPE_STORE, null, 1],
+        ];
+        $this->scopeConfig->method('isSetFlag')
+            ->willReturnMap($flagMap);
 
         $this->model->setMethod($methodName);
         $this->assertEquals($expected, $this->model->isMethodAvailable($methodName));

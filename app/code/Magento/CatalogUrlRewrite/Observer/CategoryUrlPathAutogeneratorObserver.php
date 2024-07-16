@@ -8,10 +8,15 @@ declare(strict_types=1);
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
+use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\GetDefaultUrlKey;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -20,6 +25,8 @@ use Magento\Backend\Model\Validator\UrlKey\CompositeUrlKey;
 
 /**
  * Class for set or update url path.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
 {
@@ -50,34 +57,51 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     private $compositeUrlValidator;
 
     /**
+     * @var GetDefaultUrlKey
+     */
+    private $getDefaultUrlKey;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param ChildrenCategoriesProvider $childrenCategoriesProvider
      * @param StoreViewService $storeViewService
      * @param CategoryRepositoryInterface $categoryRepository
      * @param CompositeUrlKey $compositeUrlValidator
+     * @param GetDefaultUrlKey $getDefaultUrlKey
+     * @param MetadataPool|null $metadataPool
      */
     public function __construct(
         CategoryUrlPathGenerator $categoryUrlPathGenerator,
         ChildrenCategoriesProvider $childrenCategoriesProvider,
         StoreViewService $storeViewService,
         CategoryRepositoryInterface $categoryRepository,
-        CompositeUrlKey $compositeUrlValidator
+        CompositeUrlKey $compositeUrlValidator,
+        GetDefaultUrlKey $getDefaultUrlKey,
+        ?MetadataPool $metadataPool = null
     ) {
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->storeViewService = $storeViewService;
         $this->categoryRepository = $categoryRepository;
         $this->compositeUrlValidator = $compositeUrlValidator;
+        $this->getDefaultUrlKey = $getDefaultUrlKey;
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()
+            ->get(MetadataPool::class);
     }
 
     /**
      * Method for update/set url path.
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return void
      * @throws LocalizedException
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         /** @var Category $category */
         $category = $observer->getEvent()->getCategory();
@@ -90,7 +114,17 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                 $resultUrlKey = $category->formatUrlKey($category->getOrigData('name'));
                 $this->updateUrlKey($category, $resultUrlKey);
             }
-            $category->setUrlKey(null)->setUrlPath(null);
+            if ($category->hasChildren()) {
+                $metadata = $this->metadataPool->getMetadata(CategoryInterface::class);
+                $linkField = $metadata->getLinkField();
+                $id = $category->getData($linkField);
+                if ($id) {
+                    $defaultUrlKey = $this->getDefaultUrlKey->execute((int)$id);
+                    if ($defaultUrlKey) {
+                        $this->updateUrlKey($category, $defaultUrlKey);
+                    }
+                }
+            }
         }
     }
 
@@ -175,7 +209,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                         Category::ENTITY
                     )) {
                         $child = $this->categoryRepository->get($childId, $storeId);
-                        $this->updateUrlPathForCategory($child);
+                        $this->updateUrlPathForCategory($child, $category);
                     }
                 }
             }

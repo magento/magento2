@@ -51,7 +51,7 @@
                id="<?= /* @noEscape */ $_fileName ?>"
                class="product-custom-option<?= $_option->getIsRequire() ? ' required' : '' ?>"
             <?= $_fileExists ? 'disabled="disabled"' : '' ?> />
-        <input type="hidden" name="<?= /* @noEscape */ $_fieldNameAction ?>"
+        <input type="hidden" class="product-custom-option" name="<?= /* @noEscape */ $_fieldNameAction ?>"
                value="<?= /* @noEscape */ $_fieldValueAction ?>" />
         <?php if ($_option->getFileExtension()):?>
             <p class="note">

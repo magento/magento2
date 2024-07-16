@@ -17,7 +17,7 @@
         </arguments>
 
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnTheStorePage"/>
-        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickOnResetButton"/>
         <fillField userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="fillSearchWebsiteField"/>
         <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
         <see userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="verifyThatCorrectWebsiteFound"/>

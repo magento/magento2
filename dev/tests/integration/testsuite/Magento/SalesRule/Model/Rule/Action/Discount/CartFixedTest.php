@@ -12,7 +12,10 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Api\Data\TotalsInformationInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Checkout\Model\TotalsInformationManagement;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
@@ -22,12 +25,17 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Quote\Api\Data\TotalsInterface;
 use Magento\Quote\Api\GuestCartItemRepositoryInterface;
 use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Api\GuestCartTotalRepositoryInterface;
 use Magento\Quote\Api\GuestCouponManagementInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\AddressFactory;
 use Magento\Quote\Model\QuoteIdMask;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
@@ -35,7 +43,10 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\SalesRule\Api\RuleRepositoryInterface;
 use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\RuleFactory;
+use Magento\SalesRule\Test\Fixture\Rule as RuleFixture;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -47,6 +58,11 @@ use PHPUnit\Framework\TestCase;
  */
 class CartFixedTest extends TestCase
 {
+    /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
     /**
      * @var GuestCartManagementInterface
      */
@@ -346,78 +362,52 @@ class CartFixedTest extends TestCase
         $orderSender = $this->getMockBuilder(OrderSender::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $model = $this->objectManager->create(
-            Multishipping::class,
-            ['orderSender' => $orderSender]
-        );
+        $model = $this->objectManager->create(Multishipping::class, ['orderSender' => $orderSender]);
         $model->createOrders();
         $orderList = $this->getOrderList((int)$quote->getId());
         $this->assertCount(3, $orderList);
+
         /**
          * The order with $10 simple product
          * @var Order $firstOrder
          */
         $firstOrder = array_shift($orderList);
+        $this->assertNotEmpty($firstOrder->getAppliedRuleIds());
+        $this->assertEquals($firstOrderTotals['subtotal'], $firstOrder->getSubtotal());
+        $this->assertEquals($firstOrderTotals['discount_amount'], $firstOrder->getDiscountAmount());
+        $this->assertEquals($firstOrderTotals['shipping_amount'], $firstOrder->getShippingAmount());
+        $this->assertEquals($firstOrderTotals['grand_total'], $firstOrder->getGrandTotal());
+        $firstOrderItem = array_values($firstOrder->getItems())[0];
+        $this->assertNotEmpty($firstOrderItem->getAppliedRuleIds());
+        $this->assertEquals($firstOrderTotals['discount_amount'] * -1, $firstOrderItem->getDiscountAmount());
 
-        $this->assertEquals(
-            $firstOrderTotals['subtotal'],
-            $firstOrder->getSubtotal()
-        );
-        $this->assertEquals(
-            $firstOrderTotals['discount_amount'],
-            $firstOrder->getDiscountAmount()
-        );
-        $this->assertEquals(
-            $firstOrderTotals['shipping_amount'],
-            $firstOrder->getShippingAmount()
-        );
-        $this->assertEquals(
-            $firstOrderTotals['grand_total'],
-            $firstOrder->getGrandTotal()
-        );
         /**
          * The order with $20 simple product
          * @var Order $secondOrder
          */
         $secondOrder = array_shift($orderList);
-        $this->assertEquals(
-            $secondOrderTotals['subtotal'],
-            $secondOrder->getSubtotal()
-        );
-        $this->assertEquals(
-            $secondOrderTotals['discount_amount'],
-            $secondOrder->getDiscountAmount()
-        );
-        $this->assertEquals(
-            $secondOrderTotals['shipping_amount'],
-            $secondOrder->getShippingAmount()
-        );
-        $this->assertEquals(
-            $secondOrderTotals['grand_total'],
-            $secondOrder->getGrandTotal()
-        );
+        $this->assertNotEmpty($secondOrder->getAppliedRuleIds());
+        $this->assertEquals($secondOrderTotals['subtotal'], $secondOrder->getSubtotal());
+        $this->assertEquals($secondOrderTotals['discount_amount'], $secondOrder->getDiscountAmount());
+        $this->assertEquals($secondOrderTotals['shipping_amount'], $secondOrder->getShippingAmount());
+        $this->assertEquals($secondOrderTotals['grand_total'], $secondOrder->getGrandTotal());
+        $secondOrderItem = array_values($secondOrder->getItems())[0];
+        $this->assertNotEmpty($secondOrderItem->getAppliedRuleIds());
+        $this->assertEquals($secondOrderTotals['discount_amount'] * -1, $secondOrderItem->getDiscountAmount());
+
         /**
          * The order with $5 virtual product and billing address as shipping
          * @var Order $thirdOrder
          */
         $thirdOrder = array_shift($orderList);
-        $this->assertEquals(
-            $thirdOrderTotals['subtotal'],
-            $thirdOrder->getSubtotal()
-        );
-        $this->assertEquals(
-            $thirdOrderTotals['discount_amount'],
-            $thirdOrder->getDiscountAmount()
-        );
-        $this->assertEquals(
-            $thirdOrderTotals['shipping_amount'],
-            $thirdOrder->getShippingAmount()
-        );
-        $this->assertEquals(
-            $thirdOrderTotals['grand_total'],
-            $thirdOrder->getGrandTotal()
-        );
+        $this->assertNotEmpty($thirdOrder->getAppliedRuleIds());
+        $this->assertEquals($thirdOrderTotals['subtotal'], $thirdOrder->getSubtotal());
+        $this->assertEquals($thirdOrderTotals['discount_amount'], $thirdOrder->getDiscountAmount());
+        $this->assertEquals($thirdOrderTotals['shipping_amount'], $thirdOrder->getShippingAmount());
+        $this->assertEquals($thirdOrderTotals['grand_total'], $thirdOrder->getGrandTotal());
+        $thirdOrderItem = array_values($thirdOrder->getItems())[0];
+        $this->assertNotEmpty($thirdOrderItem->getAppliedRuleIds());
+        $this->assertEquals($thirdOrderTotals['discount_amount'] * -1, $thirdOrderItem->getDiscountAmount());
     }
 
     /**
@@ -427,7 +417,7 @@ class CartFixedTest extends TestCase
     public function multishippingDataProvider(): array
     {
         return [
-            'Discount < 1stOrderSubtotal: only 1st order gets discount' => [
+            'Discount $5 proportionally spread between products' => [
                 5,
                 [
                     'subtotal' => 10.00,
@@ -443,54 +433,12 @@ class CartFixedTest extends TestCase
                 ],
                 [
                     'subtotal' => 5.00,
-                    'discount_amount' => -5.00,
+                    'discount_amount' => -0.71,
                     'shipping_amount' => 0.00,
-                    'grand_total' => 0.00,
+                    'grand_total' => 4.2900,
                 ]
             ],
-            'Discount = 1stOrderSubtotal: only 1st order gets discount' => [
-                10,
-                [
-                    'subtotal' => 10.00,
-                    'discount_amount' => -2.8600,
-                    'shipping_amount' => 5.00,
-                    'grand_total' => 12.1400,
-                ],
-                [
-                    'subtotal' => 20.00,
-                    'discount_amount' => -5.71,
-                    'shipping_amount' => 5.00,
-                    'grand_total' => 19.2900,
-                ],
-                [
-                    'subtotal' => 5.00,
-                    'discount_amount' => -5.00,
-                    'shipping_amount' => 0.00,
-                    'grand_total' => 0.00,
-                ]
-            ],
-            'Discount > 1stOrderSubtotal: 1st order get 100% discount and 2nd order get the remaining discount' => [
-                15,
-                [
-                    'subtotal' => 10.00,
-                    'discount_amount' => -4.2900,
-                    'shipping_amount' => 5.00,
-                    'grand_total' => 10.71,
-                ],
-                [
-                    'subtotal' => 20.00,
-                    'discount_amount' => -8.5700,
-                    'shipping_amount' => 5.00,
-                    'grand_total' => 16.43,
-                ],
-                [
-                    'subtotal' => 5.00,
-                    'discount_amount' => -5.00,
-                    'shipping_amount' => 0.00,
-                    'grand_total' => 0.00,
-                ]
-            ],
-            'Discount = 1stOrderSubtotal + 2ndOrderSubtotal: 1st order and 2nd order get 100% discount' => [
+            'Discount $30 proportionally spread between products' => [
                 30,
                 [
                     'subtotal' => 10.00,
@@ -506,34 +454,151 @@ class CartFixedTest extends TestCase
                 ],
                 [
                     'subtotal' => 5.00,
-                    'discount_amount' => -5.00,
+                    'discount_amount' => -4.29,
                     'shipping_amount' => 0.00,
-                    'grand_total' => 0.00,
+                    'grand_total' => 0.7100,
                 ]
             ],
-            'Discount > 1stOrdSubtotal + 2ndOrdSubtotal: 1st order and 2nd order get 100% discount'
-            . ' and 3rd order get remaining discount' => [
-                31,
+            'Discount $50 which is more then all subtotals combined proportionally spread between products' => [
+                50,
                 [
                     'subtotal' => 10.00,
-                    'discount_amount' => -8.8600,
+                    'discount_amount' => -10.0000,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 6.14,
+                    'grand_total' => 5.0000,
                 ],
                 [
                     'subtotal' => 20.00,
-                    'discount_amount' => -17.7100,
+                    'discount_amount' => -20.0000,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 7.29,
+                    'grand_total' => 5.0000,
                 ],
                 [
                     'subtotal' => 5.00,
                     'discount_amount' => -5.00,
                     'shipping_amount' => 0.00,
-                    'grand_total' => 0.00,
+                    'grand_total' => 0.0000,
                 ]
-            ]
+            ],
         ];
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_50_percent_off_no_condition.php
+     * @magentoDataFixture Magento/SalesRule/_files/cart_fixed_10_discount.php
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_products.php
+     * @dataProvider discountByPercentDataProvider
+     * @return void
+     */
+    public function testDiscountsWhenByPercentRuleAppliedFirstAndCartFixedRuleSecond(
+        $percentDiscount,
+        $expectedDiscounts
+    ): void {
+        //Update rule discount
+        /** @var Rule $rule */
+        $rule = $this->getRule('50% off - July 4');
+        $rule->setDiscountAmount($percentDiscount);
+        $this->saveRule($rule);
+        $quote = $this->getQuote('test_quote_with_simple_products');
+        $quote->collectTotals();
+        $this->quoteRepository->save($quote);
+        $this->assertEquals(21.98, $quote->getBaseSubtotal());
+        $this->assertEquals($expectedDiscounts['totalDiscount'], $quote->getShippingAddress()->getDiscountAmount());
+        $items = $quote->getAllItems();
+        $this->assertCount(2, $items);
+        $item = array_shift($items);
+        $this->assertEquals('simple1', $item->getSku());
+        $this->assertEquals(5.99, $item->getPrice());
+        $this->assertEqualsWithDelta($expectedDiscounts[$item->getSku()], $item->getDiscountAmount(), self::EPSILON);
+        $item = array_shift($items);
+        $this->assertEquals('simple2', $item->getSku());
+        $this->assertEquals(15.99, $item->getPrice());
+        $this->assertEqualsWithDelta($expectedDiscounts[$item->getSku()], $item->getDiscountAmount(), self::EPSILON);
+    }
+
+    public function discountByPercentDataProvider()
+    {
+        return [
+            [
+                'percentDiscount' => 0,
+                'expectedDiscounts' => ['simple1' => 2.73, 'simple2' => 7.27, 'totalDiscount' => -10]
+            ],
+            [
+                'percentDiscount' => 15.5,
+                'expectedDiscounts' => ['simple1' => 3.65, 'simple2' => 9.76, 'totalDiscount' => -13.41]
+            ],
+            [
+                'percentDiscount' => 50,
+                'expectedDiscounts' => ['simple1' => 5.72, 'simple2' => 15.27, 'totalDiscount' => -20.99]
+            ],
+            [
+                'percentDiscount' => 100,
+                'expectedDiscounts' => ['simple1' => 5.99, 'simple2' => 15.99, 'totalDiscount' => -21.98]
+            ],
+        ];
+    }
+
+    /**
+     * @magentoConfigFixture current_store sales/minimum_order/tax_including 1
+     * @magentoConfigFixture current_store sales/minimum_order/include_discount_amount 1
+     * @magentoConfigFixture current_store tax/calculation/price_includes_tax 1
+     * @magentoConfigFixture current_store tax/calculation/shipping_includes_tax 1
+     * @magentoConfigFixture current_store tax/calculation/discount_tax 1
+     * @magentoConfigFixture current_store tax/calculation/apply_after_discount 1
+     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_with_coupon_5_off_no_condition.php
+     * @magentoDataFixture Magento/Tax/_files/tax_rule_region_1_al.php
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_taxable_product_and_customer.php
+     */
+    public function testCartFixedDiscountPriceIncludeTax()
+    {
+        $quote = $this->getQuote('test_order_with_taxable_product');
+        $quote->setCouponCode('CART_FIXED_DISCOUNT_5');
+        $quote->getShippingAddress()
+            ->setShippingMethod('flatrate_flatrate')
+            ->setCollectShippingRates(true);
+        $quote->collectTotals();
+        $this->quoteRepository->save($quote);
+
+        $this->assertEquals(0.4, $quote->getShippingAddress()->getTaxAmount());
+        $this->assertEquals(5, $quote->getShippingAddress()->getShippingAmount());
+        $this->assertEquals(5, $quote->getShippingAddress()->getSubtotalWithDiscount());
+        $this->assertEquals(-5, $quote->getShippingAddress()->getDiscountAmount());
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['price' => 15], 'p1'),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p2'),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'simple_action' => Rule::BY_PERCENT_ACTION,
+                'discount_amount' => 50,
+                'apply_to_shipping' => 1,
+                'stop_rules_processing' => 0,
+                'sort_order' => 1,
+            ]
+        ),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'simple_action' => Rule::CART_FIXED_ACTION,
+                'discount_amount' => 40,
+                'apply_to_shipping' => 1,
+                'stop_rules_processing' => 0,
+                'sort_order' => 2
+            ]
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$', 'qty' => 2]),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p2.id$', 'qty' => 2])
+    ]
+    public function testCarFixedDiscountWithApplyToShippingAmountAfterADiscount(): void
+    {
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $totals = $this->getTotals((int) $cart->getId());
+        $this->assertEquals(0, $totals->getGrandTotal());
+        $this->assertEquals(-70, $totals->getDiscountAmount());
     }
 
     /**
@@ -590,5 +655,32 @@ class CartFixedTest extends TestCase
         /** @var \Magento\SalesRule\Model\ResourceModel\Rule $resourceModel */
         $resourceModel = $this->objectManager->get(\Magento\SalesRule\Model\ResourceModel\Rule::class);
         $resourceModel->save($rule);
+    }
+    /**
+     * @param int $cartId
+     * @return TotalsInterface
+     */
+    private function getTotals(int $cartId): TotalsInterface
+    {
+        /** @var Address $address */
+        $address = $this->objectManager->get(AddressFactory::class)->create();
+        $totalsManagement = $this->objectManager->get(TotalsInformationManagement::class);
+        $address->setAddressType(Address::ADDRESS_TYPE_SHIPPING)
+            ->setCountryId('US')
+            ->setRegionId(12)
+            ->setRegion('California')
+            ->setPostcode('90230');
+        $addressInformation = $this->objectManager->create(
+            TotalsInformationInterface::class,
+            [
+                'data' => [
+                    'address' => $address,
+                    'shipping_method_code' => 'flatrate',
+                    'shipping_carrier_code' => 'flatrate',
+                ],
+            ]
+        );
+
+        return $totalsManagement->calculate($cartId, $addressInformation);
     }
 }

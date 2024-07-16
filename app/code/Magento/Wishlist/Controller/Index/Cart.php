@@ -216,6 +216,12 @@ class Cart extends AbstractIndex implements Action\HttpPostActionInterface
 
             $item->mergeBuyRequest($buyRequest);
             $item->addToCart($this->cart, true);
+
+            $related = $this->getRequest()->getParam('related_product');
+            if (!empty($related)) {
+                $this->cart->addProductsByIds(explode(',', $related));
+            }
+
             $this->cart->save()->getQuote()->collectTotals();
             $wishlist->save();
 

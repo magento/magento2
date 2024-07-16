@@ -36,7 +36,7 @@ define([
                         data: {
                             showStoreViewOptions: self.showStoreViewOptions,
                             storeViewOptions: self.storeViewOptions,
-                            label: $t('Store View')
+                            label: $t('Store')
                         }
                     }) + content;
             }

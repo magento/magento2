@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Quote\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
@@ -24,6 +26,11 @@ use Magento\Quote\Api\Data\AddressInterfaceFactory;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Api\Data\CartItemInterfaceFactory;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use PHPUnit\Framework\TestCase;
@@ -81,6 +88,11 @@ class QuoteTest extends TestCase
     private $extensibleDataObjectConverter;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -101,6 +113,7 @@ class QuoteTest extends TestCase
         $this->customerResourceModel = $this->objectManager->get(CustomerResourceModel::class);
         $this->groupFactory = $this->objectManager->get(GroupFactory::class);
         $this->extensibleDataObjectConverter = $this->objectManager->get(ExtensibleDataObjectConverter::class);
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -116,8 +129,8 @@ class QuoteTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
      * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
      * @return void
      */
     public function testCollectTotalsWithVirtual(): void
@@ -760,5 +773,71 @@ class QuoteTest extends TestCase
         $this->assertEquals(9.3, $quote->getShippingAddress()->getBaseSubtotal());
         $this->assertEquals(5, $quote->getShippingAddress()->getBaseGrandTotal());
         $this->assertTrue($quote->validateMinimumAmount());
+    }
+
+    /**
+     * @magentoConfigFixture current_store multishipping/options/checkout_multiple 1
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Multishipping/Fixtures/quote_with_split_items.php
+     * @return void
+     */
+    public function testIsMultiShippingModeEnabledAfterQuoteItemRemoved(): void
+    {
+        $quote = $this->getQuoteByReservedOrderId->execute('multishipping_quote_id');
+        /** @var CheckoutSession $session */
+        $session = $this->objectManager->get(CheckoutSession::class);
+        $session->replaceQuote($quote);
+        $items = $quote->getAllItems();
+        $idToDelete = null;
+        foreach ($items as $item) {
+            if (!$item->getProduct()->isVirtual() && $item->getQty() == 1) {
+                $idToDelete = $item->getId();
+            }
+        }
+
+        if (!is_null($idToDelete)) {
+            $quoteShippingAddresses = $quote->getAllShippingAddresses();
+            foreach ($quoteShippingAddresses as $shippingAddress) {
+                if ($shippingAddress->getItemById($idToDelete)) {
+                    $shippingAddress->removeItem($idToDelete);
+                    $shippingAddress->setCollectShippingRates(true);
+
+                    if (count($shippingAddress->getAllItems()) == 0) {
+                        $shippingAddress->isDeleted(true);
+                    }
+                }
+            }
+            $quote->removeItem($idToDelete);
+            $this->assertEquals(
+                1,
+                $quote->getIsMultiShipping(),
+                "Multi-shipping mode is disabled after quote item removal"
+            );
+        } else {
+            $this->assertTrue(
+                !is_null($idToDelete),
+                "No Simple Product item with qty 1 to delete exists"
+            );
+        }
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['price' => 922903400.00], as: 'product'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 1]
+        ),
+    ]
+    public function testQuoteItemWithPriceGreaterThan100Millions()
+    {
+        $product = $this->fixtures->get('product');
+        $cart = $this->fixtures->get('cart');
+        $item = $cart->getItemsCollection(false)->fetchItem();
+        $this->assertEquals(
+            round((float)$product->getPrice(), 2),
+            round((float)$item->getPrice(), 2)
+        );
     }
 }

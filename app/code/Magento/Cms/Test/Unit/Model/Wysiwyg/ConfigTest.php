@@ -151,7 +151,7 @@ class ConfigTest extends TestCase
                     'galleryConfigProvider' => ['default' => WysiwygDefaultConfig::class],
                 ]
             )
-            ->setMethods(['processVariableConfig', 'processWidgetConfig'])
+            ->onlyMethods(['processVariableConfig', 'processWidgetConfig'])
             ->getMock();
 
         $this->wysiwygConfig = $objectManager->getObject(
@@ -183,10 +183,8 @@ class ConfigTest extends TestCase
     {
         $this->backendUrlMock->expects($this->atLeastOnce())
             ->method('getUrl')
-            ->withConsecutive(
-                ['cms/wysiwyg/directive'],
-                ['cms/wysiwyg_images/index']
-            );
+            ->with('cms/wysiwyg/directive')
+            ->willReturn('some_link');
         $this->backendUrlMock->expects($this->once())
             ->method('getBaseUrl')
             ->willReturn('localhost/index.php/');

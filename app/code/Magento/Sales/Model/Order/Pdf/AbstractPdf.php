@@ -8,8 +8,11 @@ namespace Magento\Sales\Model\Order\Pdf;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\File\Pdf\Image;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Sales\Model\RtlTextHandler;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Sales Order PDF abstract model
@@ -42,11 +45,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     /**
      * Predefined constants
      */
-    const XML_PATH_SALES_PDF_INVOICE_PUT_ORDER_ID = 'sales_pdf/invoice/put_order_id';
+    public const XML_PATH_SALES_PDF_INVOICE_PUT_ORDER_ID = 'sales_pdf/invoice/put_order_id';
 
-    const XML_PATH_SALES_PDF_SHIPMENT_PUT_ORDER_ID = 'sales_pdf/shipment/put_order_id';
+    public const XML_PATH_SALES_PDF_SHIPMENT_PUT_ORDER_ID = 'sales_pdf/shipment/put_order_id';
 
-    const XML_PATH_SALES_PDF_CREDITMEMO_PUT_ORDER_ID = 'sales_pdf/creditmemo/put_order_id';
+    public const XML_PATH_SALES_PDF_CREDITMEMO_PUT_ORDER_ID = 'sales_pdf/creditmemo/put_order_id';
 
     /**
      * Zend PDF object
@@ -61,6 +64,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     private $rtlTextHandler;
 
     /**
+     * @var \Magento\Framework\File\Pdf\Image
+     */
+    private $image;
+
+    /**
      * Retrieve PDF
      *
      * @return \Zend_Pdf
@@ -68,8 +76,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     abstract public function getPdf();
 
     /**
-     * Payment data
-     *
      * @var \Magento\Payment\Helper\Data
      */
     protected $_paymentData;
@@ -127,6 +133,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     protected $addressRenderer;
 
     /**
+     * @var Magento\Tax\Helper\Data
+     */
+    private $taxHelper;
+
+    /**
      * @var array $pageSettings
      */
     private $pageSettings;
@@ -150,6 +161,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param array $data
      * @param Database $fileStorageDatabase
      * @param RtlTextHandler|null $rtlTextHandler
+     * @param Image $image
+     * @param TaxHelper $taxHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -165,7 +178,9 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         array $data = [],
         Database $fileStorageDatabase = null,
-        ?RtlTextHandler $rtlTextHandler = null
+        ?RtlTextHandler $rtlTextHandler = null,
+        ?Image $image = null,
+        ?TaxHelper $taxHelper = null
     ) {
         $this->addressRenderer = $addressRenderer;
         $this->_paymentData = $paymentData;
@@ -178,8 +193,10 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $this->_pdfTotalFactory = $pdfTotalFactory;
         $this->_pdfItemsFactory = $pdfItemsFactory;
         $this->inlineTranslation = $inlineTranslation;
+        $this->taxHelper = $taxHelper ?: ObjectManager::getInstance()->get(TaxHelper::class);
         $this->fileStorageDatabase = $fileStorageDatabase ?: ObjectManager::getInstance()->get(Database::class);
         $this->rtlTextHandler = $rtlTextHandler ?: ObjectManager::getInstance()->get(RtlTextHandler::class);
+        $this->image = $image ?: ObjectManager::getInstance()->get(Image::class);
         parent::__construct($data);
     }
 
@@ -266,10 +283,10 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      */
     protected function insertLogo(&$page, $store = null)
     {
-        $this->y = $this->y ? $this->y : 815;
+        $this->y = $this->y ?: 815;
         $image = $this->_scopeConfig->getValue(
             'sales/identity/logo',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
         if ($image) {
@@ -280,7 +297,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                 $this->fileStorageDatabase->saveFileToFilesystem($imagePath);
             }
             if ($this->_mediaDirectory->isFile($imagePath)) {
-                $image = \Zend_Pdf_Image::imageWithPath($this->_mediaDirectory->getAbsolutePath($imagePath));
+                $image = $this->image->imageWithPathAdvanced($this->_mediaDirectory->getAbsolutePath($imagePath));
                 $top = 830;
                 //top border of the page
                 $widthLimit = 270;
@@ -328,22 +345,20 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $page->setFillColor(new \Zend_Pdf_Color_GrayScale(0));
         $font = $this->_setFontRegular($page, 10);
         $page->setLineWidth(0);
-        $this->y = $this->y ? $this->y : 815;
+        $this->y = $this->y ?: 815;
         $top = 815;
-        $values = explode(
-            "\n",
-            $this->_scopeConfig->getValue(
-                'sales/identity/address',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $store
-            )
+        $configAddress = $this->_scopeConfig->getValue(
+            'sales/identity/address',
+            ScopeInterface::SCOPE_STORE,
+            $store
         );
+        $values = $configAddress ? explode("\n", $configAddress) : [];
         foreach ($values as $value) {
             if ($value !== '') {
                 $value = preg_replace('/<br[^>]*>/i', "\n", $value);
                 foreach ($this->string->split($value, 45, true, true) as $_value) {
                     $page->drawText(
-                        trim(strip_tags($_value)),
+                        trim(strip_tags($_value ?: '')),
                         $this->getAlignRight($_value, 130, 440, $font, 10),
                         $top,
                         'UTF-8'
@@ -364,7 +379,9 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     protected function _formatAddress($address)
     {
         $return = [];
-        foreach (explode('|', $address) as $str) {
+        $values = $address !== null ? explode('|', $address) : [];
+
+        foreach ($values as $str) {
             foreach ($this->string->split($str, 45, true, true) as $part) {
                 if (empty($part)) {
                     continue;
@@ -466,10 +483,10 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
 
         /* Payment */
         $paymentInfo = $this->_paymentData->getInfoBlock($order->getPayment())->setIsSecureMode(true)->toPdf();
-        $paymentInfo = htmlspecialchars_decode($paymentInfo, ENT_QUOTES);
+        $paymentInfo = $paymentInfo !== null ? htmlspecialchars_decode($paymentInfo, ENT_QUOTES) : '';
         $payment = explode('{{pdf_row_separator}}', $paymentInfo);
         foreach ($payment as $key => $value) {
-            if (strip_tags(trim($value)) == '') {
+            if ($value && strip_tags(trim($value)) == '') {
                 unset($payment[$key]);
             }
         }
@@ -513,7 +530,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                     $text[] = $this->rtlTextHandler->reverseRtlText($_value);
                 }
                 foreach ($text as $part) {
-                    $page->drawText(strip_tags(ltrim($part)), 35, $this->y, 'UTF-8');
+                    $page->drawText(strip_tags(ltrim($part ?: '')), 35, $this->y, 'UTF-8');
                     $this->y -= 15;
                 }
             }
@@ -523,6 +540,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
 
         if (!$order->getIsVirtual()) {
             $this->y = $addressesStartY;
+            $shippingAddress = $shippingAddress ?? []; // @phpstan-ignore-line
             foreach ($shippingAddress as $value) {
                 if ($value !== '') {
                     $text = [];
@@ -530,7 +548,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                         $text[] = $this->rtlTextHandler->reverseRtlText($_value);
                     }
                     foreach ($text as $part) {
-                        $page->drawText(strip_tags(ltrim($part)), 285, $this->y, 'UTF-8');
+                        $page->drawText(strip_tags(ltrim($part ?: '')), 285, $this->y, 'UTF-8');
                         $this->y -= 15;
                     }
                 }
@@ -564,11 +582,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         }
 
         foreach ($payment as $value) {
-            if (trim($value) != '') {
+            if ($value && trim($value) != '') {
                 //Printing "Payment Method" lines
                 $value = preg_replace('/<br[^>]*>/i', "\n", $value);
                 foreach ($this->string->split($value, 45, true, true) as $_value) {
-                    $page->drawText(strip_tags(trim($_value)), $paymentLeft, $yPayments, 'UTF-8');
+                    $page->drawText(strip_tags(trim($_value ?: '')), $paymentLeft, $yPayments, 'UTF-8');
                     $yPayments -= 15;
                 }
             }
@@ -587,17 +605,26 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             $methodStartY = $this->y;
             $this->y -= 15;
 
-            foreach ($this->string->split($shippingMethod, 45, true, true) as $_value) {
-                $page->drawText(strip_tags(trim($_value)), 285, $this->y, 'UTF-8');
-                $this->y -= 15;
+            if (isset($shippingMethod) && \is_string($shippingMethod)) {
+                foreach ($this->string->split($shippingMethod, 45, true, true) as $_value) {
+                    $page->drawText(strip_tags(trim($_value ?: '')), 285, $this->y, 'UTF-8');
+                    $this->y -= 15;
+                }
             }
 
             $yShipments = $this->y;
-            $totalShippingChargesText = "("
-                . __('Total Shipping Charges')
-                . " "
-                . $order->formatPriceTxt($order->getShippingAmount())
-                . ")";
+            $totalShippingChargesText = "(" . __('Total Shipping Charges') . " ";
+            if ($this->taxHelper->displayShippingPriceIncludingTax()) {
+                $totalShippingChargesText .= $order->formatPriceTxt($order->getShippingInclTax());
+            } else {
+                $totalShippingChargesText .= $order->formatPriceTxt($order->getShippingAmount());
+            }
+
+            if ($this->taxHelper->displayShippingBothPrices()
+                && $order->getShippingInclTax() != $order->getShippingAmount()) {
+                $totalShippingChargesText .= "(Incl. Tax " . $order->getShippingInclTax() . ")";
+            }
+            $totalShippingChargesText .= ")";
 
             $page->drawText($totalShippingChargesText, 285, $yShipments - $topMargin, 'UTF-8');
             $yShipments -= $topMargin + 10;
@@ -623,8 +650,9 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                 $this->_setFontRegular($page, 8);
                 foreach ($tracks as $track) {
                     $maxTitleLen = 45;
-                    $endOfTitle = strlen($track->getTitle()) > $maxTitleLen ? '...' : '';
-                    $truncatedTitle = substr($track->getTitle(), 0, $maxTitleLen) . $endOfTitle;
+                    $trackTitle = $track->getTitle() ?? '';
+                    $endOfTitle = strlen($trackTitle) > $maxTitleLen ? '...' : '';
+                    $truncatedTitle = substr($trackTitle, 0, $maxTitleLen) . $endOfTitle;
                     $page->drawText($truncatedTitle, 292, $yShipments, 'UTF-8');
                     $page->drawText($track->getNumber(), 410, $yShipments, 'UTF-8');
                     $yShipments -= $topMargin - 5;
@@ -1105,8 +1133,9 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $lineSpacing = !empty($column['height']) ? $column['height'] : $height;
         $fontSize = empty($column['font_size']) ? 10 : $column['font_size'];
         foreach ($column['text'] as $part) {
-            if ($this->y - $lineSpacing < 15) {
+            if ($this->y - $top < 15) {
                 $page = $this->newPage($this->pageSettings);
+                $top = 0;
             }
 
             $feed = $column['feed'];

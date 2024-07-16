@@ -42,15 +42,25 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
     private $indexerMock;
 
     /**
+     * @var string[]
+     */
+    private $optionalIndexers;
+
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         parent::setUp();
-        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->configReaderMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->indexers = ['indexer_1' => 'indexer_1', 'indexer_2' => 'indexer_2'];
-        $this->command = $objectManagerHelper->getObject(
+        $this->command = $this->objectManagerHelper->getObject(
             IndexerShowDimensionsModeCommand::class,
             [
                 'objectManagerFactory' => $this->objectManagerFactory,
@@ -77,7 +87,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
     /**
      * Tests method \Magento\Indexer\Console\Command\IndexerDimensionsModeCommand::execute
      *
-     * @param string $command
+     * @param array $command
      * @param string $consoleOutput
      * @dataProvider dimensionModesDataProvider
      */
@@ -88,7 +98,12 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
         $this->configureAdminArea();
         /** @var CommandTester $commandTester */
         $commandTester = new CommandTester($this->command);
-        $this->indexerMock->method('load')->withConsecutive(...$indexers);
+        $this->indexerMock->method('load')
+            ->willReturnCallback(function (...$indexers) {
+                if (!empty($indexers)) {
+                    return null;
+                }
+            });
         $this->indexerMock->method('getTitle')->willReturnOnConsecutiveCalls(...$indexerTitles);
         $commandTester->execute($command);
         $actualValue = $commandTester->getDisplay();
@@ -98,10 +113,33 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
         );
     }
 
+    public function testExecuteWithOptionalIndexers()
+    {
+        $this->optionalIndexers = ['indexer_3'];
+        $this->indexers = ['indexer_3'=> 'indexer_3'];
+        $this->command = $this->objectManagerHelper->getObject(
+            IndexerShowDimensionsModeCommand::class,
+            [
+                'objectManagerFactory' => $this->objectManagerFactory,
+                'configReader'         => $this->configReaderMock,
+                'indexers'             => $this->indexers,
+                'optionalIndexers'     => $this->optionalIndexers
+            ]
+        );
+        $command = ['indexer' => ['indexer_3']];
+        $this->configureAdminArea();
+        /** @var CommandTester $commandTester */
+        $commandTester = new CommandTester($this->command);
+        $this->indexerMock->method('load')->willThrowException(new \InvalidArgumentException());
+        $commandTester->execute($command);
+        $actualValue = $commandTester->getDisplay();
+        $this->assertEquals('', $actualValue);
+    }
+
     /**
      * @return array
      */
-    public function dimensionModesDataProvider(): array
+    public static function dimensionModesDataProvider(): array
     {
         return [
             'get_all'                => [

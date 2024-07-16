@@ -16,6 +16,7 @@
             <severity value="MINOR"/>
             <testCaseId value="MC-29105"/>
             <group value="checkout"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -39,9 +40,7 @@
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Delete category -->

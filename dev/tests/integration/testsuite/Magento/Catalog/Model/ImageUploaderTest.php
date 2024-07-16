@@ -96,7 +96,7 @@ class ImageUploaderTest extends TestCase
 
         $this->imageUploader->saveFileToTmpDir('image');
         $filePath = $this->imageUploader->getBaseTmpPath() . DIRECTORY_SEPARATOR . $expectedName;
-        $this->assertTrue(is_file($this->mediaDirectory->getAbsolutePath($filePath)));
+        $this->assertTrue($this->mediaDirectory->isFile($this->mediaDirectory->getAbsolutePath($filePath)));
     }
 
     /**
@@ -127,11 +127,11 @@ class ImageUploaderTest extends TestCase
     {
         $expectedFilePath = $this->imageUploader->getBasePath() . DIRECTORY_SEPARATOR . 'magento_small_image_1.jpg';
 
-        $this->assertFileDoesNotExist($this->mediaDirectory->getAbsolutePath($expectedFilePath));
+        $this->assertFalse($this->mediaDirectory->isExist($expectedFilePath));
 
         $this->imageUploader->moveFileFromTmp('magento_small_image.jpg');
 
-        $this->assertFileExists($this->mediaDirectory->getAbsolutePath($expectedFilePath));
+        $this->assertTrue($this->mediaDirectory->isExist($expectedFilePath));
     }
 
     /**

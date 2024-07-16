@@ -12,9 +12,12 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Controller\Category\View;
 use Magento\Catalog\Helper\Category;
 use Magento\Catalog\Model\Design;
+use Magento\Catalog\Model\Product\ProductList\Toolbar;
+use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\DataObject;
@@ -128,12 +131,20 @@ class ViewTest extends TestCase
     protected $pageConfig;
 
     /**
-     * Set up instances and mock objects
+     * @var ToolbarMemorizer|MockObject
+     */
+    protected ToolbarMemorizer $toolbarMemorizer;
+
+    /**
+     * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->request = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->response = $this->getMockForAbstractClass(ResponseInterface::class);
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setRedirect', 'isRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMock();
 
         $this->categoryHelper = $this->createMock(Category::class);
         $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
@@ -149,7 +160,15 @@ class ViewTest extends TestCase
         $this->pageConfig->expects($this->any())->method('addBodyClass')->willReturnSelf();
 
         $this->page = $this->getMockBuilder(Page::class)
-            ->setMethods(['getConfig', 'initLayout', 'addPageLayoutHandles', 'getLayout', 'addUpdate'])
+            ->onlyMethods(
+                [
+                    'getConfig',
+                    'initLayout',
+                    'addPageLayoutHandles',
+                    'getLayout',
+                    'addUpdate'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->page->expects($this->any())->method('getConfig')->willReturn($this->pageConfig);
@@ -172,6 +191,8 @@ class ViewTest extends TestCase
         $this->context->expects($this->any())->method('getView')->willReturn($this->view);
         $this->context->expects($this->any())->method('getResultFactory')
             ->willReturn($this->resultFactory);
+        $this->context->expects($this->once())->method('getRedirect')
+            ->willReturn($this->createMock(RedirectInterface::class));
 
         $this->category = $this->createMock(\Magento\Catalog\Model\Category::class);
         $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
@@ -184,11 +205,13 @@ class ViewTest extends TestCase
 
         $resultPageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultPageFactory->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($this->page);
+
+        $this->toolbarMemorizer = $this->createMock(ToolbarMemorizer::class);
 
         $this->action = (new ObjectManager($this))->getObject(
             View::class,
@@ -198,16 +221,55 @@ class ViewTest extends TestCase
                 'categoryRepository' => $this->categoryRepository,
                 'storeManager' => $this->storeManager,
                 'resultPageFactory' => $resultPageFactory,
-                'categoryHelper' => $this->categoryHelper
+                'categoryHelper' => $this->categoryHelper,
+                'toolbarMemorizer' => $this->toolbarMemorizer
             ]
         );
     }
 
+    public function testRedirectOnToolbarAction()
+    {
+        $categoryId = 123;
+        $this->request->expects($this->any())
+            ->method('getParams')
+            ->willReturn([Toolbar::LIMIT_PARAM_NAME => 12]);
+        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                [Action::PARAM_NAME_URL_ENCODED],
+                ['id', false, $categoryId]
+            ]
+        );
+        $this->categoryRepository->expects($this->any())->method('get')->with($categoryId)
+            ->willReturn($this->category);
+        $this->categoryHelper->expects($this->once())->method('canShow')->with($this->category)->willReturn(true);
+        $this->toolbarMemorizer->expects($this->once())->method('memorizeParams');
+        $this->toolbarMemorizer->expects($this->once())->method('isMemorizingAllowed')->willReturn(true);
+        $this->response->expects($this->once())->method('setRedirect');
+        $settings = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getPageLayout', 'getLayoutUpdates'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->category
+            ->method('hasChildren')
+            ->willReturnOnConsecutiveCalls(true);
+        $this->category->expects($this->any())
+            ->method('getDisplayMode')
+            ->willReturn('products');
+
+        $settings->expects($this->atLeastOnce())->method('getPageLayout')->willReturn('page_layout');
+        $settings->expects($this->once())->method('getLayoutUpdates')->willReturn(['update1', 'update2']);
+        $this->catalogDesign->expects($this->any())->method('getDesignSettings')->willReturn($settings);
+
+        $this->action->execute();
+    }
+
     /**
-     * Apply custom layout update is correct
+     * Apply custom layout update is correct.
      *
-     * @dataProvider getInvocationData
+     * @param array $expectedData
+     *
      * @return void
+     * @dataProvider getInvocationData
      */
     public function testApplyCustomLayoutUpdate(array $expectedData): void
     {
@@ -220,6 +282,9 @@ class ViewTest extends TestCase
                 ['id', false, $categoryId]
             ]
         );
+        $this->request->expects($this->any())
+            ->method('getParams')
+            ->willReturn([]);
 
         $this->categoryRepository->expects($this->any())->method('get')->with($categoryId)
             ->willReturn($this->category);
@@ -230,13 +295,12 @@ class ViewTest extends TestCase
             ->addMethods(['getPageLayout', 'getLayoutUpdates'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->category->expects($this->at(1))
+        $this->category
             ->method('hasChildren')
-            ->willReturn(true);
-        $this->category->expects($this->at(2))
-            ->method('hasChildren')
-            ->willReturn($expectedData[1][0]['type'] === 'default' ? true : false);
-        $this->category->expects($this->once())
+            ->willReturnOnConsecutiveCalls(
+                $expectedData[1][0]['type'] === 'default'
+            );
+        $this->category->expects($this->any())
             ->method('getDisplayMode')
             ->willReturn($expectedData[2][0]['displaymode']);
         $this->expectationForPageLayoutHandles($expectedData);
@@ -248,21 +312,24 @@ class ViewTest extends TestCase
     }
 
     /**
-     * Expected invocation for Layout Handles
+     * Expected invocation for Layout Handles.
      *
      * @param array $data
+     *
      * @return void
      */
-    private function expectationForPageLayoutHandles($data): void
+    private function expectationForPageLayoutHandles(array $data): void
     {
-        $index = 1;
+        $withArgs = [];
 
         foreach ($data as $expectedData) {
-            $this->page->expects($this->at($index))
-                ->method('addPageLayoutHandles')
-                ->with($expectedData[0], $expectedData[1], $expectedData[2]);
-            $index++;
+            $withArgs[] = [$expectedData[0], $expectedData[1], $expectedData[2]];
         }
+        $this->page
+            ->method('addPageLayoutHandles')
+            ->willReturnCallback(function (...$withArgs) {
+                return null;
+            });
     }
 
     /**
@@ -270,7 +337,7 @@ class ViewTest extends TestCase
      *
      * @return array
      */
-    public function getInvocationData(): array
+    public static function getInvocationData(): array
     {
         return [
             [

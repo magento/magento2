@@ -21,6 +21,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Unit tests for \Magento\CatalogInventory\Model\StockStateProvider class.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockStateProviderTest extends TestCase
@@ -76,10 +78,25 @@ class StockStateProviderTest extends TestCase
     /**
      * @var array
      */
-    protected $stockItemMethods = [
+    protected $stockAddItemMethods = [
         'getId',
-        'getProductId',
         'getWebsiteId',
+        'hasStockQty',
+        'setStockQty',
+        'getData',
+        'getSuppressCheckQtyIncrements',
+        'getIsChildItem',
+        'getIsSaleable',
+        'getOrderedItems',
+        'setOrderedItems',
+        'getProductName'
+    ];
+
+    /**
+     * @var array
+     */
+    protected $stockItemMethods = [
+        'getProductId',
         'getStockId',
         'getQty',
         'getIsInStock',
@@ -104,17 +121,11 @@ class StockStateProviderTest extends TestCase
         'getLowStockDate',
         'getIsDecimalDivided',
         'getStockStatusChangedAuto',
-        'hasStockQty',
-        'setStockQty',
-        'getData',
-        'getSuppressCheckQtyIncrements',
-        'getIsChildItem',
-        'getIsSaleable',
-        'getOrderedItems',
-        'setOrderedItems',
-        'getProductName',
     ];
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -188,6 +199,21 @@ class StockStateProviderTest extends TestCase
      * @dataProvider checkQtyDataProvider
      */
     public function testCheckQty(StockItemInterface $stockItem, $expectedResult)
+    {
+        $this->assertEquals(
+            $expectedResult,
+            $this->stockStateProvider->checkQty($stockItem, $this->qty)
+        );
+    }
+
+    /**
+     * Check quantity with out-of-stock status but positive or 0 quantity.
+     *
+     * @param StockItemInterface $stockItem
+     * @param mixed $expectedResult
+     * @dataProvider checkQtyWithStockStatusDataProvider
+     */
+    public function testCheckQtyWithPositiveQtyAndOutOfStockstatus(StockItemInterface $stockItem, $expectedResult)
     {
         $this->assertEquals(
             $expectedResult,
@@ -279,6 +305,14 @@ class StockStateProviderTest extends TestCase
     /**
      * @return array
      */
+    public function checkQtyWithStockStatusDataProvider()
+    {
+        return $this->prepareDataForMethod('checkQty', $this->getVariationsForQtyAndStock());
+    }
+
+    /**
+     * @return array
+     */
     public function suggestQtyDataProvider()
     {
         return $this->prepareDataForMethod('suggestQty');
@@ -310,15 +344,20 @@ class StockStateProviderTest extends TestCase
 
     /**
      * @param $methodName
+     * @param array|null $options
      * @return array
      */
-    protected function prepareDataForMethod($methodName)
+    protected function prepareDataForMethod($methodName, array $options = null)
     {
         $variations = [];
-        foreach ($this->getVariations() as $variation) {
+        if ($options === null) {
+            $options = $this->getVariations();
+        }
+        foreach ($options as $variation) {
             $stockItem = $this->getMockBuilder(StockItemInterface::class)
                 ->disableOriginalConstructor()
-                ->setMethods($this->stockItemMethods)
+                ->addMethods($this->stockAddItemMethods)
+                ->onlyMethods($this->stockItemMethods)
                 ->getMockForAbstractClass();
             $stockItem->expects($this->any())->method('getSuppressCheckQtyIncrements')->willReturn(
                 $variation['values']['_suppress_check_qty_increments_']
@@ -355,7 +394,7 @@ class StockStateProviderTest extends TestCase
     /**
      * @return array
      */
-    protected function getVariations()
+    private function getVariations()
     {
         $stockQty = 100;
         return [
@@ -383,7 +422,7 @@ class StockStateProviderTest extends TestCase
                     'suggestQty' => 51,
                     'getStockQty' => $stockQty,
                     'checkQtyIncrements' => false,
-                    'checkQuoteItemQty' => false,
+                    'checkQuoteItemQty' => true,
                 ],
             ],
             [
@@ -411,7 +450,7 @@ class StockStateProviderTest extends TestCase
                     'getStockQty' => $stockQty,
                     'checkQtyIncrements' => false,
                     'checkQuoteItemQty' => true,
-                ]
+                ],
             ],
             [
                 'values' => [
@@ -438,6 +477,58 @@ class StockStateProviderTest extends TestCase
                     'getStockQty' => null,
                     'checkQtyIncrements' => false,
                     'checkQuoteItemQty' => true,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getVariationsForQtyAndStock()
+    {
+        $stockQty = 100;
+        return [
+            [
+                'values' => [
+                    'getIsInStock' => false,
+                    'getQty' => $stockQty,
+                    'getMinQty' => 60,
+                    'getMinSaleQty' => 1,
+                    'getMaxSaleQty' => 99,
+                    'getNotifyStockQty' => 101,
+                    'getManageStock' => true,
+                    'getBackorders' => 0,
+                    'getQtyIncrements' => 1,
+                    '_stock_qty_' => null,
+                    '_suppress_check_qty_increments_' => false,
+                    '_is_saleable_' => true,
+                    '_ordered_items_' => 0,
+                    '_product_' => 'Test product Name',
+                ],
+                'results' => [
+                    'checkQty' => false
+                ]
+            ],
+            [
+                'values' => [
+                    'getIsInStock' => false,
+                    'getQty' => 0,
+                    'getMinQty' => 60,
+                    'getMinSaleQty' => 1,
+                    'getMaxSaleQty' => 99,
+                    'getNotifyStockQty' => 101,
+                    'getManageStock' => true,
+                    'getBackorders' => 0,
+                    'getQtyIncrements' => 1,
+                    '_stock_qty_' => null,
+                    '_suppress_check_qty_increments_' => false,
+                    '_is_saleable_' => true,
+                    '_ordered_items_' => 0,
+                    '_product_' => 'Test product Name',
+                ],
+                'results' => [
+                    'checkQty' => false
                 ]
             ]
         ];
@@ -453,7 +544,8 @@ class StockStateProviderTest extends TestCase
         $qty = 1;
         $qtyIncrements = 5;
         $stockItem = $this->getMockBuilder(StockItemInterface::class)
-            ->setMethods($this->stockItemMethods)
+            ->addMethods($this->stockAddItemMethods)
+            ->onlyMethods($this->stockItemMethods)
             ->getMockForAbstractClass();
         $stockItem->expects($this->any())->method('getSuppressCheckQtyIncrements')->willReturn(false);
         $stockItem->expects($this->any())->method('getQtyIncrements')->willReturn($qtyIncrements);
@@ -469,7 +561,7 @@ class StockStateProviderTest extends TestCase
     /**
      * @return array
      */
-    public function checkQtyIncrementsMsgDataProvider()
+    public static function checkQtyIncrementsMsgDataProvider()
     {
         return [
             [true, 'You can buy Simple Product only in quantities of 5 at a time.'],

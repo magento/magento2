@@ -107,7 +107,7 @@ class UrlRewriteCollectionTest extends TestCase
     {
         $this->connectionMock->expects($this->once())
             ->method('prepareSqlCondition')
-            ->with('store_id', ['in' => $condition]);
+            ->with('main_table.store_id', ['in' => $condition]);
 
         $this->collection->addStoreFilter($storeId, $withAdmin);
     }
@@ -138,7 +138,7 @@ class UrlRewriteCollectionTest extends TestCase
 
         $this->connectionMock->expects($this->once())
             ->method('prepareSqlCondition')
-            ->with('store_id', ['in' => $condition]);
+            ->with('main_table.store_id', ['in' => $condition]);
 
         $this->collection->addStoreFilter($storeId, $withAdmin);
     }

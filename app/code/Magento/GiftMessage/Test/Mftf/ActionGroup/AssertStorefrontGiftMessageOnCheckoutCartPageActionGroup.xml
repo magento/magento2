@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontGiftMessageOnCheckoutCartPageActionGroup">
+        <annotations>
+            <description>Check that Gift Message for order present on checkout cart page.</description>
+        </annotations>
+
+        <waitForElementVisible selector="{{StorefrontOrderGiftSection.giftMessageTitle}}" stepKey="waitTitleOnThePage"/>
+        <see selector="{{StorefrontOrderGiftSection.giftMessageTitle}}" userInput="Gift options"  stepKey="seeTitleOnThePage"/>
+        <click selector="{{StorefrontOrderGiftSection.giftMessageTitle}}" stepKey="openGiftMessageForm"/>
+        <scrollTo selector="{{StorefrontOrderGiftSection.giftMessageToLabel}}" stepKey="scrollToTitleOnThePage"/>
+        <see selector="{{StorefrontOrderGiftSection.giftMessageToLabel}}" userInput="To:"  stepKey="seeTitleFromLabel"/>
+        <see selector="{{StorefrontOrderGiftSection.giftMessageFromLabel}}" userInput="From:"  stepKey="seeTitleToLabel"/>
+        <see selector="{{StorefrontOrderGiftSection.giftMessageMessageLabel}}" userInput="Message:"  stepKey="seeMessageLabel"/>
+    </actionGroup>
+</actionGroups>

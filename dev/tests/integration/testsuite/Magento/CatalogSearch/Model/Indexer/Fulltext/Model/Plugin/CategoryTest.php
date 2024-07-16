@@ -9,10 +9,16 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Model\Plugin;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Processor;
+use Magento\Framework\Indexer\StateInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
-class CategoryTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test for category repository plugin
+ */
+class CategoryTest extends TestCase
 {
     /**
      * @var Processor
@@ -24,10 +30,19 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      */
     private $categoryRepository;
 
+    /**
+     * @var CategoryCollectionFactory
+     */
+    private $categoryCollectionFactory;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->indexerProcessor = Bootstrap::getObjectManager()->create(Processor::class);
         $this->categoryRepository = Bootstrap::getObjectManager()->create(CategoryRepositoryInterface::class);
+        $this->categoryCollectionFactory = Bootstrap::getObjectManager()->create(CategoryCollectionFactory::class);
     }
 
     /**
@@ -47,22 +62,22 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $status = $state->getStatus();
 
         $this->assertTrue($isIndexerValid);
-        $this->assertEquals(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID, $status);
+        $this->assertEquals(StateInterface::STATUS_INVALID, $status);
     }
 
     /**
+     * Returns categories
+     *
      * @param int $count
      * @return Category[]
      */
-    private function getCategories($count)
+    private function getCategories(int $count): array
     {
-        /** @var Category $category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Category::class
-        );
-
-        $result = $category->getCollection()->addAttributeToSelect('name')->getItems();
-        $result = array_slice($result, 2);
+        $collection = $this->categoryCollectionFactory->create()
+            ->addAttributeToSelect('name')
+            ->addAttributeToSelect('is_active')
+            ->getItems();
+        $result = array_slice($collection, 2);
 
         return array_slice($result, 0, $count);
     }
