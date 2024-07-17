@@ -103,7 +103,7 @@
         <dontSee selector="{{AdminOrderDetailsMainActionsSection.authorize}}" stepKey="dontSeeAuthorizationButtonAfterAuthorizing"/>
         <!--Assert the invoice button is present-->
         <waitForElementVisible selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="waitForInvoiceButtonToBeAppeared"/>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache" after="flushCache">
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
             <argument name="tags" value=""/>
         </actionGroup>
         <!--Assert the authorization transaction is present in transaction grid-->
