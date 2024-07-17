@@ -24,13 +24,13 @@
             </createData>
             <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountry"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminClearPaypalPaymentStandardExistingDataActionGroup" stepKey="clearValuesPresentInPayflowLink"/>
+            <actionGroup ref="AdminClearPayflowLinkExistingDataActionGroup" stepKey="clearValuesPresentInPayflowLink"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set paypal/general/merchant_country 0" stepKey="setMerchantCountryAsUS"/>
             <magentoCLI command="config:set payment/payflow_link/active 0" stepKey="disablePayPalPayflowLink"/>
-            <actionGroup ref="AdminClearPaypalPaymentStandardExistingDataActionGroup" stepKey="clearDataPresentInPayflowLink"/>
+            <actionGroup ref="AdminClearPayflowLinkExistingDataActionGroup" stepKey="clearDataPresentInPayflowLink"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
