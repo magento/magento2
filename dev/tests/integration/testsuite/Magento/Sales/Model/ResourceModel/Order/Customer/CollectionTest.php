@@ -32,7 +32,7 @@ class CollectionTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->collection = $objectManager->get(Collection::class);
+        $this->collection = $this->objectManager->get(Collection::class);
     }
 
     /**
