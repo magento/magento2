@@ -49,7 +49,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $jsonEncoder;
 
     /**
-     * @var \Magento\ConfigurableProduct\Helper\Data $imageHelper
+     * @var \Magento\ConfigurableProduct\Helper\Data
      */
     protected $helper;
 
