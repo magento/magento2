@@ -68,8 +68,7 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
         $deserializer,
         array $expectedResult
     ): void {
-        if(is_callable($deserializer))
-        {
+        if(is_callable($deserializer)) {
             $deserializer = $deserializer($this);
         }
         $this->requestMock->method('getContentType')
@@ -136,7 +135,7 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
      *
      * @return DeserializerJson
      */
-    private function prepareJsonDeserializer(): DeserializerJson
+    protected function prepareJsonDeserializer(): DeserializerJson
     {
         /** @var Decoder|MockObject $decoder */
         $decoder = $this->createMock(Decoder::class);
@@ -151,7 +150,7 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
      *
      * @return DeserializerXml
      */
-    private function prepareXmlDeserializer(): DeserializerXml
+    protected function prepareXmlDeserializer(): DeserializerXml
     {
         $parserXml = new ParserXml();
         /** @var State|MockObject $appStateMock */

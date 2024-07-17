@@ -93,8 +93,7 @@ class DeleteExpiredImagesTest extends TestCase
      */
     public function testDeleteExpiredImages($website, $isFile, $filename, $mTime, $timeout)
     {
-        if($website!=null)
-        {
+        if($website!=null) {
             $website = $website($this);
         }
         $this->_storeManager->expects(

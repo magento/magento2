@@ -54,8 +54,7 @@ class ProductOutputProcessorTest extends TestCase
         array $result,
         array $expectedResult
     ) {
-        if(is_callable($product))
-        {
+        if(is_callable($product)) {
             $product = $product($this);
         }
         $this->requestMock
@@ -310,7 +309,7 @@ class ProductOutputProcessorTest extends TestCase
         ];
     }
 
-    private function setProductInformation($productArr)
+    protected function setProductInformation($productArr)
     {
         $productMock = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()

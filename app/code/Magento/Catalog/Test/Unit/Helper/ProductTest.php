@@ -38,8 +38,7 @@ class ProductTest extends TestCase
      */
     public function testIsDataForPriceIndexerWasChanged($data, $result)
     {
-        if(is_callable($data))
-        {
+        if(is_callable($data)) {
             $data = $data($this);
         }
         $this->assertEquals($this->_productHelper->isDataForPriceIndexerWasChanged($data), $result);
@@ -51,8 +50,7 @@ class ProductTest extends TestCase
             \Magento\Catalog\Model\Product::class
         )->disableOriginalConstructor()
             ->getMock();
-        if($method!=null)
-        {
+        if($method!=null) {
             $product->expects(
                 $this->once()
             )->method(
