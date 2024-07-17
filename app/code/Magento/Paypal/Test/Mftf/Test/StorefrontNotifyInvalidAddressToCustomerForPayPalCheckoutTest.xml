@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <!--
-     /**
-      * Copyright © Magento, Inc. All rights reserved.
-      * See COPYING.txt for license details.
-      */
-    -->
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -16,7 +16,6 @@
             <description value="Verify that customer is notified with error message about wrong address for PayPal on all Magento Storefront pages"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-3995"/>
-            <group value="paypal"/>
             <group value="paypalExpress"/>
             <!--<group value="pr_exclude"/>-->
         </annotations>
@@ -60,6 +59,7 @@
         <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="johndoe@example.com" stepKey="SetInvalidZipCode"/>
         <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="johndoe@example.com" stepKey="SetInvalidPhoneNumber"/>
         <!--Select Flat Rate shipping method-->
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.shippingMethodFlatRate}}" stepKey="waitForFlatRateShippingMethod"/>
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
         <!--Navigate to Review and Payments page-->
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToPaymentPage"/>
@@ -87,11 +87,12 @@
         <!-- Click on Paypal paypal button on mini cart page-->
         <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtnFromMiniCart">
             <argument name="elementNumber" value="1"/>
+            <argument name="frameName" value="myFrame2"/>
         </actionGroup>
         <!--Close Mini Cart-->
         <click selector="{{StorefrontMinicartSection.minicartclose}}" stepKey="closeMiniCart"/>
         <!--Assert invalid address error from mini cart page-->
-        <actionGroup ref="StorefrontAssertInvalidAddressErrorActionGroup" stepKey="assertErrorMessage2">
+        <actionGroup ref="StorefrontAssertInvalidAddressErrorActionGroup" stepKey="assertErrorMessageFromMiniCartPage">
             <argument name="invalidAddressError" value="{{CheckoutCartMessageSection.invalidAddressError}}"/>
         </actionGroup>
     </test>

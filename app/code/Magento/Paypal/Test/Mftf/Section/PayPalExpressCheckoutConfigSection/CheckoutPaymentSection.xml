@@ -25,7 +25,7 @@
         <element name="expirationYear" type="input" selector="//input[@id='expdate_year']" timeout="10"/>
         <element name="cvv" type="input" selector="//input[@id='cvv2_number']" timeout="10"/>
         <element name="payNowBtn" type="button" selector="//input[@id='btn_pay_cc']" timeout="10"/>
-        <element name="invalidAddressError" type="text" selector="//div[@data-ui-id='checkout-cart-validationmessages-message-error']" timeout="5"/>
+        <element name="invalidAddressError" type="text" selector="div.message.message-error.error" timeout="5"/>
         <element name="PayPalBtnLessTimeout" type="button" selector=".paypal-button.paypal-button-number-0" timeout="3"/>
     </section>
 </sections>
