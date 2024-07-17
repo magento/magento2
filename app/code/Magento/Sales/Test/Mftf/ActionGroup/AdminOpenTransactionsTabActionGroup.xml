@@ -21,9 +21,6 @@
         <waitForElementClickable selector="{{AdminTransactionsGridSection.orderTxnTableSearchBtn}}" stepKey="waitToClickSearch"/>
         <click selector="{{AdminTransactionsGridSection.orderTxnTableSearchBtn}}" stepKey="clickSearch"/>
         <waitForPageLoad stepKey="waitForFilterToLoad"/>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushConfigCache">
-            <argument name="tags" value="config"/>
-        </actionGroup>
         <waitForElementClickable selector="{{AdminTransactionsGridSection.orderTxnTableFirstRow}}" stepKey="clickOnVoidTransaction"/>
         <click selector="{{AdminTransactionsGridSection.orderTxnTableFirstRow}}" stepKey="clickFirstRow"/>
     </actionGroup>
