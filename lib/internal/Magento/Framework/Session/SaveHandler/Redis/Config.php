@@ -46,6 +46,11 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     const PARAM_TIMEOUT                 = 'session/redis/timeout';
 
     /**
+     * Configuration path for number of connection retries
+     */
+    const PARAM_RETRIES = 'session/redis/retries';
+
+    /**
      * Configuration path for persistent identifier
      */
     const PARAM_PERSISTENT_IDENTIFIER   = 'session/redis/persistent_identifier';
@@ -218,6 +223,14 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     public function getTimeout()
     {
         return $this->deploymentConfig->get(self::PARAM_TIMEOUT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRetries()
+    {
+        return $this->deploymentConfig->get(self::PARAM_RETRIES);
     }
 
     /**
