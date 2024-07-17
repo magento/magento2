@@ -7,12 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\App;
 
-use Magento\Framework\App\Http as HttpApp;
-use Magento\Framework\App\Request\HttpFactory as RequestFactory;
-use Magento\Framework\App\Response\Http as HttpResponse;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\GraphQl\App\State\Comparator;
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\GraphQl\App\State\GraphQlStateDiff;
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 
 /**
  * Tests the dispatch method in the GraphQl Controller class using a simple product query
@@ -21,103 +17,108 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
  * @magentoAppArea graphql
- * @magentoDataFixture Magento/Catalog/_files/multiple_mixed_products.php
- * @magentoDataFixture Magento/Catalog/_files/categories.php
- *
  */
 class GraphQlStateTest extends \PHPUnit\Framework\TestCase
 {
-    private const CONTENT_TYPE = 'application/json';
-
-    /** @var ObjectManagerInterface */
-    private ObjectManagerInterface $objectManager;
-
-    /** @var Comparator */
-    private Comparator $comparator;
-
-    /** @var RequestFactory */
-    private RequestFactory $requestFactory;
+    /**
+     * @var GetMaskedQuoteIdByReservedOrderId
+     */
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
-     * @return void
+     * @var GraphQlStateDiff|null
+     */
+    private ?GraphQlStateDiff $graphQlStateDiff;
+
+    /**
+     * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->comparator = $this->objectManager->create(Comparator::class);
-        $this->requestFactory = $this->objectManager->get(RequestFactory::class);
+        if (!class_exists(GraphQlStateDiff::class)) {
+            $this->markTestSkipped('GraphQlStateDiff class is not available on this version of Magento.');
+        }
+
+        $this->graphQlStateDiff = new GraphQlStateDiff();
         parent::setUp();
     }
 
     /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        $this->graphQlStateDiff->tearDown();
+        $this->graphQlStateDiff = null;
+        parent::tearDown();
+    }
+
+    /**
      * Runs various GraphQL queries and checks if state of shared objects in Object Manager have changed
-     *
      * @dataProvider queryDataProvider
      * @param string $query
      * @param array $variables
+     * @param array $variables2  This is the second set of variables to be used in the second request
+     * @param array $authInfo
      * @param string $operationName
      * @param string $expected
+     * @magentoDataFixture Magento/Store/_files/store.php
+     * @magentoDataFixture Magento/Catalog/_files/multiple_mixed_products.php
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
      * @return void
      * @throws \Exception
      */
-    public function testState(string $query, array $variables, string $operationName, string $expected): void
-    {
-        $jsonEncodedRequest = json_encode([
-            'query' => $query,
-            'variables' => $variables,
-            'operationName' => $operationName
-        ]);
-        $output1 = $this->request($jsonEncodedRequest, $operationName, true);
-        $this->assertStringContainsString($expected, $output1);
-        $output2 = $this->request($jsonEncodedRequest, $operationName);
-        $this->assertStringContainsString($expected, $output2);
-        $this->assertEquals($output1, $output2);
+    public function testState(
+        string $query,
+        array $variables,
+        array $variables2,
+        array $authInfo,
+        string $operationName,
+        string $expected,
+    ): void {
+        $this->graphQlStateDiff
+            ->testState($query, $variables, $variables2, $authInfo, $operationName, $expected, $this);
     }
 
     /**
+     * @magentoConfigFixture default_store catalog/seo/product_url_suffix test_product_suffix
+     * @magentoConfigFixture default_store catalog/seo/category_url_suffix test_category_suffix
+     * @magentoConfigFixture default_store catalog/seo/title_separator ___
+     * @magentoConfigFixture default_store catalog/frontend/list_mode 2
+     * @magentoConfigFixture default_store catalog/frontend/grid_per_page_values 16
+     * @magentoConfigFixture default_store catalog/frontend/list_per_page_values 8
+     * @magentoConfigFixture default_store catalog/frontend/grid_per_page 16
+     * @magentoConfigFixture default_store catalog/frontend/list_per_page 8
+     * @magentoConfigFixture default_store catalog/frontend/default_sort_by asc
+     * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @dataProvider cartQueryProvider
      * @param string $query
+     * @param array $variables
+     * @param array $variables2
+     * @param array $authInfo
      * @param string $operationName
-     * @param bool $firstRequest
-     * @return string
-     * @throws \Exception
+     * @param string $expected
+     * @return void
      */
-    private function request(string $query, string $operationName, bool $firstRequest = false): string
-    {
-        $this->comparator->rememberObjectsStateBefore($firstRequest);
-        $response = $this->doRequest($query);
-        $this->comparator->rememberObjectsStateAfter($firstRequest);
-        $result = $this->comparator->compare($operationName);
-        $this->assertEmpty(
-            $result,
-            sprintf(
-                '%d objects changed state during request. Details: %s',
-                count($result),
-                var_export($result, true)
-            )
-        );
-        return $response;
-    }
-
-    /**
-     * Process the GraphQL request
-     *
-     * @param string $query
-     * @return string
-     */
-    private function doRequest(string $query)
-    {
-        $request = $this->requestFactory->create();
-        $request->setContent($query);
-        $request->setMethod('POST');
-        $request->setPathInfo('/graphql');
-        $request->getHeaders()->addHeaders(['content_type' => self::CONTENT_TYPE]);
-        $unusedResponse = $this->objectManager->create(HttpResponse::class);
-        $httpApp = $this->objectManager->create(
-            HttpApp::class,
-            ['request' => $request, 'response' => $unusedResponse]
-        );
-        $actualResponse = $httpApp->launch();
-        return $actualResponse->getContent();
+    public function testCartState(
+        string $query,
+        array $variables,
+        array $variables2,
+        array $authInfo,
+        string $operationName,
+        string $expected
+    ): void {
+        if ($operationName == 'getCart') {
+            $this->getMaskedQuoteIdByReservedOrderId =
+                $this->graphQlStateDiff->getTestObjectManager()->get(GetMaskedQuoteIdByReservedOrderId::class);
+            $variables['id'] = $this->getMaskedQuoteIdByReservedOrderId->execute($variables['id']);
+        }
+        $this->graphQlStateDiff
+            ->testState($query, $variables, $variables2, $authInfo, $operationName, $expected, $this);
     }
 
     /**
@@ -125,8 +126,9 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      *
      * @return array[]
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    public function queryDataProvider(): array
+    private static function queryDataProvider(): array
     {
         return [
             'Get Navigation Menu by category_id' => [
@@ -160,6 +162,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['id' => 4],
+                [],
+                [],
                 'navigationMenu',
                 '"id":4,"name":"Category 1.1","product_count":2,'
             ],
@@ -209,6 +213,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['name' => 'Configurable%20Product', 'onServer' => false],
+                [],
+                [],
                 'productDetailByName',
                 '"sku":"configurable","name":"Configurable Product"'
             ],
@@ -257,6 +263,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['id' => 4, 'currentPage' => 1, 'pageSize' => 12],
+                [],
+                [],
                 'category',
                 '"url_key":"category-1-1","name":"Category 1.1"'
             ],
@@ -320,6 +328,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['name' => 'Simple Product1', 'onServer' => false],
+                [],
+                [],
                 'productDetail',
                 '"sku":"simple1","name":"Simple Product1"'
             ],
@@ -333,8 +343,219 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['urlKey' => 'no-route'],
+                [],
+                [],
                 'resolveUrl',
                 '"type":"CMS_PAGE","id":1'
+            ],
+            'Get available Stores' => [
+                <<<'QUERY'
+                query availableStores($currentGroup: Boolean!) {
+                    availableStores(useCurrentGroup:$currentGroup) {
+                        id,
+                        code,
+                        store_code,
+                        store_name,
+                        store_sort_order,
+                        is_default_store,
+                        store_group_code,
+                        store_group_name,
+                        is_default_store_group,
+                        website_id,
+                        website_code,
+                        website_name,
+                        locale,
+                        base_currency_code,
+                        default_display_currency_code,
+                        timezone,
+                        weight_unit,
+                        base_url,
+                        base_link_url,
+                        base_media_url,
+                        secure_base_url,
+                        secure_base_link_url,
+                        secure_base_static_url,
+                        secure_base_media_url,
+                        store_name
+                        use_store_in_url
+                    }
+                }
+                QUERY,
+                ['currentGroup' => true],
+                [],
+                [],
+                'availableStores',
+                '"store_code":"default"'
+            ],
+            'Get store config' => [
+                <<<'QUERY'
+                query {
+                    storeConfig {
+                        product_url_suffix,
+                        category_url_suffix,
+                        title_separator,
+                        list_mode,
+                        grid_per_page_values,
+                        list_per_page_values,
+                        grid_per_page,
+                        list_per_page,
+                        catalog_default_sort_by,
+                        root_category_id
+                        root_category_uid
+                    }
+                }
+                QUERY,
+                [],
+                [],
+                [],
+                'storeConfig',
+                '"storeConfig":{"product_url_suffix":".html"'
+            ],
+            'Get Categories by name' => [
+                <<<'QUERY'
+                query categories($name: String!) {
+                    categories(filters: {name: {match: $name}}
+                            pageSize: 3
+                            currentPage: 3
+                          ) {
+                            total_count
+                            page_info {
+                              current_page
+                              page_size
+                              total_pages
+
+                          }
+                        items {
+                          name
+                        }
+                    }
+                }
+                QUERY,
+                ['name' => 'Category'],
+                [],
+                [],
+                'categories',
+                '"data":{"categories"'
+            ],
+            'Get Products by name' => [
+                <<<'QUERY'
+                query products($name: String!) {
+                    products(
+                        search: $name
+                        filter: {}
+                        pageSize: 1000
+                        currentPage: 1
+                        sort: {name: ASC}
+                      ) {
+
+                    items {
+                            name
+                            image
+                            {
+                                url
+                            }
+                      attribute_set_id
+                      canonical_url
+                      color
+                      country_of_manufacture
+                      created_at
+                      gift_message_available
+                      id
+                      manufacturer
+                      meta_description
+                      meta_keyword
+                      meta_title
+                      new_from_date
+                      new_to_date
+                      only_x_left_in_stock
+                      options_container
+                      rating_summary
+                      review_count
+                      sku
+                      special_price
+                      special_to_date
+                      stock_status
+                      swatch_image
+                      uid
+                      updated_at
+                      url_key
+                      url_path
+                      url_suffix
+
+                    }
+                    page_info {
+                      current_page
+                      page_size
+                      total_pages
+                    }
+                    sort_fields {
+                      default
+                    }
+                    suggestions {
+                      search
+                    }
+                    total_count
+                  }
+                }
+                QUERY,
+                ['name' => 'Simple Product1'],
+                [],
+                [],
+                'products',
+                '"data":{"products":{"items":[{'
+            ],
+        ];
+    }
+
+    public static function cartQueryProvider(): array
+    {
+        return [
+            'Get Cart' => [
+                <<<'QUERY'
+                query cart($id: String!) {
+                    cart(cart_id: $id) {
+                        applied_coupons {
+                          code
+                        }
+
+                        available_payment_methods {
+                          code
+                          is_deferred
+                          title
+                        }
+                        billing_address {
+                          city
+                          company
+                          firstname
+                          lastname
+                          postcode
+                          street
+                          telephone
+                          uid
+                          vat_id
+                        }
+                        email
+                        id
+                        is_virtual
+                        items {
+                          id
+                          quantity
+                          uid
+                        }
+                        selected_payment_method {
+                          code
+                          purchase_order_number
+                          title
+                        }
+                        total_quantity
+                    }
+                }
+                QUERY,
+                ['id' => 'test_quote'],
+                [],
+                [],
+                'getCart',
+                '"cart":{"applied_coupons":null,"available_payment_methods":[{"code":"checkmo"'
             ],
         ];
     }

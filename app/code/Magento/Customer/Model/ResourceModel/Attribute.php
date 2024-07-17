@@ -6,8 +6,6 @@
 
 /**
  * Customer attribute resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Customer\Model\ResourceModel;
 

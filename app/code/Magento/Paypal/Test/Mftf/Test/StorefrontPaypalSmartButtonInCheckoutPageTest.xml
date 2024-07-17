@@ -48,6 +48,7 @@
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
             <!--Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!-- Logout -->

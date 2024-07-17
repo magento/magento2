@@ -15,6 +15,10 @@ use Magento\Framework\App\CacheInterface;
  * Dynamic validator for UI release notification, manage UI component visibility.
  * Return true if the logged in user has not seen the notification.
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ *
+ * @deprecated Starting from Magento OS 2.4.7 Magento_ReleaseNotification module is deprecated
+ * in favor of another in-product messaging mechanism
+ * @see Current in-product messaging mechanism
  */
 class CanViewNotification implements VisibilityConditionInterface
 {

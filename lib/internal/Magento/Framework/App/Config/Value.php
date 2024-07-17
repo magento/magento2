@@ -94,11 +94,16 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      */
     public function getOldValue()
     {
-        return (string)$this->_config->getValue(
+        $oldValue = $this->_config->getValue(
             $this->getPath(),
             $this->getScope() ?: ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             $this->getScopeCode()
         );
+
+        if (is_array($oldValue)) {
+            return json_encode($oldValue);
+        }
+        return (string)$oldValue;
     }
 
     /**

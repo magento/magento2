@@ -194,6 +194,15 @@ class CommonTaxCollector extends AbstractTotal
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->counter = 0;
+    }
+
+    /**
      * Map quote address to customer address
      *
      * @param QuoteAddress $address

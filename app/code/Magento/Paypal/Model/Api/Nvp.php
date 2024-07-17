@@ -44,6 +44,8 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
 
     public const DO_EXPRESS_CHECKOUT_PAYMENT = 'DoExpressCheckoutPayment';
 
+    public const DO_EXPRESS_CHECKOUT = 'DoExpressCheckout';
+
     public const CALLBACK_RESPONSE = 'CallbackResponse';
 
     /**
@@ -687,7 +689,11 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @var array
      */
-    protected $_requiredResponseParams = [self::DO_DIRECT_PAYMENT => ['ACK', 'CORRELATIONID', 'AMT']];
+    protected $_requiredResponseParams = [
+        self::DO_DIRECT_PAYMENT => ['ACK', 'CORRELATIONID', 'AMT'],
+        self::DO_EXPRESS_CHECKOUT => ['ACK'],
+        self::DO_EXPRESS_CHECKOUT_PAYMENT => ['ACK']
+    ];
 
     /**
      * Warning codes recollected after each API call
@@ -736,6 +742,11 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @var array
      */
     protected $_headers = [];
+
+    /**
+     * @var Curl
+     */
+    private $curl;
 
     /**
      * @param \Magento\Customer\Helper\Address $customerAddress
@@ -1154,6 +1165,85 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     }
 
     /**
+     * Prepare request for the API call
+     *
+     * @param string $methodName
+     * @param array $request
+     * @return array
+     */
+    private function prepareRequest(string $methodName, array $request): array
+    {
+        $request = $this->_addMethodToRequest($methodName, $request);
+        $eachCallRequest = $this->_prepareEachCallRequest($methodName);
+        if ($this->getUseCertAuthentication()) {
+            $key = array_search('SIGNATURE', $eachCallRequest);
+            if ($key) {
+                unset($eachCallRequest[$key]);
+            }
+        }
+        return $this->_exportToRequest($eachCallRequest, $request);
+    }
+
+    /**
+     * Creates a Curl object and sets parameters for the call
+     *
+     * @param array $request
+     * @return Curl
+     */
+    private function getCurl(array $request = null): Curl
+    {
+        if (!$this->curl) {
+            $this->curl = $this->_curlFactory->create();
+            $config = ['timeout' => 60, 'verifypeer' => $this->_config->getValue('verifyPeer')];
+            if ($this->getUseProxy()) {
+                $config['proxy'] = $this->getProxyHost() . ':' . $this->getProxyPort();
+            }
+            if ($this->getUseCertAuthentication()) {
+                $config['ssl_cert'] = $this->getApiCertificate();
+            }
+            $this->curl->setOptions($config);
+            if ($request) {
+                $this->curl->write(
+                    Request::METHOD_POST,
+                    $this->getApiEndpoint(),
+                    '1.1',
+                    $this->_headers,
+                    $this->_buildQuery($request)
+                );
+            }
+        }
+        return  $this->curl;
+    }
+
+    /**
+     * Checks if transport errors occurred and throws exception if needed
+     *
+     * @return void
+     * @throws ClientException
+     */
+    private function handleConnectionErrors(): void
+    {
+        if ($this->getCurl()->getErrno()) {
+            $this->_logger->critical(
+                new \Exception(
+                    sprintf(
+                        'PayPal NVP CURL connection error #%s: %s',
+                        $this->getCurl()->getErrno(),
+                        $this->getCurl()->getError()
+                    )
+                )
+            );
+            $this->getCurl()->close();
+
+            throw new ClientException(
+                __('Payment Gateway is unreachable at the moment. Please use another payment option.')
+            );
+        }
+        // cUrl resource must be closed after checking it for errors
+        $this->getCurl()->close();
+    }
+
+    /**
      * Do the API call
      *
      * @param string $methodName
@@ -1164,36 +1254,10 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      */
     public function call($methodName, array $request)
     {
-        $request = $this->_addMethodToRequest($methodName, $request);
-        $eachCallRequest = $this->_prepareEachCallRequest($methodName);
-        if ($this->getUseCertAuthentication()) {
-            $key = array_search('SIGNATURE', $eachCallRequest);
-            if ($key) {
-                unset($eachCallRequest[$key]);
-            }
-        }
-        $request = $this->_exportToRequest($eachCallRequest, $request);
+        $request = $this->prepareRequest($methodName, $request);
         $debugData = ['url' => $this->getApiEndpoint(), $methodName => $request];
-
         try {
-            /** @var Curl $http */
-            $http = $this->_curlFactory->create();
-            $config = ['timeout' => 60, 'verifypeer' => $this->_config->getValue('verifyPeer')];
-            if ($this->getUseProxy()) {
-                $config['proxy'] = $this->getProxyHost() . ':' . $this->getProxyPort();
-            }
-            if ($this->getUseCertAuthentication()) {
-                $config['ssl_cert'] = $this->getApiCertificate();
-            }
-            $http->setOptions($config);
-            $http->write(
-                Request::METHOD_POST,
-                $this->getApiEndpoint(),
-                '1.1',
-                $this->_headers,
-                $this->_buildQuery($request)
-            );
-            $response = $http->read();
+            $response = $this->getCurl($request)->read();
         } catch (\Exception $e) {
             $debugData['http_error'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
             $this->_debug($debugData);
@@ -1203,29 +1267,11 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         $response = preg_split('/^\r?$/m', $response, 2);
         $response = trim($response[1] ?? '');
         $response = $this->_deformatNVP($response);
-
         $debugData['response'] = $response;
         $this->_debug($debugData);
-
         $response = $this->_postProcessResponse($response);
 
-        // handle transport error
-        if ($http->getErrno()) {
-            $this->_logger->critical(
-                new \Exception(
-                    sprintf('PayPal NVP CURL connection error #%s: %s', $http->getErrno(), $http->getError())
-                )
-            );
-            $http->close();
-
-            throw new ClientException(
-                __('Payment Gateway is unreachable at the moment. Please use another payment option.')
-            );
-        }
-
-        // cUrl resource must be closed after checking it for errors
-        $http->close();
-
+        $this->handleConnectionErrors();
         if (!$this->_validateResponse($methodName, $response)) {
             $this->_logger->critical(new \Exception(__('PayPal response hasn\'t required fields.')));
             throw new \Magento\Framework\Exception\LocalizedException(

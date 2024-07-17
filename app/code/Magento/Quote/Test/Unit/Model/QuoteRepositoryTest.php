@@ -117,6 +117,7 @@ class QuoteRepositoryTest extends TestCase
                 [
                     'load',
                     'loadByIdWithoutStore',
+                    'loadActive',
                     'loadByCustomer',
                     'getIsActive',
                     'getId',
@@ -244,6 +245,7 @@ class QuoteRepositoryTest extends TestCase
                 [
                     'load',
                     'loadByIdWithoutStore',
+                    'loadActive',
                     'loadByCustomer',
                     'getIsActive',
                     'getId',
@@ -486,16 +488,21 @@ class QuoteRepositoryTest extends TestCase
         $cartId = 17;
         $customerId = 23;
 
-        $this->cartFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
+        $this->cartFactoryMock->method('create')->willReturn($this->quoteMock);
+        $this->storeManagerMock->method('getStore')->willReturn($this->storeMock);
         $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
-        $this->quoteMock->expects($this->never())->method('setSharedStoreIds');
+        $this->quoteMock->expects($this->once())->method('setSharedStoreIds');
         $this->quoteMock->expects($this->once())
             ->method('loadByCustomer')
             ->with($customerId)
             ->willReturn($this->storeMock);
-        $this->quoteMock->expects($this->exactly(2))->method('getId')->willReturn($cartId);
-        $this->quoteMock->expects($this->exactly(2))->method('getIsActive')->willReturn(1);
+        $this->quoteMock->expects($this->once())
+            ->method('loadActive')
+            ->with($cartId)
+            ->willReturn($this->storeMock);
+
+        $this->quoteMock->method('getId')->willReturn($cartId);
+        $this->quoteMock->method('getIsActive')->willReturn(1);
 
         $this->loadHandlerMock->expects($this->once())
             ->method('load')

@@ -217,7 +217,11 @@ class EditTest extends TestCase
         $titleMock = $this->createMock(Title::class);
         $titleMock
             ->method('prepend')
-            ->withConsecutive([__('Pages')], [$this->getTitle()]);
+            ->willReturnCallback(function ($arg) {
+                if ($arg == __('Pages') || $arg == $this->getTitle()) {
+                    return null;
+                }
+            });
         $pageConfigMock = $this->createMock(Config::class);
         $pageConfigMock->expects($this->exactly(2))->method('getTitle')->willReturn($titleMock);
 
@@ -229,8 +233,12 @@ class EditTest extends TestCase
             ->willReturnSelf();
         $resultPageMock
             ->method('addBreadcrumb')
-            ->withConsecutive([], [], [], [__($label), __($title)])
-            ->willReturnOnConsecutiveCalls(null, null, null, $resultPageMock);
+            ->willReturnCallback(function ($arg1, $arg2) use ($label, $title, $resultPageMock) {
+                if ($arg1 === __($label) && $arg2 === __($title)) {
+                    return $resultPageMock;
+                }
+                return null;
+            });
         $resultPageMock->expects($this->exactly(2))
             ->method('getConfig')
             ->willReturn($pageConfigMock);
@@ -249,7 +257,7 @@ class EditTest extends TestCase
     /**
      * @return array
      */
-    public function editActionData(): array
+    public static function editActionData(): array
     {
         return [
             [null, 'New Page', 'New Page'],

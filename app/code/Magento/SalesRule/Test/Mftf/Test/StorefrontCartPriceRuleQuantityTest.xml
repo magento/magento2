@@ -24,7 +24,9 @@
             <createData entity="_defaultProduct" stepKey="createPreReqProduct">
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
@@ -61,7 +63,9 @@
         <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="1.00" stepKey="fillDiscountAmount"/>
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
-        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Add 1 product to the cart -->
         <amOnPage url="$$createPreReqProduct.custom_attributes[url_key]$$.html" stepKey="goToProductPage"/>

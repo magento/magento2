@@ -33,7 +33,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     /**
      * Empty layout xml
      */
-    const LAYOUT_NODE = '<layout/>';
+    public const LAYOUT_NODE = '<layout/>';
 
     /**
      * Default cache life time
@@ -604,6 +604,9 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         $children = $this->getChildNames($name);
         foreach ($children as $child) {
             $html .= $this->renderElement($child, $useCache);
+            if (ctype_space($html)) {
+                $html = trim($html);
+            }
         }
         if ($html == '' || !$this->structure->getAttribute($name, Element::CONTAINER_OPT_HTML_TAG)) {
             return $html;
