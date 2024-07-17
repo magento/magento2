@@ -16,6 +16,7 @@
         <element name="PayPalBtn" type="radio" selector=".paypal-button.paypal-button-number-0" timeout="30"/>
         <element name="ContinuePayPalBtn" type="radio" selector="//span[text()='Continue to PayPal']"/>
         <element name="PayPalExpressCheckoutPayFlowEdition" type="radio" selector="input#payflow_express.radio"/>
+        <element name="PayFlowCredit" type="radio" selector="input#payflow_express_bml.radio"/>
         <element name="continueButton" type="button" selector="//div[@class='payment-method _active']//button[@class='action primary checkout']/span[text()='Continue to PayPal']"/>
         <element name="PayPalPayflowLinkRadio" type="radio" selector="input#payflow_link.radio" timeout="30"/>
         <element name="cntinuebtn" type="button" selector="//button[@data-role='review-save']/span[text()='Continue']" timeout="10"/>

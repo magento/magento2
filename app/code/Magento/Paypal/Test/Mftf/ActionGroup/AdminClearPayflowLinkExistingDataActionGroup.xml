@@ -1,0 +1,20 @@
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminClearPayflowLinkExistingDataActionGroup">
+        <annotations>
+            <description>Check No Other Paypal Payment Solution Exist and If Exist then Clear the Credentials</description>
+        </annotations>
+        <magentoCLI command="config:set {{DefaultPaypalPayflowLinkBusinessAccount.path}} {{DefaultPaypalPayflowLinkBusinessAccount.value}}" stepKey="clearBusinessAccount"/>
+        <magentoCLI command="config:set {{DefaultPaypalPayflowLinkPartner.path}} {{DefaultPaypalPayflowLinkPartner.value}}" stepKey="clearPartner"/>
+        <magentoCLI command="config:set {{DefaultPaypalPayflowLinkVendor.path}} {{DefaultPaypalPayflowLinkVendor.value}}" stepKey="clearInputForVendor"/>
+        <magentoCLI command="config:set {{DefaultPaypalPayflowLinkUser.path}} {{DefaultPaypalPayflowLinkUser.value}}" stepKey="clearInputForUser"/>
+        <magentoCLI command="config:set {{DefaultPaypalPayflowLinkPassword.path}} {{DefaultPaypalPayflowLinkPassword.value}}" stepKey="clearInputForPassword"/>
+        <magentoCLI command="config:set {{SandboxFlag.path}} {{SandboxFlag.default}}" stepKey="disableSandboxMode"/>
+    </actionGroup>
+</actionGroups>

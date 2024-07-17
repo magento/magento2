@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAssertPayflowlinkForUnitedStatesTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Check configuration for PayPal Payflow Link in Unites States"/>
+            <description value="Check paypal Credit payment option's enablement and disablement based on the configuration setting in backend"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5217"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="simpleCategory"/>
+            </createData>
+            <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountry"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminClearPaypalPaymentStandardExistingDataActionGroup" stepKey="clearValuesPresentInPayflowLink"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set paypal/general/merchant_country 0" stepKey="setMerchantCountryAsUS"/>
+            <magentoCLI command="config:set payment/payflow_link/active 0" stepKey="disablePayPalPayflowLink"/>
+            <actionGroup ref="AdminClearPaypalPaymentStandardExistingDataActionGroup" stepKey="clearDataPresentInPayflowLink"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+        </after>
+        <!--Admin navigate to payment configuration page and assert no other paypal payment is enabled-->
+        <actionGroup ref="AdminEnablePaypalPayflowlinkThroughCLICommandActionGroup" stepKey="configurePayflowlinkThroughCLICommand"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="performCleanCache">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!--Login to storefront as guest customer-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <!--Add simple product-->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$simpleProduct$"/>
+        </actionGroup>
+        <!--Go to cart page-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="gotoCart"/>
+        <!--Open cart page and proceed to checkout-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckoutCartPage"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <!--Fill Shipping Address-->
+        <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="fillShippingAddress">
+            <argument name="customer" value="$$createCustomer$$" />
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <!-- Select shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectShippingMethodAsFlatRate">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+        <!-- Go to Order review -->
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage"/>
+        <waitForPageLoad stepKey="waitForPaymentMethodPageToLoad"/>
+        <!-- Assert Paypal Solution Payment method In Storefront-->
+        <waitForElementVisible selector="{{CheckoutPaymentSection.PayPalExpressCheckoutPayFlowEdition}}" stepKey="waitForPayPalPayflowEditionRadioButton"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.PayFlowCredit}}" stepKey="waitForPayPalPayflowCreditRadioButton"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.PayPalPayflowLinkRadio}}" stepKey="waitForCreditCardRadioButton"/>
+        <!-- Disable Payflow Solution And Assert Payment Method In Storefront -->
+        <magentoCLI command="config:set {{DisablePaypalCredit.path}} {{DisablePaypalCredit.value}}" stepKey="disablePayPalCredit"/>
+        <magentoCLI command="config:set {{DisablePaypalExpressPayflow.path}} {{DisablePaypalExpressPayflow.value}}" stepKey="disablePaypalExpressCheckout"/>
+        <magentoCLI command="config:set {{DisablePaypalPayflowEditionMethod.path}} {{DisablePaypalPayflowEditionMethod.value}}" stepKey="disablePayflowSolution"/>
+        <reloadPage stepKey="reloadPaymentPage"/>
+        <waitForElementNotVisible selector="{{CheckoutPaymentSection.PayPalExpressCheckoutPayFlowEdition}}" stepKey="waitForPayPalPayflowEditionRadioBtn"/>
+        <waitForElementNotVisible selector="{{CheckoutPaymentSection.PayFlowCredit}}" stepKey="waitForPayPalPayflowCreditRadioBtn"/>
+        <waitForElementNotVisible selector="{{CheckoutPaymentSection.PayPalPayflowLinkRadio}}" stepKey="waitForCreditCardRadioBtn"/>
+        <!-- Enable Payflow Link Solution & Payflow Edition And Assert Payment Method In Storefront -->
+        <magentoCLI command="config:set {{EnablePaypalPayflowEditionoMethod.path}} {{EnablePaypalPayflowEditionoMethod.value}}" stepKey="enablePayflowEdition"/>
+        <reloadPage stepKey="reloadPaymentPageAgain"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.PayPalPayflowLinkRadio}}" stepKey="waitForCreditCardRadioButtonToBeVisible"/>
+        <magentoCLI command="config:set {{EnablePaypalExpressPayflow.path}} {{EnablePaypalExpressPayflow.value}}" stepKey="enablePaypalExpressAgain"/>
+        <reloadPage stepKey="reloadPaymentMethodPage"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.PayPalExpressCheckoutPayFlowEdition}}" stepKey="waitForPayPalPayflowEditionRadioBtnToBeVisible"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.PayPalPayflowLinkRadio}}" stepKey="waitForCreditCardRadioBtnToBeVisible"/>
+    </test>
+</tests>
