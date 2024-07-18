@@ -16,7 +16,9 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  * @deprecated 100.3.3
  * @see \Magento\GraphQl\Model\Query\Context
  */
-class Context extends \Magento\Framework\Model\AbstractExtensibleModel implements ContextInterface
+class Context extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    ContextInterface,
+    ResetAfterRequestInterface
 {
     /**#@+
      * Constants defined for type of context
