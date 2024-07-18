@@ -269,23 +269,18 @@
     </entity>
     <entity name="PaypalPayflowEditionEmail" type="text">
         <data key="path">paypal/general/business_account</data>
-        <data key="value">us_m2_biz@ebay.com</data>
     </entity>
     <entity name="PaypalPayflowEditionPartner" type="text">
         <data key="path">payment/payflow_link/partner</data>
-        <data key="value">PayPal</data>
     </entity>
     <entity name="PaypalPayflowEditionUser" type="password">
         <data key="path">payment/payflow_link/user</data>
-        <data key="value">mpilink</data>
     </entity>
     <entity name="PaypalPayflowEditionVendor" type="text">
         <data key="path">payment/payflow_link/vendor</data>
-        <data key="value">mpilink</data>
     </entity>
     <entity name="PaypalPayflowEditionPassword" type="password">
         <data key="path">payment/payflow_link/pwd</data>
-        <data key="value">1234_1234L!</data>
     </entity>
     <entity name="SandboxFlag" type="sandbox_flag">
         <data key="path">payment/payflow_link/sandbox_flag</data>

@@ -10,11 +10,14 @@
         <annotations>
             <description>Enable Paypal Payflow Link through CLI Command with all Credentials in Configuration</description>
         </annotations>
-        <magentoCLI command="config:set {{PaypalPayflowEditionEmail.path}} {{PaypalPayflowEditionEmail.value}}" stepKey="enterInputForEmail"/>
-        <magentoCLI command="config:set {{PaypalPayflowEditionPartner.path}} {{PaypalPayflowEditionPartner.value}}" stepKey="enterInputForPartner"/>
-        <magentoCLI command="config:set {{PaypalPayflowEditionVendor.path}} {{PaypalPayflowEditionVendor.value}}" stepKey="enterInputForVendor"/>
-        <magentoCLI command="config:set {{PaypalPayflowEditionUser.path}} {{PaypalPayflowEditionUser.value}}" stepKey="enterInputForUser"/>
-        <magentoCLI command="config:set {{PaypalPayflowEditionPassword.path}} {{PaypalPayflowEditionPassword.value}}" stepKey="enterInputForPassword"/>
+        <arguments>
+            <argument name="credentials" defaultValue="_CREDS"/>
+        </arguments>
+        <magentoCLI command="config:set {{PaypalPayflowEditionEmail.path}} {{credentials.magento/paypal_paymentsflowlink_businessacct}}" stepKey="enterInputForEmail"/>
+        <magentoCLI command="config:set {{PaypalPayflowEditionPartner.path}} {{credentials.magento/paypal_paymentsflowlink_partner}}" stepKey="enterInputForPartner"/>
+        <magentoCLI command="config:set {{PaypalPayflowEditionVendor.path}} {{credentials.magento/paypal_paymentsflowlink_vendor}}" stepKey="enterInputForVendor"/>
+        <magentoCLI command="config:set {{PaypalPayflowEditionUser.path}} {{credentials.magento/paypal_paymentsflowlink_user}}" stepKey="enterInputForUser"/>
+        <magentoCLI command="config:set {{PaypalPayflowEditionPassword.path}} {{credentials.magento/paypal_paymentsflowlink_password}}" stepKey="enterInputForPassword"/>
         <magentoCLI command="config:set {{SandboxFlag.path}} {{SandboxFlag.value}}" stepKey="enableSandboxMode"/>
         <magentoCLI command="config:set {{EnablePaypalPayflowEditionoMethod.path}} {{EnablePaypalPayflowEditionoMethod.value}}" stepKey="enablePayflowEdition"/>
         <magentoCLI command="config:set {{EnablePaypalExpressPayflow.path}} {{EnablePaypalExpressPayflow.value}}" stepKey="enablePaypalExpress"/>

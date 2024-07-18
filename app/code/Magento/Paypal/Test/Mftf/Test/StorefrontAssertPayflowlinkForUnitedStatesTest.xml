@@ -12,9 +12,10 @@
             <features value="PayPal"/>
             <stories value="Payment methods"/>
             <title value="Check configuration for PayPal Payflow Link in Unites States"/>
-            <description value="Check paypal Credit payment option's enablement and disablement based on the configuration setting in backend"/>
+            <description value="Check payflow payment option's enablement and disablement based on the configuration setting in backend"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-5217"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
