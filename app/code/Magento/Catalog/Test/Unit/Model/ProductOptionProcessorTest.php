@@ -110,7 +110,7 @@ class ProductOptionProcessorTest extends TestCase
         $options,
         $requestData
     ) {
-        if(!empty($options)) {
+        if (!empty($options)) {
             $options[0] = $options[0]($this);
         }
         $productOptionMock = $this->getMockBuilder(ProductOptionInterface::class)

@@ -68,7 +68,7 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
         $deserializer,
         array $expectedResult
     ): void {
-        if(is_callable($deserializer)) {
+        if (is_callable($deserializer)) {
             $deserializer = $deserializer($this);
         }
         $this->requestMock->method('getContentType')

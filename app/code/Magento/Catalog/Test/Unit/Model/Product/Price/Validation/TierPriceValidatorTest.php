@@ -245,7 +245,7 @@ class TierPriceValidatorTest extends TestCase
      */
     public function testRetrieveValidationResult(array $returned)
     {
-        if(!empty($returned['customerGroupSearchResults_getItems'])) {
+        if (!empty($returned['customerGroupSearchResults_getItems'])) {
             $groupSearchResult = $returned['customerGroupSearchResults_getItems'][0];
             $returned['customerGroupSearchResults_getItems'][0] = $groupSearchResult($this);
         }
