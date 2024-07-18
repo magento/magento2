@@ -1820,6 +1820,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $params->setCurrentConfig($item->getBuyRequest());
         $buyRequest = $this->_catalogProduct->addParamsToBuyRequest($buyRequest, $params);
 
+        $buyRequest->setData('id', $item->getId());
         $buyRequest->setResetCount(true);
         $resultItem = $this->addProduct($product, $buyRequest);
 
