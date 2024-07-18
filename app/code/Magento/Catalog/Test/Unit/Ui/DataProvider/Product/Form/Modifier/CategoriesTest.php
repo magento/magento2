@@ -11,8 +11,8 @@ use Magento\Authorization\Model\Role;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
-use Magento\Framework\App\CacheInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Framework\UrlInterface;
@@ -90,6 +90,9 @@ class CategoriesTest extends AbstractModifierTestCase
             ->willReturn($this->categoryCollectionMock);
         $this->categoryCollectionMock->expects($this->any())
             ->method('addAttributeToSelect')
+            ->willReturnSelf();
+        $this->categoryCollectionMock->expects($this->any())
+            ->method('addAttributeToSort')
             ->willReturnSelf();
         $this->categoryCollectionMock->expects($this->any())
             ->method('addAttributeToFilter')
