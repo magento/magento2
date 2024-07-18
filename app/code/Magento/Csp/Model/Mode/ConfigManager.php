@@ -29,11 +29,6 @@ class ConfigManager implements ModeConfigManagerInterface
     private $config;
 
     /**
-     * @var ModeConfiguredFactory
-     */
-    private $modeConfiguredFactory;
-
-    /**
      * @var Store
      */
     private $storeModel;
@@ -49,26 +44,32 @@ class ConfigManager implements ModeConfigManagerInterface
     private Http $request;
 
     /**
+     * @var ModeConfiguredFactory
+     */
+    private $modeConfiguredFactory;
+
+    /**
      * @param ScopeConfigInterface $config
-     * @param ModeConfiguredFactory $modeConfiguredFactory
      * @param Store $store
      * @param State $state
      * @param Http|null $request
+     * @param ModeConfiguredFactory|null $modeConfiguredFactory
      */
     public function __construct(
         ScopeConfigInterface $config,
-        ModeConfiguredFactory $modeConfiguredFactory,
         Store $store,
         State $state,
-        ?Http $request = null
+        ?Http $request = null,
+        ?ModeConfiguredFactory $modeConfiguredFactory = null
     ) {
         $this->config = $config;
-        $this->modeConfiguredFactory = $modeConfiguredFactory;
         $this->storeModel = $store;
         $this->state = $state;
 
         $this->request = $request
             ?? ObjectManager::getInstance()->get(Http::class);
+        $this->modeConfiguredFactory = $modeConfiguredFactory
+            ?? ObjectManager::getInstance()->get(ModeConfiguredFactory::class);
     }
 
     /**
