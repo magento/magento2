@@ -7,7 +7,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
+        <css src="jquery/uppy/dist/uppy.fileupload-ui.css"/>
     </head>
     <update handle="editor"/>
     <body>
