@@ -10,6 +10,7 @@ use Magento\AdvancedSearch\Model\Client\ClientResolver;
 
 /**
  * Proxy for client factories
+ * @deprecated Elasticsearch is no longer supported by Adobe
  */
 class ClientFactoryProxy implements ClientFactoryInterface
 {

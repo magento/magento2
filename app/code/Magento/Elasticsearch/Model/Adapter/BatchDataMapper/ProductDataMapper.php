@@ -17,7 +17,7 @@ use Magento\Eav\Api\Data\AttributeOptionInterface;
 
 /**
  * Map product index data to search engine metadata
- * @deprecated Elasticsearch8 is no longer supported by Adobe
+ * @deprecated Elasticsearch is no longer supported by Adobe
  */
 class ProductDataMapper implements BatchDataMapperInterface
 {

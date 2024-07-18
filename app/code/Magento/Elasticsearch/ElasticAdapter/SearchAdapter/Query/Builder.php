@@ -19,6 +19,7 @@ use Magento\Framework\App\ScopeResolverInterface;
  *
  * @api
  * @since 100.2.2
+ * @deprecated Elasticsearch is no longer supported by Adobe
  */
 class Builder
 {

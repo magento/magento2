@@ -14,7 +14,7 @@ use Magento\Elasticsearch\Model\ResourceModel\Index;
 
 /**
  * Provide data mapping for categories fields
- * @deprecated Elasticsearch8 is no longer supported by Adobe
+ * @deprecated Elasticsearch is no longer supported by Adobe
  */
 class CategoryFieldsProvider implements AdditionalFieldsProviderInterface
 {

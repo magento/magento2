@@ -21,7 +21,7 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @api
  * @since 100.1.0
- * @deprecated Elasticsearch8 is no longer supported by Adobe
+ * @deprecated Elasticsearch is no longer supported by Adobe
  */
 class Stopwords implements PreprocessorInterface
 {

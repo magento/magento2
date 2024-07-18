@@ -12,7 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Elasticsearch minimum should match data model
- * @deprecated Elasticsearch8 is no longer supported by Adobe
+ * @deprecated Elasticsearch is no longer supported by Adobe
  */
 class MinimumShouldMatch extends Value
 {

@@ -16,6 +16,7 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
 /**
  * Aggregate price intervals for search query result.
+ * @deprecated Elasticsearch is no longer supported by Adobe
  */
 class Interval implements IntervalInterface
 {

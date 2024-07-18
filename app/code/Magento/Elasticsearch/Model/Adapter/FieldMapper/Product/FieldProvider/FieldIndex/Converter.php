@@ -9,7 +9,7 @@ namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\
 
 /**
  * Field type converter from internal index type to elastic service.
- * @deprecated Elasticsearch8 is no longer supported by Adobe
+ * @deprecated Elasticsearch is no longer supported by Adobe
  */
 class Converter implements ConverterInterface
 {

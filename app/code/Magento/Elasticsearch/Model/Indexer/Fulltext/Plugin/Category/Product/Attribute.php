@@ -19,7 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Catalog search indexer plugin for catalog attribute.
- * @deprecated Elasticsearch8 is no longer supported by Adobe
+ * @deprecated Elasticsearch is no longer supported by Adobe
  */
 class Attribute
 {

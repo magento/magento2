@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
  * @api
  * @since 100.1.0
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated Elasticsearch8 is no longer supported by Adobe
+ * @deprecated Elasticsearch is no longer supported by Adobe
  */
 class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInterface, QueryAwareInterface
 {

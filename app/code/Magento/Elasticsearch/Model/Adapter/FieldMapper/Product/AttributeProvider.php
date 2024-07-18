@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Provide attribute adapter.
- * @deprecated Elasticsearch8 is no longer supported by Adobe
+ * @deprecated Elasticsearch is no longer supported by Adobe
  */
 class AttributeProvider implements ResetAfterRequestInterface
 {

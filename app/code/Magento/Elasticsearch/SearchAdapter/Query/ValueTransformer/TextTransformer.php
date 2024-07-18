@@ -12,7 +12,7 @@ use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
 /**
  * Value transformer for fields with text types.
- * @deprecated Elasticsearch8 is no longer supported by Adobe
+ * @deprecated Elasticsearch is no longer supported by Adobe
  */
 class TextTransformer implements ValueTransformerInterface
 {

@@ -9,7 +9,7 @@ namespace Magento\Elasticsearch\SearchAdapter;
 /**
  * The purpose of this class to be a container for the array with ElasticSearch query.
  * @codeCoverageIgnore
- * @deprecated Elasticsearch8 is no longer supported by Adobe
+ * @deprecated Elasticsearch is no longer supported by Adobe
  */
 class QueryContainer
 {

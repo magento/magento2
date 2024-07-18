@@ -14,7 +14,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Search\Model\ResourceModel\SynonymGroup;
 
 /**
- * @deprecated Elasticsearch8 is no longer supported by Adobe
+ * @deprecated Elasticsearch is no longer supported by Adobe
  */
 class SynonymReaderPlugin
 {
