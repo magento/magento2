@@ -11,6 +11,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
 
 /**
  * Field type converter from internal data types to elastic service.
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class Converter implements ConverterInterface
 {

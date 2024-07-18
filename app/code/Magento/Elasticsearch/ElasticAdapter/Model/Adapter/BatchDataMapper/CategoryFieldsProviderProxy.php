@@ -10,6 +10,7 @@ use Magento\AdvancedSearch\Model\Client\ClientResolver;
 
 /**
  * Proxy for data mapping of categories fields
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class CategoryFieldsProviderProxy implements AdditionalFieldsProviderInterface
 {

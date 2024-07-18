@@ -13,6 +13,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
 
 /**
  * Integer type resolver.
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class IntegerType implements ResolverInterface
 {

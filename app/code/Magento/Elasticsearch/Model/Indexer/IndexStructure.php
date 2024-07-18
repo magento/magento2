@@ -9,6 +9,9 @@ use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Framework\App\ScopeResolverInterface;
 
+/**
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
+ */
 class IndexStructure implements IndexStructureInterface
 {
     /**

@@ -13,6 +13,7 @@ use Magento\Framework\Api\Search\SearchCriteria;
 
 /**
  * Resolve specific attributes for search criteria.
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class SearchCriteriaResolver implements SearchCriteriaResolverInterface
 {

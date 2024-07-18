@@ -11,6 +11,7 @@ use Magento\Elasticsearch\Model\Config;
 
 /**
  * Field Mapper resolver.
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class FieldMapperResolver implements FieldMapperInterface
 {

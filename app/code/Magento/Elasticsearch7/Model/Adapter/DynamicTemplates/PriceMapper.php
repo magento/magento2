@@ -9,6 +9,7 @@ namespace Magento\Elasticsearch7\Model\Adapter\DynamicTemplates;
 
 /**
  * @inheridoc
+ * @deprecated because of EOL for Elasticsearch7
  */
 class PriceMapper implements MapperInterface
 {

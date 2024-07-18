@@ -12,6 +12,7 @@ use Magento\Elasticsearch\Model\Config;
 
 /**
  * Map index data to search engine metadata
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class DataMapperResolver implements BatchDataMapperInterface
 {

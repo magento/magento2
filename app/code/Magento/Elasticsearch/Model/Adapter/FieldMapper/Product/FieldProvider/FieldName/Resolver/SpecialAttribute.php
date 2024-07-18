@@ -12,6 +12,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldN
 
 /**
  * Resolver field name for not special attribute.
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class SpecialAttribute implements ResolverInterface
 {

@@ -13,6 +13,7 @@ use Magento\Search\Api\SearchInterface;
 
 /**
  * Get the search suggestion result count
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class GetSuggestionFrequency implements GetSuggestionFrequencyInterface
 {

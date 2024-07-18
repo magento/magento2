@@ -12,6 +12,7 @@ use Magento\Framework\Api\CustomAttributesDataInterface;
 /**
  * Dummy class for Not EAV attribute.
  * @SuppressWarnings(PHPMD)
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class DummyAttribute implements CustomAttributesDataInterface
 {

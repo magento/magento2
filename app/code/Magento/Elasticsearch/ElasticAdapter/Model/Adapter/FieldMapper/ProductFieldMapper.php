@@ -14,6 +14,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 
 /**
  * Class ProductFieldMapper provides field name by attribute code and retrieve all attribute types
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class ProductFieldMapper implements FieldMapperInterface
 {

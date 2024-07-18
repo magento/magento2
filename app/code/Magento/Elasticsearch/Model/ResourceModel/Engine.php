@@ -11,6 +11,7 @@ use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 
 /**
  * Search engine resource model
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class Engine implements EngineInterface
 {

@@ -9,6 +9,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
+/**
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
+ */
 class Date
 {
     /**

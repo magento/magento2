@@ -14,6 +14,7 @@ use Magento\Framework\Search\Dynamic\DataProviderInterface;
 /**
  * It's a factory which allows to override instance of DataProviderInterface
  * with the instance of the same class but with injected search query.
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class DataProviderFactory
 {

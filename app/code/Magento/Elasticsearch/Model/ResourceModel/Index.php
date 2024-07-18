@@ -20,6 +20,7 @@ use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolve
  * Elasticsearch index resource model
  * @api
  * @since 100.1.0
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
 {

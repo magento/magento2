@@ -13,6 +13,7 @@ use Magento\Framework\Api\CustomAttributesDataInterface;
  * Product attribute adapter for elasticsearch context.
  *
  * @api
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class AttributeAdapter
 {

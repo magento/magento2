@@ -14,6 +14,7 @@ use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard;
 
 /**
  * Class Builder to build Elasticsearch filter
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class Builder implements BuilderInterface
 {

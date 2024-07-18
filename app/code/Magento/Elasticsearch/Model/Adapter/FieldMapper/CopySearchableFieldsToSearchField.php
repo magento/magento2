@@ -11,6 +11,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldsMappingPreprocessorInterface;
 
 /**
  * Add "copy_to" parameter for default search field to index fields.
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class CopySearchableFieldsToSearchField implements FieldsMappingPreprocessorInterface
 {

@@ -12,6 +12,7 @@ use Magento\Framework\Data\Collection;
 
 /**
  * Resolve specific attributes for search criteria.
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class SearchResultApplier implements SearchResultApplierInterface
 {

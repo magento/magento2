@@ -9,6 +9,7 @@ namespace Magento\Elasticsearch\SearchAdapter\Query;
 
 /**
  * Pool of value transformers.
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class ValueTransformerPool
 {

@@ -12,6 +12,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 /**
  * @api
  * @since 100.1.0
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class Aggregation
 {

@@ -24,6 +24,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Provide dynamic fields for product.
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class DynamicField implements FieldProviderInterface
 {

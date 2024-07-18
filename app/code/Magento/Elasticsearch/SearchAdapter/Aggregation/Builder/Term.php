@@ -10,6 +10,7 @@ use Magento\Framework\Search\Dynamic\DataProviderInterface;
 
 /**
  * Builder for term buckets.
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
  */
 class Term implements BucketBuilderInterface
 {
