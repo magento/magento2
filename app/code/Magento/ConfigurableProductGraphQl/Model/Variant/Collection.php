@@ -10,8 +10,8 @@ namespace Magento\ConfigurableProductGraphQl\Model\Variant;
 use Exception;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ResourceModel\Product\Collection as ChildCollection;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection as ChildCollection;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
@@ -126,7 +126,6 @@ class Collection implements ResetAfterRequestInterface
      * @param ContextInterface $context
      * @param array $attributeCodes
      * @return array
-     * @throws Exception
      */
     public function getChildProductsByParentId(int $id, ContextInterface $context, array $attributeCodes) : array
     {
@@ -155,18 +154,16 @@ class Collection implements ResetAfterRequestInterface
 
         /** @var ChildCollection $childCollection */
         $childCollection = $this->childCollectionFactory->create();
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        foreach ($this->parentProducts as $product) {
+            $childCollection->setProductFilter($product);
+        }
         $childCollection->addWebsiteFilter($context->getExtensionAttributes()->getStore()->getWebsiteId());
-        $childCollection->getSelect()
-            ->columns(
-                ['parent_id' => new \Zend_Db_Expr('GROUP_CONCAT(`link_table`.parent_id)')]
-            )
-            ->join(
-                ['link_table' => $childCollection->getTable('catalog_product_super_link')],
-                'link_table.product_id = e.entity_id',
-                []
-            )
-            ->group('e.' . $linkField);
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $childCollection->getSelect()->group('e.' . $linkField);
+        $childCollection->getSelect()->columns([
+            'parent_ids' => new \Zend_Db_Expr('GROUP_CONCAT(link_table.parent_id)')
+        ]);
+
         $attributeCodes = array_unique(array_merge($this->attributeCodes, $attributeCodes));
 
         $this->collectionProcessor->process(
@@ -183,8 +180,7 @@ class Collection implements ResetAfterRequestInterface
                 continue;
             }
             $formattedChild = ['model' => $childProduct, 'sku' => $childProduct->getSku()];
-
-            $parentIds = preg_split ("/\,/", (string) $childProduct->getParentId());
+            $parentIds = $childProduct->getParentIds() ? explode(',', $childProduct->getParentIds()) : [];
             foreach ($parentIds as $parentId) {
                 if (!isset($this->childrenMap[$parentId])) {
                     $this->childrenMap[$parentId] = [];
