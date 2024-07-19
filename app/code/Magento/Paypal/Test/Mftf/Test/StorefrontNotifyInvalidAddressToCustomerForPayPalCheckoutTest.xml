@@ -75,7 +75,9 @@
         <!--Navigate to shopping cart-->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPageForAssertion"/>
         <!-- Click on Paypal paypal button on cart page-->
-        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtnFromCartPage"/>
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtnFromCartPage">
+            <argument name="elementNumber" value="1"/>
+        </actionGroup>
         <!--Assert invalid address error from cart page-->
         <actionGroup ref="StorefrontAssertInvalidAddressErrorActionGroup" stepKey="assertErrorMessageFromCartPage">
             <argument name="invalidAddressError" value="{{CheckoutCartMessageSection.invalidAddressError}}"/>
@@ -84,7 +86,7 @@
         <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCart"/>
         <!-- Click on Paypal paypal button on mini cart page-->
         <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtnFromMiniCart">
-            <argument name="elementNumber" value="1"/>
+            <argument name="elementNumber" value="2"/>
             <argument name="frameName" value="myFrame2"/>
         </actionGroup>
         <!--Close Mini Cart-->
