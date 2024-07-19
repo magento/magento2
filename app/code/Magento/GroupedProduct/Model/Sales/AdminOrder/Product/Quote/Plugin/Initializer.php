@@ -6,9 +6,6 @@
 
 /**
  * Product quote initializer plugin
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  */
 namespace Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin;
 
@@ -17,6 +14,8 @@ use Magento\GroupedProduct\Model\Product\Type\Grouped;
 class Initializer
 {
     /**
+     * After Initialization
+     *
      * @param \Magento\Sales\Model\AdminOrder\Product\Quote\Initializer $subject
      * @param \Magento\Quote\Model\Quote\Item|string $item
      * @param \Magento\Quote\Model\Quote $quote
