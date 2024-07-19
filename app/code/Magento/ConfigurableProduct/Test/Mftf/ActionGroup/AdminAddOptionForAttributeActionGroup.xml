@@ -15,6 +15,7 @@
         <!--Add option to attribute-->
         <waitForElementClickable selector="{{AdminNewAttributePanel.addOption}}" stepKey="waitForAddOption"/>
         <click selector="{{AdminNewAttributePanel.addOption}}" stepKey="clickOnAddOption"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.optionAdminValue('1')}}" stepKey="waitForAdminLabel"/>
         <fillField selector="{{AdminNewAttributePanel.optionAdminValue('1')}}" userInput="10" stepKey="fillAdminLabelForOption"/>
     </actionGroup>
 </actionGroups>

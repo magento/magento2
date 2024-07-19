@@ -16,11 +16,14 @@
             <argument name="defaultLabel" type="string"/>
         </arguments>
         <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.defaultLabel}}" stepKey="waitFprDefaultLabelInputField"/>
         <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{defaultLabel}}" stepKey="fillDefaultLabel"/>
         <!--Add option 1 to attribute-->
         <waitForElementClickable selector="{{AdminNewAttributePanel.addOption}}" stepKey="waitForAddOption"/>
         <click selector="{{AdminNewAttributePanel.addOption}}" stepKey="clickOnAddOption"/>
-        <waitForElementVisible selector="{{AdminNewAttributePanel.isDefault('1')}}" time="30" stepKey="waitForOptionRow"/>
+        <waitForElementClickable selector="{{AdminNewAttributePanel.isDefault('1')}}" time="30" stepKey="waitForOptionRow"/>
+        <click selector="{{AdminNewAttributePanel.isDefault('1')}}" stepKey="clickOnDefault"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.optionAdminValue('0')}}" stepKey="waitForAdminLabelForOptionToBecomeVisible"/>
         <fillField selector="{{AdminNewAttributePanel.optionAdminValue('0')}}" userInput="8" stepKey="fillAdminLabelForOption1"/>
     </actionGroup>
 </actionGroups>
