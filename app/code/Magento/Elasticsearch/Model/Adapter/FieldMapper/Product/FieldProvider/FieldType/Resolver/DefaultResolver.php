@@ -36,6 +36,7 @@ class DefaultResolver implements ResolverInterface
      *
      * @param AttributeAdapter $attribute
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFieldType(AttributeAdapter $attribute): ?string
     {

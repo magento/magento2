@@ -29,12 +29,12 @@ class Stopwords implements PreprocessorInterface
     /**
      * Cache id for elasticsearch stopwords
      */
-    private const CACHE_ID = 'elasticsearch_stopwords';
+    public const CACHE_ID = 'elasticsearch_stopwords';
 
     /**
      * Stopwords file modification time gap, seconds
      */
-    private const STOPWORDS_FILE_MODIFICATION_TIME_GAP = 900;
+    public const STOPWORDS_FILE_MODIFICATION_TIME_GAP = 900;
 
     /**
      * @var StoreManagerInterface
