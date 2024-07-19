@@ -74,7 +74,8 @@ use Magento\Wishlist\Helper\Data;
                                                     <?php if ($_item->isSaleable()): ?>
                                                         <?php $postParams = $block->getAddToCartPostParams($_item); ?>
                                                         <form data-role="tocart-form" data-product-sku="<?= $escaper->escapeHtml($_item->getSku()) ?>" action="<?= $escaper->escapeUrl($postParams['action']) ?>" method="post">
-                                                            <?php foreach ($postParams['data']['options'] as $optionItem): ?>
+                                                            <?php $options = $block->getOptionsData($_item); ?>
+                                                            <?php foreach ($options as $optionItem): ?>
                                                                 <input type="hidden"
                                                                        name="<?= $escaper->escapeHtml($optionItem['name']) ?>"
                                                                        value="<?= $escaper->escapeHtml($optionItem['value']) ?>">

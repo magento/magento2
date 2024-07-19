@@ -15,7 +15,7 @@ use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Pricing\Price\FinalPrice;
-use Magento\Catalog\ViewModel\Product\OptionsData as BundleOptionsData;
+use Magento\Catalog\ViewModel\Product\OptionsData;
 use Magento\CatalogWidget\Model\Rule;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
@@ -132,9 +132,9 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     private $categoryRepository;
 
     /**
-     * @var BundleOptionsData|mixed|null
+     * @var OptionsData
      */
-    private ?BundleOptionsData $bundleOptionsData;
+    private OptionsData $optionsData;
 
     /**
      * @param Context $context
@@ -149,7 +149,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      * @param LayoutFactory|null $layoutFactory
      * @param EncoderInterface|null $urlEncoder
      * @param CategoryRepositoryInterface|null $categoryRepository
-     * @param BundleOptionsData|null $bundleOptionsData
+     * @param OptionsData|null $optionsData
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -165,7 +166,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         LayoutFactory $layoutFactory = null,
         EncoderInterface $urlEncoder = null,
         CategoryRepositoryInterface $categoryRepository = null,
-        BundleOptionsData $bundleOptionsData = null
+        OptionsData $optionsData = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -178,7 +179,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         $this->urlEncoder = $urlEncoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
         $this->categoryRepository = $categoryRepository ?? ObjectManager::getInstance()
                 ->get(CategoryRepositoryInterface::class);
-        $this->bundleOptionsData = $bundleOptionsData ?: ObjectManager::getInstance()->get(BundleOptionsData::class);
+        $this->optionsData = $optionsData ?: ObjectManager::getInstance()->get(OptionsData::class);
         parent::__construct(
             $context,
             $data
@@ -309,10 +310,21 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
             'action' => $url,
             'data' => [
                 'product' => $product->getEntityId(),
-                'options' => $this->bundleOptionsData->getOptionsData($product),
+                'options' => $this->optionsData->getOptionsData($product),
                 ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($url),
             ]
         ];
+    }
+
+    /**
+     * Return product options
+     *
+     * @param Product $product
+     * @return array
+     */
+    public function getOptionsData(Product $product): array
+    {
+        return $this->optionsData->getOptionsData($product);
     }
 
     /**
