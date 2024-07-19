@@ -54,7 +54,7 @@ class ProductOutputProcessorTest extends TestCase
         array $result,
         array $expectedResult
     ) {
-        if(is_callable($product)) {
+        if (is_callable($product)) {
             $product = $product($this);
         }
         $this->requestMock

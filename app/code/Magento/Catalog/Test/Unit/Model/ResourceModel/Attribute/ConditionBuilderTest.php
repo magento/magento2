@@ -676,8 +676,7 @@ class ConditionBuilderTest extends TestCase
             $attribute = $this->getMockBuilder(Attribute::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        }
-        else if ($atr == "CatalogEavAttribute") {
+        } else if ($atr == "CatalogEavAttribute") {
             $attribute = $this->getMockBuilder(CatalogEavAttribute::class)
                 ->disableOriginalConstructor()
                 ->onlyMethods([
@@ -701,8 +700,7 @@ class ConditionBuilderTest extends TestCase
             return $this->getMockBuilder(EntityMetadataInterface::class)
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
-        }
-        else if ($return == 'entity_id') {
+        } else if ($return == 'entity_id') {
             $metadata = $this->getMockBuilder(EntityMetadata::class)
                 ->disableOriginalConstructor()
                 ->onlyMethods([
@@ -713,8 +711,7 @@ class ConditionBuilderTest extends TestCase
                 ->method('getLinkField')
                 ->willReturn('entity_id');
             return $metadata;
-        }
-        else {
+        } else {
             $dbAdapater = $this->getMockBuilder(Mysql::class)
                 ->disableOriginalConstructor()
                 ->onlyMethods(['quoteIdentifier'])
@@ -784,8 +781,7 @@ class ConditionBuilderTest extends TestCase
                 ->willReturn(
                     false
                 );
-        }
-        else {
+        } else {
             $website = $this->getMockBuilder(Website::class)
                 ->disableOriginalConstructor()
                 ->onlyMethods(['getStoreIds', 'getCode'])

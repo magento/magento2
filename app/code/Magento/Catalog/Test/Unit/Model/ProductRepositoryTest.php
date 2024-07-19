@@ -1128,7 +1128,6 @@ class ProductRepositoryTest extends TestCase
             ]
         ];
 
-
         $existingOption1 = static fn (self $testCase) => $testCase->getMockForOptionOneClass();
 
         $existingOption2 = static fn (self $testCase) => $testCase->getMockForOptionTwoClass();

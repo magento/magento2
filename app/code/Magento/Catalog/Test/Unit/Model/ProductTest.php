@@ -903,7 +903,8 @@ class ProductTest extends TestCase
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => Status::STATUS_ENABLED],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => Status::STATUS_ENABLED]
             ],
-            'no stock status changes' => static fn (self $testCase) => $testCase->getNoStockStatusChangesData($extensionAttributesMock),
+            'no stock status changes' =>
+                static fn (self $testCase) => $testCase->getNoStockStatusChangesData($extensionAttributesMock),
             'no stock status data 1' => [
                 [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => Status::STATUS_ENABLED],
@@ -926,7 +927,8 @@ class ProductTest extends TestCase
                     'stock_data' => ['is_in_stock' => true]
                 ]
             ],
-            'stock status changes for enabled product' => static fn (self $testCase) => $testCase->getStatusStockProviderData($extensionAttributesMock),
+            'stock status changes for enabled product' =>
+                static fn (self $testCase) => $testCase->getStatusStockProviderData($extensionAttributesMock),
             'stock status changes for disabled product' => [
                 [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => Status::STATUS_DISABLED],
@@ -966,7 +968,7 @@ class ProductTest extends TestCase
      *
      * @return array
      */
-    private function getNoStockStatusChangesData(\Closure $extensionAttributesMock): array
+    protected function getNoStockStatusChangesData(\Closure $extensionAttributesMock): array
     {
         $extensionAttributesMock = $extensionAttributesMock($this);
         return [
@@ -1029,9 +1031,9 @@ class ProductTest extends TestCase
      *
      * @return array
      */
-    private function getStatusStockProviderData(\Closure $extensionAttributesMock): array
+    protected function getStatusStockProviderData(\Closure $extensionAttributesMock): array
     {
-        if(is_callable($extensionAttributesMock)) {
+        if (is_callable($extensionAttributesMock)) {
             $extensionAttributesMock = $extensionAttributesMock($this);
         }
 
