@@ -22,18 +22,19 @@ use Magento\Store\Model\StoreManagerInterface;
  * @api
  * @since 100.1.0
  * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Stopwords implements PreprocessorInterface
 {
     /**
      * Cache id for elasticsearch stopwords
      */
-    const CACHE_ID = 'elasticsearch_stopwords';
+    private const CACHE_ID = 'elasticsearch_stopwords';
 
     /**
      * Stopwords file modification time gap, seconds
      */
-    const STOPWORDS_FILE_MODIFICATION_TIME_GAP = 900;
+    private const STOPWORDS_FILE_MODIFICATION_TIME_GAP = 900;
 
     /**
      * @var StoreManagerInterface

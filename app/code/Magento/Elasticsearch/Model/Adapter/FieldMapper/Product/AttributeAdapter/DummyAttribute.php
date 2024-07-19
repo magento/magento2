@@ -13,6 +13,7 @@ use Magento\Framework\Api\CustomAttributesDataInterface;
  * Dummy class for Not EAV attribute.
  * @SuppressWarnings(PHPMD)
  * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class DummyAttribute implements CustomAttributesDataInterface
 {

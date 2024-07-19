@@ -10,6 +10,7 @@ namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product;
 /**
  * Provide fields for product.
  * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class CompositeFieldProvider implements FieldProviderInterface
 {

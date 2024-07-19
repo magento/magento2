@@ -11,6 +11,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Date
 {

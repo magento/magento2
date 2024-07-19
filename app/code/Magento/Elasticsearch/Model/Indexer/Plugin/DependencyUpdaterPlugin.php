@@ -20,6 +20,7 @@ use Magento\CatalogInventory\Model\Indexer\Stock\Processor as CatalogInventorySt
  * This plugin remove catalog search index dependency on stock index when elasticsearch isn`t used as search engine
  * except full reindexing. During full reindexing this dependency doesn`t make overhead.
  * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class DependencyUpdaterPlugin
 {
@@ -75,6 +76,8 @@ class DependencyUpdaterPlugin
     }
 
     /**
+     * Check if filter needed
+     *
      * @param string $currentIndexerId
      * @param string $targetIndexerId
      * @return bool

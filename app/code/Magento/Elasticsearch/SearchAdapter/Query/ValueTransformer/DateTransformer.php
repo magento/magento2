@@ -13,6 +13,7 @@ use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerInterface;
 /**
  * Value transformer for date type fields.
  * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class DateTransformer implements ValueTransformerInterface
 {

@@ -12,11 +12,12 @@ use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 /**
  * Search engine resource model
  * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Engine implements EngineInterface
 {
     /**
-     * Catalog product visibility
+     * product visibility
      *
      * @var Visibility
      */

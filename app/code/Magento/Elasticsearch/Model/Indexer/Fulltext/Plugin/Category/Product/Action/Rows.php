@@ -18,6 +18,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 /**
  * Catalog search indexer plugin for catalog category products assignment.
  * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Rows
 {

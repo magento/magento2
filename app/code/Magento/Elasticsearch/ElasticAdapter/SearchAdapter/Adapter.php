@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Elasticsearch Search Adapter
  * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Adapter implements AdapterInterface
 {
