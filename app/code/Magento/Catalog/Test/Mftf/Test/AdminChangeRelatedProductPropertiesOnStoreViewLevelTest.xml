@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+     /**
+      * Copyright © Magento, Inc. All rights reserved.
+      * See COPYING.txt for license details.
+      */
+    -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminChangeRelatedProductPropertiesOnStoreViewLevelTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product properties as per store view"/>
+            <title value="Change related product properties on store view level"/>
+            <description value="Change name and status of product properties on diferrent store view levels"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4491"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create product A-->
+            <createData entity="SimpleProduct" stepKey="createSimpleProductA"/>
+            <!--Create product B-->
+            <createData entity="SimpleProduct" stepKey="createSimpleProductB"/>
+            <!--Create website 1-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite1">
+                <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
+                <argument name="websiteCode" value="{{NewWebSiteData.code}}"/>
+            </actionGroup>
+            <!-- Create store 1-->
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createStore1">
+                <argument name="website" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeGroupName" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeGroupCode" value="{{NewWebSiteData.code}}"/>
+            </actionGroup>
+            <!-- Create store view 1-->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView1">
+                <argument name="StoreGroup" value="NewWebSiteData"/>
+                <argument name="customStore" value="NewWebSiteData"/>
+            </actionGroup>
+            <!--Create website 2-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite2">
+                <argument name="newWebsiteName" value="{{secondCustomWebsite.name}}"/>
+                <argument name="websiteCode" value="{{secondCustomWebsite.code}}"/>
+            </actionGroup>
+            <!-- Create store 2-->
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createStore2">
+                <argument name="website" value="{{secondCustomWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{secondCustomWebsite.name}}"/>
+                <argument name="storeGroupCode" value="{{secondCustomWebsite.code}}"/>
+            </actionGroup>
+            <!-- Create store view 2-->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView2">
+                <argument name="StoreGroup" value="secondCustomWebsite"/>
+                <argument name="customStore" value="secondCustomWebsite"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete product-->
+            <deleteData createDataKey="createSimpleProductA" stepKey="deleteSimpleProductA"/>
+            <!--Delete product-->
+            <deleteData createDataKey="createSimpleProductB" stepKey="deleteSimpleProductB"/>
+            <!--Delete website 1-->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite1">
+                <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+            </actionGroup>
+            <!--Delete website 2-->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite2">
+                <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
+            </actionGroup>
+            <!--Logout as Admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
+        </after>
+        <!--Open simple product A-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSimpleProductA">
+            <argument name="productId" value="$$createSimpleProductA.id$$"/>
+        </actionGroup>
+        <!--Assign product A to website 1-->
+        <actionGroup ref="AdminAssignProductInWebsiteActionGroup" stepKey="assignProductAtoWebsite1">
+            <argument name="website" value="{{NewWebSiteData.name}}"/>
+        </actionGroup>
+        <!--Assign product A to website 2-->
+        <actionGroup ref="AdminAssignProductInWebsiteActionGroup" stepKey="assignProductAtoWebsit2">
+            <argument name="website" value="{{secondCustomWebsite.name}}"/>
+        </actionGroup>
+        <!--Add simple product B as related product-->
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addProductBasRelatedProduct">
+            <argument name="sku" value="$$createSimpleProductB.sku$$"/>
+        </actionGroup>
+        <!--Save product A-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductA"/>
+        <!--Open simple product B-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSimpleProductB">
+            <argument name="productId" value="$$createSimpleProductB.id$$"/>
+        </actionGroup>
+        <!--Assign product B to website 1-->
+        <actionGroup ref="AdminAssignProductInWebsiteActionGroup" stepKey="assignProductBtoWebsite1">
+            <argument name="website" value="{{NewWebSiteData.name}}"/>
+        </actionGroup>
+        <!--Assign product B to website 2-->
+        <actionGroup ref="AdminAssignProductInWebsiteActionGroup" stepKey="assignProductBtoWebsite2">
+            <argument name="website" value="{{secondCustomWebsite.name}}"/>
+        </actionGroup>
+        <!--Save product B-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductB"/>
+        <!--Change Scope to store view 2-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="changeScopeToStoreView2">
+            <argument name="storeViewName" value="{{secondCustomWebsite.name}}"/>
+        </actionGroup>
+        <!--Uncheck default product status-->
+        <waitForElementVisible selector="{{AdminProductFormSection.productStatusUseDefault}}" stepKey="waitForDefaultValueCheckBox"/>
+        <uncheckOption selector="{{AdminProductFormSection.productStatusUseDefault}}" stepKey="uncheckDefaultProductStatus"/>
+        <!-- Change status of product to "Disable" and save it having scope as Website-->
+        <actionGroup ref="AdminSetProductDisabledActionGroup" stepKey="disableProductStatusHavingScopeWebsite"/>
+        <!--Change product name having scope as store view-->
+        <actionGroup ref="AdminChangeProductNameAsPerStoreViewScopeActionGroup" stepKey="changeProductNameHavingScopeStoreView">
+            <argument name="productName" value="B2"/>
+        </actionGroup>
+        <!--Save product B-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="againSaveProductB"/>
+        <!--Open simple product A again-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSimpleProductAagain">
+            <argument name="productId" value="$$createSimpleProductA.id$$"/>
+        </actionGroup>
+        <!--Switch scope to store view 1-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="switchScopeToStoreView1">
+            <argument name="storeViewName" value="{{NewWebSiteData.name}}"/>
+        </actionGroup>
+        <!--Expand "Related Products" tab-->
+        <conditionalClick selector="{{AdminProductFormSection.productFormTab('Related Products')}}" dependentSelector="{{AdminProductFormSection.productFormTabState('Related Products', 'closed')}}" visible="true" stepKey="openRelatedProductTab"/>
+        <!--Assert product name and status as per store view 1-->
+        <waitForText selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$createSimpleProductB.name$$" stepKey="assertView1ProductName"/>
+        <waitForText selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedProductStatus}}" userInput="Enabled" stepKey="assertView1ProductStatus"/>
+        <!--Switch scope to store view 2-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="switchScopeToStoreView2">
+            <argument name="storeViewName" value="{{secondCustomWebsite.name}}"/>
+        </actionGroup>
+        <!--Expand "Related Products" tab-->
+        <conditionalClick selector="{{AdminProductFormSection.productFormTab('Related Products')}}" dependentSelector="{{AdminProductFormSection.productFormTabState('Related Products', 'closed')}}" visible="true" stepKey="expandRelatedProductTab"/>
+        <!--Assert product name and status as per store view 2-->
+        <waitForText selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="B2" stepKey="assertView2ProductName"/>
+        <waitForText selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedProductStatus}}" userInput="Disabled" stepKey="assertView2ProductStatus"/>
+    </test>
+</tests>
