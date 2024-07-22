@@ -48,4 +48,18 @@
         <data key="label">Yes</data>
         <data key="value">1</data>
     </entity>
+    <entity name="MinifyHtmlFilesEnableConfigData">
+        <data key="path">dev/template/minify_html</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="MinifyHtmlFilesDisableConfigData">
+        <data key="path">dev/template/minify_html</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
 </entities>
