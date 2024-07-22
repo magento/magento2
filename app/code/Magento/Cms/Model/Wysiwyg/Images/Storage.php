@@ -725,7 +725,9 @@ class Storage extends \Magento\Framework\DataObject
         try {
             $image->resize($imageWidth, $imageHeight);
         } catch (\Throwable $e) {
-            $this->logger->critical('FAILED WYSIWYG IMAGE RESIZING: ' . ' error: ' . $e->getMessage() . '. path: ' . $realPath);
+            $this->logger->critical(
+                'FAILED WYSIWYG IMAGE RESIZING: ' . ' error: ' . $e->getMessage() . '. path: ' . $realPath
+            );
             return false;
         }
         $dest = $targetDir . '/' . $this->ioFile->getPathInfo($source)['basename'];
