@@ -10,7 +10,8 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontApplyTierPriceForBundleDynamicProductTest">
         <annotations>
-            <stories value="Bundle Product"/>
+            <features value="Bundle Product"/>
+            <stories value="Dynamic Bundle Product with Tier Price"/>
             <title value="Apply Tier price for Bundle Dynamic Product"/>
             <description value="Create bundled product with tier price and verify price and tier price % in customization frame in storefront."/>
             <severity value="MAJOR"/>
@@ -58,7 +59,7 @@
                 <argument name="amount" value="20"/>
                 <argument name="priceView" value="Price Range"/>
             </actionGroup>
-            <actionGroup ref="SetCategoryByNameActionGroup" stepKey="addCategoryToVirtualProduct">
+            <actionGroup ref="SetCategoryByNameActionGroup" stepKey="addCategoryToBundledProduct">
                 <argument name="categoryName" value="$$createCategory.name$$"/>
             </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
@@ -88,7 +89,7 @@
         <waitForText userInput="From $40.00" selector="{{StorefrontCategoryProductSection.priceFromByProductId($$createBundleProduct.id$$)}}" stepKey="seeFromPriceFromInCategoryBundle"/>
         <waitForText userInput="To $110.00" selector="{{StorefrontCategoryProductSection.priceToByProductId($$createBundleProduct.id$$)}}" stepKey="seeToPriceFromInCategoryBundle"/>
         <!--Open Bundled product-->
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="navigateToProduct2PDP">
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="navigateToProduct2ProductDetailsPage">
             <argument name="product" value="$createBundleProduct$"/>
         </actionGroup>
         <!--Click on Customize and Add to cart-->
@@ -103,6 +104,8 @@
         <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart">
             <argument name="quantity" value="2"/>
         </actionGroup>
-        <waitForText userInput="$110.00" selector="{{StorefrontBundledSection.bundleProductsPrice}}" stepKey="seeCustomizationPriceAfterAddingToCart"/>
+        <!--Go to cart page and assert the discounted price-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage" />
+        <see stepKey="seeNewPriceInCart" selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$176.00"/>
     </test>
 </tests>
