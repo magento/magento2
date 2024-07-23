@@ -121,18 +121,6 @@
         </actionGroup>
 
         <!-- Verify Images & Directories in S3 & Local File System -->
-        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertDirectoryExists" stepKey="assertS3CreatedBaseFolderExists">
-            <argument name="path">media/wysiwyg/{{AdminMediaGalleryFolderData.name}}</argument>
-        </helper>
-        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileDoesNotExist" stepKey="assertS3BaseImageDoesNotExist">
-            <argument name="filePath">media/wysiwyg/{{AdminMediaGalleryFolderData.name}}/{{ImageUpload.file}}</argument>
-        </helper>
-        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertDirectoryExists" stepKey="assertS3ThumbnailDirectoryExists">
-            <argument name="path">media/.thumbswysiwyg/{{AdminMediaGalleryFolderData.name}}</argument>
-        </helper>
-        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileDoesNotExist" stepKey="assertS3ThumbnailImageDoesNotExist">
-            <argument name="filePath">media/.thumbswysiwyg/{{AdminMediaGalleryFolderData.name}}/{{ImageUpload.file}}</argument>
-        </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertDirectoryExists" stepKey="assertLocalCreatedBaseFolderExists">
             <argument name="path">pub/media/.renditions/wysiwyg/{{AdminMediaGalleryFolderData.name}}</argument>
         </helper>
