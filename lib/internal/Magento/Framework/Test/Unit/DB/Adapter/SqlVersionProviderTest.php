@@ -121,7 +121,7 @@ class SqlVersionProviderTest extends TestCase
             ],
             'MariaDB-11.4' => [
                 ['version' => '11.4.2-MariaDB'],
-                '11.4.'
+                SqlVersionProvider::MARIA_DB_11_4_VERSION
             ],
             'MySQL-5.7' => [
                 ['version' => '5.7.29'],
