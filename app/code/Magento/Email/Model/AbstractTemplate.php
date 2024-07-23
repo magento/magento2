@@ -20,7 +20,6 @@ use Magento\MediaStorage\Helper\File\Storage\Database;
  * Template model class.
  *
  * phpcs:disable Magento2.Classes.AbstractApi
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
