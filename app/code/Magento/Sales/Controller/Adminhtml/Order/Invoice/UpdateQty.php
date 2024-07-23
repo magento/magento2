@@ -24,6 +24,13 @@ use Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View as AbstractV
 class UpdateQty extends AbstractView implements HttpPostActionInterface
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    public const ADMIN_RESOURCE = 'Magento_Sales::invoice';
+
+    /**
      * @var JsonFactory
      */
     protected $resultJsonFactory;

@@ -9,6 +9,13 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 class Cancel extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    public const ADMIN_RESOURCE = 'Magento_Sales::invoice';
+
+    /**
      * Cancel invoice action
      *
      * @return \Magento\Framework\Controller\ResultInterface
