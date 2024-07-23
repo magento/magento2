@@ -214,17 +214,18 @@ input SetGuestEmailOnCartInput @doc(description: "Defines the guest email and ca
     email: String! @doc(description: "The email address of the guest.")
 }
 
-type CartPrices  @doc(description: "Contains details about the final price of items in the cart, including discount and tax information.") {
-    grand_total: Money  @doc(description: "The total, including discounts, taxes, shipping, and other fees.")
-    subtotal_including_tax: Money  @doc(description: "The subtotal including any applied taxes.")
-    subtotal_excluding_tax: Money  @doc(description: "The subtotal without any applied taxes.")
+type CartPrices @doc(description: "Contains details about the final price of items in the cart, including discount and tax information.") {
+    grand_total: Money @doc(description: "The total, including discounts, taxes, shipping, and other fees.")
+    grand_total_excluding_tax: Money @doc(description: "The total of the cart, including discounts, shipping, and other fees without tax.")
+    subtotal_including_tax: Money @doc(description: "The subtotal including any applied taxes.")
+    subtotal_excluding_tax: Money @doc(description: "The subtotal without any applied taxes.")
     discount: CartDiscount @deprecated(reason: "Use discounts instead.")
-    subtotal_with_discount_excluding_tax: Money  @doc(description: "The subtotal with any discounts applied, but not taxes.")
-    applied_taxes: [CartTaxItem]  @doc(description: "An array containing the names and amounts of taxes applied to each item in the cart.")
+    subtotal_with_discount_excluding_tax: Money @doc(description: "The subtotal with any discounts applied, but not taxes.")
+    applied_taxes: [CartTaxItem] @doc(description: "An array containing the names and amounts of taxes applied to each item in the cart.")
     discounts: [Discount] @doc(description:"An array containing cart rule discounts, store credit and gift cards applied to the cart.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Discounts")
 }
 
-type CartTaxItem  @doc(description: "Contains tax information about an item in the cart.") {
+type CartTaxItem @doc(description: "Contains tax information about an item in the cart.") {
     amount: Money! @doc(description: "The amount of tax applied to the item.")
     label: String! @doc(description: "The description of the tax.")
 }

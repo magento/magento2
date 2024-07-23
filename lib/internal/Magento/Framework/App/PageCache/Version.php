@@ -72,7 +72,8 @@ class Version
             return;
         }
 
-        if ($this->request->getOriginalPathInfo() === '/graphql' && $this->isSessionDisabled() === true) {
+        $originalPathInfo = $this->request->getOriginalPathInfo();
+        if ($originalPathInfo && str_contains($originalPathInfo, '/graphql') && $this->isSessionDisabled() === true) {
             return;
         }
 
