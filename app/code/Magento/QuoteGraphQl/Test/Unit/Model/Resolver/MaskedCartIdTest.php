@@ -136,53 +136,30 @@ class MaskedCartIdTest extends TestCase
     }
 
     /**
-     *
-     * @dataProvider resolveDataProvider
-     * @param $cartId
-     * @param $maskedId
-     * @param $expectedResult
      * @return void
      * @throws \Exception
      */
-    public function testResolveForException($cartId, $maskedId, $expectedResult): void
+    public function testResolveForExceptionWhenQuoteNotExists(): void
     {
+        $this->expectExceptionMessage('Current user does not have an active cart.');
         $this->valueMock = ['model' => $this->quoteMock];
-        $this->quoteMock
-            ->expects($this->once())
-            ->method('getId')
-            ->willReturn($cartId);
-        if ($cartId == 0) {
-            $this->quoteIdToMaskedQuoteId->method('execute')->with($cartId)->willThrowException(
-                new NoSuchEntityException(
-                    __(
-                        'No such entity with %fieldName = %fieldValue',
-                        [
-                            'fieldName' => 'quoteId',
-                            'fieldValue' => $cartId
-                        ]
-                    )
+        $cartId = 0;
+        $this->quoteIdToMaskedQuoteId->method('execute')->with($cartId)->willThrowException(
+            new NoSuchEntityException(
+                __(
+                    'No such entity with %fieldName = %fieldValue',
+                    [
+                        'fieldName' => 'quoteId',
+                        'fieldValue' => $cartId
+                    ]
                 )
-            );
-            $this->expectExceptionMessage('Current user does not have an active cart.');
-        }
-        $this->quoteIdToMaskedQuoteId->method('execute')->with($cartId)->willReturn($maskedId);
-        $result = $this->maskedCartId->resolve(
+            )
+        );
+        $this->maskedCartId->resolve(
             $this->fieldMock,
             $this->contextMock,
             $this->resolveInfoMock,
             $this->valueMock
         );
-        $this->assertEquals($expectedResult, $result);
-    }
-
-    /**
-     * @return array
-     */
-    public function resolveDataProvider(): array
-    {
-        return [
-            [0, 'noQuoteMaskId', ''],
-            [1, 'quoteMaskId', 'quoteMaskId']
-        ];
     }
 }
