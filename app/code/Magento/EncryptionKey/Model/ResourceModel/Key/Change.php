@@ -187,7 +187,7 @@ class Change extends AbstractDb
     protected function _reEncryptCreditCardNumbers()
     {
         $table = $this->getTable('sales_order_payment');
-        $select = $this->getConnection()->select()->from($table, ['entity_id', 'cc_number_enc']);
+        $select = $this->getConnection()->select()->from($table, ['entity_id', 'cc_number_enc'])->where('sales_order_payment.cc_number_enc is not NULL');
 
         $attributeValues = $this->getConnection()->fetchPairs($select);
         // save new values
