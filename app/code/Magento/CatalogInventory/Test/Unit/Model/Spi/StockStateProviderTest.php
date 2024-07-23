@@ -335,11 +335,12 @@ class StockStateProviderTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return \Closure
      */
-    public function checkQuoteItemQtyDataProvider()
+    public static function checkQuoteItemQtyDataProvider()
     {
-        return $this->prepareDataForMethod('checkQuoteItemQty');
+        $checkQuoteItem = static fn (self $testCase) => $testCase->prepareDataForMethod('checkQuoteItemQty');
+        return $checkQuoteItem;
     }
 
     /**

@@ -676,7 +676,7 @@ class ConditionBuilderTest extends TestCase
             $attribute = $this->getMockBuilder(Attribute::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        } else if ($atr == "CatalogEavAttribute") {
+        } elseif ($atr == "CatalogEavAttribute") {
             $attribute = $this->getMockBuilder(CatalogEavAttribute::class)
                 ->disableOriginalConstructor()
                 ->onlyMethods([
@@ -700,7 +700,7 @@ class ConditionBuilderTest extends TestCase
             return $this->getMockBuilder(EntityMetadataInterface::class)
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
-        } else if ($return == 'entity_id') {
+        } elseif ($return == 'entity_id') {
             $metadata = $this->getMockBuilder(EntityMetadata::class)
                 ->disableOriginalConstructor()
                 ->onlyMethods([
@@ -798,8 +798,6 @@ class ConditionBuilderTest extends TestCase
                     $website
                 );
         }
-
         return $store;
     }
-
 }
