@@ -6,9 +6,11 @@
 
 /** @var $block \Magento\Checkout\Block\Cart\Sidebar */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
+$cartid = uniqid();
 ?>
 
-<div data-block="minicart" class="minicart-wrapper">
+<div data-block="minicart<?php $cartid ?>" class="minicart-wrapper">
     <a class="action showcart" href="<?= $block->escapeUrl($block->getShoppingCartUrl()) ?>"
        data-bind="scope: 'minicart_content'">
         <span class="text"><?= $block->escapeHtml(__('My Cart')) ?></span>
@@ -32,7 +34,7 @@
         <div class="block block-minicart"
              data-role="dropdownDialog"
              data-mage-init='{"dropdownDialog":{
-                "appendTo":"[data-block=minicart]",
+                "appendTo":"[data-block=minicart<?php $cartid ?>]",
                 "triggerTarget":".showcart",
                 "timeout": "2000",
                 "closeOnMouseLeave": false,
@@ -48,11 +50,11 @@
     <?php else: ?>
         <?php $scriptString = <<<script
             require(['jquery'], function ($) {
-                $('a.action.showcart').on('click', function() {
-                    $(document.body).trigger('processStart');
-                });
-            });
-script;
+            script;
+            $scriptString .= "'$('data-block=minicart". $cartid ." a.action.showcart').on('click', function() {".PHP_EOL;
+            $scriptString .= "$(document.body).trigger('processStart')".PHP_EOL;
+            $scriptString .= '});'.PHP_EOL;
+            $scriptString .= '});'.PHP_EOL;
         ?>
         <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
     <?php endif ?>
@@ -60,7 +62,7 @@ script;
      /* @noEscape */ $block->getSerializedConfig(), false); ?>
     <script type="text/x-magento-init">
     {
-        "[data-block='minicart']": {
+        "[data-block='minicart<?php $cartid ?>']": {
             "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
         },
         "*": {
