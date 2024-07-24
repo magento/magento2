@@ -25,6 +25,7 @@
             </createData>
             <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountry"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminAssertPaypalPaymentMethodInConfigurationActionGroup" stepKey="assertPaymentSolutionsInPaypalLink"/>
             <actionGroup ref="AdminClearPayflowLinkExistingDataActionGroup" stepKey="clearValuesPresentInPayflowLink"/>
         </before>
         <after>
@@ -51,8 +52,6 @@
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
             <argument name="product" value="$simpleProduct$"/>
         </actionGroup>
-        <!--Go to cart page-->
-        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="gotoCart"/>
         <!--Open cart page and proceed to checkout-->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckoutCartPage"/>
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>

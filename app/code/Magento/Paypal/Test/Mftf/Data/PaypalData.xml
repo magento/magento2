@@ -267,20 +267,25 @@
         <requiredEntity type="pwd">PaypalPayflowEditionPassword</requiredEntity>
         <requiredEntity type="sandbox_flag">SandboxFlag</requiredEntity>
     </entity>
-    <entity name="PaypalPayflowEditionEmail" type="text">
+    <entity name="PaypalPayflowEditionEmail" type="business_account">
         <data key="path">paypal/general/business_account</data>
+        <data key="value">{{_CREDS.magento/paypal_paymentsflowlink_businessacct}}</data>
     </entity>
-    <entity name="PaypalPayflowEditionPartner" type="text">
+    <entity name="PaypalPayflowEditionPartner" type="partner">
         <data key="path">payment/payflow_link/partner</data>
+        <data key="value">{{_CREDS.magento/paypal_paymentsflowlink_partner}}</data>
     </entity>
-    <entity name="PaypalPayflowEditionUser" type="password">
+    <entity name="PaypalPayflowEditionUser" type="user">
         <data key="path">payment/payflow_link/user</data>
+        <data key="value">{{_CREDS.magento/paypal_paymentsflowlink_user}}</data>
     </entity>
-    <entity name="PaypalPayflowEditionVendor" type="text">
+    <entity name="PaypalPayflowEditionVendor" type="vendor">
         <data key="path">payment/payflow_link/vendor</data>
+        <data key="value">{{_CREDS.magento/paypal_paymentsflowlink_vendor}}</data>
     </entity>
-    <entity name="PaypalPayflowEditionPassword" type="password">
+    <entity name="PaypalPayflowEditionPassword" type="pwd">
         <data key="path">payment/payflow_link/pwd</data>
+        <data key="value">{{_CREDS.magento/paypal_paymentsflowlink_password}}</data>
     </entity>
     <entity name="SandboxFlag" type="sandbox_flag">
         <data key="path">payment/payflow_link/sandbox_flag</data>
