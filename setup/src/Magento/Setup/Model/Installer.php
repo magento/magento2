@@ -910,10 +910,16 @@ class Installer
         $this->assertDbAccessible();
         $setup = $this->setupFactory->create($this->context->getResources());
         $this->setupModuleRegistry($setup);
+
+        $this->disableRestrictFKOnNonStandardKey($setup);
+
         $this->setupCoreTables($setup);
         $this->cleanMemoryTables($setup);
         $this->log->logMeta('Schema creation/updates:');
         $this->declarativeInstallSchema($request);
+
+        $this->revertRestrictFKOnNonStandardKey($setup);
+
         $this->handleDBSchemaData($setup, 'schema', $request);
         /** @var Mysql $adapter */
         $adapter = $setup->getConnection();
@@ -1826,5 +1832,32 @@ class Installer
         } catch (\Exception $e) {
             $this->log->log(__("We couldn't change indexer(s)' mode because of an error: ".$e->getMessage()));
         }
+    }
+
+    /***
+     * use of non-unique or partial keys as foreign keys is deprecated in MySQL8.4
+     *
+     * @param $setup
+     * @return void
+     */
+    private function disableRestrictFKOnNonStandardKey($setup): void
+    {
+        $setup->getConnection()->query("
+                SET @OLD_RESTRICT_FK_ON_NON_STANDARD_KEY=@@GLOBAL.RESTRICT_FK_ON_NON_STANDARD_KEY,
+                @@GLOBAL.RESTRICT_FK_ON_NON_STANDARD_KEY=0
+        ");
+    }
+
+    /***
+     * revert RESTRICT_FK_ON_NON_STANDARD_KEY to previous saved db value
+     *
+     * @param $setup
+     * @return void
+     */
+    private function revertRestrictFKOnNonStandardKey($setup): void
+    {
+        $setup->getConnection()->query("
+            SET @@GLOBAL.RESTRICT_FK_ON_NON_STANDARD_KEY=IF(@OLD_RESTRICT_FK_ON_NON_STANDARD_KEY=0, 0, 1)"
+        );
     }
 }
