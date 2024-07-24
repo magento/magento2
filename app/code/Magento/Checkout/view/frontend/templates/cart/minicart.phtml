@@ -3,14 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+declare(strict_types=1);
 /** @var $block \Magento\Checkout\Block\Cart\Sidebar */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-
 $cartid = uniqid();
 ?>
 
-<div data-block="minicart<?php $cartid ?>" class="minicart-wrapper">
+<div data-block="minicart<?= /* @noEscape */ $cartid ?>" class="minicart-wrapper">
     <a class="action showcart" href="<?= $block->escapeUrl($block->getShoppingCartUrl()) ?>"
        data-bind="scope: 'minicart_content'">
         <span class="text"><?= $block->escapeHtml(__('My Cart')) ?></span>
@@ -34,7 +33,7 @@ $cartid = uniqid();
         <div class="block block-minicart"
              data-role="dropdownDialog"
              data-mage-init='{"dropdownDialog":{
-                "appendTo":"[data-block=minicart<?php $cartid ?>]",
+                "appendTo":"[data-block=minicart<?= /* @noEscape */ $cartid ?>]",
                 "triggerTarget":".showcart",
                 "timeout": "2000",
                 "closeOnMouseLeave": false,
@@ -51,7 +50,7 @@ $cartid = uniqid();
         <?php $scriptString = <<<script
             require(['jquery'], function ($) {
             script;
-            $scriptString .= "'$('data-block=minicart". $cartid ." a.action.showcart').on('click', function() {".PHP_EOL;
+            $scriptString .= "$('data-block=minicart". /* @noEscape */ $cartid ." a.action.showcart').on('click', function() {".PHP_EOL;
             $scriptString .= "$(document.body).trigger('processStart')".PHP_EOL;
             $scriptString .= '});'.PHP_EOL;
             $scriptString .= '});'.PHP_EOL;
@@ -62,7 +61,7 @@ $cartid = uniqid();
      /* @noEscape */ $block->getSerializedConfig(), false); ?>
     <script type="text/x-magento-init">
     {
-        "[data-block='minicart<?php $cartid ?>']": {
+        "[data-block='minicart<?= /* @noEscape */ $cartid ?>']": {
             "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
         },
         "*": {
