@@ -50,7 +50,7 @@ $cartid = uniqid();
         <?php $scriptString = <<<script
             require(['jquery'], function ($) {
             script;
-            $scriptString .= "$('data-block=minicart". /* @noEscape */ $cartid ." a.action.showcart').on('click', function() {".PHP_EOL;
+            $scriptString .= "$('[data-block=minicart". /* @noEscape */ $cartid ."] a.action.showcart').on('click', function() {".PHP_EOL;
             $scriptString .= "$(document.body).trigger('processStart')".PHP_EOL;
             $scriptString .= '});'.PHP_EOL;
             $scriptString .= '});'.PHP_EOL;
