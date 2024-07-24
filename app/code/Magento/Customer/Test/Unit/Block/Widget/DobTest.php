@@ -425,32 +425,60 @@ class DobTest extends TestCase
      */
     public function testGetMinDateRange($validationRules, $expectedValue)
     {
+        if (!empty($validationRules[0]) && is_callable($validationRules[0])) {
+            $validationRules[0] = $validationRules[0]($this);
+        }
         $this->attribute->expects($this->once())
             ->method('getValidationRules')
             ->willReturn($validationRules);
         $this->assertEquals($expectedValue, $this->_block->getMinDateRange());
     }
 
-    /**
-     * @return array
-     */
-    public function getMinDateRangeDataProvider()
+    protected function getValidationRuleClass($type)
+    {
+        $validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getName', 'getValue'])
+            ->getMockForAbstractClass();
+        if ($type=="MIN") {
+            $validationRule->expects($this->any())
+                ->method('getName')
+                ->willReturn(Dob::MIN_DATE_RANGE_KEY);
+            $validationRule->expects($this->any())
+                ->method('getValue')
+                ->willReturn(strtotime(self::MIN_DATE));
+        }
+        elseif ($type=="MAX") {
+            $validationRule->expects($this->any())
+                ->method('getName')
+                ->willReturn(Dob::MAX_DATE_RANGE_KEY);
+            $validationRule->expects($this->any())
+                ->method('getValue')
+                ->willReturn(strtotime(self::MAX_DATE));
+        }
+
+
+        return $validationRule;
+    }
+
+    protected function getEmptyValidationRuleClass()
     {
         $emptyValidationRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
 
-        $validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'getValue'])
-            ->getMockForAbstractClass();
-        $validationRule->expects($this->any())
-            ->method('getName')
-            ->willReturn(Dob::MIN_DATE_RANGE_KEY);
-        $validationRule->expects($this->any())
-            ->method('getValue')
-            ->willReturn(strtotime(self::MIN_DATE));
+        return $emptyValidationRule;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getMinDateRangeDataProvider()
+    {
+        $emptyValidationRule = static fn (self $testCase) => $testCase->getEmptyValidationRuleClass();
+
+        $validationRule = static fn (self $testCase) => $testCase->getValidationRuleClass('MIN');
 
         return [
             [
@@ -494,6 +522,9 @@ class DobTest extends TestCase
      */
     public function testGetMaxDateRange($validationRules, $expectedValue)
     {
+        if (!empty($validationRules[0]) && is_callable($validationRules[0])) {
+            $validationRules[0] = $validationRules[0]($this);
+        }
         $this->attribute->expects($this->once())
             ->method('getValidationRules')
             ->willReturn($validationRules);
@@ -503,23 +534,12 @@ class DobTest extends TestCase
     /**
      * @return array
      */
-    public function getMaxDateRangeDataProvider()
+    public static function getMaxDateRangeDataProvider()
     {
-        $emptyValidationRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'getValue'])
-            ->getMockForAbstractClass();
+        $emptyValidationRule = static fn (self $testCase) => $testCase->getEmptyValidationRuleClass();
 
-        $validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'getValue'])
-            ->getMockForAbstractClass();
-        $validationRule->expects($this->any())
-            ->method('getName')
-            ->willReturn(Dob::MAX_DATE_RANGE_KEY);
-        $validationRule->expects($this->any())
-            ->method('getValue')
-            ->willReturn(strtotime(self::MAX_DATE));
+        $validationRule = static fn (self $testCase) => $testCase->getValidationRuleClass('MAX');
+
         return [
             [
                 [

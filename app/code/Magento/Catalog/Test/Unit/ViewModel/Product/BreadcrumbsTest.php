@@ -133,7 +133,12 @@ class BreadcrumbsTest extends TestCase
     public static function productDataProvider() : array
     {
         return [
-            [static fn (self $testCase) => $testCase->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test']]), 'Test'],
+            [
+                static fn (self $testCase) => $testCase->getObjectManager()->getObject(
+                    Product::class, ['data' => ['name' => 'Test']]
+                ),
+                'Test'
+            ],
             [null, ''],
         ];
     }
@@ -175,20 +180,28 @@ class BreadcrumbsTest extends TestCase
     {
         return [
             [
-                static fn (self $testCase) => $testCase->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test ™']]),
+                static fn (self $testCase) => $testCase->getObjectManager()->getObject(
+                    Product::class, ['data' => ['name' => 'Test ™']]
+                ),
                 '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test \u2122"}}',
             ],
             [
-                static fn (self $testCase) => $testCase->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test "']]),
+                static fn (self $testCase) => $testCase->getObjectManager()->getObject(
+                    Product::class, ['data' => ['name' => 'Test "']]
+                ),
                 '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test &quot;"}}',
             ],
             [
-                static fn (self $testCase) => $testCase->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test <b>x</b>']]),
+                static fn (self $testCase) => $testCase->getObjectManager()->getObject(
+                    Product::class, ['data' => ['name' => 'Test <b>x</b>']]
+                ),
                 '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":'
                 . '"Test &lt;b&gt;x&lt;\/b&gt;"}}',
             ],
             [
-                static fn (self $testCase) => $testCase->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test \'abc\'']]),
+                static fn (self $testCase) => $testCase->getObjectManager()->getObject(
+                    Product::class, ['data' => ['name' => 'Test \'abc\'']]
+                ),
                 '{"breadcrumbs":'
                 . '{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test &#039;abc&#039;"}}'
             ],
