@@ -311,6 +311,7 @@ interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Mo
 }
 
 type ShippingCartAddress implements CartAddressInterface @doc(description: "Contains shipping addresses and methods.") {
+    same_as_billing: Boolean @doc(description: "Whether the shipping_address is the same as the billing_address")
     available_shipping_methods: [AvailableShippingMethod] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddress\\AvailableShippingMethods") @doc(description: "An array that lists the shipping methods that can be applied to the cart.")
     selected_shipping_method: SelectedShippingMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddress\\SelectedShippingMethod") @doc(description: "An object that describes the selected shipping method.")
     customer_notes: String @doc(description: "Text provided by the shopper.")
