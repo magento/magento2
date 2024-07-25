@@ -129,7 +129,7 @@ namespace Magento\Framework\Session {
 
             /** @var \Magento\Framework\Session\SidResolverInterface $sidResolver */
             $this->appState = $this->getMockBuilder(State::class)
-                ->setMethods(['getAreaCode'])
+                ->onlyMethods(['getAreaCode'])
                 ->disableOriginalConstructor()
                 ->getMock();
 
@@ -339,7 +339,7 @@ namespace Magento\Framework\Session {
         /**
          * @return array
          */
-        public function dataConstructor(): array
+        public static function dataConstructor(): array
         {
             return [
                 [Config::PARAM_SESSION_SAVE_METHOD =>'db'],

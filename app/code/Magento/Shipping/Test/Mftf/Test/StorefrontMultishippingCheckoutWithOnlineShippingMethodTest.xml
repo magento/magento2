@@ -26,7 +26,7 @@
             <createData entity="Simple_Customer_With_Multiple_Address" stepKey="customer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <actionGroup ref="AdminEnableUSPSActionGroup" stepKey="enableUSPS"/>
-            <actionGroup ref="AdminEnableUPSActionGroup" stepKey="enableUPS"/>
+            <actionGroup ref="AdminUPSEnableActionGroup" stepKey="enableUPS"/>
             <actionGroup ref="AdminEnableFedExConfigurationActionGroup" stepKey="enableFedEx"/>
             <actionGroup ref="AdminEnableDHLWithoutSpecificCountryConfigurationActionGroup" stepKey="enableDHL"/>
             <!--Set Shipping settings origin data-->
@@ -149,7 +149,7 @@
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
         <after>
             <actionGroup ref="AdminDisableUSPSActionGroup" stepKey="disableUSPS"/>
-            <actionGroup ref="AdminDisableUPSActionGroup" stepKey="disableUPS"/>
+            <actionGroup ref="AdminUPSDisableActionGroup" stepKey="disableUPS"/>
             <magentoCLI command="config:set {{AdminFedexEnableForCheckoutConfigData.path}} 0" stepKey="disableCheckout"/>
             <actionGroup ref="AdminDisableDHLConfigurationActionGroup" stepKey="resetDhlConfig"/>
             <!-- Reset shipping origin -->
