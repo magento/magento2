@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigForPaylaterProductPageTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Default configuration for Paypal Pay Later Message on Product Page"/>
+            <description value="Paypal Pay Later Message should display on Catalog Product Page configuration"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5602"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="configPayPalExpress">
+                <argument name="credentials" value="SamplePaypalExpressConfig2"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+        </after>
+        <!--Enable Pay Later in Admin Product Page -->
+        <actionGroup ref="AdminConfigurePaypalPaylaterEnableActionGroup" stepKey="enablePaypalPaylaterSolution"/>
+        <!--Check default values selected in dropdown  -->
+        <actionGroup ref="AssertAdminConfigForDefaultValuesInPaylaterProductPageActionGroup" stepKey="verifyDefaultValuesFromDropDown"/>
+        <!--Click on Save configure Button -->
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveAdminConfiguration"/>
+    </test>
+</tests>
