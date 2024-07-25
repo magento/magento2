@@ -55,6 +55,11 @@ class StorageTest extends TestCase
     private $imagesStorage;
 
     /**
+     * @var Storage
+     */
+    private $imagesStorageWithZeroHeight;
+
+    /**
      * @var MockObject
      */
     private $filesystemMock;
@@ -294,7 +299,7 @@ class StorageTest extends TestCase
 
         $this->imagesStorage = $this->objectManagerHelper->getObject(
             Storage::class,
-           $this->getStorageClass(100, 50, $allowedExtensions)
+            $this->getStorageClass(100, 50, $allowedExtensions)
         );
 
         $this->imagesStorageWithZeroHeight = $this->objectManagerHelper->getObject(
@@ -711,7 +716,6 @@ class StorageTest extends TestCase
             ->method('fileGetContents')
             ->willReturn('some content');
 
-
         $image = $this->getMockBuilder(image::class)
             ->disableOriginalConstructor()
             ->addMethods(['open', 'keepAspectRatio'])
@@ -721,8 +725,6 @@ class StorageTest extends TestCase
         $image->expects($this->any())->method('keepAspectRatio')->with(true);
         $image->expects($this->once())->method('resize')->with(100, 0)
             ->willThrowException(new \LogicException($exceptionMessage));
-
-
         $this->adapterFactoryMock->expects($this->atLeastOnce())->method('create')->willReturn($image);
 
         // Logger should not log any critical errors in this scenario
@@ -761,5 +763,5 @@ class StorageTest extends TestCase
             'coreConfig' => $this->coreConfigMock,
             'logger' => $this->loggerMock
         ];
-        }
+    }
 }
