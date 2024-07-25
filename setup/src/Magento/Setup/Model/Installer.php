@@ -1856,8 +1856,8 @@ class Installer
      */
     private function revertRestrictFKOnNonStandardKey($setup): void
     {
-        $setup->getConnection()->query("
-            SET @@GLOBAL.RESTRICT_FK_ON_NON_STANDARD_KEY=IF(@OLD_RESTRICT_FK_ON_NON_STANDARD_KEY=0, 0, 1)"
-        );
+//        $setup->getConnection()->query("
+//            SET @@GLOBAL.RESTRICT_FK_ON_NON_STANDARD_KEY=IF(@OLD_RESTRICT_FK_ON_NON_STANDARD_KEY=0, 0, 1)"
+//        );
     }
 }
