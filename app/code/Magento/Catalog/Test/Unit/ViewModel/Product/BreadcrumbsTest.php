@@ -135,7 +135,8 @@ class BreadcrumbsTest extends TestCase
         return [
             [
                 static fn (self $testCase) => $testCase->getObjectManager()->getObject(
-                    Product::class, ['data' => ['name' => 'Test']]
+                    Product::class,
+                    ['data' => ['name' => 'Test']]
                 ),
                 'Test'
             ],
@@ -181,26 +182,30 @@ class BreadcrumbsTest extends TestCase
         return [
             [
                 static fn (self $testCase) => $testCase->getObjectManager()->getObject(
-                    Product::class, ['data' => ['name' => 'Test ™']]
+                    Product::class,
+                    ['data' => ['name' => 'Test ™']]
                 ),
                 '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test \u2122"}}',
             ],
             [
                 static fn (self $testCase) => $testCase->getObjectManager()->getObject(
-                    Product::class, ['data' => ['name' => 'Test "']]
+                    Product::class,
+                    ['data' => ['name' => 'Test "']]
                 ),
                 '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test &quot;"}}',
             ],
             [
                 static fn (self $testCase) => $testCase->getObjectManager()->getObject(
-                    Product::class, ['data' => ['name' => 'Test <b>x</b>']]
+                    Product::class,
+                    ['data' => ['name' => 'Test <b>x</b>']]
                 ),
                 '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":'
                 . '"Test &lt;b&gt;x&lt;\/b&gt;"}}',
             ],
             [
                 static fn (self $testCase) => $testCase->getObjectManager()->getObject(
-                    Product::class, ['data' => ['name' => 'Test \'abc\'']]
+                    Product::class,
+                    ['data' => ['name' => 'Test \'abc\'']]
                 ),
                 '{"breadcrumbs":'
                 . '{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test &#039;abc&#039;"}}'
