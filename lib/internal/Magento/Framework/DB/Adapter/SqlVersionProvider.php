@@ -139,9 +139,8 @@ class SqlVersionProvider
      */
     public function isMysqlGte8029(): bool
     {
-        $this->getSqlVersion();
+        $isMariaDB = $this->isMariaDbEngine();
         $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
-        $isMariaDB = str_contains(strtolower($sqlExactVersion), SqlVersionProvider::MARIA_DB);
         if (!$isMariaDB && version_compare($sqlExactVersion, '8.0.29', '>=')) {
             return true;
         }
@@ -181,5 +180,22 @@ class SqlVersionProvider
             return true;
         }
         return false;
+    }
+
+    /**
+     * Checks if MariaDB used as SQL engine
+     *
+     * @return bool
+     * @throws ConnectionException
+     */
+    public function isMariaDbEngine(): bool
+    {
+        // check current version else send exception
+        $this->getSqlVersion();
+
+        // check current db is Maria DB
+        $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
+        $isMariaDB = str_contains(strtolower($sqlExactVersion), SqlVersionProvider::MARIA_DB);
+        return $isMariaDB ? true : false;
     }
 }
