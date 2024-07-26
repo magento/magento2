@@ -131,7 +131,7 @@ class SearchCriteriaBuilderTest extends TestCase
             ->method('getAttribute')
             ->with(Product::ENTITY, 'price')
             ->willReturn($attributeInterface);
-        $sortOrderList = ['relevance', '_id'];
+        $sortOrderList = ['relevance', 'entity_id'];
 
         $this->sortOrderBuilder->expects($this->exactly(2))
             ->method('setField')

@@ -257,8 +257,10 @@ class AdapterTest extends TestCase
         ];
         $this->connectionMock->expects($this->exactly(2))
             ->method('query')
-            ->withConsecutive([$firstQuery], [$finalQuery])
-            ->willReturnOnConsecutiveCalls($firstResponse, $finalResponse);
+            ->willReturnCallback(fn ($query) => match($query) {
+                $firstQuery => $firstResponse,
+                $finalQuery => $finalResponse,
+            });
         $this->connectionMock->expects($this->once())->method('closePointInTime')->with(['body' => $pit]);
 
         $queryResponseMock = $this->mockQueryResponse($requestMock, $finalQuery, $finalResponse);

@@ -114,10 +114,13 @@ class PositionTest extends TestCase
         $matchQueryMock->method('getValue')
             ->willReturn([7, 8]);
         $attributeMock = $this->createMock(AttributeAdapter::class);
-        $this->fieldNameResolverMock->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $this->fieldNameResolverMock->expects($matcher)
             ->method('getFieldName')
-            ->withConsecutive([$attributeMock, ['categoryId' => 7]], [$attributeMock, ['categoryId' => 8]])
-            ->willReturnOnConsecutiveCalls('position_category_7', 'position_category_8');
+            ->willReturnCallback(fn ($attribute, $context) => match ([$attribute, $context]) {
+                [$attributeMock, ['categoryId' => 7]] => 'position_category_7',
+                [$attributeMock, ['categoryId' => 8]] => 'position_category_8',
+            });
 
         $result = $this->position->build($attributeMock, 'desc', $requestMock);
         self::assertArrayHasKey('_script', $result);
