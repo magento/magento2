@@ -29,5 +29,6 @@
         <element name="saveAttributeButton" type="button" selector="//*[@id='save']"/>
         <element name="advancedAttributeProperties" type="button" selector="//*[@id='advanced_fieldset-wrapper']//*[contains(text(),'Advanced Attribute Properties')]"/>
         <element name="attributeCodeField" type="input" selector="//*[@id='attribute_code']"/>
+        <element name="productSku" type="input" selector="//input[@name='product[sku]']"/>
     </section>
 </sections>
