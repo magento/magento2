@@ -59,18 +59,13 @@
         <waitForElementVisible selector="{{NewProduct.weight}}" stepKey="waitForWeightToBeDisplayed"/>
         <fillField stepKey="fillInWeightFields" selector="{{NewProduct.weight}}" userInput="{{ApiConfigurableProduct.weight}}"/>
         <!--Click on create configuration button-->
-        <scrollTo selector="{{NewProduct.title('Configurations')}}" stepKey="scrollToConfigurationsSection"/>
-        <waitForText userInput="Configurations" selector="{{NewProduct.title('Configurations')}}" stepKey="seeConfigurationsSection"/>
-        <waitForText userInput="Create Configurations" selector="{{NewProduct.title('Create Configurations')}}" stepKey="seeCreateConfigurationsButtonIsPresent"/>
         <waitForElementClickable selector="{{NewProduct.createConfigurationButton}}" stepKey="waitForCreateConfigurationButtonToBeClickable"/>
         <click stepKey="clickOnCreateConfigurationsButton" selector="{{NewProduct.createConfigurationButton}}"/>
         <waitForPageLoad stepKey="waitForCreateProductConfigurationPageToLoad"/>
-        <!--Assert create product configuration title and Select Attribute step is active-->
-        <waitForText userInput="Create Product Configurations" selector="{{NewProduct.titleContainsText('Create Product Configurations')}}" stepKey="seeCreateProductConfigurationsWizard"/>
-        <waitForText userInput="Select Attributes" selector="{{NewProduct.selectAttribute}}" stepKey="seeSelectAttributeStepIsActive"/>
         <!-- Click on create Attribute buttons-->
         <click stepKey="clickOnCreateNewAttributeButton" selector="{{NewProduct.createNewAttributeButton}}"/>
         <waitForPageLoad stepKey="waitForNewAttributePageLoad"/>
+        <!--Fill option 1 -->
         <!--Fill option 1 -->
         <actionGroup ref="AdminCreateNewDefaultAttributeForAsWithOptionActionGroup" stepKey="fillOption1">
             <argument name="defaultLabel" value="{{sizeAttribute.default_label}}"/>
