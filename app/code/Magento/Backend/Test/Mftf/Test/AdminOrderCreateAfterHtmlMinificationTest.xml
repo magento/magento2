@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/************************************************************************
+ *
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ *
+ * ************************************************************************
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderCreateAfterHtmlMinificationTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Admin Panel with HTML minification"/>
+            <title value="Admin panel should allow order creation with HTML minification enabled"/>
+            <description value="Admin panel should allow order creation with HTML minification enabled"/>
+            <testCaseId value="AC-12329"/>
+            <useCaseId value="ACP2E-3169"/>
+            <severity value="MAJOR"/>
+            <group value="backend"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{MinifyHtmlFilesEnableConfigData.path}} {{MinifyHtmlFilesEnableConfigData.value}}" stepKey="enableHtmlMinification"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+            <magentoCLI command="setup:static-content:deploy -f" stepKey="deployStaticContent"/>
+            <createData entity="Simple_US_Customer_CA" stepKey="createSimpleCustomer"/>
+            <createData entity="ApiProductWithDescription" stepKey="createSimpleProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{MinifyHtmlFilesDisableConfigData.path}} {{MinifyHtmlFilesDisableConfigData.value}}" stepKey="disableHtmlMinification"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+            <magentoCLI command="setup:static-content:deploy -f" stepKey="deployStaticContent"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createSimpleCustomer" stepKey="deleteSimpleCustomer"/>
+        </after>
+        <waitForPageLoad stepKey="waitForPageLoadOnDashboard"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeDashboardTitle">
+            <argument name="value" value="Dashboard"/>
+        </actionGroup>
+        <actionGroup ref="CreateOrderActionGroup" stepKey="createOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="customer" value="$$createSimpleCustomer$$"/>
+        </actionGroup>
+    </test>
+</tests>
