@@ -57,14 +57,14 @@ class ElasticsearchTest extends TestCase
     protected function setUp(): void
     {
         $this->elasticsearchClientMock = $this->getMockBuilder(Client::class)
-            ->setMethods(
+            ->addMethods(['suggest'])
+            ->onlyMethods(
                 [
                     'indices',
                     'ping',
                     'bulk',
                     'search',
                     'scroll',
-                    'suggest',
                     'info',
                     'openPointInTime',
                     'closePointInTime',
@@ -73,14 +73,14 @@ class ElasticsearchTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->indicesMock = $this->getMockBuilder(IndicesNamespace::class)
-            ->setMethods(
+            ->addMethods(['deleteMapping'])
+            ->onlyMethods(
                 [
                     'exists',
                     'getSettings',
                     'create',
                     'delete',
                     'putMapping',
-                    'deleteMapping',
                     'getMapping',
                     'stats',
                     'updateAliases',
@@ -157,6 +157,13 @@ class ElasticsearchTest extends TestCase
      */
     public function testBuildConfig(array $options, $expectedResult): void
     {
+        $objects = [
+            [
+                DynamicTemplatesProvider::class,
+                $this->createMock(DynamicTemplatesProvider::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         $buildConfig = new Elasticsearch($options);
         $config = $this->getPrivateMethod(Elasticsearch::class, 'buildESConfig');
         $result = $config->invoke($buildConfig, $options);
@@ -183,7 +190,7 @@ class ElasticsearchTest extends TestCase
     /**
      * Get options data provider.
      */
-    public function getOptionsDataProvider()
+    public static function getOptionsDataProvider()
     {
         return [
             [

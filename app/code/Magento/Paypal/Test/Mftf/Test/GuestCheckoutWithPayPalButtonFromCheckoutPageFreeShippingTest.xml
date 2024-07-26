@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="GuestCheckoutWithPayPalButtonFromCheckoutPageFreeShippingTest">
+        <annotations>
+            <features value="Paypal"/>
+            <stories value="PayPal Express Checkout"/>
+            <title value="Guest checkout with PayPal button from Product page and use Free Shipping"/>
+            <description value="Customer is able to buy goods using Checkout with PayPal button from Product page and use Free Shipping"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5210"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <field key="price">10.00</field>
+            </createData>
+            <!-- Enabling PayPal Express Checkout -->
+            <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="setPaymentActionOrder"/>
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="configPayPalExpress">
+                <argument name="credentials" value="SamplePaypalExpressConfig2"/>
+            </actionGroup>
+            <!-- Enable Free Shipping method -->
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
+            <!-- Create Tax Rule w/ NY & CA Tax Rates -->
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
+            <actionGroup ref="AdminGoToNewTaxRulePageActionGroup" stepKey="goToCreateTaxRulePage"/>
+            <fillField selector="{{AdminTaxRulesSection.ruleName}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillRuleName"/>
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
+                <argument name="taxCode" value="SimpleTaxNY"/>
+            </actionGroup>
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
+                <argument name="taxCode" value="SimpleTaxCA"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveTaxRuleActionGroup" stepKey="saveTaxRule"/>
+        </before>
+        <after>
+            <!-- Delete Product -->
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+            <!-- Disable Free Shipping method -->
+            <createData entity="FreeShippingMethodDisableConfig" stepKey="disableFreeShipping"/>
+            <!-- Disable Paypal -->
+            <actionGroup ref="AdminPayPalExpressCheckoutDisableActionGroup" stepKey="configPaypalExpressCheckoutDisable"/>
+            <!-- Revert to default tax rate and rule -->
+            <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+                <argument name="name" value="{{SimpleTaxRule.code}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Go to StoreFront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <!-- Add simple product to cart -->
+        <actionGroup ref="StorefrontAddSimpleProductWithQtyActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <!-- Open mini cart from product page  -->
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniShoppingCart"/>
+        <!--Click Paypal button-->
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+        <!--Login to Paypal in-context-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
+        <!--Select US shipping address-->
+        <actionGroup ref="SelectShippingAddressOnPayPalPaymentPageActionGroup" stepKey="selectUSShippingAddress">
+            <argument name="address" value="ShippingAddressUS"/>
+        </actionGroup>
+        <!--Click PayPal button and go back to Magento site-->
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="ClickContinueGoBackToMagentoSite"/>
+        <!--Select free shipping-->
+        <actionGroup ref="StorefrontSelectShippingMethodOnOrderReviewPageActionGroup" stepKey="selectShippingMethod">
+            <argument name="shippingMethod" value="Free - $0.00"/>
+        </actionGroup>
+        <!--Assert grand total-->
+        <actionGroup ref="StorefrontAssertOrderReviewSummaryWithTaxActionGroup" stepKey="verifyCheckoutPaymentOrderSummary">
+            <argument name="orderSummarySubTotal" value="$10.00"/>
+            <argument name="orderSummaryShippingTotal" value="$0.00"/>
+            <argument name="orderSummaryTax" value="$0.83"/>
+            <argument name="orderSummaryTotal" value="$10.83"/>
+        </actionGroup>
+        <!--SubmitOrder-->
+        <actionGroup ref="StorefrontPlaceOrderOnOrderReviewPageActionGroup" stepKey="clickPlaceOrderBtn"/>
+        <!--See success messages-->
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
+        <see selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order # is: " stepKey="seeOrderNumber"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <!-- Go to order page -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openFirstOrderPage">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!-- Check order status -->
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+        <!-- Check grand total -->
+        <waitForText selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$10.83" stepKey="checkGrandTotal"/>
+        <!-- Check comment history -->
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderComment}}" userInput="Authorized amount of $10.83." stepKey="seeOrderHistoryNotes"/>
+        <!-- Check transaction tab and is closed values-->
+        <actionGroup ref="AdminOpenOrderTransactionActionGroup" stepKey="clickOnTransactionTab"/>
+        <waitForElementVisible selector="{{AdminOrderDetailsOrderViewSection.transactionTable('increment_id','{$grabOrderNumber}')}}" stepKey="verifyTransactionIsPresent"/>
+        <waitForElementVisible selector="{{AdminOrderDetailsOrderViewSection.transactionTable('is_closed','No')}}" stepKey="verifyTransactionIsClosedValue"/>
+    </test>
+</tests>

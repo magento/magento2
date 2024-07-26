@@ -18,6 +18,9 @@
             <testCaseId value="MC-106"/>
             <group value="GroupedProduct"/>
             <group value="cloud"/>
+            <skip>
+                <issueId value="AC-12124">Fotorama lib isn't loaded</issueId>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
