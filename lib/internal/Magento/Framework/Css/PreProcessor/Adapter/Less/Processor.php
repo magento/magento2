@@ -69,7 +69,8 @@ class Processor implements ContentProcessorInterface
             $parser = new \Less_Parser(
                 [
                     'relativeUrls' => false,
-                    'compress' => $this->appState->getMode() !== State::MODE_DEVELOPER
+                    'compress' => $this->appState->getMode() !== State::MODE_DEVELOPER,
+                    'sourceMap' => $this->appState->getMode() === State::MODE_DEVELOPER
                 ]
             );
 
