@@ -26,6 +26,7 @@ return [
   `bigint_not_default_not_nullable` bigint unsigned NOT NULL,
   `smallint_ref` smallint NOT NULL DEFAULT \'0\',
   PRIMARY KEY (`tinyint_ref`,`smallint_ref`),
+  UNIQUE KEY `REFERENCE_TABLE_TINYINT_REF` (`tinyint_ref`),
   UNIQUE KEY `REFERENCE_TABLE_SMALLINT_REF` (`smallint_ref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3',
     'test_table' => 'CREATE TABLE `test_table` (

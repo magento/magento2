@@ -24,6 +24,9 @@
         <constraint xsi:type="primary" referenceId="tinyint_primary">
             <column name="tinyint_ref"/>
         </constraint>
+        <constraint xsi:type="unique" referenceId="tinyint_ref_unique">
+            <column name="tinyint_ref"/>
+        </constraint>
     </table>
     <table name="auto_increment_test" resource="default">
         <column xsi:type="int" name="int_auto_increment_with_nullable" identity="true" padding="12" unsigned="true"
