@@ -148,38 +148,28 @@ class SqlVersionProvider
     }
 
     /**
-     * Check if MariaDB version is greater than equal to 10.6.11
+     * Get MariaDB current version
      *
-     * @return bool
+     * @return string
      * @throws ConnectionException
      */
-    public function isMariaDBGte10611(): bool
-    {
-        $sqlVersion = $this->getSqlVersion();
-        $isMariaDB106 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_6_VERSION);
-        $isMariaDB114 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_11_4_VERSION);
-        $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
-        if (($isMariaDB106 || $isMariaDB114) && version_compare($sqlExactVersion, '10.6.11', '>=')) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Check if MariaDB version is greater than equal to 10.4.27
-     *
-     * @return bool
-     * @throws ConnectionException
-     */
-    public function isMariaDBGte10427(): bool
+    public function getMariaDbVersion(): string
     {
         $sqlVersion = $this->getSqlVersion();
         $isMariaDB104 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_4_VERSION);
+        $isMariaDB106 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_6_VERSION);
+        $isMariaDB114 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_11_4_VERSION);
         $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
-        if ($isMariaDB104 && version_compare($sqlExactVersion, '10.4.27', '>=')) {
-            return true;
+        if (version_compare($sqlExactVersion, '10.4.27', '>=')) {
+            if($isMariaDB104){
+                return SqlVersionProvider::MARIA_DB_10_4_VERSION;
+            } elseif ($isMariaDB106){
+                return SqlVersionProvider::MARIA_DB_10_6_VERSION;
+            } elseif ($isMariaDB114){
+                return SqlVersionProvider::MARIA_DB_11_4_VERSION;
+            }
         }
-        return false;
+        return '';
     }
 
     /**

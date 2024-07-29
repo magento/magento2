@@ -108,11 +108,18 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
             if ($this->sqlVersionProvider->isMysqlGte8029()) {
                 $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MYSQL_8_0_29_VERSION];
                 break;
-            } elseif ($this->sqlVersionProvider->isMariaDBGte10427()) {
-                $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MARIA_DB_10_4_27_VERSION];
-                break;
-            } elseif ($this->sqlVersionProvider->isMariaDBGte10611()) {
-                $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MARIA_DB_10_6_11_VERSION];
+            } elseif ($this->sqlVersionProvider->isMariaDbEngine()) {
+                $currentVersion = $this->sqlVersionProvider->getMariaDbVersion();
+                if($currentVersion === SqlVersionProvider::MARIA_DB_10_4_VERSION){
+                    $key =  DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MARIA_DB_10_4_27_VERSION];
+                } elseif ( in_array( $currentVersion,
+                    [SqlVersionProvider::MARIA_DB_10_6_VERSION,
+                    SqlVersionProvider::MARIA_DB_11_4_VERSION] )){
+                    $key = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MARIA_DB_10_6_11_VERSION];
+                } elseif (strpos($this->getDatabaseVersion(), (string)$possibleVersion) !== false) {
+                    $key = $suffix;
+                }
+                $this->dbKey = $key;
                 break;
             } elseif (strpos($this->getDatabaseVersion(), (string)$possibleVersion) !== false) {
                 $this->dbKey = $suffix;
