@@ -487,7 +487,7 @@ class AddressTest extends TestCase
             ->method('isGlobalScope')
             ->willReturn(true);
 
-        $this->customerStorage->expects($this->once())
+        $this->customerStorage->expects($this->exactly(2))
             ->method('getCustomerIdByEmail')
             ->willReturn(1);
 
