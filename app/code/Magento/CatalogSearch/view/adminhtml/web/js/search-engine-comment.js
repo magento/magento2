@@ -4,7 +4,8 @@
  */
 require([
     'jquery',
-    'domReady!'
+    'domReady!',
+    'mage/translate'
 ], function ($) {
     'use strict';
 
@@ -14,11 +15,11 @@ require([
 
         engineField.change(() => {
             const engineValue = engineField.val();
-            let commentText = 'If not specified, Default Search Engine will be used.';
+            let commentText = $.mage.__('If not specified, Default Search Engine will be used.');
 
             if (['elasticsearch7', 'elasticsearch8'].includes(engineValue)) {
-                commentText = 'This search engine option is no longer supported by Adobe. ' +
-                    'It is recommended to use OpenSearch as a search engine instead.';
+                commentText = $.mage.__('This search engine option is no longer supported by Adobe. ' +
+                    'It is recommended to use OpenSearch as a search engine instead.');
             }
 
             commentContainer.text(commentText);
