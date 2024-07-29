@@ -77,7 +77,7 @@ class RequiredFieldsTest extends TestCase
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function invalidConfigDataProvider()
+    public static function invalidConfigDataProvider()
     {
         return [
             'missing name' => [

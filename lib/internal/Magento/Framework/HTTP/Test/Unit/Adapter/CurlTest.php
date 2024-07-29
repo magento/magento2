@@ -118,7 +118,7 @@ class CurlTest extends TestCase
     /**
      * @return array
      */
-    public function writeDataProvider()
+    public static function writeDataProvider()
     {
         return [
             'headers is empty' => [

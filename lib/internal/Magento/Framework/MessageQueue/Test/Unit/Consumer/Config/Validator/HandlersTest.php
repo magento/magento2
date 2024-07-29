@@ -103,7 +103,7 @@ class HandlersTest extends TestCase
     /**
      * @return array
      */
-    public function invalidConfigDataProvider()
+    public static function invalidConfigDataProvider()
     {
         return [
             'invalid, not an array' => [

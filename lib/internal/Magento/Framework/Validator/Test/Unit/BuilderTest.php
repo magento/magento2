@@ -226,7 +226,7 @@ class BuilderTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function configurationDataProvider()
+    public static function configurationDataProvider()
     {
         $callback = new Callback(
             [\Magento\Framework\Validator\Test\Unit\Test\Callback::class, 'getId']
@@ -271,20 +271,20 @@ class BuilderTest extends TestCase
                 [$emptyConstraint],
                 'current_alias',
                 $someMethod,
-                [$this->_getExpectedConstraints($emptyConstraint, 'methods', [$someMethod])],
+                [self::_getExpectedConstraints($emptyConstraint, 'methods', [$someMethod])],
             ],
             'constraint options initialized with callback' => [
                 [$emptyConstraint],
                 'current_alias',
                 $callbackConfig,
-                [$this->_getExpectedConstraints($emptyConstraint, 'callback', [$callback])],
+                [self::_getExpectedConstraints($emptyConstraint, 'callback', [$callback])],
             ],
             'constraint options initialized with arguments' => [
                 [$emptyConstraint],
                 'current_alias',
                 ['arguments' => ['some_argument' => 'some_value']],
                 [
-                    $this->_getExpectedConstraints(
+                    self::_getExpectedConstraints(
                         $emptyConstraint,
                         'arguments',
                         ['some_argument' => 'some_value']
@@ -296,7 +296,7 @@ class BuilderTest extends TestCase
                 'current_alias',
                 ['arguments' => ['some_argument' => 'some_value']],
                 [
-                    $this->_getExpectedConstraints(
+                    self::_getExpectedConstraints(
                         $configuredConstraint,
                         'arguments',
                         ['some_argument' => 'some_value']
@@ -307,14 +307,14 @@ class BuilderTest extends TestCase
                 [$constraintWithArgs],
                 'current_alias',
                 $methodWithArgs,
-                [$this->_getExpectedConstraints($constraintWithArgs, 'methods', [$methodWithArgs])],
+                [self::_getExpectedConstraints($constraintWithArgs, 'methods', [$methodWithArgs])],
             ],
             'method added' => [
                 [$configuredConstraint],
                 'current_alias',
                 $methodWithArgs,
                 [
-                    $this->_getExpectedConstraints(
+                    self::_getExpectedConstraints(
                         $configuredConstraint,
                         'methods',
                         [$someMethod, $methodWithArgs]
@@ -325,13 +325,13 @@ class BuilderTest extends TestCase
                 [$constraintWithArgs],
                 'current_alias',
                 $callbackConfig,
-                [$this->_getExpectedConstraints($constraintWithArgs, 'callback', [$callback])],
+                [self::_getExpectedConstraints($constraintWithArgs, 'callback', [$callback])],
             ],
             'callback added' => [
                 [$configuredConstraint],
                 'current_alias',
                 $callbackConfig,
-                [$this->_getExpectedConstraints($configuredConstraint, 'callback', [$callback, $callback])],
+                [self::_getExpectedConstraints($configuredConstraint, 'callback', [$callback, $callback])],
             ]
         ];
     }
@@ -344,7 +344,7 @@ class BuilderTest extends TestCase
      * @param mixed $optionValue
      * @return array
      */
-    protected function _getExpectedConstraints($constraint, $optionKey, $optionValue)
+    protected static function _getExpectedConstraints($constraint, $optionKey, $optionValue)
     {
         if (!is_array($constraint['options'])) {
             $constraint['options'] = [];
@@ -405,7 +405,7 @@ class BuilderTest extends TestCase
      *
      * @return array
      */
-    public function invalidArgumentsDataProvider()
+    public static function invalidArgumentsDataProvider()
     {
         return [
             'constructor invalid arguments' => [
@@ -481,7 +481,7 @@ class BuilderTest extends TestCase
      *
      * @return array
      */
-    public function invalidConfigurationFormatDataProvider()
+    public static function invalidConfigurationFormatDataProvider()
     {
         return [
             'configuration incorrect method call' => [

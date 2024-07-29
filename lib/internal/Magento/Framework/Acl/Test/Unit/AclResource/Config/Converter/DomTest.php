@@ -62,7 +62,7 @@ class DomTest extends TestCase
     /**
      * @return array
      */
-    public function convertWithInvalidDomDataProvider()
+    public static function convertWithInvalidDomDataProvider()
     {
         return [
             [

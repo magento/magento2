@@ -27,7 +27,7 @@ class PhraseTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderPhraseCreation()
+    public static function dataProviderPhraseCreation()
     {
         return [
             [['phrase', 'translation'], 'getPhrase', 'phrase'],

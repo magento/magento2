@@ -267,7 +267,7 @@ class AbstractCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addFieldToSelectDataProvider()
+    public static function addFieldToSelectDataProvider()
     {
         return [
             ['*', null, null],
@@ -289,7 +289,7 @@ class AbstractCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addExpressionFieldToSelectDataProvider()
+    public static function addExpressionFieldToSelectDataProvider()
     {
         return [
             ['alias', '', 'some_field', ['alias' => '']],
@@ -316,7 +316,7 @@ class AbstractCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function removeFieldFromSelectDataProvider()
+    public static function removeFieldFromSelectDataProvider()
     {
         return [
             ['some_field', false, [], [], false],
@@ -404,7 +404,7 @@ class AbstractCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function joinDataProvider()
+    public static function joinDataProvider()
     {
         return [
             ['table', '', '*', ['table' => true]],

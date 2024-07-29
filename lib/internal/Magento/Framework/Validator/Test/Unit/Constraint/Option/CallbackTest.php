@@ -115,7 +115,7 @@ class CallbackTest extends TestCase
     /**
      * Data provider for testGetValue
      */
-    public function setArgumentsDataProvider()
+    public static function setArgumentsDataProvider()
     {
         return [
             ['baz', ['baz']],

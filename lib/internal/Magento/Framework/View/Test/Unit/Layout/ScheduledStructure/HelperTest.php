@@ -286,7 +286,7 @@ class HelperTest extends TestCase
     /**
      * @return array
      */
-    public function scheduleElementDataProvider()
+    public static function scheduleElementDataProvider()
     {
         return [
             [

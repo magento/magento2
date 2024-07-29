@@ -32,7 +32,7 @@ class CsvfileTest extends TestCase
     /**
      * @return array
      */
-    public function constructorProvider()
+    public static function constructorProvider()
     {
         return [
             'Default config' => [

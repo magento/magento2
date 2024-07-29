@@ -151,7 +151,7 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function circularDataProvider()
+    public static function circularDataProvider()
     {
         $prefix = 'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\\';
         return [

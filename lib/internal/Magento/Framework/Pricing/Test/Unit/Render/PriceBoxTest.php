@@ -241,7 +241,7 @@ class PriceBoxTest extends TestCase
     /**
      * @return array
      */
-    public function getPriceIdProvider()
+    public static function getPriceIdProvider()
     {
         return [
             ['prefix', 'suffix', 'default_prefix', 'default_suffix'],

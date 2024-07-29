@@ -91,7 +91,7 @@ class SchemaPersistorTest extends TestCase
      *
      * @return array
      */
-    public function schemaListenerTablesDataProvider() : array
+    public static function schemaListenerTablesDataProvider() : array
     {
         return [
             [

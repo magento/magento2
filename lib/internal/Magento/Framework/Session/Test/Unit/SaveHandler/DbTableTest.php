@@ -221,7 +221,7 @@ class DbTableTest extends TestCase
      *
      * @return array
      */
-    public function writeDataProvider()
+    public static function writeDataProvider()
     {
         return [
             'session_exists' => ['$sessionExists' => true],

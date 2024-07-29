@@ -50,7 +50,7 @@ class StatTest extends TestCase
      *
      * @return array
      */
-    public function actionsDataProvider()
+    public static function actionsDataProvider()
     {
         return [
             'Start only once' => [
@@ -280,7 +280,7 @@ class StatTest extends TestCase
     /**
      * @return array
      */
-    public function timersFilteringDataProvider()
+    public static function timersFilteringDataProvider()
     {
         return [
             'Filtering by pattern' => [

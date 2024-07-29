@@ -410,7 +410,7 @@ class RepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function createRelatedDataProvider()
+    public static function createRelatedDataProvider()
     {
         return [
             ['test/file.js', '/test/file.js', ''],

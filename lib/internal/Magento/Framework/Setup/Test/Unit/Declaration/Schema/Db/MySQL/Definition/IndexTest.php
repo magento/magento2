@@ -88,7 +88,7 @@ class IndexTest extends TestCase
     /**
      * @return array
      */
-    public function toDefinitionDataProvider()
+    public static function toDefinitionDataProvider()
     {
         return [
             [
@@ -134,7 +134,7 @@ class IndexTest extends TestCase
     /**
      * @return array
      */
-    public function definitionDataProvider()
+    public static function definitionDataProvider()
     {
         return [
             [

@@ -95,7 +95,7 @@ class InternalTest extends TestCase
     /**
      * @return array
      */
-    public function toDefinitionDataProvider()
+    public static function toDefinitionDataProvider()
     {
         return [
             [
@@ -129,7 +129,7 @@ class InternalTest extends TestCase
     /**
      * @return array
      */
-    public function definitionDataProvider()
+    public static function definitionDataProvider()
     {
         return [
             [
