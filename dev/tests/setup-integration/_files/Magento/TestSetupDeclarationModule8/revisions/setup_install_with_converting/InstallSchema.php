@@ -166,13 +166,16 @@ class InstallSchema implements InstallSchemaInterface
                 ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
             )->addIndex(
                 'MODULE8_INSTALL_INDEX_3',
-                ['module8_is_guest']
+                ['module8_is_guest'],
+                ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
             )->addIndex(
                 'MODULE8_INSTALL_INDEX_4',
-                ['module8_contact_id']
+                ['module8_contact_id'],
+                ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
             )->addIndex(
                 'MODULE8_INSTALL_INDEX_TEMP',
-                ['module8_content']
+                ['module8_content'],
+                ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
             )->addIndex(
                 'MODULE8_INSTALL_UNIQUE_INDEX_TEMP',
                 ['module8_contact_group_id'],
