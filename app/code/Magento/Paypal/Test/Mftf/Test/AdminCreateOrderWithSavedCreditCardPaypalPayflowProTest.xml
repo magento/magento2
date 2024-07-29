@@ -11,7 +11,7 @@
         <annotations>
             <features value="PayPal"/>
             <stories value="Payment methods"/>
-            <title value="Checkout with  paypal payflow pro "/>
+            <title value="Admin create order with saved credit card paypal payflow pro"/>
             <description value="Use saved PayPal Payflow Pro credit card on admin sales order creation if two vault providers are available"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-5386"/>
