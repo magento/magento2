@@ -184,7 +184,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     {
         $email = strtolower(trim($email));
 
-        if ($this->configShare->isGlobalScope()) {
+        if ($this->configShare->isGlobalScope()  && $this->_customerStorage->getCustomerIdByEmail($email)) {
             return $this->_customerStorage->getCustomerIdByEmail($email);
         }
 
