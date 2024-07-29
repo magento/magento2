@@ -189,7 +189,7 @@ class InvoiceOrderTest extends TestCase
 
         $this->errorMessagesMock = $this->getMockBuilder(ValidatorResultInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['hasMessages', 'getMessages', 'addMessage'])
+            ->onlyMethods(['hasMessages', 'getMessages', 'addMessage'])
             ->getMockForAbstractClass();
 
         $this->invoiceOrder = new InvoiceOrder(
