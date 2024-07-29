@@ -94,7 +94,7 @@
         </actionGroup>
         <!--Click on Customize and Add to cart-->
         <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickButtonToCustomize"/>
-        <actionGroup ref="StorefrontSelectBundleProductDropDownOptionActionGroup" stepKey="addSimpleProduct2">
+        <actionGroup ref="StorefrontSelectBundleProductDropDownOptionActionGroup" stepKey="addSimpleProduct1">
             <argument name="productName" value="$SimpleProduct1.name$"/>
         </actionGroup>
         <!-- Assert price and tier price %-->
@@ -104,8 +104,15 @@
         <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart">
             <argument name="quantity" value="2"/>
         </actionGroup>
+        <!--Select 2nd product in from the bundled product and add qty 2 to cart-->
+        <actionGroup ref="StorefrontSelectBundleProductDropDownOptionActionGroup" stepKey="addSimpleProduct2">
+            <argument name="productName" value="$SimpleProduct2.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityForProduct2AndAddToTheCart">
+            <argument name="quantity" value="2"/>
+        </actionGroup>
         <!--Go to cart page and assert the discounted price-->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage" />
-        <see stepKey="seeNewPriceInCart" selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$176.00"/>
+        <see stepKey="seeNewPriceInCart" selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$240.00"/>
     </test>
 </tests>
