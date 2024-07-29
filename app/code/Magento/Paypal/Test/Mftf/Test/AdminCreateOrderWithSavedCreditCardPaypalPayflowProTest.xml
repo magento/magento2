@@ -72,7 +72,7 @@
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Disable Vault for paypal payflow pro-->
-            <magentoCLI command="config:set {{DisablePaypalPayflowProMethod.path}} {{DisablePaypalPayflowProMethod.value}}" stepKey="disablePaypalPayflowProVault"/>
+            <magentoCLI command="config:set {{DisablePaypalPayflowProVault.path}} {{DisablePaypalPayflowProVault.value}}" stepKey="disablePaypalPayflowProVault"/>
             <!-- Logout-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
