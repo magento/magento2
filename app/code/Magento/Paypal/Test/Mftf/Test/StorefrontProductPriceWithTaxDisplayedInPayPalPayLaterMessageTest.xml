@@ -32,6 +32,16 @@
             <actionGroup ref="AdminPayPalExpressCheckoutPayLaterEnableActionGroup" stepKey="activePayLater">
                 <argument name="countryCode" value="us"/>
             </actionGroup>
+            <!-- Create Tax Rule w/ NY & CA Tax Rates -->
+            <actionGroup ref="AdminGoToNewTaxRulePageActionGroup" stepKey="goToCreateTaxRulePage"/>
+            <fillField selector="{{AdminTaxRulesSection.ruleName}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillRuleName"/>
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
+                <argument name="taxCode" value="SimpleTaxNY"/>
+            </actionGroup>
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
+                <argument name="taxCode" value="SimpleTaxCA"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveTaxRuleActionGroup" stepKey="saveTaxRule"/>
         </before>
         <after>
             <!-- Delete Product -->
@@ -41,6 +51,12 @@
             <actionGroup ref="AdminPayPalExpressCheckoutDisableActionGroup" stepKey="configPaypalExpressCheckoutDisable"/>
             <!-- Revert to default tax setting-->
             <magentoCLI command="config:set tax/calculation/price_includes_tax 0" stepKey="disableCatalogIncludingTax"/>
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+                <argument name="name" value="{{SimpleTaxRule.code}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!-- Go to StoreFront -->
@@ -102,3 +118,4 @@
         <waitForText userInput="4 payments of $23.10 due every 2 weeks, starting today." selector="{{StorefrontPayPalPayLaterSection.payPalPayLaterMessage}}" stepKey="verifyPayPalPayLaterMessageAfterTax"/>
     </test>
 </tests>
+
