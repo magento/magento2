@@ -24,7 +24,7 @@
         <constraint xsi:type="primary" referenceId="tinyint_primary">
             <column name="tinyint_ref"/>
         </constraint>
-        <constraint xsi:type="unique" referenceId="tinyint_ref_unique">
+        <constraint xsi:type="unique" referenceId="REFERENCE_TABLE_TINYINT_REF">
             <column name="tinyint_ref"/>
         </constraint>
     </table>
