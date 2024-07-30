@@ -722,14 +722,15 @@ class Storage extends \Magento\Framework\DataObject
         $image->keepAspectRatio($keepRatio);
 
         [$imageWidth, $imageHeight] = $this->getResizedParams($source);
-        try {
-            $image->resize($imageWidth, $imageHeight);
-        } catch (\Throwable $e) {
-            $this->logger->critical(
-                'FAILED WYSIWYG IMAGE RESIZING: ' . ' error: ' . $e->getMessage() . '. path: ' . $realPath
-            );
-            return false;
-        }
+        $image->resize($imageWidth, $imageHeight);
+//        try {
+//            $image->resize($imageWidth, $imageHeight);
+//        } catch (\Throwable $e) {
+//            $this->logger->critical(
+//                'FAILED WYSIWYG IMAGE RESIZING: ' . ' error: ' . $e->getMessage() . '. path: ' . $realPath
+//            );
+//            return false;
+//        }
         $dest = $targetDir . '/' . $this->ioFile->getPathInfo($source)['basename'];
         $image->save($dest);
         if ($this->_directory->isFile($this->_directory->getRelativePath($dest))) {

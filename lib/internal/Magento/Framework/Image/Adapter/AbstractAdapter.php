@@ -604,7 +604,10 @@ abstract class AbstractAdapter implements AdapterInterface
             }
             // keep aspect ratio
             if ($this->_imageSrcWidth / $this->_imageSrcHeight >= $frameWidth / $frameHeight) {
-                $dstHeight = round($dstWidth / $this->_imageSrcWidth * $this->_imageSrcHeight);
+                $dstHeight = max(
+                    1,
+                    round($dstWidth / $this->_imageSrcWidth * $this->_imageSrcHeight)
+                );
             } else {
                 $dstWidth = round($dstHeight / $this->_imageSrcHeight * $this->_imageSrcWidth);
             }
