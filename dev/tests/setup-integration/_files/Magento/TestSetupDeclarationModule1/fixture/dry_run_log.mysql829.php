@@ -18,7 +18,8 @@ return ['CREATE TABLE `reference_table` (
 `int_unsigned` int UNSIGNED NULL   , 
 `bigint_default_nullable` bigint UNSIGNED NULL DEFAULT 1  , 
 `bigint_not_default_not_nullable` bigint UNSIGNED NOT NULL   , 
-CONSTRAINT  PRIMARY KEY (`tinyint_ref`)
+CONSTRAINT  PRIMARY KEY (`tinyint_ref`), 
+CONSTRAINT `REFERENCE_TABLE_TINYINT_REF` UNIQUE KEY (`tinyint_ref`)
 ) ENGINE=innodb DEFAULT CHARSET=utf8mb3 DEFAULT COLLATE=utf8mb3_general_ci 
 
 CREATE TABLE `auto_increment_test` (
