@@ -18,7 +18,8 @@ use Magento\Sales\Model\Service\InvoiceService;
 use Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View as AbstractView;
 
 /**
- * Class UpdateQty
+ * Class UpdateQty to update invoice items qty
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateQty extends AbstractView implements HttpPostActionInterface

@@ -13,7 +13,6 @@
         <service class="Magento\Quote\Api\CartRepositoryInterface" method="get"/>
         <resources>
             <resource ref="Magento_Cart::manage" />
-            <resource ref="Magento_Customer::customer" />
         </resources>
     </route>
     <route url="/V1/carts/search" method="GET">

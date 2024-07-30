@@ -6,7 +6,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
-class Cancel extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View;
+
+class Cancel extends View implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
