@@ -191,6 +191,28 @@ class ReindexRuleProductTest extends TestCase
         self::assertTrue($this->model->execute($this->ruleMock, 2, true));
     }
 
+    public function testExecuteWithCustomBatchSize()
+    {
+        $websiteId = 3;
+        $productIds = [
+            4 => [$websiteId => 1],
+            5 => [$websiteId => 1],
+            6 => [$websiteId => 1]
+        ];
+
+        $this->prepareResourceMock();
+        $this->prepareRuleMock([3], $productIds, [10]);
+
+        $this->localeDateMock->method('getConfigTimezone')
+            ->willReturnMap([
+                [ScopeInterface::SCOPE_WEBSITE, self::ADMIN_WEBSITE_ID, $this->adminTimeZone],
+                [ScopeInterface::SCOPE_WEBSITE, $websiteId, $this->websiteTz]
+            ]);
+
+        $this->connectionMock->expects($this->exactly(2))->method('insertMultiple');
+        self::assertTrue($this->model->execute($this->ruleMock, '2', true));
+    }
+
     /**
      * @param array $websitesIds
      * @param array $productIds

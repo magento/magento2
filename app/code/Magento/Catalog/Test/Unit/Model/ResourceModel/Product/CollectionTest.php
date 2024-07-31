@@ -258,21 +258,26 @@ class CollectionTest extends TestCase
         $preparedSql = "category_id IN(1,2)";
         $tableName = "catalog_category_product";
         $this->connectionMock->expects($this->any())->method('getId')->willReturn(1);
-        $this->connectionMock->expects($this->exactly(2))->method('prepareSqlCondition')->withConsecutive(
-            ['cat.category_id', $condition],
-            ['e.entity_id', [$conditionType => $this->selectMock]]
-        )->willReturnOnConsecutiveCalls(
-            $preparedSql,
-            'e.entity_id IN (1,2)'
-        );
+        $this->connectionMock->expects($this->exactly(2))->method('prepareSqlCondition')
+            ->willReturnCallback(function ($arg1, $arg2) use ($preparedSql, $conditionType, $condition) {
+                if ($arg1 == 'cat.category_id' && $arg2 == $condition) {
+                    return $preparedSql;
+                } elseif ($arg1 == 'e.entity_id' && $arg2 == [$conditionType => $this->selectMock]) {
+                    return 'e.entity_id IN (1,2)';
+                }
+            });
         $this->selectMock->expects($this->once())->method('from')->with(
             ['cat' => $tableName],
             'cat.product_id'
         )->willReturnSelf();
-        $this->selectMock->expects($this->exactly(2))->method('where')->withConsecutive(
-            [$preparedSql],
-            ['e.entity_id IN (1,2)']
-        )->willReturnSelf();
+        $this->selectMock->expects($this->exactly(2))->method('where')
+            ->willReturnCallback(function ($arg) use ($preparedSql) {
+                if ($arg == $preparedSql) {
+                    return $this->selectMock;
+                } elseif ($arg == 'e.entity_id IN (1,2)') {
+                    return $this->selectMock;
+                }
+            });
         $this->collection->addCategoriesFilter([$conditionType => $values]);
     }
 
@@ -358,11 +363,14 @@ class CollectionTest extends TestCase
         $resource->expects($this->once())->method('getSelect')->willReturn($select);
         $select->expects($this->once())->method('columns')->with(['product_id' => 'entity_id'])->willReturnSelf();
         $select->expects($this->exactly(2))->method('where')
-            ->withConsecutive(
-                ['entity_id IN(?)', [1]],
-                [ '(customer_group_id=? AND all_groups=0) OR all_groups=1', $customerGroupId]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) use ($customerGroupId, $select) {
+                if ($arg1 == 'entity_id IN(?)' && $arg2 == [1]) {
+                    return $select;
+                } elseif ($arg1 == '(customer_group_id=? AND all_groups=0) OR all_groups=1' &&
+                    $arg2 == $customerGroupId) {
+                    return $select;
+                }
+            });
         $select->expects($this->once())->method('order')->with('qty')->willReturnSelf();
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')

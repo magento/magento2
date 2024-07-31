@@ -6,7 +6,7 @@
  */
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
          colors="true"
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
@@ -21,12 +21,9 @@
         <ini name="date.timezone" value="America/Los_Angeles"/>
     </php>
     <extensions>
-        <extension class="Qameta\Allure\PHPUnit\AllureExtension">
-            <!-- Optional arguments block; omit it if you want to use default values -->
-            <arguments>
-                <!-- Path to config file (default is config/allure.config.php) -->
-                <string>../../../allure/allure.config.php</string>
-            </arguments>
-        </extension>
+        <bootstrap class="Qameta\Allure\PHPUnit\AllureExtension">
+            <!-- Path to config file (default is config/allure.config.php) -->
+            <parameter name="config" value="../../../allure/allure.config.php"/>
+        </bootstrap>
     </extensions>
 </phpunit>

@@ -6,9 +6,11 @@
 
 namespace Magento\Indexer\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Indexer\ActionFactory;
 use Magento\Framework\Indexer\ActionInterface;
+use Magento\Framework\Indexer\Config\DependencyInfoProviderInterface;
 use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
@@ -16,6 +18,10 @@ use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Indexer\StructureFactory;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Indexer\SuspendableIndexerInterface;
+use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
+use Magento\Framework\Mview\ViewInterface;
+use Magento\Indexer\Model\Indexer\CollectionFactory;
+use Magento\Indexer\Model\Indexer\StateFactory;
 
 /**
  * Indexer model.
@@ -75,15 +81,22 @@ class Indexer extends DataObject implements IndexerInterface, SuspendableIndexer
     private $indexerFactory;
 
     /**
+     * @var DependencyInfoProviderInterface
+     */
+    private $dependencyInfoProvider;
+
+    /**
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
      * @param StructureFactory $structureFactory
-     * @param \Magento\Framework\Mview\ViewInterface $view
-     * @param Indexer\StateFactory $stateFactory
-     * @param Indexer\CollectionFactory $indexersFactory
+     * @param ViewInterface $view
+     * @param StateFactory $stateFactory
+     * @param CollectionFactory $indexersFactory
      * @param WorkingStateProvider $workingStateProvider
      * @param IndexerInterfaceFactory $indexerFactory
      * @param array $data
+     * @param DependencyInfoProviderInterface|null $dependencyInfoProvider
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ConfigInterface $config,
@@ -94,7 +107,8 @@ class Indexer extends DataObject implements IndexerInterface, SuspendableIndexer
         Indexer\CollectionFactory $indexersFactory,
         WorkingStateProvider $workingStateProvider,
         IndexerInterfaceFactory $indexerFactory,
-        array $data = []
+        array $data = [],
+        ?DependencyInfoProviderInterface $dependencyInfoProvider = null
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;
@@ -104,6 +118,8 @@ class Indexer extends DataObject implements IndexerInterface, SuspendableIndexer
         $this->indexersFactory = $indexersFactory;
         $this->workingStateProvider = $workingStateProvider;
         $this->indexerFactory = $indexerFactory;
+        $this->dependencyInfoProvider = $dependencyInfoProvider
+            ?? ObjectManager::getInstance()->get(DependencyInfoProviderInterface::class);
         parent::__construct($data);
     }
 
@@ -310,6 +326,7 @@ class Indexer extends DataObject implements IndexerInterface, SuspendableIndexer
             $this->getView()->subscribe();
         } else {
             $this->getView()->unsubscribe();
+            $this->invalidate();
         }
         $this->getState()->save();
     }
@@ -439,18 +456,16 @@ class Indexer extends DataObject implements IndexerInterface, SuspendableIndexer
             $state->setStatus(StateInterface::STATUS_WORKING);
             $state->save();
 
+            $resetViewVersion = $this->shouldResetViewVersion();
+
             $sharedIndexers = [];
             $indexerConfig = $this->config->getIndexer($this->getId());
             if ($indexerConfig['shared_index'] !== null) {
                 $sharedIndexers = $this->getSharedIndexers($indexerConfig['shared_index']);
             }
-            if (!empty($sharedIndexers)) {
-                $this->suspendSharedViews($sharedIndexers);
-            }
 
-            if ($this->getView()->isEnabled()) {
-                $this->getView()->suspend();
-            }
+            $this->suspendViews(array_merge($sharedIndexers, [$this]), $resetViewVersion);
+
             try {
                 $this->getActionInstance()->executeFull();
                 if ($this->workingStateProvider->isWorking($this->getId())) {
@@ -497,16 +512,25 @@ class Indexer extends DataObject implements IndexerInterface, SuspendableIndexer
     }
 
     /**
-     * Suspend views of shared indexers
+     * Suspend views
      *
-     * @param array $sharedIndexers
+     * @param IndexerInterface[] $indexers
+     * @param bool $reset
      * @return void
+     * @throws \Exception
      */
-    private function suspendSharedViews(array $sharedIndexers) : void
+    private function suspendViews(array $indexers, bool $reset = true) : void
     {
-        foreach ($sharedIndexers as $indexer) {
+        foreach ($indexers as $indexer) {
             if ($indexer->getView()->isEnabled()) {
-                $indexer->getView()->suspend();
+                if ($reset) {
+                    // this method also resets the mview version to the current one
+                    $indexer->getView()->suspend();
+                } else {
+                    $state = $indexer->getView()->getState();
+                    $state->setStatus(\Magento\Framework\Mview\View\StateInterface::STATUS_SUSPENDED);
+                    $state->save();
+                }
             }
         }
     }
@@ -546,5 +570,72 @@ class Indexer extends DataObject implements IndexerInterface, SuspendableIndexer
     {
         $this->getActionInstance()->executeList($ids);
         $this->getState()->save();
+    }
+
+    /**
+     * Return all indexer Ids on which the current indexer depends (directly or indirectly).
+     *
+     * @param string $indexerId
+     * @return array
+     */
+    private function getIndexerIdsToRunBefore(string $indexerId): array
+    {
+        $relatedIndexerIds = [];
+        foreach ($this->dependencyInfoProvider->getIndexerIdsToRunBefore($indexerId) as $relatedIndexerId) {
+            if ($relatedIndexerId !== $indexerId) {
+                $relatedIndexerIds[] = [$relatedIndexerId];
+                $relatedIndexerIds[] = $this->getIndexerIdsToRunBefore($relatedIndexerId);
+            }
+        }
+
+        return array_unique(array_merge([], ...$relatedIndexerIds));
+    }
+
+    /**
+     * Check whether view is up to date
+     *
+     * @param ViewInterface $view
+     * @return bool
+     */
+    private function isViewUpToDate(\Magento\Framework\Mview\ViewInterface $view): bool
+    {
+        if (!$view->isEnabled()) {
+            return true;
+        }
+
+        try {
+            $currentVersionId = $view->getChangelog()->getVersion();
+        } catch (ChangelogTableNotExistsException $e) {
+            return true;
+        }
+
+        $lastVersionId = (int)$view->getState()->getVersionId();
+        if ($lastVersionId >= $currentVersionId) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check whether indexer view version should be reset
+     *
+     * @return bool
+     */
+    private function shouldResetViewVersion(): bool
+    {
+        $resetViewVersion = true;
+        foreach ($this->getIndexerIdsToRunBefore($this->getId()) as $indexerId) {
+            if ($indexerId === $this->getId()) {
+                continue;
+            }
+            $indexer = $this->indexerFactory->create();
+            $indexer->load($indexerId);
+            if ($indexer->isValid() && !$this->isViewUpToDate($indexer->getView())) {
+                $resetViewVersion = false;
+                break;
+            }
+        }
+        return $resetViewVersion;
     }
 }

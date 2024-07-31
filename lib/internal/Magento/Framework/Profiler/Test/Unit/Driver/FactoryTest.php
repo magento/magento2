@@ -70,18 +70,30 @@ class FactoryTest extends TestCase
      */
     public function createDataProvider()
     {
-        $defaultDriverClass = $this->getMockClass(
+        $defaultDriverClassMock = $this->getMockForAbstractClass(
             DriverInterface::class,
             [],
-            [],
-            'Magento_Framework_Profiler_Driver_Test_Default'
+            'Magento_Framework_Profiler_Driver_Test_Default',
+            true,
+            true,
+            true,
+            []
         );
-        $testDriverClass = $this->getMockClass(
+
+        $defaultDriverClass = get_class($defaultDriverClassMock);
+
+        $testDriverClassMock = $this->getMockForAbstractClass(
             DriverInterface::class,
             [],
-            [],
-            'Magento_Framework_Profiler_Driver_Test_Test'
+            'Magento_Framework_Profiler_Driver_Test_Test',
+            true,
+            true,
+            true,
+            []
         );
+
+        $testDriverClass = get_class($testDriverClassMock);
+
         return [
             'Prefix and concrete type' => [['type' => 'test'], $testDriverClass],
             'Prefix and default type' => [[], $defaultDriverClass],

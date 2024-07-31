@@ -76,7 +76,7 @@ class InformationTest extends TestCase
 
         $this->renderer = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['format'])
+            ->onlyMethods(['format'])
             ->getMock();
 
         $this->renderer->expects($this->once())

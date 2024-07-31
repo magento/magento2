@@ -47,7 +47,7 @@ class WysiwygRestrictCommandTest extends TestCase
      *
      * @return array
      */
-    public function getExecuteCases(): array
+    public static function getExecuteCases(): array
     {
         return [
             'yes' => ['y', true],
