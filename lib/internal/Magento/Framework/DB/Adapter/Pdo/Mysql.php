@@ -251,11 +251,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      */
     private $parentConnections = [];
 
-    /***
-     * const MYSQL_8_4_VERSION
-     */
-    public const MYSQL_8_4_VERSION = '8.4';
-
     /**
      * Constructor
      *
@@ -3075,10 +3070,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         $this->rawQuery("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0");
         $this->rawQuery("SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO'");
 
-        $version = $this->fetchPairs("SHOW variables LIKE 'version'")['version'] ?? '';
-        if (str_contains($version, self::MYSQL_8_4_VERSION)) {
-            $this->rawQuery("SET RESTRICT_FK_ON_NON_STANDARD_KEY=0");
-        }
         return $this;
     }
 
