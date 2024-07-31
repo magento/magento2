@@ -17,20 +17,20 @@
             <column name="module8_email_contact_id"/>
             <column name="module8_is_guest"/>
         </constraint>
-        <constraint xsi:type="unique"  referenceId="MODULE8_INSTALL_INDEX_3">
-            <column name="module8_is_guest"/>
-        </constraint>
-        <constraint xsi:type="unique"  referenceId="MODULE8_INSTALL_INDEX_4">
-            <column name="module8_contact_id"/>
-        </constraint>
-        <constraint xsi:type="unique"  referenceId="MODULE8_INSTALL_INDEX_TEMP" disabled="true">
-            <column name="module8_content"/>
-        </constraint>
         <constraint xsi:type="unique" referenceId="MODULE8_INSTALL_UNIQUE_INDEX_TEMP" disabled="true">
             <column name="module8_contact_group_id"/>
         </constraint>
         <index referenceId="MODULE8_INSTALL_INDEX_1" indexType="btree">
             <column name="module8_email_contact_id"/>
+        </index>
+        <index referenceId="MODULE8_INSTALL_INDEX_3" indexType="btree">
+            <column name="module8_is_guest"/>
+        </index>
+        <index referenceId="MODULE8_INSTALL_INDEX_4" indexType="btree">
+            <column name="module8_contact_id"/>
+        </index>
+        <index referenceId="MODULE8_INSTALL_INDEX_TEMP" indexType="btree" disabled="true">
+            <column name="module8_content"/>
         </index>
         <column xsi:type="int" name="module8_update_column" padding="11" unsigned="false" nullable="false"
                 identity="false" comment="Module_8 Update Column"/>

@@ -17,20 +17,20 @@
             <column name="module8_email_contact_id"/>
             <column name="module8_is_guest"/>
         </constraint>
-        <constraint xsi:type="unique" referenceId="MODULE8_INSTALL_INDEX_3">
-            <column name="module8_is_guest"/>
-        </constraint>
-        <constraint xsi:type="unique" referenceId="MODULE8_INSTALL_INDEX_4">
-            <column name="module8_contact_id"/>
-        </constraint>
-        <constraint xsi:type="unique" referenceId="MODULE8_INSTALL_INDEX_TEMP">
-            <column name="module8_content"/>
-        </constraint>
         <constraint xsi:type="unique" referenceId="MODULE8_INSTALL_UNIQUE_INDEX_TEMP">
             <column name="module8_contact_group_id"/>
         </constraint>
         <index referenceId="MODULE8_INSTALL_INDEX_1" indexType="btree">
             <column name="module8_email_contact_id"/>
+        </index>
+        <index referenceId="MODULE8_INSTALL_INDEX_3" indexType="btree">
+            <column name="module8_is_guest"/>
+        </index>
+        <index referenceId="MODULE8_INSTALL_INDEX_4" indexType="btree">
+            <column name="module8_contact_id"/>
+        </index>
+        <index referenceId="MODULE8_INSTALL_INDEX_TEMP" indexType="btree">
+            <column name="module8_content"/>
         </index>
     </table>
     <table name="module8_test_second_table" resource="default" engine="innodb" comment="Second Test Table for Module8">
