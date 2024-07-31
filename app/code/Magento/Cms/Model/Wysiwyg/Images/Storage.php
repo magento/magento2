@@ -722,6 +722,7 @@ class Storage extends \Magento\Framework\DataObject
         $image->keepAspectRatio($keepRatio);
 
         [$imageWidth, $imageHeight] = $this->getResizedParams($source);
+
         $image->resize($imageWidth, $imageHeight);
         $dest = $targetDir . '/' . $this->ioFile->getPathInfo($source)['basename'];
         $image->save($dest);
