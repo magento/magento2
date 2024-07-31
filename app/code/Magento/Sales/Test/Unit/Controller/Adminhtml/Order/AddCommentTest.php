@@ -135,7 +135,6 @@ class AddCommentTest extends TestCase
      */
     public function testExecuteWillNotifyCustomer(
         array $historyData,
-        string $orderStatus,
         bool $userHasResource,
         bool $visibleOnFront,
         bool $expectedNotify
@@ -172,7 +171,6 @@ class AddCommentTest extends TestCase
                     'is_visible_on_front' => true,
                     'status' => 'processing'
                 ],
-                'orderStatus' =>'processing',
                 'userHasResource' => true,
                 'expectedNotify' => true,
                 'visibleOnFront' => true
@@ -184,7 +182,6 @@ class AddCommentTest extends TestCase
                     'is_visible_on_front' => false,
                     'status' => 'processing'
                 ],
-                'orderStatus' =>'processing',
                 'userHasResource' => true,
                 'expectedNotify' => false,
                 'visibleOnFront' => false
@@ -196,7 +193,6 @@ class AddCommentTest extends TestCase
                     'is_visible_on_front' => false,
                     'status' => 'processing'
                 ],
-                'orderStatus' =>'fraud',
                 'userHasResource' => true,
                 'expectedNotify' => false,
                 'visibleOnFront' => false
@@ -208,7 +204,6 @@ class AddCommentTest extends TestCase
                     'is_visible_on_front' => false,
                     'status' => 'fraud'
                 ],
-                'orderStatus' =>'processing',
                 'userHasResource' => false,
                 'expectedNotify' => false,
                 'visibleOnFront' => false
@@ -220,7 +215,6 @@ class AddCommentTest extends TestCase
                     'is_visible_on_front' => false,
                     'status' => 'processing'
                 ],
-                'orderStatus' =>'complete',
                 'userHasResource' => false,
                 'expectedNotify' => false,
                 'visibleOnFront' => false
@@ -232,7 +226,6 @@ class AddCommentTest extends TestCase
                     'is_visible_on_front' => false,
                     'status' => 'processing'
                 ],
-                'orderStatus' =>'complete',
                 'userHasResource' => false,
                 'expectedNotify' => false,
                 'visibleOnFront' => false
