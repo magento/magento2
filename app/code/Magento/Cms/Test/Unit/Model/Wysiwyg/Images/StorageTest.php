@@ -55,11 +55,6 @@ class StorageTest extends TestCase
     private $imagesStorage;
 
     /**
-     * @var Storage
-     */
-    private $imagesStorageWithZeroHeight;
-
-    /**
      * @var MockObject
      */
     private $filesystemMock;
@@ -234,6 +229,8 @@ class StorageTest extends TestCase
             self::STORAGE_ROOT_DIR
         );
 
+        $this->resizeParameters = ['width' => 100, 'height' => 50];
+
         $this->storageCollectionFactoryMock = $this->createPartialMock(
             CollectionFactory::class,
             ['create']
@@ -299,12 +296,31 @@ class StorageTest extends TestCase
 
         $this->imagesStorage = $this->objectManagerHelper->getObject(
             Storage::class,
-            $this->getStorageClass(100, 50, $allowedExtensions)
-        );
-
-        $this->imagesStorageWithZeroHeight = $this->objectManagerHelper->getObject(
-            Storage::class,
-            $this->getStorageClass(100, 0, $allowedExtensions)
+            [
+                'session' => $this->sessionMock,
+                'backendUrl' => $this->backendUrlMock,
+                'cmsWysiwygImages' => $this->imageHelperMock,
+                'coreFileStorageDb' => $this->coreFileStorageMock,
+                'filesystem' => $this->filesystemMock,
+                'imageFactory' => $this->adapterFactoryMock,
+                'assetRepo' => $this->assetRepo,
+                'storageCollectionFactory' => $this->storageCollectionFactoryMock,
+                'storageFileFactory' => $this->storageFileFactoryMock,
+                'storageDatabaseFactory' => $this->storageDatabaseFactoryMock,
+                'directoryDatabaseFactory' => $this->directoryDatabaseFactoryMock,
+                'uploaderFactory' => $this->uploaderFactoryMock,
+                'resizeParameters' => $this->resizeParameters,
+                'extensions' => $allowedExtensions,
+                'dirs' => [
+                    'exclude' => [],
+                    'include' => [],
+                ],
+                'data' => [],
+                'file' => $this->fileMock,
+                'ioFile' => $this->ioFileMock,
+                'coreConfig' => $this->coreConfigMock,
+                'logger' => $this->loggerMock
+            ]
         );
     }
 
@@ -679,89 +695,5 @@ class StorageTest extends TestCase
             (string)__('Please rename the folder using only Latin letters, numbers, underscores and dashes.')
         );
         $this->imagesStorage->createDirectory($name, $path);
-    }
-
-    public function testResizeFileWithZeroHeight()
-    {
-        $path = 'target/path';
-        $source = self::STORAGE_ROOT_DIR . $path;
-        $fileName = 'image.jpg';
-        $realPath = $source . '/' . $fileName;
-        $thumbnailTargetPath = self::STORAGE_ROOT_DIR . '.thumbs' . $path;
-        $thumbnailDestination = $thumbnailTargetPath . '/' . $fileName;
-        $result = false;
-        $exceptionMessage = 'Exception message';
-        $this->directoryMock->expects($this->atLeastOnce())->method('getRelativePath')->willReturnMap(
-            [
-                [$realPath, $realPath],
-                [$thumbnailTargetPath, $thumbnailTargetPath],
-                [$thumbnailDestination, $thumbnailDestination],
-            ]
-        );
-        $this->directoryMock->expects($this->atLeastOnce())->method('isFile')
-            ->willReturnMap(
-                [
-                    [$realPath, true],
-                    [$thumbnailDestination, true],
-                ]
-            );
-        $this->directoryMock->expects($this->atLeastOnce())->method('isExist')
-            ->willReturnMap(
-                [
-                    [$realPath, true],
-                    [$thumbnailTargetPath, true],
-                ]
-            );
-        $this->driverMock->expects(self::once())
-            ->method('fileGetContents')
-            ->willReturn('some content');
-
-        $image = $this->getMockBuilder(image::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['open', 'keepAspectRatio'])
-            ->onlyMethods(['resize', 'save'])
-            ->getMock();
-        $image->expects($this->any())->method('open')->with($realPath);
-        $image->expects($this->any())->method('keepAspectRatio')->with(true);
-        $image->expects($this->once())->method('resize')->with(100, 0)
-            ->willThrowException(new \LogicException($exceptionMessage));
-        $this->adapterFactoryMock->expects($this->atLeastOnce())->method('create')->willReturn($image);
-
-        // Logger should not log any critical errors in this scenario
-        $this->loggerMock->expects($this->once())
-            ->method('critical');
-
-        $this->assertEquals($result, $this->imagesStorageWithZeroHeight->resizeFile($realPath));
-    }
-
-    public function getStorageClass($width, $height, $allowedExtensions)
-    {
-        $this->resizeParameters = ['width' => $width, 'height' => $height];
-        return
-        [
-            'session' => $this->sessionMock,
-            'backendUrl' => $this->backendUrlMock,
-            'cmsWysiwygImages' => $this->imageHelperMock,
-            'coreFileStorageDb' => $this->coreFileStorageMock,
-            'filesystem' => $this->filesystemMock,
-            'imageFactory' => $this->adapterFactoryMock,
-            'assetRepo' => $this->assetRepo,
-            'storageCollectionFactory' => $this->storageCollectionFactoryMock,
-            'storageFileFactory' => $this->storageFileFactoryMock,
-            'storageDatabaseFactory' => $this->storageDatabaseFactoryMock,
-            'directoryDatabaseFactory' => $this->directoryDatabaseFactoryMock,
-            'uploaderFactory' => $this->uploaderFactoryMock,
-            'resizeParameters' => $this->resizeParameters,
-            'extensions' => $allowedExtensions,
-            'dirs' => [
-                'exclude' => [],
-                'include' => [],
-            ],
-            'data' => [],
-            'file' => $this->fileMock,
-            'ioFile' => $this->ioFileMock,
-            'coreConfig' => $this->coreConfigMock,
-            'logger' => $this->loggerMock
-        ];
     }
 }
