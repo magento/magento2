@@ -18,5 +18,5 @@ interface DataSourceInterface extends UiComponentInterface
     /**
      * @return DataProviderInterface
      */
-    public function getDataProvider();
+    public static function getDataProvider();
 }
