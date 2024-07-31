@@ -86,7 +86,7 @@
         <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCart"/>
         <!-- Click on Paypal paypal button on mini cart page-->
         <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtnFromMiniCart">
-            <argument name="elementNumber" value="3"/>
+            <argument name="elementNumber" value="1"/>
             <argument name="frameName" value="myFrame"/>
         </actionGroup>
         <!--Close Mini Cart-->
