@@ -100,7 +100,7 @@ class StructurePlugin
      */
     public function aroundGetElementByPathParts(Structure $subject, \Closure $proceed, array $pathParts)
     {
-        $isSectionChanged = $pathParts[0] == 'payment';
+        $isSectionChanged = !empty($pathParts[0]) && $pathParts[0] === 'payment';
 
         if ($isSectionChanged) {
             $requestedCountrySection = 'payment_' . strtolower($this->backendHelper->getConfigurationCountryCode());
