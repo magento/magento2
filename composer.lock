@@ -10746,16 +10746,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "4.8.0",
+            "version": "4.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "7b15ca1a1d801f6ad36a93991600987b113a1747"
+                "reference": "d1566754b58f8119c3b5b2acb3b5c23cfdd65751"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/7b15ca1a1d801f6ad36a93991600987b113a1747",
-                "reference": "7b15ca1a1d801f6ad36a93991600987b113a1747",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/d1566754b58f8119c3b5b2acb3b5c23cfdd65751",
+                "reference": "d1566754b58f8119c3b5b2acb3b5c23cfdd65751",
                 "shasum": ""
             },
             "require": {
@@ -10803,7 +10803,7 @@
                 "php-coveralls/php-coveralls": "^1.0||^2.2",
                 "phpmd/phpmd": "^2.8.0",
                 "phpunit/phpunit": "^10.0",
-                "squizlabs/php_codesniffer": "~3.7.0"
+                "squizlabs/php_codesniffer": "~3.10.1"
             },
             "suggest": {
                 "hoa/console": "Enables <pause /> action and interactive console functionality"
@@ -10840,9 +10840,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.8.0"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.8.1"
             },
-            "time": "2024-05-17T08:51:13+00:00"
+            "time": "2024-06-27T04:34:02+00:00"
         },
         {
             "name": "magento/php-compatibility-fork",
@@ -13663,5 +13663,5 @@
         "lib-libxml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.6.0"
 }

@@ -577,11 +577,16 @@ class CustomerRepository implements CustomerRepositoryInterface
         CustomerInterface $customer,
         string $defaultAddressType
     ): void {
-        $addressId = $defaultAddressType === CustomerInterface::DEFAULT_BILLING ? $customer->getDefaultBilling()
-            : $customer->getDefaultShipping();
+        $defaultAddressId = $defaultAddressType === CustomerInterface::DEFAULT_BILLING ?
+            (int) $customer->getDefaultBilling() : (int) $customer->getDefaultShipping();
+
         if ($customer->getAddresses()) {
             foreach ($customer->getAddresses() as $address) {
-                if ((int) $addressId === (int) $address->getId()) {
+                $addressArray = $address->__toArray();
+                $addressId = (int) $address->getId();
+                if (!empty($addressArray[$defaultAddressType])
+                    || empty($addressId)
+                    || $defaultAddressId === $addressId) {
                     return;
                 }
             }
