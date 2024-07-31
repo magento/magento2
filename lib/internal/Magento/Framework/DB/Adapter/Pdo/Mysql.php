@@ -33,6 +33,7 @@ use Magento\Framework\Stdlib\StringUtils;
 use Zend_Db_Adapter_Exception;
 use Zend_Db_Statement_Exception;
 use Magento\Framework\DB\Adapter\SqlVersionProvider;
+
 // @codingStandardsIgnoreStart
 
 /**
