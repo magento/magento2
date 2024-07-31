@@ -228,9 +228,6 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      */
     public function getElementByPathParts(array $pathParts)
     {
-        if (empty($pathParts)) {
-            return null;
-        }
         $path = implode('_', $pathParts);
         if (isset($this->_elements[$path])) {
             return $this->_elements[$path];

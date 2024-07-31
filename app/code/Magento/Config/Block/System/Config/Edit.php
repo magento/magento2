@@ -75,29 +75,27 @@ class Edit extends \Magento\Backend\Block\Widget
     {
         /** @var $section \Magento\Config\Model\Config\Structure\Element\Section */
         $section = $this->_configStructure->getElement($this->getRequest()->getParam('section'));
-        if ($section !== null) {
-            $this->_formBlockName = $section->getFrontendModel();
-            if (empty($this->_formBlockName)) {
-                $this->_formBlockName = self::DEFAULT_SECTION_BLOCK;
-            }
-            $this->setTitle($section->getLabel());
-            $this->setHeaderCss($section->getHeaderCss());
-
-            $this->getToolbar()->addChild(
-                'save_button',
-                \Magento\Backend\Block\Widget\Button::class,
-                [
-                    'id' => 'save',
-                    'label' => __('Save Config'),
-                    'class' => 'save primary',
-                    'data_attribute' => [
-                        'mage-init' => ['button' => ['event' => 'save', 'target' => '#config-edit-form']],
-                    ]
-                ]
-            );
-            $block = $this->getLayout()->createBlock($this->_formBlockName);
-            $this->setChild('form', $block);
+        $this->_formBlockName = $section->getFrontendModel();
+        if (empty($this->_formBlockName)) {
+            $this->_formBlockName = self::DEFAULT_SECTION_BLOCK;
         }
+        $this->setTitle($section->getLabel());
+        $this->setHeaderCss($section->getHeaderCss());
+
+        $this->getToolbar()->addChild(
+            'save_button',
+            \Magento\Backend\Block\Widget\Button::class,
+            [
+                'id' => 'save',
+                'label' => __('Save Config'),
+                'class' => 'save primary',
+                'data_attribute' => [
+                    'mage-init' => ['button' => ['event' => 'save', 'target' => '#config-edit-form']],
+                ]
+            ]
+        );
+        $block = $this->getLayout()->createBlock($this->_formBlockName);
+        $this->setChild('form', $block);
         return parent::_prepareLayout();
     }
 
