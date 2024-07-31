@@ -32,7 +32,6 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
 use Zend_Db_Adapter_Exception;
 use Zend_Db_Statement_Exception;
-use Magento\Framework\DB\Adapter\SqlVersionProvider;
 
 // @codingStandardsIgnoreStart
 
@@ -252,11 +251,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      */
     private $parentConnections = [];
 
-    /**
-     * @var SqlVersionProvider
-     */
-    private $sqlVersionProvider;
-
     /***
      * const MYSQL_8_4_VERSION
      */
@@ -271,7 +265,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      * @param SelectFactory $selectFactory
      * @param array $config
      * @param SerializerInterface|null $serializer
-     * @param SqlVersionProvider|null $sqlVersionProvider
      */
     public function __construct(
         StringUtils $string,
@@ -279,8 +272,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         LoggerInterface $logger,
         SelectFactory $selectFactory,
         array $config = [],
-        SerializerInterface $serializer = null,
-        SqlVersionProvider $sqlVersionProvider = null
+        SerializerInterface $serializer = null
     ) {
         $this->pid = getmypid();
         $this->string = $string;
@@ -288,7 +280,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         $this->logger = $logger;
         $this->selectFactory = $selectFactory;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
-        $this->sqlVersionProvider = $sqlVersionProvider ?? ObjectManager::getInstance()->get(SqlVersionProvider::class);
         $this->exceptionMap = [
             // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
             2006 => ConnectionException::class,
@@ -3083,7 +3074,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         $this->rawQuery("SET SQL_MODE=''");
         $this->rawQuery("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0");
         $this->rawQuery("SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO'");
-        if (str_contains($this->sqlVersionProvider->getSqlVersion(), self::MYSQL_8_4_VERSION)) {
+
+        $version = $this->fetchPairs("SHOW variables LIKE 'version'")['version'] ?? '';
+        if (str_contains($version, self::MYSQL_8_4_VERSION)) {
             $this->rawQuery("SET RESTRICT_FK_ON_NON_STANDARD_KEY=0");
         }
         return $this;
