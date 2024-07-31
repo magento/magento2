@@ -17,6 +17,7 @@
             <group value="Catalog"/>
             <severity value="AVERAGE"/>
             <group value="cloud"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set system/upload_configuration/enable_resize 0" stepKey="disableImageResizing"/>
