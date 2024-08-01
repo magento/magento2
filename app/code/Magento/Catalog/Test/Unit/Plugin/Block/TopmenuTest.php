@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace Magento\Catalog\Test\Unit\Plugin\Block;
 
 use Magento\Catalog\Helper\Category;
-use Magento\Catalog\Model\Layer;
-use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory;
@@ -41,16 +39,6 @@ class TopmenuTest extends TestCase
      * @var MockObject|Store
      */
     protected $storeMock;
-
-    /**
-     * @var MockObject|Resolver
-     */
-    protected $layerResolverMock;
-
-    /**
-     * @var MockObject|Layer
-     */
-    protected $catalogLayerMock;
 
     /**
      * @var MockObject|CollectionFactory
@@ -90,9 +78,7 @@ class TopmenuTest extends TestCase
 
         $this->childrenCategoryMock = $this->_getCleanMock(\Magento\Catalog\Model\Category::class);
         $this->categoryHelperMock = $this->_getCleanMock(Category::class);
-        $this->catalogLayerMock = $this->_getCleanMock(Layer::class);
         $this->categoryMock = $this->_getCleanMock(\Magento\Catalog\Model\Category::class);
-        $this->layerResolverMock = $this->_getCleanMock(Resolver::class);
         $this->storeMock = $this->_getCleanMock(Store::class);
         $this->storeManagerMock = $this->_getCleanMock(StoreManagerInterface::class);
         $this->categoryCollectionMock = $this->_getCleanMock(
@@ -103,9 +89,6 @@ class TopmenuTest extends TestCase
             ['create']
         );
 
-        $this->catalogLayerMock->expects($this->once())->method('getCurrentCategory')
-            ->willReturn($this->childrenCategoryMock);
-
         $this->storeManagerMock->expects($this->atLeastOnce())->method('getStore')
             ->willReturn($this->storeMock);
 
@@ -113,9 +96,6 @@ class TopmenuTest extends TestCase
             ->willReturn($categoryParentId);
         $this->categoryMock->expects($this->once())->method('getParentIds')
             ->willReturn($categoryParentIds);
-
-        $this->layerResolverMock->expects($this->once())->method('get')
-            ->willReturn($this->catalogLayerMock);
 
         $this->storeMock->expects($this->once())->method('getRootCategoryId')
             ->willReturn($rootCategoryId);
@@ -131,8 +111,7 @@ class TopmenuTest extends TestCase
             [
                 'catalogCategory' => $this->categoryHelperMock,
                 'categoryCollectionFactory' => $this->categoryCollectionFactoryMock,
-                'storeManager' => $this->storeManagerMock,
-                'layerResolver' => $this->layerResolverMock,
+                'storeManager' => $this->storeManagerMock
             ]
         );
     }

@@ -22,10 +22,11 @@
                 <issueId value="DEPRECATED">Use StorefrontVerifyCategoryProductAndProductCategoryPartialReindexTest instead.</issueId>
             </skip>
             <group value="pr_exclude"/>
+            <group value="indexers_by_schedule_mode_only"/>
         </annotations>
         <before>
             <!-- Change "Category Products" and "Product Categories" indexers to "Update by Schedule" mode -->
-            <magentoCLI command="indexer:set-mode" arguments="schedule catalog_category_product catalog_product_category" stepKey="setIndexerMode"/>
+            <comment userInput="Adding the comment to replace 'indexer:set-mode schedule' command for preserving Backward Compatibility" stepKey="setIndexerMode"/>
 
             <!-- Create categories K, L, M, N with different nesting in the tree and Anchor = Yes/No-->
             <!-- Category K is an anchor category -->
@@ -59,13 +60,15 @@
                 <argument name="categoryName" value="$$categoryN.name$$, $$categoryM.name$$"/>
             </actionGroup>
 
-            <wait stepKey="waitBeforeRunCronIndex" time="60"/>
-            <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
-            <wait stepKey="waitAfterRunCronIndex" time="120"/>
+            <comment userInput="BIC workaround" stepKey="waitBeforeRunCronIndex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="waitAfterRunCronIndex"/>
         </before>
         <after>
             <!-- Change "Category Products" and "Product Categories" indexers to "Update on Save" mode -->
-            <magentoCLI command="indexer:set-mode" arguments="realtime" stepKey="setRealtimeMode"/>
+            <comment userInput="Adding the comment to replace 'indexer:set-mode realtime' command for preserving Backward Compatibility" stepKey="setRealtimeMode"/>
             <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
             <!-- Delete data -->
@@ -147,11 +150,11 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryN.custom_attributes[url_key]$$)}}" stepKey="amOnCategoryN"/>
         <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductInCategoryN"/>
 
-        <!-- Run cron -->
-        <wait stepKey="waitBeforeRunMagentoCron" time="60"/>
-        <magentoCLI stepKey="runMagentoCron" command="cron:run --group=index"/>
-
-        <wait stepKey="waitAfterRunMagentoCron" time="90"/>
+        <comment userInput="BIC workaround" stepKey="waitBeforeRunMagentoCron"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runMagentoCron">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitAfterRunMagentoCron"/>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->
         <!-- Category K contains only Products A, C -->
@@ -214,11 +217,12 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryN.custom_attributes[url_key]$$)}}" stepKey="onStorefrontCategoryN"/>
         <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="productCOnCategoryN"/>
 
-        <!-- Run Cron once to reindex product changes -->
-        <wait stepKey="waitBeforeRunCronIndexAfterProductAssignToCategory" time="60"/>
-        <magentoCLI stepKey="runCronIndexAfterProductAssignToCategory" command="cron:run --group=index"/>
-
-        <wait stepKey="waitAfterRunCronIndexAfterProductAssignToCategory" time="90"/>
+        <!-- Reindex -->
+        <comment userInput="BIC workaround" stepKey="waitBeforeRunCronIndexAfterProductAssignToCategory"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexAfterProductAssignToCategory">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitAfterRunCronIndexAfterProductAssignToCategory"/>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->
 

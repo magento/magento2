@@ -7,14 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Plugin\Resolver;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Paypal\Model\Express\Checkout\Factory as CheckoutFactory;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\Stdlib\ArrayManagerFactory;
+use Magento\Paypal\Model\Express\Checkout\Factory as CheckoutFactory;
 use Magento\PaypalGraphQl\Model\Provider\Checkout as CheckoutProvider;
 use Magento\PaypalGraphQl\Model\Provider\Config as ConfigProvider;
 
@@ -27,7 +29,10 @@ class SetPaymentMethodOnCart
 
     private const PATH_PAYMENT_METHOD_DATA = 'input/payment_method';
 
-    private $allowedPaymentMethodCodes = [];
+    /**
+     * @var array $allowedPaymentMethodCodes
+     */
+    private array $allowedPaymentMethodCodes = [];
 
     /**
      * @var CheckoutFactory
@@ -35,9 +40,10 @@ class SetPaymentMethodOnCart
     private $checkoutFactory;
 
     /**
-     * @var ArrayManager
+     * @var ArrayManagerFactory
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $arrayManager;
+    private readonly ArrayManagerFactory $arrayManagerFactory;
 
     /**
      * @var CheckoutProvider
@@ -51,20 +57,24 @@ class SetPaymentMethodOnCart
 
     /**
      * @param CheckoutFactory $checkoutFactory
-     * @param ArrayManager $arrayManager
+     * @param ArrayManager $arrayManager @deprecated @see $arrayManagerFactory
      * @param CheckoutProvider $checkoutProvider
      * @param ConfigProvider $configProvider
      * @param array $allowedPaymentMethodCodes
+     * @param ArrayManagerFactory|null $arrayManagerFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         CheckoutFactory $checkoutFactory,
         ArrayManager $arrayManager,
         CheckoutProvider $checkoutProvider,
         ConfigProvider $configProvider,
-        array $allowedPaymentMethodCodes = []
+        array $allowedPaymentMethodCodes = [],
+        ?ArrayManagerFactory $arrayManagerFactory = null,
     ) {
         $this->checkoutFactory = $checkoutFactory;
-        $this->arrayManager = $arrayManager;
+        $this->arrayManagerFactory = $arrayManagerFactory
+            ?? ObjectManager::getInstance()->get(ArrayManagerFactory::class);
         $this->checkoutProvider = $checkoutProvider;
         $this->configProvider = $configProvider;
         $this->allowedPaymentMethodCodes = $allowedPaymentMethodCodes;
@@ -93,12 +103,11 @@ class SetPaymentMethodOnCart
         array $value = null,
         array $args = null
     ) {
-        $paymentCode = $this->arrayManager->get(self::PATH_CODE, $args) ?? '';
+        $paymentCode = $this->arrayManagerFactory->create()->get(self::PATH_CODE, $args) ?? '';
         if (!$this->isAllowedPaymentMethod($paymentCode)) {
             return $resolvedValue;
         }
-
-        $paypalAdditionalData = $this->arrayManager->get(self::PATH_PAYMENT_METHOD_DATA, $args) ?? [];
+        $paypalAdditionalData = $this->arrayManagerFactory->create()->get(self::PATH_PAYMENT_METHOD_DATA, $args) ?? [];
         $payerId = $paypalAdditionalData[$paymentCode]['payer_id'] ?? null;
         $token = $paypalAdditionalData[$paymentCode]['token'] ?? null;
         $cart = $resolvedValue['cart']['model'];

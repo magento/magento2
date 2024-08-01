@@ -234,7 +234,7 @@ class ForgotPasswordPostTest extends TestCase
 
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getPost',
             ])
             ->getMock();
