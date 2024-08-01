@@ -58,7 +58,7 @@ class TotalTest extends TestCase
     /**
      * @return array
      */
-    public function setTotalAmountDataProvider()
+    public static function setTotalAmountDataProvider()
     {
         return [
             'Subtotal' => [
@@ -92,7 +92,7 @@ class TotalTest extends TestCase
     /**
      * @return array
      */
-    public function setBaseTotalAmountDataProvider()
+    public static function setBaseTotalAmountDataProvider()
     {
         return [
             'Subtotal' => [
@@ -126,7 +126,7 @@ class TotalTest extends TestCase
     /**
      * @return array
      */
-    public function addTotalAmountDataProvider()
+    public static function addTotalAmountDataProvider()
     {
         return [
             'Zero' => [
@@ -160,7 +160,7 @@ class TotalTest extends TestCase
     /**
      * @return array
      */
-    public function addBaseTotalAmountDataProvider()
+    public static function addBaseTotalAmountDataProvider()
     {
         return [
             'Zero' => [
@@ -219,7 +219,7 @@ class TotalTest extends TestCase
     /**
      * @return array
      */
-    public function getFullInfoDataProvider()
+    public static function getFullInfoDataProvider()
     {
         $myArray = ['team' => 'kiwis'];
         $serializedInput = json_encode($myArray);

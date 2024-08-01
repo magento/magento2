@@ -83,7 +83,7 @@ class CVV2MatchTest extends TestCase
     /**
      * @return array
      */
-    public function validationDataProvider()
+    public static function validationDataProvider()
     {
         return [
             [

@@ -92,7 +92,7 @@ class PlaceOrderTest extends ExpressTestCase
     /**
      * @return array
      */
-    public function executeProcessableExceptionDataProvider()
+    public static function executeProcessableExceptionDataProvider()
     {
         return [
             [ProcessableException::API_MAX_PAYMENT_ATTEMPTS_EXCEEDED],

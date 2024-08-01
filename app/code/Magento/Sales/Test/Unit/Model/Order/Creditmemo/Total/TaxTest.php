@@ -84,6 +84,7 @@ class TaxTest extends TestCase
      */
     public function testCollect($orderData, $creditmemoData, $expectedResults)
     {
+        print_r($creditmemoData);
         $roundingDelta = [];
 
         //Set up order mock
@@ -138,7 +139,7 @@ class TaxTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function collectDataProvider()
+    public static function collectDataProvider()
     {
         $result = [];
         // scenario 1: 3 item_1, 3 item_2, $99 each, 8.19 tax rate
@@ -197,7 +198,7 @@ class TaxTest extends TestCase
                     'base_shipping_amount' => 30,
                     'tax_amount' => 0.82,
                     'base_tax_amount' => 0.82,
-                    'invoice' => $this->createInvoiceMock(
+                    'invoice' => static fn (self $testCase) => $testCase->createInvoiceMock(
                         [
                             'tax_amount' => 24.33,
                             'base_tax_amount' => 24.33,
@@ -288,7 +289,7 @@ class TaxTest extends TestCase
                     'base_shipping_amount' => 30,
                     'tax_amount' => 0.82 * $currencyRatio,
                     'base_tax_amount' => 0.82,
-                    'invoice' => $this->createInvoiceMock(
+                    'invoice' => static fn (self $testCase) => $testCase->createInvoiceMock(
                         [
                             'tax_amount' => 24.33 * $currencyRatio,
                             'base_tax_amount' => 24.33,
@@ -365,7 +366,7 @@ class TaxTest extends TestCase
                     'base_shipping_amount' => 30,
                     'tax_amount' => 1.65,
                     'base_tax_amount' => 1.65,
-                    'invoice' => $this->createInvoiceMock(
+                    'invoice' => static fn (self $testCase) => $testCase->createInvoiceMock(
                         [
                             'tax_amount' => 11.14,
                             'base_tax_amount' => 11.14,
@@ -443,7 +444,7 @@ class TaxTest extends TestCase
                     'base_shipping_amount' => 0,
                     'tax_amount' => 0.82,
                     'base_tax_amount' => 0.82,
-                    'invoice' => $this->createInvoiceMock(
+                    'invoice' => static fn (self $testCase) => $testCasecreateInvoiceMock(
                         [
                             'tax_amount' => 16.09,
                             'base_tax_amount' => 16.09,
@@ -592,7 +593,7 @@ class TaxTest extends TestCase
                     'base_grand_total' => 60.82,
                     'tax_amount' => 0.82,
                     'base_tax_amount' => 0.82,
-                    'invoice' => $this->createInvoiceMock(
+                    'invoice' => static fn (self $testCase) => $testCase->createInvoiceMock(
                         [
                             'tax_amount' => 16.09,
                             'base_tax_amount' => 16.09,

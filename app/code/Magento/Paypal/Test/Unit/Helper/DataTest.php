@@ -225,7 +225,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function getHtmlTransactionIdProvider()
+    public static function getHtmlTransactionIdProvider()
     {
         return [
             ['paypal_express'],
