@@ -251,11 +251,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      */
     private $parentConnections = [];
 
-    /***
-     * const MYSQL_8_4_VERSION
-     */
-    public const MYSQL_8_4_VERSION = '8.4';
-
     /**
      * Constructor
      *
