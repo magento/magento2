@@ -251,6 +251,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      */
     private $parentConnections = [];
 
+    /***
+     * const MYSQL_8_4_VERSION
+     */
+    public const MYSQL_8_4_VERSION = '8.4';
+
     /**
      * Constructor
      *
@@ -3070,6 +3075,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         $this->rawQuery("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0");
         $this->rawQuery("SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO'");
 
+        $version = $this->fetchPairs("SHOW variables LIKE 'version'")['version'] ?? '';
+        if (str_contains($version, '8.4')) {
+            $this->rawQuery("SET @OLD_RESTRICT_FK_ON_NON_STANDARD_KEY=@@RESTRICT_FK_ON_NON_STANDARD_KEY");
+            $this->rawQuery("SET RESTRICT_FK_ON_NON_STANDARD_KEY=0");
+        }
         return $this;
     }
 
@@ -3082,7 +3092,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     {
         $this->rawQuery("SET SQL_MODE=IFNULL(@OLD_SQL_MODE,'')");
         $this->rawQuery("SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS=0, 0, 1)");
-
+        $version = $this->fetchPairs("SHOW variables LIKE 'version'")['version'] ?? '';
+        if (str_contains($version, '8.4')) {
+            $this->rawQuery("SET RESTRICT_FK_ON_NON_STANDARD_KEY=IF(@OLD_RESTRICT_FK_ON_NON_STANDARD_KEY=0, 0, 1)");
+        }
         return $this;
     }
 
