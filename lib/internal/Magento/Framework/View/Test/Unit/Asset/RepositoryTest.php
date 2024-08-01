@@ -246,12 +246,12 @@ class RepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function updateDesignParamsDataProvider()
+    public static function updateDesignParamsDataProvider()
     {
         return [
             [
                 ['area' => 'AREA'],
-                ['area' => 'AREA', 'themeModel' => $this->getThemeMock(), 'module' => false, 'locale' => 'locale']],
+                ['area' => 'AREA', 'themeModel' => self::getThemeMock(), 'module' => false, 'locale' => 'locale']],
             [
                 ['themeId' => 'ThemeID'],
                 [

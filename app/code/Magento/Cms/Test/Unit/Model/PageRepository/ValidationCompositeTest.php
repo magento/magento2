@@ -141,7 +141,11 @@ class ValidationCompositeTest extends TestCase
             [[''], false],
             [['foo'], false],
             [[new \stdClass()], false],
-            [[static fn (self $testCase) => $testCase->getMockForAbstractClass(ValidatorInterface::class), 'foo'], false],
+            [
+                [
+                    static fn (self $testCase) =>
+                    $testCase->getMockForAbstractClass(ValidatorInterface::class), 'foo'], false
+                ],
         ];
     }
 
