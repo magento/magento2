@@ -55,6 +55,11 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     private $isUsingAuroraDb;
 
     /**
+     * @var bool
+     */
+    private $isMariaDB;
+
+    /**
      * {@inheritdoc}
      *
      * @param string $host
@@ -82,10 +87,15 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     public function cleanup()
     {
+        $dbCommand = 'mysql';
+        if($this->isMariaDB()){
+            $dbCommand = 'mariadb';
+        }
         $this->ensureDefaultsExtraFile();
         $this->_shell->execute(
-            'mysql --defaults-file=%s --host=%s --port=%s %s -e %s',
+            '%s --defaults-file=%s --host=%s --port=%s %s -e %s',
             [
+                $dbCommand,
                 $this->_defaultsExtraFile,
                 $this->_host,
                 $this->_port,
@@ -120,8 +130,13 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     public function storeDbDump()
     {
+        $dumpCommand = 'mysqldump';
         $this->ensureDefaultsExtraFile();
         $additionalArguments = [];
+
+        if($this->isMariaDB()){
+            $dumpCommand = 'mariadb-dump';
+        }
 
         if ($this->isMysqlDumpVersion8()) {
             $additionalArguments[] = '--column-statistics=0';
@@ -133,7 +148,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
 
         $format = sprintf(
             '%s %s %s %s',
-            'mysqldump --defaults-file=%s --host=%s --port=%s',
+            '%s --defaults-file=%s --host=%s --port=%s',
             '--no-tablespaces',
             implode(' ', $additionalArguments),
             '%s > %s'
@@ -142,6 +157,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
         $this->_shell->execute(
             $format,
             [
+                $dumpCommand,
                 $this->_defaultsExtraFile,
                 $this->_host,
                 $this->_port,
@@ -162,9 +178,15 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
         if (!$this->isDbDumpExists()) {
             throw new \LogicException("DB dump file does not exist: " . $this->getSetupDbDumpFilename());
         }
+
+        $dbCommand = 'mysql';
+        if($this->isMariaDB()){
+            $dbCommand = 'mariadb';
+        }
+
         $this->_shell->execute(
-            'mysql --defaults-file=%s --host=%s --port=%s %s < %s',
-            [$this->_defaultsExtraFile, $this->_host, $this->_port, $this->_schema, $this->getSetupDbDumpFilename()]
+            '%s --defaults-file=%s --host=%s --port=%s %s < %s',
+            [$dbCommand, $this->_defaultsExtraFile, $this->_host, $this->_port, $this->_schema, $this->getSetupDbDumpFilename()]
         );
     }
 
@@ -240,5 +262,24 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
         }
 
         return $this->isUsingAuroraDb;
+    }
+
+    /**
+     * Check is mariadb.
+     *
+     * @return bool
+     * @throws LocalizedException
+     */
+    private function isMariaDB(): bool
+    {
+        if (!$this->isMariaDB) {
+            $version = $this->_shell->execute(
+                'mariadb-dump --version'
+            );
+
+            $this->isMariaDB = (bool) preg_match('/-MariaDB/i', $version);
+        }
+
+        return $this->isMariaDB;
     }
 }
