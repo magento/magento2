@@ -246,17 +246,28 @@ class Save extends AbstractAction implements HttpPostActionInterface
                 $bookmarkConfig = $bookmark->getConfig();
                 $existingConfig = $bookmarkConfig['views'][$bookmark->getIdentifier()]['data'] ?? null;
                 $currentConfig = $data[self::CURRENT_IDENTIFIER] ?? null;
-                if ($existingConfig && $currentConfig) {
-                    if ($existingConfig['filters'] === $currentConfig['filters']
-                        && $existingConfig['positions'] !== $currentConfig['positions']
-                    ) {
-                        $bookmarkConfig['views'][$bookmark->getIdentifier()]['data'] = $data[self::CURRENT_IDENTIFIER];
-                        $bookmark->setConfig($this->serializer->serialize($bookmarkConfig));
-                        $this->bookmarkRepository->save($bookmark);
-                    }
+                if ($existingConfig && $currentConfig && $this->isPositionChanged($existingConfig, $currentConfig)) {
+                    $bookmarkConfig['views'][$bookmark->getIdentifier()]['data'] = $data[self::CURRENT_IDENTIFIER];
+                    $bookmark->setConfig($this->serializer->serialize($bookmarkConfig));
+                    $this->bookmarkRepository->save($bookmark);
                 }
                 break;
             }
         }
+    }
+
+    /**
+     * Check if the positions for identical filters has changed
+     */
+    private function isPositionChanged(array $existingConfig, array $currentConfig): bool
+    {
+        foreach (['filters', 'positions'] as $key) {
+            if (!array_key_exists($key, $existingConfig) || !array_key_exists($key, $currentConfig)) {
+                return false;
+            }
+        }
+
+        return $existingConfig['filters'] === $currentConfig['filters']
+            && $existingConfig['positions'] !== $currentConfig['positions'];
     }
 }
