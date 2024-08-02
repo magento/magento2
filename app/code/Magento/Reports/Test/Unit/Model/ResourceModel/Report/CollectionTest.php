@@ -141,7 +141,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function intervalsDataProvider()
+    public static function intervalsDataProvider()
     {
         return [
             [

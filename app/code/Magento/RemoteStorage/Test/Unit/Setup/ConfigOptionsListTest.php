@@ -224,7 +224,7 @@ class ConfigOptionsListTest extends TestCase
     /**
      * @return array
      */
-    public function createConfigProvider()
+    public static function createConfigProvider()
     {
         return [
             'Remote Storage Options Missing and Remote Storage Deployment Config Present' => [

@@ -335,7 +335,7 @@ class WeeeTaxTest extends TestCase
      *
      * @return array
      */
-    public function collectDataProvider()
+    public static function collectDataProvider()
     {
         // 1. When the Weee is not taxable, this collector does not change the item, but it will update the address
         //    data based on the weee totals accumulated in the previous 'weee' collector

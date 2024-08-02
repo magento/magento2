@@ -158,7 +158,7 @@ class AddCommentTest extends TestCase
     /**
      * @return array
      */
-    public function executeWillNotifyCustomerDataProvider()
+    public static function executeWillNotifyCustomerDataProvider()
     {
         return [
             'User Has Access - Notify True' => [

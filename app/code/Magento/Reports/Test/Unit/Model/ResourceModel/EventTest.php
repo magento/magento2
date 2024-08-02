@@ -231,7 +231,7 @@ class EventTest extends TestCase
     /**
      * @return array
      */
-    public function getApplyLogToCollectionDataProvider(): array
+    public static function getApplyLogToCollectionDataProvider(): array
     {
         return [
             ['storeId' => 1, 'storeIdSelect' => [1]],

@@ -135,7 +135,7 @@ class TaxTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function collectDataProvider()
+    public static function collectDataProvider()
     {
         $result = [];
         // 3 item_1, 3 item_2, $99 each, 8.19 tax rate
