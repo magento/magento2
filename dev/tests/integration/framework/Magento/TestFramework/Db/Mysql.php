@@ -272,14 +272,17 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     private function isMariaDB(): bool
     {
-        if (!$this->isMariaDB) {
-            $version = $this->_shell->execute(
-                'mariadb-dump --version'
-            );
+        try {
+            if (!$this->isMariaDB) {
+                $version = $this->_shell->execute(
+                    'mariadb-dump --version'
+                );
 
-            $this->isMariaDB = (bool) preg_match('/-MariaDB/i', $version);
+                $this->isMariaDB = (bool) preg_match('/-MariaDB/i', $version);
+            }
+        } catch (LocalizedException $e) {
+            $this->isMariaDB = false;
         }
-
         return $this->isMariaDB;
     }
 }
