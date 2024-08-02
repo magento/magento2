@@ -23,8 +23,6 @@ class SqlVersionProvider
 
     public const MYSQL_5_7_VERSION = '5.7.';
 
-    public const MARIA_DB_10_VERSION = '10.';
-
     public const MARIA_DB_10_4_VERSION = '10.4.';
 
     public const MARIA_DB_10_6_VERSION = '10.6.';
@@ -153,23 +151,24 @@ class SqlVersionProvider
      * @return string
      * @throws ConnectionException
      */
-    public function getMariaDbVersion(): string
+    public function getMariaDbSuffixKey(): string
     {
         $sqlVersion = $this->getSqlVersion();
+        $defaultSuffixKey = SqlVersionProvider::MARIA_DB_10_6_11_VERSION;
         $isMariaDB104 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_4_VERSION);
         $isMariaDB106 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_6_VERSION);
         $isMariaDB114 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_11_4_VERSION);
         $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
         if (version_compare($sqlExactVersion, '10.4.27', '>=')) {
             if($isMariaDB104){
-                return SqlVersionProvider::MARIA_DB_10_4_VERSION;
+                return SqlVersionProvider::MARIA_DB_10_4_27_VERSION;
             } elseif ($isMariaDB106){
-                return SqlVersionProvider::MARIA_DB_10_6_VERSION;
+                return SqlVersionProvider::MARIA_DB_10_6_11_VERSION;
             } elseif ($isMariaDB114){
-                return SqlVersionProvider::MARIA_DB_11_4_VERSION;
+                return SqlVersionProvider::MARIA_DB_10_6_11_VERSION;
             }
         }
-        return '';
+        return $defaultSuffixKey;
     }
 
     /**
