@@ -53,6 +53,7 @@ type CustomerOrders @doc(description: "The collection of orders that match the c
     items: [CustomerOrder]! @doc(description: "An array of customer orders.")
     page_info: SearchResultPageInfo @doc(description: "Contains pagination metadata.")
     total_count: Int @doc(description: "The total count of customer orders.")
+    date_of_first_order: String @doc(description: "Date of the first order placed in the store") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\DateOfFirstOrderResolver")
 }
 
 type CustomerOrder @doc(description: "Contains details about each of the customer's orders.") {
