@@ -95,7 +95,6 @@ class Stock extends \Magento\Framework\Model\AbstractModel
     /**
      * Method for deleting customer's stock alert from website.
      *
-     *
      * @param int $customerId
      * @param int $websiteId
      * @return $this
