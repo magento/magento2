@@ -628,7 +628,7 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         if ($frameWidth !== null && $frameWidth <= 0 ||
             $frameHeight !== null && $frameHeight <= 0 ||
-            ($frameWidth === '' && $frameHeight === '')
+            ($frameWidth === null && $frameHeight === null)
         ) {
             //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \InvalidArgumentException('Invalid image dimensions.');
