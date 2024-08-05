@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyAuthenticationPopupStillShowsProperlyWhenGuestUserTriesToGoToTheCheckoutButGuestCheckoutIsDisabledTest" extends="StorefrontModalWindowForSignInIsShownIfGuestCheckoutIsDisabledTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Verify authentication popup if Guest checkout is disabled. "/>
+            <title value="Verify authentication popup still shows properly when guest user tries to go to the checkout but guest checkout is disabled"/>
+            <description value="Verify authentication popup still shows properly when guest user tries to go to the checkout when guest checkout is disabled and do checkout with sign in as created customer"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-5588"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="createCategory"/>
+            <remove keyForRemoval="createProduct"/>
+            <remove keyForRemoval="storeConfigurationAllowGuestCheckoutNo"/>
+            <!--Create simple product-->
+            <createData entity="SimpleProduct" stepKey="createProduct"/>
+            <!--Flush cache and Reindex-->
+            <actionGroup ref="CliIndexerReindexActionGroup" after="createCustomer" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" after="reindex" stepKey="flushCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <remove keyForRemoval="deleteCategory"/>
+        </after>
+        <remove keyForRemoval="shippingStepIsOpened"/>
+        <waitForText userInput="Checkout using your account" selector="{{StorefrontCustomerSignInPopupFormSection.authenticationPopUp}}" after="guestGoToCheckoutFromMiniCart" stepKey="assertAuthenticationMessage"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForSuccessMessage"/>
+    </test>
+</tests>
