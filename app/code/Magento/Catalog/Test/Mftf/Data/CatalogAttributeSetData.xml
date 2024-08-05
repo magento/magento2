@@ -13,4 +13,9 @@
         <data key="attributeGroupId">7</data>
         <data key="skeletonId">4</data>
     </entity>
+    <entity name="CatalogAdditionalAttributeSet" type="CatalogAttributeSet">
+        <data key="attribute_set_name" unique="suffix">additional_set_</data>
+        <data key="attributeGroupId">7</data>
+        <data key="skeletonId">4</data>
+    </entity>
 </entities>
