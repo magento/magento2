@@ -74,6 +74,7 @@ define([
             let bundleSelections = registry.get(this.name + '.' + index + '.' + this.bundleSelectionsName);
 
             bundleSelections.destroyChildren();
+            bundleSelections._elems.clear();
         },
 
         /**
