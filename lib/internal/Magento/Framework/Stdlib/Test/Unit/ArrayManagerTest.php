@@ -269,7 +269,7 @@ class ArrayManagerTest extends TestCase
     /**
      * @return array
      */
-    public function mergeDataProvider()
+    public static function mergeDataProvider()
     {
         return [
             0 => [

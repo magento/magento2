@@ -105,7 +105,7 @@ class RequestTest extends TestCase
     /**
      * @return array
      */
-    public function hostsDataProvider()
+    public static function hostsDataProvider()
     {
         return  [
             'hostWithoutPort' => [

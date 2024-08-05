@@ -538,7 +538,7 @@ class ServiceInputProcessorTest extends TestCase
      *
      * @return array
      */
-    public function customAttributesDataProvider()
+    public  function customAttributesDataProvider()
     {
         return [
             'customAttributeInteger' => [
@@ -675,7 +675,7 @@ class ServiceInputProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function invalidCustomAttributesDataProvider()
+    public static function invalidCustomAttributesDataProvider()
     {
         return [
             [
@@ -715,7 +715,7 @@ class ServiceInputProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function payloadDataProvider(): array
+    public static function payloadDataProvider(): array
     {
         return [
             [
