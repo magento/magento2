@@ -13,6 +13,7 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use PHPUnit\Framework\Constraint\LogicalOr;
 
 /**
  * @magentoDataFixture Magento/Sales/_files/order.php
@@ -101,8 +102,7 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
         foreach ($this->getResponse()->getHeaders() as $header) {
             $headerConstraints[] = new \PHPUnit\Framework\Constraint\IsEqual($header->getFieldName());
         }
-        $constraint = new \PHPUnit\Framework\Constraint\LogicalOr();
-        $constraint->setConstraints($headerConstraints);
+        $constraint = LogicalOr::fromConstraints(...$headerConstraints);
         $this->assertThat('P3P', $constraint);
     }
 

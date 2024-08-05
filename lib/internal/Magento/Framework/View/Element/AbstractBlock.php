@@ -958,7 +958,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     {
         $params = ['allowableTags' => $allowableTags, 'escape' => $allowHtmlEntities];
 
-        return $data ? $this->filterManager->stripTags($data, $params) : '';
+        return $data ? $this->filterManager->stripTags($data, $params) : $data;
     }
 
     /**

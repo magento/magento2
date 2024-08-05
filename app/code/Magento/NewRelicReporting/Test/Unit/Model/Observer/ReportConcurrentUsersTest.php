@@ -76,11 +76,11 @@ class ReportConcurrentUsersTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled'])
+            ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isLoggedIn', 'getCustomerId'])
+            ->onlyMethods(['isLoggedIn', 'getCustomerId'])
             ->getMock();
         $this->customerRepository = $this->getMockBuilder(CustomerRepositoryInterface::class)
             ->getMock();
@@ -88,7 +88,7 @@ class ReportConcurrentUsersTest extends TestCase
             ->getMock();
         $this->usersFactory = $this->getMockBuilder(UsersFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->usersModel = $this->getMockBuilder(Users::class)
             ->disableOriginalConstructor()

@@ -134,8 +134,15 @@ class ProductIdLocatorTest extends TestCase
 
         $this->collection->expects($this->atLeastOnce())
             ->method('addFieldToFilter')
-            ->withConsecutive([ProductInterface::SKU, ['in' => $skus]], [ProductInterface::SKU, ['in' => ['1']]])
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($skus) {
+                    if ($arg1 == ProductInterface::SKU && $arg2 == ['in' => $skus]) {
+                        return null;
+                    } elseif ($arg1 == ProductInterface::SKU && $arg2 == ['in' => ['1']]) {
+                        return null;
+                    }
+                }
+            );
         $this->collection->expects($this->atLeastOnce())
             ->method('getItems')
             ->willReturnOnConsecutiveCalls($products, []);

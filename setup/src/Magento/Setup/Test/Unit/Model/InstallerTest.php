@@ -43,6 +43,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Framework\Setup\Patch\PatchApplierFactory;
     use Magento\Framework\Setup\SampleData\State;
     use Magento\Framework\Setup\SchemaListener;
+    use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
     use Magento\Framework\Validation\ValidationException;
     use Magento\Indexer\Model\Indexer\Collection;
     use Magento\RemoteStorage\Driver\DriverException;
@@ -76,7 +77,7 @@ namespace Magento\Setup\Test\Unit\Model {
         /**
          * @var array
          */
-        private $request = [
+        private static $request = [
             ConfigOptionsListConstants::INPUT_KEY_DB_HOST => '127.0.0.1',
             ConfigOptionsListConstants::INPUT_KEY_DB_NAME => 'magento',
             ConfigOptionsListConstants::INPUT_KEY_DB_USER => 'magento',
@@ -245,6 +246,14 @@ namespace Magento\Setup\Test\Unit\Model {
          */
         protected function setUp(): void
         {
+            $objectManagerHelper = new ObjectManager($this);
+            $objects = [
+                [
+                    DeploymentConfig::class,
+                    $this->createMock(DeploymentConfig::class)
+                ]
+            ];
+            $objectManagerHelper->prepareObjectManager($objects);
             $this->filePermissions = $this->createMock(FilePermissions::class);
             $this->configWriter = $this->createMock(Writer::class);
             $this->configReader = $this->createMock(Reader::class);
@@ -477,27 +486,27 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->indexerRegistryMock->expects($this->exactly(2))->method('get')->willReturn(
                 $this->indexerInterfaceMock
             );
-            call_user_func_array(
-                [
-                    $this->logger->expects($this->exactly(count($logMessages)))->method('log'),
-                    'withConsecutive'
-                ],
-                $logMessages
-            );
-            call_user_func_array(
-                [
-                    $this->logger->expects($this->exactly(count($logMetaMessages)))->method('logMeta'),
-                    'withConsecutive'
-                ],
-                $logMetaMessages
-            );
+            $this->logger->expects($this->exactly(count($logMessages)))->method('log')
+                ->willReturnCallback(function ($arg) use ($logMessages) {
+                    if ($arg == $logMessages) {
+                        return null;
+                    }
+                });
+            $this->logger->expects($this->exactly(count($logMetaMessages)))->method('logMeta')
+                ->willReturnCallback(function ($arg) use ($logMetaMessages) {
+                    if ($arg == $logMetaMessages) {
+                        return null;
+                    }
+                });
             $this->logger->expects($this->exactly(3))
                 ->method('logSuccess')
-                ->withConsecutive(
-                    ['Cache cleared successfully'],
-                    ['Magento installation complete.'],
-                    ['Magento Admin URI: /']
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Cache cleared successfully'
+                        || $arg == 'Magento installation complete.'
+                        || $arg == 'Magento Admin URI: /') {
+                        return null;
+                    }
+                });
 
             $this->object->install($request);
         }
@@ -506,11 +515,11 @@ namespace Magento\Setup\Test\Unit\Model {
          * @return array
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-        public function installDataProvider()
+        public static function installDataProvider()
         {
             return [
                 [
-                    'request' => $this->request,
+                    'request' => self::$request,
                     'logMessages' => [
                         ['File permissions check...'],
                         ['Required extensions check...'],
@@ -811,27 +820,27 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->filePermissions->expects($this->once())
                 ->method('getMissingWritableDirectoriesForDbUpgrade')
                 ->willReturn([]);
-            call_user_func_array(
-                [
-                    $this->logger->expects($this->exactly(count($logMessages)))->method('log'),
-                    'withConsecutive'
-                ],
-                $logMessages
-            );
-            call_user_func_array(
-                [
-                    $this->logger->expects($this->exactly(count($logMetaMessages)))->method('logMeta'),
-                    'withConsecutive'
-                ],
-                $logMetaMessages
-            );
+            $this->logger->expects($this->exactly(count($logMessages)))->method('log')
+                ->willReturnCallback(function ($arg) use ($logMessages) {
+                    if ($arg == $logMessages) {
+                        return null;
+                    }
+                });
+            $this->logger->expects($this->exactly(count($logMetaMessages)))->method('logMeta')
+                ->willReturnCallback(function ($arg) use ($logMetaMessages) {
+                    if ($arg == $logMetaMessages) {
+                        return null;
+                    }
+                });
             $this->logger->expects($this->exactly(3))
                 ->method('logSuccess')
-                ->withConsecutive(
-                    ['Cache cleared successfully'],
-                    ['Magento installation complete.'],
-                    ['Magento Admin URI: /']
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Cache cleared successfully'
+                        || $arg == 'Magento installation complete.'
+                        || $arg == 'Magento Admin URI: /') {
+                        return null;
+                    }
+                });
 
             $this->object->install($request);
         }
@@ -840,7 +849,7 @@ namespace Magento\Setup\Test\Unit\Model {
          * @return array
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-        public function installWithOrderIncrementPrefixDataProvider(): array
+        public static function installWithOrderIncrementPrefixDataProvider(): array
         {
             return [
                 [
@@ -931,7 +940,7 @@ namespace Magento\Setup\Test\Unit\Model {
          */
         public function testInstallWithInvalidRemoteStorageConfiguration(bool $isDeploymentConfigWritable)
         {
-            $request = $this->request;
+            $request = self::$request;
 
             $logMessages = [
                 ['File permissions check...'],
@@ -1041,7 +1050,11 @@ namespace Magento\Setup\Test\Unit\Model {
             if ($isDeploymentConfigWritable) { // assert remote storage reversion is attempted
                 $this->configWriter
                     ->method('saveConfig')
-                    ->withConsecutive([], [], $remoteStorageReversionArguments);
+                    ->willReturnCallback(function ($arg) use ($remoteStorageReversionArguments) {
+                        if (empty($arg) || $arg == $remoteStorageReversionArguments) {
+                            return null;
+                        }
+                    });
             } else { // assert remote storage reversion is never attempted
                 $this->configWriter
                     ->expects(static::any())
@@ -1095,20 +1108,19 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('getMissingWritablePathsForInstallation')
                 ->willReturn([]);
 
-            call_user_func_array(
-                [
-                    $this->logger->expects(static::exactly(count($logMessages)))->method('log'),
-                    'withConsecutive'
-                ],
-                $logMessages
-            );
-            call_user_func_array(
-                [
-                    $this->logger->expects(static::exactly(count($logMetaMessages)))->method('logMeta'),
-                    'withConsecutive'
-                ],
-                $logMetaMessages
-            );
+            $this->logger->expects($this->exactly(count($logMessages)))->method('log')
+                ->willReturnCallback(function ($arg) use ($logMessages) {
+                    if ($arg == $logMessages) {
+                        return null;
+                    }
+                });
+
+            $this->logger->expects($this->exactly(count($logMetaMessages)))->method('logMeta')
+                ->willReturnCallback(function ($arg) use ($logMetaMessages) {
+                    if ($arg == $logMetaMessages) {
+                        return null;
+                    }
+                });
 
             $this->logger->expects(static::never())->method('logSuccess');
 
@@ -1118,7 +1130,7 @@ namespace Magento\Setup\Test\Unit\Model {
         /**
          * @return array
          */
-        public function installWithInvalidRemoteStorageConfigurationDataProvider()
+        public static function installWithInvalidRemoteStorageConfigurationDataProvider()
         {
             return [
                 [true],
@@ -1137,7 +1149,7 @@ namespace Magento\Setup\Test\Unit\Model {
          */
         public function testInstallWithUnresolvableRemoteStorageValidator()
         {
-            $request = $this->request;
+            $request = self::$request;
 
             // every log message call is expected
             $logMessages = $this->installDataProvider()[0]['logMessages'];
@@ -1267,6 +1279,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $withArgs = $willReturnArgs = [];
 
             foreach ($objectManagerReturnMapSequence as $map) {
+
                 list($getArgument, $mockedObject) = $map;
 
                 $withArgs[] = [$getArgument];
@@ -1277,10 +1290,21 @@ namespace Magento\Setup\Test\Unit\Model {
                     $willReturnArgs[] = $mockedObject;
                 }
             }
+
             $this->objectManager
                 ->method('get')
-                ->withConsecutive(...$withArgs)
-                ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+                ->willReturnCallback(function ($withArgs) use ($willReturnArgs) {
+                    if (!empty($withArgs)) {
+                        static $callCount = 0;
+                        $returnValue = $willReturnArgs[$callCount] ?? null;
+                        $callCount++;
+                        if ($withArgs == RemoteStorageValidator::class) {
+                            throw new
+                            ReflectionException('Class ' . RemoteStorageValidator::class . ' does not exist');
+                        }
+                        return $returnValue;
+                    }
+                });
 
             $this->indexerMock->expects($this->once())->method('getAllIds')->willReturn(
                 [
@@ -1304,27 +1328,28 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->filePermissions->expects(static::once())
                 ->method('getMissingWritableDirectoriesForDbUpgrade')
                 ->willReturn([]);
-            call_user_func_array(
-                [
-                    $this->logger->expects(static::exactly(count($logMessages)))->method('log'),
-                    'withConsecutive'
-                ],
-                $logMessages
-            );
-            call_user_func_array(
-                [
-                    $this->logger->expects(static::exactly(count($logMetaMessages)))->method('logMeta'),
-                    'withConsecutive'
-                ],
-                $logMetaMessages
-            );
-            $this->logger->expects(static::exactly(3))
+            $this->logger->expects($this->exactly(count($logMessages)))->method('log')
+                ->willReturnCallback(function ($arg) use ($logMessages) {
+                    if ($arg == $logMessages) {
+                        return null;
+                    }
+                });
+            $this->logger->expects($this->exactly(count($logMetaMessages)))->method('logMeta')
+                ->willReturnCallback(function ($arg) use ($logMetaMessages) {
+                    if ($arg == $logMetaMessages) {
+                        return null;
+                    }
+                });
+
+            $this->logger->expects($this->exactly(3))
                 ->method('logSuccess')
-                ->withConsecutive(
-                    ['Cache cleared successfully'],
-                    ['Magento installation complete.'],
-                    ['Magento Admin URI: /']
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Cache cleared successfully'
+                        || $arg == 'Magento installation complete.'
+                        || $arg == 'Magento Admin URI: /') {
+                        return null;
+                    }
+                });
 
             $this->object->install($request);
         }
@@ -1341,7 +1366,7 @@ namespace Magento\Setup\Test\Unit\Model {
          */
         public function testInstallWithInvalidRemoteStorageConfigurationWithEarlyException(\Exception $exception)
         {
-            $request = $this->request;
+            $request = self::$request;
 
             $logMessages = [
                 ['File permissions check...'],
@@ -1431,7 +1456,12 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $this->configWriter
                 ->method('saveConfig')
-                ->withConsecutive([], [], $remoteStorageReversionArguments);
+                ->willReturnCallback(function ($arg) use ($remoteStorageReversionArguments) {
+                    if (empty($arg) || $arg == $remoteStorageReversionArguments
+                    ) {
+                        return null;
+                    }
+                });
 
             $this->setupFactory->expects(static::once())->method('create')->with($resource)->willReturn($setup);
 
@@ -1454,27 +1484,26 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('getMissingWritablePathsForInstallation')
                 ->willReturn([]);
 
-            call_user_func_array(
-                [
-                    $this->logger->expects(static::exactly(count($logMessages)))->method('log'),
-                    'withConsecutive'
-                ],
-                $logMessages
-            );
-            call_user_func_array(
-                [
-                    $this->logger->expects(static::exactly(count($logMetaMessages)))->method('logMeta'),
-                    'withConsecutive'
-                ],
-                $logMetaMessages
-            );
+            $this->logger->expects($this->exactly(count($logMessages)))->method('log')
+                ->willReturnCallback(function ($arg) use ($logMessages) {
+                    if ($arg == $logMessages) {
+                        return null;
+                    }
+                });
+
+            $this->logger->expects($this->exactly(count($logMetaMessages)))->method('logMeta')
+                ->willReturnCallback(function ($arg) use ($logMetaMessages) {
+                    if ($arg == $logMetaMessages) {
+                        return null;
+                    }
+                });
 
             $this->logger->expects(static::never())->method('logSuccess');
 
             $this->object->install($request);
         }
 
-        public function installWithInvalidRemoteStorageConfigurationWithEarlyExceptionDataProvider()
+        public static function installWithInvalidRemoteStorageConfigurationWithEarlyExceptionDataProvider()
         {
             return [
                 [new RuntimeException(__('Remote driver is not available.'))],
@@ -1545,7 +1574,7 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('create')
                 ->willReturn($dataSetup);
 
-            $this->object->installDataFixtures($this->request);
+            $this->object->installDataFixtures(self::$request);
         }
 
         public function testCheckInstallationFilePermissions()
@@ -1612,21 +1641,29 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $this->logger
                 ->method('log')
-                ->withConsecutive(
-                    ['The directory \'/generation\' doesn\'t exist - skipping cleanup'],
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'The directory \'/generation\' doesn\'t exist - skipping cleanup') {
+                        return null;
+                    }
+                });
             $this->logger
                 ->method('logMeta')
-                ->withConsecutive(
-                    ['File system cleanup:'],
-                    ['Updating modules:']
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'File system cleanup:' ||
+                        $arg == 'Updating modules:'
+                    ) {
+                        return null;
+                    }
+                });
             $this->logger
                 ->method('logSuccess')
-                ->withConsecutive(
-                    ['Cache types config flushed successfully'],
-                    ['Cache cleared successfully'],
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Cache types config flushed successfully' ||
+                        $arg == 'Cache cleared successfully'
+                    ) {
+                        return null;
+                    }
+                });
 
             $installer->updateModulesSequence(false);
         }
@@ -1638,15 +1675,20 @@ namespace Magento\Setup\Test\Unit\Model {
             $installer = $this->prepareForUpdateModulesTests();
             $this->logger
                 ->method('logSuccess')
-                ->withConsecutive(
-                    ['Cache types config flushed successfully'],
-                    ['Cache cleared successfully'],
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Cache types config flushed successfully' ||
+                        $arg == 'Cache cleared successfully'
+                    ) {
+                        return null;
+                    }
+                });
             $this->logger
                 ->method('logMeta')
-                ->withConsecutive(
-                    ['Updating modules:']
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Updating modules:') {
+                        return null;
+                    }
+                });
 
             $installer->updateModulesSequence(true);
         }
@@ -1702,25 +1744,34 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $this->logger
                 ->method('log')
-                ->withConsecutive(
-                    ['No database connection defined - skipping database cleanup'],
-                    ["The directory '/var' doesn't exist - skipping cleanup"],
-                    ["The directory '/static' doesn't exist - skipping cleanup"],
-                    ["The file '/config/ConfigOne.php' doesn't exist - skipping cleanup"],
-                    ["The file '/config/ConfigTwo.php' doesn't exist - skipping cleanup"]
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'No database connection defined - skipping database cleanup' ||
+                        $arg == "The directory '/var' doesn't exist - skipping cleanup" ||
+                        $arg == "The directory '/static' doesn't exist - skipping cleanup" ||
+                        $arg == "The file '/config/ConfigOne.php' doesn't exist - skipping cleanup" ||
+                        $arg == "The file '/config/ConfigTwo.php' doesn't exist - skipping cleanup"
+                    ) {
+                        return null;
+                    }
+                });
             $this->logger
                 ->method('logMeta')
-                ->withConsecutive(
-                    ['Starting Magento uninstallation:'],
-                    ['File system cleanup:'],
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Starting Magento uninstallation:' ||
+                        $arg == 'File system cleanup:'
+                    ) {
+                        return null;
+                    }
+                });
             $this->logger
                 ->method('logSuccess')
-                ->withConsecutive(
-                    ['Cache cleared successfully'],
-                    ['Magento uninstallation complete.'],
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Cache cleared successfully' ||
+                        $arg == 'Magento uninstallation complete.'
+                    ) {
+                        return null;
+                    }
+                });
 
             $this->object->uninstall();
         }
@@ -1741,10 +1792,13 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $this->connection
                 ->method('query')
-                ->withConsecutive(
-                    ['DROP DATABASE IF EXISTS `magento`'],
-                    ['CREATE DATABASE IF NOT EXISTS `magento`']
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'DROP DATABASE IF EXISTS `magento`' ||
+                        $arg == 'CREATE DATABASE IF NOT EXISTS `magento`'
+                    ) {
+                        return null;
+                    }
+                });
 
             $this->logger->expects($this->once())->method('log')->with('Cleaning up database `magento`');
             $this->object->cleanupDb();

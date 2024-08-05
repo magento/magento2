@@ -847,9 +847,14 @@ class AccountManagement implements AccountManagementInterface
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
+        $customerEmail = $customer->getEmail();
+        if ($customerEmail === null) {
+            throw new LocalizedException(
+                __("The email address is required to create a customer account.")
+            );
+        }
         if ($password !== null) {
             $this->checkPasswordStrength($password);
-            $customerEmail = $customer->getEmail();
             try {
                 $this->credentialsValidator->checkPasswordDifferentFromEmail($customerEmail, $password);
             } catch (InputException $e) {
