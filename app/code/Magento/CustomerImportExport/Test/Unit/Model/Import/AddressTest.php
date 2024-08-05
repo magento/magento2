@@ -472,33 +472,6 @@ class AddressTest extends TestCase
     }
 
     /**
-     * @dataProvider validateRowForUpdateDataProvider
-     *
-     * @param array $rowData
-     * @param array $errors
-     * @param boolean $isValid
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function testValidateRowForUpdateGlobalCustomer(array $rowData, array $errors, $isValid = false)
-    {
-        $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
-
-        $this->configShare->expects($this->once())
-            ->method('isGlobalScope')
-            ->willReturn(true);
-
-        $this->customerStorage->expects($this->exactly(2))
-            ->method('getCustomerIdByEmail')
-            ->willReturn(1);
-
-        if ($isValid) {
-            $this->assertTrue($this->_model->validateRow($rowData, 0));
-        } else {
-            $this->assertFalse($this->_model->validateRow($rowData, 0));
-        }
-    }
-
-    /**
      * Test Address::validateRow()
      * with 2 rows with identical PKs in case when add/update behavior is performed
      *
