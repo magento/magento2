@@ -14,17 +14,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\PageCache;
+namespace Magento\GraphQl\GraphQl;
 
-use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\TestFramework\Fixture\Config;
 use Magento\Framework\App\PageCache\Version;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test absence/presence of private_content_version cookie in GraphQl POST HTTP responses
  */
-class DisableSessionTest extends GraphQlAbstract
+class DisableSessionSetCookieTest extends GraphQlAbstract
 {
+    private const PHPSESSID_COOKIE_NAME = 'PHPSESSID';
+
     #[
         Config('graphql/session/disable', '1')
     ]
@@ -33,10 +35,14 @@ class DisableSessionTest extends GraphQlAbstract
         $result = $this->graphQlMutationWithResponseHeaders($this->getMutation());
         $this->assertArrayHasKey('headers', $result);
         if (!empty($result['headers']['Set-Cookie'])) {
-            $this->assertStringNotContainsString(
-                Version::COOKIE_NAME,
-                $result['headers']['Set-Cookie'],
-                Version::COOKIE_NAME . ' should not be present in Set-Cookie header'
+            $this->assertFalse(
+                $this->isCookieSet($result['headers']['Set-Cookie'], self::PHPSESSID_COOKIE_NAME),
+                self::PHPSESSID_COOKIE_NAME . ' should not be present in HTTP response'
+            );
+
+            $this->assertFalse(
+                $this->isCookieSet($result['headers']['Set-Cookie'], Version::COOKIE_NAME),
+                Version::COOKIE_NAME . ' should not be present in HTTP response'
             );
         }
     }
@@ -49,11 +55,30 @@ class DisableSessionTest extends GraphQlAbstract
         $result = $this->graphQlMutationWithResponseHeaders($this->getMutation());
         $this->assertArrayHasKey('headers', $result);
         $this->assertArrayHasKey('Set-Cookie', $result['headers'], 'Set-Cookie HTTP response header should be present');
-        $this->assertStringContainsString(
-            Version::COOKIE_NAME,
-            $result['headers']['Set-Cookie'],
-            Version::COOKIE_NAME . ' should be set by the server'
+
+        $this->assertTrue(
+            $this->isCookieSet($result['headers']['Set-Cookie'], self::PHPSESSID_COOKIE_NAME),
+            self::PHPSESSID_COOKIE_NAME . ' should be present in HTTP response'
         );
+
+        $this->assertTrue(
+            $this->isCookieSet($result['headers']['Set-Cookie'], Version::COOKIE_NAME),
+            Version::COOKIE_NAME . ' should be present in HTTP response'
+        );
+    }
+
+    /**
+     * Checks if $cookieName was set by server in any of Set-Cookie header(s)
+     *
+     * @param array $setCookieHeader
+     * @param string $cookieName
+     * @return bool
+     */
+    private function isCookieSet(array $setCookieHeader, string $cookieName): bool
+    {
+        return count(array_filter($setCookieHeader, function ($cookie) use ($cookieName) {
+            return str_starts_with($cookie, $cookieName . '=');
+        })) > 0;
     }
 
     /**

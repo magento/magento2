@@ -27,17 +27,17 @@ class TestPreparedSubscriber implements PreparedSubscriber
         $methodName = $event->test()->methodName();
 
         $objectManager = Bootstrap::getObjectManager();
-        $assetRepo = $objectManager->create($className, ['name' => $methodName]);
+        $testObj = $objectManager->create($className, ['name' => $methodName]);
 
         $testData = $event->test()->testData();
         if ($testData->hasDataFromDataProvider()) {
             $dataSetName = $testData->dataFromDataProvider()->dataSetName();
-            $assetRepo->setData($dataSetName, ['']);
+            $testObj->setData($dataSetName, ['']);
         }
 
-        $skipConfig = Config::getInstance()->getSkipConfiguration($assetRepo);
+        $skipConfig = Config::getInstance()->getSkipConfiguration($testObj);
         if ($skipConfig['skip']) {
-            $assetRepo->markTestSkipped($skipConfig['skipMessage']);
+            $testObj->markTestSkipped($skipConfig['skipMessage']);
         }
         Magento::setTestPrepared(true);
     }
