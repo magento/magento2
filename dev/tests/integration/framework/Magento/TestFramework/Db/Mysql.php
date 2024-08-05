@@ -19,6 +19,11 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     const DEFAULT_PORT = 3306;
 
     /**
+     * MariaDB minimum version.
+     */
+    const MARIADB_MIN_VERSION = '11.4.';
+
+    /**
      * Name of configuration file.
      */
     const DEFAULTS_EXTRA_FILE_NAME = 'defaults_extra.cnf';
@@ -279,6 +284,15 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
                 );
 
                 $this->isMariaDB = (bool) preg_match('/-MariaDB/i', $version);
+
+                if($this->isMariaDB){
+                    $pattern = "/\s*((?:[0-9]+\.?)+)/i";
+                    preg_match($pattern, $version,$matches);
+                    $currentVersion = $matches[1];
+                    if (!version_compare($currentVersion, self::MARIADB_MIN_VERSION, '>=')) {
+                        $this->isMariaDB = false;
+                    }
+                }
             }
         } catch (LocalizedException $e) {
             $this->isMariaDB = false;
