@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-5157"/>
             <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
         </annotations>
         <remove keyForRemoval="checkGrandTotal"/>
         <remove keyForRemoval="clickOnCommentsHistory"/>
