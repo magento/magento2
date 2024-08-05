@@ -163,7 +163,7 @@ class Validate extends ImportResultController implements HttpPostActionInterface
      */
     private function addMessageForValidResult(Result $resultBlock, $totalError, $totalRows)
     {
-        if ($this->getImport()->isImportAllowed() && $totalRows > $totalError) {
+        if ($this->getImport()->isImportAllowed() && $totalRows >= $totalError) {
             $resultBlock->addSuccess(__('File is valid! To start import process press "Import" button'), true);
         } else {
             $resultBlock->addError(__('The file is valid, but we can\'t import it for some reason.'));
