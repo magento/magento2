@@ -217,7 +217,7 @@ class GatewayTest extends TestCase
     /**
      * @return array[]
      */
-    public function requestBodyDataProvider(): array
+    public static function requestBodyDataProvider(): array
     {
         return [
             [

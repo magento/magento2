@@ -149,7 +149,7 @@ class StateTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function stateCheckDataProvider()
+    public static function stateCheckDataProvider()
     {
         return [
             'processing - partiallyRefundedOrderShipped = true, hasPendingShipmentItems = true -> processing' => [

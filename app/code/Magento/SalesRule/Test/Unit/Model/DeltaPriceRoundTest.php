@@ -64,7 +64,7 @@ class DeltaPriceRoundTest extends TestCase
     /**
      * @return array
      */
-    public function roundDataProvider(): array
+    public static function roundDataProvider(): array
     {
         return [
             [

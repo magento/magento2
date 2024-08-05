@@ -121,7 +121,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderBoolValues()
+    public static function dataProviderBoolValues()
     {
         return [[true], [false]];
     }
@@ -223,7 +223,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderNumberValueWithScope()
+    public static function dataProviderNumberValueWithScope()
     {
         return [
             [5, Area::AREA_ADMINHTML],

@@ -133,7 +133,7 @@ class PathConfigTest extends TestCase
     /**
      * @return array
      */
-    public function urlSchemeProvider()
+    public static function urlSchemeProvider()
     {
         return [
             ['https://base.url', true],

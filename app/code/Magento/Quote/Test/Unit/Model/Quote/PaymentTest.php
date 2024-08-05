@@ -226,7 +226,7 @@ class PaymentTest extends TestCase
     /**
      * @return array
      */
-    public function importDataPositiveCheckDataProvider()
+    public static function importDataPositiveCheckDataProvider()
     {
         return [
             [
