@@ -20,6 +20,7 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
     let useMassAction = {$isUseMassAction};
     let isAnchorOnly = {$isAnchorOnly};
     let checkedNodes = [];
+    let loadedNodes = [];
 
     function addLastNodeProperty(nodes) {
         return nodes.map(node => {
@@ -95,58 +96,61 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
         }
     }
 
-    function addLastNodeFlag(treeData) {
-        if (treeData.children) {
-            treeData.children.forEach(child => addLastNodeFlag(child));
-        } else {
-            treeData.lastNode = true;
-        }
+    function handleSuccessResponse(items, parentNode, data) {
+        items.forEach(function (item) {
+            doCreateNode(item, parentNode, data);
+        })
     }
 
-    function handleSuccessResponse(response, childNode, data) {
-        if (response.length > 0) {
-            response.forEach(newNode => {
-                addLastNodeFlag(newNode);
-
-                // Create the new node and execute node callback
-                data.instance.create_node(childNode, newNode, 'last', node => {
-                    if (useMassAction) {
-                        if (checkedNodes.includes(node.id)) {
-                            tree.jstree(true).select_node(node.id);
-                        }
-                        getCheckedNodeIds(tree, node);
-                        actionBasedOnIsAnchorOnly();
+    function doCreateNode(item, parentNode, data) {
+        let itemNode = data.instance.get_node(item.id, false);
+        if (!itemNode) {
+            data.instance.create_node(parentNode, item, 'last', node => {
+                if (useMassAction) {
+                    if (checkedNodes.includes(node.id)) {
+                        tree.jstree(true).select_node(node.id);
                     }
-                });
+                    getCheckedNodeIds(tree, node);
+                    actionBasedOnIsAnchorOnly();
+                }
+            });
+        }
+
+        if (item.children && item.children.length > 0) {
+            item.children.forEach(function (child) {
+                if (child.children && child.children.length > 0) {
+                    loadedNodes[item.id] = true;
+                }
+                doCreateNode(child, itemNode, data);
             });
         }
     }
 
     function handleOpenNode(e, data) {
         let parentNode = data.node;
+        if (loadedNodes[parentNode.original.id]) {
+            return;
+        }
 
-        if (parentNode.children.length > 0) {
-            let childNode = data.instance.get_node(parentNode.children, false);
+        if (parentNode && parentNode.children.length > 0) {
+            $.ajax({
+                url: '{$block->escapeJs($block->escapeUrl($block->getLoadTreeUrl()))}',
+                type: "POST",
+                data: {
+                    id: parentNode.original.id,
+                    store: parentNode.original.store,
+                    form_key: FORM_KEY
+                },
+                dataType: 'json',
+                success: function (response) {
+                    handleSuccessResponse(response, parentNode, data);
+                },
+                error: function (jqXHR, status, error) {
+                    console.log(status + ': ' + error);
+                }
+            });
 
-            // Check if the child node has no children (is not yet loaded)
-            if (childNode.children && childNode.children.length === 0
-                && childNode.original && !childNode.original.lastNode) {
-                $.ajax({
-                    url: '{$block->escapeJs($block->escapeUrl($block->getLoadTreeUrl()))}',
-                    data: {
-                        id: childNode.original.id,
-                        store: childNode.original.store,
-                        form_key: FORM_KEY
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        handleSuccessResponse(response, childNode, data);
-                    },
-                    error: function (jqXHR, status, error) {
-                        console.log(status + ': ' + error + 'Response text:' + jqXHR.responseText);
-                    }
-                });
-            }
+            loadedNodes[parentNode.original.id] = true;
         }
     }
 

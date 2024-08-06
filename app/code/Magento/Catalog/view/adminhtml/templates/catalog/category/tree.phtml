@@ -87,6 +87,7 @@ script;
         $scriptString .= <<<script
         TreeConfig = function () {
             return {
+                loadedNodes: [],
                 createTree: function () {
                     /**
                      * Initialize the jstree with tree root
@@ -257,60 +258,63 @@ script;
                     }
                 },
 
-                handleOpenNode : function(data){
+                handleOpenNode: function (data) {
+                    if (TreeConfig.loadedNodes[parentNode.original.id]) {
+                        return;
+                    }
+
                     let parentNode = data.node;
                     if (parentNode && parentNode.children.length > 0) {
-
-                        parentNode.children.forEach(function(childId) {
-
-                            let childNode = data.instance.get_node(childId, false);
-
-                            // Check if the child node has no children (is not yet loaded)
-                            if (childNode.children && childNode.children.length === 0
-                                && childNode.original && !childNode.original.lastNode) {
-
-                                $.ajax({
-                                    url: '{$block->escapeJs($block->escapeUrl($block->getLoadTreeUrl()))}',
-                                    type: "POST",
-                                    data: {
-                                        id: childNode.original.id,
-                                        store: childNode.original.store,
-                                        form_key: FORM_KEY
-                                    },
-                                    dataType: 'json',
-                                    success: function (response) {
-                                        TreeConfig.handleSuccessResponse(response, childNode, data);
-                                    },
-                                    error: function (jqXHR, status, error) {
-                                        console.log(status + ': ' + error);
-                                    }
-                                });
+                        $.ajax({
+                            url: '{$block->escapeJs($block->escapeUrl($block->getLoadTreeUrl()))}',
+                            type: "POST",
+                            data: {
+                                id: parentNode.original.id,
+                                store: parentNode.original.store,
+                                form_key: FORM_KEY
+                            },
+                            dataType: 'json',
+                            showLoader: true,
+                            success: function (response) {
+                                TreeConfig.handleSuccessResponse(response, parentNode, data);
+                            },
+                            error: function (jqXHR, status, error) {
+                                console.log(status + ': ' + error);
                             }
                         });
+
+                        TreeConfig.loadedNodes[parentNode.original.id] = true;
                     }
                 },
 
-                handleSuccessResponse : function(response, childNode, data){
-                    if (response.length > 0) {
-                        response.forEach(newNode => {
-                            TreeConfig.addLastNodeFlag(newNode);
+                handleSuccessResponse: function (items, parentNode, data) {
+                    items.forEach(function (item) {
+                        TreeConfig.doCreateNode(item, parentNode, data);
+                    })
 
-                            // Create the new node and execute node callback
-                            data.instance.create_node(childNode, newNode, 'last');
+                    // open all node if, expand all link clicked
+                    if (expandAll === true){
+                        data.instance.open_all();
+                    }
+
+                    data.instance.get_selected().forEach(function (item) {
+                        data.instance.select_node(item, true);
+                    });
+                },
+
+                doCreateNode: function (item, parentNode, data) {
+                    let itemNode = data.instance.get_node(item.id, false);
+                    if (!itemNode) {
+                        data.instance.create_node(parentNode, item, 'last');
+                    }
+
+                    if (item.children && item.children.length > 0) {
+                        item.children.forEach(function (child) {
+                            if (child.children && child.children.length > 0) {
+                                TreeConfig.loadedNodes[item.id] = true;
+                            }
+                            TreeConfig.doCreateNode(child, itemNode, data);
                         });
-
-                        // open all node if, expand all link clicked
-                        if(expandAll === true){
-                            data.instance.open_all();
-                        }
-                    }
-                },
-
-                addLastNodeFlag : function(treeData) {
-                    if (treeData.children) {
-                        treeData.children.forEach(child => TreeConfig.addLastNodeFlag(child));
-                    } else {
-                        treeData.lastNode = true;
                     }
                 },
 
