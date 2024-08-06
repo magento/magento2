@@ -259,11 +259,10 @@ script;
                 },
 
                 handleOpenNode: function (data) {
+                    let parentNode = data.node;
                     if (TreeConfig.loadedNodes[parentNode.original.id]) {
                         return;
                     }
-
-                    let parentNode = data.node;
                     if (parentNode && parentNode.children.length > 0) {
                         $.ajax({
                             url: '{$block->escapeJs($block->escapeUrl($block->getLoadTreeUrl()))}',
