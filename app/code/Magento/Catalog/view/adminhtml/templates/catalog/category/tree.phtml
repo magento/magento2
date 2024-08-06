@@ -273,8 +273,11 @@ script;
                                 form_key: FORM_KEY
                             },
                             dataType: 'json',
-                            showLoader: true,
+                            beforeSend: function () {
+                               $('body').trigger('processStart');
+                            },
                             success: function (response) {
+                                $('body').trigger('processStop');
                                 TreeConfig.handleSuccessResponse(response, parentNode, data);
                             },
                             error: function (jqXHR, status, error) {
