@@ -16,17 +16,17 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     /**
      * Mysql default Port.
      */
-    const DEFAULT_PORT = 3306;
+    protected const DEFAULT_PORT = 3306;
 
     /**
      * MariaDB minimum version.
      */
-    const MARIADB_MIN_VERSION = '11.4.';
+    protected const MARIADB_MIN_VERSION = '11.4.';
 
     /**
      * Name of configuration file.
      */
-    const DEFAULTS_EXTRA_FILE_NAME = 'defaults_extra.cnf';
+    protected const DEFAULTS_EXTRA_FILE_NAME = 'defaults_extra.cnf';
 
     /**
      * MySQL DB dump file
@@ -93,7 +93,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     public function cleanup()
     {
         $dbCommand = 'mysql';
-        if($this->isMariaDB()){
+        if ($this->isMariaDB()) {
             $dbCommand = 'mariadb';
         }
         $this->ensureDefaultsExtraFile();
@@ -139,7 +139,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
         $this->ensureDefaultsExtraFile();
         $additionalArguments = [];
 
-        if($this->isMariaDB()){
+        if ($this->isMariaDB()) {
             $dumpCommand = 'mariadb-dump';
         }
 
@@ -185,13 +185,14 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
         }
 
         $dbCommand = 'mysql';
-        if($this->isMariaDB()){
+        if ($this->isMariaDB()) {
             $dbCommand = 'mariadb';
         }
 
         $this->_shell->execute(
             '%s --defaults-file=%s --host=%s --port=%s %s < %s',
-            [$dbCommand, $this->_defaultsExtraFile, $this->_host, $this->_port, $this->_schema, $this->getSetupDbDumpFilename()]
+            [$dbCommand, $this->_defaultsExtraFile, $this->_host, $this->_port,
+                $this->_schema, $this->getSetupDbDumpFilename()]
         );
     }
 
@@ -285,9 +286,9 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
 
                 $this->isMariaDB = (bool) preg_match('/-MariaDB/i', $version);
 
-                if($this->isMariaDB){
+                if ($this->isMariaDB) {
                     $pattern = "/\s*((?:[0-9]+\.?)+)/i";
-                    preg_match($pattern, $version,$matches);
+                    preg_match($pattern, $version, $matches);
                     $currentVersion = $matches[1];
                     if (!version_compare($currentVersion, self::MARIADB_MIN_VERSION, '>=')) {
                         $this->isMariaDB = false;
