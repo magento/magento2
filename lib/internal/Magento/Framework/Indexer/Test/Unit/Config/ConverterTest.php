@@ -62,7 +62,7 @@ class ConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertWithDependenciesDataProvider()
+    public static function convertWithDependenciesDataProvider()
     {
         return [
             [
@@ -129,7 +129,7 @@ XML
     /**
      * @return array
      */
-    public function convertWithCircularDependenciesDataProvider()
+    public static function convertWithCircularDependenciesDataProvider()
     {
         return [
             'Circular dependency on the first level' => [
@@ -168,7 +168,7 @@ XML
     /**
      * @return array
      */
-    public function convertWithDependencyOnNotExistingIndexerDataProvider()
+    public static function convertWithDependencyOnNotExistingIndexerDataProvider()
     {
         return [
             [

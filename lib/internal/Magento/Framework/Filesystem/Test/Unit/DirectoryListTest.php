@@ -74,7 +74,7 @@ class DirectoryListTest extends TestCase
     /**
      * @return array
      */
-    public function assertCodeDataProvider()
+    public static function assertCodeDataProvider()
     {
         return [['getPath', 'getUrlPath']];
     }
@@ -129,7 +129,7 @@ class DirectoryListTest extends TestCase
     /**
      * @return array
      */
-    public function assertUrlPathDataProvider()
+    public static function assertUrlPathDataProvider()
     {
         return [
             ['/'],

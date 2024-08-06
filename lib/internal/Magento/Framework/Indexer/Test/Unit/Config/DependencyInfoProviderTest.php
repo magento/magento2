@@ -95,7 +95,7 @@ class DependencyInfoProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getDependentIndexerIdsDataProvider()
+    public static function getDependentIndexerIdsDataProvider()
     {
         return [
             [

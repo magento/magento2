@@ -77,7 +77,7 @@ class CryptTest extends TestCase
     /**
      * @return array
      */
-    public function getCipherModeCombinations(): array
+    public static function getCipherModeCombinations(): array
     {
         $result = [];
         foreach (self::SUPPORTED_CIPHER_MODE_COMBINATIONS as $cipher => $modes) {
