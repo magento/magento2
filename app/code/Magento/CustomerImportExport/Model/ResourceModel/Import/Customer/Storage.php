@@ -6,7 +6,6 @@
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Customer;
 
 use Magento\Customer\Model\Config\Share;
-use Magento\Framework\App\ObjectManager;
 use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Framework\DataObject;
@@ -69,20 +68,20 @@ class Storage
 
     /**
      * @param CustomerCollectionFactory $collectionFactory
+     * @param Share $configShare
      * @param array $data
-     * @param Share|null $configShare
      */
     public function __construct(
         CustomerCollectionFactory $collectionFactory,
-        array $data = [],
-        ?Share $configShare = null
+        Share $configShare,
+        array $data = []
     ) {
         $this->_customerCollection = isset(
             $data['customer_collection']
         ) ? $data['customer_collection'] : $collectionFactory->create();
         $this->_pageSize = isset($data['page_size']) ? (int) $data['page_size'] : 0;
         $this->customerCollectionFactory = $collectionFactory;
-        $this->configShare = $configShare ?? ObjectManager::getInstance()->get(Share::class);
+        $this->configShare = $configShare;
     }
 
     /**
@@ -111,6 +110,16 @@ class Storage
             $customers = $collection->getConnection()->fetchAll($chunkSelect);
             foreach ($customers as $customer) {
                 $this->addCustomerByArray($customer);
+                if (
+                    $this->configShare->isGlobalScope() &&
+                    is_array(current($customerIdentifiers)) &&
+                    count(current($customerIdentifiers)) > 0 &&
+                    isset(current($customerIdentifiers)['website_id']) &&
+                    $customer['website_id'] !== (string) current($customerIdentifiers)['website_id']
+                ) {
+                    $customer['website_id'] = (string) current($customerIdentifiers)['website_id'];
+                    $this->addCustomerByArray($customer);
+                }
             }
         }
     }
@@ -130,14 +139,9 @@ class Storage
         if (!isset($this->customerStoreIds[$email])) {
             $this->customerStoreIds[$email] = [];
         }
-        if ($this->configShare->isGlobalScope()) {
-            $this->_customerIds[$email] = (int) $customer['entity_id'];
-            $this->customerStoreIds[$email]= $customer['store_id'] ?? null;
-        } else {
-            $websiteId = (int) $customer['website_id'];
-            $this->_customerIds[$email][$websiteId] = (int) $customer['entity_id'];
-            $this->customerStoreIds[$email][$websiteId] = $customer['store_id'] ?? null;
-        }
+        $websiteId = (int) $customer['website_id'];
+        $this->_customerIds[$email][$websiteId] = (int) $customer['entity_id'];
+        $this->customerStoreIds[$email][$websiteId] = $customer['store_id'] ?? null;
 
         return $this;
     }
@@ -173,11 +177,7 @@ class Storage
         $email = mb_strtolower($email);
         $this->loadCustomerData($email, $websiteId);
 
-        if ($this->configShare->isGlobalScope() && isset($this->_customerIds[$email])) {
-            return $this->_customerIds[$email];
-        }
-
-        if (!$this->configShare->isGlobalScope() && isset($this->_customerIds[$email][$websiteId])) {
+        if (isset($this->_customerIds[$email][$websiteId])) {
             return $this->_customerIds[$email][$websiteId];
         }
 
@@ -240,13 +240,8 @@ class Storage
                     $this->_customerIds[$email] = [];
                     $this->customerStoreIds[$email] = [];
                 }
-                if ($this->configShare->isGlobalScope()) {
-                    $this->_customerIds[$email] = null;
-                    $this->customerStoreIds[$email] = null;
-                } else {
-                    $this->_customerIds[$email][$websiteId] = null;
-                    $this->customerStoreIds[$email][$websiteId] = null;
-                }
+                $this->_customerIds[$email][$websiteId] = null;
+                $this->customerStoreIds[$email][$websiteId] = null;
             }
         }
         if (!$identifiers) {
@@ -280,11 +275,7 @@ class Storage
      */
     private function isLoadedCustomerData(string $email, int $websiteId): bool
     {
-        if ($this->configShare->isGlobalScope()) {
-            return array_key_exists($email, $this->_customerIds);
-        } else {
-            return array_key_exists($email, $this->_customerIds)
-                && array_key_exists($websiteId, $this->_customerIds[$email]);
-        }
+        return array_key_exists($email, $this->_customerIds)
+            && array_key_exists($websiteId, $this->_customerIds[$email]);
     }
 }
