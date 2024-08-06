@@ -110,8 +110,7 @@ class Storage
             $customers = $collection->getConnection()->fetchAll($chunkSelect);
             foreach ($customers as $customer) {
                 $this->addCustomerByArray($customer);
-                if (
-                    $this->configShare->isGlobalScope() &&
+                if ($this->configShare->isGlobalScope() &&
                     is_array(current($customerIdentifiers)) &&
                     count(current($customerIdentifiers)) > 0 &&
                     isset(current($customerIdentifiers)['website_id']) &&
