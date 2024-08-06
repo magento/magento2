@@ -81,6 +81,7 @@ class ProductImageTest extends TestCase
      */
     public function testBeforeGetImage($expected)
     {
+        $expected['product'] = $expected['product']($this);
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn('configurable');
 
         $this->requestMock
@@ -159,15 +160,19 @@ class ProductImageTest extends TestCase
         }
     }
 
+    protected function getMockForProductClass() {
+        $productMock = $this->createMock(Product::class);
+        $productMock->expects($this->any())->method('getImage')->willReturn(false);
+        return $productMock;
+    }
+
     /**
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataForTest()
+    public static function dataForTest()
     {
-        $productMock = $this->createMock(Product::class);
-        $productMock->expects($this->any())->method('getImage')->willReturn(false);
-
+        $productMock = static fn (self $testCase) => $testCase->getMockForProductClass();
         return [
             [
                 [

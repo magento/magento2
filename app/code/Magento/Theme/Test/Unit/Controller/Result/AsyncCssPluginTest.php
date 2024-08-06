@@ -163,7 +163,7 @@ class AsyncCssPluginTest extends TestCase
      *
      * @return array
      */
-    public function ifGetContentIsNotAStringDataProvider(): array
+    public static function ifGetContentIsNotAStringDataProvider(): array
     {
         return [
             [

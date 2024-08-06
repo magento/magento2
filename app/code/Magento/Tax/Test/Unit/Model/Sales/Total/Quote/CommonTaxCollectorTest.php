@@ -259,7 +259,7 @@ class CommonTaxCollectorTest extends TestCase
      *
      * @return array
      */
-    public function getShippingDataObjectDataProvider(): array
+    public static function getShippingDataObjectDataProvider(): array
     {
         $data = [
             'free_shipping' => [

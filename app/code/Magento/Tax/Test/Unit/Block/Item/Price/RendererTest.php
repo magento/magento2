@@ -111,7 +111,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function displayPriceInclTaxDataProvider()
+    public static function displayPriceInclTaxDataProvider()
     {
         $data = [
             'cart' => [
@@ -161,7 +161,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function displayPriceExclTaxDataProvider()
+    public static function displayPriceExclTaxDataProvider()
     {
         $data = [
             'cart' => [
@@ -211,7 +211,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function displayBothPricesDataProvider()
+    public static function displayBothPricesDataProvider()
     {
         $data = [
             'cart' => [

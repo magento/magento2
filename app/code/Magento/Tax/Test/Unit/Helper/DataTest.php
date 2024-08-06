@@ -304,7 +304,7 @@ class DataTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function getCalculatedTaxesForOrderItemsDataProvider(): array
+    public static function getCalculatedTaxesForOrderItemsDataProvider(): array
     {
         $data = [
             //Scenario 1: two items, one item with 0 tax
@@ -546,7 +546,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderIsCatalogPriceDisplayAffectedByTax(): array
+    public static function dataProviderIsCatalogPriceDisplayAffectedByTax(): array
     {
         return [
             [true , true, false, false, false],
