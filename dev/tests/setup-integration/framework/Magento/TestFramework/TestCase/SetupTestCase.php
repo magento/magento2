@@ -48,7 +48,7 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
         $dataName = '',
         ResourceConnection $resourceConnection = null
     ) {
-        parent::__construct($name, $data, $dataName);
+        parent::__construct($name);
 
         $objectManager = Bootstrap::getObjectManager();
         $this->sqlVersionProvider = $objectManager->get(SqlVersionProvider::class);
@@ -69,7 +69,7 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
      */
     public function getData()
     {
-        if(empty($this->data)){
+        if (empty($this->data)) {
             $testDataObj = DataProviderFromFile::getTestObject();
             $this->data = $testDataObj->providedData();
         }
@@ -110,7 +110,7 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
                 break;
             } elseif ($this->sqlVersionProvider->isMariaDbEngine()) {
                 $suffixKey = $this->sqlVersionProvider->getMariaDbSuffixKey();
-                $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[$suffixKey];;
+                $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[$suffixKey];
                 break;
             } elseif (strpos($this->getDatabaseVersion(), (string)$possibleVersion) !== false) {
                 $this->dbKey = $suffix;

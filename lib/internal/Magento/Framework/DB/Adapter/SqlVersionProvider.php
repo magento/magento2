@@ -160,11 +160,11 @@ class SqlVersionProvider
         $isMariaDB114 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_11_4_VERSION);
         $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
         if (version_compare($sqlExactVersion, '10.4.27', '>=')) {
-            if($isMariaDB104){
+            if ($isMariaDB104) {
                 return SqlVersionProvider::MARIA_DB_10_4_27_VERSION;
-            } elseif ($isMariaDB106){
+            } elseif ($isMariaDB106) {
                 return SqlVersionProvider::MARIA_DB_10_6_11_VERSION;
-            } elseif ($isMariaDB114){
+            } elseif ($isMariaDB114) {
                 return SqlVersionProvider::MARIA_DB_10_6_11_VERSION;
             }
         }
