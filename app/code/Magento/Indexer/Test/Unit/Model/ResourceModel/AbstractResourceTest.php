@@ -137,7 +137,7 @@ class AbstractResourceTest extends TestCase
 
         if ($readToIndex) {
             $connectionCustomMock = $this->getMockBuilder(AdapterInterface::class)
-                ->setMethods(['describeTable', 'query', 'select', 'insertArray'])
+                ->onlyMethods(['describeTable', 'query', 'select', 'insertArray'])
                 ->getMockForAbstractClass();
             $pdoMock = $this->createMock(\Zend_Db_Statement_Pdo::class);
             $connectionCustomMock->expects($this->any())->method('query')->willReturn($selectMock);
@@ -176,7 +176,7 @@ class AbstractResourceTest extends TestCase
     /**
      * @return array
      */
-    public function insertFromTableData()
+    public static function insertFromTableData()
     {
         return [[false], [true]];
     }

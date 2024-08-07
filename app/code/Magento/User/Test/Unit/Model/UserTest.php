@@ -35,7 +35,6 @@ class UserTest extends TestCase
     {
         $this->userDataMock = $this->getMockBuilder(UserHelper::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $objectManagerHelper = new ObjectManager($this);

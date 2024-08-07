@@ -117,6 +117,117 @@ QUERY;
         );
     }
 
+    /**
+     * @return void
+     * @throws LocalizedException
+     */
+    #[
+        DataFixture(
+            ProductTaxClass::class,
+            as: 'product_tax_class'
+        ),
+        DataFixture(
+            TaxRateFixture::class,
+            [
+                'tax_country_id' => 'ES',
+                'tax_postcode' => '08005',
+            ],
+            'rate'
+        ),
+        DataFixture(
+            TaxRuleFixture::class,
+            [
+                'customer_tax_class_ids' => [3],
+                'product_tax_class_ids' => ['$product_tax_class.classId$'],
+                'tax_rate_ids' => ['$rate.id$']
+            ],
+            'rule'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'custom_attributes' => [
+                    'tax_class_id' => '$product_tax_class.classId$'
+                ],
+            ],
+            'product'
+        ),
+        DataFixture(GuestCart::class, ['currency' => 'USD'], 'cart'),
+        DataFixture(QuoteIdMask::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+        DataFixture(AddProductToCart::class, [
+            'cart_id' => '$cart.id$',
+            'product_id' => '$product.id$',
+            'qty' => 1
+        ])
+    ]
+    public function testEstimateTotalsCleanPostCode(): void
+    {
+        $maskedQuoteId = DataFixtureStorageManager::getStorage()->get('quoteIdMask')->getMaskedId();
+
+        $query = <<<QUERY
+        mutation {
+  estimateTotals(input: {
+    cart_id: "{$maskedQuoteId}",
+    address: {
+      country_code: ES
+      postcode: "%s"
+    },
+    shipping_method: {
+      carrier_code: "flatrate",
+      method_code: "flatrate"
+    }
+  }) {
+    cart {
+      prices {
+        applied_taxes {
+          amount {
+            value
+            currency
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation(sprintf($query, '08005'));
+
+        self::assertEquals(
+            [
+                'estimateTotals' => [
+                    'cart' => [
+                        'prices' => [
+                            'applied_taxes' => [
+                                [
+                                    'amount' => [
+                                        'value' => 1,
+                                        'currency' => 'USD'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            $response
+        );
+
+        $response = $this->graphQlMutation(sprintf($query, ''));
+
+        self::assertEquals(
+            [
+                'estimateTotals' => [
+                    'cart' => [
+                        'prices' => [
+                            'applied_taxes' => []
+                        ]
+                    ]
+                ]
+            ],
+            $response
+        );
+    }
+
     public function estimationsProvider(): array
     {
         return [
