@@ -13,23 +13,37 @@ use Magento\Quote\Model\Quote\Address\Rate;
  */
 class CheapestMethodDeferredChooser implements DeferredShippingMethodChooserInterface
 {
-    const METHOD_CODE = 'cheapest';
+    public const METHOD_CODE = 'cheapest';
 
     /**
      * @inheritdoc
      */
     public function choose(Address $address)
     {
-        $address->setCollectShippingRates(true);
-        $address->collectShippingRates();
-        $shippingRates = $address->getAllShippingRates();
-
+        $shippingRates = $this->getShippingRates($address);
         if (empty($shippingRates)) {
             return null;
         }
 
         $cheapestRate = $this->selectCheapestRate($shippingRates);
         return $cheapestRate->getCode();
+    }
+
+    /**
+     * Retrieves previously collected shipping rates or computes new ones.
+     *
+     * @param Address $address
+     * @return Rate[]
+     */
+    private function getShippingRates(Address $address) : array
+    {
+        if (!empty($shippingRates = $address->getAllShippingRates())) {
+            // Favour previously collected rates over recomputing.
+            return $shippingRates;
+        }
+        $address->setCollectShippingRates(true);
+        $address->collectShippingRates();
+        return $address->getAllShippingRates();
     }
 
     /**

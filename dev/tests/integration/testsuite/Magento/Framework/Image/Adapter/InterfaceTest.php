@@ -296,6 +296,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
                 [self::_getFixture('image_adapters_test.png'), [100, null]],
                 [self::_getFixture('image_adapters_test.png'), [null, null]],
                 [self::_getFixture('image_adapters_test.png'), [-100, -50]],
+                [self::_getFixture('image_adapters_test.png'), [200, 0]]
             ]
         );
     }
