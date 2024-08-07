@@ -14,6 +14,8 @@ use Throwable;
  */
 class NewRelicWrapper
 {
+    private const NEWRELIC_APPNAME = 'newrelic.appname';
+
     /**
      * Wrapper for 'newrelic_add_custom_parameter' function
      *
@@ -66,6 +68,19 @@ class NewRelicWrapper
     {
         if ($this->isExtensionInstalled()) {
             newrelic_name_transaction($transactionName);
+        }
+    }
+
+    /**
+     * Wrapper to start background transaction
+     *
+     * @return void
+     */
+    public function startBackgroundTransaction()
+    {
+        if ($this->isExtensionInstalled()) {
+            newrelic_start_transaction(ini_get(self::NEWRELIC_APPNAME));
+            newrelic_background_job();
         }
     }
 

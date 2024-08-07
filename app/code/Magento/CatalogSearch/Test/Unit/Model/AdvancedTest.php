@@ -86,18 +86,18 @@ class AdvancedTest extends TestCase
         $this->dataCollection = $this->createPartialMock(\Magento\Framework\Data\Collection::class, ['getIterator']);
 
         $this->currency = $this->getMockBuilder(Currency::class)
-            ->setMethods(['getRate'])
+            ->onlyMethods(['getRate'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->store = $this->getMockBuilder(Store::class)
-            ->setMethods(['getCurrentCurrencyCode', 'getBaseCurrencyCode', 'getBaseCurrency'])
+            ->onlyMethods(['getCurrentCurrencyCode', 'getBaseCurrencyCode', 'getBaseCurrency'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->store->expects($this->any())
             ->method('getBaseCurrency')
             ->willReturn($this->currency);
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())
             ->method('getStore')
@@ -203,14 +203,14 @@ class AdvancedTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $advancedFactory = $this->getMockBuilder(AdvancedFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $advancedFactory->expects($this->once())->method('create')->willReturn($this->resource);
 
         $productCollectionFactory =
             $this->getMockBuilder(CollectionFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $productCollectionFactory->expects($this->any())->method('create')->willReturn($this->collection);
@@ -227,7 +227,7 @@ class AdvancedTest extends TestCase
             ->willReturn(1.5);
 
         $currency = $this->getMockBuilder(Currency::class)
-            ->setMethods(['load', 'format'])
+            ->onlyMethods(['load', 'format'])
             ->disableOriginalConstructor()
             ->getMock();
         $currency->expects($this->any())
@@ -237,7 +237,7 @@ class AdvancedTest extends TestCase
             ->method('format')
             ->willReturnArgument(0);
         $currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $currencyFactory->expects($this->any())
@@ -284,7 +284,7 @@ class AdvancedTest extends TestCase
     private function createSource($optionText = 'optionText')
     {
         $source = $this->getMockBuilder(AbstractSource::class)
-            ->setMethods(['getOptionText'])
+            ->onlyMethods(['getOptionText'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $source->expects($this->any())

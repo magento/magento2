@@ -56,12 +56,12 @@ class ChildrenValidationLocatorTest extends TestCase
 
         $this->quoteItemMock = $this->getMockBuilder(QuoteItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProduct'])
+            ->onlyMethods(['getProduct'])
             ->getMockForAbstractClass();
 
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeId'])
+            ->onlyMethods(['getTypeId'])
             ->getMock();
 
         $this->model = $this->objectManager->getObject(

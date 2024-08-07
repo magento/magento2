@@ -51,11 +51,11 @@ class CookieTest extends TestCase
             ->getMock();
 
         $validtorMock = $this->getMockBuilder(Validator::class)
-            ->setMethods(['isValid'])->disableOriginalConstructor()
+            ->onlyMethods(['isValid'])->disableOriginalConstructor()
             ->getMock();
 
         $scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
-            ->setMethods(['isSetFlag'])->disableOriginalConstructor()
+            ->onlyMethods(['isSetFlag'])->disableOriginalConstructor()
             ->getMock();
 
         $this->contextMock->expects($this->any())
