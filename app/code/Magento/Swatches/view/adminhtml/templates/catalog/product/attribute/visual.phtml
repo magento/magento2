@@ -50,9 +50,9 @@ $stores = $block->getStoresSortedBySortOrder();
                         </button>
 
                         <button id="reset_default_swatch_visual_option_button"
-                                title="<?= $block->escapeHtml(__('Reset Is Default')) ?>"
+                                title="<?= $escaper->escapeHtml(__('Reset Is Default')) ?>"
                                 type="button" class="action- scalable reset">
-                            <span><?= $block->escapeHtml(__('Reset Is Default')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Reset Is Default')) ?></span>
                         </button>
                     <?php endif; ?>
                 </th>
