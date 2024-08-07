@@ -198,7 +198,7 @@ class Discount extends AbstractTotal
                     continue;
                 }
 
-                 switch ($rule->getSimpleAction()) {
+                switch ($rule->getSimpleAction()) {
                     case Rule::BY_PERCENT_ACTION:
                     case Rule::BY_FIXED_ACTION:
                         if ($rule->getDiscountStep() > $item->getQty()) {
