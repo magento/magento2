@@ -107,7 +107,7 @@ class Storage
             $customerWebsites = array_reduce($chunk, function ($customerWebsiteByEmail, $customer) {
                 $customerWebsiteByEmail[$customer['email']][] = $customer['website_id'];
                 return $customerWebsiteByEmail;
-            });
+            }, []);
             $chunkSelect = clone $select;
             $chunkSelect->where($customerTableId . '.email IN (?)', array_keys($customerWebsites));
             $customers = $collection->getConnection()->fetchAll($chunkSelect);
