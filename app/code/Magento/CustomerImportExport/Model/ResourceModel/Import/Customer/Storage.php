@@ -104,19 +104,22 @@ class Storage
         };
         $offset = 0;
         for ($chunk = $getChuck($offset); !empty($chunk); $offset += $pageSize, $chunk = $getChuck($offset)) {
-            $emails = array_column($chunk, 'email');
+            $customerWebsites = array_reduce($chunk, function($customerWebsiteByEmail, $customer) {
+                $customerWebsiteByEmail[$customer['email']][] = $customer['website_id'];
+                return $customerWebsiteByEmail;
+            });
             $chunkSelect = clone $select;
-            $chunkSelect->where($customerTableId . '.email IN (?)', $emails);
+            $chunkSelect->where($customerTableId . '.email IN (?)', array_keys($customerWebsites));
             $customers = $collection->getConnection()->fetchAll($chunkSelect);
+            $i = 0;
             foreach ($customers as $customer) {
                 $this->addCustomerByArray($customer);
-                if ($this->configShare->isGlobalScope() &&
-                    is_array(current($customerIdentifiers)) &&
-                    count(current($customerIdentifiers)) > 0 &&
-                    isset(current($customerIdentifiers)['website_id']) &&
-                    $customer['website_id'] !== (string) current($customerIdentifiers)['website_id']
+                if (
+                    $this->configShare->isGlobalScope() &&
+                    !in_array((int) $customer['website_id'], $customerWebsites[$customer['email']], true)
                 ) {
-                    $customer['website_id'] = (string) current($customerIdentifiers)['website_id'];
+                    $customer['website_id'] = $customerWebsites[$customer['email']][$i];
+                    $i++;
                     $this->addCustomerByArray($customer);
                 }
             }
