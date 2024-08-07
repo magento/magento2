@@ -104,7 +104,7 @@ class Storage
         };
         $offset = 0;
         for ($chunk = $getChuck($offset); !empty($chunk); $offset += $pageSize, $chunk = $getChuck($offset)) {
-            $customerWebsites = array_reduce($chunk, function($customerWebsiteByEmail, $customer) {
+            $customerWebsites = array_reduce($chunk, function ($customerWebsiteByEmail, $customer) {
                 $customerWebsiteByEmail[$customer['email']][] = $customer['website_id'];
                 return $customerWebsiteByEmail;
             });
@@ -114,8 +114,7 @@ class Storage
             $i = 0;
             foreach ($customers as $customer) {
                 $this->addCustomerByArray($customer);
-                if (
-                    $this->configShare->isGlobalScope() &&
+                if ($this->configShare->isGlobalScope() &&
                     !in_array((int) $customer['website_id'], $customerWebsites[$customer['email']], true)
                 ) {
                     $customer['website_id'] = $customerWebsites[$customer['email']][$i];
