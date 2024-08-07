@@ -114,7 +114,7 @@ class VaultConfigProviderTest extends TestCase
     /**
      * @return array
      */
-    public function customerIdProvider()
+    public static function customerIdProvider()
     {
         return [
             [

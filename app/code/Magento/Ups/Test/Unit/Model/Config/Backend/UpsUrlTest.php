@@ -64,7 +64,7 @@ class UpsUrlTest extends TestCase
         ];
     }
 
-    public function invalidDataProvider()
+    public static function invalidDataProvider()
     {
         return [
             ['http://upsfoo.com'],
