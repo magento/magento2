@@ -824,3 +824,4 @@ Details,Details
 "Restricted admin is allowed to perform actions with images or videos, only when the admin has rights to all websites which the product is assigned to.","Restricted admin is allowed to perform actions with images or videos, only when the admin has rights to all websites which the product is assigned to."
 "Synchronize website specific attributes values","Synchronize website specific attributes values"
 "The parent product SKU is required for linking child products. Please ensure the parent product SKU is provided and try again.","The parent product SKU is required for linking child products. Please ensure the parent product SKU is provided and try again."
+"The SKU or ID of the product must be set before saving the product.","The SKU or ID of the product must be set before saving the product."
