@@ -73,7 +73,7 @@ class ArrayTypeTest extends TestCase
     /**
      * @return array
      */
-    public function evaluateDataProvider()
+    public static function evaluateDataProvider()
     {
         return [
             'empty array items' => [

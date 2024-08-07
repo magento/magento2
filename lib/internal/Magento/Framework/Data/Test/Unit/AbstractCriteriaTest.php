@@ -192,7 +192,7 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderReset()
+    public static function dataProviderReset()
     {
         return [
             [
@@ -219,7 +219,7 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderRemoveAllFilters()
+    public static function dataProviderRemoveAllFilters()
     {
         return [
             [
@@ -239,7 +239,7 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderRemoveFilter()
+    public static function dataProviderRemoveFilter()
     {
         return [
             [
@@ -260,7 +260,7 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderRemoveAllFields()
+    public static function dataProviderRemoveAllFields()
     {
         return [
             [
@@ -278,7 +278,7 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderRemoveField()
+    public static function dataProviderRemoveField()
     {
         return [
             [
@@ -316,7 +316,7 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderSetLimit()
+    public static function dataProviderSetLimit()
     {
         return [
             [
@@ -332,7 +332,7 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderAddOrder()
+    public static function dataProviderAddOrder()
     {
         return [
             [
@@ -399,7 +399,7 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderAddField()
+    public static function dataProviderAddField()
     {
         return [
             [

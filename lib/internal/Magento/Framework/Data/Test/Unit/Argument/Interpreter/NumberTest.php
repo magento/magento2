@@ -56,7 +56,7 @@ class NumberTest extends TestCase
     /**
      * @return array
      */
-    public function evaluateDataProvider()
+    public static function evaluateDataProvider()
     {
         return [
             'integer' => [10, 10],
