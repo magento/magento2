@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\AccountManagement;
@@ -16,6 +18,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\SecurityViolationException;
 use Magento\Framework\Validator\EmailAddress;
 use Magento\Framework\Validator\ValidatorChain;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * ForgotPasswordPost controller
@@ -39,20 +42,37 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount im
     protected $session;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
+     * @var SessionCleanerInterface
+     */
+    private $sessionCleaner;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
      * @param Escaper $escaper
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param SessionCleanerInterface|null $sessionCleaner
      */
     public function __construct(
         Context $context,
         Session $customerSession,
         AccountManagementInterface $customerAccountManagement,
-        Escaper $escaper
+        Escaper $escaper,
+        CustomerRepositoryInterface $customerRepository,
+        SessionCleanerInterface $sessionCleaner = null
     ) {
         $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->escaper = $escaper;
+        $this->customerRepository = $customerRepository;
+        $objectManager = ObjectManager::getInstance();
+        $this->sessionCleaner = $sessionCleaner ?? $objectManager->get(SessionCleanerInterface::class);
         parent::__construct($context);
     }
 
@@ -67,6 +87,7 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount im
         $resultRedirect = $this->resultRedirectFactory->create();
         $email = (string)$this->getRequest()->getPost('email');
         if ($email) {
+            $emailExists = false;
             if (!ValidatorChain::is($email, EmailAddress::class)) {
                 $this->session->setForgottenEmail($email);
                 $this->messageManager->addErrorMessage(
@@ -80,9 +101,10 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount im
                     $email,
                     AccountManagement::EMAIL_RESET
                 );
-                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                $emailExists = true;
             } catch (NoSuchEntityException $exception) {
                 // Do nothing, we don't want anyone to use this action to determine which email accounts are registered.
+                $emailExists = false;
             } catch (SecurityViolationException $exception) {
                 $this->messageManager->addErrorMessage($exception->getMessage());
                 return $resultRedirect->setPath('*/*/forgotpassword');
@@ -93,7 +115,10 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount im
                 );
                 return $resultRedirect->setPath('*/*/forgotpassword');
             }
-            $this->session->destroy(['send_expire_cookie']);
+            if ($emailExists) {
+                $customer = $this->customerRepository->get($email);
+                $this->sessionCleaner->clearFor((int)$customer->getId());
+            }
             $this->messageManager->addSuccessMessage($this->getSuccessMessage($email));
             return $resultRedirect->setPath('*/*/');
         } else {
