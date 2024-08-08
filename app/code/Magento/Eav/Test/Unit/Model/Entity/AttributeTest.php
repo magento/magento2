@@ -53,7 +53,7 @@ class AttributeTest extends TestCase
         $storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $storeManagerMock->method('getStore')->willReturn($storeMock);
         $resource = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class)
-            ->setMethods(['getStoreLabelsByAttributeId'])
+            ->onlyMethods(['getStoreLabelsByAttributeId'])
             ->disableOriginalConstructor()
             ->getMock();
         $arguments = [
