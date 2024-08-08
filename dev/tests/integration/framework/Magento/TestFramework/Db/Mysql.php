@@ -275,7 +275,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
                     'mariadb-dump --version'
                 );
                 $pattern = "/((?:[0-9]+\.?)+)(.*?)(mariadb)/i";
-                preg_match($pattern, $version === null ? $version : '', $matches);
+                preg_match($pattern, $version !== null ? $version : '', $matches);
                 $currentVersion = $matches[1] ?? '';
                 $isMariadb = isset($matches[3]);
                 if ($isMariadb
