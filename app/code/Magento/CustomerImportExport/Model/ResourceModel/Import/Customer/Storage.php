@@ -111,15 +111,15 @@ class Storage
             $chunkSelect = clone $select;
             $chunkSelect->where($customerTableId . '.email IN (?)', array_keys($customerWebsites));
             $customers = $collection->getConnection()->fetchAll($chunkSelect);
-            $i = 0;
             foreach ($customers as $customer) {
                 $this->addCustomerByArray($customer);
                 if ($this->configShare->isGlobalScope() &&
                     !in_array((int) $customer['website_id'], $customerWebsites[$customer['email']], true)
                 ) {
-                    $customer['website_id'] = $customerWebsites[$customer['email']][$i];
-                    $i++;
-                    $this->addCustomerByArray($customer);
+                    foreach ($customerWebsites[$customer['email']] as $websiteId) {
+                        $customer['website_id'] = $websiteId;
+                        $this->addCustomerByArray($customer);
+                    }
                 }
             }
         }
