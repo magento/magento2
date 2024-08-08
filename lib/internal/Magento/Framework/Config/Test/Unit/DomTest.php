@@ -51,7 +51,7 @@ class DomTest extends TestCase
     /**
      * @return array
      */
-    public function mergeDataProvider()
+    public static function mergeDataProvider()
     {
         // note differences of XML declaration in fixture files: sometimes encoding is specified, sometimes isn't
         return [

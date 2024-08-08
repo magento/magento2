@@ -873,7 +873,7 @@ class MysqlTest extends TestCase
      *
      * @return array[]
      */
-    public function columnDataAndValueForTest(): array
+    public static function columnDataAndValueForTest(): array
     {
         return [
             [
@@ -949,7 +949,7 @@ class MysqlTest extends TestCase
      *
      * @return array[]
      */
-    public function providerForSanitizeColumnDataType()
+    public static function providerForSanitizeColumnDataType()
     {
         return [
             [
