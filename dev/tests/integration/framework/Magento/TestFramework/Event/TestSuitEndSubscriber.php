@@ -11,6 +11,8 @@ namespace Magento\TestFramework\Event;
 
 use PHPUnit\Event\TestSuite\Finished;
 use PHPUnit\Event\TestSuite\FinishedSubscriber;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestSuite;
 
 class TestSuitEndSubscriber implements FinishedSubscriber
 {
@@ -21,7 +23,10 @@ class TestSuitEndSubscriber implements FinishedSubscriber
      */
     public function notify(Finished $event): void
     {
-        $mageEvent = Magento::getDefaultEventManager();
-        $mageEvent->fireEvent('rollbackTransaction');
+        $phpUnit = Bootstrap::getObjectManager()->create(PhpUnit::class);
+        if (class_exists($event->testSuite()->name())) {
+            $testSuite = TestSuite::empty($event->testSuite()->name());
+            $phpUnit->endTestSuite($testSuite);
+        }
     }
 }
