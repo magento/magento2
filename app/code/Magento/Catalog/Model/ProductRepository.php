@@ -527,9 +527,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $tierPrices = $product->getData('tier_price');
         $productDataToChange = $product->getData();
 
-        if (!$product->getSku() && !$product->getId()) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(
-                __('Invalid product data: %1', 'The SKU or ID of the product must be set before saving the product.')
+        if (!$product->getSku()) {
+            throw new CouldNotSaveException(
+                __("The \"%1\" attribute value is empty. Set the attribute and try again.", "sku")
             );
         }
 
