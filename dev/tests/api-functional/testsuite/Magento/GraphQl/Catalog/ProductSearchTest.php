@@ -115,6 +115,77 @@ class ProductSearchTest extends GraphQlAbstract
     }
 
     /**
+     * Verify that products returned in a correct order
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testSortMultipleFieldsSentInVariables(): void
+    {
+        $query = <<<'QUERY'
+query GetProductsQuery(
+    $search: String,
+    $filter: ProductAttributeFilterInput,
+    $pageSize: Int,
+    $currentPage: Int,
+    $sort: ProductAttributeSortInput
+) {
+    products(
+        search: $search,
+        filter: $filter,
+        pageSize: $pageSize,
+        currentPage: $currentPage,
+        sort: $sort
+    ) {
+        total_count
+        page_info{total_pages}
+        items{
+            __typename
+            url_key
+            sku
+            name
+            stock_status
+            price_range {
+                minimum_price {
+                    final_price {
+                        value
+                        currency
+                    }
+                }
+            }
+        }
+    }
+}
+QUERY;
+        $variables = [
+            'search' => null,
+            'filter' => [],
+            'pageSize' => 24,
+            'currentPage' => 1,
+            'sort' => ['price' => 'ASC', 'name' => 'ASC']
+        ];
+        $response = $this->graphQlQuery($query, $variables);
+        $this->assertEquals(5, $response['products']['total_count']);
+        $prod1 = $this->productRepository->get('search_product_1');
+        $prod2 = $this->productRepository->get('search_product_2');
+        $prod3 = $this->productRepository->get('search_product_3');
+        $prod4 = $this->productRepository->get('search_product_4');
+        $prod5 = $this->productRepository->get('search_product_5');
+
+        $filteredProducts = [$prod1, $prod2, $prod3, $prod4, $prod5];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                ]
+            );
+        }
+    }
+
+    /**
      * Verify that filters for non-existing category are empty
      *
      * @throws \Exception
