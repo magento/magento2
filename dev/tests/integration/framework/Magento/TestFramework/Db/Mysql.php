@@ -96,7 +96,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
 
         $this->ensureDefaultsExtraFile();
         $this->_shell->execute(
-            "`{$dbCommand}` --defaults-file=%s --host=%s --port=%s %s -e %s",
+            "{$dbCommand} --defaults-file=%s --host=%s --port=%s %s -e %s",
             [
                 $this->_defaultsExtraFile,
                 $this->_host,
@@ -146,7 +146,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
 
         $format = sprintf(
             '%s %s %s %s',
-            "`{$dumpCommand}` --defaults-file=%s --host=%s --port=%s",
+            "{$dumpCommand} --defaults-file=%s --host=%s --port=%s",
             '--no-tablespaces',
             implode(' ', $additionalArguments),
             '%s > %s'
@@ -179,7 +179,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
         $dbCommand = $this->getDbCommand();
 
         $this->_shell->execute(
-            "`{$dbCommand}` --defaults-file=%s --host=%s --port=%s %s < %s",
+            "{$dbCommand} --defaults-file=%s --host=%s --port=%s %s < %s",
             [$this->_defaultsExtraFile, $this->_host, $this->_port,
                 $this->_schema, $this->getSetupDbDumpFilename()]
         );
