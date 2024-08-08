@@ -215,7 +215,7 @@ class TaxTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderAfterSaveWithRegion()
+    public static function dataProviderAfterSaveWithRegion()
     {
         return [
             'withRegion' => [

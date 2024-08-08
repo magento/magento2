@@ -154,7 +154,11 @@ class ValidationCompositeTest extends TestCase
         return [
             ['save', static fn (self $testCase) => $testCase->getMockForAbstractClass(PageInterface::class)],
             ['getById', 1],
-            ['getList', static fn (self $testCase) => $testCase->getMockForAbstractClass(SearchCriteriaInterface::class)],
+            [
+                'getList',
+                static fn (self $testCase) =>
+                $testCase->getMockForAbstractClass(SearchCriteriaInterface::class)
+            ],
             ['delete', static fn (self $testCase) => $testCase->getMockForAbstractClass(PageInterface::class)],
             ['deleteById', 1],
         ];

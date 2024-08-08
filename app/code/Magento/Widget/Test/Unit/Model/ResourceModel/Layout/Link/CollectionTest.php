@@ -83,7 +83,7 @@ class CollectionTest extends AbstractTestCase
     /**
      * @return array
      */
-    public function filterFlagDataProvider()
+    public static function filterFlagDataProvider()
     {
         return [
             'Add temporary filter' => ['$flag' => true],
