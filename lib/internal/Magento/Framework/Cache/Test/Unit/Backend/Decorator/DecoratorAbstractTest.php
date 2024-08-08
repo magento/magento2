@@ -97,7 +97,7 @@ class DecoratorAbstractTest extends TestCase
     /**
      * @return array
      */
-    public function allMethodsDataProvider()
+    public static function allMethodsDataProvider()
     {
         $return = [];
         $allMethods = [

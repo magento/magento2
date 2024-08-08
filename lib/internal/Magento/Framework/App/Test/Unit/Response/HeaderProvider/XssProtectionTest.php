@@ -35,7 +35,7 @@ class XssProtectionTest extends TestCase
     /**
      * @return array
      */
-    public function userAgentDataProvider()
+    public static function userAgentDataProvider()
     {
         return [
             [

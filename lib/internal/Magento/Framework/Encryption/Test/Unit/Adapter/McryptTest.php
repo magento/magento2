@@ -159,7 +159,7 @@ class McryptTest extends TestCase
     /**
      * @return array
      */
-    public function getCryptData(): array
+    public static function getCryptData(): array
     {
         $fixturesFilename = __DIR__ . '/../Crypt/_files/_crypt_fixtures.php';
 
