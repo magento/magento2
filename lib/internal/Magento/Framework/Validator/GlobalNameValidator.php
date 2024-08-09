@@ -22,11 +22,14 @@ class GlobalNameValidator
      */
     public static function isValidName(?string $nameValue): bool
     {
-        if ($nameValue !== null) {
-            if (preg_match(self::PATTERN_NAME, $nameValue, $matches)) {
-                return $matches[0] === $nameValue;
-            }
+        if ($nameValue === null || $nameValue === '') {
+            return true;
         }
+    
+        if (preg_match(self::PATTERN_NAME, $nameValue, $matches)) {
+            return $matches[0] === $nameValue;
+        }
+    
         return false;
     }
 }
