@@ -14,7 +14,6 @@
             <stories value="Admin Creates Newsletter Template"/>
             <title value="Newsletter Template Creation"/>
             <description value="Newsletter Template Successfully Created"/>
-            <group value="newsletter"/>
             <group value="mtf_migrated"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-29809"/>

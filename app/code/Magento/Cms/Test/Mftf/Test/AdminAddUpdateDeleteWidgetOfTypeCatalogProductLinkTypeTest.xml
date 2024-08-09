@@ -19,6 +19,8 @@
         </annotations>
 
         <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProductsAsPreCondition"/>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <createData entity="_defaultProduct" stepKey="createPreReqProduct1">
                 <requiredEntity createDataKey="createPreReqCategory"/>
@@ -26,7 +28,6 @@
             <createData entity="_defaultProduct" stepKey="createPreReqProduct2">
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
 
         <!--Main test-->
@@ -47,6 +48,7 @@
 
         <amOnPage url="{{StorefrontCategoryPage.url($createPreReqCategory.custom_attributes[url_key]$)}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="wait1"/>
+        <waitForElementVisible selector="{{StorefrontHeaderSection.ProductWidgetLink}}" stepKey="waitForProductLinkButton"/>
         <click selector="{{StorefrontHeaderSection.ProductWidgetLink}}" stepKey="clickProductLinkButton"/>
         <waitForPageLoad stepKey="wait2"/>
         <actionGroup ref="AssertStorefrontProductDetailPageNameActionGroup" stepKey="assertProductNameText">
@@ -76,14 +78,14 @@
             <argument name="row" value="1"/>
         </actionGroup>
         <waitForPageLoad stepKey="wait5"/>
-        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
-
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <amOnPage url="{{StorefrontCategoryPage.url($createPreReqCategory.custom_attributes[url_key]$)}}" stepKey="navigateToCategoryPage3"/>
         <waitForPageLoad stepKey="wait6"/>
         <dontSeeElement selector="{{StorefrontHeaderSection.ProductWidgetLink}}" stepKey="doNotWidgetLink"/>
 
         <after>
-
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog"/>
             <deleteData createDataKey="createPreReqProduct1" stepKey="deletePreReqProduct"/>
             <deleteData createDataKey="createPreReqProduct2" stepKey="deletePreReqProduct2"/>

@@ -56,7 +56,8 @@
 
         <!--Save product-->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         <!-- Remove image from product -->
         <actionGroup ref="RemoveProductImageActionGroup" stepKey="removeProductImage"/>
 

@@ -17,7 +17,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-39506"/>
             <useCaseId value="MAGETWO-69597"/>
-            <group value="newsletter"/>
             <group value="reports"/>
             <group value="mtf_migrated"/>
             <group value="WYSIWYGDisabled"/>

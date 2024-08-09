@@ -66,6 +66,7 @@ class AbstractActionTest extends TestCase
     private function getTestFiles(): array
     {
         $phpFiles = AddedFiles::getAddedFilesList($this->getChangedFilesBaseDir());
+        $phpFiles = array_diff($phpFiles, $this->getIgnoredFiles());
 
         $phpFiles = Files::composeDataSets($phpFiles);
         $fileTypes = Files::INCLUDE_APP_CODE | Files::INCLUDE_LIBS | Files::AS_DATA_SET;
@@ -81,5 +82,24 @@ class AbstractActionTest extends TestCase
     {
         return BP . DIRECTORY_SEPARATOR . 'dev' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'static' .
             DIRECTORY_SEPARATOR . 'testsuite' . DIRECTORY_SEPARATOR . 'Magento' . DIRECTORY_SEPARATOR . 'Test';
+    }
+
+    /**
+     * Reads list of controller files to ignore
+     * These are false positive cases so the static tests will ignore these controllers
+     *
+     * @return array
+     */
+    private function getIgnoredFiles(): array
+    {
+        // phpcs:disable Magento2.Files.LineLength.MaxExceeded
+        $list = include __DIR__ . '/../../../../_files/blacklist/controller/controllers_extending_abstract_action.php';
+        $ignored = [];
+        $appPath = BP;
+        foreach ($list as $file) {
+            // phpcs:ignore
+            $ignored = array_merge($ignored, glob($appPath . DIRECTORY_SEPARATOR . $file, GLOB_NOSORT));
+        }
+        return $ignored;
     }
 }

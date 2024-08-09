@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutShippingMethodsSection">
+        <element name="shippingMethodSelectorNextButton" selector="#checkout-step-shipping_method button.button.action.continue.primary" type="button" timeout="30" />
         <element name="next" type="button" selector="button.button.action.continue.primary" timeout="30"/>
         <element name="firstShippingMethod" type="radio" selector="//*[@id='checkout-shipping-method-load']//input[@class='radio']"/>
         <element name="shippingMethodRow" type="text" selector=".form.methods-shipping table tbody tr"/>

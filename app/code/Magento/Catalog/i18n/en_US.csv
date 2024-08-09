@@ -819,4 +819,5 @@ Details,Details
 "Failed to retrieve product links for ""%1""","Failed to retrieve product links for ""%1"""
 "The linked product SKU is invalid. Verify the data and try again.","The linked product SKU is invalid. Verify the data and try again."
 "The linked products data is invalid. Verify the data and try again.","The linked products data is invalid. Verify the data and try again."
+"The url has invalid characters. Please correct and try again.","The url has invalid characters. Please correct and try again."
 

@@ -45,12 +45,12 @@
             <argument name="keyword" value="api-simple-product"/>
         </actionGroup>
 
-        <actionGroup ref="AdminCheckProductOnProductGridActionGroup" stepKey="clickCheckbox1">
-            <argument name="product" value="$$createProductOne$$"/>
+        <actionGroup ref="AdminCheckProductByIdOnProductGridActionGroup" stepKey="clickCheckbox1">
+            <argument name="productId" value="$$createProductOne.id$$"/>
         </actionGroup>
 
-        <actionGroup ref="AdminCheckProductOnProductGridActionGroup" stepKey="clickCheckbox2">
-            <argument name="product" value="$$createProductTwo$$"/>
+        <actionGroup ref="AdminCheckProductByIdOnProductGridActionGroup" stepKey="clickCheckbox2">
+            <argument name="productId" value="$$createProductTwo.id$$"/>
         </actionGroup>
 
         <actionGroup ref="AdminClickMassUpdateProductAttributesActionGroup" stepKey="clickDropdown"/>

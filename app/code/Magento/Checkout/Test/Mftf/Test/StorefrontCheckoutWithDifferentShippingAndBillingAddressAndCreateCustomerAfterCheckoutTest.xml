@@ -16,6 +16,7 @@
             <testCaseId value="MC-28288"/>
             <group value="mtf_migrated"/>
             <group value="checkout"/>
+            <group value="guest_checkout"/>
         </annotations>
 
         <before>
@@ -26,7 +27,7 @@
         </before>
         <after>
             <!-- Sign out Customer from storefront -->
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="UKCustomer.email"/>

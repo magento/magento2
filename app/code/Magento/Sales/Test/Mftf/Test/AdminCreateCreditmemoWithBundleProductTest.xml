@@ -67,7 +67,7 @@
             <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
         </after>
 
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
         <actionGroup ref="AddBundleProductToOrderAndCheckPriceInGridActionGroup" stepKey="addBundleProductToOrder">
