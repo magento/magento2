@@ -1574,7 +1574,7 @@ class ProductRepositoryTest extends TestCase
      */
     public function testSaveCouldNotSaveException(): void
     {
-        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
         $productData = [
             'name' => 'Simple Product',
             'price' => 100
