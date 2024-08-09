@@ -9,33 +9,26 @@ namespace Magento\Framework\Validator;
 
 /**
  * Class GlobalForbiddenPatterns
- * Provides forbidden patterns for global validation.
+ * Provides a set of forbidden patterns used for validation across the application.
  */
 class GlobalForbiddenPatterns
 {
     /**
-     * Forbidden patterns for validation.
-     *
-     * @var string[]
-     */
-    public const PATTERNS = [
-        '/{{.*}}/',
-        '/<\?=/',
-        '/<\?php/',
-        '/base64_decode/',
-        '/shell_exec/',
-        '/eval\(/',
-        '/\${IFS%/',
-        '/\bcurl\b/',
-    ];
-
-    /**
-     * Retrieve the forbidden patterns.
+     * Returns an array of forbidden patterns.
      *
      * @return string[]
      */
     public static function getPatterns(): array
     {
-        return self::PATTERNS;
+        return [
+            '/{{.*}}/',
+            '/<\?=/',
+            '/<\?php/',
+            '/base64_decode/',
+            '/shell_exec/',
+            '/eval\(/',
+            '/\${IFS%/',
+            '/\bcurl\b/',
+        ];
     }
 }
