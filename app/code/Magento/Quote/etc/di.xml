@@ -118,6 +118,7 @@
                 <item name="PaymentMethodValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\PaymentMethodValidationRule</item>
                 <item name="MinimumAmountValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\MinimumAmountValidationRule</item>
                 <item name="NameValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\NameValidationRule</item>
+                <item name="GlobalValidationRule" xsi:type="object">Magento\Quote\Model\ValidationRules\GlobalValidationRule</item>
             </argument>
         </arguments>
     </type>
@@ -149,6 +150,13 @@
     <type name="Magento\Quote\Model\ValidationRules\NameValidationRule">
         <arguments>
             <argument name="generalMessage" xsi:type="string" translatable="true">Please check the name fields (first name and last name).</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\ValidationRules\GlobalValidationRule">
+        <arguments>
+            <argument name="generalMessage" xsi:type="string" translatable="true">
+                Please check all fields for invalid characters.
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Backpressure\SlidingWindow\CompositeLimitConfigManager">
