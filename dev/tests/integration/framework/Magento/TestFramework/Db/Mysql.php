@@ -176,7 +176,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
             throw new \LogicException("DB dump file does not exist: " . $this->getSetupDbDumpFilename());
         }
 
-        $dbCommand = $this->getDbCommand();
+        $dbCommand = $this->getDbImportCommand();
 
         $this->_shell->execute(
             "{$dbCommand} --defaults-file=%s --host=%s --port=%s %s < %s",
@@ -297,7 +297,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     protected function getDbCommand()
     {
-        return $this->isMariaDB() ? 'mariadb-import' : 'mysql';
+        return $this->isMariaDB() ? 'mariadb' : 'mysql';
     }
 
     /**
@@ -308,5 +308,15 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     protected function getDbDumpCommand()
     {
         return $this->isMariaDB() ? 'mariadb-dump' : 'mysqldump';
+    }
+
+    /**
+     * Get db command mysql or mariadb-import
+     *
+     * @return string
+     */
+    protected function getDbImportCommand()
+    {
+        return $this->isMariaDB() ? 'mariadb-import' : 'mysql';
     }
 }
