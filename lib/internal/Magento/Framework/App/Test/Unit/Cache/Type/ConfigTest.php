@@ -163,7 +163,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function cleanModeMatchingAnyTagDataProvider(): array
+    public static function cleanModeMatchingAnyTagDataProvider(): array
     {
         return [
             'failure, failure' => [false, false, false],

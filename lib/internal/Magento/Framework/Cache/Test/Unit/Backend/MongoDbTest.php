@@ -55,7 +55,7 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function getIdsDataProvider()
+    public static function getIdsDataProvider()
     {
         return [
             'empty db' => [[], []],
@@ -77,7 +77,7 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function getTagsDataProvider()
+    public static function getTagsDataProvider()
     {
         return ['no tags' => [[]], 'multiple tags' => [['tag1', 'tag2']]];
     }
@@ -108,7 +108,7 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function getIdsMatchingTagsDataProvider()
+    public static function getIdsMatchingTagsDataProvider()
     {
         return [
             'getIdsMatchingTags() - one tag' => [
@@ -189,7 +189,7 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function getMetadatasDataProvider()
+    public static function getMetadatasDataProvider()
     {
         $time = time();
         return [

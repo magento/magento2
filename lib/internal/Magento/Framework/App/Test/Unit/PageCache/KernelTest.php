@@ -303,7 +303,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public function testProcessSaveCacheDataProvider(): array
+    public static function testProcessSaveCacheDataProvider(): array
     {
         return [
             [200],
@@ -344,7 +344,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public function processNotSaveCacheProvider(): array
+    public static function processNotSaveCacheProvider(): array
     {
         return [
             ['private, max-age=100', 200, true, false],
