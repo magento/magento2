@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Validator;
 
+use Magento\Customer\Model\Validator\Name;
 use Magento\Framework\Validator\GlobalNameValidator;
 use Magento\Customer\Model\Customer;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -18,9 +19,14 @@ use PHPUnit\Framework\TestCase;
 class NameTest extends TestCase
 {
     /**
+     * @var Name
+     */
+    private Name $nameValidator;
+
+    /**
      * @var GlobalNameValidator
      */
-    private GlobalNameValidator $nameValidator;
+    private GlobalNameValidator $globalNameValidator;
 
     /**
      * @var Customer|MockObject
@@ -32,7 +38,8 @@ class NameTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->nameValidator = new GlobalNameValidator();
+        $this->nameValidator = new Name();
+        $this->globalNameValidator = new GlobalNameValidator();
         $this->customerMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -60,11 +67,12 @@ class NameTest extends TestCase
         $this->customerMock->expects($this->once())->method('getMiddlename')->willReturn($middleName);
         $this->customerMock->expects($this->once())->method('getLastname')->willReturn($lastName);
 
-        $isValid = $this->nameValidator->isValid($firstName) &&
-                   $this->nameValidator->isValid($middleName) &&
-                   $this->nameValidator->isValid($lastName);
-
+        $isValid = $this->nameValidator->isValid($this->customerMock);
         $this->assertTrue($isValid, $message);
+
+        // Optionally, you can also test with the global name validator
+        $isValidGlobal = $this->globalNameValidator->isValid($firstName);
+        $this->assertTrue($isValidGlobal, $message);
     }
 
     /**
