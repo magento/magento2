@@ -9,6 +9,7 @@ namespace Magento\Quote\Model\ValidationRules;
 
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
+use Magento\Framework\Validator\GlobalNameValidator;
 
 /**
  * Class NameValidationRule
@@ -16,24 +17,6 @@ use Magento\Quote\Model\Quote;
  */
 class NameValidationRule implements QuoteValidationRuleInterface
 {
-    /**
-     * Regular expression pattern for validating names.
-     *
-     * \p{L}: Unicode letters.
-     * \p{M}: Unicode marks (diacritic marks, accents, etc.).
-     * ,: Comma.
-     * -: Hyphen.
-     * _: Underscore.
-     * .: Period.
-     * ': Apostrophe mark.
-     * ’: Right single quotation mark.
-     * `: Grave accent.
-     * &: Ampersand.
-     * \s: Whitespace characters (spaces, tabs, newlines, etc.).
-     * \d: Digits (0-9).
-     */
-    private const PATTERN_NAME = '/(?:[\p{L}\p{M}\,\-\_\.\'’`&\s\d]){1,255}+/u';
-
     /**
      * @var ValidationResultFactory
      */
@@ -50,7 +33,7 @@ class NameValidationRule implements QuoteValidationRuleInterface
     }
 
     /**
-     * Validate the first name and last name in the quote.
+     * Validate the first name, middle name, and last name in the quote.
      *
      * @param Quote $quote
      * @return array
@@ -62,34 +45,18 @@ class NameValidationRule implements QuoteValidationRuleInterface
         $middleName = $quote->getCustomerMiddlename();
         $lastName = $quote->getCustomerLastname();
 
-        if (!$this->isValidName($firstName)) {
+        if (!GlobalNameValidator::isValidName($firstName)) {
             $validationErrors[] = __('First Name is not valid');
         }
-        
-        if (!$this->isValidName($middleName)) {
+
+        if (!GlobalNameValidator::isValidName($middleName)) {
             $validationErrors[] = __('Middle Name is not valid');
         }
-        
-        if (!$this->isValidName($lastName)) {
+
+        if (!GlobalNameValidator::isValidName($lastName)) {
             $validationErrors[] = __('Last Name is not valid');
         }
 
         return [$this->validationResultFactory->create(['errors' => $validationErrors])];
-    }
-
-    /**
-     * Check if a name field is valid according to the pattern.
-     *
-     * @param string|null $nameValue
-     * @return bool
-     */
-    private function isValidName($nameValue): bool
-    {
-        if ($nameValue !== null) {
-            if (preg_match(self::PATTERN_NAME, $nameValue, $matches)) {
-                return $matches[0] === $nameValue;
-            }
-        }
-        return false;
     }
 }
