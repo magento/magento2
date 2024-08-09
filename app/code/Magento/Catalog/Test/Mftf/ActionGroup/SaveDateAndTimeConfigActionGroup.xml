@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SaveDateAndTimeConfigActionGroup">
+        <annotations>
+            <description value="Save the date and time options configuration." />
+        </annotations>
+
+        <waitForElementVisible selector="{{AdminCustomizeDateAndTimeSection.save}}" stepKey="waitForSaveButton"/>
+        <click selector="{{AdminCustomizeDateAndTimeSection.save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForAttributeToSave"/>
+        <seeElement selector="{{AdminCustomizeDateAndTimeSection.successMessage}}" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>
