@@ -35,7 +35,7 @@ class Telephone extends AbstractValidator
     {
         if (!$this->isValidTelephone($customer->getTelephone())) {
             parent::_addMessages([[
-                'telephone' => "Invalid Phone Number. Please use 0-9, +, -, (, ) and space."
+                'telephone' =>  __("Invalid Phone Number. Please use 0-9, +, -, (, ) and space.)"
             ]]);
         }
 
