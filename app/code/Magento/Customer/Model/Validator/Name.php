@@ -5,106 +5,37 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Customer\Test\Unit\Model\Validator;
+namespace Magento\Customer\Model\Validator;
 
-use Magento\Customer\Model\Validator\Name;
-use Magento\Framework\Validator\GlobalNameValidator;
 use Magento\Customer\Model\Customer;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\Validator\AbstractValidator;
+use Magento\Framework\Validator\GlobalNameValidator;
 
 /**
- * Customer name validator tests
+ * Customer name fields validator.
  */
-class NameTest extends TestCase
+class Name extends AbstractValidator
 {
     /**
-     * @var Name
-     */
-    private Name $nameValidator;
-
-    /**
-     * @var GlobalNameValidator
-     */
-    private GlobalNameValidator $globalNameValidator;
-
-    /**
-     * @var Customer|MockObject
-     */
-    private MockObject $customerMock;
-
-    /**
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        $this->nameValidator = new Name();
-        $this->globalNameValidator = new GlobalNameValidator();
-        $this->customerMock = $this
-            ->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getFirstname', 'getLastname', 'getMiddlename'])
-            ->getMock();
-    }
-
-    /**
-     * Test for allowed apostrophe and other punctuation characters in customer names
+     * Validate name fields.
      *
-     * @param string $firstName
-     * @param string $middleName
-     * @param string $lastName
-     * @param string $message
-     * @return void
-     * @dataProvider expectedPunctuationInNamesDataProvider
+     * @param Customer $customer
+     * @return bool
      */
-    public function testValidateCorrectPunctuationInNames(
-        string $firstName,
-        string $middleName,
-        string $lastName,
-        string $message
-    ) {
-        $this->customerMock->expects($this->once())->method('getFirstname')->willReturn($firstName);
-        $this->customerMock->expects($this->once())->method('getMiddlename')->willReturn($middleName);
-        $this->customerMock->expects($this->once())->method('getLastname')->willReturn($lastName);
-
-        $isValid = $this->nameValidator->isValid($this->customerMock);
-        $this->assertTrue($isValid, $message);
-
-        // Optionally, you can also test with the global name validator
-        $isValidGlobal = $this->globalNameValidator->isValid($firstName);
-        $this->assertTrue($isValidGlobal, $message);
-    }
-
-    /**
-     * @return array
-     */
-    public function expectedPunctuationInNamesDataProvider(): array
+    public function isValid($customer)
     {
-        return [
-            [
-                'firstName' => 'John',
-                'middleName' => '',
-                'lastName' => 'O’Doe',
-                'message' => 'Inclined apostrophe must be allowed in names (iOS Smart Punctuation compatibility)'
-            ],
-            [
-                'firstName' => 'John',
-                'middleName' => '',
-                'lastName' => 'O\'Doe',
-                'message' => 'Legacy straight apostrophe must be allowed in names'
-            ],
-            [
-                'firstName' => 'John',
-                'middleName' => '',
-                'lastName' => 'O`Doe',
-                'message' => 'Grave accent back quote character must be allowed in names'
-            ],
-            [
-                'firstName' => 'John & Smith',
-                'middleName' => '',
-                'lastName' => 'O`Doe',
-                'message' => 'Special character ampersand(&) must be allowed in names'
-            ]
-        ];
+        if (!GlobalNameValidator::isValidName($customer->getFirstname())) {
+            parent::_addMessages([['firstname' => 'First Name is not valid!']]);
+        }
+
+        if (!GlobalNameValidator::isValidName($customer->getLastname())) {
+            parent::_addMessages([['lastname' => 'Last Name is not valid!']]);
+        }
+
+        if (!GlobalNameValidator::isValidName($customer->getMiddlename())) {
+            parent::_addMessages([['middlename' => 'Middle Name is not valid!']]);
+        }
+
+        return count($this->_messages) == 0;
     }
 }
