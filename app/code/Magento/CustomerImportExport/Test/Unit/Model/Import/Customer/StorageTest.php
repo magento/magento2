@@ -14,7 +14,7 @@
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
  * from Adobe.
- *************************************************************************
+ * ************************************************************************
  */
 declare(strict_types=1);
 
@@ -118,10 +118,10 @@ class StorageTest extends TestCase
     /**
      * Mock DB connection and return customer data's
      *
-     * @return AdapterInterface|MockObject
+     * @return AdapterInterface
      * @throws Exception
      */
-    private function getConnectionMock(): AdapterInterface|MockObject
+    private function getConnectionMock(): AdapterInterface
     {
         $customerData = [
             'email' => 'test@example.com',
