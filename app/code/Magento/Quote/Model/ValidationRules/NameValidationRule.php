@@ -59,12 +59,17 @@ class NameValidationRule implements QuoteValidationRuleInterface
     {
         $validationErrors = [];
         $firstName = $quote->getCustomerFirstname();
+        $middleName = $quote->getCustomerMiddlename();
         $lastName = $quote->getCustomerLastname();
 
         if (!$this->isValidName($firstName)) {
             $validationErrors[] = __('First Name is not valid');
         }
-
+        
+        if (!$this->isValidName($middleName)) {
+            $validationErrors[] = __('Middle Name is not valid');
+        }
+        
         if (!$this->isValidName($lastName)) {
             $validationErrors[] = __('Last Name is not valid');
         }
