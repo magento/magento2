@@ -60,6 +60,17 @@ class GlobalValidationRule implements QuoteValidationRuleInterface
      * @param Quote $quote
      * @return ValidationResult
      */
+    public function validate(Quote $quote): ValidationResult
+    {
+        return $this->validateGlobalInput($quote);
+    }
+
+    /**
+     * Validates the global input fields extracted from the quote.
+     *
+     * @param Quote $quote
+     * @return ValidationResult
+     */
     public function validateGlobalInput(Quote $quote): ValidationResult
     {
         $validationErrors = [];
