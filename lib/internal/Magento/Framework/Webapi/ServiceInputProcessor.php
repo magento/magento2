@@ -153,6 +153,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @return \Magento\Framework\Reflection\NameFinder
      *
      * @deprecated 100.1.0
+     * @see nothing
      */
     private function getNameFinder()
     {
@@ -261,6 +262,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @throws \Exception
      * @throws SerializationException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _createFromArray($className, $data)
     {
@@ -268,6 +270,12 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         // convert to string directly to avoid situations when $className is object
         // which implements __toString method like \ReflectionObject
         $className = (string) $className;
+        if (is_subclass_of($className, \SimpleXMLElement::class)
+            || is_subclass_of($className, \DOMElement::class)) {
+            throw new SerializationException(
+                new Phrase('Invalid data type')
+            );
+        }
         $class = new ClassReflection($className);
         if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
             $className = substr($className, 0, -strlen('Interface'));

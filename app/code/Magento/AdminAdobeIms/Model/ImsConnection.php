@@ -167,8 +167,12 @@ class ImsConnection
         $curl->addHeader('cache-control', 'no-cache');
 
         $curl->post(
-            $this->adminImsConfig->getValidateTokenUrl($token, $tokenType),
-            []
+            $this->adminImsConfig->getValidateTokenUrl(),
+            [
+                'token' => $token,
+                'type' => $tokenType,
+                'client_id' => $this->adminImsConfig->getApiKey()
+            ]
         );
 
         if ($curl->getBody() === '') {

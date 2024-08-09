@@ -105,6 +105,7 @@ class ProductAttributesCleanUpTest extends \PHPUnit\Framework\TestCase
         $storeGroup->setWebsiteId($website->getId());
         $storeGroup->setName('Fixture Store Group');
         $storeGroup->setRootCategoryId(2);
+        $storeGroup->setCode('fixturestoregroup');
         $storeGroup->setDefaultStoreId($store->getId());
         $storeGroup->save();
 

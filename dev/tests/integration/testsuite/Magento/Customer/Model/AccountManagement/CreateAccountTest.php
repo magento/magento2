@@ -421,6 +421,8 @@ class CreateAccountTest extends TestCase
         $customerData = $this->customerRepository->getById($customerId);
         $customerData->getAddresses()[1]->setRegion(null)->setCountryId($allowedCountryIdForSecondWebsite)
             ->setRegionId(null);
+        $customerData->getAddresses()[1]->setIsDefaultBilling(true);
+        $customerData->getAddresses()[1]->setIsDefaultShipping(true);
         $customerData->setStoreId($store->getId())->setWebsiteId($store->getWebsiteId())->setId(null);
         $password = $this->random->getRandomString(8);
         $passwordHash = $this->encryptor->getHash($password, true);

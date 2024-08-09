@@ -32,7 +32,7 @@
         </actionGroup>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
         <actionGroup ref="AssertAdminValidationErrorAppearedForPriceFieldOnProductEditPageActionGroup" stepKey="seePriceValidationError">
-            <argument name="errorMessage" value="Please enter a number 0 or greater in this field."/>
+            <argument name="errorMessage" value="Please enter a number 0 or greater, without comma in this field."/>
         </actionGroup>
     </test>
 </tests>

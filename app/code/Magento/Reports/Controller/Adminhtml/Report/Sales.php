@@ -13,6 +13,7 @@ namespace Magento\Reports\Controller\Adminhtml\Report;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -34,34 +35,41 @@ abstract class Sales extends AbstractReport
      * Determine if action is allowed for reports module
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _isAllowed()
     {
-        switch ($this->getRequest()->getActionName()) {
+        switch (strtolower($this->getRequest()->getActionName())) {
+            case 'exportsalescsv':
+            case 'exportsalesexcel':
             case 'sales':
                 return $this->_authorization->isAllowed('Magento_Reports::salesroot_sales');
-                break;
+            case 'exporttaxcsv':
+            case 'exporttaxexcel':
             case 'tax':
                 return $this->_authorization->isAllowed('Magento_Reports::tax');
-                break;
+            case 'exportshippingcsv':
+            case 'exportshippingexcel':
             case 'shipping':
                 return $this->_authorization->isAllowed('Magento_Reports::shipping');
-                break;
+            case 'exportinvoicedcsv':
+            case 'exportinvoicedexcel':
             case 'invoiced':
                 return $this->_authorization->isAllowed('Magento_Reports::invoiced');
-                break;
+            case 'exportrefundedcsv':
+            case 'exportrefundedexcel':
             case 'refunded':
                 return $this->_authorization->isAllowed('Magento_Reports::refunded');
-                break;
+            case 'exportcouponscsv':
+            case 'exportcouponsexcel':
             case 'coupons':
                 return $this->_authorization->isAllowed('Magento_Reports::coupons');
-                break;
+            case 'exportbestsellerscsv':
+            case 'exportbestsellersexcel':
             case 'bestsellers':
                 return $this->_authorization->isAllowed('Magento_Reports::bestsellers');
-                break;
             default:
                 return $this->_authorization->isAllowed('Magento_Reports::salesroot');
-                break;
         }
     }
 }

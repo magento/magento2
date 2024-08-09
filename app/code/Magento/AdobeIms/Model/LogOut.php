@@ -103,7 +103,14 @@ class LogOut implements LogOutInterface
         $curl = $this->curlFactory->create();
         $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
         $curl->addHeader('cache-control', 'no-cache');
-        $curl->get($this->config->getLogoutUrl($accessToken));
+        $curl->post(
+            $this->config->getLogoutUrl(),
+            [
+                'access_token' => $accessToken,
+                'client_secret' => $this->config->getPrivateKey(),
+                'client_id' => $this->config->getApiKey()
+            ]
+        );
 
         if ($curl->getStatus() !== self::HTTP_FOUND) {
             throw new LocalizedException(

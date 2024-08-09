@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-16675"/>
             <group value="paypal"/>
+            <group value="pr_exclude"/>
         </annotations>
         <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="France" stepKey="setMerchantCountry"/>
         <actionGroup ref="EnablePayPalConfigurationActionGroup" stepKey="EnableWPSExpress">

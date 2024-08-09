@@ -6,14 +6,14 @@
 
 namespace Magento\Directory\Model;
 
+use Magento\Directory\Model\Currency\Filter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
-use Magento\Directory\Model\Currency\Filter;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\Currency as LocaleCurrency;
 use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
 use Magento\Framework\NumberFormatterFactory;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Currency model
@@ -442,6 +442,12 @@ class Currency extends \Magento\Framework\Model\AbstractModel
             $formattedCurrency = str_replace(' ', '', $formattedCurrency);
         }
 
+        // Sanitize data for Arabic currency
+        if (str_contains($this->localeResolver->getLocale(), 'ar_') &&
+            preg_match('/[\p{Arabic}]/u', $formattedCurrency) > 0) {
+            $formattedCurrency = ltrim($formattedCurrency, '‏');
+        }
+
         return preg_replace('/^\s+|\s+$/u', '', $formattedCurrency);
     }
 
@@ -591,7 +597,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     private function trimUnicodeDirectionMark($string)
     {
         if (preg_match('/^(\x{200E}|\x{200F})/u', $string, $match)) {
-            $string = preg_replace('/^'.$match[1].'/u', '', $string);
+            $string = preg_replace('/^' . $match[1] . '/u', '', $string);
         }
         return $string;
     }

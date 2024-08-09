@@ -17,8 +17,9 @@
             <argument name="productVar"/>
             <argument name="optionProductVar"/>
         </arguments>
-
-        <waitForElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductTitleByName(productVar.name)}}" time="30" stepKey="assertWishlistSidebarProductName"/>
+        <wait time="10" stepKey="waitForMessageToPopulate"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <waitForElementVisible selector="{{StorefrontCustomerWishlistSidebarSection.ProductTitleByName(productVar.name)}}" stepKey="assertWishlistSidebarProductName"/>
         <see userInput="${{optionProductVar.price}}.00" selector="{{StorefrontCustomerWishlistSidebarSection.ProductPriceByName(productVar.name)}}" stepKey="AssertWishlistSidebarProductPrice"/>
         <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductAddToCartByName(productVar.name)}}" stepKey="AssertWishlistSidebarAddToCart"/>
         <seeElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductImageByName(productVar.name)}}" stepKey="AssertWishlistSidebarProductImage"/>

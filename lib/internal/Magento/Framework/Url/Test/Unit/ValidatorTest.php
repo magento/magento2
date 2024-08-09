@@ -23,6 +23,9 @@ class ValidatorTest extends TestCase
     /** @var string[] */
     protected $expectedValidationMessages = ['invalidUrl' => "Invalid URL '%value%'."];
 
+    /** @var string[] */
+    protected $invalidURL = ['invalidUrl' => "Invalid URL 'php://filter'."];
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -56,8 +59,16 @@ class ValidatorTest extends TestCase
             ->method('isValid')
             ->with('%value%')
             ->willReturn(false);
-
         $this->assertFalse($this->object->isValid('%value%'));
         $this->assertEquals($this->expectedValidationMessages, $this->object->getMessages());
+    }
+
+    public function testIsValidWhenInvalidURL()
+    {
+        $this->laminasValidator
+            ->method('isValid')
+            ->with('php://filter');
+        $this->assertFalse($this->object->isValid('php://filter'));
+        $this->assertEquals($this->invalidURL, $this->object->getMessages());
     }
 }
