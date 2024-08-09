@@ -7,10 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\ValidationRules;
 
-use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\Framework\Validator\GlobalForbiddenPatterns;
 use Magento\Quote\Model\Quote;
+use Magento\Framework\Validator\GlobalForbiddenPatterns;
 
 /**
  * Class GlobalValidationRule
@@ -58,21 +57,9 @@ class GlobalValidationRule implements QuoteValidationRuleInterface
      * Validates the global input fields in the quote.
      *
      * @param Quote $quote
-     * @return ValidationResult
+     * @return array
      */
-    public function validate(Quote $quote): ValidationResult
-    {
-        $validationResult = $this->validateGlobalInput($quote);
-        return $validationResult->getErrors();
-    }
-
-    /**
-     * Validates the global input fields extracted from the quote.
-     *
-     * @param Quote $quote
-     * @return ValidationResult
-     */
-    public function validateGlobalInput(Quote $quote): ValidationResult
+    public function validate(Quote $quote): array
     {
         $validationErrors = [];
         $inputArray = $this->extractQuoteData($quote);
@@ -83,7 +70,7 @@ class GlobalValidationRule implements QuoteValidationRuleInterface
             }
         }
 
-        return $this->validationResultFactory->create(['errors' => $validationErrors]);
+        return $validationErrors;
     }
 
     /**
