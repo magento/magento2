@@ -297,7 +297,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     protected function getDbCommand()
     {
-        return $this->isMariaDB() ? 'mariadb' : 'mysql';
+        return $this->isMariaDB() ? 'mariadb-import' : 'mysql';
     }
 
     /**
@@ -307,6 +307,6 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     protected function getDbDumpCommand()
     {
-        return $this->isMariaDB() ? 'mysqldump' : 'mariadb-dump';
+        return $this->isMariaDB() ? 'mariadb-dump' : 'mysqldump';
     }
 }
