@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b51a34214644ae13c3de0c65848483e7",
+    "content-hash": "a504dcb8af9496dc2d370bd0f916e947",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -395,16 +395,16 @@
         },
         {
             "name": "colinmollenhour/php-redis-session-abstract",
-            "version": "v1.5.4",
+            "version": "v1.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/php-redis-session-abstract.git",
-                "reference": "c2e6ed15eb9cb363c9097fafefa590039fbadcb0"
+                "reference": "5d93866cd53701ef8f866cb41cb5c6d7259d4416"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/php-redis-session-abstract/zipball/c2e6ed15eb9cb363c9097fafefa590039fbadcb0",
-                "reference": "c2e6ed15eb9cb363c9097fafefa590039fbadcb0",
+                "url": "https://api.github.com/repos/colinmollenhour/php-redis-session-abstract/zipball/5d93866cd53701ef8f866cb41cb5c6d7259d4416",
+                "reference": "5d93866cd53701ef8f866cb41cb5c6d7259d4416",
                 "shasum": ""
             },
             "require": {
@@ -433,9 +433,9 @@
             "homepage": "https://github.com/colinmollenhour/php-redis-session-abstract",
             "support": {
                 "issues": "https://github.com/colinmollenhour/php-redis-session-abstract/issues",
-                "source": "https://github.com/colinmollenhour/php-redis-session-abstract/tree/v1.5.4"
+                "source": "https://github.com/colinmollenhour/php-redis-session-abstract/tree/v1.5.5"
             },
-            "time": "2024-01-03T14:16:31+00:00"
+            "time": "2024-02-03T06:04:45+00:00"
         },
         {
             "name": "composer/ca-bundle",
