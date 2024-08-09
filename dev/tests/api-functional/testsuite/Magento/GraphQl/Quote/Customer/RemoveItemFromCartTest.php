@@ -11,6 +11,7 @@ use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\GraphQl\Quote\GetQuoteItemIdByReservedQuoteIdAndSku;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -148,12 +149,56 @@ class RemoveItemFromCartTest extends GraphQlAbstract
             'simple_product'
         );
 
-        $this->expectExceptionMessage(
-            "The current user cannot perform operations on cart \"$anotherCustomerQuoteMaskedId\""
-        );
-
         $query = $this->getQuery($anotherCustomerQuoteMaskedId, $anotherCustomerQuoteItemId);
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
+
+        try {
+            $this->graphQlMutation(
+                $query,
+                [],
+                '',
+                $this->getHeaderMap('customer2@search.example.com')
+            );
+            $this->fail('ResponseContainsErrorsException was not thrown');
+        } catch (ResponseContainsErrorsException $e) {
+            $this->assertStringContainsString(
+                "The current user cannot perform operations on cart \"$anotherCustomerQuoteMaskedId\"",
+                $e->getMessage()
+            );
+            $cartQuery = $this->getCartQuery($anotherCustomerQuoteMaskedId);
+            $cart = $this->graphQlQuery(
+                $cartQuery,
+                [],
+                '',
+                $this->getHeaderMap('customer@search.example.com')
+            );
+            $this->assertTrue(count($cart['cart']['items']) > 0, 'The cart is empty');
+            $this->assertTrue(
+                $cart['cart']['items'][0]['product']['sku'] === 'simple_product',
+                'The cart doesn\'t contain product'
+            );
+        }
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getCartQuery(string $maskedQuoteId): string
+    {
+        return <<<QUERY
+{
+  cart(cart_id: "{$maskedQuoteId}") {
+    id
+    items {
+      id
+      quantity
+      product {
+        sku
+      }
+    }
+  }
+}
+QUERY;
     }
 
     /**

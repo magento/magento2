@@ -27,16 +27,6 @@ class ListsTest extends TestCase
     /**
      * @var array
      */
-    private $expectedTimezones = [
-        'Australia/Darwin',
-        'America/Los_Angeles',
-        'Europe/Kiev',
-        'Asia/Jerusalem',
-    ];
-
-    /**
-     * @var array
-     */
     private $expectedCurrencies = [
         'USD',
         'EUR',
@@ -71,8 +61,11 @@ class ListsTest extends TestCase
 
     public function testGetTimezoneList()
     {
-        $timezones = array_intersect($this->expectedTimezones, array_keys($this->lists->getTimezoneList()));
-        $this->assertEquals($this->expectedTimezones, $timezones);
+        $resultTimezone = array_keys($this->lists->getTimezoneList());
+        $timeZone = in_array('Europe/Kyiv', $resultTimezone) ? 'Europe/Kyiv' : 'Europe/Kiev';
+        $expectedTimezones = $this->getExpectedTimezones($timeZone);
+        $timezones = array_intersect($expectedTimezones, $resultTimezone);
+        $this->assertEquals($expectedTimezones, $timezones);
     }
 
     public function testGetLocaleList()
@@ -85,5 +78,15 @@ class ListsTest extends TestCase
     {
         $currencies = array_intersect($this->expectedCurrencies, array_keys($this->lists->getCurrencyList()));
         $this->assertEquals($this->expectedCurrencies, $currencies);
+    }
+
+    private function getExpectedTimezones($timeZone): array
+    {
+        return [
+            'Australia/Darwin',
+            'America/Los_Angeles',
+            $timeZone,
+            'Asia/Jerusalem',
+        ];
     }
 }

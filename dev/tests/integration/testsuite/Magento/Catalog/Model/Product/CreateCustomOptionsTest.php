@@ -35,8 +35,6 @@ class CreateCustomOptionsTest extends TestCase
     private $objectManager;
 
     /**
-     * Product repository.
-     *
      * @var ProductRepositoryInterface
      */
     private $productRepository;
@@ -47,8 +45,6 @@ class CreateCustomOptionsTest extends TestCase
     private $optionRepository;
 
     /**
-     * Custom option factory.
-     *
      * @var ProductCustomOptionInterfaceFactory
      */
     private $customOptionFactory;
@@ -84,7 +80,7 @@ class CreateCustomOptionsTest extends TestCase
      * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
      * @magentoAppArea adminhtml
      * @magentoAppIsolation disabled
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      * @magentoConfigFixture default_store catalog/price/scope 1
      * @magentoConfigFixture secondstore_store catalog/price/scope 1
      */

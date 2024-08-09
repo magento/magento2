@@ -6,27 +6,31 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 
-class Start extends \Magento\Backend\App\Action implements HttpGetActionInterface
+class Start extends Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+    public const ADMIN_RESOURCE = 'Magento_Sales::ship';
 
     /**
      * Start create shipment action
      *
-     * @return void
+     * @return Redirect
      */
     public function execute()
     {
         /**
          * Clear old values for shipment qty's
          */
-        $this->_redirect('*/*/new', ['order_id' => $this->getRequest()->getParam('order_id')]);
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('*/*/new', ['order_id' => $this->getRequest()->getParam('order_id')]);
+        return $resultRedirect;
     }
 }

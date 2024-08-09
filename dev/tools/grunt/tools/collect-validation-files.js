@@ -3,58 +3,60 @@
  * See COPYING.txt for license details.
  */
 
-'use strict';
+module.exports = (function (glob, fs, _, fst, pc) {
+    'use strict';
+    return {
+        readFiles: function (paths) {
+            var data = [];
 
-var glob = require('glob'),
-    fs = require('fs'),
-    _ = require('underscore'),
-    fst = require('../tools/fs-tools'),
-    pc = require('../configs/path');
+            _.each(paths, function (path) {
+                data = _.union(data, fst.getData(path));
+            });
 
-module.exports = {
-    readFiles: function (paths) {
-        var data = [];
+            return data;
+        },
 
-        _.each(paths, function (path) {
-            data = _.union(data, fst.getData(path));
-        });
+        getFilesForValidate: function () {
+            var blackListFiles = glob.sync(pc.static.blacklist + '*.txt'),
+                whiteListFiles = glob.sync(pc.static.whitelist + '*.txt'),
+                blackList = this.readFiles(blackListFiles).filter(this.isListEntryValid),
+                whiteList = this.readFiles(whiteListFiles).filter(this.isListEntryValid),
+                files = [],
+                entireBlackList = [];
 
-        return data;
-    },
+            fst.arrayRead(blackList, function (data) {
+                entireBlackList = _.union(entireBlackList, data);
+            });
 
-    getFilesForValidate: function () {
-        var blackListFiles = glob.sync(pc.static.blacklist + '*.txt'),
-            whiteListFiles = glob.sync(pc.static.whitelist + '*.txt'),
-            blackList = this.readFiles(blackListFiles).filter(this.isListEntryValid),
-            whiteList = this.readFiles(whiteListFiles).filter(this.isListEntryValid),
-            files = [],
-            entireBlackList = [];
+            fst.arrayRead(whiteList, function (data) {
+                files = _.difference(data, entireBlackList);
+            });
 
-        fst.arrayRead(blackList, function (data) {
-            entireBlackList = _.union(entireBlackList, data);
-        });
+            return files;
+        },
 
-        fst.arrayRead(whiteList, function (data) {
-            files = _.difference(data, entireBlackList);
-        });
+        isListEntryValid: function (line) {
+            line = line.trim();
+            return line.length > 0 && line.startsWith('// ') !== true;
+        },
 
-        return files;
-    },
+        getFiles: function (file) {
+            var files;
 
-    isListEntryValid: function(line) {
-        line = line.trim();
-        return line.length > 0 && line.startsWith('// ') !== true;
-    },
+            if (file) {
+                return file.split(',');
+            }
 
-    getFiles: function (file) {
-        if (file) {
-            return file.split(',');
+            if (!fs.existsSync(pc.static.tmp)) {
+                fst.write(pc.static.tmp, this.getFilesForValidate());
+            }
+
+            files = fst.getData(pc.static.tmp);
+            if (files.length === 1 && files[0] === '') {
+                files = [];
+            }
+
+            return files;
         }
-
-        if (!fs.existsSync(pc.static.tmp)) {
-            fst.write(pc.static.tmp, this.getFilesForValidate());
-        }
-
-        return fst.getData(pc.static.tmp);
-    }
-};
+    };
+})(require('glob'),require('fs'),require('underscore'),require('../tools/fs-tools'),require('../configs/path'));

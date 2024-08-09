@@ -78,3 +78,4 @@ Debug,Debug
 "Show Method if Not Applicable","Show Method if Not Applicable"
 "Sort Order","Sort Order"
 "Can't convert a shipping cost from ""%1-%2"" for FedEx carrier.","Can't convert a shipping cost from ""%1-%2"" for FedEx carrier."
+"Fedex API endpoint URL\'s must use fedex.com","Fedex API endpoint URL\'s must use fedex.com"

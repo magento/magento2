@@ -6,9 +6,16 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
+use Magento\Shipping\Model\ShipmentProviderInterface;
 
 class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInterface
 {
@@ -17,38 +24,57 @@ class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInte
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+    public const ADMIN_RESOURCE = 'Magento_Sales::ship';
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
+     * @var ShipmentLoader
      */
     protected $shipmentLoader;
 
     /**
-     * @var \Magento\Shipping\Model\ShipmentProviderInterface
+     * @var ShipmentProviderInterface
      */
     private $shipmentProvider;
 
     /**
-     * @param Action\Context $context
-     * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
-     * @param \Magento\Shipping\Model\ShipmentProviderInterface $shipmentProvider
+     * @var Redirect
+     */
+    protected $redirect;
+
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @param Context $context
+     * @param ShipmentLoader $shipmentLoader
+     * @param Redirect|null $redirect
+     * @param PageFactory|null $resultPageFactory
+     * @param ShipmentProviderInterface|null $shipmentProvider
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
-        \Magento\Shipping\Model\ShipmentProviderInterface $shipmentProvider = null
+        ShipmentLoader $shipmentLoader,
+        Redirect $redirect = null,
+        PageFactory $resultPageFactory = null,
+        ShipmentProviderInterface $shipmentProvider = null
     ) {
         $this->shipmentLoader = $shipmentLoader;
+        $this->redirect = $redirect ?: ObjectManager::getInstance()
+            ->get(Redirect::class);
+        $this->resultPageFactory = $resultPageFactory ?: ObjectManager::getInstance()
+            ->get(PageFactory::class);
         $this->shipmentProvider = $shipmentProvider ?: ObjectManager::getInstance()
-            ->get(\Magento\Shipping\Model\ShipmentProviderInterface::class);
+            ->get(ShipmentProviderInterface::class);
         parent::__construct($context);
     }
 
     /**
      * Shipment create page
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
+     * @throws LocalizedException
      */
     public function execute()
     {
@@ -63,13 +89,14 @@ class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInte
                 $shipment->setCommentText($comment);
             }
 
-            $this->_view->loadLayout();
-            $this->_setActiveMenu('Magento_Sales::sales_order');
-            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Shipments'));
-            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('New Shipment'));
-            $this->_view->renderLayout();
+            /** @var Page $resultPage */
+            $resultPage = $this->resultPageFactory->create();
+            $resultPage->setActiveMenu('Magento_Sales::sales_order');
+            $resultPage->getConfig()->getTitle()->prepend(__('Shipments'));
+            $resultPage->getConfig()->getTitle()->prepend(__('New Shipment'));
+            return $resultPage;
         } else {
-            $this->_redirect('*/order/view', ['order_id' => $this->getRequest()->getParam('order_id')]);
+            return $this->redirect->setPath('*/order/view', ['order_id' => $this->getRequest()->getParam('order_id')]);
         }
     }
 }

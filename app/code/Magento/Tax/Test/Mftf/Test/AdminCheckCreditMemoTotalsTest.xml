@@ -20,6 +20,8 @@
             <group value="sales"/>
         </annotations>
         <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- Create productTaxClass -->
             <createData entity="productTaxClass" stepKey="createProductTaxClass"/>
             <!--Set configs-->

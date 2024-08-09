@@ -3,25 +3,62 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\TaxImportExport\Controller\Adminhtml\Rate;
+use Magento\TaxImportExport\Model\Rate\CsvImportHandler;
 
-class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
+class ImportPost extends Rate implements HttpPostActionInterface
 {
     /**
-     * import action from import/export tax
+     * @var Context
+     */
+    protected $context;
+
+    /**
+     * @var FileFactory
+     */
+    protected $fileFactory;
+
+    /**
+     * @var RedirectInterface
+     */
+    protected $resultRedirect;
+
+    /**
+     * @param Context $context
+     * @param FileFactory $fileFactory
+     */
+    public function __construct(
+        Context $context,
+        FileFactory $fileFactory
+    ) {
+        $this->resultRedirect = $context->getRedirect();
+        parent::__construct($context, $fileFactory);
+    }
+
+    /**
+     * Import action from import/export tax
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
         $importRatesFile = $this->getRequest()->getFiles('import_rates_file');
         if ($this->getRequest()->isPost() && isset($importRatesFile['tmp_name'])) {
             try {
-                /** @var $importHandler \Magento\TaxImportExport\Model\Rate\CsvImportHandler */
+                /** @var $importHandler CsvImportHandler */
                 $importHandler = $this->_objectManager->create(
-                    \Magento\TaxImportExport\Model\Rate\CsvImportHandler::class
+                    CsvImportHandler::class
                 );
                 $importHandler->importFromCsvFile($importRatesFile);
 
@@ -34,21 +71,11 @@ class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         } else {
             $this->messageManager->addError(__('Invalid file upload attempt'));
         }
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        $resultRedirect->setUrl($this->_redirect->getRedirectUrl());
-        return $resultRedirect;
-    }
 
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed(
-            'Magento_Tax::manage_tax'
-        ) || $this->_authorization->isAllowed(
-            'Magento_TaxImportExport::import_export'
-        );
+        $resultRedirect->setUrl($this->resultRedirect->getRedirectUrl());
+
+        return $resultRedirect;
     }
 }
