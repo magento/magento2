@@ -62,7 +62,8 @@ class GlobalValidationRule implements QuoteValidationRuleInterface
      */
     public function validate(Quote $quote): ValidationResult
     {
-        return $this->validateGlobalInput($quote);
+        $validationResult = $this->validateGlobalInput($quote);
+        return $validationResult->getErrors();
     }
 
     /**
