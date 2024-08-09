@@ -309,14 +309,4 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     {
         return $this->isMariaDB() ? 'mariadb-dump' : 'mysqldump';
     }
-
-    /**
-     * Get db command mysql or mariadb-import
-     *
-     * @return string
-     */
-    protected function getDbImportCommand()
-    {
-        return $this->isMariaDB() ? 'mariadb-import' : 'mysql';
-    }
 }
