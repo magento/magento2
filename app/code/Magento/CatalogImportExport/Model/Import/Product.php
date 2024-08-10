@@ -1877,7 +1877,6 @@ class Product extends AbstractEntity
         $rowSku = $rowData[self::COL_SKU];
         $rowSkuNormalized = mb_strtolower($rowSku);
         $rowExistingImages = $existingImages[$storeId][$rowSkuNormalized] ?? [];
-        $rowStoreMediaGalleryValues = $rowExistingImages;
         $rowExistingImages += $existingImages[Store::DEFAULT_STORE_ID][$rowSkuNormalized] ?? [];
         list($rowImages, $rowLabels) = $this->getImagesFromRow($rowData);
         $imageHiddenStates = $this->getImagesHiddenStates($rowData);
@@ -1941,24 +1940,20 @@ class Product extends AbstractEntity
                 if (isset($rowExistingImages[$uploadedFileNormalized])) {
                     $currentFileData = $rowExistingImages[$uploadedFileNormalized];
                     $currentFileData['store_id'] = $storeId;
-                    $storeMediaGalleryValueExists = isset($rowStoreMediaGalleryValues[$uploadedFileNormalized]);
-                    if (array_key_exists($uploadedFile, $imageHiddenStates)
-                        && $currentFileData['disabled'] != $imageHiddenStates[$uploadedFile]
-                    ) {
-                        $imagesForChangeVisibility[] = [
-                            'disabled' => $imageHiddenStates[$uploadedFile],
-                            'imageData' => $currentFileData,
-                            'exists' => $storeMediaGalleryValueExists
-                        ];
-                        $storeMediaGalleryValueExists = true;
-                    }
+                    $imagesForChangeVisibility[] = [
+                        'disabled' => array_key_exists(
+                            $uploadedFile, $imageHiddenStates
+                        ) ? $imageHiddenStates[$uploadedFile] : '0',
+                        'imageData' => $currentFileData,
+                        'exists' => true
+                    ];
                     if (isset($rowLabels[$column][$columnImageKey])
                         && $rowLabels[$column][$columnImageKey] !== $currentFileData['label']
                     ) {
                         $labelsForUpdate[] = [
                             'label' => $rowLabels[$column][$columnImageKey],
                             'imageData' => $currentFileData,
-                            'exists' => $storeMediaGalleryValueExists
+                            'exists' => true
                         ];
                     }
                 } else {
