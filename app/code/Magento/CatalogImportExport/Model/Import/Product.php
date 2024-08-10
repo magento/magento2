@@ -177,6 +177,11 @@ class Product extends AbstractEntity
     public const URL_KEY = 'url_key';
 
     /**
+     * Hide from product page attribute code
+     */
+    public const COL_MEDIA_IMAGE_HIDE = '_media_is_disabled';
+
+    /**
      * @var array
      */
     protected $_attributeCache = [];
@@ -332,7 +337,7 @@ class Product extends AbstractEntity
         'thumbnail_label' => 'thumbnail_image_label',
         self::COL_MEDIA_IMAGE => 'additional_images',
         '_media_image_label' => 'additional_image_labels',
-        '_media_is_disabled' => 'hide_from_product_page',
+        self::COL_MEDIA_IMAGE_HIDE => 'hide_from_product_page',
         Product::COL_STORE => 'store_view_code',
         Product::COL_ATTR_SET => 'attribute_set_code',
         Product::COL_TYPE => 'product_type',
@@ -415,7 +420,7 @@ class Product extends AbstractEntity
         self::COL_MEDIA_IMAGE,
         '_media_label',
         '_media_position',
-        '_media_is_disabled',
+        self::COL_MEDIA_IMAGE_HIDE
     ];
 
     /**
@@ -1940,13 +1945,15 @@ class Product extends AbstractEntity
                 if (isset($rowExistingImages[$uploadedFileNormalized])) {
                     $currentFileData = $rowExistingImages[$uploadedFileNormalized];
                     $currentFileData['store_id'] = $storeId;
-                    $imagesForChangeVisibility[] = [
-                        'disabled' => array_key_exists(
-                            $uploadedFile, $imageHiddenStates
-                        ) ? $imageHiddenStates[$uploadedFile] : '0',
-                        'imageData' => $currentFileData,
-                        'exists' => true
-                    ];
+                    if (array_key_exists(self::COL_MEDIA_IMAGE_HIDE, $rowData)) {
+                        $imagesForChangeVisibility[] = [
+                            'disabled' => array_key_exists(
+                                $uploadedFile, $imageHiddenStates
+                            ) ? $imageHiddenStates[$uploadedFile] : '0',
+                            'imageData' => $currentFileData,
+                            'exists' => true
+                        ];
+                    }
                     if (isset($rowLabels[$column][$columnImageKey])
                         && $rowLabels[$column][$columnImageKey] !== $currentFileData['label']
                     ) {
@@ -2159,7 +2166,7 @@ class Product extends AbstractEntity
     {
         $statesArray = [];
         $mappingArray = [
-            '_media_is_disabled' => '1'
+            self::COL_MEDIA_IMAGE_HIDE => '1'
         ];
 
         foreach ($mappingArray as $key => $value) {
