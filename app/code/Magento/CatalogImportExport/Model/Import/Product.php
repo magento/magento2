@@ -1885,6 +1885,7 @@ class Product extends AbstractEntity
         $rowExistingImages += $existingImages[Store::DEFAULT_STORE_ID][$rowSkuNormalized] ?? [];
         list($rowImages, $rowLabels) = $this->getImagesFromRow($rowData);
         $imageHiddenStates = $this->getImagesHiddenStates($rowData);
+        $imageHideColumnExist = array_key_exists(self::COL_MEDIA_IMAGE_HIDE, $rowData);
         foreach (array_keys($imageHiddenStates) as $image) {
             //Mark image as uploaded if it exists
             if (array_key_exists($image, $rowExistingImages)) {
@@ -1945,7 +1946,7 @@ class Product extends AbstractEntity
                 if (isset($rowExistingImages[$uploadedFileNormalized])) {
                     $currentFileData = $rowExistingImages[$uploadedFileNormalized];
                     $currentFileData['store_id'] = $storeId;
-                    if (array_key_exists(self::COL_MEDIA_IMAGE_HIDE, $rowData)) {
+                    if ($imageHideColumnExist) {
                         $imagesForChangeVisibility[] = [
                             'disabled' => array_key_exists(
                                 $uploadedFile, $imageHiddenStates
