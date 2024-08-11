@@ -10,19 +10,28 @@ use Magento\Developer\Model\Di\Information;
 use Magento\Framework\App\ObjectManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Helper\Table;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\App\Area;
 
 class DiInfoCommand extends Command
 {
+    /**
+     * Command name
+     */
     public const COMMAND_NAME = 'dev:di:info';
 
+    /**
+     * input name
+     */
     public const CLASS_NAME = 'class';
 
+    /**
+     * Area name
+     */
     public const AREA_CODE = 'area';
 
     /**
@@ -49,7 +58,7 @@ class DiInfoCommand extends Command
     }
 
     /**
-     * @inheritdoc
+     * Initialization of the command
      *
      * @throws InvalidArgumentException
      */
@@ -102,7 +111,7 @@ class DiInfoCommand extends Command
             $paramsTableArray[] = $parameterRow;
         }
         $paramsTable->setRows($paramsTableArray);
-        $output->writeln($paramsTable->render());
+        $paramsTable->render();
     }
 
     /**
@@ -151,12 +160,14 @@ class DiInfoCommand extends Command
             ->setHeaders(['Plugin', 'Method', 'Type'])
             ->setRows($parameters);
 
-        $output->writeln($table->render());
+        $table->render();
     }
 
     /**
-     * @inheritdoc
-     * @throws \InvalidArgumentException
+     * Displays dependency injection configuration information for a class.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

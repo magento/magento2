@@ -161,9 +161,7 @@ class HelperTest extends TestCase
             ->getMock();
         $this->productLinksMock = $this->createMock(ProductLinks::class);
         $this->linkTypeProviderMock = $this->createMock(LinkTypeProvider::class);
-        $this->productLinksMock->expects($this->any())
-            ->method('initializeLinks')
-            ->willReturn($this->productMock);
+
         $this->attributeFilterMock = $this->createMock(AttributeFilter::class);
         $this->localeFormatMock = $this->createMock(Format::class);
 
@@ -221,6 +219,7 @@ class HelperTest extends TestCase
      * @param array|null $tierPrice
      * @dataProvider initializeDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function testInitialize(
         $isSingleStore,
@@ -229,8 +228,17 @@ class HelperTest extends TestCase
         $links,
         $linkTypes,
         $expectedLinks,
-        $tierPrice = null
+        $tierPrice = null,
+        $isReadOnlyRelatedItems = null,
+        $isReadOnlyUpSellItems = null,
+        $ignoreLinksFlag = false
     ) {
+        $this->productMock->setData('related_readonly', $isReadOnlyRelatedItems);
+        $this->productMock->setData('upsell_readonly', $isReadOnlyUpSellItems);
+        $this->productLinksMock->expects($this->any())
+            ->method('initializeLinks')
+            ->willReturn($this->productMock);
+
         $this->linkTypeProviderMock->expects($this->once())
             ->method('getItems')
             ->willReturn($this->assembleLinkTypes($linkTypes));
@@ -346,6 +354,11 @@ class HelperTest extends TestCase
 
         $productLinks = $this->productMock->getProductLinks();
         $this->assertCount(count($expectedLinks), $productLinks);
+        if ($ignoreLinksFlag) {
+            $this->assertTrue($this->productMock->getDataByKey('ignore_links_flag'));
+        } else {
+            $this->assertFalse($this->productMock->getDataByKey('ignore_links_flag'));
+        }
         $resultLinks = [];
 
         $this->assertEquals($tierPrice ?: [], $this->productMock->getData('tier_price'));
@@ -559,6 +572,34 @@ class HelperTest extends TestCase
                     ['type' => 'related', 'linked_product_sku' => 'Test'],
                 ],
             ],
+
+            // readonly links
+            [
+                'single_store' => false,
+                'website_ids' => ['1' => 1, '2' => 2],
+                'expected_website_ids' => ['1' => 1, '2' => 2],
+                'links' => [
+                    'related' => [
+                        0 => [
+                            'id' => 1,
+                            'thumbnail' => 'http://magento.dev/media/no-image.jpg',
+                            'name' => 'Test',
+                            'status' => 'Enabled',
+                            'attribute_set' => 'Default',
+                            'sku' => 'Test',
+                            'price' => 1.00,
+                            'position' => 1,
+                            'record_id' => 1,
+                        ],
+                    ],
+                ],
+                'linkTypes' => ['related', 'upsell', 'crosssell'],
+                'expected_links' => [],
+                'tierPrice' => [],
+                true,
+                true,
+                true
+            ],
         ];
     }
 
@@ -660,6 +701,7 @@ class HelperTest extends TestCase
                                 'default_key2' => 'val22',
                             ],
                         ],
+                        'is_use_default' => 1,
                     ],
                 ],
             ],
@@ -702,6 +744,7 @@ class HelperTest extends TestCase
                                 'default_key1' => 'val11',
                                 'default_title' => 'val22',
                                 'is_delete_store_title' => 1,
+                                'is_use_default' => 1,
                             ],
                         ],
                     ],

@@ -38,7 +38,7 @@ class JsonEncodedTest extends TestCase
     {
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
-            ->setMethods(['serialize', 'unserialize'])
+            ->onlyMethods(['serialize', 'unserialize'])
             ->getMock();
 
         $this->serializerMock->expects($this->any())
@@ -59,7 +59,7 @@ class JsonEncodedTest extends TestCase
 
         $this->attributeMock = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode'])
+            ->onlyMethods(['getAttributeCode'])
             ->getMock();
 
         $this->attributeMock->expects($this->any())

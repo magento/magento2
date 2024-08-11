@@ -70,11 +70,11 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
             ->getMock();
         $this->gateway = $this->getMockBuilder(Gateway::class)
             ->disableOriginalConstructor()
-            ->setMethods(['postRequest'])
+            ->onlyMethods(['postRequest'])
             ->getMock();
 
         $requestFactory = $this->getMockBuilder(RequestFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -161,15 +161,17 @@ QUERY;
             ->willReturnMap(
                 [
                     [
-                        'user' => null,
-                        'vendor' => null,
-                        'partner' => null,
-                        'pwd' => null,
-                        'verbosity' => null,
-                        'BUTTONSOURCE' => $button,
-                        'tender' => 'C',
-                    ],
-                    $this->returnSelf()
+                        [
+                            'user' => null,
+                            'vendor' => null,
+                            'partner' => null,
+                            'pwd' => null,
+                            'verbosity' => null,
+                            'BUTTONSOURCE' => $button,
+                            'tender' => 'C',
+                        ],
+                        $this->returnSelf()
+                    ]
                 ],
                 ['USER1', 1, $this->returnSelf()],
                 ['USER2', 'USER2SilentPostHash', $this->returnSelf()]

@@ -15,6 +15,7 @@ use Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItemInterface
 use Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PhpAmqpLib\Message\AMQPMessage;
+use PhpAmqpLib\Channel\AMQPChannel;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -97,8 +98,8 @@ class ExchangeTest extends TestCase
         ];
         $this->communicationConfig->expects($this->once())
             ->method('getTopic')->with($topicName)->willReturn($topicData);
-        $channel = $this->getMockBuilder(\AMQPChannel::class)
-            ->setMethods(['batch_basic_publish', 'publish_batch'])
+        $channel = $this->getMockBuilder(AMQPChannel::class)
+            ->onlyMethods(['batch_basic_publish', 'publish_batch'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->amqpConfig->expects($this->once())->method('getChannel')->willReturn($channel);
