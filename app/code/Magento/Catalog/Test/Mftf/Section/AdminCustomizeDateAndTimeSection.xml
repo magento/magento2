@@ -13,7 +13,5 @@
         <element name="dateAndTimeFirstFieldOrder" type="select" selector="//*[@id='catalog_custom_options_date_fields_order'][1]"/>
         <element name="dateAndTimeSecondFieldOrder" type="select" selector="//*[@id='catalog_custom_options_date_fields_order'][2]"/>
         <element name="dateAndTimeThirdFieldOrder" type="select" selector="//*[@id='catalog_custom_options_date_fields_order'][3]"/>
-        <element name="save" type="button" selector="//*[@id='save']" timeout="30"/>
-        <element name="successMessage" type="text" selector=".message.message-success.success"/>
     </section>
 </sections>
