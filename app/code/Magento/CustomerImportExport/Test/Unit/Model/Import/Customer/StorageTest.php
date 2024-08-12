@@ -27,31 +27,30 @@ use Magento\Customer\Model\Config\Share;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionException;
 
 class StorageTest extends TestCase
 {
     /**
-     * @var Storage
+     * @var MockObject|Storage
      */
-    private Storage $storage;
+    private MockObject|Storage $storage;
 
     /**
-     * @var Collection|MockObject
+     * @var MockObject|Collection
      */
-    private mixed $customerCollectionMock;
+    private MockObject|Collection $customerCollectionMock;
 
     /**
-     * @var Share|MockObject
+     * @var MockObject|Share
      */
-    private mixed $configShareMock;
+    private MockObject|Share $configShareMock;
 
     /**
-     * @var AdapterInterface|MockObject
+     * @var MockObject|AdapterInterface
      */
-    private mixed $connectionMock;
+    private MockObject|AdapterInterface $connectionMock;
 
     /**
      * @inheritdoc
@@ -75,19 +74,60 @@ class StorageTest extends TestCase
     }
 
     /**
-     * Test loadCustomersData method when the scope is set to global.
+     * Test prepareCustomers when the scope is set to global.
      *
-     * @throws Exception|ReflectionException
+     * @dataProvider customerDataProvider
+     * @throws Exception
      */
-    public function testLoadCustomersData()
+    public function testPrepareCustomers(array $customersToFind, array $customersData, array $expectedResults): void
     {
-        $customerIdentifiers = [
-            'test@example.com_2' => ['email' => 'test@example.com', 'website_id' => 2],
-            'test@example.com_3' => ['email' => 'test@example.com', 'website_id' => 3],
-            'test@example.com_4' => ['email' => 'test@example.com', 'website_id' => 4],
-            'test@example.com_5' => ['email' => 'test@example.com', 'website_id' => 5]
-        ];
+        $this->mockCustomerCollection($customersData);
+        $this->storage->prepareCustomers($customersToFind);
 
+        foreach ($expectedResults as $email => $expectedResult) {
+            foreach ($expectedResult as $websiteId => $expectedCustomerId) {
+                $this->assertEquals($expectedCustomerId, $this->storage->getCustomerId($email, $websiteId));
+            }
+        }
+    }
+
+    /**
+     * Data provider for testPrepareCustomers.
+     *
+     * @return array[]
+     */
+    public static function customerDataProvider(): array
+    {
+        return [
+            'Test sample customers data' => [
+                'customersToFind' => [
+                    ['email' => 'test@example.com', 'website_id' => 3],
+                    ['email' => 'test@example.com', 'website_id' => 4],
+                    ['email' => 'test@example.com', 'website_id' => 5],
+                    ['email' => 'test@example.com', 'website_id' => 6],
+                ],
+                'customersData' => [
+                    ['email' => 'test@example.com', 'website_id' => 1, 'entity_id' => 1, 'store_id' => 1],
+                    ['email' => 'test@example.com', 'website_id' => 2, 'entity_id' => 2, 'store_id' => 2],
+                ],
+                'expectedResults' => [
+                    'test@example.com' => [
+                        1 => 1,
+                        2 => 2,
+                    ],
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * Mock the customer collection to return specific data.
+     *
+     * @param array $customersData
+     * @throws Exception
+     */
+    private function mockCustomerCollection(array $customersData): void
+    {
         $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->once())
             ->method('getPart')
@@ -96,41 +136,27 @@ class StorageTest extends TestCase
         $this->customerCollectionMock->expects($this->once())
             ->method('getSelect')
             ->willReturn($selectMock);
-        $connectionMock = $this->getConnectionMock();
-        $this->customerCollectionMock
-            ->expects($this->once())
-            ->method('getConnection')
-            ->willReturn($connectionMock);
 
-        $this->configShareMock->expects($this->once())
+        $this->customerCollectionMock->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($this->mockConnection($customersData));
+
+        $this->configShareMock->expects($this->exactly(2))
             ->method('isGlobalScope')
             ->willReturn(true);
-
-        $reflection = new ReflectionClass($this->storage);
-        $customerIdsProperty = $reflection->getProperty('_customerIds');
-        $loadCustomersDataMethod = $reflection->getMethod('loadCustomersData');
-        $loadCustomersDataMethod->setAccessible(true);
-        $loadCustomersDataMethod->invokeArgs($this->storage, [$customerIdentifiers]);
-        $customerIds = $customerIdsProperty->getValue($this->storage);
-        $this->assertArrayHasKey('test@example.com', $customerIds);
     }
 
     /**
-     * Mock DB connection and return customer data's
+     * Mock the database connection to return specific customer data.
      *
-     * @return AdapterInterface
-     * @throws Exception
+     * @param array $customersData
+     * @return MockObject
      */
-    private function getConnectionMock(): AdapterInterface
+    private function mockConnection(array $customersData): MockObject
     {
-        $customerData = [
-            'email' => 'test@example.com',
-            'website_id' => 1,
-            'entity_id' => 1,
-            'store_id' => 1
-        ];
         $this->connectionMock->expects($this->once())
-            ->method('fetchAll')->willReturn([$customerData]);
+            ->method('fetchAll')
+            ->willReturn($customersData);
 
         return $this->connectionMock;
     }
