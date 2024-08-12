@@ -735,25 +735,25 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
          * for this we have additional diapason for 0
          * TotalPaid - contains amount, that were not rounded.
          */
-        $totalRefunded = $this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded();
+        $totalRefundable = $this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded();
         if (abs((float) $this->getGrandTotal()) < .0001) {
-            return $this->canCreditmemoForZeroTotal($totalRefunded);
+            return $this->canCreditmemoForZeroTotal($totalRefundable);
         }
 
-        return $this->canCreditmemoForZeroTotalRefunded($totalRefunded);
+        return $this->canCreditmemoForZeroTotalRefunded($totalRefundable);
     }
 
     /**
      * Retrieve credit memo for zero total refunded availability.
      *
-     * @param float $totalRefunded
+     * @param float $totalRefundable
      * @return bool
      */
-    private function canCreditmemoForZeroTotalRefunded($totalRefunded)
+    private function canCreditmemoForZeroTotalRefunded($totalRefundable)
     {
-        $isRefundZero = abs((float) $totalRefunded) < .0001;
+        $isRefundZero = abs((float) $totalRefundable) < .0001;
         // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
-        $hasAdjustmentFee = abs($totalRefunded - $this->getAdjustmentNegative()) < .0001;
+        $hasAdjustmentFee = abs($totalRefundable - $this->getAdjustmentNegative()) < .0001;
         $hasActionFlag = $this->getActionFlag(self::ACTION_FLAG_EDIT) === false;
         if ($isRefundZero || $hasAdjustmentFee || $hasActionFlag) {
             return false;
@@ -765,10 +765,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Retrieve credit memo for zero total availability.
      *
-     * @param float $totalRefunded
+     * @param float $totalRefundable
      * @return bool
      */
-    private function canCreditmemoForZeroTotal($totalRefunded)
+    private function canCreditmemoForZeroTotal($totalRefundable)
     {
         if ($this->areThereRefundableItems()) {
             return true;
@@ -785,7 +785,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
         if ($hasDueAmount ||
             $paidAmtIsRefunded ||
-            (!$checkAmtTotalPaid && abs($totalRefunded - $this->getAdjustmentNegative()) < .0001)) {
+            (!$checkAmtTotalPaid && abs($totalRefundable - $this->getAdjustmentNegative()) < .0001)) {
             return false;
         }
         return true;
