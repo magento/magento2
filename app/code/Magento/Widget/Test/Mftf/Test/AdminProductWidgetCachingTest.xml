@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductWidgetCachingTest">
+        <annotations>
+            <features value="Widget"/>
+            <stories value="Product Widget Caching"/>
+            <title value="Product CMS Widget Caching"/>
+            <description value="Verify product price and currency post widget caching"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4045"/>
+        </annotations>
+        <before>
+            <!--Login as Admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Enable currency options-->
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForEUR.value}}" stepKey="setAllowedCurrencyAsEURandUSD"/>
+            <!--Configure currency rates-->
+            <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="gotToCurrencyRatesPage"/>
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="setCurrencyRates">
+                <argument name="firstCurrency" value="USD"/>
+                <argument name="secondCurrency" value="EUR"/>
+                <argument name="rate" value="0.8"/>
+            </actionGroup>
+            <!--Create category-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <!--Create first simple product-->
+            <createData entity="SimpleProduct2" stepKey="createFirstSimpleProduct">
+                <field key="sku">simple</field>
+                <field key="price">9</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Create second simple product-->
+            <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct">
+                <field key="sku">simple1</field>
+                <field key="price">1</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Create third simple product-->
+            <createData entity="SimpleProduct2" stepKey="createThirdSimpleProduct">
+                <field key="sku">simple2</field>
+                <field key="price">10</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Create widget catalog product list with widget options-->
+            <actionGroup ref="AdminCreateCatalogProductsListWidgetActionGroup" stepKey="addWidgetCatalogProductList">
+                <argument name="widget" value="CatalogProductsListWidget"/>
+                <argument name="title" value="Some Title"/>
+                <argument name="displayPageControl" value="1"/>
+                <argument name="numberOfProductsToDisplay" value="10"/>
+                <argument name="condition" value="SKU"/>
+                <argument name="conditionsOperator" value="is one of"/>
+                <argument name="conditionParameter" value="$createFirstSimpleProduct.sku$,$createSecondSimpleProduct.sku$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Set currency options to default-->
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="setAllowedCurrencyAsDeafultUSD"/>
+            <!--Delete widget catalog product list-->
+            <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteWidgetCatalogProductList">
+                <argument name="widget" value="CatalogProductsListWidget"/>
+            </actionGroup>
+            <!--Delete first simple product-->
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <!--Delete second simple product-->
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <!--Delete third simple product-->
+            <deleteData createDataKey="createThirdSimpleProduct" stepKey="deleteThirdSimpleProduct"/>
+            <!--Logout from Admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Navigate to storefront home page-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <!--Navigate to category page to see all products-->
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="openCategoryPage">
+            <argument name="categoryUrl" value="$$createCategory.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!--Assert  first product name, price & currency displayed in USD-->
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertFirstProductDetailsInUSD">
+            <argument name="productName" value="$$createFirstSimpleProduct.name$$"/>
+            <argument name="productPrice" value="$$createFirstSimpleProduct.price$$"/>
+        </actionGroup>
+        <!--Assert  second product name, price & currency displayed in USD-->
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertSecondProductDetailsInUSD">
+            <argument name="productName" value="$$createSecondSimpleProduct.name$$"/>
+            <argument name="productPrice" value="$$createSecondSimpleProduct.price$$"/>
+        </actionGroup>
+        <!--Assert third product not present as per widget options condition-->
+        <actionGroup ref="AssertStorefrontProductAbsentOnCategoryPageActionGroup" stepKey="assertThirdProductNotPresent">
+            <argument name="categoryUrlKey" value="$$createCategory.name$$"/>
+            <argument name="productName" value="$$createThirdSimpleProduct.name$$"/>
+        </actionGroup>
+        <!--Switch storefront currency display to EURO-->
+        <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchToEURCurrency">
+            <argument name="currency" value="EUR"/>
+        </actionGroup>
+        <!--Assert first product price & currency as per EURO-->
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertFirstProductDetailsInEURO">
+            <argument name="productName" value="$$createFirstSimpleProduct.name$$"/>
+            <argument name="productPrice" value="€7.20"/>
+        </actionGroup>
+        <!--Assert second product price & currency as per EURO-->
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertSecondProductDetailsInEURO">
+            <argument name="productName" value="$$createSecondSimpleProduct.name$$"/>
+            <argument name="productPrice" value="€0.80"/>
+        </actionGroup>
+    </test>
+</tests>

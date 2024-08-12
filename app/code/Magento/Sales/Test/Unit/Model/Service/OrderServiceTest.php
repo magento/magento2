@@ -20,6 +20,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\OrderStatusHistoryRepositoryInterface;
 use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Config;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 use Magento\Sales\Model\Order\Status\History;
 use Magento\Sales\Model\OrderMutex;
@@ -28,12 +29,12 @@ use Magento\Sales\Model\Service\OrderService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Phrase;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class OrderServiceTest extends TestCase
 {
@@ -112,6 +113,11 @@ class OrderServiceTest extends TestCase
      */
     private $resourceConnectionMock;
 
+    /**
+     * @var MockObject|Config
+     */
+    private $orderConfigMock;
+
     protected function setUp(): void
     {
         $this->orderRepositoryMock = $this->getMockBuilder(
@@ -189,6 +195,10 @@ class OrderServiceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->orderConfigMock = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->orderService = new OrderService(
             $this->orderRepositoryMock,
             $this->orderStatusHistoryRepositoryMock,
@@ -199,7 +209,8 @@ class OrderServiceTest extends TestCase
             $this->orderCommentSender,
             $paymentFailures,
             $logger,
-            new OrderMutex($this->resourceConnectionMock)
+            new OrderMutex($this->resourceConnectionMock),
+            $this->orderConfigMock
         );
     }
 
@@ -276,11 +287,15 @@ class OrderServiceTest extends TestCase
 
     public function testAddComment()
     {
+        $orderId = 123;
         $clearComment = "Comment text here...";
-        $this->orderRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with(123)
-            ->willReturn($this->orderMock);
+        $this->mockCommentStatuses($orderId, Order::STATUS_FRAUD);
+        $this->orderMock->expects($this->once())
+            ->method('setStatus')
+            ->willReturn(Order::STATUS_FRAUD);
+        $this->orderStatusHistoryMock->expects($this->once())
+            ->method('setStatus')
+            ->willReturn(Order::STATUS_FRAUD);
         $this->orderMock->expects($this->once())
             ->method('addStatusHistory')
             ->with($this->orderStatusHistoryMock)
@@ -294,7 +309,7 @@ class OrderServiceTest extends TestCase
         $this->orderCommentSender->expects($this->once())
             ->method('send')
             ->with($this->orderMock, false, $clearComment);
-        $this->assertTrue($this->orderService->addComment(123, $this->orderStatusHistoryMock));
+        $this->assertTrue($this->orderService->addComment($orderId, $this->orderStatusHistoryMock));
     }
 
     /**
@@ -302,15 +317,44 @@ class OrderServiceTest extends TestCase
      */
     public function testAddCommentWithStatus()
     {
-        $params = ['status' => 'holded'];
-        $inputException = new LocalizedException(
-            new Phrase('Unable to add comment: The status "%1" is not part of the order
-            status history.', $params)
+        $orderId = 123;
+        $inputException = __(
+            'Unable to add comment: The status "%1" is not part of the order status history.',
+            Order::STATE_NEW
         );
-        $this->orderStatusHistoryMock->method('getStatus')
-            ->willThrowException($inputException);
+        $this->mockCommentStatuses($orderId, Order::STATE_NEW);
         $this->expectException(LocalizedException::class);
-        $this->orderService->addComment(123, $this->orderStatusHistoryMock);
+        $this->expectExceptionMessage((string)$inputException);
+        $this->orderService->addComment($orderId, $this->orderStatusHistoryMock);
+    }
+
+    /**
+     * @param $orderId
+     * @param $orderStatusHistory
+     */
+    private function mockCommentStatuses($orderId, $orderStatusHistory): void
+    {
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($orderId)
+            ->willReturn($this->orderMock);
+        $this->orderMock->expects($this->once())
+            ->method('getState')
+            ->willReturn(Order::STATE_PROCESSING);
+        $this->orderConfigMock->expects($this->once())
+            ->method('getStateStatuses')
+            ->with(Order::STATE_PROCESSING)
+            ->willReturn([
+                Order::STATE_PROCESSING => 'Processing',
+                Order::STATUS_FRAUD => 'Suspected Fraud',
+                'test' => 'Tests'
+            ]);
+        $this->orderMock->expects($this->once())
+            ->method('getStatus')
+            ->willReturn(Order::STATE_PROCESSING);
+        $this->orderStatusHistoryMock->expects($this->once())
+            ->method('getStatus')
+            ->willReturn($orderStatusHistory);
     }
 
     public function testNotify()
