@@ -122,7 +122,7 @@ class ProductSearchTest extends GraphQlAbstract
      */
     public function testSortMultipleFieldsSentInVariables(): void
     {
-        $query = <<<'QUERY'
+        $queryAsc = <<<'QUERY'
 query GetProductsQuery(
     $search: String,
     $filter: ProductAttributeFilterInput,
@@ -164,7 +164,7 @@ QUERY;
             'currentPage' => 1,
             'sort' => ['price' => 'ASC', 'name' => 'ASC']
         ];
-        $response = $this->graphQlQuery($query, $variables);
+        $response = $this->graphQlQuery($queryAsc, $variables);
         $this->assertEquals(5, $response['products']['total_count']);
         $prod1 = $this->productRepository->get('search_product_1');
         $prod2 = $this->productRepository->get('search_product_2');
@@ -173,6 +173,64 @@ QUERY;
         $prod5 = $this->productRepository->get('search_product_5');
 
         $filteredProducts = [$prod1, $prod2, $prod3, $prod4, $prod5];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                ]
+            );
+        }
+
+        //price DESC and name ASC order
+        $queryPriceDescNameAsc = <<<'QUERY'
+query GetProductsQuery(
+    $search: String,
+    $filter: ProductAttributeFilterInput,
+    $pageSize: Int,
+    $currentPage: Int,
+    $sort: ProductAttributeSortInput
+) {
+    products(
+        search: $search,
+        filter: $filter,
+        pageSize: $pageSize,
+        currentPage: $currentPage,
+        sort: $sort
+    ) {
+        total_count
+        page_info{total_pages}
+        items{
+            __typename
+            url_key
+            sku
+            name
+            stock_status
+            price_range {
+                minimum_price {
+                    final_price {
+                        value
+                        currency
+                    }
+                }
+            }
+        }
+    }
+}
+QUERY;
+        $variables = [
+            'search' => null,
+            'filter' => [],
+            'pageSize' => 24,
+            'currentPage' => 1,
+            'sort' => ['price' => 'DESC', 'name' => 'ASC']
+        ];
+        $response = $this->graphQlQuery($queryPriceDescNameAsc, $variables);
+        $this->assertEquals(5, $response['products']['total_count']);
+
+        $filteredProducts = [$prod5, $prod4, $prod3, $prod1, $prod2];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         foreach ($productItemsInResponse as $itemIndex => $itemArray) {
             $this->assertNotEmpty($itemArray);

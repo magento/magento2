@@ -88,6 +88,7 @@ class ProductAttributeSortInput
      */
     private function getDataFromRequest(RequestInterface $request): array
     {
+        $data = [];
         if ($request->isPost()) {
             $data = $this->jsonSerializer->unserialize($request->getContent());
         } elseif ($request->isGet()) {
@@ -96,10 +97,7 @@ class ProductAttributeSortInput
                 $this->jsonSerializer->unserialize($data['variables']) : null;
             $data['variables'] = is_array($data['variables']) ?
                 $data['variables'] : null;
-        } else {
-            return [];
         }
-
         return $data;
     }
 
