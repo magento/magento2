@@ -64,8 +64,9 @@ class EmailAddress extends LaminasEmailAddress implements ValidatorInterface
      */
     public function isValid($value)
     {
-        $bannedHostsConfig = $this->scopeConfig->getValue('customer/email_validation/banned_hosts');
-        $bannedHosts = array_map('trim', explode("\n", $bannedHostsConfig));
+        $bannedHostsConfig = $this->scopeConfig->getValue('customer/email_validation/banned_hosts', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+
+        $bannedHosts = array_map('trim', explode("\n", (string) $bannedHostsConfig));
 
         $hostname = explode('@', $value)[1] ?? '';
         if (in_array($hostname, $bannedHosts, true)) {
