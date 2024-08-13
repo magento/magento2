@@ -29,7 +29,7 @@
         <element name="customMultiSelect" type="select" selector="[name='product[multi_en]']"/>
 
         <element name="optionTypeDropDown" type="select" selector="//table[@data-index='options']//tr[{{index}}]//div[@data-index='type']//div[contains(@class, 'action-select-wrap')]" parameterized="true" timeout="30"/>
-        <element name="optionTypeItem" type="select" selector="//table[@data-index='options']//tr[{{index}}]//div[@data-index='type']//*[contains(@class, 'action-menu-item')]//*[contains(., '{{optionValue}}')]" parameterized="true" timeout="30"/>
+        <element name="optionTypeItem" type="select" selector="//table[@data-index='options']//tr[{{index}}]//div[@data-index='type']//*[contains(@class, 'action-menu-item')]//label[contains(text(), '{{optionValue}}')]" parameterized="true" timeout="30"/>
         <element name="checkSelect" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//span[text()='Option Type']/parent::label/parent::div/parent::div//div[@data-role='selected-option']" parameterized="true"/>
         <element name="checkOptionType" type="select" selector="//span[text()='{{optionTitle}}']/parent::div/parent::div/parent::div//parent::label/parent::div/parent::div//li[@class='admin__action-multiselect-menu-inner-item']//label[text()='{{optionType}}']" parameterized="true"/>
         <element name="checkDropDown" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//parent::label/parent::div/parent::div//li[@class='admin__action-multiselect-menu-inner-item']//label[text()='Drop-down']" parameterized="true"/>

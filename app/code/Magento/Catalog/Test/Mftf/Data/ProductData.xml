@@ -1538,4 +1538,14 @@
         <requiredEntity type="product_option">ProductOptionCheckboxFor2</requiredEntity>
         <requiredEntity type="product_option">ProductOptionNewField</requiredEntity>
     </entity>
+    <entity name="SimpleProductWithQty1" type="product" extends="_defaultProduct">
+        <data key="name" unique="suffix">Simple Product 3</data>
+        <data key="price">1.00</data>
+        <data key="urlKey" unique="suffix">Simple Product 3</data>
+        <data key="status">1</data>
+        <data key="quantity">1</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
 </entities>
