@@ -10,6 +10,7 @@ namespace Magento\Quote\Model\ValidationRules;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Framework\Validator\GlobalForbiddenPatterns;
+use Magento\Framework\Validator\EmailAddress;
 
 /**
  * Class GlobalValidationRule
@@ -65,8 +66,17 @@ class GlobalValidationRule implements QuoteValidationRuleInterface
         $inputArray = $this->extractQuoteData($quote);
 
         foreach ($inputArray as $key => $value) {
+            // Check for forbidden patterns
             if (is_string($value) && !GlobalForbiddenPatterns::isValid($value)) {
                 $validationErrors[] = __("Field $key contains invalid characters.");
+            }
+
+            // Email validation
+            if ($key === 'customer_email' && !empty($value)) {
+                $emailValidator = new EmailAddress();
+                if (!$emailValidator->isValid($value)) {
+                    $validationErrors[] = __("Field $key contains an invalid email address.");
+                }
             }
         }
 
