@@ -102,6 +102,9 @@ class ConvertToCsvTest extends TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetCsvFile()
     {
         $componentName = 'component_name';
