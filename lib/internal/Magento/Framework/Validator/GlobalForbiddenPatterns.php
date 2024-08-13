@@ -24,11 +24,34 @@ class GlobalForbiddenPatterns
             '/{{.*}}/',
             '/<\?=/',
             '/<\?php/',
-            '/base64_decode/',
             '/shell_exec/',
             '/eval\(/',
             '/\${IFS%/',
             '/\bcurl\b/',
         ];
+    }
+
+    /**
+     * Checks if the given field value is valid according to the forbidden patterns.
+     *
+     * @param string $fieldValue
+     * @return bool
+     */
+    public static function isValid(string $fieldValue): bool
+    {
+        foreach (self::getPatterns() as $pattern) {
+            if (preg_match($pattern, $fieldValue)) {
+                return false;
+            }
+        }
+
+        // Check if the field contains a base64 encoded string and decode it for further validation
+        if (preg_match('/base64_decode\(/', $fieldValue)) {
+            $decodedValue = base64_decode($fieldValue); 
+            // Recursively check the decoded value
+            return self::isValid($decodedValue);
+        }
+
+        return true;
     }
 }
