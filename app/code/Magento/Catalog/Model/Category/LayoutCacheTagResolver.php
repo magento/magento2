@@ -63,7 +63,9 @@ class LayoutCacheTagResolver implements StrategyInterface
         $isChanged = false;
         $objectNewPageLayout = $object->getData('page_layout');
         $objectOldPageLayout = $object->getOrigData('page_layout');
-        if ($objectNewPageLayout !== $objectOldPageLayout) {
+        if ($objectNewPageLayout !== 'empty' &&
+            $objectNewPageLayout !== $objectOldPageLayout
+        ) {
             $isChanged = true;
         }
         return $isChanged;
