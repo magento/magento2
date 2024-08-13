@@ -7,6 +7,7 @@ namespace Magento\Framework\Validator;
 
 use Laminas\Validator\EmailAddress as LaminasEmailAddress;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 
 class EmailAddress extends LaminasEmailAddress implements ValidatorInterface
 {
@@ -33,12 +34,12 @@ class EmailAddress extends LaminasEmailAddress implements ValidatorInterface
     /**
      * Constructor.
      *
-     * @param ScopeConfigInterface $scopeConfig
      * @param array $options
      */
-    public function __construct(ScopeConfigInterface $scopeConfig, $options = [])
+    public function __construct($options = [])
     {
-        $this->scopeConfig = $scopeConfig;
+        // ScopeConfigInterface wird über den ObjectManager bezogen
+        $this->scopeConfig = ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         parent::__construct($options);
 
         $this->getHostnameValidator()->setOptions(['useTldCheck' => false]);
