@@ -22,14 +22,15 @@ class TestPreprationStartedSubscriber implements PreparationStartedSubscriber
      */
     public function notify(PreparationStarted $event): void
     {
+        $objectManager = Bootstrap::getObjectManager();
         $className = $event->test()->className();
         $methodName = $event->test()->methodName();
 
-        $objectManager = Bootstrap::getObjectManager();
-        $assetRepo = $objectManager->create($className, ['name' => $methodName]);
+        $testObj = $objectManager->create($className, ['name' => $methodName]);
 
         Magento::setCurrentEventObject($event);
-        $mageEvent = Magento::getDefaultEventManager();
-        $mageEvent->fireEvent('startTest', [$assetRepo]);
+
+        $phpUnit = $objectManager->create(PhpUnit::class);
+        $phpUnit->startTest($testObj);
     }
 }
