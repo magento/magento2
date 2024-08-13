@@ -9,6 +9,7 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\Telephone;
 use Magento\Customer\Model\Customer;
+use Magento\Framework\Validator\GlobalPhoneValidation;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +21,12 @@ class TelephoneTest extends TestCase
     /**
      * @var Telephone
      */
-    private Telephone $nameValidator;
+    private Telephone $telephoneValidator;
+
+    /**
+     * @var GlobalPhoneValidation
+     */
+    private GlobalPhoneValidation $globalPhoneValidation;
 
     /**
      * @var Customer|MockObject
@@ -32,7 +38,8 @@ class TelephoneTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->nameValidator = new Telephone;
+        $this->telephoneValidator = new Telephone();
+        $this->globalPhoneValidation = new GlobalPhoneValidation();
         $this->customerMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -41,44 +48,48 @@ class TelephoneTest extends TestCase
     }
 
     /**
-     * Test for allowed apostrophe and other punctuation characters in customer names
+     * Test for allowed characters in customer telephone numbers.
      *
      * @param string $telephone
      * @param string $message
      * @return void
-     * @dataProvider expectedPunctuationInNamesDataProvider
+     * @dataProvider expectedPunctuationInTelephoneDataProvider
      */
-    public function testValidateCorrectPunctuationInNames(
+    public function testValidateCorrectPunctuationInTelephone(
         string $telephone,
         string $message
     ) {
         $this->customerMock->expects($this->once())->method('getTelephone')->willReturn($telephone);
 
-        $isValid = $this->nameValidator->isValid($this->customerMock);
+        $isValid = $this->telephoneValidator->isValid($this->customerMock);
         $this->assertTrue($isValid, $message);
+
+        // Optionally, you can also test with the global phone validator
+        $isValidGlobal = $this->globalPhoneValidation->isValidPhone($telephone);
+        $this->assertTrue($isValidGlobal, $message);
     }
 
     /**
      * @return array
      */
-    public function expectedPunctuationInNamesDataProvider(): array
+    public function expectedPunctuationInTelephoneDataProvider(): array
     {
         return [
             [
                 'telephone' => '(1)99887766',
-                'message' => 'parentheses must be allowed in telephone'
+                'message' => 'Parentheses must be allowed in telephone numbers.'
             ],
             [
                 'telephone' => '+6255554444',
-                'message' => 'plus sign be allowed in telephone'
+                'message' => 'Plus sign must be allowed in telephone numbers.'
             ],
             [
                 'telephone' => '555-555-555',
-                'message' => 'hyphen must be allowed in telephone'
+                'message' => 'Hyphen must be allowed in telephone numbers.'
             ],
             [
                 'telephone' => '123456789',
-                'message' => 'Digits (numbers) must be allowed in telephone'
+                'message' => 'Digits (numbers) must be allowed in telephone numbers.'
             ]
         ];
     }
