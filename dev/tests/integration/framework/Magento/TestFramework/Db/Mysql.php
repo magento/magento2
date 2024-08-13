@@ -24,6 +24,26 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     public const MARIADB_MIN_VERSION = '11.4.';
 
     /**
+     * MariaDB command.
+     */
+    public const MARIADB_COMMAND = 'mariadb';
+
+    /**
+     * MariaDB Dump command.
+     */
+    public const MARIADB_DUMP_COMMAND = 'mariadb-dump';
+
+    /**
+     * Mysql command.
+     */
+    public const MYSQL_COMMAND = 'mysql';
+
+    /**
+     * Mysql Dump command.
+     */
+    public const MYSQL_DUMP_COMMAND = 'mysqldump';
+
+    /**
      * Name of configuration file.
      */
     public const DEFAULTS_EXTRA_FILE_NAME = 'defaults_extra.cnf';
@@ -270,7 +290,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
         try {
             if (!isset($this->isMariaDB)) {
                 $version = $this->_shell->execute(
-                    'mariadb-dump --version'
+                    self::MARIADB_DUMP_COMMAND.' --version'
                 );
                 $pattern = "/((?:[0-9]+\.?)+)(.*?)(mariadb)/i";
                 preg_match($pattern, $version !== null ? $version : '', $matches);
@@ -297,7 +317,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     protected function getDbCommand()
     {
-        return $this->isMariaDB() ? 'mariadb' : 'mysql';
+        return $this->isMariaDB() ? self::MARIADB_COMMAND : self::MYSQL_COMMAND;
     }
 
     /**
@@ -307,6 +327,6 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     protected function getDbDumpCommand()
     {
-        return $this->isMariaDB() ? 'mariadb-dump' : 'mysqldump';
+        return $this->isMariaDB() ? self::MARIADB_DUMP_COMMAND : self::MYSQL_DUMP_COMMAND;
     }
 }
