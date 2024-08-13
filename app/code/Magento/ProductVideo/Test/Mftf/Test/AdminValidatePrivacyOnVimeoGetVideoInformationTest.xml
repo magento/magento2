@@ -19,7 +19,7 @@
             <useCaseId value="MC-42105"/>
             <group value="productVideo"/>
             <skip>
-                <issueId value="ACQE-4481"/>
+                <issueId value="AC-12714"/>
             </skip>
         </annotations>
         <before>
