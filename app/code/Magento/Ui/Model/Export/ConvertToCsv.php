@@ -96,7 +96,10 @@ class ConvertToCsv
 
             // call setTotalCount to prevent total count from being calculate in subsequent iterations of this loop
             $searchResult->setTotalCount($totalCount);
-
+            // Ensure $items is always an array
+            if ($items === null) {
+                $items = [];
+            }
             foreach ($items as $item) {
                 $this->metadataProvider->convertDate($item, $component->getName());
                 $stream->writeCsv($this->metadataProvider->getRowData($item, $fields, $options));

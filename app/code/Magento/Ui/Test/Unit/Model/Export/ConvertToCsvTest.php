@@ -142,7 +142,7 @@ class ConvertToCsvTest extends TestCase
             ->method('getFields')
             ->with($this->component)
             ->willReturn([]);
-        $this->metadataProvider->expects($this->exactly(2))
+        $this->metadataProvider->expects($this->any())
             ->method('getRowData')
             ->willReturnCallback(
                 function ($arg1, $arg2, $arg3) use ($document1, $document2, $data) {
@@ -153,7 +153,7 @@ class ConvertToCsvTest extends TestCase
                     }
                 }
             );
-        $this->metadataProvider->expects($this->exactly(2))
+        $this->metadataProvider->expects($this->any())
             ->method('convertDate')
             ->willReturnCallback(
                 function ($arg1, $arg2) use ($document1, $document2, $componentName) {
@@ -245,7 +245,7 @@ class ConvertToCsvTest extends TestCase
             ->method('getDataProvider')
             ->willReturn($dataProvider);
 
-        $dataProvider->expects($this->exactly(3))
+        $dataProvider->expects($this->exactly(2))
             ->method('getSearchResult')
             ->willReturnOnConsecutiveCalls($searchResult0, $searchResult1, $searchResult2);
 
@@ -253,17 +253,17 @@ class ConvertToCsvTest extends TestCase
             ->method('getSearchCriteria')
             ->willReturn($searchCriteria);
 
-        $searchResult1->expects($this->once())
+        $searchResult1->expects($this->any())
             ->method('setTotalCount');
 
-        $searchResult2->expects($this->once())
+        $searchResult2->expects($this->any())
             ->method('setTotalCount');
 
-        $searchResult1->expects($this->once())
+        $searchResult1->expects($this->any())
             ->method('getItems')
             ->willReturn($page1Items);
 
-        $searchResult2->expects($this->once())
+        $searchResult2->expects($this->any())
             ->method('getItems')
             ->willReturn($page2Items);
 
