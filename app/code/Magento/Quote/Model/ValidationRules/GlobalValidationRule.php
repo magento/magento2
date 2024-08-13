@@ -65,27 +65,11 @@ class GlobalValidationRule implements QuoteValidationRuleInterface
         $inputArray = $this->extractQuoteData($quote);
 
         foreach ($inputArray as $key => $value) {
-            if (is_string($value) && !$this->isValid($value)) {
+            if (is_string($value) && !GlobalForbiddenPatterns::isValid($value)) {
                 $validationErrors[] = __("Field $key contains invalid characters.");
             }
         }
 
         return $validationErrors;
-    }
-
-    /**
-     * Checks if the given field value is valid according to the forbidden patterns.
-     *
-     * @param string $fieldValue
-     * @return bool
-     */
-    private function isValid(string $fieldValue): bool
-    {
-        foreach (GlobalForbiddenPatterns::getPatterns() as $pattern) {
-            if (preg_match($pattern, $fieldValue)) {
-                return false;
-            }
-        }
-        return true;
     }
 }
