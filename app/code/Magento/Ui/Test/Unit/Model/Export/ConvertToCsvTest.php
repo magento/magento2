@@ -103,7 +103,7 @@ class ConvertToCsvTest extends TestCase
     }
 
     /**
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testGetCsvFile()
     {
