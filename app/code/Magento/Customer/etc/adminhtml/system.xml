@@ -267,6 +267,13 @@
                     <backend_model>Magento\Customer\Model\Config\Backend\Show\AddressOnly</backend_model>
                 </field>
             </group>
+            <group id="email_validation" translate="label" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Email Validation</label>
+                <field id="banned_hosts" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Banned Hosts</label>
+                    <comment>Enter banned hosts, one per line.</comment>
+                </field>
+            </group>
             <group id="startup" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Login Options</label>
                 <field id="redirect_dashboard" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" canRestore="1">
