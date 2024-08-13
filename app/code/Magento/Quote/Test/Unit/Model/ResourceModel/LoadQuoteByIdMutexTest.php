@@ -5,17 +5,17 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Quote\Test\Unit\Model;
+namespace Magento\Quote\Test\Unit\Model\ResourceModel;
 
 use Exception;
 use InvalidArgumentException;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Quote\Model\LoadQuoteByIdMutex;
 use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResourceModel;
 use Magento\Quote\Model\QuoteFactory;
+use Magento\Quote\Model\ResourceModel\LoadQuoteByIdMutex;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResourceModel;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

@@ -68,7 +68,7 @@
     </type>
     <type name="Magento\Checkout\Model\AddProductToCart">
         <arguments>
-            <argument name="quoteMutex" xsi:type="object">Magento\Quote\Model\LoadQuoteByIdMutex</argument>
+            <argument name="quoteMutex" xsi:type="object">Magento\Quote\Model\ResourceModel\LoadQuoteByIdMutex</argument>
         </arguments>
     </type>
 </config>

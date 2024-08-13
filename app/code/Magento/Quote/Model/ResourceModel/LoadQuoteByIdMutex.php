@@ -5,8 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Quote\Model;
+namespace Magento\Quote\Model\ResourceModel;
 
+use Magento\Quote\Model\QuoteFactory;
+use Magento\Quote\Model\QuoteMutexInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResourceModel;
 
 class LoadQuoteByIdMutex implements QuoteMutexInterface
