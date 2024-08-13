@@ -70,8 +70,7 @@ class NameTest extends TestCase
         $isValid = $this->nameValidator->isValid($this->customerMock);
         $this->assertTrue($isValid, $message);
 
-        // Optionally, you can also test with the global name validator
-        $isValidGlobal = $this->globalNameValidator->isValid($firstName);
+        $isValidGlobal = $this->globalNameValidator->isValidName($firstName);
         $this->assertTrue($isValidGlobal, $message);
     }
 
