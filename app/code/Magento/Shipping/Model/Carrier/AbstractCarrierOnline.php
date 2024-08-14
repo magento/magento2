@@ -11,7 +11,6 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;
 use Magento\Framework\Xml\Security;
-use Magento\Shipping\Model\Shipment\ReturnShipment;
 
 /**
  * Abstract online shipping carrier model
@@ -504,7 +503,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     /**
      * Do request to RMA shipment
      *
-     * @param ReturnShipment $request
+     * @param Request $request
      * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      */
