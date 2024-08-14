@@ -7,29 +7,32 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCaptureInvoiceForPaypalBillingAgreementPaymentAdvancedTest">
+    <test name="StorefrontPartialCaptureInvoiceForPaypalExpressPayflowEditionTest">
         <annotations>
             <features value="PayPal"/>
-            <stories value="Partial Capture Order with Payments Advanced"/>
-            <title value="Check Partial Capture order placed with Paypal Payments Advanced"/>
-            <description value="Place an order with Paypal Payments Advanced as payment method and Partial Capture the Order"/>
+            <stories value="Partial Capture Order with Payflow Edition"/>
+            <title value="Partial Capture for a sales order placed with PayPal Express Checkout (Payflow Edition)"/>
+            <description value="Place an order with Paypal express checkout payflow edition as payment method and Partial Capture the Order"/>
             <severity value="MAJOR"/>
-            <testCaseId value="AC-4833"/>
+            <testCaseId value="AC-4846"/>
             <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <!-- Simple product is created -->
             <createData entity="SimpleProduct" stepKey="createProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createAnotherProduct"/>
             <!-- US Customer is created -->
             <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Configure PayPal Express Checkout -->
-            <actionGroup ref="AdminConfigurationPaymentAdvancedActionGroup" stepKey="ConfigPaymentAdvanced"/>
+            <actionGroup ref="AdminConfigPaymentAdvancedThroughCLIActionGroup" stepKey="ConfigPaymentAdvanced"/>
+
+            <actionGroup ref="AdminConfigurationPaymentAdvancedActionGroup" stepKey="setValuesForUserAndPwd"/>
+
             <magentoCLI command="config:set payment/payflow_advanced/active 1" stepKey="enablePaymentAdvancedSolution"/>
             <magentoCLI command="config:set payment/payflow_express_bml/active 1" stepKey="enablePaypalCredit"/>
-            <magentoCLI command="config:set payment/payflow_express/active 1" stepKey="enablePayPalVault"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJob">
-                <argument name="indices" value="cataloginventory_stock"/>
+            <magentoCLI command="config:set payment/payflow_express/active 1" stepKey="enablePayPalVault"/><actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
             <!-- Login to StoreFront -->
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
@@ -38,6 +41,7 @@
             <!-- Open Product Page to add product in the cart -->
             <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="amOnProductPage">
                 <argument name="product" value="$createProduct$"/>
+
             </actionGroup>
             <scrollTo selector="{{StorefrontProductActionSection.quantity}}" stepKey="scrollToQuantityField"/>
             <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
@@ -49,10 +53,10 @@
             <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping"/>
             <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
             <!-- Click on PayPal payment radio button -->
-            <waitForElementClickable selector="{{AdminConfigurepaymentsAdvancedSection.payFlowExpress}}" stepKey="waitForPayPalRadioButton"/>
-            <click selector="{{AdminConfigurepaymentsAdvancedSection.payFlowExpress}}" stepKey="selectPaypalPayment"/>
-            <waitForElementClickable selector="{{AdminConfigurepaymentsAdvancedSection.continueButton}}" stepKey="waitForPayPalBtn"/>
-            <click selector="{{AdminConfigurepaymentsAdvancedSection.continueButton}}" stepKey="clickPayPalBtn"/>
+            <waitForElementClickable selector="{{AdminConfigurepaymentsAdvancedSection.payflowEdition}}" stepKey="waitForPayPalRadioButton"/>
+            <click selector="{{AdminConfigurepaymentsAdvancedSection.payflowEdition}}" stepKey="selectPaypalPayment"/>
+            <waitForElementClickable selector="{{CheckoutPaymentSection.ContinuePayPalBtn}}" stepKey="waitForPayPalBtn"/>
+            <click selector="{{CheckoutPaymentSection.ContinuePayPalBtn}}" stepKey="clickPayPalBtn"/>
             <actionGroup ref="StorefrontLoginToPayPalExpressCheckoutPayFlowEditionActionGroup" stepKey="loginToPayPal"/>
             <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
             <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
@@ -61,8 +65,7 @@
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <magentoCLI command="config:set payment/payflow_express_bml/active 0" stepKey="disablePaypalCredit"/>
-            <magentoCLI command="config:set payment/payflow_advanced/active 0" stepKey="disablePaymentAdvancedSolution"/>
+            <magentoCLI command="config:set {{DisablePaymentAdvancedSolution.path}} {{DisablePaymentAdvancedSolution.value}}" stepKey="setEnablePayflowAdvancedToNo"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
@@ -101,3 +104,4 @@
         </actionGroup>
     </test>
 </tests>
+

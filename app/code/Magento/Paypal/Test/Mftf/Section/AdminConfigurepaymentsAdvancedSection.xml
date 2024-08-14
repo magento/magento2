@@ -8,14 +8,8 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminConfigurepaymentsAdvancedSection">
-        <element name="configBtn" type="button" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced-head" parameterized="true"/>
-        <element name="email" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_business_account" parameterized="true"/>
-        <element name="partner" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_partner" parameterized="true"/>
         <element name="user" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_user" parameterized="true"/>
-        <element name="vendor" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_vendor" parameterized="true"/>
         <element name="password" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_pwd" parameterized="true"/>
-        <element name="testMode" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_sandbox_flag" parameterized="true"/>
-        <element name="payFlowExpress" type="radio" selector="//*[contains(text(), 'PayPal Credit (Payflow Express Bml)')]"/>
-        <element name="continueButton" type="button" selector="/html/body/div[3]/main/div[2]/div/div/div[4]/ol/li[3]/div/form/fieldset/div[1]/div/div/div[4]/div[2]/div[4]/div/button/span" timeout="10"/>
+        <element name="payflowEdition" type="radio" selector="//input[@id ='payflow_express']" timeout="10"/>
     </section>
 </sections>
