@@ -295,10 +295,10 @@ class ValidateTest extends TestCase
             ->willReturn($this->importMock);
         $this->importMock->expects($this->once())
             ->method('uploadFileAndGetSource')
-            ->willReturn($this->abstractSourceMock );
+            ->willReturn($this->abstractSourceMock);
         $this->importMock->expects($this->once())
             ->method('validateSource')
-            ->with($this->abstractSourceMock )
+            ->with($this->abstractSourceMock)
             ->willReturn(true);
 
         $resultBlock->expects($this->once())
