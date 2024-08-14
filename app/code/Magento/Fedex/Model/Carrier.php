@@ -20,6 +20,8 @@ use Magento\Sales\Model\Order;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
+use Magento\Shipping\Model\Shipment\Request;
+use Magento\Shipping\Model\Shipment\ReturnShipment;
 
 /**
  * Fedex shipping implementation
@@ -1133,7 +1135,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Form array with appropriate structure for shipment request
      *
-     * @param \Magento\Framework\DataObject $request
+     * @param Request|ReturnShipment $request
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -1190,6 +1192,15 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $optionType = $request->getShippingMethod() == self::RATE_REQUEST_SMARTPOST
             ? 'SERVICE_DEFAULT' : $packageParams->getDeliveryConfirmation();
 
+        $shipperStreetLines = [$request->getShipperAddressStreet1()];
+        if ($request->getShipperAddressStreet2()) {
+            $shipperStreetLines[] = $request->getShipperAddressStreet2();
+        }
+
+        $recipientStreetLines = [$request->getRecipientAddressStreet1()];
+        if ($request->getRecipientAddressStreet2()) {
+            $recipientStreetLines[] = $request->getRecipientAddressStreet2();
+        }
         $requestClient = [
             'requestedShipment' => [
                 'shipDatestamp' => date('Y-m-d'),
@@ -1203,7 +1214,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'phoneNumber' => $request->getShipperContactPhoneNumber(),
                     ],
                     'address' => [
-                        'streetLines' => [$request->getShipperAddressStreet()],
+                        'streetLines' => $shipperStreetLines,
                         'city' => $request->getShipperAddressCity(),
                         'stateOrProvinceCode' => $request->getShipperAddressStateOrProvinceCode(),
                         'postalCode' => $request->getShipperAddressPostalCode(),
@@ -1218,7 +1229,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                             'phoneNumber' => $request->getRecipientContactPhoneNumber()
                         ],
                         'address' => [
-                            'streetLines' => [$request->getRecipientAddressStreet()],
+                            'streetLines' => $recipientStreetLines,
                             'city' => $request->getRecipientAddressCity(),
                             'stateOrProvinceCode' => $request->getRecipientAddressStateOrProvinceCode(),
                             'postalCode' => $request->getRecipientAddressPostalCode(),
