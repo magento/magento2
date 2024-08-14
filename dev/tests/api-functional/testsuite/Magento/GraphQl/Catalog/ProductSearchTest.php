@@ -115,8 +115,6 @@ class ProductSearchTest extends GraphQlAbstract
     }
 
     /**
-     * Verify that products returned in a correct order 
-     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @dataProvider sortByPriceAndNameDataProvider
      */
