@@ -4,7 +4,7 @@
  */
 
 (function () {
-    "use strict";
+    'use strict';
     var combo        = require('./combo'),
         themes       = require('../tools/files-router').get('themes'),
         _            = require('underscore'),
