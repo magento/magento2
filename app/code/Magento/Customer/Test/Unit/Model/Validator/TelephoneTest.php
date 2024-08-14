@@ -24,6 +24,11 @@ class TelephoneTest extends TestCase
     private Telephone $telephoneValidator;
 
     /**
+     * @var GlobalPhoneValidation
+     */
+    private GlobalPhoneValidation $globalPhoneValidation;
+
+    /**
      * @var Customer|MockObject
      */
     private MockObject $customerMock;
@@ -36,6 +41,7 @@ class TelephoneTest extends TestCase
     protected function setUp(): void
     {
         $this->telephoneValidator = new Telephone();
+        $this->globalPhoneValidation = new GlobalPhoneValidation();
         $this->customerMock = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->addMethods(['getTelephone'])
@@ -56,8 +62,13 @@ class TelephoneTest extends TestCase
     ) {
         $this->customerMock->expects($this->once())->method('getTelephone')->willReturn($telephone);
 
+        // Validate using the Telephone validator
         $isValid = $this->telephoneValidator->isValid($this->customerMock);
         $this->assertTrue($isValid, $message);
+
+        // Validate using the GlobalPhoneValidation directly
+        $isValidGlobal = $this->globalPhoneValidation->isValidPhone($telephone);
+        $this->assertTrue($isValidGlobal, $message);
     }
 
     /**
