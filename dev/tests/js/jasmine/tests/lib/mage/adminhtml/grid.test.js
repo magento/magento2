@@ -12,6 +12,7 @@ define(['mage/adminhtml/grid'], function () {
 
         beforeEach(function () {
             // Create an instance of varienGrid
+            // eslint-disable-next-line no-undef
             gridInstance = new varienGrid();
 
             spyOn(gridInstance, 'reload');
