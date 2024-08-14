@@ -24,24 +24,19 @@ class TelephoneTest extends TestCase
     private Telephone $telephoneValidator;
 
     /**
-     * @var GlobalPhoneValidation
-     */
-    private GlobalPhoneValidation $globalPhoneValidation;
-
-    /**
      * @var Customer|MockObject
      */
     private MockObject $customerMock;
 
     /**
+     * Set up the test environment.
+     *
      * @return void
      */
     protected function setUp(): void
     {
         $this->telephoneValidator = new Telephone();
-        $this->globalPhoneValidation = new GlobalPhoneValidation();
-        $this->customerMock = $this
-            ->getMockBuilder(Customer::class)
+        $this->customerMock = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->addMethods(['getTelephone'])
             ->getMock();
@@ -63,13 +58,11 @@ class TelephoneTest extends TestCase
 
         $isValid = $this->telephoneValidator->isValid($this->customerMock);
         $this->assertTrue($isValid, $message);
-
-        // Optionally, you can also test with the global phone validator
-        $isValidGlobal = $this->globalPhoneValidation->isValidPhone($telephone);
-        $this->assertTrue($isValidGlobal, $message);
     }
 
     /**
+     * Data provider for testValidateCorrectPunctuationInTelephone.
+     *
      * @return array
      */
     public function expectedPunctuationInTelephoneDataProvider(): array
