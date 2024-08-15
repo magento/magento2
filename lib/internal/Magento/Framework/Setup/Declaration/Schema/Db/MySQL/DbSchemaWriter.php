@@ -7,6 +7,8 @@
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\DB\Adapter\SqlVersionProvider;
 use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\Statement;
 use Magento\Framework\Setup\Declaration\Schema\Db\StatementAggregator;
@@ -60,21 +62,29 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     private $dryRunLogger;
 
     /**
+     * @var SqlVersionProvider
+     */
+    private $sqlVersionProvider;
+
+    /**
      * @param ResourceConnection $resourceConnection
-     * @param StatementFactory   $statementFactory
-     * @param DryRunLogger       $dryRunLogger
-     * @param array              $tableOptions
+     * @param StatementFactory $statementFactory
+     * @param DryRunLogger $dryRunLogger
+     * @param SqlVersionProvider $sqlVersionProvider
+     * @param array $tableOptions
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         StatementFactory $statementFactory,
         DryRunLogger $dryRunLogger,
+        SqlVersionProvider $sqlVersionProvider,
         array $tableOptions = []
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->statementFactory = $statementFactory;
         $this->dryRunLogger = $dryRunLogger;
         $this->tableOptions = array_replace($this->tableOptions, $tableOptions);
+        $this->sqlVersionProvider = $sqlVersionProvider;
     }
 
     /**
@@ -288,19 +298,45 @@ class DbSchemaWriter implements DbSchemaWriterInterface
                     )
                 );
             } else {
-                $adapter->query(
-                    sprintf(
-                        $this->statementDirectives[$statement->getType()],
-                        $adapter->quoteIdentifier($statement->getTableName()),
-                        implode(", ", $statementsSql)
-                    )
-                );
+                if ($this->isNeedToSplitSql()) {
+                    foreach ($statementsSql as $statementSql) {
+                        $adapter->query(
+                            sprintf(
+                                $this->statementDirectives[$statement->getType()],
+                                $adapter->quoteIdentifier($statement->getTableName()),
+                                $statementSql
+                            )
+                        );
+                    }
+                } else {
+                    $adapter->query(
+                        sprintf(
+                            $this->statementDirectives[$statement->getType()],
+                            $adapter->quoteIdentifier($statement->getTableName()),
+                            implode(", ", $statementsSql)
+                        )
+                    );
+                }
                 //Do post update, like SQL DML operations or etc...
                 foreach ($statement->getTriggers() as $trigger) {
                     call_user_func($trigger);
                 }
             }
         }
+    }
+
+    /**
+     * Check if we can concatenate sql into one statement
+     *
+     * Due to issues with some versions of MariaBD such statements
+     * may produce errors, e.g. with foreign key definition with column modification
+     *
+     * @return bool
+     * @throws ConnectionException
+     */
+    private function isNeedToSplitSql() : bool
+    {
+        return str_contains($this->sqlVersionProvider->getSqlVersion(), SqlVersionProvider::MARIA_DB_10_VERSION);
     }
 
     /**
