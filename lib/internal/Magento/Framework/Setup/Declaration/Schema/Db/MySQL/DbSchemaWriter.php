@@ -9,6 +9,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\SqlVersionProvider;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\Statement;
 use Magento\Framework\Setup\Declaration\Schema\Db\StatementAggregator;
@@ -298,25 +299,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
                     )
                 );
             } else {
-                if ($this->isNeedToSplitSql()) {
-                    foreach ($statementsSql as $statementSql) {
-                        $adapter->query(
-                            sprintf(
-                                $this->statementDirectives[$statement->getType()],
-                                $adapter->quoteIdentifier($statement->getTableName()),
-                                $statementSql
-                            )
-                        );
-                    }
-                } else {
-                    $adapter->query(
-                        sprintf(
-                            $this->statementDirectives[$statement->getType()],
-                            $adapter->quoteIdentifier($statement->getTableName()),
-                            implode(", ", $statementsSql)
-                        )
-                    );
-                }
+                $this->doQuery($adapter, $statementsSql, $statement);
                 //Do post update, like SQL DML operations or etc...
                 foreach ($statement->getTriggers() as $trigger) {
                     call_user_func($trigger);
@@ -340,11 +323,65 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     }
 
     /**
+     * Perform queries based on statements
+     *
+     * @param AdapterInterface $adapter
+     * @param array $statementsSql
+     * @param Statement $statement
+     * @return void
+     * @throws ConnectionException
+     */
+    private function doQuery(
+        AdapterInterface $adapter,
+        array $statementsSql,
+        Statement $statement
+    ) : void {
+        if ($this->isNeedToSplitSql()) {
+            $canBeCombinedStatements = [];
+            $separatedStatements = [];
+            foreach ($statementsSql as $statementSql) {
+                if (str_contains($statementSql, 'FOREIGN KEY')) {
+                    $separatedStatements[] = $statementSql;
+                } else {
+                    $canBeCombinedStatements[] = $statementSql;
+                }
+            }
+            if (!empty($canBeCombinedStatements)) {
+                $adapter->query(
+                    sprintf(
+                        $this->statementDirectives[$statement->getType()],
+                        $adapter->quoteIdentifier($statement->getTableName()),
+                        implode(", ", $canBeCombinedStatements)
+                    )
+                );
+            }
+            foreach ($separatedStatements as $separatedStatement) {
+                $adapter->query(
+                    sprintf(
+                        $this->statementDirectives[$statement->getType()],
+                        $adapter->quoteIdentifier($statement->getTableName()),
+                        $separatedStatement
+                    )
+                );
+            }
+        } else {
+            $adapter->query(
+                sprintf(
+                    $this->statementDirectives[$statement->getType()],
+                    $adapter->quoteIdentifier($statement->getTableName()),
+                    implode(", ", $statementsSql)
+                )
+            );
+        }
+    }
+
+    /**
      * Retrieve next value for AUTO_INCREMENT column.
      *
      * @param string $tableName
      * @param string $resource
      * @return int
+     * @throws \Zend_Db_Statement_Exception
      */
     private function getNextAutoIncrementValue(string $tableName, string $resource): int
     {
@@ -359,6 +396,5 @@ class DbSchemaWriter implements DbSchemaWriterInterface
         } else {
             return 1;
         }
-
     }
 }
