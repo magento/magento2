@@ -11,11 +11,11 @@ use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterface;
 use Magento\AsynchronousOperations\Api\Data\AsyncResponseInterfaceFactory;
 use Magento\AsynchronousOperations\Api\Data\ItemStatusInterface;
 use Magento\AsynchronousOperations\Api\Data\ItemStatusInterfaceFactory;
+use Magento\AsynchronousOperations\Api\SaveMultipleOperationsInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Bulk\BulkManagementInterface;
 use Magento\Framework\DataObject\IdentityGeneratorInterface;
 use Magento\Framework\Encryption\Encryptor;
-use Magento\AsynchronousOperations\Api\SaveMultipleOperationsInterface;
 use Magento\Framework\Exception\BulkException;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
@@ -166,7 +166,14 @@ class MassSchedule
             }
         }
 
-        if (!$this->bulkManagement->scheduleBulk($groupId, $operations, $bulkDescription, $userId)) {
+        try {
+            $this->saveMultipleOperations->execute($operations);
+            if (!$this->bulkManagement->scheduleBulk($groupId, $operations, $bulkDescription, $userId)) {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
+                throw new \Exception();
+            }
+        // phpcs:ignore Magento2.Exceptions.ThrowCatch
+        } catch (\Exception $exception) {
             try {
                 $this->bulkManagement->deleteBulk($groupId);
             } finally {
@@ -175,7 +182,6 @@ class MassSchedule
                 );
             }
         }
-        $this->saveMultipleOperations->execute($operations);
 
         /** @var AsyncResponseInterface $asyncResponse */
         $asyncResponse = $this->asyncResponseFactory->create();
