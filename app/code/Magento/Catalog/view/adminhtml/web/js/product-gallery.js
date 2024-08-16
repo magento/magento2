@@ -204,15 +204,12 @@ define([
                 count = this._initializedItemCount++;
                 lastElement = this._lastInitializedElement;
             } else {
-                count = this.element.find(this.options.imageSelector).length;
+                count = this.element.find(this.options.imageSelector + ':not(.removed)').length;
                 lastElement = this.element.find(this.options.imageSelector + ':last');
             }
 
             position = count + 1;
 
-            if (lastElement && lastElement.length === 1) {
-                position = parseInt(lastElement.data('imageData').position || count, 10) + 1;
-            }
             imageData = $.extend({
                 'file_id': imageData['value_id'] ? imageData['value_id'] : Math.random().toString(33).substr(2, 18),
                 'disabled': imageData.disabled ? imageData.disabled : 0,
@@ -355,7 +352,7 @@ define([
             imageData.isRemoved = true;
             $imageContainer.addClass('removed').hide().find('.is-removed').val(1);
 
-            this._contentUpdated();
+            this._resort();
         },
 
         /**
@@ -388,16 +385,23 @@ define([
          * @private
          */
         _resort: function () {
-            this.element.find('.position').each($.proxy(function (index, element) {
-                var value = $(element).val();
+            var value,
+                position = 1;
 
-                if (value != index) { //eslint-disable-line eqeqeq
+            this.element.find('.position').each($.proxy(function (index, element) {
+                if ($(element).closest(this.options.imageSelector).is('.removed')) {
+                    return;
+                }
+                value = $(element).val();
+
+                if (value != position) { //eslint-disable-line eqeqeq
                     this.element.trigger('moveElement', {
                         imageData: $(element).closest(this.options.imageSelector).data('imageData'),
-                        position: index
+                        position: position
                     });
-                    $(element).val(index);
+                    $(element).val(position);
                 }
+                position++;
             }, this));
 
             this._contentUpdated();
