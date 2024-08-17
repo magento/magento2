@@ -168,19 +168,11 @@ class MassSchedule
 
         try {
             $this->saveMultipleOperations->execute($operations);
-            if (!$this->bulkManagement->scheduleBulk($groupId, $operations, $bulkDescription, $userId)) {
-                // phpcs:ignore Magento2.Exceptions.DirectThrow
-                throw new \Exception();
-            }
-        // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $exception) {
-            try {
-                $this->bulkManagement->deleteBulk($groupId);
-            } finally {
-                throw new LocalizedException(
-                    __('Something went wrong while processing the request.')
-                );
-            }
+            $this->cleanupAndError($groupId);
+        }
+        if (!$this->bulkManagement->scheduleBulk($groupId, $operations, $bulkDescription, $userId)) {
+            $this->cleanupAndError($groupId);
         }
 
         /** @var AsyncResponseInterface $asyncResponse */
@@ -197,5 +189,23 @@ class MassSchedule
         }
 
         return $asyncResponse;
+    }
+
+    /**
+     * Delete bulk, all related operations and throw error
+     *
+     * @param string $groupId
+     * @return void
+     * @throws LocalizedException
+     */
+    private function cleanupAndError($groupId): void
+    {
+        try {
+            $this->bulkManagement->deleteBulk($groupId);
+        } finally {
+            throw new LocalizedException(
+                __('Something went wrong while processing the request.')
+            );
+        }
     }
 }

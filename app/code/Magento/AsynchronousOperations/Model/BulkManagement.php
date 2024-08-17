@@ -134,7 +134,12 @@ class BulkManagement implements BulkManagementInterface
             $this->logger->critical($exception->getMessage());
             return false;
         }
-        $this->publishOperations($operations);
+        try {
+            $this->publishOperations($operations);
+        } catch (Throwable $exception) {
+            $this->logger->critical($exception->getMessage());
+            return false;
+        }
 
         return true;
     }
