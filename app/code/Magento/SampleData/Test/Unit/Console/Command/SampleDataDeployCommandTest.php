@@ -13,7 +13,7 @@ use Magento\SampleData\Console\Command\SampleDataDeployCommand;
 use Magento\Setup\Model\PackagesAuth;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
+class SampleDataDeployCommandTest extends AbstractSampleDataCommandTestCase
 {
     /**
      * Sets mocks for auth file

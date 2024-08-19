@@ -39,7 +39,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
             $this->markTestSkipped('GraphQlStateDiff class is not available on this version of Magento.');
         }
 
-        $this->graphQlStateDiff = new GraphQlStateDiff($this);
+        $this->graphQlStateDiff = new GraphQlStateDiff();
         parent::setUp();
     }
 
@@ -128,7 +128,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function queryDataProvider(): array
+    private static function queryDataProvider(): array
     {
         return [
             'Get Navigation Menu by category_id' => [
@@ -507,7 +507,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function cartQueryProvider(): array
+    public static function cartQueryProvider(): array
     {
         return [
             'Get Cart' => [

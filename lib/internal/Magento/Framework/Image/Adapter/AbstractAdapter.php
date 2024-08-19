@@ -16,6 +16,8 @@ use Psr\Log\LoggerInterface;
 /**
  * Image abstract adapter
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class AbstractAdapter implements AdapterInterface
@@ -272,12 +274,13 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param Filesystem $filesystem
      * @param LoggerInterface $logger
-     * @throws FileSystemException
+     * @param array $data
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        Filesystem      $filesystem,
-        LoggerInterface $logger
+        Filesystem $filesystem,
+        LoggerInterface $logger,
+        array $data = []
     ) {
         $this->_filesystem = $filesystem;
         $this->logger = $logger;
@@ -606,7 +609,10 @@ abstract class AbstractAdapter implements AdapterInterface
             }
             // keep aspect ratio
             if ($this->_imageSrcWidth / $this->_imageSrcHeight >= $frameWidth / $frameHeight) {
-                $dstHeight = round($dstWidth / $this->_imageSrcWidth * $this->_imageSrcHeight);
+                $dstHeight = max(
+                    1,
+                    round($dstWidth / $this->_imageSrcWidth * $this->_imageSrcHeight)
+                );
             } else {
                 $dstWidth = round($dstHeight / $this->_imageSrcHeight * $this->_imageSrcWidth);
             }
@@ -624,7 +630,10 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function _checkDimensions($frameWidth, $frameHeight)
     {
-        if ($frameWidth !== null && $frameWidth <= 0 || $frameHeight !== null && $frameHeight <= 0) {
+        if ($frameWidth !== null && $frameWidth <= 0 ||
+            $frameHeight !== null && $frameHeight <= 0 ||
+            ($frameWidth === null && $frameHeight === null)
+        ) {
             //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \InvalidArgumentException('Invalid image dimensions.');
         }

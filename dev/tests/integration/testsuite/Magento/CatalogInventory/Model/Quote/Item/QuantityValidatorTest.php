@@ -256,7 +256,7 @@ class QuantityValidatorTest extends TestCase
      *
      * @return array
      */
-    public function quantityDataProvider(): array
+    public static function quantityDataProvider(): array
     {
         $qtyRegexp = '/You can buy (this product|Configurable OptionOption 1) only in quantities of 500 at a time/';
 

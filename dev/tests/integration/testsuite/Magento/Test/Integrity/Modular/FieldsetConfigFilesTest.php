@@ -26,7 +26,7 @@ class FieldsetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractCo
      *
      * @return string
      */
-    protected function _getConfigFilePathGlob()
+    protected static function _getConfigFilePathGlob()
     {
         return 'etc/fieldset.xml';
     }
@@ -36,9 +36,9 @@ class FieldsetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractCo
      *
      * @return string
      */
-    protected function _getXsdPath()
+    protected static function _getXsdPath()
     {
-        return $this->componentRegistrar->getPath(ComponentRegistrar::LIBRARY, 'magento/framework')
+        return self::$componentRegistrar->getPath(ComponentRegistrar::LIBRARY, 'magento/framework')
         . '/DataObject/etc/fieldset_file.xsd';
     }
 }

@@ -69,7 +69,7 @@ class ReorderTest extends TestCase
 
         $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Data\Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getGroupId',
                     'getEmail',
