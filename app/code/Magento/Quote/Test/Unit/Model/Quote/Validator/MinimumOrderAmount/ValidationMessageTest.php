@@ -47,7 +47,7 @@ class ValidationMessageTest extends TestCase
     private $priceHelperMock;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

@@ -40,7 +40,7 @@ class MultiStoreTest extends \PHPUnit\Framework\TestCase
     private $fixtures;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      * @throws LocalizedException
      */
     protected function setUp(): void

@@ -46,7 +46,7 @@ class CategoriesFixtureTest extends TestCase
     private $categoryFactoryMock;
 
     /**
-     * @inhertidoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

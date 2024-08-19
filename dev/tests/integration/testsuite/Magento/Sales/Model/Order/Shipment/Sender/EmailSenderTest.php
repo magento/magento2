@@ -23,7 +23,7 @@ class EmailSenderTest extends TestCase
     private $emailSender;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

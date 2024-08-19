@@ -43,7 +43,7 @@ class TextAreaAttributeTest extends AbstractAttributeTest
     }
 
     /**
-     * @inheritdic
+     * @inheritDoc
      */
     protected function getAttributeCode(): string
     {
@@ -51,7 +51,7 @@ class TextAreaAttributeTest extends AbstractAttributeTest
     }
 
     /**
-     * @inheritdic
+     * @inheritDoc
      */
     protected function getDefaultAttributeValue(): string
     {

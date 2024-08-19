@@ -64,7 +64,7 @@ class SubmitObserverTest extends TestCase
     private $paymentMock;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

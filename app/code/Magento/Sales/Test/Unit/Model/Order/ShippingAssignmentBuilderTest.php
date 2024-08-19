@@ -39,7 +39,7 @@ class ShippingAssignmentBuilderTest extends TestCase
     private $shippingBuilderFactory;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

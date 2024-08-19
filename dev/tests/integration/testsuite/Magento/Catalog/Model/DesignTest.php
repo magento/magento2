@@ -34,7 +34,7 @@ class DesignTest extends TestCase
     private $productRepository;
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

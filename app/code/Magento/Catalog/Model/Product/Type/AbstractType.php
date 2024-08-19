@@ -241,7 +241,7 @@ abstract class AbstractType
      *   group => array(ids)
      * )
      *
-     * @deplacated TODO: refactor to child relation manager
+     * @deprecated TODO: refactor to child relation manager
      *
      * @param int $parentId
      * @param bool $required

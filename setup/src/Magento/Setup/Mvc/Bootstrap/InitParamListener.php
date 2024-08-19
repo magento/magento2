@@ -94,7 +94,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     /**
      * Create service. Proxy to the __invoke method
      *
-     * @deprecared use the __invoke method instead
+     * @deprecated use the __invoke method instead
      *
      * @param ServiceLocatorInterface $serviceLocator
      * @return array

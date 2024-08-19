@@ -20,7 +20,7 @@ use Magento\Framework\Filesystem;
 class FileFactory
 {
     /**
-     * @deprecared
+     * @deprecated
      * @see $fileResponseFactory
      * @var \Magento\Framework\App\ResponseInterface
      */

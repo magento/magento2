@@ -49,7 +49,7 @@ class TotalsReaderTest extends TestCase
     protected $collectorMock;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

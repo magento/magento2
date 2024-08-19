@@ -51,7 +51,7 @@ class GetCustomerTest extends GraphQlAbstract
      */
     private $objectManager;
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

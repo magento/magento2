@@ -23,7 +23,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {inheritdoc}
+     * {@inheritDoc}
      *
      * @return array
      */
@@ -33,7 +33,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {inheritdoc}
+     * {@inheritDoc}
      *
      * @param string $type
      * @return array

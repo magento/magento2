@@ -57,7 +57,7 @@ class UpgradeHashAlgorithmCommandTest extends TestCase
     private $storeManager;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

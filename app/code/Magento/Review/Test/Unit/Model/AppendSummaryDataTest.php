@@ -58,7 +58,7 @@ class AppendSummaryDataTest extends TestCase
     private $model;
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

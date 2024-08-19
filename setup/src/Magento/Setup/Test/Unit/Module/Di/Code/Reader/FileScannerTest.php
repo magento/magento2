@@ -18,7 +18,7 @@ class FileScannerTest extends TestCase
     private $fileScanner;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

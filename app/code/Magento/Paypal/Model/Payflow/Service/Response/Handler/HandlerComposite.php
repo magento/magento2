@@ -37,7 +37,7 @@ class HandlerComposite implements HandlerInterface
     }
 
     /**
-     * {inheritdoc}
+     * {@inheritDoc}
      */
     public function handle(InfoInterface $payment, DataObject $response)
     {

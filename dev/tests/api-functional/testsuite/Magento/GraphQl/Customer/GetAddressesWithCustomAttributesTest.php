@@ -150,7 +150,7 @@ class GetAddressesWithCustomAttributesTest extends GraphQlAbstract
     private $customer;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

@@ -56,7 +56,7 @@ class ToOrderItemTest extends TestCase
     protected $orderItemMock;
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

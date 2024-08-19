@@ -29,7 +29,7 @@ class StartTest extends AbstractBackendController
     private $session;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

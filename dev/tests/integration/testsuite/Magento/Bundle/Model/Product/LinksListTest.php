@@ -23,7 +23,7 @@ class LinksListTest extends TestCase
     private $linksList;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

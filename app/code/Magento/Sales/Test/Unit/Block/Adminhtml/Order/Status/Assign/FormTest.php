@@ -40,7 +40,7 @@ class FormTest extends TestCase
     protected $orderConfig;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

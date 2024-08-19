@@ -47,7 +47,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
     }
 
     /**
-     * {inheritdoc}
+     * {@inheritDoc}
      */
     protected function _toHtml()
     {

@@ -70,7 +70,7 @@ class CategoryRepositoryTest extends TestCase
     private $populateWithValuesMock;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

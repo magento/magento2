@@ -131,7 +131,7 @@ class AttributesListTest extends GraphQlAbstract
     private $catalogAttribute4;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

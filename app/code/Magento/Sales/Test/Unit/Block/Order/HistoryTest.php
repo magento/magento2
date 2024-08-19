@@ -68,7 +68,7 @@ class HistoryTest extends TestCase
     protected $pageTitleMock;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

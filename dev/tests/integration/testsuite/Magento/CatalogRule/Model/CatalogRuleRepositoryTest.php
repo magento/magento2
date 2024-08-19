@@ -32,7 +32,7 @@ class CatalogRuleRepositoryTest extends TestCase
     private $ruleProductProcessor;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

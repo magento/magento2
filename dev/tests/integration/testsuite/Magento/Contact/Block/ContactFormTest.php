@@ -30,7 +30,7 @@ class ContactFormTest extends TestCase
     private $block;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

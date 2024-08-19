@@ -65,7 +65,7 @@ class MediaTest extends TestCase
     private $productId = 23;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

@@ -48,7 +48,7 @@ class TaxTest extends TestCase
     private $taxOrderFactory;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

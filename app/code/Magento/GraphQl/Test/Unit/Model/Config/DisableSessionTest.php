@@ -29,7 +29,7 @@ class DisableSessionTest extends TestCase
     private $model;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     public function setUp(): void
     {

@@ -114,7 +114,7 @@ class GetProductWithCustomAttributesTest extends GraphQlAbstract
     private $product;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

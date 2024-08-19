@@ -17,7 +17,7 @@ class FormTesting extends Form
     const PROCESS_HTML_RESULT = 'parent_result';
 
     /**
-     * {inheritdoc}
+     * {@inheritDoc}
      */
     protected function processHtml()
     {
