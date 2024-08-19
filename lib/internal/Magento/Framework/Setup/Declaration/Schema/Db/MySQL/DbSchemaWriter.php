@@ -282,15 +282,14 @@ class DbSchemaWriter implements DbSchemaWriterInterface
             $statementsSql = [];
             $statement = null;
 
-            /**
-             * @var Statement $statement
-             */
-            foreach ($statementBank as $statement) {
-                $statementsSql[] = $statement->getStatement();
-            }
-            $adapter = $this->resourceConnection->getConnection($statement->getResource());
-
             if ($dryRun) {
+                /**
+                 * @var Statement $statement
+                 */
+                foreach ($statementBank as $statement) {
+                    $statementsSql[] = $statement->getStatement();
+                }
+
                 $this->dryRunLogger->log(
                     sprintf(
                         $this->statementDirectives[$statement->getType()],
@@ -299,7 +298,8 @@ class DbSchemaWriter implements DbSchemaWriterInterface
                     )
                 );
             } else {
-                $this->doQuery($adapter, $statementsSql, $statement);
+                $this->doQuery($statementBank);
+                $statement = end($statementBank);
                 //Do post update, like SQL DML operations or etc...
                 foreach ($statement->getTriggers() as $trigger) {
                     call_user_func($trigger);
@@ -325,37 +325,32 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     /**
      * Perform queries based on statements
      *
-     * @param AdapterInterface $adapter
-     * @param array $statementsSql
-     * @param Statement $statement
+     * @param Statement[] $statementBank
      * @return void
      * @throws ConnectionException
      */
     private function doQuery(
-        AdapterInterface $adapter,
-        array $statementsSql,
-        Statement $statement
+        array $statementBank
     ) : void {
+        $statementsSql = [];
+        foreach ($statementBank as $statement) {
+            $statementsSql[] = $statement->getStatement();
+        }
+        $adapter = $this->resourceConnection->getConnection($statement->getResource());
+
         if ($this->isNeedToSplitSql()) {
-            $canBeCombinedStatements = [];
-            $separatedStatements = [];
-            foreach ($statementsSql as $statementSql) {
-                if (str_contains($statementSql, 'FOREIGN KEY')) {
-                    $separatedStatements[] = $statementSql;
-                } else {
-                    $canBeCombinedStatements[] = $statementSql;
-                }
-            }
-            if (!empty($canBeCombinedStatements)) {
+            $preparedStatements = $this->getPreparedStatements($statementBank);
+
+            if (!empty($preparedStatements['canBeCombinedStatements'])) {
                 $adapter->query(
                     sprintf(
                         $this->statementDirectives[$statement->getType()],
                         $adapter->quoteIdentifier($statement->getTableName()),
-                        implode(", ", $canBeCombinedStatements)
+                        implode(", ", $preparedStatements['canBeCombinedStatements'])
                     )
                 );
             }
-            foreach ($separatedStatements as $separatedStatement) {
+            foreach ($preparedStatements['separatedStatements'] as $separatedStatement) {
                 $adapter->query(
                     sprintf(
                         $this->statementDirectives[$statement->getType()],
@@ -396,5 +391,59 @@ class DbSchemaWriter implements DbSchemaWriterInterface
         } else {
             return 1;
         }
+    }
+
+    /**
+     * Prepare list of modified columns from statement
+     *
+     * @param array $statementBank
+     * @return array
+     */
+    private function getModifiedColumns(array $statementBank) : array
+    {
+        $columns = [];
+        foreach ($statementBank as $statement) {
+            if ($statement->getType() === 'alter'
+                && str_contains($statement->getStatement(), 'MODIFY COLUMN')) {
+                $columns[] = $statement->getName();
+            }
+        }
+        return $columns;
+    }
+
+    /**
+     * Separate statements that can't be executed as one statement
+     *
+     * @param array $statementBank
+     * @return array
+     */
+    private function getPreparedStatements(array $statementBank) : array
+    {
+        $statementsSql = [];
+        foreach ($statementBank as $statement) {
+            $statementsSql[] = $statement->getStatement();
+        }
+        $result = ['separatedStatements' => [], 'canBeCombinedStatements' => []];
+        $modifiedColumns = $this->getModifiedColumns($statementBank);
+
+        foreach ($statementsSql as $statementSql) {
+            if (str_contains($statementSql, 'FOREIGN KEY')) {
+                $isThisColumnModified = false;
+                foreach ($modifiedColumns as $modifiedColumn) {
+                    if (str_contains($statementSql, '`' . $modifiedColumn . '`')) {
+                        $isThisColumnModified = true;
+                        break;
+                    }
+                }
+                if ($isThisColumnModified) {
+                    $result['separatedStatements'][] = $statementSql;
+                } else {
+                    $result['canBeCombinedStatements'][] = $statementSql;
+                }
+            } else {
+                $result['canBeCombinedStatements'][] = $statementSql;
+            }
+        }
+        return $result;
     }
 }
