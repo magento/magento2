@@ -1519,4 +1519,12 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="ApiSimpleProductWithPrice1" type="product2" extends="ApiSimpleOne">
+        <data key="price">1</data>
+        <data key="weight">1</data>
+    </entity>
+    <entity name="SimpleProductWithWeight" extends="SimpleProduct50" type="product">
+        <data key="weight">1</data>
+        <data key="price">10</data>
+    </entity>
 </entities>

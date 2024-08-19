@@ -265,6 +265,7 @@ class AccountManagementTest extends WebapiAbstract
             $customerData[Customer::ID],
             [
                 'id' => $customerData[Customer::ID],
+                'addresses' => $customerData[Customer::KEY_ADDRESSES],
                 'confirmation' => CustomerHelper::CONFIRMATION
             ]
         );

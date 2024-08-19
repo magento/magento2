@@ -137,6 +137,7 @@
         <generateDate date="now" format="m/d/Y" stepKey="generateCurrentDate"/>
         <generateDate date="-1 day" format="m/d/Y" stepKey="generateYesterdayDate"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageToEditProduct1"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditSimpleProduct1">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>

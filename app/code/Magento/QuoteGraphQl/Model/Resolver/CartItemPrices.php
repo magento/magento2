@@ -12,6 +12,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Cart\Totals;
 use Magento\Quote\Model\Quote\Item;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
@@ -30,10 +31,12 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
     /**
      * @param TotalsCollector $totalsCollector
      * @param GetDiscounts $getDiscounts
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         private readonly TotalsCollector $totalsCollector,
-        private readonly GetDiscounts $getDiscounts
+        private readonly GetDiscounts $getDiscounts,
+        private readonly PriceCurrencyInterface $priceCurrency
     ) {
     }
 
@@ -97,7 +100,24 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
             'discounts' => $this->getDiscounts->execute(
                 $cartItem->getQuote(),
                 $cartItem->getExtensionAttributes()->getDiscounts() ?? []
-            )
+            ),
+            'original_row_total' => [
+                'currency' => $currencyCode,
+                'value' => $this->getOriginalRowTotal($cartItem),
+            ],
         ];
+    }
+
+    /**
+     * Calculate the original price row total
+     *
+     * @param Item $cartItem
+     * @return float
+     */
+    private function getOriginalRowTotal(Item $cartItem): float
+    {
+        $qty = $cartItem->getTotalQty();
+        // Round unit price before multiplying to prevent losing 1 cent on subtotal
+        return $this->priceCurrency->round($cartItem->getOriginalPrice()) * $qty;
     }
 }

@@ -52,6 +52,11 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     protected $invalidAttribute;
 
     /**
+     * @var UniqueAttributeValidator
+     */
+    private $uniqueAttributeValidator;
+
+    /**
      * @var TimezoneInterface
      */
     private $localeDate;
@@ -60,16 +65,20 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      * @param StringUtils $string
      * @param RowValidatorInterface[] $validators
      * @param TimezoneInterface|null $localeDate
+     * @param UniqueAttributeValidator|null $uniqueAttributeValidator
      */
     public function __construct(
         \Magento\Framework\Stdlib\StringUtils $string,
         $validators = [],
-        ?TimezoneInterface $localeDate = null
+        ?TimezoneInterface $localeDate = null,
+        ?UniqueAttributeValidator $uniqueAttributeValidator = null
     ) {
         $this->string = $string;
         $this->validators = $validators;
         $this->localeDate = $localeDate ?: ObjectManager::getInstance()
             ->get(TimezoneInterface::class);
+        $this->uniqueAttributeValidator = $uniqueAttributeValidator
+            ?: ObjectManager::getInstance()->get(UniqueAttributeValidator::class);
     }
 
     /**
@@ -242,7 +251,14 @@ class Validator extends AbstractValidator implements RowValidatorInterface
 
         if ($valid && !empty($attrParams['is_unique'])) {
             if (isset($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]])
-                && ($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] != $rowData[Product::COL_SKU])) {
+                && ($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] != $rowData[Product::COL_SKU])
+                || !$this->uniqueAttributeValidator->isValid(
+                    $this->context,
+                    (string) $attrCode,
+                    (string) $rowData[Product::COL_SKU],
+                    (string) $rowData[$attrCode]
+                )
+            ) {
                 $this->_addMessages([RowValidatorInterface::ERROR_DUPLICATE_UNIQUE_ATTRIBUTE]);
                 return false;
             }
@@ -452,11 +468,23 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      */
     public function init($context)
     {
+        $this->_uniqueAttributes = [];
+        $this->uniqueAttributeValidator->clearCache();
         $this->context = $context;
         foreach ($this->validators as $validator) {
             $validator->init($context);
         }
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        $this->_uniqueAttributes = [];
+        $this->uniqueAttributeValidator->clearCache();
+        parent::_resetState();
     }
 }
