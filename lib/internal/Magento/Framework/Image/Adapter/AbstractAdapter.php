@@ -562,6 +562,9 @@ abstract class AbstractAdapter implements AdapterInterface
             }
         }
 
+        $frameWidth = (float)$frameWidth;
+        $frameHeight = (float)$frameHeight;
+
         // define coordinates of image inside new frame
         $srcX = 0;
         $srcY = 0;
@@ -609,10 +612,7 @@ abstract class AbstractAdapter implements AdapterInterface
             }
             // keep aspect ratio
             if ($this->_imageSrcWidth / $this->_imageSrcHeight >= $frameWidth / $frameHeight) {
-                $dstHeight = max(
-                    1,
-                    round($dstWidth / $this->_imageSrcWidth * $this->_imageSrcHeight)
-                );
+                $dstHeight = max(1, round($dstWidth / $this->_imageSrcWidth * $this->_imageSrcHeight));
             } else {
                 $dstWidth = round($dstHeight / $this->_imageSrcHeight * $this->_imageSrcWidth);
             }
