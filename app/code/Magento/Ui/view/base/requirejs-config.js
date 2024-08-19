@@ -29,7 +29,7 @@ var config = {
             chartJs:        'chartjs/Chart.min',
             'chart.js':     'chartjs/Chart.min',
             tinymce:        'tiny_mce_7/tinymce.min',
-            wysiwygAdapter: 'mage/adminhtml/wysiwyg/tiny_mce/tinymce5Adapter'
+            wysiwygAdapter: 'mage/adminhtml/wysiwyg/tiny_mce/tinymceAdapter'
         }
     }
 };
