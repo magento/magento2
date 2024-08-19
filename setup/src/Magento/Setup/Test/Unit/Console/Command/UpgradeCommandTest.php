@@ -9,7 +9,9 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Console\Cli;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Console\Command\UpgradeCommand;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
@@ -60,6 +62,14 @@ class UpgradeCommandTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                CacheInterface::class,
+                $this->createMock(CacheInterface::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -120,7 +130,7 @@ class UpgradeCommandTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         $mediaGalleryNotice = "Media files stored outside of 'Media Gallery Allowed' folders will not be available "
         . "to the media gallery.\n"

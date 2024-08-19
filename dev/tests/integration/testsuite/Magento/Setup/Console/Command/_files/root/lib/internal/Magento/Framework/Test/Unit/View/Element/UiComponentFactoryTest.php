@@ -40,11 +40,11 @@ class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->contextFactoryMock = $this
             ->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataInterfaceFactoryMock = $this->getMockBuilder(\Magento\Framework\Config\DataInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataMock = $this->createMock(\Magento\Framework\Config\DataInterface::class);
