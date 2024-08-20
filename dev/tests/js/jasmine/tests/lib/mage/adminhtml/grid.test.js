@@ -8,10 +8,12 @@
 define(['mage/adminhtml/grid'], function () {
     'use strict';
     describe('mage/adminhtml/grid', function () {
-        let gridInstance;
+        let gridInstance,originalVarienGridInitializeFn;
 
         beforeEach(function () {
             // Create an instance of varienGrid
+            originalVarienGridInitializeFn = window.varienGrid.prototype.initialize;
+            window.varienGrid.prototype.initialize = jasmine.createSpy('initialize');
             gridInstance = new window.varienGrid();
 
             spyOn(gridInstance, 'reload');
@@ -20,6 +22,10 @@ define(['mage/adminhtml/grid'], function () {
                 return `https://test.com/${filterVar}/${value}/`;
             });
             gridInstance.filterVar = 'filter';
+        });
+
+        beforeEach(function () {
+            window.varienGrid.prototype.initialize = originalVarienGridInitializeFn;
         });
 
         it('should reset the filter, clean the URL, and reload with the correct URL', function () {
