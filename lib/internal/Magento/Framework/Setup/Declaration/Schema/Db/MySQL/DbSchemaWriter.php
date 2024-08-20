@@ -289,7 +289,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
                 foreach ($statementBank as $statement) {
                     $statementsSql[] = $statement->getStatement();
                 }
-
+                $adapter = $this->resourceConnection->getConnection($statement->getResource());
                 $this->dryRunLogger->log(
                     sprintf(
                         $this->statementDirectives[$statement->getType()],
@@ -332,6 +332,11 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     private function doQuery(
         array $statementBank
     ) : void {
+        if (empty($statementBank)) {
+            return;
+        }
+
+        $statement = null;
         $statementsSql = [];
         foreach ($statementBank as $statement) {
             $statementsSql[] = $statement->getStatement();
