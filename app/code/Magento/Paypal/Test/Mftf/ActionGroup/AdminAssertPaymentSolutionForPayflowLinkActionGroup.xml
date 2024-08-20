@@ -25,11 +25,11 @@
         <!-- Check that Paypal Credit and Express Checkoutis set to No and it is disabled -->
         <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enablePaypalCredit(countryCode)}}" userInput="No" stepKey="seePaypalCreditIsSetAsNo" after="seeEnablePaypalCreditIsDisabled"/>
         <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enableExpressCheckout(countryCode)}}" userInput="No" stepKey="seeExpressCheckoutIsSetAsNo" after="seeEnableExpressCheckoutIsDisabled"/>
-        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledEnableSolution(countryCode)}}" stepKey="assertGreenTickMarkForEnableThisSolutionDropdown" after="enableSolution"/>
+        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledEnableSolution(countryCode)}}" stepKey="assertGreenTickMarkPresentForEnableThisSolutionDropdown" after="enableSolution"/>
         <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enablePaypalCredit(countryCode)}}" userInput="Yes" stepKey="seePaypalCreditIsSetAsYes" before="waitForSaveConfigToBeVisible"/>
-        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledPaypalCredit(countryCode)}}" stepKey="assertGreenTickMarkForEnablePaypalCredit" after="assertGreenTickMarkForEnableThisSolutionDropdown"/>
-        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.sortOrder(countryCode)}}" stepKey="assertSortOrder" after="assertGreenTickMarkForEnablePaypalCredit"/>
-        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledExpressCheckout(countryCode)}}" stepKey="assertGreenTickMarkForEnablePaypalCheckout" before="waitForSaveConfigToBeVisible"/>
+        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledPaypalCredit(countryCode)}}" stepKey="assertGreenTickMarkPresentForEnablePaypalCredit" after="assertGreenTickMarkPresentForEnableThisSolutionDropdown"/>
+        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.sortOrder(countryCode)}}" stepKey="assertSortOrder" after="assertGreenTickMarkPresentForEnablePaypalCredit"/>
+        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledExpressCheckout(countryCode)}}" stepKey="assertGreenTickMarkPresentForEnablePaypalCheckout" before="waitForSaveConfigToBeVisible"/>
         <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enableExpressCheckout(countryCode)}}" userInput="Yes" stepKey="seeExpressCheckoutIsSetAsYes" before="waitForSaveConfigToBeVisible"/>
     </actionGroup>
 </actionGroups>

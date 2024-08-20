@@ -50,6 +50,7 @@
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
             <argument name="tags" value="config full_page"/>
         </actionGroup>
+        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.closeButton('us')}}" stepKey="assertConfigureBtnNotVisible"/>
         <!--Login to storefront as guest customer-->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
             <argument name="Customer" value="$$createCustomer$$"/>
@@ -78,16 +79,16 @@
         <waitForPageLoad stepKey="waitForPaymentMethodPageToLoad"/>
         <waitForElementClickable selector="{{AdminPayPalPayFlowLinkConfigSection.configureBtn('us')}}" stepKey="waitForClickPayPalConfigureBtnToAssertStatus"/>
         <click selector="{{AdminPayPalPayFlowLinkConfigSection.configureBtn('us')}}" stepKey="clickPayPalConfigureBtnToAssertStatus"/>
-        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledEnableSolution('us')}}" stepKey="assertNoGreenTickMarkForEnableThisSolutionDropdown"/>
+        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledEnableSolution('us')}}" stepKey="assertGreenTickMarkAbsentForEnableThisSolutionDropdown"/>
         <assertElementContainsAttribute stepKey="seePaypalExpressCheckoutIsDisabled">
             <expectedResult selector="{{AdminPayPalPayFlowLinkConfigSection.enableExpressCheckout('us')}}" attribute="disabled" type="string"></expectedResult>
         </assertElementContainsAttribute>
-        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledExpressCheckout('us')}}" stepKey="assertNoGreenTickMarkForEnablePaypalExpressCheckoutDropdown"/>
+        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledExpressCheckout('us')}}" stepKey="assertGreenTickMarkAbsentForEnablePaypalExpressCheckoutDropdown"/>
         <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enableExpressCheckout('us')}}" userInput="No" stepKey="seeExpressCheckoutIsSetAsNo"/>
         <assertElementContainsAttribute stepKey="seePaypalCreditIsDisabled">
             <expectedResult selector="{{AdminPayPalPayFlowLinkConfigSection.enablePaypalCredit('us')}}" attribute="disabled" type="string"></expectedResult>
         </assertElementContainsAttribute>
-        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledPaypalCredit('us')}}" stepKey="assertNoGreenTickMarkForEnablePaypalCreditDropdown"/>
+        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledPaypalCredit('us')}}" stepKey="assertGreenTickMarkAbsentForEnablePaypalCreditDropdown"/>
         <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enablePaypalCredit('us')}}" userInput="No" stepKey="seePaypalCreditIsSetAsNo"/>
         <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.sortOrder('us')}}" stepKey="assertSortOrderFieldIsDisappeared"/>
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
@@ -103,37 +104,39 @@
         <waitForPageLoad stepKey="waitForPaymentMethodPageToLoadAfterEnabling"/>
         <waitForElementClickable selector="{{AdminPayPalPayFlowLinkConfigSection.configureBtn('us')}}" stepKey="waitForClickPayPalConfigureBtnToAssertStatusAfterEnabling"/>
         <click selector="{{AdminPayPalPayFlowLinkConfigSection.configureBtn('us')}}" stepKey="clickPayPalConfigureBtnToAssertStatusAfterEnabling"/>
-        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledEnableSolution('us')}}" stepKey="assertGreenTickMarkEnableThisSolutionDropdown"/>
-        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledExpressCheckout('us')}}" stepKey="assertNoGreenTickMarkForEnablePaypalExpressCheckoutDropdown1"/>
+        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledEnableSolution('us')}}" stepKey="assertGreenTickMarkPresentEnableThisSolutionDropdown"/>
+        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledExpressCheckout('us')}}" stepKey="assertGreenTickMarkAbsentForEnablePaypalExpressCheckoutDropdown1"/>
         <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enableExpressCheckout('us')}}" userInput="No" stepKey="seeExpressCheckoutIsSetAsNo1"/>
         <assertElementContainsAttribute stepKey="seePaypalCreditIsDisabled1">
             <expectedResult selector="{{AdminPayPalPayFlowLinkConfigSection.enablePaypalCredit('us')}}" attribute="disabled" type="string"></expectedResult>
         </assertElementContainsAttribute>
-        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledPaypalCredit('us')}}" stepKey="assertNoGreenTickMarkForEnablePaypalCreditDropdown1"/>
+        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledPaypalCredit('us')}}" stepKey="assertGreenTickMarkAbsentForEnablePaypalCreditDropdown1"/>
         <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enablePaypalCredit('us')}}" userInput="No" stepKey="seePaypalCreditIsSetAsNo1"/>
         <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.sortOrder('us')}}" stepKey="assertSortOrderFieldIsDisappeared1"/>
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration1"/>
-
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache2">
             <argument name="tags" value="config full_page"/>
         </actionGroup>
+        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.closeButton('us')}}" stepKey="assertConfigBtnNotVisible"/>
         <!--Go to checkout page and assert paypal express checkout option is present-->
         <actionGroup ref="StorefrontNavigateToGuestCheckoutReviewAndPaymentsPageActionGroup" stepKey= "goToStoreFrontCheckoutPageToAssertPaypalPaymentMethodIsPresent"/>
         <waitForElementVisible selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Link)')}}" stepKey="creditcardPayflowLinkInPaymentPage"/>
         <magentoCLI command="config:set payment/payflow_express/active 1" stepKey="enablePayPalExpressCheckoutPaymentMethod"/>
+        <magentoCLI command="config:set payment/payflow_express_bml/active 0" stepKey="disableAgainPaypalCredit"/>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPageAfterEnablePayPalExpressCheckout"/>
         <waitForPageLoad stepKey="waitForPaymentMethodPageToLoad1"/>
         <waitForElementClickable selector="{{AdminPayPalPayFlowLinkConfigSection.configureBtn('us')}}" stepKey="waitForClickPayPalConfigureBtnToAssertAfterEnabling"/>
         <click selector="{{AdminPayPalPayFlowLinkConfigSection.configureBtn('us')}}" stepKey="clickPayPalConfigureBtnToAssertAfterEnabling"/>
-        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledEnableSolution('us')}}" stepKey="assertGreenTickMarkEnableThisSolutionDropdown1"/>
-        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledExpressCheckout('us')}}" stepKey="assertGreenTickMarkForEnablePaypalExpressCheckoutDropdown1"/>
-        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledPaypalCredit('us')}}" stepKey="assertNoGreenTickMarkForEnablePaypalCreditDropdown2"/>
+        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledEnableSolution('us')}}" stepKey="assertGreenTickMarkPresentEnableThisSolutionDropdown1"/>
+        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledExpressCheckout('us')}}" stepKey="assertGreenTickMarkPresentForEnablePaypalExpressCheckoutDropdown1"/>
+        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledPaypalCredit('us')}}" stepKey="assertGreenTickMarkAbsentForEnablePaypalCreditDropdown2"/>
         <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enablePaypalCredit('us')}}" userInput="No" stepKey="seePaypalCreditIsSetAsNo2"/>
         <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.sortOrder('us')}}" stepKey="assertSortOrderFieldIsDisappeared2"/>
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration2"/>
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache3">
             <argument name="tags" value="config full_page"/>
         </actionGroup>
+        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.closeButton('us')}}" stepKey="assertConfigureBtnNotToBeVisible"/>
         <!--Go to checkout page and assert paypal express checkout option is present-->
         <actionGroup ref="StorefrontNavigateToGuestCheckoutReviewAndPaymentsPageActionGroup" stepKey= "goToStoreFrontCheckoutPageToAssertPaypalPaymentMethodsPresent"/>
         <waitForElementVisible selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Link)')}}" stepKey="creditcardPayflowLinkInPaymentPage2"/>
