@@ -257,7 +257,7 @@ class AdapterTest extends TestCase
         ];
         $this->connectionMock->expects($this->exactly(2))
             ->method('query')
-            ->willReturnCallback(fn ($query) => match($query) {
+            ->willReturnCallback(fn ($query) => match ($query) {
                 $firstQuery => $firstResponse,
                 $finalQuery => $finalResponse,
             });
