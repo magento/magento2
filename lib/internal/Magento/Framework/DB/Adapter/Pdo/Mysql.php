@@ -434,7 +434,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             $this->pid = getmypid();
 
             // Reset config host to avoid issue with multiple connections
-            if (!empty($this->_config['port'])) {
+            if (!empty($this->_config['port']) && strpos($this->_config['host'], ':') === false) {
                 $this->_config['host'] = implode(':', [$this->_config['host'], $this->_config['port']]);
                 unset($this->_config['port']);
             }
