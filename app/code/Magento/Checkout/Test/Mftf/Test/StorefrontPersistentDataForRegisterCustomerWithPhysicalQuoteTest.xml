@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPersistentDataForRegisterCustomerWithPhysicalQuoteTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout via Register Checkout"/>
+            <title value="Persistent Data for register Customer with physical quote"/>
+            <description value="One can use Persistent Data for register Customer with physical quote"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4618"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createProduct">
+                <field key="price">10</field>
+            </createData>
+            <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="CliEnableFreeShippingMethodActionGroup" stepKey="freeShippingMethodsSettingConfig"/>
+        </before>
+        <after>
+            <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShipping"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Login as Customer Login from Customer page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+        <!-- Add simple product to cart and go to checkout-->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <!-- 2. Go to Shopping Cart -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckoutCartIndexPage"/>
+        <!-- 3. Open "Estimate Shipping and Tax" section and input data -->
+        <actionGroup ref="StorefrontCartEstimateShippingAndTaxActionGroup" stepKey="expandEstimateShippingAndTaxSection"/>
+        <actionGroup ref="StorefrontAssertCartEstimateShippingAndTaxActionGroup" stepKey="assertCartEstimateShippingAddress"/>
+        <actionGroup ref="StorefrontAssertShippingMethodPresentInCartActionGroup" stepKey="assertShippingMethodFlatRateIsPresentInCart">
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertShippingMethodPresentInCartActionGroup" stepKey="assertShippingMethodFreeShippingIsPresentInCart">
+            <argument name="shippingMethod" value="Free Shipping"/>
+        </actionGroup>
+        <!-- 4. Select Flat Rate as shipping -->
+        <checkOption selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectFlatRateShippingMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearAfterFlatRateSelection"/>
+        <waitForText selector="{{CheckoutCartSummarySection.total}}" userInput="15" stepKey="assertOrderTotalField"/>
+        <!-- 5. Refresh browser page (F5) -->
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <actionGroup ref="StorefrontAssertCartEstimateShippingAndTaxActionGroup" stepKey="assertCartEstimateShippingAddressAfterReload"/>
+        <actionGroup ref="StorefrontAssertCartShippingMethodSelectedActionGroup" stepKey="assertFlatRateShippingMethodIsCheckedAfterReload">
+            <argument name="carrierCode" value="flatrate"/>
+            <argument name="methodCode" value="flatrate"/>
+        </actionGroup>
+        <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillUKEstimateShippingAndTaxFields">
+            <argument name="address" value="updateCustomerUKAddress"/>
+        </actionGroup>
+        <waitForLoadingMaskToDisappear stepKey="waitForZipLoadingMaskDisappear"/>
+        <dontSeeJsError stepKey="verifyThatThereIsNoJSErrors"/>
+        <!-- 6. Go to Checkout -->
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <actionGroup ref="StorefrontAssertCheckoutShippingMethodSelectedActionGroup" stepKey="assertFlatRateShippingMethodIsCheckedAfterGoingToCheckout">
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickAddNewAddressButtonFromCheckoutShippingActionGroup" stepKey="clickOnNewAddressButton"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.firstName('John')}}" stepKey="assertFirstName"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.lastName('Doe')}}" stepKey="assertLastName"/>
+        <seeOptionIsSelected selector="{{CheckoutShippingSection.country}}" userInput="{{UK_Address.country}}" stepKey="selectedCountryIsUnitedKingdom"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.postcode('12345')}}" stepKey="assertUKPostCode"/>
+        <actionGroup ref="CustomerLoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="fillSwitzerlandAddress">
+            <argument name="Address" value="Switzerland_Address"/>
+        </actionGroup>
+        <!-- Check order summary in checkout -->
+        <actionGroup ref="StorefrontCheckoutClickSaveAddressButtonActionGroup" stepKey="saveAddress"/>
+        <!-- Select Free Shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFreeShipping">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="againGoToShoppingCart"/>
+        <dontSeeJsError stepKey="againVerifyThatThereIsNoJSErrors"/>
+        <actionGroup ref="AssertStorefrontCheckoutCartEstimateShippingAndTaxAddressActionGroup" stepKey="checkSwitzerlandAddress">
+            <argument name="country" value="{{Switzerland_Address.country}}"/>
+            <argument name="state" value="{{Switzerland_Address.state}}"/>
+            <argument name="postcode" value="{{Switzerland_Address.postcode}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCartShippingMethodSelectedActionGroup" stepKey="assertFreeShippingMethodIsCheckedAfterGoingBackToShoppingCart">
+            <argument name="carrierCode" value="freeshipping"/>
+            <argument name="methodCode" value="freeshipping"/>
+        </actionGroup>
+    </test>
+</tests>

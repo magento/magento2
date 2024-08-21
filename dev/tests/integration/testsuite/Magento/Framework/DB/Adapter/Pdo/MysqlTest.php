@@ -280,7 +280,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         $adapter->dropTable($tableName);
     }
 
-    public function getAutoIncrementFieldDataProvider()
+    public static function getAutoIncrementFieldDataProvider()
     {
         return [
             'auto increment field' => [

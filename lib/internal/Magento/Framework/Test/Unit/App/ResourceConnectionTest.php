@@ -149,11 +149,15 @@ class ResourceConnectionTest extends TestCase
     {
         $this->deploymentConfigMock
             ->method('get')
-            ->withConsecutive(
-                [ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX],
-                ['db/connection/default']
-            )
-            ->willReturnOnConsecutiveCalls('pref_', ['config']);
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX) {
+                        return 'pref_';
+                    } elseif ($arg1 == 'db/connection/default') {
+                        return ['config'];
+                    }
+                }
+            );
         $this->configMock->expects($this->atLeastOnce())
             ->method('getConnectionName')
             ->with('default')

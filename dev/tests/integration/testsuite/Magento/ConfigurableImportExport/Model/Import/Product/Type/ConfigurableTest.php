@@ -98,7 +98,7 @@ class ConfigurableTest extends TestCase
         $this->assertTrue($stockItem->getIsInStock());
     }
 
-    public function configurableImportDataProvider()
+    public static function configurableImportDataProvider()
     {
         return [
             'Configurable 1' => [
