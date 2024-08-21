@@ -190,10 +190,8 @@ class Bestsellers extends AbstractReport
 
         if ($subSelect !== null) {
             $dataRange = $this->getRange($subSelect);
-            foreach ($dataRange as $date) {
-                $deleteCondition = $this->getConnection()->prepareSqlCondition('period', ['like' => $date]);
+                $deleteCondition = $this->getConnection()->prepareSqlCondition('period', ['in' => $dataRange]);
                 $this->getConnection()->delete($table, $deleteCondition);
-            }
             return;
         } else {
             $condition = [];
@@ -277,9 +275,13 @@ class Bestsellers extends AbstractReport
                 $to
             )
         );
-        $select = $connection->select();
-        $subSelect = $this->getRangeSubSelect($from, $to);
 
+        $subSelect = $this->getRangeSubSelect($from, $to);
+        $dataRange = $this->getRange($subSelect);
+
+        $whereCondition = $connection->prepareSqlCondition($periodExpr, ['in' => $dataRange]);
+
+        $select = $connection->select();
         $select->group([$periodExpr, 'source_table.store_id', 'order_item.product_id']);
 
         $columns = [
@@ -310,7 +312,7 @@ class Bestsellers extends AbstractReport
             " WHERE store_id = " . $storeId .
             " AND state != '" . \Magento\Sales\Model\Order::STATE_CANCELED . "'" .
             ($subSelect !== null ?
-                " AND " . $this->_makeConditionFromDateRangeSelect($subSelect, $periodExpr) :
+                " AND " . $whereCondition :
                 '') . ")"
         )->where(
             'order_item.product_type NOT IN(?)',
