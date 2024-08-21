@@ -24,7 +24,7 @@ define(['mage/adminhtml/grid'], function () {
             gridInstance.filterVar = 'filter';
         });
 
-        beforeEach(function () {
+        afterEach(function () {
             window.varienGrid.prototype.initialize = originalVarienGridInitializeFn;
         });
 
