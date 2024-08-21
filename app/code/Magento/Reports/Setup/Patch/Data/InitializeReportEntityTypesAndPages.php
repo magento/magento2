@@ -67,6 +67,8 @@ class InitializeReportEntityTypesAndPages implements DataPatchInterface, PatchVe
          * Prepare database after data upgrade
          */
         $this->moduleDataSetup->getConnection()->endSetup();
+        
+        return $this;
     }
 
     /**
