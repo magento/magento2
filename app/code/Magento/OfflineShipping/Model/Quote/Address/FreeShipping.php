@@ -11,34 +11,25 @@ use Magento\OfflineShipping\Model\SalesRule\Calculator;
 use Magento\OfflineShipping\Model\SalesRule\ExtendedCalculator;
 use Magento\Quote\Model\Quote\Address\FreeShippingInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
-use Magento\Store\Model\StoreManagerInterface;
 
 class FreeShipping implements FreeShippingInterface
 {
     /**
-     * @var ExtendedCalculator
+     * @var Calculator
      */
     protected $calculator;
 
     /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @param StoreManagerInterface $storeManager
      * @param Calculator $calculator
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
         Calculator $calculator
     ) {
-        $this->storeManager = $storeManager;
         $this->calculator = $calculator;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function isFreeShipping(\Magento\Quote\Model\Quote $quote, $items)
     {
@@ -49,12 +40,7 @@ class FreeShipping implements FreeShippingInterface
 
         $result = false;
         $addressFreeShipping = true;
-        $store = $this->storeManager->getStore($quote->getStoreId());
-        $this->calculator->init(
-            $store->getWebsiteId(),
-            $quote->getCustomerGroupId(),
-            $quote->getCouponCode()
-        );
+        $this->calculator->initFromQuote($quote);
         $shippingAddress = $quote->getShippingAddress();
         $shippingAddress->setFreeShipping(0);
         /** @var \Magento\Quote\Api\Data\CartItemInterface $item */
@@ -88,6 +74,8 @@ class FreeShipping implements FreeShippingInterface
     }
 
     /**
+     * Apply free shipping to quote item child items
+     *
      * @param AbstractItem $item
      * @param bool $isFreeShipping
      * @return void

@@ -11,11 +11,13 @@ namespace Magento\Elasticsearch\Test\Unit\ElasticAdapter\SearchAdapter\Query;
 use Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Query\Builder;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation as AggregationBuilder;
+use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\RequestInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -66,6 +68,14 @@ class BuilderTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Sort::class,
+                $this->createMock(Sort::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->clientConfig = $this->getMockBuilder(Config::class)
             ->onlyMethods(['getEntityType'])
             ->disableOriginalConstructor()

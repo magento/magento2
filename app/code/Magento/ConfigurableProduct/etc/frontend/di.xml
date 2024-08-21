@@ -23,4 +23,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogWidget\Block\Product\ProductsList">
+        <plugin name="configurable_product_widget_product_list" type="Magento\ConfigurableProduct\Plugin\CatalogWidget\Block\Product\ProductsListPlugin" sortOrder="2"/>
+    </type>
 </config>

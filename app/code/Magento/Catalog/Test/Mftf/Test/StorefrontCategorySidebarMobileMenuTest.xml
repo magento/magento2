@@ -26,6 +26,12 @@
             <createData entity="NewSubCategoryWithParent" stepKey="createSubCategory">
                 <requiredEntity createDataKey="createParentCategory"/>
             </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexToReflectNewCategory">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCacheToReflectNewCategory">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </before>
         <after>
             <!-- Reset the window size to its original state -->

@@ -197,7 +197,7 @@ class FileProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function getViewUrlDataProvider(): array
+    public static function getViewUrlDataProvider(): array
     {
         return [
             [
@@ -568,8 +568,10 @@ class FileProcessorTest extends TestCase
     {
         $this->mediaDirectory
             ->method('isExist')
-            ->withConsecutive(['customer/tmp/filename.ext1'], ['customer/filename.ext1'])
-            ->willReturnOnConsecutiveCalls(true, false);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['customer/tmp/filename.ext1'] => true,
+                ['customer/filename.ext1'] => false
+            });
         $this->mediaDirectory->expects($this->once())
             ->method('create')
             ->with($destinationPath)

@@ -53,14 +53,13 @@ class ProductOptionProcessorTest extends TestCase
     protected function setUp(): void
     {
         $this->dataObject = $this->getMockBuilder(DataObject::class)
-            ->setMethods([
-                'getLinks', 'addData'
-            ])
+            ->addMethods(['getLinks'])
+            ->onlyMethods(['addData'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->dataObjectFactory = $this->getMockBuilder(\Magento\Framework\DataObject\Factory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectFactory->expects($this->any())
@@ -74,7 +73,7 @@ class ProductOptionProcessorTest extends TestCase
         $this->downloadableOption = $this->getMockBuilder(
             DownloadableOptionInterface::class
         )
-            ->setMethods([
+            ->onlyMethods([
                 'getDownloadableLinks',
             ])
             ->getMockForAbstractClass();
@@ -82,7 +81,7 @@ class ProductOptionProcessorTest extends TestCase
         $this->downloadableOptionFactory = $this->getMockBuilder(
             DownloadableOptionFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->downloadableOptionFactory->expects($this->any())
@@ -111,7 +110,7 @@ class ProductOptionProcessorTest extends TestCase
         $productOptionExtensionMock = $this->getMockBuilder(
             ProductOptionExtensionInterface::class
         )
-            ->setMethods([
+            ->addMethods([
                 'getDownloadableOption',
             ])
             ->getMockForAbstractClass();
@@ -139,7 +138,7 @@ class ProductOptionProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderConvertToBuyRequest()
+    public static function dataProviderConvertToBuyRequest()
     {
         return [
             [
@@ -188,7 +187,7 @@ class ProductOptionProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderConvertToProductOption()
+    public static function dataProviderConvertToProductOption()
     {
         return [
             [
