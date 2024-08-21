@@ -23,7 +23,6 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote\Item;
 use Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider;
 
-
 class ProductImagePlugin
 {
     private const CONF_GROUPED_PRODUCT_IMAGE = 'grouped_product_image';
