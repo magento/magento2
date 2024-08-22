@@ -161,6 +161,12 @@ class IdentifierForSaveTest extends TestCase
             ->method('getVaryString')
             ->willReturn(self::VARY);
 
+        $this->identifierStoreReader->method('getPageTagsWithStoreCacheTags')->willReturnCallback(
+            function ($value) {
+                return $value;
+            }
+        );
+
         $this->assertEquals(
             sha1(
                 json_encode(
