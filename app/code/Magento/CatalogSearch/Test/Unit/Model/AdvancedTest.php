@@ -111,8 +111,7 @@ class AdvancedTest extends TestCase
         $storeLabel,
         $frontendInput,
         $backendType
-    )
-    {
+    ) {
         $attr = $this->createAttribute(
             $this->createBackend($backend),
             $this->createSource($source),

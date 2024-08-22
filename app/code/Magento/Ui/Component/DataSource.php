@@ -20,7 +20,7 @@ class DataSource extends AbstractComponent implements DataSourceInterface
     /**
      * @var DataProviderInterface
      */
-    protected static $dataProvider;
+    protected $dataProvider;
 
     /**
      * Constructor
@@ -66,8 +66,8 @@ class DataSource extends AbstractComponent implements DataSourceInterface
     /**
      * @return DataProviderInterface
      */
-    public static function getDataProvider()
+    public function getDataProvider()
     {
-        return self::$dataProvider;
+        return $this->dataProvider;
     }
 }
