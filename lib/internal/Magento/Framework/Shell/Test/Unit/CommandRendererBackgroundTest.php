@@ -59,7 +59,7 @@ class CommandRendererBackgroundTest extends TestCase
     {
         return [
             'windows' => [true, 'start /B "magento background task" ' . $this->testCommand . ' 2>&1'],
-            'unix'    => [false, $this->testCommand . ' > /dev/null &'],
+            'unix'    => [false, $this->testCommand . ' 2>/dev/null >/dev/null &'],
         ];
     }
 }

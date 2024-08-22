@@ -35,14 +35,15 @@ class AllRegionTest extends TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
 
-        $countryCollectionFactory = $this->getMockBuilder(
-            CollectionFactory::class
-        )->setMethods(['create', '__wakeup', '__sleep'])->disableOriginalConstructor()
+        $countryCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
+            ->addMethods(['__wakeup', '__sleep'])
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->countryCollection = $this->getMockBuilder(
             Collection::class
-        )->setMethods(['load', 'toOptionArray', '__wakeup', '__sleep'])
+        )->onlyMethods(['load', 'toOptionArray', '__wakeup', '__sleep'])
             ->disableOriginalConstructor()
             ->getMock();
         $countryCollectionFactory->expects($this->once())
@@ -55,10 +56,12 @@ class AllRegionTest extends TestCase
         $regionCollectionFactory = $this->getMockBuilder(
             \Magento\Directory\Model\ResourceModel\Region\CollectionFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create', '__wakeup', '__sleep'])->getMock();
+            ->addMethods(['__wakeup', '__sleep'])
+            ->onlyMethods(['create'])
+            ->getMock();
         $this->regionCollection = $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Region\Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getIterator', '__wakeup', '__sleep'])
+            ->onlyMethods(['load', 'getIterator', '__wakeup', '__sleep'])
             ->getMock();
         $regionCollectionFactory->expects($this->once())
             ->method('create')
@@ -214,7 +217,8 @@ class AllRegionTest extends TestCase
     {
         $region = $this->getMockBuilder(Region::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCountryId', 'getId', 'getDefaultName', '__wakeup', '__sleep'])
+            ->addMethods(['getCountryId','getDefaultName'])
+            ->onlyMethods(['getId', '__wakeup', '__sleep'])
             ->getMock();
         $region->expects($this->once())
             ->method('getCountryId')

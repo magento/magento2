@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillCustomProductAttributeFieldsActionGroup">
+        <annotations>
+            <description>Filling custom product attribute values in product creation page.</description>
+        </annotations>
+        <arguments>
+            <argument name="priceAttributeCode" type="string" defaultValue="price_en"/>
+            <argument name="priceAttributeValue" type="string" defaultValue="1234"/>
+            <argument name="textAttributeCode" type="string" defaultValue="text_en"/>
+            <argument name="textAttributeValue" type="string" defaultValue="abcd"/>
+            <argument name="areaAttributeCode" type="string" defaultValue="area_en"/>
+            <argument name="areaAttributeValue" type="string" defaultValue="456"/>
+            <argument name="dropdownAttributeCode" type="string" defaultValue="dropdown_en"/>
+            <argument name="dropdownAttributeValue" type="string" defaultValue="Yellow"/>
+            <argument name="boolean" type="string" defaultValue="yes_en"/>
+            <argument name="dateAttributeCode" type="string" defaultValue="date_en"/>
+            <argument name="dateAttributeValue" type="string" defaultValue="05/27/2024"/>
+            <argument name="multiSelectAttributeValue" type="string" defaultValue="'Value_1_EN','Value_2_EN'"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminProductContentSection.attributeInput('priceAttributeCode')}}" stepKey="waitForPriceFieldToBeVisible"/>
+        <fillField selector="{{AdminProductContentSection.attributeInput('priceAttributeCode')}}" userInput="{{priceAttributeValue}}" stepKey="fillPriceFieldToBeVisible"/>
+        <waitForElementVisible selector="{{AdminProductContentSection.attributeInput('textAttributeCode')}}" stepKey="waitForTextFieldToBeVisible"/>
+        <fillField selector="{{AdminProductContentSection.attributeInput('textAttributeCode')}}" userInput="{{textAttributeValue}}" stepKey="fillTextField"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.customTextArea('areaAttributeCode')}}" stepKey="waitForAreaFieldToBeVisible"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.customTextArea('areaAttributeCode')}}" userInput="{{areaAttributeValue}}" stepKey="fillAreaField"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.customDropDown('dropdownAttributeCode')}}" userInput="{{dropdownAttributeValue}}" stepKey="selectDropdownValue"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.customYesOrNo('boolean')}}" stepKey="checkYesOrNo"/>
+        <waitForElementVisible selector="{{AdminProductContentSection.attributeInput('dateAttributeCode')}}" stepKey="waitForDateFieldToBeVisible"/>
+        <fillField selector="{{AdminProductContentSection.attributeInput('dateAttributeCode')}}" userInput="{{dateAttributeValue}}" stepKey="fillDateField"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.customMultiSelect}}" parameterArray="[{{multiSelectAttributeValue}}]" stepKey="multiSelectSpecifiedValues"/>
+    </actionGroup>
+</actionGroups>

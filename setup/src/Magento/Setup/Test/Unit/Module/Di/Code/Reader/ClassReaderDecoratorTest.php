@@ -29,7 +29,6 @@ class ClassReaderDecoratorTest extends TestCase
     {
         $this->classReaderMock = $this->getMockBuilder(ClassReader::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->model = new ClassReaderDecorator($this->classReaderMock);
     }

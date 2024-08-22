@@ -35,7 +35,7 @@ class DataProviderTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->helper = $this->getMockBuilder(Data::class)
-            ->setMethods(['isGoogleExperimentActive'])
+            ->onlyMethods(['isGoogleExperimentActive'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->subject = $this->createMock(

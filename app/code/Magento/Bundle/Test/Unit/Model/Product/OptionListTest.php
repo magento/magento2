@@ -125,7 +125,7 @@ class OptionListTest extends TestCase
             ->with($productMock, $optionId)
             ->willReturn([$linkMock]);
         $newOptionMock = $this->getMockBuilder(OptionInterface::class)
-            ->setMethods(['setDefaultTitle'])
+            ->addMethods(['setDefaultTitle'])
             ->getMockForAbstractClass();
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')

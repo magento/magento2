@@ -23,5 +23,7 @@
         <element name="errorMessage" type="text" selector=".message.message-error.error"/>
         <element name="warningMessage" type="text" selector=".message-warning"/>
         <element name="noticeMessage" type="text" selector=".message-notice"/>
+        <element name="assertCacheManagementConfigurationStatus" type="button" selector="//td[@data-column='tags' and contains(text(),'CONFIG')]/following-sibling::td//span[@class='grid-severity-notice']//span"/>
+        <element name="assertCacheManagementLayoutsStatus" type="button" selector="//td[@data-column='tags' and contains(text(),'LAYOUT_GENERAL_CACHE_TAG')]/following-sibling::td//span[@class='grid-severity-notice']//span"/>
     </section>
 </sections>

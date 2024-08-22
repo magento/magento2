@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Magento\Framework\App;
 
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
-use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Application area model
@@ -17,7 +16,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  */
-class Area implements \Magento\Framework\App\AreaInterface, ResetAfterRequestInterface
+class Area implements \Magento\Framework\App\AreaInterface
 {
     public const AREA_GLOBAL = 'global';
     public const AREA_FRONTEND = 'frontend';
@@ -260,13 +259,5 @@ class Area implements \Magento\Framework\App\AreaInterface, ResetAfterRequestInt
     {
         $this->_getDesign()->setArea($this->_code)->setDefaultDesignTheme();
         return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function _resetState(): void
-    {
-        $this->_loadedParts = [];
     }
 }

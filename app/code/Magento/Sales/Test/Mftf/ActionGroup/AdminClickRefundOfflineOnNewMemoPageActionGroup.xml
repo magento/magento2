@@ -11,7 +11,7 @@
     <actionGroup name="AdminClickRefundOfflineOnNewMemoPageActionGroup">
         <annotations>
             <description>Click the Refund Offline button on the New Memo page</description>
-        </annotations> 
+        </annotations>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccesMessage"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You created the credit memo." stepKey="seeSuccessMessage"/>

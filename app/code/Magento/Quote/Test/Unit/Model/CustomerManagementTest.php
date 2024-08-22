@@ -131,7 +131,7 @@ class CustomerManagementTest extends TestCase
         );
         $this->addressFactoryMock = $this->getMockBuilder(AddressFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->validatorFactoryMock = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()

@@ -50,7 +50,7 @@ class MultiselectTest extends AbstractFormTestCase
         $multiselect = $this->getMockBuilder(
             Multiselect::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['_getRequestValue']
             )->getMock();
         $multiselect->expects($this->once())->method('_getRequestValue')->willReturn($value);
@@ -194,7 +194,7 @@ class MultiselectTest extends AbstractFormTestCase
     {
         $option1 = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLabel', 'getValue'])
+            ->onlyMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();
         $option1->method('getLabel')
             ->willReturn('fourteen');
@@ -203,7 +203,7 @@ class MultiselectTest extends AbstractFormTestCase
 
         $option2 = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLabel', 'getValue'])
+            ->onlyMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();
         $option2->method('getLabel')
             ->willReturn('some string');

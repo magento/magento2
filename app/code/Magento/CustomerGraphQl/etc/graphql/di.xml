@@ -37,6 +37,7 @@
                 <item name="required_character_classes_number" xsi:type="string">customer/password/required_character_classes_number</item>
                 <item name="minimum_password_length" xsi:type="string">customer/password/minimum_password_length</item>
                 <item name="autocomplete_on_storefront" xsi:type="string">customer/password/autocomplete_on_storefront</item>
+                <item name="create_account_confirmation" xsi:type="string">customer/create_account/confirm</item>
             </argument>
         </arguments>
     </type>
@@ -72,7 +73,6 @@
     <type name="Magento\CustomerGraphQl\Model\Customer\ValidateCustomerData">
         <arguments>
             <argument name="validators" xsi:type="array">
-                <item name="validateRequiredArguments" xsi:type="object">Magento\CustomerGraphQl\Model\Customer\ValidateCustomerData\ValidateRequiredArguments</item>
                 <item name="validateEmail" xsi:type="object">Magento\CustomerGraphQl\Model\Customer\ValidateCustomerData\ValidateEmail</item>
                 <item name="validateGender" xsi:type="object">Magento\CustomerGraphQl\Model\Customer\ValidateCustomerData\ValidateGender</item>
             </argument>
@@ -169,5 +169,47 @@
                 <item name="select" xsi:type="string">select</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\ResolverIdentityClassProvider">
+        <arguments>
+            <argument name="cacheableResolverClassNameIdentityMap" xsi:type="array">
+                <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="string">
+                    Magento\CustomerGraphQl\Model\Resolver\Cache\Customer\ResolverCacheIdentity
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorDehydratorProvider">
+        <arguments>
+            <argument name="hydratorConfig" xsi:type="array">
+                <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">
+                    <item name="model_hydrator" xsi:type="array">
+                        <item name="sortOrder" xsi:type="string">10</item>
+                        <item name="class" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\Cache\Customer\ModelHydrator</item>
+                    </item>
+                </item>
+            </argument>
+            <argument name="dehydratorConfig" xsi:type="array">
+                <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">
+                    <item name="model_dehydrator" xsi:type="array">
+                        <item name="sortOrder" xsi:type="string">10</item>
+                        <item name="class" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\Cache\Customer\ModelDehydrator</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\Provider">
+        <arguments>
+            <argument name="factorProviders" xsi:type="array">
+                <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">
+                    <item name="current_customer_id" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CurrentCustomerId</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\AccountManagement">
+        <plugin name="merge_order_after_customer_signup"
+                type="Magento\CustomerGraphQl\Plugin\Model\MergeGuestOrder" />
     </type>
 </config>
