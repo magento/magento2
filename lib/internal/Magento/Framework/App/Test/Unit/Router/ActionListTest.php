@@ -108,6 +108,9 @@ class ActionListTest extends TestCase
      */
     public function testGet($module, $area, $namespace, $action, $data, $isInstantiable, $expected)
     {
+        if ($expected!=null) {
+            $expected = $expected($this);
+        }
         $this->reflectionClass->method('isInstantiable')->willReturn($isInstantiable);
 
         $this->cacheMock->expects($this->once())
@@ -127,10 +130,7 @@ class ActionListTest extends TestCase
         ));
     }
 
-    /**
-     * @return array
-     */
-    public function getDataProvider()
+    protected function getMockForActionInterface()
     {
         $mockClassName = 'Mock_Action_Class';
         $actionClassObject = $this->getMockForAbstractClass(
@@ -144,6 +144,17 @@ class ActionListTest extends TestCase
         );
 
         $actionClass = get_class($actionClassObject);
+        return $actionClass;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getDataProvider()
+    {
+        $mockClassName = 'Mock_Action_Class';
+
+        $actionClass = static fn (self $testCase) => $testCase->getMockForActionInterface();
 
         return [
             [
@@ -196,7 +207,7 @@ class ActionListTest extends TestCase
                 null,
                 'adminhtml_product',
                 'index',
-                'magento\module\controller\adminhtml\product\index' => '$mockClassName',
+                ['magento\module\controller\adminhtml\product\index' => '$mockClassName'],
                 false,
                 null
             ],

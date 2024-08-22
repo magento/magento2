@@ -459,6 +459,9 @@ class ProfilerTest extends TestCase
      */
     public function testParseConfig($data, $isAjax, $expected): void
     {
+        if (!empty($expected) && is_callable($expected['driverFactory'])) {
+            $expected['driverFactory'] = $expected['driverFactory']($this);
+        }
         $method = new \ReflectionMethod(Profiler::class, '_parseConfig');
         $method->setAccessible(true);
         $this->assertEquals($expected, $method->invoke(null, $data, '', $isAjax));
@@ -468,10 +471,10 @@ class ProfilerTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function parseConfigDataProvider(): array
+    public static function parseConfigDataProvider(): array
     {
         $driverFactory = new Factory();
-        $otherDriverFactory = $this->createMock(Factory::class);
+        $otherDriverFactory = static fn (self $testCase) => $testCase->createMock(Factory::class);
         return [
             'Empty configuration' => [
                 [],

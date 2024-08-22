@@ -193,7 +193,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForResultWithCachedData(): array
+    public static function dataProviderForResultWithCachedData(): array
     {
         $data = [
             'context' => [
@@ -240,7 +240,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForResultWithoutCachedData(): array
+    public static function dataProviderForResultWithoutCachedData(): array
     {
         return [
             ['existing key', [], false, false],
