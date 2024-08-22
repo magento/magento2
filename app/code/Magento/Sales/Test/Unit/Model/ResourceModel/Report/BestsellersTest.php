@@ -139,7 +139,7 @@ class BestsellersTest extends TestCase
             ->willReturn($periodExpr);
         $connection->expects($this->any())->method('select')->willReturn($select);
         $query = $this->createMock(\Zend_Db_Statement_Interface::class);
-        $connection->expects($this->exactly(4))->method('query')->willReturn($query);
+        $connection->expects($this->exactly(5))->method('query')->willReturn($query);
         $resource = $this->createMock(ResourceConnection::class);
         $resource->expects($this->any())
             ->method('getConnection')
@@ -223,7 +223,7 @@ class BestsellersTest extends TestCase
         $connection->expects($this->atLeastOnce())->method('query')->willReturn($query);
         $connection->expects($this->atLeastOnce())->method('getDatePartSql')->willReturn($periodExpr);
 
-        $connection->expects($this->exactly(2))->method('delete');
+        $connection->expects($this->once())->method('delete');
 
         $this->report = new Bestsellers(
             $this->context,
