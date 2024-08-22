@@ -97,15 +97,12 @@ class ProductImagePlugin
     private function updateThumbnailToParentThumbnail(Item $cartItem, array $returnArray): array
     {
         foreach ($cartItem->getOptions() as $option) {
-            if ($option->getProduct()->getTypeId() !== self::PRODUCT_TYPE_GROUPED) {
-                continue;
-            }
-
             $parentProduct = $option->getProduct();
-            if ($parentProduct && $parentProduct->getThumbnail()) {
+
+            if ($parentProduct->getTypeId() === self::PRODUCT_TYPE_GROUPED && $parentProduct->getThumbnail()) {
                 $returnArray['model']['thumbnail'] = $parentProduct->getThumbnail();
+                break;
             }
-            break;
         }
 
         return $returnArray;
