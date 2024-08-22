@@ -417,7 +417,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         ]
                     ]
                 ],
-                'rateRequestType' => ['LIST']
+                'rateRequestType' => ['ACCOUNT']
             ]
         ];
 
