@@ -1818,13 +1818,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             }
         }
 
-        /**
-         * Starting from MariaDB 10.5.1 columns with old temporal formats are marked with a \/* mariadb-5.3 *\/
-         * comment in the output of SHOW CREATE TABLE, SHOW COLUMNS, DESCRIBE statements,
-         * as well as in the COLUMN_TYPE column of the INFORMATION_SCHEMA.COLUMNS Table.
-         */
         foreach ($ddl as $key => $columnData) {
-            $ddl[$key]['DATA_TYPE'] = str_replace(' /* mariadb-5.3 */', '', $columnData['DATA_TYPE']);
+            $ddl[$key]['DATA_TYPE'] = $this->sanitizeColumnDataType($columnData['DATA_TYPE']);
         }
 
         return $ddl;
@@ -1981,7 +1976,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     protected function _getColumnTypeByDdl($column)
     {
         // phpstan:ignore
-        switch ($column['DATA_TYPE']) {
+        switch ($this->sanitizeColumnDataType($column['DATA_TYPE'])) {
             case 'bool':
                 return Table::TYPE_BOOLEAN;
             case 'tinytext':
@@ -2016,6 +2011,22 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
                 return Table::TYPE_DECIMAL;
         }
         return null;
+    }
+
+    /**
+     * Remove old temporal format comment from column data type
+     *
+     * @param string $columnType
+     * @return string
+     */
+    private function sanitizeColumnDataType(string $columnType): string
+    {
+        /**
+         * Starting from MariaDB 10.5.1 columns with old temporal formats are marked with a \/* mariadb-5.3 *\/
+         * comment in the output of SHOW CREATE TABLE, SHOW COLUMNS, DESCRIBE statements,
+         * as well as in the COLUMN_TYPE column of the INFORMATION_SCHEMA.COLUMNS Table.
+         */
+        return str_replace(' /* mariadb-5.3 */', '', $columnType);
     }
 
     /**
@@ -2590,6 +2601,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         // detect and validate column type
         if ($ddlType === null) {
             $ddlType = $this->_getDdlType($options);
+        } else {
+            $ddlType = $this->sanitizeColumnDataType($ddlType);
         }
 
         if (empty($ddlType) || !isset($this->_ddlColumnTypes[$ddlType])) {
@@ -3230,6 +3243,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         if ($value instanceof Parameter) {
             return $value;
         }
+
+        $column['DATA_TYPE'] = $this->sanitizeColumnDataType($column['DATA_TYPE']);
 
         // return original value if invalid column describe data
         if (!isset($column['DATA_TYPE'])) {
@@ -4000,7 +4015,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             $ddlType = $options['COLUMN_TYPE'];
         }
 
-        return $ddlType;
+        return $this->sanitizeColumnDataType($ddlType);
     }
 
     /**
