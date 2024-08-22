@@ -277,9 +277,10 @@ class Bestsellers extends AbstractReport
         );
 
         $subSelect = $this->getRangeSubSelect($from, $to);
-        $dataRange = $this->getRange($subSelect);
-
-        $whereCondition = $connection->prepareSqlCondition($periodExpr, ['in' => $dataRange]);
+        if ($subSelect) {
+            $dataRange = $this->getRange($subSelect);
+            $whereCondition = $connection->prepareSqlCondition($periodExpr, ['in' => $dataRange]);
+        }
 
         $select = $connection->select();
         $select->group([$periodExpr, 'source_table.store_id', 'order_item.product_id']);
