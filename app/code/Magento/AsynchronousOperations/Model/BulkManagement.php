@@ -137,6 +137,7 @@ class BulkManagement implements BulkManagementInterface
         try {
             $this->publishOperations($operations);
         } catch (Throwable $exception) {
+            $this->deleteBulk($bulkUuid);
             $this->logger->critical($exception->getMessage());
             return false;
         }
