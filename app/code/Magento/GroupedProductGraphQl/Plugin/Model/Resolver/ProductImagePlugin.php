@@ -14,7 +14,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GroupedProductGraphQl\Plugin\CatalogGraphQl\Model\Resolver\Product;
+namespace Magento\GroupedProductGraphQl\Plugin\Model\Resolver;
 
 use Magento\CatalogGraphQl\Model\Resolver\Product\ProductImage as Subject;
 use Magento\Framework\GraphQl\Config\Element\Field;

@@ -156,7 +156,11 @@ class AddGroupedProductToCartThumbnailTest extends GraphQlAbstract
         );
     }
 
+    /**
+     * @throws LocalizedException
+     */
     #[
+        ConfigFixture('checkout/cart/grouped_product_image', 'itself'),
         DataFixture(CategoryFixture::class, ['name' => 'Category'], 'category'),
         DataFixture(
             ProductFixture::class,
@@ -195,20 +199,11 @@ class AddGroupedProductToCartThumbnailTest extends GraphQlAbstract
     ]
     public function testAddGroupedProductToCartWithoutImageShouldUseThumbnail()
     {
-        $cartId = DataFixtureStorageManager::getStorage()->get('quoteIdMask')->getMaskedId();
-        $groupedProductId = DataFixtureStorageManager::getStorage()->get('grouped-product')->getSku();
-        $response = $this->graphQlMutation($this->getMutation($cartId, $groupedProductId));
-
-        $this->assertArrayHasKey('addProductsToCart', $response);
-        $this->assertEquals(2, count($response['addProductsToCart']['cart']['itemsV2']['items']));
-        $this->assertStringContainsString(
-            self::DEFAULT_THUMBNAIL_PATH,
-            $response['addProductsToCart']['cart']['itemsV2']['items'][0]['product']['thumbnail']['url']
-        );
-        $this->assertStringContainsString(
-            self::DEFAULT_THUMBNAIL_PATH,
-            $response['addProductsToCart']['cart']['itemsV2']['items'][1]['product']['thumbnail']['url']
-        );
+        $thumbnails = [
+            'product1' => self::DEFAULT_THUMBNAIL_PATH,
+            'product2' => self::DEFAULT_THUMBNAIL_PATH
+        ];
+        $this->assertProductThumbnailUrl($thumbnails);
     }
 
     /**
