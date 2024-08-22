@@ -546,8 +546,8 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Disabling Maintenance Mode:'],
                         ['Post installation file permissions check...'],
                         ['Write installation date...'],
-                        ['Enabling Update by Schedule Indexer Mode...'],
-                        ['2 indexer(s) are in "Update by Schedule" mode.'],
+                        ['Indexing...'],
+                        ['13 indexer(s) are indexed.'],
                         ['Sample Data is installed with errors. See log file for details']
                     ],
                     'logMetaMessages' => [
@@ -621,8 +621,8 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Disabling Maintenance Mode:'],
                         ['Post installation file permissions check...'],
                         ['Write installation date...'],
-                        ['Enabling Update by Schedule Indexer Mode...'],
-                        ['2 indexer(s) are in "Update by Schedule" mode.'],
+                        ['Indexing...'],
+                        ['13 indexer(s) are indexed.'],
                         ['Sample Data is installed with errors. See log file for details']
                     ],
                     'logMetaMessages' => [
@@ -888,8 +888,8 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Disabling Maintenance Mode:'],
                         ['Post installation file permissions check...'],
                         ['Write installation date...'],
-                        ['Enabling Update by Schedule Indexer Mode...'],
-                        ['2 indexer(s) are in "Update by Schedule" mode.'],
+                        ['Indexing...'],
+                        ['13 indexer(s) are indexed.'],
                         ['Sample Data is installed with errors. See log file for details']
                     ],
                     'logMetaMessages' => [
@@ -1145,6 +1145,7 @@ namespace Magento\Setup\Test\Unit\Model {
          * @throws \Magento\Framework\Exception\FileSystemException
          * @throws \Magento\Framework\Exception\LocalizedException
          * @throws \Magento\Framework\Exception\RuntimeException
+         * @SuppressWarnings(PHPMD.CyclomaticComplexity)
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
         public function testInstallWithUnresolvableRemoteStorageValidator()
@@ -1695,6 +1696,7 @@ namespace Magento\Setup\Test\Unit\Model {
 
         /**
          * @return void
+         * @SuppressWarnings(PHPMD.CyclomaticComplexity)
          */
         public function testUninstall(): void
         {
