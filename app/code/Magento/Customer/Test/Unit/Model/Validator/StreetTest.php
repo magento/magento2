@@ -20,7 +20,7 @@ class StreetTest extends TestCase
     /**
      * @var Street
      */
-    private Street $nameValidator;
+    private Street $streetValidator;
 
     /**
      * @var Customer|MockObject
@@ -32,7 +32,7 @@ class StreetTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->nameValidator = new Street;
+        $this->streetValidator = new Street();
         $this->customerMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -41,27 +41,29 @@ class StreetTest extends TestCase
     }
 
     /**
-     * Test for allowed apostrophe and other punctuation characters in customer names
+     * Test for allowed characters in street addresses
      *
      * @param array $street
      * @param string $message
      * @return void
-     * @dataProvider expectedPunctuationInNamesDataProvider
+     * @dataProvider expectedPunctuationInStreetDataProvider
      */
-    public function testValidateCorrectPunctuationInNames(
+    public function testValidateCorrectPunctuationInStreet(
         array $street,
         string $message
-    ) {
+    ): void {
         $this->customerMock->expects($this->once())->method('getStreet')->willReturn($street);
 
-        $isValid = $this->nameValidator->isValid($this->customerMock);
+        $isValid = $this->streetValidator->isValid($this->customerMock);
         $this->assertTrue($isValid, $message);
     }
 
     /**
+     * Data provider for valid street names
+     *
      * @return array
      */
-    public function expectedPunctuationInNamesDataProvider(): array
+    public function expectedPunctuationInStreetDataProvider(): array
     {
         return [
             [
@@ -102,7 +104,7 @@ class StreetTest extends TestCase
                     'O`Connell Street',
                     '321 Birch Boulevard ’Willow Retreat’'
                 ],
-                'message' => 'quotes must be allowed in street'
+                'message' => 'Quotes must be allowed in street'
             ],
             [
                 'street' => [
@@ -127,6 +129,14 @@ class StreetTest extends TestCase
                     '876 Elm Way'
                 ],
                 'message' => 'Digits must be allowed in street'
+            ],
+            [
+                'street' => [
+                    '1234 Elm St. [Apartment 5]',
+                    'Main St. (Suite 200)',
+                    '456 Pine St. [Unit 10]'
+                ],
+                'message' => 'Square brackets and parentheses must be allowed in street'
             ]
         ];
     }
