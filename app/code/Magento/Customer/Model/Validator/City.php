@@ -9,27 +9,13 @@ namespace Magento\Customer\Model\Validator;
 
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Validator\AbstractValidator;
+use Magento\Framework\Validator\GlobalCityValidator;
 
 /**
  * Customer city fields validator.
  */
 class City extends AbstractValidator
 {
-    /**
-     * Allowed characters:
-     *
-     * \p{L}: Unicode letters.
-     * \p{M}: Unicode marks (diacritic marks, accents, etc.).
-     * ': Apostrophe mark.
-     * \s: Whitespace characters (spaces, tabs, newlines, etc.).
-     * \-: Hyphen.
-     * \.: Period.
-     * \&: Ampersand.
-     * \[\]: Square brackets.
-     * \(\): Parentheses.
-     */
-    private const PATTERN_CITY = '/^[\p{L}\p{M}\s\-\.\'\&\[\]\(\)]{1,100}$/u';
-
     /**
      * Validate city fields.
      *
@@ -38,29 +24,12 @@ class City extends AbstractValidator
      */
     public function isValid($customer): bool
     {
-        if (!$this->isValidCity($customer->getCity())) {
+        if (!GlobalCityValidator::isValidCity($customer->getCity())) {
             parent::_addMessages([[
-                'city' => __("Invalid City. Please use only letters, spaces, hyphens, apostrophes, periods, ampersands, square brackets, and parentheses.")
+                'city' => __("Invalid City. Please use only A-Z, a-z, 0-9, spaces, commas, -, ., ', &, [], ().")
             ]]);
         }
 
         return count($this->_messages) == 0;
-    }
-
-    /**
-     * Check if city field is valid.
-     *
-     * @param string|null $cityValue
-     * @return bool
-     */
-    private function isValidCity(?string $cityValue): bool
-    {
-        if ($cityValue !== null) {
-            if (preg_match(self::PATTERN_CITY, $cityValue, $matches)) {
-                return $matches[0] === $cityValue;
-            }
-        }
-
-        return true;
     }
 }
