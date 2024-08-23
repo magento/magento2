@@ -9,29 +9,13 @@ namespace Magento\Customer\Model\Validator;
 
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Validator\AbstractValidator;
+use Magento\Framework\Validator\GlobalStreetValidator;
 
 /**
  * Customer street fields validator.
  */
 class Street extends AbstractValidator
 {
-    /**
-     * Allowed characters:
-     *
-     * \p{L}: Unicode letters.
-     * \p{M}: Unicode marks (diacritic marks, accents, etc.).
-     * ,: Comma.
-     * -: Hyphen.
-     * .: Period.
-     * `'’: Single quotes, both regular and right single quotation marks.
-     * &: Ampersand.
-     * \s: Whitespace characters (spaces, tabs, newlines, etc.).
-     * \d: Digits (0-9).
-     * \[\]: Square brackets.
-     * \(\): Parentheses.
-     */
-    private const PATTERN_STREET = "/^[\p{L}\p{M}\,\-\.\'’`&\s\d\[\]\(\)]{1,255}$/u";
-
     /**
      * Validate street fields.
      *
@@ -41,30 +25,13 @@ class Street extends AbstractValidator
     public function isValid($customer): bool
     {
         foreach ($customer->getStreet() as $street) {
-            if (!$this->isValidStreet($street)) {
+            if (!GlobalStreetValidator::isValidStreet($street)) {
                 parent::_addMessages([[
-                    'street' => __("Invalid Street Address. Please use only letters, numbers, spaces, commas, hyphens, periods, apostrophes, ampersands, square brackets, and parentheses.")
+                    'street' => __("Invalid Street Address. Please use only A-Z, a-z, 0-9, spaces, commas, -, ., ', &, [], ()")
                 ]]);
             }
         }
 
-        return count($this->_messages) === 0;
-    }
-
-    /**
-     * Check if street field is valid.
-     *
-     * @param string|null $streetValue
-     * @return bool
-     */
-    private function isValidStreet(?string $streetValue): bool
-    {
-        if ($streetValue !== null) {
-            if (preg_match(self::PATTERN_STREET, $streetValue, $matches)) {
-                return $matches[0] === $streetValue;
-            }
-        }
-
-        return true;
+        return count($this->_messages) == 0;
     }
 }
