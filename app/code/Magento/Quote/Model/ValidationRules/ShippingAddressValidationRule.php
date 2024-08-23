@@ -1,15 +1,19 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 declare(strict_types=1);
 
 namespace Magento\Quote\Model\ValidationRules;
 
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
-use Magento\Framework\Validator\GlobalCityValidator;
+use Magento\Framework\Validator\GlobalForbiddenPatterns;
 use Magento\Framework\Validator\GlobalNameValidator;
+use Magento\Framework\Validator\GlobalCityValidator;
 use Magento\Framework\Validator\GlobalPhoneValidation;
 use Magento\Framework\Validator\GlobalStreetValidator;
-use Magento\Framework\Validator\GlobalForbiddenPatterns;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
@@ -39,14 +43,14 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
     private $forbiddenPatternsValidator;
 
     /**
-     * @var GlobalCityValidator
-     */
-    private $cityValidator;
-
-    /**
      * @var GlobalNameValidator
      */
     private $nameValidator;
+
+    /**
+     * @var GlobalCityValidator
+     */
+    private $cityValidator;
 
     /**
      * @var GlobalPhoneValidation
@@ -62,8 +66,8 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
      * @param ValidationResultFactory $validationResultFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param GlobalForbiddenPatterns $forbiddenPatternsValidator
-     * @param GlobalCityValidator $cityValidator
      * @param GlobalNameValidator $nameValidator
+     * @param GlobalCityValidator $cityValidator
      * @param GlobalPhoneValidation $phoneValidator
      * @param GlobalStreetValidator $streetValidator
      * @param string $generalMessage
@@ -72,8 +76,8 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
         ValidationResultFactory $validationResultFactory,
         ScopeConfigInterface $scopeConfig,
         GlobalForbiddenPatterns $forbiddenPatternsValidator,
-        GlobalCityValidator $cityValidator,
         GlobalNameValidator $nameValidator,
+        GlobalCityValidator $cityValidator,
         GlobalPhoneValidation $phoneValidator,
         GlobalStreetValidator $streetValidator,
         string $generalMessage = ''
@@ -81,8 +85,8 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
         $this->validationResultFactory = $validationResultFactory;
         $this->scopeConfig = $scopeConfig;
         $this->forbiddenPatternsValidator = $forbiddenPatternsValidator;
-        $this->cityValidator = $cityValidator;
         $this->nameValidator = $nameValidator;
+        $this->cityValidator = $cityValidator;
         $this->phoneValidator = $phoneValidator;
         $this->streetValidator = $streetValidator;
         $this->generalMessage = $generalMessage;
@@ -102,22 +106,40 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
             // Validate the shipping address
             $validationResult = $shippingAddress->validate();
             if ($validationResult !== true) {
-                $validationErrors = [__($this->generalMessage)];
+                $validationErrors[] = __($this->generalMessage);
             }
             if (is_array($validationResult)) {
                 $validationErrors = array_merge($validationErrors, $validationResult);
             }
 
-            // Validate specific fields against the corresponding validators
-            $this->validateField($shippingAddress->getCity(), 'City', $this->cityValidator, $validationErrors);
-            $this->validateField($shippingAddress->getFirstname(), 'First Name', $this->nameValidator, $validationErrors);
-            $this->validateField($shippingAddress->getMiddlename(), 'Middle Name', $this->nameValidator, $validationErrors);
-            $this->validateField($shippingAddress->getLastname(), 'Last Name', $this->nameValidator, $validationErrors);
-            $this->validateField($shippingAddress->getPrefix(), 'Prefix', $this->nameValidator, $validationErrors);
-            $this->validateField($shippingAddress->getSuffix(), 'Suffix', $this->nameValidator, $validationErrors);
-            $this->validateField($shippingAddress->getTelephone(), 'Telephone', $this->phoneValidator, $validationErrors);
-            $this->validateField($shippingAddress->getFax(), 'Fax', $this->phoneValidator, $validationErrors);
-            $this->validateField($shippingAddress->getStreet(), 'Street', $this->streetValidator, $validationErrors);
+            // Validate each field
+            if (!$this->nameValidator->isValidName($shippingAddress->getFirstname())) {
+                $validationErrors[] = __('First Name is not valid');
+            }
+            if (!$this->nameValidator->isValidName($shippingAddress->getMiddlename())) {
+                $validationErrors[] = __('Middle Name is not valid');
+            }
+            if (!$this->nameValidator->isValidName($shippingAddress->getLastname())) {
+                $validationErrors[] = __('Last Name is not valid');
+            }
+            if (!$this->nameValidator->isValidName($shippingAddress->getPrefix())) {
+                $validationErrors[] = __('Prefix is not valid');
+            }
+            if (!$this->nameValidator->isValidName($shippingAddress->getSuffix())) {
+                $validationErrors[] = __('Suffix is not valid');
+            }
+            if (!$this->cityValidator->isValidCity($shippingAddress->getCity())) {
+                $validationErrors[] = __('City is not valid');
+            }
+            if (!$this->phoneValidator->isValidPhone($shippingAddress->getTelephone())) {
+                $validationErrors[] = __('Telephone is not valid');
+            }
+            if (!$this->phoneValidator->isValidPhone($shippingAddress->getFax())) {
+                $validationErrors[] = __('Fax is not valid');
+            }
+            if (!$this->streetValidator->isValidStreet($shippingAddress->getStreet())) {
+                $validationErrors[] = __('Street is not valid');
+            }
 
             // Check if regex validation is enabled
             $isRegexEnabled = $this->scopeConfig->isSetFlag(
@@ -136,20 +158,5 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
         }
 
         return [$this->validationResultFactory->create(['errors' => $validationErrors])];
-    }
-
-    /**
-     * Validate a specific field
-     *
-     * @param string|null $fieldValue
-     * @param string $fieldName
-     * @param object $validator
-     * @param array $validationErrors
-     */
-    private function validateField(?string $fieldValue, string $fieldName, $validator, &$validationErrors)
-    {
-        if ($fieldValue !== null && !$validator->isValid($fieldValue)) {
-            $validationErrors[] = __("Invalid %1.", $fieldName);
-        }
     }
 }
