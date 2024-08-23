@@ -22,8 +22,13 @@ class City extends AbstractValidator
      * \p{M}: Unicode marks (diacritic marks, accents, etc.).
      * ': Apostrophe mark.
      * \s: Whitespace characters (spaces, tabs, newlines, etc.).
+     * \-: Hyphen.
+     * \.: Period.
+     * \&: Ampersand.
+     * \[\]: Square brackets.
+     * \(\): Parentheses.
      */
-    private const PATTERN_CITY = '/(?:[\p{L}\p{M}\s\-\']{1,100})/u';
+    private const PATTERN_CITY = '/^[\p{L}\p{M}\s\-\.\'\&\[\]\(\)]{1,100}$/u';
 
     /**
      * Validate city fields.
@@ -31,11 +36,11 @@ class City extends AbstractValidator
      * @param Customer $customer
      * @return bool
      */
-    public function isValid($customer)
+    public function isValid($customer): bool
     {
         if (!$this->isValidCity($customer->getCity())) {
             parent::_addMessages([[
-                'city' => __("Invalid City. Please use A-Z, a-z, 0-9, -, ', spaces")
+                'city' => __("Invalid City. Please use only letters, spaces, hyphens, apostrophes, periods, ampersands, square brackets, and parentheses.")
             ]]);
         }
 
@@ -48,11 +53,11 @@ class City extends AbstractValidator
      * @param string|null $cityValue
      * @return bool
      */
-    private function isValidCity($cityValue)
+    private function isValidCity(?string $cityValue): bool
     {
-        if ($cityValue != null) {
+        if ($cityValue !== null) {
             if (preg_match(self::PATTERN_CITY, $cityValue, $matches)) {
-                return $matches[0] == $cityValue;
+                return $matches[0] === $cityValue;
             }
         }
 
