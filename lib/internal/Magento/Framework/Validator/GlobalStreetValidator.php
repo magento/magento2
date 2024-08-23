@@ -11,9 +11,22 @@ class GlobalStreetValidator
 {
     /**
      * Regular expression pattern for validating street addresses.
+     * Allowed characters:
+     *
+     * \p{L}: Unicode letters.
+     * \p{M}: Unicode marks (diacritic marks, accents, etc.).
+     * ,: Comma.
+     * -: Hyphen.
+     * .: Period.
+     * `'’: Single quotes, both regular and right single quotation marks.
+     * &: Ampersand.
+     * \s: Whitespace characters (spaces, tabs, newlines, etc.).
+     * \d: Digits (0-9).
+     * \[\]: Square brackets.
+     * \(\): Parentheses.
      */
-    public const PATTERN_STREET = "/^[\p{L}\p{M}\,\-\.\'’`&\s\d\[\]\(\)]{1,255}$/u";
-
+    private const PATTERN_STREET = "/^[\p{L}\p{M}\,\-\.\'’`&\s\d\[\]\(\)]{1,255}$/u";
+    
     /**
      * Validate a street address string.
      *
