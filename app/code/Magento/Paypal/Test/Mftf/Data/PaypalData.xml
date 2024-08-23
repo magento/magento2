@@ -191,9 +191,11 @@
         <data key="value">0</data>
     </entity>
     <entity name="EnablePaypalPayflowProVault" type="payflowpro_cc_vault_active">
+        <data key="path">payment/payflowpro_cc_vault/active</data>
         <data key="value">1</data>
     </entity>
     <entity name="DisablePaypalPayflowProVault" type="payflowpro_cc_vault_active">
+        <data key="path">payment/payflowpro_cc_vault/active</data>
         <data key="value">0</data>
     </entity>
     <entity name="EnablePaypalPayStandard">

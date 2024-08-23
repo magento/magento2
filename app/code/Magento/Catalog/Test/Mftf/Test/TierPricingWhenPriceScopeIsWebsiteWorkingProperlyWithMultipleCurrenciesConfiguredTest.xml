@@ -38,7 +38,10 @@
                 <argument name="customStore" value="NewStoreViewData"/>
             </actionGroup>
             <amOnPage url="{{ConfigCurrencySetupPage.url}}" stepKey="navigateToConfigCurrencySetupPage1"/>
-            <click selector="{{CurrencySetupSection.currencyOptions}}" stepKey="openCurrencyOptions"/>
+            <waitForElementClickable selector="{{CurrencySetupSection.currencyOptions}}" stepKey="waitForCurrencyOptions"/>
+            <conditionalClick selector="{{CurrencySetupSection.currencyOptions}}" dependentSelector="{{CurrencySetupSection.CheckCurrencyOptionsIfTabExpand}}" stepKey="openCurrencyOptions" visible="true"/>
+            <waitForElementVisible selector="{{CurrencySetupSection.baseCurrencyUseDefault}}" stepKey="waitForUseDefaultCheckbox"/>
+            <uncheckOption selector="{{CurrencySetupSection.baseCurrencyUseDefault}}" stepKey="uncheckUseDefaultOption"/>
             <selectOption selector="{{CurrencySetupSection.baseCurrency}}" userInput="Swedish Krona" stepKey="setBaseCurrencyField"/>
             <selectOption selector="{{CurrencySetupSection.allowCurrencies}}" parameterArray="['Euro', 'US Dollar']" stepKey="selectCurrencies"/>
             <click stepKey="saveConfigs" selector="{{AdminConfigSection.saveButton}}"/>
@@ -63,7 +66,6 @@
             <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitingForInformationModal"/>
             <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreSwitch"/>
             <waitForPageLoad stepKey="waitForPageLoad8"/>
-
             <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="gotToCurrencyRatesPage"/>
             <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="revertCurrencyRates1">
                 <argument name="firstCurrency" value="EUR"/>
@@ -176,20 +178,20 @@
         </actionGroup>
         <actionGroup ref="AssertStorefrontProductDetailPageTierPriceWithCurrencyActionGroup" stepKey="assertProductTierPriceText">
             <argument name="tierProductPriceDiscountQuantity" value="10"/>
-            <argument name="productPriceWithAppliedTierPriceDiscount" value="0.84"/>
-            <argument name="productSavedPricePercent" value="92"/>
+            <argument name="productPriceWithAppliedTierPriceDiscount" value="9.00"/>
+            <argument name="productSavedPricePercent" value="10"/>
             <argument name="index" value="1"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontProductDetailPageTierPriceWithCurrencyActionGroup" stepKey="assertProductTierPriceText2">
             <argument name="tierProductPriceDiscountQuantity" value="20"/>
-            <argument name="productPriceWithAppliedTierPriceDiscount" value="0.74"/>
-            <argument name="productSavedPricePercent" value="93"/>
+            <argument name="productPriceWithAppliedTierPriceDiscount" value="8.00"/>
+            <argument name="productSavedPricePercent" value="20"/>
             <argument name="index" value="2"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontProductDetailPageTierPriceWithCurrencyActionGroup" stepKey="assertProductTierPriceText3">
             <argument name="tierProductPriceDiscountQuantity" value="30"/>
-            <argument name="productPriceWithAppliedTierPriceDiscount" value="0.65"/>
-            <argument name="productSavedPricePercent" value="94"/>
+            <argument name="productPriceWithAppliedTierPriceDiscount" value="7.00"/>
+            <argument name="productSavedPricePercent" value="30"/>
             <argument name="index" value="3"/>
         </actionGroup>
     </test>
