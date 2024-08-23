@@ -56,6 +56,11 @@ class Bestsellers extends AbstractReport
     protected $storeManager;
 
     /**
+     * @var array
+     */
+    private array $rangesByQuery = [];
+
+    /**
      * @param Context $context
      * @param LoggerInterface $logger
      * @param TimezoneInterface $localeDate
@@ -215,14 +220,20 @@ class Bestsellers extends AbstractReport
      */
     private function getRange(Select $select): array
     {
-        $connection = $this->getConnection();
-        $range = [];
-        try {
-            $query = $connection->query($select);
-            $range = $query->fetchAll(\Zend_Db::FETCH_COLUMN);
-        } catch (\Exception $e) {
+        $queryHash = sha1($select->__toString());
+        if (!isset($this->rangesByQuery[$queryHash])) {
+
+            $connection = $this->getConnection();
+            $range = [];
+            try {
+                $query = $connection->query($select);
+                $range = $query->fetchAll(\Zend_Db::FETCH_COLUMN);
+            } catch (\Exception $e) {
+            }
+
+            $this->rangesByQuery[$queryHash] = $range;
         }
-        return $range;
+        return $this->rangesByQuery[$queryHash];
     }
 
     /**
