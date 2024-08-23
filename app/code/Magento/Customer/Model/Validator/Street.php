@@ -27,8 +27,10 @@ class Street extends AbstractValidator
      * &: Ampersand.
      * \s: Whitespace characters (spaces, tabs, newlines, etc.).
      * \d: Digits (0-9).
+     * \[\]: Square brackets.
+     * \(\): Parentheses.
      */
-    private const PATTERN_STREET = "/(?:[\p{L}\p{M}\"[],-.'’`&\s\d]){1,255}+/u";
+    private const PATTERN_STREET = "/^[\p{L}\p{M}\,\-\.\'’`&\s\d\[\]\(\)]{1,255}$/u";
 
     /**
      * Validate street fields.
@@ -36,17 +38,17 @@ class Street extends AbstractValidator
      * @param Customer $customer
      * @return bool
      */
-    public function isValid($customer)
+    public function isValid($customer): bool
     {
         foreach ($customer->getStreet() as $street) {
             if (!$this->isValidStreet($street)) {
                 parent::_addMessages([[
-                    'street' =>  __("Invalid Street Address. Please use A-Z, a-z, 0-9, , - . ' ’ ` & spaces")
+                    'street' => __("Invalid Street Address. Please use only letters, numbers, spaces, commas, hyphens, periods, apostrophes, ampersands, square brackets, and parentheses.")
                 ]]);
             }
         }
 
-        return count($this->_messages) == 0;
+        return count($this->_messages) === 0;
     }
 
     /**
@@ -55,11 +57,11 @@ class Street extends AbstractValidator
      * @param string|null $streetValue
      * @return bool
      */
-    private function isValidStreet($streetValue)
+    private function isValidStreet(?string $streetValue): bool
     {
-        if ($streetValue != null) {
+        if ($streetValue !== null) {
             if (preg_match(self::PATTERN_STREET, $streetValue, $matches)) {
-                return $matches[0] == $streetValue;
+                return $matches[0] === $streetValue;
             }
         }
 
