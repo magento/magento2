@@ -34,11 +34,15 @@ class GlobalForbiddenPatterns
     /**
      * Checks if the given field value is valid according to the forbidden patterns.
      *
-     * @param string $fieldValue
+     * @param string|null $fieldValue
      * @return bool
      */
-    public static function isValid(string $fieldValue): bool
+    public static function isValid(?string $fieldValue): bool
     {
+        if ($fieldValue === null || trim($fieldValue) === '') {
+            return true;
+        }
+
         foreach (self::getPatterns() as $pattern) {
             if (preg_match($pattern, $fieldValue)) {
                 return false;
