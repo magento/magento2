@@ -26,7 +26,7 @@ class Telephone extends AbstractValidator
     {
         if (!GlobalPhoneValidation::isValidPhone($customer->getTelephone())) {
             parent::_addMessages([[
-                'telephone' => __('Invalid Phone Number. Please use 0-9, +, -, (, ) and space.')
+                'telephone' => __('Invalid Phone Number. Please use 0-9, +, -, (), /, and space.')
             ]]);
         }
 
