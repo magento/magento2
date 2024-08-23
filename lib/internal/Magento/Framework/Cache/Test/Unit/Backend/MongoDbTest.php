@@ -347,10 +347,10 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function cleanDataProvider()
+    public static function cleanDataProvider()
     {
         return [
-            'clean expired' => [\Zend_Cache::CLEANING_MODE_OLD, [], $this->arrayHasKey('expire')],
+            'clean expired' => [\Zend_Cache::CLEANING_MODE_OLD, [], self::arrayHasKey('expire')],
             'clean cache matching all tags (string)' => [
                 \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
                 'tag1',

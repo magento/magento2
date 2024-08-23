@@ -459,6 +459,9 @@ class ProfilerTest extends TestCase
      */
     public function testParseConfig($data, $isAjax, $expected): void
     {
+        if (!empty($data['driverFactory']) && is_callable($data['driverFactory'])) {
+            $data['driverFactory'] = $data['driverFactory']($this);
+        }
         if (!empty($expected) && is_callable($expected['driverFactory'])) {
             $expected['driverFactory'] = $expected['driverFactory']($this);
         }
