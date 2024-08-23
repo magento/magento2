@@ -43,7 +43,7 @@ class IdentifierForSave implements IdentifierInterface
         $replace = array_fill(0, count($pattern), '');
         $data = [
             $this->request->isSecure(),
-            preg_replace($pattern, $replace, $this->request->getUriString()),
+            preg_replace($pattern, $replace, (string)$this->request->getUriString()),
             $this->context->getVaryString()
         ];
 

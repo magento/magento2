@@ -71,7 +71,7 @@ class Identifier implements IdentifierInterface
         $replace = array_fill(0, count(self::PATTERN_MARKETING_PARAMETERS), '');
         $data = [
             $this->request->isSecure(),
-            preg_replace($pattern, $replace, $this->request->getUriString()),
+            preg_replace($pattern, $replace, (string)$this->request->getUriString()),
             $this->request->get(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING)
                 ?: $this->context->getVaryString()
         ];
