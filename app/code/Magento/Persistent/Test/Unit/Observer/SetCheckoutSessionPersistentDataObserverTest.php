@@ -91,7 +91,7 @@ class SetCheckoutSessionPersistentDataObserverTest extends TestCase
             CustomerRepositoryInterface::class
         );
         $this->sessionFactory = $this->createMock(
-            sessionFactory::class
+            SessionFactory::class
         );
         $this->model = new SetCheckoutSessionPersistentDataObserver(
             $this->sessionHelperMock,
