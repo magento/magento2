@@ -94,7 +94,15 @@ class TelephoneTest extends TestCase
             [
                 'telephone' => '123456789',
                 'message' => 'Digits (numbers) must be allowed in telephone numbers.'
-            ]
+            ],
+            [
+                'telephone' => '123 456 789',
+                'message' => 'Spaces must be allowed in telephone numbers.'
+            ],
+            [
+                'telephone' => '123/456/789',
+                'message' => 'Forward slashes must be allowed in telephone numbers.'
+            ],
         ];
     }
 }
