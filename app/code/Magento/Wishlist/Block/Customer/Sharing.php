@@ -7,8 +7,8 @@
 namespace Magento\Wishlist\Block\Customer;
 
 use Magento\Captcha\Block\Captcha;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Validator\GlobalForbiddenPatterns;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Wishlist customer sharing block
@@ -38,27 +38,37 @@ class Sharing extends \Magento\Framework\View\Element\Template
     protected $_wishlistSession;
 
     /**
-     * @var GlobalForbiddenPatterns
+     * @var ScopeConfigInterface
      */
-    protected $globalForbiddenPatterns;
+    private $scopeConfig;
 
     /**
+     * @var GlobalForbiddenPatterns
+     */
+    private $forbiddenPatternsValidator;
+
+    /**
+     * Constructor.
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
      * @param \Magento\Framework\Session\Generic $wishlistSession
-     * @param GlobalForbiddenPatterns $globalForbiddenPatterns
+     * @param ScopeConfigInterface $scopeConfig
+     * @param GlobalForbiddenPatterns $forbiddenPatternsValidator
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Wishlist\Model\Config $wishlistConfig,
         \Magento\Framework\Session\Generic $wishlistSession,
-        GlobalForbiddenPatterns $globalForbiddenPatterns,
+        ScopeConfigInterface $scopeConfig,
+        GlobalForbiddenPatterns $forbiddenPatternsValidator,
         array $data = []
     ) {
-        $this->globalForbiddenPatterns = $globalForbiddenPatterns;
         $this->_wishlistConfig = $wishlistConfig;
         $this->_wishlistSession = $wishlistSession;
+        $this->scopeConfig = $scopeConfig;
+        $this->forbiddenPatternsValidator = $forbiddenPatternsValidator;
         parent::__construct($context, $data);
     }
 
@@ -101,6 +111,7 @@ class Sharing extends \Magento\Framework\View\Element\Template
      *
      * @param string $key
      * @return string|null
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getEnteredData($key)
     {
@@ -108,11 +119,30 @@ class Sharing extends \Magento\Framework\View\Element\Template
             $this->_enteredData = $this->_wishlistSession->getData('sharing_form', true);
         }
 
-        if (!$this->_enteredData || !isset($this->_enteredData[$key])) {
-            return null;
-        } else {
-            return $this->escapeHtml($this->_enteredData[$key]);
+        $value = $this->_enteredData[$key] ?? null;
+
+        if ($this->isRegexEnabled() && $value !== null) {
+            if (!$this->forbiddenPatternsValidator->isValid($value)) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Field %1 contains invalid characters.', $key)
+                );
+            }
         }
+
+        return $value ? $this->escapeHtml($value) : null;
+    }
+
+    /**
+     * Check if the regex validation is enabled
+     *
+     * @return bool
+     */
+    private function isRegexEnabled(): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            'system/security/security_regex_enabled',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -143,28 +173,5 @@ class Sharing extends \Magento\Framework\View\Element\Template
     public function getTextSharingLimit()
     {
         return $this->_wishlistConfig->getSharingTextLimit();
-    }
-
-    /**
-     * Validate the sharing data (emails and message) against forbidden patterns
-     *
-     * @param string $emails
-     * @param string $message
-     * @return bool
-     * @throws LocalizedException
-     */
-    public function validateSharingData($emails, $message)
-    {
-        // Validate the emails input
-        if (!$this->globalForbiddenPatterns->validate($emails)) {
-            throw new LocalizedException(__('The email addresses contain forbidden patterns.'));
-        }
-
-        // Validate the message input
-        if (!$this->globalForbiddenPatterns->validate($message)) {
-            throw new LocalizedException(__('The message contains forbidden patterns.'));
-        }
-
-        return true;
     }
 }
