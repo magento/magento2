@@ -178,7 +178,7 @@ class Bestsellers extends AbstractReport
      * @param string $table
      * @param ?string $from
      * @param ?string $to
-     * @param null|\Magento\Framework\DB\Select|string $subSelect
+     * @param null|Select|string $subSelect
      * @return void
      */
     private function clearTableRanges($table, $from = null, $to = null, $subSelect = null): void
@@ -190,8 +190,8 @@ class Bestsellers extends AbstractReport
 
         if ($subSelect !== null) {
             $dataRange = $this->getRange($subSelect);
-                $deleteCondition = $this->getConnection()->prepareSqlCondition('period', ['in' => $dataRange]);
-                $this->getConnection()->delete($table, $deleteCondition);
+            $deleteCondition = $this->getConnection()->prepareSqlCondition('period', ['in' => $dataRange]);
+            $this->getConnection()->delete($table, $deleteCondition);
             return;
         } else {
             $condition = [];
@@ -210,22 +210,17 @@ class Bestsellers extends AbstractReport
     /**
      * Get dates range to clear the table
      *
-     * @param \Magento\Framework\DB\Select $select
-     * @return array|false
+     * @param Select $select
+     * @return array
      */
-    private function getRange(\Magento\Framework\DB\Select $select)
+    private function getRange(Select $select): array
     {
         $connection = $this->getConnection();
+        $range = [];
         try {
-            $range = [];
-
             $query = $connection->query($select);
-
-            while (true == ($date = $query->fetchColumn())) {
-                $range[] = $date;
-            }
+            $range = $query->fetchAll(\Zend_Db::FETCH_COLUMN);
         } catch (\Exception $e) {
-            $range = false;
         }
         return $range;
     }
