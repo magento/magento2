@@ -111,7 +111,10 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
             // Validate specific fields against the corresponding validators
             $this->validateField($shippingAddress->getCity(), 'City', $this->cityValidator, $validationErrors);
             $this->validateField($shippingAddress->getFirstname(), 'First Name', $this->nameValidator, $validationErrors);
+            $this->validateField($shippingAddress->getMiddlename(), 'Middle Name', $this->nameValidator, $validationErrors);
             $this->validateField($shippingAddress->getLastname(), 'Last Name', $this->nameValidator, $validationErrors);
+            $this->validateField($shippingAddress->getPrefix(), 'Prefix', $this->nameValidator, $validationErrors);
+            $this->validateField($shippingAddress->getSuffix(), 'Suffix', $this->nameValidator, $validationErrors);
             $this->validateField($shippingAddress->getTelephone(), 'Telephone', $this->phoneValidator, $validationErrors);
             $this->validateField($shippingAddress->getFax(), 'Fax', $this->phoneValidator, $validationErrors);
             $this->validateField($shippingAddress->getStreet(), 'Street', $this->streetValidator, $validationErrors);
