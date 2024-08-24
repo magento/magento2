@@ -88,7 +88,7 @@ class NameValidationRule implements QuoteValidationRuleInterface
 
         // Check if regex validation is enabled
         $isRegexEnabled = $this->scopeConfig->isSetFlag(
-            'system/security/security_regex_enabled',
+            GlobalForbiddenPatterns::XML_PATH_SECURITY_REGEX_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
 
