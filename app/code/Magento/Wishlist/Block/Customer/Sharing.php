@@ -9,6 +9,7 @@ namespace Magento\Wishlist\Block\Customer;
 use Magento\Captcha\Block\Captcha;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Validator\GlobalForbiddenPatterns;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Wishlist customer sharing block
@@ -48,8 +49,6 @@ class Sharing extends \Magento\Framework\View\Element\Template
     private $forbiddenPatternsValidator;
 
     /**
-     * Constructor.
-     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
      * @param \Magento\Framework\Session\Generic $wishlistSession
@@ -111,7 +110,6 @@ class Sharing extends \Magento\Framework\View\Element\Template
      *
      * @param string $key
      * @return string|null
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getEnteredData($key)
     {
@@ -119,30 +117,26 @@ class Sharing extends \Magento\Framework\View\Element\Template
             $this->_enteredData = $this->_wishlistSession->getData('sharing_form', true);
         }
 
-        $value = $this->_enteredData[$key] ?? null;
+        if (!$this->_enteredData || !isset($this->_enteredData[$key])) {
+            return null;
+        }
 
-        if ($this->isRegexEnabled() && $value !== null) {
+        $value = $this->_enteredData[$key];
+
+        // Check if regex validation is enabled
+        $isRegexEnabled = $this->scopeConfig->isSetFlag(
+            'system/security/security_regex_enabled',
+            ScopeInterface::SCOPE_STORE
+        );
+
+        // Perform regex validation
+        if ($isRegexEnabled && is_string($value)) {
             if (!$this->forbiddenPatternsValidator->isValid($value)) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Field %1 contains invalid characters.', $key)
-                );
+                return null; // or throw an exception or return a sanitized value
             }
         }
 
-        return $value ? $this->escapeHtml($value) : null;
-    }
-
-    /**
-     * Check if the regex validation is enabled
-     *
-     * @return bool
-     */
-    private function isRegexEnabled(): bool
-    {
-        return $this->scopeConfig->isSetFlag(
-            'system/security/security_regex_enabled',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        return $this->escapeHtml($value);
     }
 
     /**
