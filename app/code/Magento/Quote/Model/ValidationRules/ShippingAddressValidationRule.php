@@ -1,8 +1,4 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
 declare(strict_types=1);
 
 namespace Magento\Quote\Model\ValidationRules;
@@ -18,7 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Shipping Address Validation Rule
+ * @inheritdoc
  */
 class ShippingAddressValidationRule implements QuoteValidationRuleInterface
 {
@@ -88,7 +84,7 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
         $this->nameValidator = $nameValidator;
         $this->cityValidator = $cityValidator;
         $this->phoneValidator = $phoneValidator;
-        $this->streetValidator = $streetValidator;
+        $this->streetValidator = $streetValidator;       
         $this->generalMessage = $generalMessage;
     }
 
@@ -105,50 +101,55 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
 
             // Validate the shipping address
             $validationResult = $shippingAddress->validate();
+
             if ($validationResult !== true) {
-                $validationErrors[] = __($this->generalMessage);
+                $validationErrors = [__($this->generalMessage)];
             }
             if (is_array($validationResult)) {
                 $validationErrors = array_merge($validationErrors, $validationResult);
             }
+            
+            // Define the fields to validate with their respective validators
+            $fieldsToValidate = [
+                'First Name' => [$shippingAddress->getFirstname(), 'isValidName', GlobalNameValidator::class],
+                'Middle Name' => [$shippingAddress->getMiddlename(), 'isValidName', GlobalNameValidator::class],
+                'Last Name' => [$shippingAddress->getLastname(), 'isValidName', GlobalNameValidator::class],
+                'Prefix' => [$shippingAddress->getPrefix(), 'isValidName', GlobalNameValidator::class],
+                'Suffix' => [$shippingAddress->getSuffix(), 'isValidName', GlobalNameValidator::class],
+                'City' => [$shippingAddress->getCity(), 'isValidCity', GlobalCityValidator::class],
+                'Telephone' => [$shippingAddress->getTelephone(), 'isValidPhone', GlobalPhoneValidation::class],
+                'Fax' => [$shippingAddress->getFax(), 'isValidPhone', GlobalPhoneValidation::class],
+            ];
 
             // Validate each field
-            if (!$this->nameValidator->isValidName($shippingAddress->getFirstname())) {
-                $validationErrors[] = __('First Name is not valid');
-            }
-            if (!$this->nameValidator->isValidName($shippingAddress->getMiddlename())) {
-                $validationErrors[] = __('Middle Name is not valid');
-            }
-            if (!$this->nameValidator->isValidName($shippingAddress->getLastname())) {
-                $validationErrors[] = __('Last Name is not valid');
-            }
-            if (!$this->nameValidator->isValidName($shippingAddress->getPrefix())) {
-                $validationErrors[] = __('Prefix is not valid');
-            }
-            if (!$this->nameValidator->isValidName($shippingAddress->getSuffix())) {
-                $validationErrors[] = __('Suffix is not valid');
-            }
-            if (!$this->cityValidator->isValidCity($shippingAddress->getCity())) {
-                $validationErrors[] = __('City is not valid');
-            }
-            if (!$this->phoneValidator->isValidPhone($shippingAddress->getTelephone())) {
-                $validationErrors[] = __('Telephone is not valid');
-            }
-            if (!$this->phoneValidator->isValidPhone($shippingAddress->getFax())) {
-                $validationErrors[] = __('Fax is not valid');
-            }
-            if (!$this->streetValidator->isValidStreet($shippingAddress->getStreet())) {
-                $validationErrors[] = __('Street is not valid');
+            foreach ($fieldsToValidate as $fieldName => [$fieldValue, $validationMethod, $validatorClass]) {
+                if (!$validatorClass::$validationMethod($fieldValue)) {
+                    $validationErrors[] = __("$fieldName is not valid");
+                }
             }
 
+            // Validate each street line if it's an array
+            $streetArray = $shippingAddress->getStreet();
+            if (is_array($streetArray)) {
+                foreach ($streetArray as $streetLine) {
+                    if (!GlobalStreetValidator::isValidStreet($streetLine)) {
+                        $validationErrors[] = __('Street is not valid');
+                    }
+                }
+            } else {
+                if (!GlobalStreetValidator::isValidStreet($streetArray)) {
+                    $validationErrors[] = __('Street is not valid');
+                }
+            }
+            
             // Check if regex validation is enabled
             $isRegexEnabled = $this->scopeConfig->isSetFlag(
                 'system/security/security_regex_enabled',
                 ScopeInterface::SCOPE_STORE
             );
 
-            if ($isRegexEnabled) {
-                // Validate shipping address fields against forbidden patterns
+            // Perform regex validation only if no other errors exist
+            if (empty($validationErrors) && $isRegexEnabled) {
                 foreach ($shippingAddress->getData() as $key => $value) {
                     if (is_string($value) && !$this->forbiddenPatternsValidator->isValid($value)) {
                         $validationErrors[] = __("Field %1 contains invalid characters.", $key);
