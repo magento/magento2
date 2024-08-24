@@ -18,8 +18,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class BillingAddressValidationRule
- * Validates billing address fields in a quote.
+ * @inheritdoc
  */
 class BillingAddressValidationRule implements QuoteValidationRuleInterface
 {
@@ -64,8 +63,6 @@ class BillingAddressValidationRule implements QuoteValidationRuleInterface
     private $streetValidator;
 
     /**
-     * Constructor.
-     *
      * @param ValidationResultFactory $validationResultFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param GlobalForbiddenPatterns $forbiddenPatternsValidator
@@ -91,7 +88,7 @@ class BillingAddressValidationRule implements QuoteValidationRuleInterface
         $this->nameValidator = $nameValidator;
         $this->cityValidator = $cityValidator;
         $this->phoneValidator = $phoneValidator;
-        $this->streetValidator = $streetValidator;
+        $this->streetValidator = $streetValidator;       
         $this->generalMessage = $generalMessage;
     }
 
@@ -101,45 +98,49 @@ class BillingAddressValidationRule implements QuoteValidationRuleInterface
     public function validate(Quote $quote): array
     {
         $validationErrors = [];
+        
         $billingAddress = $quote->getBillingAddress();
         $billingAddress->setStoreId($quote->getStoreId());
-
-        // Validate the billing address
+        
         $validationResult = $billingAddress->validate();
         if ($validationResult !== true) {
-            $validationErrors[] = __($this->generalMessage);
+            $validationErrors = [__($this->generalMessage)];
         }
         if (is_array($validationResult)) {
             $validationErrors = array_merge($validationErrors, $validationResult);
         }
 
+        // Define the fields to validate with their respective validators
+        $fieldsToValidate = [
+            'First Name' => [$billingAddress->getFirstname(), 'isValidName', GlobalNameValidator::class],
+            'Middle Name' => [$billingAddress->getMiddlename(), 'isValidName', GlobalNameValidator::class],
+            'Last Name' => [$billingAddress->getLastname(), 'isValidName', GlobalNameValidator::class],
+            'Prefix' => [$billingAddress->getPrefix(), 'isValidName', GlobalNameValidator::class],
+            'Suffix' => [$billingAddress->getSuffix(), 'isValidName', GlobalNameValidator::class],
+            'City' => [$billingAddress->getCity(), 'isValidCity', GlobalCityValidator::class],
+            'Telephone' => [$billingAddress->getTelephone(), 'isValidPhone', GlobalPhoneValidation::class],
+            'Fax' => [$billingAddress->getFax(), 'isValidPhone', GlobalPhoneValidation::class],
+        ];
+
         // Validate each field
-        if (!$this->nameValidator->isValidName($billingAddress->getFirstname())) {
-            $validationErrors[] = __('First Name is not valid');
+        foreach ($fieldsToValidate as $fieldName => [$fieldValue, $validationMethod, $validatorClass]) {
+            if (!$validatorClass::$validationMethod($fieldValue)) {
+                $validationErrors[] = __("$fieldName is not valid");
+            }
         }
-        if (!$this->nameValidator->isValidName($billingAddress->getMiddlename())) {
-            $validationErrors[] = __('Middle Name is not valid');
-        }
-        if (!$this->nameValidator->isValidName($billingAddress->getLastname())) {
-            $validationErrors[] = __('Last Name is not valid');
-        }
-        if (!$this->nameValidator->isValidName($billingAddress->getPrefix())) {
-            $validationErrors[] = __('Prefix is not valid');
-        }
-        if (!$this->nameValidator->isValidName($billingAddress->getSuffix())) {
-            $validationErrors[] = __('Suffix is not valid');
-        }
-        if (!$this->cityValidator->isValidCity($billingAddress->getCity())) {
-            $validationErrors[] = __('City is not valid');
-        }
-        if (!$this->phoneValidator->isValidPhone($billingAddress->getTelephone())) {
-            $validationErrors[] = __('Telephone is not valid');
-        }
-        if (!$this->phoneValidator->isValidPhone($billingAddress->getFax())) {
-            $validationErrors[] = __('Fax is not valid');
-        }
-        if (!$this->streetValidator->isValidStreet($billingAddress->getStreet())) {
-            $validationErrors[] = __('Street is not valid');
+
+        // Validate each street line if it's an array
+        $streetArray = $billingAddress->getStreet();
+        if (is_array($streetArray)) {
+            foreach ($streetArray as $streetLine) {
+                if (!GlobalStreetValidator::isValidStreet($streetLine)) {
+                    $validationErrors[] = __('Street is not valid');
+                }
+            }
+        } else {
+            if (!GlobalStreetValidator::isValidStreet($streetArray)) {
+                $validationErrors[] = __('Street is not valid');
+            }
         }
 
         // Check if regex validation is enabled
@@ -148,15 +149,15 @@ class BillingAddressValidationRule implements QuoteValidationRuleInterface
             ScopeInterface::SCOPE_STORE
         );
 
-        if ($isRegexEnabled) {
-            // Validate billing address fields against forbidden patterns
+        // Perform regex validation only if no other errors exist
+        if (empty($validationErrors) && $isRegexEnabled) {
             foreach ($billingAddress->getData() as $key => $value) {
                 if (is_string($value) && !$this->forbiddenPatternsValidator->isValid($value)) {
                     $validationErrors[] = __("Field %1 contains invalid characters.", $key);
                 }
             }
         }
-
+        
         return [$this->validationResultFactory->create(['errors' => $validationErrors])];
     }
 }
