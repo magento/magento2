@@ -112,34 +112,29 @@ class BillingAddressValidationRule implements QuoteValidationRuleInterface
 
         // Define the fields to validate with their respective validators
         $fieldsToValidate = [
-            'First Name' => [$billingAddress->getFirstname(), 'isValidName', GlobalNameValidator::class],
-            'Middle Name' => [$billingAddress->getMiddlename(), 'isValidName', GlobalNameValidator::class],
-            'Last Name' => [$billingAddress->getLastname(), 'isValidName', GlobalNameValidator::class],
-            'Prefix' => [$billingAddress->getPrefix(), 'isValidName', GlobalNameValidator::class],
-            'Suffix' => [$billingAddress->getSuffix(), 'isValidName', GlobalNameValidator::class],
-            'City' => [$billingAddress->getCity(), 'isValidCity', GlobalCityValidator::class],
-            'Telephone' => [$billingAddress->getTelephone(), 'isValidPhone', GlobalPhoneValidation::class],
-            'Fax' => [$billingAddress->getFax(), 'isValidPhone', GlobalPhoneValidation::class],
+            'First Name' => [$billingAddress->getFirstname(), 'isValidName', $this->nameValidator],
+            'Middle Name' => [$billingAddress->getMiddlename(), 'isValidName', $this->nameValidator],
+            'Last Name' => [$billingAddress->getLastname(), 'isValidName', $this->nameValidator],
+            'Prefix' => [$billingAddress->getPrefix(), 'isValidName', $this->nameValidator],
+            'Suffix' => [$billingAddress->getSuffix(), 'isValidName', $this->nameValidator],
+            'City' => [$billingAddress->getCity(), 'isValidCity', $this->cityValidator],
+            'Telephone' => [$billingAddress->getTelephone(), 'isValidPhone', $this->phoneValidator],
+            'Fax' => [$billingAddress->getFax(), 'isValidPhone', $this->phoneValidator],
+            'Street' => [$billingAddress->getStreet(), 'isValidStreet', $this->streetValidator],
         ];
 
         // Validate each field
-        foreach ($fieldsToValidate as $fieldName => [$fieldValue, $validationMethod, $validatorClass]) {
-            if (!$validatorClass::$validationMethod($fieldValue)) {
-                $validationErrors[] = __("$fieldName is not valid");
-            }
-        }
-
-        // Validate each street line if it's an array
-        $streetArray = $billingAddress->getStreet();
-        if (is_array($streetArray)) {
-            foreach ($streetArray as $streetLine) {
-                if (!GlobalStreetValidator::isValidStreet($streetLine)) {
-                    $validationErrors[] = __('Street is not valid');
+        foreach ($fieldsToValidate as $fieldName => [$fieldValue, $validationMethod, $validatorInstance]) {
+            if (is_array($fieldValue)) {
+                foreach ($fieldValue as $value) {
+                    if (!$validatorInstance->$validationMethod($value)) {
+                        $validationErrors[] = __("$fieldName is not valid");
+                    }
                 }
-            }
-        } else {
-            if (!GlobalStreetValidator::isValidStreet($streetArray)) {
-                $validationErrors[] = __('Street is not valid');
+            } else {
+                if (!$validatorInstance->$validationMethod($fieldValue)) {
+                    $validationErrors[] = __("$fieldName is not valid");
+                }
             }
         }
 
