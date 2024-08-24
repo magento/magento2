@@ -13,6 +13,13 @@ namespace Magento\Framework\Validator;
  */
 class GlobalForbiddenPatterns
 {
+     /**
+     * XML path for regex validation.
+     *
+     * @var string
+     */
+    const XML_PATH_SECURITY_REGEX_ENABLED = 'system/security/security_regex_enabled';
+    
     /**
      * Returns an array of forbidden patterns.
      *
