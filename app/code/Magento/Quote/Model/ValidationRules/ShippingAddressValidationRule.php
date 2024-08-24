@@ -111,34 +111,29 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
             
             // Define the fields to validate with their respective validators
             $fieldsToValidate = [
-                'First Name' => [$shippingAddress->getFirstname(), 'isValidName', GlobalNameValidator::class],
-                'Middle Name' => [$shippingAddress->getMiddlename(), 'isValidName', GlobalNameValidator::class],
-                'Last Name' => [$shippingAddress->getLastname(), 'isValidName', GlobalNameValidator::class],
-                'Prefix' => [$shippingAddress->getPrefix(), 'isValidName', GlobalNameValidator::class],
-                'Suffix' => [$shippingAddress->getSuffix(), 'isValidName', GlobalNameValidator::class],
-                'City' => [$shippingAddress->getCity(), 'isValidCity', GlobalCityValidator::class],
-                'Telephone' => [$shippingAddress->getTelephone(), 'isValidPhone', GlobalPhoneValidation::class],
-                'Fax' => [$shippingAddress->getFax(), 'isValidPhone', GlobalPhoneValidation::class],
+                'First Name' => [$shippingAddress->getFirstname(), 'isValidName', $this->nameValidator],
+                'Middle Name' => [$shippingAddress->getMiddlename(), 'isValidName', $this->nameValidator],
+                'Last Name' => [$shippingAddress->getLastname(), 'isValidName', $this->nameValidator],
+                'Prefix' => [$shippingAddress->getPrefix(), 'isValidName', $this->nameValidator],
+                'Suffix' => [$shippingAddress->getSuffix(), 'isValidName', $this->nameValidator],
+                'City' => [$shippingAddress->getCity(), 'isValidCity', $this->cityValidator],
+                'Telephone' => [$shippingAddress->getTelephone(), 'isValidPhone', $this->phoneValidator],
+                'Fax' => [$shippingAddress->getFax(), 'isValidPhone', $this->phoneValidator],
+                'Street' => [$shippingAddress->getStreet(), 'isValidStreet', $this->streetValidator],
             ];
 
             // Validate each field
-            foreach ($fieldsToValidate as $fieldName => [$fieldValue, $validationMethod, $validatorClass]) {
-                if (!$validatorClass::$validationMethod($fieldValue)) {
-                    $validationErrors[] = __("$fieldName is not valid");
-                }
-            }
-
-            // Validate each street line if it's an array
-            $streetArray = $shippingAddress->getStreet();
-            if (is_array($streetArray)) {
-                foreach ($streetArray as $streetLine) {
-                    if (!GlobalStreetValidator::isValidStreet($streetLine)) {
-                        $validationErrors[] = __('Street is not valid');
+            foreach ($fieldsToValidate as $fieldName => [$fieldValue, $validationMethod, $validatorInstance]) {
+                if (is_array($fieldValue)) {
+                    foreach ($fieldValue as $value) {
+                        if (!$validatorInstance->$validationMethod($value)) {
+                            $validationErrors[] = __("$fieldName is not valid");
+                        }
                     }
-                }
-            } else {
-                if (!GlobalStreetValidator::isValidStreet($streetArray)) {
-                    $validationErrors[] = __('Street is not valid');
+                } else {
+                    if (!$validatorInstance->$validationMethod($fieldValue)) {
+                        $validationErrors[] = __("$fieldName is not valid");
+                    }
                 }
             }
             
