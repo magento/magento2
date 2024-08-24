@@ -68,16 +68,16 @@ class NameValidationRule implements QuoteValidationRuleInterface
         
         // Define the fields to validate with their respective validators
         $fieldsToValidate = [
-            'First Name' => [$quote->getCustomerFirstname(), 'isValidName', GlobalNameValidator::class],
-            'Middle Name' => [$quote->getCustomerMiddlename(), 'isValidName', GlobalNameValidator::class],
-            'Last Name' => [$quote->getCustomerLastname(), 'isValidName', GlobalNameValidator::class],
-            'Prefix' => [$quote->getCustomerPrefix(), 'isValidName', GlobalNameValidator::class],
-            'Suffix' => [$quote->getCustomerSuffix(), 'isValidName', GlobalNameValidator::class],
+            'First Name' => [$quote->getCustomerFirstname(), 'isValidName', $this->nameValidator],
+            'Middle Name' => [$quote->getCustomerMiddlename(), 'isValidName', $this->nameValidator],
+            'Last Name' => [$quote->getCustomerLastname(), 'isValidName', $this->nameValidator],
+            'Prefix' => [$quote->getCustomerPrefix(), 'isValidName', $this->nameValidator],
+            'Suffix' => [$quote->getCustomerSuffix(), 'isValidName', $this->nameValidator],
         ];
 
         // Validate each field
-        foreach ($fieldsToValidate as $fieldName => [$fieldValue, $validationMethod, $validatorClass]) {
-            if (!$validatorClass::$validationMethod($fieldValue)) {
+        foreach ($fieldsToValidate as $fieldName => [$fieldValue, $validationMethod, $validatorInstance]) {
+            if (!$validatorInstance->$validationMethod($fieldValue)) {
                 $validationErrors[] = __("$fieldName is not valid");
             }
         }
