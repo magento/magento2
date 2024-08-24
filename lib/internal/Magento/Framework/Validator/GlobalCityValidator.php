@@ -10,7 +10,6 @@ namespace Magento\Framework\Validator;
 class GlobalCityValidator
 {
     /**
-     * Regular expression pattern for validating city names.
      * Allowed characters:
      *
      * \p{L}: Unicode letters.
@@ -22,8 +21,9 @@ class GlobalCityValidator
      * \&: Ampersand.
      * \[\]: Square brackets.
      * \(\): Parentheses.
+     * \:: Colon.
      */
-    public const PATTERN_CITY = '/^[\p{L}\p{M}\s\-\.\'\&\[\]\(\)]{1,100}$/u';
+    private const PATTERN_CITY = '/^[\p{L}\p{M}\s\-\.\'\&\[\]\(\):]{1,100}$/u';
 
     /**
      * Validate a city name string.
