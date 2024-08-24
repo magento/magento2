@@ -27,7 +27,10 @@ class Street extends AbstractValidator
         foreach ($customer->getStreet() as $street) {
             if (!GlobalStreetValidator::isValidStreet($street)) {
                 parent::_addMessages([[
-                    'street' => __("Invalid Street Address. Please use only A-Z, a-z, 0-9, spaces, commas, -, ., ', &, [], ()")
+                    'street' => __(
+                        "Invalid Street Address. Please use only A-Z, a-z, 0-9, spaces, commas, -, ., ', " .
+                        "&, [], ()"
+                    )
                 ]]);
             }
         }
