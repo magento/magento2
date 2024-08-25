@@ -388,7 +388,7 @@ class Installer
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
         $script[] = ['Write installation date...', 'writeInstallationDate', []];
         if (empty($request['magento-init-params'])) {
-            $script[] = ['Enabling Update by Schedule Indexer Mode...', 'setIndexerModeSchedule', []];
+            $script[] = ['Indexing...', 'reindexAll', []];
         }
         $estimatedModules = $this->createModulesConfig($request, true);
         $total = count($script) + 4 * count(array_filter($estimatedModules));
@@ -1736,12 +1736,12 @@ class Installer
                 return in_array(
                     $key,
                     [
-                        AdminAccount::KEY_EMAIL,
-                        AdminAccount::KEY_FIRST_NAME,
-                        AdminAccount::KEY_LAST_NAME,
-                        AdminAccount::KEY_USER,
-                        AdminAccount::KEY_PASSWORD,
-                    ]
+                            AdminAccount::KEY_EMAIL,
+                            AdminAccount::KEY_FIRST_NAME,
+                            AdminAccount::KEY_LAST_NAME,
+                            AdminAccount::KEY_USER,
+                            AdminAccount::KEY_PASSWORD,
+                        ]
                 ) && $value !== null;
             },
             ARRAY_FILTER_USE_BOTH
@@ -1801,14 +1801,14 @@ class Installer
     }
 
     /**
-     * Set Index mode as 'Update by Schedule'
+     * Reindexing
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
      * @throws LocalizedException
      * @throws \Exception
      */
-    private function setIndexerModeSchedule(): void
+    private function reindexAll(): void
     {
         /** @var Collection $indexCollection */
         $indexCollection = $this->objectManagerProvider->get()->get(Collection::class);
@@ -1818,13 +1818,13 @@ class Installer
                 /** @var IndexerInterface $model */
                 $model = $this->objectManagerProvider->get()->get(IndexerRegistry::class)
                     ->get($indexerId);
-                $model->setScheduled(true);
+                $model->reindexAll();
             }
-            $this->log->log(__('%1 indexer(s) are in "Update by Schedule" mode.', count($indexerIds)));
+            $this->log->log(__('%1 indexer(s) are indexed.', count($indexerIds)));
         } catch (LocalizedException $e) {
             $this->log->log($e->getMessage());
         } catch (\Exception $e) {
-            $this->log->log(__("We couldn't change indexer(s)' mode because of an error: ".$e->getMessage()));
+            $this->log->log(__("Indexing Error: ".$e->getMessage()));
         }
     }
 }
