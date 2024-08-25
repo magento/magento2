@@ -44,9 +44,9 @@ class GlobalForbiddenPatterns
      * @param string|null $fieldValue
      * @return bool
      */
-    public static function isValid(?string $fieldValue): bool
+    public static function isValid(mixed $fieldValue): bool
     {
-        if ($fieldValue === null || trim($fieldValue) === '') {
+        if ($fieldValue === null || $fieldValue === '' || !is_string($fieldValue)) {
             return true;
         }
 
