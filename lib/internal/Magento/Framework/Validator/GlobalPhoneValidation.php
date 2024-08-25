@@ -22,7 +22,7 @@ class GlobalPhoneValidation
      */
     public static function isValidPhone(mixed $phoneValue): bool
     {
-        if ($phoneValue === null || $phoneValue === '') {
+        if ($phoneValue === null || $phoneValue === '' || !is_string($phoneValue)) {
             return true;
         }
 
