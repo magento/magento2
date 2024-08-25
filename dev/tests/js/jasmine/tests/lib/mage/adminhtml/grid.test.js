@@ -30,7 +30,7 @@ define(['mage/adminhtml/grid'], function () {
 
         it('should reset the filter, clean the URL, and reload with the correct URL', function () {
             let callback = jasmine.createSpy('callback'),
-                expectedUrl = 'https://test.com/filter/';
+                expectedUrl = 'https://test.com/';
 
             gridInstance.resetFilter(callback);
             expect(gridInstance.addVarToUrl).toHaveBeenCalledWith('filter', '');
