@@ -20,7 +20,7 @@ class GlobalPhoneValidation
      * @param string|null $phoneValue
      * @return bool
      */
-    public static function isValidPhone(?string $phoneValue): bool
+    public static function isValidPhone(mixed $phoneValue): bool
     {
         if ($phoneValue === null || $phoneValue === '') {
             return true;
