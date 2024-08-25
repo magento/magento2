@@ -26,9 +26,8 @@ class GlobalPhoneValidation
             return true;
         }
 
-        // Ensure phoneValue is treated as a string for validation if int given
-        if (preg_match(self::PATTERN_TELEPHONE, (string)$phoneValue, $matches)) {
-            return $matches[0] === (string)$phoneValue;
+        if (preg_match(self::PATTERN_TELEPHONE, $phoneValue, $matches)) {
+            return $matches[0] === $phoneValue;
         }
     
         return false;
