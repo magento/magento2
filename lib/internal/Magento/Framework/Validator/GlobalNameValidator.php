@@ -20,9 +20,9 @@ class GlobalNameValidator
      * @param string|null $nameValue
      * @return bool
      */
-    public static function isValidName(?string $nameValue): bool
+    public static function isValidName(mixed $nameValue): bool
     {
-        if ($nameValue === null || $nameValue === '') {
+        if ($nameValue === null || $nameValue === '' || !is_string($nameValue)) {
             return true;
         }
     
