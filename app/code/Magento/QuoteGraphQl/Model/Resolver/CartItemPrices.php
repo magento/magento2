@@ -17,6 +17,7 @@ use Magento\Quote\Model\Cart\Totals;
 use Magento\Quote\Model\Quote\Item;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 use Magento\QuoteGraphQl\Model\GetDiscounts;
+use Magento\QuoteGraphQl\Model\GetOptionsRegularPrice;
 
 /**
  * @inheritdoc
@@ -29,14 +30,18 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
     private $totals;
 
     /**
+     * CartItemPrices constructor.
+     *
      * @param TotalsCollector $totalsCollector
      * @param GetDiscounts $getDiscounts
      * @param PriceCurrencyInterface $priceCurrency
+     * @param GetOptionsRegularPrice $getOptionsRegularPrice
      */
     public function __construct(
         private readonly TotalsCollector $totalsCollector,
         private readonly GetDiscounts $getDiscounts,
-        private readonly PriceCurrencyInterface $priceCurrency
+        private readonly PriceCurrencyInterface $priceCurrency,
+        private readonly GetOptionsRegularPrice $getOptionsRegularPrice
     ) {
     }
 
@@ -134,10 +139,18 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
         if (!$optionIds) {
             return $price;
         }
+
         foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
             $option = $cartItem->getProduct()->getOptionById($optionId);
-            if ($option) {
+            $optionValueIds = $cartItem->getOptionByCode('option_' . $optionId);
+            if (!$option) {
+                return $price;
+            }
+            if ($option->getRegularPrice()) {
                 $price += $option->getRegularPrice();
+            } else {
+                $price += $this->getOptionsRegularPrice
+                    ->execute(explode(",", $optionValueIds->getValue()), $option);
             }
         }
 
