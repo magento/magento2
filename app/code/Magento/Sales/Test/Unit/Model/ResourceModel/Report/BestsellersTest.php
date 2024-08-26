@@ -358,11 +358,7 @@ class BestsellersTest extends TestCase
         $connection->expects($this->any())->method('select')->willReturn($select);
         $query = $this->createMock(\Zend_Db_Statement_Interface::class);
         $query->expects($this->once())->method('fetchAll')->willReturn($randomDates);
-        $calls = 3;
-        if ($from && $to) {
-            $calls = 4;
-        }
-        $connection->expects($this->exactly($calls))->method('query')->willReturn($query);
+        $connection->expects($this->exactly(3))->method('query')->willReturn($query);
         $resource = $this->createMock(ResourceConnection::class);
         $resource->expects($this->any())
             ->method('getConnection')

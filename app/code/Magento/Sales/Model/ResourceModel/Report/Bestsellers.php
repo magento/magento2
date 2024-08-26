@@ -224,11 +224,11 @@ class Bestsellers extends AbstractReport
         if (!isset($this->rangesByQuery[$queryHash])) {
 
             $connection = $this->getConnection();
-            $range = [];
             try {
                 $query = $connection->query($select);
                 $range = $query->fetchAll(\Zend_Db::FETCH_COLUMN);
-            } catch (\Exception $e) {
+            } catch (\Exception) {
+                $range = [];
             }
 
             $this->rangesByQuery[$queryHash] = $range;
