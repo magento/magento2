@@ -21,6 +21,8 @@ use Magento\Sales\Model\ResourceModel\Helper;
 use Magento\Sales\Model\ResourceModel\Report\Bestsellers;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -94,6 +96,24 @@ class BestsellersTest extends TestCase
      * @var string
      */
     protected string $connectionName = 'connection_name';
+
+    /**
+     * Data provider for testAggregateWithMultipleOrderDatesAndNoDates
+     *
+     * @return array
+     */
+    public static function datesDataProvider(): array
+    {
+        $randomDates = [];
+        for ($i = 0; $i < 10000; $i++) {
+            $randomDates[] = date('Y-m-d', rand(0, time()));
+        }
+        return [
+            'from-to interval' => [new \DateTime('yesterday'), new \DateTime(), $randomDates],
+            'from interval' => [new \DateTime('yesterday'), null, $randomDates],
+            'from interval no dates' => [new \DateTime('yesterday'), null, []]
+        ];
+    }
 
     /**
      * @inheritDoc
@@ -307,16 +327,18 @@ class BestsellersTest extends TestCase
     }
 
     /**
+     * @param \DateTime|null $from
+     * @param \DateTime|null $to
+     * @param array $randomDates
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
-    public function testAggregateWithMultipleOrderDates(): void
-    {
-        $from = new \DateTime('yesterday');
-        $to = null;
-        for ($i = 0; $i < 10000; $i++) {
-            $randomDates[] = date('Y-m-d', rand(0, time()));
-        }
+    #[DataProvider('datesDataProvider')]
+    public function testAggregateWithMultipleOrderDatesAndNoDates(
+        ?\DateTime $from,
+        ?\DateTime $to,
+        array $randomDates
+    ): void {
         $periodExpr = 'DATE(DATE_ADD(`source_table`.`created_at`, INTERVAL -25200 SECOND))';
         $select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
@@ -336,7 +358,11 @@ class BestsellersTest extends TestCase
         $connection->expects($this->any())->method('select')->willReturn($select);
         $query = $this->createMock(\Zend_Db_Statement_Interface::class);
         $query->expects($this->once())->method('fetchAll')->willReturn($randomDates);
-        $connection->expects($this->exactly(4))->method('query')->willReturn($query);
+        $calls = 3;
+        if ($from && $to) {
+            $calls = 4;
+        }
+        $connection->expects($this->exactly($calls))->method('query')->willReturn($query);
         $resource = $this->createMock(ResourceConnection::class);
         $resource->expects($this->any())
             ->method('getConnection')
