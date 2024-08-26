@@ -16,7 +16,7 @@
             <argument name="defaultLabel" type="string"/>
         </arguments>
         <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
-        <waitForElementVisible selector="{{AdminNewAttributePanel.defaultLabel}}" stepKey="WaitForDefaultLabel"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.defaultLabel}}" stepKey="waitFprDefaultLabelInputField"/>
         <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{defaultLabel}}" stepKey="fillDefaultLabel"/>
         <!--Add option 1 to attribute-->
         <waitForElementClickable selector="{{AdminNewAttributePanel.addOption}}" stepKey="waitForAddOption"/>
