@@ -60,6 +60,9 @@ class IdentifierForSave implements IdentifierInterface
      */
     private function reconstructUrl($url)
     {
+        if (empty($url)) {
+            return [$url, ''];
+        }
         $baseUrl = strtok((string)$url, '?');
         $uri = UriFactory::factory($url);
         $query = $uri->getQueryAsArray();
