@@ -139,7 +139,8 @@ class BestsellersTest extends TestCase
             ->willReturn($periodExpr);
         $connection->expects($this->any())->method('select')->willReturn($select);
         $query = $this->createMock(\Zend_Db_Statement_Interface::class);
-        $connection->expects($this->exactly(5))->method('query')->willReturn($query);
+        $query->expects($this->once())->method('fetchAll')->willReturn(['date1', 'date2']);
+        $connection->expects($this->exactly(4))->method('query')->willReturn($query);
         $resource = $this->createMock(ResourceConnection::class);
         $resource->expects($this->any())
             ->method('getConnection')
@@ -219,7 +220,7 @@ class BestsellersTest extends TestCase
         $this->flagFactory->expects($this->atLeastOnce())->method('create')->willReturn($flag);
 
         $query = $this->createMock(\Zend_Db_Statement_Interface::class);
-        $query->method('fetchColumn')->willReturnOnConsecutiveCalls('date1', 'date2', false);
+        $query->method('fetchAll')->willReturn(['date1', 'date2']);
         $connection->expects($this->atLeastOnce())->method('query')->willReturn($query);
         $connection->expects($this->atLeastOnce())->method('getDatePartSql')->willReturn($periodExpr);
 
@@ -303,5 +304,76 @@ class BestsellersTest extends TestCase
         );
 
         $this->report->aggregate();
+    }
+
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    public function testAggregateWithMultipleOrderDates(): void
+    {
+        $from = new \DateTime('yesterday');
+        $to = null;
+        for ($i = 0; $i < 10000; $i++) {
+            $randomDates[] = date('Y-m-d', rand(0, time()));
+        }
+        $periodExpr = 'DATE(DATE_ADD(`source_table`.`created_at`, INTERVAL -25200 SECOND))';
+        $select = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $select->expects($this->exactly(2))->method('group');
+        $select->expects($this->exactly(5))->method('from')->willReturn($select);
+        $select->expects($this->exactly(3))->method('distinct')->willReturn($select);
+        $select->expects($this->once())->method('joinInner')->willReturn($select);
+        $select->expects($this->once())->method('joinLeft')->willReturn($select);
+        $select->expects($this->any())->method('where')->willReturn($select);
+        $select->expects($this->once())->method('useStraightJoin');
+        $select->expects($this->exactly(2))->method('insertFromSelect');
+        $connection = $this->createMock(AdapterInterface::class);
+        $connection->expects($this->exactly(4))
+            ->method('getDatePartSql')
+            ->willReturn($periodExpr);
+        $connection->expects($this->any())->method('select')->willReturn($select);
+        $query = $this->createMock(\Zend_Db_Statement_Interface::class);
+        $query->expects($this->once())->method('fetchAll')->willReturn($randomDates);
+        $connection->expects($this->exactly(4))->method('query')->willReturn($query);
+        $resource = $this->createMock(ResourceConnection::class);
+        $resource->expects($this->any())
+            ->method('getConnection')
+            ->with($this->connectionName)
+            ->willReturn($connection);
+        $this->context->expects($this->any())->method('getResources')->willReturn($resource);
+
+        $store = $this->createMock(StoreInterface::class);
+        $store->expects($this->once())->method('getId')->willReturn(1);
+        $this->storeManager->expects($this->once())->method('getStores')->with(true)->willReturn([$store]);
+
+        $this->helper->expects($this->exactly(3))->method('getBestsellersReportUpdateRatingPos');
+
+        $flag = $this->createMock(Flag::class);
+        $flag->expects($this->once())->method('setReportFlagCode')->willReturn($flag);
+        $flag->expects($this->once())->method('unsetData')->willReturn($flag);
+        $flag->expects($this->once())->method('loadSelf');
+        $this->flagFactory->expects($this->once())->method('create')->willReturn($flag);
+
+        $date = $this->createMock(\DateTime::class);
+        $date->expects($this->exactly(4))->method('format')->with('e');
+        $this->time->expects($this->exactly(4))->method('scopeDate')->willReturn($date);
+
+        $this->report = new Bestsellers(
+            $this->context,
+            $this->logger,
+            $this->time,
+            $this->flagFactory,
+            $this->validator,
+            $this->date,
+            $this->product,
+            $this->helper,
+            $this->connectionName,
+            [],
+            $this->storeManager
+        );
+
+        $this->report->aggregate($from, $to);
     }
 }
