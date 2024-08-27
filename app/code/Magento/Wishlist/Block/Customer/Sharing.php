@@ -7,9 +7,6 @@
 namespace Magento\Wishlist\Block\Customer;
 
 use Magento\Captcha\Block\Captcha;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Validator\GlobalForbiddenPatterns;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Wishlist customer sharing block
@@ -39,35 +36,19 @@ class Sharing extends \Magento\Framework\View\Element\Template
     protected $_wishlistSession;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var GlobalForbiddenPatterns
-     */
-    private $forbiddenPatternsValidator;
-
-    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Wishlist\Model\Config $wishlistConfig
      * @param \Magento\Framework\Session\Generic $wishlistSession
-     * @param ScopeConfigInterface $scopeConfig
-     * @param GlobalForbiddenPatterns $forbiddenPatternsValidator
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Wishlist\Model\Config $wishlistConfig,
         \Magento\Framework\Session\Generic $wishlistSession,
-        ScopeConfigInterface $scopeConfig,
-        GlobalForbiddenPatterns $forbiddenPatternsValidator,
         array $data = []
     ) {
         $this->_wishlistConfig = $wishlistConfig;
         $this->_wishlistSession = $wishlistSession;
-        $this->scopeConfig = $scopeConfig;
-        $this->forbiddenPatternsValidator = $forbiddenPatternsValidator;
         parent::__construct($context, $data);
     }
 
@@ -119,24 +100,9 @@ class Sharing extends \Magento\Framework\View\Element\Template
 
         if (!$this->_enteredData || !isset($this->_enteredData[$key])) {
             return null;
+        } else {
+            return $this->escapeHtml($this->_enteredData[$key]);
         }
-
-        $value = $this->_enteredData[$key];
-
-        // Check if regex validation is enabled
-        $isRegexEnabled = $this->scopeConfig->isSetFlag(
-            GlobalForbiddenPatterns::XML_PATH_SECURITY_REGEX_ENABLED,
-            ScopeInterface::SCOPE_STORE
-        );
-
-        // Perform regex validation
-        if ($isRegexEnabled && is_string($value)) {
-            if (!$this->forbiddenPatternsValidator->isValid($value)) {
-                return null; // or throw an exception or return a sanitized value
-            }
-        }
-
-        return $this->escapeHtml($value);
     }
 
     /**
