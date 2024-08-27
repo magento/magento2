@@ -66,8 +66,8 @@ class AddressValidationRule
     /**
      * Validates the address fields and applies forbidden pattern checks
      *
-     * @param mixed $address
-     * @param array &$validationErrors
+     * @param mixed $address           The address object to validate.
+     * @param array &$validationErrors An array to store validation errors.
      * @return void
      */
     public function validateAddress($address, array &$validationErrors): void
