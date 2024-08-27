@@ -93,6 +93,8 @@ class AddressValidationRule
             }
         }
 
-        $this->forbiddenPatternsValidator->validateData($address->getData(), $validationErrors);
+        if (empty($validationErrors)) {
+            $this->forbiddenPatternsValidator->validateData($address->getData(), $validationErrors);
+        }
     }
 }
