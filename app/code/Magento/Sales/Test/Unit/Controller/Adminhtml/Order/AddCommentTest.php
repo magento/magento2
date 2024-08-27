@@ -241,14 +241,18 @@ class AddCommentTest extends TestCase
     public function testExecuteForEmptyCommentMessage(): void
     {
         $orderId = 30;
+        $orderStatus = 'processing';
         $historyData = [
             'comment' => '',
             'is_customer_notified' => false,
-            'is_visible_on_front' => true
+            'is_visible_on_front' => true,
+            'status' => 'processing'
         ];
 
         $this->requestMock->expects($this->once())->method('getParam')
             ->with('order_id')->willReturn($orderId);
+        $this->orderMock->expects($this->atLeastOnce())->method('getDataByKey')
+            ->with('status')->willReturn($orderStatus);
         $this->orderRepositoryMock->expects($this->once())->method('get')->willReturn($this->orderMock);
         $this->requestMock->expects($this->once())->method('getPost')
             ->with('history')->willReturn($historyData);
