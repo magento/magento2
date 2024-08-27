@@ -11,8 +11,6 @@ use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Framework\Validator\GlobalForbiddenPatterns;
 use Magento\Framework\Validator\GlobalNameValidator;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class NameValidationRule
@@ -36,28 +34,20 @@ class NameValidationRule implements QuoteValidationRuleInterface
     private $forbiddenPatternsValidator;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * Constructor.
      *
      * @param ValidationResultFactory $validationResultFactory
      * @param GlobalNameValidator $nameValidator
      * @param GlobalForbiddenPatterns $forbiddenPatternsValidator
-     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         ValidationResultFactory $validationResultFactory,
         GlobalNameValidator $nameValidator,
-        GlobalForbiddenPatterns $forbiddenPatternsValidator,
-        ScopeConfigInterface $scopeConfig
+        GlobalForbiddenPatterns $forbiddenPatternsValidator
     ) {
         $this->validationResultFactory = $validationResultFactory;
         $this->nameValidator = $nameValidator;
         $this->forbiddenPatternsValidator = $forbiddenPatternsValidator;
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -69,7 +59,7 @@ class NameValidationRule implements QuoteValidationRuleInterface
     public function validate(Quote $quote): array
     {
         $validationErrors = [];
-        
+
         // Define the fields to validate with their respective validators
         $fieldsToValidate = [
             'First Name' => [$quote->getCustomerFirstname(), 'isValidName', $this->nameValidator],
@@ -86,19 +76,9 @@ class NameValidationRule implements QuoteValidationRuleInterface
             }
         }
 
-        // Check if regex validation is enabled
-        $isRegexEnabled = $this->scopeConfig->isSetFlag(
-            GlobalForbiddenPatterns::XML_PATH_SECURITY_REGEX_ENABLED,
-            ScopeInterface::SCOPE_STORE
-        );
-
         // Perform regex validation only if no other errors exist
-        if (empty($validationErrors) && $isRegexEnabled) {
-            foreach ($quote->getData() as $key => $value) {
-                if (is_string($value) && !$this->forbiddenPatternsValidator->isValid($value)) {
-                    $validationErrors[] = __("Field %1 contains invalid characters.", $key);
-                }
-            }
+        if (empty($validationErrors)) {
+            $this->forbiddenPatternsValidator->validateData($quote->getData(), $validationErrors);
         }
 
         return [$this->validationResultFactory->create(['errors' => $validationErrors])];
