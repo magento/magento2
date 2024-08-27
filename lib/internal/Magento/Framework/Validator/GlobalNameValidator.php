@@ -26,8 +26,8 @@ class GlobalNameValidator
             return true;
         }
     
-        if (preg_match(self::PATTERN_NAME, $nameValue, $matches)) {
-            return $matches[0] === $nameValue;
+        if (preg_match(self::PATTERN_NAME, trim($nameValue), $matches)) {
+            return $matches[0] === trim($nameValue);
         }
     
         return false;
