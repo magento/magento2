@@ -39,8 +39,8 @@ class GlobalStreetValidator
             return true;
         }
 
-        if (preg_match(self::PATTERN_STREET, $streetValue, $matches)) {
-            return $matches[0] === $streetValue;
+        if (preg_match(self::PATTERN_STREET, trim($streetValue), $matches)) {
+            return $matches[0] === trim($streetValue);
         }
 
         return false;
