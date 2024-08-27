@@ -65,7 +65,9 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
                 $validationErrors = array_merge($validationErrors, $validationResult);
             }
 
-            $this->addressValidationRule->validateAddress($shippingAddress, $validationErrors);
+            if (empty($validationErrors)) {
+                $this->addressValidationRule->validateAddress($shippingAddress, $validationErrors);
+            }
         }
 
         return [$this->validationResultFactory->create(['errors' => $validationErrors])];
