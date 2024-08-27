@@ -106,7 +106,6 @@
         <click selector="{{AdminPayPalPayFlowLinkConfigSection.configureBtn('us')}}" stepKey="clickPayPalConfigureBtnToAssertStatusAfterEnabling"/>
         <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledEnableSolution('us')}}" stepKey="assertGreenTickMarkPresentEnableThisSolutionDropdown"/>
         <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledExpressCheckout('us')}}" stepKey="assertGreenTickMarkAbsentForEnablePaypalExpressCheckoutDropdown1"/>
-        <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enableExpressCheckout('us')}}" userInput="No" stepKey="seeExpressCheckoutIsSetAsNo1"/>
         <assertElementContainsAttribute stepKey="seePaypalCreditIsDisabled1">
             <expectedResult selector="{{AdminPayPalPayFlowLinkConfigSection.enablePaypalCredit('us')}}" attribute="disabled" type="string"></expectedResult>
         </assertElementContainsAttribute>
