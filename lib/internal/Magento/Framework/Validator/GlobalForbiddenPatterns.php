@@ -21,13 +21,18 @@ class GlobalForbiddenPatterns
      *
      * @var string
      */
-    const XML_PATH_SECURITY_REGEX_ENABLED = 'system/security/security_regex_enabled';
+    public const XML_PATH_SECURITY_REGEX_ENABLED = 'system/security/security_regex_enabled';
 
     /**
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
 
+    /**
+     * Constructor.
+     *
+     * @param ScopeConfigInterface $scopeConfig
+     */
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
