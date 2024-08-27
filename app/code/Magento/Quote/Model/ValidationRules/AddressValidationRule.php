@@ -12,8 +12,6 @@ use Magento\Framework\Validator\GlobalNameValidator;
 use Magento\Framework\Validator\GlobalCityValidator;
 use Magento\Framework\Validator\GlobalPhoneValidation;
 use Magento\Framework\Validator\GlobalStreetValidator;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface;
 
 class AddressValidationRule
 {
@@ -43,11 +41,6 @@ class AddressValidationRule
     private $streetValidator;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * Constructor
      *
      * @param GlobalForbiddenPatterns $forbiddenPatternsValidator
@@ -55,22 +48,19 @@ class AddressValidationRule
      * @param GlobalCityValidator $cityValidator
      * @param GlobalPhoneValidation $phoneValidator
      * @param GlobalStreetValidator $streetValidator
-     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         GlobalForbiddenPatterns $forbiddenPatternsValidator,
         GlobalNameValidator $nameValidator,
         GlobalCityValidator $cityValidator,
         GlobalPhoneValidation $phoneValidator,
-        GlobalStreetValidator $streetValidator,
-        ScopeConfigInterface $scopeConfig
+        GlobalStreetValidator $streetValidator
     ) {
         $this->forbiddenPatternsValidator = $forbiddenPatternsValidator;
         $this->nameValidator = $nameValidator;
         $this->cityValidator = $cityValidator;
         $this->phoneValidator = $phoneValidator;
         $this->streetValidator = $streetValidator;
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**
