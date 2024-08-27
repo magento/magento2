@@ -68,6 +68,8 @@ class GlobalForbiddenPatterns
             return true;
         }
 
+        $fieldValue = trim($fieldValue);
+        
         foreach (self::getPatterns() as $pattern) {
             if (preg_match($pattern, $fieldValue)) {
                 return false;
