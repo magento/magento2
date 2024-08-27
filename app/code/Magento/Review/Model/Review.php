@@ -14,9 +14,7 @@ use Magento\Framework\Validator\ValidateException;
 use Magento\Framework\Validator\ValidatorChain;
 use Magento\Review\Model\ResourceModel\Review\Product\Collection as ProductCollection;
 use Magento\Review\Model\ResourceModel\Review\Status\Collection as StatusCollection;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Validator\GlobalForbiddenPatterns;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Review model
@@ -128,11 +126,6 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
     protected $_urlModel;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @var GlobalForbiddenPatterns
      */
     private $forbiddenPatternsValidator;
@@ -149,7 +142,6 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * @param \Magento\Review\Model\Review\Summary $reviewSummary
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlModel
-     * @param ScopeConfigInterface $scopeConfig
      * @param GlobalForbiddenPatterns $forbiddenPatternsValidator
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
@@ -166,7 +158,6 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
         \Magento\Review\Model\Review\Summary $reviewSummary,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $urlModel,
-        ScopeConfigInterface $scopeConfig,
         GlobalForbiddenPatterns $forbiddenPatternsValidator,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -179,7 +170,6 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
         $this->_reviewSummary = $reviewSummary;
         $this->_storeManager = $storeManager;
         $this->_urlModel = $urlModel;
-        $this->scopeConfig = $scopeConfig;
         $this->forbiddenPatternsValidator = $forbiddenPatternsValidator;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -313,30 +303,21 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
             $errors[] = __('Please enter a review.');
         }
 
-        // Check if regex validation is enabled
-        $isRegexEnabled = $this->scopeConfig->isSetFlag(
-            GlobalForbiddenPatterns::XML_PATH_SECURITY_REGEX_ENABLED,
-            ScopeInterface::SCOPE_STORE
-        );
-
-        // Perform regex validation only if no other errors exist
-        if (empty($errors) && $isRegexEnabled) {
+        // Validate fields with forbidden patterns
+        if (empty($errors)) {
             $dataToValidate = [
                 'Title' => $this->getTitle(),
                 'Nickname' => $this->getNickname(),
                 'Detail' => $this->getDetail(),
             ];
 
-            foreach ($dataToValidate as $fieldName => $fieldValue) {
-                if (is_string($fieldValue) && !$this->forbiddenPatternsValidator->isValid($fieldValue)) {
-                    $errors[] = __("Field %1 contains invalid characters.", $fieldName);
-                }
-            }
+            $this->forbiddenPatternsValidator->validateData($dataToValidate, $errors);
         }
 
         if (empty($errors)) {
             return true;
         }
+
         return $errors;
     }
 
