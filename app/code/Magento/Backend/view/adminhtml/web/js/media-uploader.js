@@ -75,7 +75,7 @@ define([
                         byteConvert(currentFile.size);
 
                     // check if file is allowed to upload and resize
-                    allowedResize = $.inArray(currentFile.extension, allowedExt) !== -1;
+                    allowedResize = $.inArray(currentFile.extension?.toLowerCase(), allowedExt) !== -1;
 
                     if (!allowedResize)  {
                         fileUploader.aggregateError(currentFile.name,

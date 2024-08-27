@@ -310,6 +310,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
             'action' => $url,
             'data' => [
                 'product' => $product->getEntityId(),
+                'options' => $this->optionsData->getOptionsData($product),
                 ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($url),
             ]
         ];
