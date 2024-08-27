@@ -49,7 +49,7 @@ class RangeTest extends TestCase
 
         $this->filterInterface = $this->getMockBuilder(RangeFilterRequest::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getField',
                     'getFrom',

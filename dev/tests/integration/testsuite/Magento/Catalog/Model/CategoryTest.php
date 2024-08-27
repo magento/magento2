@@ -459,7 +459,7 @@ class CategoryTest extends TestCase
     /**
      * @return array
      */
-    public function categoryFieldsProvider(): array
+    public static function categoryFieldsProvider(): array
     {
         return [
             [

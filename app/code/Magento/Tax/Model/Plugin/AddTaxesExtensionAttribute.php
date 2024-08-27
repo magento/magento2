@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Tax\Model\Plugin;
 
-use Magento\Sales\Api\Data\OrderExtensionFactory;
-use Magento\Sales\Api\Data\OrderItemExtensionFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderSearchResultInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -27,15 +25,11 @@ class AddTaxesExtensionAttribute
     /**
      * @param TaxCollectionFactory $taxCollectionFactory
      * @param TaxItemCollectionFactory $taxItemCollectionFactory
-     * @param OrderExtensionFactory $orderExtensionFactory
-     * @param OrderItemExtensionFactory $orderItemExtensionFactory
      * @param Converter $dataConverter
      */
     public function __construct(
         private readonly TaxCollectionFactory $taxCollectionFactory,
         private readonly TaxItemCollectionFactory $taxItemCollectionFactory,
-        private readonly OrderExtensionFactory $orderExtensionFactory,
-        private readonly OrderItemExtensionFactory $orderItemExtensionFactory,
         private readonly Converter $dataConverter
     ) {
     }
@@ -134,9 +128,6 @@ class AddTaxesExtensionAttribute
             }
             $this->addOrderItemsAssociatedItemizedTaxes($order, $orderItemAssociatedTaxes);
             $extensionAttributes = $order->getExtensionAttributes();
-            if ($extensionAttributes === null) {
-                $extensionAttributes = $this->orderExtensionFactory->create();
-            }
             $extensionAttributes->setAdditionalItemizedTaxes($additionalItemizedTaxes);
             $extensionAttributes->setTaxes($taxes);
         }
@@ -169,9 +160,6 @@ class AddTaxesExtensionAttribute
     {
         foreach ($order->getItems() as $orderItem) {
             $extensionAttributes = $orderItem->getExtensionAttributes();
-            if ($extensionAttributes === null) {
-                $extensionAttributes = $this->orderItemExtensionFactory->create();
-            }
             $extensionAttributes->setItemizedTaxes($orderItemAssociatedTaxes[$orderItem->getItemId()] ?? []);
             $orderItem->setExtensionAttributes($extensionAttributes);
         }

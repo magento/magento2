@@ -41,11 +41,11 @@ class SortTest extends TestCase
     {
         $this->attributeAdapterProvider = $this->getMockBuilder(AttributeProvider::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getByAttributeCode'])
+            ->onlyMethods(['getByAttributeCode'])
             ->getMock();
         $this->fieldNameResolver = $this->getMockBuilder(FieldNameResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFieldName'])
+            ->onlyMethods(['getFieldName'])
             ->getMock();
 
         $this->sortBuilder = (new ObjectManager($this))->getObject(
@@ -80,14 +80,14 @@ class SortTest extends TestCase
         /** @var MockObject|RequestInterface $request */
         $request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSort'])
+            ->addMethods(['getSort'])
             ->getMockForAbstractClass();
         $request->expects($this->any())
             ->method('getSort')
             ->willReturn($sortItems);
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isSortable', 'isFloatType', 'isIntegerType', 'isComplexType'])
+            ->onlyMethods(['isSortable', 'isFloatType', 'isIntegerType', 'isComplexType'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('isSortable')

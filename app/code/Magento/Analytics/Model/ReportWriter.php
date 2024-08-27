@@ -9,6 +9,7 @@ namespace Magento\Analytics\Model;
 
 use Magento\Analytics\ReportXml\DB\ReportValidator;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
 
 /**
  * Writes reports in files in csv format
@@ -69,23 +70,7 @@ class ReportWriter implements ReportWriterInterface
                     continue;
                 }
             }
-            /** @var  $providerObject */
-            $providerObject = $this->providerFactory->create($provider['class']);
-            $fileName = $provider['parameters'] ? $provider['parameters']['name'] : $provider['name'];
-            $fileFullPath = $path . $fileName . '.csv';
-            $fileData = $providerObject->getReport(...array_values($provider['parameters']));
-            $stream = $directory->openFile($fileFullPath, 'w+');
-            $stream->lock();
-            $headers = [];
-            foreach ($fileData as $row) {
-                if (!$headers) {
-                    $headers = array_keys($row);
-                    $stream->writeCsv($headers);
-                }
-                $stream->writeCsv($this->prepareRow($row));
-            }
-            $stream->unlock();
-            $stream->close();
+            $this->prepareData($provider, $directory, $path);
         }
         if ($errorsList) {
             $errorStream = $directory->openFile($path . $this->errorsFileName, 'w+');
@@ -98,6 +83,61 @@ class ReportWriter implements ReportWriterInterface
         }
 
         return true;
+    }
+
+    /**
+     * Prepare report data
+     *
+     * @param array $provider
+     * @param WriteInterface $directory
+     * @param string $path
+     * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    private function prepareData(array $provider, WriteInterface $directory, string $path)
+    {
+        /** @var  $providerObject */
+        $providerObject = $this->providerFactory->create($provider['class']);
+        $fileName = $provider['parameters'] ? $provider['parameters']['name'] : $provider['name'];
+        $fileFullPath = $path . $fileName . '.csv';
+
+        $stream = $directory->openFile($fileFullPath, 'w+');
+        $stream->lock();
+
+        $headers = [];
+        if ($providerObject instanceof \Magento\Analytics\ReportXml\BatchReportProviderInterface) {
+            $fileData = $providerObject->getBatchReport(...array_values($provider['parameters']));
+            do {
+                $this->doWrite($fileData, $stream, $headers);
+                $fileData = $providerObject->getBatchReport(...array_values($provider['parameters']));
+                $fileData->rewind();
+            } while ($fileData->valid());
+        } else {
+            $fileData = $providerObject->getReport(...array_values($provider['parameters']));
+            $this->doWrite($fileData, $stream, $headers);
+        }
+
+        $stream->unlock();
+        $stream->close();
+    }
+
+    /**
+     * Write data to file
+     *
+     * @param \Traversable $fileData
+     * @param FileWriteInterface $stream
+     * @param array $headers
+     * @return void
+     */
+    private function doWrite(\Traversable $fileData, FileWriteInterface $stream, array $headers)
+    {
+        foreach ($fileData as $row) {
+            if (!$headers) {
+                $headers = array_keys($row);
+                $stream->writeCsv($headers);
+            }
+            $stream->writeCsv($this->prepareRow($row));
+        }
     }
 
     /**
