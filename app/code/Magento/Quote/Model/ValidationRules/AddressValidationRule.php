@@ -74,15 +74,15 @@ class AddressValidationRule
     {
         // Define the fields to validate with their respective validators
         $fieldsToValidate = [
-            'First Name' => [$address->getFirstname(), 'isValidName', $this->nameValidator],
-            'Middle Name' => [$address->getMiddlename(), 'isValidName', $this->nameValidator],
-            'Last Name' => [$address->getLastname(), 'isValidName', $this->nameValidator],
-            'Prefix' => [$address->getPrefix(), 'isValidName', $this->nameValidator],
-            'Suffix' => [$address->getSuffix(), 'isValidName', $this->nameValidator],
-            'City' => [$address->getCity(), 'isValidCity', $this->cityValidator],
-            'Telephone' => [$address->getTelephone(), 'isValidPhone', $this->phoneValidator],
-            'Fax' => [$address->getFax(), 'isValidPhone', $this->phoneValidator],
-            'Street' => [$address->getStreet(), 'isValidStreet', $this->streetValidator],
+            'First Name' => [trim($address->getFirstname()), 'isValidName', $this->nameValidator],
+            'Middle Name' => [trim($address->getMiddlename()), 'isValidName', $this->nameValidator],
+            'Last Name' => [trim($address->getLastname()), 'isValidName', $this->nameValidator],
+            'Prefix' => [trim($address->getPrefix()), 'isValidName', $this->nameValidator],
+            'Suffix' => [trim($address->getSuffix()), 'isValidName', $this->nameValidator],
+            'City' => [trim($address->getCity()), 'isValidCity', $this->cityValidator],
+            'Telephone' => [trim($address->getTelephone()), 'isValidPhone', $this->phoneValidator],
+            'Fax' => [trim($address->getFax()), 'isValidPhone', $this->phoneValidator],
+            'Street' => [trim($address->getStreet()), 'isValidStreet', $this->streetValidator],
         ];
 
         // Validate each field
