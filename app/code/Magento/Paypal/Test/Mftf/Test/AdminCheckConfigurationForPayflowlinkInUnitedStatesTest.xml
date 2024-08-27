@@ -50,7 +50,7 @@
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
             <argument name="tags" value="config full_page"/>
         </actionGroup>
-        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.closeButton('us')}}" stepKey="assertConfigureBtnIsDisabled"/>
+        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.closeButton('us')}}" stepKey="assertConfigureBtnToBeDisabled"/>
         <!--Login to storefront as guest customer-->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
             <argument name="Customer" value="$$createCustomer$$"/>
