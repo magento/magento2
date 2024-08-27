@@ -54,6 +54,7 @@ class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
     public function execute($ids)
     {
         $this->_productStockIndexerRows->execute($ids);
+        $this->getCacheContext()->registerEntities(ProductModel::CACHE_TAG, $ids);
     }
 
     /**
@@ -82,6 +83,7 @@ class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
     public function executeList(array $ids)
     {
         $this->_productStockIndexerRows->execute($ids);
+        $this->getCacheContext()->registerEntities(ProductModel::CACHE_TAG, $ids);
     }
 
     /**
@@ -94,6 +96,7 @@ class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
     public function executeRow($id)
     {
         $this->_productStockIndexerRow->execute($id);
+        $this->getCacheContext()->registerEntities(ProductModel::CACHE_TAG, [$id]);
     }
 
     /**
