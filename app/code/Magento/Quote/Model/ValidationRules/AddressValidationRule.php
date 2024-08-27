@@ -47,6 +47,16 @@ class AddressValidationRule
      */
     private $scopeConfig;
 
+    /**
+     * Constructor
+     *
+     * @param GlobalForbiddenPatterns $forbiddenPatternsValidator
+     * @param GlobalNameValidator $nameValidator
+     * @param GlobalCityValidator $cityValidator
+     * @param GlobalPhoneValidation $phoneValidator
+     * @param GlobalStreetValidator $streetValidator
+     * @param ScopeConfigInterface $scopeConfig
+     */
     public function __construct(
         GlobalForbiddenPatterns $forbiddenPatternsValidator,
         GlobalNameValidator $nameValidator,
@@ -63,6 +73,13 @@ class AddressValidationRule
         $this->scopeConfig = $scopeConfig;
     }
 
+    /**
+     * Validates the address fields and applies forbidden pattern checks
+     *
+     * @param mixed $address
+     * @param array &$validationErrors
+     * @return void
+     */
     public function validateAddress($address, array &$validationErrors): void
     {
         // Define the fields to validate with their respective validators
