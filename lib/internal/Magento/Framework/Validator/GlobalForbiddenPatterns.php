@@ -87,8 +87,8 @@ class GlobalForbiddenPatterns
     /**
      * Validate all fields in the provided data array based on forbidden patterns.
      *
-     * @param array $data
-     * @param array &$validationErrors
+     * @param array $data              The data array to be validated.
+     * @param array &$validationErrors An array to collect validation errors.
      * @return void
      */
     public function validateData(
