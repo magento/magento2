@@ -90,11 +90,13 @@ class AddressValidationRule
             if (is_array($fieldValue)) {
                 foreach ($fieldValue as $value) {
                     if (!$validatorInstance->$validationMethod($value)) {
+                        error_log("Invalid street value: " . $fieldValue);
                         $validationErrors[] = __("$fieldName is not valid");
                     }
                 }
             } else {
                 if (!$validatorInstance->$validationMethod($fieldValue)) {
+                    error_log("Invalid street value: " . $fieldValue);
                     $validationErrors[] = __("$fieldName is not valid");
                 }
             }
