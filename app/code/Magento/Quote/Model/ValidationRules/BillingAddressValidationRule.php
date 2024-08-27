@@ -17,6 +17,11 @@ use Magento\Quote\Model\ValidationRules\AddressValidationRule;
 class BillingAddressValidationRule implements QuoteValidationRuleInterface
 {
     /**
+     * @var string
+     */
+    private $generalMessage;
+
+    /**
      * @var ValidationResultFactory
      */
     private $validationResultFactory;
@@ -31,13 +36,16 @@ class BillingAddressValidationRule implements QuoteValidationRuleInterface
      *
      * @param ValidationResultFactory $validationResultFactory
      * @param AddressValidationRule $addressValidationRule
+     * @param string $generalMessage
      */
     public function __construct(
         ValidationResultFactory $validationResultFactory,
-        AddressValidationRule $addressValidationRule
+        AddressValidationRule $addressValidationRule,
+        string $generalMessage = ''
     ) {
         $this->validationResultFactory = $validationResultFactory;
         $this->addressValidationRule = $addressValidationRule;
+        $this->generalMessage = $generalMessage;
     }
 
     /**
