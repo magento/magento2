@@ -13,7 +13,6 @@ use Magento\Framework\App\Area;
 use Magento\Framework\Validator\GlobalForbiddenPatterns;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Store\Model\ScopeInterface;
 
 class Mail implements MailInterface
 {
@@ -43,11 +42,6 @@ class Mail implements MailInterface
     private $forbiddenPatternsValidator;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * Initialize dependencies.
      *
      * @param ConfigInterface $contactsConfig
@@ -55,22 +49,19 @@ class Mail implements MailInterface
      * @param StateInterface $inlineTranslation
      * @param StoreManagerInterface|null $storeManager
      * @param GlobalForbiddenPatterns $forbiddenPatternsValidator
-     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         ConfigInterface $contactsConfig,
         TransportBuilder $transportBuilder,
         StateInterface $inlineTranslation,
         StoreManagerInterface $storeManager = null,
-        GlobalForbiddenPatterns $forbiddenPatternsValidator,
-        ScopeConfigInterface $scopeConfig
+        GlobalForbiddenPatterns $forbiddenPatternsValidator
     ) {
         $this->contactsConfig = $contactsConfig;
         $this->transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->forbiddenPatternsValidator = $forbiddenPatternsValidator;
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -83,21 +74,9 @@ class Mail implements MailInterface
      */
     public function send($replyTo, array $variables)
     {
-        // Check if regex validation is enabled
-        $isRegexEnabled = $this->scopeConfig->isSetFlag(
-            GlobalForbiddenPatterns::XML_PATH_SECURITY_REGEX_ENABLED,
-            ScopeInterface::SCOPE_STORE
-        );
-
-        // Perform regex validation only if it's enabled
-        if ($isRegexEnabled) {
-            foreach ($variables['data'] as $key => $value) {
-                if (is_string($value) && !$this->forbiddenPatternsValidator->isValid($value)) {
-                    throw new LocalizedException(
-                        __("Field %1 contains invalid characters.", $key)
-                    );
-                }
-            }
+        $this->forbiddenPatternsValidator->validateData($variables['data'], $validationErrors);
+        if (!empty($validationErrors)) {
+            throw new LocalizedException(__(implode(", ", $validationErrors)));
         }
 
         /** @see \Magento\Contact\Controller\Index\Post::validatedParams() */
