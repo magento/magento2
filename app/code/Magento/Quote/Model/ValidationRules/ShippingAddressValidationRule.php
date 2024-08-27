@@ -57,6 +57,16 @@ class ShippingAddressValidationRule implements QuoteValidationRuleInterface
             $shippingAddress = $quote->getShippingAddress();
             $shippingAddress->setStoreId($quote->getStoreId());
 
+            // Führe die Standard-Adressvalidierung durch
+            $validationResult = $shippingAddress->validate();
+            if ($validationResult !== true) {
+                $validationErrors = [__($this->generalMessage)];
+            }
+            if (is_array($validationResult)) {
+                $validationErrors = array_merge($validationErrors, $validationResult);
+            }
+
+            // Führe die erweiterte Adressvalidierung durch
             $this->addressValidationRule->validateAddress($shippingAddress, $validationErrors);
         }
 
