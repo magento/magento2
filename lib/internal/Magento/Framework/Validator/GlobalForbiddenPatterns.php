@@ -76,7 +76,7 @@ class GlobalForbiddenPatterns
 
         // Check if the field contains a base64 encoded string and decode it for further validation
         if (preg_match('/base64_decode\(/', $fieldValue)) {
-            $decodedValue = base64_decode($fieldValue); 
+            $decodedValue = base64_decode($fieldValue);
             // Recursively check the decoded value
             return self::isValid($decodedValue);
         }
@@ -91,13 +91,15 @@ class GlobalForbiddenPatterns
      * @param array &$validationErrors
      * @return void
      */
-    public function validateData(array $data, array &$validationErrors): void
-    {
+    public function validateData(
+        array $data,
+        array &$validationErrors
+    ): void {
         $isRegexEnabled = $this->scopeConfig->isSetFlag(
             self::XML_PATH_SECURITY_REGEX_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
-
+    
         if ($isRegexEnabled) {
             foreach ($data as $key => $value) {
                 if (is_string($value) && !$this->isValid($value)) {
