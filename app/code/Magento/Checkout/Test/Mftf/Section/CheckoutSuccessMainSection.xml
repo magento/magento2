@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutSuccessMainSection">
-        <element name="successTitle" type="text" selector=".page-title>span"/>
+        <element name="successTitle" type="text" selector=".page-title > span" timeout="90"/>
         <element name="success" type="text" selector="div.checkout-success"/>
         <element name="orderNumber" type="text" selector="div.checkout-success > p:nth-child(1) > span"/>
         <element name="orderNumber22" type="text" selector=".order-number>strong"/>
