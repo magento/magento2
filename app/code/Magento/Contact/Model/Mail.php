@@ -74,6 +74,7 @@ class Mail implements MailInterface
      */
     public function send($replyTo, array $variables)
     {
+        $validationErrors = [];
         $fieldsToValidate = [
             'name' => $variables['data']['name'] ?? '',
             'comment' => $variables['data']['comment'] ?? '',
@@ -81,6 +82,12 @@ class Mail implements MailInterface
         ];
         $this->forbiddenPatternsValidator->validateData($fieldsToValidate, $validationErrors);
 
+        if (!empty($validationErrors)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __(implode("\n", $validationErrors))
+            );
+        }
+        
         /** @see \Magento\Contact\Controller\Index\Post::validatedParams() */
         $replyToName = !empty($variables['data']['name']) ? $variables['data']['name'] : null;
 
