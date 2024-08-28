@@ -37,8 +37,9 @@ class GlobalCityValidator
             return true;
         }
 
-        if (preg_match(self::PATTERN_CITY, trim($cityValue), $matches)) {
-            return $matches[0] === trim($cityValue);
+        $cityValue = trim($cityValue);
+        if (preg_match(self::PATTERN_CITY, $cityValue, $matches)) {
+            return $matches[0] === $cityValue;
         }
 
         return false;
