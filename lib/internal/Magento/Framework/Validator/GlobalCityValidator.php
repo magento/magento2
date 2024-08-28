@@ -31,7 +31,7 @@ class GlobalCityValidator
      * @param string|null $cityValue
      * @return bool
      */
-    public static function isValidCity(mixed $cityValue): bool
+    public function isValidCity(mixed $cityValue): bool
     {
         if ($cityValue === null || $cityValue === '' || !is_string($cityValue)) {
             return true;
