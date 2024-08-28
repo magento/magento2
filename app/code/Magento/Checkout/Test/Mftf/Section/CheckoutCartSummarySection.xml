@@ -42,6 +42,6 @@
         <element name="fptAmount" type="text" selector="//*[@id='cart-totals']//tr[@class='totals']//td[@class='amount']/span"/>
         <element name="canadaTaxAmount" type="text" selector="//span[@data-th='Canada-GST-5%']"/>
         <element name="canadaPstTaxAmount" type="text" selector="//span[@data-th='Canada-GST-PST-5%']"/>
-        <element name="PayPalBtnLessTimeout" type="button" selector=".paypal-button.paypal-button-number-0" timeout="3"/>
+        <element name="PayPalBtnLessTimeout" type="button" selector=".paypal-button.paypal-button-number-0"/>
     </section>
 </sections>
