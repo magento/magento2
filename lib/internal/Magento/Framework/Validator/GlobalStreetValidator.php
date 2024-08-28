@@ -33,7 +33,7 @@ class GlobalStreetValidator
      * @param string|null $streetValue
      * @return bool
      */
-    public static function isValidStreet(mixed $streetValue): bool
+    public function isValidStreet(mixed $streetValue): bool
     {
         if ($streetValue === null || $streetValue === '' || !is_string($streetValue)) {
             return true;
