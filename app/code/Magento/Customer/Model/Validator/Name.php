@@ -17,6 +17,21 @@ use Magento\Framework\Validator\GlobalNameValidator;
 class Name extends AbstractValidator
 {
     /**
+     * @var GlobalNameValidator
+     */
+    private $nameValidator;
+
+    /**
+     * Name constructor.
+     *
+     * @param GlobalNameValidator $nameValidator
+     */
+    public function __construct(GlobalNameValidator $nameValidator)
+    {
+        $this->nameValidator = $nameValidator;
+    }
+
+    /**
      * Validate name fields.
      *
      * @param Customer $customer
@@ -24,15 +39,15 @@ class Name extends AbstractValidator
      */
     public function isValid($customer)
     {
-        if (!GlobalNameValidator::isValidName($customer->getFirstname())) {
+        if (!$this->nameValidator->isValidName($customer->getFirstname())) {
             parent::_addMessages([['firstname' => __('First Name is not valid!')]]);
         }
 
-        if (!GlobalNameValidator::isValidName($customer->getLastname())) {
+        if (!$this->nameValidator->isValidName($customer->getLastname())) {
             parent::_addMessages([['lastname' => __('Last Name is not valid!')]]);
         }
 
-        if (!GlobalNameValidator::isValidName($customer->getMiddlename())) {
+        if (!$this->nameValidator->isValidName($customer->getMiddlename())) {
             parent::_addMessages([['middlename' => __('Middle Name is not valid!')]]);
         }
 
