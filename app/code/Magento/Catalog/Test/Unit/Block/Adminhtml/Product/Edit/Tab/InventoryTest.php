@@ -255,15 +255,10 @@ class InventoryTest extends TestCase
         $websiteId = 15;
         $fieldName = 'field';
 
-        $stockItemMock = $this->getMockForAbstractClass(
-            StockItemInterface::class,
-            [],
-            '',
-            false,
-            false,
-            false,
-            $methods
-        );
+        $stockItemMock = $this->getMockBuilder(StockItemInterface::class)
+                            ->disableOriginalConstructor()
+                            ->addMethods($methods)
+                            ->getMockForAbstractClass();
         $productMock = $this->createMock(Product::class);
         $storeMock = $this->createMock(Store::class);
         $productMock->expects($this->once())
@@ -318,15 +313,10 @@ class InventoryTest extends TestCase
         $websiteId = 15;
         $fieldName = 'field';
 
-        $stockItemMock = $this->getMockForAbstractClass(
-            StockItemInterface::class,
-            [],
-            '',
-            false,
-            false,
-            false,
-            $methods
-        );
+        $stockItemMock = $this->getMockBuilder(StockItemInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods($methods)
+            ->getMockForAbstractClass();
         $productMock = $this->createMock(Product::class);
         $storeMock = $this->createMock(Store::class);
         $productMock->expects($this->once())
@@ -516,10 +506,10 @@ class InventoryTest extends TestCase
     {
         return [
             [
-                'ModuleEnabled' => true,
+                'moduleEnabled' => true,
             ],
             [
-                'ModuleEnabled' => false
+                'moduleEnabled' => false
             ]
         ];
     }
