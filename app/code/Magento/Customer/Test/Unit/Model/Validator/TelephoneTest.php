@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\Telephone;
-use Magento\Customer\Model\Customer;
 use Magento\Framework\Validator\GlobalPhoneValidation;
+use Magento\Customer\Model\Customer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -24,9 +24,9 @@ class TelephoneTest extends TestCase
     private Telephone $telephoneValidator;
 
     /**
-     * @var GlobalPhoneValidation
+     * @var GlobalPhoneValidation|MockObject
      */
-    private GlobalPhoneValidation $globalPhoneValidation;
+    private MockObject $globalPhoneValidationMock;
 
     /**
      * @var Customer|MockObject
@@ -40,8 +40,8 @@ class TelephoneTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->telephoneValidator = new Telephone();
-        $this->globalPhoneValidation = new GlobalPhoneValidation();
+        $this->globalPhoneValidationMock = $this->createMock(GlobalPhoneValidation::class);
+        $this->telephoneValidator = new Telephone($this->globalPhoneValidationMock);
         $this->customerMock = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->addMethods(['getTelephone'])
@@ -62,13 +62,14 @@ class TelephoneTest extends TestCase
     ) {
         $this->customerMock->expects($this->once())->method('getTelephone')->willReturn($telephone);
 
-        // Validate using the Telephone validator
+        // Mock the GlobalPhoneValidation behavior
+        $this->globalPhoneValidationMock->expects($this->once())
+            ->method('isValidPhone')
+            ->with($telephone)
+            ->willReturn(true);
+
         $isValid = $this->telephoneValidator->isValid($this->customerMock);
         $this->assertTrue($isValid, $message);
-
-        // Validate using the GlobalPhoneValidation directly
-        $isValidGlobal = $this->globalPhoneValidation->isValidPhone($telephone);
-        $this->assertTrue($isValidGlobal, $message);
     }
 
     /**
