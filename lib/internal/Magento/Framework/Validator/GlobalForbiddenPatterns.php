@@ -43,7 +43,7 @@ class GlobalForbiddenPatterns
      *
      * @return string[]
      */
-    public static function getPatterns(): array
+    public function getPatterns(): array
     {
         return [
             '/{{.*}}/',
@@ -62,7 +62,7 @@ class GlobalForbiddenPatterns
      * @param mixed $fieldValue
      * @return bool
      */
-    public static function isValid(mixed $fieldValue): bool
+    public function isValid(mixed $fieldValue): bool
     {
         if ($fieldValue === null || $fieldValue === '' || !is_string($fieldValue)) {
             return true;
