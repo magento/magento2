@@ -17,6 +17,21 @@ use Magento\Framework\Validator\GlobalCityValidator;
 class City extends AbstractValidator
 {
     /**
+     * @var GlobalCityValidator
+     */
+    private $cityValidator;
+
+    /**
+     * City constructor.
+     *
+     * @param GlobalCityValidator $cityValidator
+     */
+    public function __construct(GlobalCityValidator $cityValidator)
+    {
+        $this->cityValidator = $cityValidator;
+    }
+
+    /**
      * Validate city fields.
      *
      * @param Customer $customer
@@ -24,7 +39,7 @@ class City extends AbstractValidator
      */
     public function isValid($customer): bool
     {
-        if (!GlobalCityValidator::isValidCity($customer->getCity())) {
+        if (!$this->cityValidator->isValidCity($customer->getCity())) {
             parent::_addMessages([[
                 'city' => __("Invalid City. Please use only A-Z, a-z, 0-9, spaces, commas, -, ., ', &, [], ().")
             ]]);
