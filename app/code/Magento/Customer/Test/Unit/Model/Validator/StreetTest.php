@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\Street;
+use Magento\Framework\Validator\GlobalStreetValidator;
 use Magento\Customer\Model\Customer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -23,6 +24,11 @@ class StreetTest extends TestCase
     private Street $streetValidator;
 
     /**
+     * @var GlobalStreetValidator|MockObject
+     */
+    private MockObject $globalStreetValidatorMock;
+
+    /**
      * @var Customer|MockObject
      */
     private MockObject $customerMock;
@@ -32,7 +38,8 @@ class StreetTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->streetValidator = new Street();
+        $this->globalStreetValidatorMock = $this->createMock(GlobalStreetValidator::class);
+        $this->streetValidator = new Street($this->globalStreetValidatorMock);
         $this->customerMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -53,6 +60,11 @@ class StreetTest extends TestCase
         string $message
     ): void {
         $this->customerMock->expects($this->once())->method('getStreet')->willReturn($street);
+
+        // Mock the GlobalStreetValidator behavior
+        $this->globalStreetValidatorMock->expects($this->exactly(count($street)))
+            ->method('isValidStreet')
+            ->willReturn(true);
 
         $isValid = $this->streetValidator->isValid($this->customerMock);
         $this->assertTrue($isValid, $message);
