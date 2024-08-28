@@ -17,6 +17,21 @@ use Magento\Framework\Validator\GlobalStreetValidator;
 class Street extends AbstractValidator
 {
     /**
+     * @var GlobalStreetValidator
+     */
+    private $streetValidator;
+
+    /**
+     * Street constructor.
+     *
+     * @param GlobalStreetValidator $streetValidator
+     */
+    public function __construct(GlobalStreetValidator $streetValidator)
+    {
+        $this->streetValidator = $streetValidator;
+    }
+
+    /**
      * Validate street fields.
      *
      * @param Customer $customer
@@ -25,7 +40,7 @@ class Street extends AbstractValidator
     public function isValid($customer): bool
     {
         foreach ($customer->getStreet() as $street) {
-            if (!GlobalStreetValidator::isValidStreet($street)) {
+            if (!$this->streetValidator->isValidStreet($street)) {
                 parent::_addMessages([[
                     'street' => __(
                         "Invalid Street Address. Please use only A-Z, a-z, 0-9, spaces, commas, -, ., ', " .
