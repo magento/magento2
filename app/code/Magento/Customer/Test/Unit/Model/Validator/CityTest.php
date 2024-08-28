@@ -9,6 +9,7 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\City;
 use Magento\Customer\Model\Customer;
+use Magento\Framework\Validator\GlobalCityValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,11 +29,17 @@ class CityTest extends TestCase
     private MockObject $customerMock;
 
     /**
+     * @var GlobalCityValidator|MockObject
+     */
+    private MockObject $globalCityValidatorMock;
+
+    /**
      * @return void
      */
     protected function setUp(): void
     {
-        $this->cityValidator = new City();
+        $this->globalCityValidatorMock = $this->createMock(GlobalCityValidator::class);
+        $this->cityValidator = new City($this->globalCityValidatorMock);
         $this->customerMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -53,6 +60,11 @@ class CityTest extends TestCase
         string $message
     ) {
         $this->customerMock->expects($this->once())->method('getCity')->willReturn($city);
+
+        $this->globalCityValidatorMock->expects($this->once())
+            ->method('isValidCity')
+            ->with($city)
+            ->willReturn(true);
 
         $isValid = $this->cityValidator->isValid($this->customerMock);
         $this->assertTrue($isValid, $message);
