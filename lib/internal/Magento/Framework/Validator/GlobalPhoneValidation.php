@@ -22,7 +22,7 @@ class GlobalPhoneValidation
      *
      * The pattern ensures that a phone number can be between 1 and 30 characters long.
      */
-    public const PATTERN_TELEPHONE = '/(?:[\d\s\+\-\()\/]{1,30})/u';
+    private const PATTERN_TELEPHONE = '/(?:[\d\s\+\-\()\/]{1,30})/u';
 
     /**
      * Validate a phone number string.
