@@ -45,7 +45,7 @@ class WizardTest extends TestCase
             ->getMock();
         $this->productBuilder = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['build'])
+            ->onlyMethods(['build'])
             ->getMock();
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()

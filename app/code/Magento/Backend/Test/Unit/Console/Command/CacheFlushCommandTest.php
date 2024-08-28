@@ -10,7 +10,7 @@ namespace Magento\Backend\Test\Unit\Console\Command;
 use Magento\Backend\Console\Command\CacheFlushCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CacheFlushCommandTest extends AbstractCacheManageCommandTest
+class CacheFlushCommandTest extends AbstractCacheManageCommandTestCase
 {
     protected function setUp(): void
     {

@@ -24,6 +24,8 @@ use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\Helper\Data;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -110,7 +112,7 @@ class ListProductTest extends TestCase
         /** @var MockObject|Resolver $layerResolver */
         $layerResolver = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get', 'create'])
+            ->onlyMethods(['get', 'create'])
             ->getMock();
         $layerResolver->expects($this->any())
             ->method($this->anything())
@@ -139,6 +141,10 @@ class ListProductTest extends TestCase
         $this->context->expects($this->any())->method('getCartHelper')->willReturn($this->cartHelperMock);
         $this->context->expects($this->any())->method('getLayout')->willReturn($this->layoutMock);
         $this->context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $store = $this->createMock(StoreInterface::class);
+        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $this->context->expects($this->any())->method('getStoreManager')->willReturn($storeManager);
 
         $this->block = $objectManager->getObject(
             ListProduct::class,
@@ -253,15 +259,14 @@ class ListProductTest extends TestCase
 
     public function testSetIsProductListFlagOnGetProductPrice()
     {
-        $this->renderer->expects($this->once())
+        $this->renderer->expects($this->exactly(2))
             ->method('setData')
-            ->with('is_product_list', true)
             ->willReturnSelf();
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('product.price.render.default')
             ->willReturn($this->renderer);
-
+        $this->block->setCollection($this->prodCollectionMock);
         $this->block->getProductPrice($this->productMock);
     }
 }

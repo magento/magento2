@@ -11,6 +11,7 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Model\Metadata\Form as CustomerForm;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\CustomAttributeListInterface;
 use Magento\Quote\Model\Quote\Item;
@@ -20,6 +21,7 @@ use Magento\Sales\Model\Order;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * Order create model
@@ -265,6 +267,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private $orderRepositoryInterface;
 
     /**
+     * @var HttpRequest
+     */
+    private $request;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -298,6 +305,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param StoreManagerInterface $storeManager
      * @param CustomAttributeListInterface|null $customAttributeList
      * @param OrderRepositoryInterface|null $orderRepositoryInterface
+     * @param HttpRequest|null $request
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -333,7 +341,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         ExtensibleDataObjectConverter $dataObjectConverter = null,
         StoreManagerInterface $storeManager = null,
         CustomAttributeListInterface $customAttributeList = null,
-        OrderRepositoryInterface $orderRepositoryInterface = null
+        OrderRepositoryInterface $orderRepositoryInterface = null,
+        HttpRequest $request = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -372,6 +381,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             ->get(CustomAttributeListInterface::class);
         $this->orderRepositoryInterface = $orderRepositoryInterface ?: ObjectManager::getInstance()
             ->get(OrderRepositoryInterface::class);
+        $this->request = $request ?: ObjectManager::getInstance()
+            ->get(HttpRequest::class);
     }
 
     /**
@@ -895,8 +906,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         }
                         $canBeRestored = $this->restoreTransferredItem('cart', $cartItemsToRestore);
 
+                        $cartItem = $cart->addProduct($product, $info);
                         if (!$canBeRestored) {
-                            $cartItem = $cart->addProduct($product, $info);
                             if (is_string($cartItem)) {
                                 throw new \Magento\Framework\Exception\LocalizedException(__($cartItem));
                             }
@@ -904,6 +915,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         }
                         $this->_needCollectCart = true;
                         $removeItem = true;
+                        $this->removeCartTransferredItemsAndUpdateQty($cartItem, $item->getId());
                     }
                     break;
                 case 'wishlist':
@@ -2309,5 +2321,34 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             }
         }
         return $this;
+    }
+
+    /**
+     * Remove cart from transferred items and update the qty.
+     *
+     * @param int|null|Item $cartItem
+     * @param int $itemId
+     * @return void
+     */
+    private function removeCartTransferredItemsAndUpdateQty(int|null|Item $cartItem, int $itemId)
+    {
+        $removeCartTransferredItems = $this->getSession()->getTransferredItems() ?? [];
+        if (isset($removeCartTransferredItems['cart'])) {
+            $removeTransferredItemKey = array_search($cartItem->getId(), $removeCartTransferredItems['cart']);
+            if ($removeCartTransferredItems['cart'][$removeTransferredItemKey]) {
+                $cartItem->clearMessage();
+                $cartItem->setHasError(false);
+                if (isset($this->request->get('item')[$itemId]['qty'])) {
+                    $qty = $this->request->get('item')[$itemId]['qty'];
+                    $cartItem->setQty($qty);
+                }
+
+                if ($cartItem->getHasError()) {
+                    throw new LocalizedException(__($cartItem->getMessage()));
+                }
+                unset($removeCartTransferredItems['cart'][$removeTransferredItemKey]);
+            }
+            $this->getSession()->setTransferredItems($removeCartTransferredItems);
+        }
     }
 }
