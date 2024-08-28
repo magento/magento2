@@ -36,8 +36,9 @@ class GlobalPhoneValidation
             return true;
         }
 
-        if (preg_match(self::PATTERN_TELEPHONE, trim($phoneValue), $matches)) {
-            return $matches[0] === trim($phoneValue);
+        $phoneValue = trim($phoneValue);
+        if (preg_match(self::PATTERN_TELEPHONE, $phoneValue, $matches)) {
+            return $matches[0] === $phoneValue;
         }
     
         return false;
