@@ -27,7 +27,7 @@ class GlobalNameValidator
      *
      * The pattern ensures that a name can be between 1 and 255 characters long.
      */
-    public const PATTERN_NAME = '/(?:[\p{L}\p{M}\,\-\_\.\'’`&\s\d]){1,255}+/u';
+    private const PATTERN_NAME = '/(?:[\p{L}\p{M}\,\-\_\.\'’`&\s\d]){1,255}+/u';
 
     /**
      * Validate a name string.
