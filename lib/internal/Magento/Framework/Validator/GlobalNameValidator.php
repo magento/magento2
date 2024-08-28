@@ -40,9 +40,10 @@ class GlobalNameValidator
         if ($nameValue === null || $nameValue === '' || !is_string($nameValue)) {
             return true;
         }
-    
-        if (preg_match(self::PATTERN_NAME, trim($nameValue), $matches)) {
-            return $matches[0] === trim($nameValue);
+
+        $nameValue = trim($nameValue);
+        if (preg_match(self::PATTERN_NAME, $nameValue, $matches)) {
+            return $matches[0] === $nameValue;
         }
     
         return false;
