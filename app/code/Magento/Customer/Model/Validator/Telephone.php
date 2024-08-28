@@ -17,6 +17,21 @@ use Magento\Framework\Validator\GlobalPhoneValidation;
 class Telephone extends AbstractValidator
 {
     /**
+     * @var GlobalPhoneValidation
+     */
+    private $phoneValidator;
+
+    /**
+     * Telephone constructor.
+     *
+     * @param GlobalPhoneValidation $phoneValidator
+     */
+    public function __construct(GlobalPhoneValidation $phoneValidator)
+    {
+        $this->phoneValidator = $phoneValidator;
+    }
+
+    /**
      * Validate telephone fields.
      *
      * @param Customer $customer
@@ -24,7 +39,7 @@ class Telephone extends AbstractValidator
      */
     public function isValid($customer)
     {
-        if (!GlobalPhoneValidation::isValidPhone($customer->getTelephone())) {
+        if (!$this->phoneValidator->isValidPhone($customer->getTelephone())) {
             parent::_addMessages([[
                 'telephone' => __('Invalid Phone Number. Please use 0-9, +, -, (), /, and space.')
             ]]);
