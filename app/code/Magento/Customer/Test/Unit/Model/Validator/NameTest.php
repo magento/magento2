@@ -24,9 +24,9 @@ class NameTest extends TestCase
     private Name $nameValidator;
 
     /**
-     * @var GlobalNameValidator
+     * @var GlobalNameValidator|MockObject
      */
-    private GlobalNameValidator $globalNameValidator;
+    private MockObject $globalNameValidatorMock;
 
     /**
      * @var Customer|MockObject
@@ -38,8 +38,8 @@ class NameTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->nameValidator = new Name();
-        $this->globalNameValidator = new GlobalNameValidator();
+        $this->globalNameValidatorMock = $this->createMock(GlobalNameValidator::class);
+        $this->nameValidator = new Name($this->globalNameValidatorMock);
         $this->customerMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -67,11 +67,17 @@ class NameTest extends TestCase
         $this->customerMock->expects($this->once())->method('getMiddlename')->willReturn($middleName);
         $this->customerMock->expects($this->once())->method('getLastname')->willReturn($lastName);
 
+        // Mock the GlobalNameValidator behavior
+        $this->globalNameValidatorMock->expects($this->exactly(3))
+            ->method('isValidName')
+            ->willReturnMap([
+                [$firstName, true],
+                [$middleName, true],
+                [$lastName, true],
+            ]);
+
         $isValid = $this->nameValidator->isValid($this->customerMock);
         $this->assertTrue($isValid, $message);
-
-        $isValidGlobal = $this->globalNameValidator->isValidName($firstName);
-        $this->assertTrue($isValidGlobal, $message);
     }
 
     /**
