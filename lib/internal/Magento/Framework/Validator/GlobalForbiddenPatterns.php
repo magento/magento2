@@ -21,7 +21,7 @@ class GlobalForbiddenPatterns
      *
      * @var string
      */
-    public const XML_PATH_SECURITY_REGEX_ENABLED = 'system/security/security_regex_enabled';
+    private const XML_PATH_SECURITY_REGEX_ENABLED = 'system/security/security_regex_enabled';
 
     /**
      * @var ScopeConfigInterface
