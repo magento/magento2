@@ -10,21 +10,20 @@ require([
     'use strict';
 
     $(function () {
-        const engineField = $('#catalog_search_engine');
-        const commentContainer = $('#row_catalog_search_engine p');
+        const engineField = $('#catalog_search_engine'),
+            commentContainer = $('#row_catalog_search_engine p'),
+            defaultText = $.mage.__('If not specified, Default Search Engine will be used.'),
+            unsupportedText = $.mage.__('This search engine option is no longer supported by Adobe. ' +
+                'It is recommended to use OpenSearch as a search engine instead.'),
+            updateCommentText = () => {
+                const engineValue = engineField.val(),
+                    newCommentText = ['elasticsearch7', 'elasticsearch8'].includes(engineValue) ?
+                        unsupportedText : defaultText;
 
-        const updateCommentText = () => {
-            const engineValue = engineField.val(),
-                defaultText = $.mage.__('If not specified, Default Search Engine will be used.'),
-                unsupportedText = $.mage.__('This search engine option is no longer supported by Adobe. ' +
-                    'It is recommended to use OpenSearch as a search engine instead.'),
-                newCommentText = ['elasticsearch7', 'elasticsearch8'].includes(engineValue) ?
-                    unsupportedText : defaultText;
-
-            if (commentContainer.text() !== newCommentText) {
-                commentContainer.text(newCommentText);
-            }
-        };
+                if (commentContainer.text() !== newCommentText) {
+                    commentContainer.text(newCommentText);
+                }
+            };
 
         engineField.change(updateCommentText);
         updateCommentText();
