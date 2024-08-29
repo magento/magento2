@@ -838,7 +838,8 @@ class ProductTest extends TestCase
         $this->assertEquals($expected, $this->model->getIdentities());
     }
 
-    protected function getMockForExtensionAttribute() {
+    protected function getMockForExtensionAttribute()
+    {
         $extensionAttributesMock = $this->getMockBuilder(ExtensionAttributesInterface::class)
             ->disableOriginalConstructor()
             ->addMethods(['getStockItem'])
@@ -849,14 +850,6 @@ class ProductTest extends TestCase
         $extensionAttributesMock->expects($this->any())->method('getStockItem')->willReturn($stockItemMock);
         return $extensionAttributesMock;
     }
-
-    protected function getMockForStockInterface() {
-        $stockItemMock = $this->getMockBuilder(StockItemInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $stockItemMock->expects($this->any())->method('getIsInStock')->willReturn(true);
-    }
-
     /**
      * @return array
      */
@@ -864,8 +857,11 @@ class ProductTest extends TestCase
     {
         $extensionAttributesMock = static fn (self $testCase)
         => $testCase->getMockForExtensionAttribute();
-        $stockItemMock = static fn (self $testCase)
-        => $testCase->getMockForStockInterface();
+        /** Unused lines of code */
+//        $stockItemMock = $this->getMockBuilder(StockItemInterface::class)
+//            ->disableOriginalConstructor()
+//            ->getMockForAbstractClass();
+//        $stockItemMock->expects($this->any())->method('getIsInStock')->willReturn(true);
 
         return [
             'no changes' => [
