@@ -9,10 +9,8 @@ namespace Magento\GraphQl\Quote\Customer;
 
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\GraphQl\GetCustomerAuthenticationHeader;
 use Magento\Quote\Test\Fixture\AddProductToCart;
 use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\Quote\Test\Fixture\QuoteIdMask as QuoteMaskFixture;
@@ -30,9 +28,9 @@ class GetCartPaginatedItemsTest extends GraphQlAbstract
     private $objectManager;
 
     /**
-     * @var CustomerTokenServiceInterface
+     * @var GetCustomerAuthenticationHeader
      */
-    private $customerTokenService;
+    private $getCustomerAuthenticationHeader;
 
     /**
      * @var DataFixtureStorage
@@ -46,7 +44,7 @@ class GetCartPaginatedItemsTest extends GraphQlAbstract
     {
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
+        $this->getCustomerAuthenticationHeader = $this->objectManager->get(GetCustomerAuthenticationHeader::class);
         $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
@@ -74,7 +72,12 @@ class GetCartPaginatedItemsTest extends GraphQlAbstract
         $customer = $this->fixtures->get('customer');
         $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
         $query = $this->getQuery($maskedQuoteId, $pageSize, $currentPage);
-        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap($customer->getEmail()));
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthenticationHeader->execute($customer->getEmail(), 'password')
+        );
 
         $this->assertArrayNotHasKey('errors', $response);
         $this->assertEquals($totalCount, $response['cart']['itemsV2']['total_count']);
@@ -118,19 +121,6 @@ class GetCartPaginatedItemsTest extends GraphQlAbstract
   }
 }
 QUERY;
-    }
-
-    /**
-     * @param string $username
-     * @param string $password
-     * @return string[]
-     * @throws AuthenticationException
-     * @throws EmailNotConfirmedException
-     */
-    private function getHeaderMap(string $username = 'customer@example.com', string $password = 'password'): array
-    {
-        $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
-        return ['Authorization' => 'Bearer ' . $customerToken];
     }
 
     /**
