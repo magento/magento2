@@ -19,5 +19,6 @@
         <element name="textSwatchDefaultStoreSwatchValue" type="input" selector="[data-role='swatch-text-options-container'] input[name='swatchtext[value][option_{{row}}][1]']" parameterized="true"/>
         <element name="textSwatchDefaultStoreDescriptionValue" type="input" selector="[data-role='swatch-text-options-container'] input[name='optiontext[value][option_{{row}}][1]']" parameterized="true"/>
         <element name="textSwatchStoreViewValue" type="input" selector="//*[@data-role='swatch-text-options-container']//td[starts-with(@class,'col-swatch col-swatch')]//input[@value='{{storeViewValue}}']" parameterized="true"/>
+        <element name="isDefaultTextSwatch" type="radio" selector="[data-role='swatch-text-options-container'] tr:nth-of-type({{row}}) input[name='defaulttext[]']" parameterized="true"/>
     </section>
 </sections>
