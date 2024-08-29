@@ -75,23 +75,23 @@
             <word>rma</word>
         </item>
         <item>
-            <path>lib/web/tiny_mce_5/plugins/help/plugin.min.js</path>
+            <path>lib/web/tiny_mce_7/plugins/help/plugin.min.js</path>
             <word>CHANGELOG</word>
         </item>
         <item>
-            <path>lib/web/tiny_mce_5/plugins/emoticons/js/emojis.min.js</path>
+            <path>lib/web/tiny_mce_7/plugins/emoticons/js/emojis.min.js</path>
             <word>Enterprise</word>
         </item>
         <item>
-            <path>lib/web/tiny_mce_5/plugins/emoticons/js/emojis.js</path>
+            <path>lib/web/tiny_mce_7/plugins/emoticons/js/emojis.js</path>
             <word>Enterprise</word>
         </item>
         <item>
-            <path>lib/web/tiny_mce_5/plugins/emoticons/js/emojiimages.min.js</path>
+            <path>lib/web/tiny_mce_7/plugins/emoticons/js/emojiimages.min.js</path>
             <word>Enterprise</word>
         </item>
         <item>
-            <path>lib/web/tiny_mce_5/plugins/emoticons/js/emojiimages.js</path>
+            <path>lib/web/tiny_mce_7/plugins/emoticons/js/emojiimages.js</path>
             <word>Enterprise</word>
         </item>
         <item>
