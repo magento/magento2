@@ -121,7 +121,7 @@ class Config extends ConfigData
         if (!isset($this->_types[$storeId])) {
             $this->_types[$storeId] = [];
             foreach ($this->get() as $typeCode => $typeConfig) {
-                $path = sprintf('%s%s', self::XML_PATH_ADDRESS_TEMPLATE, $typeCode);
+                $path = sprintf('%s%s', static::XML_PATH_ADDRESS_TEMPLATE, $typeCode);
                 $type = new DataObject();
                 if (isset($typeConfig['escapeHtml'])) {
                     $escapeHtml = $typeConfig['escapeHtml'] == 'true' || $typeConfig['escapeHtml'] == '1';
@@ -136,7 +136,7 @@ class Config extends ConfigData
 
                 $renderer = isset($typeConfig['renderer']) ? (string)$typeConfig['renderer'] : null;
                 if (!$renderer) {
-                    $renderer = self::DEFAULT_ADDRESS_RENDERER;
+                    $renderer = static::DEFAULT_ADDRESS_RENDERER;
                 }
 
                 $type->setRenderer($this->_addressHelper->getRenderer($renderer)->setType($type));
@@ -167,7 +167,7 @@ class Config extends ConfigData
                 '{{var street}}, {{var city}}, {{var region}} {{var postcode}}, {{var country}}'
             );
 
-            $renderer = $this->_addressHelper->getRenderer(self::DEFAULT_ADDRESS_RENDERER)
+            $renderer = $this->_addressHelper->getRenderer(static::DEFAULT_ADDRESS_RENDERER)
                 ->setType($this->_defaultTypes[$storeId]);
             $this->_defaultTypes[$storeId]->setRenderer($renderer);
         }
