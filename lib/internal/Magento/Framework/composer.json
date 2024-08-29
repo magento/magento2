@@ -44,7 +44,7 @@
         "magento/zend-cache": "^1.16",
         "magento/zend-db": "^1.16",
         "magento/zend-pdf": "^1.16",
-        "monolog/monolog": "^2.7",
+        "monolog/monolog": "^3.6",
         "psr/log": "^2 || ^3",
         "ramsey/uuid": "^4.2",
         "symfony/console": "^6.4",
