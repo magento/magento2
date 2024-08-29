@@ -43,6 +43,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
 use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Customer\Model\AddressRegistry;
 
 /**
  * Class for managing quote
@@ -184,6 +185,11 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     private $cartMutex;
 
     /**
+     * @var AddressRegistry
+     */
+    private $addressRegistry;
+
+    /**
      * @param EventManager $eventManager
      * @param SubmitQuoteValidator $submitQuoteValidator
      * @param OrderFactory $orderFactory
@@ -210,6 +216,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
      * @param RemoteAddress|null $remoteAddress
      * @param LockManagerInterface $lockManager
      * @param CartMutexInterface|null $cartMutex
+     * @param AddressRegistry|null $addressRegistry
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -239,7 +246,8 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         RequestInterface $request = null,
         RemoteAddress $remoteAddress = null,
         LockManagerInterface $lockManager = null,
-        ?CartMutexInterface $cartMutex = null
+        ?CartMutexInterface $cartMutex = null,
+        ?AddressRegistry $addressRegistry = null
     ) {
         $this->eventManager = $eventManager;
         $this->submitQuoteValidator = $submitQuoteValidator;
@@ -271,6 +279,8 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             ->get(RemoteAddress::class);
         $this->cartMutex = $cartMutex
             ?? ObjectManager::getInstance()->get(CartMutexInterface::class);
+        $this->addressRegistry = $addressRegistry
+            ?? ObjectManager::getInstance()->get(AddressRegistry::class);
     }
 
     /**
@@ -696,7 +706,9 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
                 }
                 //save here new customer address
                 $shippingAddress->setCustomerId($quote->getCustomerId());
-                $this->addressRepository->save($shippingAddress);
+                if ($this->validateAddress((int) $shippingAddress->getId()) === true) {
+                    $this->addressRepository->save($shippingAddress);
+                }
                 $quote->addCustomerAddress($shippingAddress);
                 $shipping->setCustomerAddressData($shippingAddress);
                 $this->addressesToSync[] = $shippingAddress->getId();
@@ -728,7 +740,9 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
                     $billingAddress->setIsDefaultBilling(true);
                 }
                 $billingAddress->setCustomerId($quote->getCustomerId());
-                $this->addressRepository->save($billingAddress);
+                if ($this->validateAddress((int) $billingAddress->getId()) === true) {
+                    $this->addressRepository->save($billingAddress);
+                }
                 $quote->addCustomerAddress($billingAddress);
                 $billing->setCustomerAddressData($billingAddress);
                 $this->addressesToSync[] = $billingAddress->getId();
@@ -790,5 +804,18 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     public function _resetState(): void
     {
         $this->addressesToSync = [];
+    }
+
+    /**
+     * Validate address
+     *
+     * @param int|null $addressId
+     * @return array|bool
+     * @throws NoSuchEntityException
+     */
+    private function validateAddress(?int $addressId): bool|array
+    {
+        $addressModel = $this->addressRegistry->retrieve($addressId);
+        return $addressModel->validate();
     }
 }
