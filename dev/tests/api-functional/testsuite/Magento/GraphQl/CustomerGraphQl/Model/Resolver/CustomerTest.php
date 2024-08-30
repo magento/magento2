@@ -618,7 +618,7 @@ class CustomerTest extends ResolverCacheAbstract
         );
     }
 
-    public function invalidationMechanismProvider(): array
+    public static function invalidationMechanismProvider(): array
     {
         // provider is invoked before setUp() is called so need to init here
         $repo = Bootstrap::getObjectManager()->get(
