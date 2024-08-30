@@ -22,3 +22,7 @@ type CancelOrderOutput @doc(description: "Contains the updated customer order an
     error: String @doc(description: "Error encountered while cancelling the order.")
     order: CustomerOrder @doc(description: "Updated customer order.")
 }
+
+enum OrderActionType @doc(description: "The list of available order actions.") {
+    CANCEL
+}
