@@ -16,18 +16,18 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
     /**#@+
      * Attributes used in test assertions
      */
-    const ATTRIBUTE_CODE_FIRST_NAME = 'firstname';
+    public const ATTRIBUTE_CODE_FIRST_NAME = 'firstname';
 
-    const ATTRIBUTE_CODE_LAST_NAME = 'lastname';
+    public const ATTRIBUTE_CODE_LAST_NAME = 'lastname';
 
     /**#@-*/
 
     /**#@+
      * Source *.csv file names for different behaviors
      */
-    const UPDATE_FILE_NAME = 'customer_composite_update.csv';
+    public const UPDATE_FILE_NAME = 'customer_composite_update.csv';
 
-    const DELETE_FILE_NAME = 'customer_composite_delete.csv';
+    public const DELETE_FILE_NAME = 'customer_composite_delete.csv';
 
     /**#@-*/
 
