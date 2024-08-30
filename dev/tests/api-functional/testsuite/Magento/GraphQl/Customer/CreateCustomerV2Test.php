@@ -79,7 +79,7 @@ QUERY;
     /**
      * @return array
      */
-    public function validEmailAddressDataProvider(): array
+    public static function validEmailAddressDataProvider(): array
     {
         return [
             ['new_customer@example.com'],
@@ -222,7 +222,7 @@ QUERY;
     /**
      * @return array
      */
-    public function invalidEmailAddressDataProvider(): array
+    public static function invalidEmailAddressDataProvider(): array
     {
         return [
             ['plainaddress'],
