@@ -14,9 +14,6 @@ use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Class ExpiredQuotesCollection
- */
 class ExpiredQuotesCollection
 {
     /**
