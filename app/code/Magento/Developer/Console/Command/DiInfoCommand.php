@@ -53,8 +53,8 @@ class DiInfoCommand extends Command
         ?AreaList   $areaList = null
     )
     {
-        $this->areaList = $areaList ?? \Magento\Framework\App\ObjectManager::getInstance()->get(AreaList::class);
         $this->diInformation = $diInformation;
+        $this->areaList = $areaList ?? \Magento\Framework\App\ObjectManager::getInstance()->get(AreaList::class);
         parent::__construct();
     }
 
@@ -208,11 +208,12 @@ class DiInfoCommand extends Command
         if ($this->validateAreaCodeFromInput($area)) {
             $objectManager = ObjectManager::getInstance();
 
-            $objectManager->configure(
-                $objectManager
-                    ->get(\Magento\Framework\App\ObjectManager\ConfigLoader::class)
-                    ->load($area)
-            );
+            $areaOmConfiguration = $objectManager
+                ->get(\Magento\Framework\App\ObjectManager\ConfigLoader::class)
+                ->load($area);
+
+            $objectManager->configure($areaOmConfiguration);
+
             $objectManager->get(\Magento\Framework\Config\ScopeInterface::class)
                 ->setCurrentScope($area);
         } else {
