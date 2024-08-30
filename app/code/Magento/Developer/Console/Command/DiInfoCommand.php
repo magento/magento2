@@ -50,9 +50,10 @@ class DiInfoCommand extends Command
      */
     public function __construct(
         Information $diInformation,
-        AreaList    $areaList
-    ) {
-        $this->areaList = $areaList;
+        ?AreaList   $areaList = null
+    )
+    {
+        $this->areaList = $areaList ?? \Magento\Framework\App\ObjectManager::getInstance()->get(AreaList::class);
         $this->diInformation = $diInformation;
         parent::__construct();
     }
@@ -202,7 +203,7 @@ class DiInfoCommand extends Command
      * @return void
      * @throws \InvalidArgumentException
      */
-    private function setDiArea($area)
+    private function setDiArea($area): void
     {
         if ($this->validateAreaCodeFromInput($area)) {
             $objectManager = ObjectManager::getInstance();
@@ -225,7 +226,7 @@ class DiInfoCommand extends Command
      * @param string $area
      * @return bool
      */
-    private function validateAreaCodeFromInput($area)
+    private function validateAreaCodeFromInput($area): bool
     {
         $availableAreaCodes = $this->areaList->getCodes();
         return in_array($area, $availableAreaCodes, true);
