@@ -1,21 +1,31 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
 declare(strict_types=1);
 
 namespace Magento\Customer\Model\Validator;
 
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Validator\AbstractValidator;
+use Magento\Security\Model\Validator\Pattern\NameValidator;
 
 /**
  * Customer name fields validator.
  */
 class Name extends AbstractValidator
 {
-    private const PATTERN_NAME = '/(?:[\p{L}\p{M}\,\-\_\.\'’`&\s\d]){1,255}+/u';
+    /**
+     * @var NameValidator
+     */
+    private NameValidator $nameValidator;
+
+    /**
+     * Constructor.
+     *
+     * @param NameValidator $nameValidator
+     */
+    public function __construct(NameValidator $nameValidator)
+    {
+        $this->nameValidator = $nameValidator;
+    }
 
     /**
      * Validate name fields.
@@ -23,37 +33,38 @@ class Name extends AbstractValidator
      * @param Customer $customer
      * @return bool
      */
-    public function isValid($customer)
+    public function isValid($customer): bool
     {
-        if (!$this->isValidName($customer->getFirstname())) {
-            parent::_addMessages([['firstname' => 'First Name is not valid!']]);
+        if (!$this->nameValidator->isValidationEnabled()) {
+            return true;
         }
 
-        if (!$this->isValidName($customer->getLastname())) {
-            parent::_addMessages([['lastname' => 'Last Name is not valid!']]);
-        }
+        $nameFields = [
+            'Firstname' => $customer->getFirstname(),
+            'Lastname' => $customer->getLastname(),
+            'Middlename' => $customer->getMiddlename()
+        ];
 
-        if (!$this->isValidName($customer->getMiddlename())) {
-            parent::_addMessages([['middlename' => 'Middle Name is not valid!']]);
+        foreach ($nameFields as $fieldName => $fieldValue) {
+            if (!empty($fieldValue) && !$this->isValidName($fieldName, $fieldValue)) {
+                parent::_addMessages([
+                    __('%1 is not valid! Allowed characters: %2', $fieldName, $this->nameValidator->allowedCharsDescription)
+                ]);
+            }
         }
 
         return count($this->_messages) == 0;
     }
 
     /**
-     * Check if name field is valid.
+     * Check if name field is valid using the NameValidator.
      *
+     * @param string $fieldName
      * @param string|null $nameValue
      * @return bool
      */
-    private function isValidName($nameValue)
+    private function isValidName(string $fieldName, ?string $nameValue): bool
     {
-        if ($nameValue != null) {
-            if (preg_match(self::PATTERN_NAME, $nameValue, $matches)) {
-                return $matches[0] == $nameValue;
-            }
-        }
-
-        return true;
+        return $this->nameValidator->isValid($nameValue);
     }
 }
