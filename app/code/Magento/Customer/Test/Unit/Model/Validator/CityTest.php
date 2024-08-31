@@ -9,7 +9,6 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Validator\City;
-use Magento\Security\Model\Validator\Pattern\CityValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -18,11 +17,6 @@ use PHPUnit\Framework\TestCase;
  */
 class CityTest extends TestCase
 {
-    /**
-     * @var CityValidator|MockObject
-     */
-    private MockObject $cityValidatorMock;
-
     /**
      * @var Address|MockObject
      */
@@ -38,9 +32,8 @@ class CityTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->cityValidatorMock = $this->createMock(CityValidator::class);
         $this->addressMock = $this->createMock(Address::class);
-        $this->cityValidator = new City($this->cityValidatorMock);
+        $this->cityValidator = new City();
     }
 
     /**
@@ -54,9 +47,8 @@ class CityTest extends TestCase
     public function testValidateCorrectPunctuationInCities(
         string $city,
         string $message
-    ) {
+    ): void {
         $this->addressMock->expects($this->once())->method('getCity')->willReturn($city);
-        $this->cityValidatorMock->expects($this->once())->method('isValid')->with($city)->willReturn(true);
 
         $isValid = $this->cityValidator->isValid($this->addressMock);
         $this->assertTrue($isValid, $message);
