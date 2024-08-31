@@ -53,7 +53,7 @@ class StreetValidator extends AbstractValidator
      *
      * @var string
      */
-    public string $allowedCharsDescription = 'A-Z, a-z, 0-9, -, ., \', ’, `, &, space, [, ], (, )';
+    public string $allowedCharsDescription = 'A-Z, a-z, 0-9, -, ., \', ’, `, &, space, [, ], (, ), /, \,';
 
     /**
      * @var ScopeConfigInterface
