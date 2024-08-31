@@ -7,79 +7,99 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Validator;
 
+use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Validator\City;
-use Magento\Customer\Model\Customer;
+use Magento\Security\Model\Validator\Pattern\CityValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Customer city validator tests
+ * City validator tests
  */
 class CityTest extends TestCase
 {
     /**
-     * @var City
+     * @var CityValidator|MockObject
      */
-    private City $nameValidator;
+    private MockObject $cityValidatorMock;
 
     /**
-     * @var Customer|MockObject
+     * @var Address|MockObject
      */
-    private MockObject $customerMock;
+    private MockObject $addressMock;
+
+    /**
+     * @var City
+     */
+    private City $cityValidator;
 
     /**
      * @return void
      */
     protected function setUp(): void
     {
-        $this->nameValidator = new City;
-        $this->customerMock = $this
-            ->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCity'])
-            ->getMock();
+        $this->cityValidatorMock = $this->createMock(CityValidator::class);
+        $this->addressMock = $this->createMock(Address::class);
+        $this->cityValidator = new City($this->cityValidatorMock);
     }
 
     /**
-     * Test for allowed apostrophe and other punctuation characters in customer names
+     * Test for allowed punctuation characters in city names
      *
      * @param string $city
      * @param string $message
      * @return void
-     * @dataProvider expectedPunctuationInNamesDataProvider
+     * @dataProvider expectedPunctuationInCityDataProvider
      */
-    public function testValidateCorrectPunctuationInNames(
+    public function testValidateCorrectPunctuationInCities(
         string $city,
         string $message
     ) {
-        $this->customerMock->expects($this->once())->method('getCity')->willReturn($city);
+        $this->addressMock->expects($this->once())->method('getCity')->willReturn($city);
+        $this->cityValidatorMock->expects($this->once())->method('isValid')->with($city)->willReturn(true);
 
-        $isValid = $this->nameValidator->isValid($this->customerMock);
+        $isValid = $this->cityValidator->isValid($this->addressMock);
         $this->assertTrue($isValid, $message);
     }
 
     /**
      * @return array
      */
-    public function expectedPunctuationInNamesDataProvider(): array
+    public function expectedPunctuationInCityDataProvider(): array
     {
         return [
             [
+                'city' => 'New York',
+                'message' => 'Spaces must be allowed in city names'
+            ],
+            [
+                'city' => 'São Paulo',
+                'message' => 'Accented characters and spaces must be allowed in city names'
+            ],
+            [
+                'city' => 'St. Louis',
+                'message' => 'Periods and spaces must be allowed in city names'
+            ],
+            [
                 'city' => 'Москва',
-                'message' => 'Unicode letters must be allowed in city'
+                'message' => 'Unicode letters must be allowed in city names'
             ],
             [
-                'city' => 'Мо́сква',
-                'message' => 'Unicode marks must be allowed in city'
+                'city' => 'Moscow \'',
+                'message' => 'Apostrophe characters must be allowed in city names'
             ],
             [
-                'city' => ' Moscow \'',
-                'message' => 'Apostrophe characters must be allowed in city'
+                'city' => 'St.-Pierre',
+                'message' => 'Hyphens must be allowed in city names'
             ],
             [
-                'city' => ' Moscow Moscow',
-                'message' => 'Whitespace characters must be allowed in city'
-            ]
+                'city' => 'Offenbach (Main)',
+                'message' => 'Parentheses must be allowed in city names'
+            ],
+            [
+                'city' => 'Rome: The Eternal City',
+                'message' => 'Colons must be allowed in city names'
+            ],
         ];
     }
 }
