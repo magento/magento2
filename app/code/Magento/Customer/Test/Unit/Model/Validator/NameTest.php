@@ -9,7 +9,6 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Validator\Name;
-use Magento\Security\Model\Validator\Pattern\NameValidator as PatternNameValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -18,11 +17,6 @@ use PHPUnit\Framework\TestCase;
  */
 class NameTest extends TestCase
 {
-    /**
-     * @var PatternNameValidator|MockObject
-     */
-    private MockObject $patternNameValidatorMock;
-
     /**
      * @var Name
      */
@@ -38,8 +32,7 @@ class NameTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->patternNameValidatorMock = $this->createMock(PatternNameValidator::class);
-        $this->nameValidator = new Name($this->patternNameValidatorMock);
+        $this->nameValidator = new Name();
         $this->customerMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -62,15 +55,10 @@ class NameTest extends TestCase
         string $middleName,
         string $lastName,
         string $message
-    ) {
+    ): void {
         $this->customerMock->expects($this->once())->method('getFirstname')->willReturn($firstName);
         $this->customerMock->expects($this->once())->method('getMiddlename')->willReturn($middleName);
         $this->customerMock->expects($this->once())->method('getLastname')->willReturn($lastName);
-
-        $this->patternNameValidatorMock->expects($this->exactly(3))
-            ->method('isValid')
-            ->withConsecutive([$firstName], [$middleName], [$lastName])
-            ->willReturn(true);
 
         $isValid = $this->nameValidator->isValid($this->customerMock);
         $this->assertTrue($isValid, $message);
