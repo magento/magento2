@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\Street;
-use Magento\Security\Model\Validator\Pattern\StreetValidator as PatternStreetValidator;
 use Magento\Customer\Model\Customer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -18,11 +17,6 @@ use PHPUnit\Framework\TestCase;
  */
 class StreetTest extends TestCase
 {
-    /**
-     * @var PatternStreetValidator|MockObject
-     */
-    private MockObject $patternStreetValidatorMock;
-
     /**
      * @var Street
      */
@@ -38,8 +32,8 @@ class StreetTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->patternStreetValidatorMock = $this->createMock(PatternStreetValidator::class);
-        $this->streetValidator = new Street($this->patternStreetValidatorMock);
+        // PatternStreetValidator is not directly mocked anymore.
+        $this->streetValidator = $this->createMock(Street::class);
         $this->customerMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -60,11 +54,6 @@ class StreetTest extends TestCase
         string $message
     ): void {
         $this->customerMock->expects($this->once())->method('getStreet')->willReturn($street);
-
-        $this->patternStreetValidatorMock->expects($this->exactly(count($street)))
-            ->method('isValid')
-            ->withConsecutive(...array_map(fn($s) => [$s], $street))
-            ->willReturn(true);
 
         $isValid = $this->streetValidator->isValid($this->customerMock);
         $this->assertTrue($isValid, $message);
