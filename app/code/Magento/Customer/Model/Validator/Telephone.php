@@ -1,14 +1,11 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
 declare(strict_types=1);
 
 namespace Magento\Customer\Model\Validator;
 
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Validator\AbstractValidator;
+use Magento\Security\Model\Validator\Pattern\TelephoneValidator;
 
 /**
  * Customer telephone fields validator.
@@ -16,46 +13,57 @@ use Magento\Framework\Validator\AbstractValidator;
 class Telephone extends AbstractValidator
 {
     /**
-     * Allowed char:
-     *
-     * \() :Matches open and close parentheses
-     * \+: Matches the plus sign.
-     * \-: Matches the hyphen.
-     * \d: Digits (0-9).
+     * @var TelephoneValidator
      */
-    private const PATTERN_TELEPHONE = '/(?:[\d\s\+\-\()]{1,20})/u';
-    
+    private TelephoneValidator $telephoneValidator;
+
+    /**
+     * Constructor.
+     *
+     * @param TelephoneValidator $telephoneValidator
+     */
+    public function __construct(TelephoneValidator $telephoneValidator)
+    {
+        $this->telephoneValidator = $telephoneValidator;
+    }
+
     /**
      * Validate telephone fields.
      *
      * @param Customer $customer
      * @return bool
      */
-    public function isValid($customer)
+    public function isValid($customer): bool
     {
-        if (!$this->isValidTelephone($customer->getTelephone())) {
-            parent::_addMessages([[
-                'telephone' => "Invalid Phone Number. Please use 0-9, +, -, (, ) and space."
-            ]]);
+        if (!$this->telephoneValidator->isValidationEnabled()) {
+            return true;
+        }
+
+        $telephoneFields = [
+            'Phone Number' => $customer->getTelephone(),
+            'Fax Number' => $customer->getFax()
+        ];
+
+        foreach ($telephoneFields as $fieldName => $fieldValue) {
+            if (!empty($fieldValue) && !$this->validateTelephoneField($fieldName, $fieldValue)) {
+                parent::_addMessages([
+                    __('%1 is not valid! Allowed characters: %2', $fieldName, $this->telephoneValidator->allowedCharsDescription)
+                ]);
+            }
         }
 
         return count($this->_messages) == 0;
     }
 
     /**
-     * Check if telephone field is valid.
+     * Validate a single telephone field.
      *
-     * @param string|null $telephoneValue
+     * @param string $fieldName
+     * @param mixed $telephoneValue
      * @return bool
      */
-    private function isValidTelephone($telephoneValue)
+    private function validateTelephoneField(string $fieldName, mixed $telephoneValue): bool
     {
-        if ($telephoneValue != null) {
-            if (preg_match(self::PATTERN_TELEPHONE, (string) $telephoneValue, $matches)) {
-                return $matches[0] == $telephoneValue;
-            }
-        }
-
-        return true;
+        return $this->telephoneValidator->isValid($telephoneValue);
     }
 }
