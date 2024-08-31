@@ -1,0 +1,111 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+namespace Magento\Security\Model\Validator\Pattern;
+
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Validator\AbstractValidator;
+
+/**
+ * Customer city fields pattern validator.
+ */
+class CityValidator extends AbstractValidator
+{
+     /**
+     * Allowed characters:
+     *
+     * \p{L}: Unicode letters.
+     * \p{M}: Unicode marks (diacritic marks, accents, etc.).
+     * ': Apostrophe mark.
+     * \s: Whitespace characters (spaces, tabs, newlines, etc.).
+     * \-: Hyphen.
+     * \.: Period.
+     * \&: Ampersand.
+     * \[\]: Square brackets.
+     * \(\): Parentheses.
+     * \:: Colon.
+     * \/: Forward slash.
+     * \\\\: Backslash (double escaped for regex).
+     */
+    private const PATTERN_CITY = '/^[\p{L}\p{M}\s\-\.\'\&\[\]\(\):\/\\\\]{1,255}$/u';
+
+    
+    /**
+     * XML path for regex validation.
+     *
+     * @var string
+     */
+    public const XML_PATH_SECURITY_PATTERN_ENABLED = 'system/security_pattern/security_pattern';
+    
+    /**
+     * XML path for regex validation.
+     *
+     * @var string
+     */
+    public const XML_PATH_SECURITY_PATTERN_CITY_ENABLED = 'system/security_pattern/security_pattern_city';
+    
+    /**
+     * Description of allowed characters for city fields.
+     *
+     * @var string
+     */
+    public string $allowedCharsDescription = 'A-Z, a-z, 0-9, -, ., \', &, [, ], (, ), :';
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private ScopeConfigInterface $scopeConfig;
+
+    /**
+     * Constructor.
+     *
+     * @param ScopeConfigInterface $scopeConfig
+     */
+    public function __construct(ScopeConfigInterface $scopeConfig)
+    {
+        $this->scopeConfig = $scopeConfig;
+    }
+
+    /**
+     * Check if both the global security pattern and city validation are enabled in the configuration.
+     *
+     * @return bool
+     */
+    public function isValidationEnabled(): bool
+    {
+        // Check if the global security pattern validation is enabled
+        $isGlobalPatternEnabled = $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SECURITY_PATTERN_ENABLED, 
+            ScopeInterface::SCOPE_STORE
+        );
+
+        // Check if the specific city validation is enabled
+        $isCityValidationEnabled = $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SECURITY_PATTERN_CITY_ENABLED, 
+            ScopeInterface::SCOPE_STORE
+        );
+
+        // Return true only if both are enabled
+        return $isGlobalPatternEnabled && $isCityValidationEnabled;
+    }
+
+    /**
+     * Validate the city value against the pattern.
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    public function isValid($value): bool
+    {
+        if ($value === null || $value === '' || !is_string($value)) {
+            return true;
+        }
+
+        return preg_match(self::PATTERN_CITY, trim($value)) === 1;
+    }
+}
