@@ -44,7 +44,7 @@ class ForbiddenPattern extends AbstractValidator
             return true;
         }
 
-        $customerData = $customer->getData();        
+        $customerData = $customer->getData();
         if (empty($customerData)) {
             return true;
         }
