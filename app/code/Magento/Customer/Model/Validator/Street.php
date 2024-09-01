@@ -52,7 +52,8 @@ class Street extends AbstractValidator
         foreach ($streets as $street) {
             if (!$this->validateStreetField('Street', $street)) {
                 parent::_addMessages([
-                    'street' => __('Street is not valid! Allowed characters: %1', $this->streetValidator->allowedCharsDescription)
+                    'street' => __('Street is not valid! Allowed characters: %1',
+                                   $this->streetValidator->allowedCharsDescription)
                 ]);
             }
         }
@@ -63,11 +64,10 @@ class Street extends AbstractValidator
     /**
      * Validate the street field.
      *
-     * @param string $fieldName
      * @param string|null $streetValue
      * @return bool
      */
-    private function validateStreetField(string $fieldName, ?string $streetValue): bool
+    private function validateStreetField(?string $streetValue): bool
     {
         return $this->streetValidator->isValid($streetValue);
     }
