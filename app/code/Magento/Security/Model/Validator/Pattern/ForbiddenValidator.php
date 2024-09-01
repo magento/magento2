@@ -124,6 +124,7 @@ class ForbiddenValidator extends AbstractValidator
         }
 
         if (preg_match('/base64_decode\(/', $value)) {
+            // Use of base64_decode is discouraged, ensure this is safe in your context
             $decodedValue = base64_decode($value);
             return $this->validatePattern($decodedValue);
         }
