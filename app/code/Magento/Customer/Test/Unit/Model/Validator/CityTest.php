@@ -23,9 +23,9 @@ class CityTest extends TestCase
     private City $cityValidator;
 
     /**
-     * @var AbstractAddress|MockObject
+     * @var Customer|MockObject
      */
-    private MockObject $addressMock;
+    private MockObject $customerMock;
 
     /**
      * @return void
@@ -50,7 +50,7 @@ class CityTest extends TestCase
      * @dataProvider expectedPunctuationInCityDataProvider
      */
     public function testValidateCityName(
-        string $city, 
+        string $city,
         string $message
     ): void {
         $this->customerMock->expects($this->once())->method('getCity')->willReturn($city);
