@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Customer\Test\Unit\Model\Validator;
+namespace Magento\Customer\Test\Unit\Model\Address\Validator;
 
+use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Model\Validator\Street;
-use Magento\Customer\Model\Customer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Customer street validator tests
+ * Test for validating street field in address.
  */
 class StreetTest extends TestCase
 {
@@ -23,44 +23,44 @@ class StreetTest extends TestCase
     private Street $streetValidator;
 
     /**
-     * @var Customer|MockObject
+     * @var AbstractAddress|MockObject
      */
-    private MockObject $customerMock;
+    private MockObject $addressMock;
 
     /**
      * @return void
      */
     protected function setUp(): void
     {
-        // PatternStreetValidator is not directly mocked anymore.
-        $this->streetValidator = $this->createMock(Street::class);
-        $this->customerMock = $this
-            ->getMockBuilder(Customer::class)
+        $this->streetValidator = new Street();
+        
+        $this->addressMock = $this
+            ->getMockBuilder(AbstractAddress::class)
             ->disableOriginalConstructor()
             ->addMethods(['getStreet'])
-            ->getMock();
+            ->getMock();        
     }
 
     /**
-     * Test for allowed characters in street addresses
+     * Test for valid street name
      *
      * @param array $street
      * @param string $message
      * @return void
      * @dataProvider expectedPunctuationInStreetDataProvider
      */
-    public function testValidateCorrectPunctuationInStreet(
-        array $street,
+    public function testValidateStreetName(
+        array $street, 
         string $message
     ): void {
-        $this->customerMock->expects($this->once())->method('getStreet')->willReturn($street);
+        $this->addressMock->expects($this->once())->method('getStreet')->willReturn($street);
 
-        $isValid = $this->streetValidator->isValid($this->customerMock);
+        $isValid = $this->streetValidator->isValid($street);
         $this->assertTrue($isValid, $message);
     }
 
     /**
-     * Data provider for valid street names
+     * Data provider for street names
      *
      * @return array
      */
