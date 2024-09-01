@@ -5,56 +5,63 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Customer\Test\Unit\Model\Validator;
+namespace Magento\Customer\Test\Unit\Model\Address\Validator;
 
-use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Model\Validator\City;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * City validator tests
+ * Test for validating city field in address.
  */
 class CityTest extends TestCase
 {
-    /**
-     * @var Address|MockObject
-     */
-    private MockObject $addressMock;
-
     /**
      * @var City
      */
     private City $cityValidator;
 
     /**
+     * @var AbstractAddress|MockObject
+     */
+    private MockObject $addressMock;
+
+    /**
      * @return void
      */
     protected function setUp(): void
     {
-        $this->addressMock = $this->createMock(Address::class);
         $this->cityValidator = new City();
+        
+        $this->addressMock = $this
+            ->getMockBuilder(AbstractAddress::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getCity'])
+            ->getMock();        
     }
 
     /**
-     * Test for allowed punctuation characters in city names
+     * Test for valid city name
      *
      * @param string $city
-     * @param string $message
+     * @param bool $expectedIsValid
      * @return void
      * @dataProvider expectedPunctuationInCityDataProvider
      */
-    public function testValidateCorrectPunctuationInCities(
-        string $city,
-        string $message
+    public function testValidateCityName(
+        string $city, 
+        bool $expectedIsValid
     ): void {
         $this->addressMock->expects($this->once())->method('getCity')->willReturn($city);
 
-        $isValid = $this->cityValidator->isValid($this->addressMock);
+        $isValid = $this->cityValidator->isValid($city);
         $this->assertTrue($isValid, $message);
     }
 
     /**
+     * Data provider for city names
+     *
      * @return array
      */
     public function expectedPunctuationInCityDataProvider(): array
