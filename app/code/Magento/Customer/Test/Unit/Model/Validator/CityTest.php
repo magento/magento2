@@ -34,11 +34,11 @@ class CityTest extends TestCase
     {
         $this->cityValidator = new City();
         
-        $this->addressMock = $this
+        $this->customerMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->addMethods(['getCity'])
-            ->getMock();        
+            ->getMock();
     }
 
     /**
@@ -51,11 +51,11 @@ class CityTest extends TestCase
      */
     public function testValidateCityName(
         string $city, 
-        bool $expectedIsValid
+        string $message
     ): void {
-        $this->addressMock->expects($this->once())->method('getCity')->willReturn($city);
+        $this->customerMock->expects($this->once())->method('getCity')->willReturn($city);
 
-        $isValid = $this->cityValidator->isValid($city);
+        $isValid = $this->cityValidator->isValid($this->customerMock);
         $this->assertTrue($isValid, $message);
     }
 
