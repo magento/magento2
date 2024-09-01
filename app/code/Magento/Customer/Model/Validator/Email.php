@@ -58,15 +58,15 @@ class Email extends AbstractValidator
     /**
      * Validate the email field.
      *
-     * @param string $fieldName
      * @param string|null $emailValue
      * @return bool
      */
-    private function validateEmailField(string $fieldName, ?string $emailValue): bool
+    private function validateEmailField(?string $emailValue): bool
     {
         if (!$this->emailValidator->isValid($emailValue)) {
             parent::_addMessages([
-                "Email address is not valid! Allowed characters: {$this->emailValidator->allowedCharsDescription}"
+                __('Email address is not valid! Allowed characters: %1',
+                   $this->emailValidator->allowedCharsDescription)
             ]);
             return false;
         }
