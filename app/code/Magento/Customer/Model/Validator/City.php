@@ -50,7 +50,8 @@ class City extends AbstractValidator
 
         if (!$this->validateCityField('City', $cityField)) {
             parent::_addMessages([
-                __('%1 is not valid! Allowed characters: %2', 'City', $this->cityValidator->allowedCharsDescription)
+                __('%1 is not valid! Allowed characters: %2',
+                   'City', $this->cityValidator->allowedCharsDescription)
             ]);
         }
 
