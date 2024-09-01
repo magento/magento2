@@ -23,9 +23,9 @@ class StreetTest extends TestCase
     private Street $streetValidator;
 
     /**
-     * @var AbstractAddress|MockObject
+     * @var Customer|MockObject
      */
-    private MockObject $addressMock;
+    private MockObject $customerMock;
 
     /**
      * @return void
@@ -34,11 +34,11 @@ class StreetTest extends TestCase
     {
         $this->streetValidator = new Street();
         
-        $this->addressMock = $this
+        $this->customerMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->addMethods(['getStreet'])
-            ->getMock();        
+            ->getMock();
     }
 
     /**
@@ -50,12 +50,12 @@ class StreetTest extends TestCase
      * @dataProvider expectedPunctuationInStreetDataProvider
      */
     public function testValidateStreetName(
-        array $street, 
+        array $street,
         string $message
     ): void {
-        $this->addressMock->expects($this->once())->method('getStreet')->willReturn($street);
+        $this->customerMock->expects($this->once())->method('getStreet')->willReturn($street);
 
-        $isValid = $this->streetValidator->isValid($street);
+        $isValid = $this->streetValidator->isValid($this->customerMock);
         $this->assertTrue($isValid, $message);
     }
 
