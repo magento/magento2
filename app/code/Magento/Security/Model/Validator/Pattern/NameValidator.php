@@ -16,6 +16,8 @@ use Magento\Framework\Validator\AbstractValidator;
  */
 class NameValidator extends AbstractValidator
 {
+    private const PATTERN_NAME = '/(?:[\p{L}\p{M}\,\-\_\.\'’`&\s\d]){1,255}+/u';
+    
     /**
      * Allowed characters for validating names:
      *
@@ -34,7 +36,7 @@ class NameValidator extends AbstractValidator
      *
      * The pattern ensures that a name can be between 1 and 255 characters long.
      */
-    private const PATTERN_NAME = '/^(?:[\p{L}\p{M},\-_.\'’`&\s\d]{1,255})$/u';
+    public string $patternName = '/^(?:[\p{L}\p{M},\-_.\'’`&\s\d]{1,255})$/u';
     
     /**
      * XML path for regex validation.
@@ -60,7 +62,7 @@ class NameValidator extends AbstractValidator
     /**
      * @var ScopeConfigInterface
      */
-    private $scopeConfig;
+    private ScopeConfigInterface $scopeConfig;
 
     /**
      * Constructor.
@@ -81,13 +83,13 @@ class NameValidator extends AbstractValidator
     {
         // Check if the global security pattern validation is enabled
         $isGlobalPatternEnabled = $this->scopeConfig->isSetFlag(
-            self::XML_PATH_SECURITY_PATTERN_ENABLED, 
+            self::XML_PATH_SECURITY_PATTERN_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
 
         // Check if the specific name validation is enabled
         $isNameValidationEnabled = $this->scopeConfig->isSetFlag(
-            self::XML_PATH_SECURITY_PATTERN_NAME_ENABLED, 
+            self::XML_PATH_SECURITY_PATTERN_NAME_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
 
@@ -107,6 +109,8 @@ class NameValidator extends AbstractValidator
             return true;
         }
 
-        return preg_match(self::PATTERN_NAME, trim($value)) === 1;
+        $pattern = $this->isValidationEnabled() ? $this->patternName : self::PATTERN_NAME;
+
+        return preg_match($pattern, trim($value)) === 1;
     }
 }
