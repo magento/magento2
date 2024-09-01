@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Address\Validator;
 
-use Magento\Customer\Model\Address\AbstractAddress;
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Validator\Street;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -35,7 +35,7 @@ class StreetTest extends TestCase
         $this->streetValidator = new Street();
         
         $this->addressMock = $this
-            ->getMockBuilder(AbstractAddress::class)
+            ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->addMethods(['getStreet'])
             ->getMock();        
