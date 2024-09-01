@@ -29,7 +29,7 @@ class TelephoneValidator extends AbstractValidator
      *
      * The pattern ensures that a phone number can be between 1 and 40 characters long.
      */
-    private const PATTERN_TELEPHONE = '/^[\d\s\+\-\()\/]{1,40}$/u';
+    public string $patternTelephone = '/^[\d\s\+\-\()\/]{1,40}$/u';
     
     /**
      * XML path for regex validation.
@@ -76,13 +76,13 @@ class TelephoneValidator extends AbstractValidator
     {
         // Check if the global security pattern validation is enabled
         $isGlobalPatternEnabled = $this->scopeConfig->isSetFlag(
-            self::XML_PATH_SECURITY_PATTERN_ENABLED, 
+            self::XML_PATH_SECURITY_PATTERN_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
 
         // Check if the specific telephone validation is enabled
         $isTelephoneValidationEnabled = $this->scopeConfig->isSetFlag(
-            self::XML_PATH_SECURITY_PATTERN_TELEPHONE_ENABLED, 
+            self::XML_PATH_SECURITY_PATTERN_TELEPHONE_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
 
@@ -102,6 +102,6 @@ class TelephoneValidator extends AbstractValidator
             return true;
         }
 
-        return preg_match(self::PATTERN_TELEPHONE, trim($value)) === 1;
+        return preg_match($this->patternTelephone, trim($value)) === 1;
     }
 }
