@@ -32,7 +32,7 @@ class StreetValidator extends AbstractValidator
      * \[\]: Square brackets.
      * \(\): Parentheses.
      */
-    private const PATTERN_STREET = "/^[\p{L}\p{M}\,\-\.\'’`&\s\d\[\]\(\)]{1,255}$/u";
+    public string $patterStreet = "/^[\p{L}\p{M}\,\-\.\'’`&\s\d\[\]\(\)]{1,255}$/u";
 
     /**
      * XML path for global security pattern validation.
@@ -53,7 +53,7 @@ class StreetValidator extends AbstractValidator
      *
      * @var string
      */
-    public string $allowedCharsDescription = 'A-Z, a-z, 0-9, -, ., \', ’, `, &, space, [, ], (, ), /';
+    public string $allowedCharsDescription = 'A-Z, a-z, 0-9, -, ., \', ’, `, &, space, [, ], (, )';
 
     /**
      * @var ScopeConfigInterface
@@ -140,6 +140,6 @@ class StreetValidator extends AbstractValidator
             return true;
         }
 
-        return preg_match(self::PATTERN_STREET, trim($streetValue)) === 1;
+        return preg_match($this->$patterStreet, trim($streetValue)) === 1;
     }
 }
