@@ -32,7 +32,7 @@ class NameTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->nameValidator = new Name();
+        $this->nameValidator = new Name;
         $this->customerMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -55,7 +55,7 @@ class NameTest extends TestCase
         string $middleName,
         string $lastName,
         string $message
-    ): void {
+    ) {
         $this->customerMock->expects($this->once())->method('getFirstname')->willReturn($firstName);
         $this->customerMock->expects($this->once())->method('getMiddlename')->willReturn($middleName);
         $this->customerMock->expects($this->once())->method('getLastname')->willReturn($lastName);
