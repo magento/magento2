@@ -39,9 +39,6 @@ class Name extends AbstractValidator
      */
     public function isValid($customer): bool
     {
-        if (!$this->nameValidator->isValidationEnabled()) {
-            return true;
-        }
 
         $nameFields = [
             'Firstname' => $customer->getFirstname(),
@@ -50,9 +47,11 @@ class Name extends AbstractValidator
         ];
 
         foreach ($nameFields as $fieldName => $fieldValue) {
-            if (!empty($fieldValue) && !$this->isValidName($fieldName, $fieldValue)) {
+            if (!empty($fieldValue) && !$this->isValidName($fieldValue)) {
                 parent::_addMessages([
-                    __('%1 is not valid! Allowed characters: %2', $fieldName, $this->nameValidator->allowedCharsDescription)
+                    __('%1 is not valid! Allowed characters: %2',
+                       $fieldName,
+                       $this->nameValidator->allowedCharsDescription)
                 ]);
             }
         }
@@ -63,11 +62,10 @@ class Name extends AbstractValidator
     /**
      * Check if name field is valid using the NameValidator.
      *
-     * @param string $fieldName
      * @param string|null $nameValue
      * @return bool
      */
-    private function isValidName(string $fieldName, ?string $nameValue): bool
+    private function isValidName(?string $nameValue): bool
     {
         return $this->nameValidator->isValid($nameValue);
     }
