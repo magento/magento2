@@ -51,7 +51,8 @@ class Telephone extends AbstractValidator
         foreach ($telephoneFields as $fieldName => $fieldValue) {
             if (!empty($fieldValue) && !$this->validateTelephoneField($fieldName, $fieldValue)) {
                 parent::_addMessages([
-                    __('%1 is not valid! Allowed characters: %2', $fieldName, $this->telephoneValidator->allowedCharsDescription)
+                    __('%1 is not valid! Allowed characters: %2',
+                       $fieldName, $this->telephoneValidator->allowedCharsDescription)
                 ]);
             }
         }
