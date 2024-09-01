@@ -18,7 +18,7 @@ class EmailAddressValidator extends AbstractValidator implements ValidatorInterf
     /**
      * Pattern for email validation.
      */
-    private const PATTERN_EMAIL = '/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/';
+    public string $patterEmail = '/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/';
 
     /**
      * XML path for global security pattern validation.
@@ -107,7 +107,7 @@ class EmailAddressValidator extends AbstractValidator implements ValidatorInterf
             return false;
         }
 
-        if (!preg_match(self::PATTERN_EMAIL, trim($value))) {
+        if (!preg_match($this->patterEmail, trim($value))) {
             return false;
         }
 
