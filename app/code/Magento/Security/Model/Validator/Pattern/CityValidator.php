@@ -16,7 +16,7 @@ use Magento\Framework\Validator\AbstractValidator;
  */
 class CityValidator extends AbstractValidator
 {
-     /**
+    /**
      * Allowed characters:
      *
      * \p{L}: Unicode letters.
@@ -32,9 +32,8 @@ class CityValidator extends AbstractValidator
      * \/: Forward slash.
      * \\\\: Backslash (double escaped for regex).
      */
-    private const PATTERN_CITY = '/^[\p{L}\p{M}\s\-\.\'\&\[\]\(\):\/\\\\]{1,255}$/u';
+    public string $patternCity = '/^[\p{L}\p{M}\s\-\.\'\&\[\]\(\):\/\\\\]{1,255}$/u';
 
-    
     /**
      * XML path for regex validation.
      *
@@ -106,6 +105,6 @@ class CityValidator extends AbstractValidator
             return true;
         }
 
-        return preg_match(self::PATTERN_CITY, trim($value)) === 1;
+        return preg_match($this->patternCity, trim($value)) === 1;
     }
 }
