@@ -137,7 +137,7 @@ class ProcessDataTest extends TestCase
             ->getMock();
         $this->resultForwardFactory = $this->getMockBuilder(ForwardFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->resultForwardFactory->expects($this->once())

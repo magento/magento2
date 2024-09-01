@@ -125,7 +125,7 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     /**
      * @return array
      */
-    public function dimensionModesDataProvider(): array
+    public static function dimensionModesDataProvider(): array
     {
         return [
             'was_changed'     => [

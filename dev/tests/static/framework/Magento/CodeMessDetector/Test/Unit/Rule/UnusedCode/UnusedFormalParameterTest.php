@@ -74,8 +74,17 @@ class UnusedFormalParameterTest extends TestCase
          */
         $methodNode->expects($this->atLeastOnce())
             ->method('findChildrenOfType')
-            ->withConsecutive(['FormalParameters'], ['CompoundVariable'], ['FunctionPostfix'])
-            ->willReturnOnConsecutiveCalls([$parametersMock], [], []);
+            ->willReturnCallback(
+                function ($arg1) use ($parametersMock) {
+                    if ($arg1 == 'FormalParameters') {
+                        return [$parametersMock];
+                    } elseif ($arg1 == 'CompoundVariable') {
+                        return [];
+                    } elseif ($arg1 == 'FunctionPostfix') {
+                        return [];
+                    }
+                }
+            );
 
         // Dummy result for removeRegularVariables
         $methodNode->expects($this->once())

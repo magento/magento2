@@ -20,4 +20,17 @@
         <data key="applicableCountries">All Allowed Countries</data>
         <data key="showIfNotApplicable">No</data>
     </entity>
+    <entity name="UPSShippingMethod" type="shipping">
+        <data key="enableCheckoutSelect">Yes</data>
+        <data key="modeSelect">Development</data>
+        <data key="showMethodIfNotApplicableSelect">Yes</data>
+        <data key="debugSelect">Yes</data>
+    </entity>
+    <entity name="USPSShippingMethodConfig" type="shipping">
+        <data key="enableCheckoutSelectUSPS">Yes</data>
+        <data key="gatewayURLInputUSPS">http://production.shippingapis.com/ShippingAPI.dll</data>
+        <data key="secureGatewayURLInputUSPS">https://secure.shippingapis.com/ShippingAPI.dll</data>
+        <data key="showMethodIfNotApplicableSelectUSPS">Yes</data>
+        <data key="debugSelectUSPS">Yes</data>
+    </entity>
 </entities>

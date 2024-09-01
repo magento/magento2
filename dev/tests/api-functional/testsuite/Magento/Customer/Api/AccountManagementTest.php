@@ -108,7 +108,7 @@ class AccountManagementTest extends WebapiAbstract
         $this->filterGroupBuilder = Bootstrap::getObjectManager()->create(
             \Magento\Framework\Api\Search\FilterGroupBuilder::class
         );
-        $this->customerHelper = new CustomerHelper();
+        $this->customerHelper = new CustomerHelper($this->name());
 
         $this->dataObjectProcessor = Bootstrap::getObjectManager()->create(
             \Magento\Framework\Reflection\DataObjectProcessor::class

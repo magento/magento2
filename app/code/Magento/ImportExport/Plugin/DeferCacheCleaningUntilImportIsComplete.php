@@ -7,22 +7,45 @@ declare(strict_types=1);
 
 namespace Magento\ImportExport\Plugin;
 
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Indexer\DeferredCacheCleanerInterface;
 use Magento\ImportExport\Model\Import;
 
 class DeferCacheCleaningUntilImportIsComplete
 {
+    private const BEHAVIOR_ADD_UPDATE = 'add_update';
+    private const ENTITY_CUSTOMER = 'customer';
+    private const CACHE_TYPE_GRAPHQL_QUERY_RESOLVER_RESULT = 'graphql_query_resolver_result';
+
     /**
      * @var DeferredCacheCleanerInterface
      */
     private $cacheCleaner;
 
     /**
-     * @param DeferredCacheCleanerInterface $cacheCleaner
+     * @var TypeListInterface
      */
-    public function __construct(DeferredCacheCleanerInterface $cacheCleaner)
-    {
+    private $cacheTypeList;
+
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @param DeferredCacheCleanerInterface $cacheCleaner
+     * @param TypeListInterface $cacheTypeList
+     * @param RequestInterface $request
+     */
+    public function __construct(
+        DeferredCacheCleanerInterface $cacheCleaner,
+        TypeListInterface $cacheTypeList,
+        RequestInterface $request
+    ) {
         $this->cacheCleaner = $cacheCleaner;
+        $this->cacheTypeList = $cacheTypeList;
+        $this->request = $request;
     }
 
     /**
@@ -47,6 +70,13 @@ class DeferCacheCleaningUntilImportIsComplete
      */
     public function afterImportSource(Import $subject, bool $result): bool
     {
+        $behavior = $this->request->getParam('behavior');
+        $entity = $this->request->getParam('entity');
+
+        if ($behavior === self::BEHAVIOR_ADD_UPDATE &&
+            $entity === self::ENTITY_CUSTOMER) {
+            $this->cacheTypeList->cleanType(self::CACHE_TYPE_GRAPHQL_QUERY_RESOLVER_RESULT);
+        }
         $this->cacheCleaner->flush();
         return $result;
     }

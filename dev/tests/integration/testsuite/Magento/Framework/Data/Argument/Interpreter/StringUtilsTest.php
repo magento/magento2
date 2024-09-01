@@ -42,14 +42,14 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
         $this->model = new StringUtils($this->booleanUtils, $baseStringUtils);
         /** @var RendererInterface|\PHPUnit\Framework\MockObject\MockObject $translateRenderer */
         $translateRenderer = $this->getMockBuilder(RendererInterface::class)
-          ->setMethods(['render'])
+          ->onlyMethods(['render'])
           ->getMockForAbstractClass();
         $translateRenderer->expects($this->any())->method('render')->willReturnCallback(
-            
+
                 function ($input) {
                     return end($input) . ' (translated)';
                 }
-            
+
         );
         \Magento\Framework\Phrase::setRenderer($translateRenderer);
     }
