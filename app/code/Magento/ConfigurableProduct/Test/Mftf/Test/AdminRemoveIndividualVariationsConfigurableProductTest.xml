@@ -11,9 +11,9 @@
     <test name="AdminRemoveIndividualVariationsConfigurableProductTest">
         <annotations>
             <features value="Configurable Product"/>
-            <stories value="Create configurable product"/>
-            <title value="Configure Price 'Apply unique prices by attribute to each SKU' and Inventory 'Apply single quantity to each SKUs' in 'Create Configurations' wizard"/>
-            <description value="Admin create configurable product and select 'Apply unique prices by attribute to each SKU' and 'Apply single quantity to each SKUs' in 'Create Configurations' in configuration wizard during creation and assert child product's price after creation."/>
+            <stories value="Configurable product"/>
+            <title value="Remove individual variations configurable product."/>
+            <description value="Admin removes individual variation from created configurable product"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4420"/>
         </annotations>
