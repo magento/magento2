@@ -13,6 +13,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Monolog\LogRecord;
 
 /**
  * Base stream handler
@@ -87,7 +88,7 @@ class Base extends StreamHandler implements ResetAfterRequestInterface
     /**
      * @inheritDoc
      */
-    protected function write(array $record): void
+    protected function write(LogRecord $record): void
     {
         $logDir = $this->filesystem->getParentDirectory($this->url);
 
