@@ -27,7 +27,8 @@
         "magento/module-captcha": "*",
         "magento/module-checkout": "*",
         "magento/module-authorization": "*",
-        "magento/module-asynchronous-operations": "*"
+        "magento/module-asynchronous-operations": "*",
+        "magento/module-multishipping": "*"
     },
     "suggest": {
         "magento/module-sales-rule-sample-data": "*"

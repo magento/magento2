@@ -934,7 +934,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function shipDateDataProvider(): array
+    public static function shipDateDataProvider(): array
     {
         return [
             'tracking1' => [

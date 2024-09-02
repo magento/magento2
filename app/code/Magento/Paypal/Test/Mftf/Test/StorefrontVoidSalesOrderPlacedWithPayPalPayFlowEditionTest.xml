@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVoidSalesOrderPlacedWithPayPalPayFlowEditionTest" extends="StorefrontGuestCheckoutUsingPaypalPayFlowLinkTest">
+        <annotations>
+            <features value="payFlow link"/>
+            <stories value="Void Paypal Payflow Edition"/>
+            <title value="Void Sales Order placed with PayPal Express Checkout Payflow Edition"/>
+            <description value="Void Sales Order placed with PayPal Express Checkout Payflow Edition and validate message in transaction tab from backend"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5157"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <remove keyForRemoval="checkGrandTotal"/>
+        <remove keyForRemoval="clickOnCommentsHistory"/>
+        <remove keyForRemoval="seeOrderHistoryNotes"/>
+        <!--Void created order -->
+        <actionGroup ref="AdminVoidPendingOrderActionGroup" stepKey="voidPendingOrder"/>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkOrderStatus">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+        <!--Grab transaction ids -->
+        <waitForElementVisible selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForGrabLastTransactionID"/>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabLastTransactionID"/>
+        <waitForElementVisible selector="{{AdminOrderNotesSection.voidAuthorizationNotes('$grabLastTransactionID')}}" stepKey="waitForVoidAuthorizationNotesWithID"/>
+        <grabTextFrom selector="{{AdminOrderNotesSection.voidAuthorizationNotes('$grabLastTransactionID')}}" stepKey="getVoidAuthorizationNotesWithID"/>
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryTab"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.authorizationNotes('Voided')}}" userInput="$getVoidAuthorizationNotesWithID" stepKey="seeOrderHistoryNote"/>
+        <!-- Check the last transaction of the order and validate the details for Void and Authorization-->
+        <actionGroup ref="AdminViewAuthorizationTransactionsInOrderActionGroup" stepKey="validateAuthTransaction"/>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForAuthorization"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClicked"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>
+        <actionGroup ref="AdminAssertTransitionTypeStatusNewActionGroup" stepKey="assertTransactionTypeStatusForCapture">
+            <argument name="transactionType" value="void"/>
+            <argument name="transitionTypeStatus" value="Yes"/>
+        </actionGroup>
+    </test>
+</tests>

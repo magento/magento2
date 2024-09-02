@@ -124,7 +124,7 @@ class DeleteTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupCollectionMock = $this->getMockBuilder(Collection::class)
-            ->setMethods(['getIterator', 'addFieldToFilter'])
+            ->onlyMethods(['getIterator', 'addFieldToFilter'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupMock = $this->getMockBuilder(Group::class)
