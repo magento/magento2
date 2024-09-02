@@ -4,11 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 
 <?php $_divId = 'tree' . $block->getId() ?>
-<div id="<?= $block->escapeHtmlAttr($_divId) ?>" class="tree"></div>
+<div id="<?= $escaper->escapeHtmlAttr($_divId) ?>" class="tree"></div>
 <?php
 $isUseMassAction = $block->getUseMassaction() ? 1 : 0;
 $isAnchorOnly = $block->getIsAnchorOnly() ? 1 : 0;
@@ -124,29 +127,30 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
 
     function handleOpenNode(e, data) {
         let parentNode = data.node;
-
-        if (parentNode.children.length > 0) {
-            let childNode = data.instance.get_node(parentNode.children, false);
-
-            // Check if the child node has no children (is not yet loaded)
-            if (childNode.children && childNode.children.length === 0
-                && childNode.original && !childNode.original.lastNode) {
-                $.ajax({
-                    url: '{$block->escapeJs($block->escapeUrl($block->getLoadTreeUrl()))}',
-                    data: {
-                        id: childNode.original.id,
-                        store: childNode.original.store,
-                        form_key: FORM_KEY
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        handleSuccessResponse(response, childNode, data);
-                    },
-                    error: function (jqXHR, status, error) {
-                        console.log(status + ': ' + error + 'Response text:' + jqXHR.responseText);
-                    }
-                });
-            }
+        if (parentNode && parentNode.children.length > 0) {
+            parentNode.children.forEach(function(childId) {
+                let childNode = data.instance.get_node(childId, false);
+                // Check if the child node has no children (is not yet loaded)
+                if (childNode.children && childNode.children.length === 0
+                    && childNode.original && !childNode.original.lastNode) {
+                    $.ajax({
+                        url: '{$block->escapeJs($block->escapeUrl($block->getLoadTreeUrl()))}',
+                        type: "POST",
+                        data: {
+                            id: childNode.original.id,
+                            store: childNode.original.store,
+                            form_key: FORM_KEY
+                        },
+                        dataType: 'json',
+                        success: function (response) {
+                            handleSuccessResponse(response, childNode, data);
+                        },
+                        error: function (jqXHR, status, error) {
+                            console.log(status + ': ' + error + 'Response text:' + jqXHR.responseText);
+                        }
+                    });
+                }
+            })
         }
     }
 
@@ -179,7 +183,7 @@ script;
 ?>
 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
     'overflow-x: auto;',
-    '#tree' . $block->escapeJs($block->getId())
+    '#tree' . $escaper->escapeJs($block->getId())
 );
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
