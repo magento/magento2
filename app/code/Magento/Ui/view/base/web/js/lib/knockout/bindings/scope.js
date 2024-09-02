@@ -14,6 +14,43 @@ define([
     'use strict';
 
     /**
+     * Check if an element is visible in the viewport
+     *
+     * @param {HTMLElement} el
+     * @returns bool
+     */
+    function isInViewport(el) {
+        if (!el.checkVisibility()) return false;
+        const rect = el.getBoundingClientRect();
+        const vWidth = window.innerWidth || doc.documentElement.clientWidth;
+        const vHeight = window.innerHeight || doc.documentElement.clientHeight;
+
+        // Check if the element is out of bounds
+        if (rect.right < 0 || rect.bottom < 0 || rect.left > vWidth || rect.top > vHeight) return false;
+
+        // Return true if any of the above disjunctions are false
+        return true;
+    }
+
+    /**
+     *  Check condition apply components
+     *
+     * @param {HTMLElement} el - element to apply bindings to.
+     * @param {ko.bindingContext} bindingContext - instance of ko.bindingContext, passed to binding initially.
+     * @param {Promise} promise - instance of jQuery promise
+     * @param {Object} component - component instance to attach to new context
+     */
+    function applyComponents(el, bindingContext, promise, component) {
+        if (isInViewport(el)) {
+            runApplyComponents(el, bindingContext, promise, component);
+        } else {
+            document.addEventListener('mousemove', function (e) {
+                runApplyComponents(el, bindingContext, promise, component);
+            }, { once: true });
+        }
+    }
+
+    /**
      * Creates child context with passed component param as $data. Extends context with $t helper.
      * Applies bindings to descendant nodes.
      * @param {HTMLElement} el - element to apply bindings to.
@@ -21,7 +58,7 @@ define([
      * @param {Promise} promise - instance of jQuery promise
      * @param {Object} component - component instance to attach to new context
      */
-    function applyComponents(el, bindingContext, promise, component) {
+    function runApplyComponents(el, bindingContext, promise, component) {
         promise.resolve();
         component = bindingContext.createChildContext(component);
 
