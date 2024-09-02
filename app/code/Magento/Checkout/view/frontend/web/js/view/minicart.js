@@ -120,9 +120,7 @@ define([
          * Close mini shopping cart.
          */
         closeMinicart: function () {
-            try {
-                $('[data-block="minicart"]').find('[data-role="dropdownDialog"]').dropdownDialog('close');
-            } catch (err) {}
+            $('[data-block="minicart"]').find('[data-role="dropdownDialog"]').dropdownDialog('close');
         },
 
         /**
