@@ -74,7 +74,7 @@
         "magento/zend-cache": "^1.16",
         "magento/zend-db": "^1.16",
         "magento/zend-pdf": "^1.16",
-        "monolog/monolog": "^2.7",
+        "monolog/monolog": "^3.6",
         "opensearch-project/opensearch-php": "^1.0 || ^2.0",
         "pelago/emogrifier": "^7.0",
         "php-amqplib/php-amqplib": "^3.2",
@@ -90,7 +90,7 @@
         "tubalmartin/cssmin": "^4.1",
         "web-token/jwt-framework": "^3.1",
         "webonyx/graphql-php": "^15.0",
-        "wikimedia/less.php": "^3.2"
+        "wikimedia/less.php": "^4.4"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "^3",
