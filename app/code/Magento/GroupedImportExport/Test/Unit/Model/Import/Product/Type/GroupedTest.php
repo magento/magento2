@@ -381,7 +381,10 @@ class GroupedTest extends AbstractImportTestCase
         $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn(true);
         $this->entityModel
             ->method('getNextBunch')
-            ->willReturnOnConsecutiveCalls($bunch);
+            ->willReturnCallback(function () use (&$callCount, $bunch) {
+                $callCount++;
+                return $bunch[$callCount - 1] ?? null;
+            });
         $this->entityModel
             ->method('getRowScope')
             ->willReturnOnConsecutiveCalls(Product::SCOPE_DEFAULT, Product::SCOPE_STORE);

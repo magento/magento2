@@ -165,10 +165,14 @@ class AbstractTypeTest extends TestCase
         $this->entityModel->method('getEntityTypeId')
             ->willReturn(3);
         $this->entityModel->method('getAttributeOptions')
-            ->willReturnOnConsecutiveCalls(
-                ['option1', 'option2'],
-                ['yes' => 1, 'no' => 0]
-            );
+            ->willReturnCallback(function () use (&$callCount) {
+                $callCount++;
+                if ($callCount === 1) {
+                    return ['option1', 'option2'];
+                } elseif ($callCount === 2) {
+                    return ['yes' => 1, 'no' => 0];
+                }
+            });
         $attrSetColFactory->method('create')
             ->willReturn($attrSetCollection);
         $attrSetCollection->method('setEntityTypeFilter')
