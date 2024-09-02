@@ -185,9 +185,33 @@ class MassUpdateProductAttribute
             $this->dataObjectHelper->populateWithArray($stockItemDo, $inventoryData, StockItemInterface::class);
             $stockItemDo->setItemId($stockItemId);
             $this->stockItemRepository->save($stockItemDo);
+            
+            // New logic to check and update stock status
+            $this->updateStockStatus($productId, $websiteId, $stockItemDo);
+    
             $this->processParents($product);
         }
         $this->stockIndexerProcessor->reindexList($productIds);
+    }
+    
+    /**
+     * Update stock status based on inventory data
+     *
+     * @param int $productId
+     * @param int $websiteId
+     * @param StockItemInterface $stockItemDo
+     *
+     * @return void
+     */
+    private function updateStockStatus(int $productId, int $websiteId, StockItemInterface $stockItemDo): void
+    {
+        // Check if product quantity is 0 and set stock status accordingly
+        $qty = $stockItemDo->getQty();
+        $isInStock = $qty > 0 ? 1 : 0;
+    
+        // Set stock status based on quantity
+        $stockItemDo->setIsInStock($isInStock);
+        $this->stockItemRepository->save($stockItemDo);
     }
 
     /**
