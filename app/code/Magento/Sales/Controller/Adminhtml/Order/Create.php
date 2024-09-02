@@ -27,6 +27,10 @@ abstract class Create extends \Magento\Backend\App\Action
      */
     private const ACTION_SAVE = 'save';
     /**
+     * Controller name for edit actions
+     */
+    private const CONTROLLER_NAME_ORDER_EDIT = 'order_edit';
+    /**
      * @var \Magento\Framework\Escaper
      */
     protected $escaper;
@@ -380,6 +384,9 @@ abstract class Create extends \Magento\Backend\App\Action
         if (in_array($action, ['index', 'save', 'cancel']) && $this->_getSession()->getReordered()) {
             $action = 'reorder';
         }
+        if (strtolower($this->getRequest()->getControllerName() ?? '') === self::CONTROLLER_NAME_ORDER_EDIT) {
+            $action = 'actions_edit';
+        }
         switch ($action) {
             case 'index':
             case 'save':
@@ -390,6 +397,9 @@ abstract class Create extends \Magento\Backend\App\Action
                 break;
             case 'cancel':
                 $aclResource = 'Magento_Sales::cancel';
+                break;
+            case 'actions_edit':
+                $aclResource = 'Magento_Sales::actions_edit';
                 break;
             default:
                 $aclResource = 'Magento_Sales::actions';
