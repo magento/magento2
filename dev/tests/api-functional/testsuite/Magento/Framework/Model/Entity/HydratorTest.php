@@ -39,7 +39,7 @@ class HydratorTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     {
         $this->_markTestAsRestOnly('Hydrator can be tested using REST adapter only');
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->customerHelper = $this->objectManager->get(CustomerHelper::class);
+        $this->customerHelper = $this->objectManager->create(CustomerHelper::class, ['name' => $this->name()]);
         $this->dataObjectProcessor = $this->objectManager->create(DataObjectProcessor::class);
     }
 

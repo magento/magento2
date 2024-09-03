@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminPaypalStandardConfigSection">
+        <element name="configureBtn" type="button" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express-head" parameterized="true"/>
+        <element name="email" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_express_checkout_required_express_checkout_business_account" parameterized="true"/>
+        <element name="apiMethod" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_express_checkout_required_express_checkout_api_authentication" parameterized="true"/>
+        <element name="username" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_express_checkout_required_express_checkout_api_username" parameterized="true"/>
+        <element name="password" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_express_checkout_required_express_checkout_api_password" parameterized="true"/>
+        <element name="signature" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_express_checkout_required_express_checkout_api_signature" parameterized="true"/>
+        <element name="sandboxMode" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_express_checkout_required_express_checkout_sandbox_flag" parameterized="true"/>
+        <element name="enableSolution" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_enable_express_checkout" parameterized="true"/>
+        <element name="enablePaylaterExperience" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_enable_paypal_paylater_experience" parameterized="true"/>
+        <element name="expandCategoryPage" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage-head" parameterized="true"/>
+        <element name="advisePaylater" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater-head" parameterized="true"/>
+        <element name="enablePaypalPaylater" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_paylater_enabled" parameterized="true"/>
+        <element name="display" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage_paylater_categorypage_display" parameterized="true"/>
+        <element name="position" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage_paylater_categorypage_position" parameterized="true"/>
+        <element name="styleLayout" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage_paylater_categorypage_stylelayout" parameterized="true"/>
+        <element name="ratio" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage_paylater_categorypage_ratio" parameterized="true"/>
+        <element name="color" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express_express_checkout_required_advertise_paylater_settings_paylater_categorypage_paylater_categorypage_color" parameterized="true"/>
+        <element name="categoryClick" type="button" selector="//span[contains(text(), 'SimpleSubCategory')]"/>
+        <element name="payPalFrame" type="iframe" selector="//iframe[contains(@id, 'jsx-iframe')]"/>
+        <element name="paypalPaylaterMessage" type="input" selector="//span[text()='Buy now, pay later.']"/>
+    </section>
+</sections>

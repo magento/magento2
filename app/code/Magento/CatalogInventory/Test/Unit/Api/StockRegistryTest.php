@@ -80,7 +80,7 @@ class StockRegistryTest extends TestCase
         $this->product->expects($this->any())
             ->method('getIdBySku')
             ->willReturn(self::PRODUCT_ID);
-
+        //getIdBySku
         $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->productFactory->expects($this->any())
             ->method('create')
