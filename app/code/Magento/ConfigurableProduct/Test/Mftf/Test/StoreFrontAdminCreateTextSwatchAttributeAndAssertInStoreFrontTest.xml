@@ -74,7 +74,7 @@
             <argument name="swatchDescription" value="Large"/>
         </actionGroup>
         <actionGroup ref="AdminAddTextSwatchForStoreViewActionGroup" stepKey="addTextSwatchForLSizeInStoreView">
-            <argument name="position" value="3"/>
+            <argument name="position" value="2"/>
             <argument name="swatchName" value="L3"/>
             <argument name="swatchDescription" value="Large_3"/>
         </actionGroup>
@@ -82,7 +82,7 @@
         <waitForElementClickable selector="{{AttributePropertiesSection.addSwatch}}" stepKey="waitForAddSwatchButtonForExtarLargeToBeClickable"/>
         <click selector="{{AttributePropertiesSection.addSwatch}}" stepKey="clickAddSwatchForExtraLarge"/>
         <actionGroup ref="AdminAddTextSwatchForAdminActionGroup" stepKey="addTextSwatchForXLSizeInAdmin">
-            <argument name="position" value="2"/>
+            <argument name="position" value="3"/>
             <argument name="swatchName" value="XL"/>
             <argument name="swatchDescription" value="Extra Large"/>
         </actionGroup>
