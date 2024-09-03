@@ -9,6 +9,7 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\Telephone;
 use Magento\Customer\Model\Customer;
+use Magento\Security\Model\Validator\Pattern\TelephoneValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +24,11 @@ class TelephoneTest extends TestCase
     private Telephone $telephoneValidator;
 
     /**
+     * @var TelephoneValidator|MockObject
+     */
+    private MockObject $telephoneValidatorMock;
+
+    /**
      * @var Customer|MockObject
      */
     private MockObject $customerMock;
@@ -32,7 +38,8 @@ class TelephoneTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->telephoneValidator = new Telephone();
+        $this->telephoneValidatorMock = $this->createMock(TelephoneValidator::class);
+        $this->telephoneValidator = new Telephone($this->telephoneValidatorMock);
         $this->customerMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
