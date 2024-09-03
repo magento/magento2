@@ -115,6 +115,11 @@ class NameValidator extends AbstractValidator
 
         $pattern = $this->isValidationEnabled() ? $this->patternName : self::PATTERN_NAME;
 
+        $trimmedValue = trim($value);
+        if (preg_match($pattern, $trimmedValue, $matches)) {
+            return $matches[0] === $trimmedValue;
+        }
+        
         return preg_match($pattern, trim($value)) === 1;
     }
 }
