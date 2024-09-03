@@ -81,6 +81,15 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     email: String @doc(description: "Order customer email.")
     is_virtual: Boolean! @doc(description: "`TRUE` if the order is virtual") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderIsVirtual")
     available_actions: [OrderActionType!]! @doc(description: "List of available order actions.") @resolver(class: "\\Magento\\SalesGraphQl\\Model\\Resolver\\OrderAvailableActions")
+    customer_info: OrderCustomerInfo! @doc(description: "Returns customer information from order.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderCustomerInfo")
+}
+
+type OrderCustomerInfo {
+    firstname: String! @doc(description: "First name of the customer")
+    lastname: String @doc(description: "Last name of the customer")
+    middlename: String @doc(description: "Middle name of the customer")
+    prefix: String @doc(description: "Prefix of the customer")
+    suffix: String @doc(description: "Suffix of the customer")
 }
 
 type OrderAddress @doc(description: "Contains detailed information about an order's billing and shipping addresses."){
