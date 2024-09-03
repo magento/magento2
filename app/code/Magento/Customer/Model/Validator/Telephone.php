@@ -49,11 +49,16 @@ class Telephone extends AbstractValidator
         ];
 
         foreach ($telephoneFields as $fieldName => $fieldValue) {
-            if (!empty($fieldValue) && !$this->validateTelephoneField($fieldName, $fieldValue)) {
-                parent::_addMessages([
-                    __('%1 is not valid! Allowed characters: %2',
-                       $fieldName, $this->telephoneValidator->allowedCharsDescription)
-                ]);
+            if (!empty($fieldValue) && !$this->validateTelephoneField($fieldValue)) {
+                parent::_addMessages(
+                    [
+                        __(
+                            '%1 is not valid! Allowed characters: %2',
+                            $fieldName,
+                            $this->telephoneValidator->allowedCharsDescription
+                        ),
+                    ]
+                );
             }
         }
 
@@ -63,11 +68,10 @@ class Telephone extends AbstractValidator
     /**
      * Validate a single telephone field.
      *
-     * @param string $fieldName
-     * @param mixed $telephoneValue
+     * @param int|string|null $telephoneValue
      * @return bool
      */
-    private function validateTelephoneField(string $fieldName, mixed $telephoneValue): bool
+    private function validateTelephoneField(int|string|null $telephoneValue): bool
     {
         return $this->telephoneValidator->isValid($telephoneValue);
     }
