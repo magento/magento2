@@ -17,6 +17,7 @@
             <testCaseId value="MC-42802"/>
             <useCaseId value="MC-42612"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
@@ -40,6 +41,7 @@
             <deleteData createDataKey="simpleProduct2" stepKey="DeleteSimpleProduct2"/>
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
         </after>
 
         <!-- Add the first product to the cart -->
@@ -77,6 +79,7 @@
         </actionGroup>
 
         <!-- Place Order -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 

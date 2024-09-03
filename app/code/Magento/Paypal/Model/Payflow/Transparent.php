@@ -390,20 +390,6 @@ class Transparent extends Payflowpro implements TransparentInterface
     }
 
     /**
-     * @inheritDoc
-     */
-    public function fetchTransactionInfo(InfoInterface $payment, $transactionId)
-    {
-        $result = parent::fetchTransactionInfo($payment, $transactionId);
-        $this->_canFetchTransactionInfo = false;
-        if ($payment->getIsTransactionApproved()) {
-            $this->acceptPayment($payment);
-        }
-
-        return $result;
-    }
-
-    /**
      * Marks payment as fraudulent.
      *
      * @param InfoInterface $payment

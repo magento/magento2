@@ -18,6 +18,7 @@
             <testCaseId value="MC-3755"/>
             <group value="GroupedProduct"/>
             <group value="cloud_smoke"/>
+            <group value="cloud"/>
         </annotations>
         <before></before>
         <after>
@@ -36,7 +37,9 @@
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
 
-        <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!--See related product in storefront-->
         <amOnPage url="{{GroupedProduct.urlKey}}.html" stepKey="goToStorefront"/>

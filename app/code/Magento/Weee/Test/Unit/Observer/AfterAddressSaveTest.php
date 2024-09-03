@@ -64,7 +64,7 @@ class AfterAddressSaveTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerAddress'])
+            ->addMethods(['getCustomerAddress'])
             ->getMock();
 
         $this->moduleManagerMock = $this->getMockBuilder(Manager::class)
@@ -80,7 +80,7 @@ class AfterAddressSaveTest extends TestCase
             ->getMock();
 
         $this->addressManagerMock = $this->getMockBuilder(TaxAddressManagerInterface::class)
-            ->setMethods(['setDefaultAddressAfterSave', 'setDefaultAddressAfterLogIn'])
+            ->onlyMethods(['setDefaultAddressAfterSave', 'setDefaultAddressAfterLogIn'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -142,7 +142,7 @@ class AfterAddressSaveTest extends TestCase
     /**
      * @return array
      */
-    public function getExecuteDataProvider()
+    public static function getExecuteDataProvider()
     {
         return [
             [false, false, false, false],

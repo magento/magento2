@@ -12,7 +12,8 @@ $template->setData(
     [
         'template_text' => file_get_contents(__DIR__ . '/template_fixture.html'),
         'template_code' => \Magento\Theme\Model\Config\ValidatorTest::TEMPLATE_CODE,
-        'template_type' => \Magento\Email\Model\Template::TYPE_TEXT
+        'template_type' => \Magento\Email\Model\Template::TYPE_TEXT,
+        'orig_template_code' => 'template_fixture'
     ]
 );
 $template->save();

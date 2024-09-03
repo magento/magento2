@@ -31,7 +31,7 @@ class SearchCriteriaResolverTest extends TestCase
     {
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setPageSize', 'create'])
+            ->onlyMethods(['setPageSize', 'create'])
             ->getMock();
     }
 
@@ -51,7 +51,7 @@ class SearchCriteriaResolverTest extends TestCase
 
         $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setRequestName', 'setSortOrders', 'setCurrentPage'])
+            ->onlyMethods(['setRequestName', 'setSortOrders', 'setCurrentPage'])
             ->getMock();
         $searchCriteria->expects($this->once())
             ->method('setRequestName')

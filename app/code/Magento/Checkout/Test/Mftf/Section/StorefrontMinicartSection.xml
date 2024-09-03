@@ -50,5 +50,7 @@
         <element name="minicartclose" type="button" selector="//button[@id='btn-minicart-close']"/>
         <element name="productCountNew" type="text" selector=".minicart-wrapper .action.showcart .counter-number"/>
         <element name="image" type="text" selector="//*[@class='product-image-container']//img[contains(@src, '{{var1}}')]" parameterized="true"/>
+        <element name="proceedToCheckout" type="button" selector="//button[@data-role='proceed-to-checkout']"/>
+        <element name="deleteProductBasedOnQty" type="button" selector="//input[@data-item-qty='{{quantity}}']/../../..//div[@class='product actions']//a[@class='action delete']" parameterized="true"/>
     </section>
 </sections>

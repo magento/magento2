@@ -48,7 +48,7 @@ class AggregateSalesReportOrderDataTest extends TestCase
 
         $this->orderFactoryMock = $this->getMockBuilder(OrderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()

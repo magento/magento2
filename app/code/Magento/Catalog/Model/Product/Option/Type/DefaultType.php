@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Model\Product\Option\Value;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Catalog product option default type
@@ -23,7 +24,7 @@ use Magento\Catalog\Model\Product\Option\Value;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class DefaultType extends \Magento\Framework\DataObject
+class DefaultType extends \Magento\Framework\DataObject implements ResetAfterRequestInterface
 {
     /**
      * Option Instance
@@ -425,5 +426,13 @@ class DefaultType extends \Magento\Framework\DataObject
         } else {
             return $price;
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_productOptions = [];
     }
 }

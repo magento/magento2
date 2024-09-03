@@ -17,6 +17,7 @@ Extension developers can interact with the Magento_LayeredNavigation module. For
 ### Layouts
 
 This module introduces the following layout handles in the `view/frontend/layout` directory:
+
 - `catalog_category_view_type_layered`
 - `catalog_category_view_type_layered_without_children`
 - `catalogsearch_result_index`
@@ -26,6 +27,7 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 ### UI components
 
 This module extends following ui components located in the `view/adminhtml/ui_component` directory:
+
 - `product_attribute_add_form`
 - `product_attributes_grid`
 - `product_attributes_listing`
@@ -42,7 +44,9 @@ For information about a public API in Magento 2, see [Public interfaces & APIs](
 ## Additional information
 
 ### Page Layout
-This module modifies the following page_layout in the `view/frontend.page_layout` directory: 
+
+This module modifies the following page_layout in the `view/frontend.page_layout` directory:
+
 - `1columns` - moves block `catalog.leftnav` into the `content.top` container
 - `2columns-left` - moves block `catalog.leftnav` into the `sidebar.main"` container
 - `2columns-right` - moves block `catalog.leftnav` into the `sidebar.main"` container
@@ -50,5 +54,6 @@ This module modifies the following page_layout in the `view/frontend.page_layout
 - `empty` - moves block `catalog.leftnav` into the `category.product.list.additional` container
 
 More information can be found in:
-- [Learn more about Layered Navigation](https://docs.magento.com/user-guide/catalog/navigation-layered.html)
-- [Learn how to Configuring Layered Navigation](https://docs.magento.com/user-guide/catalog/navigation-layered-configuration.html)
+
+- [Learn more about Layered Navigation](https://experienceleague.adobe.com/docs/commerce-admin/catalog/catalog/navigation/navigation-layered.html)
+- [Learn how to Configuring Layered Navigation](https://experienceleague.adobe.com/docs/commerce-admin/catalog/catalog/navigation/navigation-layered.html#configure-layered-navigation)

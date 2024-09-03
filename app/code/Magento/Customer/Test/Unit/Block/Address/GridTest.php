@@ -66,17 +66,17 @@ class GridTest extends TestCase
 
         $this->currentCustomer = $this->getMockBuilder(CurrentCustomer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomer'])
+            ->onlyMethods(['getCustomer'])
             ->getMock();
 
         $this->addressCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->countryFactory = $this->getMockBuilder(CountryFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
@@ -101,7 +101,7 @@ class GridTest extends TestCase
         $outputString = 'OutputString';
         /** @var BlockInterface|MockObject $block */
         $block = $this->getMockBuilder(BlockInterface::class)
-            ->setMethods(['setCollection'])
+            ->addMethods(['setCollection'])
             ->getMockForAbstractClass();
         /** @var LayoutInterface|MockObject $layout */
         $layout = $this->getMockForAbstractClass(LayoutInterface::class);
@@ -110,7 +110,7 @@ class GridTest extends TestCase
         /** @var MockObject */
         $addressCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setOrder', 'setCustomerFilter', 'load','addFieldToFilter'])
+            ->onlyMethods(['setOrder', 'setCustomerFilter', 'load','addFieldToFilter'])
             ->getMock();
 
         $layout->expects($this->atLeastOnce())->method('getChildName')->with('NameInLayout', 'pager')
@@ -155,12 +155,12 @@ class GridTest extends TestCase
         /** @var MockObject */
         $addressCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setOrder', 'setCustomerFilter', 'load', 'getIterator','addFieldToFilter'])
+            ->onlyMethods(['setOrder', 'setCustomerFilter', 'load', 'getIterator','addFieldToFilter'])
             ->getMock();
         $addressDataModel = $this->getMockForAbstractClass(AddressInterface::class);
         $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getDataModel'])
+            ->onlyMethods(['getId', 'getDataModel'])
             ->getMock();
         $collection = [$address, $address, $address];
         $address->expects($this->exactly(3))->method('getId')
@@ -205,7 +205,7 @@ class GridTest extends TestCase
         $countryName = 'United States';
         $country = $this->getMockBuilder(Country::class)
             ->disableOriginalConstructor()
-            ->setMethods(['loadByCode', 'getName'])
+            ->onlyMethods(['loadByCode', 'getName'])
             ->getMock();
         $this->countryFactory->expects($this->atLeastOnce())->method('create')->willReturn($country);
         $country->expects($this->atLeastOnce())->method('loadByCode')->with($countryId)->willReturnSelf();

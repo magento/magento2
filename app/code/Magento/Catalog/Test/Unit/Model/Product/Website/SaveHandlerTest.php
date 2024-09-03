@@ -49,7 +49,7 @@ class SaveHandlerTest extends TestCase
             ->willReturn(false);
         $extensionAttributes = $this->getMockBuilder(ExtensionAttributesInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsiteIds', 'setWebsiteIds'])
+            ->addMethods(['getWebsiteIds', 'setWebsiteIds'])
             ->getMockForAbstractClass();
         $extensionAttributes->expects($this->once())
             ->method('getWebsiteIds')
@@ -68,7 +68,7 @@ class SaveHandlerTest extends TestCase
     {
         $extensionAttributes = $this->getMockBuilder(ExtensionAttributesInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsiteIds', 'setWebsiteIds'])
+            ->addMethods(['getWebsiteIds', 'setWebsiteIds'])
             ->getMockForAbstractClass();
         $this->product->expects($this->once())
             ->method('getExtensionAttributes')

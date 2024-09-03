@@ -15,6 +15,7 @@
             <description value="Verify Tax is calculated based on Tax Rule even if all Shipping methods are disabled"/>
             <testCaseId value="AC-3895"/>
             <severity value="MAJOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create category -->
@@ -27,7 +28,9 @@
             <!-- Disable shipping method -->
             <createData entity="DisableFlatRateShippingMethodConfig" stepKey="disableFlatRate"/>
             <!-- reindex -->
-            <magentoCLI command="cron:run --group=index" stepKey="runCronReindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- delete created product -->
@@ -44,14 +47,14 @@
             <!-- Go to the tax rate page -->
             <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
             <!-- Delete the tax rate that was created -->
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteCARate">
-                <argument name="name" value="{{SimpleTaxCA.state}}-{{SimpleTaxCA.rate}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
-            </actionGroup>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
+            <comment userInput="Preserve BiC" stepKey="deleteCARate"/>
             <!-- Revert back configuration -->
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
             <!-- reindex and flush cache -->
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
                 <argument name="tags" value="full_page"/>
             </actionGroup>
@@ -69,7 +72,9 @@
         </actionGroup>
         <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
         <!-- reindex and flush cache -->
-        <magentoCron groups="index" stepKey="reindexAgain"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAgain">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
             <argument name="tags" value="full_page"/>
         </actionGroup>
@@ -91,6 +96,10 @@
             <argument name="state" value="California"/>
             <argument name="postcode" value="90310"/>
         </actionGroup>
+        <!-- Cache Flush-->
+    	<actionGroup ref="CliCacheFlushActionGroup" stepKey="flushConfigCache">
+    	    <argument name="tags" value="config"/>
+    	</actionGroup>
         <!-- Assert tax and order amount -->
         <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="8.25" stepKey="assertTaxAmount"/>
         <actionGroup ref="AssertStorefrontShoppingCartSummaryItemsActionGroup" stepKey="assertCartTotals">

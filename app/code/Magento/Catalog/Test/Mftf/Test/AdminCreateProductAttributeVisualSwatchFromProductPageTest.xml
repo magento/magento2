@@ -16,6 +16,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MC-42510"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -26,9 +27,14 @@
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
                 <argument name="ProductAttribute" value="{{visualSwatchProductAttribute.attribute_code}}"/>
             </actionGroup>
-            <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
-            <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
-            <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute"/>
+            <comment userInput="BIC workaround" stepKey="clickDelete"/>
+            <comment userInput="BIC workaround" stepKey="clickOk"/>
+            <comment userInput="BIC workaround" stepKey="waitForDeletion"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

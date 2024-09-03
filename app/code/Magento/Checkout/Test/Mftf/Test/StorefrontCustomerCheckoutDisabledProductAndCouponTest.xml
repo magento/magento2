@@ -16,6 +16,7 @@
             <severity value="MINOR"/>
             <testCaseId value="MC-21996"/>
             <group value="checkout"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -33,6 +34,7 @@
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createUSCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductListing"/>

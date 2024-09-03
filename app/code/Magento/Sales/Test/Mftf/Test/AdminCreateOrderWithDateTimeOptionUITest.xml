@@ -17,6 +17,7 @@
             <stories value="Create order in Admin"/>
             <severity value="MINOR"/>
             <group value="Sales"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

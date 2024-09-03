@@ -533,7 +533,7 @@ class PageRepositoryTest extends WebapiAbstract
      *
      * @return array
      */
-    public function byStoresProvider(): array
+    public static function byStoresProvider(): array
     {
         return [
             'default_store' => [

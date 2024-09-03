@@ -33,7 +33,9 @@
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
                 <argument name="tags" value=""/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createFirtsSimpleProduct" stepKey="deleteProductOne"/>
@@ -43,7 +45,7 @@
         </after>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductSku">
-            <argument name="phrase" value="24 MB04"/>
+            <argument name="phrase" value="24 MB0"/>
         </actionGroup>
 
         <see userInput="4" selector="{{StorefrontCatalogSearchMainSection.productCount}}" stepKey="assertSearchResultCount"/>

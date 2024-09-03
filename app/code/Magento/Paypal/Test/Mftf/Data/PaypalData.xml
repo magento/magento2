@@ -191,9 +191,19 @@
         <data key="value">0</data>
     </entity>
     <entity name="EnablePaypalPayflowProVault" type="payflowpro_cc_vault_active">
+        <data key="path">payment/payflowpro_cc_vault/active</data>
         <data key="value">1</data>
     </entity>
     <entity name="DisablePaypalPayflowProVault" type="payflowpro_cc_vault_active">
+        <data key="path">payment/payflowpro_cc_vault/active</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnablePaypalPayStandard">
+        <data key="path">payment/wps_express/active</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisablePaypalPayStandard">
+        <data key="path">payment/wps_express/active</data>
         <data key="value">0</data>
     </entity>
     <entity name="Visa3DSecureCard" type="data">
@@ -214,7 +224,7 @@
     </entity>
     <entity name="VisaDefaultCardInfo">
         <data key="cardNumberEnding">1111</data>
-        <data key="cardExpire">01/2030</data>
+        <data key="cardExpire">1/2030</data>
     </entity>
     <entity name="SamplePaypalExpressConfig2" type="paypal_express_config">
         <data key="paypal_express_email">rlus_1349181941_biz@ebay.com</data>
@@ -222,5 +232,24 @@
         <data key="paypal_express_api_password">MDNAZYSJBDYNA6BN</data>
         <data key="paypal_express_api_signature">AFcWxV21C7fd0v3bYYYRCpSSRl31AqoP3QLd.JUUpDPuPpQIgT0-m401</data>
         <data key="paypal_express_merchantID">54Z2EE6T7PRB4</data>
+    </entity>
+    <entity name="SamplePaypalPaymentsProConfig" type="paypal_paymentspro_config">
+        <data key="paypal_paymentspro_parner">PayPal</data>
+        <data key="paypal_paymentspro_user">MksGLTest</data>
+        <data key="paypal_paymentspro_vendor">MksGLTest</data>
+        <data key="paypal_paymentspro_password">Abcd@123</data>
+    </entity>
+    <entity name="SamplePaypalPaymentsFlowLinkConfig" type="paypal_payment_flow_Link_config">
+        <data key="paypal_paymentsflowlink_businessacct">us_m2_biz@ebay.com</data>
+        <data key="paypal_paymentsflowlink_partner">PayPal</data>
+        <data key="paypal_paymentsflowlink_user">mpilink</data>
+        <data key="paypal_paymentsflowlink_vendor">mpilink</data>
+        <data key="paypal_paymentsflowlink_password">1234_1234L!</data>
+    </entity>
+    <entity name="validCreditCard" type="data">
+        <data key="cardNumber">4111111111111111</data>
+        <data key="month">12</data>
+        <data key="year">25</data>
+        <data key="cvv">123</data>
     </entity>
 </entities>
