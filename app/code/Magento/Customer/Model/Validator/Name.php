@@ -48,11 +48,15 @@ class Name extends AbstractValidator
 
         foreach ($nameFields as $fieldName => $fieldValue) {
             if (!empty($fieldValue) && !$this->isValidName($fieldValue)) {
-                parent::_addMessages([
-                    __('%1 is not valid! Allowed characters: %2',
-                       $fieldName,
-                       $this->nameValidator->allowedCharsDescription)
-                ]);
+                parent::_addMessages(
+                    [
+                        __(
+                            '%1 is not valid! Allowed characters: %2',
+                            $fieldName,
+                            $this->nameValidator->allowedCharsDescription
+                        ),
+                    ]
+                );
             }
         }
 
