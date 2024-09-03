@@ -28,6 +28,8 @@ class TelephoneValidator extends AbstractValidator
      * \/: Forward slash, sometimes used in extensions or other parts of the number.
      *
      * The pattern ensures that a phone number can be between 1 and 40 characters long.
+     *
+     * @var string
      */
     public string $patternTelephone = '/^[\d\s\+\-\()\/]{1,40}$/u';
     
