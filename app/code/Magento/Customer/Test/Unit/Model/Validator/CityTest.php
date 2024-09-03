@@ -9,7 +9,7 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Validator\City;
-use Magento\Security\Model\Validator\Pattern\CityValidator;
+use Magento\Customer\Model\Validator\Pattern\CityValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -45,7 +45,7 @@ class CityTest extends TestCase
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->addMethods(['getCity'])
-            ->getMock();        
+            ->getMock();
     }
 
     /**
@@ -57,7 +57,7 @@ class CityTest extends TestCase
      * @dataProvider expectedPunctuationInCityDataProvider
      */
     public function testValidateCityName(
-        string $city, 
+        string $city,
         bool $expectedIsValid
     ): void {
         $this->addressMock->expects($this->once())->method('getCity')->willReturn($city);
