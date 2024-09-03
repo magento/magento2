@@ -519,22 +519,18 @@
         <requiredEntity type="address">US_Address_NY_Not_Default_Address</requiredEntity>
         <requiredEntity type="address">US_California_State</requiredEntity>
     </entity>
-    <entity name="US_Address_Bris" type="address">
+    <entity name="Simple_US_Customer_With_Brisbane_Address" type="customer">
+        <data key="group_id">1</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
-        <data key="company">National Auto Parts</data>
-        <array key="street">
-            <item>3976 Thunder Road</item>
-        </array>
-        <data key="city">Brisbane</data>
-        <data key="state">California</data>
-        <data key="country_id">US</data>
-        <data key="country">United States</data>
-        <data key="postcode">94005</data>
-        <data key="telephone">650-544-6365</data>
-        <data key="vat_id">47458714</data>
-        <data key="default_billing">Yes</data>
-        <data key="default_shipping">Yes</data>
-        <requiredEntity type="region">RegionCA</requiredEntity>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <data key="group">General</data>
+        <requiredEntity type="address">US_Address_Bris</requiredEntity>
     </entity>
 </entities>
