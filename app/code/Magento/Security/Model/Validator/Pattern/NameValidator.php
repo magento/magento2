@@ -16,6 +16,11 @@ use Magento\Framework\Validator\AbstractValidator;
  */
 class NameValidator extends AbstractValidator
 {
+    /**
+     * Main Pattern
+     *
+     * @var string
+     */
     private const PATTERN_NAME = '/(?:[\p{L}\p{M}\,\-\_\.\'’`&\s\d]){1,255}+/u';
     
     /**
@@ -35,6 +40,8 @@ class NameValidator extends AbstractValidator
      * \d: Digits (0-9), to allow names that include numbers, such as "John Doe II".
      *
      * The pattern ensures that a name can be between 1 and 255 characters long.
+     *
+     * @var string
      */
     public string $patternName = '/^(?:[\p{L}\p{M},\-_.\'’`&\s\d]{1,255})$/u';
     
@@ -81,19 +88,16 @@ class NameValidator extends AbstractValidator
      */
     public function isValidationEnabled(): bool
     {
-        // Check if the global security pattern validation is enabled
         $isGlobalPatternEnabled = $this->scopeConfig->isSetFlag(
             self::XML_PATH_SECURITY_PATTERN_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
 
-        // Check if the specific name validation is enabled
         $isNameValidationEnabled = $this->scopeConfig->isSetFlag(
             self::XML_PATH_SECURITY_PATTERN_NAME_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
 
-        // Return true only if both are enabled
         return $isGlobalPatternEnabled && $isNameValidationEnabled;
     }
 
