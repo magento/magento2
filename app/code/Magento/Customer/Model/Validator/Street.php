@@ -48,13 +48,16 @@ class Street extends AbstractValidator
             return true;
         }
 
-        // Prüfen, ob "street" ein Array ist und jede Zeile validieren
         foreach ($streets as $street) {
-            if (!$this->validateStreetField('Street', $street)) {
-                parent::_addMessages([
-                    'street' => __('Street is not valid! Allowed characters: %1',
-                                   $this->streetValidator->allowedCharsDescription)
-                ]);
+            if (!$this->validateStreetField($street)) {
+                parent::_addMessages(
+                    [
+                        'street' => __(
+                            'Street is not valid! Allowed characters: %1',
+                            $this->streetValidator->allowedCharsDescription
+                        ),
+                    ]
+                );
             }
         }
 
