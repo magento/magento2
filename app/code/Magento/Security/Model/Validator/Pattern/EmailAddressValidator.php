@@ -13,10 +13,15 @@ use Magento\Framework\Validator\AbstractValidator;
 use Magento\Framework\Validator\ValidatorInterface;
 use Magento\Framework\Validator\EmailAddress;
 
+/**
+ * Email fields pattern validator.
+ */
 class EmailAddressValidator extends AbstractValidator implements ValidatorInterface
 {
     /**
      * Pattern for email validation.
+     *
+     * @var string
      */
     public string $patterEmail = '/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/';
 
