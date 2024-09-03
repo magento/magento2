@@ -9,7 +9,7 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\Telephone;
 use Magento\Customer\Model\Customer;
-use Magento\Security\Model\Validator\Pattern\TelephoneValidator;
+use Magento\Customer\Model\Validator\Pattern\TelephoneValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
