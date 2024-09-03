@@ -46,7 +46,7 @@ class ForbiddenValidator extends AbstractValidator
     public function isValidationEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(
-            self::XML_PATH_SECURITY_CODE_INJECTION_ENABLED, 
+            self::XML_PATH_SECURITY_CODE_INJECTION_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
     }
