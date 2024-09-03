@@ -9,7 +9,7 @@ namespace Magento\Customer\Model\Validator;
 
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Validator\AbstractValidator;
-use Magento\Security\Model\Validator\Pattern\ForbiddenValidator;
+use Magento\Customer\Model\Validator\Pattern\ForbiddenValidator;
 
 /**
  * Validator for forbidden patterns in customer EAV data.
