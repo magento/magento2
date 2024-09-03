@@ -9,6 +9,7 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Validator\City;
+use Magento\Security\Model\Validator\Pattern\CityValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,22 +24,28 @@ class CityTest extends TestCase
     private City $cityValidator;
 
     /**
+     * @var CityValidator|MockObject
+     */
+    private MockObject $cityValidatorMock;
+
+    /**
      * @var Customer|MockObject
      */
-    private MockObject $customerMock;
+    private MockObject $addressMock;
 
     /**
      * @return void
      */
     protected function setUp(): void
     {
-        $this->cityValidator = new City();
-        
-        $this->customerMock = $this
+        $this->cityValidatorMock = $this->createMock(CityValidator::class);
+        $this->cityValidator = new City($this->cityValidatorMock);
+
+        $this->addressMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->addMethods(['getCity'])
-            ->getMock();
+            ->getMock();        
     }
 
     /**
@@ -50,13 +57,13 @@ class CityTest extends TestCase
      * @dataProvider expectedPunctuationInCityDataProvider
      */
     public function testValidateCityName(
-        string $city,
-        string $message
+        string $city, 
+        bool $expectedIsValid
     ): void {
-        $this->customerMock->expects($this->once())->method('getCity')->willReturn($city);
+        $this->addressMock->expects($this->once())->method('getCity')->willReturn($city);
 
-        $isValid = $this->cityValidator->isValid($this->customerMock);
-        $this->assertTrue($isValid, $message);
+        $isValid = $this->cityValidator->isValid($this->addressMock);
+        $this->assertEquals($expectedIsValid, $isValid);
     }
 
     /**
@@ -69,34 +76,42 @@ class CityTest extends TestCase
         return [
             [
                 'city' => 'New York',
+                'expectedIsValid' => true,
                 'message' => 'Spaces must be allowed in city names'
             ],
             [
                 'city' => 'São Paulo',
+                'expectedIsValid' => true,
                 'message' => 'Accented characters and spaces must be allowed in city names'
             ],
             [
                 'city' => 'St. Louis',
+                'expectedIsValid' => true,
                 'message' => 'Periods and spaces must be allowed in city names'
             ],
             [
                 'city' => 'Москва',
+                'expectedIsValid' => true,
                 'message' => 'Unicode letters must be allowed in city names'
             ],
             [
                 'city' => 'Moscow \'',
+                'expectedIsValid' => true,
                 'message' => 'Apostrophe characters must be allowed in city names'
             ],
             [
                 'city' => 'St.-Pierre',
+                'expectedIsValid' => true,
                 'message' => 'Hyphens must be allowed in city names'
             ],
             [
                 'city' => 'Offenbach (Main)',
+                'expectedIsValid' => true,
                 'message' => 'Parentheses must be allowed in city names'
             ],
             [
                 'city' => 'Rome: The Eternal City',
+                'expectedIsValid' => true,
                 'message' => 'Colons must be allowed in city names'
             ],
         ];
