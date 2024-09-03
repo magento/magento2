@@ -32,7 +32,8 @@ class CreateEmptyCartWithoutCountryValidation
         private readonly CartRepositoryInterface $quoteRepository,
         private readonly CustomerRepositoryInterface $customerRepository,
         private readonly QuoteFactory $quoteFactory
-    ) {}
+    ) {
+    }
 
     /**
      * Create empty cart for customer without country validation
@@ -50,10 +51,9 @@ class CreateEmptyCartWithoutCountryValidation
         QuoteManagement $subject,
         Closure $proceed,
         int $customerId
-    ): bool|int
-    {
+    ): bool|int {
         $storeId = (int) $this->storeManager->getStore()->getStoreId();
-        $quote = $this->createCustomerCart($customerId,$storeId);
+        $quote = $this->createCustomerCart($customerId, $storeId);
 
         try {
             $this->quoteRepository->save($quote);
@@ -75,14 +75,14 @@ class CreateEmptyCartWithoutCountryValidation
     private function createCustomerCart(int $customerId, int $storeId): Quote
     {
         try {
-            $quote = $this->quoteRepository->getActiveForCustomer($customerId);
+            $activeQuote = $this->quoteRepository->getActiveForCustomer($customerId);
         } catch (NoSuchEntityException $e) {
-            $customer = $this->customerRepository->getById($customerId);
-            $quote = $this->quoteFactory->create();
-            $quote->setStoreId($storeId);
-            $quote->setCustomer($customer);
-            $quote->setCustomerIsGuest(0);
+            $activeCustomer = $this->customerRepository->getById($customerId);
+            $activeQuote = $this->quoteFactory->create();
+            $activeQuote->setStoreId($storeId);
+            $activeQuote->setCustomer($activeCustomer);
+            $activeQuote->setCustomerIsGuest(0);
         }
-        return $quote;
+        return $activeQuote;
     }
 }
