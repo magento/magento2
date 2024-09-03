@@ -127,7 +127,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
             ->willReturn([$moduleName]);
 
         $actionMock = $this->getMock(ActionInterface::class, $actionInstance);
-        
+
         $this->actionListMock->expects($this->once())
             ->method('get')
             ->with($moduleName)
