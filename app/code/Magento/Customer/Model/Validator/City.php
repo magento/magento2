@@ -48,11 +48,16 @@ class City extends AbstractValidator
             return true;
         }
 
-        if (!$this->validateCityField('City', $cityField)) {
-            parent::_addMessages([
-                __('%1 is not valid! Allowed characters: %2',
-                   'City', $this->cityValidator->allowedCharsDescription)
-            ]);
+        if (!$this->validateCityField($cityField)) {
+            parent::_addMessages(
+                [
+                    __(
+                        '%1 is not valid! Allowed characters: %2',
+                        'City',
+                        $this->cityValidator->allowedCharsDescription
+                    ),
+                ]
+            );
         }
 
         return count($this->_messages) == 0;
@@ -61,11 +66,10 @@ class City extends AbstractValidator
     /**
      * Validate the city field.
      *
-     * @param string $fieldName
      * @param string|null $cityValue
      * @return bool
      */
-    private function validateCityField(string $fieldName, ?string $cityValue): bool
+    private function validateCityField(?string $cityValue): bool
     {
         return $this->cityValidator->isValid($cityValue);
     }
