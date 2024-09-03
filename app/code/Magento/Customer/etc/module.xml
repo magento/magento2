@@ -10,7 +10,6 @@
         <sequence>
             <module name="Magento_Eav"/>
             <module name="Magento_Directory"/>
-            <module name="Magento_Security"/>
         </sequence>
     </module>
 </config>
