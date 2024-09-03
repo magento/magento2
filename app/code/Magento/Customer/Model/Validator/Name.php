@@ -9,7 +9,7 @@ namespace Magento\Customer\Model\Validator;
 
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Validator\AbstractValidator;
-use Magento\Security\Model\Validator\Pattern\NameValidator;
+use Magento\Customer\Model\Validator\Pattern\NameValidator;
 
 /**
  * Customer name fields validator.
