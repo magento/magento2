@@ -77,19 +77,16 @@ class CityValidator extends AbstractValidator
      */
     public function isValidationEnabled(): bool
     {
-        // Check if the global security pattern validation is enabled
         $isGlobalPatternEnabled = $this->scopeConfig->isSetFlag(
-            self::XML_PATH_SECURITY_PATTERN_ENABLED, 
+            self::XML_PATH_SECURITY_PATTERN_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
 
-        // Check if the specific city validation is enabled
         $isCityValidationEnabled = $this->scopeConfig->isSetFlag(
-            self::XML_PATH_SECURITY_PATTERN_CITY_ENABLED, 
+            self::XML_PATH_SECURITY_PATTERN_CITY_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
 
-        // Return true only if both are enabled
         return $isGlobalPatternEnabled && $isCityValidationEnabled;
     }
 
