@@ -103,7 +103,14 @@ class CityValidator extends AbstractValidator
         if ($value === null || $value === '' || !is_string($value)) {
             return true;
         }
-
-        return preg_match($this->patternCity, trim($value)) === 1;
+    
+        $pattern = $this->isValidationEnabled() ? $this->patternName : self::PATTERN_NAME;
+        
+        $trimmedValue = trim($value);
+        if (preg_match($pattern, $trimmedValue, $matches)) {
+            return $matches[0] === $trimmedValue;
+        }
+        
+        return false;
     }
 }
