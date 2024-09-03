@@ -31,6 +31,8 @@ class StreetValidator extends AbstractValidator
      * \d: Digits (0-9).
      * \[\]: Square brackets.
      * \(\): Parentheses.
+     *
+     * @var string
      */
     public string $patterStreet = "/^[\p{L}\p{M}\,\-\.\'’`&\s\d\[\]\(\)]{1,255}$/u";
 
@@ -140,6 +142,6 @@ class StreetValidator extends AbstractValidator
             return true;
         }
 
-        return preg_match($this->$patterStreet, trim($streetValue)) === 1;
+        return preg_match($this->patterStreet, trim($streetValue)) === 1;
     }
 }
