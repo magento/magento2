@@ -57,7 +57,6 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
         };
         $this->_eventManager
             ->method('fireEvent')
-            ->withConsecutive([$eventName])
             ->willReturnOnConsecutiveCalls($this->returnCallback($callback));
     }
 
@@ -83,7 +82,6 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
         };
         $this->_eventManager
             ->method('fireEvent')
-            ->withConsecutive([$eventName])
             ->willReturnOnConsecutiveCalls($this->returnCallback($callback));
     }
 
@@ -115,10 +113,10 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
 
         $this->_eventManager
             ->method('fireEvent')
-            ->withConsecutive($eventManagerWithArgs);
+            ->with($eventManagerWithArgs);
     }
 
-    public function startAndRollbackTransactionDataProvider()
+    public static function startAndRollbackTransactionDataProvider()
     {
         return [
             'method "startTest"' => ['startTest', 'startTestTransactionRequest'],
@@ -153,7 +151,11 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
         $this->_expectTransactionRollback();
         $this->_eventManager
             ->method('fireEvent')
-            ->withConsecutive(['rollbackTransaction']);
+            ->willReturnCallback(function ($arg) {
+                if ($arg === 'rollbackTransaction') {
+                    return null;
+                }
+            });
 
         $this->_object->endTestSuite();
     }

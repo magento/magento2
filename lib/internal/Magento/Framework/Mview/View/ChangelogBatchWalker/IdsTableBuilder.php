@@ -50,7 +50,6 @@ class IdsTableBuilder implements IdsTableBuilderInterface
             ['unsigned' => true, 'nullable' => false],
             'Entity ID'
         );
-        $table->setOption('type', 'memory');
         $table->addIndex(
             self::INDEX_NAME_UNIQUE,
             [

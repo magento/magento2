@@ -63,16 +63,17 @@ class UiComponentTest extends TestCase
     protected function setUp(): void
     {
         $this->helper = $this->getMockBuilder(Helper::class)
-            ->setMethods(['scheduleStructure'])
+            ->onlyMethods(['scheduleStructure'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getScheduledStructure', 'setElementToIfconfigList'])
+            ->addMethods(['setElementToIfconfigList'])
+            ->onlyMethods(['getScheduledStructure'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataConfigFactory = $this->getMockBuilder(DataInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->dataConfig = $this->getMockBuilder(DataInterface::class)
             ->disableOriginalConstructor()
