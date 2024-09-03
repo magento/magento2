@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Validator;
 
-use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Validator\Name;
+use Magento\Customer\Model\Customer;
+use Magento\Security\Model\Validator\Pattern\NameValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +24,11 @@ class NameTest extends TestCase
     private Name $nameValidator;
 
     /**
+     * @var NameValidator|MockObject
+     */
+    private MockObject $nameValidatorMock;
+
+    /**
      * @var Customer|MockObject
      */
     private MockObject $customerMock;
@@ -32,11 +38,12 @@ class NameTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->nameValidator = new Name;
+        $this->nameValidatorMock = $this->createMock(NameValidator::class);
+        $this->nameValidator = new Name($this->nameValidatorMock);
         $this->customerMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getFirstname', 'getMiddlename', 'getLastname'])
+            ->addMethods(['getFirstname', 'getLastname', 'getMiddlename'])
             ->getMock();
     }
 
@@ -73,25 +80,25 @@ class NameTest extends TestCase
             [
                 'firstName' => 'John',
                 'middleName' => '',
-                'lastName' => 'O’Doe',
+                'lastNameName' => 'O’Doe',
                 'message' => 'Inclined apostrophe must be allowed in names (iOS Smart Punctuation compatibility)'
             ],
             [
                 'firstName' => 'John',
                 'middleName' => '',
-                'lastName' => 'O\'Doe',
+                'lastNameName' => 'O\'Doe',
                 'message' => 'Legacy straight apostrophe must be allowed in names'
             ],
             [
                 'firstName' => 'John',
                 'middleName' => '',
-                'lastName' => 'O`Doe',
+                'lastNameName' => 'O`Doe',
                 'message' => 'Grave accent back quote character must be allowed in names'
             ],
             [
                 'firstName' => 'John & Smith',
                 'middleName' => '',
-                'lastName' => 'O`Doe',
+                'lastNameName' => 'O`Doe',
                 'message' => 'Special character ampersand(&) must be allowed in names'
             ]
         ];
