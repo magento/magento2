@@ -84,7 +84,7 @@ class Validate extends ImportResultController implements HttpPostActionInterface
         if ($import->getProcessedRowsCount()) {
             if ($validationResult) {
                 $totalError = $errorAggregator->getErrorsCount();
-                $totalRows = $import->getProcessedRowsCount();
+                $totalRows = $import->getProcessedRowsCount() + $errorAggregator->getInvalidRowsCount();
                 $this->addMessageForValidResult($resultBlock, $totalError, $totalRows);
             } else {
                 $resultBlock->addError(
