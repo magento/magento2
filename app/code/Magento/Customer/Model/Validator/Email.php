@@ -48,7 +48,7 @@ class Email extends AbstractValidator
             return true;
         }
 
-        if (!$this->validateEmailField('Email', $email)) {
+        if (!$this->validateEmailField($email)) {
             return false;
         }
 
