@@ -57,12 +57,12 @@ class Totals extends Bar
             return $this;
         }
         $isFilter = $this->getRequest()->getParam(
-                'store'
-            ) || $this->getRequest()->getParam(
-                'website'
-            ) || $this->getRequest()->getParam(
-                'group'
-            );
+            'store'
+        ) || $this->getRequest()->getParam(
+            'website'
+        ) || $this->getRequest()->getParam(
+            'group'
+        );
         $period = $this->getRequest()->getParam('period', Period::PERIOD_24_HOURS);
 
         /* @var $collection Collection */
