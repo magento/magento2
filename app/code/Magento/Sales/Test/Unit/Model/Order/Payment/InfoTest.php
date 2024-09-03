@@ -106,7 +106,7 @@ class InfoTest extends TestCase
      *
      * @return array
      */
-    public function ccKeysDataProvider(): array
+    public static function ccKeysDataProvider(): array
     {
         return [
             ['cc_number', 'cc_number_enc'],
@@ -159,8 +159,13 @@ class InfoTest extends TestCase
 
         $this->paymentHelperMock
             ->method('getMethodInstance')
-            ->withConsecutive([$method], [Substitution::CODE])
-            ->willReturn($this->methodInstanceMock);
+            ->willReturnCallback(
+                function ($arg) use ($method) {
+                    if ($arg === $method || $arg === Substitution::CODE) {
+                        return $this->methodInstanceMock;
+                    }
+                }
+            );
 
         $this->info->getMethodInstance();
     }
@@ -270,7 +275,7 @@ class InfoTest extends TestCase
      *
      * @return array
      */
-    public function additionalInformationDataProvider(): array
+    public static function additionalInformationDataProvider(): array
     {
         return [
             [['key1' => 'data1', 'key2' => 'data2'], null],
