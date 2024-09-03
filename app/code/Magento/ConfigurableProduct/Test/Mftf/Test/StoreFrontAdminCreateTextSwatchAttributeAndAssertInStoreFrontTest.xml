@@ -9,10 +9,10 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StoreFrontAdminCreateTextSwatchAttributeAndAssertInStoreFrontTest">
         <annotations>
-            <features value="ConfigurableProduct"/>
-            <stories value="Create Text Swatch from Stores ->Attributes section: Product"/>
+            <features value="Configurable Product"/>
+            <stories value="Create Text Swatch from Stores ->Attributes section: Product and create configurable product"/>
             <title value="Create Text Swatch from Stores ->Attributes section: Product"/>
-            <description value="Admin create product attribute with text swatch and assert them in storefront"/>
+            <description value="Admin create product attribute with text swatch and create configurable product and assert the created attributes in storefront"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-3921"/>
         </annotations>
@@ -42,43 +42,50 @@
 
         <waitForElementClickable selector="{{AttributeManageSwatchSection.isDefaultTextSwatch('1')}}" stepKey="waitForDefaultOptionToBecomeClickable"/>
         <click selector="{{AttributeManageSwatchSection.isDefaultTextSwatch('1')}}" stepKey="setFirstSizeAsDefault"/>
-        <waitForElementVisible selector="{{AttributeManageSwatchSection.textSwatchAdminSwatchValue('0')}}" stepKey="waitForTextBoxForSSizeBecomeVisible"/>
-        <fillField selector="{{AttributeManageSwatchSection.textSwatchAdminSwatchValue('0')}}" userInput="S" stepKey="fillSwatchForAdmin"/>
-        <waitForElementVisible selector="{{AttributeManageSwatchSection.textSwatchAdminDescriptionValue('0')}}" stepKey="waitForTextBoxForDescriptionForSSizeBecomeVisibleForAdmin"/>
-        <fillField selector="{{AttributeManageSwatchSection.textSwatchAdminDescriptionValue('0')}}" userInput="Small" stepKey="fillDescriptionForAdmin"/>
-        <waitForElementVisible selector="{{AttributeManageSwatchSection.textSwatchDefaultStoreSwatchValue('0')}}" stepKey="waitForTextBoxForSSizeBecomeVisibleForStoreView"/>
-        <fillField selector="{{AttributeManageSwatchSection.textSwatchDefaultStoreSwatchValue('0')}}" userInput="S1" stepKey="fillSwatchForStoreView"/>
-        <waitForElementVisible selector="{{AttributeManageSwatchSection.textSwatchDefaultStoreDescriptionValue('0')}}" stepKey="waitForTextBoxForDescriptionForSSizeBecomeVisibleForStoreView"/>
-        <fillField selector="{{AttributeManageSwatchSection.textSwatchDefaultStoreDescriptionValue('0')}}" userInput="Small_1" stepKey="fillDescriptionForStoreView"/>
+        <actionGroup ref="AdminAddTextSwatchForAdminActionGroup" stepKey="addTextSwatchForAdmin">
+            <argument name="position" value="0"/>
+            <argument name="swatchName" value="S"/>
+            <argument name="swatchDescription" value="Small"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddTextSwatchForStoreViewActionGroup" stepKey="addTextSwatchForStoreView">
+            <argument name="position" value="0"/>
+            <argument name="swatchName" value="S1"/>
+            <argument name="swatchDescription" value="Small_1"/>
+        </actionGroup>
         <!--Add swatch for Medium-->
         <waitForElementClickable selector="{{AttributePropertiesSection.addSwatch}}" stepKey="waitForAddSwatchButtonToBeClickable"/>
         <click selector="{{AttributePropertiesSection.addSwatch}}" stepKey="clickAddSwatchForMedium"/>
-        <waitForElementVisible selector="{{AttributeManageSwatchSection.textSwatchAdminSwatchValue('1')}}" stepKey="waitForTextBoxForMSizeBecomeVisible"/>
-        <fillField selector="{{AttributeManageSwatchSection.textSwatchAdminSwatchValue('1')}}" userInput="M" stepKey="fillMediumSwatchForAdmin"/>
-        <waitForElementVisible selector="{{AttributeManageSwatchSection.textSwatchAdminDescriptionValue('1')}}" stepKey="waitForTextBoxForDescriptionForMSizeBecomeVisibleForAdmin"/>
-        <fillField selector="{{AttributeManageSwatchSection.textSwatchAdminDescriptionValue('1')}}" userInput="Medium" stepKey="fillDescriptionForMediumForAdmin"/>
-        <waitForElementVisible selector="{{AttributeManageSwatchSection.textSwatchDefaultStoreSwatchValue('1')}}" stepKey="waitForTextBoxForMSizeBecomeVisibleForStoreView"/>
-        <fillField selector="{{AttributeManageSwatchSection.textSwatchDefaultStoreSwatchValue('1')}}" userInput="M2" stepKey="fillMediumSwatchForStoreView"/>
-        <waitForElementVisible selector="{{AttributeManageSwatchSection.textSwatchDefaultStoreDescriptionValue('1')}}" stepKey="waitForTextBoxForDescriptionForMSizeBecomeVisibleForStoreView"/>
-        <fillField selector="{{AttributeManageSwatchSection.textSwatchDefaultStoreDescriptionValue('1')}}" userInput="Medium_2" stepKey="fillDescriptionForMediumForStoreView"/>
+        <actionGroup ref="AdminAddTextSwatchForAdminActionGroup" stepKey="addTextSwatchForMSizeInAdmin">
+            <argument name="position" value="1"/>
+            <argument name="swatchName" value="M"/>
+            <argument name="swatchDescription" value="Medium"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddTextSwatchForStoreViewActionGroup" stepKey="addTextSwatchForMSizeInStoreView">
+            <argument name="position" value="1"/>
+            <argument name="swatchName" value="M2"/>
+            <argument name="swatchDescription" value="Medium_2"/>
+        </actionGroup>
         <!--Add swatch for Large-->
         <waitForElementClickable selector="{{AttributePropertiesSection.addSwatch}}" stepKey="waitForAddSwatchButtonForLargeToBeClickable"/>
         <click selector="{{AttributePropertiesSection.addSwatch}}" stepKey="clickAddSwatchForLarge"/>
-        <waitForElementVisible selector="{{AttributeManageSwatchSection.textSwatchAdminSwatchValue('2')}}" stepKey="waitForTextBoxForLargeSizeBecomeVisible"/>
-        <fillField selector="{{AttributeManageSwatchSection.textSwatchAdminSwatchValue('2')}}" userInput="L" stepKey="fillLargeSwatchForAdmin"/>
-        <waitForElementVisible selector="{{AttributeManageSwatchSection.textSwatchAdminDescriptionValue('2')}}" stepKey="waitForTextBoxForDescriptionForLargeSizeBecomeVisibleForAdmin"/>
-        <fillField selector="{{AttributeManageSwatchSection.textSwatchAdminDescriptionValue('2')}}" userInput="Large" stepKey="fillDescriptionForLargeForAdmin"/>
-        <waitForElementVisible selector="{{AttributeManageSwatchSection.textSwatchDefaultStoreSwatchValue('2')}}" stepKey="waitForTextBoxForLargeSizeBecomeVisibleForStoreView"/>
-        <fillField selector="{{AttributeManageSwatchSection.textSwatchDefaultStoreSwatchValue('2')}}" userInput="L3" stepKey="fillLargeSwatchForStoreView"/>
-        <waitForElementVisible selector="{{AttributeManageSwatchSection.textSwatchDefaultStoreDescriptionValue('2')}}" stepKey="waitForTextBoxForDescriptionForLargeSizeBecomeVisibleForStoreView"/>
-        <fillField selector="{{AttributeManageSwatchSection.textSwatchDefaultStoreDescriptionValue('2')}}" userInput="Large_3" stepKey="fillDescriptionForLargeForStoreView"/>
+        <actionGroup ref="AdminAddTextSwatchForAdminActionGroup" stepKey="addTextSwatchForLSizeInAdmin">
+            <argument name="position" value="2"/>
+            <argument name="swatchName" value="L"/>
+            <argument name="swatchDescription" value="Large"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddTextSwatchForStoreViewActionGroup" stepKey="addTextSwatchForLSizeInStoreView">
+            <argument name="position" value="3"/>
+            <argument name="swatchName" value="L3"/>
+            <argument name="swatchDescription" value="Large_3"/>
+        </actionGroup>
         <!--Add swatch for Extra Large-->
         <waitForElementClickable selector="{{AttributePropertiesSection.addSwatch}}" stepKey="waitForAddSwatchButtonForExtarLargeToBeClickable"/>
         <click selector="{{AttributePropertiesSection.addSwatch}}" stepKey="clickAddSwatchForExtraLarge"/>
-        <waitForElementVisible selector="{{AttributeManageSwatchSection.textSwatchAdminSwatchValue('3')}}" stepKey="waitForTextBoxForExtraLargeSizeBecomeVisible"/>
-        <fillField selector="{{AttributeManageSwatchSection.textSwatchAdminSwatchValue('3')}}" userInput="XL" stepKey="fillExtraLargeSwatchForAdmin"/>
-        <waitForElementVisible selector="{{AttributeManageSwatchSection.textSwatchAdminDescriptionValue('3')}}" stepKey="waitForTextBoxForDescriptionForExtraLargeSizeBecomeVisibleForAdmin"/>
-        <fillField selector="{{AttributeManageSwatchSection.textSwatchAdminDescriptionValue('3')}}" userInput="Extra Large" stepKey="fillDescriptionForExtraLargeForAdmin"/>
+        <actionGroup ref="AdminAddTextSwatchForAdminActionGroup" stepKey="addTextSwatchForXLSizeInAdmin">
+            <argument name="position" value="2"/>
+            <argument name="swatchName" value="XL"/>
+            <argument name="swatchDescription" value="Extra Large"/>
+        </actionGroup>
         <!--Select Scope-->
         <waitForElementClickable selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="waitForAdvancedPropertiesFieldIsVisible"/>
         <click selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="openAttributeAdvancedSection"/>
