@@ -9,6 +9,7 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Validator\Street;
+use Magento\Security\Model\Validator\Pattern\StreetValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,22 +24,28 @@ class StreetTest extends TestCase
     private Street $streetValidator;
 
     /**
+     * @var StreetValidator|MockObject
+     */
+    private MockObject $streetValidatorMock;
+
+    /**
      * @var Customer|MockObject
      */
-    private MockObject $customerMock;
+    private MockObject $addressMock;
 
     /**
      * @return void
      */
     protected function setUp(): void
     {
-        $this->streetValidator = new Street();
+        $this->streetValidatorMock = $this->createMock(StreetValidator::class);
+        $this->streetValidator = new Street($this->streetValidatorMock);
         
-        $this->customerMock = $this
+        $this->addressMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->addMethods(['getStreet'])
-            ->getMock();
+            ->getMock();        
     }
 
     /**
@@ -50,12 +57,12 @@ class StreetTest extends TestCase
      * @dataProvider expectedPunctuationInStreetDataProvider
      */
     public function testValidateStreetName(
-        array $street,
+        array $street, 
         string $message
     ): void {
-        $this->customerMock->expects($this->once())->method('getStreet')->willReturn($street);
+        $this->addressMock->expects($this->once())->method('getStreet')->willReturn($street);
 
-        $isValid = $this->streetValidator->isValid($this->customerMock);
+        $isValid = $this->streetValidator->isValid($this->addressMock);
         $this->assertTrue($isValid, $message);
     }
 
