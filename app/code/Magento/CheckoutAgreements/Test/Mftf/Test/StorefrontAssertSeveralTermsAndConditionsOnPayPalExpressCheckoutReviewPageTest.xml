@@ -45,6 +45,12 @@
             <argument name="term" value="newHtmlAutomaticallyTerm"/>
         </actionGroup>
         <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveAutomaticTerm"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
         <!-- Login as customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
             <argument name="Customer" value="$$createCustomer$$"/>
@@ -60,16 +66,17 @@
         <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPayPalRadioButton"/>
         <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="selectPaypalPayment"/>
         <!-- Verify both manual and automatic are present -->
-        <waitForText selector="{{CheckoutPaymentSection.brainTreeManualCheckoutAgreementLink}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="seeManualTermTextInCheckoutIsPresent"/>
-        <waitForText selector="{{CheckoutPaymentSection.brainTreeAutomaticCheckoutAgreementLink}}" userInput="{{newHtmlAutomaticallyTerm.checkboxText}}" stepKey="seeAutomaticTermTextInCheckoutIsPresent"/>
+        <waitForText selector="{{StorefrontCheckoutAgreementsSection.manualCheckoutAgreementLink('agreement_paypal_express')}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="seeManualTermTextInCheckoutIsPresent"/>
+        <waitForText selector="{{StorefrontCheckoutAgreementsSection.automaticCheckoutAgreementLink('agreement_paypal_express')}}" userInput="{{newHtmlAutomaticallyTerm.checkboxText}}" stepKey="seeAutomaticTermTextInCheckoutIsPresent"/>
         <!-- open manual terms and conditions and verify content messages-->
-        <waitForElementClickable selector="{{CheckoutPaymentSection.brainTreeManualCheckoutAgreementLink}}" stepKey="waitForManualTermTextInCheckoutIsClickable"/>
-        <click selector="{{CheckoutPaymentSection.brainTreeManualCheckoutAgreementLink}}" stepKey="clickManualTermTextInCheckout"/>
+        <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.manualCheckoutAgreementLink('agreement_paypal_express')}}" stepKey="waitForManualTermTextInCheckoutIsClickable"/>
+        <click selector="{{StorefrontCheckoutAgreementsSection.manualCheckoutAgreementLink('agreement_paypal_express')}}" stepKey="clickManualTermTextInCheckout"/>
         <waitForElement selector="{{StorefrontCheckoutAgreementsSection.contentArea(newHtmlTerm.content)}}" stepKey="verifyManualTermContentTextMessage"/>
-        <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.close}}" stepKey="waitForCloseToBeClickable"/>
-        <click selector="{{StorefrontCheckoutAgreementsSection.close}}" stepKey="ClickOnClose"/>
-        <waitForElementClickable selector="{{CheckoutPaymentSection.brainTreeAutomaticCheckoutAgreementLink}}" stepKey="waitForAutomaticTermTextInCheckoutIsClickable"/>
-        <click selector="{{CheckoutPaymentSection.brainTreeAutomaticCheckoutAgreementLink}}" stepKey="clickAutomaticTermTextInCheckoutIsClickable"/>
+        <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.agreementClose}}" stepKey="waitForCloseToBeClickable"/>
+        <click selector="{{StorefrontCheckoutAgreementsSection.agreementClose}}" stepKey="ClickOnClose"/>
+        <!-- open automatic terms and conditions and verify content messages-->
+        <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.automaticCheckoutAgreementLink('agreement_paypal_express')}}" stepKey="waitForAutomaticTermTextInCheckoutIsClickable"/>
+        <click selector="{{StorefrontCheckoutAgreementsSection.automaticCheckoutAgreementLink('agreement_paypal_express')}}" stepKey="clickAutomaticTermTextInCheckoutIsClickable"/>
         <waitForElement selector="{{StorefrontCheckoutAgreementsSection.contentArea(newHtmlAutomaticallyTerm.content)}}" stepKey="verifyAutomaticTermContentTextMessage"/>
     </test>
 </tests>
