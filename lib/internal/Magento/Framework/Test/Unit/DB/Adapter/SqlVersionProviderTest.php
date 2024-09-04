@@ -49,6 +49,7 @@ class SqlVersionProviderTest extends TestCase
      */
     private $supportedVersionPatterns = [
         'MySQL-8' => '^8\.0\.',
+        'MySQL-8.4' => '^8\.4\.',
         'MySQL-5.7' => '^5\.7\.',
         'MariaDB-(10.2-10.6)' => '^10\.[2-6]\.',
         'MariaDB-11.4' => '^11\.4\.'
@@ -130,6 +131,10 @@ class SqlVersionProviderTest extends TestCase
             'MySQL-8' => [
                 ['version' => '8.0.19'],
                 SqlVersionProvider::MYSQL_8_0_VERSION,
+            ],
+            'MySQL-8.4' => [
+                ['version' => '8.4.0'],
+                SqlVersionProvider::MYSQL_8_4_VERSION,
             ],
             'Percona' => [
                 ['version' => '5.7.29-32'],
