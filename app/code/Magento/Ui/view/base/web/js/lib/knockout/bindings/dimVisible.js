@@ -28,7 +28,7 @@ define([
         },
 
         /**
-         * Whenever the value subsequently changes, slowly fade the element in or out.
+         * Whenever the value subsequently changes, update the state of the element accordingly.
          *
          * @param {HTMLElement} element
          * @param {Function} valueAccessor
