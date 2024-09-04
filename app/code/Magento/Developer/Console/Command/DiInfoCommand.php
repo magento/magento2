@@ -7,7 +7,7 @@
 namespace Magento\Developer\Console\Command;
 
 use Magento\Developer\Model\Di\Information;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Helper\Table;
@@ -19,6 +19,12 @@ use Magento\Framework\App\Area;
 
 class DiInfoCommand extends Command
 {
+    /**
+     * @var ObjectManagerInterface
+     */
+    private ObjectManagerInterface $objectManager;
+
+
     /**
      * Command name
      */
@@ -50,10 +56,12 @@ class DiInfoCommand extends Command
      */
     public function __construct(
         Information $diInformation,
+        ObjectManagerInterface $objectManager,
         ?AreaList   $areaList = null
     )
     {
         $this->diInformation = $diInformation;
+        $this->objectManager = $objectManager;
         $this->areaList = $areaList ?? \Magento\Framework\App\ObjectManager::getInstance()->get(AreaList::class);
         parent::__construct();
     }
@@ -203,18 +211,16 @@ class DiInfoCommand extends Command
      * @return void
      * @throws \InvalidArgumentException
      */
-    private function setDiArea($area): void
+    private function setDiArea(string $area): void
     {
         if ($this->validateAreaCodeFromInput($area)) {
-            $objectManager = ObjectManager::getInstance();
-
-            $areaOmConfiguration = $objectManager
+            $areaOmConfiguration = $this->objectManager
                 ->get(\Magento\Framework\App\ObjectManager\ConfigLoader::class)
                 ->load($area);
 
-            $objectManager->configure($areaOmConfiguration);
+            $this->objectManager->configure($areaOmConfiguration);
 
-            $objectManager->get(\Magento\Framework\Config\ScopeInterface::class)
+            $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class)
                 ->setCurrentScope($area);
         } else {
             throw new InvalidArgumentException(sprintf('The "%s" area code does not exist', $area));
