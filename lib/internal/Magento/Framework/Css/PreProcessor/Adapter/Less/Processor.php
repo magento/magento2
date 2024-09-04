@@ -66,11 +66,12 @@ class Processor implements ContentProcessorInterface
     {
         $path = $asset->getPath();
         try {
+            $mode = $this->appState->getMode();
             $parser = new \Less_Parser(
                 [
                     'relativeUrls' => false,
-                    'compress' => $this->appState->getMode() !== State::MODE_DEVELOPER,
-                    'sourceMap' => $this->appState->getMode() === State::MODE_DEVELOPER
+                    'compress' => $mode !== State::MODE_DEVELOPER,
+                    'sourceMap' => $mode === State::MODE_DEVELOPER
                 ]
             );
 
