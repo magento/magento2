@@ -55,9 +55,9 @@ class DiInfoCommand extends Command
      * @param AreaList $areaList
      */
     public function __construct(
-        Information $diInformation,
+        Information            $diInformation,
         ObjectManagerInterface $objectManager,
-        ?AreaList   $areaList = null
+        ?AreaList              $areaList = null
     )
     {
         $this->diInformation = $diInformation;
