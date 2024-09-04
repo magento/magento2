@@ -19,52 +19,54 @@ use Magento\Framework\Setup\Option\TextConfigOption;
  */
 class Session implements ConfigOptionsListInterface
 {
-    const INPUT_KEY_SESSION_REDIS_HOST = 'session-save-redis-host';
-    const INPUT_KEY_SESSION_REDIS_PORT = 'session-save-redis-port';
-    const INPUT_KEY_SESSION_REDIS_PASSWORD = 'session-save-redis-password';
-    const INPUT_KEY_SESSION_REDIS_TIMEOUT = 'session-save-redis-timeout';
-    const INPUT_KEY_SESSION_REDIS_PERSISTENT_IDENTIFIER = 'session-save-redis-persistent-id';
-    const INPUT_KEY_SESSION_REDIS_DATABASE = 'session-save-redis-db';
-    const INPUT_KEY_SESSION_REDIS_COMPRESSION_THRESHOLD = 'session-save-redis-compression-threshold';
-    const INPUT_KEY_SESSION_REDIS_COMPRESSION_LIBRARY = 'session-save-redis-compression-lib';
-    const INPUT_KEY_SESSION_REDIS_LOG_LEVEL = 'session-save-redis-log-level';
-    const INPUT_KEY_SESSION_REDIS_MAX_CONCURRENCY = 'session-save-redis-max-concurrency';
-    const INPUT_KEY_SESSION_REDIS_BREAK_AFTER_FRONTEND = 'session-save-redis-break-after-frontend';
-    const INPUT_KEY_SESSION_REDIS_BREAK_AFTER_ADMINHTML = 'session-save-redis-break-after-adminhtml';
-    const INPUT_KEY_SESSION_REDIS_FIRST_LIFETIME = 'session-save-redis-first-lifetime';
-    const INPUT_KEY_SESSION_REDIS_BOT_FIRST_LIFETIME = 'session-save-redis-bot-first-lifetime';
-    const INPUT_KEY_SESSION_REDIS_BOT_LIFETIME = 'session-save-redis-bot-lifetime';
-    const INPUT_KEY_SESSION_REDIS_DISABLE_LOCKING = 'session-save-redis-disable-locking';
-    const INPUT_KEY_SESSION_REDIS_MIN_LIFETIME = 'session-save-redis-min-lifetime';
-    const INPUT_KEY_SESSION_REDIS_MAX_LIFETIME = 'session-save-redis-max-lifetime';
-    const INPUT_KEY_SESSION_REDIS_SENTINEL_SERVERS = 'session-save-redis-sentinel-servers';
-    const INPUT_KEY_SESSION_REDIS_SENTINEL_MASTER = 'session-save-redis-sentinel-master';
-    const INPUT_KEY_SESSION_REDIS_SENTINEL_VERIFY_MASTER = 'session-save-redis-sentinel-verify-master';
-    const INPUT_KEY_SESSION_REDIS_SENTINEL_CONNECT_RETRIES = 'session-save-redis-sentinel-connect-retries';
+    public const INPUT_KEY_SESSION_REDIS_HOST = 'session-save-redis-host';
+    public const INPUT_KEY_SESSION_REDIS_PORT = 'session-save-redis-port';
+    public const INPUT_KEY_SESSION_REDIS_PASSWORD = 'session-save-redis-password';
+    public const INPUT_KEY_SESSION_REDIS_TIMEOUT = 'session-save-redis-timeout';
+    public const INPUT_KEY_SESSION_REDIS_RETRIES = 'session-save-redis-retries';
+    public const INPUT_KEY_SESSION_REDIS_PERSISTENT_IDENTIFIER = 'session-save-redis-persistent-id';
+    public const INPUT_KEY_SESSION_REDIS_DATABASE = 'session-save-redis-db';
+    public const INPUT_KEY_SESSION_REDIS_COMPRESSION_THRESHOLD = 'session-save-redis-compression-threshold';
+    public const INPUT_KEY_SESSION_REDIS_COMPRESSION_LIBRARY = 'session-save-redis-compression-lib';
+    public const INPUT_KEY_SESSION_REDIS_LOG_LEVEL = 'session-save-redis-log-level';
+    public const INPUT_KEY_SESSION_REDIS_MAX_CONCURRENCY = 'session-save-redis-max-concurrency';
+    public const INPUT_KEY_SESSION_REDIS_BREAK_AFTER_FRONTEND = 'session-save-redis-break-after-frontend';
+    public const INPUT_KEY_SESSION_REDIS_BREAK_AFTER_ADMINHTML = 'session-save-redis-break-after-adminhtml';
+    public const INPUT_KEY_SESSION_REDIS_FIRST_LIFETIME = 'session-save-redis-first-lifetime';
+    public const INPUT_KEY_SESSION_REDIS_BOT_FIRST_LIFETIME = 'session-save-redis-bot-first-lifetime';
+    public const INPUT_KEY_SESSION_REDIS_BOT_LIFETIME = 'session-save-redis-bot-lifetime';
+    public const INPUT_KEY_SESSION_REDIS_DISABLE_LOCKING = 'session-save-redis-disable-locking';
+    public const INPUT_KEY_SESSION_REDIS_MIN_LIFETIME = 'session-save-redis-min-lifetime';
+    public const INPUT_KEY_SESSION_REDIS_MAX_LIFETIME = 'session-save-redis-max-lifetime';
+    public const INPUT_KEY_SESSION_REDIS_SENTINEL_SERVERS = 'session-save-redis-sentinel-servers';
+    public const INPUT_KEY_SESSION_REDIS_SENTINEL_MASTER = 'session-save-redis-sentinel-master';
+    public const INPUT_KEY_SESSION_REDIS_SENTINEL_VERIFY_MASTER = 'session-save-redis-sentinel-verify-master';
+    public const INPUT_KEY_SESSION_REDIS_SENTINEL_CONNECT_RETRIES = 'session-save-redis-sentinel-connect-retries';
 
-    const CONFIG_PATH_SESSION_REDIS = 'session/redis';
-    const CONFIG_PATH_SESSION_REDIS_HOST = 'session/redis/host';
-    const CONFIG_PATH_SESSION_REDIS_PORT = 'session/redis/port';
-    const CONFIG_PATH_SESSION_REDIS_PASSWORD = 'session/redis/password';
-    const CONFIG_PATH_SESSION_REDIS_TIMEOUT = 'session/redis/timeout';
-    const CONFIG_PATH_SESSION_REDIS_PERSISTENT_IDENTIFIER = 'session/redis/persistent_identifier';
-    const CONFIG_PATH_SESSION_REDIS_DATABASE = 'session/redis/database';
-    const CONFIG_PATH_SESSION_REDIS_COMPRESSION_THRESHOLD = 'session/redis/compression_threshold';
-    const CONFIG_PATH_SESSION_REDIS_COMPRESSION_LIBRARY = 'session/redis/compression_library';
-    const CONFIG_PATH_SESSION_REDIS_LOG_LEVEL = 'session/redis/log_level';
-    const CONFIG_PATH_SESSION_REDIS_MAX_CONCURRENCY = 'session/redis/max_concurrency';
-    const CONFIG_PATH_SESSION_REDIS_BREAK_AFTER_FRONTEND = 'session/redis/break_after_frontend';
-    const CONFIG_PATH_SESSION_REDIS_BREAK_AFTER_ADMINHTML = 'session/redis/break_after_adminhtml';
-    const CONFIG_PATH_SESSION_REDIS_FIRST_LIFETIME = 'session/redis/first_lifetime';
-    const CONFIG_PATH_SESSION_REDIS_BOT_FIRST_LIFETIME = 'session/redis/bot_first_lifetime';
-    const CONFIG_PATH_SESSION_REDIS_BOT_LIFETIME = 'session/redis/bot_lifetime';
-    const CONFIG_PATH_SESSION_REDIS_DISABLE_LOCKING = 'session/redis/disable_locking';
-    const CONFIG_PATH_SESSION_REDIS_MIN_LIFETIME = 'session/redis/min_lifetime';
-    const CONFIG_PATH_SESSION_REDIS_MAX_LIFETIME = 'session/redis/max_lifetime';
-    const CONFIG_PATH_SESSION_REDIS_SENTINEL_SERVERS = 'session/redis/sentinel_servers';
-    const CONFIG_PATH_SESSION_REDIS_SENTINEL_MASTER = 'session/redis/sentinel_master';
-    const CONFIG_PATH_SESSION_REDIS_SENTINEL_VERIFY_MASTER = 'session/redis/sentinel_verify_master';
-    const CONFIG_PATH_SESSION_REDIS_SENTINEL_CONNECT_RETRIES = 'session/redis/sentinel_connect_retries';
+    public const CONFIG_PATH_SESSION_REDIS = 'session/redis';
+    public const CONFIG_PATH_SESSION_REDIS_HOST = 'session/redis/host';
+    public const CONFIG_PATH_SESSION_REDIS_PORT = 'session/redis/port';
+    public const CONFIG_PATH_SESSION_REDIS_PASSWORD = 'session/redis/password';
+    public const CONFIG_PATH_SESSION_REDIS_TIMEOUT = 'session/redis/timeout';
+    public const CONFIG_PATH_SESSION_REDIS_RETRIES = 'session/redis/retries';
+    public const CONFIG_PATH_SESSION_REDIS_PERSISTENT_IDENTIFIER = 'session/redis/persistent_identifier';
+    public const CONFIG_PATH_SESSION_REDIS_DATABASE = 'session/redis/database';
+    public const CONFIG_PATH_SESSION_REDIS_COMPRESSION_THRESHOLD = 'session/redis/compression_threshold';
+    public const CONFIG_PATH_SESSION_REDIS_COMPRESSION_LIBRARY = 'session/redis/compression_library';
+    public const CONFIG_PATH_SESSION_REDIS_LOG_LEVEL = 'session/redis/log_level';
+    public const CONFIG_PATH_SESSION_REDIS_MAX_CONCURRENCY = 'session/redis/max_concurrency';
+    public const CONFIG_PATH_SESSION_REDIS_BREAK_AFTER_FRONTEND = 'session/redis/break_after_frontend';
+    public const CONFIG_PATH_SESSION_REDIS_BREAK_AFTER_ADMINHTML = 'session/redis/break_after_adminhtml';
+    public const CONFIG_PATH_SESSION_REDIS_FIRST_LIFETIME = 'session/redis/first_lifetime';
+    public const CONFIG_PATH_SESSION_REDIS_BOT_FIRST_LIFETIME = 'session/redis/bot_first_lifetime';
+    public const CONFIG_PATH_SESSION_REDIS_BOT_LIFETIME = 'session/redis/bot_lifetime';
+    public const CONFIG_PATH_SESSION_REDIS_DISABLE_LOCKING = 'session/redis/disable_locking';
+    public const CONFIG_PATH_SESSION_REDIS_MIN_LIFETIME = 'session/redis/min_lifetime';
+    public const CONFIG_PATH_SESSION_REDIS_MAX_LIFETIME = 'session/redis/max_lifetime';
+    public const CONFIG_PATH_SESSION_REDIS_SENTINEL_SERVERS = 'session/redis/sentinel_servers';
+    public const CONFIG_PATH_SESSION_REDIS_SENTINEL_MASTER = 'session/redis/sentinel_master';
+    public const CONFIG_PATH_SESSION_REDIS_SENTINEL_VERIFY_MASTER = 'session/redis/sentinel_verify_master';
+    public const CONFIG_PATH_SESSION_REDIS_SENTINEL_CONNECT_RETRIES = 'session/redis/sentinel_connect_retries';
 
     /**
      * @var array
@@ -75,6 +77,7 @@ class Session implements ConfigOptionsListInterface
         self::INPUT_KEY_SESSION_REDIS_PORT => '6379',
         self::INPUT_KEY_SESSION_REDIS_PASSWORD => '',
         self::INPUT_KEY_SESSION_REDIS_TIMEOUT => '2.5',
+        self::INPUT_KEY_SESSION_REDIS_RETRIES => '0',
         self::INPUT_KEY_SESSION_REDIS_PERSISTENT_IDENTIFIER => '',
         self::INPUT_KEY_SESSION_REDIS_DATABASE => '2',
         self::INPUT_KEY_SESSION_REDIS_COMPRESSION_THRESHOLD => '2048',
@@ -117,6 +120,7 @@ class Session implements ConfigOptionsListInterface
         self::INPUT_KEY_SESSION_REDIS_PORT => self::CONFIG_PATH_SESSION_REDIS_PORT,
         self::INPUT_KEY_SESSION_REDIS_PASSWORD => self::CONFIG_PATH_SESSION_REDIS_PASSWORD,
         self::INPUT_KEY_SESSION_REDIS_TIMEOUT => self::CONFIG_PATH_SESSION_REDIS_TIMEOUT,
+        self::INPUT_KEY_SESSION_REDIS_RETRIES => self::CONFIG_PATH_SESSION_REDIS_RETRIES,
         self::INPUT_KEY_SESSION_REDIS_PERSISTENT_IDENTIFIER => self::CONFIG_PATH_SESSION_REDIS_PERSISTENT_IDENTIFIER,
         self::INPUT_KEY_SESSION_REDIS_DATABASE => self::CONFIG_PATH_SESSION_REDIS_DATABASE,
         self::INPUT_KEY_SESSION_REDIS_COMPRESSION_THRESHOLD => self::CONFIG_PATH_SESSION_REDIS_COMPRESSION_THRESHOLD,
@@ -134,7 +138,7 @@ class Session implements ConfigOptionsListInterface
         self::INPUT_KEY_SESSION_REDIS_SENTINEL_MASTER => self::CONFIG_PATH_SESSION_REDIS_SENTINEL_MASTER,
         self::INPUT_KEY_SESSION_REDIS_SENTINEL_SERVERS => self::CONFIG_PATH_SESSION_REDIS_SENTINEL_SERVERS,
         self::INPUT_KEY_SESSION_REDIS_SENTINEL_CONNECT_RETRIES =>
-            self::CONFIG_PATH_SESSION_REDIS_SENTINEL_CONNECT_RETRIES,
+        self::CONFIG_PATH_SESSION_REDIS_SENTINEL_CONNECT_RETRIES,
         self::INPUT_KEY_SESSION_REDIS_SENTINEL_VERIFY_MASTER => self::CONFIG_PATH_SESSION_REDIS_SENTINEL_VERIFY_MASTER,
     ];
 
@@ -176,6 +180,12 @@ class Session implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_SESSION_REDIS_TIMEOUT,
                 'Connection timeout, in seconds'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_SESSION_REDIS_RETRIES,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_SESSION_REDIS_RETRIES,
+                'Redis connection retries.'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_SESSION_REDIS_PERSISTENT_IDENTIFIER,
