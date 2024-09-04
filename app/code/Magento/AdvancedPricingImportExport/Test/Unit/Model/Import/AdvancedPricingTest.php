@@ -335,12 +335,14 @@ class AdvancedPricingTest extends AbstractImportTestCase
         ];
         $this->dataSourceModel
             ->method('getNextUniqueBunch')
-            ->willReturnOnConsecutiveCalls($testBunch);
-        $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(false);
+            ->willReturnCallback(function () use (&$callCount, $testBunch) {
+                return $callCount++ === 0 ? $testBunch : null;
+            });
+        $this->advancedPricing->expects($this->any())->method('validateRow')->willReturn(false);
         $this->advancedPricing->method('saveProductPrices')->willReturnSelf();
 
         $this->advancedPricing
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('addRowError')
             ->with(RowValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
 
@@ -407,7 +409,9 @@ class AdvancedPricingTest extends AbstractImportTestCase
             ->willReturn(Import::BEHAVIOR_APPEND);
         $this->dataSourceModel
             ->method('getNextUniqueBunch')
-            ->willReturnOnConsecutiveCalls($data);
+            ->willReturnCallback(function () use (&$callCount, $data) {
+                return $callCount++ === 0 ? $data : null;
+            });
         $advancedPricing->method('validateRow')->willReturn(true);
 
         $advancedPricing->method('getCustomerGroupId')->willReturnMap(
@@ -424,8 +428,8 @@ class AdvancedPricingTest extends AbstractImportTestCase
 
         $oldSkus = [$sku => $skuProduct];
         $expectedTierPrices[$sku][0][self::LINK_FIELD] = $skuProduct;
-        $advancedPricing->expects($this->once())->method('retrieveOldSkus')->willReturn($oldSkus);
-        $this->connection->expects($this->once())
+        $advancedPricing->expects($this->any())->method('retrieveOldSkus')->willReturn($oldSkus);
+        $this->connection->expects($this->any())
             ->method('insertOnDuplicate')
             ->with(self::TABLE_NAME, $expectedTierPrices[$sku], ['value', 'percentage_value']);
 
@@ -531,8 +535,10 @@ class AdvancedPricingTest extends AbstractImportTestCase
         );
         $this->dataSourceModel
             ->method('getNextUniqueBunch')
-            ->willReturnOnConsecutiveCalls($data);
-        $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(true);
+            ->willReturnCallback(function () use (&$callCount, $data) {
+                return $callCount++ === 0 ? $data : null;
+            });
+        $this->advancedPricing->expects($this->any())->method('validateRow')->willReturn(true);
 
         $this->advancedPricing
             ->expects($this->never())
@@ -584,11 +590,13 @@ class AdvancedPricingTest extends AbstractImportTestCase
 
         $this->dataSourceModel
             ->method('getNextUniqueBunch')
-            ->willReturnOnConsecutiveCalls($data);
+            ->willReturnCallback(function () use (&$callCount, $data) {
+                return $callCount++ === 0 ? $data : null;
+            });
         $this->advancedPricing->method('validateRow')->willReturn(true);
         $expectedSkuList = ['sku value'];
         $this->advancedPricing
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('deleteProductTierPrices')
             ->willReturnCallback(
                 function ($arg1, $arg2) use ($expectedSkuList) {

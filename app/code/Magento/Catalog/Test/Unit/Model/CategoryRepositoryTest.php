@@ -250,7 +250,7 @@ class CategoryRepositoryTest extends TestCase
         $parentCategoryMock = $this->createMock(CategoryModel::class);
         $callCount = 0;
         $categoryMock->expects($this->any())->method('getId')
-            ->willReturnCallback(function() use (&$callCount, $categoryId, $newCategoryId) {
+            ->willReturnCallback(function () use (&$callCount, $categoryId, $newCategoryId) {
                 return $callCount++ === 0 ? $categoryId : $newCategoryId;
             });
         $this->categoryFactoryMock->expects($this->exactly(2))->method('create')->willReturn($parentCategoryMock);
