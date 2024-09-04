@@ -21,7 +21,7 @@ class GeneratedFiles
     /**
      * Regenerate flag file name
      */
-    const REGENERATE_FLAG = '/var/.regenerate';
+    const REGENERATE_FLAG = 'var/.regenerate';
 
     /**
      * Regenerate lock file name
