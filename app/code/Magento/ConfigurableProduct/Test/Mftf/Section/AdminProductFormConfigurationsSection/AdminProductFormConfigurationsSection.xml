@@ -60,5 +60,9 @@
         <element name="searchBySource" type="input" selector="//div[contains(@data-bind,'inventory_source_listing.inventory_source_listing')]/div[2]//input[@placeholder='Search by keyword']"/>
         <element name="clickSearch" type="button" selector="//div[contains(@data-bind,'inventory_source_listing.inventory_source_listing')]/div[2]//button[@aria-label='Search']"/>
         <element name="btnDoneAdvancedInventory" type="button" selector="//aside[@class='modal-slide product_form_product_form_advanced_inventory_modal _show']//button[@class='action-primary']//span[text()='Done']/.." />
+        <element name="paginationDropDropdown" type="button" selector="//*[@data-index='configurable-matrix'][1]//div[@class='admin__control-table-pagination']//select"/>
+        <element name="evenProduct" type="text" selector="//tr[@class='data-row'][{{row}}]/td[{{column}}]//a" parameterized="true"/>
+        <element name="oddProduct" type="text" selector="//tr[@class='data-row _odd-row'][{{row}}]/td[{{column}}]//a" parameterized="true"/>
+        <element name="nextPageArrow" type="text" selector="(//*[@class='action-next'])[2]"/>
     </section>
 </sections>
