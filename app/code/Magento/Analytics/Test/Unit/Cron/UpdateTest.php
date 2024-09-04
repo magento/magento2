@@ -193,22 +193,22 @@ class UpdateTest extends TestCase
     {
         return [
             'The last attempt with command execution result False' => [
-                'Reverse count' => 1,
-                'Command result' => false,
-                'Executed final output conditions' => true,
-                'Function result' => false,
+                'reverseCount' => 1,
+                'commandResult' => false,
+                'finalConditionsIsExpected' => true,
+                'functionResult' => false,
             ],
             'Not the last attempt with command execution result False' => [
-                'Reverse count' => 10,
-                'Command result' => false,
-                'Executed final output conditions' => false,
-                'Function result' => false,
+                'reverseCount' => 10,
+                'commandResult' => false,
+                'finalConditionsIsExpected' => false,
+                'functionResult' => false,
             ],
             'Command execution result True' => [
-                'Reverse count' => 10,
-                'Command result' => true,
-                'Executed final output conditions' => true,
-                'Function result' => true,
+                'reverseCount' => 10,
+                'commandResult' => true,
+                'finalConditionsIsExpected' => true,
+                'functionResult' => true,
             ],
         ];
     }

@@ -59,14 +59,14 @@ class ProductListTest extends TestCase
     {
         return [
             'limit-available' => [
-                'values' => '10,20,30',
-                'default' => 10,
-                'expected' => 10
+                'availableValues' => '10,20,30',
+                'defaultValue' => 10,
+                'expectedReturn' => 10
             ],
             'limit-not-available' => [
-                'values' => '10,20,30',
-                'default' => 1,
-                'expected' => 10
+                'availableValues' => '10,20,30',
+                'defaultValue' => 1,
+                'expectedReturn' => 10
             ]
         ];
     }

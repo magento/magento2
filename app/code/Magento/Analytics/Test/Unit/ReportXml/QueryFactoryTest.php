@@ -228,7 +228,7 @@ class QueryFactoryTest extends TestCase
     {
         return [
             [
-                'getQueryDataMock' => [
+                'queryDataMock' => [
                     'connectionName' => self::STUB_CONNECTION,
                     'config' => [
                         'name' => self::STUB_QUERY_NAME,
@@ -236,7 +236,7 @@ class QueryFactoryTest extends TestCase
                     ],
                     'select_parts' => []
                 ],
-                'getQueryDataJsonEncodeMock' => '{"connectionName":"default",' .
+                'jsonEncodeData' => '{"connectionName":"default",' .
                     '"config":{"name":"test_query",' .
                     '"connection":"default"},"select_parts":[]}'
             ]

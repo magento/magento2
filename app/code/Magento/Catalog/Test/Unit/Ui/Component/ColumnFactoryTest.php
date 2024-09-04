@@ -136,11 +136,11 @@ class ColumnFactoryTest extends TestCase
     {
         return [
             'without' => [
-                'filter_modifiers' => [],
+                'filterModifiers' => [],
                 'filter' => null,
             ],
             'with' => [
-                'filter_modifiers' => [
+                'filterModifiers' => [
                     'color' => [
                         'condition_type' => 'notnull',
                     ],
@@ -235,7 +235,7 @@ class ColumnFactoryTest extends TestCase
             [
                 'frontendInput' => 'date',
                 'showsTime' => false,
-                'dateFormat' => 'date_format',
+                'expectedDateFormat' => 'date_format',
                 'expectedTimezone' => 'default_timezone',
             ],
             [

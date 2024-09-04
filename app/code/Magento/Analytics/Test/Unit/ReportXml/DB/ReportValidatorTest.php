@@ -111,12 +111,12 @@ class ReportValidatorTest extends TestCase
         return [
             [
                 $reportName,
-                'expectedResult' => [],
+                'result' => [],
                 'queryReturnStub' => self::returnValue(null)
             ],
             [
                 $reportName,
-                'expectedResult' => [$reportName, $errorMessage],
+                'result' => [$reportName, $errorMessage],
                 'queryReturnStub' => self::throwException(new \Zend_Db_Statement_Exception($errorMessage))
             ]
         ];

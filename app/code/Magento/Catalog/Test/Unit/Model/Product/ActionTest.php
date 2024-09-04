@@ -183,8 +183,8 @@ class ActionTest extends TestCase
     public static function updateWebsitesDataProvider()
     {
         return [
-            ['$type' => 'add', '$methodName' => 'addProducts'],
-            ['$type' => 'remove', '$methodName' => 'removeProducts']
+            ['type' => 'add', 'methodName' => 'addProducts'],
+            ['type' => 'remove', 'methodName' => 'removeProducts']
         ];
     }
 
