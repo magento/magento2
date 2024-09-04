@@ -18,6 +18,7 @@
         <!--set ID for iframe of PayPal group button-->
         <executeJS function="document.getElementsByClassName('component-frame')[{{elementNumber}}].setAttribute('name', '{{frameName}}');" stepKey="setIDForIframe"/>
         <!--switch to iframe of PayPal group button-->
+        <switchToIFrame userInput="myFrame" stepKey="switchToIframe"/>
         <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalBtn}}" stepKey="waitForPayPalBtn"/>
         <click selector="{{CheckoutPaymentSection.PayPalBtn}}" stepKey="clickPayPalBtn"/>
         <switchToIFrame stepKey="switchBackToMainFrame"/>
