@@ -20,6 +20,7 @@
         <!--switch to iframe of PayPal group button-->
         <switchToIFrame userInput="myFrame" stepKey="switchToIframe"/>
         <!--click on PayPal button-->
+        <scrollTo selector="{{CheckoutPaymentSection.PayPalBtnLessTimeout}}" x="0" y="-100" stepKey="scrollTowaitForPayPalBtn"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.PayPalBtnLessTimeout}}" stepKey="waitForPayPalBtn"/>
         <click selector="{{CheckoutPaymentSection.PayPalBtnLessTimeout}}" stepKey="clickPayPalBtn"/>
         <!--switch back to default iframe-->
