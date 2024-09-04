@@ -23,6 +23,9 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CreateEmptyCartWithoutCountryValidationTest extends TestCase
 {
     /**
@@ -99,7 +102,8 @@ class CreateEmptyCartWithoutCountryValidationTest extends TestCase
     public function testAroundCreateEmptyCartForCustomerCreatesNewCart(
         int $storeId,
         int $customerId,
-        object $callBack) {
+        object $callBack
+    ) {
         $expectedResult = 123;
         $this->storeManager->expects($this->once())
             ->method('getStore')
@@ -158,7 +162,8 @@ class CreateEmptyCartWithoutCountryValidationTest extends TestCase
     public function testAroundCreateEmptyCartForCustomerHandlesSaveException(
         int $storeId,
         int $customerId,
-        object $callBack) {
+        object $callBack
+    ) {
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->willReturn($this->store);
@@ -208,7 +213,8 @@ class CreateEmptyCartWithoutCountryValidationTest extends TestCase
     public static function aroundCreateEmptyCartForCustomerDataProvider(): array
     {
         return [
-            [1, 1, function() {}]
+            [1, 1, function () {
+            }]
         ];
     }
 }
