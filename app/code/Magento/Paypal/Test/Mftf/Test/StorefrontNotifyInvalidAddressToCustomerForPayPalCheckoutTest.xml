@@ -87,7 +87,6 @@
         <!-- Click on Paypal paypal button on mini cart page-->
         <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtnFromMiniCart">
             <argument name="elementNumber" value="1"/>
-            <argument name="frameName" value="myFrame2"/>
         </actionGroup>
         <!--Close Mini Cart-->
         <click selector="{{StorefrontMinicartSection.minicartclose}}" stepKey="closeMiniCart"/>
