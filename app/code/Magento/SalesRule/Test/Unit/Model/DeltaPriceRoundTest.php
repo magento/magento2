@@ -69,11 +69,11 @@ class DeltaPriceRoundTest extends TestCase
         return [
             [
                 'prices' => [1.004, 1.004],
-                'rounded prices' => [1.00, 1.01],
+                'roundedPrices' => [1.00, 1.01],
             ],
             [
                 'prices' => [1.005, 1.005],
-                'rounded prices' => [1.01, 1.0],
+                'roundedPrices' => [1.01, 1.0],
             ],
         ];
     }

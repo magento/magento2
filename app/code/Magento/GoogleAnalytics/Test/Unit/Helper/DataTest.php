@@ -113,8 +113,8 @@ class DataTest extends TestCase
     public static function yesNoDataProvider(): array
     {
         return [
-            ['Yes' => '1', 'result' => true],
-            ['No' => '0', 'result' => false]
+            ['value' => '1', 'result' => true],
+            ['value' => '0', 'result' => false]
         ];
     }
 }

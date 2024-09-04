@@ -128,7 +128,7 @@ class CollectionTest extends TestCase
     {
         return [
             [
-                'indexers' => [
+                'indexersData' => [
                     'indexer_2' => [
                         'indexer_id' => 'indexer_2',
                     ],
@@ -184,7 +184,7 @@ class CollectionTest extends TestCase
     {
         return [
             [
-                'indexers' => [
+                'indexersData' => [
                     'indexer_2' => [
                         'indexer_id' => 'indexer_2',
                     ],

@@ -123,7 +123,7 @@ class DefaultStockqtyTest extends TestCase
         $this->assertSame($expectedQty, $this->block->getData('product_stock_qty'));
     }
 
-    public function te1stGetStockQtyLeft()
+    public function testGetStockQtyLeft()
     {
         $productId = 1;
         $minQty = 0;
@@ -169,25 +169,25 @@ class DefaultStockqtyTest extends TestCase
     {
         return [
             [
-                'product qty' => 100,
-                'product id' => 5,
-                'website id' => 0,
-                'default qty' => null,
-                'expected qty' => 100,
+                'productStockQty' => 100,
+                'productId' => 5,
+                'websiteId' => 0,
+                'dataQty' => null,
+                'expectedQty' => 100,
             ],
             [
-                'product qty' => 100,
-                'product id' => null,
-                'website id' => null,
-                'default qty' => null,
-                'expected qty' => 0
+                'productStockQty' => 100,
+                'productId' => null,
+                'websiteId' => null,
+                'dataQty' => null,
+                'expectedQty' => 0
             ],
             [
-                'product qty' => null,
-                'product id' => null,
-                'website id' => null,
-                'default qty' => 50,
-                'expected qty' => 50
+                'productStockQty' => null,
+                'productId' => null,
+                'websiteId' => null,
+                'dataQty' => 50,
+                'expectedQty' => 50
             ],
         ];
     }

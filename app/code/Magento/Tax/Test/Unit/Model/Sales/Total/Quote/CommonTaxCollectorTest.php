@@ -263,30 +263,30 @@ class CommonTaxCollectorTest extends TestCase
     {
         $data = [
             'free_shipping' => [
-                'address' => [
+                'addressData' => [
                     'shipping_amount' => 0,
                     'base_shipping_amount' => 0,
                 ],
-                'use_base_currency' => false,
-                'shipping_tax_class' => 'shippingTaxClass',
+                'useBaseCurrency' => false,
+                'shippingTaxClass' => 'shippingTaxClass',
                 'shippingPriceInclTax' => true,
             ],
             'none_zero_none_base' => [
-                'address' => [
+                'addressData' => [
                     'shipping_amount' => 10,
                     'base_shipping_amount' => 5,
                 ],
-                'use_base_currency' => false,
-                'shipping_tax_class' => 'shippingTaxClass',
+                'useBaseCurrency' => false,
+                'shippingTaxClass' => 'shippingTaxClass',
                 'shippingPriceInclTax' => true,
             ],
             'none_zero_base' => [
-                'address' => [
+                'addressData' => [
                     'shipping_amount' => 10,
                     'base_shipping_amount' => 5,
                 ],
-                'use_base_currency' => true,
-                'shipping_tax_class' => 'shippingTaxClass',
+                'useBaseCurrency' => true,
+                'shippingTaxClass' => 'shippingTaxClass',
                 'shippingPriceInclTax' => true,
             ],
         ];

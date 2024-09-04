@@ -81,7 +81,7 @@ class IndexerTest extends TestCase
     {
         return [
             'set1' => ['isExist' => true, 'expectsValue' => 1],
-            'set2' => ['delete' => false, 'expectsValue' => 0]
+            'set2' => ['isExist' => false, 'expectsValue' => 0]
         ];
     }
 

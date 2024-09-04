@@ -65,12 +65,12 @@ class ViewModelTest extends TestCase
     {
         return [
             'view model was not preset before' => [
-                'hasData' => false,
-                'setData' => self::once(),
+                'hasDataResult' => false,
+                'setDataExpects' => self::once(),
             ],
             'view model was pre-installed before' => [
-                'hasData' => true,
-                'setData' => self::never(),
+                'hasDataResult' => true,
+                'setDataExpects' => self::never(),
             ]
         ];
     }

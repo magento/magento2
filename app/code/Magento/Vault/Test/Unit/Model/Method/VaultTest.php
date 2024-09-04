@@ -297,10 +297,10 @@ class VaultTest extends TestCase
     public static function isAvailableDataProvider()
     {
         return [
-            ['isAvailableProvider' => true, 'isActiveVault' => false, 'expected' => false],
-            ['isAvailableProvider' => false, 'isActiveVault' => false, 'expected' => false],
-            ['isAvailableProvider' => false, 'isActiveVault' => true, 'expected' => false],
-            ['isAvailableProvider' => true, 'isActiveVault' => true, 'expected' => true],
+            ['isAvailableProvider' => true, 'isActive' => false, 'expected' => false],
+            ['isAvailableProvider' => false, 'isActive' => false, 'expected' => false],
+            ['isAvailableProvider' => false, 'isActive' => true, 'expected' => false],
+            ['isAvailableProvider' => true, 'isActive' => true, 'expected' => true],
         ];
     }
 

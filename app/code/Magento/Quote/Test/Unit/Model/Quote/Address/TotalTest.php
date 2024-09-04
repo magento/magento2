@@ -64,12 +64,12 @@ class TotalTest extends TestCase
             'Subtotal' => [
                 'code' => 'subtotal',
                 'amount' => 42.42,
-                'stored_code' => 'subtotal'
+                'storedCode' => 'subtotal'
             ],
             'Other total' => [
                 'code' => 'other',
                 'amount' => 42.17,
-                'stored_code' => 'other_amount'
+                'storedCode' => 'other_amount'
             ]
         ];
     }
@@ -98,12 +98,12 @@ class TotalTest extends TestCase
             'Subtotal' => [
                 'code' => 'subtotal',
                 'amount' => 17.42,
-                'stored_code' => 'base_subtotal'
+                'storedCode' => 'base_subtotal'
             ],
             'Other total' => [
                 'code' => 'other',
                 'amount' => 42.17,
-                'stored_code' => 'base_other_amount'
+                'storedCode' => 'base_other_amount'
             ]
         ];
     }

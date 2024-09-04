@@ -288,7 +288,7 @@ class TaxTest extends TestCase
                     "qty" => 1, "price" => 100, "tax_percent" => 20, "product_type" => "simple",
                     "code" => "sequence-1", "tax_calculation_item_id" => "sequence-1", "converted_price" => 100,
                 ],
-                '$appliedRates' => [
+                'appliedRatesData' => [
                     [
                         "rates" => [
                             [

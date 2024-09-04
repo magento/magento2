@@ -86,8 +86,8 @@ class CollectionTest extends AbstractTestCase
     public static function filterFlagDataProvider()
     {
         return [
-            'Add temporary filter' => ['$flag' => true],
-            'Disable temporary filter' => ['$flag' => false]
+            'Add temporary filter' => ['flag' => true],
+            'Disable temporary filter' => ['flag' => false]
         ];
     }
 

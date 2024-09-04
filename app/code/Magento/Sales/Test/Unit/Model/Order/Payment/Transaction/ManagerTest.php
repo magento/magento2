@@ -138,21 +138,21 @@ class ManagerTest extends TestCase
             'withoutTransactionId' => [
                 'transactionId' => null,
                 'parentTransactionId' => 2,
-                'transactionBasedOnId' => 1,
+                'transactionBasedTxnId' => 1,
                 'type' => Transaction::TYPE_REFUND,
                 'expectedResult' => "2-" . Transaction::TYPE_REFUND
             ],
             'withTransactionId' => [
                 'transactionId' => 33,
                 'parentTransactionId' => 2,
-                'transactionBasedOnId' => 1,
+                'transactionBasedTxnId' => 1,
                 'type' => Transaction::TYPE_REFUND,
                 'expectedResult' => 33
             ],
             'withBasedTransactionId' => [
                 'transactionId' => null,
                 'parentTransactionId' => null,
-                'transactionBasedOnId' => 4,
+                'transactionBasedTxnId' => 4,
                 'type' => Transaction::TYPE_REFUND,
                 'expectedResult' => "4-" . Transaction::TYPE_REFUND
             ],
