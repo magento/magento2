@@ -16,6 +16,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class Processor
+ *
+ * Process LESS files into CSS
  */
 class Processor implements ContentProcessorInterface
 {
