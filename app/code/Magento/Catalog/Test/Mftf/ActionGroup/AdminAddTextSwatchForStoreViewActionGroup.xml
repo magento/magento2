@@ -16,7 +16,6 @@
             <argument name="position" type="string"/>
             <argument name="swatchName" type="string"/>
             <argument name="swatchDescription" type="string"/>
-
         </arguments>
         <waitForElementVisible selector="{{AttributeManageSwatchSection.textSwatchDefaultStoreSwatchValue(position)}}" stepKey="waitForSwatchTextBoxForAdminToVisible"/>
         <fillField selector="{{AttributeManageSwatchSection.textSwatchDefaultStoreSwatchValue(position)}}" userInput="{{swatchName}}" stepKey="fillSwatchForStoreView"/>
