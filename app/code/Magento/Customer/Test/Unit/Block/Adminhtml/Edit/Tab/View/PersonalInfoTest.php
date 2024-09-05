@@ -270,8 +270,8 @@ class PersonalInfoTest extends TestCase
     public static function getAccountLockDataProvider()
     {
         return [
-            ['result' => 'Locked', 'expectedValue' => true],
-            ['result' => 'Unlocked', 'expectedValue' => false]
+            ['expectedResult' => 'Locked', 'value' => true],
+            ['expectedResult' => 'Unlocked', 'value' => false]
         ];
     }
 }
