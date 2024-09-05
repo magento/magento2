@@ -165,6 +165,24 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
                 true,
                 [],
                 ['div' => ['src' => false]]
+            ],
+            'invalid-allowed-tag-attributes' => [
+                ['a'],
+                ['href'],
+                ['a' => ['href']],
+                '<a href="javascript:alert(1)">a</a>',
+                false,
+                [],
+                []
+            ],
+            'allowed-empty-tag' => [
+                [],
+                [],
+                [],
+                '',
+                false,
+                [],
+                []
             ]
         ];
     }
@@ -224,20 +242,23 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
                 );
             $tagValidatorsMocks[$tag] = [$mock];
         }
-        $validator = new ConfigurableWYSIWYGValidator(
-            $allowedTags,
-            $allowedAttr,
-            $allowedTagAttrs,
-            $attrValidators,
-            $tagValidatorsMocks
-        );
-        $valid = true;
         try {
-            $validator->validate($html);
-        } catch (ValidationException $exception) {
+            $validator = new ConfigurableWYSIWYGValidator(
+                $allowedTags,
+                $allowedAttr,
+                $allowedTagAttrs,
+                $attrValidators,
+                $tagValidatorsMocks
+            );
+            $valid = true;
+            try {
+                $validator->validate($html);
+            } catch (ValidationException $exception) {
+                $valid = false;
+            }
+        } catch (\InvalidArgumentException $exception) {
             $valid = false;
         }
-
         self::assertEquals($isValid, $valid);
     }
 }
