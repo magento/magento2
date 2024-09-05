@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminVerifyThatCustomersMatchesToASectionWithConditionsOrderAddressTest">
         <annotations>
-            <features value="CustomerSegment"/>
+            <features value="CustomersSegments"/>
             <stories value="Customer segment with ordered address based condition"/>
             <title value="Customer segment with order based condition should automatically match customer after order is placed"/>
             <description value="Customer segment with address based condition should automatically match customer after order is placed and also verify the customer for wrong postal code"/>
