@@ -1462,7 +1462,6 @@ class TypeTest extends TestCase
         $option->expects($this->once())
             ->method('getRequired')
             ->willReturn(true);
-
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
         $this->assertEquals('Please select all required options.', $result);
     }
