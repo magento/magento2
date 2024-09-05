@@ -57,7 +57,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
         };
         $this->_eventManager
             ->method('fireEvent')
-            ->willReturnCallback(function() use ($callback) {
+            ->willReturnCallback(function () use ($callback) {
                 return $callback;
             });
     }
@@ -84,7 +84,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
         };
         $this->_eventManager
             ->method('fireEvent')
-            ->willReturnCallback(function() use ($callback) {
+            ->willReturnCallback(function () use ($callback) {
                 return $callback;
             });
     }

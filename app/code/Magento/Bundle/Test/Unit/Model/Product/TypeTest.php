@@ -1364,6 +1364,7 @@ class TypeTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testPrepareForCartAdvancedAllRequiredOption(): void
     {
