@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\PageCache\Test\Unit\Model\App\Request\Http;
 
 use Laminas\Stdlib\Parameters;
+use Laminas\Uri\Http as HttpUri;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -115,6 +116,12 @@ class IdentifierForSaveTest extends TestCase
             ->method('getVaryString')
             ->willReturn(self::VARY);
 
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn('');
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
+
         $this->identifierStoreReader->method('getPageTagsWithStoreCacheTags')->willReturnCallback(
             function ($value) {
                 return $value;
@@ -160,6 +167,15 @@ class IdentifierForSaveTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getVaryString')
             ->willReturn(self::VARY);
+
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn([
+            'b' => 2,
+            'a' => 1,
+        ]);
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
 
         $this->identifierStoreReader->method('getPageTagsWithStoreCacheTags')->willReturnCallback(
             function ($value) {

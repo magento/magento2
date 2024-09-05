@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\App\Test\Unit\PageCache;
 
 use Laminas\Stdlib\Parameters;
+use Laminas\Uri\Http as HttpUri;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\PageCache\Identifier;
 use Magento\Framework\App\Request\Http as HttpRequest;
@@ -107,6 +108,12 @@ class IdentifierTest extends TestCase
             ->method('toArray')
             ->willReturn([]);
 
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn('');
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
+
         $valueWithSecureRequest = $this->model->getValue();
         $valueWithInsecureRequest = $this->model->getValue();
         $this->assertNotEquals($valueWithSecureRequest, $valueWithInsecureRequest);
@@ -129,6 +136,12 @@ class IdentifierTest extends TestCase
             ->method('toArray')
             ->willReturn([]);
 
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn('');
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
+
         $valueDomain1 = $this->model->getValue();
         $valueDomain2 = $this->model->getValue();
         $this->assertNotEquals($valueDomain1, $valueDomain2);
@@ -150,6 +163,12 @@ class IdentifierTest extends TestCase
         $this->fileParams->expects($this->any())
             ->method('toArray')
             ->willReturn([]);
+
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn('');
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
 
         $valuePath1 = $this->model->getValue();
         $valuePath2 = $this->model->getValue();
@@ -209,6 +228,12 @@ class IdentifierTest extends TestCase
             ->method('toArray')
             ->willReturn([]);
 
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn('');
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
+
         $this->assertEquals(
             sha1(
                 json_encode(
@@ -247,6 +272,15 @@ class IdentifierTest extends TestCase
                 'b' => 2,
                 'a' => 1,
             ]);
+
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn([
+            'b' => 2,
+            'a' => 1,
+        ]);
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
 
         $this->assertEquals(
             sha1(
