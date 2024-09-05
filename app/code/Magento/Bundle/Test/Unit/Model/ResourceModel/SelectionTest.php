@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\ResourceModel;
 
-use Codeception\PHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use Magento\Bundle\Model\ResourceModel\Selection as ResourceSelection;
 use Magento\Bundle\Model\Selection;
 use Magento\Framework\App\ResourceConnection;

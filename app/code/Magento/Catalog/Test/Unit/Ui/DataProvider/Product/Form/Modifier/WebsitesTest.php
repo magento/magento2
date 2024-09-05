@@ -22,7 +22,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class WebsitesTest extends AbstractModifierTest
+class WebsitesTest extends AbstractModifierTestCase
 {
     public const PRODUCT_ID = 1;
     public const WEBSITE_ID = 1;

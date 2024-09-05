@@ -18,6 +18,9 @@
             <testCaseId value="MC-101"/>
             <group value="ConfigurableProduct"/>
             <group value="cloud"/>
+            <skip>
+                <issueId value="AC-12124">Fotorama lib isn't loaded</issueId>
+            </skip>
         </annotations>
 
         <before>
