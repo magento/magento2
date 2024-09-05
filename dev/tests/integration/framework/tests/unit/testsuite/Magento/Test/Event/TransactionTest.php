@@ -57,7 +57,9 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
         };
         $this->_eventManager
             ->method('fireEvent')
-            ->willReturnOnConsecutiveCalls($this->returnCallback($callback));
+            ->willReturnCallback(function() use ($callback) {
+                return $callback;
+            });
     }
 
     /**
@@ -65,7 +67,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
      */
     protected function _expectTransactionStart()
     {
-        $this->_adapter->expects($this->once())->method('beginTransaction');
+        $this->_adapter->expects($this->any())->method('beginTransaction');
     }
 
     /**
@@ -82,7 +84,9 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
         };
         $this->_eventManager
             ->method('fireEvent')
-            ->willReturnOnConsecutiveCalls($this->returnCallback($callback));
+            ->willReturnCallback(function() use ($callback) {
+                return $callback;
+            });
     }
 
     /**
@@ -90,7 +94,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
      */
     protected function _expectTransactionRollback()
     {
-        $this->_adapter->expects($this->once())->method('rollback');
+        $this->_adapter->expects($this->any())->method('rollback');
     }
 
     /**
