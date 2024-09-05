@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\App\PageCache;
 
-use Laminas\Uri\UriFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
@@ -75,8 +74,7 @@ class Identifier implements IdentifierInterface
             return [$url, ''];
         }
         $baseUrl = strtok((string)$url, '?');
-        $uri = UriFactory::factory($url);
-        $query = $uri->getQueryAsArray();
+        $query = $this->request->getQuery()->toArray();
         if (!empty($query)) {
             ksort($query);
             $query = http_build_query($query);

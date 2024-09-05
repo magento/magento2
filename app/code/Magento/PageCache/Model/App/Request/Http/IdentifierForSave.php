@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\PageCache\Model\App\Request\Http;
 
-use Laminas\Uri\UriFactory;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\PageCache\IdentifierInterface;
 use Magento\Framework\App\Request\Http;
@@ -64,8 +63,7 @@ class IdentifierForSave implements IdentifierInterface
             return [$url, ''];
         }
         $baseUrl = strtok((string)$url, '?');
-        $uri = UriFactory::factory($url);
-        $query = $uri->getQueryAsArray();
+        $query = $this->request->getQuery()->toArray();
         if (!empty($query)) {
             ksort($query);
             $query = http_build_query($query);
