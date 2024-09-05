@@ -18,6 +18,7 @@
             <testCaseId value="AC-4430"/>
             <group value="paypalExpress"/>
             <group value="3rd_party_integration" />
+            <group value="pr_exclude" />
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
