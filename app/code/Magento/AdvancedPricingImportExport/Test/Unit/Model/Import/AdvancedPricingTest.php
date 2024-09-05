@@ -333,16 +333,20 @@ class AdvancedPricingTest extends AbstractImportTestCase
                 'bunch'
             ]
         ];
+        $count = 0;
         $this->dataSourceModel
             ->method('getNextUniqueBunch')
-            ->willReturnCallback(function () use (&$callCount, $testBunch) {
-                return $callCount++ === 0 ? $testBunch : null;
+            ->willReturnCallback(function () use (&$count, $testBunch) {
+                if ($count == 0) {
+                    $count++;
+                    return $testBunch;
+                }
             });
-        $this->advancedPricing->expects($this->any())->method('validateRow')->willReturn(false);
+        $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(false);
         $this->advancedPricing->method('saveProductPrices')->willReturnSelf();
 
         $this->advancedPricing
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('addRowError')
             ->with(RowValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
 
@@ -407,10 +411,14 @@ class AdvancedPricingTest extends AbstractImportTestCase
         $advancedPricing
             ->method('getBehavior')
             ->willReturn(Import::BEHAVIOR_APPEND);
+        $count = 0;
         $this->dataSourceModel
             ->method('getNextUniqueBunch')
-            ->willReturnCallback(function () use (&$callCount, $data) {
-                return $callCount++ === 0 ? $data : null;
+            ->willReturnCallback(function () use (&$count, $data) {
+                if ($count == 0) {
+                    $count++;
+                    return $data;
+                }
             });
         $advancedPricing->method('validateRow')->willReturn(true);
 
@@ -428,8 +436,8 @@ class AdvancedPricingTest extends AbstractImportTestCase
 
         $oldSkus = [$sku => $skuProduct];
         $expectedTierPrices[$sku][0][self::LINK_FIELD] = $skuProduct;
-        $advancedPricing->expects($this->any())->method('retrieveOldSkus')->willReturn($oldSkus);
-        $this->connection->expects($this->any())
+        $advancedPricing->expects($this->once())->method('retrieveOldSkus')->willReturn($oldSkus);
+        $this->connection->expects($this->once())
             ->method('insertOnDuplicate')
             ->with(self::TABLE_NAME, $expectedTierPrices[$sku], ['value', 'percentage_value']);
 
@@ -533,12 +541,17 @@ class AdvancedPricingTest extends AbstractImportTestCase
         $this->advancedPricing->method('getBehavior')->willReturn(
             Import::BEHAVIOR_REPLACE
         );
+
+        $count = 0;
         $this->dataSourceModel
             ->method('getNextUniqueBunch')
-            ->willReturnCallback(function () use (&$callCount, $data) {
-                return $callCount++ === 0 ? $data : null;
+            ->willReturnCallback(function () use (&$count, $data) {
+                if ($count == 0) {
+                    $count++;
+                    return $data;
+                }
             });
-        $this->advancedPricing->expects($this->any())->method('validateRow')->willReturn(true);
+        $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(true);
 
         $this->advancedPricing
             ->expects($this->never())
@@ -588,15 +601,19 @@ class AdvancedPricingTest extends AbstractImportTestCase
             ]
         ];
 
+        $count = 0;
         $this->dataSourceModel
             ->method('getNextUniqueBunch')
-            ->willReturnCallback(function () use (&$callCount, $data) {
-                return $callCount++ === 0 ? $data : null;
+            ->willReturnCallback(function () use (&$count, $data) {
+                if ($count == 0) {
+                    $count++;
+                    return $data;
+                }
             });
         $this->advancedPricing->method('validateRow')->willReturn(true);
         $expectedSkuList = ['sku value'];
         $this->advancedPricing
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('deleteProductTierPrices')
             ->willReturnCallback(
                 function ($arg1, $arg2) use ($expectedSkuList) {
