@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75933a67efbf31735b50186b8524c5db",
+    "content-hash": "cf7b1964395980991dde8f19b86ab5a0",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1072,7 +1072,7 @@
             "version": "v7.17.2",
             "source": {
                 "type": "git",
-                "url": "git@github.com:elastic/elasticsearch-php.git",
+                "url": "https://github.com/elastic/elasticsearch-php.git",
                 "reference": "2d302233f2bb0926812d82823bb820d405e130fc"
             },
             "dist": {
@@ -1631,12 +1631,12 @@
             "version": "v5.2.13",
             "source": {
                 "type": "git",
-                "url": "https://github.com/justinrainbow/json-schema.git",
+                "url": "https://github.com/jsonrainbow/json-schema.git",
                 "reference": "fbbe7e5d79f618997bc3332a6f49246036c45793"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/fbbe7e5d79f618997bc3332a6f49246036c45793",
+                "url": "https://api.github.com/repos/jsonrainbow/json-schema/zipball/fbbe7e5d79f618997bc3332a6f49246036c45793",
                 "reference": "fbbe7e5d79f618997bc3332a6f49246036c45793",
                 "shasum": ""
             },
@@ -9361,16 +9361,16 @@
         },
         {
             "name": "wikimedia/less.php",
-            "version": "v4.4.1",
+            "version": "v5.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/less.php.git",
-                "reference": "7d66ab6d38af72f80a0c0a3598d7feac04bbc7b7"
+                "reference": "29e14517d40b321bdbf8823eae1c327fc6b227f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/less.php/zipball/7d66ab6d38af72f80a0c0a3598d7feac04bbc7b7",
-                "reference": "7d66ab6d38af72f80a0c0a3598d7feac04bbc7b7",
+                "url": "https://api.github.com/repos/wikimedia/less.php/zipball/29e14517d40b321bdbf8823eae1c327fc6b227f5",
+                "reference": "29e14517d40b321bdbf8823eae1c327fc6b227f5",
                 "shasum": ""
             },
             "require": {
@@ -9430,9 +9430,9 @@
             ],
             "support": {
                 "issues": "https://github.com/wikimedia/less.php/issues",
-                "source": "https://github.com/wikimedia/less.php/tree/v4.4.1"
+                "source": "https://github.com/wikimedia/less.php/tree/v5.1.1"
             },
-            "time": "2024-05-27T14:47:49+00:00"
+            "time": "2024-08-09T13:59:17+00:00"
         }
     ],
     "packages-dev": [
