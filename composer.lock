@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6365ef759ff5394c26ed1a48d1119a26",
+    "content-hash": "34eb5399d2c14840699617fcc5e4bfbe",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -11282,16 +11282,16 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "33",
+            "version": "dev-Hammer_PlatForm_Health_247",
             "source": {
                 "type": "git",
-                "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "75215870d446f955ea08acdad9badff647117cfa"
+                "url": "git@github.com:magento-gl/magento-coding-standard.git",
+                "reference": "33a79a65b626acba68a4ae9da584ec6ce230a5a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/75215870d446f955ea08acdad9badff647117cfa",
-                "reference": "75215870d446f955ea08acdad9badff647117cfa",
+                "url": "https://api.github.com/repos/magento-gl/magento-coding-standard/zipball/33a79a65b626acba68a4ae9da584ec6ce230a5a8",
+                "reference": "33a79a65b626acba68a4ae9da584ec6ce230a5a8",
                 "shasum": ""
             },
             "require": {
@@ -11300,7 +11300,7 @@
                 "magento/php-compatibility-fork": "^0.1",
                 "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
                 "phpcsstandards/phpcsutils": "^1.0.5",
-                "rector/rector": "^0.17.12",
+                "rector/rector": "^1.2.4",
                 "squizlabs/php_codesniffer": "^3.6.1",
                 "webonyx/graphql-php": "^15.0"
             },
@@ -11310,25 +11310,36 @@
             },
             "type": "phpcodesniffer-standard",
             "autoload": {
+                "classmap": [
+                    "PHP_CodeSniffer/Tokenizers/"
+                ],
                 "psr-4": {
                     "Magento2\\": "Magento2/",
                     "Magento2Framework\\": "Magento2Framework/"
-                },
-                "classmap": [
-                    "PHP_CodeSniffer/Tokenizers/"
+                }
+            },
+            "autoload-dev": {
+                "files": [
+                    "PHP_CodeSniffer/Tests/Standards/AbstractSniffUnitTest.php"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "scripts": {
+                "post-install-cmd": [
+                    "vendor/bin/phpcs --config-set installed_paths ../../..,../../magento/php-compatibility-fork/PHPCompatibility"
+                ],
+                "post-update-cmd": [
+                    "vendor/bin/phpcs --config-set installed_paths ../../..,../../magento/php-compatibility-fork/PHPCompatibility"
+                ]
+            },
             "license": [
                 "OSL-3.0",
                 "AFL-3.0"
             ],
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
-                "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/v33"
+                "source": "https://github.com/magento-gl/magento-coding-standard/tree/Hammer_PlatForm_Health_247"
             },
-            "time": "2023-12-19T17:16:36+00:00"
+            "time": "2024-09-06T07:11:26+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
@@ -13047,27 +13058,30 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.17.13",
+            "version": "1.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "e2003ba7c5bda06d7bb419cf4be8dae5f8672132"
+                "reference": "42a4aa23b48b4cfc8ebfeac2b570364e27744381"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/e2003ba7c5bda06d7bb419cf4be8dae5f8672132",
-                "reference": "e2003ba7c5bda06d7bb419cf4be8dae5f8672132",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/42a4aa23b48b4cfc8ebfeac2b570364e27744381",
+                "reference": "42a4aa23b48b4cfc8ebfeac2b570364e27744381",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2|^8.0",
-                "phpstan/phpstan": "^1.10.26"
+                "phpstan/phpstan": "^1.11.11"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
                 "rector/rector-downgrade-php": "*",
                 "rector/rector-phpunit": "*",
                 "rector/rector-symfony": "*"
+            },
+            "suggest": {
+                "ext-dom": "To manipulate phpunit.xml via the custom-rule command"
             },
             "bin": [
                 "bin/rector"
@@ -13091,7 +13105,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.17.13"
+                "source": "https://github.com/rectorphp/rector/tree/1.2.4"
             },
             "funding": [
                 {
@@ -13099,7 +13113,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-14T16:33:29+00:00"
+            "time": "2024-08-23T09:03:01+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -14562,7 +14576,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "magento/composer": 10
+        "magento/composer": 10,
+        "magento/magento-coding-standard": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
