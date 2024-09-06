@@ -21,9 +21,9 @@ define([
 
             // Use "unwrapObservable" so we can handle values that may or may not be observable
             if (ko.unwrap(value)) {
-                $(element).css('visibility','visible').css('height','auto');
+                $(element).css('visibility','visible').css('height','auto').css('position','relative');
             } else {
-                $(element).css('visibility', 'hidden').css('height', '0');
+                $(element).css('visibility', 'hidden').css('height', '0').css('position', 'absolute');
             }
         },
 
@@ -37,9 +37,9 @@ define([
             let value = valueAccessor();
 
             if (ko.unwrap(value)) {
-                $(element).css('visibility', 'visible').css('height', 'auto');
+                $(element).css('visibility', 'visible').css('height', 'auto').css('position', 'relative');
             } else {
-                $(element).css('visibility', 'hidden').css('height', '0');
+                $(element).css('visibility', 'hidden').css('height', '0').css('position', 'absolute');
             }
         }
     };

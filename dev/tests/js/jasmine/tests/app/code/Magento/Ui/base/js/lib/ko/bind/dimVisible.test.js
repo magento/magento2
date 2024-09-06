@@ -26,7 +26,9 @@ define([
                 valueAccessor = jasmine.createSpy().and.returnValue(value);
 
             ko.bindingHandlers.dimVisible.init(elementToHide, valueAccessor);
-            expect(elementToHide.attr('style').indexOf('visibility: hidden; height: 0px;') !== -1).toBeTrue();
+            expect(
+                elementToHide.attr('style').indexOf('visibility: hidden; height: 0px; position: absolute;') !== -1
+            ).toBeTrue();
         });
 
         it('Check that html element is displayed based on flag value', function () {
@@ -34,7 +36,9 @@ define([
                 valueAccessor = jasmine.createSpy().and.returnValue(value);
 
             ko.bindingHandlers.dimVisible.init(elementToHide, valueAccessor);
-            expect(elementToHide.attr('style').indexOf('visibility: visible; height: auto;') !== -1).toBeTrue();
+            expect(
+                elementToHide.attr('style').indexOf('visibility: visible; height: auto; position: relative;') !== -1
+            ).toBeTrue();
         });
 
         it('Check that html element is updated based on flags changing value', function () {
@@ -44,10 +48,14 @@ define([
                 valueTrueAccessor = jasmine.createSpy().and.returnValue(valueTrue);
 
             ko.bindingHandlers.dimVisible.update(elementToHide, valueFalseAccessor);
-            expect(elementToHide.attr('style').indexOf('visibility: hidden; height: 0px;') !== -1).toBeTrue();
+            expect(
+                elementToHide.attr('style').indexOf('visibility: hidden; height: 0px; position: absolute;') !== -1
+            ).toBeTrue();
 
             ko.bindingHandlers.dimVisible.update(elementToHide, valueTrueAccessor);
-            expect(elementToHide.attr('style').indexOf('visibility: visible; height: auto;') !== -1).toBeTrue();
+            expect(
+                elementToHide.attr('style').indexOf('visibility: visible; height: auto; position: relative;') !== -1
+            ).toBeTrue();
         });
     });
 });
