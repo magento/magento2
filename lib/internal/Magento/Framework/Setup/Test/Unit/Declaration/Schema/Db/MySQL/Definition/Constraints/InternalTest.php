@@ -137,7 +137,7 @@ class InternalTest extends TestCase
                     'Key_name' => 'PRIMARY',
                     'Column_name' => 'id',
                 ],
-                'excpectedDefiniton' => [
+                'expectedDefinition' => [
                     'name' => 'PRIMARY',
                     'column' => ['id' => 'id'],
                     'type' => 'primary',
@@ -148,7 +148,7 @@ class InternalTest extends TestCase
                     'Key_name' => 'unique_key_1',
                     'Column_name' => 'parent_id',
                 ],
-                'excpectedDefiniton' => [
+                'expectedDefinition' => [
                     'name' => 'unique_key_1',
                     'column' => ['parent_id' => 'parent_id'],
                     'type' => 'unique',

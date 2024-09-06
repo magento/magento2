@@ -281,8 +281,8 @@ class TypeProcessorTest extends TestCase
     public static function arrayParamTypeDataProvider()
     {
         return [
-            ['method name' => 'addData', 'type' => 'array[]'],
-            ['method name' => 'addObjectList', 'type' => '\\' . TSampleInterface::class . '[]']
+            ['methodName' => 'addData', 'type' => 'array[]'],
+            ['methodName' => 'addObjectList', 'type' => '\\' . TSampleInterface::class . '[]']
         ];
     }
 
@@ -315,8 +315,8 @@ class TypeProcessorTest extends TestCase
     public static function methodParamsDataProvider()
     {
         return [
-            ['method name' => 'setName', 'descriptions' => ['Name of the attribute']],
-            ['method name' => 'setData', 'descriptions' => ['Key is used as index', null]],
+            ['methodName' => 'setName', 'descriptions' => ['Name of the attribute']],
+            ['methodName' => 'setData', 'descriptions' => ['Key is used as index', null]],
         ];
     }
 

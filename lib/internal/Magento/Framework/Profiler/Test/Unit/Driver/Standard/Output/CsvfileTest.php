@@ -37,20 +37,20 @@ class CsvfileTest extends TestCase
         return [
             'Default config' => [
                 'config' => [],
-                'filePath' => '/var/log/profiler.csv',
-                'delimiter' => ',',
-                'enclosure' => '"',
+                'expectedFilePath' => '/var/log/profiler.csv',
+                'expectedDelimiter' => ',',
+                'expectedEnclosure' => '"',
             ],
             'Custom config' => [
                 'config' => [
                     'baseDir' => '/var/www/project/',
                     'filePath' => '/log/example.csv',
-                    'delimiter' => "\t",
-                    'enclosure' => '"',
+                    'expectedDelimiter' => "\t",
+                    'expectedEnclosure' => '"',
                 ],
-                'filePath' => '/var/www/project/log/example.csv',
-                'delimiter' => "\t",
-                'enclosure' => '"',
+                'expectedFilePath' => '/var/www/project/log/example.csv',
+                'expectedDelimiter' => "\t",
+                'expectedEnclosure' => '"',
             ]
         ];
     }

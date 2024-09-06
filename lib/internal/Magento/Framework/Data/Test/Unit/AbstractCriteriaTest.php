@@ -223,7 +223,7 @@ class AbstractCriteriaTest extends TestCase
     {
         return [
             [
-                'actualResult' => [
+                'actualField' => [
                     'test-filter-name',
                     'test-field-name',
                     'test-condition',
@@ -243,7 +243,7 @@ class AbstractCriteriaTest extends TestCase
     {
         return [
             [
-                'actualResult' => [
+                'actualField' => [
                     'test-filter-name',
                     'test-field-name',
                     'test-condition',

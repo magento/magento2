@@ -438,7 +438,7 @@ class MysqlTest extends TestCase
     {
         return [
             [
-                'columnData' => [
+                'options' => [
                     'TYPE'        => 'integer',
                     'IDENTITY'    => true,
                     'UNSIGNED'    => true,

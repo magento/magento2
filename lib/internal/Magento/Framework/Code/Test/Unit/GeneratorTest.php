@@ -347,8 +347,8 @@ class GeneratorTest extends TestCase
         foreach ($this->expectedEntities as $generatedEntity) {
             $generatedEntity = ucfirst($generatedEntity);
             $data['test class for ' . $generatedEntity] = [
-                'class name' => self::SOURCE_CLASS,
-                'entity type' => $generatedEntity,
+                'className' => self::SOURCE_CLASS,
+                'entityType' => $generatedEntity,
             ];
         }
         return $data;

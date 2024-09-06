@@ -114,7 +114,7 @@ class SearchConfigTest extends TestCase
     {
         return [
             [
-                'all' => [
+                'installInput' => [
                     'amqp-host' => '',
                     'amqp-port' => '5672',
                     'amqp-user' => '',
@@ -149,7 +149,7 @@ class SearchConfigTest extends TestCase
                     'elasticsearch-timeout' => 15,
                     'no-interaction' => false,
                 ],
-                'search' => [
+                'searchInput' => [
                     'search-engine' => 'elasticsearch7',
                     'elasticsearch-host' => 'localhost',
                     'elasticsearch-port' => '9200',

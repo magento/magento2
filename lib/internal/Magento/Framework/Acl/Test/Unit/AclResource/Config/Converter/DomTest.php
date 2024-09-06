@@ -65,9 +65,9 @@ class DomTest extends TestCase
     public static function convertWithInvalidDomDataProvider()
     {
         return [
-            [
-                'resource without "id" attribute' => '<?xml version="1.0"?><config><acl>' .
-                '<resources><resource/></resources></acl></config>',
+            'resource without "id" attribute' => [
+                'xml' => '<?xml version="1.0"?><config><acl>' .
+                    '<resources><resource/></resources></acl></config>'
             ]
         ];
     }

@@ -116,7 +116,7 @@ class BackpressureLoggerTest extends TestCase
                     ['backpressure/logger/options/user', null, null],
                     ['backpressure/logger/id-prefix', null, null],
                 ],
-                'expected-config-data' => [
+                'expectedConfigData' => [
                     'backpressure' => [
                         'logger' => [
                             'type' => 'redis',
@@ -157,7 +157,7 @@ class BackpressureLoggerTest extends TestCase
                     ['backpressure/logger/options/user', null, null],
                     ['backpressure/logger/id-prefix', null, null],
                 ],
-                'expected-config-data' => [
+                'expectedConfigData' => [
                     'backpressure' => [
                         'logger' => [
                             'type' => 'redis',
@@ -198,7 +198,7 @@ class BackpressureLoggerTest extends TestCase
                     ['backpressure/logger/options/user', null, '<current-user>'],
                     ['backpressure/logger/id-prefix', null, '<current-prefix>'],
                 ],
-                'expected-config-data' => [
+                'expectedConfigData' => [
                     'backpressure' => [
                         'logger' => [
                             'type' => 'redis',
@@ -235,7 +235,7 @@ class BackpressureLoggerTest extends TestCase
                     ['backpressure/logger/options/user', null, '<current-user>'],
                     ['backpressure/logger/id-prefix', null, '<current-prefix>'],
                 ],
-                'expected-config-data' => [
+                'expectedConfigData' => [
                     'backpressure' => [
                         'logger' => [
                             'type' => 'redis',

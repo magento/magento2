@@ -140,13 +140,13 @@ class PriceBoxTest extends TestCase
         return [
             [
                 'data' => [],
-                'price_code' => 'test_price',
-                'css_classes' => 'price-test_price',
+                'priceCode' => 'test_price',
+                'cssClasses' => 'price-test_price',
             ],
             [
                 'data' => ['css_classes' => 'some_css_class'],
-                'price_code' => 'test_price',
-                'css_classes' => 'some_css_class price-test_price'
+                'priceCode' => 'test_price',
+                'cssClasses' => 'some_css_class price-test_price'
             ]];
     }
 

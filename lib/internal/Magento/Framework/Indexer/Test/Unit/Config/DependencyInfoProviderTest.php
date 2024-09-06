@@ -99,8 +99,8 @@ class DependencyInfoProviderTest extends TestCase
     {
         return [
             [
-                'indexer' => 'indexer_2',
-                'indexers' => [
+                'indexerId' => 'indexer_2',
+                'indexersData' => [
                     'indexer_2' => [
                         'indexer_id' => 'indexer_2',
                         'dependencies' => [],
@@ -129,7 +129,7 @@ class DependencyInfoProviderTest extends TestCase
                         'dependencies' => [],
                     ],
                 ],
-                'dependent_indexers' => ['indexer_4', 'indexer_1'],
+                'dependentIndexerIds' => ['indexer_4', 'indexer_1'],
             ]
         ];
     }

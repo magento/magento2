@@ -65,8 +65,8 @@ class DbTableTest extends TestCase
     public static function readDataProvider()
     {
         return [
-            'session_encoded' => ['$dataEncoded' => true],
-            'session_not_encoded' => ['$dataEncoded' => false]
+            'session_encoded' => ['isDataEncoded' => true],
+            'session_not_encoded' => ['isDataEncoded' => false]
         ];
     }
 
@@ -224,8 +224,8 @@ class DbTableTest extends TestCase
     public static function writeDataProvider()
     {
         return [
-            'session_exists' => ['$sessionExists' => true],
-            'session_not_exists' => ['$sessionExists' => false]
+            'session_exists' => ['sessionExists' => true],
+            'session_not_exists' => ['sessionExists' => false]
         ];
     }
 
