@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Css\PreProcessor\Adapter\Less;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
 use Magento\Framework\Css\PreProcessor\File\Temporary;
 use Magento\Framework\Phrase;
@@ -40,6 +41,7 @@ class Processor implements ContentProcessorInterface
      * @var Temporary
      */
     private $temporaryFile;
+    private DirectoryList $directoryList;
 
     /**
      * Constructor
@@ -53,12 +55,14 @@ class Processor implements ContentProcessorInterface
         LoggerInterface $logger,
         State $appState,
         Source $assetSource,
-        Temporary $temporaryFile
+        Temporary $temporaryFile,
+        DirectoryList $directoryList
     ) {
         $this->logger = $logger;
         $this->appState = $appState;
         $this->assetSource = $assetSource;
         $this->temporaryFile = $temporaryFile;
+        $this->directoryList = $directoryList;
     }
 
     /**
@@ -73,7 +77,9 @@ class Processor implements ContentProcessorInterface
                 [
                     'relativeUrls' => false,
                     'compress' => $mode !== State::MODE_DEVELOPER,
-                    'sourceMap' => $mode === State::MODE_DEVELOPER
+                    'sourceMap' => $mode === State::MODE_DEVELOPER,
+                    'sourceMapRootpath' => '/',
+                    'sourceMapBasepath' => $this->directoryList->getPath(DirectoryList::TEMPLATE_MINIFICATION_DIR) . '/pub/'
                 ]
             );
 
