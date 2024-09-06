@@ -361,6 +361,11 @@
             <argument name="componentManager" xsi:type="object">Magento\Ui\Model\Manager\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Ui\Config\Reader\Definition\Data">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Interception\Cache\CompiledConfig</argument>
+        </arguments>
+    </type>
     <type name="Magento\Ui\Config\Argument\Parser\ArrayType">
         <arguments>
             <argument name="itemParser" xsi:type="object">Magento\Ui\Config\Argument\Parser\Composite\Proxy</argument>
