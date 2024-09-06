@@ -143,18 +143,15 @@ class ConfigTest extends TestCase
         $this->scopeMock->expects($this->once())
             ->method('getCurrentScope')
             ->willReturn($scope);
-        $this->assertEquals($resetMethod, $this->model->getPasswordResetProtectionType($scope));
+        $this->assertEquals($resetMethod, $this->model->getPasswordResetProtectionType());
     }
 
     /**
      * @return array
      */
-    public function dataProviderResetMethodValues()
+    public static function dataProviderResetMethodValues()
     {
-        $objectManager = new ObjectManager($this);
-        $resetMethodSource = $objectManager->getObject(
-            ResetMethod::class
-        );
+        $resetMethodSource = new ResetMethod();
 
         $optionKeys = array_keys($resetMethodSource->toArray());
         $data = [];
