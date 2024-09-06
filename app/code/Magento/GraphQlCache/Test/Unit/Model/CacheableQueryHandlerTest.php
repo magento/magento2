@@ -59,7 +59,7 @@ class CacheableQueryHandlerTest extends TestCase
             'cacheTag' => 'cat_p'
         ];
         $mockIdentity = $this->getMockBuilder($cacheData['cacheIdentity'])
-            ->setMethods(['getIdentities'])
+            ->onlyMethods(['getIdentities'])
             ->getMockForAbstractClass();
 
         $this->requestMock->expects($this->once())->method('isGet')->willReturn(true);

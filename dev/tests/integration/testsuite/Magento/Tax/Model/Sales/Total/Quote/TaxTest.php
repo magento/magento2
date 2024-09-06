@@ -329,7 +329,7 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @return array
      */
-    public function taxDataProvider()
+    public static function taxDataProvider()
     {
         global $taxCalculationData;
         return $taxCalculationData;

@@ -51,8 +51,7 @@ class CctypeTest extends TestCase
     {
         $this->_paymentConfig = $this->getMockBuilder(
             Config::class
-        )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
 
         $this->_model = new Cctype($this->_paymentConfig);
     }

@@ -99,7 +99,7 @@ class ShippingInformationManagementTest extends TestCase
      *
      * @return array
      */
-    public function getAddressesVariation(): array
+    public static function getAddressesVariation(): array
     {
         return [
             'Shipping address swap' => [true],
