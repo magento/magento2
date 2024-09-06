@@ -86,7 +86,7 @@ class Rows
 
             $productIds = array_merge([], ...$productIds);
             if (!empty($productIds)) {
-                $indexer->reindexList(array_unique($productIds));
+                $indexer->getView()->getChangelog()->addList($productIds);
             }
         }
 

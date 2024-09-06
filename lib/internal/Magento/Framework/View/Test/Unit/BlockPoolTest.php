@@ -32,7 +32,7 @@ class BlockPoolTest extends TestCase
     {
         $this->blockFactory = $this->getMockBuilder(BlockFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['createBlock'])
+            ->onlyMethods(['createBlock'])
             ->getMock();
         $this->blockPool = new BlockPool($this->blockFactory);
     }

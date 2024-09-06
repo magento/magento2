@@ -51,9 +51,8 @@ class CryptographerTest extends TestCase
      * @var array
      */
     private $initializationVectors;
-
     /**
-     * @var
+     * @var string
      */
     private $source;
 
@@ -70,7 +69,7 @@ class CryptographerTest extends TestCase
         $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
         $this->encodedContextFactoryMock = $this->getMockBuilder(EncodedContextFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

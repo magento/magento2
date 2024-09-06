@@ -88,6 +88,11 @@ class ExtractCustomerData
                 },
                 $customerData['custom_attributes']
             );
+            usort($customerData['custom_attributes'], function (array $a, array $b) {
+                $aPosition = $a['sort_order'];
+                $bPosition = $b['sort_order'];
+                return $aPosition <=> $bPosition;
+            });
         } else {
             $customerData['custom_attributes'] = [];
         }

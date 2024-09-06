@@ -219,6 +219,13 @@ QUERY;
         $productNameInFixtureStore = 'Product\'s Name in Fixture Store';
         $product->setName($productNameInFixtureStore)->setStoreId($storeId)->save();
 
+        // test cached response store + currency header with non existing currency, and no valid response, no cache
+        $headerMap = ['Store' => $storeCodeFromFixture, 'Content-Currency' => 'SOMECURRENCY'];
+        $this->expectExceptionMessage(
+            'GraphQL response contains errors: Please correct the target currency'
+        );
+        $this->graphQlQuery($query, [], '', $headerMap);
+
         // test store header only, query is cached at this point in EUR
         $headerMap = ['Store' => $storeCodeFromFixture];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
@@ -230,7 +237,7 @@ QUERY;
         $this->assertEquals(
             'EUR',
             $response['products']['items'][0]['price']['minimalPrice']['amount']['currency'],
-            'Currency code EUR in fixture ' . $storeCodeFromFixture . ' is unexpected'
+            'Currency code EUR in fixture ' . $storeCodeFromFixture . ' is expected'
         );
 
         // test cached store + currency header in Euros
@@ -302,12 +309,5 @@ QUERY;
             $response['products']['items'][0]['price']['minimalPrice']['amount']['currency'],
             'Currency code USD in fixture store default is unexpected'
         );
-
-        // test cached response store + currency header with non existing currency, and no valid response, no cache
-        $headerMap = ['Store' => $storeCodeFromFixture, 'Content-Currency' => 'SOMECURRENCY'];
-        $this->expectExceptionMessage(
-            'GraphQL response contains errors: Please correct the target currency'
-        );
-        $this->graphQlQuery($query, [], '', $headerMap);
     }
 }
