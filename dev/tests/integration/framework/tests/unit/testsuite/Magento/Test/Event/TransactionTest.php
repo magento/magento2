@@ -47,6 +47,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
      * Imitate transaction start request
      *
      * @param string $eventName
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _imitateTransactionStartRequest($eventName)
     {
@@ -74,6 +75,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
      * Imitate transaction rollback request
      *
      * @param string $eventName
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _imitateTransactionRollbackRequest($eventName)
     {
