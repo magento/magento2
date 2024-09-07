@@ -69,8 +69,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
 
         <!-- Select payment solution -->
-        <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution" />
-
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="clickCheckMoneyOrderPayment"/>
         <!-- Check order summary in checkout -->
         <comment userInput="BIC workaround" stepKey="waitForPaymentSectionLoaded"/>
         <comment userInput="BIC workaround" stepKey="waitForPlaceOrderButton"/>
