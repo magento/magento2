@@ -133,7 +133,7 @@ class Topmenu extends Template implements IdentityInterface
      *
      * @param Menu $items
      * @param int $limit
-     * @return array|void
+     * @return array
      *
      * @todo: Add Depth Level limit, and better logic for columns
      */
