@@ -83,5 +83,5 @@ For information about a public API in Magento 2, see [Public interfaces & APIs](
 You can get more information about import/export processes in magento at the articles:
 
 - [Create custom import entity](https://developer.adobe.com/commerce/php/tutorials/backend/create-custom-import-entity/)
-- [Import](https://docs.magento.com/user-guide/system/data-import.html)
-- [Export](https://docs.magento.com/user-guide/system/data-export.html)
+- [Import](https://experienceleague.adobe.com/docs/commerce-admin/systems/data-transfer/import/data-import.html)
+- [Export](https://experienceleague.adobe.com/docs/commerce-admin/systems/data-transfer/data-export.html)

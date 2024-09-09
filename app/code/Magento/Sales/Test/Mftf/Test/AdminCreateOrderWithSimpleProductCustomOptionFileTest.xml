@@ -30,6 +30,7 @@
             <!--Clean up created test data.-->
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="customer" stepKey="deleteCustomer" />
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

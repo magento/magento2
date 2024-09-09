@@ -1,0 +1,133 @@
+
+File "/var/www/html/app/code/Magento/MediaGalleryCatalogUi/Test/Mftf/Test/AdminMediaGalleryCatalogUiUsedInCategoryFilterTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMediaGalleryFolderData from module(s): magento/module-media-gallery-ui
+	 AdminOpenStandaloneMediaGalleryActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryFolderSelectActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryFolderDeleteActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryOpenNewFolderFormActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryCreateNewFolderActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryUploadImageActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryViewImageDetails from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryImageDetailsEditActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryImageDetailsSaveActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryCloseViewDetailsActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickAddSelectedActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryExpandFilterActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGallerySelectUsedInFilterActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryApplyFiltersActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryAssertImageInGridActionGroup from module(s): magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/MediaGalleryCatalogUi/Test/Mftf/Test/AdminMediaGalleryCatalogUiUsedInProductFilterOnTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMediaGalleryFolderData from module(s): magento/module-media-gallery-ui
+	 ImageMetadata from module(s): magento/module-media-gallery-ui
+	 AdminOpenStandaloneMediaGalleryActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryFolderSelectActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryFolderDeleteActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminOpenMediaGalleryTinyMceActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryOpenNewFolderFormActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryCreateNewFolderActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryUploadImageActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickImageInGridActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickAddSelectedActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickOkButtonTinyMceActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryExpandFilterActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGallerySelectUsedInFilterActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryApplyFiltersActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryViewImageDetails from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryClickEntityUsedInActionGroup from module(s): magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/MediaGalleryCatalogUi/Test/Mftf/Test/AdminMediaGalleryCatalogUiUsedInProductFilterTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ImageMetadata from module(s): magento/module-media-gallery-ui
+	 AdminOpenMediaGalleryTinyMceActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryUploadImageActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickImageInGridActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickAddSelectedActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickOkButtonTinyMceActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminOpenStandaloneMediaGalleryActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryExpandFilterActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGallerySelectUsedInFilterActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryApplyFiltersActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryViewImageDetails from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryClickEntityUsedInActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminAssertMediaGalleryFilterPlaceholderActionGroup from module(s): magento/module-media-gallery-ui
+	 AssertAdminEnhancedMediaGalleryUsedInSectionNotDisplayedActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryCloseViewDetailsActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryEnableMassActionModeActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGallerySelectImageForMassActionActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup from module(s): magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/MediaGalleryCatalogUi/Test/Mftf/Test/AdminMediaGalleryCatalogUiVerifyUsedInLinkCategoryGridTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMediaGalleryFolderData from module(s): magento/module-media-gallery-ui
+	 UpdatedImageDetails from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryFolderSelectActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryFolderDeleteActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryAssertFolderDoesNotExistActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryOpenNewFolderFormActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryCreateNewFolderActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryAssertFolderNameActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryUploadImageActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryViewImageDetails from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryImageDetailsEditActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryImageDetailsSaveActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryCloseViewDetailsActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickAddSelectedActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryClickEntityUsedInActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryCategoryGridExpandFilterActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGallerySelectUsedInFilterActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryCategoryGridApplyFiltersActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminOpenStandaloneMediaGalleryActionGroup from module(s): magento/module-media-gallery-ui
+	 AssertAdminEnhancedMediaGalleryUsedInSectionNotDisplayedActionGroup from module(s): magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/MediaGalleryCatalogUi/Test/Mftf/Test/AdminMediaGalleryCatalogUiVerifyUsedInLinkProductGridTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ImageMetadata from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryFolderSelectActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryUploadImageActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickImageInGridActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickAddSelectedActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickOkButtonTinyMceActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminOpenStandaloneMediaGalleryActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryViewImageDetails from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryClickEntityUsedInActionGroup from module(s): magento/module-media-gallery-ui
+	 AssertAdminEnhancedMediaGalleryUsedInSectionNotDisplayedActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryCloseViewDetailsActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryEnableMassActionModeActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGallerySelectImageForMassActionActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup from module(s): magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/MediaGalleryCatalogUi/Test/Mftf/Test/AdminMediaGalleryCatalogUiVerifyUsedInLinkedCategoryGridTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 UpdatedImageDetails from module(s): magento/module-media-gallery-ui
+	 AdminOpenStandaloneMediaGalleryActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryFolderSelectActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryFolderDeleteActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryAssertFolderDoesNotExistActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryOpenNewFolderFormActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryCreateNewFolderActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryAssertFolderNameActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryUploadImageActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryViewImageDetails from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryImageDetailsEditActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryImageDetailsSaveActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryCloseViewDetailsActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickAddSelectedActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryClickEntityUsedInActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryCategoryGridExpandFilterActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGallerySelectUsedInFilterActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryCategoryGridApplyFiltersActionGroup from module(s): magento/module-media-gallery-ui
+	 AssertAdminEnhancedMediaGalleryUsedInSectionNotDisplayedActionGroup from module(s): magento/module-media-gallery-ui

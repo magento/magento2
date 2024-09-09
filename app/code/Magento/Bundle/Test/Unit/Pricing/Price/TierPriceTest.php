@@ -65,7 +65,8 @@ class TierPriceTest extends TestCase
         $this->priceInfo = $this->createMock(Base::class);
 
         $this->product = $this->getMockBuilder(Product::class)
-            ->setMethods(['getPriceInfo', 'hasCustomerGroupId', 'getCustomerGroupId', 'getResource', '__wakeup'])
+            ->addMethods(['hasCustomerGroupId', 'getCustomerGroupId'])
+            ->onlyMethods(['getPriceInfo', 'getResource', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -127,7 +128,7 @@ class TierPriceTest extends TestCase
     /**
      * @return array
      */
-    public function providerForGetterTierPriceList()
+    public static function providerForGetterTierPriceList()
     {
         return [
             'base case' => [
@@ -220,7 +221,7 @@ class TierPriceTest extends TestCase
     /**
      * @return array
      */
-    public function providerForTestGetSavePercent()
+    public static function providerForTestGetSavePercent()
     {
         return [
             'no fraction' => [9.0000, 8.1, 10],

@@ -22,6 +22,7 @@
             <createData entity="Simple_US_Customer_With_Different_Billing_Shipping_Addresses" stepKey="createCustomer"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
         </after>
 

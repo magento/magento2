@@ -12,10 +12,8 @@ use Magento\Catalog\Model\FilterProductCustomAttribute;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogGraphQl\Model\ProductDataProvider;
 use Magento\Eav\Api\Data\AttributeInterface;
-use Magento\Eav\Model\AttributeRepository;
 use Magento\EavGraphQl\Model\Output\Value\GetAttributeValueInterface;
-use Magento\EavGraphQl\Model\Resolver\AttributeFilter;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\EavGraphQl\Model\Resolver\GetFilteredAttributes;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -28,16 +26,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class ProductCustomAttributes implements ResolverInterface
 {
     /**
-     * @var AttributeRepository
-     */
-    private AttributeRepository $attributeRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private SearchCriteriaBuilder $searchCriteriaBuilder;
-
-    /**
      * @var GetAttributeValueInterface
      */
     private GetAttributeValueInterface $getAttributeValue;
@@ -48,9 +36,9 @@ class ProductCustomAttributes implements ResolverInterface
     private ProductDataProvider $productDataProvider;
 
     /**
-     * @var AttributeFilter
+     * @var GetFilteredAttributes
      */
-    private AttributeFilter $attributeFilter;
+    private GetFilteredAttributes $getFilteredAttributes;
 
     /**
      * @var FilterProductCustomAttribute
@@ -58,26 +46,20 @@ class ProductCustomAttributes implements ResolverInterface
     private FilterProductCustomAttribute $filterCustomAttribute;
 
     /**
-     * @param AttributeRepository $attributeRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param GetAttributeValueInterface $getAttributeValue
      * @param ProductDataProvider $productDataProvider
-     * @param AttributeFilter $attributeFilter
+     * @param GetFilteredAttributes $getFilteredAttributes
      * @param FilterProductCustomAttribute $filterCustomAttribute
      */
     public function __construct(
-        AttributeRepository $attributeRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
         GetAttributeValueInterface $getAttributeValue,
         ProductDataProvider $productDataProvider,
-        AttributeFilter $attributeFilter,
+        GetFilteredAttributes $getFilteredAttributes,
         FilterProductCustomAttribute $filterCustomAttribute
     ) {
-        $this->attributeRepository = $attributeRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->getAttributeValue = $getAttributeValue;
         $this->productDataProvider = $productDataProvider;
-        $this->attributeFilter = $attributeFilter;
+        $this->getFilteredAttributes = $getFilteredAttributes;
         $this->filterCustomAttribute = $filterCustomAttribute;
     }
 
@@ -99,25 +81,18 @@ class ProductCustomAttributes implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $filterArgs = $args['filter'] ?? [];
+        $filtersArgs = $args['filters'] ?? [];
 
-        $searchCriteriaBuilder = $this->attributeFilter->execute($filterArgs, $this->searchCriteriaBuilder);
-
-        $searchCriteriaBuilder = $searchCriteriaBuilder
-            ->addFilter('is_visible', true)
-            ->addFilter('backend_type', 'static', 'neq')
-            ->create();
-
-        $productCustomAttributes = $this->attributeRepository->getList(
-            ProductAttributeInterface::ENTITY_TYPE_CODE,
-            $searchCriteriaBuilder
-        )->getItems();
+        $productCustomAttributes = $this->getFilteredAttributes->execute(
+            $filtersArgs,
+            ProductAttributeInterface::ENTITY_TYPE_CODE
+        );
 
         $attributeCodes = array_map(
             function (AttributeInterface $customAttribute) {
                 return $customAttribute->getAttributeCode();
             },
-            $productCustomAttributes
+            $productCustomAttributes['items']
         );
 
         $filteredAttributeCodes = $this->filterCustomAttribute->execute(array_flip($attributeCodes));
@@ -141,15 +116,18 @@ class ProductCustomAttributes implements ResolverInterface
             ];
         }
 
-        return array_map(
-            function (array $customAttribute) {
-                return $this->getAttributeValue->execute(
-                    ProductAttributeInterface::ENTITY_TYPE_CODE,
-                    $customAttribute['attribute_code'],
-                    $customAttribute['value']
-                );
-            },
-            $customAttributes
-        );
+        return [
+            'items' => array_map(
+                function (array $customAttribute) {
+                    return $this->getAttributeValue->execute(
+                        ProductAttributeInterface::ENTITY_TYPE_CODE,
+                        $customAttribute['attribute_code'],
+                        $customAttribute['value']
+                    );
+                },
+                $customAttributes
+            ),
+            'errors' => $productCustomAttributes['errors']
+        ];
     }
 }

@@ -6,10 +6,16 @@
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Eav\Model\Config;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Indexer\Table\StrategyInterface;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Catalog Product Indexer Abstract Resource Model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
@@ -18,8 +24,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\AbstractResource
 {
     /**
-     * Eav config
-     *
      * @var \Magento\Eav\Model\Config
      */
     protected $_eavConfig;
@@ -33,18 +37,22 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
     /**
      * Class constructor
      *
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param string $connectionName
+     * @param Context $context
+     * @param StrategyInterface $tableStrategy
+     * @param Config $eavConfig
+     * @param string|null $connectionName
+     * @param MetadataPool|null $metadataPool
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
-        $connectionName = null
+        $connectionName = null,
+        ?\Magento\Framework\EntityManager\MetadataPool $metadataPool = null
     ) {
         $this->_eavConfig = $eavConfig;
+        $this->metadataPool = $metadataPool ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         parent::__construct($context, $tableStrategy, $connectionName);
     }
 
@@ -65,12 +73,13 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
      * If $condition is not empty apply limitation for select
      *
      * @param \Magento\Framework\DB\Select $select
-     * @param string $attrCode              the attribute code
-     * @param string|\Zend_Db_Expr $entity   the entity field or expression for condition
-     * @param string|\Zend_Db_Expr $store    the store field or expression for condition
-     * @param \Zend_Db_Expr $condition       the limitation condition
-     * @param bool $required                if required or has condition used INNER join, else - LEFT
-     * @return \Zend_Db_Expr                 the attribute value expression
+     * @param string $attrCode the attribute code
+     * @param string|\Zend_Db_Expr $entity the entity field or expression for condition
+     * @param string|\Zend_Db_Expr $store the store field or expression for condition
+     * @param \Zend_Db_Expr $condition the limitation condition
+     * @param bool $required if required or has condition used INNER join, else - LEFT
+     * @return \Zend_Db_Expr the attribute value expression
+     * @throws LocalizedException
      */
     protected function _addAttributeToSelect($select, $attrCode, $entity, $store, $condition = null, $required = false)
     {
@@ -158,6 +167,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
 
     /**
      * Add join for catalog/product_website table
+     *
      * Joined table has alias pw
      *
      * @param \Magento\Framework\DB\Select $select the select object
@@ -234,15 +244,13 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
     }
 
     /**
+     * Returns table metadata entity
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      * @since 101.0.0
      */
     protected function getMetadataPool()
     {
-        if (null === $this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
-        }
         return $this->metadataPool;
     }
 }

@@ -146,7 +146,7 @@ class ReindexRuleProduct
                             'sort_order' => $sortOrder,
                         ];
 
-                        if (count($rows) === $batchCount) {
+                        if (count($rows) === (int) $batchCount) {
                             $connection->insertMultiple($indexTable, $rows);
                             $rows = [];
                         }

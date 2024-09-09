@@ -182,33 +182,22 @@ class AbstractTypeTest extends TestCase
         $attributeSet->method('getAttributeSetName')
             ->willReturn('attribute_set_name');
         $attrCollection->method('addFieldToFilter')
-            ->withConsecutive(
-                [
-                    ['main_table.attribute_id'],
-                    [
-                        [
-                            'in' => ['1', '2', '3'],
-                        ],
-                    ]
-                ],
-                [
-                    ['main_table.attribute_code'],
-                    [
-                        [
-                            'in' => [
-                                'related_tgtr_position_behavior',
-                                'related_tgtr_position_limit',
-                                'upsell_tgtr_position_behavior',
-                                'upsell_tgtr_position_limit',
-                                'thumbnail_label',
-                                'small_image_label',
-                                'image_label',
-                            ],
-                        ],
-                    ]
-                ],
-            )
-            ->willReturnOnConsecutiveCalls([$attribute1, $attribute2, $attribute3], []);
+        ->willReturnCallback(function ($field, $conditions) use ($attribute1, $attribute2, $attribute3) {
+            if ($field === ['main_table.attribute_id'] && $conditions === [['in' => ['1', '2', '3']]]) {
+                return [$attribute1, $attribute2, $attribute3];
+            } elseif ($field === ['main_table.attribute_code'] &&
+                $conditions === [['in' =>
+                    ['related_tgtr_position_behavior',
+                        'related_tgtr_position_limit',
+                        'upsell_tgtr_position_behavior',
+                        'upsell_tgtr_position_limit',
+                        'thumbnail_label',
+                        'small_image_label',
+                        'image_label']]]) {
+                return [];
+            }
+        });
+
         $this->connection = $this->getMockBuilder(Mysql::class)
             ->addMethods(['joinLeft'])
             ->onlyMethods(['select', 'fetchAll', 'fetchPairs', 'insertOnDuplicate', 'delete', 'quoteInto'])
@@ -368,7 +357,7 @@ class AbstractTypeTest extends TestCase
     /**
      * @return array
      */
-    public function addAttributeOptionDataProvider()
+    public static function addAttributeOptionDataProvider()
     {
         return [
             [
