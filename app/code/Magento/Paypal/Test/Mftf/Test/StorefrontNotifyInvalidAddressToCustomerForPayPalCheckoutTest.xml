@@ -85,8 +85,8 @@
         <!-- Open Mini Cart -->
         <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCart"/>
         <!-- Click on Paypal paypal button on mini cart page-->
-        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtnFromMiniCart">
-            <argument name="elementNumber" value="1"/>
+        <actionGroup ref="StorefrontClickPayPalButtonActionGroup" stepKey="clickPayPalBtn">
+            <argument name="selector" value="{{SmartButtonsCartSection.ButtonsIframe}}"/>
         </actionGroup>
         <!--Close Mini Cart-->
         <click selector="{{StorefrontMinicartSection.minicartclose}}" stepKey="closeMiniCart"/>
