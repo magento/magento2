@@ -90,7 +90,6 @@
         <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn">
             <argument name="elementNumber" value="1"/>
         </actionGroup>
-        <click selector="{{StorefrontMinicartSection.minicartclose}}" stepKey="closeMiniCart"/>
         <!--Assert invalid address error from mini cart page-->
         <actionGroup ref="StorefrontAssertInvalidAddressErrorActionGroup" stepKey="assertErrorMessageFromMiniCartPage">
             <argument name="invalidAddressError" value="{{CheckoutCartMessageSection.invalidAddressError}}"/>
