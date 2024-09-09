@@ -17,12 +17,10 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-4420"/>
         </annotations>
-
         <before>
             <!-- Log in to Dashboard page -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         </before>
-
         <after>
             <!--Delete configurable product-->
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProductsWithAllVariations">
@@ -44,7 +42,6 @@
             <!--Logout from Admin-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminArea"/>
         </after>
-
         <!-- Navigate to Catalog-> Products and click On Configurable product dropdown -->
         <actionGroup ref="GotoCatalogProductsPageActionGroup" stepKey="goToCatalogProductsPage"/>
         <actionGroup ref="GotoConfigurableProductPageActionGroup" stepKey="goToConfigurableProductPage"/>
