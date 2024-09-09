@@ -123,11 +123,11 @@ class Validate extends ImportResultController implements HttpPostActionInterface
     /**
      * Validate row error.
      *
-     * @param $errorAggregator
-     * @param $totalRows
+     * @param object $errorAggregator
+     * @param int $totalRows
      * @return bool
      */
-    private function validateRowError($errorAggregator, $totalRows): bool
+    private function validateRowError(object $errorAggregator, int $totalRows): bool
     {
         $errors = $errorAggregator->getAllErrors();
         $rowNumber = [];
