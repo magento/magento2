@@ -327,6 +327,10 @@ class ValidateTest extends TestCase
             ->method('getErrorsCount')
             ->willReturn(2);
 
+        $errorAggregatorMock->expects($this->once())
+            ->method('getAllErrors')
+            ->willReturn($errorAggregatorMock);
+
         $this->resultFactoryMock->expects($this->any())
             ->method('create')
             ->with(ResultFactory::TYPE_LAYOUT)
