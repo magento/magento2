@@ -38,7 +38,7 @@ class ShippingBuilderTest extends TestCase
     private $totalFactory;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

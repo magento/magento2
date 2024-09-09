@@ -30,7 +30,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     private $resource;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

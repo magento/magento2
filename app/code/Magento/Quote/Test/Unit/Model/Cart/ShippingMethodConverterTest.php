@@ -68,7 +68,7 @@ class ShippingMethodConverterTest extends TestCase
     protected $taxHelper;
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

@@ -59,7 +59,7 @@ class ContentsTest extends TestCase
     protected $storage;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

@@ -50,7 +50,7 @@ class DirectTest extends TestCase
     private $resultAssetMock;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

@@ -58,7 +58,7 @@ class MultiselectOptionViewTest extends AbstractBundleOptionsViewTest
     }
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function getRequiredSelectXpath(): string
     {
@@ -67,7 +67,7 @@ class MultiselectOptionViewTest extends AbstractBundleOptionsViewTest
     }
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function getNotRequiredSelectXpath(): string
     {

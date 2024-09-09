@@ -92,7 +92,7 @@ class ItemTest extends TestCase
     private const PRODUCT_COST = 9.00;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

@@ -138,7 +138,7 @@ class GetCustomerWithCustomAttributesTest extends GraphQlAbstract
     private $customer;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

@@ -53,7 +53,7 @@ class SubtotalTest extends TestCase
     protected $stockRegistry;
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

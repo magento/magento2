@@ -36,7 +36,7 @@ class CollectTotalsObserverTest extends TestCase
     private $objectManager;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

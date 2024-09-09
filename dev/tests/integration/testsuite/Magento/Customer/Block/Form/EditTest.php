@@ -42,7 +42,7 @@ class EditTest extends TestCase
     private $customerSession;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

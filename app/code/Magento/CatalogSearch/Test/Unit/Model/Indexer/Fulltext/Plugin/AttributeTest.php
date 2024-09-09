@@ -64,7 +64,7 @@ class AttributeTest extends TestCase
     private $eavConfig;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

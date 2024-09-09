@@ -49,7 +49,7 @@ class ExportTest extends AbstractBackendController
     private $localeResolver;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

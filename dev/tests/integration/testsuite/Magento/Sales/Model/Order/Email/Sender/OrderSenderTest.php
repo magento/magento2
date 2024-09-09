@@ -19,7 +19,7 @@ class OrderSenderTest extends TestCase
     private $orderSender;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

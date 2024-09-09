@@ -42,7 +42,7 @@ class Config implements ConfigInterface, UploadConfigInterface
     }
 
     /**
-     * {@inherit}
+     * {@inheritDoc}
      *
      * @return string
      */
@@ -52,7 +52,7 @@ class Config implements ConfigInterface, UploadConfigInterface
     }
 
     /**
-     * {@inherit}
+     * {@inheritDoc}
      *
      * @return mixed
      */

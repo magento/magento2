@@ -26,7 +26,7 @@ class ConnectionManagerTest extends TestCase
     private $connectionManager;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

@@ -203,7 +203,7 @@ class QuoteManagementTest extends TestCase
     private $lockManagerMock;
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

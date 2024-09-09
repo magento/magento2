@@ -60,7 +60,7 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
     }
 
     /**
-     * {inheritdoc}
+     * {@inheritDoc}
      */
     public function configureObjectManager(ConfigInterface $diConfig, &$sharedInstances)
     {

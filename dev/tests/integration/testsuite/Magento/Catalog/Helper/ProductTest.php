@@ -54,7 +54,7 @@ class ProductTest extends TestCase
     private $registry;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

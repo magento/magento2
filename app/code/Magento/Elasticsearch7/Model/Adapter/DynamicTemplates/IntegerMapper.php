@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch7\Model\Adapter\DynamicTemplates;
 
 /**
- * @inheridoc
+ * @inheritDoc
  */
 class IntegerMapper implements MapperInterface
 {
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     public function processTemplates(array $templates): array
     {

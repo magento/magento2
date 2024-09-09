@@ -32,7 +32,7 @@ class CalculationTest extends TestCase
     private $fixtures;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

@@ -22,7 +22,7 @@ class AbstractTest extends TestCase
     protected $_objectManager;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

@@ -35,7 +35,7 @@ class GraphQlSessionTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
-     * @inheirtdoc
+     * @inheritDoc
      */
     public function setUp(): void
     {

@@ -84,7 +84,7 @@ class SaveTest extends TestCase
     private $pageId = 1;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

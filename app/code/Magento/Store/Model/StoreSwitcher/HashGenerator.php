@@ -17,7 +17,7 @@ use Magento\Store\Model\StoreSwitcher\HashGenerator\HashData;
 /**
  * Generate one time token and build redirect url
  *
- * @deplacated No longer used
+ * @deprecated No longer used
  * @see RedirectDataGenerator
  * @see RedirectDataValidator
  */

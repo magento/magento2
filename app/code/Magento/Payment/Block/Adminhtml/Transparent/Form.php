@@ -22,7 +22,7 @@ class Form extends \Magento\Payment\Block\Transparent\Form
     }
 
     /**
-     * {inheritdoc}
+     * {@inheritDoc}
      */
     protected function initializeMethod()
     {

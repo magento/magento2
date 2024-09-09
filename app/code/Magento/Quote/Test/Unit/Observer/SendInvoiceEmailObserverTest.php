@@ -71,7 +71,7 @@ class SendInvoiceEmailObserverTest extends TestCase
     private $paymentMock;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

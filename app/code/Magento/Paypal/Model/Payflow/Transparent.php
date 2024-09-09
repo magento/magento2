@@ -244,7 +244,7 @@ class Transparent extends Payflowpro implements TransparentInterface
     }
 
     /**
-     * {inheritdoc}
+     * {@inheritDoc}
      */
     public function getConfigInterface()
     {

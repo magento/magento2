@@ -36,7 +36,7 @@ class TransportTest extends TestCase
     private $scopeConfigMock;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

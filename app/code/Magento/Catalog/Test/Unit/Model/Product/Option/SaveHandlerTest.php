@@ -46,7 +46,7 @@ class SaveHandlerTest extends TestCase
     private $relationMock;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
