@@ -16,5 +16,6 @@
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="amOnCustomersPage"/>
         <waitForPageLoad stepKey="WaitForPageToLoad"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+        <waitForPageLoad stepKey="waitForCustomersFilterToBeDeleted"/>
     </actionGroup>
 </actionGroups>

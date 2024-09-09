@@ -18,7 +18,9 @@
         <conditionalClick selector="{{PayPalPaymentSection.notYouLink}}" dependentSelector="{{PayPalPaymentSection.notYouLink}}" visible="true" stepKey="selectNotYouSection"/>
         <conditionalClick selector="{{PayPalPaymentSection.existingAccountLoginBtn}}" dependentSelector="{{PayPalPaymentSection.existingAccountLoginBtn}}" visible="true" stepKey="skipAccountCreationAndLogin"/>
         <waitForPageLoad stepKey="waitForLoginPageLoad"/>
-        <waitForElement selector="{{PayPalPaymentSection.email}}" stepKey="waitForLoginForm" />
+        <waitForElementClickable selector="{{PayPalPaymentSection.email}}" stepKey="waitForLoginForm"/>
+        <click selector="{{PayPalPaymentSection.email}}" stepKey="focusOnEmailField"/>
+        <clearField selector="{{PayPalPaymentSection.email}}" stepKey="clearEmailField"/>
         <fillField selector="{{PayPalPaymentSection.email}}" userInput="{{credentials.magento/PAYPAL_LOGIN}}" stepKey="fillEmail"/>
         <click selector="{{PayPalPaymentSection.nextButton}}" stepKey="clickNext"/>
         <waitForElementVisible selector="{{PayPalPaymentSection.password}}" stepKey="waitForPasswordField"/>

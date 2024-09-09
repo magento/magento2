@@ -37,6 +37,7 @@ class ValidationMessageTest extends TestCase
     /**
      * @var MockObject
      * @deprecated since 101.0.0
+     * @see no alternatives
      */
     private $currencyMock;
 
@@ -73,11 +74,15 @@ class ValidationMessageTest extends TestCase
 
         $this->scopeConfigMock
             ->method('getValue')
-            ->withConsecutive(
-                ['sales/minimum_order/description', ScopeInterface::SCOPE_STORE],
-                ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE]
-            )
-            ->willReturnOnConsecutiveCalls(null, $minimumAmount);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($minimumAmount) {
+                    if ($arg1 == 'sales/minimum_order/description' && $arg2 == ScopeInterface::SCOPE_STORE) {
+                        return null;
+                    } elseif ($arg1 == 'sales/minimum_order/amount' && $arg2 == ScopeInterface::SCOPE_STORE) {
+                        return $minimumAmount;
+                    }
+                }
+            );
 
         $this->priceHelperMock->expects($this->once())
             ->method('currency')
