@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontClickPayPalButtonActionGroup" extends="SwitchToPayPalGroupBtnActionGroup">
+        <annotations>
+            <description>Click PayPal button</description>
+        </annotations>
+        <arguments>
+            <argument name="selector" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{selector}}" stepKey="waitForIframeVisible" before="setIDForIframe"/>
+        <executeJS function="jQuery('{{selector}}').attr('name', 'myFrame');" stepKey="setIDForIframe"/>
+        <switchToIFrame userInput="myFrame" stepKey="switchToIframe"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.PayPalBtn}}" stepKey="waitForPayPalBtn"/>
+        <click selector="{{CheckoutPaymentSection.PayPalBtn}}" stepKey="clickPayPalBtn"/>
+    </actionGroup>
+</actionGroups>
