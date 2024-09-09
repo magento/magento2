@@ -12,11 +12,9 @@
         <annotations>
             <description>Filters the Admin Products grid by the provided Product (Name).</description>
         </annotations>
-
         <arguments>
             <argument name="productName" type="string"/>
         </arguments>
-
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <waitForElementClickable selector="{{AdminProductGridFilterSection.filters}}" stepKey="openForFilterField"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
