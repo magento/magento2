@@ -4,11 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Framework\Escaper;
-use Magento\Framework\View\Helper\SecureHtmlRenderer;
-
-/** @var SecureHtmlRenderer $secureRenderer */
-/** @var Escaper $escaper */
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 
 <?php $_divId = 'tree' . $block->getId() ?>
@@ -137,29 +136,30 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
 
     function handleOpenNode(e, data) {
         let parentNode = data.node;
-
-        if (parentNode.children.length > 0) {
-            let childNode = data.instance.get_node(parentNode.children, false);
-
-            // Check if the child node has no children (is not yet loaded)
-            if (childNode.children && childNode.children.length === 0
-                && childNode.original && !childNode.original.lastNode) {
-                $.ajax({
-                    url: '{$escaper->escapeJs($escaper->escapeUrl($block->getLoadTreeUrl()))}',
-                    data: {
-                        id: childNode.original.id,
-                        store: childNode.original.store,
-                        form_key: FORM_KEY
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        handleSuccessResponse(response, childNode, data);
-                    },
-                    error: function (jqXHR, status, error) {
-                        console.log(status + ': ' + error + 'Response text:' + jqXHR.responseText);
-                    }
-                });
-            }
+        if (parentNode && parentNode.children.length > 0) {
+            parentNode.children.forEach(function(childId) {
+                let childNode = data.instance.get_node(childId, false);
+                // Check if the child node has no children (is not yet loaded)
+                if (childNode.children && childNode.children.length === 0
+                    && childNode.original && !childNode.original.lastNode) {
+                    $.ajax({
+                        url: '{$block->escapeJs($block->escapeUrl($block->getLoadTreeUrl()))}',
+                        type: "POST",
+                        data: {
+                            id: childNode.original.id,
+                            store: childNode.original.store,
+                            form_key: FORM_KEY
+                        },
+                        dataType: 'json',
+                        success: function (response) {
+                            handleSuccessResponse(response, childNode, data);
+                        },
+                        error: function (jqXHR, status, error) {
+                            console.log(status + ': ' + error + 'Response text:' + jqXHR.responseText);
+                        }
+                    });
+                }
+            })
         }
     }
 

@@ -33,7 +33,7 @@ class DefaultConfigProvider implements \Magento\Framework\Data\Wysiwyg\ConfigPro
     {
         $config->addData([
             'tinymce' => [
-                'toolbar' => 'formatselect | bold italic underline | alignleft aligncenter alignright | '
+                'toolbar' => ' blocks | formatselect | bold italic underline | alignleft aligncenter alignright | '
                     . 'bullist numlist | link table charmap',
                 'plugins' => implode(
                     ' ',
