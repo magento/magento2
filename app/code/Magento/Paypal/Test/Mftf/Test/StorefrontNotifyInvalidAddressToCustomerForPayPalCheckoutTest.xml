@@ -75,7 +75,7 @@
         <!--Navigate to shopping cart-->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPageForAssertion"/>
         <!-- Click on Paypal paypal button on cart page-->
-        <actionGroup ref="StorefrontSwitchPayPalGroupBtnWithLessTimeoutActionGroup" stepKey="clickPayPalBtnFromCartPage">
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtnFromCartPage">
             <argument name="elementNumber" value="1"/>
         </actionGroup>
         <!--Assert invalid address error from cart page-->
