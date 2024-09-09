@@ -123,6 +123,7 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
                 // Create the new node and execute node callback
                 data.instance.create_node(childNode, newNode, 'last', node => {
                     if (useMassAction) {
+                        isAnchorArr[parseInt(node.id)] = node.original.is_anchor;
                         if (checkedNodes.includes(node.id)) {
                             tree.jstree(true).select_node(node.id);
                         }
@@ -158,6 +159,17 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
                             console.log(status + ': ' + error + 'Response text:' + jqXHR.responseText);
                         }
                     });
+                }
+                else if (childNode.children.length === 0
+                    && childNode.original && childNode.original.lastNode) {
+                    if (useMassAction) {
+                        isAnchorArr[parseInt(childNode.id)] = childNode.original.is_anchor;
+                        if (checkedNodes.includes(childNode.id)) {
+                            tree.jstree(true).select_node(childNode.id);
+                        }
+                        getCheckedNodeIds(tree, childNode);
+                        actionBasedOnIsAnchorOnly();
+                    }
                 }
             })
         }
