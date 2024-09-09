@@ -26,8 +26,8 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
     public static function getConfigurations(): array
     {
         return [
-            'no-html' => [['div'], [], [], 'just text', true, [], []],
-            'allowed-tag' => [['div'], [], [], 'just text and <div>a div</div>', true, [], []],
+            'no-html' => [['div'], [], [], 'just text', false, [], []],
+            'allowed-tag' => [['div'], [], [], 'just text and <div>a div</div>', false, [], []],
             'restricted-tag' => [
                 ['div', 'p'],
                 [],

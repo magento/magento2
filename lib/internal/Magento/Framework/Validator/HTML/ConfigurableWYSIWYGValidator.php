@@ -24,6 +24,11 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
         . '(\\\\x64\\\\x61\\\\x74\\\\x61(\\\\x3a|:|%3A)))/i';
 
     /**
+     * @var string
+     */
+    private static string $contentFiltrationPattern = "/(<body)/i";
+
+    /**
      * @var string[]
      */
     private $allowedTags;
@@ -105,6 +110,7 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
     private function validateConfigured(\DOMXPath $xpath): void
     {
         //Validating tags
+        $this->allowedTags = array_merge($this->allowedTags, ["body", "html"]);
         $found = $xpath->query(
             '//*['
             . implode(
@@ -113,7 +119,7 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
                     function (string $tag): string {
                         return "name() != '$tag'";
                     },
-                    array_merge($this->allowedTags, ['body', 'html'])
+                    $this->allowedTags
                 )
             )
             .']'
@@ -243,7 +249,9 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
                 $loaded = false;
             }
         );
-        $loaded = $dom->loadHTML("<html><body>$content</body></html>");
+        $matches = [];
+        preg_match_all(self::$contentFiltrationPattern, $content, $matches);
+        $loaded = !(count($matches[0]) > 1) && $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED);
         restore_error_handler();
         if (!$loaded) {
             throw new ValidationException(__('Invalid HTML content provided'));
