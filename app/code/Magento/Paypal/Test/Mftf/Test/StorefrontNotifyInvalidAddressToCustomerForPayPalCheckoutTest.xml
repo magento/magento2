@@ -67,7 +67,7 @@
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPayPalExpressButton"/>
         <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="clickPayPalExpressButton"/>
         <!--Switch to paypal group and click on paypal button-->
-        <actionGroup ref="StorefrontSwitchPayPalGroupBtnWithLessTimeoutActionGroup" stepKey="clickPayPalButtonFromCheckoutPage"/>
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalButtonFromCheckoutPage"/>
         <!--Assert invalid address error from checkout page-->
         <actionGroup ref="StorefrontAssertInvalidAddressErrorActionGroup" stepKey="assertInvalidAddressErrorFromCheckoutPage">
             <argument name="invalidAddressError" value="{{CheckoutPaymentSection.invalidAddressError}}"/>
@@ -85,7 +85,7 @@
         <!-- Open Mini Cart -->
         <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCart"/>
         <!-- Click on Paypal paypal button on mini cart page-->
-        <actionGroup ref="StorefrontSwitchPayPalGroupBtnWithLessTimeoutActionGroup" stepKey="clickPayPalBtnFromMiniCart">
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtnFromMiniCart">
             <argument name="elementNumber" value="1"/>
         </actionGroup>
         <!--Close Mini Cart-->
