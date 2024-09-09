@@ -925,6 +925,120 @@ class OptionTest extends AbstractImportTestCase
     }
 
     /**
+     * Test parsing different option's type with _parseCustomOptions() method.
+     *
+     * @param array $rowData
+     * @param array $responseData
+     *
+     * @return void
+     * @dataProvider validateParseCustomOptionsDataProvider
+     * @throws \ReflectionException
+     */
+    public function testValidateParseCustomOptions(array $rowData, array $responseData): void
+    {
+        $reflection = new \ReflectionClass(Option::class);
+        $reflectionMethod = $reflection->getMethod('_parseCustomOptions');
+        $result = $reflectionMethod->invoke($this->model, $rowData);
+        $this->assertEquals($responseData, $result);
+    }
+
+    /**
+     * Data provider for testValidateParseCustomOptions.
+     *
+     * @return array
+     */
+    public static function validateParseCustomOptionsDataProvider(): array
+    {
+        return [
+            'file_type' => [
+                '$rowData' => [
+                    'custom_options' => 'name=Test Field Title,type=file,required=1,'
+                        . 'sku=1-text,price=12,file_extension=png,jpeg,jpg,gif,image_size_x=1024,'
+                        . 'image_size_y=1024,price_type=fixed'
+                ],
+                '$responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'file',
+                                'required' => '1',
+                                'sku' => '1-text',
+                                'price' => '12',
+                                'file_extension' => 'png,jpeg,jpg,gif',
+                                'image_size_x' => '1024',
+                                'image_size_y' => '1024',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'drop_down' => [
+                '$rowData' => [
+                    'custom_options' => 'name=Test Field Title,type=drop_down,required=0,'
+                        . 'sku=1-text,price=10,price_type=fixed'
+                ],
+                '$responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'drop_down',
+                                'required' => '0',
+                                'sku' => '1-text',
+                                'price' => '10',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'area' => [
+                '$rowData' => [
+                    'custom_options' => 'name=Test Field Title,type=area,required=1,'
+                        . 'sku=1-text,price=20,max_characters=150,price_type=fixed'
+                ],
+                '$responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'area',
+                                'required' => '1',
+                                'sku' => '1-text',
+                                'price' => '20',
+                                'max_characters' => '150',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'date_time' => [
+                '$rowData' => [
+                    'custom_options' => 'name=Test Field Title,type=date_time,required=0,'
+                        . 'sku=1-text,price=30,price_type=fixed'
+                ],
+                '$responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'date_time',
+                                'required' => '0',
+                                'sku' => '1-text',
+                                'price' => '30',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
      * Data provider of row data and errors.
      *
      * @return array
