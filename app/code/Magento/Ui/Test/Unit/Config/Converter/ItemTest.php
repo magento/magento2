@@ -45,7 +45,7 @@ class ItemTest extends TestCase
      * @param string $xpath
      * @dataProvider convertDataProvider
      */
-    public function testConvert(array $expectedResult, $xpath)
+    public function testConvert(array $expectedResult, string $xpath)
     {
         $node = $this->domXpath->query($xpath)->item(0);
         if ($xpath == '//listing/columns/settings/editorConfig') {
@@ -132,7 +132,7 @@ class ItemTest extends TestCase
     private static function getSetTwo()
     {
         return [
-            'editorConfig' => [
+            'expectedResult' => [
                 'name' => 'editorConfig',
                 'xsi:type' => 'array',
                 'item' => [
@@ -174,7 +174,7 @@ class ItemTest extends TestCase
     private static function getSetThree()
     {
         return [
-            'templates' => [
+            'xpath' => [
                 'name' => 'templates',
                 'xsi:type' => 'array',
                 'item' => [
