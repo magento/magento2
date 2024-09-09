@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="SmartButtonsCartSection">
+        <element name="MessageIframe" type="radio" selector=".checkout-methods-items .pay-later-message iframe"/>
+        <element name="ButtonsIframe" type="radio" selector=".checkout-methods-items .smart-buttons iframe"/>
+        <element name="ButtonsContainer" type="radio" selector=".checkout-methods-items .smart-buttons"/>
+        <element name="MessageContainer" type="radio" selector=".checkout-methods-items .pay-later-message"/>
+    </section>
+</sections>
