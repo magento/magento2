@@ -31,7 +31,7 @@ class ReorderTest extends TestCase
     protected $scopeConfigMock;
 
     /**
-     * @var MockObject|\Magento\Sales\Model\Store
+     * @var MockObject|\Magento\Store\Model\Store
      */
     protected $storeParam;
 
@@ -78,7 +78,7 @@ class ReorderTest extends TestCase
             $this->repositoryMock
         );
 
-        $this->storeParam = $this->getMockBuilder(\Magento\Sales\Model\Store::class)
+        $this->storeParam = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
