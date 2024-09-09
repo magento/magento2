@@ -39,7 +39,6 @@
         <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="Text Swatch" stepKey="selectInputType"/>
         <click selector="{{AttributePropertiesSection.addSwatch}}" stepKey="clickAddSwatch"/>
         <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
-
         <waitForElementClickable selector="{{AttributeManageSwatchSection.isDefaultTextSwatch('1')}}" stepKey="waitForDefaultOptionToBecomeClickable"/>
         <click selector="{{AttributeManageSwatchSection.isDefaultTextSwatch('1')}}" stepKey="setFirstSizeAsDefault"/>
         <actionGroup ref="AdminAddTextSwatchForAdminActionGroup" stepKey="addTextSwatchForAdmin">
