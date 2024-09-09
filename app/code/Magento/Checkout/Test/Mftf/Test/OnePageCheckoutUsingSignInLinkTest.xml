@@ -70,7 +70,6 @@
 
         <!-- Select payment solution -->
         <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution" />
-
         <!-- Check order summary in checkout -->
         <comment userInput="BIC workaround" stepKey="waitForPaymentSectionLoaded"/>
         <comment userInput="BIC workaround" stepKey="waitForPlaceOrderButton"/>
