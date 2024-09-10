@@ -246,7 +246,6 @@
          * @param {Event} event
          */
         changeAddressField: function (event) {
-            console.trace();
             var field = Event.element(event),
                 re = /[^\[]*\[([^\]]*)_address\]\[([^\]]*)\](\[(\d)\])?/,
                 matchRes = field.name.match(re),
