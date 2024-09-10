@@ -9,8 +9,9 @@ define([
     'mage/translate',
     '../template/renderer',
     'jquery',
-    '../../logger/console-logger'
-], function (ko, registry, $t, renderer, $, consoleLogger) {
+    '../../logger/console-logger',
+    'underscore'
+], function (ko, registry, $t, renderer, $, consoleLogger, _) {
     'use strict';
 
     /**
@@ -20,34 +21,21 @@ define([
      * @returns bool
      */
     function isInViewport(el) {
-        if (!el.checkVisibility()) return false;
-        const rect = el.getBoundingClientRect();
-        const vWidth = window.innerWidth || doc.documentElement.clientWidth;
-        const vHeight = window.innerHeight || doc.documentElement.clientHeight;
+        if ((!_.isFunction(el.checkVisibility)) || !el.checkVisibility()) {
+            return false;
+        }
+
+        const rect = el.getBoundingClientRect(),
+            vWidth = window.innerWidth || doc.documentElement.clientWidth,
+            vHeight = window.innerHeight || doc.documentElement.clientHeight;
 
         // Check if the element is out of bounds
-        if (rect.right < 0 || rect.bottom < 0 || rect.left > vWidth || rect.top > vHeight) return false;
+        if (rect.right < 0 || rect.bottom < 0 || rect.left > vWidth || rect.top > vHeight) {
+            return false;
+        }
 
         // Return true if any of the above disjunctions are false
         return true;
-    }
-
-    /**
-     *  Check condition apply components
-     *
-     * @param {HTMLElement} el - element to apply bindings to.
-     * @param {ko.bindingContext} bindingContext - instance of ko.bindingContext, passed to binding initially.
-     * @param {Promise} promise - instance of jQuery promise
-     * @param {Object} component - component instance to attach to new context
-     */
-    function applyComponents(el, bindingContext, promise, component) {
-        if (isInViewport(el)) {
-            runApplyComponents(el, bindingContext, promise, component);
-        } else {
-            document.addEventListener('mousemove', function (e) {
-                runApplyComponents(el, bindingContext, promise, component);
-            }, { once: true });
-        }
     }
 
     /**
@@ -69,6 +57,29 @@ define([
         ko.utils.arrayForEach(ko.virtualElements.childNodes(el), ko.cleanNode);
 
         ko.applyBindingsToDescendants(component, el);
+    }
+
+    /**
+     *  Check condition apply components
+     *
+     * @param {HTMLElement} el - element to apply bindings to.
+     * @param {ko.bindingContext} bindingContext - instance of ko.bindingContext, passed to binding initially.
+     * @param {Promise} promise - instance of jQuery promise
+     * @param {Object} component - component instance to attach to new context
+     */
+    function applyComponents(el, bindingContext, promise, component) {
+        if (isInViewport(el)) {
+            runApplyComponents(el, bindingContext, promise, component);
+        } else {
+            (events => {
+                const lazyLoadJs = () => {
+                    events.forEach(type => window.removeEventListener(type, lazyLoadJs))
+                    runApplyComponents(el, bindingContext, promise, component);
+                };
+
+                events.forEach(type => window.addEventListener(type, lazyLoadJs, {once: true}))
+            })(['touchstart', 'mouseover', 'wheel', 'scroll', 'keydown']);
+        }
     }
 
     ko.bindingHandlers.scope = {
