@@ -807,7 +807,7 @@ MUTATION;
     /**
      * @return array
      */
-    public function invalidInputDataProvider()
+    public static function invalidInputDataProvider()
     {
         return [
             ['', 'Syntax Error: Expected Name, found )'],
