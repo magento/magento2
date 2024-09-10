@@ -80,6 +80,16 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
         } else {
             $discountAmount = $cartItem->getDiscountAmount();
         }
+
+        /**
+         * Calculate the actual price of the product with all discounts applied
+         */
+        $originalItemPrice = $cartItem->getTotalDiscountAmount() > 0
+            ? $this->priceCurrency->round(
+                $cartItem->getCalculationPrice() - ($cartItem->getTotalDiscountAmount() / max($cartItem->getQty(), 1))
+            )
+            : $cartItem->getCalculationPrice();
+
         return [
             'model' => $cartItem,
             'price' => [
@@ -106,6 +116,10 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
                 $cartItem->getQuote(),
                 $cartItem->getExtensionAttributes()->getDiscounts() ?? []
             ),
+            'original_item_price' => [
+                'currency' => $currencyCode,
+                'value' => $originalItemPrice
+            ],
             'original_row_total' => [
                 'currency' => $currencyCode,
                 'value' => $this->getOriginalRowTotal($cartItem),

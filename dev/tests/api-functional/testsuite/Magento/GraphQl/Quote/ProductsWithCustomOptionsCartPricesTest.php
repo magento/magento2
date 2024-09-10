@@ -132,6 +132,10 @@ class ProductsWithCustomOptionsCartPricesTest extends GraphQlAbstract
                                 "original_row_total" => [
                                     "value" => 80,
                                     "currency" => "USD"
+                                ],
+                                "original_item_price" => [
+                                    "value" => 25,
+                                    "currency" => "USD"
                                 ]
                             ]
                         ]
@@ -213,6 +217,10 @@ class ProductsWithCustomOptionsCartPricesTest extends GraphQlAbstract
                                 "original_row_total" => [
                                     "value" => 66,
                                     "currency" => "USD"
+                                ],
+                                "original_item_price" => [
+                                    "value" => 16.5,
+                                    "currency" => "USD"
                                 ]
                             ]
                         ]
@@ -293,6 +301,10 @@ class ProductsWithCustomOptionsCartPricesTest extends GraphQlAbstract
                                 ],
                                 "original_row_total" => [
                                     "value" => 166,
+                                    "currency" => "USD"
+                                ],
+                                "original_item_price" => [
+                                    "value" => 66.5,
                                     "currency" => "USD"
                                 ]
                             ]
@@ -435,6 +447,10 @@ class ProductsWithCustomOptionsCartPricesTest extends GraphQlAbstract
                                 "original_row_total" => [
                                     "value" => 92,
                                     "currency" => "USD"
+                                ],
+                                "original_item_price" => [
+                                    "value" => 22,
+                                    "currency" => "USD"
                                 ]
                             ]
                         ]
@@ -469,6 +485,10 @@ class ProductsWithCustomOptionsCartPricesTest extends GraphQlAbstract
             currency
           }
           original_row_total {
+            value
+            currency
+          }
+          original_item_price {
             value
             currency
           }
