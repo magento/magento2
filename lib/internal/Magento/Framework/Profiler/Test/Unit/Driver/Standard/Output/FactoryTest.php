@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 /**
- * Test class for \Magento\Framework\Profiler\Driver\Standard\Output\Factory
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ *
+ * Test class for \Magento\Framework\Profiler\Driver\Standard\Output\Factory
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard\Output;
 
@@ -60,6 +60,14 @@ class FactoryTest extends TestCase
      */
     public function testCreate($configData, $expectedClass)
     {
+        if (isset($configData['type']) && is_callable($configData['type'])) {
+            $configData['type'] = $configData['type']($this);
+        }
+
+        if (is_callable($expectedClass)) {
+            $expectedClass = $expectedClass($this);
+        }
+
         $driver = $this->_factory->create($configData);
         $this->assertInstanceOf($expectedClass, $driver);
         $this->assertInstanceOf(OutputInterface::class, $driver);
@@ -68,7 +76,29 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider()
+    public static function createDataProvider(): array
+    {
+        return [
+            'Prefix and concrete type' => [
+                ['type' => 'test'],
+                static fn(self $testCase) => $testCase->getOutputClassMock()['testOutputClass']
+            ],
+            'Prefix and default type' => [
+                [],
+                static fn(self $testCase) => $testCase->getOutputClassMock()['defaultOutputClass']
+            ],
+            'Concrete class' => [
+                ['type' => static fn(self $testCase) => $testCase->getOutputClassMock()['testOutputClass']],
+                static fn(self $testCase) => $testCase->getOutputClassMock()['testOutputClass']
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function getOutputClassMock(): array
     {
         $defaultOutputClassMock = $this->getMockForAbstractClass(
             OutputInterface::class,
@@ -95,9 +125,8 @@ class FactoryTest extends TestCase
         $testOutputClass = get_class($testOutputClassMock);
 
         return [
-            'Prefix and concrete type' => [['type' => 'test'], $testOutputClass],
-            'Prefix and default type' => [[], $defaultOutputClass],
-            'Concrete class' => [['type' => $testOutputClass], $testOutputClass]
+            'defaultOutputClass' => $defaultOutputClass,
+            'testOutputClass' => $testOutputClass
         ];
     }
 
