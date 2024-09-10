@@ -951,12 +951,12 @@ class OptionTest extends AbstractImportTestCase
     {
         return [
             'file_type' => [
-                '$rowData' => [
+                'rowData' => [
                     'custom_options' => 'name=Test Field Title,type=file,required=1,'
                         . 'sku=1-text,price=12,file_extension=png,jpeg,jpg,gif,image_size_x=1024,'
                         . 'image_size_y=1024,price_type=fixed'
                 ],
-                '$responseData' => [
+                'responseData' => [
                     'custom_options' => [
                         'Test Field Title' => [
                             [
@@ -975,11 +975,11 @@ class OptionTest extends AbstractImportTestCase
                 ]
             ],
             'drop_down' => [
-                '$rowData' => [
+                'rowData' => [
                     'custom_options' => 'name=Test Field Title,type=drop_down,required=0,'
                         . 'sku=1-text,price=10,price_type=fixed'
                 ],
-                '$responseData' => [
+                'responseData' => [
                     'custom_options' => [
                         'Test Field Title' => [
                             [
@@ -995,11 +995,11 @@ class OptionTest extends AbstractImportTestCase
                 ]
             ],
             'area' => [
-                '$rowData' => [
+                'rowData' => [
                     'custom_options' => 'name=Test Field Title,type=area,required=1,'
                         . 'sku=1-text,price=20,max_characters=150,price_type=fixed'
                 ],
-                '$responseData' => [
+                'responseData' => [
                     'custom_options' => [
                         'Test Field Title' => [
                             [
@@ -1016,11 +1016,11 @@ class OptionTest extends AbstractImportTestCase
                 ]
             ],
             'date_time' => [
-                '$rowData' => [
+                'rowData' => [
                     'custom_options' => 'name=Test Field Title,type=date_time,required=0,'
                         . 'sku=1-text,price=30,price_type=fixed'
                 ],
-                '$responseData' => [
+                'responseData' => [
                     'custom_options' => [
                         'Test Field Title' => [
                             [
