@@ -28,6 +28,21 @@ input ConfirmCancelOrderInput {
 type CancelOrderOutput @doc(description: "Contains the updated customer order and error message if any.") {
     error: String @doc(description: "Error encountered while cancelling the order.")
     order: CustomerOrder @doc(description: "Updated customer order.")
+    errorV2: CancelOrderError @resolver(class: "Magento\\OrderCancellationGraphQl\\Model\\Resolver\\CancelOrderError")
+}
+
+type CancelOrderError {
+    message: String! @doc(description: "A localized error message.")
+    code: CancelOrderErrorCode! @doc(description: "An error code that is specific to cancel order.")
+}
+
+enum CancelOrderErrorCode {
+    ORDER_CANCELLATION_DISABLED
+    UNDEFINED
+    UNAUTHORISED
+    ORDER_NOT_FOUND
+    PARTIAL_ORDER_ITEM_SHIPPED
+    INVALID_ORDER_STATUS
 }
 
 enum OrderActionType @doc(description: "The list of available order actions.") {
