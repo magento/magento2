@@ -455,7 +455,7 @@ HTML;
             ],
             [
                 'place' => 4,
-                'colbrake' => true
+                'colbrake' => false
             ]
         ];
 
