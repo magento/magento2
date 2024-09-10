@@ -97,7 +97,7 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
         $this->_object->startTest($this->_testCaseMock);
     }
 
-    public function getTestAppAreaDataProvider()
+    public static function getTestAppAreaDataProvider()
     {
         return [
             'method scope' => [['method' => ['magentoAppArea' => ['adminhtml']]], 'adminhtml'],
@@ -181,7 +181,7 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function startTestWithDifferentAreaCodes()
+    public static function startTestWithDifferentAreaCodes()
     {
         return [
             [

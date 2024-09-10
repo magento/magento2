@@ -89,6 +89,15 @@ class Weee extends AbstractTotal
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->setCode('weee');
+    }
+
+    /**
      * Collect Weee amounts for the quote / order
      *
      * @param Quote $quote

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Model\Order\Address;
 
@@ -71,7 +72,9 @@ class Renderer
     public function format(Address $address, $type)
     {
         $orderStore = $address->getOrder()->getStore();
+        $originalStore = $this->storeManager->getStore();
         $this->storeManager->setCurrentStore($orderStore);
+        $this->addressConfig->setStore($orderStore);
         $formatType = $this->addressConfig->getFormatByCode($type);
         if (!$formatType || !$formatType->getRenderer()) {
             return null;
@@ -79,8 +82,12 @@ class Renderer
         $this->eventManager->dispatch('customer_address_format', ['type' => $formatType, 'address' => $address]);
         $addressData = $address->getData();
         $addressData['locale'] = $this->getLocaleByStoreId((int) $orderStore->getId());
+        $rendered = $formatType->getRenderer()->renderArray($addressData);
 
-        return $formatType->getRenderer()->renderArray($addressData);
+        $this->addressConfig->setStore($originalStore);
+        $this->storeManager->setCurrentStore($originalStore);
+
+        return $rendered;
     }
 
     /**

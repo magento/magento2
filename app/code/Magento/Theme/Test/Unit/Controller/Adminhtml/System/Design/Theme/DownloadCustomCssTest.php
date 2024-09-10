@@ -99,7 +99,8 @@ class DownloadCustomCssTest extends TestCase
         $this->redirect = $this->getMockBuilder(RedirectInterface::class)
             ->getMock();
         $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->setMethods(['sendResponse', 'setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->addMethods(['setRedirect'])
             ->getMockForAbstractClass();
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
@@ -163,7 +164,7 @@ class DownloadCustomCssTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(['getCustomization'])
+            ->addMethods(['getCustomization'])
             ->getMockForAbstractClass();
         $file->expects($this->once())
             ->method('getContent')
@@ -188,7 +189,7 @@ class DownloadCustomCssTest extends TestCase
             ->with('theme_id')
             ->willReturn($themeId);
         $themeFactory = $this->getMockBuilder(FlyweightFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManager->expects($this->any())
@@ -218,7 +219,7 @@ class DownloadCustomCssTest extends TestCase
             ->with('theme_id')
             ->willReturn($themeId);
         $themeFactory = $this->getMockBuilder(FlyweightFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $logger = $this->getMockBuilder(LoggerInterface::class)

@@ -9,11 +9,8 @@ namespace Magento\ConfigurableProduct\Model;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
-use Magento\Catalog\Api\Data\ProductInterface;
-
 
 /**
  * Configurable product link management.
@@ -52,10 +49,15 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      */
     private $attributeFactory;
 
-    //private $mediaGalleryProcessor;
-    public \Magento\Catalog\Model\ProductRepository $mediaGallery;
-    public \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory;
-    private array $images;
+    /**
+     * @var ProductRepository|mixed
+     */
+    private \Magento\Catalog\Model\ProductRepository $mediaGallery;
+
+    /**
+     * @var ProductAttributeMediaGalleryEntryInterfaceFactory|mixed
+     */
+    private \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory;
 
     /**
      * Constructor
@@ -66,7 +68,8 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory
      * @param \Magento\Catalog\Model\ProductRepository $mediaGalleryProcessor
-     * @param \Magento\Catalog\Api\Data\ProductInterface $productInterface
+     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory
+     * @param \Magento\ConfigurableProduct\Helper\Product\Options\Factory $optionsFactory
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -74,9 +77,9 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableType,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory = null,
-        \Magento\Catalog\Model\ProductRepository $mediaGalleryProcessor,
-//        \Magento\Catalog\Api\Data\ProductInterface $productInterface,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory
+        \Magento\Catalog\Model\ProductRepository $mediaGalleryProcessor = null,
+        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory = null,
+        \Magento\ConfigurableProduct\Helper\Product\Options\Factory $optionsFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->productFactory = $productFactory;
@@ -84,28 +87,16 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         $this->dataObjectHelper = $dataObjectHelper;
         $this->attributeFactory = $attributeFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory::class);
-        $this->mediaGallery = $mediaGalleryProcessor;
-//        $this->productInterface=$productInterface;
-        $this->myModelFactory = $myModelFactory;
+        $this->mediaGallery = $mediaGalleryProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\ProductRepository::class);
+        $this->myModelFactory = $myModelFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory::class);
+        $this->optionsFactory = $optionsFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\ConfigurableProduct\Helper\Product\Options\Factory::class);
     }
 
     /**
-     * Process Media gallery data before save product.
-     *
-     * Compare Media Gallery Entries Data with existing Media Gallery
-     * * If Media entry has not value_id set it as new
-     * * If Existing entry 'value_id' absent in Media Gallery set 'removed' flag
-     * * Merge Existing and new media gallery
-     *
-     * @param ProductInterface $product contains only existing media gallery items
-     * @param array $mediaGalleryEntries array which contains all media gallery items
-     * @throws InputException
-     * @throws StateException
-     * @throws LocalizedException
-     */
-    /**
      * @inheritdoc
-     * @throws LocalizedException
      */
     public function getChildren($sku)
     {
@@ -142,7 +133,14 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         }
         return $childrenList;
     }
-    public function getMediaEntries($images)
+
+    /**
+     * Get media entries
+     *
+     * @param array $images
+     * @return array
+     */
+    public function getMediaEntries(array $images): array
     {
         $media = $this->myModelFactory->create();
         $mediaGalleryEntries=[];
@@ -151,8 +149,8 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
             $media->setMediaType($image["media_type"]);
             $media->setLabel($image["label"]);
             $media->setPosition($image["position"]);
-           $media->setDisabled($image["disabled"]);
-           $media->setFile($image["file"]);
+            $media->setDisabled($image["disabled"]);
+            $media->setFile($image["file"]);
             $mediaGalleryEntries[]=$media->getData();
         }
         return $mediaGalleryEntries;
@@ -198,7 +196,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         $configurableOptionData = $this->getConfigurableAttributesData($attributeData);
 
         /** @var \Magento\ConfigurableProduct\Helper\Product\Options\Factory $optionFactory */
-        $optionFactory = $this->getOptionsFactory();
+        $optionFactory = $this->optionsFactory;
         $options = $optionFactory->create($configurableOptionData);
         $childrenIds[] = $child->getId();
         $product->getExtensionAttributes()->setConfigurableProductOptions($options);
@@ -240,22 +238,6 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         $product->getExtensionAttributes()->setConfigurableProductLinks($ids);
         $this->productRepository->save($product);
         return true;
-    }
-
-    /**
-     * Get Options Factory
-     *
-     * @return \Magento\ConfigurableProduct\Helper\Product\Options\Factory
-     *
-     * @deprecated 100.2.0
-     */
-    private function getOptionsFactory()
-    {
-        if (!$this->optionsFactory) {
-            $this->optionsFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\ConfigurableProduct\Helper\Product\Options\Factory::class);
-        }
-        return $this->optionsFactory;
     }
 
     /**

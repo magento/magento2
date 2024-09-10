@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ProductViewPageCustomOptionValidationErrorMessageTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product view page"/>
+            <title value="[Magento Cloud] Bug of product custom option validation in product view page"/>
+            <description value="Check custom option validation error message is displayed in product view page"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-9978"/>
+            <useCaseId value="ACP2E-2404"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin" />
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <!-- open product edit page -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+                <argument name="productId" value="$$createProduct.id$$"/>
+            </actionGroup>
+            <!-- Create a custom option(radio button) with 2 values -->
+            <click stepKey="openCustomizableOptions" selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}"/>
+            <waitForPageLoad stepKey="waitForCustomOptionsOpen"/>
+            <actionGroup ref="CreateCustomRadioOptionsActionGroup" stepKey="createCustomOption1">
+                <argument name="customOptionName" value="ProductOptionRadiobutton.title"/>
+                <argument name="productOption" value="ProductOptionField"/>
+                <argument name="productOption2" value="ProductOptionField2"/>
+            </actionGroup>
+            <!-- Save the product -->
+            <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+            <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccess"/>
+            <!-- indexer reindex -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Navigate to Product Page on StoreFront -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Add Product to Cart from product detail page -->
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
+        <!-- see custom option validation message -->
+        <see userInput="This is a required field." stepKey="seeRequiredField"/>
+    </test>
+</tests>

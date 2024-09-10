@@ -58,7 +58,7 @@ class AttributeFixedProductTaxTest extends TestCase
     /**
      * @return array
      */
-    public function fPTProvider(): array
+    public static function fPTProvider(): array
     {
         return [
             [

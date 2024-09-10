@@ -55,7 +55,7 @@ class TermTest extends TestCase
             ->getMock();
 
         $this->bucket = $this->getMockBuilder(TermBucket::class)
-            ->setMethods(['getName'])
+            ->onlyMethods(['getName'])
             ->disableOriginalConstructor()
             ->getMock();
 
