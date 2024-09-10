@@ -17,6 +17,7 @@
             <testCaseId value="AC-5461"/>
             <group value="paypalPaymentsPro"/>
             <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct"/>
