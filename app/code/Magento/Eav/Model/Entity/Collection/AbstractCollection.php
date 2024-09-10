@@ -186,7 +186,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     public function _resetState(): void
     {
-        parent::_resetState();
         $this->_itemsById = [];
         $this->_staticFields = [];
         $this->_entity = null;
@@ -196,6 +195,11 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $this->_joinEntities = [];
         $this->_joinAttributes = [];
         $this->_joinFields = [];
+        parent::_resetState();
+        $this->_construct();
+        $this->setConnection($this->getEntity()->getConnection());
+        $this->_prepareStaticFields();
+        $this->_initSelect();
     }
 
     /**

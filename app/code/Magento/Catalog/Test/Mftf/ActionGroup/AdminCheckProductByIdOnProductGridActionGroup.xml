@@ -17,6 +17,9 @@
         </arguments>
 
         <waitForElementClickable selector="{{AdminProductGridSection.productRowCheckboxById(productId)}}" stepKey="waitForElementClickable" />
+        <scrollTo selector="{{AdminProductGridSection.productRowCheckboxById(productId)}}" x="-100" stepKey="scrollToProductCheckbox" />
+        <moveMouseOver selector="{{AdminProductGridSection.productRowCheckboxById(productId)}}" x="-100" stepKey="moveMouseOverProductCheckbox" />
         <checkOption selector="{{AdminProductGridSection.productRowCheckboxById(productId)}}" stepKey="selectProduct"/>
+        <waitForPageLoad stepKey="waitForBackgroundProcessesToFinish" />
     </actionGroup>
 </actionGroups>

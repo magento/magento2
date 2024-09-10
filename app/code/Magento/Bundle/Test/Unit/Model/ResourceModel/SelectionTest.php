@@ -7,13 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\ResourceModel;
 
-use Codeception\PHPUnit\TestCase;
+use PHPUnit\Framework\TestCase;
 use Magento\Bundle\Model\ResourceModel\Selection as ResourceSelection;
 use Magento\Bundle\Model\Selection;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\EntityManager\EntityManager;
 
 class SelectionTest extends TestCase
 {
@@ -28,6 +29,11 @@ class SelectionTest extends TestCase
     private MetadataPool $metadataPool;
 
     /**
+     * @var EntityManager
+     */
+    private EntityManager $entityManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -36,6 +42,7 @@ class SelectionTest extends TestCase
 
         $this->context = $this->createMock(Context::class);
         $this->metadataPool = $this->createMock(MetadataPool::class);
+        $this->entityManager = $this->createMock(EntityManager::class);
     }
 
     public function testSaveSelectionPrice()
@@ -82,7 +89,12 @@ class SelectionTest extends TestCase
             ->willReturn('catalog_product_bundle_selection_price');
         $this->context->expects($this->once())->method('getResources')->willReturn($parentResources);
 
-        $selection = new ResourceSelection($this->context, $this->metadataPool, 'test_connection_name');
+        $selection = new ResourceSelection(
+            $this->context,
+            $this->metadataPool,
+            'test_connection_name',
+            $this->entityManager
+        );
         $selection->saveSelectionPrice($item);
     }
 }

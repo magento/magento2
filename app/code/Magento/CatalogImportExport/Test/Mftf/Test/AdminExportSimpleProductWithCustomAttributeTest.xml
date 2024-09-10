@@ -29,8 +29,10 @@
                 <requiredEntity createDataKey="createAttributeSet"/>
             </createData>
 
-            <magentoCLI command="cron:run" arguments="--group index" stepKey="cronRun"/>
-            <magentoCLI command="cron:run" arguments="--group index" stepKey="cronRunToStartReindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="cronRun">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="cronRunToStartReindex"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -38,7 +40,9 @@
             <deleteData createDataKey="createSimpleProductWithCustomAttributeSet" stepKey="deleteSimpleProductWithCustomAttributeSet"/>
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

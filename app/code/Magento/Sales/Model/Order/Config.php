@@ -6,8 +6,9 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\App\Area;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Order configuration model
@@ -15,7 +16,7 @@ use Magento\Framework\App\ObjectManager;
  * @api
  * @since 100.0.2
  */
-class Config
+class Config implements ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Status\Collection
@@ -85,6 +86,14 @@ class Config
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->collection = null;
+    }
+
+    /**
      * Get collection.
      *
      * @return \Magento\Sales\Model\ResourceModel\Order\Status\Collection
@@ -129,7 +138,6 @@ class Config
         }
         return $status;
     }
-
 
     /**
      * Retrieve status label for detected area

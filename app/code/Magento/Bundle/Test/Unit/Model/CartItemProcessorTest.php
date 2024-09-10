@@ -54,7 +54,7 @@ class CartItemProcessorTest extends TestCase
         $this->productOptionExtensionMock = $this->getMockBuilder(
             ProductOptionExtensionFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->bundleOptionFactoryMock = $this->createPartialMock(
@@ -85,7 +85,7 @@ class CartItemProcessorTest extends TestCase
         $productOptionMock = $this->createMock(ProductOption::class);
         $dataObjectMock = $this->createMock(DataObject::class);
         $optionExtensionMock = $this->getMockBuilder(ProductOptionExtensionInterface::class)
-            ->setMethods(
+            ->addMethods(
                 [
                     'getBundleOptions',
                     'getCustomOptions',
@@ -141,7 +141,7 @@ class CartItemProcessorTest extends TestCase
         $bundleOptionMock = $this->createMock(BundleOption::class);
         $productOptionMock = $this->createMock(ProductOption::class);
         $optionExtensionMock = $this->getMockBuilder(ProductOptionExtensionInterface::class)
-            ->setMethods(
+            ->addMethods(
                 [
                     'getBundleOptions',
                     'getCustomOptions',
