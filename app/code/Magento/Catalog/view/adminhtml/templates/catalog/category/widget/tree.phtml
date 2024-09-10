@@ -115,6 +115,17 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
         }
     }
 
+    function getAnchorNodeIds(tree, node) {
+        if (useMassAction) {
+            isAnchorArr[parseInt(node.id)] = node.original.is_anchor;
+            if (checkedNodes.includes(node.id)) {
+                tree.jstree(true).select_node(node.id);
+            }
+            getCheckedNodeIds(tree, node);
+            actionBasedOnIsAnchorOnly();
+        }
+    }
+
     function handleSuccessResponse(response, childNode, data) {
         if (response.length > 0) {
             response.forEach(newNode => {
@@ -160,16 +171,11 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
                         }
                     });
                 }
-                else if (childNode.children.length === 0
-                    && childNode.original && childNode.original.lastNode) {
-                    if (useMassAction) {
-                        isAnchorArr[parseInt(childNode.id)] = childNode.original.is_anchor;
-                        if (checkedNodes.includes(childNode.id)) {
-                            tree.jstree(true).select_node(childNode.id);
-                        }
-                        getCheckedNodeIds(tree, childNode);
-                        actionBasedOnIsAnchorOnly();
-                    }
+                else if ((childNode.children.length === 0
+                    && childNode.original && childNode.original.lastNode)
+                    || childNode.children.length === 1) {
+
+                    getAnchorNodeIds(tree, childNode);
                 }
             })
         }
