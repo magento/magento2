@@ -190,8 +190,7 @@ QUERY;
     public function testDeletePaymentTokenInvalidPublicHash()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors:
-                                       Could not find a token using public hash: ksdfk392ks');
+        $this->expectExceptionMessage('GraphQL response contains errors: Could not find a token using public hash: ksdfk392ks');
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
