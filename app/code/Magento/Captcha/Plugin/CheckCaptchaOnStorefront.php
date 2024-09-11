@@ -20,14 +20,14 @@ class CheckCaptchaOnStorefront
     /**
      * @var HelperCaptcha
      */
-    protected $helper;
+    private $helper;
 
     /**
      * Customer session
      *
      * @var HttpContext
      */
-    protected $httpContext;
+    private $httpContext;
 
     /**
      * CheckCaptchaOnStorefront constructor
