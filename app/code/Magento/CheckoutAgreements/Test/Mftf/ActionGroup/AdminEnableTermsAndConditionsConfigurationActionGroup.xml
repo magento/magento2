@@ -11,7 +11,6 @@
         <annotations>
             <description>Enable Terms and Conditions On Configuration page.</description>
         </annotations>
-
         <magentoCLI command="config:set {{enableTermsAndConditions.path}} {{enableTermsAndConditions.value}}" stepKey="EnableTermsAndConditions"/>
     </actionGroup>
 </actionGroups>
