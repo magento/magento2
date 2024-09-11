@@ -17,6 +17,7 @@
             <testCaseId value="AC-5191"/>
             <group value="paypalPayflowPro"/>
             <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <remove keyForRemoval="createVirtualProduct"/>
