@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertProductDateFormatInStorefrontActionGroup">
+        <annotations>
+            <description value="Go to product page on the storefront and assert sku and custom option date format"/>
+        </annotations>
+
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+
+        <!-- Go to storefront product page, assert product sku and date custom option -->
+        <amOnPage url="{{product.urlKey}}.html" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
+
+        <click selector="{{StorefrontProductInfoMainSection.productCalenderButton}}" stepKey="clickCalenderButton"/>
+        <click selector="{{StorefrontProductInfoMainSection.productCalenderGoToday}}" stepKey="clickCalenderGoTodayButton"/>
+
+        <generateDate date="Now" format="j/n/Y" stepKey="currentDate"/>
+
+        <executeJS function="
+            var xpath = '{{StorefrontProductInfoMainSection.customDateField}}';
+            var result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+            var element = result.singleNodeValue;
+            return element.value;
+        " stepKey="dateValue"/>
+
+        <assertEquals stepKey="assertDateFormat">
+            <actualResult type="variable">dateValue</actualResult>
+            <expectedResult type="variable">currentDate</expectedResult>
+        </assertEquals>
+
+    </actionGroup>
+</actionGroups>
