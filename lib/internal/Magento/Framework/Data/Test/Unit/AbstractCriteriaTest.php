@@ -61,6 +61,13 @@ class AbstractCriteriaTest extends TestCase
      */
     public function testAddFilter($name, $field, $condition, $type, array $result)
     {
+        $objectManager = new ObjectManager($this);
+        $result = [
+            'test-filter-name' => $objectManager->getObject(
+                DataObject::class,
+                ['data' => $result]
+            ),
+        ];
         $this->criteria->addFilter($name, $field, $condition, $type);
         $this->assertEquals($result, $this->criteria->toArray()[CriteriaInterface::PART_FILTERS]['list']);
     }
@@ -368,9 +375,8 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderAddFilter()
+    public static function dataProviderAddFilter()
     {
-        $objectManager = new ObjectManager($this);
         return [
             [
                 'name' => 'test-filter-name',
@@ -378,17 +384,10 @@ class AbstractCriteriaTest extends TestCase
                 'condition' => 'test-condition',
                 'type' => 'test-type',
                 'result' => [
-                    'test-filter-name' => $objectManager->getObject(
-                        DataObject::class,
-                        [
-                            'data' => [
-                                'name' => 'test-filter-name',
-                                'field' => 'test-field-name',
-                                'condition' => 'test-condition',
-                                'type' => 'test-type',
-                            ]
-                        ]
-                    ),
+                    'name' => 'test-filter-name',
+                    'field' => 'test-field-name',
+                    'condition' => 'test-condition',
+                    'type' => 'test-type',
                 ],
             ]
         ];

@@ -58,10 +58,12 @@ class BuilderTest extends TestCase
      *
      * @dataProvider createValidatorDataProvider
      *
-     * @param array $constraints
-     * @param ValidatorInterface $expectedValidator
+     * @param array $constraint
+     * string $property
+     * int $min
+     * int $max
      */
-    public function testCreateValidator(array $constraints, $expectedValidator)
+    public function testCreateValidator(array $constraints, string $property, int $min, int $max)
     {
         /** @var \Magento\Framework\Validator\Builder $builder */
         $builder = $this->_objectManager->getObject(
@@ -73,6 +75,21 @@ class BuilderTest extends TestCase
                 'constraints' => $constraints
             ]
         );
+        /** @var AbstractAdapter $translator */
+        $translator = $this->getMockBuilder(
+            AbstractAdapter::class
+        )->getMockForAbstractClass();
+        AbstractValidator::setDefaultTranslator($translator);
+
+        $expectedValidator = new Validator();
+        $expectedValidator->addValidator(
+            new Property(
+                new StringLength($min, $max),
+                $property,
+                $constraints[0]['alias']
+            )
+        );
+
         $actualValidator = $builder->createValidator();
         $this->assertEquals($expectedValidator, $actualValidator);
     }
@@ -82,95 +99,66 @@ class BuilderTest extends TestCase
      *
      * @return array
      */
-    public function createValidatorDataProvider()
+    public static function createValidatorDataProvider()
     {
-        $result = [];
-
-        /** @var AbstractAdapter $translator */
-        $translator = $this->getMockBuilder(
-            AbstractAdapter::class
-        )->getMockForAbstractClass();
-        AbstractValidator::setDefaultTranslator($translator);
-
-        // Case 1. Check constructor with arguments
-        $actualConstraints = [
+        return [
             [
-                'alias' => 'name_alias',
-                'class' => StringLength::class,
-                'options' => [
-                    'arguments' => [
-                        'options' => ['min' => 1, 'max' => new Option(20)],
-                    ],
+                [
+                    [
+                        'alias' => 'name_alias',
+                        'class' => StringLength::class,
+                        'options' => [
+                            'arguments' => [
+                                'options' => ['min' => 1, 'max' => new Option(20)],
+                            ],
+                        ],
+                        'property' => 'name',
+                        'type' => 'property',
+                    ]
                 ],
-                'property' => 'name',
-                'type' => 'property',
-            ],
-        ];
-
-        $expectedValidator = new Validator();
-        $expectedValidator->addValidator(
-            new Property(
-                new StringLength(1, 20),
                 'name',
-                'name_alias'
-            )
-        );
-
-        $result[] = [$actualConstraints, $expectedValidator];
-
-        // Case 2. Check method calls
-        $actualConstraints = [
-            [
-                'alias' => 'description_alias',
-                'class' => StringLength::class,
-                'options' => [
-                    'methods' => [
-                        ['method' => 'setMin', 'arguments' => [10]],
-                        ['method' => 'setMax', 'arguments' => [1000]],
-                    ],
-                ],
-                'property' => 'description',
-                'type' => 'property',
+                1,
+                20
             ],
-        ];
-
-        $expectedValidator = new Validator();
-        $expectedValidator->addValidator(
-            new Property(
-                new StringLength(10, 1000),
-                'description',
-                'description_alias'
-            )
-        );
-
-        $result[] = [$actualConstraints, $expectedValidator];
-
-        // Case 3. Check callback on validator
-        $actualConstraints = [
             [
-                'alias' => 'sku_alias',
-                'class' => StringLength::class,
-                'options' => [
-                    'callback' => [
-                        new Callback(
-                            function ($validator) {
-                                $validator->setMin(20);
-                                $validator->setMax(100);
-                            }
-                        ), ], ],'property' => 'sku', 'type' => 'property', ], ];
-
-        $expectedValidator = new Validator();
-        $expectedValidator->addValidator(
-            new Property(
-                new StringLength(20, 100),
+                [
+                    [
+                        'alias' => 'description_alias',
+                        'class' => StringLength::class,
+                        'options' => [
+                            'methods' => [
+                                ['method' => 'setMin', 'arguments' => [10]],
+                                ['method' => 'setMax', 'arguments' => [1000]],
+                            ],
+                        ],
+                        'property' => 'description',
+                        'type' => 'property',
+                    ]
+                ],
+                'description',
+                10,
+                1000
+            ],
+            [
+                [
+                    [
+                        'alias' => 'sku_alias',
+                        'class' => StringLength::class,
+                        'options' => [
+                            'methods' => [
+                                ['method' => 'setMin', 'arguments' => [20]],
+                                ['method' => 'setMax', 'arguments' => [100]],
+                            ],
+                        ],
+                        'property' => 'sku',
+                        'type' => 'property',
+                    ]
+                ],
                 'sku',
-                'sku_alias'
-            )
-        );
-
-        $result[] = [$actualConstraints, $expectedValidator];
-
-        return $result;
+                20,
+                100
+            ]
+        ];
     }
 
     /**

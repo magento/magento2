@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 /**
- * Test class for \Magento\Framework\Profiler\Driver\Factory
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ *
+ * Test class for \Magento\Framework\Profiler\Driver\Factory
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver;
 
@@ -60,6 +60,12 @@ class FactoryTest extends TestCase
      */
     public function testCreate($config, $expectedClass)
     {
+        if (isset($config['type']) && is_callable($config['type'])) {
+            $config['type'] = $config['type']($this);
+        }
+        if (is_callable($expectedClass)) {
+            $expectedClass = $expectedClass($this);
+        }
         $driver = $this->_factory->create($config);
         $this->assertInstanceOf($expectedClass, $driver);
         $this->assertInstanceOf(DriverInterface::class, $driver);
@@ -68,7 +74,25 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider()
+    public static function createDataProvider()
+    {
+        return [
+            'Prefix and concrete type' => [
+                ['type' => 'test'],
+                static fn (self $testCase) => $testCase->getMockForDriverClass()['testDriverClass']
+            ],
+            'Prefix and default type' => [
+                [],
+                static fn (self $testCase) => $testCase->getMockForDriverClass()['defaultDriverClass']
+            ],
+            'Concrete class' => [
+                ['type' => static fn (self $testCase) => $testCase->getMockForDriverClass()['testDriverClass']],
+                static fn (self $testCase) => $testCase->getMockForDriverClass()['testDriverClass']
+            ]
+        ];
+    }
+
+    public function getMockForDriverClass()
     {
         $defaultDriverClassMock = $this->getMockForAbstractClass(
             DriverInterface::class,
@@ -95,9 +119,8 @@ class FactoryTest extends TestCase
         $testDriverClass = get_class($testDriverClassMock);
 
         return [
-            'Prefix and concrete type' => [['type' => 'test'], $testDriverClass],
-            'Prefix and default type' => [[], $defaultDriverClass],
-            'Concrete class' => [['type' => $testDriverClass], $testDriverClass]
+            'defaultDriverClass' => $defaultDriverClass,
+            'testDriverClass' => $testDriverClass
         ];
     }
 
