@@ -12,6 +12,8 @@ use Magento\Framework\Search\RequestInterface;
 
 /**
  * Sort builder.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Sort
 {

@@ -813,7 +813,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                // phpstan:ignore "Class Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor not found."
+                // @phpstan-ignore-next-line - this is a virtual type defined in di.xml
                 \Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor::class
             );
         }
