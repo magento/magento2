@@ -19,6 +19,8 @@
             <group value="checkout"/>
             <group value="mtf_migrated"/>
             <group value="cloud"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
