@@ -111,7 +111,7 @@ class RemoteSynchronizedCacheTest extends TestCase
     /**
      * @return array
      */
-    public function initializeWithOutExceptionDataProvider(): array
+    public static function initializeWithOutExceptionDataProvider(): array
     {
         $connectionMock = static fn (self $testCase) => $testCase->getMockForMysqlClass();
         return [
