@@ -90,15 +90,14 @@ class ParamsOverrider
             $currentArray = &$currentArray[$key];
         }
         return true;
-
     }
 
     /**
      * Set a nested array value.
      *
-     * @param array &$nestedArray
+     * @param array   &$nestedArray
      * @param string[] $arrayKeys
-     * @param string $valueToSet
+     * @param string   $valueToSet
      * @return void
      */
     protected function setNestedArrayValue(&$nestedArray, $arrayKeys, $valueToSet)
@@ -117,16 +116,13 @@ class ParamsOverrider
             $currentArray = &$currentArray[$key];
         }
         $camelCaseKey = SimpleDataObjectConverter::snakeCaseToCamelCase($lastKey);
-        if (is_array($currentArray)){
+        if (is_array($currentArray)) {
             if (array_key_exists($camelCaseKey, $currentArray)) {
                 $lastKey = $camelCaseKey;
             }
             $currentArray[$lastKey] = $valueToSet;
         }
-
-
     }
-
 
     /**
      * Override request body property value with matching url path parameter value
