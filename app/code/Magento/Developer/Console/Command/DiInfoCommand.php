@@ -17,13 +17,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\App\Area;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DiInfoCommand extends Command
 {
     /**
      * @var ObjectManagerInterface
      */
     private ObjectManagerInterface $objectManager;
-
 
     /**
      * Command name
@@ -52,14 +54,14 @@ class DiInfoCommand extends Command
 
     /**
      * @param Information $diInformation
-     * @param AreaList $areaList
+     * @param ObjectManagerInterface $objectManager
+     * @param AreaList|null $areaList
      */
     public function __construct(
         Information            $diInformation,
         ObjectManagerInterface $objectManager,
         ?AreaList              $areaList = null
-    )
-    {
+    ) {
         $this->diInformation = $diInformation;
         $this->objectManager = $objectManager;
         $this->areaList = $areaList ?? \Magento\Framework\App\ObjectManager::getInstance()->get(AreaList::class);
