@@ -57,7 +57,7 @@ class IdentifierForSave implements IdentifierInterface
      * @param string $url
      * @return array
      */
-    private function reconstructUrl($url)
+    private function reconstructUrl(string $url): array
     {
         if (empty($url)) {
             return [$url, ''];
