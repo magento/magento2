@@ -16,6 +16,8 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5685"/>
             <group value="paypalPayflowPro"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <createData entity="VirtualProduct" stepKey="createVirtualProduct"/>
