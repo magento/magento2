@@ -11,7 +11,7 @@ use Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleWeight;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 
-class BundleWeightTest extends AbstractModifierTest
+class BundleWeightTest extends AbstractModifierTestCase
 {
     /**
      * @return BundleWeight

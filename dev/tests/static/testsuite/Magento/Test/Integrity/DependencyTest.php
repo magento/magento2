@@ -60,6 +60,12 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     public const MAP_TYPE_REDUNDANT = 'redundant';
 
     /**
+     * Redundant dependencies error message
+     */
+    public const UNUSED_DEPENDENCY_ERROR_MSG =
+        'Some dependencies required by composer.json are not used in the module and must be removed:';
+
+    /**
      * Count of directories in path
      */
     public const DIR_PATH_COUNT = 4;
@@ -869,7 +875,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             }
         }
         if (!empty($output)) {
-            $this->fail("Redundant dependencies found!\r\n" . implode(' ', $output));
+            $this->fail(self::UNUSED_DEPENDENCY_ERROR_MSG . "\r\n" . implode(' ', $output));
         }
     }
 

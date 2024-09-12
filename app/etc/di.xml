@@ -418,6 +418,11 @@
         </arguments>
     </type>
     <type name="Magento\Framework\Acl" shared="false" />
+    <type name="Magento\Framework\App\Router\ActionList">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Interception\Cache\CompiledConfig</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\App\ObjectManager\ConfigLoader">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
@@ -449,7 +454,7 @@
     </type>
     <type name="Magento\Framework\Interception\PluginList\PluginList">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Interception\Cache\CompiledConfig\Proxy</argument>
             <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy</argument>
             <argument name="cacheId" xsi:type="string">plugin-list</argument>
             <argument name="scopePriorityScheme" xsi:type="array">
@@ -878,6 +883,7 @@
     </type>
     <type name="Magento\Framework\Event\Config\Data">
         <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Interception\Cache\CompiledConfig</argument>
             <argument name="reader" xsi:type="object">Magento\Framework\Event\Config\Reader\Proxy</argument>
         </arguments>
     </type>
@@ -1858,8 +1864,10 @@
         <arguments>
             <argument name="supportedVersionPatterns" xsi:type="array">
                 <item name="MySQL-8" xsi:type="string">^8\.0\.</item>
+                <item name="MySQL-8.4" xsi:type="string">^8\.4\.</item>
                 <item name="MySQL-5.7" xsi:type="string">^5\.7\.</item>
                 <item name="MariaDB-(10.2-10.6)" xsi:type="string">^10\.[2-6]\.</item>
+                <item name="MariaDB-11.4" xsi:type="string">^11\.4\.</item>
             </argument>
         </arguments>
     </type>
@@ -2006,4 +2014,5 @@
     <preference for="Magento\Framework\Filter\Input\PurifierInterface" type="Magento\Framework\Filter\Input\Purifier"/>
     <preference for="Magento\Framework\App\PageCache\IdentifierInterface" type="Magento\Framework\App\PageCache\Identifier"/>
     <preference for="Magento\Framework\App\State\ReloadProcessorInterface" type="Magento\Framework\App\State\ReloadProcessorComposite" />
+    <preference for="Magento\Framework\Indexer\Config\Converter\SortingAdjustmentInterface" type="Magento\Framework\Indexer\Config\Converter\SortingAdjustment" />
 </config>
