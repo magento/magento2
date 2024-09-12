@@ -147,8 +147,9 @@ class Utility
         $itemDiscountAmount = $item->getDiscountAmount();
         $itemBaseDiscountAmount = $item->getBaseDiscountAmount();
 
-        $discountAmount = min($itemDiscountAmount + $discountData->getAmount(), $itemPrice * $qty);
-        $baseDiscountAmount = min($itemBaseDiscountAmount + $discountData->getBaseAmount(), $baseItemPrice * $qty);
+        $discountAmount = min($itemDiscountAmount + $discountData->getAmount(), $itemPrice * $item->getQty());
+        $baseDiscountAmount =
+            min($itemBaseDiscountAmount + $discountData->getBaseAmount(), $baseItemPrice * $item->getQty());
 
         $discountData->setAmount($discountAmount);
         $discountData->setBaseAmount($baseDiscountAmount);
