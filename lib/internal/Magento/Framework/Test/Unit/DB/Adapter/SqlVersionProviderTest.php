@@ -51,7 +51,8 @@ class SqlVersionProviderTest extends TestCase
         'MySQL-8' => '^8\.0\.',
         'MySQL-8.4' => '^8\.4\.',
         'MySQL-5.7' => '^5\.7\.',
-        'MariaDB-(10.2-10.6)' => '^10\.[2-6]\.'
+        'MariaDB-(10.2-10.6)' => '^10\.[2-6]\.',
+        'MariaDB-11.4' => '^11\.4\.'
     ];
 
     /**
@@ -118,6 +119,10 @@ class SqlVersionProviderTest extends TestCase
             'MariaDB-10.2' => [
                 ['version' => '10.2.31-MariaDB-1:10.2.31+maria~bionic'],
                 '10.2.'
+            ],
+            'MariaDB-11.4' => [
+                ['version' => '11.4.2-MariaDB'],
+                SqlVersionProvider::MARIA_DB_11_4_VERSION
             ],
             'MySQL-5.7' => [
                 ['version' => '5.7.29'],
