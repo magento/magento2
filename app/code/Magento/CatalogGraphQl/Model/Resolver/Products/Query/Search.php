@@ -146,8 +146,8 @@ class Search implements ProductQueryInterface
                 'totalCount' => $totalCount,
                 'productsSearchResult' => $productArray,
                 'searchAggregation' => $itemsResults->getAggregations(),
-                'pageSize' => $searchCriteria->getPageSize(),
-                'currentPage' => $searchCriteria->getCurrentPage() + 1, //search criteria pagination starts with 0
+                'pageSize' => $args['pageSize'],
+                'currentPage' => $args['currentPage'],
                 'totalPages' => $totalPages,
                 'suggestions' => $suggestions,
             ]

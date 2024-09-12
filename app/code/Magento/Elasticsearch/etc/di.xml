@@ -418,4 +418,9 @@
             <argument name="sortExpressionBuilder" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort\ExpressionBuilder</argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolver</argument>
+        </arguments>
+    </type>
 </config>
