@@ -19,6 +19,7 @@ However, for those who need a full-featured eCommerce solution, we recommend [Ad
 - [System requirements](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/system-requirements.html)
 - [Prerequisites](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/prerequisites/overview.html)
 - [More installation options](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/overview.html)
+- [Self-Host on Elestio](https://elest.io/open-source/magento)
 
 ## Get help
 
