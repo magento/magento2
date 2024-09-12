@@ -53,7 +53,7 @@ class FrequencyTest extends TestCase
      */
     protected $objectManager;
 
-    /*
+    /**
      * @var RemoteAddress
      */
     protected $remoteAddressMock;
@@ -66,7 +66,7 @@ class FrequencyTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->securityConfigMock =  $this->getMockBuilder(ConfigInterface::class)
-            ->setMethods(['getScopeByEventType'])
+            ->addMethods(['getScopeByEventType'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->securityConfigMock->expects($this->any())
@@ -174,7 +174,7 @@ class FrequencyTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderSecurityEventTypeWithRequestsMethod()
+    public static function dataProviderSecurityEventTypeWithRequestsMethod()
     {
         return [
             [

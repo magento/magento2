@@ -251,10 +251,10 @@ class OptionTest extends AbstractImportTestCase
 
         $addExpectations = false;
         $deleteBehavior = false;
-        $testName = $this->getName(true);
+        $testName = $this->name() . $this->dataSetAsString();
         if ($testName == 'testImportDataAppendBehavior' || $testName == 'testImportDataDeleteBehavior') {
             $addExpectations = true;
-            $deleteBehavior = $this->getName() == 'testImportDataDeleteBehavior' ? true : false;
+            $deleteBehavior = $this->name() == 'testImportDataDeleteBehavior' ? true : false;
         }
 
         $doubleOptions = false;
@@ -317,7 +317,7 @@ class OptionTest extends AbstractImportTestCase
         // Create model mock with rewritten _getMultiRowFormat method to support test data with the old format.
         $this->modelMock = $this->getMockBuilder($modelClassName)
             ->setConstructorArgs($modelClassArgs)
-            ->setMethods(['_getMultiRowFormat'])
+            ->onlyMethods(['_getMultiRowFormat'])
             ->getMock();
         $reflection = new \ReflectionClass(Option::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
@@ -875,7 +875,7 @@ class OptionTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function validateRowStoreViewCodeFieldDataProvider(): array
+    public static function validateRowStoreViewCodeFieldDataProvider(): array
     {
         return [
             'with_store_view_code' => [
@@ -925,12 +925,126 @@ class OptionTest extends AbstractImportTestCase
     }
 
     /**
+     * Test parsing different option's type with _parseCustomOptions() method.
+     *
+     * @param array $rowData
+     * @param array $responseData
+     *
+     * @return void
+     * @dataProvider validateParseCustomOptionsDataProvider
+     * @throws \ReflectionException
+     */
+    public function testValidateParseCustomOptions(array $rowData, array $responseData): void
+    {
+        $reflection = new \ReflectionClass(Option::class);
+        $reflectionMethod = $reflection->getMethod('_parseCustomOptions');
+        $result = $reflectionMethod->invoke($this->model, $rowData);
+        $this->assertEquals($responseData, $result);
+    }
+
+    /**
+     * Data provider for testValidateParseCustomOptions.
+     *
+     * @return array
+     */
+    public static function validateParseCustomOptionsDataProvider(): array
+    {
+        return [
+            'file_type' => [
+                '$rowData' => [
+                    'custom_options' => 'name=Test Field Title,type=file,required=1,'
+                        . 'sku=1-text,price=12,file_extension=png,jpeg,jpg,gif,image_size_x=1024,'
+                        . 'image_size_y=1024,price_type=fixed'
+                ],
+                '$responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'file',
+                                'required' => '1',
+                                'sku' => '1-text',
+                                'price' => '12',
+                                'file_extension' => 'png,jpeg,jpg,gif',
+                                'image_size_x' => '1024',
+                                'image_size_y' => '1024',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'drop_down' => [
+                '$rowData' => [
+                    'custom_options' => 'name=Test Field Title,type=drop_down,required=0,'
+                        . 'sku=1-text,price=10,price_type=fixed'
+                ],
+                '$responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'drop_down',
+                                'required' => '0',
+                                'sku' => '1-text',
+                                'price' => '10',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'area' => [
+                '$rowData' => [
+                    'custom_options' => 'name=Test Field Title,type=area,required=1,'
+                        . 'sku=1-text,price=20,max_characters=150,price_type=fixed'
+                ],
+                '$responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'area',
+                                'required' => '1',
+                                'sku' => '1-text',
+                                'price' => '20',
+                                'max_characters' => '150',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'date_time' => [
+                '$rowData' => [
+                    'custom_options' => 'name=Test Field Title,type=date_time,required=0,'
+                        . 'sku=1-text,price=30,price_type=fixed'
+                ],
+                '$responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'date_time',
+                                'required' => '0',
+                                'sku' => '1-text',
+                                'price' => '30',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
      * Data provider of row data and errors.
      *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function validateRowDataProvider(): array
+    public static function validateRowDataProvider(): array
     {
         return [
             'main_valid' => [
@@ -1027,7 +1141,7 @@ class OptionTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function validateAmbiguousDataDataProvider(): array
+    public static function validateAmbiguousDataDataProvider(): array
     {
         return [
             'ambiguity_several_input_rows' => [

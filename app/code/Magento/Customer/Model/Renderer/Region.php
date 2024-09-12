@@ -9,8 +9,6 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Region field renderer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {

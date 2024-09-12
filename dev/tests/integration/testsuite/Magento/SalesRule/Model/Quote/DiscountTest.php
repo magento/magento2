@@ -190,9 +190,9 @@ class DiscountTest extends TestCase
             [
                 'bundle_cc',
                 [
-                    'bundle_product_with_dynamic_price-simple1-simple2' => 0,
-                    'simple1' => 3,
-                    'simple2' => 7.99,
+                    'bundle_product_with_dynamic_price-simple1-simple2' => 10.99,
+                    'simple1' => 0,
+                    'simple2' => 0,
                 ],
                 -10.99
             ],

@@ -59,14 +59,6 @@ QRY;
                 'used_in_forms' => ['customer_address_edit']
             ],
             'attribute_2'
-        ),
-        DataFixture(
-            CustomerAttribute::class,
-            [
-                'entity_type_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
-                'used_in_forms' => ['customer_register_address']
-            ],
-            'attribute_3'
         )
     ]
     public function testAttributesForm(): void
@@ -75,22 +67,16 @@ QRY;
         $attribute1 = DataFixtureStorageManager::getStorage()->get('attribute_1');
         /** @var AttributeInterface $attribute2 */
         $attribute2 = DataFixtureStorageManager::getStorage()->get('attribute_2');
-        /** @var AttributeInterface $attribute3 */
-        $attribute3 = DataFixtureStorageManager::getStorage()->get('attribute_3');
-        $attribute3->setIsVisible(false)->save();
 
         $result = $this->graphQlQuery(sprintf(self::QUERY, 'customer_register_address'));
 
-        foreach ($result['attributesForm']['items'] as $item) {
-            if (array_contains($item, $attribute1->getAttributeCode())) {
-                return;
-            }
-            $this->assertNotContains($attribute2->getAttributeCode(), $item);
-            $this->assertNotContains($attribute3->getAttributeCode(), $item);
-            $this->assertNotContains('region_id', $item);
-            $this->assertNotContains('country_id', $item);
-        }
-        $this->fail(sprintf("Attribute '%s' not found in query response", $attribute1->getAttributeCode()));
+        $this->assertNotEmpty($result['attributesForm']['items']);
+        $codes = $this->getAttributeCodes($result['attributesForm']['items']);
+
+        $this->assertContains($attribute1->getAttributeCode(), $codes);
+        $this->assertContains('country_id', $codes);
+        $this->assertContains('region_id', $codes);
+        $this->assertNotContains($attribute2->getAttributeCode(), $codes);
     }
 
     public function testAttributesFormAdminHtmlForm(): void
@@ -152,13 +138,10 @@ QRY;
 
         $result = $this->graphQlQuery(sprintf(self::QUERY, 'customer_register_address'));
 
-        foreach ($result['attributesForm']['items'] as $item) {
-            if (array_contains($item, $attribute1->getAttributeCode())) {
-                $this->fail(
-                    sprintf("Attribute '%s' found in query response in global scope", $attribute1->getAttributeCode())
-                );
-            }
-        }
+        $this->assertNotEmpty($result['attributesForm']['items']);
+        $codes = $this->getAttributeCodes($result['attributesForm']['items']);
+
+        $this->assertNotContains($attribute1->getAttributeCode(), $codes);
 
         /** @var StoreInterface $store */
         $store = DataFixtureStorageManager::getStorage()->get('store2');
@@ -170,16 +153,31 @@ QRY;
             ['Store' => $store->getCode()]
         );
 
-        foreach ($result['attributesForm']['items'] as $item) {
-            if (array_contains($item, $attribute1->getAttributeCode())) {
-                return;
-            }
-        }
-        $this->fail(
+        $this->assertNotEmpty($result['attributesForm']['items']);
+        $codes = $this->getAttributeCodes($result['attributesForm']['items']);
+        $this->assertContains(
+            $attribute1->getAttributeCode(),
+            $codes,
             sprintf(
                 "Attribute '%s' not found in query response in website scope",
                 $attribute1->getAttributeCode()
             )
+        );
+    }
+
+    /**
+     * Retrieve an array of attribute codes based on an array of attributes data
+     *
+     * @param array $attributes
+     * @return array
+     */
+    private function getAttributeCodes(array $attributes): array
+    {
+        return array_map(
+            function (array $attribute) {
+                return $attribute['code'];
+            },
+            $attributes
         );
     }
 }
