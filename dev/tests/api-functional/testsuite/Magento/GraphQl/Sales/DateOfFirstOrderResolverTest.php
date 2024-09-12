@@ -195,6 +195,68 @@ class DateOfFirstOrderResolverTest extends GraphQlAbstract
     }
 
     /**
+     * Test the date_of_first_order data for customerOrders query without any scope
+     *
+     * @throws AuthenticationException
+     * @throws Exception
+     */
+    public function testGetCustomerOrdersWithoutScope()
+    {
+        $store2 = $this->fixtures->get('store2');
+        $customerEmail = $this->fixtures->get('customer')->getEmail();
+        $generateToken = $this->generateCustomerToken($customerEmail, 'password');
+        $tokenResponse = $this->graphQlMutationWithResponseHeaders(
+            $generateToken,
+            [],
+            '',
+            ['Store' => $store2->getCode()]
+        );
+        $token = $tokenResponse['body']['generateCustomerToken']['token'];
+        $customerAuthHeaders = $this->getCustomerHeaders($token, $store2->getCode());
+
+        $query = $this->getCustomerOrdersQueryWithFilters();
+        $response = $this->graphQlQuery($query, [], '', $customerAuthHeaders);
+        self::assertArrayHasKey('date_of_first_order', $response['customer']['orders']);
+        self::assertNotNull($response['customer']['orders']['date_of_first_order']);
+    }
+
+    /**
+     * Test the date_of_first_order data for customerOrders query without
+     * any scope and store header
+     *
+     * @throws AuthenticationException
+     * @throws Exception
+     */
+    #[
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(CustomerFixture::class, as: 'customer'),
+        DataFixture(CustomerCartFixture::class, ['customer_id' => '$customer.id$'], as: 'quote'),
+        DataFixture(AddProductToCartFixture::class, [
+            'cart_id' => '$quote.id$', 'product_id' => '$product.id$', 'qty' => 1
+        ]),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$quote.id$'], 'order')
+    ]
+    public function testGetCustomerOrdersWithoutScopeAndStoreHeader()
+    {
+        $customerEmail = $this->fixtures->get('customer')->getEmail();
+        $generateToken = $this->generateCustomerToken($customerEmail, 'password');
+        $tokenResponse = $this->graphQlMutationWithResponseHeaders(
+            $generateToken
+        );
+        $token = $tokenResponse['body']['generateCustomerToken']['token'];
+        $customerAuthHeaders = $this->getCustomerHeaders($token, null);
+
+        $query = $this->getCustomerOrdersQueryWithFilters();
+        $response = $this->graphQlQuery($query, [], '', $customerAuthHeaders);
+        self::assertArrayHasKey('date_of_first_order', $response['customer']['orders']);
+        self::assertNotNull($response['customer']['orders']['date_of_first_order']);
+    }
+
+    /**
      * Get Customer Orders query
      *
      * @return string

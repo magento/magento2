@@ -46,7 +46,7 @@ class DateOfFirstOrderResolver implements ResolverInterface
         if ($context->getExtensionAttributes()->getIsCustomer() === false) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
-        $storeIds = $value['store_ids'] ?? [$context->getExtensionAttributes()->getStore()->getId()];
+        $storeIds = $value['store_ids'] ?: [$context->getExtensionAttributes()->getStore()->getId()];
         return $this->getDateOfFirstOrder($context->getUserId(), $storeIds);
     }
 
