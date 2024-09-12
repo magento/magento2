@@ -146,6 +146,8 @@ type PayflowProResponseOutput {
 
 type StoreConfig {
     payment_payflowpro_cc_vault_active: String @doc(description: "Payflow Pro vault status.")
+    paypal_express_active : Boolean @doc(description: "Extended Config Data - payment/paypal_express/active")
+    paypal_express_visible_on_cart : Boolean @doc(description: "Extended Config Data - payment/paypal_express/visible_on_car")
 }
 
 input VaultTokenInput @doc(description:"Contains required input for payment methods with Vault support.") {
