@@ -39,33 +39,26 @@ class Name extends AbstractValidator
      */
     public function isValid($customer): bool
     {        
-        if (!$this->isValidName($customer->getFirstname())) {
-            $firstname = __('Firstname');
-            parent::_addMessages([__(
-                '%1 is not valid! Allowed characters: %2',
-                $firstname,
-                $this->nameValidator->allowedCharsDescription
-            )]);
+        $nameFields = [
+            'Firstname' => $customer->getFirstname(),
+            'Lastname' => $customer->getLastname(),
+            'Middlename' => $customer->getMiddlename()
+        ];
+        
+        foreach ($nameFields as $fieldName => $fieldValue) {
+            if (!empty($fieldValue) && !$this->isValidName($fieldValue)) {
+                parent::_addMessages(
+                    [
+                        __(
+                            '%1 is not valid! Allowed characters: %2',
+                            $fieldName,
+                            $this->nameValidator->allowedCharsDescription
+                        ),
+                    ]
+                );
+            }
         }
-
-        if (!$this->isValidName($customer->getLastname())) {
-            $lastname = __('Lastname');
-            parent::_addMessages([__(
-                '%1 is not valid! Allowed characters: %2',
-                $lastname,
-                $this->nameValidator->allowedCharsDescription
-            )]);
-        }
-
-        if (!$this->isValidName($customer->getMiddlename())) {
-            $middlename = __('Middlename');
-            parent::_addMessages([__(
-                '%1 is not valid! Allowed characters: %2',
-                $middlename,
-                $this->nameValidator->allowedCharsDescription
-            )]);
-        }
-
+        
         return count($this->_messages) == 0;
     }
 
