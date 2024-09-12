@@ -251,7 +251,7 @@ class ViewTest extends TestCase
             ->getMock();
         $this->category
             ->method('hasChildren')
-            ->willReturnOnConsecutiveCalls(true);
+            ->willReturn(true);
         $this->category->expects($this->any())
             ->method('getDisplayMode')
             ->willReturn('products');
@@ -297,9 +297,9 @@ class ViewTest extends TestCase
             ->getMock();
         $this->category
             ->method('hasChildren')
-            ->willReturnOnConsecutiveCalls(
-                $expectedData[1][0]['type'] === 'default'
-            );
+            ->willReturnCallback(function () use ($expectedData) {
+                return $expectedData[1][0]['type'] === 'default';
+            });
         $this->category->expects($this->any())
             ->method('getDisplayMode')
             ->willReturn($expectedData[2][0]['displaymode']);
