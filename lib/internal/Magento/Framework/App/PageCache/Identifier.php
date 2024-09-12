@@ -50,7 +50,7 @@ class Identifier implements IdentifierInterface
      */
     public function getValue()
     {
-        $url = $this->request->getUriString();
+        $url = (string)$this->request->getUriString();
         list($baseUrl, $query) = $this->reconstructUrl($url);
         $data = [
             $this->request->isSecure(),
@@ -73,7 +73,7 @@ class Identifier implements IdentifierInterface
         if (empty($url)) {
             return [$url, ''];
         }
-        $baseUrl = strtok((string)$url, '?');
+        $baseUrl = strtok($url, '?');
         $query = $this->request->getUri()->getQueryAsArray();
         if (!empty($query)) {
             ksort($query);
