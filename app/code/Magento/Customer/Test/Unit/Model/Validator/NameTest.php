@@ -24,11 +24,6 @@ class NameTest extends TestCase
     private Name $nameValidator;
 
     /**
-     * @var NameValidator|MockObject
-     */
-    private MockObject $nameValidatorMock;
-
-    /**
      * @var Customer|MockObject
      */
     private MockObject $customerMock;
@@ -38,8 +33,7 @@ class NameTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->nameValidatorMock = $this->createMock(NameValidator::class);
-        $this->nameValidator = new Name($this->nameValidatorMock);
+        $this->nameValidator = new Name;
         $this->customerMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
