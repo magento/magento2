@@ -35,6 +35,8 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderRepository;
+use Magento\Sales\Test\Fixture\Invoice as InvoiceFixture;
+use Magento\Sales\Test\Fixture\Shipment as ShipmentFixture;
 use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
@@ -138,6 +140,43 @@ class OrderAvailableActionTest extends GraphQlAbstract
         $result = $response['customerOrders']['items'][0]['available_actions'];
 
         $this->assertEquals(['REORDER'], $result);
+    }
+
+    /**
+     * @throws AuthenticationException
+     */
+    #[
+        Config('sales/cancellation/enabled', 1),
+        DataFixture(ProductFixture::class, as: 'product1'),
+        DataFixture(ProductFixture::class, as: 'product2'),
+        DataFixture(CustomerFixture::class, as: 'customer'),
+        DataFixture(CustomerCartFixture::class, ['customer_id' => '$customer.id$'], as: 'quote'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$quote.id$', 'product_id' => '$product1.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$quote.id$', 'product_id' => '$product2.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$quote.id$'], 'order'),
+        DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], 'invoice'),
+        DataFixture(
+            ShipmentFixture::class,
+            [
+                'order_id' => '$order.id$',
+                'items' => [['product_id' => '$product1.id$', 'qty' => 1]]
+            ]
+        )
+    ]
+    public function testCustomerOrderActionWithOrderPartialShipment(): void
+    {
+        $response = $this->graphQlQuery(
+            $this->getCustomerOrdersQuery(),
+            [],
+            '',
+            $this->getCustomerAuthHeaders($this->fixtures->get('customer')->getEmail())
+        );
+
+        $this->assertEquals(['REORDER'], $response['customerOrders']['items'][0]['available_actions']);
     }
 
     /**

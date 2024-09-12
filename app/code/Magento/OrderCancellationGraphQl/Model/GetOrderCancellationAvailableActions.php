@@ -43,6 +43,7 @@ class GetOrderCancellationAvailableActions implements OrderAvailableActionProvid
     {
         if ($this->config->isOrderCancellationEnabledForStore((int)$order->getStoreId())
             && $this->customerCanCancel->execute($order)
+            && !$order->hasShipments()
         ) {
             return ['CANCEL'];
         }
