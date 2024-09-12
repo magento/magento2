@@ -333,9 +333,15 @@ class AdvancedPricingTest extends AbstractImportTestCase
                 'bunch'
             ]
         ];
+        $count = 0;
         $this->dataSourceModel
             ->method('getNextUniqueBunch')
-            ->willReturnOnConsecutiveCalls($testBunch);
+            ->willReturnCallback(function () use (&$count, $testBunch) {
+                if ($count == 0) {
+                    $count++;
+                    return $testBunch;
+                }
+            });
         $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(false);
         $this->advancedPricing->method('saveProductPrices')->willReturnSelf();
 
@@ -405,9 +411,15 @@ class AdvancedPricingTest extends AbstractImportTestCase
         $advancedPricing
             ->method('getBehavior')
             ->willReturn(Import::BEHAVIOR_APPEND);
+        $count = 0;
         $this->dataSourceModel
             ->method('getNextUniqueBunch')
-            ->willReturnOnConsecutiveCalls($data);
+            ->willReturnCallback(function () use (&$count, $data) {
+                if ($count == 0) {
+                    $count++;
+                    return $data;
+                }
+            });
         $advancedPricing->method('validateRow')->willReturn(true);
 
         $advancedPricing->method('getCustomerGroupId')->willReturnMap(
@@ -529,9 +541,16 @@ class AdvancedPricingTest extends AbstractImportTestCase
         $this->advancedPricing->method('getBehavior')->willReturn(
             Import::BEHAVIOR_REPLACE
         );
+
+        $count = 0;
         $this->dataSourceModel
             ->method('getNextUniqueBunch')
-            ->willReturnOnConsecutiveCalls($data);
+            ->willReturnCallback(function () use (&$count, $data) {
+                if ($count == 0) {
+                    $count++;
+                    return $data;
+                }
+            });
         $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(true);
 
         $this->advancedPricing
@@ -582,9 +601,15 @@ class AdvancedPricingTest extends AbstractImportTestCase
             ]
         ];
 
+        $count = 0;
         $this->dataSourceModel
             ->method('getNextUniqueBunch')
-            ->willReturnOnConsecutiveCalls($data);
+            ->willReturnCallback(function () use (&$count, $data) {
+                if ($count == 0) {
+                    $count++;
+                    return $data;
+                }
+            });
         $this->advancedPricing->method('validateRow')->willReturn(true);
         $expectedSkuList = ['sku value'];
         $this->advancedPricing
