@@ -7,9 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
+use Magento\Bundle\Test\Fixture\AddProductToCart as AddBundleProductToCart;
+use Magento\Bundle\Test\Fixture\Link as BundleSelectionFixture;
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\Quote\Test\Fixture\CustomerCart;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -39,6 +51,21 @@ class MergeCartsTest extends GraphQlAbstract
      */
     private $customerTokenService;
 
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
+     * @var \Magento\Quote\Model\QuoteIdMaskFactory
+     */
+    private $quoteIdMaskedFactory;
+
+    /**
+     * @var \Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask
+     */
+    private $quoteIdMaskedResource;
+
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -46,6 +73,9 @@ class MergeCartsTest extends GraphQlAbstract
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->fixtures = DataFixtureStorageManager::getStorage();
+        $this->quoteIdMaskedFactory = $objectManager->get(\Magento\Quote\Model\QuoteIdMaskFactory::class);
+        $this->quoteIdMaskedResource = $objectManager->get(\Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask::class);
     }
 
     protected function tearDown(): void
@@ -99,6 +129,75 @@ class MergeCartsTest extends GraphQlAbstract
         $item2 = $cartResponse['cart']['items'][1];
         self::assertArrayHasKey('quantity', $item2);
         self::assertEquals(1, $item2['quantity']);
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple1', 'price' => 10], as:'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple2', 'price' => 20], as:'p2'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p1.sku$', 'price' => 10, 'price_type' => 0], as:'link1'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p2.sku$', 'price' => 25, 'price_type' => 0], as:'link2'),
+        DataFixture(BundleOptionFixture::class, ['title' => 'Checkbox Options', 'type' => 'checkbox',
+            'required' => 1,'product_links' => ['$link1$', '$link2$']], 'opt1'),
+        DataFixture(BundleOptionFixture::class, ['title' => 'Checkbox Options', 'type' => 'checkbox',
+            'required' => 1,'product_links' => ['$link1$', '$link2$']], 'opt2'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['sku' => 'bundle-product-multiselect-checkbox-options','price' => 50,'price_type' => 1,
+                '_options' => ['$opt1$', '$opt2$']],
+            as:'bp1'
+        ),
+        DataFixture(Customer::class, ['email' => 'me@example.com'], as: 'customer'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'customerCart'),
+        DataFixture(
+            AddBundleProductToCart::class,
+            [
+                'cart_id' => '$customerCart.id$',
+                'product_id' => '$bp1.id$',
+                'selections' => [['$p1.id$'], ['$p2.id$']],
+                'qty' => 1
+            ]
+        ),
+        DataFixture(GuestCartFixture::class, as: 'guestCart'),
+        DataFixture(
+            AddBundleProductToCart::class,
+            [
+                'cart_id' => '$guestCart.id$',
+                'product_id' => '$bp1.id$',
+                'selections' => [['$p1.id$'], ['$p2.id$']],
+                'qty' => 2
+            ]
+        )
+    ]
+    public function testMergeGuestWithCustomerCartBundleProduct()
+    {
+        $guestCart = $this->fixtures->get('guestCart');
+        $guestQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$guestCart->getId());
+
+        $customerCart = $this->fixtures->get('customerCart');
+        $customerCartId = (int)$customerCart->getId();
+        $customerQuoteMaskedId = $this->quoteIdToMaskedId->execute($customerCartId);
+        if (!$customerQuoteMaskedId) {
+            $quoteIdMask = $this->quoteIdMaskedFactory->create()->setQuoteId($customerCartId);
+            $this->quoteIdMaskedResource->save($quoteIdMask);
+            $customerQuoteMaskedId = $this->quoteIdToMaskedId->execute($customerCartId);
+        }
+
+        $queryHeader = $this->getHeaderMap('me@example.com', 'password');
+        $cartMergeQuery = $this->getCartMergeMutation($guestQuoteMaskedId, $customerQuoteMaskedId);
+        $mergeResponse = $this->graphQlMutation($cartMergeQuery, [], '', $queryHeader);
+        self::assertArrayHasKey('mergeCarts', $mergeResponse);
+
+        $cartResponse = $mergeResponse['mergeCarts'];
+        self::assertArrayHasKey('items', $cartResponse);
+        self::assertCount(1, $cartResponse['items']);
+        $cartResponse = $this->graphQlMutation($this->getCartQuery($customerQuoteMaskedId), [], '', $queryHeader);
+
+        self::assertArrayHasKey('cart', $cartResponse);
+        self::assertArrayHasKey('items', $cartResponse['cart']);
+        self::assertCount(1, $cartResponse['cart']['items']);
+        $item1 = $cartResponse['cart']['items'][0];
+        self::assertArrayHasKey('quantity', $item1);
+        self::assertEquals(3, $item1['quantity']);
     }
 
     /**

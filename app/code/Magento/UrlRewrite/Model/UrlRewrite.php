@@ -14,7 +14,6 @@ use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
@@ -41,7 +40,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteService;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
-class UrlRewrite extends AbstractModel implements ResetAfterRequestInterface
+class UrlRewrite extends AbstractModel
 {
     /**
      * @var Json
@@ -154,6 +153,15 @@ class UrlRewrite extends AbstractModel implements ResetAfterRequestInterface
             ]
         );
 
+        // to manage accent characters in URL rewrite
+        if ($urlRewriteTarget) {
+            $planeChars = iconv('UTF-8', 'ISO-8859-1//IGNORE', $urlRewriteTarget->getRequestPath());
+
+            if ($planeChars !== $urlRewriteTarget->getRequestPath()) {
+                $urlRewriteTarget = null;
+            }
+        }
+
         while ($urlRewriteTarget &&
             $urlRewriteTarget->getTargetPath() !== $urlRewriteTarget->getRequestPath() &&
             $urlRewriteTarget->getRedirectType() > 0
@@ -235,13 +243,5 @@ class UrlRewrite extends AbstractModel implements ResetAfterRequestInterface
     {
         $this->_getResource()->addCommitCallback([$this, 'cleanEntitiesCache']);
         return parent::afterSave();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function _resetState(): void
-    {
-        $this->entityToCacheTagMap = [];
     }
 }

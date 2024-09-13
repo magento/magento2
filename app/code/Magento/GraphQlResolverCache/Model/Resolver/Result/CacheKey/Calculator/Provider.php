@@ -27,6 +27,11 @@ class Provider implements ProviderInterface
     private array $keyCalculatorInstances = [];
 
     /**
+     * Dev docs link
+     */
+    private const DEV_DOCS = "https://developer.adobe.com/commerce/webapi/graphql/develop";
+
+    /**
      * @var ObjectManagerInterface
      */
     private ObjectManagerInterface $objectManager;
@@ -58,8 +63,10 @@ class Provider implements ProviderInterface
         }
         $factorProviders = $this->getFactorProvidersForResolver($resolver);
         if ($factorProviders === null) {
+            $devDocs = self::DEV_DOCS;
             throw new \InvalidArgumentException(
-                "GraphQL Resolver Cache key factors are not determined for {$resolverClass} or its parents."
+                "GraphQL Resolver Cache key factors are not determined for {$resolverClass} or its parents. " .
+                "See {$devDocs} for information about configuring cache key factors for a resolver."
             );
         } else {
             $runtimePoolKey = $this->generateKeyFromFactorProviders($factorProviders);

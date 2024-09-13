@@ -190,7 +190,8 @@ class Curl implements AdapterInterface
         }
 
         if (is_array($headers)) {
-            curl_setopt($this->_getResource(), CURLOPT_HTTPHEADER, $headers);
+            $curlHeaders = $this->normalizeHeaders($headers);
+            curl_setopt($this->_getResource(), CURLOPT_HTTPHEADER, $curlHeaders);
         }
 
         /**
@@ -343,5 +344,20 @@ class Curl implements AdapterInterface
         }
 
         return false;
+    }
+
+    /**
+     * Normalizes headers to cURL format
+     *
+     * @param array $headers Headers to normalize. Expected format: ['name' => 'value'] or ['name: value']
+     * @return array Normalized headers. Expected Format: ['name: value']
+     */
+    private function normalizeHeaders(array $headers): array
+    {
+        $curlHeaders = [];
+        foreach ($headers as $key => $value) {
+            $curlHeaders[] = !is_int($key) ? ($key . ': ' . $value) : $value;
+        }
+        return $curlHeaders;
     }
 }
