@@ -58,7 +58,7 @@ class GtagConfigTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue', 'isSetFlag'])
+            ->onlyMethods(['getValue', 'isSetFlag'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

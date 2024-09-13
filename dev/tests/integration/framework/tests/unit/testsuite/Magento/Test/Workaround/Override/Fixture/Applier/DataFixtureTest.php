@@ -34,7 +34,7 @@ class DataFixtureTest extends TestCase
     public function testGetPrioritizedConfig(): void
     {
         $this->object = $this->getMockBuilder(DataFixture::class)
-            ->setMethods(['getGlobalConfig','getClassConfig', 'getMethodConfig', 'getDataSetConfig'])
+            ->onlyMethods(['getGlobalConfig','getClassConfig', 'getMethodConfig', 'getDataSetConfig'])
             ->getMock();
         $this->object->expects($this->once())
             ->method('getGlobalConfig')

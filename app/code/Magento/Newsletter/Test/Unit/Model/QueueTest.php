@@ -10,6 +10,8 @@ namespace Magento\Newsletter\Test\Unit\Model;
 use Magento\Framework\Data\Collection as DataCollection;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\Timezone\LocalizedDateToUtcConverterInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Newsletter\Model\ProblemFactory;
 use Magento\Newsletter\Model\Queue;
@@ -85,21 +87,22 @@ class QueueTest extends TestCase
     {
         $this->templateFilterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->addMethods(['create'])
             ->getMock();
         $this->dateMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->templateFactoryMock = $this->getMockBuilder(TemplateFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'load'])
+            ->addMethods(['load'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->problemFactoryMock = $this->getMockBuilder(ProblemFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->transportBuilderMock = $this->getMockBuilder(TransportBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['setTemplateData', 'setTemplateOptions', 'setTemplateVars', 'setFrom', 'addTo', 'getTransport']
             )
             ->getMock();
@@ -114,14 +117,24 @@ class QueueTest extends TestCase
             CollectionFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->subscribersCollectionFactoryMock->expects($this->any())->method('create')->willReturn(
             $this->subscribersCollectionMock
         );
 
         $this->objectManager = new ObjectManager($this);
-
+        $objects = [
+            [
+                TimezoneInterface::class,
+                $this->createMock(TimezoneInterface::class)
+            ],
+            [
+                LocalizedDateToUtcConverterInterface::class,
+                $this->createMock(LocalizedDateToUtcConverterInterface::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         $this->queue = $this->objectManager->getObject(
             Queue::class,
             [
@@ -165,12 +178,13 @@ class QueueTest extends TestCase
         $this->queue->setQueueStartAt(1);
         $collection = $this->getMockBuilder(DataCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getItems'])
+            ->onlyMethods(['getItems'])
             ->getMock();
         $item = $this->getMockBuilder(Subscriber::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                ['getStoreId', 'getSubscriberEmail', 'getSubscriberFullName', 'received', 'getUnsubscriptionLink']
+            ->addMethods(['getStoreId', 'getSubscriberEmail'])
+            ->onlyMethods(
+                ['getSubscriberFullName', 'received', 'getUnsubscriptionLink']
             )
             ->getMock();
         $transport = $this->getMockForAbstractClass(TransportInterface::class);

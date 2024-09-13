@@ -127,6 +127,7 @@ class AddCommentTest extends TestCase
      * @param string $orderStatus
      * @param bool $userHasResource
      * @param bool $expectedNotify
+     * @param string $expectedOrderStatus
      *
      * @dataProvider executeWillNotifyCustomerDataProvider
      */
@@ -134,11 +135,12 @@ class AddCommentTest extends TestCase
         array $historyData,
         string $orderStatus,
         bool $userHasResource,
-        bool $expectedNotify
+        bool $expectedNotify,
+        string $expectedOrderStatus
     ) {
         $orderId = 30;
         $this->requestMock->expects($this->once())->method('getParam')->with('order_id')->willReturn($orderId);
-        $this->orderMock->expects($this->atLeastOnce())->method('getDataByKey')
+        $this->orderMock->expects($this->any())->method('getDataByKey')
             ->with('status')->willReturn($orderStatus);
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
@@ -152,6 +154,12 @@ class AddCommentTest extends TestCase
         $this->objectManagerMock->expects($this->once())->method('create')->willReturn(
             $this->createMock(OrderCommentSender::class)
         );
+
+        // Verify the getOrderStatus method call
+        $this->orderMock->expects($this->once())->method('setStatus')->with($expectedOrderStatus);
+        $this->orderMock->expects($this->once())->method('save');
+        $this->statusHistoryCommentMock->expects($this->once())->method('save');
+
         $this->addCommentController->execute();
     }
 
@@ -167,9 +175,10 @@ class AddCommentTest extends TestCase
                     'is_customer_notified' => true,
                     'status' => 'processing'
                 ],
-                'orderStatus' =>'processing',
+                'orderStatus' => 'processing',
                 'userHasResource' => true,
-                'expectedNotify' => true
+                'expectedNotify' => true,
+                'expectedOrderStatus' => 'processing'
             ],
             'User Has Access - Notify False' => [
                 'postData' => [
@@ -177,18 +186,20 @@ class AddCommentTest extends TestCase
                     'is_customer_notified' => false,
                     'status' => 'processing'
                 ],
-                'orderStatus' =>'processing',
+                'orderStatus' => 'processing',
                 'userHasResource' => true,
-                'expectedNotify' => false
+                'expectedNotify' => false,
+                'expectedOrderStatus' => 'processing'
             ],
             'User Has Access - Notify Unset' => [
                 'postData' => [
                     'comment' => 'Great Product!',
                     'status' => 'processing'
                 ],
-                'orderStatus' =>'fraud',
+                'orderStatus' => 'fraud',
                 'userHasResource' => true,
-                'expectedNotify' => false
+                'expectedNotify' => false,
+                'expectedOrderStatus' => 'processing'
             ],
             'User No Access - Notify True' => [
                 'postData' => [
@@ -196,9 +207,10 @@ class AddCommentTest extends TestCase
                     'is_customer_notified' => true,
                     'status' => 'fraud'
                 ],
-                'orderStatus' =>'processing',
+                'orderStatus' => 'processing',
                 'userHasResource' => false,
-                'expectedNotify' => false
+                'expectedNotify' => false,
+                'expectedOrderStatus' => 'fraud'
             ],
             'User No Access - Notify False' => [
                 'postData' => [
@@ -206,18 +218,20 @@ class AddCommentTest extends TestCase
                     'is_customer_notified' => false,
                     'status' => 'processing'
                 ],
-                'orderStatus' =>'complete',
+                'orderStatus' => 'complete',
                 'userHasResource' => false,
-                'expectedNotify' => false
+                'expectedNotify' => false,
+                'expectedOrderStatus' => 'processing'
             ],
             'User No Access - Notify Unset' => [
                 'postData' => [
                     'comment' => 'Great Product!',
                     'status' => 'processing'
                 ],
-                'orderStatus' =>'complete',
+                'orderStatus' => 'complete',
                 'userHasResource' => false,
-                'expectedNotify' => false
+                'expectedNotify' => false,
+                'expectedOrderStatus' => 'processing'
             ],
         ];
     }

@@ -147,7 +147,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         'radio' => true,
         'checkbox' => true,
         'multiple' => true,
-        'file' => ['sku', 'file_extension', 'image_size_x', 'image_size_y'],
+        'file' => ['price', 'sku', 'file_extension', 'image_size_x', 'image_size_y'],
     ];
 
     /**
@@ -1912,9 +1912,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if (!isset($existingOptionIds[$optionId]) && count($storeInfo) > 0) {
                 $storeInfo = [Store::DEFAULT_STORE_ID => reset($storeInfo)] + $storeInfo;
             }
-            //for use default
-            $uniqStoreInfo = array_unique($storeInfo);
-            foreach ($uniqStoreInfo as $storeId => $title) {
+            foreach ($storeInfo as $storeId => $title) {
                 $titleRows[] = ['option_id' => $optionId, 'store_id' => $storeId, 'title' => $title];
             }
         }
@@ -2095,10 +2093,26 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $k = 0;
         $name = '';
         foreach ($optionValues as $optionValue) {
+            $separator = preg_quote($this->_productEntity->getMultipleValueSeparator(), '/');
+            $pattern = '/(?:^|' . $separator . ')file_extension=([a-zA-Z' . $separator . ']+)(?:' . $separator . '|$)/';
+
+            if (preg_match($pattern, $optionValue, $matches)) {
+                $fileExtNameAndValue = $matches[0];
+                $fileExtNameAndValue = ltrim($fileExtNameAndValue, $separator);
+                $optionValue = str_replace($fileExtNameAndValue, '', $optionValue);
+                $fileExtNameAndValue = rtrim($fileExtNameAndValue, $separator);
+                $optionValue = rtrim($optionValue, $separator);
+            }
+
             $optionValueParams = explode($this->_productEntity->getMultipleValueSeparator(), $optionValue);
+
+            if (isset($fileExtNameAndValue)) {
+                $optionValueParams[] = $fileExtNameAndValue;
+            }
+
             foreach ($optionValueParams as $nameAndValue) {
                 $nameAndValue = explode('=', $nameAndValue);
-                $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
+                $value = $nameAndValue[1] ?? '';
                 $value = trim($value);
                 $fieldName = isset($nameAndValue[0]) ? trim($nameAndValue[0]) : '';
                 if ($value && ($fieldName === 'name')) {

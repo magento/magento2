@@ -114,7 +114,7 @@ class ProductScopeRewriteGeneratorTest extends TestCase
         $this->objectRegistryFactory = $this->getMockBuilder(
             ObjectRegistryFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
         $this->storeViewService = $this->getMockBuilder(StoreViewService::class)
             ->disableOriginalConstructor()
             ->getMock();

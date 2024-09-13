@@ -102,7 +102,7 @@ class ImageTest extends TestCase
         $this->valueMock = ['model' => $this->categoryMock];
         $contextExtensionInterfaceMock = $this->getMockBuilder(ContextExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore'])
+            ->addMethods(['getStore'])
             ->getMockForAbstractClass();
         $storeMock = $this->createMock(Store::class);
         $this->categoryMock
@@ -154,7 +154,7 @@ class ImageTest extends TestCase
         $this->valueMock = ['model' => $this->categoryMock];
         $contextExtensionInterfaceMock = $this->getMockBuilder(ContextExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore'])
+            ->addMethods(['getStore'])
             ->getMockForAbstractClass();
         $storeMock = $this->createMock(Store::class);
         $this->categoryMock
