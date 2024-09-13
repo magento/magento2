@@ -30,7 +30,7 @@ class Current extends Template
     private const REGEX_INDEX_URL_PATTERN = '/(\/index|(\/))+($|\/$)/';
 
     /**
-     * Default path
+     * This property specifies the default path.
      *
      * @var DefaultPathInterface
      */
