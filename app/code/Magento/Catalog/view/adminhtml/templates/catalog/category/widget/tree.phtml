@@ -19,9 +19,10 @@ $scriptString = <<<script
 
 require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
 
-    let tree = $('#tree{$block->escapeJs($block->getId())}');
+    let tree = $('#tree{$escaper->escapeJs($block->getId())}');
     let useMassAction = {$isUseMassAction};
     let isAnchorOnly = {$isAnchorOnly};
+    let isAnchorArr = [];
     let checkedNodes = [];
 
     function addLastNodeProperty(nodes) {
@@ -38,10 +39,18 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
             const rootNode = tree.jstree().get_node("#");
             const rootId = rootNode.children[0];
 
-            if (isAnchorOnly === 1 && node.id === rootId) {
-                tree.jstree(true).disable_node(node);
-            } else if (isAnchorOnly === 0 && node.id !== rootId) {
-                tree.jstree(true).disable_node(node);
+            if (isAnchorOnly === 1) {
+                if (1 === isAnchorArr[parseInt(node.id)]) {
+                    tree.jstree(true).enable_node(node);
+                } else {
+                    tree.jstree(true).disable_node(node);
+                }
+            } else {
+                if (0 === isAnchorArr[parseInt(node.id)]) {
+                    tree.jstree(true).enable_node(node);
+                } else {
+                    tree.jstree(true).disable_node(node);
+                }
             }
         });
     }
@@ -52,12 +61,7 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
 
         data.instance.get_json('#', { flat: true }).forEach(nodeId => {
             const node = data.instance.get_node(nodeId);
-
-            if (checkedNodes.includes(node.id)) {
-                tree.jstree(true).select_node(node.id);
-            }
-
-            actionBasedOnIsAnchorOnly();
+            getAnchorNodeIds(tree, node);
         });
     }
 
@@ -106,6 +110,17 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
         }
     }
 
+    function getAnchorNodeIds(tree, node) {
+        if (useMassAction) {
+            isAnchorArr[parseInt(node.id)] = node.original.is_anchor;
+            if (checkedNodes.includes(node.id)) {
+                tree.jstree(true).select_node(node.id);
+            }
+            getCheckedNodeIds(tree, node);
+            actionBasedOnIsAnchorOnly();
+        }
+    }
+
     function handleSuccessResponse(response, childNode, data) {
         if (response.length > 0) {
             response.forEach(newNode => {
@@ -114,11 +129,9 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
                 // Create the new node and execute node callback
                 data.instance.create_node(childNode, newNode, 'last', node => {
                     if (useMassAction) {
-                        if (checkedNodes.includes(node.id)) {
-                            tree.jstree(true).select_node(node.id);
+                        if ($.inArray(childNode.id, isAnchorArr) === -1) {
+                            getAnchorNodeIds(tree, childNode);
                         }
-                        getCheckedNodeIds(tree, node);
-                        actionBasedOnIsAnchorOnly();
                     }
                 });
             });
@@ -130,6 +143,9 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
         if (parentNode && parentNode.children.length > 0) {
             parentNode.children.forEach(function(childId) {
                 let childNode = data.instance.get_node(childId, false);
+                if ($.inArray(childNode.id, isAnchorArr) === -1) {
+                    getAnchorNodeIds(tree, childNode);
+                }
                 // Check if the child node has no children (is not yet loaded)
                 if (childNode.children && childNode.children.length === 0
                     && childNode.original && !childNode.original.lastNode) {
@@ -151,6 +167,10 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
                     });
                 }
             })
+        }
+        else if ((parentNode.children.length === 0
+                    && parentNode.original && parentNode.original.lastNode)) {
+            getAnchorNodeIds(tree, parentNode);
         }
     }
 
