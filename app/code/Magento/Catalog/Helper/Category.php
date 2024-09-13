@@ -9,6 +9,7 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category as ModelCategory;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -16,11 +17,11 @@ use Magento\Store\Model\Store;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Category extends AbstractHelper
+class Category extends AbstractHelper implements ResetAfterRequestInterface
 {
-    const XML_PATH_USE_CATEGORY_CANONICAL_TAG = 'catalog/seo/category_canonical_tag';
+    public const XML_PATH_USE_CATEGORY_CANONICAL_TAG = 'catalog/seo/category_canonical_tag';
 
-    const XML_PATH_CATEGORY_ROOT_ID = 'catalog/category/root_id';
+    public const XML_PATH_CATEGORY_ROOT_ID = 'catalog/category/root_id';
 
     /**
      * Store categories cache
@@ -30,14 +31,14 @@ class Category extends AbstractHelper
     protected $_storeCategories = [];
 
     /**
-     * Store manager
+     * Store manager instance
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Category factory
+     * Category factory instance
      *
      * @var \Magento\Catalog\Model\CategoryFactory
      */
@@ -175,5 +176,13 @@ class Category extends AbstractHelper
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_storeCategories = [];
     }
 }

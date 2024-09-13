@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-92925"/>
             <group value="sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Enable flat rate shipping-->
@@ -31,7 +32,7 @@
         </before>
         <after>
             <!-- Disable shipping method for customer with default address -->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <createData entity="DisabledMinimumOrderAmount" stepKey="disableMinimumOrderAmount"/>

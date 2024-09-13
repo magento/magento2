@@ -26,4 +26,9 @@
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="response-http-page-cache" type="Magento\PageCache\Model\App\Response\HttpPlugin"/>
     </type>
+    <type name="Magento\Framework\App\PageCache\Kernel">
+        <arguments>
+            <argument name="identifierForSave" xsi:type="object">Magento\PageCache\Model\App\Request\Http\IdentifierForSave</argument>
+        </arguments>
+    </type>
 </config>

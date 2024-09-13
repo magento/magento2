@@ -17,6 +17,7 @@
             <testCaseId value="MC-14217"/>
             <group value="wishlist"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create Data -->
@@ -110,6 +111,7 @@
         </before>
         <after>
             <!-- Delete data -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteSimpleProduct2"/>
@@ -120,7 +122,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- 1. Login as a customer -->

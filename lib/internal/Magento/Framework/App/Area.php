@@ -18,24 +18,24 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
  */
 class Area implements \Magento\Framework\App\AreaInterface
 {
-    const AREA_GLOBAL = 'global';
-    const AREA_FRONTEND = 'frontend';
-    const AREA_ADMINHTML = 'adminhtml';
-    const AREA_DOC = 'doc';
-    const AREA_CRONTAB = 'crontab';
-    const AREA_WEBAPI_REST = 'webapi_rest';
-    const AREA_WEBAPI_SOAP = 'webapi_soap';
-    const AREA_GRAPHQL = 'graphql';
+    public const AREA_GLOBAL = 'global';
+    public const AREA_FRONTEND = 'frontend';
+    public const AREA_ADMINHTML = 'adminhtml';
+    public const AREA_DOC = 'doc';
+    public const AREA_CRONTAB = 'crontab';
+    public const AREA_WEBAPI_REST = 'webapi_rest';
+    public const AREA_WEBAPI_SOAP = 'webapi_soap';
+    public const AREA_GRAPHQL = 'graphql';
 
     /**
      * @deprecated
      */
-    const AREA_ADMIN    = 'admin';
+    public const AREA_ADMIN    = 'admin';
 
     /**
      * Area parameter.
      */
-    const PARAM_AREA = 'area';
+    public const PARAM_AREA = 'area';
 
     /**
      * Array of area loaded parts
@@ -52,22 +52,16 @@ class Area implements \Magento\Framework\App\AreaInterface
     protected $_code;
 
     /**
-     * Event Manager
-     *
      * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
 
     /**
-     * Translator
-     *
      * @var \Magento\Framework\TranslateInterface
      */
     protected $_translator;
 
     /**
-     * Object manager
-     *
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
@@ -189,6 +183,8 @@ class Area implements \Magento\Framework\App\AreaInterface
     }
 
     /**
+     * Get Design instance
+     *
      * @return \Magento\Framework\View\DesignInterface
      */
     protected function _getDesign()
@@ -245,7 +241,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      */
     protected function _initTranslate()
     {
-        $this->_translator->loadData(null, false);
+        $this->_translator->loadData($this->_code, false);
 
         \Magento\Framework\Phrase::setRenderer(
             $this->_objectManager->get(\Magento\Framework\Phrase\RendererInterface::class)

@@ -1,0 +1,66 @@
+
+File "/var/www/html/app/code/Magento/Sales/Test/Mftf/Test/AddConfigurableProductToOrderFromShoppingCartTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontAddConfigurableProductToTheCartActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Sales/Test/Mftf/Test/AdminCancelTheCreatedOrderWithZeroSubtotalCheckoutTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliConsumerStartActionGroup from module(s): magento/module-message-queue
+
+File "/var/www/html/app/code/Magento/Sales/Test/Mftf/Test/AdminCreateOrderWithConfigurableProductPressKeyEnterTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CreateConfigurableProductActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Sales/Test/Mftf/Test/AdminCreateOrderWithConfigurableProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CreateConfigurableProductActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Sales/Test/Mftf/Test/AdminUpdatePaymentMethodTitleTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 EnableCheckMoneyOrderPaymentMethod from module(s): magento/module-offline-payments
+	 ChangeDefaultCheckMoneyOrderTitle from module(s): magento/module-offline-payments
+	 DefaultCheckMoneyOrderTitle from module(s): magento/module-offline-payments
+
+File "/var/www/html/app/code/Magento/Sales/Test/Mftf/Test/AdminViewOrderUserWithRestrictedAccessTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminRevokeRoleResourceActionGroup from module(s): magento/module-login-as-customer
+
+File "/var/www/html/app/code/Magento/Sales/Test/Mftf/Test/CloseOrderInCaseItRefundedPartiallyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 colorProductAttribute from module(s): magento/module-configurable-product
+	 colorProductAttribute1 from module(s): magento/module-configurable-product
+	 CreateConfigurableProductActionGroup from module(s): magento/module-configurable-product
+	 StorefrontCheckQuickSearchStringActionGroup from module(s): magento/module-catalog-search
+	 StorefrontAddToCartFromQuickSearchActionGroup from module(s): magento/module-catalog-search
+	 StorefrontOpenProductFromQuickSearchActionGroup from module(s): magento/module-catalog-search
+	 SelectSingleAttributeAndAddToCartActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Sales/Test/Mftf/Test/PlaceAnOrderAndCreditMemoItValidateTheOrderStatusIsClosedTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 colorProductAttribute2 from module(s): magento/module-configurable-product
+	 CreateConfigurableProductActionGroupWithDefaultColorAttributeActionGroup from module(s): magento/module-configurable-product
+	 AdminSetProductQuantityToEachSkusConfigurableProductActionGroup from module(s): magento/module-configurable-product
+	 StorefrontAddConfigurableProductToTheCartActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Sales/Test/Mftf/Test/StorefrontPrintOrderGuestTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminConfigurableProductFormSection from module(s): magento/module-configurable-product, magento/module-inventory-configurable-product-admin-ui
+
+File "/var/www/html/app/code/Magento/Sales/Test/Mftf/Test/StorefrontVerifyOrderShipmentForDecimalQuantityTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontSelectCheckMoneyOrderActionGroup from module(s): magento/module-offline-payments
+
+File "/var/www/html/app/code/Magento/Sales/Test/Mftf/ActionGroup/AssertStorefrontCustomerOrderMatchesGrandTotalActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontSalesOrderSection from module(s): magento/module-multishipping

@@ -19,6 +19,7 @@ use Magento\Review\Model\Review\SummaryFactory;
 use Magento\Review\Test\Fixture\Review as ReviewFixture;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
@@ -286,6 +287,55 @@ QUERY;
         self::assertNotEmpty($response['products']['items']);
         self::assertEquals(1, $response['products']['items'][0]['review_count']);
         self::assertCount(1, $response['products']['items'][0]['reviews']['items']);
+    }
+
+    #[
+        DataFixture(StoreFixture::class, ['code' => 'store2'], 'store2'),
+        DataFixture(CustomerFixture::class, ['email' => 'customer@example.com'], 'customer'),
+        DataFixture(ProductFixture::class, ['sku' => 'product1'], 'product1'),
+        DataFixture(ReviewFixture::class, [
+            'entity_pk_value' => '$product1.id$',
+            'customer_id' => '$customer.entity_id$'
+        ]),
+        DataFixture(ReviewFixture::class, [
+            'entity_pk_value' => '$product1.id$',
+            'store_id' => '$store2.id$',
+            'customer_id' => '$customer.entity_id$'
+        ]),
+    ]
+    /**
+     * @dataProvider storesDataProvider
+     * @param string $storeCode
+     */
+    public function testCustomerReviewDifferentStores(string $storeCode): void
+    {
+        $query = <<<QUERY
+{
+  customer {
+    firstname
+    lastname
+    suffix
+    email
+    reviews(
+      currentPage: 1
+      pageSize: 20
+    ) {
+          items {
+              summary
+              text
+              summary
+          }
+      }
+  }
+}
+QUERY;
+        $headers = ['Store' => $storeCode, 'Authorization' => implode($this->getHeaderMap())];
+        $response = $this->graphQlQuery($query, [], '', $headers);
+        self::assertArrayHasKey('customer', $response);
+        self::assertArrayHasKey('reviews', $response['customer']);
+        self::assertArrayHasKey('items', $response['customer']['reviews']);
+        self::assertNotEmpty($response['customer']['reviews']['items']);
+        self::assertCount(1, $response['customer']['reviews']['items']);
     }
 
     /**

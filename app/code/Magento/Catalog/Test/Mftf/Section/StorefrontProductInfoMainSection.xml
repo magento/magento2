@@ -16,6 +16,7 @@
         <element name="price" type="text" selector=".product-info-main [data-price-type='finalPrice']"/>
         <element name="productPrice" type="text" selector=".price-final_price"/>
         <element name="qty" type="input" selector="#qty"/>
+        <element name="qtyByClassAndQuantity" type="input" selector="//input[contains(@class,'qty') and @value='{{quantity}}']" parameterized="true"/>
         <element name="specialPrice" type="text" selector=".special-price"/>
         <element name="specialPriceAmount" type="text" selector=".special-price span.price"/>
         <element name="updatedPrice" type="text" selector="div.price-box.price-final_price [data-price-type='finalPrice'] .price"/>
@@ -23,14 +24,17 @@
         <element name="oldPriceTag" type="text" selector=".old-price .price-label"/>
         <element name="oldPriceAmount" type="text" selector=".old-price span.price"/>
         <element name="productStockStatus" type="text" selector=".stock[title=Availability]>span"/>
-        <element name="productImage" type="text" selector="//*[@id='maincontent']//div[@class='gallery-placeholder']//img[@class='fotorama__img']"/>
-        <element name="productImageSrc" type="text" selector="//*[@id='maincontent']//div[@class='gallery-placeholder']//img[contains(@src, '{{src}}')]" parameterized="true"/>
+        <element name="productImage" type="text" selector="//*[@id='maincontent']//div[@class='gallery-placeholder']//img[contains(@class, 'fotorama__img')]"/>
+        <element name="productImageSrc" type="text" selector="//*[@id='maincontent']//div[@class='gallery-placeholder']//img[contains(@class, 'fotorama__img')][contains(@src, '{{src}}')]" parameterized="true"/>
         <element name="productDescription" type="text" selector="#description .value"/>
         <element name="productOptionFieldInput" type="input" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{var1}}')]/../div[@class='control']//input[@type='text']" parameterized="true"/>
         <element name="productOptionAreaInput" type="textarea" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{var1}}')]/../div[@class='control']//textarea" parameterized="true"/>
         <element name="productOptionFile" type="file" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'OptionFile')]/../div[@class='control']//input[@type='file']" parameterized="true"/>
         <element name="productOptionSelect" type="select" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{var1}}')]/../div[@class='control']//select" parameterized="true"/>
+        <element name="productOptionSelectByColor" type="select" selector=".//option[text()='Choose an Option...']/../../select" />
         <element name="asLowAs" type="input" selector="span[class='price-wrapper '] "/>
+        <element name="asLowAsLabel" type="input" selector="//strong[@id='block-related-heading']/following::span[@class='price-label'][1]"/>
+        <element name="asLowAsLabelAgain" type="input" selector="//strong[@id='block-related-heading']/following::span[@class='price-label'][2]"/>
         <element name="specialPriceValue" type="text" selector="//span[@class='special-price']//span[@class='price']"/>
         <element name="mapPrice" type="text" selector="//div[@class='price-box price-final_price']//span[contains(@class, 'price-msrp_price')]"/>
         <element name="clickForPriceLink" type="text" selector="//div[@class='price-box price-final_price']//a[contains(text(), 'Click for price')]"/>
@@ -78,6 +82,7 @@
         <element name="productTierPriceByForTextLabel" type="text" selector="//ul[contains(@class, 'prices-tier')]//li[{{var1}}][contains(text(),'Buy {{var2}} for')]" parameterized="true"/>
         <element name="productTierPriceAmount" type="text" selector="//ul[contains(@class, 'prices-tier')]//li[{{var1}}]//span[contains(text(), '{{var2}}')]" parameterized="true"/>
         <element name="productTierPriceSavePercentageAmount" type="text" selector="//ul[contains(@class, 'prices-tier')]//li[{{var1}}]//span[contains(@class, 'percent')][contains(text(), '{{var2}}')]" parameterized="true"/>
+        <element name="tierPriceWithIndex" type="text" selector=".//*[@class='prices-tier items']/li[{{var}}]" parameterized="true"/>
 
         <!-- Special price selectors -->
         <element name="productSpecialPrice" type="text" selector="//span[@data-price-type='finalPrice']/span"/>
@@ -106,7 +111,11 @@
         <element name="customOptionHour" type="date" selector="//div[@class='field date required']//span[text()='{{option}}']/../..//div/select[@data-calendar-role='hour']" parameterized="true"/>
         <element name="customOptionMinute" type="date" selector="//div[@class='field date required']//span[text()='{{option}}']/../..//div/select[@data-calendar-role='minute']" parameterized="true"/>
         <element name="customOptionDayPart" type="date" selector="//div[@class='field date required']//span[text()='{{option}}']/../..//div/select[@data-calendar-role='day_part']" parameterized="true"/>
-
+        <element name="swatchOptionDisabled" type="text" selector=".//*[@class='swatch-option color disabled']"/>
         <element name="addToCartEnabled" type="button" selector="#product-addtocart-button:not([disabled])"/>
+        <element name="selectCustomOptionDropDown" type="select" selector="//select[contains(@class,' required product-custom-option admin__control-select')]"/>
+        <element name="productCalenderButton" type="button" selector="//*[@id='product-options-wrapper']/div/div/fieldset/div/button" />
+        <element name="productCalenderGoToday" type="button" selector="//*[@id='ui-datepicker-div']/div[2]/button[1]" />
+        <element name="customDateField" type="text" selector='//*[@class="product-custom-option datetime-picker input-text _has-datepicker"]' />
     </section>
 </sections>

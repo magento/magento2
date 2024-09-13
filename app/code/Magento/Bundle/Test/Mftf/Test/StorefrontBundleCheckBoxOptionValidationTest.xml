@@ -18,6 +18,10 @@
             <severity value="MINOR"/>
             <group value="Bundle"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
+            <skip>
+                <issueId value="AC-10826"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simpleProduct1" before="bundleProduct"/>
@@ -38,7 +42,9 @@
                 <requiredEntity createDataKey="simpleProduct2"/>
                 <field key="qty">4</field>
             </createData>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="bundleProduct" stepKey="deleteBundleProduct"/>

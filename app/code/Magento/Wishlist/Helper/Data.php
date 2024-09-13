@@ -8,15 +8,19 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Helper;
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\Wishlist\Model\Item;
 
 /**
  * Wishlist Data Helper
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  *
@@ -318,7 +322,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConfigureUrl($item)
     {
-        return $this->_getUrl(
+        $query = $this->getItemQueryOptions($item);
+        $url = $this->_getUrl(
             'wishlist/index/configure',
             [
                 'id' => $item->getWishlistItemId(),
@@ -326,6 +331,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 'qty' => (int)$item->getQty()
             ]
         );
+        $url .= (isset($query['fragment']) && count($query['fragment'])) ?
+            '#' . http_build_query($query['fragment']) : '';
+        return $url;
     }
 
     /**
@@ -638,6 +646,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  \Magento\Wishlist\Model\Item|\Magento\Catalog\Model\Product $item
      * @param  array $additional
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getProductUrl($item, $additional = [])
     {
@@ -646,8 +656,31 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         } else {
             $product = $item->getProduct();
         }
+
+        $query = $this->getItemQueryOptions($item);
+        if (isset($query['product'])) {
+            $product = $query['product'];
+        }
+
+        $url = $product->getUrlModel()->getUrl($product, $query['additional'] ?? []);
+        if (isset($query['fragment']) && count($query['fragment'])) {
+            $url .= '#' . http_build_query($query['fragment']);
+        }
+
+        return $url;
+    }
+
+    /**
+     * Generate query params from product options
+     *
+     * @param Item|Product $item
+     * @return array
+     * @throws NoSuchEntityException
+     */
+    private function getItemQueryOptions(Item|Product $item): array
+    {
+        $query = [];
         $buyRequest = $item->getBuyRequest();
-        $fragment = [];
         if (is_object($buyRequest)) {
             $config = $buyRequest->getSuperProductConfig();
             if ($config && !empty($config['product_id'])) {
@@ -656,17 +689,29 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     false,
                     $this->_storeManager->getStore()->getStoreId()
                 );
+                $query['product'] = $product;
             }
-            $fragment = $buyRequest->getSuperAttribute() ?? [];
+            $query['fragment'] = $this->getFragmentByProductType($buyRequest);
             if ($buyRequest->getQty()) {
-                $additional['_query']['qty'] = $buyRequest->getQty();
+                $query['additional']['_query']['qty'] = $buyRequest->getQty();
             }
         }
-        $url = $product->getUrlModel()->getUrl($product, $additional);
-        if ($fragment) {
-            $url .= '#' . http_build_query($fragment);
-        }
+        return $query;
+    }
 
-        return $url;
+    /**
+     * Get product url with options and qty for complex products
+     *
+     * @param DataObject $buyRequest
+     * @return array
+     */
+    private function getFragmentByProductType(DataObject $buyRequest): array
+    {
+        $fragment = $buyRequest->getSuperAttribute() ?? $buyRequest->getSuperGroup() ?? [];
+        if ($buyRequest->getBundleOption()) {
+            $fragment['bundle_option'] = $buyRequest->getBundleOption() ?? [];
+            $fragment['bundle_option_qty'] = $buyRequest->getBundleOptionQty() ?? [];
+        }
+        return $fragment;
     }
 }

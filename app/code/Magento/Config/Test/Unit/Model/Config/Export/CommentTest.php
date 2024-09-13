@@ -48,7 +48,7 @@ class CommentTest extends TestCase
             ->getMockForAbstractClass();
 
         $placeholderFactoryMock = $this->getMockBuilder(PlaceholderFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

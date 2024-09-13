@@ -60,12 +60,12 @@ class PriceTest extends TestCase
         /** @var Product|MockObject $configurableProduct */
         $configurableProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomOption', 'getPriceInfo', 'setFinalPrice'])
+            ->onlyMethods(['getCustomOption', 'getPriceInfo', 'setFinalPrice'])
             ->getMock();
         /** @var PriceInfoBase|MockObject $priceInfo */
         $priceInfo = $this->getMockBuilder(PriceInfoBase::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPrice'])
+            ->onlyMethods(['getPrice'])
             ->getMock();
         /** @var PriceInterface|MockObject $price */
         $price = $this->getMockBuilder(PriceInterface::class)

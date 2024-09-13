@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <group value="checkout"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -28,9 +29,10 @@
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
-        
+
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
@@ -57,7 +59,7 @@
             <argument name="text" value="{{US_Address_NY.postcode}}"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goBackToCheckout"/>   
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goBackToCheckout"/>
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatShippingMethod"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>

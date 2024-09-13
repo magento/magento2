@@ -215,7 +215,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             $to = $from;
         }
 
-        if ($from === false || $to === false) {
+        if ($from === false || $to === false || $mod == 0) {
             throw new CronException(__('Invalid cron expression: %1', $expr));
         }
 

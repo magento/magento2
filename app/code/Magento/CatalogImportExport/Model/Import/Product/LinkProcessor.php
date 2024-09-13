@@ -47,6 +47,11 @@ class LinkProcessor
     private $logger;
 
     /**
+     * @var SkuStorage
+     */
+    private SkuStorage $skuStorage;
+
+    /**
      * LinkProcessor constructor.
      *
      * @param LinkFactory $linkFactory
@@ -54,13 +59,15 @@ class LinkProcessor
      * @param SkuProcessor $skuProcessor
      * @param LoggerInterface $logger
      * @param array $linkNameToId
+     * @param SkuStorage $skuStorage
      */
     public function __construct(
         LinkFactory $linkFactory,
         Helper $resourceHelper,
         SkuProcessor $skuProcessor,
         LoggerInterface $logger,
-        array $linkNameToId
+        array $linkNameToId,
+        SkuStorage $skuStorage
     ) {
         $this->linkFactory = $linkFactory;
         $this->resourceHelper = $resourceHelper;
@@ -68,6 +75,7 @@ class LinkProcessor
         $this->logger = $logger;
 
         $this->linkNameToId = $linkNameToId;
+        $this->skuStorage = $skuStorage;
     }
 
     /**
@@ -171,10 +179,10 @@ class LinkProcessor
                     ? explode($importEntity->getMultipleValueSeparator(), $rowData[$linkName . 'position'])
                     : [];
 
-                $linkSkus = $this->filterValidLinks($importEntity, $sku, $linkSkus);
+                $linkSkus = $this->filterValidLinks($sku, $linkSkus);
 
                 foreach ($linkSkus as $linkedKey => $linkedSku) {
-                    $linkedId = $this->getProductLinkedId($importEntity, $linkedSku);
+                    $linkedId = $this->getProductLinkedId($linkedSku);
                     if ($linkedId == null) {
                         // Import file links to a SKU which is skipped for some reason, which leads to a "NULL"
                         // link causing fatal errors.
@@ -222,7 +230,7 @@ class LinkProcessor
         Product $importEntity,
         Link $resource,
         array $linksToDelete
-    ) {
+    ): void {
         if (!empty($linksToDelete) && Import::BEHAVIOR_APPEND === $importEntity->getBehavior()) {
             foreach ($linksToDelete as $linkTypeId => $productIds) {
                 if (!empty($productIds)) {
@@ -243,27 +251,23 @@ class LinkProcessor
     /**
      * Check if product exists for specified SKU
      *
-     * @param Product $importEntity
      * @param string $sku
      * @return bool
      */
-    private function isSkuExist(Product $importEntity, string $sku): bool
+    private function isSkuExist(string $sku): bool
     {
-        $sku = strtolower($sku);
-        return isset($importEntity->getOldSku()[$sku]);
+        return $this->skuStorage->has($sku);
     }
 
     /**
      * Get existing SKU record
      *
-     * @param Product $importEntity
      * @param string $sku
-     * @return mixed
+     * @return array|null
      */
-    private function getExistingSku(Product $importEntity, string $sku)
+    private function getExistingSku(string $sku): ?array
     {
-        $sku = strtolower($sku);
-        return $importEntity->getOldSku()[$sku];
+        return $this->skuStorage->get($sku);
     }
 
     /**
@@ -296,20 +300,17 @@ class LinkProcessor
     /**
      * Gets the Id of the Sku
      *
-     * @param Product $importEntity
      * @param string $linkedSku
      * @return int|null
      */
-    private function getProductLinkedId(Product $importEntity, string $linkedSku): ?int
+    private function getProductLinkedId(string $linkedSku): ?int
     {
         $linkedSku = trim($linkedSku);
         $newSku = $this->skuProcessor->getNewSku($linkedSku);
 
-        $linkedId = ! empty($newSku) ?
+        return !empty($newSku) ?
             $newSku['entity_id'] :
-            $this->getExistingSku($importEntity, $linkedSku)['entity_id'];
-
-        return $linkedId;
+            $this->getExistingSku($linkedSku)['entity_id'];
     }
 
     /**
@@ -329,7 +330,7 @@ class LinkProcessor
         array $productIds,
         array $linkRows,
         array $positionRows
-    ) {
+    ): void {
         $mainTable = $resource->getMainTable();
         if (Import::BEHAVIOR_APPEND != $importEntity->getBehavior() && $productIds) {
             $importEntity->getConnection()->delete(
@@ -370,7 +371,7 @@ class LinkProcessor
      * @param array $rowData
      * @return array
      */
-    private function filterProvidedLinkTypes(array $rowData)
+    private function filterProvidedLinkTypes(array $rowData): array
     {
         return array_filter(
             $this->linkNameToId,
@@ -384,21 +385,20 @@ class LinkProcessor
     /**
      * Filter out invalid links
      *
-     * @param Product $importEntity
      * @param string $sku
      * @param array $linkSkus
      * @return array
      */
-    private function filterValidLinks(Product $importEntity, string $sku, array $linkSkus)
+    private function filterValidLinks(string $sku, array $linkSkus): array
     {
         return array_filter(
             $linkSkus,
-            function ($linkedSku) use ($sku, $importEntity) {
+            function ($linkedSku) use ($sku) {
                 $linkedSku = $linkedSku !== null ? trim($linkedSku) : '';
 
                 return (
                         $this->skuProcessor->getNewSku($linkedSku) !== null
-                        || $this->isSkuExist($importEntity, $linkedSku)
+                        || $this->isSkuExist($linkedSku)
                     )
                     && strcasecmp($linkedSku, $sku) !== 0;
             }

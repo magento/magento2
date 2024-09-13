@@ -17,6 +17,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MC-223"/>
             <group value="Bundle"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
@@ -24,7 +25,9 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup stepKey="loginToAdminPanel" ref="AdminLoginActionGroup"/>
         </before>
         <after>
@@ -106,6 +109,7 @@
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
+
         <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="clickOnBundleProductToEdit"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="conditionallyOpenSectionBundleItemsToEdit"/>
         <actionGroup ref="AdminClickAddOptionOnBundleProductEditPageActionGroup" stepKey="clickAddOption"/>

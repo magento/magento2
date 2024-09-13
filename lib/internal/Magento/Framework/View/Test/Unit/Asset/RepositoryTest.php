@@ -118,15 +118,15 @@ class RepositoryTest extends TestCase
         $this->fallbackFactoryMock = $this->getMockBuilder(
             FallbackContextFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextFactoryMock = $this->getMockBuilder(ContextFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->remoteFactoryMock = $this->getMockBuilder(RemoteFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

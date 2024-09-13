@@ -7,11 +7,12 @@
 namespace Magento\Customer\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Registry for Address models
  */
-class AddressRegistry
+class AddressRegistry implements ResetAfterRequestInterface
 {
     /**
      * @var Address[]
@@ -73,5 +74,13 @@ class AddressRegistry
     {
         $this->registry[$address->getId()] = $address;
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->registry = [];
     }
 }

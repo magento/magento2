@@ -14,6 +14,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-91101"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="subcategory1"/>
@@ -58,8 +59,9 @@
         <waitForElement selector="{{PriceRuleConditionsSection.treeRoot}}" stepKey="wait3"/>
         <click selector="{{PriceRuleConditionsSection.lastTreeNode}}" stepKey="openLatestTreeNode1"/>
         <click selector="{{PriceRuleConditionsSection.lastTreeNode}}" stepKey="openLatestTreeNode2"/>
-        <click selector="{{PriceRuleConditionsSection.lastTreeNode}}" stepKey="openLatestTreeNode3"/>
         <waitForAjaxLoad stepKey="ajaxLoad4"/>
+        <click selector="{{PriceRuleConditionsSection.lastTreeNode}}" stepKey="openLatestTreeNode3"/>
+        <waitForAjaxLoad stepKey="ajaxLoad5"/>
         <waitForElement selector="{{PriceRuleConditionsSection.subcategory4level}}" stepKey="wait4"/>
         <click selector="{{PriceRuleConditionsSection.subcategory4level}}" stepKey="openLatestTreeNode4"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
