@@ -1568,4 +1568,18 @@ class ProductRepositoryTest extends TestCase
         $this->model->save($this->product);
         $this->assertEquals($expectedResult, $this->initializedProduct->getMediaGallery('images'));
     }
+
+    /**
+     * @return void
+     */
+    public function testSaveCouldNotSaveException(): void
+    {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $productData = [
+            'name' => 'Simple Product',
+            'price' => 100
+        ];
+        $this->product->setData($productData);
+        $this->model->save($this->product);
+    }
 }
