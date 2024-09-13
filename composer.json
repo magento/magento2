@@ -90,7 +90,7 @@
         "tubalmartin/cssmin": "^4.1",
         "web-token/jwt-framework": "^3.1",
         "webonyx/graphql-php": "^15.0",
-        "wikimedia/less.php": "^4.4"
+        "wikimedia/less.php": "^5.0"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "^3",
@@ -343,7 +343,7 @@
         "components/jquery": "1.11.0",
         "components/jqueryui": "1.10.4",
         "twbs/bootstrap": "3.1.0",
-        "tinymce/tinymce": "3.4.7",
+        "tinymce/tinymce": "7.3.0",
         "magento/module-csp": "*",
         "magento/module-aws-s3": "*",
         "magento/module-remote-storage": "*",

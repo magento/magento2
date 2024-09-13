@@ -10,6 +10,7 @@ namespace Magento\GroupedImportExport\Test\Unit\Model\Import\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
 use Magento\Framework\App\ResourceConnection;
@@ -172,6 +173,17 @@ class GroupedTest extends AbstractImportTestCase
         );
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->resource->expects($this->any())->method('getTableName')->willReturn('tableName');
+        $objects = [
+            [
+                ConfigInterface::class,
+                $this->createMock(ConfigInterface::class)
+            ],
+            [
+                SkuStorage::class,
+                $this->createMock(SkuStorage::class)
+            ]
+        ];
+        $this->objectManagerHelper->prepareObjectManager($objects);
         $this->grouped = $this->objectManagerHelper->getObject(
             Grouped::class,
             [
@@ -231,9 +243,12 @@ class GroupedTest extends AbstractImportTestCase
         $attributes = ['position' => ['id' => 0], 'qty' => ['id' => 0]];
         $this->links->expects($this->once())->method('getAttributes')->willReturn($attributes);
 
+        $callCount = 0;
         $this->entityModel
             ->method('getNextBunch')
-            ->willReturnOnConsecutiveCalls([$bunch]);
+            ->willReturnCallback(function () use (&$callCount, $bunch) {
+                return $callCount++ === 0 ? [$bunch] : null;
+            });
         $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn(true);
         $this->entityModel->expects($this->any())->method('getRowScope')->willReturn(Product::SCOPE_DEFAULT);
 
@@ -246,7 +261,7 @@ class GroupedTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function saveDataProvider(): array
+    public static function saveDataProvider(): array
     {
         return [
             [
@@ -342,9 +357,12 @@ class GroupedTest extends AbstractImportTestCase
             ]
         ];
         $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn(true);
+        $callCount = 0;
         $this->entityModel
             ->method('getNextBunch')
-            ->willReturnOnConsecutiveCalls($bunch);
+            ->willReturnCallback(function () use (&$callCount, $bunch) {
+                return $callCount++ === 0 ? $bunch : null;
+            });
         $this->entityModel
             ->method('getRowScope')
             ->willReturnOnConsecutiveCalls(Product::SCOPE_DEFAULT, Product::SCOPE_STORE);
@@ -379,9 +397,12 @@ class GroupedTest extends AbstractImportTestCase
         ];
 
         $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn(true);
+        $callCount = 0;
         $this->entityModel
             ->method('getNextBunch')
-            ->willReturnOnConsecutiveCalls($bunch);
+            ->willReturnCallback(function () use (&$callCount, $bunch) {
+                return $callCount++ === 0 ? $bunch : null;
+            });
         $this->entityModel
             ->method('getRowScope')
             ->willReturnOnConsecutiveCalls(Product::SCOPE_DEFAULT, Product::SCOPE_STORE);
