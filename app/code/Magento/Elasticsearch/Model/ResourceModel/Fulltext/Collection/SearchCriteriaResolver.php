@@ -53,7 +53,7 @@ class SearchCriteriaResolver implements SearchCriteriaResolverInterface
         string $searchRequestName,
         int $currentPage,
         int $size,
-        ?array $orders
+        ?array $orders = null
     ) {
         $this->builder = $builder;
         $this->searchRequestName = $searchRequestName;

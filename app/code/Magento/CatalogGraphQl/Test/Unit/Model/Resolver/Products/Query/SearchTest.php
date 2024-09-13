@@ -119,7 +119,7 @@ class SearchTest extends TestCase
 
     public function testPopulateSearchQueryStats(): void
     {
-        $args = ['search' => 'test'];
+        $args = ['search' => 'test', 'pageSize' => 10, 'currentPage' => 1];
         $context = $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
