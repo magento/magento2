@@ -13,6 +13,8 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
 
 /**
  * Default field type resolver.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class DefaultResolver implements ResolverInterface
 {
@@ -34,6 +36,7 @@ class DefaultResolver implements ResolverInterface
      *
      * @param AttributeAdapter $attribute
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFieldType(AttributeAdapter $attribute): ?string
     {
