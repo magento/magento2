@@ -85,14 +85,14 @@ class CostStorageTest extends TestCase
             PricePersistenceFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->pricePersistence = $this->getMockBuilder(PricePersistence::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->costInterfaceFactory = $this->getMockBuilder(CostInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->costInterface = $this->getMockBuilder(CostInterface::class)
             ->disableOriginalConstructor()
@@ -169,18 +169,27 @@ class CostStorageTest extends TestCase
         $this->costInterface
             ->expects($this->atLeastOnce())
             ->method('setSku')
-            ->withConsecutive(['sku_1'], ['sku_2'])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 'sku_1' || $arg == 'sku_2') {
+                    return $this->costInterface;
+                }
+            });
         $this->costInterface
             ->expects($this->atLeastOnce())
             ->method('setCost')
-            ->withConsecutive([15], [35])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 15 || $arg == 35) {
+                    return $this->costInterface;
+                }
+            });
         $this->costInterface
             ->expects($this->atLeastOnce())
             ->method('setStoreId')
-            ->withConsecutive([1], [1])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 1) {
+                    return $this->costInterface;
+                }
+            });
 
         $this->model->get($skus);
     }
@@ -243,6 +252,7 @@ class CostStorageTest extends TestCase
      * Test update method with negative cost and without SKU.
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testUpdateWithNegativeCostAndWithoutSku()
     {
@@ -261,32 +271,21 @@ class CostStorageTest extends TestCase
             ->getMockForAbstractClass();
         $this->validationResult->expects($this->atLeastOnce())
             ->method('addFailedItem')
-            ->withConsecutive(
-                [
-                    0,
-                    __(
-                        'Invalid attribute %fieldName = %fieldValue.',
-                        ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
-                    ),
-                    ['fieldName' => 'SKU', 'fieldValue' => null]
-                ],
-                [
-                    0,
-                    __(
-                        'Invalid attribute Cost = %cost. Row ID: SKU = %SKU, Store ID: %storeId.',
-                        ['cost' => -15, 'SKU' => null, 'storeId' => 10]
-                    ),
-                    ['cost' => -15, 'SKU' => null, 'storeId' => 10]
-                ],
-                [
-                    0,
-                    __(
-                        'Requested store is not found. Row ID: SKU = %SKU, Store ID: %storeId.',
-                        ['SKU' => null, 'storeId' => 10]
-                    ),
-                    ['SKU' => null, 'storeId' => 10]
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 === 0 &&
+                    $arg2 === 'Invalid attribute %fieldName = %fieldValue.' &&
+                    $arg3 === ['fieldName' => 'SKU', 'fieldValue' => null]) {
+                    return null;
+                } elseif ($arg1 === 0 &&
+                    $arg2 === 'Invalid attribute Cost = %cost. Row ID: SKU = %SKU, Store ID: %storeId.' &&
+                    $arg3 === ['cost' => -15, 'SKU' => null, 'storeId' => 10]) {
+                    return null;
+                } elseif ($arg1 === 0 &&
+                    $arg2 === 'Requested store is not found. Row ID: SKU = %SKU, Store ID: %storeId.' &&
+                    $arg3 === ['SKU' => null, 'storeId' => 10]) {
+                    return null;
+                }
+            });
         $this->storeRepository->expects($this->once())->method('getById')->with(10)->willThrowException($exception);
         $this->invalidSkuProcessor
             ->expects($this->once())

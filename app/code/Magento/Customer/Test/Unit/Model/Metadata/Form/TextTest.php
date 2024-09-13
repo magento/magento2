@@ -128,7 +128,7 @@ class TextTest extends AbstractFormTestCase
     {
         $minTextLengthRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getValue'])
+            ->onlyMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
         $minTextLengthRule->expects($this->any())
             ->method('getName')
@@ -139,7 +139,7 @@ class TextTest extends AbstractFormTestCase
 
         $maxTextLengthRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getValue'])
+            ->onlyMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
         $maxTextLengthRule->expects($this->any())
             ->method('getName')
@@ -150,7 +150,7 @@ class TextTest extends AbstractFormTestCase
 
         $inputValidationRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getValue'])
+            ->onlyMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
         $inputValidationRule->expects($this->any())
             ->method('getName')

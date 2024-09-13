@@ -28,12 +28,12 @@ class GetPaginatedCartItems
      *
      * @param Quote $cart
      * @param int $pageSize
-     * @param int $offset
+     * @param int $currentPage
      * @param string $orderBy
      * @param string $order
      * @return array
      */
-    public function execute(Quote $cart, int $pageSize, int $offset, string $orderBy, string $order): array
+    public function execute(Quote $cart, int $pageSize, int $currentPage, string $orderBy, string $order): array
     {
         if (!$cart->getId()) {
             return [
@@ -46,8 +46,9 @@ class GetPaginatedCartItems
             ->addFieldToFilter('parent_item_id', ['null' => true])
             ->addFieldToFilter('quote_id', $cart->getId())
             ->setOrder($orderBy, $order)
-            ->setCurPage($offset)
-            ->setPageSize($pageSize);
+            ->setCurPage($currentPage)
+            ->setPageSize($pageSize)
+            ->setQuote($cart);
 
         $items = [];
         $itemDeletedCount = 0;

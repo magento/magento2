@@ -53,7 +53,7 @@ class WeeeTest extends TestCase
     protected function setUp(): void
     {
         $this->weeeData = $this->getMockBuilder(Data::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getRowWeeeTaxInclTax',
                     'getBaseRowWeeeTaxInclTax',

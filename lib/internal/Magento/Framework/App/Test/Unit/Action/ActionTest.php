@@ -113,8 +113,10 @@ class ActionTest extends TestCase
         $this->_requestMock->method('getRouteName')->willReturn(self::ROUTE_NAME);
         $this->_requestMock->method('isDispatched')->willReturn(true);
         $this->_actionFlagMock->method('get')->willReturnMap(
-            ['', Action::FLAG_NO_DISPATCH, false],
-            ['', Action::FLAG_NO_POST_DISPATCH]
+            [
+                ['', Action::FLAG_NO_DISPATCH, false],
+                ['', Action::FLAG_NO_POST_DISPATCH]
+            ]
         );
 
         // _forward expectations
