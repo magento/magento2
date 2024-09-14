@@ -476,7 +476,7 @@
     </table>
     <table name="catalog_category_product" resource="default" engine="innodb"
            comment="Catalog Product To Category Linkage Table">
-        <column xsi:type="int" name="entity_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
         <column xsi:type="int" name="category_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Category ID"/>

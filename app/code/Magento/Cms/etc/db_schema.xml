@@ -8,7 +8,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="cms_block" resource="default" engine="innodb" comment="CMS Block Table">
-        <column xsi:type="smallint" name="block_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="smallint" name="block_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
         <column xsi:type="varchar" name="title" nullable="false" length="255" comment="Block Title"/>
         <column xsi:type="varchar" name="identifier" nullable="false" length="255" comment="Block String Identifier"/>
@@ -48,7 +48,7 @@
         </index>
     </table>
     <table name="cms_page" resource="default" engine="innodb" comment="CMS Page Table">
-        <column xsi:type="smallint" name="page_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="smallint" name="page_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
         <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Page Title"/>
         <column xsi:type="varchar" name="page_layout" nullable="true" length="255" comment="Page Layout"/>

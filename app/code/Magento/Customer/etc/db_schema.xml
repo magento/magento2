@@ -529,7 +529,7 @@
         </index>
     </table>
     <table name="customer_log" resource="default" engine="innodb" comment="Customer Log Table">
-        <column xsi:type="int" name="log_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="log_id" unsigned="true" nullable="false" identity="true"
                 comment="Log ID"/>
         <column xsi:type="int" name="customer_id" unsigned="false" nullable="false" identity="false"
                 comment="Customer ID"/>
