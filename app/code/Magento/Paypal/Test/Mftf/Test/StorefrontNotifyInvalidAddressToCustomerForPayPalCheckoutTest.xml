@@ -83,9 +83,7 @@
             <argument name="invalidAddressError" value="{{CheckoutCartMessageSection.invalidAddressError}}"/>
         </actionGroup>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
-
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openShoppingCart"/>
-
         <!--Click Paypal button-->
         <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn">
             <argument name="elementNumber" value="1"/>
