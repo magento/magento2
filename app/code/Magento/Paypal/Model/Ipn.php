@@ -7,10 +7,12 @@
 namespace Magento\Paypal\Model;
 
 use Exception;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Sales\Model\OrderMutexInterface;
 
 /**
  * PayPal Instant Payment Notification processor model
@@ -46,13 +48,19 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
     protected $creditmemoSender;
 
     /**
-     * @param \Magento\Paypal\Model\ConfigFactory $configFactory
+     * @var OrderMutexInterface|null
+     */
+    private ?OrderMutexInterface $orderMutex;
+
+    /**
+     * @param ConfigFactory $configFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param Info $paypalInfo
      * @param OrderSender $orderSender
      * @param CreditmemoSender $creditmemoSender
+     * @param OrderMutexInterface|null $orderMutex
      * @param array $data
      */
     public function __construct(
@@ -63,6 +71,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
         Info $paypalInfo,
         OrderSender $orderSender,
         CreditmemoSender $creditmemoSender,
+        ?OrderMutexInterface $orderMutex = null,
         array $data = []
     ) {
         parent::__construct($configFactory, $logger, $curlFactory, $data);
@@ -70,6 +79,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
         $this->_paypalInfo = $paypalInfo;
         $this->orderSender = $orderSender;
         $this->creditmemoSender = $creditmemoSender;
+        $this->orderMutex = $orderMutex ?: ObjectManager::getInstance()->get(OrderMutexInterface::class);
     }
 
     /**
@@ -466,6 +476,21 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      * @return void
      */
     protected function _registerPaymentRefund()
+    {
+        return $this->orderMutex->execute(
+            (int) $this->_order->getEntityId(),
+            \Closure::fromCallable([$this, 'processRefund'])
+        );
+    }
+
+    /**
+     * Process a refund
+     *
+     * @return void
+     * @throws Exception
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) This method is used in closure callback
+     */
+    private function processRefund()
     {
         $this->_importPaymentInformation();
         $reason = $this->getRequestData('reason_code');
