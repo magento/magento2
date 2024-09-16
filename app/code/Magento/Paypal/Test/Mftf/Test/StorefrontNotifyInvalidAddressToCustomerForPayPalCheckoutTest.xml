@@ -79,7 +79,7 @@
         </actionGroup>
         <!--Assert invalid address error from cart page-->
         <actionGroup ref="StorefrontAssertInvalidAddressErrorActionGroup" stepKey="assertErrorMessageFromCartPage">
-            <argument name="invalidAddressError" value="{{CheckoutCartMessageSection.invalidAddressError}}"/>
+            <argument name="invalidAddressError" value="{{CheckoutCartMessageSection.invalidAddressError('PayPal gateway has rejected request. A match of the Shipping Address City, State, and Postal Code failed (#10736: Shipping Address Invalid City State Postal Code)')}}"/>
         </actionGroup>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openShoppingCart"/>
@@ -89,7 +89,7 @@
         </actionGroup>
         <!--Assert invalid address error from mini cart page-->
         <actionGroup ref="StorefrontAssertInvalidAddressErrorActionGroup" stepKey="assertErrorMessageFromMiniCartPage">
-            <argument name="invalidAddressError" value="{{CheckoutCartMessageSection.invalidAddressError}}"/>
+            <argument name="invalidAddressError" value="{{CheckoutCartMessageSection.invalidAddressError('PayPal gateway has rejected request. A match of the Shipping Address City, State, and Postal Code failed (#10736: Shipping Address Invalid City State Postal Code)')}}"/>
         </actionGroup>
     </test>
 </tests>
