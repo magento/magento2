@@ -53,11 +53,10 @@
         <fillField selector="{{CheckoutShippingSection.street}}" userInput="johndoe@example.com" stepKey="SetInvalidStreetAddress"/>
         <waitForElementVisible selector="{{CheckoutShippingSection.country}}" stepKey="waitToSelectCountry"/>
         <selectOption selector="{{CheckoutShippingSection.country}}" userInput="United States" stepKey="selectCountryInStorefrontAddressBook"/>
-        <waitForElementVisible selector="{{CheckoutShippingSection.region}}" stepKey="waitToSelectState"/>
-        <selectOption selector="{{CheckoutShippingSection.region}}" userInput="California" stepKey="selectStateInStorefrontAddressBook"/>
-        <fillField selector="{{CheckoutShippingSection.city}}" userInput="johndoe@example.com" stepKey="SetInvalidCity"/>
-        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="johndoe@example.com" stepKey="SetInvalidZipCode"/>
-        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="johndoe@example.com" stepKey="SetInvalidPhoneNumber"/>
+        <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customer" value="CustomerEntityOne" />
+            <argument name="address" value="CustomerInvalidAddress" />
+        </actionGroup>
         <!--Select Flat Rate shipping method-->
         <waitForElementClickable selector="{{CheckoutShippingMethodsSection.shippingMethodFlatRate}}" stepKey="waitForFlatRateShippingMethod"/>
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
