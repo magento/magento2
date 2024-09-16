@@ -49,7 +49,7 @@ class NotAvailableMessageResolver implements ResolverInterface
         if ((int) $this->scopeConfig->getValue('cataloginventory/options/not_available_message') === 1) {
             return sprintf(
                 'Only %s available for sale. Please adjust the quantity to continue',
-                (string) $this->productStock->getProductAvailableStock($cartItem)
+                (string) $this->productStock->getProductSaleableQty($cartItem)
             );
         }
 
