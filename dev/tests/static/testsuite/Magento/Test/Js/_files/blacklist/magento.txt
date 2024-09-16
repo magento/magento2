@@ -19,6 +19,8 @@ lib/web/prototype/**/*.js
 // MINIFIED FILES
 app/code/**/*.min.js
 lib/web/legacy-build.min.js
+lib/web/tiny_mce_7/**/*.js
+lib/web/tiny_mce_7/***/*.js
 
 // TEST
 vendor/magento/magento-coding-standard/Magento2/Tests/Eslint/*
