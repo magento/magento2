@@ -457,9 +457,11 @@ class QuantityValidatorTest extends TestCase
         $this->stockRegistryMock
             ->method('getStockItem')
             ->willReturnOnConsecutiveCalls($this->stockItemMock);
-        $this->stockRegistryMock
-            ->method('getStockStatus')
-            ->willReturnOnConsecutiveCalls($this->stockStatusMock);
+        $callCount = 0;
+        $this->stockRegistryMock->method('getStockStatus')
+            ->willReturnCallback(function () use (&$callCount) {
+                return $callCount++ === 0 ? $this->stockStatusMock : null;
+            });
         $this->quoteItemMock->expects($this->any())
             ->method('getParentItem')
             ->willReturn($this->parentItemMock);
