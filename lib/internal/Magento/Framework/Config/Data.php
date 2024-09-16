@@ -106,7 +106,7 @@ class Data implements \Magento\Framework\Config\DataInterface
         $data = $this->cache->load($this->cacheId);
         if (false === $data) {
             $data = $this->reader->read();
-            $this->cache->save($this->serializer->serialize($data), $this->cacheId, $this->cacheTags);
+            $this->cache->save($this->serializer->serialize($data), $this->cacheId, array_values($this->cacheTags));
         } else {
             $data = $this->serializer->unserialize($data);
         }
