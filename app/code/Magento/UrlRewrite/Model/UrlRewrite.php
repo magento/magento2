@@ -153,6 +153,15 @@ class UrlRewrite extends AbstractModel
             ]
         );
 
+        // to manage accent characters in URL rewrite
+        if ($urlRewriteTarget) {
+            $planeChars = iconv('UTF-8', 'ISO-8859-1//IGNORE', $urlRewriteTarget->getRequestPath());
+
+            if ($planeChars !== $urlRewriteTarget->getRequestPath()) {
+                $urlRewriteTarget = null;
+            }
+        }
+
         while ($urlRewriteTarget &&
             $urlRewriteTarget->getTargetPath() !== $urlRewriteTarget->getRequestPath() &&
             $urlRewriteTarget->getRedirectType() > 0

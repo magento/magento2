@@ -18,6 +18,7 @@
             <testCaseId value="AC-5199"/>
             <group value="paypalPayflowPro"/>
             <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
         </annotations>
         <!-- Checkout select Credit Card (Payflow Pro) and place order-->
         <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectPaymentMethod"/>
