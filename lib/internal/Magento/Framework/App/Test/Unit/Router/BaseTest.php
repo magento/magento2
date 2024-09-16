@@ -176,6 +176,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         if (class_exists($mockClassName)) {
             return new $mockClassName();
         }
+
         $mockBuilder = $this->getMockBuilder($class);
         $mockBuilder->setMockClassName($mockClassName);
         $mockBuilder->disableOriginalConstructor();
