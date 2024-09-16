@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRemoveIndividualVariationsConfigurableProductTest">
+        <annotations>
+            <features value="Configurable Product"/>
+            <stories value="Configurable product"/>
+            <title value="Remove individual variations configurable product."/>
+            <description value="Admin removes individual variation from created configurable product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4420"/>
+        </annotations>
+        <before>
+            <!-- Log in to Dashboard page -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <!--Delete configurable product-->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProductsWithAllVariations">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+
+            <actionGroup ref="AdminDeleteCreatedColorSpecificAttributeActionGroup" stepKey="deleteBlackColorAttribute">
+                <argument name="Color" value="Black"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteCreatedColorSpecificAttributeActionGroup" stepKey="deleteRedColorAttribute">
+                <argument name="Color" value="{{colorProductAttribute2.name}}"/>
+            </actionGroup>
+            <!-- Delete Created Attribute -->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteCreatedAttribute">
+                <argument name="ProductAttribute" value="sizeAttribute"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterInProductAttributePage"/>
+            <!--Logout from Admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminArea"/>
+        </after>
+        <!-- Navigate to Catalog-> Products and click On Configurable product dropdown -->
+        <actionGroup ref="GotoCatalogProductsPageActionGroup" stepKey="goToCatalogProductsPage"/>
+        <actionGroup ref="GotoConfigurableProductPageActionGroup" stepKey="goToConfigurableProductPage"/>
+        <!-- Assert Page title and Fill New product information-->
+        <waitForElementVisible selector="{{NewProduct.productName}}" stepKey="waitForProductNameToBeDisplayed"/>
+        <fillField stepKey="fillInProductNameFields" selector="{{NewProduct.productName}}" userInput="{{ApiConfigurableProduct.name}}"/>
+        <waitForElementVisible selector="{{NewProduct.productSku}}" stepKey="waitForProductSkuToBeDisplayed"/>
+        <fillField stepKey="fillInProductSkuFields" selector="{{NewProduct.productSku}}" userInput="{{ApiConfigurableProduct.sku}}"/>
+        <waitForElementVisible selector="{{NewProduct.price}}" stepKey="waitForPriceToBeDisplayed"/>
+        <fillField stepKey="fillInPriceFields" selector="{{NewProduct.price}}" userInput="{{ApiConfigurableProduct.price}}"/>
+        <waitForElementVisible selector="{{NewProduct.weight}}" stepKey="waitForWeightToBeDisplayed"/>
+        <fillField stepKey="fillInWeightFields" selector="{{NewProduct.weight}}" userInput="{{ApiConfigurableProduct.weight}}"/>
+        <!--Click on create configuration button-->
+        <waitForElementClickable selector="{{NewProduct.createConfigurationButton}}" stepKey="waitForCreateConfigurationButtonToBeClickable"/>
+        <click stepKey="clickOnCreateConfigurationsButton" selector="{{NewProduct.createConfigurationButton}}"/>
+        <waitForPageLoad stepKey="waitForCreateProductConfigurationPageToLoad"/>
+        <!-- Click on create Attribute buttons-->
+        <waitForElementClickable selector="{{NewProduct.createNewAttributeButton}}" stepKey="waitForClickOnCreateNewAttributeButton"/>
+        <click stepKey="clickOnCreateNewAttributeButton" selector="{{NewProduct.createNewAttributeButton}}"/>
+        <waitForPageLoad stepKey="waitForNewAttributePageLoad"/>
+        <!--Fill option 1 -->
+        <actionGroup ref="AdminCreateNewDefaultAttributeForAsWithOptionActionGroup" stepKey="fillOption1">
+            <argument name="defaultLabel" value="{{sizeAttribute.default_label}}"/>
+        </actionGroup>
+        <!-- Fill option 2-->
+        <actionGroup ref="AdminAddOptionForAttributeActionGroup" stepKey="fillOption2"/>
+        <!--Click on save button-->
+        <waitForElementClickable selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="waitForClickSaveAttributeButton"/>
+        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="clickSaveAttribute"/>
+        <waitForPageLoad stepKey="waitForSavingAttribute"/>
+        <!--Select color attribute and size attribute and click on Next-->
+        <waitForElementClickable selector="{{AdminGridRow.checkboxByValue('color')}}" stepKey="waitToSelectColorAttribute"/>
+        <click selector="{{AdminGridRow.checkboxByValue('color')}}" stepKey="selectColorAttribute"/>
+        <actionGroup ref="AdminSelectAttributeInConfigurableAttributesGrid" stepKey="checkFirstAttribute">
+            <argument name="attributeCode" value="{{sizeAttribute.attribute_code}}"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitToClickOnNextButtonAfterSelectingAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButtonAfterSelectingAttribute"/>
+        <!--Fill Black and Red options for color-->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.optionsWithTitle('Color')}}" stepKey="waitToAddNewColorBlack"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.optionsWithTitle('Color')}}" stepKey="addNewColorBlack"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="waitToSetNameBlack"/>
+        <fillField userInput="{{colorDefaultProductAttribute2.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="setNameBlack"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="waitToSaveBlackColor"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="saveBlackColor"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.optionsWithTitle('Color')}}" stepKey="waitToAddNewColorRed"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.optionsWithTitle('Color')}}" stepKey="addNewColorRed"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="waitToSetNameRed"/>
+        <fillField userInput="{{colorProductAttribute2.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="setNameRed"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="waitToSaveRedColor"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="saveRedColor"/>
+        <!--Select sizes for size attribute and click on Next-->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(sizeAttribute.default_label)}}" stepKey="waitForSelectAllToBeClickableBySizeAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(sizeAttribute.default_label)}}" stepKey="selectAllForSizeAttribute"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitToClickOnNextButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
+        <waitForPageLoad stepKey="waitForStepLoad"/>
+        <!-- Assigning quantities to each SKU's -->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="waitToClickOnApplySingleQuantityToEachSku"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.quantity}}" stepKey="waitForQuantityField"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="10000" stepKey="enterAttributeQuantity"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextButtonToBecomeClickable"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButtonToNavigateToSummaryTab"/>
+        <!--Click On Next-->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForGenerateProductButtonIsPresent"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateProductButtonIsPresent"/>
+        <!--Choose affected attribute set and Save product and then see success message-->
+        <waitForElementClickable selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveConfigurableProduct"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableProduct"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="confirmDefaultAttributeSetForConfigurableProduct"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkProductSavedMessage"/>
+        <!--Grab configurable product name-->
+        <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.currentVariationsProductName('1')}}" stepKey="seeNameOfVariationProduct1"/>
+        <grabTextFrom selector="{{AdminProductFormConfigurationsSection.currentVariationsProductName('1')}}" stepKey="grabNameOfVariationProduct1"/>
+        <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.currentVariationsProductName('2')}}" stepKey="seeNameOfVariationProduct2"/>
+        <grabTextFrom selector="{{AdminProductFormConfigurationsSection.currentVariationsProductName('2')}}" stepKey="grabNameOfVariationProduct2"/>
+        <!--Remove Configurable product black-8-->
+        <scrollTo selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" x="0" y="-100" stepKey="scrollToFirstChildProduct"/>
+        <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="waitForSelectionLinkToBeClickable"/>
+        <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandActions"/>
+        <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.removeProductBtn}}" stepKey="waitToClickOnRemove"/>
+        <click selector="{{AdminProductFormConfigurationsSection.removeProductBtn}}" stepKey="clickRemove"/>
+        <!--Remove Configurable product black-10-->
+        <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="waitForSelectionLinkToBeClickableForProduct2"/>
+        <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandActionsForProduct2"/>
+        <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.removeProductBtn}}" stepKey="waitToClickOnRemoveForProduct2"/>
+        <click selector="{{AdminProductFormConfigurationsSection.removeProductBtn}}" stepKey="clickRemoveForProduct2"/>
+        <!--Save configurable product-->
+        <waitForElementClickable selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveConfigurableProductAfterRemovingChildVariations"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableProductAfterRemovingChildVariations"/>
+        <!--Go to product index and verify child product-->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndexPage"/>
+        <actionGroup ref="FilterProductGridByProductNameActionGroup" stepKey="filterChildProduct1">
+            <argument name="productName" value="$grabNameOfVariationProduct1"/>
+        </actionGroup>
+        <waitForText selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="$grabNameOfVariationProduct1"  stepKey="seeProduct1NameInGrid"/>
+        <actionGroup ref="FilterProductGridByProductNameActionGroup" stepKey="filterChildProduct2">
+            <argument name="productName" value="$grabNameOfVariationProduct2"/>
+        </actionGroup>
+        <waitForText selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="$grabNameOfVariationProduct2"  stepKey="seeProduct2NameInGrid"/>
+    </test>
+</tests>

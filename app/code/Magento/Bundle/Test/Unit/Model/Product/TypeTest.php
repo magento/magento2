@@ -1179,9 +1179,11 @@ class TypeTest extends TestCase
 
         $this->arrayUtility->expects($this->once())->method('flatten')->willReturn($bundleOptions);
 
-        $selectionCollection
-            ->method('getItems')
-            ->willReturnOnConsecutiveCalls([$selection], []);
+        $callCount = 0;
+        $selectionCollection->method('getItems')
+            ->willReturnCallback(function () use (&$callCount, $selection) {
+                return $callCount++ === 0 ? [$selection] : [];
+            });
         $selectionCollection
             ->method('getSize')
             ->willReturnOnConsecutiveCalls(1, 0);
@@ -1362,6 +1364,7 @@ class TypeTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testPrepareForCartAdvancedAllRequiredOption(): void
     {
@@ -1452,12 +1455,14 @@ class TypeTest extends TestCase
         $buyRequest->expects($this->once())
             ->method('getBundleOption')
             ->willReturn([3 => 5]);
+        $callCount = 0;
         $option->method('getId')
-            ->willReturnOnConsecutiveCalls(3);
+            ->willReturnCallback(function () use (&$callCount) {
+                return $callCount++ === 0 ? 3 : '';
+            });
         $option->expects($this->once())
             ->method('getRequired')
             ->willReturn(true);
-
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
         $this->assertEquals('Please select all required options.', $result);
     }
@@ -1630,9 +1635,11 @@ class TypeTest extends TestCase
         $selectionMock->expects(($this->any()))
             ->method('getItemByColumnValue')
             ->willReturn($selectionItemMock);
-        $selectionItemMock
-            ->method('getEntityId')
-            ->willReturnOnConsecutiveCalls(1);
+        $callCount = 0;
+        $selectionItemMock->method('getEntityId')
+            ->willReturnCallback(function () use (&$callCount) {
+                return $callCount++ === 0 ? 1 : '';
+            });
         $selectionItemMock->expects($this->once())
             ->method('getSku')
             ->willReturn($itemSku);
