@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAttributeLabelsValueDisplayOnMultipleStoreViewsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Update product attribute labels"/>
+            <title value="Product attribute labels and values display on multiple store views"/>
+            <description value="This test case is intended to check that attributes labels and values are displayed correctly on different store views."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4383"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct"/>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createGermanyStoreView"/>
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
+            <!-- Delete attribute set -->
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+            <!--Delete text product attribute -->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openTextAttribute">
+                <argument name="productAttributeCode" value="text_en"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteTextAttribute"/>
+            <!--Delete area product attribute -->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openAreaAttribute">
+                <argument name="productAttributeCode" value="area_en"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteAreaAttribute"/>
+            <!--Delete price product attribute -->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openPriceAttribute">
+                <argument name="productAttributeCode" value="price_en"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deletePriceAttribute"/>
+            <!--Delete date product attribute -->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openDateAttribute">
+                <argument name="productAttributeCode" value="date_en"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteDateAttribute"/>
+            <!--Delete yes product attribute -->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openYesAttribute">
+                <argument name="productAttributeCode" value="yes_en"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteYesAttribute"/>
+            <!--Delete dropdown product attribute -->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openDropdownAttribute">
+                <argument name="productAttributeCode" value="dropdown_en"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteDropdownAttribute"/>
+            <!--Delete multi product attribute -->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openMultiAttribute">
+                <argument name="productAttributeCode" value="multi_en"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteMultiAttribute"/>
+            <!-- admin logout from the admin page-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- create text product attribute -->
+        <actionGroup ref="AdminCreateProductAttributeWithCustomChangesActionGroup" stepKey="CreateAttributeWithTextType"/>
+        <!-- create area product attribute -->
+        <actionGroup ref="AdminCreateProductAttributeWithCustomChangesActionGroup" stepKey="CreateAttributeWithAreaType">
+            <argument name="defaultLabel" value="Area_EN"/>
+            <argument name="attributeType" value="Text Area"/>
+            <argument name="tabName" value="Manage Labels"/>
+            <argument name="labelName" value="Area_DE"/>
+            <argument name="catalogType" value="Yes"/>
+        </actionGroup>
+        <!-- create date product attribute -->
+        <actionGroup ref="AdminCreateProductAttributeWithCustomChangesActionGroup" stepKey="CreateAttributeWithDateType">
+            <argument name="defaultLabel" value="Date_EN"/>
+            <argument name="attributeType" value="Date"/>
+            <argument name="tabName" value="Manage Labels"/>
+            <argument name="labelName" value="Date_DE"/>
+            <argument name="catalogType" value="Yes"/>
+        </actionGroup>
+        <!-- create yes or no product attribute -->
+        <actionGroup ref="AdminCreateProductAttributeWithCustomChangesActionGroup" stepKey="CreateAttributeWithYesNoType">
+            <argument name="defaultLabel" value="Yes_EN"/>
+            <argument name="attributeType" value="boolean"/>
+            <argument name="tabName" value="Manage Labels"/>
+            <argument name="labelName" value="Yes_DE"/>
+            <argument name="catalogType" value="Yes"/>
+        </actionGroup>
+        <!-- create price product attribute -->
+        <actionGroup ref="AdminCreateProductAttributeWithCustomChangesActionGroup" stepKey="CreateAttributeWithPriceType">
+            <argument name="defaultLabel" value="Price_EN"/>
+            <argument name="attributeType" value="price"/>
+            <argument name="tabName" value="Manage Labels"/>
+            <argument name="labelName" value="Price_DE"/>
+            <argument name="catalogType" value="Yes"/>
+        </actionGroup>
+        <!-- create dropdown product attribute -->
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="openProductAttributePageForDropDownField"/>
+        <actionGroup ref="AdminFillProductAttributePropertiesActionGroup" stepKey="fillDropDownAttributeProperties">
+            <argument name="attributeName" value="Dropdown_EN"/>
+            <argument name="attributeType" value="Dropdown"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddOptionsForProductAttributeActionGroup" stepKey="createDropdownOptions"/>
+        <actionGroup ref="AdminProductAttributePageSwitchTabActionGroup" stepKey="openManageLabelsSection">
+            <argument name="tabName" value="Manage Labels"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductAttributeManageLabelsSection.customStoreLabel}}" stepKey="waitForGermanStoreViewLabel"/>
+        <fillField selector="{{AdminProductAttributeManageLabelsSection.customStoreLabel}}" userInput="Dropdown_DE" stepKey="fillDropDownStoreViewLabel"/>
+        <waitForElementClickable selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="waitForStorefrontPropertiesTabToBeClickable"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
+        <waitForElement selector="{{StorefrontPropertiesSection.visibleOnCatalogPagesOnStorefront}}" stepKey="waitForVisibleOnCatalogElement"/>
+        <selectOption selector="{{StorefrontPropertiesSection.visibleOnCatalogPagesOnStorefront}}" userInput="Yes" stepKey="enableVisibleOnStorefront"/>
+        <actionGroup ref="AdminSaveProductAttributeActionGroup" stepKey="saveAttribute"/>
+        <!-- create multiple select product attribute -->
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="openProductAttributePageForMultiSelectCatalog"/>
+        <actionGroup ref="AdminFillProductAttributePropertiesActionGroup" stepKey="fillMultiSelectAttributeProperties">
+            <argument name="attributeName" value="Multi_EN"/>
+            <argument name="attributeType" value="Multiple Select"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddOptionsForProductAttributeActionGroup" stepKey="createMultiSelectOptions">
+            <argument name="adminAttributeFirstRowValue" value="Value_1_EN"/>
+            <argument name="adminAttributeSecondRowValue" value="Value_2_EN"/>
+            <argument name="storeViewAttributeFirstRowValue" value="Value_1_DE"/>
+            <argument name="storeViewAttributeSecondRowValue" value="Value_2_DE"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductAttributePageSwitchTabActionGroup" stepKey="openManageLabels">
+            <argument name="tabName" value="Manage Labels"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductAttributeManageLabelsSection.customStoreLabel}}" stepKey="waitForCustomStoreViewLabel"/>
+        <fillField selector="{{AdminProductAttributeManageLabelsSection.customStoreLabel}}" userInput="Multi_DE" stepKey="fillMultiDEStoreViewLabel"/>
+        <waitForElementClickable selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="waitForStorefrontPropertiesTabToBeClickableFOrMulti"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTabForMulti"/>
+        <waitForElement selector="{{StorefrontPropertiesSection.visibleOnCatalogPagesOnStorefront}}" stepKey="waitForVisibleOnCatalogElementForMulti"/>
+        <selectOption selector="{{StorefrontPropertiesSection.visibleOnCatalogPagesOnStorefront}}" userInput="Yes" stepKey="enableVisibleOnStorefrontForMulti"/>
+        <actionGroup ref="AdminSaveProductAttributeActionGroup" stepKey="saveMultiAttribute"/>
+        <!--Go to Store > Attribute Set-->
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+        <!-- Search and open Attribute Set from preconditions -->
+        <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="openAttributeSetByName">
+            <argument name="name" value="$createAttributeSet.attribute_set_name$"/>
+        </actionGroup>
+        <!-- move created attributes to product details group -->
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignTextAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="text_en"/>
+        </actionGroup>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAreaAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="area_en"/>
+        </actionGroup>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignDateAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="date_en"/>
+        </actionGroup>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignYesAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="yes_en"/>
+        </actionGroup>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignPriceAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="price_en"/>
+        </actionGroup>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignDropdownAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="dropdown_en"/>
+        </actionGroup>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignMultiAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="multi_en"/>
+        </actionGroup>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+         <!--open product page-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductPage">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+        <!-- On product page, select created Attribute Set -->
+        <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectAttributeSet">
+            <argument name="attributeSetName" value="$$createAttributeSet.attribute_set_name$$"/>
+        </actionGroup>
+        <!-- fill custom product attribute values in product page -->
+        <actionGroup ref="AdminFillCustomProductAttributeFieldsActionGroup" stepKey="fillCustomProductDetailsInProductPage"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <!-- Go to storefront product details page -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPageOnStorefront">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <!-- assert product attribute values on pdp on default store view-->
+        <actionGroup ref="StorefrontAssertProductAttributeValuesOnProductPageActionGroup" stepKey="assertAttributeValuesInDefaultStoreView"/>
+        <!-- Switch store view to Germany -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreViewToGermany">
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+        <!-- assert product attribute values on pdp on Germany store view-->
+        <actionGroup ref="StorefrontAssertProductAttributeValuesOnProductPageActionGroup" stepKey="assertAttributeValuesInGermanStoreView">
+            <argument name="textAttribute" value="Text_DE"/>
+            <argument name="areaAttribute" value="Area_DE"/>
+            <argument name="dateAttribute" value="Date_DE"/>
+            <argument name="yesAttribute" value="Yes_DE"/>
+            <argument name="dropdownAttribute" value="Dropdown_DE"/>
+            <argument name="multiAttribute" value="Multi_DE"/>
+            <argument name="priceAttribute" value="Price_DE"/>
+            <argument name="dropdownAttributeValue" value="Gelb"/>
+            <argument name="multiAttributeValue" value="Value_1_DE, Value_2_DE"/>
+        </actionGroup>
+        <!-- change germany store view values for created product attributes-->
+        <!-- change germany store view value for area product attributes-->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
+            <argument name="productAttributeCode" value="area_en"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductAttributePageSwitchTabActionGroup" stepKey="goToManageLabels">
+            <argument name="tabName" value="Manage Labels"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillManageLabelsValuesActionGroup" stepKey="fillAreaValueInGermanStoreView">
+            <argument name="customStoreViewValue" value="Area_DE"/>
+            <argument name="newStoreViewValue" value="Area_DE_new"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveProductAttributeActionGroup" stepKey="saveAttributeForAreaAttribute"/>
+        <!-- change germany store view value for text product attributes-->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openTextProductAttribute">
+            <argument name="productAttributeCode" value="text_en"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductAttributePageSwitchTabActionGroup" stepKey="goToManageLabelsInTextProductAttribute">
+            <argument name="tabName" value="Manage Labels"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillManageLabelsValuesActionGroup" stepKey="fillTextValueInGermanStoreView">
+            <argument name="customStoreViewValue" value="Text_DE"/>
+            <argument name="newStoreViewValue" value="Text_DE_new"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveProductAttributeActionGroup" stepKey="saveAttributeForTextAttribute"/>
+        <!-- change germany store view value for date product attributes-->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openDateProductAttribute">
+            <argument name="productAttributeCode" value="date_en"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductAttributePageSwitchTabActionGroup" stepKey="goToManageLabelsInDateProductAttribute">
+            <argument name="tabName" value="Manage Labels"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillManageLabelsValuesActionGroup" stepKey="fillDateValueInGermanStoreView">
+            <argument name="customStoreViewValue" value="Date_DE"/>
+            <argument name="newStoreViewValue" value="Date_DE_new"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveProductAttributeActionGroup" stepKey="saveAttributeForDateAttribute"/>
+        <!-- change germany store view value for yes product attributes-->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openYesProductAttribute">
+            <argument name="productAttributeCode" value="yes_en"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductAttributePageSwitchTabActionGroup" stepKey="goToManageLabelsInYesProductAttribute">
+            <argument name="tabName" value="Manage Labels"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillManageLabelsValuesActionGroup" stepKey="fillYesValueInGermanStoreView">
+            <argument name="customStoreViewValue" value="Yes_DE"/>
+            <argument name="newStoreViewValue" value="Yes_DE_new"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveProductAttributeActionGroup" stepKey="saveAttributeForYesAttribute"/>
+        <!-- change germany store view value for dropdown product attributes-->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openDropdownProductAttribute">
+            <argument name="productAttributeCode" value="dropdown_en"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.customStoreViewField('Blau')}}" stepKey="waitForFirstRowCustomAttributeFieldToVisible"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.customStoreViewField('Blau')}}" userInput="Blau_New" stepKey="fillFirstRowCustomField"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.customStoreViewField('Gelb')}}" stepKey="waitForSecondRowCustomAttributeFieldToVisible"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.customStoreViewField('Gelb')}}" userInput="Gelb_New" stepKey="fillSecondRowCustomField"/>
+        <actionGroup ref="AdminProductAttributePageSwitchTabActionGroup" stepKey="goToManageLabelsInDropdownProductAttribute">
+            <argument name="tabName" value="Manage Labels"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillManageLabelsValuesActionGroup" stepKey="fillDropdownValueInGermanStoreView">
+            <argument name="customStoreViewValue" value="Dropdown_DE"/>
+            <argument name="newStoreViewValue" value="Dropdown_DE_new"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveProductAttributeActionGroup" stepKey="saveAttributeForDropdownAttribute"/>
+        <!-- change germany store view value for multiple select product attributes-->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openMultiProductAttribute">
+            <argument name="productAttributeCode" value="multi_en"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.customStoreViewField('Value_2_DE')}}" stepKey="waitForFirstRowCustomAttributeFieldToVisible2"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.customStoreViewField('Value_2_DE')}}" userInput="Value_2_DE_new" stepKey="fillFirstRowCustomField2"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.customStoreViewField('Value_1_DE')}}" stepKey="waitForSecondRowCustomAttributeFieldToVisible2"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.customStoreViewField('Value_1_DE')}}" userInput="Value_1_DE_new" stepKey="fillSecondRowCustomField2"/>
+        <actionGroup ref="AdminProductAttributePageSwitchTabActionGroup" stepKey="goToManageLabelsInMultiProductAttribute">
+            <argument name="tabName" value="Manage Labels"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillManageLabelsValuesActionGroup" stepKey="fillMultiValueInGermanStoreView">
+            <argument name="customStoreViewValue" value="Multi_DE"/>
+            <argument name="newStoreViewValue" value="Multi_DE_new"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveProductAttributeActionGroup" stepKey="saveAttributeForMultiAttribute"/>
+        <!-- change germany store view value for price product attributes-->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openPriceProductAttribute">
+            <argument name="productAttributeCode" value="price_en"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductAttributePageSwitchTabActionGroup" stepKey="goToManageLabelsInPriceProductAttribute">
+            <argument name="tabName" value="Manage Labels"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillManageLabelsValuesActionGroup" stepKey="fillPriceValueInGermanStoreView">
+            <argument name="customStoreViewValue" value="Price_DE"/>
+            <argument name="newStoreViewValue" value="Price_DE_new"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveProductAttributeActionGroup" stepKey="saveAttributeForPriceAttribute"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value="catalogsearch_fulltext catalog_category_product catalog_product_price catalogrule_rule"/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!-- again to storefront pdp page on germany store view -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="againOpenProductPageOnStorefront">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <!-- assert new updated attribute values on germany store view -->
+        <actionGroup ref="StorefrontAssertProductAttributeValuesOnProductPageActionGroup" stepKey="againAssertAttributeValuesInGermanStoreView">
+            <argument name="textAttribute" value="Text_DE_new"/>
+            <argument name="areaAttribute" value="Area_DE_new"/>
+            <argument name="dateAttribute" value="Date_DE_new"/>
+            <argument name="yesAttribute" value="Yes_DE_new"/>
+            <argument name="dropdownAttribute" value="Dropdown_DE_new"/>
+            <argument name="multiAttribute" value="Multi_DE_new"/>
+            <argument name="priceAttribute" value="Price_DE_new"/>
+            <argument name="dropdownAttributeValue" value="Gelb_New"/>
+            <argument name="multiAttributeValue" value="Value_1_DE_new, Value_2_DE_new"/>
+        </actionGroup>
+    </test>
+</tests>

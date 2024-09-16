@@ -234,8 +234,10 @@ class LinkManagementTest extends TestCase
 
         $this->productRepository
             ->method('get')
-            ->withConsecutive([$productSku], [$childSku])
-            ->willReturnOnConsecutiveCalls($configurable, $simple);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$productSku] => $configurable,
+                [$childSku] => $simple
+            });
 
         $this->configurableType->expects($this->once())->method('getChildrenIds')->with(666)
             ->willReturn(
@@ -292,8 +294,10 @@ class LinkManagementTest extends TestCase
 
         $this->productRepository
             ->method('get')
-            ->withConsecutive([$productSku], [$childSku])
-            ->willReturnOnConsecutiveCalls($configurable, $simple);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$productSku] => $configurable,
+                [$childSku] => $simple
+            });
 
         $this->configurableType->expects($this->once())->method('getChildrenIds')->with(666)
             ->willReturn(

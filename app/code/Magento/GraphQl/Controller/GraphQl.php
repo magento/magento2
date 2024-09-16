@@ -187,10 +187,10 @@ class GraphQl implements FrontControllerInterface
         $result = [];
 
         $schema = null;
+        $query = $data['query'] ?? '';
         try {
             /** @var Http $request */
             $this->requestProcessor->validateRequest($request);
-            $query = $data['query'] ?? '';
             $parsedQuery = $this->queryParser->parse($query);
             $data['parsedQuery'] = $parsedQuery;
 
@@ -216,7 +216,7 @@ class GraphQl implements FrontControllerInterface
         $jsonResult->renderResult($this->httpResponse);
 
         // log information about the query, unless it is an introspection query
-        if (!isset($data['query']) || strpos($data['query'], 'IntrospectionQuery') === false) {
+        if (strpos($query, 'IntrospectionQuery') === false) {
             $queryInformation = $this->logDataHelper->getLogData($request, $data, $schema, $this->httpResponse);
             $this->loggerPool->execute($queryInformation);
         }

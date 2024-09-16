@@ -80,7 +80,7 @@ class DataProviderTest extends TestCase
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->layerResolverMock = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
 
         $this->searchLayerMock = $this->createMock(SearchLayer::class);
@@ -91,14 +91,14 @@ class DataProviderTest extends TestCase
 
         $this->recommendationsFactoryMock = $this->getMockBuilder(RecommendationsFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->recommendationsMock = $this->createMock(Recommendations::class);
 
         $this->queryResultFactoryMock = $this->getMockBuilder(QueryResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

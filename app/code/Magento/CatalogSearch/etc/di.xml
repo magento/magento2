@@ -161,13 +161,6 @@
             <argument name="context" xsi:type="object">Magento\CatalogSearch\Model\Layer\Search\Context</argument>
         </arguments>
     </type>
-    <type name="Magento\Search\Model\Autocomplete">
-        <arguments>
-            <argument name="dataProviders" xsi:type="array">
-                <item name="10" xsi:type="object">Magento\CatalogSearch\Model\Autocomplete\DataProvider</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Search\Adapter\Aggregation\AggregationResolver">
         <arguments>
             <argument name="resolvers" xsi:type="array">

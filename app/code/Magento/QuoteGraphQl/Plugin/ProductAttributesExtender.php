@@ -9,23 +9,14 @@ namespace Magento\QuoteGraphQl\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\Framework\GraphQl\Query\Fields;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Quote\Model\Quote\Config as QuoteConfig;
 
 /**
  * Class for extending product attributes for quote.
  */
-class ProductAttributesExtender
+class ProductAttributesExtender implements ResetAfterRequestInterface
 {
-    /**
-     * @var Fields
-     */
-    private $fields;
-
-    /**
-     * @var AttributeCollectionFactory
-     */
-    private $attributeCollectionFactory;
-
     /**
      * @var array
      */
@@ -36,11 +27,9 @@ class ProductAttributesExtender
      * @param AttributeCollectionFactory $attributeCollectionFactory
      */
     public function __construct(
-        Fields $fields,
-        AttributeCollectionFactory $attributeCollectionFactory
+        private Fields $fields,
+        private AttributeCollectionFactory $attributeCollectionFactory,
     ) {
-        $this->fields = $fields;
-        $this->attributeCollectionFactory = $attributeCollectionFactory;
     }
 
     /**
@@ -61,8 +50,14 @@ class ProductAttributesExtender
                 ->load();
             $this->attributes = $attributeCollection->getColumnValues('attribute_code');
         }
-        $attributes = $this->attributes;
+        return array_unique(array_merge($result, $this->attributes));
+    }
 
-        return array_unique(array_merge($result, $attributes));
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->attributes = [];
     }
 }
