@@ -127,9 +127,10 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         $this->priceCurrency = $priceCurrency;
         $this->entityManager = $entityManager ?? ObjectManager::getInstance()->get(EntityManager::class);
         $this->_associatedEntitiesMap = $associatedEntityMap ?? ObjectManager::getInstance()
-            // phpstan:ignore this is a virtual class
+            // @phpstan-ignore-next-line - this is a virtual type defined in di.xml
             ->get(\Magento\CatalogRule\Model\ResourceModel\Rule\AssociatedEntityMap::class)
             ->getData();
+
         parent::__construct($context, $connectionName);
     }
 
@@ -218,13 +219,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
-     * Load an object
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @param mixed $value
-     * @param string $field
-     *
-     * @return $this
+     * @inheritDoc
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
