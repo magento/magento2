@@ -38,6 +38,7 @@ class SearchCriteriaBuilder
      * @param RequestDataBuilder $localData
      * @param SearchCriteriaResolverFactory $criteriaResolverFactory
      * @param ArgumentApplierPool $argumentApplierPool
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         private readonly ScopeConfigInterface $scopeConfig,
@@ -93,7 +94,7 @@ class SearchCriteriaBuilder
             $this->addFilter($searchCriteria, 'search_term', $args['search']);
         }
         if (!$searchCriteria->getSortOrders()) {
-            $this->addDefaultSortOrder($searchCriteria, $args);
+            $this->addDefaultSortOrder($searchCriteria, $args, $isSearch);
         }
         $this->addEntityIdSort($searchCriteria);
         $this->addVisibilityFilter($searchCriteria, $isSearch, !empty($args['filter']['category_id']));
@@ -258,11 +259,12 @@ class SearchCriteriaBuilder
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @param array $args
+     * @param bool $isSearch
      */
-    private function addDefaultSortOrder(SearchCriteriaInterface $searchCriteria, array $args): void
+    private function addDefaultSortOrder(SearchCriteriaInterface $searchCriteria, array $args, $isSearch = false): void
     {
         $defaultSortOrder = [];
-        if (isset($args['search'])) {
+        if ($isSearch) {
             $defaultSortOrder[] = $this->sortOrderBuilder
                 ->setField('relevance')
                 ->setDirection(SortOrder::SORT_DESC)
