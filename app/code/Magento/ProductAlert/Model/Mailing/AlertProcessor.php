@@ -171,10 +171,8 @@ class AlertProcessor
                 if ($alert->getStoreId()) {
                     $email->setStoreId($alert->getStoreId());
                 }
-                if ($customer === null) {
-                    $customer = $this->customerRepository->getById($alert->getCustomerId());
-                } elseif ((int)$customer->getId() !== (int)$alert->getCustomerId()) {
-                    $this->sendEmail($customer, $email);
+
+                if ($customer === null || (int)$customer->getId() !== (int)$alert->getCustomerId()) {
                     $customer = $this->customerRepository->getById($alert->getCustomerId());
                 }
 
@@ -193,13 +191,7 @@ class AlertProcessor
                         $this->savePriceAlert($alert, $product, $customer, $email);
                         break;
                 }
-            } catch (\Exception $e) {
-                $errors[] = $e->getMessage();
-            }
-        }
 
-        if ($customer !== null) {
-            try {
                 $this->sendEmail($customer, $email);
             } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
