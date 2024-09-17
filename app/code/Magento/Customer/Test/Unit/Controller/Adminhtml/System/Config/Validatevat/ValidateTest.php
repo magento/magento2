@@ -131,7 +131,7 @@ class ValidateTest extends TestCase
             ->getMock();
 
         $resultJsonFactory = $this->getMockBuilder(JsonFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

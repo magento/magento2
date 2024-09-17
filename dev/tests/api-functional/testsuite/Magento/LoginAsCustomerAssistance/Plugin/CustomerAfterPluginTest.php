@@ -177,7 +177,7 @@ class CustomerAfterPluginTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function assistanceStatesDataProvider(): array
+    public static function assistanceStatesDataProvider(): array
     {
         return [
             'Assistance Allowed' => [IsAssistanceEnabledInterface::ALLOWED, true],

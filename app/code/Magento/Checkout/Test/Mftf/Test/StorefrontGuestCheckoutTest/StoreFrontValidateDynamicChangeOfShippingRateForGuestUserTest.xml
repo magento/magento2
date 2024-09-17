@@ -55,7 +55,7 @@
                 <argument name="product" value="$createSimpleProduct$"/>
             </actionGroup>
             <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="goToShippingPage"/>
-            <!-- Guest checkout -->
+            <!-- Guest checkout for US address -->
             <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="goToShippingAndFillDetails">
                 <argument name="customerAddress" value="US_Address_CA"/>
             </actionGroup>
@@ -99,3 +99,4 @@
         </after>
     </test>
 </tests>
+
