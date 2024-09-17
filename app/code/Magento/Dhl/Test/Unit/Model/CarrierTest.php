@@ -531,7 +531,6 @@ class CarrierTest extends TestCase
             ->getMock();
         $rateResult = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $rateFactory->method('create')
             ->willReturn($rateResult);

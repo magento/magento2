@@ -29,5 +29,9 @@
         <element name="saveAttributeButton" type="button" selector="//*[@id='save']"/>
         <element name="advancedAttributeProperties" type="button" selector="//*[@id='advanced_fieldset-wrapper']//*[contains(text(),'Advanced Attribute Properties')]"/>
         <element name="attributeCodeField" type="input" selector="//*[@id='attribute_code']"/>
+        <element name="selectAttribute" type="button" selector=".steps-wizard-navigation .active"/>
+        <element name="title" type="button" selector="//*[text()='{{title}}']" parameterized="true"/>
+        <element name="titleContainsText" type="button" selector=".//*[contains(text(),'{{titleContainsText}}')]" parameterized="true"/>
+        <element name="productSku" type="input" selector="//input[@name='product[sku]']"/>
     </section>
 </sections>

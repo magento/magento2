@@ -126,10 +126,8 @@ class BaseTest extends \PHPUnit\Framework\TestCase
             ->with($moduleFrontName)
             ->willReturn([$moduleName]);
 
-        $actionMock = $this->getMockBuilder(ActionInterface::class)
-            ->setMockClassName($actionInstance)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $actionMock = $this->getMock(ActionInterface::class, $actionInstance);
+
         $this->actionListMock->expects($this->once())
             ->method('get')
             ->with($moduleName)
@@ -145,6 +143,23 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         $requestMock->expects($this->once())->method('setControllerModule')->with($moduleName);
 
         $this->assertEquals($actionMock, $this->model->match($requestMock));
+    }
+
+    /**
+     * @param string $class
+     * @param string $mockClassName
+     * @return MockObject
+     */
+    private function getMock(string $class, string $mockClassName): MockObject
+    {
+        if (class_exists($mockClassName)) {
+            return new $mockClassName();
+        }
+
+        $mockBuilder = $this->getMockBuilder($class);
+        $mockBuilder->setMockClassName($mockClassName);
+        $mockBuilder->disableOriginalConstructor();
+        return $mockBuilder->getMockForAbstractClass();
     }
 
     public function matchDataProvider(): array

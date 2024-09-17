@@ -197,7 +197,7 @@ class UrlTest extends TestCase
     /**
      * @return array
      */
-    public function getCurrentUrlProvider(): array
+    public static function getCurrentUrlProvider(): array
     {
         return [
             'without_port' => ['example.com', 'http://example.com/fancy_uri'],
@@ -383,7 +383,7 @@ class UrlTest extends TestCase
     /**
      * @return array
      */
-    public function getUrlDataProvider(): array
+    public static function getUrlDataProvider(): array
     {
         return [
             'string query' => [
@@ -561,7 +561,7 @@ class UrlTest extends TestCase
     /**
      * @return array
      */
-    public function getRebuiltUrlDataProvider(): array
+    public static function getRebuiltUrlDataProvider(): array
     {
         return [
             'with port' => [
@@ -615,7 +615,7 @@ class UrlTest extends TestCase
     /**
      * @return array
      */
-    public function isOwnOriginUrlDataProvider(): array
+    public static function isOwnOriginUrlDataProvider(): array
     {
         return [
             'is origin url' => [true, 'http://localhost/'],
@@ -653,8 +653,15 @@ class UrlTest extends TestCase
         $this->scopeMock->expects($this->once())->method('isUrlSecure')->willReturn(true);
         $this->routeParamsResolverMock
             ->method('hasData')
-            ->withConsecutive(['secure_is_forced'], ['secure'])
-            ->willReturnOnConsecutiveCalls(false, false);
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == 'secure_is_forced') {
+                        return false;
+                    } elseif ($arg1 == 'secure') {
+                        return false;
+                    }
+                }
+            );
         $this->routeParamsResolverMock->expects($this->any())->method('getType')
             ->willReturn($urlType);
         $this->routeParamsResolverMock->expects($this->once())
@@ -669,7 +676,7 @@ class UrlTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigDataDataProvider(): array
+    public static function getConfigDataDataProvider(): array
     {
         return [
             'secure url' => ['some-type', 'web/secure/base_url_secure', true, 0, 'base_url_secure'],
@@ -785,7 +792,7 @@ class UrlTest extends TestCase
     /**
      * @return array
      */
-    public function sessionUrlVarWithMatchedHostsAndBaseUrlDataProvider(): array
+    public static function sessionUrlVarWithMatchedHostsAndBaseUrlDataProvider(): array
     {
         return [
             [

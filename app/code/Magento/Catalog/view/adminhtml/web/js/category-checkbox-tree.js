@@ -1,17 +1,6 @@
-/************************************************************************
- *
+/**
  * Copyright 2018 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ***********************************************************************
  */
 
 define([
@@ -47,21 +36,21 @@ define([
     return function (config) {
 
         let options = {
-            dataUrl: config.dataUrl,
-            divId: config.divId,
-            rootVisible: config.rootVisible,
-            useAjax: config.useAjax,
-            currentNodeId: config.currentNodeId,
-            jsFormObject: window[config.jsFormObject],
-            name: config.name,
-            checked: config.checked,
-            allowDrop: config.allowDrop,
-            rootId: config.rootId,
-            expanded: config.expanded,
-            categoryId: config.categoryId,
-            treeJson: addLastNodeProperty(config.treeJson)
-        },
-        checkedNodes = [];
+                dataUrl: config.dataUrl,
+                divId: config.divId,
+                rootVisible: config.rootVisible,
+                useAjax: config.useAjax,
+                currentNodeId: config.currentNodeId,
+                jsFormObject: window[config.jsFormObject],
+                name: config.name,
+                checked: config.checked,
+                allowDrop: config.allowDrop,
+                rootId: config.rootId,
+                expanded: config.expanded,
+                categoryId: config.categoryId,
+                treeJson: addLastNodeProperty(config.treeJson)
+            },
+            checkedNodes = [];
 
         /**
          * Get the jstree element by its ID

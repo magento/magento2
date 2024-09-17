@@ -132,25 +132,35 @@ class CacheTest extends TestCase
      */
     public function testCreateConfigWithRedisConfig()
     {
-        $this->deploymentConfigMock->method('get')->withConsecutive(
-            [CacheConfigOptionsList::CONFIG_PATH_CACHE_ID_PREFIX],
-            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_SERVER, '127.0.0.1'],
-            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_DATABASE, '0'],
-            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_PORT, '6379'],
-            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_PASSWORD, ''],
-            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA, '1'],
-            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB, ''],
-            [CacheConfigOptionsList::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION, 'false']
-        )->willReturnOnConsecutiveCalls(
-            'XXX_',
-            '127.0.0.1',
-            '0',
-            '6379',
-            '',
-            '1',
-            '',
-            null
-        );
+        $this->deploymentConfigMock->method('get')
+            ->willReturnCallback(
+                function ($arg1, $arg2 = null) {
+                    if ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_ID_PREFIX) {
+                        return 'XXX_';
+                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_SERVER &&
+                        $arg2 === '127.0.0.1') {
+                        return '127.0.0.1';
+                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_DATABASE &&
+                        $arg2 === '0') {
+                        return '0';
+                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_PORT &&
+                        $arg2 === '6379') {
+                        return '6379';
+                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_PASSWORD &&
+                        $arg2 === '') {
+                        return '';
+                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA &&
+                        $arg2 === '1') {
+                        return '1';
+                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB &&
+                        $arg2 === '') {
+                        return '';
+                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION &&
+                        $arg2 === 'false') {
+                        return null;
+                    }
+                }
+            );
 
         $expectedConfigData = [
             'cache' => [
