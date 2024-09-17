@@ -8,7 +8,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="tax_class" resource="default" engine="innodb" comment="Tax Class">
-        <column xsi:type="smallint" name="class_id" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="smallint" name="class_id" unsigned="false" nullable="false" identity="true"
                 comment="Class ID"/>
         <column xsi:type="varchar" name="class_name" nullable="false" length="255" comment="Class Name"/>
         <column xsi:type="varchar" name="class_type" nullable="false" length="8" default="CUSTOMER"
@@ -18,7 +18,7 @@
         </constraint>
     </table>
     <table name="tax_calculation_rule" resource="default" engine="innodb" comment="Tax Calculation Rule">
-        <column xsi:type="int" name="tax_calculation_rule_id" unsigned="true" nullable="false"
+        <column xsi:type="int" name="tax_calculation_rule_id" unsigned="false" nullable="false"
                 identity="true" comment="Tax Calculation Rule ID"/>
         <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
         <column xsi:type="int" name="priority" unsigned="false" nullable="false" identity="false"
@@ -39,7 +39,7 @@
         </index>
     </table>
     <table name="tax_calculation_rate" resource="default" engine="innodb" comment="Tax Calculation Rate">
-        <column xsi:type="int" name="tax_calculation_rate_id" unsigned="true" nullable="false"
+        <column xsi:type="int" name="tax_calculation_rate_id" unsigned="false" nullable="false"
                 identity="true" comment="Tax Calculation Rate ID"/>
         <column xsi:type="varchar" name="tax_country_id" nullable="false" length="2" comment="Tax Country ID"/>
         <column xsi:type="int" name="tax_region_id" unsigned="false" nullable="false" identity="false"
@@ -74,7 +74,7 @@
         </index>
     </table>
     <table name="tax_calculation" resource="default" engine="innodb" comment="Tax Calculation">
-        <column xsi:type="int" name="tax_calculation_id" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="tax_calculation_id" unsigned="false" nullable="false" identity="true"
                 comment="Tax Calculation ID"/>
         <column xsi:type="int" name="tax_calculation_rate_id" unsigned="false" nullable="false"
                 identity="false" comment="Tax Calculation Rate ID"/>
@@ -115,7 +115,7 @@
         </index>
     </table>
     <table name="tax_calculation_rate_title" resource="default" engine="innodb" comment="Tax Calculation Rate Title">
-        <column xsi:type="int" name="tax_calculation_rate_title_id" unsigned="true" nullable="false"
+        <column xsi:type="int" name="tax_calculation_rate_title_id" unsigned="false" nullable="false"
                 identity="true" comment="Tax Calculation Rate Title ID"/>
         <column xsi:type="int" name="tax_calculation_rate_id" unsigned="false" nullable="false"
                 identity="false" comment="Tax Calculation Rate ID"/>
