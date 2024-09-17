@@ -62,7 +62,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getCanadaInvalidPostCodes()
+    public static function getCanadaInvalidPostCodes()
     {
         return [
             ['countryId' => 'CA', 'postcode' => '12345'],
@@ -75,7 +75,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getCanadaValidPostCodes()
+    public static function getCanadaValidPostCodes()
     {
         return [
             ['countryId' => 'CA', 'postcode' => 'A1B2C3'],
@@ -91,7 +91,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getPostcodesDataProvider()
+    public static function getPostcodesDataProvider()
     {
         return [
             ['countryId' => 'AD', 'postcode' => 'AD100'],
@@ -157,7 +157,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ['countryId' => 'GH', 'postcode' => 'GA18400'],
             ['countryId' => 'GN', 'postcode' => '123'],
             ['countryId' => 'GP', 'postcode' => '12345'],
-            ['countryId' => 'GR', 'postcode' => '123 45'],
+            ['countryId' => 'GR', 'postcode' => '12345'],
             ['countryId' => 'GS', 'postcode' => 'SIQQ 1ZZ'],
             ['countryId' => 'GT', 'postcode' => '12345'],
             ['countryId' => 'GU', 'postcode' => '12345'],

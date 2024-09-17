@@ -80,7 +80,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     /**
      * @return array
      */
-    public function productDataProvider(): array
+    public static function productDataProvider(): array
     {
         return [
             'without_url_key' => [
@@ -166,7 +166,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     /**
      * @return array
      */
-    public function productEditProvider(): array
+    public static function productEditProvider(): array
     {
         return [
             [
@@ -202,7 +202,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     /**
      * @return array
      */
-    public function existingUrlKeyProvider(): array
+    public static function existingUrlKeyProvider(): array
     {
         return [
             [

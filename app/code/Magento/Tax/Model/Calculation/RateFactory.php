@@ -6,8 +6,6 @@
 
 /**
  * Tax rate factory
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Model\Calculation;
 

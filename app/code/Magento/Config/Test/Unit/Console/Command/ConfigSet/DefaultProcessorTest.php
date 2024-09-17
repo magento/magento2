@@ -73,11 +73,11 @@ class DefaultProcessorTest extends TestCase
         $this->configPathResolverMock = $this->createMock(ConfigPathResolver::class);
         $this->resourceModelMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['save'])
+            ->onlyMethods(['save'])
             ->getMockForAbstractClass();
         $this->valueMock = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getResource'])
+            ->onlyMethods(['getResource'])
             ->getMock();
         $this->preparedValueFactoryMock = $this->createMock(PreparedValueFactory::class);
         $this->configFactory = $this->createMock(ConfigFactory::class);

@@ -128,8 +128,15 @@ class CurrentTest extends TestCase
         }
         $this->_urlBuilderMock
             ->method('getUrl')
-            ->withConsecutive(...$withArgs)
-            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+            ->willReturnCallback(function ($arg) use ($withArgs, $willReturnArgs) {
+                static $callCount = 0;
+                $currentWithArg = $withArgs[$callCount];
+                $currentReturnArg = (array) $willReturnArgs[$callCount];
+                $callCount++;
+                if ($arg == $currentWithArg[0]) {
+                    return  $currentReturnArg;
+                }
+            });
 
         $this->currentLink->setPath($pathStub);
         $this->assertEquals($expected, $this->currentLink->isCurrent());
@@ -140,7 +147,7 @@ class CurrentTest extends TestCase
      *
      * @return array
      */
-    public function isCurrentDataProvider(): array
+    public static function isCurrentDataProvider(): array
     {
         return [
             'url with MCA' => [

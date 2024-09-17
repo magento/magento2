@@ -18,6 +18,8 @@
             <testCaseId value="MC-115"/>
             <group value="Bundle"/>
             <group value="cloud"/>
+            <!-- Excluded from PR builds due to AC-12124 -->
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -47,7 +49,7 @@
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
         <!-- scrollTo before click to fix flaky failure -->
         <scrollTo selector="{{AdminProductFormBundleSection.addOption}}" stepKey="scrollToAddOption"/>
-        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption3"/>
+        <actionGroup ref="AdminClickAddOptionForBundleItemsActionGroup" stepKey="clickAddOption3"/>
         <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
         <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>

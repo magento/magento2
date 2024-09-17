@@ -249,7 +249,7 @@ class DataTest extends TestCase
     public function testGetGalleryImages()
     {
         $productMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getMediaGalleryImages'])
+            ->addMethods(['getMediaGalleryImages'])
             ->getMockForAbstractClass();
         $productMock->expects($this->once())
             ->method('getMediaGalleryImages')
@@ -257,27 +257,16 @@ class DataTest extends TestCase
 
         $this->imageUrlBuilder->expects($this->exactly(3))
             ->method('getUrl')
-            ->withConsecutive(
-                [
-                    self::identicalTo('test_file'),
-                    self::identicalTo('product_page_image_small')
-                ],
-                [
-                    self::identicalTo('test_file'),
-                    self::identicalTo('product_page_image_medium')
-                ],
-                [
-                    self::identicalTo('test_file'),
-                    self::identicalTo('product_page_image_large')
-                ]
-            )
-            ->will(
-                self::onConsecutiveCalls(
-                    'testSmallImageUrl',
-                    'testMediumImageUrl',
-                    'testLargeImageUrl'
-                )
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'test_file' && $arg2 == 'product_page_image_small') {
+                    return 'testSmallImageUrl';
+                } elseif ($arg1 == 'test_file' && $arg2 == 'product_page_image_medium') {
+                    return 'testMediumImageUrl';
+                } elseif ($arg1 == 'test_file' && $arg2 == 'product_page_image_large') {
+                    return 'testLargeImageUrl';
+                }
+            });
+
         $this->_imageHelperMock->expects(self::never())
             ->method('setImageFile')
             ->with('test_file')

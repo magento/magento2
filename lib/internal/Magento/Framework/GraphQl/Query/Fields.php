@@ -101,8 +101,11 @@ class Fields implements ResetAfterRequestInterface
         foreach ($variables as $key => $value) {
             if (is_array($value)) {
                 $this->extractVariables($fields, $value);
+            } else {
+                if (is_string($key)) {
+                    $fields[$key] = $key;
+                }
             }
-            $fields[$key] = $key;
         }
     }
 

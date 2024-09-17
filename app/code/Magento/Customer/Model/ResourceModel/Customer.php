@@ -112,6 +112,7 @@ class Customer extends AbstractEntity
         $this->storeManager = $storeManager;
         $this->encryptor = $encryptor ?? ObjectManager::getInstance()
                 ->get(EncryptorInterface::class);
+        $this->getEntityIdField();
     }
 
     /**
