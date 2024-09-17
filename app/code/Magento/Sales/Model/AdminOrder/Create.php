@@ -1810,6 +1810,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         if (isset($data['payment_method'])) {
             $this->setPaymentMethod($data['payment_method']);
+       } else {
+            $this->setPaymentMethod('');
         }
 
         if (isset($data['coupon']['code'])) {
@@ -2180,7 +2182,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 $this->_errors[] = __('The shipping method is missing. Select the shipping method and try again.');
             }
         }
-
         if (!$this->getQuote()->getPayment()->getMethod()) {
             $this->_errors[] = __("The payment method isn't selected. Enter the payment method and try again.");
         } else {
