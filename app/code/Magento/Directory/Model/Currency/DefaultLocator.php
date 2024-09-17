@@ -63,4 +63,34 @@ class DefaultLocator
 
         return $currencyCode;
     }
+
+    /**
+     * Retrieve display currency for selected store, website or website group
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return string
+     */
+    public function getDisplayCurrency(\Magento\Framework\App\RequestInterface $request): string
+    {
+        if ($request->getParam('store')) {
+            $store = $request->getParam('store');
+            $currencyCode = $this->_storeManager->getStore($store)->getDefaultCurrencyCode();
+        } else {
+            if ($request->getParam('website')) {
+                $website = $request->getParam('website');
+                $currencyCode = $this->_storeManager->getWebsite($website)->getDefaultCurrencyCode();
+            } else {
+                if ($request->getParam('group')) {
+                    $group = $request->getParam('group');
+                    $currencyCode = $this->_storeManager->getGroup($group)->getWebsite()->getDefaultCurrencyCode();
+                } else {
+                    $currencyCode = $this->_configuration->getValue(
+                        \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_DEFAULT,
+                        'default'
+                    );
+                }
+            }
+        }
+
+        return $currencyCode;
+    }
 }

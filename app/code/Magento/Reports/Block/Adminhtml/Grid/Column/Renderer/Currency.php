@@ -115,9 +115,9 @@ class Currency extends BackendCurrency
         $catalogPriceScope = $this->getCatalogPriceScope();
         $storeId = $this->_request->getParam('store_ids');
         if ($catalogPriceScope != 0 && !empty($storeId)) {
-            $currencyCode = $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
+            $currencyCode = $this->_storeManager->getStore($storeId)->getDefaultCurrencyCode();
         } elseif ($catalogPriceScope != 0) {
-            $currencyCode = $this->_currencyLocator->getDefaultCurrency($this->_request);
+            $currencyCode = $this->_currencyLocator->getDisplayCurrency($this->_request);
         } else {
             $currencyCode = $this->_getCurrencyCode($row);
         }
