@@ -1,0 +1,28 @@
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminConfigForDefaultValuesInPaylaterProductPageActionGroup">
+        <annotations>
+            <description>Check the default Dropdown Values Available in Admin Cart Page.</description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <waitForElementClickable selector="{{AdminPaypalProductPageConfigSection.expandCatalogProductPage(countryCode)}}" stepKey="waitForCheckoutCartPageClickable"/>
+        <click selector="{{AdminPaypalProductPageConfigSection.expandCatalogProductPage(countryCode)}}" stepKey="clickCheckoutCart"/>
+        <selectOption selector ="{{AdminPaypalProductPageConfigSection.display(countryCode)}}" userInput="Yes" stepKey="enableDisplayforPaylaterCartPage"/>
+        <selectOption selector="{{AdminPaypalProductPageConfigSection.position(countryCode)}}" userInput="Header (center)" stepKey="selectDefaultPosition"/>
+        <!--Verify Default Option was Selected correctly-->
+        <seeOptionIsSelected selector="{{AdminPaypalProductPageConfigSection.position(countryCode)}}" userInput="Header (center)" stepKey="seeSelectedPosition"/>
+        <seeOptionIsSelected selector="{{AdminPaypalProductPageConfigSection.styleLayout(countryCode)}}" userInput="Text" stepKey="seeSelectedStyleLayout"/>
+        <seeOptionIsSelected selector="{{AdminPaypalProductPageConfigSection.logoType(countryCode)}}" userInput="Primary" stepKey="seeSelectedLogoType"/>
+        <seeOptionIsSelected selector="{{AdminPaypalProductPageConfigSection.logoPosition(countryCode)}}" userInput="Left" stepKey="seeSelectedLogoPosition"/>
+        <seeOptionIsSelected selector="{{AdminPaypalProductPageConfigSection.textColor(countryCode)}}" userInput="Black" stepKey="seeSelectedTextColor"/>
+        <seeOptionIsSelected selector="{{AdminPaypalProductPageConfigSection.textSize(countryCode)}}" userInput="12px" stepKey="seeSelectedTextSize"/>
+    </actionGroup>
+</actionGroups>

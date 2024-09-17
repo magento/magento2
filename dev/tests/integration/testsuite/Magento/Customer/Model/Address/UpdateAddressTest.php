@@ -124,7 +124,7 @@ class UpdateAddressTest extends TestCase
      *
      * @return array
      */
-    public function updateAddressIsDefaultDataProvider(): array
+    public static function updateAddressIsDefaultDataProvider(): array
     {
         return [
             'update_shipping_address_default' => [true, false, 1, null],
@@ -163,7 +163,7 @@ class UpdateAddressTest extends TestCase
      *
      * @return array
      */
-    public function updateAddressesDataProvider(): array
+    public static function updateAddressesDataProvider(): array
     {
         return [
             'required_field_telephone' => [
@@ -252,7 +252,7 @@ class UpdateAddressTest extends TestCase
      *
      * @return array
      */
-    public function updateWrongAddressesDataProvider(): array
+    public static function updateWrongAddressesDataProvider(): array
     {
         return [
             'required_field_empty_telephone' => [

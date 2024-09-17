@@ -94,7 +94,7 @@
         <!-- Click and open order summary tab-->
         <conditionalClick selector="{{CheckoutOrderSummarySection.miniCartTab}}" dependentSelector="{{CheckoutOrderSummarySection.miniCartTabClosed}}" visible="true" stepKey="clickOnOrderSummaryTab"/>
         <waitForPageLoad stepKey="waitForPageToLoad5"/>
-
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <!-- Assert Product displayed in Order Summary -->
         <actionGroup ref="StorefrontAssertProductDetailsInOrderSummaryActionGroup" stepKey="assertProduct3InOrderSummary">
             <argument name="productName" value="$$virtualProduct.name$$"/>

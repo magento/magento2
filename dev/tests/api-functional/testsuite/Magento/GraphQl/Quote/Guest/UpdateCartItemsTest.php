@@ -9,9 +9,22 @@ namespace Magento\GraphQl\Quote\Guest;
 
 use Exception;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Catalog\Test\Fixture\ProductStock as ProductStockFixture;
+use Magento\ConfigurableProduct\Test\Fixture\AddProductToCart as AddConfigurableProductToCartFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\Quote\Test\Fixture\QuoteIdMask as QuoteMaskFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -40,6 +53,11 @@ class UpdateCartItemsTest extends GraphQlAbstract
      */
     private $productRepository;
 
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -47,6 +65,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $this->quoteFactory = $objectManager->get(QuoteFactory::class);
         $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
+        $this->fixtures = DataFixtureStorageManager::getStorage();
     }
 
     /**
@@ -318,6 +337,88 @@ QUERY;
             self::assertArrayHasKey('gift_message', $item);
             self::assertSame(null, $item['gift_message']);
         }
+    }
+
+    #[
+        DataFixture(ProductFixture::class, as: 'configProd1'),
+        DataFixture(ProductFixture::class, as: 'configProd2'),
+        DataFixture(AttributeFixture::class, as: 'attr'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            ['_options' => ['$attr$'], '_links' => ['$configProd1$', '$configProd2$']],
+            'configurableProduct'
+        ),
+        DataFixture(ProductFixture::class, as: 'simpleProduct'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_quote'], 'cart'),
+        DataFixture(
+            AddConfigurableProductToCartFixture::class,
+            [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$configurableProduct.id$',
+                'child_product_id' => '$configProd1.id$',
+                'qty' => 10
+            ],
+        ),
+        DataFixture(
+            AddProductToCartFixture::class,
+            [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$simpleProduct.id$',
+                'qty' => 10
+            ]
+        ),
+        //We are reducing the stock of confProd1 to 6, which is less than the quantity (10) in cart
+        DataFixture(ProductStockFixture::class, ['prod_id' => '$configProd1.id$', 'prod_qty' => 6]),
+        DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+    ]
+    /**
+     * Test updateCartItems GQL error when removing other products with insufficient configurable product in cart
+     *
+     * configProd1 & simpleProduct is added to cart with quantity 10.
+     * configProd1 stock is reduced to 6. So requested qty of configProd1 is not available now.
+     * updateCartItems mutation is used to remove simpleProduct from cart
+     */
+    public function testRemoveCartItemIfOtherProductStockIsReduced(): void
+    {
+        $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
+        $simpleProdSku = $this->fixtures->get('simpleProduct')->getSku();
+        $simpleProdId = $this->getQuoteItemIdBySku($simpleProdSku);
+        $quantity = 0.0;
+
+        /*
+         * Set simple product quantity to 0.
+         * This will remove simple product from cart
+         */
+        $query = $this->getQuery($maskedQuoteId, $simpleProdId, $quantity);
+        $mutationResponse = $this->graphQlMutation($query);
+        $this->assertArrayHasKey('updateCartItems', $mutationResponse);
+        $this->assertArrayHasKey('cart', $mutationResponse['updateCartItems']);
+        $this->assertArrayHasKey('items', $mutationResponse['updateCartItems']['cart']);
+        $mutationResponseCartItems = $mutationResponse['updateCartItems']['cart']['items'];
+        $this->assertCount(1, $mutationResponseCartItems);
+        //Check that update is correctly reflected in cart
+        $cartQuery = $this->getCartQuery($maskedQuoteId);
+        $cartResponse = $this->graphQlQuery($cartQuery);
+        $cartResponseItems = $cartResponse['cart']['items'];
+        $this->assertCount(1, $cartResponseItems);
+    }
+
+    /**
+     * Returns quote item id by product's SKU
+     *
+     * @param string $sku
+     * @return int
+     * @throws NoSuchEntityException
+     */
+    private function getQuoteItemIdBySku(string $sku): int
+    {
+        $quote = $this->quoteFactory->create();
+        $product = $this->productRepository->get($sku);
+        $this->quoteResource->load($quote, 'test_quote', 'reserved_order_id');
+        /** @var Item $quoteItem */
+        $quoteItem = $quote->getItemByProduct($product);
+
+        return (int)$quoteItem->getId();
     }
 
     private function getUpdateGiftMessageQuery(string $messageTo, string $messageFrom, string $message)

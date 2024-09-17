@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontApplyGiftsCardsAndCouponCodesInWidgetIsShownOnOrderReviewPageForPayflowProTest">
+        <annotations>
+            <features value="Payments"/>
+            <stories value="Payflow Pro"/>
+            <title value="Apply gift cards or promo codes widget is shown on Order review page for Payflow Pro"/>
+            <description value="As a guest, apply coupon and gift card while placing an order through paypal payflow pro"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5199"/>
+            <group value="paypalPayflowPro"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <!-- Checkout select Credit Card (Payflow Pro) and place order-->
+        <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectPaymentMethod"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
+        <!--Fill Card Data -->
+        <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" after="selectPaymentMethod" stepKey="fillCardData">
+            <argument name="cardData" value="VisaDefaultCard"/>
+        </actionGroup>
+    </test>
+</tests>

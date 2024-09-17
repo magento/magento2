@@ -109,7 +109,9 @@ class PlaceOrderTest extends GraphQlAbstract
 
         self::assertArrayHasKey('placeOrder', $response);
         self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
+        self::assertArrayHasKey('number', $response['placeOrder']['orderV2']);
         self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_number']);
+        self::assertEquals($reservedOrderId, $response['placeOrder']['orderV2']['number']);
         self::assertEmpty(count($response['placeOrder']['errors']));
         $orderIncrementId = $response['placeOrder']['order']['order_number'];
         $order = $this->orderFactory->create();
@@ -147,7 +149,9 @@ class PlaceOrderTest extends GraphQlAbstract
 
         self::assertArrayHasKey('placeOrder', $response);
         self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
+        self::assertArrayHasKey('number', $response['placeOrder']['orderV2']);
         self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_number']);
+        self::assertEquals($reservedOrderId, $response['placeOrder']['orderV2']['number']);
         self::assertEmpty(count($response['placeOrder']['errors']));
         $orderIncrementId = $response['placeOrder']['order']['order_number'];
         $order = $this->orderFactory->create();
@@ -458,7 +462,9 @@ class PlaceOrderTest extends GraphQlAbstract
 
         self::assertArrayHasKey('placeOrder', $response);
         self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
+        self::assertArrayHasKey('number', $response['placeOrder']['orderV2']);
         self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_number']);
+        self::assertEquals($reservedOrderId, $response['placeOrder']['orderV2']['number']);
         $orderIncrementId = $response['placeOrder']['order']['order_number'];
         $order = $this->orderFactory->create();
         $order->loadByIncrementId($orderIncrementId);
@@ -476,6 +482,9 @@ mutation {
   placeOrder(input: {cart_id: "{$maskedQuoteId}"}) {
     order {
       order_number
+    }
+    orderV2 {
+      number
     }
     errors {
       message

@@ -395,10 +395,20 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
             return $this;
         }
 
+        $couponCodes = [];
+        if ($this->getCouponCode()) {
+            $couponCodes = [$this->getCouponCode()];
+        }
+
+        if ($this->getCouponCodes()) {
+            $couponCodes = $this->getCouponCodes();
+        }
+
         $appliedRuleIds = $this->rulesApplier->applyRules(
             $item,
             [$rule],
-            $this->_skipActionsValidation
+            $this->_skipActionsValidation,
+            $couponCodes
         );
         $this->rulesApplier->setAppliedRuleIds($item, $appliedRuleIds);
 
@@ -522,6 +532,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
             $address->setBaseShippingDiscountAmount($this->priceCurrency->roundPrice($baseDiscountAmount));
             $appliedRuleIds[$rule->getRuleId()] = $rule->getRuleId();
 
+            $this->rulesApplier->maintainAddressCouponCode($address, $rule, $this->getCouponCode());
             $this->rulesApplier->addDiscountDescription(
                 $address,
                 $rule,

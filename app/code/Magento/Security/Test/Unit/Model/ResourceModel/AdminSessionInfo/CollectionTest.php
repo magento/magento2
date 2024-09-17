@@ -57,8 +57,9 @@ class CollectionTest extends TestCase
 
         $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                ['getConnection', 'getMainTable', 'getTable', 'deleteSessionsOlderThen', 'updateStatusByUserId']
+            ->addMethods(['deleteSessionsOlderThen', 'updateStatusByUserId'])
+            ->onlyMethods(
+                ['getConnection', 'getMainTable', 'getTable']
             )
             ->getMockForAbstractClass();
 
@@ -72,7 +73,7 @@ class CollectionTest extends TestCase
         $this->collectionMock = $this->getMockBuilder(
             Collection::class
         )
-            ->setMethods(['addFieldToFilter', 'getResource', 'getConnection'])
+            ->onlyMethods(['addFieldToFilter', 'getResource', 'getConnection'])
             ->setConstructorArgs(
                 [
                     $entityFactory,
@@ -112,12 +113,15 @@ class CollectionTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(3))
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                ['user_id', $userId],
-                ['status', $status],
-                ['id', ['neq' => $sessionIdToExclude]]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) use ($userId, $status, $sessionIdToExclude) {
+                if ($arg1 == 'user_id' && $arg2 == $userId) {
+                    return $this;
+                } elseif ($arg1 == 'status' && $arg2 == $status) {
+                    return $this;
+                } elseif ($arg1 == 'id' && $arg2 == ['neq' => $sessionIdToExclude]) {
+                    return $this;
+                }
+            });
 
         $this->assertEquals(
             $this->collectionMock,

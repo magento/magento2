@@ -149,7 +149,6 @@ class ServiceInputProcessorTest extends TestCase
 
         $this->fieldNamer = $this->getMockBuilder(FieldNamer::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->methodsMap = $objectManager->getObject(
@@ -396,7 +395,7 @@ class ServiceInputProcessorTest extends TestCase
     public function testArrayOfDataObjectPropertiesIsValidated()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage(
+        $this->expectExceptionMessage(
             'Maximum items of type "\\' . Simple::class . '" is 50'
         );
         $this->inputLimitConfig->method('isInputLimitingEnabled')
@@ -648,9 +647,9 @@ class ServiceInputProcessorTest extends TestCase
                     TestService::CUSTOM_ATTRIBUTE_CODE => $objectManager->getObject(
                         AttributeValue::class,
                         ['data' => [
-                                'attribute_code' => TestService::CUSTOM_ATTRIBUTE_CODE,
-                                'value' => $customAttributeValue
-                            ]
+                            'attribute_code' => TestService::CUSTOM_ATTRIBUTE_CODE,
+                            'value' => $customAttributeValue
+                        ]
                         ]
                     )
                 ]

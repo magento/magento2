@@ -2,15 +2,6 @@
 /**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained from
- * Adobe.
  */
 declare(strict_types=1);
 
@@ -27,6 +18,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\AddressFactory;
 
 /**
@@ -78,7 +70,8 @@ class EstimateTotals implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "country_code" is missing'));
         }
 
-        $this->totalsInformationManagement->calculate($cartId, $this->getTotalsInformation($args['input']));
+        $data = $this->getTotalsInformation($args['input']);
+        $this->totalsInformationManagement->calculate($cartId, $data);
 
         return [
             'cart' => [
@@ -115,14 +108,14 @@ class EstimateTotals implements ResolverInterface
      */
     private function getAddress(array $data): AddressInterface
     {
-        $data = [
-            AddressInterface::KEY_COUNTRY_ID => $data['country_code'],
-            AddressInterface::KEY_REGION => $data['region'][AddressInterface::KEY_REGION] ?? null,
-            AddressInterface::KEY_REGION_ID => $data['region'][AddressInterface::KEY_REGION_ID] ?? null,
-            AddressInterface::KEY_REGION_CODE => $data['region'][AddressInterface::KEY_REGION_CODE] ?? null,
-            AddressInterface::KEY_POSTCODE => $data[AddressInterface::KEY_POSTCODE] ?? null,
-        ];
+        /** @var Address $address */
+        $address = $this->addressFactory->create();
+        $address->setCountryId($data['country_code']);
+        $address->setRegion($data['region'][AddressInterface::KEY_REGION] ?? null);
+        $address->setRegionId($data['region'][AddressInterface::KEY_REGION_ID] ?? null);
+        $address->setRegionCode($data['region'][AddressInterface::KEY_REGION_CODE] ?? null);
+        $address->setPostcode($data[AddressInterface::KEY_POSTCODE] ?? null);
 
-        return $this->addressFactory->create(['data' => array_filter($data)]);
+        return $address;
     }
 }

@@ -97,6 +97,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
                     $exception = $e;
                 }
             }
+            $response->clearHeader('Location');
             $response->setHttpResponseCode(500);
             $response->setHeader('Content-Type', 'text/plain');
             $response->setBody($this->buildContentFromException($exception));

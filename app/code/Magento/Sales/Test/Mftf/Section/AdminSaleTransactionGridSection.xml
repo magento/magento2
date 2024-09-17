@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminSaleTransactionGridSection">
+        <element name="searchOrderId" type="input" selector="#sales_transactions_grid_filter_increment_id" />
+        <element name="selectTxnType" type="input" selector="#sales_transactions_grid_filter_txn_type"/>
+        <element name="searchButton" type="button" selector="#sales_transactions_grid .admin__filter-actions [data-action='grid-filter-apply']"/>
+        <element name="gridTransactionFirstRowForType" type="text" selector="#sales_transactions_grid table#sales_transactions_grid_table tbody tr:nth-child(1) td.col-txn_type"/>
+        <element name="gridTransactionFirstRowForClosed" type="text" selector="#sales_transactions_grid table#sales_transactions_grid_table tbody tr:nth-child(1) td.col-is_closed"/>
+    </section>
+</sections>
+
