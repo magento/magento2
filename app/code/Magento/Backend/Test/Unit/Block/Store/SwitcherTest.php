@@ -17,6 +17,7 @@ use Magento\Store\Model\Website;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SwitcherTest extends TestCase
@@ -26,6 +27,9 @@ class SwitcherTest extends TestCase
      */
     private $switcherBlock;
 
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
     private $storeManagerMock;
 
     /**
@@ -61,19 +65,19 @@ class SwitcherTest extends TestCase
             ->getMockForAbstractClass();
         $this->websiteFactoryMock = $this->getMockBuilder(WebsiteFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->storeFactoryMock = $this->getMockBuilder(StoreFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->websiteMock = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'getName'])
+            ->onlyMethods(['load', 'getId', 'getName'])
             ->getMock();
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'getName'])
+            ->onlyMethods(['load', 'getId', 'getName'])
             ->getMock();
         $this->websiteFactoryMock->expects($this->any())
             ->method('create')

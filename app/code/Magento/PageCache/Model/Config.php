@@ -52,6 +52,11 @@ class Config
     protected $_scopeConfig;
 
     /**
+     * XML path to Varnish 7 config template path
+     */
+    public const VARNISH_7_CONFIGURATION_PATH = 'system/full_page_cache/varnish7/path';
+
+    /**
      * XML path to Varnish 6 config template path
      */
     public const VARNISH_6_CONFIGURATION_PATH = 'system/full_page_cache/varnish6/path';
@@ -155,6 +160,9 @@ class Config
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         switch ($vclTemplatePath) {
+            case self::VARNISH_7_CONFIGURATION_PATH:
+                $version = 7;
+                break;
             case self::VARNISH_6_CONFIGURATION_PATH:
                 $version = 6;
                 break;

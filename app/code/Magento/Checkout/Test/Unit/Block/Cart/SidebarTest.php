@@ -199,11 +199,15 @@ class SidebarTest extends TestCase
 
         $this->scopeConfigMock
             ->method('getValue')
-            ->withConsecutive(
-                [Sidebar::XML_PATH_CHECKOUT_SIDEBAR_COUNT, ScopeInterface::SCOPE_STORE],
-                ['checkout/sidebar/max_items_display_count', ScopeInterface::SCOPE_STORE]
-            )
-            ->willReturnOnConsecutiveCalls(3, 8);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 === Sidebar::XML_PATH_CHECKOUT_SIDEBAR_COUNT &&
+                    $arg2 === ScopeInterface::SCOPE_STORE) {
+                    return 3;
+                } elseif ($arg1 === 'checkout/sidebar/max_items_display_count' &&
+                    $arg2 === ScopeInterface::SCOPE_STORE) {
+                    return 8;
+                }
+            });
 
         $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
 

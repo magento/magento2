@@ -17,6 +17,7 @@ use Magento\Quote\Model\Cart\Totals;
 use Magento\Quote\Model\Quote\Item;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 use Magento\QuoteGraphQl\Model\GetDiscounts;
+use Magento\QuoteGraphQl\Model\GetOptionsRegularPrice;
 
 /**
  * @inheritdoc
@@ -29,14 +30,18 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
     private $totals;
 
     /**
+     * CartItemPrices constructor.
+     *
      * @param TotalsCollector $totalsCollector
      * @param GetDiscounts $getDiscounts
      * @param PriceCurrencyInterface $priceCurrency
+     * @param GetOptionsRegularPrice $getOptionsRegularPrice
      */
     public function __construct(
         private readonly TotalsCollector $totalsCollector,
         private readonly GetDiscounts $getDiscounts,
-        private readonly PriceCurrencyInterface $priceCurrency
+        private readonly PriceCurrencyInterface $priceCurrency,
+        private readonly GetOptionsRegularPrice $getOptionsRegularPrice
     ) {
     }
 
@@ -75,6 +80,16 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
         } else {
             $discountAmount = $cartItem->getDiscountAmount();
         }
+
+        /**
+         * Calculate the actual price of the product with all discounts applied
+         */
+        $originalItemPrice = $cartItem->getTotalDiscountAmount() > 0
+            ? $this->priceCurrency->round(
+                $cartItem->getCalculationPrice() - ($cartItem->getTotalDiscountAmount() / max($cartItem->getQty(), 1))
+            )
+            : $cartItem->getCalculationPrice();
+
         return [
             'model' => $cartItem,
             'price' => [
@@ -101,6 +116,10 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
                 $cartItem->getQuote(),
                 $cartItem->getExtensionAttributes()->getDiscounts() ?? []
             ),
+            'original_item_price' => [
+                'currency' => $currencyCode,
+                'value' => $originalItemPrice
+            ],
             'original_row_total' => [
                 'currency' => $currencyCode,
                 'value' => $this->getOriginalRowTotal($cartItem),
@@ -118,6 +137,37 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
     {
         $qty = $cartItem->getTotalQty();
         // Round unit price before multiplying to prevent losing 1 cent on subtotal
-        return $this->priceCurrency->round($cartItem->getOriginalPrice()) * $qty;
+        return $this->priceCurrency->round($cartItem->getOriginalPrice() + $this->getOptionsPrice($cartItem)) * $qty;
+    }
+
+    /**
+     * Get the product custom options price
+     *
+     * @param Item $cartItem
+     * @return float
+     */
+    private function getOptionsPrice(Item $cartItem): float
+    {
+        $price = 0.0;
+        $optionIds = $cartItem->getProduct()->getCustomOption('option_ids');
+        if (!$optionIds) {
+            return $price;
+        }
+
+        foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
+            $option = $cartItem->getProduct()->getOptionById($optionId);
+            $optionValueIds = $cartItem->getOptionByCode('option_' . $optionId);
+            if (!$option) {
+                return $price;
+            }
+            if ($option->getRegularPrice()) {
+                $price += $option->getRegularPrice();
+            } else {
+                $price += $this->getOptionsRegularPrice
+                    ->execute(explode(",", $optionValueIds->getValue()), $option);
+            }
+        }
+
+        return $price;
     }
 }

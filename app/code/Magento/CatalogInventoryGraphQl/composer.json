@@ -8,6 +8,8 @@
         "magento/module-store": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-inventory": "*",
+        "magento/module-quote": "*",
+        "magento/module-quote-graph-ql": "*",
         "magento/module-graph-ql": "*"
     },
     "license": [

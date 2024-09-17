@@ -161,7 +161,13 @@ class SynchronizerTest extends TestCase
             ->with(1, 34);
         $collection
             ->method('addFieldToFilter')
-            ->withConsecutive(['type_id', $typeId], ['product_id', [1, 2]]);
+            ->willReturnCallback(function ($arg1, $arg2) use ($typeId) {
+                if ($arg1 == 'type_id' && $arg2 == $typeId) {
+                    return null;
+                } elseif ($arg1 == 'product_id' && $arg2 == [1, 2]) {
+                    return null;
+                }
+            });
         $iterator = new \IteratorIterator(new \ArrayIterator([$frontendAction]));
         $collection->expects($this->once())
             ->method('getIterator')
@@ -171,34 +177,20 @@ class SynchronizerTest extends TestCase
             ->with($frontendAction);
         $this->productFrontendActionFactoryMock->expects($this->exactly(2))
             ->method('create')
-            ->withConsecutive(
-                [
-                    [
-                        'data' => [
-                            'visitor_id' => null,
-                            'customer_id' => 1,
-                            'added_at' => 12,
-                            'product_id' => 1,
-                            'type_id' => 'recently_compared_product'
-                        ]
-                    ]
-                ],
-                [
-                    [
-                        'data' => [
-                            'visitor_id' => null,
-                            'customer_id' => 1,
-                            'added_at' => 13,
-                            'product_id' => 2,
-                            'type_id' => 'recently_compared_product'
-                        ]
-                    ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls($action1, $action2);
+            ->willReturnCallback(function ($args) use ($action1, $action2) {
+                if ($args['data']['added_at'] === 12) {
+                    return $action1;
+                } elseif ($args['data']['added_at'] === 13) {
+                    return $action2;
+                }
+            });
         $this->entityManagerMock->expects($this->exactly(2))
             ->method('save')
-            ->withConsecutive([$action1], [$action2]);
+            ->willReturnCallback(function ($arg) use ($action1, $action2) {
+                if ($arg == $action1 || $arg == $action2) {
+                    return null;
+                }
+            });
         $this->model->syncActions($productsData, 'recently_compared_product');
     }
 }

@@ -151,7 +151,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      *
      * @return array
      */
-    abstract public function exportImportDataProvider(): array;
+    abstract public static function exportImportDataProvider(): array;
 
     /**
      * Modify data.
