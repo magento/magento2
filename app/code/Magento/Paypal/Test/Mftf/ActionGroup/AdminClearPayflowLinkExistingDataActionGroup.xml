@@ -1,0 +1,42 @@
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminClearPayflowLinkExistingDataActionGroup">
+        <annotations>
+            <description>Admin goes to payflow link configuration and clears provided Sample PayPal credentials</description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <waitForElementVisible selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="waitForOtherPayPalPaymentsSection"/>
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab(countryCode)}}" visible="false" stepKey="clickOtherPayPalPaymentsSection"/>
+        <conditionalClick selector ="{{AdminPayPalPayFlowLinkConfigSection.paymentGateway(countryCode)}}" dependentSelector="{{AdminPayPalPayFlowLinkConfigSection.paymentGateway(countryCode)}}" visible="false" stepKey="clickPayPalPayflowPaymentGatewayBtn"/>
+        <waitForElementClickable selector="{{AdminPayPalPayFlowLinkConfigSection.configureBtn(countryCode)}}" stepKey="waitForPayPalPayflowLinkConfigureBtn"/>
+        <click selector ="{{AdminPayPalPayFlowLinkConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalPayflowLinkoConfigureBtn"/>
+        <waitForPageLoad stepKey="waitForPaymethodConfigPageLoad"/>
+        <clearField selector="{{AdminPayPalPayFlowLinkConfigSection.partner(countryCode)}}" stepKey="clearInputPartnerField"/>
+        <clearField selector="{{AdminPayPalPayFlowLinkConfigSection.vendor(countryCode)}}" stepKey="clearInputVendorField"/>
+        <clearField selector="{{AdminPayPalPayFlowLinkConfigSection.user(countryCode)}}" stepKey="clearInputUsereField"/>
+        <clearField selector="{{AdminPayPalPayFlowLinkConfigSection.password(countryCode)}}" stepKey="clearInputPasswordField"/>
+        <selectOption selector="{{AdminPayPalPayFlowLinkConfigSection.testMode(countryCode)}}" userInput="No" stepKey="disableTestMode"/>
+        <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enableSolution(countryCode)}}" userInput="No" stepKey="seeEnableThisSolutionIsSetNo" after="disableTestMode"/>
+        <assertElementContainsAttribute stepKey="seeEnableThisSolutionIsDisabled">
+            <expectedResult selector="{{AdminPayPalPayFlowLinkConfigSection.enableSolution(countryCode)}}" attribute="disabled" type="string"></expectedResult>
+        </assertElementContainsAttribute>
+        <assertElementContainsAttribute stepKey="seeEnablePaypalCreditIsDisabled">
+            <expectedResult selector="{{AdminPayPalPayFlowLinkConfigSection.enablePaypalCredit(countryCode)}}" attribute="disabled" type="string"></expectedResult>
+        </assertElementContainsAttribute>
+        <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enablePaypalCredit(countryCode)}}" userInput="No" stepKey="seePaypalCreditIsSetNo"/>
+        <assertElementContainsAttribute stepKey="seeEnableExpressCheckoutIsDisabled">
+            <expectedResult selector="{{AdminPayPalPayFlowLinkConfigSection.enableExpressCheckout(countryCode)}}" attribute="disabled" type="string"></expectedResult>
+        </assertElementContainsAttribute>
+        <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enableExpressCheckout(countryCode)}}" userInput="No" stepKey="seeExpressCheckoutIsSetNo"/>
+    </actionGroup>
+</actionGroups>
