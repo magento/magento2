@@ -8,12 +8,15 @@ declare(strict_types=1);
 namespace Magento\CatalogInventoryGraphQl\Model\Resolver;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Quote\Model\Quote\Item;
 
 /**
  * @inheritdoc
@@ -21,16 +24,35 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class StockStatusProvider implements ResolverInterface
 {
     /**
-     * @var StockStatusRepositoryInterface
+     * Bundle product type code
      */
-    private $stockStatusRepository;
+    private const PRODUCT_TYPE_BUNDLE = "bundle";
 
     /**
-     * @param StockStatusRepositoryInterface $stockStatusRepository
+     * Configurable product type code
      */
-    public function __construct(StockStatusRepositoryInterface $stockStatusRepository)
-    {
-        $this->stockStatusRepository = $stockStatusRepository;
+    private const PRODUCT_TYPE_CONFIGURABLE = "configurable";
+
+    /**
+     * In Stock return code
+     */
+    private const IN_STOCK = "IN_STOCK";
+
+    /**
+     * Out of Stock return code
+     */
+    private const OUT_OF_STOCK = "OUT_OF_STOCK";
+
+    /**
+     * StockStatusProvider Constructor
+     *
+     * @param StockStatusRepositoryInterface $stockStatusRepository
+     * @param ProductRepositoryInterface $productRepositoryInterface
+     */
+    public function __construct(
+        private readonly StockStatusRepositoryInterface $stockStatusRepository,
+        private readonly ProductRepositoryInterface $productRepositoryInterface,
+    ) {
     }
 
     /**
@@ -41,13 +63,58 @@ class StockStatusProvider implements ResolverInterface
         if (!array_key_exists('model', $value) || !$value['model'] instanceof ProductInterface) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
+        /** @var Item $cartItem */
+        $cartItem = $value['cart_item'] ?? [];
+        if (!$cartItem instanceof Item) {
+            $product = $value['model'];
+            $stockStatus = $this->stockStatusRepository->get($product->getId());
 
-        /* @var $product ProductInterface */
-        $product = $value['model'];
+            return ((int)$stockStatus->getStockStatus()) ? self::IN_STOCK : self::OUT_OF_STOCK;
+        }
 
+        if ($cartItem->getProductType() === self::PRODUCT_TYPE_BUNDLE) {
+            return $this->getBundleProductStockStatus($cartItem);
+        }
+
+        $product = $this->getVariantProduct($cartItem) ?? $cartItem->getProduct();
         $stockStatus = $this->stockStatusRepository->get($product->getId());
-        $productStockStatus = (int)$stockStatus->getStockStatus();
 
-        return $productStockStatus === StockStatusInterface::STATUS_IN_STOCK ? 'IN_STOCK' : 'OUT_OF_STOCK';
+        return ((int)$stockStatus->getStockStatus()) ? self::IN_STOCK : self::OUT_OF_STOCK;
+    }
+
+    /**
+     * Get stock status of added bundle options
+     *
+     * @param Item $cartItem
+     * @return string
+     */
+    private function getBundleProductStockStatus(Item $cartItem): string
+    {
+        $qtyOptions = $cartItem->getQtyOptions();
+        foreach ($qtyOptions as $qtyOption) {
+            $stockStatus = $this->stockStatusRepository->get($qtyOption->getProduct()->getId());
+            if (!(int)$stockStatus->getStockStatus()) {
+                return self::OUT_OF_STOCK;
+            }
+        }
+
+        return self::IN_STOCK;
+    }
+
+    /**
+     * Returns variant product if available
+     *
+     * @param Item $cartItem
+     * @return ProductInterface|null
+     * @throws NoSuchEntityException
+     */
+    private function getVariantProduct(Item $cartItem): ?ProductInterface
+    {
+        if ($cartItem->getProductType() === self::PRODUCT_TYPE_CONFIGURABLE) {
+            if ($cartItem->getChildren()[0] !== null) {
+                return $this->productRepositoryInterface->get($cartItem->getSku());
+            }
+        }
+        return null;
     }
 }

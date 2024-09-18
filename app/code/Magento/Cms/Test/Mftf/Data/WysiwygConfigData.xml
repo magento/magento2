@@ -22,6 +22,6 @@
         <data key="path">cms/wysiwyg/editor</data>
         <data key="scope_id">0</data>
         <data key="label">Yes</data>
-        <data key="value">mage/adminhtml/wysiwyg/tiny_mce/tinymce5Adapter</data>
+        <data key="value">mage/adminhtml/wysiwyg/tiny_mce/tinymceAdapter</data>
     </entity>
 </entities>
