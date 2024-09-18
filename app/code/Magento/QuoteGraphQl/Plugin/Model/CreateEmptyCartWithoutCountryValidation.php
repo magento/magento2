@@ -21,6 +21,9 @@ use Magento\Quote\Model\QuoteManagement;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Customer\Model\Config\Share;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CreateEmptyCartWithoutCountryValidation
 {
     /**
