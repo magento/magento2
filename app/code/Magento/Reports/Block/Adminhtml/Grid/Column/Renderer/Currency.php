@@ -82,7 +82,8 @@ class Currency extends BackendCurrency
         $rate = $this->getStoreCurrencyRate($currencyCode, $row);
         $data = (float) $data * $rate;
         $data = sprintf('%f', $data);
-        return $this->_localeCurrency->getCurrency($currencyCode)->toCurrency($data);
+        $displayCurrencyCode = $this->getStoreDisplayCurrencyCode($row);
+        return $this->_localeCurrency->getCurrency($displayCurrencyCode)->toCurrency($data);
     }
 
     /**
@@ -110,6 +111,27 @@ class Currency extends BackendCurrency
      * @throws NoSuchEntityException
      */
     private function getStoreCurrencyCode(DataObject $row): string
+    {
+        $catalogPriceScope = $this->getCatalogPriceScope();
+        $storeId = $this->_request->getParam('store_ids');
+        if ($catalogPriceScope != 0 && !empty($storeId)) {
+            $currencyCode = $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
+        } elseif ($catalogPriceScope != 0) {
+            $currencyCode = $this->_currencyLocator->getDefaultCurrency($this->_request);
+        } else {
+            $currencyCode = $this->_getCurrencyCode($row);
+        }
+        return $currencyCode;
+    }
+
+    /**
+     * Get store display currency code
+     *
+     * @param DataObject $row
+     * @return string
+     * @throws NoSuchEntityException
+     */
+    private function getStoreDisplayCurrencyCode(DataObject $row): string
     {
         $catalogPriceScope = $this->getCatalogPriceScope();
         $storeId = $this->_request->getParam('store_ids');
