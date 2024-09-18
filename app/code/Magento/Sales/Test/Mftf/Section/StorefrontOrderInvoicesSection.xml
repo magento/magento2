@@ -11,5 +11,7 @@
     <section name="StorefrontOrderInvoicesSection">
         <element name="invoiceTab" type="button" selector="//a[contains(text(), 'Invoices')]"/>
         <element name="grandTotalPrice" type="text" selector="[data-th='Grand Total'] .price"/>
+        <element name="invoiceTab1" type="button" selector="//a[@name='order_invoices']"/>
+        <element name="clickView" type="button" selector="#sales_order_view_tabs_order_invoices_content > div > div.admin__data-grid-wrap > table > tbody > tr > td.data-grid-actions-cell > a"/>
     </section>
 </sections>
