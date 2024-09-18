@@ -130,7 +130,7 @@ class DbSchemaWriterTest extends TestCase
         $statementAggregator->expects($this->any())
             ->method('getStatementsBank')
             ->willReturn([$statementBank]);
-        $this->sqlVersionProvider->expects($this->once())
+        $this->sqlVersionProvider->expects($this->any())
             ->method('getSqlVersion')
             ->willReturn($dbVersion);
         $this->adapter->expects($this->exactly($numberOfQueries))
@@ -145,7 +145,8 @@ class DbSchemaWriterTest extends TestCase
     public static function compileDataProvider() : array
     {
         return [
-            [SqlVersionProvider::MARIA_DB_10_VERSION, 2],
+            [SqlVersionProvider::MARIA_DB_10_4_VERSION, 2],
+            [SqlVersionProvider::MARIA_DB_10_6_VERSION, 2],
             [SqlVersionProvider::MYSQL_8_0_VERSION, 1],
         ];
     }

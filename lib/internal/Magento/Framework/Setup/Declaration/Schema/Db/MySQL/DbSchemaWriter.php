@@ -319,7 +319,8 @@ class DbSchemaWriter implements DbSchemaWriterInterface
      */
     private function isNeedToSplitSql() : bool
     {
-        return str_contains($this->sqlVersionProvider->getSqlVersion(), SqlVersionProvider::MARIA_DB_10_VERSION);
+        return str_contains($this->sqlVersionProvider->getSqlVersion(), SqlVersionProvider::MARIA_DB_10_4_VERSION) ||
+            str_contains($this->sqlVersionProvider->getSqlVersion(), SqlVersionProvider::MARIA_DB_10_6_VERSION);
     }
 
     /**
