@@ -657,28 +657,6 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * Retrieve website default currency code
-     *
-     * @return string
-     */
-    public function getDefaultCurrencyCode()
-    {
-        if ($this->getConfig(
-                \Magento\Store\Model\Store::XML_PATH_PRICE_SCOPE
-            ) == \Magento\Store\Model\Store::PRICE_SCOPE_GLOBAL
-        ) {
-            $currencyCode = $this->_coreConfig->getValue(
-                \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_DEFAULT,
-                'default'
-            );
-        } else {
-            $currencyCode = $this->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_DEFAULT);
-        }
-
-        return $currencyCode;
-    }
-
-    /**
      * Retrieve website base currency
      *
      * @return \Magento\Directory\Model\Currency
