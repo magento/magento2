@@ -258,7 +258,11 @@ class Save extends AbstractAction implements HttpPostActionInterface
 
     /**
      * Check if the positions for identical filters has changed
-     */
+     */*
+ * @param array $existingConfig The existing configuration
+ * @param array $currentConfig The current configuration
+ * @return bool True if positions have changed, false otherwise
+ */
     private function isPositionChanged(array $existingConfig, array $currentConfig): bool
     {
         foreach (['filters', 'positions'] as $key) {
