@@ -77,12 +77,18 @@ class PriceBackendTest extends TestCase
     public static function aroundValidateDataProvider()
     {
         return [
-            ['typeId' => Type::TYPE_SIMPLE, 'priceType' => Price::PRICE_TYPE_FIXED, 'expectedResult' => static::CLOSURE_VALUE],
-            ['typeId' => Type::TYPE_SIMPLE, 'priceType' => Price::PRICE_TYPE_DYNAMIC, 'expectedResult' => static::CLOSURE_VALUE],
-            ['typeId' => Type::TYPE_BUNDLE, 'priceType' => Price::PRICE_TYPE_FIXED, 'expectedResult' => static::CLOSURE_VALUE],
-            ['typeId' => Type::TYPE_BUNDLE, 'priceType' => Price::PRICE_TYPE_DYNAMIC, 'expectedResult' => true],
-            ['typeId' => Type::TYPE_VIRTUAL, 'priceType' => Price::PRICE_TYPE_FIXED, 'expectedResult' => static::CLOSURE_VALUE],
-            ['typeId' => Type::TYPE_VIRTUAL, 'priceType' => Price::PRICE_TYPE_DYNAMIC, 'expectedResult' => static::CLOSURE_VALUE],
+            ['typeId' => Type::TYPE_SIMPLE, 'priceType' => Price::PRICE_TYPE_FIXED,
+                'expectedResult' => static::CLOSURE_VALUE],
+            ['typeId' => Type::TYPE_SIMPLE, 'priceType' => Price::PRICE_TYPE_DYNAMIC,
+                'expectedResult' => static::CLOSURE_VALUE],
+            ['typeId' => Type::TYPE_BUNDLE, 'priceType' => Price::PRICE_TYPE_FIXED,
+                'expectedResult' => static::CLOSURE_VALUE],
+            ['typeId' => Type::TYPE_BUNDLE, 'priceType' => Price::PRICE_TYPE_DYNAMIC,
+                'expectedResult' => true],
+            ['typeId' => Type::TYPE_VIRTUAL, 'priceType' => Price::PRICE_TYPE_FIXED,
+                'expectedResult' => static::CLOSURE_VALUE],
+            ['typeId' => Type::TYPE_VIRTUAL, 'priceType' => Price::PRICE_TYPE_DYNAMIC,
+                'expectedResult' => static::CLOSURE_VALUE],
         ];
     }
 }
