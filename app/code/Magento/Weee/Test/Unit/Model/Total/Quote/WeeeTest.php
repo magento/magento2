@@ -882,6 +882,7 @@ class WeeeTest extends TestCase
                 'base_weee_tax_applied_row_amnt_incl_tax' => 30
             ],
             'itemQty' => 2,
+            'parentQty' => 0,
             'addressData' => [
                 'subtotal_incl_tax' => 30,
                 'base_subtotal_incl_tax' => 30,

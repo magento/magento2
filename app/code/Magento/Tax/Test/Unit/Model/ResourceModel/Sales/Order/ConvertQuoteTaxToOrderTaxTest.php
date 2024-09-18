@@ -328,7 +328,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         'item_id' => null,
                         'type' => 'shipping',
                         'associated_item_id' => null,
-                        'appliedTaxes' => [
+                        'applied_taxes' => [
                             [
                                 'amount' => 0.55,
                                 'base_amount' => 0.55,
@@ -368,7 +368,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         ]
                     ]
                 ],
-                'expectedItemTaxes' => [
+                'expectedTaxes' => [
                     //state tax
                     '35' => [
                         'order_id' => self::ORDERID,
@@ -578,7 +578,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         'item_id' => null,
                         'type' => 'shipping',
                         'associated_item_id' => null,
-                        'appliedTaxes' => [
+                        'applied_taxes' => [
                             [
                                 'amount' => 0.55,
                                 'base_amount' => 0.55,
@@ -618,7 +618,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         ]
                     ]
                 ],
-                'expectedItemTaxes' => [
+                'expectedTaxes' => [
                     //state tax
                     '35' => [
                         'order_id' => self::ORDERID,
