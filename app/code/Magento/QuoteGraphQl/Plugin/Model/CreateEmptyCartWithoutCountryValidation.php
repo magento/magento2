@@ -18,6 +18,8 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Closure;
 use Exception;
 use Magento\Quote\Model\QuoteManagement;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Customer\Model\Config\Share;
 
 class CreateEmptyCartWithoutCountryValidation
 {
@@ -26,12 +28,14 @@ class CreateEmptyCartWithoutCountryValidation
      * @param CartRepositoryInterface $quoteRepository
      * @param CustomerRepositoryInterface $customerRepository
      * @param QuoteFactory $quoteFactory
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         private readonly StoreManagerInterface $storeManager,
         private readonly CartRepositoryInterface $quoteRepository,
         private readonly CustomerRepositoryInterface $customerRepository,
-        private readonly QuoteFactory $quoteFactory
+        private readonly QuoteFactory $quoteFactory,
+        private readonly ScopeConfigInterface $scopeConfig
     ) {
     }
 
@@ -52,15 +56,23 @@ class CreateEmptyCartWithoutCountryValidation
         Closure $proceed,
         int $customerId
     ): bool|int {
-        $storeId = (int) $this->storeManager->getStore()->getStoreId();
-        $quote = $this->createCustomerCart($customerId, $storeId);
+        $customerAccountShareScope = (int) $this->scopeConfig->getValue(
+            Share::XML_PATH_CUSTOMER_ACCOUNT_SHARE,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+        );
+        if ($customerAccountShareScope === Share::SHARE_GLOBAL) {
+            $storeId = (int) $this->storeManager->getStore()->getStoreId();
+            $quote = $this->createCustomerCart($customerId, $storeId);
 
-        try {
-            $this->quoteRepository->save($quote);
-        } catch (Exception $e) {
-            throw new CouldNotSaveException(__("The quote can't be created."));
+            try {
+                $this->quoteRepository->save($quote);
+            } catch (Exception $e) {
+                throw new CouldNotSaveException(__("The quote can't be created."));
+            }
+            return (int)$quote->getId();
+        } else {
+            return $proceed($customerId);
         }
-        return (int)$quote->getId();
     }
 
     /**

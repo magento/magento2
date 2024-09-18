@@ -19,6 +19,7 @@ use Magento\Quote\Model\QuoteManagement;
 use Magento\QuoteGraphQl\Plugin\Model\CreateEmptyCartWithoutCountryValidation;
 use Magento\Store\Model\Store;
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -69,6 +70,11 @@ class CreateEmptyCartWithoutCountryValidationTest extends TestCase
     private MockObject|Quote $quote;
 
     /**
+     * @var MockObject|ScopeConfigInterface
+     */
+    private MockObject|ScopeConfigInterface $scopeConfig;
+
+    /**
      * @throws Exception
      */
     protected function setUp(): void
@@ -83,12 +89,14 @@ class CreateEmptyCartWithoutCountryValidationTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->quote = $this->createMock(Quote::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->model = new CreateEmptyCartWithoutCountryValidation(
             $this->storeManager,
             $this->quoteRepository,
             $this->customerRepository,
-            $this->quoteFactory
+            $this->quoteFactory,
+            $this->scopeConfig
         );
     }
 
