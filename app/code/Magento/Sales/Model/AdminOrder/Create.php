@@ -1810,8 +1810,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         if (isset($data['payment_method'])) {
             $this->setPaymentMethod($data['payment_method']);
-       } else {
-            $this->setPaymentMethod('');
         }
 
         if (isset($data['coupon']['code'])) {
