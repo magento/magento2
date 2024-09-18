@@ -10,7 +10,7 @@ namespace Magento\Theme\Controller\Result;
 use Magento\Csp\Api\InlineUtilInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\Response\Http;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\View\Result\Layout;
@@ -34,14 +34,16 @@ class AsyncCssPlugin
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param InlineUtilInterface $cspInlineUtil
+     * @param InlineUtilInterface|null $cspInlineUtil
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        InlineUtilInterface $cspInlineUtil
+        InlineUtilInterface $cspInlineUtil = null
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->cspInlineUtil = $cspInlineUtil;
+        $this->cspInlineUtil = $cspInlineUtil ?: ObjectManager::getInstance()->get(
+            InlineUtilInterface::class
+        );
     }
 
     /**
