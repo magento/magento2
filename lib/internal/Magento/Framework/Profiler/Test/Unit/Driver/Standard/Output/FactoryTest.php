@@ -55,7 +55,7 @@ class FactoryTest extends TestCase
 
     /**
      * @dataProvider createDataProvider
-     * @param array $configData
+     * @param array|string $configData
      * @param string $expectedClass
      */
     public function testCreate($configData, $expectedClass)
@@ -81,15 +81,17 @@ class FactoryTest extends TestCase
         return [
             'Prefix and concrete type' => [
                 ['type' => 'test'],
-                static fn(self $testCase) => $testCase->getOutputClassMock()['testOutputClass']
+                static fn(self $testCase) => $testCase->getOutputClassTestMock()
             ],
             'Prefix and default type' => [
                 [],
-                static fn(self $testCase) => $testCase->getOutputClassMock()['defaultOutputClass']
+                static fn(self $testCase) => $testCase->getOutputClassDefaultMock()
             ],
             'Concrete class' => [
-                ['type' => static fn(self $testCase) => $testCase->getOutputClassMock()['testOutputClass']],
-                static fn(self $testCase) => $testCase->getOutputClassMock()['testOutputClass']
+                ['type' => 'Magento_Framework_Profiler_Driver_Standard_Output_Test_Test_Foo'],
+                static fn(self $testCase) => $testCase->getOutputClassTestMock(
+                    'Magento_Framework_Profiler_Driver_Standard_Output_Test_Test_Foo'
+                )
             ],
         ];
     }
@@ -98,36 +100,24 @@ class FactoryTest extends TestCase
      * @return array
      * @throws \PHPUnit\Framework\MockObject\Exception
      */
-    public function getOutputClassMock(): array
-    {
-        $defaultOutputClassMock = $this->getMockForAbstractClass(
-            OutputInterface::class,
-            [],
-            'Magento_Framework_Profiler_Driver_Standard_Output_Test_Default',
-            true,
-            true,
-            true,
-            []
-        );
+    public function getOutputClassDefaultMock(
+        $mockClass = 'Magento_Framework_Profiler_Driver_Standard_Output_Test_Default'
+    ): string {
+        $defaultOutputClassMock = $this->getMockBuilder(OutputInterface::class)
+            ->setMockClassName($mockClass)
+            ->getMock();
 
-        $defaultOutputClass = get_class($defaultOutputClassMock);
+        return get_class($defaultOutputClassMock);
+    }
 
-        $testOutputClassMock = $this->getMockForAbstractClass(
-            OutputInterface::class,
-            [],
-            'Magento_Framework_Profiler_Driver_Standard_Output_Test_Test',
-            true,
-            true,
-            true,
-            []
-        );
+    public function getOutputClassTestMock(
+        $mockClass = 'Magento_Framework_Profiler_Driver_Standard_Output_Test_Test'
+    ): string {
+        $testOutputClassMock = $this->getMockBuilder(OutputInterface::class)
+            ->setMockClassName($mockClass)
+            ->getMock();
 
-        $testOutputClass = get_class($testOutputClassMock);
-
-        return [
-            'defaultOutputClass' => $defaultOutputClass,
-            'testOutputClass' => $testOutputClass
-        ];
+        return get_class($testOutputClassMock);
     }
 
     public function testCreateUndefinedClass()
