@@ -23,6 +23,11 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test Class BaseurlTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BaseurlTest extends TestCase
 {
     public function testSaveMergedJsCssMustBeCleaned()
