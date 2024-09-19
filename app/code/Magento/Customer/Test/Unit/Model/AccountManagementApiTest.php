@@ -433,8 +433,6 @@ class AccountManagementApiTest extends TestCase
     ): void {
         if ($willThrowException) {
             $this->expectException(AuthorizationException::class);
-        } else {
-            $this->expectNotToPerformAssertions();
         }
         $this->authorizationMock
             ->expects($this->once())

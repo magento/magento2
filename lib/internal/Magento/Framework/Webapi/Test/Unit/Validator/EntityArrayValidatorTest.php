@@ -48,10 +48,7 @@ class EntityArrayValidatorTest extends TestCase
             $this->inputArraySizeLimitValueMock
         );
     }
-
-    /**
-     * @doesNotPerformAssertions
-     */
+    
     public function testAllowsDataWhenBelowLimitWhenUsingRouteInputLimit()
     {
         $this->configMock->expects(self::once())
@@ -65,9 +62,6 @@ class EntityArrayValidatorTest extends TestCase
         $this->validator->validateComplexArrayType("foo", array_fill(0, 5, []));
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     public function testFailsDataWhenAboveLimitUsingRouteInputLimit()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -83,9 +77,6 @@ class EntityArrayValidatorTest extends TestCase
         $this->validator->validateComplexArrayType("foo", array_fill(0, 5, []));
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     public function testAllowsDataWhenBelowLimit()
     {
         $this->configMock->expects(self::once())
@@ -100,9 +91,6 @@ class EntityArrayValidatorTest extends TestCase
         $this->validator->validateComplexArrayType("foo", array_fill(0, 3, []));
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     public function testAllowsDataWhenBelowLimitUsingConfig()
     {
         $this->configMock->expects(self::once())
@@ -117,9 +105,6 @@ class EntityArrayValidatorTest extends TestCase
         $this->validator->validateComplexArrayType("foo", array_fill(0, 5, []));
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     public function testFailsDataWhenAboveLimit()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -136,9 +121,6 @@ class EntityArrayValidatorTest extends TestCase
         $this->validator->validateComplexArrayType("foo", array_fill(0, 4, []));
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     public function testFailsDataWhenAboveLimitUsingConfig()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -155,9 +137,6 @@ class EntityArrayValidatorTest extends TestCase
         $this->validator->validateComplexArrayType("foo", array_fill(0, 7, []));
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     public function testAboveLimitWithDisabledLimiting()
     {
         $this->configMock->expects(self::once())
