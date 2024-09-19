@@ -26,7 +26,7 @@ class SqlVersionProvider
     /**
      * @deprecated removed use of MARIA_DB_10_VERSION const
      * Introduced MARIA_DB const to check current db engine is mysql or mariadb
-     * @see isMysqlGte8029() and isMariaDbEngine()
+     * @see isMysqlGte8029() , isMariaDbEngine()
      */
     public const MARIA_DB_10_VERSION = '10.';
 
