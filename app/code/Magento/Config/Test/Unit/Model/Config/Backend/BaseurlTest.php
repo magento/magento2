@@ -17,6 +17,9 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\MergeService;
+use Magento\Framework\Validator\Url as UrlValidator;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\TestCase;
 
@@ -71,6 +74,24 @@ class BaseurlTest extends TestCase
     public function testBeforeSaveConvertLowerCase($value, $expectedValue)
     {
         $model = (new ObjectManager($this))->getObject(Baseurl::class);
+
+        $urlValidatorMock = $this->getMockBuilder(UrlValidator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $objectManagerInterface = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerInterface->expects($this->exactly(1))
+            ->method('get')
+            ->with(UrlValidator::class)
+            ->willReturn($urlValidatorMock);
+        AppObjectManager::setInstance($objectManagerInterface);
+
+        $urlValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with($expectedValue, ['http', 'https'])
+            ->willReturn(true);
+
+
         $model->setValue($value);
         $model->beforeSave();
         $this->assertEquals($expectedValue, $model->getValue());
@@ -79,7 +100,7 @@ class BaseurlTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider()
     {
         return [
             ['https://Example1.com/', 'https://example1.com/'],
