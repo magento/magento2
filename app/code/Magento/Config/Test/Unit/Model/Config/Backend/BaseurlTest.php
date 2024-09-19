@@ -91,7 +91,6 @@ class BaseurlTest extends TestCase
             ->with($expectedValue, ['http', 'https'])
             ->willReturn(true);
 
-
         $model->setValue($value);
         $model->beforeSave();
         $this->assertEquals($expectedValue, $model->getValue());
