@@ -113,7 +113,6 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
                             console.log(status + ': ' + error);
                         }
                     });
-
                 }else{
                     let defaultTree = updateChildrenKey({$block->getTreeJson()});
                     callback.call(this, defaultTree);
