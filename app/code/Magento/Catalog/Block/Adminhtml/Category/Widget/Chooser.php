@@ -152,7 +152,7 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
         if (in_array($node->getId(), $this->getSelectedCategories())) {
             $item['checked'] = true;
         }
-        $item['is_anchor'] = (int)$node->getIsAnchor();
+        $item['is_anchor'] = $node->getIsAnchor() !== null ? (int) $node->getIsAnchor() : 1;
         $item['url_key'] = $node->getData('url_key');
         return $item;
     }
