@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="productCustomizableDatepickerOption1">
+        <data key="title" unique="suffix">option1</data>
+        <data key="is_required">1</data>
+        <data key="type">Date</data>
+        <data key="option_0_price">100</data>
+        <data key="option_0_price_type">Fixed</data>
+        <data key="option_0_sku" unique="suffix">sku1_</data>
+    </entity>
+    <entity name="productCustomizableDatepickerOption2">
+        <data key="title" unique="suffix">option2</data>
+        <data key="is_required">1</data>
+        <data key="type">Date</data>
+        <data key="option_0_price">200</data>
+        <data key="option_0_price_type">Fixed</data>
+        <data key="option_0_sku" unique="suffix">sku2_</data>
+    </entity>
+    <entity name="productCustomizableDatepicker">
+        <data key="name">customizable datepicker product</data>
+        <data key="sku">customizable_datepicker_product</data>
+        <data key="price">100</data>
+        <data key="weight">1</data>
+        <data key="quantity">100</data>
+    </entity>
+</entities>

@@ -78,7 +78,7 @@ class AuthenticationTest extends TestCase
 
         $this->backendConfigMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMockForAbstractClass();
         $this->customerRegistryMock = $this->createPartialMock(
             CustomerRegistry::class,
@@ -140,11 +140,10 @@ class AuthenticationTest extends TestCase
         $customerId = 1;
         $this->backendConfigMock->expects($this->exactly(2))
             ->method('getValue')
-            ->withConsecutive(
-                [Authentication::LOCKOUT_THRESHOLD_PATH],
-                [Authentication::MAX_FAILURES_PATH]
-            )
-            ->willReturnOnConsecutiveCalls(0, 0);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Authentication::LOCKOUT_THRESHOLD_PATH] => 0,
+                [Authentication::MAX_FAILURES_PATH] => 0
+            });
         $this->customerRegistryMock->expects($this->once())
             ->method('retrieveSecureData')
             ->with($customerId)
@@ -177,11 +176,10 @@ class AuthenticationTest extends TestCase
         $customerId = 1;
         $this->backendConfigMock->expects($this->exactly(2))
             ->method('getValue')
-            ->withConsecutive(
-                [Authentication::LOCKOUT_THRESHOLD_PATH],
-                [Authentication::MAX_FAILURES_PATH]
-            )
-            ->willReturnOnConsecutiveCalls(10, 5);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Authentication::LOCKOUT_THRESHOLD_PATH] => 10,
+                [Authentication::MAX_FAILURES_PATH] => 5
+            });
 
         $this->customerRegistryMock->expects($this->once())
             ->method('retrieveSecureData')
@@ -213,7 +211,7 @@ class AuthenticationTest extends TestCase
     /**
      * @return array
      */
-    public function processAuthenticationFailureDataProvider()
+    public static function processAuthenticationFailureDataProvider()
     {
         return [
             'first attempt' => [0, null, null, 1, 1, 1, 1, null],
@@ -306,11 +304,10 @@ class AuthenticationTest extends TestCase
         } else {
             $this->backendConfigMock->expects($this->exactly(2))
                 ->method('getValue')
-                ->withConsecutive(
-                    [Authentication::LOCKOUT_THRESHOLD_PATH],
-                    [Authentication::MAX_FAILURES_PATH]
-                )
-                ->willReturnOnConsecutiveCalls(1, 1);
+                ->willReturnCallback(fn($param) => match ([$param]) {
+                    [Authentication::LOCKOUT_THRESHOLD_PATH] => 1,
+                    [Authentication::MAX_FAILURES_PATH] => 1
+                });
             $this->customerSecureMock->expects($this->once())
                 ->method('isCustomerLocked')
                 ->willReturn(false);
@@ -333,7 +330,7 @@ class AuthenticationTest extends TestCase
     /**
      * @return array
      */
-    public function validateCustomerPassword()
+    public static function validateCustomerPassword()
     {
         return [
             [true],

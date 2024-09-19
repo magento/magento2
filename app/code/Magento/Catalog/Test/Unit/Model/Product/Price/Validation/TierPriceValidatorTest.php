@@ -184,7 +184,13 @@ class TierPriceValidatorTest extends TestCase
         $websiteId = 0;
         $invalidWebsiteId = 4;
         $this->tierPrice->expects($this->atLeastOnce())->method('getWebsiteId')
-            ->willReturnOnConsecutiveCalls($websiteId, $websiteId, $websiteId, $invalidWebsiteId, $websiteId);
+            ->willReturnCallback(function () use (&$callCount, $websiteId, $invalidWebsiteId) {
+                $callCount++;
+                if ($callCount === 4) {
+                    return $invalidWebsiteId;
+                }
+                return $websiteId;
+            });
         $this->tierPrice->expects($this->atLeastOnce())->method('getCustomerGroup')
             ->willReturn($returned['tierPrice_getCustomerGroup']);
         $skuDiff = [$sku];
@@ -270,7 +276,7 @@ class TierPriceValidatorTest extends TestCase
     {
         $customerGroupName = 'test_Group';
         $customerGroup = $this->getMockBuilder(GroupInterface::class)
-            ->setMethods(['getCode', 'getId'])
+            ->onlyMethods(['getCode', 'getId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $customerGroup->expects($this->atLeastOnce())->method('getCode')->willReturn($customerGroupName);
