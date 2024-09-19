@@ -23,6 +23,13 @@ class SqlVersionProvider
 
     public const MYSQL_5_7_VERSION = '5.7.';
 
+    /**
+     * @deprecated removed use of MARIA_DB_10_VERSION const
+     * Introduced MARIA_DB const to check current db engine is mysql or mariadb
+     * @see isMysqlGte8029() and isMariaDbEngine()
+     */
+    public const MARIA_DB_10_VERSION = '10.';
+
     public const MARIA_DB_10_4_VERSION = '10.4.';
 
     public const MARIA_DB_10_6_VERSION = '10.6.';
