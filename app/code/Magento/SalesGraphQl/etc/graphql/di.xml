@@ -52,4 +52,13 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\SalesGraphQl\Api\OrderAvailableActionProviderInterface"
+                type="Magento\SalesGraphQl\Model\GetReorderAvailableActions" />
+    <type name="Magento\SalesGraphQl\Model\GetOrderAvailableActions">
+        <arguments>
+            <argument name="actions" xsi:type="array">
+                <item name="is_reorder_available_action" xsi:type="object">Magento\SalesGraphQl\Model\GetReorderAvailableActions</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
