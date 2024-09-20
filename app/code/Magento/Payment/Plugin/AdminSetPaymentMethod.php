@@ -29,13 +29,15 @@ class AdminSetPaymentMethod
      * Checkout LayoutProcessor before process plugin.
      *
      * @param Create $subject
-     * @param $data
+     * @param array $data
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeImportPostData(Create $subject, $data)
+    public function beforeImportPostData(Create $subject, array $data)
     {
-        if (!isset($data['payment_method']) && !isset($this->request->getParam('payment')['method'])) {
+        if (!isset($data['payment_method'])
+            && ($_POST)
+            && !isset($this->request->getParam('payment')['method'])) {
             $subject->setPaymentMethod('');
         }
     }
