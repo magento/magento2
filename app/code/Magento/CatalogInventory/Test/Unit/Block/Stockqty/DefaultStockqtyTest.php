@@ -133,20 +133,29 @@ class DefaultStockqtyTest extends TestCase
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $storeMock->expects($this->once())
-            ->method('getWebsiteId')
-            ->willReturn($websiteId);
         $product = $this->createMock(Product::class);
-        $product->expects($this->any())
-            ->method('getId')
-            ->willReturn($productId);
         $product->expects($this->once())
             ->method('getStore')
             ->willReturn($storeMock);
-        $this->registryMock->expects($this->once())
+        $storeMock->expects($this->once())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+        $product->expects($this->any())
+            ->method('getId')
+            ->willReturn($productId);
+        $this->registryMock->expects($this->any())
             ->method('registry')
             ->with('current_product')
             ->willReturn($product);
+        if ($productId) {
+            $stockStatus = $this->getMockBuilder(StockStatusInterface::class)
+                ->getMockForAbstractClass();
+            $stockStatus->expects($this->any())->method('getQty')->willReturn($stockQty);
+            $this->stockRegistryMock->expects($this->once())
+                ->method('getStockStatus')
+                ->with($productId, $websiteId)
+                ->willReturn($stockStatus);
+        }
 
         $stockItemMock = $this->getMockBuilder(StockItemInterface::class)
             ->disableOriginalConstructor()
