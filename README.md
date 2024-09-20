@@ -82,3 +82,39 @@ If you are a new Community member, check out the following channels:
 - [general](https://magentocommeng.slack.com/archives/C4YS78WE6) is an open chat for introductions and Magento 2 questions
 - [github](https://magentocommeng.slack.com/archives/C7KB93M32) is a support channel for GitHub issues, pull requests, and processes
 - [public-backlog](https://magentocommeng.slack.com/archives/CCV3J3RV5) for discussions of the backlog
+
+### Ref wikipage
+- https://iwikio.github.io/en/Greco-Buddhism
+- https://iwikio.github.io/en/Greenwich_Village
+- https://iwikio.github.io/en/Greg_A._Baldwin
+- https://iwikio.github.io/en/Grupo_Mexicano_de_Desarrollo,_S.A._v._Alliance_Bond_Fund,_Inc.
+- https://iwikio.github.io/en/Guided_bomb
+- https://iwikio.github.io/en/Guinness_Book_of_World_Records
+- https://iwikio.github.io/en/Gummi,_Nigeria
+- https://iwikio.github.io/en/HMS_Queen_Elizabeth_(1913)
+- https://iwikio.github.io/en/HMS_Valiant_(1914)
+- https://iwikio.github.io/en/Haigerloch_research_reactor
+- https://iwikio.github.io/en/Haiti
+- https://iwikio.github.io/en/Haitian_crisis_(2018–present)
+- https://iwikio.github.io/en/Hamas
+- https://iwikio.github.io/en/Harmon_Trophy
+- https://iwikio.github.io/en/Harold_J._Pickerstein
+- https://iwikio.github.io/en/Haysborough,_Tennessee
+- https://iwikio.github.io/en/Head-related_transfer_function
+- https://iwikio.github.io/en/Health_professional
+- https://iwikio.github.io/en/Helen_D._Pigeon
+- https://iwikio.github.io/en/Helen_Gallagher
+- https://iwikio.github.io/en/Hell
+- https://iwikio.github.io/en/Hema_people
+- https://iwikio.github.io/en/Henry_Drury_Noyes
+- https://iwikio.github.io/en/Henry_Souther
+- https://iwikio.github.io/en/Henry_Souther_(Pennsylvania_politician)
+- https://iwikio.github.io/en/Henry_VIII_of_England
+- https://iwikio.github.io/en/Herbie_Flowers
+- https://iwikio.github.io/en/Hermel_District
+- https://iwikio.github.io/en/Hezbollah
+- https://iwikio.github.io/en/High_Court_of_Justice_of_England_and_Wales
+- https://iwikio.github.io/en/High_treason
+- https://iwikio.github.io/en/History_of_Buddhism
+- https://iwikio.github.io/en/History_of_San_Francisco_(Refregier)
+- https://iwikio.github.io/en/Hong_Kong_Economic_and_Trade_Office_Certification_Act
