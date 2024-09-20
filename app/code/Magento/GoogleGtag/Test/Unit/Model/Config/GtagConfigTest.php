@@ -184,7 +184,7 @@ class GtagConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestStoreConfig(): array
+    public static function dataProviderForTestStoreConfig(): array
     {
         return [
             ['getConversionId', self::XML_PATH_CONVERSION_ID, 'AW-123'],

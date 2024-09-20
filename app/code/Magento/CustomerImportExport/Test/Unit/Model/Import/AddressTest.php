@@ -9,7 +9,6 @@ namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
 use Magento\Customer\Model\Address\Validator\Postcode;
 use Magento\Customer\Model\AddressFactory;
-use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\Indexer\Processor;
 use Magento\Customer\Model\ResourceModel\Address\Attribute as AddressAttribute;
@@ -151,16 +150,6 @@ class AddressTest extends TestCase
     private $countryWithWebsites;
 
     /**
-     * @var Share|MockObject
-     */
-    private $configShare;
-
-    /**
-     * @var Storage
-     */
-    private $customerStorage;
-
-    /**
      * Init entity adapter model
      */
     protected function setUp(): void
@@ -182,7 +171,6 @@ class AddressTest extends TestCase
 
             ->method('getAllOptions')
             ->willReturn([]);
-        $this->configShare = $this->createMock(Share::class);
         $this->_model = $this->_getModelMock();
         $this->errorAggregator = $this->createPartialMock(
             ProcessingErrorAggregator::class,
@@ -210,7 +198,7 @@ class AddressTest extends TestCase
             ->getMock();
         $connection = $this->createMock(\stdClass::class);
         $attributeCollection = $this->_createAttrCollectionMock();
-        $this->customerStorage = $this->_createCustomerStorageMock();
+        $customerStorage = $this->_createCustomerStorageMock();
         $customerEntity = $this->_createCustomerEntityMock();
         $addressCollection = new Collection(
             $this->createMock(EntityFactory::class)
@@ -234,7 +222,7 @@ class AddressTest extends TestCase
             'bunch_size' => 1,
             'attribute_collection' => $attributeCollection,
             'entity_type_id' => 1,
-            'customer_storage' => $this->customerStorage,
+            'customer_storage' => $customerStorage,
             'customer_entity' => $customerEntity,
             'address_collection' => $addressCollection,
             'entity_table' => 'not_used',
@@ -400,8 +388,7 @@ class AddressTest extends TestCase
             $this->_getModelDependencies(),
             $this->countryWithWebsites,
             $this->createMock(\Magento\CustomerImportExport\Model\ResourceModel\Import\Address\Storage::class),
-            $this->createMock(Processor::class),
-            $this->configShare
+            $this->createMock(Processor::class)
         );
 
         $property = new \ReflectionProperty($modelMock, '_availableBehaviors');
@@ -420,14 +407,14 @@ class AddressTest extends TestCase
     {
         return [
             'valid' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
-                '$errors' => [],
-                '$isValid' => true,
+                'rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
+                'errors' => [],
+                'isValid' => true,
             ],
             'empty address id' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_update_empty_address_id.php',
-                '$errors' => [],
-                '$isValid' => true,
+                'rowData' => include __DIR__ . '/_files/row_data_address_update_empty_address_id.php',
+                'errors' => [],
+                'isValid' => true,
             ],
         ];
     }
@@ -441,9 +428,9 @@ class AddressTest extends TestCase
     {
         return [
             'valid' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
-                '$errors' => [],
-                '$isValid' => true,
+                'rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
+                'errors' => [],
+                'isValid' => true,
             ],
         ];
     }
@@ -459,10 +446,6 @@ class AddressTest extends TestCase
     public function testValidateRowForUpdate(array $rowData, array $errors, $isValid = false)
     {
         $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
-
-        $this->configShare->expects($this->once())
-            ->method('isGlobalScope')
-            ->willReturn(false);
 
         if ($isValid) {
             $this->assertTrue($this->_model->validateRow($rowData, 0));
@@ -481,16 +464,6 @@ class AddressTest extends TestCase
      */
     public function testValidateRowForUpdateGlobalCustomer(array $rowData, array $errors, $isValid = false)
     {
-        $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
-
-        $this->configShare->expects($this->once())
-            ->method('isGlobalScope')
-            ->willReturn(true);
-
-        $this->customerStorage->expects($this->once())
-            ->method('getCustomerIdByEmail')
-            ->willReturn(1);
-
         if ($isValid) {
             $this->assertTrue($this->_model->validateRow($rowData, 0));
         } else {

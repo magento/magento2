@@ -191,24 +191,24 @@ class ElasticsearchTest extends TestCase
     {
         return [
             [
-                'without_protocol' => [
+                'options' => [
                     'hostname' => 'localhost',
                     'port' => '9200',
                     'timeout' => 15,
                     'index' => 'magento2',
                     'enableAuth' => 0,
                 ],
-                'expected_result' => 'http://localhost:9200',
+                'expectedResult' => 'http://localhost:9200',
             ],
             [
-                'with_protocol' => [
+                'options' => [
                     'hostname' => 'https://localhost',
                     'port' => '9200',
                     'timeout' => 15,
                     'index' => 'magento2',
                     'enableAuth' => 0,
                 ],
-                'expected_result' => 'https://localhost:9200',
+                'expectedResult' => 'https://localhost:9200',
             ],
         ];
     }

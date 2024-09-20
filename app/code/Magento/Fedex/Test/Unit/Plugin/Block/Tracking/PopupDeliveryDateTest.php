@@ -167,14 +167,14 @@ class PopupDeliveryDateTest extends TestCase
         return [
             'same day' => [
                 'date' => '2024-01-07 06:00:00',
-                'current_timezone' => 'US/Eastern',
-                'converted_timezone' => 'America/Chicago',
+                'currentTimezone' => 'US/Eastern',
+                'convertedTimezone' => 'America/Chicago',
                 'expected' => '2024-01-07'
             ],
             'previous day' => [
                 'date' => '2024-01-07 00:00:00',
-                'current_timezone' => 'US/Eastern',
-                'converted_timezone' => 'America/Chicago',
+                'currentTimezone' => 'US/Eastern',
+                'convertedTimezone' => 'America/Chicago',
                 'expected' => '2024-01-06'
             ]
         ];

@@ -184,7 +184,7 @@ class GeneratorPoolTest extends TestCase
                         'sort.element' => ['second.element', 'sibling', false, 'alias'],
                     ],
                 ],
-                'expectedScheduledElements' => [
+                'expectedSchedule' => [
                     'first.element' => ['block', []],
                     'second.element' => ['block', []],
                     'third.element' => ['block', []],

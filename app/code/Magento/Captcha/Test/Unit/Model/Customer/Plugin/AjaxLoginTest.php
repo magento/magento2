@@ -213,11 +213,11 @@ class AjaxLoginTest extends TestCase
         return [
             [
                 'username' => 'name',
-                'requestData' => ['username' => 'name', 'captcha_string' => 'string'],
+                'requestContent' => ['username' => 'name', 'captcha_string' => 'string'],
             ],
             [
                 'username' => 'name',
-                'requestData' => [
+                'requestContent' => [
                     'username' => 'name',
                     'captcha_string' => 'string',
                     'captcha_form_id' => self::$formIds[0]
@@ -225,7 +225,7 @@ class AjaxLoginTest extends TestCase
             ],
             [
                 'username' => null,
-                'requestData' => [
+                'requestContent' => [
                     'username' => null,
                     'captcha_string' => 'string',
                     'captcha_form_id' => self::$formIds[0]
@@ -233,7 +233,7 @@ class AjaxLoginTest extends TestCase
             ],
             [
                 'username' => 'name',
-                'requestData' => [
+                'requestContent' => [
                     'username' => 'name',
                     'captcha_string' => 'string',
                     'captcha_form_id' => null

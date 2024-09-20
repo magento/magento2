@@ -141,7 +141,7 @@ class FileTest extends TestCase
     /**
      * @return array
      */
-    public function getContentDataProvider()
+    public static function getContentDataProvider()
     {
         return [
             'normal content' => ['content'],

@@ -242,134 +242,134 @@ class EntityAbstractTest extends AbstractImportTestCase
     {
         return [
             "add/update behavior and row with delete in action column" => [
-                '$inputBehavior' => Import::BEHAVIOR_ADD_UPDATE,
-                '$rowData' => [
+                'inputBehavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'rowData' => [
                     AbstractEntity::COLUMN_ACTION => AbstractEntity::COLUMN_ACTION_VALUE_DELETE,
                 ],
-                '$expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
             ],
             "delete behavior and row with delete in action column" => [
-                '$inputBehavior' => Import::BEHAVIOR_DELETE,
-                '$rowData' => [
+                'inputBehavior' => Import::BEHAVIOR_DELETE,
+                'rowData' => [
                     AbstractEntity::COLUMN_ACTION => AbstractEntity::COLUMN_ACTION_VALUE_DELETE,
                 ],
-                '$expectedBehavior' => Import::BEHAVIOR_DELETE,
+                'expectedBehavior' => Import::BEHAVIOR_DELETE,
             ],
             "custom behavior and row with delete in action column" => [
-                '$inputBehavior' => Import::BEHAVIOR_CUSTOM,
-                '$rowData' => [
+                'inputBehavior' => Import::BEHAVIOR_CUSTOM,
+                'rowData' => [
                     AbstractEntity::COLUMN_ACTION => AbstractEntity::COLUMN_ACTION_VALUE_DELETE,
                 ],
-                '$expectedBehavior' => Import::BEHAVIOR_DELETE,
+                'expectedBehavior' => Import::BEHAVIOR_DELETE,
             ],
             "add/update behavior and row with update in action column" => [
-                '$inputBehavior' => Import::BEHAVIOR_ADD_UPDATE,
-                '$rowData' => [AbstractEntity::COLUMN_ACTION => 'update'],
-                '$expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'inputBehavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'rowData' => [AbstractEntity::COLUMN_ACTION => 'update'],
+                'expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
             ],
             "delete behavior and row with update in action column" => [
-                '$inputBehavior' => Import::BEHAVIOR_DELETE,
-                '$rowData' => [AbstractEntity::COLUMN_ACTION => 'update'],
-                '$expectedBehavior' => Import::BEHAVIOR_DELETE,
+                'inputBehavior' => Import::BEHAVIOR_DELETE,
+                'rowData' => [AbstractEntity::COLUMN_ACTION => 'update'],
+                'expectedBehavior' => Import::BEHAVIOR_DELETE,
             ],
             "custom behavior and row with update in action column" => [
-                '$inputBehavior' => Import::BEHAVIOR_CUSTOM,
-                '$rowData' => [AbstractEntity::COLUMN_ACTION => 'update'],
-                '$expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'inputBehavior' => Import::BEHAVIOR_CUSTOM,
+                'rowData' => [AbstractEntity::COLUMN_ACTION => 'update'],
+                'expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
             ],
             "add/update behavior and row with bogus string in action column" => [
-                '$inputBehavior' => Import::BEHAVIOR_ADD_UPDATE,
-                '$rowData' => [
+                'inputBehavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'rowData' => [
                     AbstractEntity::COLUMN_ACTION => microtime(true),
                 ],
-                '$expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
             ],
             "delete behavior and row with bogus string in action column" => [
-                '$inputBehavior' => Import::BEHAVIOR_DELETE,
-                '$rowData' => [
+                'inputBehavior' => Import::BEHAVIOR_DELETE,
+                'rowData' => [
                     AbstractEntity::COLUMN_ACTION => microtime(true),
                 ],
-                '$expectedBehavior' => Import::BEHAVIOR_DELETE,
+                'expectedBehavior' => Import::BEHAVIOR_DELETE,
             ],
             "custom behavior and row with bogus string in action column" => [
-                '$inputBehavior' => Import::BEHAVIOR_CUSTOM,
-                '$rowData' => [
+                'inputBehavior' => Import::BEHAVIOR_CUSTOM,
+                'rowData' => [
                     AbstractEntity::COLUMN_ACTION => microtime(true),
                 ],
-                '$expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
             ],
             "add/update behavior and row with null in action column" => [
-                '$inputBehavior' => Import::BEHAVIOR_ADD_UPDATE,
-                '$rowData' => [AbstractEntity::COLUMN_ACTION => null],
-                '$expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'inputBehavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'rowData' => [AbstractEntity::COLUMN_ACTION => null],
+                'expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
             ],
             "delete behavior and row with null in action column" => [
-                '$inputBehavior' => Import::BEHAVIOR_DELETE,
-                '$rowData' => [AbstractEntity::COLUMN_ACTION => null],
-                '$expectedBehavior' => Import::BEHAVIOR_DELETE,
+                'inputBehavior' => Import::BEHAVIOR_DELETE,
+                'rowData' => [AbstractEntity::COLUMN_ACTION => null],
+                'expectedBehavior' => Import::BEHAVIOR_DELETE,
             ],
             "custom behavior and row with null in action column" => [
-                '$inputBehavior' => Import::BEHAVIOR_CUSTOM,
-                '$rowData' => [AbstractEntity::COLUMN_ACTION => null],
-                '$expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'inputBehavior' => Import::BEHAVIOR_CUSTOM,
+                'rowData' => [AbstractEntity::COLUMN_ACTION => null],
+                'expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
             ],
             "add/update behavior and empty row" => [
-                '$inputBehavior' => Import::BEHAVIOR_ADD_UPDATE,
-                '$rowData' => null,
-                '$expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'inputBehavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'rowData' => null,
+                'expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
             ],
             "delete behavior and empty row" => [
-                '$inputBehavior' => Import::BEHAVIOR_DELETE,
-                '$rowData' => null,
-                '$expectedBehavior' => Import::BEHAVIOR_DELETE,
+                'inputBehavior' => Import::BEHAVIOR_DELETE,
+                'rowData' => null,
+                'expectedBehavior' => Import::BEHAVIOR_DELETE,
             ],
             "custom behavior and empty row" => [
-                '$inputBehavior' => Import::BEHAVIOR_CUSTOM,
-                '$rowData' => null,
-                '$expectedBehavior' => Import::BEHAVIOR_CUSTOM,
+                'inputBehavior' => Import::BEHAVIOR_CUSTOM,
+                'rowData' => null,
+                'expectedBehavior' => Import::BEHAVIOR_CUSTOM,
             ],
             "add/update behavior and row is empty array" => [
-                '$inputBehavior' => Import::BEHAVIOR_ADD_UPDATE,
-                '$rowData' => [],
-                '$expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'inputBehavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'rowData' => [],
+                'expectedBehavior' => Import::BEHAVIOR_ADD_UPDATE,
             ],
             "delete behavior and empty row is empty array" => [
-                '$inputBehavior' => Import::BEHAVIOR_DELETE,
-                '$rowData' => [],
-                '$expectedBehavior' => Import::BEHAVIOR_DELETE,
+                'inputBehavior' => Import::BEHAVIOR_DELETE,
+                'rowData' => [],
+                'expectedBehavior' => Import::BEHAVIOR_DELETE,
             ],
             "custom behavior and empty row is empty array" => [
-                '$inputBehavior' => Import::BEHAVIOR_CUSTOM,
-                '$rowData' => [],
-                '$expectedBehavior' => AbstractEntity::getDefaultBehavior(),
+                'inputBehavior' => Import::BEHAVIOR_CUSTOM,
+                'rowData' => [],
+                'expectedBehavior' => AbstractEntity::getDefaultBehavior(),
             ],
             "custom behavior and row with delete in action column and empty available behaviors" => [
-                '$inputBehavior' => Import::BEHAVIOR_CUSTOM,
-                '$rowData' => [
+                'inputBehavior' => Import::BEHAVIOR_CUSTOM,
+                'rowData' => [
                     AbstractEntity::COLUMN_ACTION => AbstractEntity::COLUMN_ACTION_VALUE_DELETE,
                 ],
-                '$expectedBehavior' => AbstractEntity::getDefaultBehavior(),
-                '$availableBehaviors' => [],
+                'expectedBehavior' => AbstractEntity::getDefaultBehavior(),
+                'availableBehaviors' => [],
             ],
             "custom behavior and row with update in action column and empty available behaviors" => [
-                '$inputBehavior' => Import::BEHAVIOR_CUSTOM,
-                '$rowData' => [AbstractEntity::COLUMN_ACTION => 'update'],
-                '$expectedBehavior' => AbstractEntity::getDefaultBehavior(),
-                '$availableBehaviors' => [],
+                'inputBehavior' => Import::BEHAVIOR_CUSTOM,
+                'rowData' => [AbstractEntity::COLUMN_ACTION => 'update'],
+                'expectedBehavior' => AbstractEntity::getDefaultBehavior(),
+                'availableBehaviors' => [],
             ],
             "custom behavior and row with bogus string in action column and empty available behaviors" => [
-                '$inputBehavior' => Import::BEHAVIOR_CUSTOM,
-                '$rowData' => [
+                'inputBehavior' => Import::BEHAVIOR_CUSTOM,
+                'rowData' => [
                     AbstractEntity::COLUMN_ACTION => microtime(true),
                 ],
-                '$expectedBehavior' => AbstractEntity::getDefaultBehavior(),
-                '$availableBehaviors' => [],
+                'expectedBehavior' => AbstractEntity::getDefaultBehavior(),
+                'availableBehaviors' => [],
             ],
             "custom behavior and row with null in action column and empty available behaviors" => [
-                '$inputBehavior' => Import::BEHAVIOR_CUSTOM,
-                '$rowData' => [AbstractEntity::COLUMN_ACTION => null],
-                '$expectedBehavior' => AbstractEntity::getDefaultBehavior(),
-                '$availableBehaviors' => [],
+                'inputBehavior' => Import::BEHAVIOR_CUSTOM,
+                'rowData' => [AbstractEntity::COLUMN_ACTION => null],
+                'expectedBehavior' => AbstractEntity::getDefaultBehavior(),
+                'availableBehaviors' => [],
             ]
         ];
     }

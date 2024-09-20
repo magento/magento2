@@ -144,7 +144,7 @@ class DwstreeTest extends TestCase
     {
         return [
             'matchAll'  => [
-                'scope'   => 'Test Scope',
+                'section'   => 'Test Scope',
                 'website' => [
                     'expected' => ['name' => 'Test Website Name', 'code' => 'Test Website Code'],
                     'actual'   => ['name' => 'Test Website Name', 'code' => 'Test Website Code'],
@@ -155,7 +155,7 @@ class DwstreeTest extends TestCase
                 ],
             ],
             'matchStore'  => [
-                'scope'   => 'Test Scope',
+                'section'   => 'Test Scope',
                 'website' => [
                     'expected' => ['name' => 'Test Website Name', 'code' => 'Test Website Code'],
                     'actual'   => ['name' => false, 'code' => false],
@@ -166,7 +166,7 @@ class DwstreeTest extends TestCase
                 ],
             ],
             'matchWebsite'  => [
-                'scope'   => 'Test Scope',
+                'section'   => 'Test Scope',
                 'website' => [
                     'expected' => ['name' => 'Test Website Name', 'code' => 'Test Website Code'],
                     'actual'   => ['name' => 'Test Website Name', 'code' => 'Test Website Code'],
@@ -177,7 +177,7 @@ class DwstreeTest extends TestCase
                 ],
             ],
             'noMatch'  => [
-                'scope'   => 'Test Scope',
+                'section'   => 'Test Scope',
                 'website' => [
                     'expected' => ['name' => 'Test Website Name', 'code' => 'Test Website Code'],
                     'actual'   => ['name' => false, 'code' => false],

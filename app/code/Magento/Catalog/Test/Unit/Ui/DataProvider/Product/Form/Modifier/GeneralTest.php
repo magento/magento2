@@ -208,7 +208,7 @@ class GeneralTest extends AbstractModifierTestCase
         return [
             'With default status value' => [
                 'data' => [],
-                'defaultStatusAttributeValue' => 5,
+                'defaultStatusValue' => 5,
                 'expectedResult' => [
                     null => [
                         General::DATA_SOURCE_DEFAULT => [
@@ -219,7 +219,7 @@ class GeneralTest extends AbstractModifierTestCase
             ],
             'Without default status value' => [
                 'data' => [],
-                'defaultStatusAttributeValue' => 0,
+                'defaultStatusValue' => 0,
                 'expectedResult' => [
                     null => [
                         General::DATA_SOURCE_DEFAULT => [

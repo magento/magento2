@@ -139,18 +139,18 @@ class ProcessTaxAttributeTest extends TestCase
      *
      * @return array
      */
-    public function afterInitializeFromDataWhenAttributesIncludeWeeeDataProvider()
+    public static function afterInitializeFromDataWhenAttributesIncludeWeeeDataProvider()
     {
         return [
             'Product data includes wee' => [
                 [
                     self::STUB_WEEE_ATTRIBUTE_CODE => self::STUB_WEEE_ATTRIBUTE_VALUE
                 ],
-                $this->never()
+                self::never()
             ],
             'Product data does not include wee' => [
                 [],
-                $this->once()
+                self::once()
             ]
         ];
     }

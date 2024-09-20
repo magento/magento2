@@ -43,10 +43,10 @@ class VariationMatrixTest extends TestCase
      * Test data provider.
      */
     public static function variationProvider()
-    {
+    {   
         return [
             [
-                'with_attribute_id' => [
+                [
                     'result' => [
                         [
                             130 => [
@@ -102,7 +102,7 @@ class VariationMatrixTest extends TestCase
                         ],
                     ]
                 ],
-                'without_attribute_id' => [
+                [
                     'result' => [
                         [
                             130 => [

@@ -96,12 +96,12 @@ class RowCustomizerTest extends TestCase
 
         return [
             [
-                '$expected' => [
+                'expected' => [
                     'key_1' => 'value_1',
                     'key_2' => 'value_2',
                     'key_3' => 'value_3'
                 ],
-                '$data' => [
+                'data' => [
                     'data_row' => [
                         'key_1' => 'value_1',
                         'key_2' => 'value_2',
@@ -111,14 +111,14 @@ class RowCustomizerTest extends TestCase
                 ]
             ],
             [
-                '$expected' => [
+                'expected' => [
                     'key_1' => 'value_1',
                     'key_2' => 'value_2',
                     'key_3' => 'value_3',
                     'configurable_variations' => $data['configurable_variations'],
                     'configurable_variation_labels' => $data['configurable_variation_labels']
                 ],
-                '$data' => [
+                'data' => [
                     'data_row' => [
                         'key_1' => 'value_1',
                         'key_2' => 'value_2',

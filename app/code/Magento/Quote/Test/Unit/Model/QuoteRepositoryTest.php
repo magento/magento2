@@ -374,16 +374,16 @@ class QuoteRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function getForCustomerDataProvider()
+    public static function getForCustomerDataProvider()
     {
         return [
             [
-                'invoke_number_times' => static::never(),
-                'shared_store_ids' => []
+                'invokeTimes' => static::never(),
+                'sharedStoreIds' => []
             ],
             [
-                'invoke_number_times' => static::once(),
-                'shared_store_ids' => [1]
+                'invokeTimes' => static::once(),
+                'sharedStoreIds' => [1]
             ]
         ];
     }

@@ -152,12 +152,12 @@ class ImageTest extends TestCase
     {
         return [
             [
-                'actual_label' => 'testLabel',
-                'expected_label' => 'testLabel',
+                'actualLabel' => 'testLabel',
+                'expectedLabel' => 'testLabel',
             ],
             [
-                'actual_label' => '<media-image-attributelabel',
-                'expected_label' => '&lt;media-image-attributelabel',
+                'actualLabel' => '<media-image-attributelabel',
+                'expectedLabel' => '&lt;media-image-attributelabel',
             ],
         ];
     }

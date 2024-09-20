@@ -75,7 +75,7 @@ class ImageTest extends TestCase
         $this->attribute = $this->getMockForAbstractClass(
             AbstractAttribute::class,
             [],
-            'TestAttribute',
+            '',
             false,
             false,
             true,
@@ -85,7 +85,7 @@ class ImageTest extends TestCase
         $this->logger = $this->getMockForAbstractClass(
             LoggerInterface::class,
             [],
-            'TestLogger',
+            '',
             false,
             false,
             true,

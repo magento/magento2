@@ -121,6 +121,11 @@ class AddressTest extends TestCase
      */
     public function testGetRenderer($renderer, $blockFactory, $result)
     {
+        if ($renderer!="some_test_block") {
+            $renderer = $renderer($this);
+        }
+        $blockFactory = $blockFactory($this);
+        $result = $result($this);
         $this->helper = new Address(
             $this->context,
             $blockFactory,
@@ -132,10 +137,14 @@ class AddressTest extends TestCase
         $this->assertEquals($result, $this->helper->getRenderer($renderer));
     }
 
-    /**
-     * @return array
-     */
-    public function getRendererDataProvider()
+    protected function getMockForBlockInterface()
+    {
+        $blockMock = $this->getMockBuilder(BlockInterface::class)
+            ->getMock();
+        return $blockMock;
+    }
+
+    protected function getMockForBlockFactory()
     {
         $blockMock = $this->getMockBuilder(BlockInterface::class)
             ->getMock();
@@ -143,10 +152,20 @@ class AddressTest extends TestCase
             BlockFactory::class
         )->disableOriginalConstructor()
             ->getMock();
-        $blockFactory->expects($this->once())
+        $blockFactory->expects($this->any())
             ->method('createBlock')
             ->with('some_test_block', [])
             ->willReturn($blockMock);
+        return $blockFactory;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getRendererDataProvider()
+    {
+        $blockMock = static fn (self $testCase) => $testCase->getMockForBlockInterface();
+        $blockFactory = static fn (self $testCase) => $testCase->getMockForBlockFactory();
         return [
             ['some_test_block', $blockFactory, $blockMock],
             [$blockMock, $blockFactory, $blockMock],
@@ -347,6 +366,10 @@ class AddressTest extends TestCase
      */
     public function testGetFormatTypeRenderer($code, $result)
     {
+        if(is_callable($result))
+        {
+            $result = $result($this);
+        }
         $this->addressConfig->expects($this->once())
             ->method('getFormatByCode')
             ->with($code)
@@ -356,14 +379,20 @@ class AddressTest extends TestCase
         $this->assertEquals($result, $this->helper->getFormatTypeRenderer($code));
     }
 
-    /**
-     * @return array
-     */
-    public function getFormatTypeRendererDataProvider()
+    protected function getMockForRendererClass()
     {
         $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        return $renderer;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getFormatTypeRendererDataProvider()
+    {
+        $renderer = static fn (self $testCase) => $testCase->getMockForRendererClass();
         return [
             ['valid_code', $renderer],
             ['invalid_code', null]

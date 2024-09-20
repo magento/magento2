@@ -166,7 +166,7 @@ class InfoTest extends TestCase
      *
      * @return array
      */
-    public function additionalInfoPublicDataProvider()
+    public static function additionalInfoPublicDataProvider()
     {
         return [
             [
@@ -215,7 +215,7 @@ class InfoTest extends TestCase
      *
      * @return array
      */
-    public function importToPaymentDataProvider()
+    public static function importToPaymentDataProvider()
     {
         return [
             [

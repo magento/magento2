@@ -290,8 +290,8 @@ class CustomerTest extends TestCase
     public static function isCustomerLockedDataProvider()
     {
         return [
-            ['lockExpirationDate' => date("F j, Y", strtotime('-1 days')), 'expectedResult' => false],
-            ['lockExpirationDate' => date("F j, Y", strtotime('+1 days')), 'expectedResult' => true]
+            ['lockExpires' => date("F j, Y", strtotime('-1 days')), 'expectedResult' => false],
+            ['lockExpires' => date("F j, Y", strtotime('+1 days')), 'expectedResult' => true]
         ];
     }
 

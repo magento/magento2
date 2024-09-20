@@ -26,7 +26,6 @@ class DebugHintsTest extends TestCase
     {
         $subject = $this->getMockForAbstractClass(TemplateEngineInterface::class);
         $block = $this->getMockBuilder(BlockInterface::class)
-            ->setMockClassName('TestBlock')
             ->getMockForAbstractClass();
         $subject->expects(
             $this->once()

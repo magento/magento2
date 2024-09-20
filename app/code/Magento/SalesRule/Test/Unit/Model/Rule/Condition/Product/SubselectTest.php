@@ -194,7 +194,7 @@ class SubselectTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderForFixedBundleProduct(): array
+    public static function dataProviderForFixedBundleProduct(): array
     {
         return [
             'validate true for bundle product data with conditions' =>
@@ -377,7 +377,7 @@ class SubselectTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderForBaseTotalInclTax(): array
+    public static function dataProviderForBaseTotalInclTax(): array
     {
         return [
             'validate true for product data with conditions for attribute base_row_total_incl_tax' =>

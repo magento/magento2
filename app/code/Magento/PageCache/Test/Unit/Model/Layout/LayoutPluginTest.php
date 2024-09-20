@@ -149,7 +149,7 @@ class LayoutPluginTest extends TestCase
     /**
      * @return array
      */
-    public function afterGetOutputDataProvider(): array
+    public static function afterGetOutputDataProvider(): array
     {
         $tags = 'identity1,identity2';
         return [

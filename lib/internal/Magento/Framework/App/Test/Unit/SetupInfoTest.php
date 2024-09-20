@@ -34,7 +34,7 @@ class SetupInfoTest extends TestCase
     /**
      * @return array
      */
-    public function constructorExceptionsDataProvider()
+    public static function constructorExceptionsDataProvider()
     {
         $docRootErr = 'DOCUMENT_ROOT variable is unavailable.';
         $projectRootErr = 'Project root cannot be automatically detected.';
@@ -92,7 +92,7 @@ class SetupInfoTest extends TestCase
     /**
      * @return array
      */
-    public function getProjectUrlDataProvider()
+    public static function getProjectUrlDataProvider()
     {
         return [
             [self::$fixture, ''],
@@ -124,7 +124,7 @@ class SetupInfoTest extends TestCase
     /**
      * @return array
      */
-    public function getDirDataProvider()
+    public static function getDirDataProvider()
     {
         return [
             [

@@ -259,8 +259,8 @@ class IntervalTest extends TestCase
         return [
             [
                 'data' => '24',
-                'rightIndex' => '1',
-                'upper' => '24',
+                'index' => '1',
+                'lower' => '24',
                 'queryResult' => [
                     'hits' => [
                         'total'=> '1',
@@ -277,8 +277,8 @@ class IntervalTest extends TestCase
             ],
             [
                 'data' => '24',
-                'rightIndex' => '1',
-                'upper' => '24',
+                'index' => '1',
+                'lower' => '24',
                 'queryResult' => [
                     'hits' => ['total'=> '0'],
                 ],

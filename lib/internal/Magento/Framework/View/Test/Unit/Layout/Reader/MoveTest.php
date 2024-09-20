@@ -83,7 +83,7 @@ class MoveTest extends TestCase
     {
         return [
             'move_before' => [
-                'element' => new Element('
+                'currentElement' => new Element('
                     <move element="product" destination="product.info" before="before.block" as="as.product.info"/>
                 '),
                 'destination' => 'product.info',
@@ -93,7 +93,7 @@ class MoveTest extends TestCase
                 'parentElement' => new Element('<element/>'),
             ],
             'move_after' => [
-                'element' => new Element('
+                'currentElement' => new Element('
                     <move element="product" destination="product.info" after="after.block" as="as.product.info"/>
                 '),
                 'destination' => 'product.info',

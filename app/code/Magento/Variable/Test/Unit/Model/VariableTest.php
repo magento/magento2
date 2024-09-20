@@ -219,7 +219,7 @@ class VariableTest extends TestCase
     /**
      * @return array
      */
-    public function validateMissingInfoDataProvider()
+    public static function validateMissingInfoDataProvider()
     {
         return [
             'Missing code' => ['', 'some-name'],
@@ -270,7 +270,7 @@ class VariableTest extends TestCase
      *
      * @return array
      */
-    public function getWysiwygValidationCases(): array
+    public static function getWysiwygValidationCases(): array
     {
         return [
             'changed-html-value-without-exception' => ['<b>Test Html</b>',true,true,false],

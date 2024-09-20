@@ -64,13 +64,14 @@ class SessionTest extends TestCase
     /**
      * @param int|null $orderId
      * @param int|null $incrementId
-     * @param Order|MockObject $orderMock
+     * @param \Closure $orderMock
      *
      * @return void
      * @dataProvider getLastRealOrderDataProvider
      */
-    public function testGetLastRealOrder($orderId, $incrementId, $orderMock): void
+    public function testGetLastRealOrder($orderId, $incrementId, \Closure $orderMock): void
     {
+        $orderMock = $orderMock($this);
         $orderFactory = $this->getMockBuilder(OrderFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
@@ -114,12 +115,12 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function getLastRealOrderDataProvider(): array
+    public static function getLastRealOrderDataProvider(): array
     {
         return [
-            [null, 1, $this->_getOrderMock(1, null)],
-            [1, 1, $this->_getOrderMock(1, 1)],
-            [1, null, $this->_getOrderMock(null, 1)]
+            [null, 1, static fn (self $testCase) => $testCase->_getOrderMock(1, null)],
+            [1, 1, static fn (self $testCase) => $testCase->_getOrderMock(1, 1)],
+            [1, null, static fn (self $testCase) => $testCase->_getOrderMock(null, 1)]
         ];
     }
 

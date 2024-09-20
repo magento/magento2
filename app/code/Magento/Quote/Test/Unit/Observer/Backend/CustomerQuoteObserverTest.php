@@ -173,7 +173,7 @@ class CustomerQuoteObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dispatchDataProvider()
+    public static function dispatchDataProvider()
     {
         return [
             [true, [['website1']]],

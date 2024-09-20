@@ -354,7 +354,7 @@ class FileTest extends TestCase
      *
      * @return array
      */
-    public function getRelativeMediaPathDataProvider(): array
+    public static function getRelativeMediaPathDataProvider(): array
     {
         return [
             'Normal path' => ['pub/media/', 'filename.jpg'],
