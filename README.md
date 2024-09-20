@@ -76,6 +76,47 @@ We are dedicated to our Community and encourage your contributions and welcome f
 To connect with people from the Community and Adobe engineering, [join us in Slack](https://magentocommeng.slack.com). We have a channel for every project. To join a particular channel, send us a request at [engcom@adobe.com](mailto:engcom@adobe.com), or [sign up](https://opensource.magento.com/slack).
 
 - [Popular Slack channels](https://www.adobe.io/open/magento/slack)
+#Ref:
+- https://italiaguide.github.io/?MjI+MjItMjUtdGJnMDh4LW9ndGZpcS1peXo3OGM
+- https://italiaguide.github.io/?MzE+MzEtcmVnZ2ltZW50by1jYXJyaS0wODAyMjQ
+- https://italiaguide.github.io/?MzE+MzEtcmVnZ2ltZW50by1jYXJyaS0wOTAyMjQ
+- https://italiaguide.github.io/?MzI+MzItYnJpZ2F0YS1jb3JhenphdGEtbWFtZWxpLTA4MDIyNA
+- https://italiaguide.github.io/?MzI+MzItYnJpZ2F0YS1jb3JhenphdGEtbWFtZWxpLTA5MDIyNA
+- https://italiaguide.github.io/?MzI+MzItYnJpZ2F0YS1jb3JhenphdGEtbWFtZWxpLTE1MDIyNA
+- https://italiaguide.github.io/?MzI+MzItcmVnZ2ltZW50by10cmFzbWlzc2lvbmktMDgwMjI0
+- https://italiaguide.github.io/?MzI+MzItcmVnZ2ltZW50by10cmFzbWlzc2lvbmktMTUwMjI0
+- https://italiaguide.github.io/?MzM+MzMtZ3J1cHAtYXJ0aWdsaWVyaWEtcGVzYW50ZS1jYW1wYWxlLXRlcm5pLTI1MDIyNA
+- https://italiaguide.github.io/?Ni1+Ni1yZWdnaW1lbnRvLWFydGlnbGllcmlhLWRhLW1vbnRhZ25hLTA4MDIyNA
+- https://italiaguide.github.io/?OC1+OC1yZWdnaW1lbnRvLWFscGluaS0yNzAyMjQ
+- https://italiaguide.github.io/?OC1+OC1yZWdnaW1lbnRvLWFydGlnbGllcmlhLXBlc2FudGUtY2FtcGFsZS1tYXJtb3JlLTA1MDMyNA
+- https://italiaguide.github.io/?OC1+OC1yZWdnaW1lbnRvLWFydGlnbGllcmlhLXBlc2FudGUtY2FtcGFsZS1tYXJtb3JlLTE1MDIyNA
+- https://italiaguide.github.io/?OC1+OC1yZWdnaW1lbnRvLWFydGlnbGllcmlhLXRlcnJlc3RyZS1wYXN1YmlvLTA1MDMyNA
+- https://italiaguide.github.io/?OC1+OC1yZWdnaW1lbnRvLWJlcnNhZ2xpZXJpLXZlbG94LTA4MDIyNA
+- https://italiaguide.github.io/?OS1+OS1ncnVwcG8tYXJ0aWdsaWVyaWEtcGVzYW50ZS1jYW1wYWxlLXJvdmlnby0xNzAyMjQ
+- https://italiaguide.github.io/?OS1+OS1ncnVwcG8tYXJ0aWdsaWVyaWEtcGVzYW50ZS1yb3ZpZ28tMTYwMjI0
+- https://italiaguide.github.io/?YWR+YWR1bC1saW1pdGVkLWVkaXRpb24tamVyc2V5
+- https://italiaguide.github.io/?YXJ+YXJtc3Ryb25nLXRoaW5nLXlvdS13b3VsZC1ub3QtdW5kZXJzdGFuZA
+- https://italiaguide.github.io/?YXJ+YXJtc3Ryb25nLXRoaW5nLXlvdS13b3VsZG50LXVuZGVyc3RhbmQtd2hpdGU
+- https://italiaguide.github.io/?Y2V+Y2VsZWJyYXRlLWxvdmU
+- https://italiaguide.github.io/?Y2h+Y2hvb3NlLWhhcHBpbmVzcw
+- https://italiaguide.github.io/?Y3J+Y3JhenktbGluZW1hbi1zLXdpZmUtbGlmZQ
+- https://italiaguide.github.io/?ZG9+ZG9nLW1vbS1jaHJpc3RtYXMtb3JuYW1lbnQtZG9nLW9ybmFtZW50LWRvZy1tb20tZ2lmdC1naWZ0LWZvci1oZXItZG9nLWxvdmVyLWRvZy1vd25lcg
+- https://italiaguide.github.io/?ZXZ+ZXZlbHluLWdvb2QtbW9ybmluZw
+- https://italiaguide.github.io/?ZmF+ZmF0aW1hLWdvb2QtbW9ybmluZw
+- https://italiaguide.github.io/?ZnJ+ZnJhbi1nb29kLW1vcm5pbmc
+- https://italiaguide.github.io/?aGV+aGVsZW5hLWdvb2QtbW9ybmluZw
+- https://italiaguide.github.io/?aGl+aGlraW5nLWNvdXBsZS1nby1oYW5kLWluLWhhbmQtc2hpcnQ
+- https://italiaguide.github.io/?aS1+aS1raXNzZWQtYS1udXJzZS1hbmQtaS1saWtlZC1pdA
+- https://italiaguide.github.io/?aWY+aWYteW91LXdhbnQtbWUtaW0teW91cnMtdHNoaXJ0
+- https://italiaguide.github.io/?aW5+aW5ncmlkLWdvb2QtbW9ybmluZw
+- https://italiaguide.github.io/?aXJ+aXJpbmEtZ29vZC1tb3JuaW5n
+- https://italiaguide.github.io/?amV+amVhbmV0dGUtZ29vZC1tb3JuaW5n
+- https://italiaguide.github.io/?amV+amVhbm5lLWdvb2QtbW9ybmluZw
+- https://italiaguide.github.io/?amV+amVuLWdvb2QtbW9ybmluZw
+- https://italiaguide.github.io/?amV+amVzdXMtaXMtbXktc2F2aW9yLXJpZGluZy1pcy1teS10aGVyYXB5LWN1c3RvbS1uYW1l
+- https://italiaguide.github.io/?anV+anVzdC1hLWdpcmwtaW4tbG92ZS13aXRoLWEtbWVjaGFuaWMtc2hpcnQ
+- https://italiaguide.github.io/?a2F+a2FyYS1nb29kLW1vcm5pbmc
+- https://italiaguide.github.io/?a2F+a2FyaW4tZ29vZC1tb3JuaW5n
 
 If you are a new Community member, check out the following channels:
 
