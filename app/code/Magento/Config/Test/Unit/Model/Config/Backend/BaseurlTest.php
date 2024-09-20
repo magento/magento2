@@ -71,12 +71,14 @@ class BaseurlTest extends TestCase
     }
 
     /**
+     * Test beforeSave method to ensure URL is converted to lower case.
+     *
      * @dataProvider beforeSaveDataProvider
      * @param string $value
      * @param string $expectedValue
      * @return void
      */
-    public function testBeforeSaveConvertLowerCase($value, $expectedValue)
+    public function testBeforeSaveConvertLowerCase(string $value, string $expectedValue): void
     {
         $model = (new ObjectManager($this))->getObject(Baseurl::class);
 
@@ -102,9 +104,11 @@ class BaseurlTest extends TestCase
     }
 
     /**
+     * Data provider for testBeforeSaveConvertLowerCase.
+     *
      * @return array
      */
-    public static function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider(): array
     {
         return [
             ['https://Example1.com/', 'https://example1.com/'],
