@@ -28,16 +28,16 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
     let nonAnchorNodes = [];
 
     function actionBasedOnIsAnchorOnly() {
-        if(isAnchorOnly){
+        if (isAnchorOnly) {
             tree.jstree(true).disable_node(nonAnchorNodes);
-        }else{
+        } else {
             tree.jstree(true).disable_node(anchorNodes);
         }
     }
 
     function handleLoadedNode(e, data) {
         const container = $(e.target).closest('div.chooser_container');
-        if(container.find('input[type="text"].entities').val() !== ''){
+        if (container.find('input[type="text"].entities').val() !== '') {
             checkedNodes = container.find('input[type="text"].entities').val().split(',').map(item => item.trim());
         }
 
@@ -80,9 +80,9 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
                 updateChildrenKey(node.children);
             }
 
-            if(node.is_anchor === 1){
+            if (node.is_anchor === 1) {
                 anchorNodes.push(node.id);
-            }else{
+            } else {
                 nonAnchorNodes.push(node.id);
             }
         });
@@ -92,7 +92,7 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
     var jstreeConfig = {
         core: {
             data: function (obj, callback) {
-                if(obj.id != '#' && obj.children.length === 0){
+                if (obj.id != '#' && obj.children.length === 0) {
                     let data = {
                         id: obj.id,
                         store: obj.original.store,
@@ -113,7 +113,7 @@ require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
                             console.log(status + ': ' + error);
                         }
                     });
-                }else{
+                } else {
                     let defaultTree = updateChildrenKey({$block->getTreeJson()});
                     callback.call(this, defaultTree);
                 }
