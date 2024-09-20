@@ -37,6 +37,9 @@ class DefaultPageSizeSetterTest extends TestCase
         $this->setter = new DefaultPageSizeSetter($this->configProvider);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testPageSizeIsNotSetWhenLimitingIsDisabled()
     {
         $this->configProvider->method('isInputLimitingEnabled')
@@ -51,6 +54,9 @@ class DefaultPageSizeSetterTest extends TestCase
         $this->setter->processSearchCriteria($searchCriteria);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testPageSizeIsNotSetWhenAlreadySet()
     {
         $this->configProvider->method('isInputLimitingEnabled')
@@ -65,6 +71,9 @@ class DefaultPageSizeSetterTest extends TestCase
         $this->setter->processSearchCriteria($searchCriteria);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testPageSizeIsSetWithPreferredConfigValue()
     {
         $this->configProvider->method('isInputLimitingEnabled')
@@ -83,6 +92,9 @@ class DefaultPageSizeSetterTest extends TestCase
         $this->setter->processSearchCriteria($searchCriteria, 678);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testPageSizeIsSetWithPreferredFallbackValue()
     {
         $this->configProvider->method('isInputLimitingEnabled')

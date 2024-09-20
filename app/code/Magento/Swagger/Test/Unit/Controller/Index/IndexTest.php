@@ -66,6 +66,9 @@ class IndexTest extends TestCase
         );
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testExecute()
     {
         $this->pageConfigMock->expects($this->once())
@@ -91,6 +94,9 @@ class IndexTest extends TestCase
         $this->indexAction->dispatch($request);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testDispatchIsSuccessfulWhenEnabled()
     {
         $request = self::getMockBuilder(Http::class)

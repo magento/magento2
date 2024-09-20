@@ -62,6 +62,7 @@ class StoreAssetIntegrityHashesTest extends TestCase
      * Test After Deploy method of plugin
      *
      * @return void
+     * @doesNotPerformAssertions
      */
     public function testAfterDeploy(): void
     {

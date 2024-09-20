@@ -414,6 +414,9 @@ class ServiceInputProcessorTest extends TestCase
         );
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testDefaultPageSizeSetterIsInvoked()
     {
         $this->defaultPageSizeSetter->expects(self::once())
