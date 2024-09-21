@@ -76,6 +76,22 @@ We are dedicated to our Community and encourage your contributions and welcome f
 To connect with people from the Community and Adobe engineering, [join us in Slack](https://magentocommeng.slack.com). We have a channel for every project. To join a particular channel, send us a request at [engcom@adobe.com](mailto:engcom@adobe.com), or [sign up](https://opensource.magento.com/slack).
 
 - [Popular Slack channels](https://www.adobe.io/open/magento/slack)
+- https://cndevwall.github.io/?wrra=A45MgxIy1Tg
+- https://cndevwall.github.io/?qhur=A45Mg2aI+9c
+- https://cndevwall.github.io/?ccht=A45Mg75GjLw
+- https://cndevwall.github.io/?ptvd=A45MhCnBXiE
+- https://cndevwall.github.io/?jjoe=A45MhHFnfFk
+- https://cndevwall.github.io/?ohkg=A45MhK6LU2E
+- https://cndevwall.github.io/?aoud=A45Mha8OgO0
+- https://cndevwall.github.io/?owhf=A45MhyEhYZI
+- https://cndevwall.github.io/?vxpp=A45MhzvlRiQ
+- https://cndevwall.github.io/?lfcx=A45MiOPEe/M
+- https://cndevwall.github.io/?swhu=A45MiYT4ZJg
+- https://cndevwall.github.io/?tfdy=A45Mibk9RlE
+- https://cndevwall.github.io/?hmsb=A45MikvWVrc
+- https://cndevwall.github.io/?mghu=A45MiyQdm+M
+- https://cndevwall.github.io/?xaxn=A45Mi9ApE8I
+- https://cndevwall.github.io/?qppj=A45MjIRUdck
 
 If you are a new Community member, check out the following channels:
 
