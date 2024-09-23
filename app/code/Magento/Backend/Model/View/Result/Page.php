@@ -36,7 +36,7 @@ class Page extends View\Result\Page
     /**
      * Add link to breadcrumb block
      *
-     * @param string $label
+     * @param \Stringable $label
      * @param string $title
      * @param string|null $link
      * @return $this

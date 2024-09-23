@@ -45,12 +45,7 @@ class Config implements ScopeConfigInterface
     }
 
     /**
-     * Retrieve config value by path and scope
-     *
-     * @param string $path
-     * @param string $scope
-     * @param null|int|string $scopeCode
-     * @return mixed
+     * @inheritDoc
      */
     public function getValue(
         $path = null,
@@ -80,12 +75,7 @@ class Config implements ScopeConfigInterface
     }
 
     /**
-     * Retrieve config flag
-     *
-     * @param string $path
-     * @param string $scope
-     * @param null|int|string $scopeCode
-     * @return bool
+     * @inheritDoc
      */
     public function isSetFlag($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
     {
