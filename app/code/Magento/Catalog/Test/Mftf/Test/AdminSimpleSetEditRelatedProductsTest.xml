@@ -17,6 +17,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MC-3411"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -28,7 +29,9 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct5"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct6"/>
 
-            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete simple product -->

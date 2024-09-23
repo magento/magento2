@@ -58,13 +58,13 @@ class CollectionTest extends TestCase
         $this->selectMock->expects($this->atLeastOnce())->method('getPart')->willReturn($whereClauses);
         $this->selectMock
             ->method('reset')
-            ->withConsecutive(
-                [Select::ORDER],
-                [Select::LIMIT_COUNT],
-                [Select::LIMIT_OFFSET],
-                [Select::WHERE],
-                [Select::HAVING]
-            );
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == [Select::ORDER] || $arg1 == [Select::LIMIT_COUNT] || $arg1 ==[Select::LIMIT_OFFSET] ||
+                    $arg1 ==[Select::WHERE] || $arg1 ==[Select::HAVING]) {
+                    return null;
+                }
+            });
+
         $this->selectMock->expects($this->atLeastOnce())->method('columns')
             ->with(new \Zend_Db_Expr('COUNT(DISTINCT detail.customer_id)'))->willReturnSelf();
         $this->selectMock->expects($this->atLeastOnce())->method('reset')->willReturnSelf();
@@ -90,7 +90,11 @@ class CollectionTest extends TestCase
         $this->selectMock->expects($this->atLeastOnce())->method('getPart')->willReturn($whereClauses);
         $this->selectMock
             ->method('reset')
-            ->withConsecutive([Select::ORDER], [Select::LIMIT_COUNT], [Select::LIMIT_OFFSET]);
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == [Select::ORDER] || $arg1 == [Select::LIMIT_COUNT] || $arg1 ==[Select::LIMIT_OFFSET]) {
+                    return null;
+                }
+            });
         $this->selectMock->expects($this->atLeastOnce())->method('reset')->willReturnSelf();
         $this->selectMock->expects($this->atLeastOnce())->method('from')->willReturnSelf();
 

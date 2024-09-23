@@ -18,6 +18,7 @@
                 value="Verify Login as Customer session is ended/invalidated when the related admin session is logged out."/>
             <severity value="MAJOR"/>
             <group value="login_as_customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
@@ -29,6 +30,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultUser"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAfter"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"

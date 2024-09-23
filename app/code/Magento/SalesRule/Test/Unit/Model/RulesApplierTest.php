@@ -9,12 +9,16 @@ namespace Magento\SalesRule\Test\Unit\Model;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\ExtensionAttributesInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\Manager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Rule\Model\Action\Collection;
+use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
+use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
 use Magento\SalesRule\Model\Quote\ChildrenValidationLocator;
 use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory;
@@ -22,6 +26,7 @@ use Magento\SalesRule\Model\Rule\Action\Discount\Data;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\SalesRule\Model\Rule\Action\Discount\DiscountInterface;
 use Magento\SalesRule\Model\RulesApplier;
+use Magento\SalesRule\Model\SelectRuleCoupon;
 use Magento\SalesRule\Model\Utility;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -62,10 +67,33 @@ class RulesApplierTest extends TestCase
     protected $childrenValidationLocator;
 
     /**
+     * RuleDiscountInterfaceFactory|MockObject
+     */
+    protected $ruleDiscountInterfaceFactoryMock;
+
+    /**
+     * @var DiscountDataInterfaceFactory|MockObject
+     */
+    protected $discountDataInterfaceFactoryMock;
+
+    /**
+     * @var SelectRuleCoupon|MockObject
+     */
+    protected $selectRuleCouponMock;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                RuleDiscountInterfaceFactory::class,
+                $this->createMock(RuleDiscountInterfaceFactory::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->calculatorFactory = $this->createMock(
             CalculatorFactory::class
         );
@@ -82,12 +110,28 @@ class RulesApplierTest extends TestCase
             ChildrenValidationLocator::class,
             ['isChildrenValidationRequired']
         );
+        $this->ruleDiscountInterfaceFactoryMock = $this->getMockBuilder(RuleDiscountInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMockForAbstractClass();
+        $this->discountDataInterfaceFactoryMock = $this->getMockBuilder(DiscountDataInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMockForAbstractClass();
+        $this->selectRuleCouponMock = $this->getMockBuilder(SelectRuleCoupon::class)
+                                        ->disableOriginalConstructor()
+                                        ->onlyMethods(['execute'])
+                                        ->getMock();
+
         $this->rulesApplier = new RulesApplier(
             $this->calculatorFactory,
             $this->eventManager,
             $this->validatorUtility,
             $this->childrenValidationLocator,
-            $this->discountFactory
+            $this->discountFactory,
+            $this->ruleDiscountInterfaceFactoryMock,
+            $this->discountDataInterfaceFactoryMock,
+            $this->selectRuleCouponMock
         );
     }
 
@@ -105,7 +149,7 @@ class RulesApplierTest extends TestCase
         $positivePrice = 1;
         $skipValidation = false;
         $item = $this->getPreparedItem();
-        $couponCode = 111;
+        $couponCode = [111];
 
         $ruleId = 1;
         $appliedRuleIds = [$ruleId => $ruleId];
@@ -211,7 +255,7 @@ class RulesApplierTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderChildren(): array
+    public static function dataProviderChildren(): array
     {
         return [
             ['isChildren' => true, 'isContinue' => false],
@@ -306,12 +350,15 @@ class RulesApplierTest extends TestCase
         $item = $this->getPreparedItem();
         $ruleId = 1;
         $appliedRuleIds = [$ruleId => $ruleId];
+        $previouslyAppliedRuleIds = '3';
+        $expectedAppliedRuleIds = '3,1';
 
         $item->expects($this->once())
             ->method('setAppliedRuleIds')
-            ->with($ruleId);
-        $item->expects($this->never())
-            ->method('getAppliedRuleIds');
+            ->with($expectedAppliedRuleIds);
+        $item->expects($this->once())
+            ->method('getAppliedRuleIds')
+            ->willReturn($previouslyAppliedRuleIds);
 
         $this->rulesApplier->setAppliedRuleIds($item, $appliedRuleIds);
     }

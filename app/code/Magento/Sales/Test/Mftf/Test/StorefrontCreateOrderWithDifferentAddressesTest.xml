@@ -13,17 +13,19 @@
             <description value="Place order on Store Front with manually filled billing address state and selected shipping address state. Check that billing address show correct state on Admin Order View page"/>
             <severity value="MINOR"/>
             <group value="sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
             <createData entity="Customer_UK_US" stepKey="createCustomer"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCreateCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 0" stepKey="DisablingGuestCheckoutLogin"/>
         </after>
 
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToProductPage">
@@ -42,7 +44,8 @@
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="gotoPaymentStep"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="gotoPaymentStep"/>
+         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
 
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceOrder">
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>

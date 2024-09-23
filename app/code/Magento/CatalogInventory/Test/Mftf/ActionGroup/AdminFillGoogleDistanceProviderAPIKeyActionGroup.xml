@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillGoogleDistanceProviderAPIKeyActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Inventory' and expand Google Distance Provider. Fill Google API Key. Clicks on the Save button.</description>
+        </annotations>
+        <arguments>
+            <argument name="apiKey" defaultValue="AIzaSyD7QOaF7rcGVZQwrbG7AYNnFLwyuhGpQBU" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{InventoryConfigurationPage.url}}" stepKey="navigateToInventoryConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForConfigPageToLoad"/>
+        <conditionalClick stepKey="expandGoogledistanceProvider" selector="{{InventoryConfigSection.GoogleDistanceProvidedTab}}" dependentSelector="{{InventoryConfigSection.GoogleDistanceProvidedTabExpanded}}" visible="true"/>
+        <!-- Fill Google API key-->
+        <waitForElementVisible selector="{{InventoryConfigSection.GoogleDistanceProvided}}" stepKey="waitForGoogleAPIKeyField"/>
+        <fillField selector="{{InventoryConfigSection.GoogleDistanceProvided}}" userInput="{{apiKey}}" stepKey="fillGoogleDistanceProvider"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig"/>
+    </actionGroup>
+</actionGroups>

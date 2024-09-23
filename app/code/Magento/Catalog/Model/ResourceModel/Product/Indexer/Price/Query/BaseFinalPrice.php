@@ -230,7 +230,6 @@ class BaseFinalPrice
         $select->where('cgw.website_id IS NULL');
 
         if ($entityIds !== null) {
-            $select->where(sprintf('e.entity_id BETWEEN %s AND %s', min($entityIds), max($entityIds)));
             $select->where('e.entity_id IN(?)', $entityIds, \Zend_Db::INT_TYPE);
         }
 

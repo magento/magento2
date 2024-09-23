@@ -30,6 +30,7 @@
         </before>
 
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="initialCategoryEntity" stepKey="deleteDefaultCategory"/>
             <deleteData createDataKey="initialSimpleProduct" stepKey="deleteSimpleProduct"/>

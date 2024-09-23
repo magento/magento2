@@ -111,4 +111,27 @@
             <argument name="cache" xsi:type="object">Magento\Csp\Model\BlockCache</argument>
         </arguments>
     </type>
+    <type name="Magento\Deploy\Package\Package">
+        <arguments>
+            <argument name="postProcessors" xsi:type="array">
+                <item name="integrity" xsi:type="object">Magento\Csp\Model\Deploy\Package\Processor\PostProcessor\Integrity</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Asset\GroupedCollection">
+        <plugin name="addDefaultPropertiesToGroup" type="Magento\Csp\Plugin\AddDefaultPropertiesToGroupPlugin" />
+    </type>
+    <type name="Magento\Deploy\Service\DeployStaticContent">
+        <plugin name="removeAllAssetIntegrityHashes" type="Magento\Csp\Plugin\RemoveAllAssetIntegrityHashes" />
+        <plugin name="storeAssetIntegrityHashes" type="Magento\Csp\Plugin\StoreAssetIntegrityHashes" />
+    </type>
+    <type name="Magento\RequireJs\Model\FileManager">
+        <plugin name="addResourceIntegrityAfterAssetCreate" type="Magento\Csp\Plugin\GenerateAssetIntegrity"/>
+    </type>
+    <preference for="Magento\Deploy\Package\Processor\PostProcessor\Map" type="Magento\Csp\Model\Deploy\Package\Processor\PostProcessor\Map" />
+    <type name="Magento\Csp\Model\Deploy\Package\Processor\PostProcessor\Map">
+        <arguments>
+            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
 </config>

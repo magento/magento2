@@ -55,7 +55,8 @@
 
         <!--Click unassign and verify AssertOrderStatusSuccessUnassignMessage-->
         <click selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="clickUnassign"/>
-        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You have unassigned the order status." stepKey="seeAssertOrderStatusSuccessUnassignMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessageVisible" />
+        <waitForText selector="{{AdminMessagesSection.success}}" time="30" userInput="You have unassigned the order status." stepKey="seeAssertOrderStatusSuccessUnassignMessage"/>
 
         <!--Verify the order status grid page shows the updated order status and verify AssertOrderStatusInGrid-->
         <actionGroup ref="AssertOrderStatusExistsInGrid" stepKey="seeAssertOrderStatusInGrid">

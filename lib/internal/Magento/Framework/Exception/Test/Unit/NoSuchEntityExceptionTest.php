@@ -34,7 +34,7 @@ class NoSuchEntityExceptionTest extends TestCase
     {
         $this->defaultRenderer = Phrase::getRenderer();
         $this->rendererMock = $this->getMockBuilder(Placeholder::class)
-            ->setMethods(['render'])
+            ->onlyMethods(['render'])
             ->disableOriginalConstructor()
             ->getMock();
     }
