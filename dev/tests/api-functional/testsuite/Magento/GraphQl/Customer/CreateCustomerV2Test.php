@@ -79,7 +79,7 @@ QUERY;
     /**
      * @return array
      */
-    public function validEmailAddressDataProvider(): array
+    public static function validEmailAddressDataProvider(): array
     {
         return [
             ['new_customer@example.com'],
@@ -125,8 +125,6 @@ QUERY;
         $this->assertTrue($response['createCustomerV2']['customer']['is_subscribed']);
     }
 
-    /**
-     */
     public function testCreateCustomerIfInputDataIsEmpty()
     {
         $this->expectException(\Exception::class);
@@ -152,8 +150,6 @@ QUERY;
         $this->graphQlMutation($query);
     }
 
-    /**
-     */
     public function testCreateCustomerIfEmailMissed()
     {
         $this->expectException(\Exception::class);
@@ -226,7 +222,7 @@ QUERY;
     /**
      * @return array
      */
-    public function invalidEmailAddressDataProvider(): array
+    public static function invalidEmailAddressDataProvider(): array
     {
         return [
             ['plainaddress'],
@@ -240,8 +236,6 @@ QUERY;
         ];
     }
 
-    /**
-     */
     public function testCreateCustomerIfPassedAttributeDosNotExistsInCustomerInput()
     {
         $this->expectException(\Exception::class);
@@ -277,12 +271,10 @@ QUERY;
         $this->graphQlMutation($query);
     }
 
-    /**
-     */
     public function testCreateCustomerIfNameEmpty()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Required parameters are missing: First Name');
+        $this->expectExceptionMessage('"First Name" is a required value.');
 
         $newEmail = 'customer_created' . rand(1, 2000000) . '@example.com';
         $newFirstname = '';

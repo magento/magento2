@@ -79,14 +79,14 @@ class ClearProductUrlsObserverTest extends TestCase
     {
         $this->skuStorage = $this->createMock(SkuStorage::class);
         $this->event = $this->getMockBuilder(Event::class)
-            ->setMethods(['getBunch'])
+            ->addMethods(['getBunch'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->event->expects($this->once())
             ->method('getBunch')
             ->willReturn($this->products);
         $this->observer = $this->getMockBuilder(Observer::class)
-            ->setMethods(['getEvent'])
+            ->onlyMethods(['getEvent'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->observer->expects($this->exactly(1))

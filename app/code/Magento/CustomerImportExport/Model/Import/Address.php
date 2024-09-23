@@ -272,7 +272,7 @@ class Address extends AbstractCustomer
      * @param array $data
      * @param CountryWithWebsitesSource|null $countryWithWebsites
      * @param AddressStorage|null $addressStorage
-     * @param Processor $indexerProcessor
+     * @param Processor|null $indexerProcessor
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)

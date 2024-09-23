@@ -44,7 +44,7 @@
         <dragAndDrop selector1="{{UnassignedAttributes.ProductAttributeName('$$createProductAttribute.attribute_code$$')}}" selector2="{{Group.FolderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
         <click selector="{{AttributeSetSection.Save}}" stepKey="saveAttributeSet"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
-        <seeElement selector=".message-success" stepKey="assertSuccess"/>
+        <waitForElementVisible selector=".message-success" stepKey="assertSuccess"/>
         <actionGroup ref="FillAdminSimpleProductFormActionGroup" stepKey="fillProductFieldsInAdmin">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="simpleProduct" value="SimpleProduct"/>

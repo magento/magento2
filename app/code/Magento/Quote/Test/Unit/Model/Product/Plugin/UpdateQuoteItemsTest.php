@@ -46,7 +46,8 @@ class UpdateQuoteItemsTest extends TestCase
         $productResourceMock = $this->createMock(Product::class);
         $productMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOrigData', 'getPrice', 'getId', 'getData'])
+            ->addMethods([ 'getPrice'])
+            ->onlyMethods(['getOrigData', 'getId', 'getData'])
             ->getMockForAbstractClass();
         $productId = 1;
         $productMock->expects($this->any())->method('getOrigData')->with('price')->willReturn($originalPrice);

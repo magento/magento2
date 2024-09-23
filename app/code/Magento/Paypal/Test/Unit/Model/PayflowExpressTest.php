@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\Paypal\Model\Payflow;
@@ -39,18 +40,25 @@ class PayflowExpressTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $proFactory = $this->getMockBuilder(
             ProFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
         $api = $this->createMock(Nvp::class);
         $paypalPro = $this->getMockBuilder(
             Pro::class
         )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods(['getApi','setMethod'])->getMock();
         $this->transactionRepository = $this->getMockBuilder(TransactionRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getByTransactionType'])
+            ->addMethods(['getByTransactionType'])
             ->getMockForAbstractClass();
         $paypalPro->expects($this->any())->method('getApi')->willReturn($api);
 
@@ -112,8 +120,7 @@ class PayflowExpressTest extends TestCase
     {
         $paymentInfo = $this->getMockBuilder(
             Payment::class
-        )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
         $this->_model->setData('info_instance', $paymentInfo);
         return $paymentInfo;
     }
@@ -127,8 +134,7 @@ class PayflowExpressTest extends TestCase
     {
         return $this->getMockBuilder(
             Transaction::class
-        )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
     }
 
     public function testCanFetchTransactionInfo()

@@ -164,7 +164,7 @@ class FilePermissionsTest extends TestCase
     /**
      * @return array
      */
-    public function getApplicationCurrentNonWritableDirectoriesDataProvider(): array
+    public static function getApplicationCurrentNonWritableDirectoriesDataProvider(): array
     {
         return [
             [
@@ -287,7 +287,7 @@ class FilePermissionsTest extends TestCase
     /**
      * @return array
      */
-    public function getUnnecessaryWritableDirectoriesForApplicationDataProvider(): array
+    public static function getUnnecessaryWritableDirectoriesForApplicationDataProvider(): array
     {
         return [
             [['isExist' => true, 'isDirectory' => true, 'isReadable' => true, 'isWritable' => false], []],
@@ -302,19 +302,20 @@ class FilePermissionsTest extends TestCase
     {
         $this->directoryListMock
             ->method('getPath')
-            ->withConsecutive(
-                [DirectoryList::CONFIG],
-                [DirectoryList::VAR_DIR],
-                [DirectoryList::MEDIA],
-                [DirectoryList::GENERATED],
-                [DirectoryList::STATIC_VIEW]
-            )
-            ->willReturnOnConsecutiveCalls(
-                BP . '/app/etc',
-                BP . '/var',
-                BP . '/pub/media',
-                BP . '/generated',
-                BP . '/pub/static'
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == DirectoryList::CONFIG) {
+                        return BP . '/app/etc';
+                    } elseif ($arg1 == DirectoryList::VAR_DIR) {
+                        return BP . '/var';
+                    } elseif ($arg1 == DirectoryList::MEDIA) {
+                        return BP . '/pub/media';
+                    } elseif ($arg1 == DirectoryList::GENERATED) {
+                        return BP . '/generated';
+                    } elseif ($arg1 == DirectoryList::STATIC_VIEW) {
+                        return BP . '/pub/static';
+                    }
+                }
             );
     }
 
@@ -325,8 +326,17 @@ class FilePermissionsTest extends TestCase
     {
         $this->directoryListMock
             ->method('getPath')
-            ->withConsecutive([DirectoryList::CONFIG], [DirectoryList::VAR_DIR], [DirectoryList::MEDIA])
-            ->willReturnOnConsecutiveCalls(BP . '/app/etc', BP . '/var', BP . '/pub/media');
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == DirectoryList::CONFIG) {
+                        return BP . '/app/etc';
+                    } elseif ($arg1 == DirectoryList::VAR_DIR) {
+                        return BP . '/var';
+                    } elseif ($arg1 == DirectoryList::MEDIA) {
+                        return BP . '/pub/media';
+                    }
+                }
+            );
     }
 
     /**
@@ -336,7 +346,16 @@ class FilePermissionsTest extends TestCase
     {
         $this->directoryWriteMock
             ->method('isExist')
-            ->willReturnOnConsecutiveCalls(true, false, true);
+            ->willReturnCallback(function () use (&$callCount) {
+                $callCount++;
+                if ($callCount === 1) {
+                    return true;
+                } elseif ($callCount === 2) {
+                    return false;
+                } elseif ($callCount === 3) {
+                    return true;
+                }
+            });
         $this->directoryWriteMock
             ->method('isWritable')
             ->willReturn(true);
@@ -351,7 +370,7 @@ class FilePermissionsTest extends TestCase
     /**
      * @return array
      */
-    public function modeDataProvider(): array
+    public static function modeDataProvider(): array
     {
         return [
             [State::MODE_DEFAULT],

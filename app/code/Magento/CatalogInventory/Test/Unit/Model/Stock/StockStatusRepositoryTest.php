@@ -80,17 +80,17 @@ class StockStatusRepositoryTest extends TestCase
         $this->stockStatusFactoryMock = $this->getMockBuilder(
             StatusFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockStatusCollectionMock = $this->getMockBuilder(
             StockStatusCollectionInterfaceFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->queryBuilderFactoryMock = $this->getMockBuilder(QueryBuilderFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->mapperMock = $this->getMockBuilder(MapperFactory::class)
@@ -140,7 +140,7 @@ class StockStatusRepositoryTest extends TestCase
             ->getMock();
         $queryBuilderMock = $this->getMockBuilder(QueryBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCriteria', 'setResource', 'create'])
+            ->onlyMethods(['setCriteria', 'setResource', 'create'])
             ->getMock();
         $queryMock = $this->getMockBuilder(QueryInterface::class)
             ->getMock();

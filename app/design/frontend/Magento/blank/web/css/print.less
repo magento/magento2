@@ -3,11 +3,17 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @codingStandardsIgnoreStart
+ */
+
 @import 'source/lib/_lib.less'; // Global lib
 @import 'source/_theme.less'; // Theme overrides
 @import 'source/_variables.less'; // Local theme variables
 
 @baseDir: '../'; // Default
+
+//  @codingStandardsIgnoreEnd
 
 //  Magento/blank
 .page-print {
@@ -27,7 +33,6 @@
         text-shadow: none !important;
     }
 
-    //  Black prints faster:h5bp.com/s
     a,
     a:visited {
         text-decoration: underline !important;
@@ -76,18 +81,18 @@
     p,
     h2,
     h3 {
-        orphans: 3;
-        widows: 3;
+        break-inside: avoid;
     }
 
     .block-content {
-        page-break-before: avoid;
+        break-before: avoid;
     }
 
     .block-title,
     h2,
     h3 {
-        page-break-after: avoid;
+        break-after: avoid;
+        break-inside: avoid;
     }
 
     .nav-toggle {

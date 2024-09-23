@@ -34,7 +34,7 @@ class StoreNameValidatorTest extends TestCase
     {
         $this->notEmptyValidatorFactoryMock = $this->getMockBuilder(NotEmptyFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->notEmptyValidatorMock = $this->createMock(NotEmpty::class);
         $this->notEmptyValidatorFactoryMock->method('create')
