@@ -36,7 +36,9 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'attribute_set_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
             'attribute_group_id' => 1,
             'attribute_code' => 'simple_attribute',
-            'sort_order' => 1
+            'sort_order' => 2,
+            'is_required' => 1,
+            'frontend_label' => 'simple_attribute'
         ],
         'simple_attribute',
     ),
@@ -50,7 +52,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'backend_model' => ArrayBackend::class,
             'attribute_code' => 'multiselect_attribute',
             'frontend_input' => 'multiselect',
-            'sort_order' => 2
+            'sort_order' => 1
         ],
         'multiselect_attribute',
     ),
@@ -60,7 +62,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'entity_type' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
             'attribute_code' => '$multiselect_attribute.attribute_code$',
             'label' => 'line 1',
-            'sort_order' => 10
+            'sort_order' => 20
         ],
         'multiselect_attribute_option1'
     ),
@@ -70,7 +72,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'entity_type' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
             'attribute_code' => '$multiselect_attribute.attribute_code$',
             'label' => 'line 2',
-            'sort_order' => 20
+            'sort_order' => 30
         ],
         'multiselect_attribute_option2'
     ),
@@ -80,7 +82,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'entity_type' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
             'attribute_code' => '$multiselect_attribute.attribute_code$',
             'label' => 'line 3',
-            'sort_order' => 30
+            'sort_order' => 10
         ],
         'multiselect_attribute_option3'
     ),
@@ -154,64 +156,8 @@ class CreateCustomerAddressWithCustomAttributesV2Test extends GraphQlAbstract
      */
     public function testCreateCustomerAddressWithCustomAttributesV2()
     {
-        $query = <<<QUERY
-mutation {
-  createCustomerAddress(input: {
-    region: {
-      region_id: 4
-      region: "Arizona"
-      region_code: "AZ"
-    }
-    country_code: US
-    street: ["123 Main Street"]
-    telephone: "7777777777"
-    postcode: "77777"
-    city: "Phoenix"
-    firstname: "Bob"
-    lastname: "Loblaw"
-    default_shipping: true
-    default_billing: false
-    custom_attributesV2: [
-      {
-        attribute_code: "%s"
-        value: "%s"
-      },
-      {
-        attribute_code: "%s"
-        value: "%s"
-        selected_options: []
-      }
-    ]
-  }) {
-    region {
-      region
-      region_code
-    }
-    country_code
-    street
-    telephone
-    postcode
-    city
-    default_shipping
-    default_billing
-    custom_attributesV2 {
-      code
-      ... on AttributeValue {
-        value
-      }
-      ... on AttributeSelectedOptions {
-        selected_options {
-          value
-          label
-        }
-      }
-    }
-  }
-}
-QUERY;
         $response = $this->graphQlMutation(
-            sprintf(
-                $query,
+            $this->getQuery(
                 $this->simple_attribute->getAttributeCode(),
                 "brand new customer address value",
                 $this->multiselect_attribute->getAttributeCode(),
@@ -243,23 +189,23 @@ QUERY;
                             [
                                 0 =>
                                     [
-                                        'code' => $this->simple_attribute->getAttributeCode(),
-                                        'value' => 'brand new customer address value'
-                                    ],
-                                1 =>
-                                    [
                                         'code' => $this->multiselect_attribute->getAttributeCode(),
                                         'selected_options' => [
                                             [
-                                                'label' => $this->option2->getLabel(),
-                                                'value' => $this->option2->getValue()
-                                            ],
-                                            [
                                                 'label' => $this->option3->getLabel(),
                                                 'value' => $this->option3->getValue()
+                                            ],
+                                            [
+                                                'label' => $this->option2->getLabel(),
+                                                'value' => $this->option2->getValue()
                                             ]
                                         ]
                                     ],
+                                1 =>
+                                    [
+                                        'code' => $this->simple_attribute->getAttributeCode(),
+                                        'value' => 'brand new customer address value'
+                                    ]
                             ],
                     ],
             ],
@@ -276,6 +222,28 @@ QUERY;
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Attribute multiselect_attribute does not contain option with Id 1345");
+
+        $this->graphQlMutation(
+            $this->getQuery(
+                $this->simple_attribute->getAttributeCode(),
+                "brand new customer address value",
+                $this->multiselect_attribute->getAttributeCode(),
+                "1345"
+            ),
+            [],
+            '',
+            $this->getCustomerAuthHeaders($this->customer->getEmail(), $this->currentPassword)
+        );
+    }
+
+    /**
+     * @return void
+     * @throws AuthenticationException
+     */
+    public function testAttemptToCreateCustomerAddressNonPassingRequiredCustomAttribute()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("\"simple_attribute\" is a required value.");
 
         $query = <<<QUERY
 mutation {
@@ -294,13 +262,6 @@ mutation {
     lastname: "Loblaw"
     default_shipping: true
     default_billing: false
-    custom_attributesV2: [
-      {
-        attribute_code: "%s"
-        value: "%s"
-        selected_options: []
-      }
-    ]
   }) {
     custom_attributesV2 {
       code
@@ -319,11 +280,7 @@ mutation {
 QUERY;
 
         $this->graphQlMutation(
-            sprintf(
-                $query,
-                $this->multiselect_attribute->getAttributeCode(),
-                "1345"
-            ),
+            $query,
             [],
             '',
             $this->getCustomerAuthHeaders($this->customer->getEmail(), $this->currentPassword)
@@ -388,6 +345,75 @@ QUERY;
             '',
             $this->getCustomerAuthHeaders($this->customer->getEmail(), $this->currentPassword)
         );
+    }
+
+    /**
+     * @param $attributeCode
+     * @param $attributeValue
+     * @param $selectAttributeCode
+     * @param $selectAttributeCode
+     *
+     * @return string
+     */
+    private function getQuery($attributeCode, $attributeValue, $selectAttributeCode, $selectAttributeValue)
+    {
+        $query = <<<QUERY
+mutation {
+  createCustomerAddress(input: {
+    region: {
+      region_id: 4
+      region: "Arizona"
+      region_code: "AZ"
+    }
+    country_code: US
+    street: ["123 Main Street"]
+    telephone: "7777777777"
+    postcode: "77777"
+    city: "Phoenix"
+    firstname: "Bob"
+    lastname: "Loblaw"
+    default_shipping: true
+    default_billing: false
+    custom_attributesV2: [
+      {
+        attribute_code: "$attributeCode"
+        value: "$attributeValue"
+      },
+      {
+        attribute_code: "$selectAttributeCode"
+        value: "$selectAttributeValue"
+        selected_options: []
+      }
+    ]
+  }) {
+    region {
+      region
+      region_code
+    }
+    country_code
+    street
+    telephone
+    postcode
+    city
+    default_shipping
+    default_billing
+    custom_attributesV2 {
+      code
+      ... on AttributeValue {
+        value
+      }
+      ... on AttributeSelectedOptions {
+        selected_options {
+          value
+          label
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        return $query;
     }
 
     /**

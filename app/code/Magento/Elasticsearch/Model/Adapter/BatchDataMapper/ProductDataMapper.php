@@ -17,6 +17,8 @@ use Magento\Eav\Api\Data\AttributeOptionInterface;
 
 /**
  * Map product index data to search engine metadata
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class ProductDataMapper implements BatchDataMapperInterface
 {
@@ -250,6 +252,7 @@ class ProductDataMapper implements BatchDataMapperInterface
      * - "Visible in Advanced Search" (is_visible_in_advanced_search)
      * - "Use in Layered Navigation" (is_filterable)
      * - "Use in Search Results Layered Navigation" (is_filterable_in_search)
+     * - "Use in Sorting in Product Listing" (used_for_sort_by)
      *
      * @param Attribute $attribute
      * @return bool
@@ -261,6 +264,7 @@ class ProductDataMapper implements BatchDataMapperInterface
             || $attribute->getIsVisibleInAdvancedSearch()
             || $attribute->getIsFilterable()
             || $attribute->getIsFilterableInSearch()
+            || $attribute->getUsedForSortBy()
         );
     }
 

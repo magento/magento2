@@ -42,14 +42,17 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource im
     /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
+     * @param StoreManagerInterface|null $storeManager
      * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->_attrOptionCollectionFactory = $attrOptionCollectionFactory;
         $this->_attrOptionFactory = $attrOptionFactory;
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -63,7 +66,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource im
     {
         $storeId = $this->getAttribute()->getStoreId();
         if ($storeId === null) {
-            $storeId = $this->getStoreManager()->getStore()->getId();
+            $storeId = $this->storeManager->getStore()->getId();
         }
         if (!is_array($this->_options)) {
             $this->_options = [];
@@ -91,21 +94,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource im
         }
 
         return $options;
-    }
-
-    /**
-     * Get StoreManager dependency
-     *
-     * @return StoreManagerInterface
-     * @deprecated 100.1.6
-     * @see we don't recommend this approach anymore
-     */
-    private function getStoreManager()
-    {
-        if ($this->storeManager === null) {
-            $this->storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
-        }
-        return $this->storeManager;
     }
 
     /**
@@ -302,6 +290,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource im
     public function _resetState(): void
     {
         $this->_optionsDefault = [];
-        $this->_options = [];
+        $this->_options = null;
     }
 }

@@ -17,6 +17,7 @@ use Magento\Framework\App\ScopeInterface as AppScopeInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Url\ModifierInterface;
 use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\UrlInterface;
@@ -43,7 +44,8 @@ class Store extends AbstractExtensibleModel implements
     AppScopeInterface,
     UrlScopeInterface,
     IdentityInterface,
-    StoreInterface
+    StoreInterface,
+    ResetAfterRequestInterface
 {
     /**
      * Store Id key name
@@ -466,7 +468,6 @@ class Store extends AbstractExtensibleModel implements
     protected function _getSession()
     {
         if (!$this->_session->isSessionExists()) {
-            $this->_session->setName('store_' . $this->getCode());
             $this->_session->start();
         }
         return $this->_session;
@@ -1365,6 +1366,17 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getCacheTags()
+    {
+        $identities = $this->getIdentities();
+        $parentTags = parent::getCacheTags();
+
+        return array_unique(array_merge($identities, $parentTags));
+    }
+
+    /**
      * Return Store Path
      *
      * @return string
@@ -1420,5 +1432,18 @@ class Store extends AbstractExtensibleModel implements
     public function __debugInfo()
     {
         return [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_baseUrlCache = [];
+        $this->_configCache = null;
+        $this->_configCacheBaseNodes = [];
+        $this->_dirCache = [];
+        $this->_urlCache = [];
+        $this->_baseUrlCache = [];
     }
 }

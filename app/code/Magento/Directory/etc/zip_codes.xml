@@ -283,7 +283,7 @@
     </zip>
     <zip countryCode="GR">
         <codes>
-            <code id="pattern_1" active="true" example="123 45">^[0-9]{3}\s[0-9]{2}$</code>
+            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
         </codes>
     </zip>
     <zip countryCode="GS">

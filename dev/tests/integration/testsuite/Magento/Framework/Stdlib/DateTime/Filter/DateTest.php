@@ -61,7 +61,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function filterDataProvider()
+    public static function filterDataProvider()
     {
         return [
             ['2000-01-01', '2000-01-01'],
@@ -87,7 +87,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function localeDateFilterProvider()
+    public static function localeDateFilterProvider()
     {
         return [
             ['en_US', '01/02/2010', '2010-01-02'],

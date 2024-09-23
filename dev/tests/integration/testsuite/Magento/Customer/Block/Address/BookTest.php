@@ -22,12 +22,14 @@ class BookTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        /** @var \PHPUnit\Framework\MockObject\MockObject $blockMock */
         $blockMock = $this->getMockBuilder(
             \Magento\Framework\View\Element\BlockInterface::class
-        )->disableOriginalConstructor()->setMethods(
-            ['setTitle', 'toHtml']
+        )->disableOriginalConstructor()->addMethods(
+            ['setTitle']
+        )->onlyMethods(
+            ['toHtml']
         )->getMock();
+
         $blockMock->expects($this->any())->method('setTitle');
 
         $this->currentCustomer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -75,7 +77,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_block->hasPrimaryAddress());
     }
 
-    public function hasPrimaryAddressDataProvider()
+    public static function hasPrimaryAddressDataProvider()
     {
         return ['0' => [0, false], '1' => [1, true], '5' => [5, false]];
     }
@@ -110,7 +112,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_block->getAdditionalAddresses());
     }
 
-    public function getAdditionalAddressesDataProvider()
+    public static function getAdditionalAddressesDataProvider()
     {
         return ['0' => [0, false], '5' => [5, false]];
     }
@@ -171,7 +173,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_block->getDefaultBilling());
     }
 
-    public function getDefaultBillingDataProvider()
+    public static function getDefaultBillingDataProvider()
     {
         return ['0' => [0, null], '1' => [1, 1], '5' => [5, null]];
     }
@@ -191,7 +193,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_block->getDefaultShipping());
     }
 
-    public function getDefaultShippingDataProvider()
+    public static function getDefaultShippingDataProvider()
     {
         return ['0' => [0, null], '1' => [1, 1], '5' => [5, null]];
     }

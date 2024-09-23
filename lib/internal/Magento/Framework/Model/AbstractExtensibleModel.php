@@ -127,7 +127,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
         if (isset($data[self::CUSTOM_ATTRIBUTES][0])) {
             $data[self::CUSTOM_ATTRIBUTES] = $this->flattenCustomAttributesArrayToMap($data[self::CUSTOM_ATTRIBUTES]);
         }
-        $customAttributesCodes         = $this->getCustomAttributesCodes();
+        $customAttributesCodes = $this->getCustomAttributesCodes();
         $data[self::CUSTOM_ATTRIBUTES] = array_intersect_key(
             (array) $data[self::CUSTOM_ATTRIBUTES],
             array_flip($customAttributesCodes)

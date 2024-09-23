@@ -135,10 +135,20 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
                 )
                 && !in_array(
                     $method->getName(),
-                    ['__sleep', '__wakeup', '__clone', '__debugInfo']
+                    ['__sleep', '__wakeup', '__clone', '__debugInfo', '_resetState']
                 )
             ) {
                 $methods[] = $this->_getMethodInfo($method);
+            }
+            if ($method->getName() === '_resetState') {
+                $methods[] = [
+                    'name' => '_resetState',
+                    'returnType' => 'void',
+                    'body' => "if (\$this->_subject) {\n" .
+                        "    \$this->_subject->_resetState(); \n" .
+                        "}\n",
+                    'docblock' => ['shortDescription' => 'Reset state of proxied instance'],
+                ];
             }
         }
 
