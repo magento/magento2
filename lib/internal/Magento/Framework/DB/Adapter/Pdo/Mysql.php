@@ -251,6 +251,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      */
     private $parentConnections = [];
 
+    /***
+     * Get exact version of MySQL
+     *
+     * @var string
+     */
+    private $mysqlversion;
+    
     /**
      * Constructor
      *
@@ -328,8 +335,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         }
         if ($this->_transactionLevel === 0) {
             $this->logger->startTimer();
-            parent::beginTransaction();
-            $this->logger->logStats(LoggerInterface::TYPE_TRANSACTION, 'BEGIN');
+            try {
+                $this->performQuery(function () {
+                    parent::beginTransaction();
+                });
+            } finally {
+                $this->logger->logStats(LoggerInterface::TYPE_TRANSACTION, 'BEGIN');
+            }
         }
         ++$this->_transactionLevel;
         return $this;
@@ -427,6 +439,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             $this->parentConnections[] = $this->_connection;
             $this->_connection = null;
             $this->pid = getmypid();
+
+            // Reset config host to avoid issue with multiple connections
+            if (!empty($this->_config['port']) && strpos($this->_config['host'], ':') === false) {
+                $this->_config['host'] = implode(':', [$this->_config['host'], $this->_config['port']]);
+                unset($this->_config['port']);
+            }
         }
     }
 
@@ -598,9 +616,30 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      * @return \Zend_Db_Statement_Pdo|void
      * @throws Zend_Db_Adapter_Exception To re-throw \PDOException.
      * @throws Zend_Db_Statement_Exception
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _query($sql, $bind = [])
+    {
+        $result = null;
+        try {
+            $this->_checkDdlTransaction($sql);
+            $this->_prepareQuery($sql, $bind);
+            $this->logger->startTimer();
+            $result = $this->performQuery(fn () => parent::query($sql, $bind));
+        } finally {
+            $this->logger->logStats(LoggerInterface::TYPE_QUERY, $sql, $bind, $result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Execute query and reconnect if needed.
+     *
+     * @param callable $queryExecutor
+     * @return \Zend_Db_Statement_Pdo|void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function performQuery(callable $queryExecutor)
     {
         $connectionErrors = [
             2006, // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
@@ -609,22 +648,15 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         $triesCount = 0;
         do {
             $retry = false;
-            $this->logger->startTimer();
             try {
-                $this->_checkDdlTransaction($sql);
-                $this->_prepareQuery($sql, $bind);
-                $result = parent::query($sql, $bind);
-                $this->logger->logStats(LoggerInterface::TYPE_QUERY, $sql, $bind, $result);
-                return $result;
+                return $queryExecutor();
             } catch (\Exception $e) {
                 // Finalize broken query
                 $profiler = $this->getProfiler();
                 if ($profiler instanceof Profiler) {
-                    /** @var Profiler $profiler */
                     $profiler->queryEndLast();
                 }
 
-                /** @var $pdoException \PDOException */
                 $pdoException = null;
                 if ($e instanceof \PDOException) {
                     $pdoException = $e;
@@ -641,12 +673,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
                     $retry = true;
                     $triesCount++;
                     $this->closeConnection();
-
                     $this->_connect();
                 }
 
                 if (!$retry) {
-                    $this->logger->logStats(LoggerInterface::TYPE_QUERY, $sql, $bind);
                     $this->logger->critical($e);
                     // rethrow custom exception if needed
                     if ($pdoException && isset($this->exceptionMap[$pdoException->errorInfo[1]])) {
@@ -1795,13 +1825,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             }
         }
 
-        /**
-         * Starting from MariaDB 10.5.1 columns with old temporal formats are marked with a \/* mariadb-5.3 *\/
-         * comment in the output of SHOW CREATE TABLE, SHOW COLUMNS, DESCRIBE statements,
-         * as well as in the COLUMN_TYPE column of the INFORMATION_SCHEMA.COLUMNS Table.
-         */
         foreach ($ddl as $key => $columnData) {
-            $ddl[$key]['DATA_TYPE'] = str_replace(' /* mariadb-5.3 */', '', $columnData['DATA_TYPE']);
+            $ddl[$key]['DATA_TYPE'] = $this->sanitizeColumnDataType($columnData['DATA_TYPE']);
         }
 
         return $ddl;
@@ -1958,7 +1983,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     protected function _getColumnTypeByDdl($column)
     {
         // phpstan:ignore
-        switch ($column['DATA_TYPE']) {
+        switch ($this->sanitizeColumnDataType($column['DATA_TYPE'])) {
             case 'bool':
                 return Table::TYPE_BOOLEAN;
             case 'tinytext':
@@ -1993,6 +2018,22 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
                 return Table::TYPE_DECIMAL;
         }
         return null;
+    }
+
+    /**
+     * Remove old temporal format comment from column data type
+     *
+     * @param string $columnType
+     * @return string
+     */
+    private function sanitizeColumnDataType(string $columnType): string
+    {
+        /**
+         * Starting from MariaDB 10.5.1 columns with old temporal formats are marked with a \/* mariadb-5.3 *\/
+         * comment in the output of SHOW CREATE TABLE, SHOW COLUMNS, DESCRIBE statements,
+         * as well as in the COLUMN_TYPE column of the INFORMATION_SCHEMA.COLUMNS Table.
+         */
+        return str_replace(' /* mariadb-5.3 */', '', $columnType);
     }
 
     /**
@@ -2567,6 +2608,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         // detect and validate column type
         if ($ddlType === null) {
             $ddlType = $this->_getDdlType($options);
+        } else {
+            $ddlType = $this->sanitizeColumnDataType($ddlType);
         }
 
         if (empty($ddlType) || !isset($this->_ddlColumnTypes[$ddlType])) {
@@ -3039,7 +3082,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         $this->rawQuery("SET SQL_MODE=''");
         $this->rawQuery("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0");
         $this->rawQuery("SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO'");
-
+        $this->mysqlversion = $this->fetchPairs("SHOW variables LIKE 'version'")['version'] ?? '';
+        if ($this->isMysql8EngineUsed() && str_contains($this->mysqlversion, '8.4')) {
+            $this->rawQuery("SET @OLD_RESTRICT_FK_ON_NON_STANDARD_KEY=@@RESTRICT_FK_ON_NON_STANDARD_KEY");
+            $this->rawQuery("SET RESTRICT_FK_ON_NON_STANDARD_KEY=0");
+        }
         return $this;
     }
 
@@ -3052,7 +3099,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     {
         $this->rawQuery("SET SQL_MODE=IFNULL(@OLD_SQL_MODE,'')");
         $this->rawQuery("SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS=0, 0, 1)");
-
+        if ($this->isMysql8EngineUsed() && str_contains($this->mysqlversion, '8.4')) {
+            $this->rawQuery("SET RESTRICT_FK_ON_NON_STANDARD_KEY=IF(@OLD_RESTRICT_FK_ON_NON_STANDARD_KEY=0, 0, 1)");
+        }
         return $this;
     }
 
@@ -3207,6 +3256,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         if ($value instanceof Parameter) {
             return $value;
         }
+
+        $column['DATA_TYPE'] = $this->sanitizeColumnDataType($column['DATA_TYPE']);
 
         // return original value if invalid column describe data
         if (!isset($column['DATA_TYPE'])) {
@@ -3977,7 +4028,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             $ddlType = $options['COLUMN_TYPE'];
         }
 
-        return $ddlType;
+        return $this->sanitizeColumnDataType($ddlType);
     }
 
     /**

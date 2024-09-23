@@ -46,11 +46,11 @@ class MinsaleqtyTest extends TestCase
             ->willReturn('unique_hash');
 
         $groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
-            ->setMethods(['getAllCustomersGroup'])
+            ->onlyMethods(['getAllCustomersGroup'])
             ->getMockForAbstractClass();
 
         $allGroup = $this->getMockBuilder(GroupInterface::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $allGroup->expects($this->any())

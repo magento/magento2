@@ -110,6 +110,15 @@ class Discount extends AbstractTotal
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->setCode(self::COLLECTOR_TYPE_CODE);
+    }
+
+    /**
      * Collect address discount amount
      *
      * @param Quote $quote
@@ -172,8 +181,9 @@ class Discount extends AbstractTotal
                     $child->setDiscountPercent(0);
                 }
             }
+            $item->getAddress()->setBaseDiscountAmount(0);
         }
-        $this->calculator->init($store->getWebsiteId(), $quote->getCustomerGroupId(), $quote->getCouponCode());
+        $this->calculator->initFromQuote($quote);
         $this->calculator->initTotals($items, $address);
         $items = $this->calculator->sortItemsByPriority($items, $address);
         $itemsToApplyRules = $items;
@@ -184,12 +194,24 @@ class Discount extends AbstractTotal
         foreach ($rules as $rule) {
             /** @var Item $item */
             foreach ($itemsToApplyRules as $key => $item) {
-                if ($quote->getIsMultiShipping() && $item->getAddress()->getId() !== $address->getId()) {
-                    continue;
-                }
                 if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item) || $item->getParentItem()) {
                     continue;
                 }
+
+                switch ($rule->getSimpleAction()) {
+                    case Rule::BY_PERCENT_ACTION:
+                    case Rule::BY_FIXED_ACTION:
+                        if ($rule->getDiscountStep() > $item->getQty()) {
+                            continue 2;
+                        }
+                        break;
+                    case Rule::BUY_X_GET_Y_ACTION:
+                        if ($rule->getDiscountStep() >= $item->getQty()) {
+                            continue 2;
+                        }
+                        break;
+                }
+
                 $eventArgs['item'] = $item;
                 $this->eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
 

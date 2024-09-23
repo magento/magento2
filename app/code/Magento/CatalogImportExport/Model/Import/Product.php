@@ -6,6 +6,7 @@
 
 namespace Magento\CatalogImportExport\Model\Import;
 
+use Magento\AwsS3\Driver\AwsS3;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config as CatalogConfig;
 use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
@@ -53,7 +54,6 @@ use Magento\Store\Model\Store;
 class Product extends AbstractEntity
 {
     private const COL_NAME_FORMAT = '/[\x00-\x1F\x7F]/';
-    private const DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR = ',';
     public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
 
     /**
@@ -939,7 +939,7 @@ class Product extends AbstractEntity
         $this->_optionEntity = $data['option_entity'] ??
             $optionFactory->create(['data' => ['product_entity' => $this]]);
         $this->skuStorage = $skuStorage ?? ObjectManager::getInstance()
-            ->get(SkuStorage::class);
+                ->get(SkuStorage::class);
         $this->_initAttributeSets()
             ->_initTypeModels()
             ->_initSkus()
@@ -949,7 +949,7 @@ class Product extends AbstractEntity
         $this->productRepository = $productRepository ?? ObjectManager::getInstance()
                 ->get(ProductRepositoryInterface::class);
         $this->stockItemProcessor = $stockItemProcessor ?? ObjectManager::getInstance()
-            ->get(StockItemProcessorInterface::class);
+                ->get(StockItemProcessorInterface::class);
     }
 
     /**
@@ -2055,18 +2055,26 @@ class Product extends AbstractEntity
             $backModel = $attribute->getBackendModel();
             $attrTable = $attribute->getBackend()->getTable();
             $storeIds = [0];
-            if ('datetime' == $attribute->getBackendType()
-                && (
-                    in_array($attribute->getAttributeCode(), $this->dateAttrCodes)
-                    || $attribute->getIsUserDefined()
-                )
-            ) {
-                $attrValue = $this->dateTime->formatDate($attrValue, false);
-            } elseif ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
-                $attrValue = gmdate(
-                    'Y-m-d H:i:s',
-                    $this->_localeDate->date($attrValue)->getTimestamp()
-                );
+            if ('datetime' == $attribute->getBackendType()) {
+                $attrValue = trim((string) $attrValue);
+                if (!empty($attrValue)) {
+                    $timezone = new \DateTimeZone($this->_localeDate->getConfigTimezone());
+                    // Parse date from format Y-m-d[ H:i:s]
+                    $date = date_create_from_format(DateTime::DATETIME_PHP_FORMAT, $attrValue, $timezone)
+                        ?: date_create_from_format(DateTime::DATE_PHP_FORMAT, $attrValue, $timezone);
+                    // Perhaps, date is formatted according to user locale. For example, dates in exported csv file
+                    $date = $date ?: $this->_localeDate->date($attrValue);
+                    if ($attribute->getFrontendInput() === 'date'
+                        || in_array($attribute->getAttributeCode(), $this->dateAttrCodes)
+                    ) {
+                        $date->setTime(0, 0);
+                    } else {
+                        $date->setTimezone(new \DateTimeZone($this->_localeDate->getDefaultTimezone()));
+                    }
+                    $attrValue = $date->format(DateTime::DATETIME_PHP_FORMAT);
+                } else {
+                    $attrValue = null;
+                }
             } elseif ($backModel) {
                 $attribute->getBackend()->beforeSave($product);
                 $attrValue = $product->getData($attribute->getAttributeCode());
@@ -2309,6 +2317,14 @@ class Product extends AbstractEntity
             $fileUploader->init();
 
             $tmpPath = $this->getImportDir();
+
+            if (is_a($this->_mediaDirectory->getDriver(), AwsS3::class)) {
+                if (!$this->_mediaDirectory->create($tmpPath)) {
+                    throw new LocalizedException(
+                        __('Directory \'%1\' could not be created.', $tmpPath)
+                    );
+                }
+            }
 
             if (!$fileUploader->setTmpDir($tmpPath)) {
                 throw new LocalizedException(
@@ -2837,7 +2853,7 @@ class Product extends AbstractEntity
      *
      * @return array
      */
-    private function _parseAdditionalAttributes($rowData)
+    private function _parseAdditionalAttributes(array $rowData): array
     {
         if (empty($rowData['additional_attributes'])) {
             return $rowData;
@@ -2847,7 +2863,7 @@ class Product extends AbstractEntity
                 $rowData[mb_strtolower($key)] = $value;
             }
         } else {
-            $rowData = array_merge($rowData, $this->getAdditionalAttributes($rowData['additional_attributes']));
+            $rowData = array_merge($rowData, $this->getAdditionalAttributes($rowData));
         }
         return $rowData;
     }
@@ -2861,14 +2877,14 @@ class Product extends AbstractEntity
      *      codeN => valueN
      * ]
      *
-     * @param string $additionalAttributes Attributes data that will be parsed
+     * @param array $rowData
      * @return array
      */
-    private function getAdditionalAttributes($additionalAttributes)
+    private function getAdditionalAttributes(array $rowData): array
     {
         return empty($this->_parameters[Import::FIELDS_ENCLOSURE])
-            ? $this->parseAttributesWithoutWrappedValues($additionalAttributes)
-            : $this->parseAttributesWithWrappedValues($additionalAttributes);
+            ? $this->parseAttributesWithoutWrappedValues($rowData['additional_attributes'], $rowData['product_type'])
+            : $this->parseAttributesWithWrappedValues($rowData['additional_attributes']);
     }
 
     /**
@@ -2882,9 +2898,10 @@ class Product extends AbstractEntity
      *
      * @param string $attributesData Attributes data that will be parsed. It keeps data in format:
      *      code=value,code2=value2...,codeN=valueN
+     * @param string $productType
      * @return array
      */
-    private function parseAttributesWithoutWrappedValues($attributesData)
+    private function parseAttributesWithoutWrappedValues(string $attributesData, string $productType): array
     {
         $attributeNameValuePairs = explode($this->getMultipleValueSeparator(), $attributesData);
         $preparedAttributes = [];
@@ -2900,6 +2917,17 @@ class Product extends AbstractEntity
             }
             list($code, $value) = explode(self::PAIR_NAME_VALUE_SEPARATOR, $attributeData, 2);
             $code = mb_strtolower($code);
+
+            $entityTypeModel = $this->retrieveProductTypeByName($productType);
+            if ($entityTypeModel) {
+                $attrParams = $entityTypeModel->retrieveAttributeFromCache($code);
+                if (!empty($attrParams) && $attrParams['type'] ==  'multiselect') {
+                    $parsedValue = $this->parseMultiselectValues($value, self::PSEUDO_MULTI_LINE_SEPARATOR);
+                    if (count($parsedValue) > 1) {
+                        $value = $parsedValue;
+                    }
+                }
+            }
             $preparedAttributes[$code] = $value;
         }
         return $preparedAttributes;
@@ -2949,10 +2977,13 @@ class Product extends AbstractEntity
      * @return array
      * @since 100.1.2
      */
-    public function parseMultiselectValues($values, $delimiter = self::PSEUDO_MULTI_LINE_SEPARATOR)
+    public function parseMultiselectValues($values, $delimiter = '')
     {
         if (empty($this->_parameters[Import::FIELDS_ENCLOSURE])) {
-            if ($this->getMultipleValueSeparator() !== self::DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR) {
+            if (is_array($values)) {
+                return $values;
+            }
+            if (!$delimiter) {
                 $delimiter = $this->getMultipleValueSeparator();
             }
 

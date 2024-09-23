@@ -34,9 +34,9 @@ use PHPUnit\Framework\TestCase;
  */
 class LabelGeneratorTest extends TestCase
 {
-    const CARRIER_CODE = 'fedex';
+    private const CARRIER_CODE = 'fedex';
 
-    const CARRIER_TITLE = 'Fedex carrier';
+    private const CARRIER_TITLE = 'Fedex carrier';
 
     /**
      * @var CarrierFactory|MockObject
@@ -169,21 +169,40 @@ class LabelGeneratorTest extends TestCase
             $willReturnArgs[] = $trackMock;
 
             $setCarrierCodeWithArgs[] = [self::CARRIER_CODE];
-
             $setTitleWithArgs[] = [self::CARRIER_TITLE];
         }
         $trackMock
             ->method('setNumber')
-            ->withConsecutive(...$setNumberWithArgs)
-            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+            ->willReturnCallback(function ($setNumberWithArgs) use ($willReturnArgs) {
+                if (!empty($setNumberWithArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $willReturnArgs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
+
         $trackMock
             ->method('setCarrierCode')
-            ->withConsecutive(...$setCarrierCodeWithArgs)
-            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+            ->willReturnCallback(function ($setCarrierCodeWithArgs) use ($willReturnArgs) {
+                if (!empty($setCarrierCodeWithArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $willReturnArgs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
+
         $trackMock
             ->method('setTitle')
-            ->withConsecutive(...$setTitleWithArgs)
-            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+            ->willReturnCallback(function ($setTitleWithArgs) use ($willReturnArgs) {
+                if (!empty($setTitleWithArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $willReturnArgs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
 
         $this->trackFactory->expects(static::any())
             ->method('create')
@@ -258,7 +277,7 @@ class LabelGeneratorTest extends TestCase
     /**
      * @return array
      */
-    public function labelInfoDataProvider(): array
+    public static function labelInfoDataProvider(): array
     {
         return [
             [['tracking_number' => ['111111', '222222', '333333'], 'label_content' => 'some']],
