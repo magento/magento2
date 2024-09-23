@@ -310,7 +310,7 @@ class ProductOutputProcessorTest extends TestCase
     {
         $productMock = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setSku',
                     'setStatus',

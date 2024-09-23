@@ -28,8 +28,8 @@ class GroupActions extends Column
     /**
      * Url path
      */
-    const URL_PATH_EDIT = 'customer/group/edit';
-    const URL_PATH_DELETE = 'customer/group/delete';
+    public const URL_PATH_EDIT = 'customer/group/edit';
+    public const URL_PATH_DELETE = 'customer/group/delete';
 
     /**
      * @var GroupManagementInterface
@@ -99,7 +99,7 @@ class GroupActions extends Column
                         ],
                     ];
 
-                    if (!$this->groupManagement->isReadonly($item['customer_group_id'])) {
+                    if (!$this->canHideDeleteButton((int) $item['customer_group_id'])) {
                         $item[$this->getData('name')]['delete'] = [
                             'href' => $this->urlBuilder->getUrl(
                                 static::URL_PATH_DELETE,
@@ -123,5 +123,18 @@ class GroupActions extends Column
         }
 
         return $dataSource;
+    }
+
+    /**
+     * Check if delete button can visible
+     *
+     * @param int $customer_group_id
+     * @return bool
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    public function canHideDeleteButton(int $customer_group_id): bool
+    {
+        return $this->groupManagement->isReadonly($customer_group_id);
     }
 }

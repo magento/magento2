@@ -96,7 +96,7 @@ class DynamicTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->bucket = $this->getMockBuilder(DynamicBucket::class)
-            ->setMethods(['getMethod'])
+            ->onlyMethods(['getMethod'])
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -53,13 +53,14 @@ class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstrac
 
         $themeFieldset->addField(
             'js_files_uploader',
-            'js_files',
+            'button',
             [
                 'name' => 'js_files_uploader',
                 'label' => __('Select JS Files to Upload'),
                 'title' => __('Select JS Files to Upload'),
                 'accept' => 'application/x-javascript',
                 'multiple' => '',
+                'value' => __('Browse JS Files'),
                 'note' => $this->_getUploadJsFileNote()
             ]
         );

@@ -28,7 +28,7 @@ class PopupDeliveryDate
     public function afterFormatDeliveryDateTime(Popup $subject, $result, $date, $time)
     {
         if ($this->getCarrier($subject) === Carrier::CODE) {
-            $result = $subject->formatDeliveryDate($date);
+            $result = $subject->formatDeliveryDate($date. ' ' . $time);
         }
         return $result;
     }

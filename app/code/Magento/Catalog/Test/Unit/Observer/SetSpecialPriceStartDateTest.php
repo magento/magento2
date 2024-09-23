@@ -71,12 +71,12 @@ class SetSpecialPriceStartDateTest extends TestCase
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProduct'])
+            ->addMethods(['getProduct'])
             ->getMock();
 
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSpecialPrice', 'getSpecialFromDate', 'setData'])
+            ->onlyMethods(['getSpecialPrice', 'getSpecialFromDate', 'setData'])
             ->getMock();
 
         $this->observer = $this->objectManager->getObject(

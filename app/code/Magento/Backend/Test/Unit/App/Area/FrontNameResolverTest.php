@@ -84,8 +84,10 @@ class FrontNameResolverTest extends TestCase
     {
         $this->configMock
             ->method('getValue')
-            ->withConsecutive(['admin/url/use_custom_path'], ['admin/url/custom_path'])
-            ->willReturnOnConsecutiveCalls(true, 'expectedValue');
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['admin/url/use_custom_path'] => true,
+                ['admin/url/custom_path'] => 'expectedValue'
+            });
         $this->assertEquals('expectedValue', $this->model->getFrontName());
     }
 
@@ -200,7 +202,7 @@ class FrontNameResolverTest extends TestCase
     /**
      * @return array
      */
-    public function hostsDataProvider(): array
+    public static function hostsDataProvider(): array
     {
         return [
             'withoutPort' => [

@@ -37,7 +37,7 @@ class PermissionsTest extends TestCase
 
         $this->mockAuthorization = $this->getMockBuilder(Authorization::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isAllowed'])
+            ->onlyMethods(['isAllowed'])
             ->getMock();
 
         $this->permissions = new Permissions($this->mockAuthorization);

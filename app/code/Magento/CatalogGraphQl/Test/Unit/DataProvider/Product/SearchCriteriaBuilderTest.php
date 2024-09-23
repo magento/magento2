@@ -10,6 +10,7 @@ namespace Magento\CatalogGraphQl\Test\Unit\DataProvider\Product;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\CatalogGraphQl\DataProvider\Product\RequestDataBuilder;
 use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 use Magento\Eav\Model\Config;
 use Magento\Framework\Api\Filter;
@@ -19,10 +20,14 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
+use Magento\Framework\Search\Request\Config as SearchConfig;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Build search criteria
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SearchCriteriaBuilderTest extends TestCase
 {
@@ -72,6 +77,18 @@ class SearchCriteriaBuilderTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $objects = [
+            [
+                SearchConfig::class,
+                $this->createMock(SearchConfig::class)
+            ],
+            [
+                RequestDataBuilder::class,
+                $this->createMock(RequestDataBuilder::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
         $this->builder = $this->createMock(Builder::class);
         $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
@@ -118,8 +135,10 @@ class SearchCriteriaBuilderTest extends TestCase
 
         $this->sortOrderBuilder->expects($this->exactly(2))
             ->method('setField')
-            ->withConsecutive([$sortOrderList[0]], [$sortOrderList[1]])
-            ->willReturnSelf();
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$sortOrderList[0]] => $this->sortOrderBuilder,
+                [$sortOrderList[1]] => $this->sortOrderBuilder
+            });
 
         $this->sortOrderBuilder->expects($this->exactly(2))
             ->method('setDirection')
@@ -134,8 +153,11 @@ class SearchCriteriaBuilderTest extends TestCase
 
         $this->filterBuilder->expects($this->exactly(2))
             ->method('setField')
-            ->withConsecutive([$filterOrderList[0]], [$filterOrderList[1]])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($filterOrderList) {
+                if ([$filterOrderList[0]] || [$filterOrderList[1]]) {
+                    return $this->filterBuilder;
+                }
+            });
 
         $this->filterBuilder->expects($this->exactly(2))
             ->method('setValue')
@@ -144,8 +166,11 @@ class SearchCriteriaBuilderTest extends TestCase
 
         $this->filterBuilder->expects($this->exactly(2))
             ->method('setConditionType')
-            ->withConsecutive([''], ['in'])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'in' || empty($arg1)) {
+                    return $this->filterBuilder;
+                }
+            });
 
         $this->filterBuilder
             ->expects($this->exactly(2))

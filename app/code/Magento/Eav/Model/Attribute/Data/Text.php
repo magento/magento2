@@ -6,7 +6,9 @@
 
 namespace Magento\Eav\Model\Attribute\Data;
 
+use Magento\Eav\Model\Attribute;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Stdlib\StringUtils;
@@ -21,33 +23,25 @@ use Psr\Log\LoggerInterface;
 class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var StringUtils
      */
     protected $_string;
-
-    /**
-     * @var array
-     */
-    private $allowDiacriticsForAttributes;
 
     /**
      * @param TimezoneInterface $localeDate
      * @param LoggerInterface $logger
      * @param ResolverInterface $localeResolver
      * @param StringUtils $stringHelper
-     * @param array $allowDiacriticsForAttributes
      * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Framework\Stdlib\StringUtils $stringHelper,
-        array $allowDiacriticsForAttributes = []
+        TimezoneInterface $localeDate,
+        LoggerInterface   $logger,
+        ResolverInterface $localeResolver,
+        StringUtils       $stringHelper
     ) {
         parent::__construct($localeDate, $logger, $localeResolver);
         $this->_string = $stringHelper;
-        $this->allowDiacriticsForAttributes = $allowDiacriticsForAttributes;
     }
 
     /**
@@ -92,15 +86,6 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
             return $errors;
         }
 
-        if (isset($this->allowDiacriticsForAttributes[$attribute->getEntityType()->getEntityTypeCode()])
-            && in_array(
-                $attribute->getAttributeCode(),
-                $this->allowDiacriticsForAttributes[$attribute->getEntityType()->getEntityTypeCode()]
-            )) {
-            // if string with diacritics encode it.
-            $value = $this->encodeDiacritics($value);
-        }
-
         $validateLengthResult = $this->validateLength($attribute, $value);
         $errors = array_merge($errors, $validateLengthResult);
 
@@ -119,6 +104,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array|string $value
      * @return $this
+     * @throws LocalizedException
      */
     public function compactValue($value)
     {
@@ -146,6 +132,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @param string $format
      * @return string|array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws LocalizedException
      */
     public function outputValue($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT)
     {
@@ -158,11 +145,11 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
     /**
      * Validates value length by attribute rules
      *
-     * @param \Magento\Eav\Model\Attribute $attribute
+     * @param Attribute $attribute
      * @param string $value
      * @return array errors
      */
-    private function validateLength(\Magento\Eav\Model\Attribute $attribute, string $value): array
+    private function validateLength(Attribute $attribute, string $value): array
     {
         $errors = [];
         $length = $this->_string->strlen(trim($value));
@@ -194,20 +181,5 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
     {
         $result = $this->_validateInputRule($value);
         return \is_array($result) ? $result : [];
-    }
-
-    /**
-     * Encode strings with diacritics for validate.
-     *
-     * @param array|string $value
-     * @return array|string
-     */
-    private function encodeDiacritics($value): array|string
-    {
-        $encoded = $value;
-        if (is_string($value)) {
-            $encoded = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $value);
-        }
-        return $encoded;
     }
 }
