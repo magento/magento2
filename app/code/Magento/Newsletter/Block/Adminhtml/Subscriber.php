@@ -23,7 +23,7 @@ use Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory;
 class Subscriber extends Template
 {
     /**
-     * Queue collection
+     * Queue collection property
      *
      * @var Collection
      */

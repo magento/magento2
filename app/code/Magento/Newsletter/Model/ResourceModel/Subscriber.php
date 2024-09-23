@@ -46,7 +46,7 @@ class Subscriber extends AbstractDb
     protected $_messagesScope = 'newsletter/session';
 
     /**
-     * Date
+     * Date variable
      *
      * @var DateTime
      */
@@ -58,7 +58,7 @@ class Subscriber extends AbstractDb
     protected $mathRandom;
 
     /**
-     * Store manager
+     * Member variable for Store manager
      *
      * @var StoreManagerInterface
      */

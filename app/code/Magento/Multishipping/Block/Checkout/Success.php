@@ -30,6 +30,8 @@ class Success extends \Magento\Multishipping\Block\Checkout\AbstractMultishippin
     }
 
     /**
+     * Get Order Ids
+     *
      * @return array|bool|string
      */
     public function getOrderIds()
@@ -42,6 +44,8 @@ class Success extends \Magento\Multishipping\Block\Checkout\AbstractMultishippin
     }
 
     /**
+     * Get order Url
+     *
      * @param int $orderId
      * @return string
      */
@@ -51,6 +55,8 @@ class Success extends \Magento\Multishipping\Block\Checkout\AbstractMultishippin
     }
 
     /**
+     * Get continue Url
+     *
      * @return string
      */
     public function getContinueUrl()

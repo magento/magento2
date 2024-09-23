@@ -17,6 +17,8 @@ class Template extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Newsletter::template/list.phtml';
 
     /**
+     * Prepare the layout
+     *
      * @return $this
      */
     protected function _prepareLayout()

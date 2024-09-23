@@ -17,7 +17,7 @@ use Magento\Newsletter\Model\Queue as ModelQueue;
 class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * Subscriber collection
+     * Subscriber collection variable
      *
      * @var \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection
      */

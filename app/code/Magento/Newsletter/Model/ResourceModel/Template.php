@@ -15,7 +15,7 @@ namespace Magento\Newsletter\Model\ResourceModel;
 class Template extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * Date
+     * Date variable
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */

@@ -31,6 +31,8 @@ class State extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Retrieve available checkout steps
+     *
      * @return array
      */
     public function getSteps()

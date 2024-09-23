@@ -15,5 +15,5 @@ abstract class Template extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Newsletter::template';
+    public const ADMIN_RESOURCE = 'Magento_Newsletter::template';
 }
