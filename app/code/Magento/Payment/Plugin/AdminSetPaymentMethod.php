@@ -35,8 +35,8 @@ class AdminSetPaymentMethod
      */
     public function beforeImportPostData(Create $subject, array $data)
     {
-        if (isset($this->request->getParam('payment')['method'])) {
-            $subject->setPaymentMethod('');
-        }
+//        if (isset($this->request->getParam('payment')['method'])) {
+//            $subject->setPaymentMethod('');
+//        }
     }
 }
