@@ -17,6 +17,7 @@
             <useCaseId value="ACP2E-1007"/>
             <severity value="MAJOR"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create simple products -->

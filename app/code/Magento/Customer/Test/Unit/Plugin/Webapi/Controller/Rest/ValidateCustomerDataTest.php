@@ -8,10 +8,11 @@ declare(strict_types=1);
 namespace Magento\Customer\Test\Unit\Plugin\Webapi\Controller\Rest;
 
 use Exception;
-use Magento\Framework\App\ObjectManager;
 use Magento\Customer\Plugin\Webapi\Controller\Rest\ValidateCustomerData;
+use Magento\Framework\App\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectmanagerHelper;
 
 /**
  * Unit test for ValidateCustomerData plugin
@@ -35,6 +36,14 @@ class ValidateCustomerDataTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectmanagerHelper($this);
+        $objects = [
+            [
+                ValidateCustomerData::class,
+                $this->createMock(ValidateCustomerData::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->validateCustomerDataObject = ObjectManager::getInstance()->get(ValidateCustomerData::class);
         $this->reflectionObject = new ReflectionClass(get_class($this->validateCustomerDataObject));
     }
@@ -71,43 +80,51 @@ class ValidateCustomerDataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderInputData(): array
+    public static function dataProviderInputData(): array
     {
         return [
             [
-                ['customer' =>
-                    [
+                ['customer' => [
                         'id' => -1,
                         'Id' => 1,
-                        'name' =>
-                            [
+                        'name' => [
                                 'firstName' => 'Test',
                                 'LastName' => 'user'
                             ],
                         'isHavingOwnHouse' => 1,
-                        'address' =>
-                            [
+                        'address' => [
                                 'street' => '1st Street',
                                 'Street' => '3rd Street',
                                 'city' => 'London'
                             ],
                     ]
                 ],
-                ['customer' =>
-                    [
+                ['customer' => [
                         'id' => -1,
-                        'name' =>
-                            [
+                        'name' => [
                                 'firstName' => 'Test',
                                 'LastName' => 'user'
                             ],
                         'isHavingOwnHouse' => 1,
-                        'address' =>
-                            [
+                        'address' => [
                                 'street' => '1st Street',
                                 'city' => 'London'
                             ],
                     ]
+                ],
+                ['customer' => [
+                    'id' => -1,
+                    '_Id' => 1,
+                    'name' => [
+                        'firstName' => 'Test',
+                        'LastName' => 'user'
+                    ],
+                    'isHavingOwnHouse' => 1,
+                    'address' => [
+                        'street' => '1st Street',
+                        'city' => 'London'
+                    ],
+                ]
                 ],
             ]
         ];

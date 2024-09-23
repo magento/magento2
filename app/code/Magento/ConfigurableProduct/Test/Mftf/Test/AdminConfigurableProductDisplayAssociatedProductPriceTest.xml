@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-4289"/>
             <group value="ConfigurableProduct"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- create category -->

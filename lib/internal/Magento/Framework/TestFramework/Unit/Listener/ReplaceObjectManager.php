@@ -11,6 +11,7 @@ use PHPUnit\Framework\Test;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestListener;
 use PHPUnit\Framework\TestListenerDefaultImplementation;
+use Magento\Framework\TestFramework\Unit\Listener\ReplaceObjectManager\TestProvidesServiceInterface;
 
 /**
  * The event listener which instantiates ObjectManager before test run
@@ -36,6 +37,12 @@ class ReplaceObjectManager implements TestListener
             $objectManagerMock = $test->getMockBuilder(ObjectManagerInterface::class)
                 ->getMockForAbstractClass();
             $createMockCallback = function ($type) use ($test) {
+                if ($test instanceof TestProvidesServiceInterface) {
+                    $serviceObject = $test->getServiceForObjectManager($type);
+                    if ($serviceObject) {
+                        return $serviceObject;
+                    }
+                }
                 return $test->getMockBuilder($type)
                     ->disableOriginalConstructor()
                     ->getMockForAbstractClass();

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddProductToCartAndGoToCheckoutWithInvalidCreditCardTest">
+        <annotations>
+            <features value="payflow"/>
+            <stories value="Checkout with invalid credit card details through Paypal payflow credit card payment method"/>
+            <title value="Checkout with invalid credit card details through Paypal payflow credit card payment method"/>
+            <description value="Checkout with invalid credit card details through Paypal payflow credit card payment method"/>
+            <severity value="MINOR"/>
+            <testCaseId value="AC-8920"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- New Customer -->
+            <createData entity="Custom_US_Customer" stepKey="createCustomer">
+                <field key="firstname">CCREJECT-BANK_ERROR</field>
+                <field key="lastname">Doe1</field>
+            </createData>
+            <!-- New Product -->
+            <createData entity="SimpleProduct2" stepKey="simpleProduct">
+                <field key="price">9000000</field>
+            </createData>
+            <!-- Reindex and cache flush -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <!-- Paypal Payflow -->
+            <actionGroup ref="AdminPayPalPayflowProActionGroup" stepKey="ConfigPayflow">
+                <argument name="credentials" value="SamplePaypalPaymentsProConfig"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountry"/>
+            <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUpNewUser">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$simpleProduct$"/>
+        </actionGroup>
+        <!--Go to checkout from minicart-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <!-- Select Shipping method and fill the credit card details -->
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToReview"/>
+        <click selector="{{StorefrontCheckoutPaymentMethodSection.checkPayFlowCreditCard}}" stepKey="selectCreditCardPaymentMethod"/>
+        <checkOption selector="{{StorefrontCheckoutPaymentMethodSection.billingAddressSameAsShipping}}" stepKey="checkBillingAddressSameAsShippingCheckbox"/>
+        <actionGroup ref="FillPayFlowCreditCardActionGroup" stepKey="fillCreditCardDetails">
+            <argument name="creditCardDetails" value="VisaDefaultCard"/>
+        </actionGroup>
+        <!-- Place Order and assert the url -->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <wait time="6" stepKey="waitForPageLoad" />
+        <seeCurrentUrlMatches regex="~\/checkout/#payment~" stepKey="seeCurrentUrl"/>
+    </test>
+</tests>

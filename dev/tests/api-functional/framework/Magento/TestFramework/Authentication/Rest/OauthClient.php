@@ -6,7 +6,9 @@
 
 namespace Magento\TestFramework\Authentication\Rest;
 
+use Magento\Framework\Oauth\Helper\Utility;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use OAuth\Common\Consumer\Credentials;
 use OAuth\Common\Http\Client\ClientInterface;
 use OAuth\Common\Http\Exception\TokenResponseException;
@@ -17,6 +19,8 @@ use OAuth\OAuth1\Service\AbstractService;
 use OAuth\OAuth1\Signature\SignatureInterface;
 use OAuth\OAuth1\Token\StdOAuth1Token;
 use OAuth\OAuth1\Token\TokenInterface;
+use Laminas\OAuth\Http\Utility as HTTPUtility;
+use Magento\Framework\Oauth\Helper\Signature\HmacFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -37,13 +41,15 @@ class OauthClient extends AbstractService
      * @param TokenStorageInterface|null $storage
      * @param SignatureInterface|null $signature
      * @param UriInterface|null $baseApiUri
+     * @param Utility|null $helper
      */
     public function __construct(
         Credentials $credentials,
         ClientInterface $httpClient = null,
         TokenStorageInterface $storage = null,
         SignatureInterface $signature = null,
-        UriInterface $baseApiUri = null
+        UriInterface $baseApiUri = null,
+        Utility $helper = null
     ) {
         if (!isset($httpClient)) {
             $httpClient = new \Magento\TestFramework\Authentication\Rest\CurlClient();
@@ -52,8 +58,12 @@ class OauthClient extends AbstractService
         if (!isset($storage)) {
             $storage = new \OAuth\Common\Storage\Memory();
         }
+        if (!isset($helper)) {
+            /** @phpstan-ignore-next-line */
+            $helper = new Utility(new HTTPUtility(), new HmacFactory(ObjectManager::getInstance()));
+        }
         if (!isset($signature)) {
-            $signature = new \Magento\TestFramework\Authentication\Rest\OauthClient\Signature($credentials);
+            $signature = new \Magento\TestFramework\Authentication\Rest\OauthClient\Signature($helper, $credentials);
         }
         parent::__construct($credentials, $httpClient, $storage, $signature, $baseApiUri);
     }

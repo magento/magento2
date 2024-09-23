@@ -10,7 +10,7 @@ namespace Magento\Backend\Test\Unit\Console\Command;
 use Magento\Backend\Console\Command\CacheStatusCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CacheStatusCommandTest extends AbstractCacheCommandTest
+class CacheStatusCommandTest extends AbstractCacheCommandTestCase
 {
     protected function setUp(): void
     {

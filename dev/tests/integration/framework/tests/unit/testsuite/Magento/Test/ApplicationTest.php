@@ -57,6 +57,26 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
     private $appMode;
 
     /**
+     * @var \Magento\TestFramework\ObjectManagerFactory|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $factoryMock;
+
+    /**
+     * @var \Magento\TestFramework\ObjectManagerFactory
+     */
+    private $_factory;
+
+    /**
+     * @var \Magento\Indexer\Model\Indexer\Collection | \PHPUnit\Framework\MockObject\MockObject
+     */
+    private $collectionMock;
+
+    /**
+     * @var \Magento\TestFramework\ObjectManager | \PHPUnit\Framework\MockObject\MockObject
+     */
+    private $objectManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -78,6 +98,19 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
             $this->appMode,
             $this->autoloadWrapper
         );
+
+        $this->factoryMock = $this->getMockBuilder(\Magento\TestFramework\ObjectManagerFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create', 'restore'])
+            ->getMock();
+
+        $this->collectionMock = $this->getMockBuilder(\Magento\Indexer\Model\Indexer\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->objectManager = $this->getMockBuilder(\Magento\TestFramework\ObjectManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -136,12 +169,18 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         );
 
         // bypass db dump logic
+        $reflectionProperty = new \ReflectionProperty($subject, '_factory');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($subject, $this->factoryMock);
+        $this->_factory = $this->factoryMock;
         $dbMock = $this->getMockBuilder(Mysql::class)->disableOriginalConstructor()->getMock();
 
         $reflectionSubject = new ReflectionClass($subject);
         $dbProperty = $reflectionSubject->getProperty('_db');
         $dbProperty->setAccessible(true);
         $dbProperty->setValue($subject, $dbMock);
+        $property = $reflectionSubject->getProperty('canLoadArea');
+        $property->setValue($subject, false);
 
         $dbMock
             ->expects($this->any())
@@ -150,7 +189,6 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 false,
                 true
             );
-
         $withArgs = [];
         // Add expected shell execution calls
         foreach ($expectedShellExecutionCalls as $expectedShellExecutionArguments) {
@@ -168,7 +206,26 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         }
         $this->shell
             ->method('execute')
-            ->withConsecutive(...$withArgs);
+            ->willReturnCallback(function (...$withArgs) {
+                if (!empty($withArgs)) {
+                    return null;
+                }
+            });
+
+        $this->objectManager->expects($this->any())
+            ->method('configure')
+            ->willReturnSelf();
+        TestFrameworkBootstrap::setObjectManager($this->objectManager);
+
+        $this->_factory->expects($this->any())
+            ->method('restore')
+            ->willReturn($this->objectManager);
+        $this->objectManager->expects($this->any())
+            ->method('get')
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [\Magento\Indexer\Model\Indexer\Collection::class] => $this->collectionMock,
+                default => ''
+            });
 
         $subject->install(false);
     }

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyCustomerAddressRegionFieldTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="The State-Region field should stay blank after it's cleared from the customer address and saved"/>
+            <title value="The State-Region field should stay blank after it's cleared from the customer address and saved"/>
+            <description value="When removing the state from the customer address details in the admin, the field must stay blank after save."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-8302"/>
+            <useCaseId value="ACP2E-1609"/>
+            <group value="customer"/>
+        </annotations>
+
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCreateCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Open customer grid page and Navigate to customer edit page addresses tab for created customer-->
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
+        <actionGroup ref="AdminNavigateCustomerEditPageAddressesTabActionGroup" stepKey="openEditCustomerPageWithAddresses">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+
+        <!--Click on edit default billing address and update the address-->
+        <actionGroup ref="AdminClickEditLinkForDefaultBillingAddressActionGroup" stepKey="clickEditDefaultBillingAddress"/>
+        <actionGroup ref="AdminFillAndSaveCustomerAddressWithoutRegionActionGroup" stepKey="fillAndSaveCustomerAddressInformation">
+            <argument name="address" value="updateCustomerFranceAddress"/>
+        </actionGroup>
+
+        <!--Verify state name in address details section-->
+        <see selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" userInput="{{updateCustomerFranceAddress.state}}" stepKey="seeStateInAddress"/>
+
+        <!--Click on edit link for default billing address , remove the region-->
+        <actionGroup ref="AdminClickEditLinkForDefaultBillingAddressActionGroup" stepKey="clickEditDefaultBillingAddressAgain"/>
+        <actionGroup ref="AdminRemoveRegionFromCustomerAddressInformationActionGroup" stepKey="removeState"/>
+
+        <!--Verify state name not visible under address details section-->
+        <dontSee userInput="{{updateCustomerFranceAddress.state}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="dontSeeStateInAddress"/>
+
+        <!--Log in to Storefront-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCreateCustomer">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+
+        <!--Go to customer address book and click edit default shipping address for storefront-->
+        <actionGroup ref="StorefrontGoToCustomerAddressesPageActionGroup" stepKey="goToCustomerAddressBook"/>
+        <actionGroup ref="StoreFrontClickEditDefaultShippingAddressActionGroup" stepKey="clickEditDefaultShippingAddressForStorefront"/>
+
+        <!--Update the address-->
+        <actionGroup ref="FillNewCustomerAddressRequiredFieldsActionGroup" stepKey="fillAddressForm">
+            <argument name="address" value="updateCustomerFranceAddress"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCustomerAddressActionGroup" stepKey="saveAddress"/>
+
+        <!--Verify state name in address details section-->
+        <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{updateCustomerFranceAddress.state}}" stepKey="seeAssertCustomerDefaultShippingAddressState"/>
+
+        <!--Click on edit link for default shipping address , remove the region and click on save button-->
+        <actionGroup ref="StoreFrontClickEditDefaultShippingAddressActionGroup" stepKey="clickEditDefaultShippingAddressForStorefrontAgain"/>
+        <actionGroup ref="StorefrontRemoveRegionFromCustomerAddressFormActionGroup" stepKey="fillAddressFormWithoutRegion"/>
+        <actionGroup ref="AdminSaveCustomerAddressActionGroup" stepKey="saveAddressAfterRemovingRegion"/>
+        <waitForPageLoad stepKey="waitForPageToBeSavedAddressAfterRemovingRegion"/>
+
+        <!--Verify state name not visible under address details section-->
+        <dontSee userInput="{{updateCustomerFranceAddress.state}}" selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" stepKey="dontSeeAssertCustomerDefaultShippingAddressState"/>
+    </test>
+</tests>

@@ -19,7 +19,7 @@
             <group value="salesRule"/>
         </annotations>
         <before>
-             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct1">
                 <field key="price">5.00</field>
             </createData>
@@ -79,10 +79,7 @@
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
             <deleteData createDataKey="createSimpleProduct4" stepKey="deleteSimpleProduct4"/>
-
-            <actionGroup ref="AdminDeleteCartPriceRuleActionGroup" stepKey="deleteCartPriceRule">
-                <argument name="ruleName" value="CatPriceRule"/>
-            </actionGroup>
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteCartPriceRule"/>
             <!-- Revert Attribute 'sku' to it's default value (not accessible for Promo Rule Conditions) -->
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="editSkuAttribute">
                 <argument name="ProductAttribute" value="sku"/>
@@ -113,6 +110,7 @@
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
         <waitForPageLoad stepKey="waitForDetailsOpen"/>
         <!--Check all products and Cart Subtotal and Discount is only for SimpleProduct1-->
+        <actionGroup ref="StorefrontCartEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxSection" />
         <actionGroup ref="StorefrontCheckCartTotalWithDiscountCategoryActionGroup" stepKey="checkDiscountIsAppliedOnlyForSimple1productOnly">
             <argument name="subtotal" value="12.00"/>
             <argument name="shipping" value="5.00"/>
@@ -137,6 +135,7 @@
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart2"/>
         <waitForPageLoad stepKey="waitForDetailsOpen2"/>
         <!--Check all products and Cart Subtotal and Discount is only for SimpleProduct2-->
+        <actionGroup ref="StorefrontCartEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxSectionForSimple2" />
         <actionGroup ref="StorefrontCheckCartTotalWithDiscountCategoryActionGroup" stepKey="checkDiscountIsAppliedOnlyForSimple2productOnly">
             <argument name="subtotal" value="10.00"/>
             <argument name="shipping" value="5.00"/>

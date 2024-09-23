@@ -102,7 +102,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
         );
 
         foreach ($entities as $entity) {
-            $data[strtolower($entity[$keyField])] = $entity;
+            $data[$entity[$keyField]] = $entity;
         }
 
         return $data;

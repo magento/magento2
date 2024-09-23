@@ -17,9 +17,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-201"/>
             <group value="Downloadable"/>
-            <skip>
-                <issueId value="ACQE-4474"/>
-            </skip>
         </annotations>
         <before>
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>

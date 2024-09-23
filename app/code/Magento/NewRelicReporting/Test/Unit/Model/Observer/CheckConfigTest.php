@@ -46,11 +46,11 @@ class CheckConfigTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled', 'disableModule'])
+            ->onlyMethods(['isNewRelicEnabled', 'disableModule'])
             ->getMock();
         $this->newRelicWrapper = $this->getMockBuilder(NewRelicWrapper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isExtensionInstalled'])
+            ->onlyMethods(['isExtensionInstalled'])
             ->getMock();
         $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()

@@ -26,7 +26,7 @@ However, for those who need a full-featured eCommerce solution, we recommend [Ad
 
 ## Contribute
 
-Our [Community](https://opensource.magento.com/) is large and diverse, and our project is enormous. As a contributor, you have countless opportunities to impact product development and delivery by introducing new features or improving existing ones, enhancing test coverage, updating documentation for [developers](https://devdocs.magento.com/) and [end-users](https://docs.magento.com/user-guide/), catching and fixing code bugs, suggesting points for optimization, and sharing your great ideas.
+Our [Community](https://opensource.magento.com/) is large and diverse, and our project is enormous. As a contributor, you have countless opportunities to impact product development and delivery by introducing new features or improving existing ones, enhancing test coverage, updating documentation for [developers](https://developer.adobe.com/commerce/docs/) and [end-users](https://experienceleague.adobe.com/docs/commerce-admin/user-guides/home.html), catching and fixing code bugs, suggesting points for optimization, and sharing your great ideas.
 
 - [Contribute to the code](https://developer.adobe.com/commerce/contributor/guides/code-contributions/)
 - [Report an issue](https://developer.adobe.com/commerce/contributor/guides/code-contributions/#report)
@@ -36,7 +36,7 @@ Our [Community](https://opensource.magento.com/) is large and diverse, and our p
 
 ### Maintainers
 
-We encourage experts from the Community to help us with GitHub routines such as accepting, merging, or rejecting pull requests and reviewing issues. Adobe has granted the Community Maintainers permission to accept, merge, and reject pull requests, as well as review issues. Thanks to invaluable input from the Community Maintainers team, we can significantly improve contribution quality and accelerate the time to deliver your updates to production. 
+We encourage experts from the Community to help us with GitHub routines such as accepting, merging, or rejecting pull requests and reviewing issues. Adobe has granted the Community Maintainers permission to accept, merge, and reject pull requests, as well as review issues. Thanks to invaluable input from the Community Maintainers team, we can significantly improve contribution quality and accelerate the time to deliver your updates to production.
 
 - [Learn more about the Maintainer role](https://developer.adobe.com/commerce/contributor/guides/maintainers/)
 - [Maintainer's Handbook](https://developer.adobe.com/commerce/contributor/guides/maintainers/handbook/)
@@ -64,9 +64,9 @@ Stay up-to-date on the latest security news and patches by signing up for [Secur
 ## Licensing
 
 Each Magento source file included in this distribution is licensed under OSL 3.0 or the terms and conditions of the applicable ordering document between Licensee/Customer and Adobe (or Magento).
- 
+
 [Open Software License (OSL 3.0)](https://opensource.org/licenses/osl-3.0.php) – Please see [LICENSE.txt](LICENSE.txt) for the full text of the OSL 3.0 license.
- 
+
 Subject to Licensee's/Customer's payment of fees and compliance with the terms and conditions of the applicable ordering document between Licensee/Customer and Adobe (or Magento), the terms and conditions of the applicable ordering between Licensee/Customer and Adobe (or Magento) supersede the OSL 3.0 license for each source file.
 
 ## Communications

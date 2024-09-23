@@ -242,6 +242,7 @@
                     <validation>
                         <rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
                     </validation>
+                    <notice translate="true">Use {YYYY} to insert the current year (updates on cache refresh).</notice>
                     <dataType>text</dataType>
                     <label translate="true">Copyright</label>
                     <dataScope>footer_copyright</dataScope>

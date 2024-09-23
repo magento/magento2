@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertPaypalPayLaterComponentsActionGroup">
+        <annotations>
+            <description>Verify paylater components after enabling paypal paylater </description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <waitForText selector="{{PayPalExpressCheckoutConfigSection.payLaterHomePage(countryCode)}}" userInput="Home Page" stepKey="verifyHomePageIsPresentUnderPayLater"/>
+        <waitForText selector="{{PayPalExpressCheckoutConfigSection.payLaterCatalogPageConfigDropDown(countryCode)}}" userInput="Catalog Product Page" stepKey="verifyCatalogProductPageUnderPayLater"/>
+        <waitForText selector="{{PayPalExpressCheckoutConfigSection.payLaterCheckoutCartPage(countryCode)}}" userInput="Checkout Cart Page" stepKey="verifyCheckoutCartPageUnderPayLater"/>
+        <waitForText selector="{{PayPalExpressCheckoutConfigSection.payLaterCheckoutPaymentCheck(countryCode)}}" userInput="Checkout Payment Step" stepKey="verifyCheckoutPaymentStepUnderPayLater"/>
+        <waitForText selector="{{PayPalExpressCheckoutConfigSection.payLaterCatalogCategoryPage(countryCode)}}" userInput="Catalog Category Page" stepKey="verifyCatalogCategoryPageUnderPayLater"/>
+    </actionGroup>
+</actionGroups>

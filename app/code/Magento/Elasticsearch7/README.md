@@ -1,4 +1,4 @@
-#Magento_Elasticsearch7 module
+# Magento_Elasticsearch7 module
 
 Magento_Elasticsearch7 module allows using ElasticSearch engine 7.x version for the product searching capabilities.
 
@@ -22,7 +22,7 @@ For information about significant changes in patch releases, see [2.4.x Release 
 
 More information about ElasticSearch are at articles:
 
-- [Configuring Catalog Search](https://docs.magento.com/user-guide/catalog/search-configuration.html).
+- [Configuring Catalog Search](https://experienceleague.adobe.com/docs/commerce-admin/catalog/catalog/search/search-configuration.html).
 - [Installation Guide/Elasticsearch](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/prerequisites/search-engine/overview.html).
 - [Configure and maintain Elasticsearch](https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/search/overview-search.html).
 - Magento Commerce Cloud - [set up Elasticsearch service](https://experienceleague.adobe.com/docs/commerce-cloud-service/user-guide/configure/service/elasticsearch.html).

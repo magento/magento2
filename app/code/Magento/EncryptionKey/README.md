@@ -1,4 +1,4 @@
-#Magento_EncryptionKey module
+# Magento_EncryptionKey module
 
 The Magento_EncryptionKey module provides an advanced encryption model to protect passwords and other sensitive data.
 
@@ -16,6 +16,6 @@ This module introduces the following layouts and layout handles in the `view/adm
 
 ## Additional information
 
-For information about significant changes in patch releases, see [2.4.x Release information](https://experienceleague.adobe.com/docs/commerce-operations/release/notes/overview.html).
+For information about significant changes in patch releases, see [Release information](https://experienceleague.adobe.com/docs/commerce-operations/release/notes/overview.html).
 
-Some more information you can get at [Encryption Key](https://docs.magento.com/user-guide/system/encryption-key.html) article.
+Some more information you can get at [Encryption Key](https://experienceleague.adobe.com/docs/commerce-admin/systems/security/encryption-key.html) article.

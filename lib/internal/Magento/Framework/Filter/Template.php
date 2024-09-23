@@ -189,6 +189,7 @@ class Template implements FilterInterface
      *
      * @param string $value
      * @return string
+     *
      * @throws \Exception
      */
     public function filter($value)
@@ -203,19 +204,21 @@ class Template implements FilterInterface
         $this->filteringDepthMeter->descend();
 
         // Processing of template directives.
-        $templateDirectivesResults = $this->processDirectives($value);
+        $templateDirectivesResults = array_unique(
+            $this->processDirectives($value),
+            SORT_REGULAR
+        );
 
-        foreach ($templateDirectivesResults as $result) {
-            $value = str_replace($result['directive'], $result['output'], $value);
-        }
+        $value = $this->applyDirectivesResults($value, $templateDirectivesResults);
 
         // Processing of deferred directives received from child templates
         // or nested directives.
-        $deferredDirectivesResults = $this->processDirectives($value, true);
+        $deferredDirectivesResults = array_unique(
+            $this->processDirectives($value, true),
+            SORT_REGULAR
+        );
 
-        foreach ($deferredDirectivesResults as $result) {
-            $value = str_replace($result['directive'], $result['output'], $value);
-        }
+        $value = $this->applyDirectivesResults($value, $deferredDirectivesResults);
 
         if ($this->filteringDepthMeter->showMark() > 1) {
             // Signing own deferred directives (if any).
@@ -271,15 +274,58 @@ class Template implements FilterInterface
                 foreach ($constructions as $construction) {
                     $replacedValue = $directiveProcessor->process($construction, $this, $this->templateVars);
 
-                    $results[] = [
+                    $result = [
                         'directive' => $construction[0],
                         'output' => $replacedValue
                     ];
+
+                    if (count($this->afterFilterCallbacks) > 0) {
+                        $result['callbacks'] = $this->afterFilterCallbacks;
+
+                        $this->resetAfterFilterCallbacks();
+                    }
+
+                    $results[] = $result;
                 }
             }
         }
 
         return $results;
+    }
+
+    /**
+     * Applies results produced by directives.
+     *
+     * @param string $value
+     * @param array $results
+     *
+     * @return string
+     */
+    private function applyDirectivesResults(string $value, array $results): string
+    {
+        $processedResults = [];
+
+        foreach ($results as $result) {
+            foreach ($processedResults as $processedResult) {
+                $result['directive'] = str_replace(
+                    $processedResult['directive'],
+                    $processedResult['output'],
+                    $result['directive']
+                );
+            }
+
+            $value = str_replace($result['directive'], $result['output'], $value);
+
+            if (isset($result['callbacks'])) {
+                foreach ($result['callbacks'] as $callback) {
+                    $this->addAfterFilterCallback($callback);
+                }
+            }
+
+            $processedResults[] = $result;
+        }
+
+        return $value;
     }
 
     /**
