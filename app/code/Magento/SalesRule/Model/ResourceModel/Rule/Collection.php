@@ -463,7 +463,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     {
         if (!$this->_associatedEntitiesMap) {
             $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
-                // phpstan:ignore "Class Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap not found."
+                // @phpstan-ignore-next-line - this is a virtual type defined in di.xml
                 ->get(\Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class)
                 ->getData();
         }

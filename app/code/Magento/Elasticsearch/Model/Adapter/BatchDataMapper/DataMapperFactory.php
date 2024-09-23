@@ -12,6 +12,8 @@ use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 
 /**
  * Data mapper factory uses to create appropriate mapper class
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class DataMapperFactory
 {
