@@ -281,15 +281,13 @@ class Session extends \Magento\Framework\Session\SessionManager
                         $quote->setStore($this->_storeManager->getStore());
                         $this->quoteRepository->save($quote->collectTotals());
                         /*
-                         * We mast to create new quote object, because collectTotals()
-                         * can to create links with other objects.
+                         * We must create a new quote object, because collectTotals()
+                         * can create links with other objects.
                          */
                         $quote = $this->quoteRepository->get($this->getQuoteId());
                     }
 
-                    if ($quote->getTotalsCollectedFlag() === false) {
-                        $quote->collectTotals();
-                    }
+                    $quote->collectTotals();
                 } catch (NoSuchEntityException $e) {
                     $this->setQuoteId(null);
                 }
