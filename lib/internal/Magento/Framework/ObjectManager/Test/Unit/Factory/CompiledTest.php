@@ -162,8 +162,8 @@ class CompiledTest extends TestCase
             ]
         );
 
-        $this->expectError();
-        $this->expectErrorMessage('Unknown named parameter $value_array');
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Unknown named parameter $value_array');
 
         /** @var SimpleClassTesting $result */
         $this->factory->create($requestedType, []);
