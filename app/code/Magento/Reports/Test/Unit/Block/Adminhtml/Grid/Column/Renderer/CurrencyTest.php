@@ -188,6 +188,7 @@ class CurrencyTest extends TestCase
      * @throws CurrencyException
      * @dataProvider getCurrencyDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function testRender(
         float $rate,
