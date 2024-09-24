@@ -12,12 +12,15 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
 use Magento\SalesRule\Model\Quote\Discount as DiscountCollector;
 use Magento\SalesRule\Model\Validator;
+use Magento\Customer\Model\GroupManagement;
 
 /**
  * Total collector for shipping discounts.
  */
 class ShippingDiscount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
+    private const DEFAULT_WEBSITE_ID = 0;
+
     /**
      * @var Validator
      */
@@ -59,9 +62,10 @@ class ShippingDiscount extends \Magento\Quote\Model\Quote\Address\Total\Abstract
         }
         if ($address->getShippingAmount()) {
             if (empty($this->calculator->getWebsiteId()) || empty($this->calculator->getCustomerGroupId())) {
+                $websiteId = $quote->getStore() ? $quote->getStore()->getWebsiteId() : self::DEFAULT_WEBSITE_ID;
                 $this->calculator->init(
-                    $quote->getStore()->getWebsiteId(),
-                    $quote->getCustomerGroupId(),
+                    $websiteId,
+                    $quote->getCustomerGroupId() ?? GroupManagement::NOT_LOGGED_IN_ID,
                     $quote->getCouponCode()
                 );
             }
