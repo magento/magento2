@@ -46,7 +46,7 @@
                                     <?= ' disabled="disabled"' ?>
                                 <?php endif; ?>
                                value="<?= $block->escapeHtmlAttr($sectionId) ?>"
-                               data-errors-message-box="#validation-message-box"/>
+                               data-errors-message-box="#validation-message-box-<?= $block->escapeHtmlAttr($_option->getId()) ?>"/>
                         <label class="label"
                                for="<?= /* @noEscape */ $inputId . '-' . $block->escapeHtmlAttr($sectionId) ?>">
                             <span><?= /* @noEscape */ $block->getSelectionQtyTitlePrice($selection) ?></span>
@@ -54,10 +54,11 @@
                             <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($selection) ?>
                         </label>
                     </div>
+
                 <?php endforeach; ?>
-                <div id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-container"></div>
-                <div id="validation-message-box"></div>
             <?php endif; ?>
         </div>
+        <div id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-container"></div>
+        <div id="validation-message-box-<?= $block->escapeHtmlAttr($_option->getId()) ?>"></div>
     </div>
 </div>
