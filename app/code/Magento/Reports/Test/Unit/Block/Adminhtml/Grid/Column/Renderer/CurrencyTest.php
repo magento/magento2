@@ -179,6 +179,7 @@ class CurrencyTest extends TestCase
      * @param int $adminWebsiteId
      * @param string $adminCurrencyCode
      * @param string $storeCurrencyCode
+     * @param string $displayCurrencyCode
      * @param string $adminOrderAmount
      * @param string $convertedAmount
      * @param bool $needToGetRateFromModel
@@ -195,6 +196,7 @@ class CurrencyTest extends TestCase
         int $adminWebsiteId,
         string $adminCurrencyCode,
         string $storeCurrencyCode,
+        string $displayCurrencyCode,
         string $adminOrderAmount,
         string $convertedAmount,
         bool $needToGetRateFromModel
@@ -242,6 +244,10 @@ class CurrencyTest extends TestCase
             ->expects($this->any())
             ->method('getDefaultCurrency')
             ->willReturn($storeCurrencyCode);
+        $this->currencyLocatorMock
+            ->expects($this->any())
+            ->method('getDisplayCurrency')
+            ->willReturn($displayCurrencyCode);
         $currLocaleMock = $this->createMock(CurrencyData::class);
         $currLocaleMock
             ->expects($this->any())
@@ -250,9 +256,9 @@ class CurrencyTest extends TestCase
         $this->localeCurrencyMock
             ->expects($this->any())
             ->method('getCurrency')
-            ->with($storeCurrencyCode)
+            ->with($displayCurrencyCode)
             ->willReturn($currLocaleMock);
-        $this->gridColumnMock->method('getCurrency')->willReturn('USD');
+        $this->gridColumnMock->method('getCurrency')->willReturn($displayCurrencyCode);
         $this->gridColumnMock->method('getRateField')->willReturn('test_rate_field');
 
         if ($needToGetRateFromModel) {
@@ -281,8 +287,9 @@ class CurrencyTest extends TestCase
                 'adminWebsiteId' => 1,
                 'adminCurrencyCode' => 'EUR',
                 'storeCurrencyCode' => 'EUR',
+                'displayCurrencyCode' => 'EUR',
                 'adminOrderAmount' => '105.00',
-                'convertedAmount' => '105.00',
+                'convertedAmount' => '€105.00',
                 'needToGetRateFromModel' => false
             ],
             'rate conversion with different admin and storefront rate' => [
@@ -292,6 +299,7 @@ class CurrencyTest extends TestCase
                 'adminWebsiteId' => 1,
                 'adminCurrencyCode' => 'USD',
                 'storeCurrencyCode' => 'EUR',
+                'displayCurrencyCode' => 'EUR',
                 'adminOrderAmount' => '105.00',
                 'convertedAmount' => '148.575',
                 'needToGetRateFromModel' => true
@@ -303,9 +311,22 @@ class CurrencyTest extends TestCase
                 'adminWebsiteId' => 1,
                 'adminCurrencyCode' => 'USD',
                 'storeCurrencyCode' => 'THB',
+                'displayCurrencyCode' => 'THB',
                 'adminOrderAmount' => '100.00',
                 'convertedAmount' => '100.00',
                 'needToGetRateFromModel' => true
+            ],
+            'rate conversation with different rate for different display currencies' => [
+                'rate' => 1.6150,
+                'columnIndex' => 'total_income_amount',
+                'catalogPriceScope' => 1,
+                'adminWebsiteId' => 1,
+                'adminCurrencyCode' => 'USD',
+                'storeCurrencyCode' => 'USD',
+                'displayCurrencyCode' => 'EUR',
+                'adminOrderAmount' => '$100.00',
+                'convertedAmount' => '€161.50',
+                'needToGetRateFromModel' => false
             ],
         ];
     }
