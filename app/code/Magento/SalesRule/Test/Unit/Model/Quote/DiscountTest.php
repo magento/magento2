@@ -451,7 +451,7 @@ class DiscountTest extends TestCase
         $item->expects($this->any())->method('getExtensionAttributes')->willReturn(false);
         $item->expects($this->once())->method('getAddress')->willReturn($this->addressMock);
         $index = 1;
-        $item->expects($this->any())->method('getBaseDiscountAmount')->willReturnCallback(function () use(&$index) {
+        $item->expects($this->any())->method('getBaseDiscountAmount')->willReturnCallback(function () use (&$index) {
             $value = $index * 10;
             $index++;
             return $value;
