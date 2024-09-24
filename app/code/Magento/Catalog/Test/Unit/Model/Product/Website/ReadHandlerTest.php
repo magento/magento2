@@ -32,7 +32,7 @@ class ReadHandlerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->extensionAttributesMock = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->setMethods(['setWebsiteIds', 'getWebsiteIds'])
+            ->addMethods(['setWebsiteIds', 'getWebsiteIds'])
             ->disableArgumentCloning()
             ->getMockForAbstractClass();
         $this->readHandler = new ReadHandler($this->websiteLinkMock);

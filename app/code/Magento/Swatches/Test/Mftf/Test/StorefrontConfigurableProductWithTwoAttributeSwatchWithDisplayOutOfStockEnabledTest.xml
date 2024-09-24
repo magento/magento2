@@ -19,6 +19,7 @@
             <testCaseId value="AC-7020"/>
             <useCaseId value="ACP2E-1342"/>
             <group value="Swatches"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Set Display out of stock Enabled-->

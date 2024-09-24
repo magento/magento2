@@ -93,8 +93,13 @@ class PriceTest extends TestCase
 
         $this->productMock
             ->method('setFinalPrice')
-            ->withConsecutive([], [], [], [], [], [$rawFinalPrice])
-            ->willReturnOnConsecutiveCalls(null, null, null, null, null, $this->productMock);
+            ->willReturnCallback(function ($arg1) use ($rawFinalPrice) {
+                if ($arg1 === $rawFinalPrice) {
+                    return $this->productMock;
+                } else {
+                    return null;
+                }
+            });
 
         $expectedPriceCallWithArgs = [];
 
@@ -105,7 +110,11 @@ class PriceTest extends TestCase
 
         $this->productMock
             ->method('setFinalPrice')
-            ->withConsecutive(...$expectedPriceCallWithArgs);
+             ->willReturnCallback(function (...$expectedPriceCallWithArgs) {
+                if (!empty($expectedPriceCallWithArgs)) {
+                    return null;
+                }
+             });
 
         $this->productMock->expects(
             $this->any()

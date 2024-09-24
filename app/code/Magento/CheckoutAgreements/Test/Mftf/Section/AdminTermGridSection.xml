@@ -15,5 +15,7 @@
         <element name="firstRowConditionName" type="text" selector=".data-grid>tbody>tr>td.col-name"/>
         <element name="firstRowConditionId" type="text" selector=".data-grid>tbody>tr>td.col-id.col-agreement_id"/>
         <element name="successMessage" type="text" selector=".message-success"/>
+        <element name="allTermRows" type="block" selector="//table[@id='agreementGrid_table']//tbody//tr[not(contains(@class,'data-grid-tr-no-data'))]"/>
+        <element name="emptyGrid" type="block" selector="//table[@id='agreementGrid_table']//tbody//tr[contains(@class,'data-grid-tr-no-data')]"/>
     </section>
 </sections>

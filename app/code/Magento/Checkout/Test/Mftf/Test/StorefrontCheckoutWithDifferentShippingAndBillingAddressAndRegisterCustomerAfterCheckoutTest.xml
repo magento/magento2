@@ -65,13 +65,14 @@
         <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="waitForElementToBeVisible"/>
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="uncheckSameBillingAndShippingAddress"/>
         <conditionalClick selector="{{CheckoutShippingSection.editAddressButton}}" dependentSelector="{{CheckoutShippingSection.editAddressButton}}" visible="true" stepKey="clickEditButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForPageLoad stepKey="waitForLoadingMask"/>
 
         <!-- Fill Billing Address -->
         <actionGroup ref="StorefrontFillBillingAddressActionGroup" stepKey="fillBillingAddress"/>
         <click selector="{{CheckoutPaymentSection.update}}" stepKey="clickOnUpdateButton"/>
 
         <!--Place order -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
         <seeElement selector="{{StorefrontMinicartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>

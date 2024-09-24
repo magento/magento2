@@ -78,7 +78,7 @@ class DomainsAddCommand extends Command
 
                 foreach (array_diff($this->domainManager->getDomains(), $whitelistBefore) as $newHost) {
                     $output->writeln(
-                        $newHost . ' was added to the whitelist.'
+                        $newHost . ' was added to the whitelist.' . PHP_EOL
                     );
                 }
             }

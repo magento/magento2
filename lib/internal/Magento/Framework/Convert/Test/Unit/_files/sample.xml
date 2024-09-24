@@ -32,6 +32,8 @@
                 <Cell><Data ss:Type="String">HeaderSymbol=</Data></Cell>
                 <Cell><Data ss:Type="String">HeaderSymbol-</Data></Cell>
                 <Cell><Data ss:Type="String">HeaderSymbol+</Data></Cell>
+                <Cell><Data ss:Type="String">HeaderNumberWithSpace</Data></Cell>
+                <Cell><Data ss:Type="String">HeaderNumberWithTabulation</Data></Cell>
             </Row>
             <Row>
                 <Cell><Data ss:Type="String">ID</Data></Cell>
@@ -47,6 +49,8 @@
                 <Cell><Data ss:Type="String">Symbol=</Data></Cell>
                 <Cell><Data ss:Type="String">Symbol-</Data></Cell>
                 <Cell><Data ss:Type="String">Symbol+</Data></Cell>
+                <Cell><Data ss:Type="String">NumberWithSpace</Data></Cell>
+                <Cell><Data ss:Type="String">NumberWithTabulation</Data></Cell>
             </Row>
             <Row>
                 <Cell><Data ss:Type="Number">1</Data></Cell>
@@ -62,6 +66,8 @@
                 <Cell><Data ss:Type="String"> =</Data></Cell>
                 <Cell><Data ss:Type="String"> -</Data></Cell>
                 <Cell><Data ss:Type="String"> +</Data></Cell>
+                <Cell><Data ss:Type="String"> 3111</Data></Cell>
+                <Cell><Data ss:Type="String">\t3111</Data></Cell>
             </Row>
             <Row>
                 <Cell><Data ss:Type="String">FooterID</Data></Cell>
@@ -77,6 +83,8 @@
                 <Cell><Data ss:Type="String">FooterSymbol=</Data></Cell>
                 <Cell><Data ss:Type="String">FooterSymbol-</Data></Cell>
                 <Cell><Data ss:Type="String">FooterSymbol+</Data></Cell>
+                <Cell><Data ss:Type="String">FooterNumberWithSpace</Data></Cell>
+                <Cell><Data ss:Type="String">FooterNumberWithTabulation</Data></Cell>
             </Row>
         </Table>
     </Worksheet>

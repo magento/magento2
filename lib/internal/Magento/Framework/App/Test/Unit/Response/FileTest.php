@@ -179,19 +179,34 @@ class FileTest extends TestCase
             ->with(200);
         $this->responseMock->expects($this->exactly(6))
             ->method('setHeader')
-            ->withConsecutive(
-                ['Content-Disposition', 'attachment; filename="' . $fileName . '"', true],
-                ['Content-Type', $fileMimetype, true],
-                ['Content-Length', $fileSize, true],
-                ['Pragma', 'public', true],
-                ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true],
-                [
-                    'Last-Modified',
-                    $this->callback(fn (string $str) => preg_match('/\+|\-\d{4}$/', $str) !== false),
-                    true
-                ],
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($fileName, $fileMimetype, $fileSize) {
+                    if ($arg1 == 'Content-Disposition' &&
+                        $arg2 == 'attachment; filename="' . $fileName . '"' &&
+                        $arg3 == true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Content-Type' &&
+                        $arg2 == $fileMimetype &&
+                        $arg3 == true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Content-Length' &&
+                        $arg2 == $fileSize &&
+                        $arg3 == true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Pragma' &&
+                        $arg2 == 'public' &&
+                        $arg3 == true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Cache-Control' &&
+                        $arg2 == 'must-revalidate, post-check=0, pre-check=0' &&
+                        $arg3 == true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Last-Modified' && preg_match('/\+|\-\d{4}$/', $arg2) !== false &&
+                        $arg3 == true) {
+                        return $this->responseMock;
+                    }
+                }
+            );
         $this->responseMock->expects($this->once())
             ->method('sendHeaders');
         $this->getModel($options)->sendResponse();
@@ -254,19 +269,34 @@ class FileTest extends TestCase
             ->with(200);
         $this->responseMock->expects($this->exactly(6))
             ->method('setHeader')
-            ->withConsecutive(
-                ['Content-Disposition', 'attachment; filename="' . $fileName . '"', true],
-                ['Content-Type', $fileMimetype, true],
-                ['Content-Length', $fileSize, true],
-                ['Pragma', 'public', true],
-                ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true],
-                [
-                    'Last-Modified',
-                    $this->callback(fn (string $str) => preg_match('/\+|\-\d{4}$/', $str) !== false),
-                    true
-                ],
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($fileName, $fileMimetype, $fileSize) {
+                    if ($arg1 === 'Content-Disposition' &&
+                        $arg2 === 'attachment; filename="' . $fileName . '"' &&
+                        $arg3 === true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 === 'Content-Type' &&
+                        $arg2 === $fileMimetype &&
+                        $arg3 === true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 === 'Content-Length' &&
+                        $arg2 === $fileSize &&
+                        $arg3 === true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 === 'Pragma' &&
+                        $arg2 === 'public' &&
+                        $arg3 === true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 === 'Cache-Control' &&
+                        $arg2 === 'must-revalidate, post-check=0, pre-check=0' &&
+                        $arg3 === true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 === 'Last-Modified' &&
+                        preg_match('/\+|\-\d{4}$/', $arg2) !== false && $arg3 === true) {
+                        return $this->responseMock;
+                    }
+                }
+            );
         $this->responseMock->expects($this->once())
             ->method('sendHeaders');
         $this->getModel($options)->sendResponse();
@@ -282,19 +312,35 @@ class FileTest extends TestCase
         ];
         $this->responseMock->expects($this->exactly(6))
             ->method('setHeader')
-            ->withConsecutive(
-                ['Content-Disposition', 'attachment; filename="' . $fileName . '"', false],
-                ['Content-Type', $fileMimetype, false],
-                ['Content-Length', $fileSize, false],
-                ['Pragma', 'public', false],
-                ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', false],
-                [
-                    'Last-Modified',
-                    $this->callback(fn (string $str) => preg_match('/\+|\-\d{4}$/', $str) !== false),
-                    false
-                ],
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($fileName, $fileMimetype, $fileSize) {
+                    if ($arg1 == 'Content-Disposition' &&
+                        $arg2 == 'attachment; filename="' . $fileName . '"' &&
+                        $arg3 == false) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Content-Type' &&
+                        $arg2 == $fileMimetype &&
+                        $arg3 == false) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Content-Length' &&
+                        $arg2 == $fileSize &&
+                        $arg3 == false) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Pragma' &&
+                        $arg2 == 'public' &&
+                        $arg3 == false) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Cache-Control' &&
+                        $arg2 == 'must-revalidate, post-check=0, pre-check=0' &&
+                        $arg3 == false) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Last-Modified' && preg_match('/\+|\-\d{4}$/', $arg2) !== false &&
+                        $arg3 == false) {
+                        return $this->responseMock;
+                    }
+                }
+            );
+
         $this->responseMock->expects($this->once())
             ->method('getContent')
             ->willReturn('Bienvenue à Paris');

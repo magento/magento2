@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
@@ -25,7 +26,9 @@
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCreatedStore">
                 <argument name="storeGroupName" value="customStore.code"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

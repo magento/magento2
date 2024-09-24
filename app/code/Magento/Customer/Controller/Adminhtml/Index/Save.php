@@ -27,6 +27,7 @@ use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\FormFactory;
+use Magento\Customer\Model\SetCustomerStore;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
@@ -76,6 +77,11 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     private $storeManager;
 
     /**
+     * @var SetCustomerStore|null
+     */
+    private $customerStore;
+
+    /**
      * Constructor
      *
      * @param Context $context
@@ -106,7 +112,9 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      * @param SubscriptionManagerInterface $subscriptionManager
      * @param AddressRegistry|null $addressRegistry
      * @param StoreManagerInterface|null $storeManager
+     * @param SetCustomerStore|null $customerStore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
@@ -136,7 +144,8 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         JsonFactory $resultJsonFactory,
         SubscriptionManagerInterface $subscriptionManager,
         AddressRegistry $addressRegistry = null,
-        ?StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null,
+        ?SetCustomerStore $customerStore = null
     ) {
         parent::__construct(
             $context,
@@ -168,6 +177,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         $this->subscriptionManager = $subscriptionManager;
         $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
         $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->customerStore = $customerStore ?? ObjectManager::getInstance()->get(SetCustomerStore::class);
     }
 
     /**
@@ -335,6 +345,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
 
         if ($this->getRequest()->getPostValue()) {
             try {
+                $this->customerStore->setStore(
+                    $this->getRequest()->getPostValue(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER)
+                );
+
                 // optional fields might be set in request for future processing by observers in other modules
                 $customerData = $this->_extractCustomerData();
 
@@ -369,13 +383,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                             " is not related to the customer's associated website."));
                     }
                 }
-
-                $storeId = $customer->getStoreId();
-                if (empty($storeId)) {
-                    $website = $this->storeManager->getWebsite($customer->getWebsiteId());
-                    $storeId = current($website->getStoreIds());
-                }
-                $this->storeManager->setCurrentStore($storeId);
 
                 // Save customer
                 if ($customerId) {

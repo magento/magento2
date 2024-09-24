@@ -67,6 +67,8 @@
         </before>
 
         <after>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
+            <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="resetProductFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
@@ -74,7 +76,9 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>

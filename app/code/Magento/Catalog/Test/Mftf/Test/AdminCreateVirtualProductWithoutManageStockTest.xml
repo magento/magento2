@@ -24,6 +24,8 @@
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="categoryEntity"/>
+            <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductGridPage" />
+            <actionGroup ref="AdminDeleteAllProductsFromGridActionGroup" stepKey="deleteProducts" />
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

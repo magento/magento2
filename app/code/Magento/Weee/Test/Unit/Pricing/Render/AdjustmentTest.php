@@ -115,7 +115,7 @@ class AdjustmentTest extends TestCase
         /** @var Amount $amountRender */
         $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
+            ->onlyMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
             ->getMock();
         $amountRender->expects($this->any())
             ->method('getDisplayValue')
@@ -124,7 +124,7 @@ class AdjustmentTest extends TestCase
         /** @var Base $baseAmount */
         $baseAmount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $amountRender->expects($this->any())
             ->method('getAmount')
@@ -146,7 +146,7 @@ class AdjustmentTest extends TestCase
         /** @var Amount $amountRender */
         $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
+            ->onlyMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
             ->getMock();
         /** @var Product $saleable */
         $saleable = $this->getMockBuilder(Product::class)
@@ -155,7 +155,7 @@ class AdjustmentTest extends TestCase
         /** @var Base $baseAmount */
         $baseAmount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
 
         $baseAmount->expects($this->any())
@@ -218,17 +218,17 @@ class AdjustmentTest extends TestCase
         /** @var Amount $amountRender */
         $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
+            ->onlyMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
             ->getMock();
         /** @var Product $saleable */
         $saleable = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
+            ->onlyMethods(['__wakeup'])
             ->getMock();
         /** @var Base $baseAmount */
         $baseAmount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $baseAmount->expects($this->any())
             ->method('getValue')
@@ -289,7 +289,7 @@ class AdjustmentTest extends TestCase
         /** @var Amount $amountRender */
         $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
+            ->onlyMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
             ->getMock();
         /** @var Product $saleable */
         $saleable = $this->getMockBuilder(Product::class)
@@ -298,7 +298,7 @@ class AdjustmentTest extends TestCase
         /** @var Base $baseAmount */
         $baseAmount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $amountRender->expects($this->any())
             ->method('getAmount')

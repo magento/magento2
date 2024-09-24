@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-92453"/>
             <group value="persistent"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>
@@ -37,6 +38,7 @@
         <!-- Navigate to checkout -->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckoutFromMinicart"/>
         <!-- Fill Shipping Address form -->
+        <waitForElementVisible selector="{{CheckoutShippingGuestInfoSection.email}}" stepKey="waitForEmailFieldVisible" />
         <fillField selector="{{CheckoutShippingGuestInfoSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
         <fillField selector="{{CheckoutShippingGuestInfoSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
         <fillField selector="{{CheckoutShippingGuestInfoSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="enterLastName"/>
@@ -46,6 +48,7 @@
         <fillField selector="{{CheckoutShippingGuestInfoSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
         <fillField selector="{{CheckoutShippingGuestInfoSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForElementClickable selector="{{CheckoutShippingGuestInfoSection.firstShippingMethod}}" stepKey="waitForFirstShippingMethodClickable" />
         <click selector="{{CheckoutShippingGuestInfoSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
         <!-- Check that have the same values after page reload -->
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="amOnCheckoutShippingInfoPage"/>

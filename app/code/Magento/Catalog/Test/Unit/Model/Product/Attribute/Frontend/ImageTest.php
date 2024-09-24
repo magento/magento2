@@ -37,7 +37,7 @@ class ImageTest extends TestCase
      *
      * @return array
      */
-    public function getUrlDataProvider(): array
+    public static function getUrlDataProvider(): array
     {
         return [
             ['catalog/product/img.jpg', 'img.jpg'],
@@ -62,7 +62,7 @@ class ImageTest extends TestCase
     private function getMockedProduct(string $productImage): Product
     {
         $mockBuilder = $this->getMockBuilder(Product::class);
-        $mock = $mockBuilder->setMethods(['getData', 'getStore'])
+        $mock = $mockBuilder->onlyMethods(['getData', 'getStore'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -84,7 +84,7 @@ class ImageTest extends TestCase
         $mockedStore = $this->getMockedStore();
 
         $mockBuilder = $this->getMockBuilder(StoreManagerInterface::class);
-        $mock = $mockBuilder->setMethods(['getStore'])
+        $mock = $mockBuilder->onlyMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -101,7 +101,7 @@ class ImageTest extends TestCase
     private function getMockedStore(): Store
     {
         $mockBuilder = $this->getMockBuilder(Store::class);
-        $mock = $mockBuilder->setMethods(['getBaseUrl'])
+        $mock = $mockBuilder->onlyMethods(['getBaseUrl'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -118,7 +118,7 @@ class ImageTest extends TestCase
     private function getMockedAttribute(): AbstractAttribute
     {
         $mockBuilder = $this->getMockBuilder(AbstractAttribute::class);
-        $mockBuilder->setMethods(['getAttributeCode']);
+        $mockBuilder->onlyMethods(['getAttributeCode']);
         $mockBuilder->disableOriginalConstructor();
         $mock = $mockBuilder->getMockForAbstractClass();
 

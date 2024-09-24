@@ -128,7 +128,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $metadataPool,
             $tableMaintainer
         );
-
         $this->stockItem = $stockItem
             ?? ObjectManager::getInstance()->get(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class);
     }
@@ -143,6 +142,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         parent::_construct();
         $this->setRowIdFieldName('selection_id');
         $this->_selectionTable = $this->getTable('catalog_product_bundle_selection');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->itemPrototype = null;
+        $this->catalogRuleProcessor = null;
+        $this->websiteScopePriceJoined = false;
     }
 
     /**
@@ -306,6 +316,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function addPriceFilter($product, $searchMin, $useRegularPrice = false)
     {
         if ($product->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
+            if (!$this->getStoreId()) {
+                $this->setStoreId($this->_storeManager->getStore()->getId());
+            }
             $this->addPriceData();
             if ($useRegularPrice) {
                 $minimalPriceExpression = self::INDEX_TABLE_ALIAS . '.price';
@@ -355,8 +368,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Get Catalog Rule Processor.
      *
      * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
-     *
-     * @deprecated 100.2.0
      */
     private function getCatalogRuleProcessor()
     {

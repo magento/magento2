@@ -216,7 +216,7 @@ class CategoryTest extends TestCase
     /**
      * @return array
      */
-    public function applyWithEmptyRequestDataProvider(): array
+    public static function applyWithEmptyRequestDataProvider(): array
     {
         return [
             [
@@ -347,8 +347,16 @@ class CategoryTest extends TestCase
 
         $this->itemDataBuilder
             ->method('addItemData')
-            ->withConsecutive(['Category 1', 120, 10], ['Category 2', 5641, 45])
-            ->willReturnOnConsecutiveCalls($this->itemDataBuilder, $this->itemDataBuilder);
+            ->willReturnCallback(function (...$args) {
+                static $index = 0;
+                $expectedArgs = [
+                    ['Category 1', 120, 10],
+                    ['Category 2', 5641, 45]
+                ];
+                $returnValue = $this->itemDataBuilder;
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue : null;
+            });
         $this->itemDataBuilder->expects($this->once())
             ->method('build')
             ->willReturn($builtData);

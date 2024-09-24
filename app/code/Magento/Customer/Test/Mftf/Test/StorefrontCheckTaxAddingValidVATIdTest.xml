@@ -17,10 +17,14 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-95028"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Log In-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="logIn"/>
+            <!-- Delete All Non Default Tax Rates-->
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
             <!--Create category-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <!--Create product-->
@@ -119,15 +123,9 @@
             <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
 
             <!-- Delete the two tax rates that were created -->
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
-                <argument name="name" value="{{SimpleTaxUK.state}}-{{SimpleTaxUK.rate}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
-            </actionGroup>
-
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteCARate">
-                <argument name="name" value="{{SimpleTaxUKZeroRate.state}}-{{SimpleTaxUKZeroRate.rate}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
-            </actionGroup>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
+            <comment userInput="Preserve BiC" stepKey="deleteNYRate"/>
+            <comment userInput="Preserve BiC" stepKey="deleteCARate"/>
 
             <!--Delete created customer group-->
             <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
@@ -142,6 +140,7 @@
                 <argument name="taxClassName" value="UK_zero"/>
             </actionGroup>
 
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
