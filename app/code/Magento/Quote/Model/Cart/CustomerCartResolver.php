@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResourceModel;
+use Magento\Quote\Model\CreateEmptyCartForCustomerWithoutCountryValidation;
 
 /**
  * Get customer cart or create empty cart. Ensure mask_id is created
@@ -41,21 +42,29 @@ class CustomerCartResolver
     private $quoteIdToMaskedQuoteId;
 
     /**
+     * @var CreateEmptyCartForCustomerWithoutCountryValidation
+     */
+    private $createEmptyCartForCustomerWithoutCountryValidation;
+
+    /**
      * @param CartManagementInterface $cartManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @param QuoteIdMaskResourceModel $quoteIdMaskResourceModel
      * @param QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
+     * @param CreateEmptyCartForCustomerWithoutCountryValidation $createEmptyCartForCustomerWithoutCountryValidation
      */
     public function __construct(
         CartManagementInterface $cartManagement,
         QuoteIdMaskFactory $quoteIdMaskFactory,
         QuoteIdMaskResourceModel $quoteIdMaskResourceModel,
-        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
+        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId,
+        CreateEmptyCartForCustomerWithoutCountryValidation $createEmptyCartForCustomerWithoutCountryValidation
     ) {
         $this->cartManagement = $cartManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->quoteIdMaskResourceModel = $quoteIdMaskResourceModel;
         $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
+        $this->createEmptyCartForCustomerWithoutCountryValidation = $createEmptyCartForCustomerWithoutCountryValidation;
     }
 
     /**
@@ -73,7 +82,8 @@ class CustomerCartResolver
             /** @var Quote $cart */
             $cart = $this->cartManagement->getCartForCustomer($customerId);
         } catch (NoSuchEntityException $e) {
-            $this->cartManagement->createEmptyCartForCustomer($customerId);
+            $this->createEmptyCartForCustomerWithoutCountryValidation
+                ->createEmptyCartForCustomerWithoutCountryValidation($customerId);
             $cart = $this->cartManagement->getCartForCustomer($customerId);
         }
         try {
