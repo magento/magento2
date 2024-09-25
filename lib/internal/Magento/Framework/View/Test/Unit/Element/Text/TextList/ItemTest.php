@@ -57,7 +57,7 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function toHtmlDataProvider()
+    public static function toHtmlDataProvider()
     {
         return [
             [

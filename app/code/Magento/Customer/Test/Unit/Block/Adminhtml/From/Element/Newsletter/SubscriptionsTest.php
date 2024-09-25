@@ -14,6 +14,7 @@ use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -58,6 +59,14 @@ class SubscriptionsTest extends TestCase
         $this->dataPersistor = $this->getMockForAbstractClass(DataPersistorInterface::class);
 
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         $this->element = $objectManager->getObject(
             Subscriptions::class,
             [
@@ -132,7 +141,7 @@ class SubscriptionsTest extends TestCase
      *
      * @return array
      */
-    public function getElementHtmlDataProvider(): array
+    public static function getElementHtmlDataProvider(): array
     {
         $customerId = 33;
         $elementName = 'element_name';

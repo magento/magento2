@@ -137,7 +137,13 @@ class GeneratorTest extends TestCase
                 }
             );
         $this->productMetadata = $this->createMock(ProductMetadata::class);
-
+        $objects = [
+            [
+                Json::class,
+                $this->createMock(Json::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         $this->generator = $this->objectManager->getObject(
             Generator::class,
             [
@@ -199,7 +205,7 @@ class GeneratorTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function generateDataProvider()
+    public static function generateDataProvider()
     {
         return [
             [
@@ -431,7 +437,7 @@ class GeneratorTest extends TestCase
     /**
      * @return array
      */
-    public function getObjectSchemaDataProvider()
+    public static function getObjectSchemaDataProvider()
     {
         return [
             [
@@ -493,7 +499,7 @@ class GeneratorTest extends TestCase
     /**
      * @return array
      */
-    public function generateDefinitionDataProvider()
+    public static function generateDefinitionDataProvider()
     {
         return [
             [
