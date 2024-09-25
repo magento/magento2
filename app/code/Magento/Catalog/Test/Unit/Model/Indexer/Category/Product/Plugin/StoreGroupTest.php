@@ -105,7 +105,7 @@ class StoreGroupTest extends TestCase
     /**
      * @return array
      */
-    public function changedDataProvider(): array
+    public static function changedDataProvider(): array
     {
         return [
             [

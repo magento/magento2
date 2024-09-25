@@ -251,7 +251,7 @@ class HttpTest extends TestCase
      * Different test content for responseMock with their expected lengths in bytes.
      * @return array
      */
-    public function dataProviderForTestLaunchHeadRequest(): array
+    public static function dataProviderForTestLaunchHeadRequest(): array
     {
         return [
             [
