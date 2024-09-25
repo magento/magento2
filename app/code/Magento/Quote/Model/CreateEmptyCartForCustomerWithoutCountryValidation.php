@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model;
 
+use Exception;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * Class for creating empty cart for customer without country validation
