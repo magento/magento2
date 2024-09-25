@@ -50,6 +50,8 @@
         <element name="specificEntitySelectRadio" type="input" selector="#specific_anchor_categories_0"/>
         <element name="specificEntityOptionsChooser" type="button" selector="#anchor_categories_ids_0 .widget-option-chooser"/>
         <element name="widgetInstanceType" type="select" selector=".admin__field-control select#instance_code" />
+        <element name="expandJsTree" type="button" selector="//*[@class='chooser']/div/ul/li/i[@role='presentation']"/>
+        <element name="jsTreeAnchorCheckbox" type="select" selector="//*[@class='chooser']/div/ul[@role='presentation']/li/ul[@role='group']/li/a/i[@class='jstree-icon jstree-checkbox']"/>
         <!-- Catalog Product List Widget Options -->
         <element name="title" type="input" selector="[name='parameters[title]']"/>
         <element name="displayPageControl" type="select" selector="[name='parameters[show_pager]']"/>
