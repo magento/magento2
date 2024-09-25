@@ -92,13 +92,5 @@ script;
     <?= /* @noEscape */
     $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php else: ?>
-    <div class="admin__message-empty"><?= $escaper->escapeHtml(__('No Payment Methods')); ?>
-        <span class="no-display">
-            <input id="p_method"
-                   value="<?= $escaper->escapeHtmlAttr(''); ?>"
-                   type="text"
-                   name="payment[method]" class="admin__control-radio"
-                   checked="checked"/>
-        </span>
-    </div>
+    <div class="admin__message-empty"><?= $escaper->escapeHtml(__('No Payment Methods')); ?></div>
 <?php endif; ?>

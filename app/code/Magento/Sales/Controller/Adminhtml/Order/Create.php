@@ -280,6 +280,8 @@ abstract class Create extends \Magento\Backend\App\Action
 
         if ($paymentData = $this->getRequest()->getPost('payment')) {
             $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentData);
+        } else {
+            $this->_getOrderCreateModel()->getQuote()->getPayment()->setMethod('');
         }
 
         $eventData = [
@@ -293,6 +295,8 @@ abstract class Create extends \Magento\Backend\App\Action
 
         if ($paymentData = $this->getRequest()->getPost('payment')) {
             $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentData);
+        } else {
+            $this->_getOrderCreateModel()->getQuote()->getPayment()->setMethod('');
         }
 
         /**
