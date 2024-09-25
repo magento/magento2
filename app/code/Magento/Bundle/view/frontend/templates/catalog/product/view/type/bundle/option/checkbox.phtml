@@ -51,7 +51,7 @@
                                 <?= ' disabled="disabled"' ?>
                             <?php endif; ?>
                            value="<?= $escaper->escapeHtmlAttr($sectionId) ?>"
-                           data-errors-msg-box="#validatn-msg-box-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>"/>
+                        data-errors-msg-box="#validation-message-box-<?=$escaper->escapeHtmlAttr($_option->getId())?>"/>
                         <label class="label"
                                for="<?= /* @noEscape */ $inputId . '-' . $escaper->escapeHtmlAttr($sectionId) ?>">
                             <span><?= /* @noEscape */ $block->getSelectionQtyTitlePrice($selection) ?></span>
@@ -64,6 +64,6 @@
             <?php endif; ?>
         </div>
         <div id="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>-container"></div>
-        <div id="validatn-msg-box-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>"></div>
+        <div id="validation-message-box-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>"></div>
     </div>
 </div>
