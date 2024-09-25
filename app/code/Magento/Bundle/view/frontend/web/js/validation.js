@@ -32,8 +32,8 @@ define([
                         errorPlacement = element.siblings('label').last();
                     }
                 }
-                if (element.attr('data-errors-message-box')) {
-                    messageBox = $(element.attr('data-errors-message-box'));
+                if (element.attr('data-errors-msg-box')) {
+                    messageBox = $(element.attr('data-errors-msg-box'));
                     messageBox.html(error);
                     return;
                 }
