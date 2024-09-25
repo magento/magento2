@@ -80,7 +80,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function renderDataProvider(): array
+    public static function renderDataProvider(): array
     {
         return [
             [

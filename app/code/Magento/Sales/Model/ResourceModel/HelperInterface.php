@@ -9,8 +9,6 @@ use Magento\Sales\Model\ResourceModel\Report\Bestsellers as BestsellersReport;
 
 /**
  * Sales resource helper interface
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 interface HelperInterface
 {

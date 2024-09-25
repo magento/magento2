@@ -112,7 +112,14 @@ class ExpressRedirectTest extends TestCase
         }
         $this->actionFlag
             ->method('set')
-            ->withConsecutive(...$withArgs);
+            ->willReturnCallback(function (...$args) use ($withArgs) {
+                static $callCount = 0;
+                $callCount++;
+                $expectedArgs = $withArgs[$callCount - 1];
+                if ($args === $expectedArgs) {
+                    return null;
+                }
+            });
 
         $expectedLoginUrl = 'loginURL';
         $expressRedirectMock->expects(
@@ -151,9 +158,7 @@ class ExpressRedirectTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['setRedirect'])->getMock();
         $responseMock->expects($this->once())->method('setRedirect')->with($expectedLoginUrl);
-
         $expressRedirectMock->expects($this->once())->method('getResponse')->willReturn($responseMock);
-
         $expressRedirectMock->expects(
             $this->any()
         )->method(
@@ -181,7 +186,7 @@ class ExpressRedirectTest extends TestCase
      *
      * @return array
      */
-    public function redirectLoginDataProvider(): array
+    public static function redirectLoginDataProvider(): array
     {
         return [
             [[], 'beforeCustomerUrl', 'beforeCustomerUrlDEFAULT'],

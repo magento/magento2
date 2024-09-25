@@ -77,7 +77,7 @@ class IndexerTest extends TestCase
     /**
      * @return array
      */
-    public function executeProvider()
+    public static function executeProvider()
     {
         return [
             'set1' => ['isExist' => true, 'expectsValue' => 1],

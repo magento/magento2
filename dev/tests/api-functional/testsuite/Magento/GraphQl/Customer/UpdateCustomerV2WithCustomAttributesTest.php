@@ -36,7 +36,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'attribute_set_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
             'attribute_group_id' => 1,
             'attribute_code' => 'random_attribute',
-            'sort_order' => 1
+            'sort_order' => 2
         ],
         'random_attribute',
     ),
@@ -50,7 +50,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'backend_model' => ArrayBackend::class,
             'attribute_code' => 'multiselect_attribute',
             'frontend_input' => 'multiselect',
-            'sort_order' => 2
+            'sort_order' => 1
         ],
         'multiselect_attribute',
     ),
@@ -60,7 +60,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'entity_type' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
             'attribute_code' => '$multiselect_attribute.attribute_code$',
             'label' => 'line 1',
-            'sort_order' => 10
+            'sort_order' => 20
         ],
         'multiselect_attribute_option1'
     ),
@@ -70,7 +70,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'entity_type' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
             'attribute_code' => '$multiselect_attribute.attribute_code$',
             'label' => 'option 2',
-            'sort_order' => 20
+            'sort_order' => 30
         ],
         'multiselect_attribute_option2'
     ),
@@ -80,7 +80,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'entity_type' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
             'attribute_code' => '$multiselect_attribute.attribute_code$',
             'label' => 'option 3',
-            'sort_order' => 30
+            'sort_order' => 10
         ],
         'multiselect_attribute_option3'
     ),
@@ -257,22 +257,22 @@ QUERY;
                                     [
                                         0 =>
                                             [
-                                                'code' => $this->random_attribute->getAttributeCode(),
-                                                'value' => 'new_value_for_attribute'
-                                            ],
-                                        1 =>
-                                            [
                                                 'code' => $this->multiselect_attribute->getAttributeCode(),
                                                 'selected_options' => [
                                                     [
-                                                        'label' => $this->option2->getLabel(),
-                                                        'value' => $this->option2->getValue()
-                                                    ],
-                                                    [
                                                         'label' => $this->option3->getLabel(),
                                                         'value' => $this->option3->getValue()
+                                                    ],
+                                                    [
+                                                        'label' => $this->option2->getLabel(),
+                                                        'value' => $this->option2->getValue()
                                                     ]
                                                 ]
+                                            ],
+                                        1 =>
+                                            [
+                                                'code' => $this->random_attribute->getAttributeCode(),
+                                                'value' => 'new_value_for_attribute'
                                             ]
                                     ],
                             ],
@@ -316,22 +316,22 @@ QUERY;
                                     [
                                         0 =>
                                             [
-                                                'code' => $this->random_attribute->getAttributeCode(),
-                                                'value' => 'value_one'
-                                            ],
-                                        1 =>
-                                            [
                                                 'code' => $this->multiselect_attribute->getAttributeCode(),
                                                 'selected_options' => [
                                                     [
-                                                        'label' => $this->option2->getLabel(),
-                                                        'value' => $this->option2->getValue()
-                                                    ],
-                                                    [
                                                         'label' => $this->option3->getLabel(),
                                                         'value' => $this->option3->getValue()
+                                                    ],
+                                                    [
+                                                        'label' => $this->option2->getLabel(),
+                                                        'value' => $this->option2->getValue()
                                                     ]
                                                 ]
+                                            ],
+                                        1 =>
+                                            [
+                                                'code' => $this->random_attribute->getAttributeCode(),
+                                                'value' => 'value_one'
                                             ]
                                     ],
                             ],

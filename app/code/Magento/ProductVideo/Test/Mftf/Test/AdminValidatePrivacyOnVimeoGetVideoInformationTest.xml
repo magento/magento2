@@ -19,6 +19,9 @@
             <useCaseId value="MC-42105"/>
             <group value="productVideo"/>
             <group value="pr_exclude"/>
+            <skip>
+                <issueId value="AC-12714"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

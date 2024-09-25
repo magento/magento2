@@ -284,7 +284,7 @@ class Filter extends Template
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @deprecated SID query parameter is not used in URLs anymore.
-     * @see setUseSessionInUrl
+     * @see SessionId's in URL
      */
     public function setUseSessionInUrl($flag)
     {
@@ -408,6 +408,7 @@ class Filter extends Template
     {
         $skipParams = ['class', 'id', 'output'];
         $blockParameters = $this->getParameters($construction[2]);
+
         $block = null;
 
         if (isset($blockParameters['class'])) {
@@ -694,7 +695,7 @@ class Filter extends Template
      * @param string $default assumed modifier if none present
      * @return array
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
-     * @see explodeModifiers
+     * @see Directive Processor Interfaces
      */
     protected function explodeModifiers($value, $default = null)
     {
@@ -714,7 +715,7 @@ class Filter extends Template
      * @param string $modifiers
      * @return string
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
-     * @see applyModifiers
+     * @see Directive Processor Interfaces
      */
     protected function applyModifiers($value, $modifiers)
     {
@@ -744,7 +745,7 @@ class Filter extends Template
      * @param string $type
      * @return string
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
-     * @see modifierEscape
+     * @see Directive Processor Interfacees
      */
     public function modifierEscape($value, $type = 'html')
     {

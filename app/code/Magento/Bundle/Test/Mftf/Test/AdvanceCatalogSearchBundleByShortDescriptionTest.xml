@@ -37,7 +37,9 @@
                 <requiredEntity createDataKey="simple2"/>
             </createData>
 
-            <magentoCron stepKey="runCronReindex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>

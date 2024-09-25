@@ -31,7 +31,6 @@ class TaxRatesFixture extends Fixture
         if (empty($taxRatesFile)) {
             return;
         }
-        $this->fixtureModel->resetObjectManager();
         /** Clean predefined tax rates to maintain consistency */
         /** @var $collection \Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection */
         $collection = $this->fixtureModel->getObjectManager()

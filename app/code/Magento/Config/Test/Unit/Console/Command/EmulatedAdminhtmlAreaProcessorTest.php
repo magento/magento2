@@ -43,7 +43,7 @@ class EmulatedAdminhtmlAreaProcessorTest extends TestCase
             ->getMockForAbstractClass();
         $this->stateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
-            ->setMethods(['emulateAreaCode'])
+            ->onlyMethods(['emulateAreaCode'])
             ->getMock();
 
         $this->emulatedAdminhtmlProcessorArea = new EmulatedAdminhtmlAreaProcessor(

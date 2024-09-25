@@ -21,9 +21,16 @@ define([
         setDifferedFromDefault: function (value) {
             this._super();
 
-            if (parseFloat(value)) {
-                this.source.set(this.regionScope, this.indexedOptions[value].label);
-            }
+            const indexedOptionsArray = Object.values(this.indexedOptions),
+                countryId = this.source.data.country_id,
+                hasRegionList = indexedOptionsArray.some(option => option.country_id === countryId);
+
+            this.source.set(
+                this.regionScope,
+                hasRegionList
+                    ? parseFloat(value) ? this.indexedOptions?.[value]?.label || '' : ''
+                    : this.source.data?.region || ''
+            );
         }
     });
 });

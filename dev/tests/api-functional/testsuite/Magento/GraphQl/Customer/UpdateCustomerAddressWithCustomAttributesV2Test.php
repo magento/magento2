@@ -36,7 +36,9 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'attribute_set_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
             'attribute_group_id' => 1,
             'attribute_code' => 'simple_attribute',
-            'sort_order' => 1
+            'sort_order' => 2,
+            'is_required' => 1,
+            'frontend_label' => 'simple_attribute'
         ],
         'simple_attribute',
     ),
@@ -50,7 +52,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'backend_model' => ArrayBackend::class,
             'attribute_code' => 'multiselect_attribute',
             'frontend_input' => 'multiselect',
-            'sort_order' => 2
+            'sort_order' => 1
         ],
         'multiselect_attribute',
     ),
@@ -60,7 +62,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'entity_type' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
             'attribute_code' => '$multiselect_attribute.attribute_code$',
             'label' => 'line 1',
-            'sort_order' => 10
+            'sort_order' => 20
         ],
         'multiselect_attribute_option1'
     ),
@@ -70,7 +72,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'entity_type' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
             'attribute_code' => '$multiselect_attribute.attribute_code$',
             'label' => 'line 2',
-            'sort_order' => 20
+            'sort_order' => 30
         ],
         'multiselect_attribute_option2'
     ),
@@ -80,7 +82,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'entity_type' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
             'attribute_code' => '$multiselect_attribute.attribute_code$',
             'label' => 'line 3',
-            'sort_order' => 30
+            'sort_order' => 10
         ],
         'multiselect_attribute_option3'
     ),
@@ -243,22 +245,22 @@ QUERY;
                             [
                                 0 =>
                                     [
-                                        'code' => $this->simple_attribute->getAttributeCode(),
-                                        'value' => 'another simple value'
-                                    ],
-                                1 =>
-                                    [
                                         'code' => $this->multiselect_attribute->getAttributeCode(),
                                         'selected_options' => [
                                             [
-                                                'label' => $this->option2->getLabel(),
-                                                'value' => $this->option2->getValue()
-                                            ],
-                                            [
                                                 'label' => $this->option3->getLabel(),
                                                 'value' => $this->option3->getValue()
+                                            ],
+                                            [
+                                                'label' => $this->option2->getLabel(),
+                                                'value' => $this->option2->getValue()
                                             ]
                                         ]
+                                    ],
+                                1 =>
+                                    [
+                                        'code' => $this->simple_attribute->getAttributeCode(),
+                                        'value' => 'another simple value'
                                     ]
                             ],
                     ],
@@ -310,6 +312,55 @@ QUERY;
                 $this->customerAddress->getId(),
                 $this->multiselect_attribute->getAttributeCode(),
                 "1345"
+            ),
+            [],
+            '',
+            $this->getCustomerAuthHeaders($this->customer->getEmail(), $this->currentPassword)
+        );
+    }
+
+    /**
+     * @return void
+     * @throws AuthenticationException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testAttemptToUpdateCustomerAddressNonPassingRequiredCustomAttribute()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("\"simple_attribute\" is a required value.");
+
+        $query = <<<QUERY
+mutation {
+  updateCustomerAddress(id: "%s", input: {
+    firstname: "Testing"
+    custom_attributesV2: [
+      {
+        attribute_code: "%s"
+        value: ""
+      }
+    ]
+  }) {
+    custom_attributesV2 {
+      code
+      ... on AttributeValue {
+        value
+      }
+      ... on AttributeSelectedOptions {
+        selected_options {
+          value
+          label
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation(
+            sprintf(
+                $query,
+                $this->customerAddress->getId(),
+                $this->simple_attribute->getAttributeCode(),
             ),
             [],
             '',

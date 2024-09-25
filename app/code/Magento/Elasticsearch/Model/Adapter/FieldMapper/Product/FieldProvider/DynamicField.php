@@ -18,20 +18,23 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Provide dynamic fields for product.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class DynamicField implements FieldProviderInterface
 {
     /**
      * Category collection.
      *
-     * @var Collection
+     * @var CollectionFactory
      */
-    private $categoryCollection;
+    private $categoryCollectionFactory;
 
     /**
      * Customer group repository.
@@ -41,8 +44,6 @@ class DynamicField implements FieldProviderInterface
     private $groupRepository;
 
     /**
-     * Search criteria builder.
-     *
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
@@ -79,8 +80,10 @@ class DynamicField implements FieldProviderInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FieldNameResolver $fieldNameResolver
      * @param AttributeProvider $attributeAdapterProvider
-     * @param Collection $categoryCollection
+     * @param Collection $categoryCollection @deprecated @see $categoryCollectionFactory
      * @param StoreManagerInterface|null $storeManager
+     * @param CollectionFactory|null $categoryCollectionFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         FieldTypeConverterInterface $fieldTypeConverter,
@@ -90,7 +93,8 @@ class DynamicField implements FieldProviderInterface
         FieldNameResolver $fieldNameResolver,
         AttributeProvider $attributeAdapterProvider,
         Collection $categoryCollection,
-        ?StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null,
+        ?CollectionFactory $categoryCollectionFactory = null
     ) {
         $this->groupRepository = $groupRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -98,7 +102,8 @@ class DynamicField implements FieldProviderInterface
         $this->indexTypeConverter = $indexTypeConverter;
         $this->fieldNameResolver = $fieldNameResolver;
         $this->attributeAdapterProvider = $attributeAdapterProvider;
-        $this->categoryCollection = $categoryCollection;
+        $this->categoryCollectionFactory = $categoryCollectionFactory
+            ?: ObjectManager::getInstance()->get(CollectionFactory::class);
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
@@ -108,7 +113,7 @@ class DynamicField implements FieldProviderInterface
     public function getFields(array $context = []): array
     {
         $allAttributes = [];
-        $categoryIds = $this->categoryCollection->getAllIds();
+        $categoryIds = $this->categoryCollectionFactory->create()->getAllIds();
         $positionAttribute = $this->attributeAdapterProvider->getByAttributeCode('position');
         $categoryNameAttribute = $this->attributeAdapterProvider->getByAttributeCode('category_name');
         foreach ($categoryIds as $categoryId) {

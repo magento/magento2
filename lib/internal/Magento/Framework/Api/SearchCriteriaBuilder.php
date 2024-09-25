@@ -9,14 +9,13 @@ declare(strict_types=1);
 namespace Magento\Framework\Api;
 
 use Magento\Framework\Api\Search\FilterGroupBuilder;
-use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Builder for SearchCriteria Service Data Object
  *
  * @api
  */
-class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder implements ResetAfterRequestInterface
+class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
 {
     /**
      * @var FilterGroupBuilder
@@ -147,13 +146,5 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder implements Reset
     public function setCurrentPage($currentPage)
     {
         return $this->_set(SearchCriteria::CURRENT_PAGE, $currentPage);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function _resetState(): void
-    {
-        $this->data = [];
     }
 }
