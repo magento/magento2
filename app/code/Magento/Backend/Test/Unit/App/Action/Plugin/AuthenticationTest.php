@@ -165,7 +165,7 @@ class AuthenticationTest extends TestCase
     /**
      * @return array
      */
-    public function processNotLoggedInUserDataProvider(): array
+    public static function processNotLoggedInUserDataProvider(): array
     {
         return [
             'iFrame' => [true, false, false],

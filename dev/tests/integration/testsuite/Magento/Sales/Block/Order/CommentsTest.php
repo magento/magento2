@@ -37,7 +37,7 @@ class CommentsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getCommentsDataProvider()
+    public static function getCommentsDataProvider()
     {
         return [
             [

@@ -111,7 +111,7 @@ class AccountManagementTest extends TestCase
     /**
      * @return array
      */
-    public function beforeInitiatePasswordResetDataProvider()
+    public static function beforeInitiatePasswordResetDataProvider()
     {
         return [
             [Area::AREA_ADMINHTML, PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST, 0],
