@@ -189,7 +189,7 @@ class AmountTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderToHtmlSkipAdjustments()
+    public static function dataProviderToHtmlSkipAdjustments()
     {
         return [
             [false, null, 'html'],

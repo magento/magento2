@@ -65,7 +65,7 @@ class BooleanTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider()
     {
         return [
             [null, null, '0'],
