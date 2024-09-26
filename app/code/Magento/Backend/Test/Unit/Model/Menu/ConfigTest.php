@@ -160,7 +160,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getMenuExceptionLoggedDataProvider(): array
+    public static function getMenuExceptionLoggedDataProvider(): array
     {
         return [
             'InvalidArgumentException' => ['InvalidArgumentException'],

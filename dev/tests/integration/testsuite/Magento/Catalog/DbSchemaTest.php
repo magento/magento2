@@ -49,7 +49,7 @@ class DbSchemaTest extends TestCase
     /**
      * @return array[]
      */
-    public function indexDataProvider(): array
+    public static function indexDataProvider(): array
     {
         return [
             [
