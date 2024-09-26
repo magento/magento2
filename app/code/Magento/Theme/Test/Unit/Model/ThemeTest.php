@@ -541,27 +541,47 @@ class ThemeTest extends TestCase
      */
     public function testToArray(array $themeData, array $expected): void
     {
+        if (!empty($themeData['parent_theme'])) {
+            $themeData['parent_theme'] = $themeData['parent_theme']($this);
+        }
+        if (!empty($themeData['inherited_themes'])) {
+            $themeData['inherited_themes']['key1'] = $themeData['inherited_themes']['key1']($this);
+            $themeData['inherited_themes']['key2'] = $themeData['inherited_themes']['key2']($this);
+        }
         $this->_model->setData($themeData);
         $this->assertEquals($expected, $this->_model->toArray());
+    }
+
+    protected function getMockForParentTheme() {
+        $parentTheme = $this->getMockBuilder(Theme::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $parentTheme->expects($this->once())
+            ->method('toArray')
+            ->willReturn('parent_theme');
+        return $parentTheme;
+    }
+
+    protected function getMockForChildTheme() {
+        $parentTheme = $this->getMockBuilder(Theme::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $childTheme = clone $parentTheme;
+        $childTheme->expects($this->exactly(2))
+            ->method('toArray')
+            ->willReturn('child_theme');
+
+        return $childTheme;
     }
 
     /**
      * @return array
      */
-    public function toArrayDataProvider(): array
+    public static function toArrayDataProvider(): array
     {
-        $parentTheme = $this->getMockBuilder(Theme::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $childTheme = clone $parentTheme;
+        $parentTheme = static fn (self $testCase) => $testCase->getMockForParentTheme();
 
-        $parentTheme->expects($this->once())
-            ->method('toArray')
-            ->willReturn('parent_theme');
-
-        $childTheme->expects($this->exactly(2))
-            ->method('toArray')
-            ->willReturn('child_theme');
+        $childTheme = static fn (self $testCase) => $testCase->getMockForChildTheme();
 
         return [
             'null' => [[], []],
@@ -626,7 +646,7 @@ class ThemeTest extends TestCase
     /**
      * @return array
      */
-    public function populateFromArrayDataProvider(): array
+    public static function populateFromArrayDataProvider(): array
     {
         return [
             'valid data' => [
@@ -644,7 +664,7 @@ class ThemeTest extends TestCase
                     'theme_data' => 'theme_data',
                     'parent_theme' => 'theme_instance'
                 ],
-                'expected call count' => 1
+                'expectedCallCount' => 1
             ],
             'valid data with children' => [
                 'value' => [
@@ -661,7 +681,7 @@ class ThemeTest extends TestCase
                         'key2' => 'theme_instance'
                     ]
                 ],
-                'expected call count' => 2
+                'expectedCallCount' => 2
             ]
         ];
     }

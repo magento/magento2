@@ -76,7 +76,7 @@ class ImageMagickTest extends TestCase
     /**
      * @return array
      */
-    public function watermarkDataProvider(): array
+    public static function watermarkDataProvider(): array
     {
         return [
             ['', ImageMagick::ERROR_WATERMARK_IMAGE_ABSENT],
