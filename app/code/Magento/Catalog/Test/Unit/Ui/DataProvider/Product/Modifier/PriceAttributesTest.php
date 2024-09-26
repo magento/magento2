@@ -70,7 +70,7 @@ class PriceAttributesTest extends TestCase
     /**
      * @return array
      */
-    public function modifyDataProvider(): array
+    public static function modifyDataProvider(): array
     {
         return [
             [

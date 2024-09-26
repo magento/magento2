@@ -84,7 +84,7 @@ class CreatedatTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function orderParamsDataProvider()
+    public static function orderParamsDataProvider()
     {
         return [
             [

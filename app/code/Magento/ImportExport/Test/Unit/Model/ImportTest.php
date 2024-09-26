@@ -1059,14 +1059,14 @@ class ImportTest extends AbstractImportTestCase
     {
         return [
             [
-                '$entity' => null,
-                '$getEntityResult' => null,
-                '$expectedResult' => false,
+                'entity' => null,
+                'getEntityResult' => null,
+                'expectedResult' => false,
             ],
             [
-                '$entity' => 'advanced_pricing',
-                '$getEntityResult' => 'advanced_pricing',
-                '$expectedResult' => null,
+                'entity' => 'advanced_pricing',
+                'getEntityResult' => 'advanced_pricing',
+                'expectedResult' => null,
             ],
         ];
     }
@@ -1080,16 +1080,16 @@ class ImportTest extends AbstractImportTestCase
     {
         return [
             [
-                '$entity' => 'entity',
-                '$getEntitiesResult' => ['catalog_product' => ['model' => 'catalog_product']],
-                '$getEntityResult' => 'catalog_product',
-                '$expectedResult' => false,
+                'entity' => 'entity',
+                'getEntitiesResult' => ['catalog_product' => ['model' => 'catalog_product']],
+                'getEntityResult' => 'catalog_product',
+                'expectedResult' => false,
             ],
             [
-                '$entity' => 'advanced_pricing',
-                '$getEntitiesResult' => ['catalog_product' => ['model' => 'catalog_product']],
-                '$getEntityResult' => 'advanced_pricing',
-                '$expectedResult' => true,
+                'entity' => 'advanced_pricing',
+                'getEntitiesResult' => ['catalog_product' => ['model' => 'catalog_product']],
+                'getEntityResult' => 'advanced_pricing',
+                'expectedResult' => true,
             ],
         ];
     }

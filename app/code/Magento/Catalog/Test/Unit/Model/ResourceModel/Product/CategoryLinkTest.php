@@ -164,7 +164,7 @@ class CategoryLinkTest extends TestCase
      *
      * @return array
      */
-    public function getCategoryLinksDataProvider()
+    public static function getCategoryLinksDataProvider()
     {
         return [
             [

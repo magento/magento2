@@ -67,7 +67,7 @@ class SensitiveCookieMetadataTest extends TestCase
     /**
      * @return array
      */
-    public function constructorAndGetHttpOnlyTestDataProvider()
+    public static function constructorAndGetHttpOnlyTestDataProvider()
     {
         return [
             'with httpOnly' => [
@@ -115,7 +115,7 @@ class SensitiveCookieMetadataTest extends TestCase
     /**
      * @return array
      */
-    public function getSecureDataProvider()
+    public static function getSecureDataProvider()
     {
         return [
             'with secure' => [
@@ -174,7 +174,7 @@ class SensitiveCookieMetadataTest extends TestCase
     /**
      * @return array
      */
-    public function toArrayDataProvider()
+    public static function toArrayDataProvider()
     {
         return [
             'with secure' => [
@@ -239,7 +239,7 @@ class SensitiveCookieMetadataTest extends TestCase
     /**
      * @return array
      */
-    public function getMethodData()
+    public static function getMethodData()
     {
         return [
             "getDomain" => ["setDomain", 'getDomain', "example.com"],
