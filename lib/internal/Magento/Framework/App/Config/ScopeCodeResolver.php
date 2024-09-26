@@ -38,7 +38,7 @@ class ScopeCodeResolver
      * @param string|null $scopeCode
      * @return ScopeInterface|mixed
      */
-    public function resolvedScopeCode($scopeType, $scopeCode)
+    public function resolvedScopeCode(string $scopeType, ?string$scopeCode): mixed
     {
         if ($scopeType !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
             $scopeResolver = $this->scopeResolverPool->get($scopeType);
