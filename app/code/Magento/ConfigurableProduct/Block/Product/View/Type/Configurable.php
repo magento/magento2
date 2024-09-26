@@ -34,6 +34,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Current customer
      *
      * @deprecated 100.2.0 as unused property
+     * @see Nothing
      * @var CurrentCustomer
      */
     protected $currentCustomer;
@@ -359,6 +360,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Replace ',' on '.' for js
      *
      * @deprecated 100.1.10 Will be removed in major release
+     * @see Nothing
      * @param float $price
      * @return string
      */
