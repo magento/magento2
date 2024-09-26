@@ -70,7 +70,7 @@ class JsonConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertBodyDataProvider()
+    public static function convertBodyDataProvider()
     {
         return [
             [null, ['body']],

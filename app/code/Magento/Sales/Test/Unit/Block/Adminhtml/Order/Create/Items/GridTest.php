@@ -203,7 +203,7 @@ class GridTest extends TestCase
      *
      * @return array
      */
-    public function tierPriceDataProvider()
+    public static function tierPriceDataProvider()
     {
         return [
             [
@@ -445,7 +445,7 @@ class GridTest extends TestCase
     /**
      * @return array
      */
-    public function getSubtotalWithDiscountDataProvider()
+    public static function getSubtotalWithDiscountDataProvider()
     {
         $result = [];
         $result['displayTotalsIncludeTaxTrue'] = [
