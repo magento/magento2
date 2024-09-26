@@ -53,72 +53,72 @@ class TypePoolTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderToTestIsPresent()
+    public static function dataProviderToTestIsPresent()
     {
         return [
             [
-                'sensitiveFieldList' => [],
-                'environmentFieldList' => [],
-                'field' => '',
-                'typeList' => '',
+                'sensitive' => [],
+                'environment' => [],
+                'path' => '',
+                'type' => '',
                 'excludeListCallback' => null,
                 'expectedResult' => false,
             ],
             [
-                'sensitiveFieldList' => ['some/sensitive/field1' => '1'],
-                'environmentFieldList' => ['some/environment/field1' => '1'],
-                'field' => 'some/wrong/field',
-                'typeList' => 'someWrongType',
+                'sensitive' => ['some/sensitive/field1' => '1'],
+                'environment' => ['some/environment/field1' => '1'],
+                'path' => 'some/wrong/field',
+                'type' => 'someWrongType',
                 'excludeListCallback' => null,
                 'expectedResult' => false,
             ],
             [
-                'sensitiveFieldList' => ['some/sensitive/field1' => '1'],
-                'environmentFieldList' => ['some/environment/field1' => '1'],
-                'field' => 'some/sensitive/field1',
-                'typeList' => 'someWrongType',
+                'sensitive' => ['some/sensitive/field1' => '1'],
+                'environment' => ['some/environment/field1' => '1'],
+                'path' => 'some/sensitive/field1',
+                'type' => 'someWrongType',
                 'excludeListCallback' => null,
                 'expectedResult' => false,
             ],
             [
-                'sensitiveFieldList' => ['some/sensitive/field1' => '1'],
-                'environmentFieldList' => ['some/environment/field1' => '1'],
-                'field' => 'some/wrong/field',
-                'typeList' => TypePool::TYPE_SENSITIVE,
+                'sensitive' => ['some/sensitive/field1' => '1'],
+                'environment' => ['some/environment/field1' => '1'],
+                'path' => 'some/wrong/field',
+                'type' => TypePool::TYPE_SENSITIVE,
                 'excludeListCallback' => function (MockObject $mockObject) {
-                    $mockObject->expects($this->once())
+                    $mockObject->expects(self::once())
                         ->method('isPresent')
                         ->willReturn(false);
                 },
                 'expectedResult' => false,
             ],
             [
-                'sensitiveFieldList' => ['some/sensitive/field1' => '1'],
-                'environmentFieldList' => ['some/environment/field1' => '1'],
-                'field' => 'some/environment/field1',
-                'typeList' => TypePool::TYPE_ENVIRONMENT,
+                'sensitive' => ['some/sensitive/field1' => '1'],
+                'environment' => ['some/environment/field1' => '1'],
+                'path' => 'some/environment/field1',
+                'type' => TypePool::TYPE_ENVIRONMENT,
                 'excludeListCallback' => null,
                 'expectedResult' => true,
             ],
             [
-                'sensitiveFieldList' => ['some/sensitive/field1' => '1'],
-                'environmentFieldList' => ['some/environment/field1' => '1'],
-                'field' => 'some/environment/field1',
-                'typeList' => TypePool::TYPE_SENSITIVE,
+                'sensitive' => ['some/sensitive/field1' => '1'],
+                'environment' => ['some/environment/field1' => '1'],
+                'path' => 'some/environment/field1',
+                'type' => TypePool::TYPE_SENSITIVE,
                 'excludeListCallback' =>  function (MockObject $mockObject) {
-                    $mockObject->expects($this->once())
+                    $mockObject->expects(self::once())
                         ->method('isPresent')
                         ->willReturn(false);
                 },
                 'expectedResult' => false,
             ],
             [
-                'sensitiveFieldList' => ['some/sensitive-environment/field1' => '1'],
-                'environmentFieldList' => ['some/sensitive-environment/field1' => '1'],
-                'field' => 'some/sensitive-environment/field1',
-                'typeList' => TypePool::TYPE_SENSITIVE,
+                'sensitive' => ['some/sensitive-environment/field1' => '1'],
+                'environment' => ['some/sensitive-environment/field1' => '1'],
+                'path' => 'some/sensitive-environment/field1',
+                'type' => TypePool::TYPE_SENSITIVE,
                 'excludeListCallback' =>  function (MockObject $mockObject) {
-                    $mockObject->expects($this->never())
+                    $mockObject->expects(self::never())
                         ->method('isPresent');
                 },
                 'expectedResult' => true,

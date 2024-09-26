@@ -271,7 +271,7 @@ class CurrencyTest extends TestCase
      *
      * @return array
      */
-    public function getCurrencyDataProvider(): array
+    public static function getCurrencyDataProvider(): array
     {
         return [
             'rate conversion with same admin and storefront rate' => [

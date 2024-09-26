@@ -41,7 +41,7 @@ class Base64JsonTest extends TestCase
     /**
      * @return array
      */
-    public function serializeDataProvider()
+    public static function serializeDataProvider()
     {
         $dataObject = new DataObject(['something']);
         return [
@@ -69,7 +69,7 @@ class Base64JsonTest extends TestCase
     /**
      * @return array
      */
-    public function unserializeDataProvider()
+    public static function unserializeDataProvider()
     {
         return [
             ['""', ''],

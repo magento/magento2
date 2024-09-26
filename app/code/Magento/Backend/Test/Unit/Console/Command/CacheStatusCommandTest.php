@@ -31,7 +31,7 @@ class CacheStatusCommandTest extends AbstractCacheCommandTestCase
     /**
      * {@inheritdoc}
      */
-    public function getExpectedExecutionOutput(array $types)
+    public static function getExpectedExecutionOutput(array $types)
     {
         $output = 'Current status:' . PHP_EOL;
         foreach ($types as $type => $status) {

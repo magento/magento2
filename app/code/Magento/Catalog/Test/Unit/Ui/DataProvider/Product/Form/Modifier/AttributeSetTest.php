@@ -110,7 +110,7 @@ class AttributeSetTest extends AbstractModifierTestCase
     /**
      * @return array
      */
-    public function modifyMetaLockedDataProvider()
+    public static function modifyMetaLockedDataProvider()
     {
         return [[true], [false]];
     }
