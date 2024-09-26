@@ -14,7 +14,6 @@ use Magento\Framework\DB\Statement\Parameter;
  */
 class Mysql extends \Zend_Db_Statement_Pdo
 {
-
     /**
      * Executes statement with binding values to it. Allows transferring specific options to DB driver.
      *
@@ -40,13 +39,11 @@ class Mysql extends \Zend_Db_Statement_Pdo
         // Separate array with values, as they are bound by reference
         foreach ($params as $name => $param) {
             $dataType = \PDO::PARAM_STR;
-            $length = null;
+            $length = is_string($param) ? strlen($param) : 0;
             $driverOptions = null;
 
             if ($param instanceof Parameter) {
-                if ($param->getIsBlob()) {
-                    // Nothing to do there - default options are fine for MySQL driver
-                } else {
+                if (!$param->getIsBlob()) {
                     $dataType = $param->getDataType();
                     $length = $param->getLength();
                     $driverOptions = $param->getDriverOptions();
@@ -71,6 +68,8 @@ class Mysql extends \Zend_Db_Statement_Pdo
      * @param array $params OPTIONAL Values to bind to parameter placeholders.
      * @return bool
      * @throws \Zend_Db_Statement_Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function _execute(array $params = null)
     {
@@ -88,7 +87,7 @@ class Mysql extends \Zend_Db_Statement_Pdo
             return $this->_executeWithBinding($params);
         } else {
             return $this->tryExecute(function () use ($params) {
-                return $params !== null ? $this->_stmt->execute($params) : $this->_stmt->execute();
+                return !empty($params) ? $this->_stmt->execute($params) : $this->_stmt->execute();
             });
         }
     }

@@ -6,7 +6,7 @@
  */
 -->
 <req:ShipmentRequest xmlns:req="http://www.dhl.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                     xsi:schemaLocation="http://www.dhl.com ship-val-global-req-6.0.xsd" schemaVersion="6.0">
+                     xsi:schemaLocation="http://www.dhl.com ship-val-global-req.xsd" schemaVersion="10.0">
     <Request xmlns="">
         <ServiceHeader>
             <MessageTime>currentTime</MessageTime>
@@ -14,22 +14,22 @@
             <SiteID>some ID</SiteID>
             <Password>some password</Password>
         </ServiceHeader>
+        <MetaData>
+            <SoftwareName>Magento</SoftwareName>
+            <SoftwareVersion>1.0.0+no-v</SoftwareVersion>
+        </MetaData>
     </Request>
     <RegionCode xmlns="">CHECKED</RegionCode>
     <RequestedPickupTime xmlns="">N</RequestedPickupTime>
-    <NewShipper xmlns="">N</NewShipper>
     <LanguageCode xmlns="">EN</LanguageCode>
-    <PiecesEnabled xmlns="">Y</PiecesEnabled>
     <Billing xmlns="">
-        <ShipperAccountNumber>1234567890</ShipperAccountNumber>
+        <ShipperAccountNumber>123456789</ShipperAccountNumber>
         <ShippingPaymentType>S</ShippingPaymentType>
-        <BillingAccountNumber>1234567890</BillingAccountNumber>
-        <DutyPaymentType>S</DutyPaymentType>
-        <DutyAccountNumber>1234567890</DutyAccountNumber>
+        <BillingAccountNumber>123456789</BillingAccountNumber>
     </Billing>
     <Consignee xmlns="">
         <CompanyName/>
-        <AddressLine>15099 Some Blvd</AddressLine>
+        <AddressLine1>15099 Some Blvd</AddressLine1>
         <City/>
         <PostalCode/>
         <CountryCode/>
@@ -40,14 +40,13 @@
         </Contact>
     </Consignee>
     <Commodity xmlns="">
-        <CommodityCode>1</CommodityCode>
+        <CommodityCode>01</CommodityCode>
     </Commodity>
     <Reference xmlns="">
         <ReferenceID>shipment reference</ReferenceID>
         <ReferenceType>St</ReferenceType>
     </Reference>
     <ShipmentDetails xmlns="">
-        <NumberOfPieces>1</NumberOfPieces>
         <Pieces xmlns="">
             <Piece xmlns="">
                 <PieceID>1</PieceID>
@@ -59,22 +58,20 @@
                 <PieceContents>item_name</PieceContents>
             </Piece>
         </Pieces>
-        <Weight>0.454</Weight>
         <WeightUnit>K</WeightUnit>
         <GlobalProductCode/>
         <LocalProductCode/>
         <Date>currentTime</Date>
         <Contents>DHL Parcel</Contents>
-        <DoorTo>DD</DoorTo>
         <DimensionUnit>C</DimensionUnit>
         <PackageType>CP</PackageType>
         <CurrencyCode>USD</CurrencyCode>
     </ShipmentDetails>
     <Shipper xmlns="">
-        <ShipperID>1234567890</ShipperID>
+        <ShipperID>123456789</ShipperID>
         <CompanyName/>
-        <RegisteredAccount>1234567890</RegisteredAccount>
-        <AddressLine>4956 Some Way</AddressLine>
+        <RegisteredAccount>123456789</RegisteredAccount>
+        <AddressLine1>4956 Some Way</AddressLine1>
         <City/>
         <PostalCode/>
         <CountryCode/>

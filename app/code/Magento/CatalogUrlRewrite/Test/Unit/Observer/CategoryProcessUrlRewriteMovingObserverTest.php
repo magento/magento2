@@ -89,14 +89,15 @@ class CategoryProcessUrlRewriteMovingObserverTest extends TestCase
      * Test category process rewrite url by changing the parent
      *
      * @return void
+     * @dataProvider getCategoryRewritesConfigProvider
      */
-    public function testCategoryProcessUrlRewriteAfterMovingWithChangedParentId()
+    public function testCategoryProcessUrlRewriteAfterMovingWithChangedParentId(bool $isCatRewritesEnabled)
     {
         /** @var Observer|MockObject $observerMock */
         $observerMock = $this->createMock(Observer::class);
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCategory'])
+            ->addMethods(['getCategory'])
             ->getMock();
         $categoryMock = $this->createPartialMock(
             Category::class,
@@ -108,17 +109,32 @@ class CategoryProcessUrlRewriteMovingObserverTest extends TestCase
             ]
         );
 
+        $observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('getCategory')->willReturn($categoryMock);
         $categoryMock->expects($this->once())->method('dataHasChangedFor')->with('parent_id')
             ->willReturn(true);
-        $eventMock->expects($this->once())->method('getCategory')->willReturn($categoryMock);
-        $observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
         $this->scopeConfigMock->expects($this->once())->method('isSetFlag')
             ->with(UrlKeyRenderer::XML_PATH_SEO_SAVE_HISTORY)->willReturn(true);
-        $this->scopeConfigMock->method('getValue')->willReturn(true);
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with('catalog/seo/generate_category_product_rewrites')
+            ->willReturn($isCatRewritesEnabled);
+
         $this->categoryUrlRewriteGeneratorMock->expects($this->once())->method('generate')
             ->with($categoryMock, true)->willReturn(['category-url-rewrite']);
-        $this->urlRewriteHandlerMock->expects($this->once())->method('generateProductUrlRewrites')
-            ->with($categoryMock)->willReturn(['product-url-rewrite']);
+
+        if ($isCatRewritesEnabled) {
+            $this->urlRewriteHandlerMock->expects($this->once())
+                ->id('generateProductUrlRewrites')
+                ->method('generateProductUrlRewrites')
+                ->with($categoryMock)->willReturn(['product-url-rewrite']);
+            $this->urlRewriteHandlerMock->expects($this->once())
+                ->method('deleteCategoryRewritesForChildren')
+                ->after('generateProductUrlRewrites');
+        } else {
+            $this->urlRewriteHandlerMock->expects($this->once())
+                ->method('deleteCategoryRewritesForChildren');
+        }
         $this->databaseMapPoolMock->expects($this->exactly(2))->method('resetMap')->willReturnSelf();
 
         $this->observer->execute($observerMock);
@@ -135,7 +151,7 @@ class CategoryProcessUrlRewriteMovingObserverTest extends TestCase
         $observerMock = $this->createMock(Observer::class);
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCategory'])
+            ->addMethods(['getCategory'])
             ->getMock();
         $categoryMock = $this->createPartialMock(Category::class, ['dataHasChangedFor']);
         $observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
@@ -144,5 +160,16 @@ class CategoryProcessUrlRewriteMovingObserverTest extends TestCase
             ->willReturn(false);
 
         $this->observer->execute($observerMock);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getCategoryRewritesConfigProvider(): array
+    {
+        return [
+            [true],
+            [false]
+        ];
     }
 }

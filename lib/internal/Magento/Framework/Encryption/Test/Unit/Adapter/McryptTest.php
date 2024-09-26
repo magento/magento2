@@ -47,7 +47,7 @@ class McryptTest extends TestCase
         return substr($result, -$length);
     }
 
-    private function requireCipherInfo()
+    private static function requireCipherInfo()
     {
         $filename = __DIR__ . '/../Crypt/_files/_cipher_info.php';
 
@@ -62,9 +62,9 @@ class McryptTest extends TestCase
      *
      * @return int
      */
-    private function getKeySize(string $cipherName, string $modeName): int
+    private static function getKeySize(string $cipherName, string $modeName): int
     {
-        $this->requireCipherInfo();
+        self::requireCipherInfo();
         return self::$cipherInfo[$cipherName][$modeName]['key_size'];
     }
 
@@ -74,16 +74,16 @@ class McryptTest extends TestCase
      *
      * @return int
      */
-    private function getInitVectorSize(string $cipherName, string $modeName): int
+    private static function getInitVectorSize(string $cipherName, string $modeName): int
     {
-        $this->requireCipherInfo();
+        self::requireCipherInfo();
         return self::$cipherInfo[$cipherName][$modeName]['iv_size'];
     }
 
     /**
      * @return array
      */
-    public function getCipherModeCombinations(): array
+    public static function getCipherModeCombinations(): array
     {
         $result = [];
         foreach (self::SUPPORTED_CIPHER_MODE_COMBINATIONS as $cipher => $modes) {
@@ -113,16 +113,16 @@ class McryptTest extends TestCase
     /**
      * @return array
      */
-    public function getConstructorExceptionData(): array
+    public static function getConstructorExceptionData(): array
     {
         $key = substr(__CLASS__, -32, 32);
         $result = [];
         foreach (self::SUPPORTED_CIPHER_MODE_COMBINATIONS as $cipher => $modes) {
             /** @var array $modes */
             foreach ($modes as $mode) {
-                $tooLongKey = str_repeat('-', $this->getKeySize($cipher, $mode) + 1);
-                $tooShortInitVector = str_repeat('-', $this->getInitVectorSize($cipher, $mode) - 1);
-                $tooLongInitVector = str_repeat('-', $this->getInitVectorSize($cipher, $mode) + 1);
+                $tooLongKey = str_repeat('-', self::getKeySize($cipher, $mode) + 1);
+                $tooShortInitVector = str_repeat('-', self::getInitVectorSize($cipher, $mode) - 1);
+                $tooLongInitVector = str_repeat('-', self::getInitVectorSize($cipher, $mode) + 1);
                 $result['tooLongKey-' . $cipher . '-' . $mode . '-false'] = [$tooLongKey, $cipher, $mode, null];
                 $keyPrefix = 'key-' . $cipher . '-' . $mode;
                 $result[$keyPrefix . '-tooShortInitVector'] = [$key, $cipher, $mode, $tooShortInitVector];
@@ -159,7 +159,7 @@ class McryptTest extends TestCase
     /**
      * @return array
      */
-    public function getCryptData(): array
+    public static function getCryptData(): array
     {
         $fixturesFilename = __DIR__ . '/../Crypt/_files/_crypt_fixtures.php';
 

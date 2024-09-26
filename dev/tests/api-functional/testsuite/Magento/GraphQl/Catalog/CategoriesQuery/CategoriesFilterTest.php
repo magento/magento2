@@ -566,7 +566,7 @@ QUERY;
     /**
      * @return array
      */
-    public function filterSingleCategoryDataProvider(): array
+    public static function filterSingleCategoryDataProvider(): array
     {
         return [
             [
@@ -579,7 +579,7 @@ QUERY;
                     'name' => 'Category 1.1',
                     'url_key' => 'category-1-1',
                     'url_path' => 'category-1/category-1-1',
-                    'children_count' => '0',
+                    'children_count' => '1',
                     'path' => '1/2/3/4',
                     'position' => '1'
                 ]
@@ -594,7 +594,7 @@ QUERY;
                     'name' => 'Category 1.1',
                     'url_key' => 'category-1-1',
                     'url_path' => 'category-1/category-1-1',
-                    'children_count' => '0',
+                    'children_count' => '1',
                     'path' => '1/2/3/4',
                     'position' => '1'
                 ]
@@ -664,7 +664,7 @@ QUERY;
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function filterMultipleCategoriesDataProvider(): array
+    public static function filterMultipleCategoriesDataProvider(): array
     {
         return[
             //Filter by multiple IDs
@@ -678,7 +678,7 @@ QUERY;
                         'name' => 'Category 1.1',
                         'url_key' => 'category-1-1',
                         'url_path' => 'category-1/category-1-1',
-                        'children_count' => '0',
+                        'children_count' => '1',
                         'path' => '1/2/3/4',
                         'position' => '1'
                     ],
@@ -714,7 +714,7 @@ QUERY;
                         'name' => 'Category 1.1',
                         'url_key' => 'category-1-1',
                         'url_path' => 'category-1/category-1-1',
-                        'children_count' => '0',
+                        'children_count' => '1',
                         'path' => '1/2/3/4',
                         'position' => '1'
                     ],
@@ -751,7 +751,7 @@ QUERY;
                         'name' => 'Category 1.1',
                         'url_key' => 'category-1-1',
                         'url_path' => 'category-1/category-1-1',
-                        'children_count' => '0',
+                        'children_count' => '1',
                         'path' => '1/2/3/4',
                         'position' => '1'
                     ],
@@ -786,7 +786,7 @@ QUERY;
                         'name' => 'Category 1.1',
                         'url_key' => 'category-1-1',
                         'url_path' => 'category-1/category-1-1',
-                        'children_count' => '0',
+                        'children_count' => '1',
                         'path' => '1/2/3/4',
                         'position' => '1'
                     ],

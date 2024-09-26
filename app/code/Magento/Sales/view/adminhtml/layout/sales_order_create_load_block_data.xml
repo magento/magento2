@@ -24,12 +24,14 @@
                     <arguments>
                         <argument name="customerAddressFormatter" xsi:type="object">Magento\Sales\ViewModel\Customer\AddressFormatter</argument>
                         <argument name="customerAddressCollection" xsi:type="object">Magento\Customer\Model\ResourceModel\Address\Collection</argument>
+                        <argument name="customerAddressCollectionAttributeFilter" xsi:type="object">Magento\Sales\ViewModel\Customer\Address\AddressAttributeFilter</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Sales\Block\Adminhtml\Order\Create\Billing\Address" template="Magento_Sales::order/create/form/address.phtml" name="billing_address">
                     <arguments>
                         <argument name="customerAddressFormatter" xsi:type="object">Magento\Sales\ViewModel\Customer\AddressFormatter</argument>
                         <argument name="customerAddressCollection" xsi:type="object">Magento\Customer\Model\ResourceModel\Address\Collection</argument>
+                        <argument name="customerAddressCollectionAttributeFilter" xsi:type="object">Magento\Sales\ViewModel\Customer\Address\AddressAttributeFilter</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Method" template="Magento_Sales::order/create/abstract.phtml" name="shipping_method">
@@ -44,6 +46,11 @@
                 <block class="Magento\Sales\Block\Adminhtml\Order\Create\Search" template="Magento_Sales::order/create/abstract.phtml" name="search">
                     <block class="Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid" name="search.grid" as="grid"/>
                 </block>
+                <referenceBlock name="search.grid">
+                    <arguments>
+                        <argument name="view_model" xsi:type="object">Magento\Backend\ViewModel\LimitTotalNumberOfProductsInGrid</argument>
+                    </arguments>
+                </referenceBlock>
                 <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items" template="Magento_Sales::order/create/items.phtml" name="items">
                     <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid" template="Magento_Sales::order/create/items/grid.phtml" name="items_grid">
                         <block class="Magento\Sales\Block\Adminhtml\Order\Create\Coupons" template="Magento_Sales::order/create/coupons/form.phtml" name="coupons">

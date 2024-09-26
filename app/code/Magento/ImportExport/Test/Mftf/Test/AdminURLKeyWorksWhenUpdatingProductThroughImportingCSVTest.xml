@@ -18,6 +18,7 @@
             <testCaseId value="MC-6317"/>
             <useCaseId value="MAGETWO-91544"/>
             <group value="importExport"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Create Product-->
@@ -43,7 +44,9 @@
         <amOnPage url="{{StorefrontProductPage.url('simpleprod')}}" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <seeInCurrentUrl url="{{StorefrontProductPage.url('simpleprod')}}" stepKey="seeUpdatedUrl"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct.name$$" stepKey="assertProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertProductName">
+            <argument name="value" value="$$createProduct.name$$"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="assertProductSku">
             <argument name="productSku" value="$$createProduct.sku$$"/>
         </actionGroup>

@@ -15,9 +15,11 @@
         <arguments>
             <argument name="productQty" type="string"/>
         </arguments>
-        
+
         <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{productQty}}" stepKey="fillProduct1Quantity"/>
+        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartDisabled}}" stepKey="waitForAddToCartButtonToRemoveDisabledState"/>
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButton"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickOnAddToCartButton"/>
         <waitForPageLoad stepKey="waitForProductToAddInCart"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>

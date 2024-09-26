@@ -9,10 +9,12 @@
  */
 namespace Magento\Framework\Acl;
 
+use Laminas\Permissions\Acl\Resource\GenericResource;
+
 /**
  * @api
  * @since 100.0.2
  */
-class AclResource extends \Zend_Acl_Resource
+class AclResource extends GenericResource
 {
 }

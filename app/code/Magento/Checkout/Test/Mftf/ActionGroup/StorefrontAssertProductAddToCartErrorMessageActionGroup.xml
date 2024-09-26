@@ -11,7 +11,7 @@
         <arguments>
             <argument name="message" type="string" defaultValue=""/>
         </arguments>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.error}}" time="10" stepKey="waitForProductAddedMessage"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.error}}" stepKey="waitForProductAddedMessage"/>
         <see selector="{{StorefrontMessagesSection.error}}" userInput="{{message}}" stepKey="seeAddToCartErrorMessage"/>
     </actionGroup>
 </actionGroups>

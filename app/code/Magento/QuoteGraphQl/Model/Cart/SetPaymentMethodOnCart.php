@@ -15,11 +15,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Quote\Api\Data\PaymentInterface;
-use Magento\Quote\Api\Data\PaymentInterfaceFactory;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\Quote\Model\Quote;
-use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool;
+use Magento\QuoteGraphQl\Model\Cart\Payment\PaymentMethodBuilder;
 
 /**
  * Saves related payment method info for a cart.
@@ -34,14 +32,9 @@ class SetPaymentMethodOnCart
     private $paymentMethodManagement;
 
     /**
-     * @var PaymentInterfaceFactory
+     * @var PaymentMethodBuilder
      */
-    private $paymentFactory;
-
-    /**
-     * @var AdditionalDataProviderPool
-     */
-    private $additionalDataProviderPool;
+    private $paymentMethodBuilder;
 
     /**
      * @var PaymentSavingRateLimiterInterface
@@ -50,8 +43,7 @@ class SetPaymentMethodOnCart
 
     /**
      * @param PaymentMethodManagementInterface $paymentMethodManagement
-     * @param PaymentInterfaceFactory $paymentFactory
-     * @param AdditionalDataProviderPool $additionalDataProviderPool
+     * @param PaymentMethodBuilder $paymentMethodBuilder
      * @param PaymentProcessingRateLimiterInterface|null $paymentRateLimiter
      * @param PaymentSavingRateLimiterInterface|null $savingRateLimiter
      *
@@ -59,14 +51,12 @@ class SetPaymentMethodOnCart
      */
     public function __construct(
         PaymentMethodManagementInterface $paymentMethodManagement,
-        PaymentInterfaceFactory $paymentFactory,
-        AdditionalDataProviderPool $additionalDataProviderPool,
+        PaymentMethodBuilder $paymentMethodBuilder,
         ?PaymentProcessingRateLimiterInterface $paymentRateLimiter = null,
         ?PaymentSavingRateLimiterInterface $savingRateLimiter = null
     ) {
         $this->paymentMethodManagement = $paymentMethodManagement;
-        $this->paymentFactory = $paymentFactory;
-        $this->additionalDataProviderPool = $additionalDataProviderPool;
+        $this->paymentMethodBuilder = $paymentMethodBuilder;
         $this->paymentRateLimiter = $savingRateLimiter
             ?? ObjectManager::getInstance()->get(PaymentSavingRateLimiterInterface::class);
     }
@@ -92,23 +82,7 @@ class SetPaymentMethodOnCart
             throw new GraphQlInputException(__($exception->getMessage()), $exception);
         }
 
-        if (!isset($paymentData['code']) || empty($paymentData['code'])) {
-            throw new GraphQlInputException(__('Required parameter "code" for "payment_method" is missing.'));
-        }
-        $paymentMethodCode = $paymentData['code'];
-
-        $poNumber = $paymentData['purchase_order_number'] ?? null;
-        $additionalData = $this->additionalDataProviderPool->getData($paymentMethodCode, $paymentData);
-
-        $payment = $this->paymentFactory->create(
-            [
-                'data' => [
-                    PaymentInterface::KEY_METHOD => $paymentMethodCode,
-                    PaymentInterface::KEY_PO_NUMBER => $poNumber,
-                    PaymentInterface::KEY_ADDITIONAL_DATA => $additionalData,
-                ],
-            ]
-        );
+        $payment = $this->paymentMethodBuilder->build($paymentData);
 
         try {
             $this->paymentMethodManagement->set($cart->getId(), $payment);

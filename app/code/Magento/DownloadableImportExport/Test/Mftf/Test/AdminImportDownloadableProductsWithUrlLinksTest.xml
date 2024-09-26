@@ -31,35 +31,35 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
             <!-- Copy Images to Import Directory for Product Images -->
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
                 <argument name="path">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyBaseImage">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyBaseImage">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.baseImage}}</argument>
                 <argument name="destination">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.baseImage}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copySmallImage">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copySmallImage">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.smallImage}}</argument>
                 <argument name="destination">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.smallImage}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyThumbnailImage">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyThumbnailImage">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}</argument>
                 <argument name="destination">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}</argument>
             </helper>
 
             <!-- Copy Images to Import Directory for Downloadable Links -->
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportDownloadableLinkFiles">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportDownloadableLinkFiles">
                 <argument name="path">pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyBaseImage2">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyBaseImage2">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.baseImage}}</argument>
                 <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.baseImage}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copySmallImage2">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copySmallImage2">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.smallImage}}</argument>
                 <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.smallImage}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyThumbnailImage3">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyThumbnailImage3">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}</argument>
                 <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}</argument>
             </helper>
@@ -75,11 +75,12 @@
                 <argument name="tags" value="config full_page"/>
             </actionGroup>
             <deleteData createDataKey="createImportCategory" stepKey="deleteImportCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
                 <argument name="path">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteDownloadableLinkFilesDirectory">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteDownloadableLinkFilesDirectory">
                 <argument name="path">pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}</argument>
             </helper>
             <deleteData url="/V1/products/{{ImportProduct_Downloadable_UrlLinks.urlKey}}" stepKey="deleteImportedDownloadableProduct"/>
@@ -181,7 +182,9 @@
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStorefrontPage">
             <argument name="productUrl" value="{{ImportProduct_Downloadable_UrlLinks.urlKey}}"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Downloadable_UrlLinks.name}}" stepKey="seeProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="{{ImportProduct_Downloadable_UrlLinks.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Downloadable_UrlLinks.sku}}" stepKey="seeSku"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProduct_Downloadable_UrlLinks.price}}" stepKey="seePrice"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Downloadable_UrlLinks.baseImageName)}}" stepKey="seeBaseImage"/>
@@ -211,17 +214,19 @@
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlacePurchaseOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
         <!-- Create Invoice -->
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="goToOrderInAdmin">
-            <argument name="orderId" value="{$grabOrderNumber}"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="goToOrderInAdmin">
+            <argument name="entityId" value="{$grabOrderId}"/>
         </actionGroup>
         <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
         <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
 
         <!-- Storefront: Go to Purchased Downloadable Product & Verify Link -->
         <actionGroup ref="StorefrontNavigateToCustomerDownloadableProductsPageActionGroup" stepKey="goToCustomerDownloadableProductsPage"/>
-        <see userInput="{{ImportProduct_Downloadable_UrlLinks.linkTitle}}" selector="{{StorefrontCustomerDownloadableProductsSection.downloadableLinkByOrderNumber({$grabOrderNumber})}}" stepKey="seeDownloadableLink2"/>
+        <waitForText userInput="{{ImportProduct_Downloadable_UrlLinks.linkTitle}}" selector="{{StorefrontCustomerDownloadableProductsSection.downloadableLinkByOrderNumber({$grabOrderNumber})}}" stepKey="seeDownloadableLink2"/>
         <click selector="{{StorefrontCustomerDownloadableProductsSection.downloadableLinkByOrderNumber({$grabOrderNumber})}}" stepKey="clickDownloadableLink"/>
         <switchToNextTab stepKey="switchToDownloadedLinkTab3"/>
         <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkTitle(ImportProduct_Downloadable_UrlLinks.linkFileName)}}" stepKey="seeImageTitle3"/>

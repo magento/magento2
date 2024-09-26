@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontMultishippingAddressAndItemUKGEActionGroup" extends="AssertStorefrontMultishippingAddressAndItemActionGroup">
+        <annotations>
+            <description>Verify item information on Ship to Multiple Addresses page for UK and Germany.</description>
+        </annotations>
+        <arguments>
+            <argument name="addressQtySequenceNumber" type="string" defaultValue="1"/>
+        </arguments>
+        <remove keyForRemoval="verifyAddress"/>
+        <seeInField selector="{{MultishippingSection.shippingAddressSelector(addressQtySequenceNumber)}}" userInput="{{firstName}} {{lastName}}, {{addressStreetLine1}}, {{city}}, {{postCode}}, {{country}}" stepKey="verifyAddressDetails"/>
+    </actionGroup>
+</actionGroups>

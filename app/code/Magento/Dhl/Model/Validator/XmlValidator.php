@@ -47,7 +47,7 @@ class XmlValidator
      */
     public function validate($xmlResponse, $isShippingLabel = false)
     {
-        if (strlen(trim($xmlResponse)) > 0 && strpos(trim($xmlResponse), '<?xml') === 0) {
+        if ($xmlResponse !== null && strlen(trim($xmlResponse)) > 0 && strpos(trim($xmlResponse), '<?xml') === 0) {
             if (!$this->xmlSecurity->scan($xmlResponse)) {
                 throw new DocumentValidationException(__('The security validation of the XML document has failed.'));
             }

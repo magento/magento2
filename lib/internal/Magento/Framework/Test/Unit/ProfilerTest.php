@@ -15,24 +15,36 @@ use PHPUnit\Framework\TestCase;
 
 class ProfilerTest extends TestCase
 {
+    /**
+     * @inheritdoc
+     */
     protected function tearDown(): void
     {
         Profiler::reset();
     }
 
-    public function testEnable()
+    /**
+     * @return void
+     */
+    public function testEnable(): void
     {
         Profiler::enable();
         $this->assertTrue(Profiler::isEnabled());
     }
 
-    public function testDisable()
+    /**
+     * @return void
+     */
+    public function testDisable(): void
     {
         Profiler::disable();
         $this->assertFalse(Profiler::isEnabled());
     }
 
-    public function testSetDefaultTags()
+    /**
+     * @return void
+     */
+    public function testSetDefaultTags(): void
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
@@ -41,7 +53,10 @@ class ProfilerTest extends TestCase
         $this->assertAttributeEquals($expected, '_defaultTags', Profiler::class);
     }
 
-    public function testAddTagFilter()
+    /**
+     * @return void
+     */
+    public function testAddTagFilter(): void
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
@@ -54,7 +69,10 @@ class ProfilerTest extends TestCase
         $this->assertAttributeEquals(true, '_hasTagFilters', Profiler::class);
     }
 
-    public function testAdd()
+    /**
+     * @return void
+     */
+    public function testAdd(): void
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
@@ -70,16 +88,16 @@ class ProfilerTest extends TestCase
     /**
      * @return MockObject
      */
-    protected function _getDriverMock()
+    protected function _getDriverMock(): MockObject
     {
-        return $this->getMockBuilder(
-            DriverInterface::class
-        )->setMethods(
-            ['start', 'stop', 'clear']
-        )->getMockForAbstractClass();
+        return $this->getMockBuilder(DriverInterface::class)
+            ->onlyMethods(['start', 'stop', 'clear'])->getMockForAbstractClass();
     }
 
-    public function testStartException()
+    /**
+     * @return void
+     */
+    public function testStartException(): void
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Timer name must not contain a nesting separator.');
@@ -87,7 +105,10 @@ class ProfilerTest extends TestCase
         Profiler::start('timer ' . Profiler::NESTING_SEPARATOR . ' name');
     }
 
-    public function testDisabledProfiler()
+    /**
+     * @return void
+     */
+    public function testDisabledProfiler(): void
     {
         $driver = $this->_getDriverMock();
         $driver->expects($this->never())->method('start');
@@ -99,7 +120,10 @@ class ProfilerTest extends TestCase
         Profiler::stop('test');
     }
 
-    public function testStartStopSimple()
+    /**
+     * @return void
+     */
+    public function testStartStopSimple(): void
     {
         $driver = $this->_getDriverMock();
         $driver->expects($this->once())->method('start')->with('root_level_timer', null);
@@ -110,14 +134,33 @@ class ProfilerTest extends TestCase
         Profiler::stop('root_level_timer');
     }
 
-    public function testStartNested()
+    /**
+     * @return void
+     */
+    public function testStartNested(): void
     {
         $driver = $this->_getDriverMock();
-        $driver->expects($this->at(0))->method('start')->with('root_level_timer', null);
-        $driver->expects($this->at(1))->method('start')->with('root_level_timer->some_other_timer', null);
 
-        $driver->expects($this->at(2))->method('stop')->with('root_level_timer->some_other_timer');
-        $driver->expects($this->at(3))->method('stop')->with('root_level_timer');
+        $driver
+            ->method('start')
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'root_level_timer' && $arg2 === null) {
+                        return null;
+                    } elseif ($arg1 == 'root_level_timer->some_other_timer' && $arg2 === null) {
+                        return null;
+                    }
+                }
+            );
+        $driver
+            ->method('stop')
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'root_level_timer->some_other_timer' || $arg == 'root_level_timer') {
+                        return null;
+                    }
+                }
+            );
 
         Profiler::add($driver);
         Profiler::start('root_level_timer');
@@ -126,7 +169,10 @@ class ProfilerTest extends TestCase
         Profiler::stop('root_level_timer');
     }
 
-    public function testStopExceptionUnknown()
+    /**
+     * @return void
+     */
+    public function testStopExceptionUnknown(): void
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Timer "unknown" has not been started.');
@@ -135,16 +181,38 @@ class ProfilerTest extends TestCase
         Profiler::stop('unknown');
     }
 
-    public function testStopOrder()
+    /**
+     * @return void
+     */
+    public function testStopOrder(): void
     {
         $driver = $this->_getDriverMock();
-        $driver->expects($this->at(0))->method('start')->with('timer1', null);
-        $driver->expects($this->at(1))->method('start')->with('timer1->timer2', null);
-        $driver->expects($this->at(2))->method('start')->with('timer1->timer2->timer1', null);
-        $driver->expects($this->at(3))->method('start')->with('timer1->timer2->timer1->timer3', null);
 
-        $driver->expects($this->at(4))->method('stop')->with('timer1->timer2->timer1->timer3');
-        $driver->expects($this->at(5))->method('stop')->with('timer1->timer2->timer1');
+        $driver
+            ->method('start')
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'timer1' && $arg2 == null) {
+                        return null;
+                    } elseif ($arg1 == 'timer1->timer2' && $arg2 == null) {
+                        return null;
+                    } elseif ($arg1 == 'timer1->timer2->timer1' && $arg2 == null) {
+                        return null;
+                    } elseif ($arg1 == 'timer1->timer2->timer1->timer3' && $arg2 == null) {
+                        return null;
+                    }
+                }
+            );
+
+        $driver
+            ->method('stop')
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'timer1->timer2->timer1->timer3' || $arg == 'timer1->timer2->timer1') {
+                        return null;
+                    }
+                }
+            );
 
         $driver->expects($this->exactly(4))->method('start');
         $driver->expects($this->exactly(2))->method('stop');
@@ -157,14 +225,34 @@ class ProfilerTest extends TestCase
         Profiler::stop('timer1');
     }
 
-    public function testStopSameName()
+    /**
+     * @return void
+     */
+    public function testStopSameName(): void
     {
         $driver = $this->_getDriverMock();
-        $driver->expects($this->at(0))->method('start')->with('timer1', null);
-        $driver->expects($this->at(1))->method('start')->with('timer1->timer1', null);
 
-        $driver->expects($this->at(2))->method('stop')->with('timer1->timer1');
-        $driver->expects($this->at(3))->method('stop')->with('timer1');
+        $driver
+            ->method('start')
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'timer1' && $arg2 == null) {
+                        return null;
+                    } elseif ($arg1 == 'timer1->timer1' && $arg2 == null) {
+                        return null;
+                    }
+                }
+            );
+
+        $driver
+            ->method('stop')
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'timer1->timer1' || $arg == 'timer1') {
+                        return null;
+                    }
+                }
+            );
 
         Profiler::add($driver);
         Profiler::start('timer1');
@@ -173,30 +261,44 @@ class ProfilerTest extends TestCase
         Profiler::stop('timer1');
     }
 
-    public function testStopLatest()
+    /**
+     * @return void
+     */
+    public function testStopLatest(): void
     {
         $driver = $this->_getDriverMock();
-        $driver->expects($this->at(0))->method('start')->with('root_level_timer', null);
 
-        $driver->expects($this->at(1))->method('stop')->with('root_level_timer');
+        $driver
+            ->method('start')
+            ->with('root_level_timer', null);
+        $driver
+            ->method('stop')
+            ->with('root_level_timer');
 
         Profiler::add($driver);
         Profiler::start('root_level_timer');
         Profiler::stop();
     }
 
-    public function testTags()
+    /**
+     * @return void
+     */
+    public function testTags(): void
     {
         $driver = $this->_getDriverMock();
-        $driver->expects($this->at(0))->method('start')->with('root_level_timer', ['default_tag' => 'default']);
-        $driver->expects(
-            $this->at(1)
-        )->method(
-            'start'
-        )->with(
-            'root_level_timer->some_other_timer',
-            ['default_tag' => 'default', 'type' => 'test']
-        );
+        $driver
+            ->method('start')
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'root_level_timer' &&
+                        $arg2 == ['default_tag' => 'default']) {
+                        return null;
+                    } elseif ($arg1 == 'root_level_timer->some_other_timer' &&
+                        $arg2 == ['default_tag' => 'default', 'type' => 'test']) {
+                        return null;
+                    }
+                }
+            );
 
         Profiler::add($driver);
         Profiler::setDefaultTags(['default_tag' => 'default']);
@@ -204,16 +306,24 @@ class ProfilerTest extends TestCase
         Profiler::start('some_other_timer', ['type' => 'test']);
     }
 
-    public function testClearTimer()
+    /**
+     * @return void
+     */
+    public function testClearTimer(): void
     {
         $driver = $this->_getDriverMock();
-        $driver->expects($this->at(0))->method('clear')->with('timer');
+        $driver
+            ->method('clear')
+            ->with('timer');
 
         Profiler::add($driver);
         Profiler::clear('timer');
     }
 
-    public function testClearException()
+    /**
+     * @return void
+     */
+    public function testClearException(): void
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Timer name must not contain a nesting separator.');
@@ -221,7 +331,10 @@ class ProfilerTest extends TestCase
         Profiler::clear('timer ' . Profiler::NESTING_SEPARATOR . ' name');
     }
 
-    public function testResetProfiler()
+    /**
+     * @return void
+     */
+    public function testResetProfiler(): void
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
@@ -243,9 +356,11 @@ class ProfilerTest extends TestCase
     /**
      * @param string $timerName
      * @param array $tags
+     *
+     * @return void
      * @dataProvider skippedFilterDataProvider
      */
-    public function testTagFilterSkip($timerName, array $tags = null)
+    public function testTagFilterSkip($timerName, array $tags = null): void
     {
         $driver = $this->_getDriverMock();
         $driver->expects($this->never())->method('start');
@@ -258,7 +373,7 @@ class ProfilerTest extends TestCase
     /**
      * @return array
      */
-    public function skippedFilterDataProvider()
+    public static function skippedFilterDataProvider(): array
     {
         return [
             'no tags' => ['timer', null],
@@ -270,9 +385,11 @@ class ProfilerTest extends TestCase
     /**
      * @param string $timerName
      * @param array $tags
+     *
+     * @return void
      * @dataProvider passedFilterDataProvider
      */
-    public function testTagFilterPass($timerName, array $tags = null)
+    public function testTagFilterPass($timerName, array $tags = null): void
     {
         $driver = $this->_getDriverMock();
         $driver->expects($this->once())->method('start')->with($timerName, $tags);
@@ -285,7 +402,7 @@ class ProfilerTest extends TestCase
     /**
      * @return array
      */
-    public function passedFilterDataProvider()
+    public static function passedFilterDataProvider(): array
     {
         return [
             'one expected tag' => ['timer', ['type' => 'test']],
@@ -293,7 +410,10 @@ class ProfilerTest extends TestCase
         ];
     }
 
-    public function testApplyConfig()
+    /**
+     * @return void
+     */
+    public function testApplyConfig(): void
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
@@ -330,13 +450,21 @@ class ProfilerTest extends TestCase
     }
 
     /**
-     * @dataProvider parseConfigDataProvider
      * @param array $data
      * @param boolean $isAjax
      * @param array $expected
+     *
+     * @return void
+     * @dataProvider parseConfigDataProvider
      */
-    public function testParseConfig($data, $isAjax, $expected)
+    public function testParseConfig($data, $isAjax, $expected): void
     {
+        if (!empty($data['driverFactory']) && is_callable($data['driverFactory'])) {
+            $data['driverFactory'] = $data['driverFactory']($this);
+        }
+        if (!empty($expected) && is_callable($expected['driverFactory'])) {
+            $expected['driverFactory'] = $expected['driverFactory']($this);
+        }
         $method = new \ReflectionMethod(Profiler::class, '_parseConfig');
         $method->setAccessible(true);
         $this->assertEquals($expected, $method->invoke(null, $data, '', $isAjax));
@@ -346,10 +474,10 @@ class ProfilerTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function parseConfigDataProvider()
+    public static function parseConfigDataProvider(): array
     {
         $driverFactory = new Factory();
-        $otherDriverFactory = $this->createMock(Factory::class);
+        $otherDriverFactory = static fn (self $testCase) => $testCase->createMock(Factory::class);
         return [
             'Empty configuration' => [
                 [],
@@ -359,14 +487,14 @@ class ProfilerTest extends TestCase
                     'driverFactory' => $driverFactory,
                     'tagFilters' => [],
                     'baseDir' => null
-                ],
+                ]
             ],
             'Full configuration' => [
                 [
                     'drivers' => [['type' => 'foo']],
                     'driverFactory' => $otherDriverFactory,
                     'tagFilters' => ['key' => 'value'],
-                    'baseDir' => '/custom/base/dir',
+                    'baseDir' => '/custom/base/dir'
                 ],
                 false,
                 [
@@ -374,7 +502,7 @@ class ProfilerTest extends TestCase
                     'driverFactory' => $otherDriverFactory,
                     'tagFilters' => ['key' => 'value'],
                     'baseDir' => '/custom/base/dir'
-                ],
+                ]
             ],
             'Driver configuration with type in index' => [
                 ['drivers' => ['foo' => 1]],
@@ -384,7 +512,7 @@ class ProfilerTest extends TestCase
                     'driverFactory' => $driverFactory,
                     'tagFilters' => [],
                     'baseDir' => null
-                ],
+                ]
             ],
             'Driver configuration with type in value' => [
                 ['drivers' => ['foo']],
@@ -394,7 +522,7 @@ class ProfilerTest extends TestCase
                     'driverFactory' => $driverFactory,
                     'tagFilters' => [],
                     'baseDir' => null
-                ],
+                ]
             ],
             'Driver ignored configuration' => [
                 ['drivers' => ['foo' => 0]],
@@ -404,7 +532,7 @@ class ProfilerTest extends TestCase
                     'driverFactory' => $driverFactory,
                     'tagFilters' => [],
                     'baseDir' => null
-                ],
+                ]
             ],
             'Non ajax call' => [
                 1,
@@ -414,7 +542,7 @@ class ProfilerTest extends TestCase
                     'driverFactory' => $driverFactory,
                     'tagFilters' => [],
                     'baseDir' => ''
-                ],
+                ]
             ]
         ];
     }

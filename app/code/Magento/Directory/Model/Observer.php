@@ -4,80 +4,81 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Directory module observer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-
 namespace Magento\Directory\Model;
 
+use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Directory\Model\Currency\Import\Factory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\Translate\Inline\StateInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
- * Class Observer
- *
- * @package Magento\Directory\Model
+ * Import currency rates
  */
 class Observer
 {
-    const CRON_STRING_PATH = 'crontab/default/jobs/currency_rates_update/schedule/cron_expr';
+    public const CRON_STRING_PATH = 'crontab/default/jobs/currency_rates_update/schedule/cron_expr';
 
-    const IMPORT_ENABLE = 'currency/import/enabled';
+    public const IMPORT_ENABLE = 'currency/import/enabled';
 
-    const IMPORT_SERVICE = 'currency/import/service';
+    public const IMPORT_SERVICE = 'currency/import/service';
 
-    const XML_PATH_ERROR_TEMPLATE = 'currency/import/error_email_template';
+    public const XML_PATH_ERROR_TEMPLATE = 'currency/import/error_email_template';
 
-    const XML_PATH_ERROR_IDENTITY = 'currency/import/error_email_identity';
+    public const XML_PATH_ERROR_IDENTITY = 'currency/import/error_email_identity';
 
-    const XML_PATH_ERROR_RECIPIENT = 'currency/import/error_email';
+    public const XML_PATH_ERROR_RECIPIENT = 'currency/import/error_email';
 
     /**
-     * @var \Magento\Directory\Model\Currency\Import\Factory
+     * @var Factory
      */
     protected $_importFactory;
 
     /**
      * Core store config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Mail\Template\TransportBuilder
+     * @var TransportBuilder
      */
     protected $_transportBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Directory\Model\CurrencyFactory
+     * @var CurrencyFactory
      */
     protected $_currencyFactory;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\StateInterface
+     * @var StateInterface
      */
     protected $inlineTranslation;
 
     /**
-     * @param \Magento\Directory\Model\Currency\Import\Factory $importFactory
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @param Factory $importFactory
+     * @param ScopeConfigInterface $scopeConfig
+     * @param TransportBuilder $transportBuilder
+     * @param StoreManagerInterface $storeManager
+     * @param CurrencyFactory $currencyFactory
+     * @param StateInterface $inlineTranslation
      */
     public function __construct(
-        \Magento\Directory\Model\Currency\Import\Factory $importFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+        Factory $importFactory,
+        ScopeConfigInterface $scopeConfig,
+        TransportBuilder $transportBuilder,
+        StoreManagerInterface $storeManager,
+        CurrencyFactory $currencyFactory,
+        StateInterface $inlineTranslation
     ) {
         $this->_importFactory = $importFactory;
         $this->_scopeConfig = $scopeConfig;
@@ -94,16 +95,17 @@ class Observer
      * @return void
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function scheduledUpdateCurrencyRates($schedule)
     {
         $importWarnings = [];
         if (!$this->_scopeConfig->getValue(
             self::IMPORT_ENABLE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         ) || !$this->_scopeConfig->getValue(
             self::CRON_STRING_PATH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         )
         ) {
             return;
@@ -113,7 +115,7 @@ class Observer
         $rates = [];
         $service = $this->_scopeConfig->getValue(
             self::IMPORT_SERVICE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
         if ($service) {
             try {
@@ -137,32 +139,33 @@ class Observer
 
         $errorRecipient = $this->_scopeConfig->getValue(
             self::XML_PATH_ERROR_RECIPIENT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
+        $errorRecipients = !empty($errorRecipient) ? explode(',', $errorRecipient) : [];
         if (count($importWarnings) == 0) {
             $this->_currencyFactory->create()->saveRates($rates);
-        } elseif ($errorRecipient) {
+        } elseif (count($errorRecipients) > 0) {
             //if $errorRecipient is not set, there is no sense send email to nobody
             $this->inlineTranslation->suspend();
 
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_TEMPLATE,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    ScopeInterface::SCOPE_STORE
                 )
             )->setTemplateOptions(
                 [
-                    'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-                    'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                    'area' => FrontNameResolver::AREA_CODE,
+                    'store' => Store::DEFAULT_STORE_ID,
                 ]
             )->setTemplateVars(
                 ['warnings' => join("\n", $importWarnings)]
             )->setFrom(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_IDENTITY,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    ScopeInterface::SCOPE_STORE
                 )
-            )->addTo($errorRecipient);
+            )->addTo($errorRecipients);
             $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();
 

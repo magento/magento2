@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddOptionToBundleProductActionGroup">
+        <annotations>
+            <description>Admin Add Option to bundled products</description>
+        </annotations>
+        <arguments>
+            <argument name="categoryName" type="string"/>
+            <argument name="website" defaultValue="Main Website" type="string"/>
+        </arguments>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="openDropDown"/>
+        <checkOption selector="{{AdminProductFormSection.selectCategory(categoryName)}}" stepKey="selectCategory"/>
+        <conditionalClick selector="{{AdminProductGridSection.productCollapsibleColumns('closed','Product in Websites')}}" dependentSelector="{{AdminProductGridSection.productCollapsibleColumns('closed','Product in Websites')}}" visible="true" stepKey="expandProductInWebsites"/>
+        <checkOption selector="{{AdminProductGridSection.checkOtherWebsites(website)}}" stepKey="checkMainWebsite"/>
+        <scrollTo selector="{{AdminProductFormBundleSection.contentDropDown}}" stepKey="scrollToBundleSection"/>
+        <conditionalClick selector="{{AdminProductGridSection.productCollapsibleColumns('closed','Product in Websites')}}" dependentSelector="{{AdminProductGridSection.productCollapsibleColumns('closed','Product in Websites')}}" visible="true" stepKey="expandBundleItem"/>
+        <selectOption userInput="Separately" selector="{{AdminProductFormBundleSection.shipmentType}}" stepKey="SelectShipBundleItemsAsTogether"/>
+        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption"/>
+        <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForAddOptionLoad" time="30"/>
+        <wait time="5" stepKey="waitForOptionsToPopulate"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="option1" stepKey="fillOptionTitle"/>
+        <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="Drop-down" stepKey="selectInputTypeAsDropDown"/>
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProductsToBundle"/>
+        <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts"/>
+    </actionGroup>
+</actionGroups>

@@ -6,13 +6,13 @@
 
 namespace Magento\SalesRule\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Quote\Model\Quote\Address;
+use Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory;
+use Magento\SalesRule\Model\Rule\CustomerFactory;
 
-/**
- * Class Utility
- *
- * @package Magento\SalesRule\Model
- */
 class Utility
 {
     /**
@@ -26,22 +26,22 @@ class Utility
     protected $_baseRoundingDeltas = [];
 
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory
+     * @var UsageFactory
      */
     protected $usageFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\CouponFactory
+     * @var CouponFactory
      */
     protected $couponFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule\CustomerFactory
+     * @var CustomerFactory
      */
     protected $customerFactory;
 
     /**
-     * @var \Magento\Framework\DataObjectFactory
+     * @var DataObjectFactory
      */
     protected $objectFactory;
 
@@ -49,76 +49,52 @@ class Utility
      * @var PriceCurrencyInterface
      */
     protected $priceCurrency;
+    /**
+     * @var ValidateCoupon
+     */
+    private $validateCoupon;
 
     /**
-     * @param \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory $usageFactory
+     * @param UsageFactory $usageFactory
      * @param CouponFactory $couponFactory
      * @param Rule\CustomerFactory $customerFactory
-     * @param \Magento\Framework\DataObjectFactory $objectFactory
+     * @param DataObjectFactory $objectFactory
      * @param PriceCurrencyInterface $priceCurrency
+     * @param ValidateCoupon|null $validateCoupon
      */
     public function __construct(
-        \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory $usageFactory,
-        \Magento\SalesRule\Model\CouponFactory $couponFactory,
-        \Magento\SalesRule\Model\Rule\CustomerFactory $customerFactory,
-        \Magento\Framework\DataObjectFactory $objectFactory,
-        PriceCurrencyInterface $priceCurrency
+        UsageFactory $usageFactory,
+        CouponFactory $couponFactory,
+        CustomerFactory $customerFactory,
+        DataObjectFactory $objectFactory,
+        PriceCurrencyInterface $priceCurrency,
+        ValidateCoupon $validateCoupon = null
     ) {
         $this->couponFactory = $couponFactory;
         $this->customerFactory = $customerFactory;
         $this->usageFactory = $usageFactory;
         $this->objectFactory = $objectFactory;
         $this->priceCurrency = $priceCurrency;
+        $this->validateCoupon = $validateCoupon ?: ObjectManager::getInstance()->get(ValidateCoupon::class);
     }
 
     /**
      * Check if rule can be applied for specific address/quote/customer
      *
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param Rule $rule
+     * @param Address $address
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function canProcessRule($rule, $address)
+    public function canProcessRule(Rule $rule, Address $address): bool
     {
         if ($rule->hasIsValidForAddress($address) && !$address->isObjectNew()) {
             return $rule->getIsValidForAddress($address);
         }
 
-        /**
-         * check per coupon usage limit
-         */
-        if ($rule->getCouponType() != \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON) {
-            $couponCode = $address->getQuote()->getCouponCode();
-            if (strlen($couponCode)) {
-                /** @var \Magento\SalesRule\Model\Coupon $coupon */
-                $coupon = $this->couponFactory->create();
-                $coupon->load($couponCode, 'code');
-                if ($coupon->getId()) {
-                    // check entire usage limit
-                    if ($coupon->getUsageLimit() && $coupon->getTimesUsed() >= $coupon->getUsageLimit()) {
-                        $rule->setIsValidForAddress($address, false);
-                        return false;
-                    }
-                    // check per customer usage limit
-                    $customerId = $address->getQuote()->getCustomerId();
-                    if ($customerId && $coupon->getUsagePerCustomer()) {
-                        $couponUsage = $this->objectFactory->create();
-                        $this->usageFactory->create()->loadByCustomerCoupon(
-                            $couponUsage,
-                            $customerId,
-                            $coupon->getId()
-                        );
-                        if ($couponUsage->getCouponId() &&
-                            $couponUsage->getTimesUsed() >= $coupon->getUsagePerCustomer()
-                        ) {
-                            $rule->setIsValidForAddress($address, false);
-                            return false;
-                        }
-                    }
-                }
-            }
+        if (!$this->validateCoupon->execute($rule, $address, $address->getQuote()->getCouponCode())) {
+            return false;
         }
 
         /**
@@ -153,6 +129,8 @@ class Utility
     }
 
     /**
+     * Set discount amount (found min)
+     *
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
@@ -192,10 +170,9 @@ class Utility
         $rowTotalInclTax = $item->getRowTotalInclTax();
         $baseRowTotalInclTax = $item->getBaseRowTotalInclTax();
 
-        //TODO Seems \Magento\Quote\Model\Quote\Item\AbstractItem::getDiscountPercent() returns float value
-        //that can not be used as array index
-        $percentKey = $item->getDiscountPercent();
-        if ($percentKey) {
+        $percentKey = (string)$item->getDiscountPercent();
+        $rowTotal = $item->getRowTotal();
+        if ($percentKey && $rowTotal > 0) {
             $delta = isset($this->_roundingDeltas[$percentKey]) ? $this->_roundingDeltas[$percentKey] : 0;
             $baseDelta = isset($this->_baseRoundingDeltas[$percentKey]) ? $this->_baseRoundingDeltas[$percentKey] : 0;
 
@@ -211,7 +188,7 @@ class Utility
          * When we have 100% discount check if totals will not be negative
          */
 
-        if ($percentKey == 100) {
+        if ($item->getDiscountPercent() == 100) {
             $discountDelta = $rowTotalInclTax - $discountAmount;
             $baseDiscountDelta = $baseRowTotalInclTax - $baseDiscountAmount;
 
@@ -259,7 +236,7 @@ class Utility
      * Return discount item qty
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param Rule $rule
      * @return int
      */
     public function getItemQty($item, $rule)
@@ -293,6 +270,8 @@ class Utility
     }
 
     /**
+     * Resets rounding deltas data.
+     *
      * @return void
      */
     public function resetRoundingDeltas()

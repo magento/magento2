@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateSimpleProductCommaSeparatedPriceTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create a Simple Product via Admin"/>
+            <title value="Admin should not be able to create a product with a comma separated price"/>
+            <description value="Admin should not be able to create a product with a comma separated price"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-2928"/>
+            <useCaseId value="ACP2E-420"/>
+            <group value="product"/>
+            <group value="cloud"/>
+        </annotations>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateProduct"/>
+        <actionGroup ref="FillMainProductFormByStringActionGroup" stepKey="fillPrice">
+            <argument name="productName" value="{{SimpleProduct.name}}"/>
+            <argument name="productSku" value="{{SimpleProduct.sku}}"/>
+            <argument name="productPrice" value="33,444"/>
+            <argument name="productQuantity" value="{{SimpleProduct.quantity}}"/>
+            <argument name="productStatus" value="{{SimpleProduct.status}}"/>
+            <argument name="productWeight" value="{{SimpleProduct.weight}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
+        <actionGroup ref="AssertAdminValidationErrorAppearedForPriceFieldOnProductEditPageActionGroup" stepKey="seePriceValidationError">
+            <argument name="errorMessage" value="Please enter a number 0 or greater, without comma in this field."/>
+        </actionGroup>
+    </test>
+</tests>

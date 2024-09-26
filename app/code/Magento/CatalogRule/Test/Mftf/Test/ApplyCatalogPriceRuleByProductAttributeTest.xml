@@ -19,6 +19,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use AdminApplyCatalogPriceRuleByProductAttributeTest instead.</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
@@ -83,7 +84,9 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
 
@@ -107,7 +110,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Add values to your attribute ( ex: red , green) -->
@@ -237,14 +242,14 @@
         <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Go to Frontend and open the simple product -->
-        <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.sku$$)}}" stepKey="amOnSimpleProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
 
         <!-- Verify Price for simple product with specialColor green=$20 -->
         <see userInput="20.00" selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="seePrice20"/>
 
         <!-- Go to Frontend and  Open the Configurable product -->
-        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.sku$$)}}" stepKey="amOnConfigProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="amOnConfigProductPage"/>
         <waitForPageLoad stepKey="waitForConfigProductPageLoad"/>
 
         <!-- Verify Price for configurable product with specialColor green=$30 -->
@@ -257,7 +262,7 @@
         <see userInput="30.00" selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="seeOption2Price30"/>
 
         <!-- Go to Frontend and  open the second simple product -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSecondProduct.sku$$)}}" stepKey="amOnSecondProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSecondProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSecondProductPage"/>
         <waitForPageLoad stepKey="waitForSecondProductPageLoad"/>
 
         <!-- Verify Price for simple product with specialColor red=$40 -->

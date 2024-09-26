@@ -18,5 +18,6 @@
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnail(imageNumber)}}" stepKey="waitThumbnailAppears"/>
         <conditionalClick selector="{{StorefrontProductMediaSection.fotoramaImageThumbnail(imageNumber)}}" dependentSelector="{{StorefrontProductMediaSection.fotoramaImageThumbnailActive(imageNumber)}}" visible="false" stepKey="clickOnThumbnailImage"/>
         <click selector="{{StorefrontProductMediaSection.gallery}}" stepKey="openFullScreenPage"/>
+        <waitForPageLoad stepKey="waitForFullScreen"/>
     </actionGroup>
 </actionGroups>

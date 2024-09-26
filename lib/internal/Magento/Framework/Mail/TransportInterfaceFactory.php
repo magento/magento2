@@ -11,6 +11,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory class for \Magento\Framework\Mail\TransportInterface
+ *
+ * @api
  */
 class TransportInterfaceFactory
 {

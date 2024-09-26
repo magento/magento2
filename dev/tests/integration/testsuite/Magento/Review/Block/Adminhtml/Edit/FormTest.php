@@ -24,6 +24,7 @@ class FormTest extends TestCase
             ->setWebsiteId(1)
             ->loadByEmail('customer@example.com');
         $block = Bootstrap::getObjectManager()->create(Form::class);
+        $block->setNameInLayout('test_block_name');
         /** @var Escaper $escaper */
         $escaper = Bootstrap::getObjectManager()->get(Escaper::class);
         $this->assertStringMatchesFormat(
@@ -49,6 +50,7 @@ class FormTest extends TestCase
         $registry = Bootstrap::getObjectManager()->get(Registry::class);
         $review = $registry->registry('review_data');
         $block = Bootstrap::getObjectManager()->create(Form::class);
+        $block->setNameInLayout('test_block_name');
         foreach ($review->getStores() as $storeId) {
             $regex = sprintf('/input id="select_stores" (.*) value="%d" type="hidden"/', $storeId);
             $this->assertMatchesRegularExpression(

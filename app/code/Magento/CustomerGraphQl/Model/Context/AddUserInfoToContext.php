@@ -8,13 +8,17 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Context;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\ResourceModel\CustomerRepository;
+use Magento\Customer\Model\Session;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\GraphQl\Model\Query\ContextParametersInterface;
-use Magento\GraphQl\Model\Query\ContextParametersProcessorInterface;
+use Magento\GraphQl\Model\Query\UserContextParametersProcessorInterface;
 
 /**
- * @inheritdoc
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class AddUserInfoToContext implements ContextParametersProcessorInterface
+class AddUserInfoToContext implements UserContextParametersProcessorInterface, ResetAfterRequestInterface
 {
     /**
      * @var UserContextInterface
@@ -22,11 +26,49 @@ class AddUserInfoToContext implements ContextParametersProcessorInterface
     private $userContext;
 
     /**
+     * @var UserContextInterface
+     */
+    private UserContextInterface $userContextFromConstructor;
+
+    /**
+     * @var Session
+     */
+    private $session;
+
+    /**
+     * @var CustomerRepository
+     */
+    private $customerRepository;
+
+    /**
      * @param UserContextInterface $userContext
+     * @param Session $session
+     * @param CustomerRepository $customerRepository
      */
     public function __construct(
-        UserContextInterface $userContext
+        UserContextInterface $userContext,
+        Session $session,
+        CustomerRepository $customerRepository
     ) {
+        $this->userContext = $userContext;
+        $this->userContextFromConstructor = $userContext;
+        $this->session = $session;
+        $this->customerRepository = $customerRepository;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->userContext = $this->userContextFromConstructor;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setUserContext(UserContextInterface $userContext): void
+    {
         $this->userContext = $userContext;
     }
 
@@ -47,8 +89,25 @@ class AddUserInfoToContext implements ContextParametersProcessorInterface
         }
         $contextParameters->setUserType($currentUserType);
 
-        $contextParameters->addExtensionAttribute('is_customer', $this->isCustomer($currentUserId, $currentUserType));
+        $isCustomer = $this->isCustomer($currentUserId, $currentUserType);
+        $contextParameters->addExtensionAttribute('is_customer', $isCustomer);
+
+        if ($isCustomer) {
+            $customer = $this->customerRepository->getById($currentUserId);
+            $this->session->setCustomerData($customer);
+            $this->session->setCustomerGroupId($customer->getGroupId());
+        }
         return $contextParameters;
+    }
+
+    /**
+     * Get logged in customer data
+     *
+     * @return CustomerInterface
+     */
+    public function getLoggedInCustomerData(): ?CustomerInterface
+    {
+        return $this->session->isLoggedIn() ? $this->session->getCustomerData() : null;
     }
 
     /**

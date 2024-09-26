@@ -16,8 +16,8 @@
 
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <click selector="{{AdminProductGridFilterSection.viewDropdown}}" stepKey="openViewBookmarksTab"/>
-        <click selector="{{AdminProductGridFilterSection.viewBookmark('Default View')}}" stepKey="resetToDefaultGridView"/>
+        <click selector="{{AdminProductGridFilterSection.viewBookmark(DefaultGridView.name)}}" stepKey="resetToDefaultGridView"/>
         <waitForPageLoad stepKey="waitForProductGridLoad"/>
-        <see selector="{{AdminProductGridFilterSection.viewDropdown}}" userInput="Default View" stepKey="seeDefaultViewSelected"/>
+        <see selector="{{AdminProductGridFilterSection.viewDropdown}}" userInput="{{DefaultGridView.name}}" stepKey="seeDefaultViewSelected"/>
     </actionGroup>
 </actionGroups>

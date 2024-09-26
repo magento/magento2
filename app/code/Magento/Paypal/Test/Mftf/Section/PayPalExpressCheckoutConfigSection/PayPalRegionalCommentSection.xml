@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="PayPalRegionalCommentSection">
+        <element name="country" type="text" selector="//tr[@id='row_payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_enable_paypal_paylater_experience']//td //p[@class='note'] //a[text()='here']" parameterized="true"/>
+        <element name="other" type="text" selector="//tr[@id='row_payment_{{countryCode}}_express_checkout_other_express_checkout_required_enable_paypal_paylater_experience']//td //p[@class='note'] //a[text()='here']" parameterized="true"/>
+    </section>
+</sections>

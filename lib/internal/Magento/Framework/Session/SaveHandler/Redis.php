@@ -9,6 +9,7 @@ use Cm\RedisSession\Handler\ConfigInterface;
 use Cm\RedisSession\Handler\LoggerInterface;
 use Cm\RedisSession\ConnectionFailedException;
 use Cm\RedisSession\ConcurrentConnectionsExceededException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Filesystem;
@@ -17,24 +18,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class Redis implements \SessionHandlerInterface
 {
     /**
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @var \Cm\RedisSession\Handler[]
      */
-    private $connection;
+    private array $connection = [];
 
     /**
      * @param ConfigInterface $config
@@ -42,11 +28,11 @@ class Redis implements \SessionHandlerInterface
      * @param Filesystem $filesystem
      * @throws SessionException
      */
-    public function __construct(ConfigInterface $config, LoggerInterface $logger, Filesystem $filesystem)
-    {
-        $this->config = $config;
-        $this->logger = $logger;
-        $this->filesystem = $filesystem;
+    public function __construct(
+        private readonly ConfigInterface $config,
+        private readonly LoggerInterface $logger,
+        private readonly Filesystem $filesystem,
+    ) {
     }
 
     /**
@@ -76,6 +62,7 @@ class Redis implements \SessionHandlerInterface
      * @return bool
      * @throws SessionException
      */
+    #[\ReturnTypeWillChange]
     public function open($savePath, $sessionName)
     {
         return $this->getConnection()->open($savePath, $sessionName);
@@ -85,17 +72,21 @@ class Redis implements \SessionHandlerInterface
      * Fetch session data
      *
      * @param string $sessionId
-     * @return string
-     * @throws ConcurrentConnectionsExceededException
+     * @return string|false
      * @throws SessionException
      */
+    #[\ReturnTypeWillChange]
     public function read($sessionId)
     {
+        $result = false;
+
         try {
-            return $this->getConnection()->read($sessionId);
+            $result = $this->getConnection()->read($sessionId);
         } catch (ConcurrentConnectionsExceededException $e) {
-            require $this->filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/503.php');
+            throw new LocalizedException(__("Redis session exceeded concurrent connections"), $e);
         }
+
+        return $result;
     }
 
     /**
@@ -106,6 +97,7 @@ class Redis implements \SessionHandlerInterface
      * @return boolean
      * @throws SessionException
      */
+    #[\ReturnTypeWillChange]
     public function write($sessionId, $sessionData)
     {
         return $this->getConnection()->write($sessionId, $sessionData);
@@ -118,6 +110,7 @@ class Redis implements \SessionHandlerInterface
      * @return boolean
      * @throws SessionException
      */
+    #[\ReturnTypeWillChange]
     public function destroy($sessionId)
     {
         return $this->getConnection()->destroy($sessionId);
@@ -129,6 +122,7 @@ class Redis implements \SessionHandlerInterface
      * @return bool
      * @throws SessionException
      */
+    #[\ReturnTypeWillChange]
     public function close()
     {
         return $this->getConnection()->close();
@@ -142,6 +136,7 @@ class Redis implements \SessionHandlerInterface
      * @throws SessionException
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
+    #[\ReturnTypeWillChange]
     public function gc($maxLifeTime)
     {
         return $this->getConnection()->gc($maxLifeTime);

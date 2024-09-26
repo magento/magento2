@@ -9,6 +9,8 @@ use Magento\Framework\Data\Collection;
 
 /**
  * AddFilterToCollection interface
+ *
+ * @api
  */
 interface AddFilterToCollectionInterface
 {

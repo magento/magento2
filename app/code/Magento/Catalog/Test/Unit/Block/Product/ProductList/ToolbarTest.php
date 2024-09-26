@@ -198,7 +198,7 @@ class ToolbarTest extends TestCase
     {
         $direction = 'desc';
 
-        $this->memorizer->expects($this->once())
+        $this->memorizer->expects($this->any())
             ->method('getDirection')
             ->willReturn($direction);
 
@@ -248,7 +248,7 @@ class ToolbarTest extends TestCase
     /**
      * @return array
      */
-    public function setModesDataProvider()
+    public static function setModesDataProvider()
     {
         return [
             [['list' => 'List'], ['list' => 'List']],

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontShowConfirmPopupBeforeSwitchingPageIfItemQuantityChangedTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Check if the confirm popup is visible when quantity of items changed and try to change the page on cart."/>
+            <title value="Check if the confirm popup is visible when quantity of items changed and try to change the page on cart."/>
+            <description value="Check if the confirm popup is visible when quantity of items changed and try to change the page on cart."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-479"/>
+            <group value="shoppingCart"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!--Set the default number of items on cart which is 20-->
+            <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 5" />
+
+            <createData entity="SimpleTwo" stepKey="simpleProduct1"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem1">
+                <argument name="product" value="$$simpleProduct1$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct2"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem2">
+                <argument name="product" value="$simpleProduct2$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct3"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem3">
+                <argument name="product" value="$simpleProduct3$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct4"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem4">
+                <argument name="product" value="$simpleProduct4$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct5"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem5">
+                <argument name="product" value="$simpleProduct5$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct6"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem6">
+                <argument name="product" value="$simpleProduct6$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteCartItem1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteCartItem2"/>
+            <deleteData createDataKey="simpleProduct3" stepKey="deleteCartItem3"/>
+            <deleteData createDataKey="simpleProduct4" stepKey="deleteCartItem4"/>
+            <deleteData createDataKey="simpleProduct5" stepKey="deleteCartItem5"/>
+            <deleteData createDataKey="simpleProduct6" stepKey="deleteCartItem6"/>
+        </after>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage" />
+        <actionGroup ref="AssertToolbarTextIsVisibleInCartActionGroup" stepKey="VerifyPagerText">
+            <argument name="text" value="Items 1 to 5 of 6 total"/>
+        </actionGroup>
+        <fillField selector="{{CheckoutCartProductSection.ProductQuantityByName($$simpleProduct1.name$$)}}" userInput="10" stepKey="changeCartQty"/>
+        <actionGroup ref="StorefrontChangeNextPageShoppingCartActionGroup" stepKey="changeNextPage" />
+    </test>
+</tests>

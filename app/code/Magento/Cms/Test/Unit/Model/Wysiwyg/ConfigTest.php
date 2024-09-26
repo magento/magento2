@@ -151,7 +151,7 @@ class ConfigTest extends TestCase
                     'galleryConfigProvider' => ['default' => WysiwygDefaultConfig::class],
                 ]
             )
-            ->setMethods(['processVariableConfig', 'processWidgetConfig'])
+            ->onlyMethods(['processVariableConfig', 'processWidgetConfig'])
             ->getMock();
 
         $this->wysiwygConfig = $objectManager->getObject(
@@ -183,10 +183,8 @@ class ConfigTest extends TestCase
     {
         $this->backendUrlMock->expects($this->atLeastOnce())
             ->method('getUrl')
-            ->withConsecutive(
-                ['cms/wysiwyg/directive'],
-                ['cms/wysiwyg_images/index']
-            );
+            ->with('cms/wysiwyg/directive')
+            ->willReturn('some_link');
         $this->backendUrlMock->expects($this->once())
             ->method('getBaseUrl')
             ->willReturn('localhost/index.php/');
@@ -224,7 +222,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigDataProvider()
+    public static function getConfigDataProvider()
     {
         return [
             'add_variables IS FALSE, add_widgets IS FALSE, isAuthorizationAllowed IS FALSE' => [
@@ -296,7 +294,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function isEnabledDataProvider()
+    public static function isEnabledDataProvider()
     {
         return [
             ['wysiwygState' => 'enabled', 'expectedResult' => true],
@@ -325,7 +323,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function isHiddenDataProvider()
+    public static function isHiddenDataProvider()
     {
         return [
             ['status' => 'hidden', 'expectedResult' => true],

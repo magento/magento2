@@ -60,7 +60,10 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
     public function testUpdateBundleProductWithOptions(): void
     {
         // Add the fixture bundle product to the fixture customer's wishlist
-        $wishlist = $this->addProductToWishlist();
+        $wishlist = $this->addBundleProductToWishlist(
+            'bundle-product-dropdown-options',
+            'simple-1'
+        );
         $wishlistId = (int) $wishlist['addProductsToWishlist']['wishlist']['id'];
         $wishlistItemId = (int) $wishlist['addProductsToWishlist']['wishlist']['items_v2']['items'][0]['id'];
         $previousItemsCount = $wishlist['addProductsToWishlist']['wishlist']['items_count'];
@@ -68,8 +71,10 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
         // Set the new values to update the wishlist item with
         $newQuantity = 5;
         $newDescription = 'This is a test.';
-        $bundleProductOptions = $this->getBundleProductOptions('bundle-product-dropdown-options');
-        $newBundleOptionUid = $bundleProductOptions[1]["uid"];
+        $newBundleOptionUid = $this->getBundleProductOptionUid(
+            'bundle-product-dropdown-options',
+            'simple2'
+        );
 
         // Update the newly added wishlist item as the fixture customer
         $query = $this->getUpdateQuery(
@@ -179,19 +184,19 @@ MUTATION;
     }
 
     /**
-     * Add a product to the to the wishlist.
+     * Add the specified bundle product with the specified selected option to the wishlist.
      *
+     * @param $bundleProductSku
+     * @param $selectedOptionSku
      * @return array
      * @throws AuthenticationException
      */
-    private function addProductToWishlist(): array
+    private function addBundleProductToWishlist($bundleProductSku, $selectedOptionSku): array
     {
-        $bundleProductSku = 'bundle-product-dropdown-options';
-        $bundleProductOptions = $this->getBundleProductOptions($bundleProductSku);
-        $initialBundleOptionUid = $bundleProductOptions[0]["uid"];
+        $bundleOptionUid = $this->getBundleProductOptionUid($bundleProductSku, $selectedOptionSku);
         $initialQuantity = 2;
 
-        $query = $this->getAddQuery($bundleProductSku, $initialQuantity, $initialBundleOptionUid);
+        $query = $this->getAddQuery($bundleProductSku, $initialQuantity, $bundleOptionUid);
         return $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
@@ -260,20 +265,31 @@ MUTATION;
     }
 
     /**
-     * Get the available options for the specified bundle product.
+     * Get the uid for the specified bundle product option.
      *
      * @param string $bundleProductSku
-     * @return array
+     * @param string $selectedOptionSku
+     * @return string|null
      */
-    private function getBundleProductOptions(string $bundleProductSku)
+    private function getBundleProductOptionUid(string $bundleProductSku, string $selectedOptionSku)
     {
         $query = $this->getBundleProductSearchQuery($bundleProductSku);
         $response = $this->graphQlQuery($query);
 
         $bundleProduct = $response["products"]["items"][0];
         $bundleProductOptions = $bundleProduct["items"][0]["options"];
+        $bundleProductOptionUid = null;
 
-        return $bundleProductOptions;
+        // Search the specified bundle product for the specified option based on the product sku
+        foreach ($bundleProductOptions as $bundleProductOption) {
+            if (isset($bundleProductOption['product'])
+                && $bundleProductOption['product']['sku'] === $selectedOptionSku) {
+                $bundleProductOptionUid = $bundleProductOption['uid'];
+                break;
+            }
+        }
+
+        return $bundleProductOptionUid;
     }
 
     /**
@@ -299,6 +315,9 @@ query {
           options {
             id
             uid
+            product {
+              sku
+            }
           }
         }
       }

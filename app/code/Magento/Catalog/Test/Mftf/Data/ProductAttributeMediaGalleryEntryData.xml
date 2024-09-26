@@ -42,6 +42,23 @@
         <data key="disabled">false</data>
         <requiredEntity type="ImageContent">MagentoLogoImageContent</requiredEntity>
     </entity>
+    <entity name="ApiProductAttributeMediaGalleryEntryBluePng" type="ProductAttributeMediaGalleryEntry">
+        <data key="media_type">image</data>
+        <data key="label" unique="suffix">Blue PNG </data>
+        <data key="position">1</data>
+        <array key="types">
+            <item>image</item>
+            <item>small_image</item>
+            <item>thumbnail</item>
+            <item>swatch</item>
+        </array>
+        <data key="disabled">false</data>
+        <requiredEntity type="ImageContent">BluePngImageContent</requiredEntity>
+    </entity>
+    <entity name="ApiProductAttributeMediaGalleryEntryRedPng" extends="ApiProductAttributeMediaGalleryEntryBluePng" type="ProductAttributeMediaGalleryEntry">
+        <data key="label" unique="suffix">Red PNG </data>
+        <requiredEntity type="ImageContent">RedPngImageContent</requiredEntity>
+    </entity>
     <!-- From file "export_import_configurable_product.csv" -->
     <entity name="ApiProductAttributeMediaGalleryForExportImport" extends="ApiProductAttributeMediaGalleryEntryTestImage" type="ProductAttributeMediaGalleryEntry">
         <data key="label">Magento Logo</data>

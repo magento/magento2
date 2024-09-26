@@ -75,13 +75,13 @@ class AddToPackageTest extends TestCase
      *
      * @magentoDataFixture Magento/Shipping/_files/shipping_with_carrier_data_different_currency_code.php
      */
-    public function testGetCurrencyCodeCustomValue ()
+    public function testGetCurrencyCodeCustomValue()
     {
         $template = '/<span class="customs-value-currency">\s*?(?<currency>[A-Za-z]+)\s*?<\/span>/';
         $matches = [];
         preg_match($template, $this->getHtml(), $matches);
         $currency = $matches['currency'] ?? null;
-        $this->assertEquals('FR',$currency );
+        $this->assertEquals('FR', $currency);
     }
 
     /**
@@ -102,6 +102,7 @@ class AddToPackageTest extends TestCase
         $this->registry->register('current_shipment', $shipment);
 
         $block->setTemplate('Magento_Shipping::order/packaging/popup.phtml');
+        $block->setNameInLayout('test');
 
         return $block->toHtml();
     }

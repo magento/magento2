@@ -13,11 +13,12 @@ use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Customer\Model\GroupManagement;
 use Magento\Catalog\Api\Data\ProductTierPriceInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PriceProviderPool;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Get product tier price information
  */
-class Tiers
+class Tiers implements ResetAfterRequestInterface
 {
     /**
      * @var CollectionFactory
@@ -172,5 +173,14 @@ class Tiers
         foreach (array_unique($missingProducts) as $missingProductId) {
             $this->products[$missingProductId] = null;
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->products = [];
+        $this->filterProductIds = [];
     }
 }

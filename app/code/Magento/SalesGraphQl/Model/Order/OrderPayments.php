@@ -23,6 +23,9 @@ class OrderPayments
     public function getOrderPaymentMethod(OrderInterface $orderModel): array
     {
         $orderPayment = $orderModel->getPayment();
+        if (!$orderPayment) {
+            return [];
+        }
         return [
             [
                 'name' => $orderPayment->getAdditionalInformation()['method_title'] ?? '',
