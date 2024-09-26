@@ -87,7 +87,7 @@ class PageLayoutTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionsDataProvider()
+    public static function getOptionsDataProvider()
     {
         return [
             [

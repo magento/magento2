@@ -55,14 +55,18 @@ class CartMutexTest extends TestCase
     /**
      * Tests cart mutex execution with different callables.
      *
-     * @param callable $callable
+     * @param callable|string $callable
      * @param array $args
      * @param mixed $expectedResult
      * @return void
      * @dataProvider callableDataProvider
      */
-    public function testSuccessfulExecution(callable $callable, array $args, $expectedResult): void
+    public function testSuccessfulExecution(callable|string $callable, array $args, $expectedResult): void
     {
+        if ($callable === 'privateMethod') {
+            $callable = \Closure::fromCallable([$this, 'privateMethod']);
+        }
+
         $cartId = 1;
         $this->lockManager->expects($this->once())
             ->method('lock')
@@ -80,7 +84,7 @@ class CartMutexTest extends TestCase
     /**
      * @return array[]
      */
-    public function callableDataProvider(): array
+    public static function callableDataProvider(): array
     {
         $functionWithArgs = function (int $a, int $b) {
             return $a + $b;
@@ -94,7 +98,7 @@ class CartMutexTest extends TestCase
             ['callable' => $functionWithoutArgs, 'args' => [], 'expectedResult' => 'Function without args'],
             ['callable' => $functionWithArgs, 'args' => [1,2], 'expectedResult' => 3],
             [
-                'callable' => \Closure::fromCallable([$this, 'privateMethod']),
+                'callable' => 'privateMethod',
                 'args' => ['test'],
                 'expectedResult' => 'test'
             ],

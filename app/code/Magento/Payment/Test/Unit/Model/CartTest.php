@@ -153,13 +153,13 @@ class CartTest extends TestCase
      *
      * @return array
      */
-    public function cartDataProvider()
+    public static function cartDataProvider()
     {
         return [
             // 1. All transfer flags set to true
             [
                 ['transfer_shipping' => true, 'transfer_discount' => true],
-                $this->_getSalesModelItems(),
+                self::_getSalesModelItems(),
                 [
                     'BaseDiscountAmount' => 15.0,
                     'BaseShippingAmount' => 20.0,
@@ -176,7 +176,7 @@ class CartTest extends TestCase
             // 2. All transfer flags set to false
             [
                 ['transfer_shipping' => false, 'transfer_discount' => false],
-                $this->_getSalesModelItems(),
+                self::_getSalesModelItems(),
                 [
                     'BaseDiscountAmount' => 15.0,
                     'BaseShippingAmount' => 20.0,
@@ -282,7 +282,7 @@ class CartTest extends TestCase
      *
      * @return array
      */
-    protected function _getSalesModelItems()
+    protected static function _getSalesModelItems()
     {
         $product = new DataObject(['id' => '1']);
         return [

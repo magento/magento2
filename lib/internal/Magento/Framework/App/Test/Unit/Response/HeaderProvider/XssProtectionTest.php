@@ -35,20 +35,20 @@ class XssProtectionTest extends TestCase
     /**
      * @return array
      */
-    public function userAgentDataProvider()
+    public static function userAgentDataProvider()
     {
         return [
             [
-                'user-agent' => 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4)',
-                'expected-header' => XssProtection::HEADER_DISABLED
+                'userAgent' => 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB7.4)',
+                'expectedHeader' => XssProtection::HEADER_DISABLED
             ],
             [
-                'user-agent' => 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/4.0; GTB7.4)',
-                'expected-header' => XssProtection::HEADER_ENABLED
+                'userAgent' => 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/4.0; GTB7.4)',
+                'expectedHeader' => XssProtection::HEADER_ENABLED
             ],
             [
-                'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) Chrome/41.0.2227.1 Safari/537.36',
-                'expected-header' => XssProtection::HEADER_ENABLED
+                'userAgent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) Chrome/41.0.2227.1 Safari/537.36',
+                'expectedHeader' => XssProtection::HEADER_ENABLED
             ],
         ];
     }
