@@ -407,14 +407,14 @@ class AddressTest extends TestCase
     {
         return [
             'valid' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
-                '$errors' => [],
-                '$isValid' => true,
+                'rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
+                'errors' => [],
+                'isValid' => true,
             ],
             'empty address id' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_update_empty_address_id.php',
-                '$errors' => [],
-                '$isValid' => true,
+                'rowData' => include __DIR__ . '/_files/row_data_address_update_empty_address_id.php',
+                'errors' => [],
+                'isValid' => true,
             ],
         ];
     }
@@ -428,9 +428,9 @@ class AddressTest extends TestCase
     {
         return [
             'valid' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
-                '$errors' => [],
-                '$isValid' => true,
+                'rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
+                'errors' => [],
+                'isValid' => true,
             ],
         ];
     }

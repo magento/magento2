@@ -210,7 +210,7 @@ class DeploymentConfigTest extends TestCase
     /**
      * @return array
      */
-    public function keyCollisionDataProvider(): array
+    public static function keyCollisionDataProvider(): array
     {
         return [
             [

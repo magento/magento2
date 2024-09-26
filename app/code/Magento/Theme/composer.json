@@ -21,7 +21,8 @@
     "suggest": {
         "magento/module-theme-sample-data": "*",
         "magento/module-deploy": "*",
-        "magento/module-directory": "*"
+        "magento/module-directory": "*",
+        "magento/module-csp": "*"
     },
     "type": "magento2-module",
     "license": [

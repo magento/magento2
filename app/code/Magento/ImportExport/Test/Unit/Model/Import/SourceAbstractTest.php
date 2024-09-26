@@ -39,7 +39,7 @@ class SourceAbstractTest extends TestCase
     /**
      * @return array
      */
-    public function constructExceptionDataProvider()
+    public static function constructExceptionDataProvider()
     {
         return ['empty column names' => [[]], 'duplicate column names' => [['1', '2', '1']]];
     }

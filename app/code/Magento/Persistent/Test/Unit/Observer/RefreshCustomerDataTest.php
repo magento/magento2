@@ -93,7 +93,7 @@ class RefreshCustomerDataTest extends TestCase
     /**
      * @return array
      */
-    public function beforeStartDataProvider()
+    public static function beforeStartDataProvider()
     {
         return [
             [true, 'once'],

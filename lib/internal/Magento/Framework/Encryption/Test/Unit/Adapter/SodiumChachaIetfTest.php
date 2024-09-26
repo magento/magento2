@@ -19,7 +19,7 @@ class SodiumChachaIetfTest extends TestCase
     /**
      * @return array
      */
-    public function getCryptData(): array
+    public static function getCryptData(): array
     {
         $result = include __DIR__ . '/../Crypt/_files/_sodium_chachaieft_fixtures.php';
         /* Restore encoded string back to binary */
