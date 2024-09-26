@@ -98,7 +98,7 @@ class FindByUrlRewriteTest extends TestCase
      *
      * @return array
      */
-    public function visibilityWithExpectedResultDataProvider(): array
+    public static function visibilityWithExpectedResultDataProvider(): array
     {
         return [
             'visibility_for_both_product_only_catalog' => [

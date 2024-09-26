@@ -253,7 +253,7 @@ class AbstractItemsTest extends TestCase
     /**
      * @return array
      */
-    public function canReturnItemToStockDataProvider(): array
+    public static function canReturnItemToStockDataProvider(): array
     {
         return [
             [true, ['has_can_return_to_stock' => true], true],
