@@ -182,7 +182,7 @@ class UpdateCustomizedOptionsTest extends TestCase
     /**
      * @return array
      */
-    public function updateCustomizedOptionsDataProvider()
+    public static function updateCustomizedOptionsDataProvider()
     {
         return [
             'test customized options for simple product' => [

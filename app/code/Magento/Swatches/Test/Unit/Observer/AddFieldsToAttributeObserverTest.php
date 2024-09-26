@@ -89,7 +89,7 @@ class AddFieldsToAttributeObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataAddFields()
+    public static function dataAddFields()
     {
         return [
             [

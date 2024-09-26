@@ -116,7 +116,7 @@ QUERY;
     {
         return [
             'products' => [
-                'items' => [
+                'bundleProductDataProvider' => [
                     [
                         'sku' => 'bundle-product',
                         'type_id' => 'bundle',

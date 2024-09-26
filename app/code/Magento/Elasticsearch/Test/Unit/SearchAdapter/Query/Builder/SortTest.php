@@ -128,7 +128,7 @@ class SortTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function getSortProvider()
+    public static function getSortProvider()
     {
         return [
             [

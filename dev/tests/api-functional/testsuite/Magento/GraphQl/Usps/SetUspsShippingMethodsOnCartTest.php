@@ -117,7 +117,7 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function dataProviderShippingMethods(): array
+    public static function dataProviderShippingMethods(): array
     {
         return [
             'Library Mail Parcel' =>
@@ -190,7 +190,7 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function dataProviderShippingMethodsBasedOnCanadaAddress(): array
+    public static function dataProviderShippingMethodsBasedOnCanadaAddress(): array
     {
         return [
             'First-Class Package International Service' =>
@@ -249,9 +249,9 @@ mutation {
           method_title
         }
       }
-    } 
+    }
   }
-}        
+}
 QUERY;
     }
 

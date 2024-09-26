@@ -351,7 +351,7 @@ class ProcessorTest extends TestCase
                         'dependencies' => []
                     ],
                 ],
-                'indexer_states' => [
+                'indexerStates' => [
                     'indexer_1' => [
                         StateInterface::STATUS_INVALID,
                         StateInterface::STATUS_INVALID,
@@ -360,12 +360,12 @@ class ProcessorTest extends TestCase
                     'indexer_2' => [StateInterface::STATUS_VALID],
                     'indexer_3' => [StateInterface::STATUS_VALID]
                 ],
-                'expected_reindex_all_calls' => [
+                'expectedReindexAllCalls' => [
                     'indexer_1' => self::once(),
                     'indexer_2' => self::never(),
                     'indexer_3' => self::never()
                 ],
-                'executed_shared_indexers' => []
+                'executedSharedIndexers' => []
             ],
             'With dependencies and some indexers is invalid' => [
                 'indexers' => [
@@ -394,7 +394,7 @@ class ProcessorTest extends TestCase
                         'dependencies' => ['indexer_1']
                     ]
                 ],
-                'indexer_states' => [
+                'indexerStates' => [
                     'indexer_1' => [
                         StateInterface::STATUS_INVALID,
                         StateInterface::STATUS_INVALID,
@@ -408,13 +408,13 @@ class ProcessorTest extends TestCase
                     ],
                     'indexer_4' => [StateInterface::STATUS_VALID]
                 ],
-                'expected_reindex_all_calls' => [
+                'expectedReindexAllCalls' => [
                     'indexer_1' => self::once(),
                     'indexer_2' => self::never(),
                     'indexer_3' => self::once(),
                     'indexer_4' => self::never()
                 ],
-                'executed_shared_indexers' => [['indexer_2'], ['indexer_3']]
+                'executedSharedIndexers' => [['indexer_2'], ['indexer_3']]
             ]
         ];
     }
@@ -446,7 +446,7 @@ class ProcessorTest extends TestCase
                         'dependencies' => []
                     ]
                 ],
-                'indexer_states' => [
+                'indexerStates' => [
                     'indexer_1' => [
                         StateInterface::STATUS_INVALID,
                         StateInterface::STATUS_INVALID,
@@ -463,7 +463,7 @@ class ProcessorTest extends TestCase
                         StateInterface::STATUS_VALID
                     ]
                 ],
-                'expected_reindex_all_calls' => [
+                'expectedReindexAllCalls' => [
                     'indexer_1' => self::once(),
                     'indexer_2' => self::never(),
                     'indexer_3' => self::never()
