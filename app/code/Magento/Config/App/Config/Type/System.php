@@ -22,6 +22,8 @@ use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
@@ -238,20 +240,24 @@ class System implements ConfigTypeInterface
 
         $configPath = implode('/', $pathParts);
 
-        if ($scopeType === StoreScope::SCOPE_STORES) {
-            $websiteCode = $this->getWebsiteCodeFromStore($scopeType, $this->getScopeCode($scopeType, $scopeId));
-            if ($websiteCode) {
-                if ($this->isLocked($configPath, StoreScope::SCOPE_WEBSITES, $websiteCode)) {
-                    array_unshift($pathParts, StoreScope::SCOPE_WEBSITES, $websiteCode);
-                    $path = implode('/', $pathParts);
-                } elseif ($this->isLocked($configPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null)) {
-                    array_unshift($pathParts, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
-                    $path = implode('/', $pathParts);
+        try {
+            if ($scopeType === StoreScope::SCOPE_STORES) {
+                $websiteCode = $this->getWebsiteCodeFromStore($scopeType, $this->getScopeCode($scopeType, $scopeId));
+                if ($websiteCode) {
+                    if ($this->isLocked($configPath, StoreScope::SCOPE_WEBSITES, $websiteCode)) {
+                        array_unshift($pathParts, StoreScope::SCOPE_WEBSITES, $websiteCode);
+                        $path = implode('/', $pathParts);
+                    } elseif ($this->isLocked($configPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null)) {
+                        array_unshift($pathParts, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+                        $path = implode('/', $pathParts);
+                    }
                 }
+            } elseif ($this->isLocked($configPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null)) {
+                array_unshift($pathParts, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+                $path = implode('/', $pathParts);
             }
-        } elseif ($this->isLocked($configPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null)) {
-            array_unshift($pathParts, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
-            $path = implode('/', $pathParts);
+        } catch (FileSystemException|RuntimeException $e) {
+            $this->logger->error($e->getMessage());
         }
 
         return $this->getWithParts($path);
@@ -516,6 +522,8 @@ class System implements ConfigTypeInterface
      * @param string $scope The scope of configuration
      * @param string|null $scopeCode The scope code of configuration
      * @return bool
+     * @throws FileSystemException
+     * @throws RuntimeException
      */
     private function isLocked(string $path, string $scope, ?string $scopeCode): bool
     {
@@ -541,7 +549,7 @@ class System implements ConfigTypeInterface
                     $websiteCode = $resolverScope->getWebsite()->getCode();
                 }
             } catch (\Exception $e) {
-                $websiteCode = false;
+                $this->logger->error($e->getMessage());
             }
             $this->websiteCode[$scopeCode] = $websiteCode;
         }
