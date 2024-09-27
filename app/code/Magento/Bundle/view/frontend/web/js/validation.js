@@ -49,7 +49,7 @@ define([
             }
 
         }
-    }
+    };
 
     return function (mageValidation) {
         $.widget('mage.validation', mageValidation, enhancedMageValidation);
