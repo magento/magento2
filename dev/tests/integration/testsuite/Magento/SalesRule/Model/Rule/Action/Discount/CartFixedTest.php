@@ -240,7 +240,7 @@ class CartFixedTest extends TestCase
     /**
      * @return array
      */
-    public function applyFixedDiscountDataProvider(): array
+    public static function applyFixedDiscountDataProvider(): array
     {
         return [
             'prices when discount had wrong value 15.01' => [[22, 14, 43, 7.50, 0.00]],
@@ -414,7 +414,7 @@ class CartFixedTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function multishippingDataProvider(): array
+    public static function multishippingDataProvider(): array
     {
         return [
             'Discount $5 proportionally spread between products' => [
@@ -517,7 +517,7 @@ class CartFixedTest extends TestCase
         $this->assertEqualsWithDelta($expectedDiscounts[$item->getSku()], $item->getDiscountAmount(), self::EPSILON);
     }
 
-    public function discountByPercentDataProvider()
+    public static function discountByPercentDataProvider()
     {
         return [
             [

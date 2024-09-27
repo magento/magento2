@@ -98,7 +98,7 @@ class FiltersTest extends TestCase
     /**
      * @return array
      */
-    public function updateDataProvider(): array
+    public static function updateDataProvider(): array
     {
         return [
             ['text', 'filterInput'],
