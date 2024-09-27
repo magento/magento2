@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,6 @@ namespace Magento\Quote\Model;
 
 use Exception;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -17,38 +16,36 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
- * Class for creating empty cart for customer without country validation
+ * Class to create an empty cart and quote for a specified customer.
  */
-class CreateEmptyCartForCustomerWithoutCountryValidation
+readonly class CreateEmptyCartForCustomer
 {
     /**
      * @param StoreManagerInterface $storeManager
      * @param CartRepositoryInterface $quoteRepository
      * @param CustomerRepositoryInterface $customerRepository
      * @param QuoteFactory $quoteFactory
-     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        private readonly StoreManagerInterface $storeManager,
-        private readonly CartRepositoryInterface $quoteRepository,
-        private readonly CustomerRepositoryInterface $customerRepository,
-        private readonly QuoteFactory $quoteFactory,
-        private readonly ScopeConfigInterface $scopeConfig
+        private StoreManagerInterface $storeManager,
+        private CartRepositoryInterface $quoteRepository,
+        private CustomerRepositoryInterface $customerRepository,
+        private QuoteFactory $quoteFactory,
     ) {
     }
 
     /**
-     * Create empty cart for customer without country validation
+     * Creates an empty cart and quote for a specified customer if customer does not have a cart yet.
      *
      * @param int $customerId
-     * @return bool|int
+     * @return int
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    public function createEmptyCartForCustomerWithoutCountryValidation(int $customerId): bool|int
+    public function execute(int $customerId): int
     {
         $storeId = (int) $this->storeManager->getStore()->getStoreId();
-        $quote = $this->createCustomerCart($customerId, $storeId);
+        $quote = $this->getCustomerActiveQuote($customerId, $storeId);
 
         try {
             $this->quoteRepository->save($quote);
@@ -59,7 +56,7 @@ class CreateEmptyCartForCustomerWithoutCountryValidation
     }
 
     /**
-     * Creates a cart for the currently logged-in customer.
+     * Get an active quote for the currently logged-in customer.
      *
      * @param int $customerId
      * @param int $storeId
@@ -67,7 +64,7 @@ class CreateEmptyCartForCustomerWithoutCountryValidation
      * @throws NoSuchEntityException
      * @throws LocalizedException
      */
-    private function createCustomerCart(int $customerId, int $storeId): Quote
+    private function getCustomerActiveQuote(int $customerId, int $storeId): Quote
     {
         try {
             $activeQuote = $this->quoteRepository->getActiveForCustomer($customerId);

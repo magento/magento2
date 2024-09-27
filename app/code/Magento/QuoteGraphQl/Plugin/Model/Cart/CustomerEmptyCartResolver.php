@@ -1,83 +1,71 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
-namespace Magento\Quote\Model\Cart;
+
+namespace Magento\QuoteGraphQl\Plugin\Model\Cart;
 
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Model\Cart\CustomerCartResolver;
 use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\QuoteIdMaskFactory;
+use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Model\CreateEmptyCartForCustomer;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResourceModel;
+use Closure;
 
 /**
  * Get customer cart or create empty cart. Ensure mask_id is created
  */
-class CustomerCartResolver
+readonly class CustomerEmptyCartResolver
 {
     /**
-     * @var CartManagementInterface
-     */
-    private $cartManagement;
-
-    /**
-     * @var QuoteIdMaskFactory
-     */
-    private $quoteIdMaskFactory;
-
-    /**
-     * @var QuoteIdMaskResourceModel
-     */
-    private $quoteIdMaskResourceModel;
-
-    /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedQuoteId;
-
-    /**
      * @param CartManagementInterface $cartManagement
+     * @param CreateEmptyCartForCustomer $createEmptyCartForCustomer
+     * @param QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @param QuoteIdMaskResourceModel $quoteIdMaskResourceModel
-     * @param QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
      */
     public function __construct(
-        CartManagementInterface $cartManagement,
-        QuoteIdMaskFactory $quoteIdMaskFactory,
-        QuoteIdMaskResourceModel $quoteIdMaskResourceModel,
-        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
-    ) {
-        $this->cartManagement = $cartManagement;
-        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
-        $this->quoteIdMaskResourceModel = $quoteIdMaskResourceModel;
-        $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
+        private CartManagementInterface $cartManagement,
+        private CreateEmptyCartForCustomer $createEmptyCartForCustomer,
+        private QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId,
+        private QuoteIdMaskFactory $quoteIdMaskFactory,
+        private QuoteIdMaskResourceModel $quoteIdMaskResourceModel
+    ){
     }
 
     /**
      * Get customer cart by customer id with predefined masked quote id
      *
+     * @param CustomerCartResolver $subject
+     * @param Closure $proceed
      * @param int $customerId
-     * @param string|null $predefinedMaskedQuoteId
      * @return Quote
      * @throws NoSuchEntityException
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function resolve(int $customerId, string $predefinedMaskedQuoteId = null): Quote
-    {
+    public function aroundResolve(
+        CustomerCartResolver $subject,
+        Closure $proceed,
+        int $customerId
+    ): Quote {
         try {
             /** @var Quote $cart */
             $cart = $this->cartManagement->getCartForCustomer($customerId);
         } catch (NoSuchEntityException $e) {
-            $this->cartManagement->createEmptyCartForCustomer($customerId);
+            $this->createEmptyCartForCustomer->execute($customerId);
             $cart = $this->cartManagement->getCartForCustomer($customerId);
         }
         try {
-            $this->ensureQuoteMaskIdExist((int)$cart->getId(), $predefinedMaskedQuoteId);
+            $this->ensureQuoteMaskIdExist((int)$cart->getId());
             // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (AlreadyExistsException $e) {
             // do nothing, we already have masked id
@@ -90,11 +78,10 @@ class CustomerCartResolver
      * Create masked id for customer's active quote if it's not exists
      *
      * @param int $quoteId
-     * @param string|null $predefinedMaskedQuoteId
      * @return void
      * @throws AlreadyExistsException
      */
-    private function ensureQuoteMaskIdExist(int $quoteId, string $predefinedMaskedQuoteId = null): void
+    private function ensureQuoteMaskIdExist(int $quoteId): void
     {
         try {
             $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
@@ -104,9 +91,6 @@ class CustomerCartResolver
         if ($maskedId === '') {
             $quoteIdMask = $this->quoteIdMaskFactory->create();
             $quoteIdMask->setQuoteId($quoteId);
-            if (null !== $predefinedMaskedQuoteId) {
-                $quoteIdMask->setMaskedId($predefinedMaskedQuoteId);
-            }
             $this->quoteIdMaskResourceModel->save($quoteIdMask);
         }
     }
