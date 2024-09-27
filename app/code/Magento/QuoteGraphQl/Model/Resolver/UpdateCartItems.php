@@ -79,8 +79,11 @@ class UpdateCartItems implements ResolverInterface
                 $this->cartRepository->get((int)$cart->getId())
             );
         } catch (NoSuchEntityException | LocalizedException $e) {
+            $message = (str_contains($e->getMessage(), 'The requested qty is not available'))
+                ? 'The requested qty. is not available'
+                : $e->getMessage();
             $errors[] = [
-                'message' => __($e->getMessage()),
+                'message' => __($message),
                 'code' => $this->getErrorCode($e->getMessage())
             ];
         }

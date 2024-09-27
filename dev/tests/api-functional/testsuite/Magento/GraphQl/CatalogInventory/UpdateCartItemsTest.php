@@ -80,7 +80,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
 
         $responseError = $response['updateCartItems']['errors'][0];
         $this->assertEquals(
-            "Could not update the product with SKU simple_product: The requested qty is not available",
+            "The requested qty. is not available",
             $responseError['message']
         );
         $this->assertEquals('INSUFFICIENT_STOCK', $responseError['code']);

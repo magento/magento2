@@ -30,11 +30,11 @@ class NotAvailableMessage implements OptionSourceInterface
         $options = [];
         $options[] = [
             'value' => self::VALUE_ONLY_X_OF_Y,
-            'label' => __('Only X available for sale. Please adjust the quantity to continue'),
+            'label' => __('Only X of Y available'),
         ];
         $options[] = [
             'value' => self::VALUE_NOT_ENOUGH_ITEMS,
-            'label' => __('Not enough items for sale. Please adjust the quantity to continue'),
+            'label' => __('Not enough items for sale'),
         ];
         return $options;
     }
@@ -47,8 +47,8 @@ class NotAvailableMessage implements OptionSourceInterface
     public function toArray(): array
     {
         return [
-            self::VALUE_ONLY_X_OF_Y => __('Only X available for sale. Please adjust the quantity to continue'),
-            self::VALUE_NOT_ENOUGH_ITEMS => __('Not enough items for sale. Please adjust the quantity to continue')
+            self::VALUE_ONLY_X_OF_Y => __('Only X of Y available'),
+            self::VALUE_NOT_ENOUGH_ITEMS => __('Not enough items for sale')
         ];
     }
 }
