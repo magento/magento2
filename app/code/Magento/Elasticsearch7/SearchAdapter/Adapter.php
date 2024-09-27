@@ -110,13 +110,7 @@ class Adapter implements AdapterInterface
         $query = $this->mapper->buildQuery($request);
         $aggregationBuilder->setQuery($this->queryContainerFactory->create(['query' => $query]));
 
-        try {
-            $rawResponse = $client->query($query);
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
-            // return empty search result in case an exception is thrown from Elasticsearch
-            $rawResponse = self::$emptyRawResponse;
-        }
+        $rawResponse = $client->query($query);
 
         $rawDocuments = $rawResponse['hits']['hits'] ?? [];
         $queryResponse = $this->responseFactory->create(
