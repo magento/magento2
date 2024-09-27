@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAddSimpleProductCustomOptionFieldActionGroup">
+        <annotations>
+            <description>Adding simple product to cart with custom option field.</description>
+        </annotations>
+        <arguments>
+            <argument name="testValue" type="string" defaultValue="Test value"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.customOptionField}}" stepKey="waitForCustomOptionFieldToBeVisible"/>
+        <fillField selector="{{StorefrontProductInfoMainSection.customOptionField}}" userInput="{{testValue}}" stepKey="fillCustomOptionField"/>
+    </actionGroup>
+</actionGroups>

@@ -36,7 +36,7 @@
                 default="0" comment="Discount Step"/>
         <column xsi:type="smallint" name="apply_to_shipping" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Apply To Shipping"/>
-        <column xsi:type="int" name="times_used" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="times_used" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Times Used"/>
         <column xsi:type="smallint" name="is_rss" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Is Rss"/>

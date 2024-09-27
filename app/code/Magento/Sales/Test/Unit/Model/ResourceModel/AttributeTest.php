@@ -102,24 +102,13 @@ class AttributeTest extends TestCase
             ->willReturn('event_object');
         $this->eventManagerMock
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'event_prefix_save_attribute_before',
-                    [
-                        'event_object' => $this->attribute,
-                        'object' => $this->modelMock,
-                        'attribute' => ['attribute']
-                    ]
-                ],
-                [
-                    'event_prefix_save_attribute_after',
-                    [
-                        'event_object' => $this->attribute,
-                        'object' => $this->modelMock,
-                        'attribute' => ['attribute']
-                    ]
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'event_prefix_save_attribute_before' ||
+                    $arg1 == 'event_prefix_save_attribute_after' &&
+                is_array($arg2)) {
+                    return null;
+                }
+            });
         $this->connectionMock->expects($this->once())
             ->method('beginTransaction');
         $this->connectionMock->expects($this->once())

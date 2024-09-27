@@ -35,7 +35,7 @@ class ParamsOverriderTest extends TestCase
 
         $userContextMock = $this->getMockBuilder(UserContextInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUserId', 'getUserType'])->getMockForAbstractClass();
+            ->onlyMethods(['getUserId', 'getUserType'])->getMockForAbstractClass();
         $userContextMock->expects($this->any())->method('getUserId')->willReturn($userId);
         $userContextMock->expects($this->any())->method('getUserType')->willReturn($userType);
 
@@ -47,7 +47,7 @@ class ParamsOverriderTest extends TestCase
         /** @var MockObject $objectConverter */
         $objectConverter = $this->getMockBuilder(SimpleDataObjectConverter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['convertKeysToCamelCase'])
+            ->onlyMethods(['convertKeysToCamelCase'])
             ->getMock();
         $objectConverter->expects($this->any())
             ->method('convertKeysToCamelCase')
@@ -77,7 +77,7 @@ class ParamsOverriderTest extends TestCase
     /**
      * @return array
      */
-    public function overrideParamsDataProvider()
+    public static function overrideParamsDataProvider()
     {
         return [
             'force false, value present' => [

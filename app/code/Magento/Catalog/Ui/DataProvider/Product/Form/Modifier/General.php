@@ -394,7 +394,7 @@ class General extends AbstractModifier
 
         $urlKeyConfig = [
             'tooltip' => [
-                'link' => 'https://docs.magento.com/user-guide/catalog/catalog-urls.html',
+                'link' => 'https://experienceleague.adobe.com/docs/commerce-admin/catalog/catalog/catalog-urls.html',
                 'description' => __(
                     'The URL key should consist of lowercase characters with hyphens to separate words.'
                 ),

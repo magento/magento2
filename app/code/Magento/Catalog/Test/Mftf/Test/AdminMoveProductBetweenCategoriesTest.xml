@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-11296"/>
             <group value="catalog"/>
+            <group value="indexers_by_schedule_mode_only"/>
         </annotations>
 
         <before>
@@ -30,9 +31,7 @@
             <comment userInput="BIC workaround" stepKey="switchCatalogSearch"/>
 
             <!-- Switch "Category Product", "Product Category" and "Catalog Search" indexers to "Update by Schedule" mode -->
-            <actionGroup ref="CliIndexerSetScheduleModeActionGroup" stepKey="setScheduleIndexerMode">
-                <argument name="indices" value="catalog_category_product catalog_product_category catalogsearch_fulltext"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace 'indexer:set-mode schedule' command for preserving Backward Compatibility" stepKey="setScheduleIndexerMode"/>
         </before>
 
         <after>
@@ -40,9 +39,7 @@
             <comment userInput="BIC workaround" stepKey="switchCategoryProduct"/>
             <comment userInput="BIC workaround" stepKey="switchProductCategory"/>
             <!-- Switch "Category Product", "Product Category" and "Catalog Search" indexers to "Update by Save" mode -->
-            <actionGroup ref="CliIndexerSetRealtimeModeActionGroup" stepKey="setRealtimeIndexerMode">
-                <argument name="indices" value="catalog_category_product catalog_product_category catalogsearch_fulltext"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace 'indexer:set-mode realtime' command for preserving Backward Compatibility" stepKey="setRealtimeIndexerMode"/>
 
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSecondCategory" stepKey="deleteSecondCategory"/>

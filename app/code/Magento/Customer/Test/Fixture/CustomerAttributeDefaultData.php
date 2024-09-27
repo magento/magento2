@@ -16,6 +16,7 @@ class CustomerAttributeDefaultData
         'default_frontend_label' => 'Attribute%uniqid%',
         'frontend_labels' => [],
         'frontend_input' => 'text',
+        'frontend_label' => null,
         'backend_type' => 'varchar',
         'is_required' => false,
         'is_user_defined' => true,

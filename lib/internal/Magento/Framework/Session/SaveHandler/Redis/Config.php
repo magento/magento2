@@ -18,130 +18,135 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     /**
      * Configuration path for log level
      */
-    const PARAM_LOG_LEVEL               = 'session/redis/log_level';
+    public const PARAM_LOG_LEVEL               = 'session/redis/log_level';
 
     /**
      * Configuration path for host
      */
-    const PARAM_HOST                    = 'session/redis/host';
+    public const PARAM_HOST                    = 'session/redis/host';
 
     /**
      * Configuration path for port
      */
-    const PARAM_PORT                    = 'session/redis/port';
+    public const PARAM_PORT                    = 'session/redis/port';
 
     /**
      * Configuration path for database
      */
-    const PARAM_DATABASE                = 'session/redis/database';
+    public const PARAM_DATABASE                = 'session/redis/database';
 
     /**
      * Configuration path for password
      */
-    const PARAM_PASSWORD                = 'session/redis/password';
+    public const PARAM_PASSWORD                = 'session/redis/password';
 
     /**
      * Configuration path for connection timeout
      */
-    const PARAM_TIMEOUT                 = 'session/redis/timeout';
+    public const PARAM_TIMEOUT                 = 'session/redis/timeout';
+
+    /**
+     * Configuration path for number of connection retries
+     */
+    public const PARAM_RETRIES = 'session/redis/retries';
 
     /**
      * Configuration path for persistent identifier
      */
-    const PARAM_PERSISTENT_IDENTIFIER   = 'session/redis/persistent_identifier';
+    public const PARAM_PERSISTENT_IDENTIFIER   = 'session/redis/persistent_identifier';
 
     /**
      * Configuration path for compression threshold
      */
-    const PARAM_COMPRESSION_THRESHOLD   = 'session/redis/compression_threshold';
+    public const PARAM_COMPRESSION_THRESHOLD   = 'session/redis/compression_threshold';
 
     /**
      * Configuration path for compression library
      */
-    const PARAM_COMPRESSION_LIBRARY     = 'session/redis/compression_library';
+    public const PARAM_COMPRESSION_LIBRARY     = 'session/redis/compression_library';
 
     /**
      * Configuration path for maximum number of processes that can wait for a lock on one session
      */
-    const PARAM_MAX_CONCURRENCY         = 'session/redis/max_concurrency';
+    public const PARAM_MAX_CONCURRENCY         = 'session/redis/max_concurrency';
 
     /**
      * Configuration path for minimum session lifetime
      */
-    const PARAM_MAX_LIFETIME            = 'session/redis/max_lifetime';
+    public const PARAM_MAX_LIFETIME            = 'session/redis/max_lifetime';
 
     /**
      * Configuration path for min
      */
-    const PARAM_MIN_LIFETIME            = 'session/redis/min_lifetime';
+    public const PARAM_MIN_LIFETIME            = 'session/redis/min_lifetime';
 
     /**
      * Configuration path for disabling session locking entirely flag
      */
-    const PARAM_DISABLE_LOCKING         = 'session/redis/disable_locking';
+    public const PARAM_DISABLE_LOCKING         = 'session/redis/disable_locking';
 
     /**
      * Configuration path for lifetime of session for bots on subsequent writes
      */
-    const PARAM_BOT_LIFETIME            = 'session/redis/bot_lifetime';
+    public const PARAM_BOT_LIFETIME            = 'session/redis/bot_lifetime';
 
     /**
      * Configuration path for lifetime of session for bots on the first write
      */
-    const PARAM_BOT_FIRST_LIFETIME      = 'session/redis/bot_first_lifetime';
+    public const PARAM_BOT_FIRST_LIFETIME      = 'session/redis/bot_first_lifetime';
 
     /**
      * Configuration path for lifetime of session for non-bots on the first write
      */
-    const PARAM_FIRST_LIFETIME          = 'session/redis/first_lifetime';
+    public const PARAM_FIRST_LIFETIME          = 'session/redis/first_lifetime';
 
     /**
      * Configuration path for number of seconds to wait before trying to break the lock
      */
-    const PARAM_BREAK_AFTER             = 'session/redis/break_after';
+    public const PARAM_BREAK_AFTER             = 'session/redis/break_after';
 
     /**
      * Configuration path for comma separated list of sentinel servers
      */
-    const PARAM_SENTINEL_SERVERS        = 'session/redis/sentinel_servers';
+    public const PARAM_SENTINEL_SERVERS        = 'session/redis/sentinel_servers';
 
     /**
      * Configuration path for sentinel master
      */
-    const PARAM_SENTINEL_MASTER         = 'session/redis/sentinel_master';
+    public const PARAM_SENTINEL_MASTER         = 'session/redis/sentinel_master';
 
     /**
      * Configuration path for verify sentinel master flag
      */
-    const PARAM_SENTINEL_VERIFY_MASTER  = 'session/redis/sentinel_verify_master';
+    public const PARAM_SENTINEL_VERIFY_MASTER  = 'session/redis/sentinel_verify_master';
 
     /**
      * Configuration path for number of sentinel connection retries
      */
-    const PARAM_SENTINEL_CONNECT_RETRIES = 'session/redis/sentinel_connect_retries';
+    public const PARAM_SENTINEL_CONNECT_RETRIES = 'session/redis/sentinel_connect_retries';
 
     /**
      * Cookie lifetime config path
      */
-    const XML_PATH_COOKIE_LIFETIME = 'web/cookie/cookie_lifetime';
+    public const XML_PATH_COOKIE_LIFETIME = 'web/cookie/cookie_lifetime';
 
     /**
      * Admin session lifetime config path
      */
-    const XML_PATH_ADMIN_SESSION_LIFETIME = 'admin/security/session_lifetime';
+    public const XML_PATH_ADMIN_SESSION_LIFETIME = 'admin/security/session_lifetime';
 
     /**
      * Session max lifetime
      */
-    const SESSION_MAX_LIFETIME = 31536000;
+    public const SESSION_MAX_LIFETIME = 31536000;
 
     /**
      * Try to break lock for at most this many seconds
      */
-    const DEFAULT_FAIL_AFTER = 15;
+    public const DEFAULT_FAIL_AFTER = 15;
 
     /**
-     * Deployment config
+     * Deployment configuration
      *
      * @var DeploymentConfig
      */
@@ -218,6 +223,14 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     public function getTimeout()
     {
         return $this->deploymentConfig->get(self::PARAM_TIMEOUT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRetries()
+    {
+        return $this->deploymentConfig->get(self::PARAM_RETRIES);
     }
 
     /**

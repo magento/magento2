@@ -134,12 +134,12 @@ class DataTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getNextBunchDataProvider()
+    public static function getNextBunchDataProvider()
     {
         return [
             'address entity' => [
-                '$entityType' => CustomerComposite::COMPONENT_ENTITY_ADDRESS,
-                '$bunchData' => json_encode(
+                'entityType' => CustomerComposite::COMPONENT_ENTITY_ADDRESS,
+                'bunchData' => json_encode(
                     [
                         [
                             '_scope' => CustomerComposite::SCOPE_DEFAULT,
@@ -155,7 +155,7 @@ class DataTest extends TestCase
                         ],
                     ]
                 ),
-                '$expectedData' => [
+                'expectedData' => [
                     0 => [
                         Address::COLUMN_WEBSITE => 'website1',
                         Address::COLUMN_EMAIL => 'email1',
@@ -168,8 +168,8 @@ class DataTest extends TestCase
                 ],
             ],
             'customer entity default scope' => [
-                '$entityType' => CustomerComposite::COMPONENT_ENTITY_CUSTOMER,
-                '$bunchData' => json_encode(
+                'entityType' => CustomerComposite::COMPONENT_ENTITY_CUSTOMER,
+                'bunchData' => json_encode(
                     [
                         [
                             '_scope' => CustomerComposite::SCOPE_DEFAULT,
@@ -185,7 +185,7 @@ class DataTest extends TestCase
                         ],
                     ]
                 ),
-                '$expectedData' => [
+                'expectedData' => [
                     0 => [
                         Address::COLUMN_WEBSITE => 'website1',
                         Address::COLUMN_EMAIL => 'email1',
@@ -200,8 +200,8 @@ class DataTest extends TestCase
                 ],
             ],
             'customer entity address scope' => [
-                '$entityType' => CustomerComposite::COMPONENT_ENTITY_CUSTOMER,
-                '$bunchData' => json_encode(
+                'entityType' => CustomerComposite::COMPONENT_ENTITY_CUSTOMER,
+                'bunchData' => json_encode(
                     [
                         [
                             '_scope' => CustomerComposite::SCOPE_ADDRESS,
@@ -217,7 +217,7 @@ class DataTest extends TestCase
                         ],
                     ]
                 ),
-                '$expectedData' => [],
+                'expectedData' => [],
             ]
         ];
     }

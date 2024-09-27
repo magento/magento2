@@ -368,11 +368,11 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * Data provider for testAddToCartSimpleProduct
      */
-    public function addAddProductDataProvider()
+    public static function addAddProductDataProvider()
     {
         return [
-            'frontend' => ['frontend', 'expected_price' => 10],
-            'adminhtml' => ['adminhtml', 'expected_price' => 1]
+            'frontend' => ['frontend', 'expectedPrice' => 10],
+            'adminhtml' => ['adminhtml', 'expectedPrice' => 1]
         ];
     }
 
@@ -422,24 +422,24 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @return array
      */
-    public function reorderItemsDataProvider()
+    public static function reorderItemsDataProvider()
     {
         return [
             [
-                'logged_in' => false,
-                'request_type' => Request::METHOD_POST,
+                'loggedIn' => false,
+                'request' => Request::METHOD_POST,
             ],
             [
-                'logged_in' => false,
-                'request_type' => Request::METHOD_GET,
+                'loggedIn' => false,
+                'request' => Request::METHOD_GET,
             ],
             [
-                'logged_in' => true,
-                'request_type' => Request::METHOD_POST,
+                'loggedIn' => true,
+                'request' => Request::METHOD_POST,
             ],
             [
-                'logged_in' => true,
-                'request_type' => Request::METHOD_GET,
+                'loggedIn' => true,
+                'request' => Request::METHOD_GET,
             ],
         ];
     }

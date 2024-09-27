@@ -49,7 +49,7 @@ class ByFixedTest extends TestCase
         $this->validator = $this->getMockBuilder(
             Validator::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getItemPrice', 'getItemBasePrice', 'getItemOriginalPrice', 'getItemBaseOriginalPrice']
             )->getMock();
 
@@ -59,7 +59,7 @@ class ByFixedTest extends TestCase
         $this->discountDataFactory = $this->getMockBuilder(
             DataFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['create']
             )->getMock();
 
@@ -94,7 +94,7 @@ class ByFixedTest extends TestCase
         $discountData = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['setAmount', 'setBaseAmount', 'setOriginalAmount', 'setBaseOriginalAmount']
             )->getMock();
 
@@ -103,7 +103,7 @@ class ByFixedTest extends TestCase
         $rule = $this->getMockBuilder(
             Rule::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 ['getDiscountAmount']
             )->getMock();
 
@@ -117,10 +117,9 @@ class ByFixedTest extends TestCase
         $item = $this->getMockBuilder(
             AbstractItem::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['getDiscountAmount', 'getBaseDiscountAmount',])
+            ->onlyMethods(
                 [
-                    'getDiscountAmount',
-                    'getBaseDiscountAmount',
                     'getQuote',
                     'getAddress',
                     'getOptionByCode',
@@ -222,7 +221,7 @@ class ByFixedTest extends TestCase
     /**
      * @return array
      */
-    public function calculateDataProvider()
+    public static function calculateDataProvider()
     {
         return [
             [
@@ -267,7 +266,7 @@ class ByFixedTest extends TestCase
     /**
      * @return array
      */
-    public function fixQuantityDataProvider()
+    public static function fixQuantityDataProvider()
     {
         return [
             ['step' => 0, 'qty' => 23, 'expected' => 23],
