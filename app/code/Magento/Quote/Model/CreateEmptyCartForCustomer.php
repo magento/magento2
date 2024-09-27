@@ -18,7 +18,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 /**
  * Class to create an empty cart and quote for a specified customer.
  */
-readonly class CreateEmptyCartForCustomer
+class CreateEmptyCartForCustomer
 {
     /**
      * @param StoreManagerInterface $storeManager
@@ -27,10 +27,10 @@ readonly class CreateEmptyCartForCustomer
      * @param QuoteFactory $quoteFactory
      */
     public function __construct(
-        private StoreManagerInterface $storeManager,
-        private CartRepositoryInterface $quoteRepository,
-        private CustomerRepositoryInterface $customerRepository,
-        private QuoteFactory $quoteFactory,
+        private readonly StoreManagerInterface $storeManager,
+        private readonly CartRepositoryInterface $quoteRepository,
+        private readonly CustomerRepositoryInterface $customerRepository,
+        private readonly QuoteFactory $quoteFactory,
     ) {
     }
 
