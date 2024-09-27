@@ -211,7 +211,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         } else {
             $this->_httpContext->setValue(
                 Context::CONTEXT_GROUP,
-                $customer->getGroupId(),
+                (string)$customer->getGroupId(),
                 \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
             );
             $this->setCustomerId($customer->getId());
@@ -271,7 +271,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         $this->_customerModel = $customerModel;
         $this->_httpContext->setValue(
             Context::CONTEXT_GROUP,
-            $customerModel->getGroupId(),
+            (string)$customerModel->getGroupId(),
             \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
         );
         $this->setCustomerId($customerModel->getId());
@@ -391,6 +391,19 @@ class Session extends \Magento\Framework\Session\SessionManager
             return $customerGroupId;
         }
         return Group::NOT_LOGGED_IN_ID;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_customer = null;
+        $this->_customerModel = null;
+        $this->setCustomerId(null);
+        $this->setCustomerGroupId($this->groupManagement->getNotLoggedInGroup()->getId());
+        $this->_isCustomerIdChecked = null;
+        parent::_resetState();
     }
 
     /**

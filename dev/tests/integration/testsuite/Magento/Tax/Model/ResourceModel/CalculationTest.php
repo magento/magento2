@@ -9,6 +9,12 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Registry;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
 use Magento\Tax\Api\TaxRuleRepositoryInterface;
+use Magento\Tax\Test\Fixture\CustomerTaxClass as CustomerTaxClassFixture;
+use Magento\Tax\Test\Fixture\ProductTaxClass as ProductTaxClassFixture;
+use Magento\Tax\Test\Fixture\TaxRate as TaxRateFixture;
+use Magento\Tax\Test\Fixture\TaxRule as TaxRuleFixture;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -62,14 +68,25 @@ class CalculationTest extends TestCase
         $this->assertEquals($taxRate->getRateIds(), $taxCalculation->getRate($data));
     }
 
-    /**
-     * phpcs:disable Generic.Files.LineLength.TooLong
-     * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento\Tax\Test\Fixture\TaxClass with:{"class_name":"CustomerTaxClass1", "class_type":"CUSTOMER"} as:c1
-     * @magentoDataFixture Magento\Tax\Test\Fixture\TaxClass with:{"class_name":"ProductTaxClass1", "class_type":"PRODUCT"} as:p1
-     * @magentoDataFixture Magento\Tax\Test\Fixture\TaxRate with:{"code":"*", "rate":"10", "tax_country_id":"PT", "tax_postcode":"96*", "tax_region_id":"12"} as:rate
-     * @magentoDataFixture Magento\Tax\Test\Fixture\TaxRule with:{"code":"Test Rule Portugal", "customer_tax_class_ids":["$c1.id$"], "product_tax_class_ids":["$p1.id$"], "tax_rate_ids":["$rate.id$"]} as:rule
-     */
+    #[
+        AppIsolation(true),
+        DataFixture(CustomerTaxClassFixture::class, as: 'c1'),
+        DataFixture(ProductTaxClassFixture::class, as: 'p1'),
+        DataFixture(
+            TaxRateFixture::class,
+            ['tax_country_id' => 'PT', 'tax_postcode' => '96*', 'tax_region_id' => 12],
+            'rate'
+        ),
+        DataFixture(
+            TaxRuleFixture::class,
+            [
+                'customer_tax_class_ids' => ['$c1.id$'],
+                'product_tax_class_ids' => ['$p1.id$'],
+                'tax_rate_ids' => ['$rate.id$']
+            ],
+            'rule'
+        )
+    ]
     public function testGetRateForPortugal()
     {
         /** @var TaxRuleRepositoryInterface $taxRule */

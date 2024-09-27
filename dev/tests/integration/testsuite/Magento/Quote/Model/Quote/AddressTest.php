@@ -172,7 +172,7 @@ class AddressTest extends TestCase
         /** @var AddressRepositoryInterface $addressRepository */
         $addressRepository = Bootstrap::getObjectManager()
             ->create(AddressRepositoryInterface::class);
-        $this->_customer->setDefaultShipping(-1)
+        $this->_customer->setDefaultShipping(1)
             ->setAddresses(
                 [
                     $addressRepository->getById($this->_address->getId()),
@@ -211,7 +211,7 @@ class AddressTest extends TestCase
         /** @var AddressRepositoryInterface $addressRepository */
         $addressRepository = Bootstrap::getObjectManager()
             ->create(AddressRepositoryInterface::class);
-        $this->_customer->setDefaultShipping(2)
+        $this->_customer->setDefaultShipping(1)
             ->setAddresses([$addressRepository->getById($this->_address->getId())]);
         $this->_customer = $this->customerRepository->save($this->_customer);
         // we should save the customer data in order to be able to use it
@@ -243,7 +243,7 @@ class AddressTest extends TestCase
     /**
      * @return array
      */
-    public function unsetAddressIdDataProvider()
+    public static function unsetAddressIdDataProvider()
     {
         return [[true], [false]];
     }
@@ -373,7 +373,7 @@ class AddressTest extends TestCase
      *
      * @return array
      */
-    public function appliedTaxesDataProvider()
+    public static function appliedTaxesDataProvider()
     {
         return [
             ['test', 'test'],

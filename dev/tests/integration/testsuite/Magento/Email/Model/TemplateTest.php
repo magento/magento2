@@ -8,8 +8,8 @@ namespace Magento\Email\Model;
 use Magento\Backend\App\Area\FrontNameResolver as BackendFrontNameResolver;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
@@ -26,12 +26,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Zend_Mail|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $mail;
-
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -46,13 +41,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         }
 
-        $this->mail = $this->getMockBuilder(\Zend_Mail::class)
-            ->setMethods(['send', 'addTo', 'addBcc', 'setReturnPath', 'setReplyTo'])
-            ->setConstructorArgs(['utf-8'])
-            ->getMock();
-
         $this->model = $this->getMockBuilder(\Magento\Email\Model\Template::class)
-            ->setMethods(['_getMail'])
+            ->addMethods([])
             ->setConstructorArgs(
                 [
                     $this->objectManager->get(\Magento\Framework\Model\Context::class),
@@ -73,23 +63,11 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
-
-        $this->model->expects($this->any())->method('_getMail')->willReturnCallback([$this, 'getMail']);
         $this->model
             ->setSenderName('sender')
             ->setSenderEmail('sender@example.com')
             ->setTemplateSubject('Subject')
             ->setTemplateId('abc');
-    }
-
-    /**
-     * Return a disposable \Zend_Mail instance
-     *
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Zend_Mail
-     */
-    public function getMail()
-    {
-        return clone $this->mail;
     }
 
     public function testSetGetTemplateFilter()
@@ -179,7 +157,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function templateFallbackDataProvider()
+    public static function templateFallbackDataProvider()
     {
         return [
             'Template from module - admin' => [
@@ -283,7 +261,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function templateDirectiveDataProvider()
+    public static function templateDirectiveDataProvider()
     {
         return [
             'Template from module folder - adminhtml' => [
@@ -485,7 +463,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             // @styles comments by default, it is necessary to mock an object to return testable contents
             $themeDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
                 ->disableOriginalConstructor()
-                ->setMethods(
+                ->onlyMethods(
                     [
                         'readFile',
                     ]
@@ -498,7 +476,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
             $filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['getDirectoryRead'])
+                ->onlyMethods(['getDirectoryRead'])
                 ->getMock();
 
             $filesystem->expects($this->once())
@@ -523,7 +501,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function templateStylesVariableDataProvider()
+    public static function templateStylesVariableDataProvider()
     {
         return [
             'Styles from <!--@styles @--> comment - adminhtml' => [
@@ -747,7 +725,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $model->setDesignConfig($config);
     }
 
-    public function setDesignConfigExceptionDataProvider()
+    public static function setDesignConfigExceptionDataProvider()
     {
         $storeId = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)
             ->getStore()

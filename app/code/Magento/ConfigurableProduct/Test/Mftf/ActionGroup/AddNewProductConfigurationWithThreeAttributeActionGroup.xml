@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddNewProductConfigurationWithThreeAttributeActionGroup" extends="AddNewProductConfigurationAttributeActionGroup">
+        <annotations>
+            <description>Generates the Product Configurations for the 3 provided Attribute Names on the Configurable Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="thirdOption" type="entity"/>
+        </arguments>
+
+        <!-- Find created below attribute and add option; save attribute -->
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" after="clickOnSaveAttribute" stepKey="clickOnCreateThirdNewValue"/>
+        <fillField userInput="{{thirdOption.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" after="clickOnCreateThirdNewValue" stepKey="fillFieldForNewThirdOption"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" after="fillFieldForNewThirdOption" stepKey="clickOnSaveThirdAttribute"/>
+    </actionGroup>
+</actionGroups>

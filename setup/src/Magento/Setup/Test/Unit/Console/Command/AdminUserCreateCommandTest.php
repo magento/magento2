@@ -20,6 +20,7 @@ use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -50,7 +51,7 @@ class AdminUserCreateCommandTest extends TestCase
         $this->command = new AdminUserCreateCommand($this->installerFactoryMock, new UserValidationRules());
 
         $this->questionHelperMock = $this->getMockBuilder(QuestionHelper::class)
-            ->setMethods(['ask'])
+            ->onlyMethods(['ask'])
             ->getMock();
     }
 
@@ -110,8 +111,7 @@ class AdminUserCreateCommandTest extends TestCase
             'quiet' => false,
             'verbose' => false,
             'version' => false,
-            'ansi' => false,
-            'no-ansi' => false,
+            'ansi' => null,
             'no-interaction' => false
         ];
 
@@ -136,9 +136,9 @@ class AdminUserCreateCommandTest extends TestCase
      * @return void
      * @dataProvider getOptionListDataProvider
      */
-    public function testGetOptionsList($mode, $description): void
+    public function testGetOptionsList(int $mode, string $description): void
     {
-        /* @var $argsList \Symfony\Component\Console\Input\InputArgument[] */
+        /* @var $argsList InputArgument[] */
         $argsList = $this->command->getOptionsList($mode);
         $this->assertEquals(AdminAccount::KEY_EMAIL, $argsList[2]->getName());
         $this->assertEquals($description, $argsList[2]->getDescription());
@@ -147,7 +147,7 @@ class AdminUserCreateCommandTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionListDataProvider(): array
+    public static function getOptionListDataProvider(): array
     {
         return [
             [
@@ -185,7 +185,7 @@ class AdminUserCreateCommandTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider(): array
+    public static function validateDataProvider(): array
     {
         return [
             [

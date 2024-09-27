@@ -40,11 +40,6 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     private const TEST_PRODUCT_TYPE = 'bundle';
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product
-     */
-    protected $model;
-
-    /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
@@ -77,7 +72,6 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
     }
 
     /**
@@ -273,7 +267,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @return array
      */
-    public function valuesDataProvider(): array
+    public static function valuesDataProvider(): array
     {
         return [
             [
@@ -350,20 +344,20 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @return array
      */
-    public function shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider(): array
+    public static function shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider(): array
     {
         return [
             'all options are required' => [
                 true,
                 true,
-                'out-of-stock' => 'import_bundle_set_option1_products_out_of_stock.csv',
-                'in-stock' => 'import_bundle_set_option1_products_in_stock.csv'
+                'outOfStockImportFile' => 'import_bundle_set_option1_products_out_of_stock.csv',
+                'inStockImportFile' => 'import_bundle_set_option1_products_in_stock.csv'
             ],
             'all options are optional' => [
                 false,
                 false,
-                'out-of-stock' => 'import_bundle_set_all_products_out_of_stock.csv',
-                'in-stock' => 'import_bundle_set_option1_products_in_stock.csv'
+                'outOfStockImportFile' => 'import_bundle_set_all_products_out_of_stock.csv',
+                'inStockImportFile' => 'import_bundle_set_option1_products_in_stock.csv'
             ]
         ];
     }
@@ -397,15 +391,15 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
         bool $validateOnly = false
     ): ProcessingErrorAggregatorInterface {
         /** @var Filesystem $filesystem */
-        $filesystem =$this->objectManager->create(Filesystem::class);
+        $filesystem = $this->objectManager->create(Filesystem::class);
         $directoryWrite = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = ImportAdapter::findAdapterFor($file, $directoryWrite);
-        $errors = $this->model
-            ->setParameters(['behavior' => $behavior, 'entity' => 'catalog_product'])
-            ->setSource($source)
-            ->validateData();
+        $model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
+        $model->setParameters(['behavior' => $behavior, 'entity' => 'catalog_product']);
+        $model->setSource($source);
+        $errors = $model->validateData();
         if (!$validateOnly && !$errors->getAllErrors()) {
-            $this->model->importData();
+            $model->importData();
         }
         return $errors;
     }

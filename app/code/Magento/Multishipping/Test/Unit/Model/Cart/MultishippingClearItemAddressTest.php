@@ -100,7 +100,8 @@ class MultishippingClearItemAddressTest extends TestCase
             ->willReturn($actionName);
         $this->checkoutSessionMock->method('getQuote')
             ->willReturn($quoteMock);
-
+        $this->checkoutSessionMock->method('clearQuote')
+            ->willReturnSelf();
         $addressMock = $this->createMock(Address::class);
         $addressMock->method('getId')
             ->willReturn($addressId);
@@ -148,7 +149,7 @@ class MultishippingClearItemAddressTest extends TestCase
     /**
      * @return array
      */
-    public function getDataDataProvider()
+    public static function getDataDataProvider()
     {
         return [
             'test with `add` action and multi shipping address enabled' => ['add', 100, 200, true],

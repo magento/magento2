@@ -31,10 +31,10 @@ foreach ($simpleProduct->getOptions() as $option) {
             $options[$option->getId()] = ['month' => 1, 'day' => 1, 'year' => 2001, 'hour' => 1, 'minute' => 1];
             break;
         case 'drop_down':
-            $options[$option->getId()] = '1';
+            $options[$option->getId()] = current($option->getValues())->getOptionTypeId();
             break;
         case 'radio':
-            $options[$option->getId()] = '1';
+            $options[$option->getId()] = current($option->getValues())->getOptionTypeId();
             break;
     }
 }

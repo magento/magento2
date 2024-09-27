@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Product as ProductEntity;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
@@ -116,13 +117,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_productTypeModels = [];
 
     /**
-     * Array of pairs store ID to its code.
-     *
-     * @var array
-     */
-    protected $_storeIdToCode = [];
-
-    /**
      * Array of Website ID-to-code.
      *
      * @var array
@@ -169,6 +163,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      *
      * @var array
      * @deprecated 100.2.0
+     * @see we don't use this variable anymore
      */
     protected $_headerColumns = [];
 
@@ -369,6 +364,16 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     private $filter;
 
     /**
+     * @var StockConfigurationInterface
+     */
+    private $stockConfiguration;
+
+    /**
+     * @var array
+     */
+    private array $attributeFrontendTypes = [];
+
+    /**
      * Product constructor.
      *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -388,7 +393,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param ProductEntity\LinkTypeProvider $linkTypeProvider
      * @param RowCustomizerInterface $rowCustomizer
      * @param array $dateAttrCodes
-     * @param ProductFilterInterface $filter
+     * @param ProductFilterInterface|null $filter
+     * @param StockConfigurationInterface|null $stockConfiguration
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -409,7 +415,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer,
         array $dateAttrCodes = [],
-        ?ProductFilterInterface $filter = null
+        ?ProductFilterInterface $filter = null,
+        ?StockConfigurationInterface $stockConfiguration = null
     ) {
         $this->_entityCollectionFactory = $collectionFactory;
         $this->_exportConfig = $exportConfig;
@@ -426,7 +433,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $this->rowCustomizer = $rowCustomizer;
         $this->dateAttrCodes = array_merge($this->dateAttrCodes, $dateAttrCodes);
         $this->filter = $filter ?? ObjectManager::getInstance()->get(ProductFilterInterface::class);
-
+        $this->stockConfiguration = $stockConfiguration ?? ObjectManager::getInstance()
+                ->get(StockConfigurationInterface::class);
         parent::__construct($localeDate, $config, $resource, $storeManager);
 
         $this->initTypeModels()
@@ -460,6 +468,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     {
         $collection = $this->_categoryColFactory->create()->addNameToResult();
         /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
+        $collection->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
         foreach ($collection as $category) {
             $structure = preg_split('#/+#', $category->getPath());
             $pathSize = count($structure);
@@ -625,6 +634,17 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $stockItemRow['stock_id'],
                 $stockItemRow['stock_status_changed_auto']
             );
+
+            if ($stockItemRow['use_config_max_sale_qty']) {
+                $stockItemRow['max_sale_qty'] = $this->stockConfiguration->getMaxSaleQty();
+            }
+            if ($stockItemRow['use_config_min_sale_qty']) {
+                $stockItemRow['min_sale_qty'] = $this->stockConfiguration->getMinSaleQty();
+            }
+            if ($stockItemRow['use_config_manage_stock']) {
+                $stockItemRow['manage_stock'] = $this->stockConfiguration->getManageStock();
+            }
+
             $stockItemRows[$productId] = $stockItemRow;
         }
         return $stockItemRows;
@@ -755,7 +775,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param array $customOptionsData
      * @param array $stockItemRows
      * @return void
-     * @deprecated 100.2.0 Logic will be moved to _getHeaderColumns in future release
+     * @deprecated 100.2.0
+     * @see Logic is moved to _getHeaderColumns
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -1046,7 +1067,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
                     if ($this->_attributeTypes[$code] == 'datetime') {
                         if (in_array($code, $this->dateAttrCodes)
-                            || in_array($code, $this->userDefinedAttributes)
+                            || $this->attributeFrontendTypes[$code] === 'date'
                         ) {
                             $attrValue = $this->_localeDate->formatDateTime(
                                 new \DateTime($attrValue),
@@ -1066,7 +1087,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
                     if ($storeId != Store::DEFAULT_STORE_ID
                         && isset($data[$itemId][Store::DEFAULT_STORE_ID][$fieldName])
-                        && $data[$itemId][Store::DEFAULT_STORE_ID][$fieldName] == htmlspecialchars_decode($attrValue)
+                        && $data[$itemId][Store::DEFAULT_STORE_ID][$fieldName] == $attrValue
                     ) {
                         continue;
                     }
@@ -1077,7 +1098,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                                 $additionalAttributes[$fieldName] = $fieldName .
                                     ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $this->wrapValue($attrValue);
                             }
-                            $data[$itemId][$storeId][$fieldName] = htmlspecialchars_decode($attrValue);
+                            $data[$itemId][$storeId][$fieldName] = $attrValue;
                         }
                     } else {
                         $this->collectMultiselectValues($item, $code, $storeId);
@@ -1092,7 +1113,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 }
 
                 if (!empty($additionalAttributes)) {
-                    $additionalAttributes = array_map('htmlspecialchars_decode', $additionalAttributes);
                     $data[$itemId][$storeId][self::COL_ADDITIONAL_ATTRIBUTES] =
                         implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalAttributes);
                 } else {
@@ -1103,7 +1123,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $data[$itemId][$storeId][self::COL_STORE] = $storeCode;
                 $data[$itemId][$storeId][self::COL_ATTR_SET] = $this->_attrSetIdToName[$attrSetId];
                 $data[$itemId][$storeId][self::COL_TYPE] = $item->getTypeId();
-                $data[$itemId][$storeId][self::COL_SKU] = htmlspecialchars_decode($item->getSku());
+                $data[$itemId][$storeId][self::COL_SKU] = $item->getSku();
                 $data[$itemId][$storeId]['store_id'] = $storeId;
                 $data[$itemId][$storeId]['product_id'] = $itemId;
                 $data[$itemId][$storeId]['product_link_id'] = $productLinkId;
@@ -1182,6 +1202,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param int $storeId
      * @return bool
      * @deprecated 100.2.3
+     * @see This protected method is not used anymore
      */
     protected function hasMultiselectData($item, $storeId)
     {
@@ -1410,6 +1431,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Add multi row data to export
      *
      * @deprecated 100.1.0
+     * @see This protected method is not used anymore
      * @param array $dataRow
      * @param array $multiRawData
      * @return array
@@ -1640,6 +1662,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $this->_attributeValues[$attribute->getAttributeCode()] = $this->getAttributeOptions($attribute);
             $this->_attributeTypes[$attribute->getAttributeCode()] =
                 \Magento\ImportExport\Model\Import::getAttributeType($attribute);
+            $this->attributeFrontendTypes[$attribute->getAttributeCode()] = $attribute->getFrontendInput();
             if ($attribute->getIsUserDefined()) {
                 $this->userDefinedAttributes[] = $attribute->getAttributeCode();
             }

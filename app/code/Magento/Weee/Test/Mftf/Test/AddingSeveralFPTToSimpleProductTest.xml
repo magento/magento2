@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddingSeveralFPTToSimpleProductTest">
+        <annotations>
+            <features value="Tax"/>
+            <stories value="Shopping cart taxes"/>
+            <title value="Adding Several FPT's To Simple Product"/>
+            <description value="Adding Several FPT's To Simple Product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4477"/>
+            <group value="checkout"/>
+            <group value="tax"/>
+            <group value="weee"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <!-- Preconditions  -->
+            <!-- Customer is created with default addresses: -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+
+            <!-- Store -> Configuration -> Sales -> Tax FPT Enable -->
+            <createData entity="WeeeConfigEnable" stepKey="enableFPT"/>
+
+            <!-- Fixed Product 1 Tax attribute is created and added to default attribute set -->
+            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttributeFour"/>
+            <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet1">
+                <requiredEntity createDataKey="createProductFPTAttributeFour"/>
+            </createData>
+
+            <!-- Fixed Product Tax 2 attribute is created and added to default attribute set -->
+            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttributeThree"/>
+            <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet2">
+                <requiredEntity createDataKey="createProductFPTAttributeThree"/>
+            </createData>
+
+            <!-- Fixed Product Tax 3 attribute is created and added to default attribute set -->
+            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttributeTwo"/>
+            <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet3">
+                <requiredEntity createDataKey="createProductFPTAttributeTwo"/>
+            </createData>
+
+            <!-- Fixed Product Tax 4 attribute is created and added to default attribute set -->
+            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttributeOne"/>
+            <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet4">
+                <requiredEntity createDataKey="createProductFPTAttributeOne"/>
+            </createData>
+
+            <!-- Magento cache is flushed -->
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Simple Product is created -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">200.00</field>
+            </createData>
+
+            <!-- Open Simple Pproduct in Edit mode -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+                <argument name="productId" value="$createSimpleProduct.id$"/>
+            </actionGroup>
+
+            <!-- Add values to FPT 1 -->
+            <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValue1">
+                <argument name="FPTAttributeCode" value="$createProductFPTAttributeOne.attribute_code$"/>
+                <argument name="countryForFPT" value="United States"/>
+                <argument name="stateForFPT" value="California"/>
+                <argument name="valueForFPT" value="2"/>
+            </actionGroup>
+            <!-- Add values to FPT 2 -->
+            <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValue2">
+                <argument name="FPTAttributeCode" value="$createProductFPTAttributeTwo.attribute_code$"/>
+                <argument name="countryForFPT" value="United States"/>
+                <argument name="stateForFPT" value="California"/>
+                <argument name="valueForFPT" value="6"/>
+            </actionGroup>
+            <!-- Add values to FPT 3 -->
+            <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValue3">
+                <argument name="FPTAttributeCode" value="$createProductFPTAttributeThree.attribute_code$"/>
+                <argument name="countryForFPT" value="United States"/>
+                <argument name="stateForFPT" value="New York"/>
+                <argument name="valueForFPT" value="11"/>
+            </actionGroup>
+            <!-- Add values to FPT 4 -->
+            <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValue4">
+                <argument name="FPTAttributeCode" value="$createProductFPTAttributeFour.attribute_code$"/>
+                <argument name="countryForFPT" value="Germany"/>
+                <argument name="stateForFPT" value="Berlin"/>
+                <argument name="valueForFPT" value="15"/>
+            </actionGroup>
+            <!-- Save Simple Product -->
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!-- Delete all four FPT Attributes -->
+            <deleteData createDataKey="createProductFPTAttributeOne" stepKey="deleteProductFPTAttribute1"/>
+            <deleteData createDataKey="createProductFPTAttributeTwo" stepKey="deleteProductFPTAttribute2"/>
+            <deleteData createDataKey="createProductFPTAttributeThree" stepKey="deleteProductFPTAttribute3"/>
+            <deleteData createDataKey="createProductFPTAttributeFour" stepKey="deleteProductFPTAttribute4"/>
+            <!-- Disable FPT -->
+            <createData entity="WeeeConfigDisable" stepKey="disableFPT"/>
+            <!-- Delete Simple Product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <!-- Delete created customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <!-- Logout from Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <!--  Test Steps  -->
+        <!--  Step 1: Go to Storefront as logged in Customer  -->
+        <!-- Login as Customer and add Product to Cart-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Add simple product with qty 2 to shopping cart -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="cartAddSimpleProductToCart">
+            <argument name="productName" value="$createSimpleProduct.name$"/>
+            <argument name="productQty" value="2"/>
+        </actionGroup>
+
+        <!-- Select Mini Cart and select 'View And Edit Cart' -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
+        <!-- Scroll to summary section -->
+        <scrollTo selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="scrollToSummary"/>
+        <!--  See Order totals contain 16$ of FPT -->
+        <see selector="{{CheckoutCartSummarySection.amountFPT}}" userInput="$16" stepKey="checkFPTAmountInCheckoutPage"/>
+        <!-- Click Proceed to checkout -->
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <!-- Click next button to open payment section -->
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <!--  See Order totals contain 16$ of FPT -->
+        <see selector="{{CheckoutCartSummarySection.amountFPT}}" userInput="$16" stepKey="checkFPTAmountInOrderSummaryPage"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+
+        <!-- Goto Admin > Sales > Orders page -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
+        <!-- Reset admin order filter -->
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
+        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
+        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <scrollTo selector="{{AdminOrderTotalSection.subTotal}}" stepKey="scrollToOrderTotalSection"/>
+        <!--  See Order totals contain 16$ of FPT -->
+        <see selector="{{AdminOrderTotalSection.totalField('FPT')}}"  userInput="$16.00" stepKey="seeFPTInOrderSummaryPage"/>
+        <!-- Create an invoice for an order -->
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoice"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
+        <!-- Click on Invoice on the left tab -->
+        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoices"/>
+        <waitForPageLoad stepKey="waitForLoadingMask5" />
+        <see selector="{{AdminOrderDetailsInvoicesSection.content}}" userInput="{$grabOrderNumber}" stepKey="seeInvoice1"/>
+        <!-- Click on view Button -->
+        <click selector="{{AdminOrderDetailsInvoicesSection.viewButton}}" stepKey="clickViewButton"/>
+        <waitForPageLoad stepKey="waitForOrderInformationTabLoadingMask"/>
+        <scrollTo selector="{{AdminInvoiceTotalSection.grandTotal}}" stepKey="scrollToGrandTotalSection"/>
+        <!--  See Order totals contain 16$ of FPT -->
+        <see selector="{{AdminInvoiceTotalSection.total('FPT')}}" userInput="$16.00" stepKey="seeFPTInInvoicePage"/>
+        <!-- Click on back button -->
+        <click selector="{{AdminInvoiceTotalSection.backButton}}" stepKey="clickBackButton"/>
+        <!-- Create an Credit memo for an order -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreateCreditMemoForSecond" />
+        <conditionalClick selector="{{AdminOrderDetailsMainActionsSection.modalOk}}" dependentSelector="{{AdminOrderDetailsMainActionsSection.modalOk}}"
+                          visible="true" stepKey="acceptModal1"/>
+
+        <!-- Scroll to summary section -->
+        <scrollTo selector="{{AdminCreditMemoTotalSection.grandTotal}}" stepKey="scrollToGrandTotalSectionInCreditMemoScreen"/>
+        <!--  See Order totals contain 16$ of FPT -->
+        <see selector="{{AdminCreditMemoTotalSection.total('FPT')}}" userInput="$16.00" stepKey="seeFPTInCreditMemoPage"/>
+        <!-- Click on refund offline button -->
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOfflineForSecond"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the credit memo." stepKey="seeCreditMemoSuccessForSecond"/>
+        <!-- Click on Credit Memo on the left tab -->
+        <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemo"/>
+        <waitForPageLoad stepKey="waitForLoadingMask6" />
+        <!-- Click on view button -->
+        <click selector="{{AdminCreditMemosGridSection.viewButton}}" stepKey="clickInformationInCreditMemo"/>
+        <scrollTo selector="{{AdminCreditMemoTotalSection.grandTotal}}" stepKey="scrollToGrandTotalSectionInCreditMemoPage"/>
+        <!--  See Order totals contain 16$ of FPT -->
+        <see selector="{{AdminCreditMemoTotalSection.total('FPT')}}" userInput="$16.00" stepKey="seeFPTInCreditMemoPageAgain"/>
+    </test>
+</tests>

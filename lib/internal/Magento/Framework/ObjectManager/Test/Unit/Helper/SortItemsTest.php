@@ -13,11 +13,6 @@ use PHPUnit\Framework\TestCase;
 class SortItemsTest extends TestCase
 {
     /**
-     * @var MockObject|InterpreterInterface
-     */
-    protected InterpreterInterface $_itemInterpreter;
-
-    /**
      * @var SortItemsHelper
      */
     protected SortItemsHelper $_model;
@@ -42,7 +37,7 @@ class SortItemsTest extends TestCase
     /**
      * @return array
      */
-    public function evaluateDataProvider(): array
+    public static function evaluateDataProvider(): array
     {
         return [
             'empty array items' => [

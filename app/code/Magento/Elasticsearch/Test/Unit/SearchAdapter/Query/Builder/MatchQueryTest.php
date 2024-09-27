@@ -16,7 +16,6 @@ use Magento\Elasticsearch\SearchAdapter\Query\Builder\MatchQuery as MatchQueryBu
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerInterface;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool;
 use Magento\Framework\Search\Request\Query\MatchQuery;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,12 +38,14 @@ class MatchQueryTest extends TestCase
      * @var MatchQueryBuilder
      */
     private $matchQueryBuilder;
+
     /**
-     * @var MockObject
+     * @var Config|MockObject
      */
     private $config;
+
     /**
-     * @var MockObject
+     * @var FieldMapperInterface|MockObject
      */
     private $fieldMapper;
 
@@ -65,16 +66,13 @@ class MatchQueryTest extends TestCase
             ->willReturn($valueTransformerMock);
         $valueTransformerMock->method('transform')
             ->willReturnArgument(0);
-        $this->matchQueryBuilder = (new ObjectManager($this))->getObject(
-            MatchQueryBuilder::class,
-            [
-                'fieldMapper' => $this->fieldMapper,
-                'preprocessorContainer' => [],
-                'attributeProvider' => $this->attributeProvider,
-                'fieldTypeResolver' => $this->fieldTypeResolver,
-                'valueTransformerPool' => $valueTransformerPoolMock,
-                'config' => $this->config,
-            ]
+
+        $this->matchQueryBuilder = new MatchQueryBuilder(
+            $this->fieldMapper,
+            $this->attributeProvider,
+            $this->fieldTypeResolver,
+            $valueTransformerPoolMock,
+            $this->config
         );
     }
 
@@ -120,7 +118,7 @@ class MatchQueryTest extends TestCase
     /**
      * @return array
      */
-    public function buildDataProvider(): array
+    public static function buildDataProvider(): array
     {
         return [
             'match query without minimum_should_match' => [
@@ -182,6 +180,7 @@ class MatchQueryTest extends TestCase
                 ],
                 '2<75%'
             ],
+            //[match_phrase] query does not support [minimum_should_match]
             'match_phrase query with minimum_should_match' => [
                 '"fitness bottle"',
                 [
@@ -196,21 +195,19 @@ class MatchQueryTest extends TestCase
                             'name' => [
                                 'query' => 'fitness bottle',
                                 'boost' => 6,
-                                'minimum_should_match' => '2<75%',
                             ],
                         ],
                     ],
                 ],
                 '2<75%'
             ],
-
         ];
     }
 
     /**
      * @return array
      */
-    public function buildDataProviderForMatchPhrasePrefix()
+    public static function buildDataProviderForMatchPhrasePrefix()
     {
         return [
         'match_phrase_prefix query with minimum_should_match' => [

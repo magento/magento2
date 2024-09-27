@@ -42,7 +42,7 @@ function (
     'use strict';
 
     var lastSelectedBillingAddress = null,
-        addressUpadated = false,
+        addressUpdated = false,
         addressEdited = false,
         countryData = customerData.get('directory-data'),
         addressOptions = addressList().filter(function (address) {
@@ -125,8 +125,7 @@ function (
         useShippingAddress: function () {
             if (this.isAddressSameAsShipping()) {
                 selectBillingAddress(quote.shippingAddress());
-
-                this.updateAddresses();
+                this.updateAddresses(true);
                 this.isAddressDetailsVisible(true);
             } else {
                 lastSelectedBillingAddress = quote.billingAddress();
@@ -142,9 +141,10 @@ function (
          * Update address action
          */
         updateAddress: function () {
-            var addressData, newBillingAddress;
+            var addressData, newBillingAddress, needsToUpdateAddress;
 
-            addressUpadated = true;
+            needsToUpdateAddress = true;
+            addressUpdated = true;
 
             if (this.selectedAddress() && !this.isAddressFormVisible()) {
                 selectBillingAddress(this.selectedAddress());
@@ -157,7 +157,9 @@ function (
                     this.source.trigger(this.dataScopePrefix + '.custom_attributes.data.validate');
                 }
 
-                if (!this.source.get('params.invalid')) {
+                if (this.source.get('params.invalid')) {
+                    needsToUpdateAddress = false;
+                } else {
                     addressData = this.source.get(this.dataScopePrefix);
 
                     if (customer.isLoggedIn() && !this.customerHasAddresses) { //eslint-disable-line max-depth
@@ -171,15 +173,14 @@ function (
                     checkoutData.setNewCustomerBillingAddress(addressData);
                 }
             }
-            setBillingAddressAction(globalMessageList);
-            this.updateAddresses();
+            this.updateAddresses(needsToUpdateAddress);
         },
 
         /**
          * Edit address action
          */
         editAddress: function () {
-            addressUpadated = false;
+            addressUpdated = false;
             addressEdited = true;
             lastSelectedBillingAddress = quote.billingAddress();
             quote.billingAddress(null);
@@ -190,7 +191,7 @@ function (
          * Cancel address edit action
          */
         cancelAddressEdit: function () {
-            addressUpadated = true;
+            addressUpdated = true;
             this.restoreBillingAddress();
 
             if (quote.billingAddress()) {
@@ -215,7 +216,7 @@ function (
          * Check if Billing Address Changes should be canceled
          */
         needCancelBillingAddressChanges: function () {
-            if (addressEdited && !addressUpadated) {
+            if (addressEdited && !addressUpdated) {
                 this.cancelAddressEdit();
             }
         },
@@ -244,11 +245,15 @@ function (
 
         /**
          * Trigger action to update shipping and billing addresses
+         *
+         * @param {Boolean} force
          */
-        updateAddresses: function () {
-            if (window.checkoutConfig.reloadOnBillingAddress ||
-                !window.checkoutConfig.displayBillingOnPaymentMethod
-            ) {
+        updateAddresses: function (force) {
+            force = !(typeof force === 'undefined' || force !== true);
+
+            if (force
+                || window.checkoutConfig.reloadOnBillingAddress
+                || !window.checkoutConfig.displayBillingOnPaymentMethod) {
                 setBillingAddressAction(globalMessageList);
             }
         },

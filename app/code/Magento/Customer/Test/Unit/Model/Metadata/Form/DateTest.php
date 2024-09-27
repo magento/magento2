@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * test Magento\Customer\Model\Metadata\Form\Date
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
@@ -130,7 +130,7 @@ class DateTest extends AbstractFormTestCase
         $validationRules = [];
         $validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getValue'])
+            ->onlyMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
         $validationRule->expects($this->any())
             ->method('getName')
@@ -144,7 +144,7 @@ class DateTest extends AbstractFormTestCase
             foreach ($validation as $ruleName => $ruleValue) {
                 $validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
                     ->disableOriginalConstructor()
-                    ->setMethods(['getName', 'getValue'])
+                    ->onlyMethods(['getName', 'getValue'])
                     ->getMockForAbstractClass();
                 $validationRule->expects($this->any())
                     ->method('getName')
@@ -174,7 +174,7 @@ class DateTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueDataProvider()
+    public static function validateValueDataProvider()
     {
         return [
             'false value, load original' => [false, [], false, true],
@@ -209,7 +209,7 @@ class DateTest extends AbstractFormTestCase
                 'abc',
                 [],
                 false,
-                ['dateFalseFormat' => '"Space Date" does not fit the entered date format.'],
+                ['dateInvalidDate' => '"Space Date" is not a valid date.'],
             ]
         ];
     }
@@ -228,7 +228,7 @@ class DateTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function compactAndRestoreValueDataProvider()
+    public static function compactAndRestoreValueDataProvider()
     {
         return [
             [1, 1],

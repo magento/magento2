@@ -144,6 +144,7 @@ class Builder
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _getMappedSqlCondition(
         AbstractCondition $condition,
@@ -155,7 +156,7 @@ class Builder
         // If rule hasn't valid argument - prevent incorrect rule behavior.
         if (empty($argument)) {
             return $this->_expressionFactory->create(['expression' => '1 = -1']);
-        } elseif (preg_match('/[^a-z0-9\-_\.\`]/i', $argument) > 0) {
+        } elseif (preg_match('/[^a-z0-9\-_\.\`]/i', $argument) > 0 && !$argument instanceof \Zend_Db_Expr) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Invalid field'));
         }
 

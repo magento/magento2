@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectValueFromActionSelectInItemsOrderedGridOnCreateOrderPageActionGroup">
+        <annotations>
+            <description>Selects a value from the "Action" dropdown for specified Product in th Items Ordered Grid on the Create Order Page</description>
+        </annotations>
+        <arguments>
+            <argument name="product" type="entity"/>
+            <argument name="option" type="string" defaultValue="Remove"/>
+        </arguments>
+
+        <selectOption selector="{{AdminOrderFormItemsOrderedSection.moveProduct(product.name)}}" userInput="{{option}}" stepKey="applyActionToProduct"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForPageIsUpdated"/>
+        
+    </actionGroup>
+</actionGroups>

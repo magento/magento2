@@ -59,7 +59,7 @@ class MaliciousCodeTest extends TestCase
     /**
      * @return array
      */
-    public function filterDataProvider()
+    public static function filterDataProvider()
     {
         return [
             'Comments' => ['Comment /** This is omitted */ is removed', 'Comment  is removed'],
@@ -146,6 +146,7 @@ class MaliciousCodeTest extends TestCase
                 '<?=$test?>',
                 '',
             ],
+            'Null Value' => [null, ''],
         ];
     }
 
