@@ -115,7 +115,7 @@ class GetAssetsByPathsTest extends TestCase
         $this->getAssetsByPaths->execute([$asset['path']]);
     }
 
-    private function getAssets(): array
+    private static function getAssets(): array
     {
         return [
             [
@@ -176,11 +176,11 @@ class GetAssetsByPathsTest extends TestCase
             ]
         ];
     }
-    public function assetDeleteByPathDataProvider(): array
+    public static function assetDeleteByPathDataProvider(): array
     {
         return [
             [
-                'assets' => $this->getAssets(),
+                'assets' => self::getAssets(),
                 'assetIndex' => 0,
                 'resultsCount' => 1
             ],

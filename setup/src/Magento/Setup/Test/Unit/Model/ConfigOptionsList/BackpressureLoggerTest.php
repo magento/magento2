@@ -101,7 +101,7 @@ class BackpressureLoggerTest extends TestCase
      * @return array[]
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderCreateConfigCacheRedis(): array
+    public static function dataProviderCreateConfigCacheRedis(): array
     {
         return [
             'minimum options' => [
@@ -116,7 +116,7 @@ class BackpressureLoggerTest extends TestCase
                     ['backpressure/logger/options/user', null, null],
                     ['backpressure/logger/id-prefix', null, null],
                 ],
-                'expected-config-data' => [
+                'expectedConfigData' => [
                     'backpressure' => [
                         'logger' => [
                             'type' => 'redis',
@@ -129,7 +129,7 @@ class BackpressureLoggerTest extends TestCase
                                 'persistent' => '',
                                 'user' => null
                             ],
-                            'id-prefix' => $this->expectedIdPrefix()
+                            'id-prefix' => self::expectedIdPrefix()
                         ]
                     ]
                 ],
@@ -157,7 +157,7 @@ class BackpressureLoggerTest extends TestCase
                     ['backpressure/logger/options/user', null, null],
                     ['backpressure/logger/id-prefix', null, null],
                 ],
-                'expected-config-data' => [
+                'expectedConfigData' => [
                     'backpressure' => [
                         'logger' => [
                             'type' => 'redis',
@@ -198,7 +198,7 @@ class BackpressureLoggerTest extends TestCase
                     ['backpressure/logger/options/user', null, '<current-user>'],
                     ['backpressure/logger/id-prefix', null, '<current-prefix>'],
                 ],
-                'expected-config-data' => [
+                'expectedConfigData' => [
                     'backpressure' => [
                         'logger' => [
                             'type' => 'redis',
@@ -235,7 +235,7 @@ class BackpressureLoggerTest extends TestCase
                     ['backpressure/logger/options/user', null, '<current-user>'],
                     ['backpressure/logger/id-prefix', null, '<current-prefix>'],
                 ],
-                'expected-config-data' => [
+                'expectedConfigData' => [
                     'backpressure' => [
                         'logger' => [
                             'type' => 'redis',
@@ -261,7 +261,7 @@ class BackpressureLoggerTest extends TestCase
      *
      * @return string
      */
-    private function expectedIdPrefix(): string
+    private static function expectedIdPrefix(): string
     {
         return substr(\hash('sha256', dirname(__DIR__, 8)), 0, 3) . '_';
     }

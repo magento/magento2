@@ -63,18 +63,18 @@ class DropdownAttributeTest extends AbstractAttributeTest
     /**
      * @return array
      */
-    public function attributeWithTagsProvider(): array
+    public static function attributeWithTagsProvider(): array
     {
         return [
             'allow_html_tags' => [
-                'allow_html_tags' => true,
-                'attribute_value' => '<h2>Option 2</h2>',
-                'expected_attribute_value' => '<h2>Option 2</h2>',
+                'allowHtmlTags' => true,
+                'attributeValue' => '<h2>Option 2</h2>',
+                'expectedAttributeValue' => '<h2>Option 2</h2>',
             ],
             'disallow_html_tags' => [
-                'allow_html_tags' => false,
-                'attribute_value' => '<h2>Option 2</h2>',
-                'expected_attribute_value' => '&lt;h2&gt;Option 2&lt;/h2&gt;',
+                'allowHtmlTags' => false,
+                'attributeValue' => '<h2>Option 2</h2>',
+                'expectedAttributeValue' => '&lt;h2&gt;Option 2&lt;/h2&gt;',
             ],
         ];
     }

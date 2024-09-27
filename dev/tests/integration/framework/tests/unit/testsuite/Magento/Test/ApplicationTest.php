@@ -235,7 +235,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function installDataProvider()
+    public static function installDataProvider()
     {
         $installShellCommandExpectation = [
             PHP_BINARY . ' -f %s setup:install -vvv ' .
@@ -250,7 +250,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 '',
                 '0',
                 '0',
-                $this->getInitParamsQuery(sys_get_temp_dir()),
+                self::getInitParamsQuery(sys_get_temp_dir()),
                 true
             ]
         ];
@@ -280,7 +280,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                             'magento_replica',
                             'root',
                             'secret',
-                            $this->getInitParamsQuery(sys_get_temp_dir()),
+                            self::getInitParamsQuery(sys_get_temp_dir()),
                         ]
                     ]
                 ]
@@ -300,7 +300,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                             'bar',
                             'baz',
                             'qux',
-                            $this->getInitParamsQuery(sys_get_temp_dir()),
+                            self::getInitParamsQuery(sys_get_temp_dir()),
                         ]
                     ]
                 ]
@@ -381,23 +381,23 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function partialLoadAreaDataProvider()
+    public static function partialLoadAreaDataProvider()
     {
         return [
             [
-                'area_code' => Area::AREA_GLOBAL,
+                'areaCode' => Area::AREA_GLOBAL,
             ],
             [
-                'area_code' => Area::AREA_WEBAPI_REST,
+                'areaCode' => Area::AREA_WEBAPI_REST,
             ],
             [
-                'area_code' => Area::AREA_WEBAPI_SOAP,
+                'areaCode' => Area::AREA_WEBAPI_SOAP,
             ],
             [
-                'area_code' => Area::AREA_CRONTAB,
+                'areaCode' => Area::AREA_CRONTAB,
             ],
             [
-                'area_code' => Area::AREA_GRAPHQL,
+                'areaCode' => Area::AREA_GRAPHQL,
             ],
         ];
     }
@@ -408,7 +408,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
      * @param string $dir The base application directory
      * @return string
      */
-    private function getInitParamsQuery(string $dir)
+    private static function getInitParamsQuery(string $dir)
     {
         return str_replace(
             '%s',
