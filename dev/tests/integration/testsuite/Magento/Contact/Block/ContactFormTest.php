@@ -9,6 +9,7 @@ namespace Magento\Contact\Block;
 
 use Magento\Contact\ViewModel\UserDataProvider;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Framework\View\Element\ButtonLockManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -35,7 +36,8 @@ class ContactFormTest extends TestCase
     {
         parent::setUp();
         Bootstrap::getInstance()->loadArea('frontend');
-        $this->block = Bootstrap::getObjectManager()->create(ContactForm::class);
+        $this->block = Bootstrap::getObjectManager()->create(ContactForm::class)
+            ->setButtonLockManager(Bootstrap::getObjectManager()->create(ButtonLockManager::class));
     }
 
     /**
@@ -60,16 +62,16 @@ class ContactFormTest extends TestCase
         $this->assertInstanceOf($expectedViewModelType, $this->block->getData('view_model'));
     }
 
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
         return [
             'view model was not preset before' => [
-                'set view model' => false,
-                'expected view model type' => UserDataProvider::class
+                'setViewModel' => false,
+                'expectedViewModelType' => UserDataProvider::class
             ],
             'view model was pre-installed before' => [
-                'set view model' => true,
-                'expected view model type' => self::SOME_VIEW_MODEL
+                'setViewModel' => true,
+                'expectedViewModelType' => self::SOME_VIEW_MODEL
             ]
         ];
     }

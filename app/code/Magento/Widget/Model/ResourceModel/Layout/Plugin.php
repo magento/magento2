@@ -1,31 +1,30 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Widget\Model\ResourceModel\Layout;
 
-/**
- * Class Plugin
- */
 class Plugin
 {
     /**
-     * @var \Magento\Widget\Model\ResourceModel\Layout\Update
+     * @var Update
      */
     private $update;
 
     /**
-     * @param \Magento\Widget\Model\ResourceModel\Layout\Update $update
+     * @param Update $update
      */
-    public function __construct(
-        \Magento\Widget\Model\ResourceModel\Layout\Update $update
-    ) {
+    public function __construct(Update $update)
+    {
         $this->update = $update;
     }
 
     /**
-     * Around getDbUpdateString
+     * Around update
      *
      * @param \Magento\Framework\View\Model\Layout\Merge $subject
      * @param callable $proceed

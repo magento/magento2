@@ -13,6 +13,7 @@ use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter\LayerFormatter;
+use Magento\Config\Model\Config\Source\Yesno;
 
 /**
  * @inheritdoc
@@ -30,6 +31,8 @@ class Attribute implements LayerBuilderInterface
      * @see \Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Price::PRICE_BUCKET
      */
     private const CATEGORY_BUCKET = 'category_bucket';
+
+    private const ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS = 1;
 
     /**
      * @var AttributeOptionProvider
@@ -50,17 +53,25 @@ class Attribute implements LayerBuilderInterface
     ];
 
     /**
+     * @var Yesno
+     */
+    private Yesno $YesNo;
+
+    /**
      * @param AttributeOptionProvider $attributeOptionProvider
      * @param LayerFormatter $layerFormatter
+     * @param Yesno $YesNo
      * @param array $bucketNameFilter
      */
     public function __construct(
         AttributeOptionProvider $attributeOptionProvider,
         LayerFormatter $layerFormatter,
+        Yesno $YesNo,
         $bucketNameFilter = []
     ) {
         $this->attributeOptionProvider = $attributeOptionProvider;
         $this->layerFormatter = $layerFormatter;
+        $this->YesNo = $YesNo;
         $this->bucketNameFilter = \array_merge($this->bucketNameFilter, $bucketNameFilter);
     }
 
@@ -82,19 +93,21 @@ class Attribute implements LayerBuilderInterface
 
             $result[$bucketName] = $this->layerFormatter->buildLayer(
                 $attribute['attribute_label'] ?? $bucketName,
-                \count($bucket->getValues()),
+                0,
                 $attribute['attribute_code'] ?? $bucketName,
                 isset($attribute['position']) ? $attribute['position'] : null
             );
-
-            $options = $this->getSortedOptions($bucket, isset($attribute['options']) ? $attribute['options'] : []);
-            foreach ($options as $option) {
-                $result[$bucketName]['options'][] = $this->layerFormatter->buildItem(
-                    $option['label'],
-                    $option['value'],
-                    $option['count']
+            $optionLabels = $attribute['attribute_type'] === 'boolean'
+                ? $this->YesNo->toArray()
+                : $attribute['options'] ?? [];
+            $result[$bucketName]['options'] = $this->getSortedOptions($bucket, $optionLabels);
+            if (self::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS === $attribute['is_filterable']) {
+                $result[$bucketName]['options'] = array_filter(
+                    $result[$bucketName]['options'],
+                    fn ($option) => $option['count']
                 );
             }
+            $result[$bucketName]['count'] = count($result[$bucketName]['options']);
         }
 
         return $result;
@@ -172,23 +185,20 @@ class Attribute implements LayerBuilderInterface
      */
     private function getSortedOptions(BucketInterface $bucket, array $optionLabels): array
     {
+        $options = [];
         /**
          * Option labels array has been sorted
          */
-        $options = $optionLabels;
+        foreach ($optionLabels as $optionId => $optionLabel) {
+            $options[$optionId] = $this->layerFormatter->buildItem($optionLabel, $optionId, 0);
+        }
         foreach ($bucket->getValues() as $value) {
             $metrics = $value->getMetrics();
-            $optionValue = $metrics['value'];
-            $optionLabel = $optionLabels[$optionValue] ?? $optionValue;
-            $options[$optionValue] = $metrics + ['label' => $optionLabel];
-        }
-
-        /**
-         * Delete options without bucket values
-         */
-        foreach ($options as $optionId => $option) {
-            if (!is_array($options[$optionId])) {
-               unset($options[$optionId]);
+            $optionId = $metrics['value'];
+            if (isset($options[$optionId])) {
+                $options[$optionId]['count'] = $metrics['count'];
+            } else {
+                $options[$optionId] = $this->layerFormatter->buildItem($optionId, $optionId, $metrics['count']);
             }
         }
 

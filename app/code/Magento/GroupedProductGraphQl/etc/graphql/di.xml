@@ -53,17 +53,8 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GroupedProductGraphQl\Model\Resolver\GroupedItems">
-        <arguments>
-            <argument name="productResolver" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ChildProduct</argument>
-        </arguments>
+
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\ProductImage">
+        <plugin name="updateThumbnailToParentProductThumbnail" type="Magento\GroupedProductGraphQl\Plugin\Model\Resolver\ProductImagePlugin" />
     </type>
-    <virtualType name="Magento\GroupedProductGraphQl\Model\Resolver\GroupedItem\Product"
-                 type="Magento\CatalogGraphQl\Model\Resolver\Product">
-        <arguments>
-            <argument name="productDataProvider" xsi:type="object">
-                Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ChildProduct
-            </argument>
-        </arguments>
-    </virtualType>
 </config>

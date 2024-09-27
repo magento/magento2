@@ -45,7 +45,7 @@
 
             <!-- Logout from customer account -->
             <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomerOne"/>
-            <waitForPageLoad stepKey="waitLogoutCustomerOne"/>
+            <comment userInput="BIC" stepKey="waitLogoutCustomerOne"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
         </after>

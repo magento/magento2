@@ -101,4 +101,28 @@
         <data key="price_type">fixed</data>
         <data key="sku">product_option_value_sku_dropdown_2_</data>
     </entity>
+    <entity name="ProductValueDropdown1" type="product_option_value">
+        <data key="title">Value1</data>
+        <data key="sort_order">1</data>
+        <data key="price">10</data>
+        <data key="price_type">fixed</data>
+    </entity>
+    <entity name="ProductValueDropdown2" type="product_option_value">
+        <data key="title">Value2</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="price_type">fixed</data>
+    </entity>
+    <entity name="ProductValueCheckbox1" type="product_option_value">
+        <data key="title">Value1</data>
+        <data key="sort_order">1</data>
+        <data key="price">25</data>
+        <data key="price_type">percent</data>
+    </entity>
+    <entity name="ProductValueCheckbox2" type="product_option_value">
+        <data key="title">Value2</data>
+        <data key="sort_order">1</data>
+        <data key="price">50</data>
+        <data key="price_type">percent</data>
+    </entity>
 </entities>

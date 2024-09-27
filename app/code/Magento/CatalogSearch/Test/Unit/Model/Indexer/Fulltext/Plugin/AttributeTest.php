@@ -89,7 +89,7 @@ class AttributeTest extends TestCase
         );
         $this->config =  $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['reset'])
+            ->onlyMethods(['reset'])
             ->getMock();
         $this->eavConfig = $this->createPartialMock(
             EavConfig::class,
@@ -170,13 +170,13 @@ class AttributeTest extends TestCase
     /**
      * @return array
      */
-    public function afterSaveDataProvider(): array
+    public static function afterSaveDataProvider(): array
     {
         return [
-            'save_new_with_invalidation' => ['saveNeedInvalidation' => true, 'isNew' => true],
-            'save_new_without_invalidation' => ['saveNeedInvalidation' => false, 'isNew' => true],
-            'update_existing_with_inalidation' => ['saveNeedInvalidation' => true, 'isNew' => false],
-            'update_existing_without_inalidation' => ['saveNeedInvalidation' => false, 'isNew' => false],
+            'save_new_with_invalidation' => ['saveNeedInvalidation' => true, 'saveIsNew' => true],
+            'save_new_without_invalidation' => ['saveNeedInvalidation' => false, 'saveIsNew' => true],
+            'update_existing_with_inalidation' => ['saveNeedInvalidation' => true, 'saveIsNew' => false],
+            'update_existing_without_inalidation' => ['saveNeedInvalidation' => false, 'saveIsNew' => false],
         ];
     }
 

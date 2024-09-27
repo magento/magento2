@@ -140,7 +140,7 @@ location /media/ {
 
 ## The following section allows to offload image resizing from Magento instance to the Nginx.
 ## Catalog image URL format should be set accordingly.
-## See https://docs.magento.com/user-guide/configuration/general/web.html#url-options
+## See https://experienceleague.adobe.com/docs/commerce-admin/config/general/web.html
 #   location ~* ^/media/catalog/.* {
 #
 #       # Replace placeholders and uncomment the line below to serve product images from public S3

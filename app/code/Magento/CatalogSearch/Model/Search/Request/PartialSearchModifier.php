@@ -41,8 +41,12 @@ class PartialSearchModifier implements ModifierInterface
             if ($matches) {
                 foreach ($matches as $index => $match) {
                     $field = $match['field'] ?? null;
-                    if ($field && $field !== '*' && !isset($attributes[$field])) {
-                        unset($matches[$index]);
+                    if ($field && $field !== '*') {
+                        if (!isset($attributes[$field])) {
+                            unset($matches[$index]);
+                            continue;
+                        }
+                        $matches[$index]['boost'] = $attributes[$field]->getSearchWeight() ?: 1;
                     }
                 }
                 $requests[$code]['queries']['partial_search']['match'] = array_values($matches);

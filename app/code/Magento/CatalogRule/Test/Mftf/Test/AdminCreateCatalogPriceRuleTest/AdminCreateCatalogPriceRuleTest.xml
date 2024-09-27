@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-26702"/>
             <group value="CatalogRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Login as admin -->
@@ -35,7 +36,9 @@
                 <field key="price">100.00</field>
             </createData>
 
-            <magentoCron groups="index" stepKey="fixInvalidatedIndicesBeforeTest"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="fixInvalidatedIndicesBeforeTest">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete products and category -->
@@ -49,7 +52,9 @@
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Goto Marketing > Catalog Price Rule -->

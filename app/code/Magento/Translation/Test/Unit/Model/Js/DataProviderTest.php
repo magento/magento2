@@ -189,7 +189,7 @@ class DataProviderTest extends TestCase
      *
      * @return array
      */
-    public function configDataProvider(): array
+    public static function configDataProvider(): array
     {
         return [
             [

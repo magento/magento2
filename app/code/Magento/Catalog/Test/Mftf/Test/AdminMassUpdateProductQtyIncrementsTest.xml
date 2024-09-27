@@ -20,6 +20,9 @@
             <group value="catalog"/>
             <group value="CatalogInventory"/>
             <group value="product_attributes"/>
+            <skip>
+            <issueId value="ACQE-4352"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

@@ -10,7 +10,7 @@ namespace Magento\Backend\Test\Unit\Console\Command;
 use Magento\Backend\Console\Command\CacheEnableCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CacheEnableCommandTest extends AbstractCacheSetCommandTest
+class CacheEnableCommandTest extends AbstractCacheSetCommandTestCase
 {
     protected function setUp(): void
     {
@@ -46,9 +46,9 @@ class CacheEnableCommandTest extends AbstractCacheSetCommandTest
     /**
      * {@inheritdoc}
      */
-    public function getExpectedExecutionOutput(array $enabled)
+    public static function getExpectedExecutionOutput(array $enabled)
     {
-        $output = $this->getExpectedChangeOutput($enabled, true);
+        $output = static::getExpectedChangeOutput($enabled, true);
         if ($enabled) {
             $output .= 'Cleaned cache types:' . PHP_EOL;
             $output .= implode(PHP_EOL, $enabled) . PHP_EOL;

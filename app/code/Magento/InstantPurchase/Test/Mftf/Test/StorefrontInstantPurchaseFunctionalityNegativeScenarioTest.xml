@@ -18,6 +18,8 @@
             <group value="instant_purchase"/>
             <group value="vault"/>
             <group value="paypal"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
@@ -55,7 +57,9 @@
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-           <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!-- Log in as a customer -->
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLoginToStorefront">
                 <argument name="Customer" value="$customerWithDefaultAddress$"/>
@@ -104,7 +108,9 @@
             <deleteData createDataKey="createConfigChildProduct1CreateConfigurableProduct" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2CreateConfigurableProduct" stepKey="deleteConfigChildProduct2"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-           <magentoCron groups="index" stepKey="reindexInvalidatedIndicesAfterTest"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndicesAfterTest">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <!-- 1. Ensure customer is a guest -->
         <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>

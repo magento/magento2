@@ -221,7 +221,8 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'ANG', /*Netherlands Antillan Guilder*/
         'YTL', /*New Turkish Lira*/
         'NZD', /*New Zealand Dollar*/
-        'NIC', /*Nicaraguan Cordoba*/
+        'NIC', /*Nicaraguan Cordoba (1988–1991)*/
+        'NIO', /*Nicaraguan Cordoba*/
         'NGN', /*Nigerian Naira*/
         'KPW', /*North Korean Won*/
         'NOK', /*Norwegian Krone*/

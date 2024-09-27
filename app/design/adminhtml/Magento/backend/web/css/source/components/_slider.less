@@ -69,9 +69,9 @@
     cursor: pointer;
     display: block;
     height: @data-slider-handle__height;
-    margin-left: -@data-slider-handle__width / 2 !important;
+    margin-left: (-@data-slider-handle__width / 2) !important;
     position: absolute;
-    top: -@data-slider-handle__height / 2;
+    top: (-@data-slider-handle__height / 2);
     width: @data-slider-handle__width;
     z-index: @data-slider-track__z-index + 1 !important;
 
@@ -88,7 +88,7 @@
         display: block;
         height: @data-slider-handle-accent__height;
         left: 50%;
-        margin: -@data-slider-handle-accent__height / 2 0 0 -@data-slider-handle-accent__width / 2;
+        margin: (-@data-slider-handle-accent__height / 2) 0 0 (-@data-slider-handle-accent__width / 2);
         position: absolute;
         top: 50%;
         width: @data-slider-handle-accent__width;

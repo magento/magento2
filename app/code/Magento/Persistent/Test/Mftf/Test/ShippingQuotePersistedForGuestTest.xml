@@ -17,6 +17,7 @@
             <testCaseId value="MAGETWO-99025"/>
             <useCaseId value="MAGETWO-98620"/>
             <group value="persistent"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Enabled The Persistent Shopping Cart feature -->
@@ -36,6 +37,7 @@
             <!--Revert persistent configuration to default-->
             <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

@@ -27,6 +27,8 @@ use Magento\Store\Model\Website;
 
 /**
  * Class for mailing Product Alerts
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AlertProcessor
 {
@@ -139,6 +141,7 @@ class AlertProcessor
      * @param int $websiteId
      * @return array
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processAlerts(string $alertType, array $customerIds, int $websiteId): array
     {
@@ -160,6 +163,7 @@ class AlertProcessor
         /** @var Website $website */
         $website = $this->storeManager->getWebsite($websiteId);
         $defaultStoreId = $website->getDefaultStore()->getId();
+        $products = [];
 
         /** @var Price|Stock $alert */
         foreach ($collection as $alert) {
@@ -174,7 +178,12 @@ class AlertProcessor
                     $customer = $this->customerRepository->getById($alert->getCustomerId());
                 }
 
-                $product = $this->productRepository->getById($alert->getProductId(), false, $defaultStoreId);
+                if (!isset($products[$alert->getProductId()])) {
+                    $product = $this->productRepository->getById($alert->getProductId(), false, $defaultStoreId, true);
+                    $products[$alert->getProductId()] = $product;
+                } else {
+                    $product = $products[$alert->getProductId()];
+                }
 
                 switch ($alertType) {
                     case self::ALERT_TYPE_STOCK:

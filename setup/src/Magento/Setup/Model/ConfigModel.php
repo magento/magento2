@@ -143,7 +143,7 @@ class ConfigModel
                     $option->validate($inputValue);
                 }
             } catch (\InvalidArgumentException $e) {
-                $errors[] = $e->getMessage();
+                $errors[] = [$e->getMessage()];
             }
         }
 

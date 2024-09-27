@@ -20,7 +20,7 @@
         <element name="carriersUSPSContainer" type="input" selector="#carriers_usps_container_inherit"/>
         <element name="carriersUSPSSize" type="input" selector="#carriers_usps_size_inherit"/>
         <element name="carriersUSPSDestType" type="input" selector="#carriers_usps_machinable_inherit"/>
-        <element name="carriersUSPSMachinable" type="input" selector="#carriers_ups_tracking_xml_url_inherit"/>
+        <element name="carriersUSPSMachinable" type="input" selector="#carriers_ups_tracking_url_inherit"/>
         <element name="carriersUSPSMaxPackageWeight" type="input" selector="#carriers_usps_max_package_weight_inherit"/>
         <element name="carriersUSPSHandlingType" type="input" selector="#carriers_usps_handling_type_inherit"/>
         <element name="carriersUSPSHandlingAction" type="input" selector="#carriers_usps_handling_action_inherit"/>

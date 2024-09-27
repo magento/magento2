@@ -16,6 +16,7 @@
             <description value="Already selected configurable option should be selected when configurable product is edited from minicart"/>
             <severity value="MAJOR"/>
             <group value="ConfigurableProduct"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
