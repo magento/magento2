@@ -233,8 +233,12 @@ class AlertProcessor
      * @return AbstractCollection
      * @throws \InvalidArgumentException
      */
-    private function getAlertCollection(string $alertType, array $customerIds, int $websiteId, int $storeId): AbstractCollection
-    {
+    private function getAlertCollection(
+        string $alertType,
+        array $customerIds,
+        int $websiteId,
+        int $storeId
+    ): AbstractCollection {
         switch ($alertType) {
             case self::ALERT_TYPE_STOCK:
                 $collection = $this->stockCollectionFactory->create();
