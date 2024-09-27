@@ -92,7 +92,7 @@ class MaintenanceModeEnablerTest extends TestCase
     /**
      * @return array
      */
-    public function initialAppStateProvider()
+    public static function initialAppStateProvider()
     {
         return [
             'Maintenance mode disabled initially' => [false],

@@ -174,7 +174,7 @@ class ItemsTest extends TestCase
     /**
      * @return array
      */
-    public function canReturnItemsToStockDataProvider()
+    public static function canReturnItemsToStockDataProvider()
     {
         return [
             'cannot subtract by config' => [false, true, false],
