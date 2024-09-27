@@ -54,7 +54,7 @@ class UrlRewriteTest extends AbstractSaveCategoryTest
     /**
      * @return array
      */
-    public function categoryDataProvider(): array
+    public static function categoryDataProvider(): array
     {
         return [
             'url_rewrite_is_created_during_category_save' => [
