@@ -28,6 +28,9 @@ class SerializedTest extends TestCase
     /** @var LoggerInterface|MockObject */
     private $loggerMock;
 
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
     private $scopeConfigMock;
 
     protected function setUp(): void
@@ -72,7 +75,7 @@ class SerializedTest extends TestCase
     /**
      * @return array
      */
-    public function afterLoadDataProvider()
+    public static function afterLoadDataProvider()
     {
         return [
             'empty value' => [
@@ -124,7 +127,7 @@ class SerializedTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider()
     {
         return [
             'string' => [

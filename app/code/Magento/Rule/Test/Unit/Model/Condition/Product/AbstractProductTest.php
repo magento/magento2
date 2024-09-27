@@ -432,7 +432,7 @@ class AbstractProductTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function prepareValueOptionsDataProvider()
+    public static function prepareValueOptionsDataProvider()
     {
         return [
             [

@@ -99,7 +99,7 @@ class ShippingProcessorTest extends TestCase
      * Get variations for save method testing
      * @return array
      */
-    public function saveDataProvider()
+    public static function saveDataProvider()
     {
         return [
             ['carrier_Global_World_Economy', 'carrier', 'Global_World_Economy'],

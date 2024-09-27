@@ -66,7 +66,7 @@ class MultiselectTest extends AbstractFormTestCase
      *
      * @return array(array)
      */
-    public function extractValueDataProvider()
+    public static function extractValueDataProvider()
     {
         return [
             'false' => [false, false],
@@ -97,7 +97,7 @@ class MultiselectTest extends AbstractFormTestCase
      *
      * @return array(array)
      */
-    public function compactValueDataProvider()
+    public static function compactValueDataProvider()
     {
         return [
             'false' => [false, false],
@@ -140,7 +140,7 @@ class MultiselectTest extends AbstractFormTestCase
      *
      * @return array(array)
      */
-    public function outputValueTextDataProvider()
+    public static function outputValueTextDataProvider()
     {
         return [
             'empty' => ['', ''],
@@ -171,7 +171,7 @@ class MultiselectTest extends AbstractFormTestCase
      *
      * @return array(array)
      */
-    public function outputValueJsonDataProvider()
+    public static function outputValueJsonDataProvider()
     {
         return [
             'empty' => ['', ['']],

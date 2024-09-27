@@ -98,7 +98,7 @@ class SenderResolverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvidedSenderArray()
+    public static function dataProvidedSenderArray()
     {
         return [
             [

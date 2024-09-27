@@ -140,7 +140,7 @@ class FileInfoManagerTest extends TestCase
     /**
      * @return array
      */
-    public function saveWithLocalizedExceptionDataProvider()
+    public static function saveWithLocalizedExceptionDataProvider()
     {
         return [
             'Empty FileInfo' => [null, null],
@@ -178,7 +178,7 @@ class FileInfoManagerTest extends TestCase
     /**
      * @return array
      */
-    public function loadDataProvider()
+    public static function loadDataProvider()
     {
         return [
             'Empty flag data' => [null],

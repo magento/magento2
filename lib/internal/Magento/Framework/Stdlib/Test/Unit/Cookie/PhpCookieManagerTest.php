@@ -287,7 +287,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
         /**
          * @return array
          */
-        public function isCurrentlySecureDataProvider()
+        public static function isCurrentlySecureDataProvider()
         {
             return [
                 [self::SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS, true],
