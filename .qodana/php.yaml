@@ -1,0 +1,23 @@
+name: "Configuring Qodana"
+version: 1.0
+baseProfile: qodana.recommended
+
+inspections:
+  - group: "ALL"
+    ignore:
+      - "vendor/**"
+      - "**/*.phtml"
+      - "**/*.html"
+      - "**/*.js"
+      - "generated/**"
+      - "dev/**"
+      - "app/i18n/**"
+      - "app/design/**"
+      - "**/Test/**"
+      - "**/View/**"
+  - group: "category:JavaScript and TypeScript/General"
+    enabled: false
+  - inspection: PhpDeprecationInspection # 使用了已弃用的方法
+    enabled: false
+  - inspection: PhpNotInstalledPackagesInspection
+    enabled: false
