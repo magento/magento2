@@ -1,0 +1,8 @@
+version: "1.0"
+profile:
+  path: .qodana/php.yaml # windows 系统请使用绝对路径
+php:
+  version: "7.4"
+disableSanityInspections: true
+plugins:
+  - id: com.magento.idea.magento2plugin
