@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+// phpcs:ignore CookieAndSessionMisuse
 namespace Magento\Multishipping\Model\Checkout\Type\Multishipping;
 
 use Magento\Checkout\Model\Session;
@@ -178,6 +179,7 @@ class State extends \Magento\Framework\DataObject
      */
     public function canSelectAddresses()
     {
+        return false;
     }
 
     /**
@@ -185,6 +187,7 @@ class State extends \Magento\Framework\DataObject
      */
     public function canInputShipping()
     {
+        return false;
     }
 
     /**
@@ -192,6 +195,7 @@ class State extends \Magento\Framework\DataObject
      */
     public function canSeeOverview()
     {
+        return false;
     }
 
     /**
@@ -199,6 +203,7 @@ class State extends \Magento\Framework\DataObject
      */
     public function canSuccess()
     {
+        return false;
     }
 
     // phpcs:enable
