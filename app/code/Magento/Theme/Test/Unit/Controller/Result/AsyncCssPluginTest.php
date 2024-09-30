@@ -24,7 +24,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  */
 class AsyncCssPluginTest extends TestCase
 {
-    const STUB_XML_PATH_USE_CSS_CRITICAL_PATH = 'dev/css/use_css_critical_path';
+    private const STUB_XML_PATH_USE_CSS_CRITICAL_PATH = 'dev/css/use_css_critical_path';
 
     /**
      * @var AsyncCssPlugin
