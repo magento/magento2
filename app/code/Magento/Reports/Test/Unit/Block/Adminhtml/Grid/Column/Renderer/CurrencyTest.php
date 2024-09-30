@@ -29,7 +29,6 @@ use PHPUnit\Framework\TestCase;
  * Test for class Currency.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-#[\AllowDynamicProperties] //@phpstan-ignore-line
 class CurrencyTest extends TestCase
 {
     /**
