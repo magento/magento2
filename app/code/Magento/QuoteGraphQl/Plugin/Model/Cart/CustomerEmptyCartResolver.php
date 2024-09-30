@@ -47,7 +47,7 @@ class CustomerEmptyCartResolver
      * @param CustomerCartResolver $subject
      * @param Closure $proceed
      * @param int $customerId
-     * @param null $predefinedMaskedQuoteId
+     * @param string|null $predefinedMaskedQuoteId
      * @return Quote
      * @throws NoSuchEntityException
      * @throws LocalizedException
@@ -80,7 +80,7 @@ class CustomerEmptyCartResolver
      * Create masked id for customer's active quote if it's not exists
      *
      * @param int $quoteId
-     * @param null $predefinedMaskedQuoteId
+     * @param string|null $predefinedMaskedQuoteId
      * @return void
      * @throws AlreadyExistsException
      */
