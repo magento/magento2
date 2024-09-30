@@ -18,11 +18,13 @@ use Magento\Store\Model\Store;
  */
 class Product extends \Magento\Framework\Url\Helper\Data
 {
-    const XML_PATH_PRODUCT_URL_USE_CATEGORY = 'catalog/seo/product_use_categories';
+    public const XML_PATH_PRODUCT_URL_USE_CATEGORY = 'catalog/seo/product_use_categories';
 
-    const XML_PATH_USE_PRODUCT_CANONICAL_TAG = 'catalog/seo/product_canonical_tag';
+    public const XML_PATH_USE_PRODUCT_CANONICAL_TAG = 'catalog/seo/product_canonical_tag';
 
-    const XML_PATH_AUTO_GENERATE_MASK = 'catalog/fields_masks';
+    public const XML_PATH_AUTO_GENERATE_MASK = 'catalog/fields_masks';
+
+    public const XML_PATH_APPLY_TRANSLITERATION_TO_URL = 'catalog/seo/product_url_transliteration';
 
     /**
      * Flag that shows if Magento has to check product to be saleable (enabled and/or inStock)
@@ -47,8 +49,6 @@ class Product extends \Magento\Framework\Url\Helper\Data
     protected $_assetRepo;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
@@ -59,8 +59,6 @@ class Product extends \Magento\Framework\Url\Helper\Data
     protected $_attributeConfig;
 
     /**
-     * Catalog session
-     *
      * @var \Magento\Catalog\Model\Session
      */
     protected $_catalogSession;

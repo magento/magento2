@@ -11,9 +11,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem\Glob;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Mail;
+use Magento\Indexer\Model\Indexer\Collection;
 use Magento\TestFramework;
+use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Psr\Log\LoggerInterface;
+use DomainException;
 
 /**
  * Encapsulates application installation, initialization and uninstall.
@@ -26,7 +30,7 @@ class Application
     /**
      * Default application area.
      */
-    const DEFAULT_APP_AREA = 'global';
+    public const DEFAULT_APP_AREA = 'global';
 
     /**
      * DB vendor adapter instance.
@@ -50,11 +54,25 @@ class Application
     private $installConfigFile;
 
     /**
+     * Configuration file that contains array of post-installation commands to run through bin/magento CLI tool.
+     *
+     * @var string|null
+     */
+    private $postInstallSetupCommandsFile;
+
+    /**
      * The loaded installation parameters.
      *
      * @var array
      */
     protected $installConfig;
+
+    /**
+     * The loaded post-installation commands.
+     *
+     * @var array
+     */
+    private $postInstallSetupCommands;
 
     /**
      * Application *.xml configuration files.
@@ -153,12 +171,13 @@ class Application
      *
      * @param \Magento\Framework\Shell $shell
      * @param string $installDir
-     * @param array $installConfigFile
+     * @param string $installConfigFile
      * @param string $globalConfigFile
      * @param string $globalConfigDir
      * @param string $appMode
      * @param AutoloaderInterface $autoloadWrapper
      * @param bool|null $loadTestExtensionAttributes
+     * @param string|null $postInstallSetupCommandsFile
      */
     public function __construct(
         \Magento\Framework\Shell $shell,
@@ -168,7 +187,8 @@ class Application
         $globalConfigDir,
         $appMode,
         AutoloaderInterface $autoloadWrapper,
-        $loadTestExtensionAttributes = false
+        $loadTestExtensionAttributes = false,
+        $postInstallSetupCommandsFile = null
     ) {
         if (getcwd() != BP . '/dev/tests/integration') {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -176,6 +196,7 @@ class Application
         }
         $this->_shell = $shell;
         $this->installConfigFile = $installConfigFile;
+        $this->postInstallSetupCommandsFile = $postInstallSetupCommandsFile;
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $this->_globalConfigDir = realpath($globalConfigDir);
         $this->_appMode = $appMode;
@@ -258,8 +279,26 @@ class Application
         if (null === $this->installConfig) {
             // phpcs:ignore Magento2.Security.IncludeFile
             $this->installConfig = include $this->installConfigFile;
+            $this->installConfig['use-secure'] = '0';
+            $this->installConfig['use-secure-admin'] = '0';
         }
         return $this->installConfig;
+    }
+
+    /**
+     * Gets post-installation commands.
+     *
+     * @return array
+     */
+    protected function getPostInstallSetupCommands()
+    {
+        if (null === $this->postInstallSetupCommandsFile) {
+            $this->postInstallSetupCommands = [];
+        } elseif (null === $this->postInstallSetupCommands) {
+            // phpcs:ignore Magento2.Security.IncludeFile
+            $this->postInstallSetupCommands = include $this->postInstallSetupCommandsFile;
+        }
+        return $this->postInstallSetupCommands;
     }
 
     /**
@@ -336,6 +375,8 @@ class Application
         );
         $objectManager->removeSharedInstance(LoggerInterface::class, true);
         $objectManager->addSharedInstance($logger, LoggerInterface::class, true);
+        $objectManager->removeSharedInstance(TestFramework\ErrorLog\Logger::class, true);
+        $objectManager->addSharedInstance($logger, TestFramework\ErrorLog\Logger::class, true);
         return $logger;
     }
 
@@ -382,6 +423,7 @@ class Application
                 \Magento\Framework\App\State::class => TestFramework\App\State::class,
                 Mail\TransportInterface::class => TestFramework\Mail\TransportInterfaceMock::class,
                 Mail\Template\TransportBuilder::class => TestFramework\Mail\Template\TransportBuilderMock::class,
+                ProcessorInterface::class => \Magento\TestFramework\Fixture\Data\CompositeProcessor::class,
             ]
         ];
         if ($this->loadTestExtensionAttributes) {
@@ -485,7 +527,7 @@ class Application
          * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
          */
         $this->_shell->execute(
-            PHP_BINARY . ' -f %s setup:uninstall -vvv -n --magento-init-params=%s',
+            PHP_BINARY . ' -f %s setup:uninstall --no-interaction -vvv -n --magento-init-params=%s',
             [BP . '/bin/magento', $this->getInitParamsQuery()]
         );
     }
@@ -511,6 +553,7 @@ class Application
         $this->copyGlobalConfigFile();
 
         $installParams = $this->getInstallCliParams();
+        $installParams['--no-interaction'] = true;
 
         // performance optimization: restore DB from last good dump to make installation on top of it (much faster)
         // do not restore from the database if the cleanup option is set to ensure we have a clean DB to test on
@@ -525,8 +568,12 @@ class Application
             array_merge([BP . '/bin/magento'], array_values($installParams))
         );
 
+        $this->runPostInstallCommands();
+        $this->makeIndexStatusRealtime();
+
         // enable only specified list of caches
         $initParamsQuery = $this->getInitParamsQuery();
+
         $this->_shell->execute(
             PHP_BINARY . ' -f %s cache:disable -vvv --bootstrap=%s',
             [BP . '/bin/magento', $initParamsQuery]
@@ -546,6 +593,53 @@ class Application
         // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
         if (!$db->isDbDumpExists() && $this->dumpDb) {
             $this->getDbInstance()->storeDbDump();
+        }
+    }
+
+    /**
+     * Run commands after installation configured in post-install-setup-command-config.php
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function runPostInstallCommands()
+    {
+        // run post-install setup commands
+        $postInstallSetupCommands = $this->getPostInstallSetupCommands();
+
+        foreach ($postInstallSetupCommands as $postInstallSetupCommand) {
+            if (!isset($postInstallSetupCommand['command'])) {
+                throw new DomainException('"command" must be present in post install setup command arrays');
+            }
+
+            $command = $postInstallSetupCommand['command'];
+            $argumentsAndOptions = $postInstallSetupCommand['config'];
+
+            $argumentsAndOptionsPlaceholders = [
+                '--no-interaction'
+            ];
+
+            foreach (array_keys($argumentsAndOptions) as $key) {
+                $isArgument = is_numeric($key);
+
+                if ($isArgument) {
+                    $argumentsAndOptionsPlaceholders[] = '%s';
+                } else {
+                    $argumentsAndOptionsPlaceholders[] = "$key=%s";
+                }
+            }
+
+            $argumentsAndOptionsPlaceholders[] = "--magento-init-params=%s";
+            $argumentsAndOptions[] = $this->getInitParamsQuery();
+
+            $this->_shell->execute(
+                PHP_BINARY . ' -f %s %s -vvv ' . implode(' ', array_values($argumentsAndOptionsPlaceholders)),
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                array_merge(
+                    [BP . '/bin/magento'],
+                    [$command],
+                    array_values($argumentsAndOptions)
+                ),
+            );
         }
     }
 
@@ -655,7 +749,7 @@ class Application
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             mkdir($dir, 0777, true);
             umask($old);
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
         } elseif (!is_dir($dir)) {
             throw new \Magento\Framework\Exception\LocalizedException(__("'%1' is not a directory.", $dir));
         }
@@ -734,5 +828,91 @@ class Application
             DirectoryList::VAR_IMPORT_EXPORT => [$path => "{$this->installDir}/var"],
         ];
         return $customDirs;
+    }
+
+    /**
+     * Initialize the application and set the index status to realtime.
+     *
+     * @return void
+     */
+    private function makeIndexStatusRealtime(): void
+    {
+        $overriddenParams = $this->getOverriddenParams();
+        $directoryList = $this->getDirectoryList($overriddenParams);
+        $objectManager = $this->getObjectManagers($overriddenParams, $directoryList);
+        Helper\Bootstrap::setObjectManager($objectManager);
+        $objectManagerConfiguration = [
+            'preferences' => [
+                \Magento\Framework\App\State::class => TestFramework\App\State::class
+            ]
+        ];
+        $objectManager->configure($objectManagerConfiguration);
+        $this->setIndexerToRealtime($objectManager);
+    }
+
+    /**
+     * Retrieves the overridden parameters.
+     *
+     * @return array
+     */
+    private function getOverriddenParams(): array
+    {
+        $overriddenParams[\Magento\Framework\App\State::PARAM_MODE] = $this->_appMode;
+        return $this->_customizeParams($overriddenParams);
+    }
+
+    /**
+     * Retrieves the directory list.
+     *
+     * @param array $overriddenParams
+     * @return DirectoryList
+     */
+    private function getDirectoryList($overriddenParams): DirectoryList
+    {
+        $directories = isset($overriddenParams[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS])
+            ? $overriddenParams[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
+            : [];
+        return new DirectoryList(BP, $directories);
+    }
+
+    /**
+     * Retrieves the object manager.
+     *
+     * @param array $overriddenParams
+     * @param DirectoryList $directoryList The directory list.
+     * @return ObjectManager
+     */
+    private function getObjectManagers($overriddenParams, $directoryList): ObjectManager
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        if (!$objectManager) {
+            $objectManager = $this->_factory->create($overriddenParams);
+            $objectManager->addSharedInstance($directoryList, DirectoryList::class);
+            $objectManager->addSharedInstance($directoryList, \Magento\Framework\Filesystem\DirectoryList::class);
+        } else {
+            $objectManager = $this->_factory->restore($objectManager, $directoryList, $overriddenParams);
+        }
+        return $objectManager;
+    }
+
+    /**
+     * Sets the indexer mode to realtime.
+     *
+     * @param ObjectManager $objectManager
+     * @return void
+     */
+    private function setIndexerToRealtime($objectManager): void
+    {
+        /** @var Collection $indexCollection */
+        $indexCollection = $objectManager->get(Collection::class);
+        $indexerIds = $indexCollection->getAllIds();
+        if (!empty($indexerIds)) {
+            foreach ($indexerIds as $indexerId) {
+                /** @var IndexerInterface $model */
+                $model = $objectManager->get(IndexerRegistry::class)
+                    ->get($indexerId);
+                $model->setScheduled(false);
+            }
+        }
     }
 }

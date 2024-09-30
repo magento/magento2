@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCheckoutSelectPaypalPaymentMethodActionGroup">
+        <annotations>
+            <description>Select Paypal payment method on onepage checkout</description>
+        </annotations>
+        <arguments>
+            <argument name="paymentMethod" defaultValue="{{StorefrontPaypalCheckoutSection.creditCard}}" type="string"/>
+        </arguments>
+        <waitForElementClickable selector="{{paymentMethod}}" stepKey="waitForPaypalPaymentMethod"/>
+        <click selector="{{paymentMethod}}" stepKey="selectPaypalPaymentMethod"/>
+        <waitForPageLoad stepKey="waitForPaypalFormLoad"/>
+        <scrollTo selector="{{paymentMethod}}" stepKey="scrollToCreditCardSection"/>
+    </actionGroup>
+</actionGroups>

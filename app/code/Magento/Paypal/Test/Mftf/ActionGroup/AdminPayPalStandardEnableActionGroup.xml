@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminPayPalStandardEnableActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Payment Methods'. Fills in the provided Sample PayPal credentials and other details. Clicks on Save.</description>
+        </annotations>
+        <arguments>
+            <argument name="credentials" defaultValue="SamplePaypalExpressConfig2"/>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <waitForElementVisible selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="waitForOtherPayPalPaymentsSection"/>
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab(countryCode)}}" visible="false" stepKey="expandOtherPaypalConfigButton"/>
+        <scrollTo selector="{{AdminPaypalStandardConfigSection.configureBtn(countryCode)}}"  x="0" y="-80"  stepKey="scrollToConfigure"/>
+        <waitForElementClickable selector="{{AdminPaypalStandardConfigSection.configureBtn(countryCode)}}" stepKey="waitForPayPalStandardConfigureBtn" />
+        <click selector="{{AdminPaypalStandardConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalStandardConfigureBtn"/>
+        <waitForElementVisible selector="{{AdminPaypalStandardConfigSection.email(countryCode)}}" stepKey="waitForEmailTab"/>
+        <fillField selector ="{{AdminPaypalStandardConfigSection.email(countryCode)}}" userInput="{{credentials.paypal_express_email}}" stepKey="inputEmailAssociatedWithPayPalMerchantAccount"/>
+        <selectOption selector ="{{AdminPaypalStandardConfigSection.apiMethod(countryCode)}}" userInput="API Signature" stepKey="inputAPIAuthenticationMethods"/>
+        <fillField selector ="{{AdminPaypalStandardConfigSection.username(countryCode)}}" userInput="{{credentials.paypal_express_api_username}}" stepKey="inputAPIUsername"/>
+        <fillField selector ="{{AdminPaypalStandardConfigSection.password(countryCode)}}" userInput="{{credentials.paypal_express_api_password}}" stepKey="inputAPIPassword"/>
+        <fillField selector ="{{AdminPaypalStandardConfigSection.signature(countryCode)}}" userInput="{{credentials.paypal_express_api_signature}}" stepKey="inputAPISignature"/>
+        <selectOption selector ="{{AdminPaypalStandardConfigSection.sandboxMode(countryCode)}}" userInput="Yes" stepKey="enableSandboxMode"/>
+        <selectOption selector="{{AdminPaypalStandardConfigSection.enableSolution(countryCode)}}" userInput="Yes" stepKey="enableSolution"/>
+        <waitForElementClickable selector="{{AdminConfigSection.saveButton}}" stepKey="waitForConfigureBtn" />
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+    </actionGroup>
+</actionGroups>

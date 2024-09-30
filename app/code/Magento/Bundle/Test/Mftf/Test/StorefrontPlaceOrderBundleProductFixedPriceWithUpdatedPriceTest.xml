@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPlaceOrderBundleProductFixedPriceWithUpdatedPriceTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Placing order with bundle product"/>
+            <title value="Order details with bundle product fixed price should show the correct price for bundle items"/>
+            <description value="Order details with bundle product fixed price should show the correct price for bundle items"/>
+            <severity value="MAJOR"/>
+            <useCaseId value="MC-40603"/>
+            <testCaseId value="MC-40744"/>
+            <group value="bundle"/>
+            <group value="catalog"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct2" stepKey="createFirstProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createSecondProduct"/>
+            <createData entity="ApiFixedBundleProduct" stepKey="createFixedBundleProduct">
+                <field key="price">11.00</field>
+            </createData>
+            <createData entity="RadioButtonsOption" stepKey="createFirstBundleOption">
+                <field key="position">1</field>
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+            </createData>
+            <createData entity="RadioButtonsOption" stepKey="createSecondBundleOption">
+                <field key="position">2</field>
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="firstLinkOptionToFixedProduct">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createFirstBundleOption"/>
+                <requiredEntity createDataKey="createFirstProduct"/>
+                <field key="price_type">0</field>
+                <field key="price">7.00</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="secondLinkOptionToFixedProduct">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createSecondBundleOption"/>
+                <requiredEntity createDataKey="createSecondProduct"/>
+                <field key="price_type">0</field>
+                <field key="price">5.00</field>
+            </createData>
+            <actionGroup stepKey="loginToAdminPanel" ref="AdminLoginActionGroup"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+                <argument name="productId" value="$createFixedBundleProduct.id$"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteSimpleProductForBundleItem"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteVirtualProductForBundleItem"/>
+            <deleteData createDataKey="createFixedBundleProduct" stepKey="deleteBundleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilters"/>
+            <waitForPageLoad stepKey="waitForClearProductsGridFilters"/>
+        </after>
+        <!--Login customer on storefront-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+        <!--Open Product Page-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="product" value="$createFixedBundleProduct$"/>
+        </actionGroup>
+        <!--Add bundle to cart-->
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickAddToCart"/>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart">
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <!--Open bundle product in admin-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$createFixedBundleProduct.id$"/>
+        </actionGroup>
+        <!--Change price of the first option-->
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYPrice('0', '0')}}" userInput="9" stepKey="fillBundleOption1Price"/>
+        <!--Save the bundle product-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <!--Open Product Page-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openBundleProductPage2">
+            <argument name="product" value="$createFixedBundleProduct$"/>
+        </actionGroup>
+        <!--Add bundle to cart-->
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickAddToCart2"/>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart2">
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <!--Verify bundle product details-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart"/>
+        <see selector="{{StorefrontBundledSection.nthItemOptionsTitle('1')}}" userInput="$$createFirstBundleOption.title$$" stepKey="seeOptionLabelInShoppingCart"/>
+        <see selector="{{StorefrontBundledSection.nthItemOptionsValue('1')}}" userInput="1 x $$createFirstProduct.name$$ $9.00" stepKey="seeOptionValueInShoppingCart"/>
+        <see selector="{{StorefrontBundledSection.nthItemOptionsTitle('2')}}" userInput="$$createSecondBundleOption.title$$" stepKey="seeOption2LabelInShoppingCart"/>
+        <see selector="{{StorefrontBundledSection.nthItemOptionsValue('2')}}" userInput="1 x $$createSecondProduct.name$$ $5.00" stepKey="seeOption2ValueInShoppingCart"/>
+        <!--Verify total-->
+        <waitForPageLoad stepKey="waitForCartSummary"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForShoppingCartTotal"/>
+        <grabTextFrom selector="{{CheckoutCartSummarySection.total}}" stepKey="grabShoppingCartTotal"/>
+        <assertEquals stepKey="verifyGrandTotalOnShoppingCartPage">
+            <actualResult type="variable">grabShoppingCartTotal</actualResult>
+            <expectedResult type="string">$60.00</expectedResult>
+        </assertEquals>
+
+        <!--Navigate to checkout-->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
+        <!--Click next button to open payment section-->
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <!--Click place order-->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <!--Navigate to order details page in custom account-->
+        <actionGroup ref="StorefrontGoToCustomerOrderDetailsPageActionGroup" stepKey="amOnOrderPage">
+            <argument name="orderId" value="$orderId"/>
+            <argument name="orderNumber" value="$orderNumber"/>
+        </actionGroup>
+        <!--Verify bundle order items details-->
+        <see selector="{{StorefrontCustomerOrderSection.orderItemOptionLabel('2')}}" userInput="$$createFirstBundleOption.title$$" stepKey="seeOptionLabelInCustomerOrderItems"/>
+        <see selector="{{StorefrontCustomerOrderSection.orderItemOptionValue('3')}}" userInput="1 x $$createFirstProduct.name$$ $9.00" stepKey="seeOptionValueInCustomerOrderItems"/>
+        <see selector="{{StorefrontCustomerOrderSection.orderItemOptionLabel('4')}}" userInput="$$createSecondBundleOption.title$$" stepKey="seeOption2LabelInCustomerOrderItems"/>
+        <see selector="{{StorefrontCustomerOrderSection.orderItemOptionValue('5')}}" userInput="1 x $$createSecondProduct.name$$ $5.00" stepKey="seeOption2ValueInCustomerOrderItems"/>
+        <!--Navigate to order details page on admin-->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="entityId" value="{$orderId}"/>
+        </actionGroup>
+        <!--Verify bundle order items details-->
+        <see selector="{{AdminOrderItemsOrderedSection.orderItemOptionLabel('2')}}" userInput="$$createFirstBundleOption.title$$" stepKey="seeOptionLabelInAdminOrderItems"/>
+        <see selector="{{AdminOrderItemsOrderedSection.orderItemOptionValue('3')}}" userInput="1 x $$createFirstProduct.name$$" stepKey="seeOptionValueInAdminOrderItems"/>
+        <see selector="{{AdminOrderItemsOrderedSection.orderItemOptionPrice('3')}}" userInput="$9.00" stepKey="seeOptionPriceInAdminOrderItems"/>
+        <see selector="{{AdminOrderItemsOrderedSection.orderItemOptionLabel('4')}}" userInput="$$createSecondBundleOption.title$$" stepKey="seeOption2LabelInAdminOrderItems"/>
+        <see selector="{{AdminOrderItemsOrderedSection.orderItemOptionValue('5')}}" userInput="1 x $$createSecondProduct.name$$" stepKey="seeOption2ValueInAdminOrderItems"/>
+        <see selector="{{AdminOrderItemsOrderedSection.orderItemOptionPrice('5')}}" userInput="$5.00" stepKey="seeOption2PriceInAdminOrderItems"/>
+        <!--Verify total-->
+        <grabTextFrom selector="{{AdminOrderTotalSection.grandTotal}}" stepKey="grabAdminOrderTotal"/>
+        <assertEquals stepKey="verifyGrandTotalOnAdminOrderPage">
+            <actualResult type="variable">grabAdminOrderTotal</actualResult>
+            <expectedResult type="string">$60.00</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

@@ -117,6 +117,7 @@ class InvoiceTest extends TestCase
         $order = $this->orderFactory->create()->loadByIncrementId('100000555');
         $invoice = $order->getInvoiceCollection()->getFirstItem();
         $this->assertNotNull($invoice->getId());
+        $this->assertTrue(is_numeric($invoice->getIncrementId()));
         $this->registerOrder($order);
         $this->registerInvoice($invoice);
         $blockHtml = $this->renderPrintInvoiceBlock();
@@ -125,11 +126,41 @@ class InvoiceTest extends TestCase
             Xpath::getElementsCountForXpath(
                 sprintf(
                     "//div[contains(@class, 'order-title')]/strong[contains(text(), '%s')]",
-                    __('Invoice #%1', (int)$invoice->getIncrementId())
+                    __('Invoice #%1', $invoice->getIncrementId())
                 ),
                 $blockHtml
             ),
-            sprintf('Title for %s was not found.', __('Invoice #%1', (int)$invoice->getIncrementId()))
+            sprintf('Title for %s was not found.', __('Invoice #%1', $invoice->getIncrementId()))
+        );
+        $this->assertOrderInformation($order, $blockHtml);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Sales/_files/invoices_for_items.php
+     *
+     * @return void
+     */
+    public function testPrintInvoiceWithStringPrefix(): void
+    {
+        $order = $this->orderFactory->create()->loadByIncrementId('100000555');
+        $invoice = $order->getInvoiceCollection()->getFirstItem();
+        $this->assertNotNull($invoice->getId());
+        // set text prefix to increment id
+        $invoice->setIncrementId('prefix-' . $invoice->getIncrementId());
+        $this->assertFalse(is_numeric($invoice->getIncrementId()));
+        $this->registerOrder($order);
+        $this->registerInvoice($invoice);
+        $blockHtml = $this->renderPrintInvoiceBlock();
+        $this->assertEquals(
+            1,
+            Xpath::getElementsCountForXpath(
+                sprintf(
+                    "//div[contains(@class, 'order-title')]/strong[contains(text(), '%s')]",
+                    __('Invoice #%1', $invoice->getIncrementId())
+                ),
+                $blockHtml
+            ),
+            sprintf('Title for %s was not found.', __('Invoice #%1', $invoice->getIncrementId()))
         );
         $this->assertOrderInformation($order, $blockHtml);
     }

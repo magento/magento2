@@ -15,6 +15,6 @@
         </annotations>
 
         <conditionalClick selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" dependentSelector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" visible="true" stepKey="selectFlatRateShippingMethod"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForNextButton"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskForNextButton"/>
     </actionGroup>
 </actionGroups>

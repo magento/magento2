@@ -87,7 +87,8 @@ class TermsTest extends TestCase
         $terms = $this->createMock(Collection::class);
         $dataObjectMock = $this->getMockBuilder(Query::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPopularity', 'getQueryText'])
+            ->addMethods(['getPopularity'])
+            ->onlyMethods(['getQueryText'])
             ->getMock();
         $storeMock = $this->createMock(Store::class);
 
@@ -132,12 +133,13 @@ class TermsTest extends TestCase
     {
         $urlMock = $this->getMockBuilder(Url::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setQueryParam', 'getUrl'])
+            ->onlyMethods(['setQueryParam', 'getUrl'])
             ->getMock();
 
         $dataObjectMock = $this->getMockBuilder(Query::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPopularity', 'getQueryText'])
+            ->addMethods(['getPopularity'])
+            ->onlyMethods(['getQueryText'])
             ->getMock();
         $this->urlFactoryMock->expects($this->once())
             ->method('create')
@@ -159,7 +161,7 @@ class TermsTest extends TestCase
      *
      * @return array
      */
-    public function termKeysProvider(): array
+    public static function termKeysProvider(): array
     {
         return [
             [

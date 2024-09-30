@@ -5,64 +5,75 @@
  */
 namespace Magento\ImportExport\Model\Import;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Stdlib\StringUtils;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\ImportFactory;
+use Magento\ImportExport\Model\ResourceModel\Helper;
+use Magento\ImportExport\Model\ResourceModel\Import\Data as DataSourceModel;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Import entity abstract model
  *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
- *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 100.0.2
  */
-abstract class AbstractEntity
+abstract class AbstractEntity implements EntityInterface
 {
     /**
      * Custom row import behavior column name
      */
-    const COLUMN_ACTION = '_action';
+    public const COLUMN_ACTION = '_action';
 
     /**
      * Value in custom column for delete behaviour
      */
-    const COLUMN_ACTION_VALUE_DELETE = 'delete';
+    public const COLUMN_ACTION_VALUE_DELETE = 'delete';
 
-    /**#@+
-     * XML paths to parameters
+    /**
+     * Path to bunch size configuration
      */
-    const XML_PATH_BUNCH_SIZE = 'import/format_v2/bunch_size';
+    public const XML_PATH_BUNCH_SIZE = 'import/format_v2/bunch_size';
 
-    const XML_PATH_PAGE_SIZE = 'import/format_v2/page_size';
-
-    /**#@-*/
-
-    /**#@+
-     * Database constants
+    /**
+     * Path to page size configuration
      */
-    const DB_MAX_VARCHAR_LENGTH = 256;
+    public const XML_PATH_PAGE_SIZE = 'import/format_v2/page_size';
 
-    const DB_MAX_TEXT_LENGTH = 65536;
+    /**
+     * Size of varchar value
+     */
+    public const DB_MAX_VARCHAR_LENGTH = 256;
 
-    const ERROR_CODE_SYSTEM_EXCEPTION = 'systemException';
-    const ERROR_CODE_COLUMN_NOT_FOUND = 'columnNotFound';
-    const ERROR_CODE_COLUMN_EMPTY_HEADER = 'columnEmptyHeader';
-    const ERROR_CODE_COLUMN_NAME_INVALID = 'columnNameInvalid';
-    const ERROR_CODE_ATTRIBUTE_NOT_VALID = 'attributeNotInvalid';
-    const ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicateUniqueAttribute';
-    const ERROR_CODE_ILLEGAL_CHARACTERS = 'illegalCharacters';
-    const ERROR_CODE_INVALID_ATTRIBUTE = 'invalidAttributeName';
-    const ERROR_CODE_WRONG_QUOTES = 'wrongQuotes';
-    const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
-    const ERROR_EXCEEDED_MAX_LENGTH = 'exceededMaxLength';
-    const ERROR_INVALID_ATTRIBUTE_TYPE = 'invalidAttributeType';
-    const ERROR_INVALID_ATTRIBUTE_OPTION = 'absentAttributeOption';
+    /**
+     * Size of text value
+     */
+    public const DB_MAX_TEXT_LENGTH = 65536;
+
+    public const ERROR_CODE_SYSTEM_EXCEPTION = 'systemException';
+    public const ERROR_CODE_COLUMN_NOT_FOUND = 'columnNotFound';
+    public const ERROR_CODE_COLUMN_EMPTY_HEADER = 'columnEmptyHeader';
+    public const ERROR_CODE_COLUMN_NAME_INVALID = 'columnNameInvalid';
+    public const ERROR_CODE_ATTRIBUTE_NOT_VALID = 'attributeNotInvalid';
+    public const ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicateUniqueAttribute';
+    public const ERROR_CODE_ILLEGAL_CHARACTERS = 'illegalCharacters';
+    public const ERROR_CODE_INVALID_ATTRIBUTE = 'invalidAttributeName';
+    public const ERROR_CODE_WRONG_QUOTES = 'wrongQuotes';
+    public const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
+    public const ERROR_EXCEEDED_MAX_LENGTH = 'exceededMaxLength';
+    public const ERROR_INVALID_ATTRIBUTE_TYPE = 'invalidAttributeType';
+    public const ERROR_INVALID_ATTRIBUTE_OPTION = 'absentAttributeOption';
 
     /**
      * @var array
@@ -84,9 +95,9 @@ abstract class AbstractEntity
             . ", see acceptable values on settings specified for Admin",
     ];
 
-    /**#@-*/
-
-    /**#@-*/
+    /**
+     * @var AdapterInterface
+     */
     protected $_connection;
 
     /**
@@ -97,9 +108,7 @@ abstract class AbstractEntity
     protected $_dataValidated = false;
 
     /**
-     * Valid column names
-     *
-     * @array
+     * @var array
      */
     protected $validColumnNames = [];
 
@@ -113,7 +122,7 @@ abstract class AbstractEntity
     /**
      * DB data source model
      *
-     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data
+     * @var DataSourceModel
      */
     protected $_dataSourceModel;
 
@@ -132,7 +141,7 @@ abstract class AbstractEntity
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var StringUtils
      */
     protected $string;
 
@@ -252,7 +261,7 @@ abstract class AbstractEntity
     /**
      * Core store config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -285,54 +294,52 @@ abstract class AbstractEntity
     private $serializer;
 
     /**
-     * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\ImportExport\Model\ImportFactory $importFactory
-     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * Ids of saved data in DB
+     *
+     * @var array
+     */
+    private array $ids = [];
+
+    /**
+     * @param StringUtils $string
+     * @param ScopeConfigInterface $scopeConfig
+     * @param ImportFactory $importFactory
+     * @param Helper $resourceHelper
+     * @param ResourceConnection $resource
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param array $data
+     * @param Json|null $serializer
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\StringUtils $string,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\ImportExport\Model\ImportFactory $importFactory,
-        \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
+        StringUtils $string,
+        ScopeConfigInterface $scopeConfig,
+        ImportFactory $importFactory,
+        Helper $resourceHelper,
         ResourceConnection $resource,
         ProcessingErrorAggregatorInterface $errorAggregator,
-        array $data = []
+        array $data = [],
+        Json $serializer = null
     ) {
-        $this->_scopeConfig = $scopeConfig;
-        $this->_dataSourceModel = isset(
-            $data['data_source_model']
-        ) ? $data['data_source_model'] : $importFactory->create()->getDataSourceModel();
-        $this->_connection =
-            isset($data['connection']) ?
-            $data['connection'] :
-            $resource->getConnection();
         $this->string = $string;
-        $this->_pageSize = isset(
-            $data['page_size']
-        ) ? $data['page_size'] : (static::XML_PATH_PAGE_SIZE ? (int)$this->_scopeConfig->getValue(
-            static::XML_PATH_PAGE_SIZE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) : 0);
-        $this->_maxDataSize = isset(
-            $data['max_data_size']
-        ) ? $data['max_data_size'] : $resourceHelper->getMaxDataSize();
-        $this->_bunchSize = isset(
-            $data['bunch_size']
-        ) ? $data['bunch_size'] : (static::XML_PATH_BUNCH_SIZE ? (int)$this->_scopeConfig->getValue(
-            static::XML_PATH_BUNCH_SIZE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) : 0);
-
+        $this->_scopeConfig = $scopeConfig;
+        $this->_dataSourceModel = $data['data_source_model'] ?? $importFactory->create()->getDataSourceModel();
+        $this->_maxDataSize = $data['max_data_size'] ?? $resourceHelper->getMaxDataSize();
+        $this->_connection = $data['connection'] ?? $resource->getConnection();
         $this->errorAggregator = $errorAggregator;
+        $this->_pageSize = $data['page_size'] ?? ((int) $this->_scopeConfig->getValue(
+            static::XML_PATH_PAGE_SIZE,
+            ScopeInterface::SCOPE_STORE
+        ) ?: 0);
+        $this->_bunchSize = $data['bunch_size'] ?? ((int) $this->_scopeConfig->getValue(
+            static::XML_PATH_BUNCH_SIZE,
+            ScopeInterface::SCOPE_STORE
+        ) ?: 0);
 
         foreach ($this->errorMessageTemplates as $errorCode => $message) {
             $this->getErrorAggregator()->addErrorMessageTemplate($errorCode, $message);
         }
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -415,7 +422,7 @@ abstract class AbstractEntity
         $startNewBunch = false;
 
         $source->rewind();
-        $this->_dataSourceModel->cleanBunches();
+        $this->_dataSourceModel->cleanProcessedBunches();
         $mainAttributeCode = $this->getMasterAttributeCode();
 
         while ($source->valid() || count($bunchRows) || isset($entityGroup)) {
@@ -427,23 +434,20 @@ abstract class AbstractEntity
                     }
                     unset($entityGroup);
                 }
-                $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
+                $this->ids[] =
+                    $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
                 $bunchRows = [];
                 $startNewBunch = false;
             }
             if ($source->valid()) {
-                $valid = true;
                 try {
                     $rowData = $source->current();
+                    $valid = true;
                     foreach ($rowData as $attrName => $element) {
-                        if (!mb_check_encoding($element, 'UTF-8')) {
-                            $valid = false;
-                            $this->addRowError(
-                                AbstractEntity::ERROR_CODE_ILLEGAL_CHARACTERS,
-                                $this->_processedRowsCount,
-                                $attrName
-                            );
+                        $valid = $this->validateEncoding($element, $attrName);
+                        if (!$valid) {
+                            break;
                         }
                     }
                 } catch (\InvalidArgumentException $e) {
@@ -462,7 +466,7 @@ abstract class AbstractEntity
                         foreach ($entityGroup as $key => $value) {
                             $bunchRows[$key] = $value;
                         }
-                        $productDataSize = strlen($this->getSerializer()->serialize($bunchRows));
+                        $productDataSize = strlen($this->serializer->serialize($bunchRows));
 
                         /* Check if the new bunch should be started */
                         $isBunchSizeExceeded = ($this->_bunchSize > 0 && count($bunchRows) >= $this->_bunchSize);
@@ -473,7 +477,7 @@ abstract class AbstractEntity
                     $entityGroup = [];
                 }
 
-                if (isset($entityGroup) && $this->validateRow($rowData, $source->key())) {
+                if (isset($entityGroup) && isset($rowData) && $this->validateRow($rowData, $source->key())) {
                     /* Add row to entity group */
                     $entityGroup[$source->key()] = $this->_prepareRowForDb($rowData);
                 } elseif (isset($entityGroup)) {
@@ -489,19 +493,39 @@ abstract class AbstractEntity
     }
 
     /**
-     * Get Serializer instance
+     * Validates encoding.
      *
-     * Workaround. Only way to implement dependency and not to break inherited child classes
-     *
-     * @return Json
-     * @deprecated 100.2.0
+     * @param array|string|null $element
+     * @param string $attrName
+     * @return bool
      */
-    private function getSerializer()
+    private function validateEncoding(array|string|null $element, string $attrName): bool
     {
-        if (null === $this->serializer) {
-            $this->serializer = ObjectManager::getInstance()->get(Json::class);
+        if (is_array($element)) {
+            foreach ($element as $value) {
+                if (!mb_check_encoding($value, 'UTF-8')) {
+                    $this->addRowError(
+                        AbstractEntity::ERROR_CODE_ILLEGAL_CHARACTERS,
+                        $this->_processedRowsCount,
+                        $attrName
+                    );
+                    return false;
+                }
+            }
+        } elseif (is_string($element)) {
+            if (!mb_check_encoding($element, 'UTF-8')) {
+                $this->addRowError(
+                    AbstractEntity::ERROR_CODE_ILLEGAL_CHARACTERS,
+                    $this->_processedRowsCount,
+                    $attrName
+                );
+                return false;
+            }
+        } elseif ($element === null) {
+            return true;
         }
-        return $this->serializer;
+
+        return true;
     }
 
     /**
@@ -553,7 +577,7 @@ abstract class AbstractEntity
     /**
      * Import behavior getter
      *
-     * @param array $rowData
+     * @param array|null $rowData
      * @return string
      */
     public function getBehavior(array $rowData = null)
@@ -569,7 +593,9 @@ abstract class AbstractEntity
             if ($rowData !== null && $behavior == \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM) {
                 // try analyze value in self::COLUMN_CUSTOM column and return behavior for given $rowData
                 if (array_key_exists(self::COLUMN_ACTION, $rowData)) {
-                    if (strtolower($rowData[self::COLUMN_ACTION]) == self::COLUMN_ACTION_VALUE_DELETE) {
+                    if ($rowData[self::COLUMN_ACTION]
+                        && strtolower($rowData[self::COLUMN_ACTION]) == self::COLUMN_ACTION_VALUE_DELETE
+                    ) {
                         $behavior = \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE;
                     } else {
                         // as per task description, if column value is different to self::COLUMN_CUSTOM_VALUE_DELETE,
@@ -684,6 +710,7 @@ abstract class AbstractEntity
         $multiSeparator = Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
     ) {
         $message = '';
+        $rowData[$attributeCode] = $rowData[$attributeCode] ?? '';
         switch ($attributeParams['type']) {
             case 'varchar':
                 $value = $this->string->cleanString($rowData[$attributeCode]);
@@ -699,12 +726,19 @@ abstract class AbstractEntity
             case 'multiselect':
             case 'boolean':
                 $valid = true;
-                foreach (explode($multiSeparator, mb_strtolower($rowData[$attributeCode])) as $value) {
-                    $valid = isset($attributeParams['options'][$value]);
+                $values = $rowData[$attributeCode];
+
+                if (!is_array($values)) {
+                    $values = explode($multiSeparator, mb_strtolower($values));
+                }
+
+                foreach ($values as $value) {
+                    $valid = isset($attributeParams['options'][mb_strtolower($value)]);
                     if (!$valid) {
                         break;
                     }
                 }
+
                 $message = self::ERROR_INVALID_ATTRIBUTE_OPTION;
                 break;
             case 'int':
@@ -818,6 +852,7 @@ abstract class AbstractEntity
      *
      * @return ProcessingErrorAggregatorInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validateData()
     {
@@ -835,7 +870,7 @@ abstract class AbstractEntity
             foreach ($this->getSource()->getColNames() as $columnName) {
                 $columnNumber++;
                 if (!$this->isAttributeParticular($columnName)) {
-                    if (trim($columnName) == '') {
+                    if ($columnName === null || trim($columnName) == '') {
                         $emptyHeaderColumns[] = $columnNumber;
                     } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
                         $invalidColumns[] = $columnName;
@@ -896,9 +931,9 @@ abstract class AbstractEntity
      */
     protected function updateItemsCounterStats(array $created = [], array $updated = [], array $deleted = [])
     {
-        $this->countItemsCreated = count($created);
-        $this->countItemsUpdated = count($updated);
-        $this->countItemsDeleted = count($deleted);
+        $this->countItemsCreated += count($created);
+        $this->countItemsUpdated += count($updated);
+        $this->countItemsDeleted += count($deleted);
         return $this;
     }
 
@@ -910,5 +945,36 @@ abstract class AbstractEntity
     public function getValidColumnNames()
     {
         return $this->validColumnNames;
+    }
+
+    /**
+     * Retrieve Ids of Validated Rows
+     *
+     * @return array
+     */
+    public function getIds() : array
+    {
+        return $this->ids;
+    }
+
+    /**
+     * Set Ids of Validated Rows
+     *
+     * @param array $ids
+     * @return void
+     */
+    public function setIds(array $ids)
+    {
+        $this->ids = $ids;
+    }
+
+    /**
+     * Gets the currently used DataSourceModel
+     *
+     * @return DataSourceModel
+     */
+    public function getDataSourceModel() : DataSourceModel
+    {
+        return $this->_dataSourceModel;
     }
 }

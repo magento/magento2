@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Sales\Setup;
 
 use Magento\Eav\Model\Entity\Setup\Context;
@@ -10,7 +13,6 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
@@ -19,28 +21,29 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @codeCoverageIgnore
+ * @api
  */
 class SalesSetup extends EavSetup
 {
     /**
      * This should be set explicitly
      */
-    const ORDER_ENTITY_TYPE_ID = 5;
+    public const ORDER_ENTITY_TYPE_ID = 5;
 
     /**
      * This should be set explicitly
      */
-    const INVOICE_PRODUCT_ENTITY_TYPE_ID = 6;
+    public const INVOICE_PRODUCT_ENTITY_TYPE_ID = 6;
 
     /**
      * This should be set explicitly
      */
-    const CREDITMEMO_PRODUCT_ENTITY_TYPE_ID = 7;
+    public const CREDITMEMO_PRODUCT_ENTITY_TYPE_ID = 7;
 
     /**
      * This should be set explicitly
      */
-    const SHIPMENT_PRODUCT_ENTITY_TYPE_ID = 8;
+    public const SHIPMENT_PRODUCT_ENTITY_TYPE_ID = 8;
 
     /**
      * @var ScopeConfigInterface
@@ -206,7 +209,7 @@ class SalesSetup extends EavSetup
     protected function _getAttributeColumnDefinition($code, $data)
     {
         // Convert attribute type to column info
-        $data['type'] = isset($data['type']) ? $data['type'] : 'varchar';
+        $data['type'] = $data['type'] ?? 'varchar';
         $type = null;
         $length = null;
         switch ($data['type']) {
@@ -238,12 +241,14 @@ class SalesSetup extends EavSetup
             $data['length'] = $length;
         }
 
-        $data['nullable'] = isset($data['required']) ? !$data['required'] : true;
-        $data['comment'] = isset($data['comment']) ? $data['comment'] : ucwords(str_replace('_', ' ', $code));
+        $data['nullable'] = !isset($data['required']) || !$data['required'];
+        $data['comment'] = $data['comment'] ?? $code !== null ? ucwords(str_replace('_', ' ', $code)) : '';
         return $data;
     }
 
     /**
+     * Method to get default entities.
+     *
      * @return array
      */
     public function getDefaultEntities()
@@ -296,6 +301,8 @@ class SalesSetup extends EavSetup
     }
 
     /**
+     * Method to get encryptor.
+     *
      * @return EncryptorInterface
      */
     public function getEncryptor()
@@ -304,6 +311,8 @@ class SalesSetup extends EavSetup
     }
 
     /**
+     * Method to get connection.
+     *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     public function getConnection()

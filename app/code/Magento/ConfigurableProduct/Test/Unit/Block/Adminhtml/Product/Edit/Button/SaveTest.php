@@ -42,7 +42,7 @@ class SaveTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['isReadonly', 'isDuplicable', 'isComposite'])
+            ->addMethods(['isReadonly', 'isDuplicable', 'isComposite'])
             ->getMockForAbstractClass();
 
         $this->registryMock->expects(static::any())
@@ -63,5 +63,6 @@ class SaveTest extends TestCase
 
         $this->assertArrayHasKey('data_attribute', $result);
         $this->assertArrayHasKey('options', $result);
+        $this->assertArrayHasKey('dropdown_button_aria_label', $result);
     }
 }

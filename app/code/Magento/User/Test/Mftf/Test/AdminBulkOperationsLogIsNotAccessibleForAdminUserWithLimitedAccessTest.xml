@@ -17,6 +17,8 @@
             <testCaseId value="MC-13245"/>
             <group value="AsynchronousOperations"/>
             <group value="User"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

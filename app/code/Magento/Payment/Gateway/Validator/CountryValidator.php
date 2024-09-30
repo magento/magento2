@@ -10,8 +10,6 @@ use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
 /**
- * Class CountryValidator
- * @package Magento\Payment\Gateway\Validator
  * @api
  * @since 100.0.2
  */
@@ -35,6 +33,8 @@ class CountryValidator extends AbstractValidator
     }
 
     /**
+     * Validate country
+     *
      * @param array $validationSubject
      * @return bool
      * @throws NotFoundException
@@ -48,7 +48,7 @@ class CountryValidator extends AbstractValidator
         if ((int)$this->config->getValue('allowspecific', $storeId) === 1) {
             $availableCountries = explode(
                 ',',
-                $this->config->getValue('specificcountry', $storeId)
+                $this->config->getValue('specificcountry', $storeId) ?? ''
             );
 
             if (!in_array($validationSubject['country'], $availableCountries)) {

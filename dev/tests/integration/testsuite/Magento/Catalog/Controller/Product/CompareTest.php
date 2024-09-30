@@ -6,14 +6,16 @@
 
 namespace Magento\Catalog\Controller\Product;
 
+use Laminas\Stdlib\ParametersFactory;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ProductRepository;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Visitor;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Registry;
 use Magento\TestFramework\TestCase\AbstractController;
-use Magento\Customer\Model\Session;
-use Magento\Customer\Model\Visitor;
-use Laminas\Stdlib\ParametersFactory;
 
 /**
  * Test compare product.
@@ -39,6 +41,9 @@ class CompareTest extends AbstractController
     /** @var ParametersFactory */
     private $parametersFactory;
 
+    /** @var Registry */
+    private $registry;
+
     /**
      * @inheritDoc
      */
@@ -51,6 +56,7 @@ class CompareTest extends AbstractController
         $this->customerSession = $this->_objectManager->get(Session::class);
         $this->visitor = $this->_objectManager->get(Visitor::class);
         $this->parametersFactory = $this->_objectManager->get(ParametersFactory::class);
+        $this->registry = $this->_objectManager->get(Registry::class);
     }
 
     /**
@@ -85,7 +91,7 @@ class CompareTest extends AbstractController
         $this->assertSessionMessages(
             $this->equalTo(
                 [
-                    'You added product Simple Product 1 Name to the '.
+                    'You added product Simple Product 1 Name to the ' .
                     '<a href="http://localhost/index.php/catalog/product_compare/">comparison list</a>.'
                 ]
             ),
@@ -257,6 +263,31 @@ class CompareTest extends AbstractController
             ),
             MessageInterface::TYPE_SUCCESS
         );
+    }
+
+    /**
+     * Test removing a product wich does not exist from compare list.
+     *
+     * @return void
+     */
+    public function testRemoveActionWithNonExistentProduct(): void
+    {
+        $this->_requireVisitorWithTwoProducts();
+        $removedProduct = $this->productRepository->get('simple_product_1');
+        $redirectUrl = 'http://localhost/index.php/catalog/product_compare/index';
+        $this->assertTrue($this->deleteProduct($removedProduct), "The product must be removed.");
+
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setParams(['product' => $removedProduct->getId()]);
+        $server = $this->getRequest()->getServer();
+        $server['HTTP_REFERER'] = $redirectUrl;
+        $this->getRequest()->setServer($server);
+        $this->dispatch('catalog/product_compare/remove/');
+
+        $this->assertSessionMessages($this->isEmpty());
+        $this->assertRedirect($this->equalTo($redirectUrl));
+        $restProduct = $this->productRepository->get('simple_product_2');
+        $this->_assertCompareListEquals([$restProduct->getId()]);
     }
 
     /**
@@ -485,5 +516,28 @@ class CompareTest extends AbstractController
             $actualProductIds[] = $compareItem->getProductId();
         }
         $this->assertEquals($expectedProductIds, $actualProductIds, "Products in current visitor's compare list.");
+    }
+
+    /**
+     * Delete product in secure area
+     *
+     * @param ProductInterface $product
+     * @return bool
+     */
+    private function deleteProduct(ProductInterface $product): bool
+    {
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
+
+        try {
+            $result = $this->productRepository->delete($product);
+        } catch (\Exception $e) {
+            $result = false;
+        }
+
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', false);
+
+        return $result;
     }
 }

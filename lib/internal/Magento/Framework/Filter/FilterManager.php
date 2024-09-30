@@ -5,25 +5,31 @@
  */
 namespace Magento\Framework\Filter;
 
+use InvalidArgumentException;
+use Laminas\Filter\FilterInterface;
+use Magento\Framework\Filter\FilterManager\Config;
+use Magento\Framework\ObjectManagerInterface;
+use UnexpectedValueException;
+
 /**
  * Magento Filter Manager
  *
  * @api
  * @method string email(string $value)
- * @method string money(string $value, $params = array())
- * @method string simple(string $value, $params = array())
- * @method string object(string $value, $params = array())
- * @method string sprintf(string $value, $params = array())
- * @method string template(string $value, $params = array())
+ * @method string money(string $value, $params = [])
+ * @method string simple(string $value, $params = [])
+ * @method string object(string $value, $params = [])
+ * @method string sprintf(string $value, $params = [])
+ * @method string template(string $value, $params = [])
  * @method string arrayFilter(string $value)
- * @method string removeAccents(string $value, $params = array())
- * @method string splitWords(string $value, $params = array())
- * @method string removeTags(string $value, $params = array())
- * @method string stripTags(string $value, $params = array())
- * @method string truncate(string $value, $params = array())
- * @method string truncateFilter(string $value, $params = array())
- * @method string encrypt(string $value, $params = array())
- * @method string decrypt(string $value, $params = array())
+ * @method string removeAccents(string $value, $params = [])
+ * @method string splitWords(string $value, $params = [])
+ * @method string removeTags(string $value, $params = [])
+ * @method string stripTags(string $value, $params = [])
+ * @method string truncate(string $value, $params = [])
+ * @method string truncateFilter(string $value, $params = [])
+ * @method string encrypt(string $value, $params = [])
+ * @method string decrypt(string $value, $params = [])
  * @method string translit(string $value)
  * @method string translitUrl(string $value)
  * @since 100.0.2
@@ -31,12 +37,12 @@ namespace Magento\Framework\Filter;
 class FilterManager
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * @var FilterManager\Config
+     * @var Config
      */
     protected $config;
 
@@ -46,11 +52,13 @@ class FilterManager
     protected $factoryInstances;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManger
-     * @param FilterManager\Config $config
+     * @param ObjectManagerInterface $objectManger
+     * @param Config $config
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManger, FilterManager\Config $config)
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManger,
+        Config $config
+    ) {
         $this->objectManager = $objectManger;
         $this->config = $config;
     }
@@ -60,16 +68,18 @@ class FilterManager
      *
      * @param string $filterAlias
      * @param array $arguments
-     * @return \Zend_Filter_Interface
-     * @throws \UnexpectedValueException
+     * @return FilterInterface
+     * @throws UnexpectedValueException
      */
     public function get($filterAlias, array $arguments = [])
     {
         $filter = $this->createFilterInstance($filterAlias, $arguments);
-        if (!$filter instanceof \Zend_Filter_Interface) {
-            throw new \UnexpectedValueException(
-                'Filter object must implement Zend_Filter_Interface interface, ' . get_class($filter) . ' was given.'
-            );
+        if (!$filter instanceof FilterInterface) {
+            throw new UnexpectedValueException(sprintf(
+                'Filter object must implement %s interface, %s was given',
+                FilterInterface::class,
+                get_class($filter)
+            ));
         }
         return $filter;
     }
@@ -79,37 +89,39 @@ class FilterManager
      *
      * @param string $filterAlias
      * @param array $arguments
-     * @return \Zend_Filter_Interface
-     * @throws \InvalidArgumentException
+     * @return FilterInterface
+     * @throws InvalidArgumentException
      */
     protected function createFilterInstance($filterAlias, $arguments)
     {
-        /** @var FactoryInterface $factory */
         foreach ($this->getFilterFactories() as $factory) {
             if ($factory->canCreateFilter($filterAlias)) {
                 return $factory->createFilter($filterAlias, $arguments);
             }
         }
-        throw new \InvalidArgumentException('Filter was not found by given alias ' . $filterAlias);
+        throw new InvalidArgumentException(sprintf(
+            'Filter was not found by given alias %s',
+            $filterAlias
+        ));
     }
 
     /**
      * Get registered factories
      *
      * @return FactoryInterface[]
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     protected function getFilterFactories()
     {
-        if (null === $this->factoryInstances) {
+        if ($this->factoryInstances === null) {
             foreach ($this->config->getFactories() as $class) {
                 $factory = $this->objectManager->create($class);
                 if (!$factory instanceof FactoryInterface) {
-                    throw new \UnexpectedValueException(
-                        'Filter factory must implement FilterFactoryInterface interface, ' . get_class(
-                            $factory
-                        ) . ' was given.'
-                    );
+                    throw new UnexpectedValueException(sprintf(
+                        'Filter factory must implement %s interface, %s was given.',
+                        FactoryInterface::class,
+                        get_class($factory)
+                    ));
                 }
                 $this->factoryInstances[] = $factory;
             }
@@ -122,7 +134,7 @@ class FilterManager
      *
      * @param string $filterAlias
      * @param array $arguments
-     * @return \Zend_Filter_Interface
+     * @return FilterInterface
      */
     public function __call($filterAlias, array $arguments = [])
     {

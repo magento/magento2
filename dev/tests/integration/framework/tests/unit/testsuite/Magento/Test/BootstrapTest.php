@@ -74,13 +74,13 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
             ['emulateHttpRequest', 'emulateSession']
         );
         $this->_docBlockBootstrap = $this->getMockBuilder(\Magento\TestFramework\Bootstrap\DocBlock::class)
-            ->setMethods(['registerAnnotations'])
+            ->onlyMethods(['registerAnnotations'])
             ->setConstructorArgs([__DIR__])
             ->getMock();
         $profilerDriver =
             $this->createPartialMock(\Magento\Framework\Profiler\Driver\Standard::class, ['registerOutput']);
         $this->_profilerBootstrap = $this->getMockBuilder(\Magento\TestFramework\Bootstrap\Profiler::class)
-            ->setMethods(['registerFileProfiler', 'registerBambooProfiler'])
+            ->onlyMethods(['registerFileProfiler', 'registerBambooProfiler'])
             ->setConstructorArgs([$profilerDriver])
             ->getMock();
 
@@ -105,7 +105,6 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         $this->_envBootstrap = null;
         $this->_docBlockBootstrap = null;
         $this->_profilerBootstrap = null;
-        $this->_memoryBootstrap = null;
         $this->_shell = null;
     }
 
@@ -121,7 +120,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
             ->with($this->identicalTo($_SERVER));
         $this->_envBootstrap->expects($this->once())
             ->method('emulateSession')
-            ->with($this->identicalTo(isset($_SESSION) ? $_SESSION : null));
+            ->with($this->identicalTo($_SESSION));
 
         $memUsageLimit = '100B';
         $memLeakLimit = '60B';

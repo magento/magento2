@@ -14,6 +14,8 @@ use Magento\Framework\Filesystem;
  *
  * @api
  * @since 100.0.2
+ *
+ * @deprecated Database Media Storage is deprecated
  */
 class Database extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -206,8 +208,8 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
             $directory = $this->_removeAbsPathFromFileName($directory);
             if ($this->fileExists($directory . $filename)) {
                 $index = 1;
-                $extension = strrchr($filename, '.');
-                $filenameWoExtension = substr($filename, 0, -1 * strlen($extension));
+                $extension = $filename !== null ? strrchr($filename, '.') : '';
+                $filenameWoExtension = $filename !== null ? substr($filename, 0, -1 * strlen($extension)) : '';
                 while ($this->fileExists($directory . $filenameWoExtension . '_' . $index . $extension)) {
                     $index++;
                 }
@@ -245,7 +247,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getMediaRelativePath($fullPath)
     {
-        $relativePath = ltrim(str_replace($this->getMediaBaseDir(), '', $fullPath), '\\/');
+        $relativePath = $fullPath !== null ? ltrim(str_replace($this->getMediaBaseDir(), '', $fullPath), '\\/') : '';
         return str_replace('\\', '/', $relativePath);
     }
 
@@ -278,7 +280,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Saves uploaded by \Magento\MediaStorage\Model\File\Uploader file to DB with existence tests
      *
-     * param $result should be result from \Magento\MediaStorage\Model\File\Uploader::save() method
+     * Param $result should be result from \Magento\MediaStorage\Model\File\Uploader::save() method
      * Checks in DB, whether uploaded file exists ($result['file'])
      * If yes, renames file on FS (!!!!!)
      * Saves file with unique name into DB
@@ -291,8 +293,8 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
     public function saveUploadedFile($result)
     {
         if ($this->checkDbUsage()) {
-            $path = rtrim(str_replace(['\\', '/'], '/', $result['path']), '/');
-            $file = '/' . ltrim($result['file'], '\\/');
+            $path = rtrim(str_replace(['\\', '/'], '/', $result['path'] ?? ''), '/');
+            $file = '/' . ltrim($result['file'] ?? '', '\\/');
 
             $uniqueResultFile = $this->getUniqueFilename($path, $file);
 
@@ -310,6 +312,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Convert full file path to local (as used by model)
+     *
      * If not - returns just a filename
      *
      * @param string $filename

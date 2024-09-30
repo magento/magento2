@@ -22,6 +22,7 @@
             <skip>
                 <issueId value="MC-15741"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>
@@ -52,6 +53,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <comment userInput="BIC workaround" stepKey="logoutFromCustomer"/>
             <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteRecentlyComparedProductsWidget">

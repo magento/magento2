@@ -80,6 +80,9 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <createData entity="MsrpDisableMAP" stepKey="disableMAP"/>
             <magentoCLI command="config:set currency/options/allow USD" stepKey="setCurrencyAllow"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
@@ -98,10 +101,7 @@
         <actionGroup ref="AdminSetAdvancedPricingActionGroup" stepKey="setAdvancedPricingSecond">
             <argument name="advancedPrice" value="100"/>
         </actionGroup>
-
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToProduct">
             <argument name="productUrlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>

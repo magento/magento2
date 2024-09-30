@@ -16,6 +16,7 @@
             <testCaseId value="MAGETWO-93289"/>
             <stories value="MAGETWO-66666: Adding a product to cart from category page with an expired session does not allow product to be added"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -23,7 +24,9 @@
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCron stepKey="runCronReindex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>

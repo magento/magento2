@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
+    <suite name="RemoteStorageAwsS3EnabledSuite">
+        <before>
+            <!-- Enable AWS S3 Remote Storage -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage"/>
+        </before>
+        <after>
+            <!-- Disable Remote Storage -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage"/>
+        </after>
+        <include>
+            <group name="remote_storage_aws_s3"/>
+        </include>
+        <exclude>
+            <group name="remote_storage_disabled"/>
+            <group name="remote_storage_aws_s3_pagebuilder"/>
+        </exclude>
+    </suite>
+</suites>

@@ -7,34 +7,48 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model\UserExpiration;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\Timezone\LocalizedDateToUtcConverterInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Validator\AbstractValidator;
+use Magento\Framework\Validator\NotEmpty;
+use Magento\Framework\Validator\ValidatorChain;
 
 /**
  * Validates that the expires_at field is later than the current date/time.
  */
 class Validator extends AbstractValidator
 {
-
-    /**@var TimezoneInterface */
+    /**
+     * @var TimezoneInterface
+     */
     private $timezone;
 
-    /**@var DateTime */
+    /**
+     * @var DateTime
+     */
     private $dateTime;
 
     /**
-     * Validator constructor.
-     *
+     * @var LocalizedDateToUtcConverterInterface
+     */
+    private $localizedDateToUtcConverter;
+
+    /**
      * @param TimezoneInterface $timezone
      * @param DateTime $dateTime
+     * @param LocalizedDateToUtcConverterInterface|null $localizedDateToUtcConverter
      */
     public function __construct(
         TimezoneInterface $timezone,
-        DateTime $dateTime
+        DateTime $dateTime,
+        ?LocalizedDateToUtcConverterInterface $localizedDateToUtcConverter = null
     ) {
         $this->timezone = $timezone;
         $this->dateTime = $dateTime;
+        $this->localizedDateToUtcConverter = $localizedDateToUtcConverter ?: ObjectManager::getInstance()
+            ->get(LocalizedDateToUtcConverterInterface::class);
     }
 
     /**
@@ -48,18 +62,13 @@ class Validator extends AbstractValidator
     {
         $this->_clearMessages();
         $messages = [];
-        $expiresAt = $value;
         $label = 'Expiration date';
-        if (\Zend_Validate::is($expiresAt, 'NotEmpty')) {
-            if (strtotime($expiresAt)) {
-                $currentTime = $this->dateTime->gmtTimestamp();
-                $utcExpiresAt = $this->timezone->convertConfigTimeToUtc($expiresAt);
-                $expiresAt = $this->timezone->date($utcExpiresAt)->getTimestamp();
-                if ($expiresAt < $currentTime) {
-                    $messages['expires_at'] = __('"%1" must be later than the current date.', $label);
-                }
-            } else {
-                $messages['expires_at'] = __('"%1" is not a valid date.', $label);
+        if (ValidatorChain::is($value, NotEmpty::class)) {
+            $utcExpiresAt = $this->localizedDateToUtcConverter->convertLocalizedDateToUtc($value);
+            $currentTime = $this->dateTime->gmtTimestamp();
+            $expiresAt = $this->timezone->date($utcExpiresAt)->getTimestamp();
+            if ($expiresAt < $currentTime) {
+                $messages['expires_at'] = __('"%1" must be later than the current date.', $label);
             }
         }
         $this->_addMessages($messages);

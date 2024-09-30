@@ -11,6 +11,8 @@ use Magento\Framework\App\ResourceConnection;
  * Schema DTO element.
  *
  * Aggregation root for all structural elements. Provides access to tables by their names.
+ *
+ * @api
  */
 class Schema
 {

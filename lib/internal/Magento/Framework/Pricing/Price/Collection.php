@@ -6,15 +6,16 @@
 
 namespace Magento\Framework\Pricing\Price;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 
 /**
- * Class Collection
+ * The Price Collection
  *
  * @api
  * @since 100.0.2
  */
-class Collection implements \Iterator
+class Collection implements \Iterator, ResetAfterRequestInterface
 {
     /**
      * @var Pool
@@ -75,10 +76,19 @@ class Collection implements \Iterator
     }
 
     /**
+     * @inheritdoc
+     */
+    public function _resetState() : void
+    {
+        $this->priceModels = [];
+    }
+
+    /**
      * Reset the Collection to the first element
      *
      * @return mixed|void
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         return $this->pool->rewind();
@@ -89,6 +99,7 @@ class Collection implements \Iterator
      *
      * @return \Magento\Framework\Pricing\Price\PriceInterface
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->get($this->key());
@@ -99,6 +110,7 @@ class Collection implements \Iterator
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->pool->key();
@@ -109,6 +121,7 @@ class Collection implements \Iterator
      *
      * @return mixed|void
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         return $this->pool->next();
@@ -119,6 +132,7 @@ class Collection implements \Iterator
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->pool->valid();

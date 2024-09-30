@@ -46,7 +46,11 @@
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping"/>
 
         <!--Check price-->
-        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="openItemProductBlock"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsClickable"/>
+        <waitForElementNotVisible selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" stepKey="waitForCartItemsActive"/>
+        <waitForPageLoad stepKey="waitForOrderSummaryLoad"/>
+        <click selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="openItemProductBlock"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskForCartItem"/>
         <see userInput="$100.00" selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="checkSummarySubtotal"/>
         <see userInput="$100.00" selector="{{CheckoutPaymentSection.productItemPriceByName($$createSimpleProduct.name$$)}}" stepKey="checkItemPrice"/>
 
@@ -61,8 +65,15 @@
 
         <!--Check price-->
         <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+
         <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForCheckoutPageReload"/>
-        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="openItemProductBlock1"/>
+        <comment userInput="Preserve BIC" stepKey="waitForCartItemsActive1"/>
+        <comment userInput="Preserve BIC" stepKey="waitForOrderSummaryLoad2"/>
+
+        <waitForElementClickable selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsVisible1"/>
+        <click selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="openItemProductBlock1"/>
+        <waitForPageLoad stepKey="waitForCartItemLoaded"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="waitForSummarySubtotalVisible" />
         <see userInput="$120.00" selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="checkSummarySubtotal1"/>
         <see userInput="$120.00" selector="{{CheckoutPaymentSection.productItemPriceByName($$createSimpleProduct.name$$)}}" stepKey="checkItemPrice1"/>
     </test>

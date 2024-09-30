@@ -33,6 +33,7 @@
 
     <preference for="Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface" type="Magento\CatalogInventory\Model\ResourceModel\Stock" />
     <preference for="Magento\CatalogInventory\Model\ResourceModel\StockStatusFilterInterface" type="Magento\CatalogInventory\Model\ResourceModel\StockStatusFilter" />
+    <preference for="Magento\CatalogInventory\Model\StockStatusApplierInterface" type="Magento\CatalogInventory\Model\StockStatusApplier" />
     <type name="Magento\Catalog\Model\Product\Attribute\Repository">
         <plugin name="filterCustomAttribute" type="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute" />
     </type>
@@ -132,5 +133,12 @@
     </type>
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save">
         <plugin name="massAction" type="Magento\CatalogInventory\Plugin\MassUpdateProductAttribute" />
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\GetStatusExpression">
+        <arguments>
+            <argument name="statusExpressions" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\StatusExpression\DefaultExpression</item>
+            </argument>
+        </arguments>
     </type>
 </config>

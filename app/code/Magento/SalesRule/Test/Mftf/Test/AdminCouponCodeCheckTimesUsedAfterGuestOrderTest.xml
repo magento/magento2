@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCouponCodeCheckTimesUsedAfterGuestOrderTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Discount code `Times Used` is being counted twice while Customer account created just after order placed by converting guest details in tandem."/>
+            <title value="Discount code Times Used is being counted twice when customer account got created via the `Create Account` link just after placing an order."/>
+            <description value="Discount code `Times Used` is being counted twice while Customer account created just after order placed by converting guest details in tandem."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-2843"/>
+            <useCaseId value="ACP2E-690"/>
+            <group value="salesRule"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create simple product-->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+        </before>
+        <after>
+            <!--Delete simple product created during the test-->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <!--Delete customer created during the test-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <!--Delete the cart price rule we made during the test-->
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
+                <argument name="ruleName" value="{{CatPriceRule.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!--Go to admin Marketing > Cart Price Rule Page-->
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
+
+        <!--Create a new rule with specified details below-->
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{CatPriceRule.name}}" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.websites}}" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" parameterArray="[{{CatPriceRule.customerGroups}}]" stepKey="selectCustomerGroup"/>
+
+        <!-- Choose coupon type specific coupon and tick auto generation checkbox -->
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{CatPriceRule.coupon_type}}" stepKey="selectCouponType"/>
+        <checkOption selector="{{AdminCartPriceRulesFormSection.useAutoGeneration}}" stepKey="tickAutoGeneration"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.userPerCustomer}}" userInput="1" stepKey="fillUsesPerCustomer"/>
+
+        <!--Navigate to Actions tab and set the specified details-->
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="{{CatPriceRule.apply}}" stepKey="selectActionType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="{{CatPriceRule.discountAmount}}" stepKey="fillDiscountAmount"/>
+        <click selector="{{AdminCartPriceRulesFormSection.saveAndContinue}}" stepKey="clickSaveAndContinueButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+
+        <!-- Navigate to Manage Coupon Codes section to generate 5 coupon code -->
+        <click selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}" stepKey="expandCouponSection"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponQty}}" userInput="1" stepKey="fillCouponQty"/>
+        <click selector="{{AdminCartPriceRulesFormSection.generateCouponsButton}}" stepKey="clickGenerate"/>
+        <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="Message is added to queue, wait to get your coupons soon" stepKey="seeGenerationSuccess"/>
+
+        <!--Start coupon code generator queue-->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminCodeGeneratorMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="1"/>
+        </actionGroup>
+
+        <!--Reload cart price rule page-->
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+
+        <!--Open Manage Coupon Codes tab again to see generated coupon codes-->
+        <click selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}" stepKey="expandCouponSectionSecondTime"/>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.couponGridUsedHeader}}" stepKey="scrollToCouponGridUsedHeader"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.couponGridUsedHeader}}"  stepKey="waitForNewRule"/>
+
+        <!--Assert coupon codes grid header is correct -->
+        <see selector="{{AdminCartPriceRulesFormSection.couponGridUsedHeader}}" userInput="Used" stepKey="seeCorrectUsedHeader"/>
+
+        <!--Grab a coupon code and hold on to it for later -->
+        <grabTextFrom selector="{{AdminCartPriceRulesFormSection.generatedCouponByIndex('1')}}" stepKey="couponCode"/>
+
+        <!--Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="openProductPage"/>
+        <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartPriceRule">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="couponCode" value="{$couponCode}"/>
+        </actionGroup>
+        <waitForText userInput='You used coupon code "{$couponCode}"' stepKey="waitForText"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput='You used coupon code "{$couponCode}"' stepKey="seeSuccessMessage"/>
+
+        <!--Proceed to checkout for guest customer details-->
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="CheckBillingAddressInCheckoutActionGroup" stepKey="guestSeeAddress">
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+
+        <!-- Create Customer using guest details while placing an order -->
+        <actionGroup ref="StorefrontRegisterCustomerFromOrderSuccessPage" stepKey="createCustomerAfterPlaceOrder">
+            <argument name="customer" value="CustomerEntityOne"/>
+        </actionGroup>
+
+        <!-- Run cron -->
+        <magentoCron stepKey="runAllCronJobs"/>
+        <reloadPage stepKey="refreshPageAfterCronRun"/>
+
+        <!-- Search and go to cart price rule page again -->
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceListSecondTime"/>
+        <waitForPageLoad stepKey="waitForPriceList"/>
+        <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{CatPriceRule.name}}" stepKey="filterByName"/>
+        <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="doFilter"/>
+        <click selector="{{AdminCartPriceRulesSection.rowByIndex('1')}}" stepKey="goToEditRulePage"/>
+        <click selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}" stepKey="expandCouponSectionThirdTime"/>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.couponGridUsedHeader}}" stepKey="scrollToCouponGridUsedHeaderSecondTime"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.couponGridUsedHeader}}"  stepKey="waitForCouponGridToLoad"/>
+
+        <!--Verify coupon does not used twice-->
+        <dontSee userInput="2" selector="{{AdminCartPriceRulesFormSection.generatedCouponTimesUsed('1')}}" stepKey="seeTimesUsed"/>
+        <wait time="5" stepKey="waitToSeeTimesUsed"/>
+    </test>
+</tests>

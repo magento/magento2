@@ -13,6 +13,8 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Validate a page repository
+ *
+ * @api
  */
 interface ValidatorInterface
 {

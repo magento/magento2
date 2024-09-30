@@ -150,7 +150,8 @@ class Excel
 
         foreach ($row as $value) {
             $value = $this->escaper->escapeHtml($value);
-            $dataType = is_numeric($value) && $value[0] !== '+' && $value[0] !== '0' ? 'Number' : 'String';
+            $dataType = is_numeric($value) && (is_string($value) && ctype_space($value[0]) === false) &&
+                $value[0] !== '+' && $value[0] !== '0' ? 'Number' : 'String';
 
             /**
              * Security enhancement for CSV data processing by Excel-like applications.

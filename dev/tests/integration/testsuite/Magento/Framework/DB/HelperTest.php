@@ -46,7 +46,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
     {
         $diff = $this->_model->getDateDiff('2011-01-01', '2011-01-01');
         $this->assertInstanceOf('Zend_Db_Expr', $diff);
-        $this->assertStringContainsString('TO_DAYS', (string)$diff);
+        $this->assertStringContainsString('TIMESTAMPDIFF(DAY', (string)$diff);
     }
 
     public function testAddLikeEscape()

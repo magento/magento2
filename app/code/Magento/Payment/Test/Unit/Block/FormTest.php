@@ -47,13 +47,13 @@ class FormTest extends TestCase
         $helper = new ObjectManager($this);
         $this->_storeManager = $this->getMockBuilder(
             StoreManager::class
-        )->setMethods(
+        )->onlyMethods(
             ['getStore']
         )->disableOriginalConstructor()
             ->getMock();
         $this->_eventManager = $this->getMockBuilder(
             ManagerInterface::class
-        )->setMethods(
+        )->onlyMethods(
             ['dispatch']
         )->disableOriginalConstructor()
             ->getMock();
@@ -93,7 +93,7 @@ class FormTest extends TestCase
     public function testGetInfoData($field, $value, $expected)
     {
         $methodInstance = $this->getMockBuilder(AbstractMethod::class)
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMock();
         $methodInstance->expects($this->any())
@@ -113,7 +113,7 @@ class FormTest extends TestCase
     /**
      * @return array
      */
-    public function getInfoDataProvider()
+    public static function getInfoDataProvider()
     {
         return [
             ['info', 'blah-blah', 'blah-blah'],

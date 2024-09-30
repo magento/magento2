@@ -27,7 +27,7 @@
 
         <!-- Go to new order status page -->
         <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPage"/>
-        <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewStatus"/>
+        <actionGroup ref="AdminClickCreateNewStatusButtonOnOrderStatusPageActionGroup" stepKey="clickCreateNewStatus"/>
 
         <!-- Fill the form and validate message -->
         <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">

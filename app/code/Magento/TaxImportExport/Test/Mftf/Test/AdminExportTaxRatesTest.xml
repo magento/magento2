@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminExportTaxRatesTest">
+        <annotations>
+            <features value="TaxImportExport"/>
+            <stories value="Export"/>
+            <title value="Export Tax Rates"/>
+            <description value="Exports tax rates from the System > Data Transfer > Import/Export Tax Rates page, from
+            the Tax Rule page, from the Tax Rates grid page as a .csv, and from the Tax Rates grid page as an .xml.
+            Validates contents in downloaded file for each export area. Note that MFTF cannot simply click export and
+            have access to the file that is downloaded in the browser due to the test not having access to the server
+            that is running the test browser. Therefore, this test verifies that the Export button can be successfully
+            clicked, grabs the request URL from the Export button's form, executes the request on the magento machine
+            via a curl request, and verifies the contents of the exported file."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-38621"/>
+            <group value="importExport"/>
+            <group value="tax"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <!-- Create/Revert Seed Data -->
+            <createData entity="US_CA_Rate_1" stepKey="revertInitialTaxRateCA"/>
+            <createData entity="US_NY_Rate_1" stepKey="revertInitialTaxRateNY"/>
+
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Export Tax Rates & Validate Export from System > Data Transfer -->
+        <actionGroup ref="AdminNavigateImportExportTaxRatesActionGroup" stepKey="navigateToImportExportTaxRatesPage"/>
+        <actionGroup ref="AdminClickExportTaxRatesActionGroup" stepKey="exportTaxRates"/>
+        <grabAttributeFrom userInput="action" selector="{{AdminImportExportTaxRatesSection.exportTaxRatesButtonForm}}" stepKey="grabExportUrl"/>
+        <executeJS function="return window.FORM_KEY" stepKey="grabFormKey"/>
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsCATaxRate">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="postBody">{"form_key": "{$grabFormKey}"}</argument>
+            <argument name="expectedString">{{US_CA_Rate_1.code}}</argument>
+        </helper>
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsNYTaxRate">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="postBody">{"form_key": "{$grabFormKey}"}</argument>
+            <argument name="expectedString">{{US_NY_Rate_1.code}}</argument>
+        </helper>
+
+        <!-- Export Tax Rates & Validate Export from Tax Rule Page -->
+        <actionGroup ref="AdminGoToNewTaxRulePageActionGroup" stepKey="navigateToTaxRulePage"/>
+        <actionGroup ref="AdminClickExportTaxRatesActionGroup" stepKey="exportTaxRates2"/>
+        <grabAttributeFrom userInput="action" selector="{{AdminImportExportTaxRatesSection.exportTaxRatesButtonForm}}" stepKey="grabExportUrl2"/>
+        <executeJS function="return window.FORM_KEY" stepKey="grabFormKey2"/>
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsCATaxRate2">
+            <argument name="url">{$grabExportUrl2}</argument>
+            <argument name="postBody">{"form_key": "{$grabFormKey2}"}</argument>
+            <argument name="expectedString">{{US_CA_Rate_1.code}}</argument>
+        </helper>
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsNYTaxRate2">
+            <argument name="url">{$grabExportUrl2}</argument>
+            <argument name="postBody">{"form_key": "{$grabFormKey2}"}</argument>
+            <argument name="expectedString">{{US_NY_Rate_1.code}}</argument>
+        </helper>
+
+        <!-- Export Tax Rates & Validate Export from Tax Rates Grid Page as CSV -->
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesGridPage"/>
+        <actionGroup ref="AdminExportTaxRatesFromGridActionGroup" stepKey="exportTaxRatesCSV"/>
+        <grabAttributeFrom userInput="value" selector="{{AdminTaxRateGridSection.exportFileTypeOption('CSV')}}" stepKey="grabExportUrl3"/>
+        <executeJS function="return window.FORM_KEY" stepKey="grabFormKey3"/>
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsCATaxRate3">
+            <argument name="url">{$grabExportUrl3}</argument>
+            <argument name="postBody">{"form_key": "{$grabFormKey3}"}</argument>
+            <argument name="expectedString">{{US_CA_Rate_1.code}}</argument>
+        </helper>
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsNYTaxRate3">
+            <argument name="url">{$grabExportUrl3}</argument>
+            <argument name="postBody">{"form_key": "{$grabFormKey3}"}</argument>
+            <argument name="expectedString">{{US_NY_Rate_1.code}}</argument>
+        </helper>
+
+        <!-- Export Tax Rates & Validate Export from Tax Rates Grid Page as XML -->
+        <actionGroup ref="AdminExportTaxRatesFromGridActionGroup" stepKey="exportTaxRatesXML">
+            <argument name="fileType" value="Excel XML"/>
+        </actionGroup>
+        <grabAttributeFrom userInput="value" selector="{{AdminTaxRateGridSection.exportFileTypeOption('Excel XML')}}" stepKey="grabExportUrl4"/>
+        <executeJS function="return window.FORM_KEY" stepKey="grabFormKey4"/>
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsCATaxRate4">
+            <argument name="url">{$grabExportUrl4}</argument>
+            <argument name="postBody">{"form_key": "{$grabFormKey4}"}</argument>
+            <argument name="expectedString">{{US_CA_Rate_1.code}}</argument>
+        </helper>
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertExportedFileContainsNYTaxRate4">
+            <argument name="url">{$grabExportUrl4}</argument>
+            <argument name="postBody">{"form_key": "{$grabFormKey4}"}</argument>
+            <argument name="expectedString">{{US_NY_Rate_1.code}}</argument>
+        </helper>
+    </test>
+</tests>

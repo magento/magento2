@@ -16,7 +16,7 @@
         <data key="name" unique="suffix">configurable</data>
         <data key="price">123.00</data>
         <data key="weight">2</data>
-        <data key="urlKey" unique="suffix">configurableurlkey</data>
+        <data key="urlKey" unique="suffix">configurable</data>
         <data key="status">1</data>
         <data key="quantity">100</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>

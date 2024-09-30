@@ -16,7 +16,7 @@ use Magento\Framework\App\ObjectManager;
 class ItemResolverComposite implements ItemResolverInterface
 {
     /** @var string[] */
-    private $itemResolvers = [];
+    private $itemResolvers;
 
     /** @var ItemResolverInterface[] */
     private $itemResolversInstances = [];

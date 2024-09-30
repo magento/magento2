@@ -4,21 +4,27 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Checkout\Block\Onepage\Link */
+use Magento\Checkout\Block\Onepage\Link;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Link $block
+ * @var Escaper $escaper
+ */
 ?>
-<?php if ($block->isPossibleOnepageCheckout()) :?>
+<?php if ($block->isPossibleOnepageCheckout()): ?>
     <button type="button"
             data-role="proceed-to-checkout"
-            title="<?= $block->escapeHtmlAttr(__('Proceed to Checkout')) ?>"
+            title="<?= $escaper->escapeHtmlAttr(__('Proceed to Checkout')) ?>"
             data-mage-init='{
                 "Magento_Checkout/js/proceed-to-checkout":{
-                    "checkoutUrl":"<?= $block->escapeJs($block->escapeUrl($block->getCheckoutUrl())) ?>"
+                    "checkoutUrl":"<?= $escaper->escapeJs($block->getCheckoutUrl()) ?>"
                 }
             }'
             class="action primary checkout<?= ($block->isDisabled()) ? ' disabled' : '' ?>"
-            <?php if ($block->isDisabled()) :?>
+            <?php if ($block->isDisabled()): ?>
                 disabled="disabled"
             <?php endif; ?>>
-        <span><?= $block->escapeHtml(__('Proceed to Checkout')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Proceed to Checkout')) ?></span>
     </button>
 <?php endif?>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminTurnOffVenmoButtonTest">
+        <annotations>
+            <features value="Paypal"/>
+            <stories value="Payment methods configuration"/>
+            <title value="Check that Admin can turn off Venmo button"/>
+            <description value="Venmo button can be turned off by Admin"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-7121"/>
+            <useCaseId value="ACP2E-1303"/>
+            <group value="paypal"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <!-- Log out Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Open PayPal Advanced->Frontend Experience->Features configuration -->
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage1"/>
+        <actionGroup ref="AdminOpenPayPalAdvancedFrontendExperienceFeaturesPageActionGroup" stepKey= "openFeaturesPage1"/>
+        <!-- Venmo option is present in Disable Funding Options multiselect -->
+        <see selector="{{PayPalAdvancedFrontendExperienceFeaturesSection.disableFundingOptionsMultiselect('us')}}" userInput="Venmo" stepKey="seeVenmoOption"/>
+        <!-- Select Venmo option in Disable Funding Options multiselect and save config -->
+        <actionGroup ref="AdminSelectDisableFundingActionGroup" stepKey="selectVenmoOption"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig1"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheAfterOptionSelected">
+            <argument name="tags" value="config"/>
+        </actionGroup>
+
+        <!-- Open PayPal Advanced->Frontend Experience->Features configuration page again -->
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage2"/>
+        <actionGroup ref="AdminOpenPayPalAdvancedFrontendExperienceFeaturesPageActionGroup" stepKey="openFeaturesPage2"/>
+        <!-- Check Venmo option is selected  -->
+        <seeOptionIsSelected selector="{{PayPalAdvancedFrontendExperienceFeaturesSection.disableFundingOptionsMultiselect('us')}}" userInput="Venmo" stepKey="seeVenmoIsSelected"/>
+        <!-- Unselect Venmo option in Disable Funding Options multiselect and save config -->
+        <actionGroup ref="AdminUnselectDisableFundingActionGroup" stepKey="unselectVenmoOption"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig2"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage2"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheAfterOptionUnselected">
+            <argument name="tags" value="config"/>
+        </actionGroup>
+
+    </test>
+</tests>

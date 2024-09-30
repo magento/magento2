@@ -42,7 +42,7 @@ class Downloadable extends FinalPrice implements ConfiguredPriceInterface
             $customOption = $this->getProduct()->getCustomOption('downloadable_link_ids');
             if ($customOption) {
                 $links = $this->getLinks();
-                $linkIds = explode(',', $customOption->getValue());
+                $linkIds = explode(',', (string) $customOption->getValue());
                 foreach ($linkIds as $linkId) {
                     if (isset($links[$linkId])) {
                         $result += $links[$linkId]->getPrice();
@@ -54,6 +54,8 @@ class Downloadable extends FinalPrice implements ConfiguredPriceInterface
     }
 
     /**
+     * This method get downloadable product links.
+     *
      * @return \Magento\Downloadable\Model\Link[]
      */
     private function getLinks()
