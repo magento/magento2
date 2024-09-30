@@ -16,13 +16,12 @@ use Magento\Framework\Currency\Data\Currency as CurrencyData;
 use Magento\Framework\Currency\Exception\CurrencyException;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\CurrencyInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -30,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  * Test for class Currency.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[\AllowDynamicProperties] //@phpstan-ignore-line
 class CurrencyTest extends TestCase
 {
     /**
@@ -58,19 +58,9 @@ class CurrencyTest extends TestCase
     private $gridColumnMock;
 
     /**
-     * @var ScopeConfigInterface|MockObject
-     */
-    private $scopeConfigMock;
-
-    /**
      * @var StoreInterface|MockObject
      */
     private $storeMock;
-
-    /**
-     * @var WebsiteInterface|MockObject
-     */
-    private $websiteMock;
 
     /**
      * @var DataObject
@@ -108,26 +98,6 @@ class CurrencyTest extends TestCase
             true,
             true,
             ['getStore', 'getWebsite']
-        );
-
-        $this->storeMock = $this->getMockForAbstractClass(
-            StoreInterface::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['getWebsiteId', 'getCurrentCurrencyCode']
-        );
-
-        $this->websiteMock = $this->getMockForAbstractClass(
-            WebsiteInterface::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['getBaseCurrencyCode']
         );
 
         $this->currencyLocatorMock = $this->getMockBuilder(DefaultLocator::class)
@@ -175,32 +145,19 @@ class CurrencyTest extends TestCase
      *
      * @param float $rate
      * @param string $columnIndex
-     * @param int $catalogPriceScope
-     * @param int $adminWebsiteId
-     * @param string $adminCurrencyCode
      * @param string $storeCurrencyCode
-     * @param string $displayCurrencyCode
      * @param string $adminOrderAmount
      * @param string $convertedAmount
-     * @param bool $needToGetRateFromModel
      * @throws LocalizedException
-     * @throws NoSuchEntityException
-     * @throws CurrencyException
+     * @throws CurrencyException|Exception
      * @dataProvider getCurrencyDataProvider
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function testRender(
         float $rate,
         string $columnIndex,
-        int $catalogPriceScope,
-        int $adminWebsiteId,
-        string $adminCurrencyCode,
         string $storeCurrencyCode,
-        string $displayCurrencyCode,
         string $adminOrderAmount,
         string $convertedAmount,
-        bool $needToGetRateFromModel
     ): void {
         $this->row = new DataObject(
             [
@@ -220,35 +177,14 @@ class CurrencyTest extends TestCase
             ->expects($this->any())
             ->method('getRate')
             ->willReturn($rate);
-        $this->scopeConfigMock
-            ->expects($this->any())
-            ->method('getValue')
-            ->willReturn($catalogPriceScope);
         $this->storeManagerMock
             ->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
-        $this->storeMock
-            ->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn($adminWebsiteId);
-        $this->storeManagerMock
-            ->expects($this->any())
-            ->method('getWebsite')
-            ->with($adminWebsiteId)
-            ->willReturn($this->websiteMock);
-        $this->websiteMock
-            ->expects($this->any())
-            ->method('getBaseCurrencyCode')
-            ->willReturn($adminCurrencyCode);
         $this->currencyLocatorMock
             ->expects($this->any())
             ->method('getDefaultCurrency')
             ->willReturn($storeCurrencyCode);
-        $this->currencyLocatorMock
-            ->expects($this->any())
-            ->method('getDisplayCurrency')
-            ->willReturn($displayCurrencyCode);
         $currLocaleMock = $this->createMock(CurrencyData::class);
         $currLocaleMock
             ->expects($this->any())
@@ -257,17 +193,10 @@ class CurrencyTest extends TestCase
         $this->localeCurrencyMock
             ->expects($this->any())
             ->method('getCurrency')
-            ->with($displayCurrencyCode)
+            ->with($storeCurrencyCode)
             ->willReturn($currLocaleMock);
-        $this->gridColumnMock->method('getCurrency')->willReturn($displayCurrencyCode);
+        $this->gridColumnMock->method('getCurrency')->willReturn($storeCurrencyCode);
         $this->gridColumnMock->method('getRateField')->willReturn('test_rate_field');
-
-        if ($needToGetRateFromModel) {
-            $this->currencyMock->expects($this->once())
-                ->method('getAnyRate')
-                ->with($storeCurrencyCode)
-                ->willReturn($rate);
-        }
 
         $actualAmount = $this->model->render($this->row);
         $this->assertEquals($convertedAmount, $actualAmount);
@@ -281,64 +210,21 @@ class CurrencyTest extends TestCase
     public static function getCurrencyDataProvider(): array
     {
         return [
-            'rate conversion with same admin and storefront rate' => [
-                'rate' => 1.00,
+            'rate conversion with storefront' => [
+                'rate' => 1.367,
                 'columnIndex' => 'total_income_amount',
-                'catalogPriceScope' => 1,
-                'adminWebsiteId' => 1,
-                'adminCurrencyCode' => 'EUR',
                 'storeCurrencyCode' => 'EUR',
-                'displayCurrencyCode' => 'EUR',
-                'adminOrderAmount' => '105.00',
-                'convertedAmount' => '€105.00',
-                'needToGetRateFromModel' => false
-            ],
-            'rate conversion with different admin and storefront rate' => [
-                'rate' => 1.4150,
-                'columnIndex' => 'total_income_amount',
-                'catalogPriceScope' => 1,
-                'adminWebsiteId' => 1,
-                'adminCurrencyCode' => 'USD',
-                'storeCurrencyCode' => 'EUR',
-                'displayCurrencyCode' => 'EUR',
-                'adminOrderAmount' => '105.00',
-                'convertedAmount' => '148.575',
-                'needToGetRateFromModel' => true
-            ],
-            'rate conversation with same rate for different currencies' => [
-                'rate' => 1.00,
-                'columnIndex' => 'total_income_amount',
-                'catalogPriceScope' => 1,
-                'adminWebsiteId' => 1,
-                'adminCurrencyCode' => 'USD',
-                'storeCurrencyCode' => 'THB',
-                'displayCurrencyCode' => 'THB',
                 'adminOrderAmount' => '100.00',
-                'convertedAmount' => '100.00',
-                'needToGetRateFromModel' => true
-            ],
-            'rate conversation with different rate for different display currencies' => [
-                'rate' => 1.6150,
-                'columnIndex' => 'total_income_amount',
-                'catalogPriceScope' => 1,
-                'adminWebsiteId' => 1,
-                'adminCurrencyCode' => 'USD',
-                'storeCurrencyCode' => 'USD',
-                'displayCurrencyCode' => 'EUR',
-                'adminOrderAmount' => '$100.00',
-                'convertedAmount' => '€161.50',
-                'needToGetRateFromModel' => false
+                'convertedAmount' => '€136.70',
             ],
         ];
     }
 
     protected function tearDown(): void
     {
-        unset($this->scopeConfigMock);
         unset($this->storeManagerMock);
         unset($this->currencyLocatorMock);
         unset($this->localeCurrencyMock);
-        unset($this->websiteMock);
         unset($this->storeMock);
         unset($this->currencyMock);
         unset($this->backendCurrencyMock);
