@@ -124,62 +124,108 @@
         </after>
 
         <!-- Open Product in Store Front Page -->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="openProductInStoreFront"/>
-        <waitForPageLoad stepKey="waitForProductToLoad"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductInStoreFront">
+            <argument name="product" value="$createConfigProduct$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductToLoad"/>
 
         <!-- Verify category,Configurable product and initial price -->
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="seeCategoryInFrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="seeProductNameInStoreFront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigChildProduct1.price$$" stepKey="seeInitialPriceInStoreFront"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCategoryInFrontPage">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeProductNameInStoreFront">
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeInitialPriceInStoreFront">
+            <argument name="productPrice" value="$$createConfigChildProduct1.price$$"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront">
             <argument name="productSku" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStatusInStoreFront"/>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="seeProductStatusInStoreFront">
+            <argument name="productStockStatus" value="In Stock"/>
+        </actionGroup>
 
         <!-- Verify First Child Product attribute option is displayed -->
         <see selector="{{StorefrontProductInfoMainSection.productOptionSelect($$createConfigProductAttribute.default_value$$)}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="seeOption1"/>
 
         <!-- Select product Attribute option1, option2 and option3 and verify changes in the price -->
-        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect($$createConfigProductAttribute.default_value$$)}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="selectOption1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigChildProduct1.price$$" stepKey="seeChildProduct1PriceInStoreFront"/>
-        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect($$createConfigProductAttribute.default_value$$)}}"  userInput="$$getConfigAttributeOption2.label$$" stepKey="selectOption2"/>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigChildProduct2.price$$" stepKey="seeChildProduct2PriceInStoreFront"/>
-        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect($$createConfigProductAttribute.default_value$$)}}"  userInput="$$getConfigAttributeOption3.label$$" stepKey="selectOption3"/>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigChildProduct3.price$$" stepKey="seeChildProduct3PriceInStoreFront"/>
-
-        <!-- Open Product Index Page and Filter First Child product  -->
-        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
-        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
-            <argument name="product" value="ApiSimpleOne"/>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectOption1">
+            <argument name="attributeLabel" value="$$createConfigProductAttribute.default_value$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption1.label$$"/>
         </actionGroup>
-        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="selectFirstRow"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeChildProduct1PriceInStoreFront">
+            <argument name="productPrice" value="$$createConfigChildProduct1.price$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectOption2">
+            <argument name="attributeLabel" value="$$createConfigProductAttribute.default_value$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption2.label$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeChildProduct2PriceInStoreFront">
+            <argument name="productPrice" value="$$createConfigChildProduct2.price$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectOption3">
+            <argument name="attributeLabel" value="$$createConfigProductAttribute.default_value$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption3.label$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeChildProduct3PriceInStoreFront">
+            <argument name="productPrice" value="$$createConfigChildProduct3.price$$"/>
+        </actionGroup>
+        <!-- Open Product Index Page and Filter First Child product  -->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="navigateToProductIndex"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProduct"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="selectFirstRow">
+            <argument name="productId" value="$$createConfigChildProduct1.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageToLoad"/>
 
         <!-- Disable the product -->
-        <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="disableProduct"/>
+        <actionGroup ref="ToggleProductEnabledActionGroup" stepKey="disableProduct"/>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <!-- Open Product Store Front Page -->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="openProductInStoreFront1"/>
-        <waitForPageLoad stepKey="waitForProductToLoad1"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductInStoreFront1">
+            <argument name="product" value="$createConfigProduct$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductToLoad1"/>
 
         <!-- Verify category,configurable product and updated price -->
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="seeCategoryInFrontPage1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="seeProductNameInStoreFront1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigChildProduct2.price$$" stepKey="seeUpdatedProductPriceInStoreFront"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCategoryInFrontPage1">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeProductNameInStoreFront1">
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeUpdatedProductPriceInStoreFront">
+            <argument name="productPrice" value="$$createConfigChildProduct2.price$$"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront1">
             <argument name="productSku" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStatusInStoreFront1"/>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="seeProductStatusInStoreFront1">
+            <argument name="productStockStatus" value="In Stock"/>
+        </actionGroup>
 
         <!-- Verify product Attribute Option1 is not displayed  -->
         <dontSee selector="{{StorefrontProductInfoMainSection.productOptionSelect($$createConfigProductAttribute.default_value$$)}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="dontSeeOption1"/>
 
         <!--Select product Attribute option2 and option3 and verify changes in the price -->
-        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect($$createConfigProductAttribute.default_value$$)}}"  userInput="$$getConfigAttributeOption2.label$$" stepKey="selectTheOption2"/>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigChildProduct2.price$$" stepKey="seeSecondChildProductPriceInStoreFront"/>
-        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect($$createConfigProductAttribute.default_value$$)}}"  userInput="$$getConfigAttributeOption3.label$$" stepKey="selectTheOption3"/>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigChildProduct3.price$$" stepKey="seeThirdProductPriceInStoreFront"/>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectTheOption2">
+            <argument name="attributeLabel" value="$$createConfigProductAttribute.default_value$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption2.label$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeSecondChildProductPriceInStoreFront">
+            <argument name="productPrice" value="$$createConfigChildProduct2.price$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectTheOption3">
+            <argument name="attributeLabel" value="$$createConfigProductAttribute.default_value$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption3.label$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeThirdProductPriceInStoreFront">
+            <argument name="productPrice" value="$$createConfigChildProduct3.price$$"/>
+        </actionGroup>
     </test>
 </tests>

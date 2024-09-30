@@ -32,7 +32,6 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        CacheCleaner::cleanAll();
         $this->objectManager = Bootstrap::getObjectManager();
         $this->attributeLoader = $this->objectManager->get(AttributeLoader::class);
         $entityType = $this->objectManager->create(\Magento\Eav\Model\Entity\Type::class)

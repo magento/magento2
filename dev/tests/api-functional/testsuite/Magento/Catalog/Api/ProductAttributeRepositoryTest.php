@@ -87,12 +87,15 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     }
 
     /**
+     * Test create attribute
+     *
+     * @dataProvider attributeCodeDataProvider
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     * @param string $attributeCode
      * @return void
      */
-    public function testCreate()
+    public function testCreate(string $attributeCode): void
     {
-        $attributeCode = uniqid('label_attr_code');
         $attribute = $this->createAttribute($attributeCode);
 
         $expectedData = [
@@ -119,6 +122,17 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         //'Blue' should be set as default
         $this->assertEquals($attribute['default_value'], $attribute['options'][1]['value']);
         $this->assertEquals('Default Red', $attribute['options'][2]['label']);
+    }
+
+    /**
+     * @return array
+     */
+    public function attributeCodeDataProvider(): array
+    {
+        return [
+            [str_repeat('az_7', 15)],
+            [uniqid('label_attr_code')],
+        ];
     }
 
     /**

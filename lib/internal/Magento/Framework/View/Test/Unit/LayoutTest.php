@@ -944,7 +944,7 @@ class LayoutTest extends TestCase
 
         $this->cacheMock->expects($this->once())
             ->method('save')
-            ->with(json_encode($data), 'structure_' . $layoutCacheId, $handles)
+            ->with(json_encode($data), 'structure_' . $layoutCacheId, $handles, 31536000)
             ->willReturn(true);
 
         $generatorContextMock = $this->getMockBuilder(Context::class)

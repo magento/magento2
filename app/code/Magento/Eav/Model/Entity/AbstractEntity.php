@@ -626,6 +626,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     public function walkAttributes($partMethod, array $args = [], $collectExceptionMessages = null)
     {
         $methodArr = explode('/', $partMethod);
+        $part = '';
+        $method = '';
         switch (count($methodArr)) {
             case 1:
                 $part = 'attribute';
@@ -642,6 +644,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         }
         $results = [];
         $suffix = $this->getAttributesCacheSuffix($args[0]);
+        $instance = null;
         foreach ($this->getAttributesByScope($suffix) as $attrCode => $attribute) {
             if (isset($args[0]) && is_object($args[0]) && !$this->_isApplicableAttribute($args[0], $attribute)) {
                 continue;
@@ -1337,7 +1340,9 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             if ($this->_canUpdateAttribute($attribute, $v, $origData)) {
                 if ($this->_isAttributeValueEmpty($attribute, $v)) {
                     $this->_aggregateDeleteData($delete, $attribute, $newObject);
-                } elseif (!is_numeric($v) && $v !== $origData[$k] || is_numeric($v) && $v != $origData[$k]) {
+                } elseif (!is_numeric($v) && $v !== $origData[$k]
+                    || is_numeric($v) && ($v != $origData[$k] || strlen($v) !== strlen($origData[$k]))
+                ) {
                     $update[$attrId] = [
                         'value_id' => $attribute->getBackend()->getEntityValueId($newObject),
                         'value' => is_array($v) ? array_shift($v) : $v,//@TODO: MAGETWO-44182,
@@ -1739,6 +1744,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     {
         try {
             $connection = $this->transactionManager->start($this->getConnection());
+            $id = 0;
             if (is_numeric($object)) {
                 $id = (int) $object;
             } elseif ($object instanceof \Magento\Framework\Model\AbstractModel) {

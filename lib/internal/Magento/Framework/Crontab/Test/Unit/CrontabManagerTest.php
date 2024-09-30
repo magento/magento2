@@ -375,13 +375,13 @@ class CrontabManagerTest extends TestCase
             ],
             [
                 'tasks' => [
-                    ['command' => '{magentoRoot}run.php mysqldump db > db-$(date +%F).sql']
+                    ['command' => '{magentoRoot}run.php mysqldump --no-tablespaces db > db-$(date +%F).sql']
                 ],
                 'content' => '* * * * * /bin/php /var/www/cron.php',
                 'contentToSave' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
                     . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . hash("sha256", BP) . PHP_EOL
                     . '* * * * * ' . PHP_BINARY . ' /var/www/magento2/run.php'
-                    . ' mysqldump db > db-\$(date +%%F).sql' . PHP_EOL
+                    . ' mysqldump --no-tablespaces db > db-\$(date +%%F).sql' . PHP_EOL
                     . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . hash("sha256", BP) . PHP_EOL,
             ],
         ];

@@ -6,7 +6,9 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
-class Template extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+class Template extends \Magento\Widget\Controller\Adminhtml\Widget\Instance implements HttpPostActionInterface
 {
     /**
      * Templates Chooser Action (Ajax request)
@@ -17,7 +19,7 @@ class Template extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
     {
         /* @var $widgetInstance \Magento\Widget\Model\Widget\Instance */
         $widgetInstance = $this->_initWidgetInstance();
-        $block = $this->getRequest()->getParam('block');
+        $block = $this->getRequest()->getParam('block', '');
         $selected = $this->getRequest()->getParam('selected', null);
         $templateChooser = $this->_view->getLayout()->createBlock(
             \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Template::class

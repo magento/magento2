@@ -101,13 +101,32 @@ class FileUploader
      */
     public function upload()
     {
-        /** @var FileProcessor $fileProcessor */
-        $fileProcessor = $this->fileProcessorFactory->create([
-            'entityTypeCode' => $this->entityTypeCode,
-            'allowedExtensions' => $this->getAllowedExtensions(),
-        ]);
+        return $this->uploadFile();
+    }
 
-        $result = $fileProcessor->saveTemporaryFile($this->scope . '[' . $this->getAttributeCode() . ']');
+    /**
+     * File uploading process
+     *
+     * @param bool $useScope
+     * @return string[]
+     * @throws LocalizedException
+     */
+    public function uploadFile($useScope = true)
+    {
+        /** @var FileProcessor $fileProcessor */
+        $fileProcessor = $this->fileProcessorFactory->create(
+            [
+                'entityTypeCode' => $this->entityTypeCode,
+                'allowedExtensions' => $this->getAllowedExtensions(),
+            ]
+        );
+
+        if ($useScope === true) {
+            $fileId = $this->scope . '[' . $this->getAttributeCode() . ']';
+        } else {
+            $fileId = $this->getAttributeCode();
+        }
+        $result = $fileProcessor->saveTemporaryFile($fileId);
 
         // Update tmp_name param. Required for attribute validation!
         $result['tmp_name'] = ltrim($result['file'], '/');
@@ -127,7 +146,14 @@ class FileUploader
      */
     private function getAttributeCode()
     {
-        return key($_FILES[$this->scope]['name']);
+        // phpcs:disable Magento2.Security.Superglobal
+        if (is_array($_FILES[$this->scope]['name'])) {
+            $code = key($_FILES[$this->scope]['name']);
+        } else {
+            $code = $this->scope;
+        }
+        // phpcs:enable Magento2.Security.Superglobal
+        return $code;
     }
 
     /**
@@ -139,10 +165,16 @@ class FileUploader
     {
         $data = [];
 
+        // phpcs:disable Magento2.Security.Superglobal
         $fileAttributes = $_FILES[$this->scope];
         foreach ($fileAttributes as $attributeName => $attributeValue) {
-            $data[$attributeName] = $attributeValue[$this->getAttributeCode()];
+            if (is_array($attributeValue)) {
+                $data[$attributeName] = $attributeValue[$this->getAttributeCode()];
+            } else {
+                $data[$attributeName] = $attributeValue;
+            }
         }
+        // phpcs:enable Magento2.Security.Superglobal
 
         return $data;
     }
@@ -160,9 +192,12 @@ class FileUploader
         foreach ($validationRules as $validationRule) {
             if ($validationRule->getName() == 'file_extensions') {
                 $allowedExtensions = explode(',', $validationRule->getValue());
-                array_walk($allowedExtensions, function (&$value) {
-                    $value = strtolower(trim($value));
-                });
+                array_walk(
+                    $allowedExtensions,
+                    function (&$value) {
+                        $value = strtolower(trim($value));
+                    }
+                );
                 break;
             }
         }

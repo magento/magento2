@@ -15,9 +15,11 @@
                attr="'aria-labelledby': 'label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code,
                     'checked': element.rates().length == 1 || element.isSelected" />
     </td>
+    <!-- ko ifnot: (method.error_message) -->
     <td class="col col-price">
         <each args="element.getRegion('price')" render="" />
     </td>
+    <!-- /ko -->
     <td class="col col-method"
         attr="'id': 'label_method_' + method.method_code + '_' + method.carrier_code"
         text="method.method_title" />

@@ -184,6 +184,8 @@ class SampleTest extends TestCase
             ->willReturn('1');
         $this->sampleModel->expects($this->any())->method('getSampleType')
             ->willReturn('url');
+        $this->sampleModel->expects($this->once())->method('getSampleUrl')
+            ->willReturn('http://example.com/simple.jpg');
         $this->objectManager->expects($this->once())->method('create')
             ->willReturn($this->sampleModel);
 

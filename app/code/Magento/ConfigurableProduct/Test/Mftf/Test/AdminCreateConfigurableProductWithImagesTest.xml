@@ -131,10 +131,7 @@
         <!-- Save product -->
         <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveProduct"/>
 
-        <!--Run re-index task-->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!-- Assert configurable product in category -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>

@@ -56,10 +56,7 @@
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
         </after>
 
-        <!--Re-index-->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!-- Step 1: User browses catalog -->
         <comment userInput="Start of browsing catalog" stepKey="startOfBrowsingCatalog"/>

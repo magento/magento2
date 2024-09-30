@@ -5,6 +5,8 @@
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -33,6 +35,11 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
+
+    /**
+     * @var string[]
+     */
+    private $importedProductSkus;
 
     /**
      * List of Bundle options SKU
@@ -131,6 +138,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
                 }
             }
         }
+        $this->importedProductSkus = ['Simple 1', 'Simple 2', 'Simple 3', 'Bundle 1'];
     }
 
     /**
@@ -192,6 +200,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
                 }
             }
         }
+        $this->importedProductSkus = ['Simple 1', 'Simple 2', 'Simple 3', 'Bundle 1'];
     }
 
     /**
@@ -199,6 +208,26 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
      */
     protected function tearDown(): void
     {
+        if (!empty($this->importedProductSkus)) {
+            $objectManager = Bootstrap::getObjectManager();
+            /** @var ProductRepositoryInterface $productRepository */
+            $productRepository = $objectManager->create(ProductRepositoryInterface::class);
+            $registry = $objectManager->get(\Magento\Framework\Registry::class);
+            /** @var ProductRepositoryInterface $productRepository */
+            $registry->unregister('isSecureArea');
+            $registry->register('isSecureArea', true);
+
+            foreach ($this->importedProductSkus as $sku) {
+                try {
+                    $productRepository->deleteById($sku);
+                } catch (NoSuchEntityException $e) {
+                    // product already deleted
+                }
+            }
+            $registry->unregister('isSecureArea');
+            $registry->register('isSecureArea', false);
+        }
+
         parent::tearDown();
     }
 }

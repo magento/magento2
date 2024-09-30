@@ -62,9 +62,11 @@
         <!-- Switch from default attribute set to new attribute set -->
         <!-- A scrollToTopOfPage is needed to hide the floating header -->
         <scrollToTopOfPage stepKey="scrollToTop"/>
-        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
-        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="searchForAttrSet"/>
-        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+        <actionGroup ref="AdminSelectAttributeSetOnEditProductPageActionGroup" stepKey="startEditAttrSet">
+            <argument name="attributeSet" value="{{ProductAttributeFrontendLabel.label}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="searchForAttrSet"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectAttrSet"/>
 
         <!-- See new attibute set -->
         <seeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('testgroupname')}}" stepKey="seeTestGroupName"/>

@@ -73,7 +73,7 @@ class CurrencyConfig
      */
     private function getConfigForAllStores(string $path)
     {
-        $storesResult = [[]];
+        $storesResult = [];
         foreach ($this->storeManager->getStores() as $store) {
             $storesResult[] = explode(
                 ',',
@@ -81,7 +81,7 @@ class CurrencyConfig
             );
         }
 
-        return array_merge(...$storesResult);
+        return array_merge([], ...$storesResult);
     }
 
     /**

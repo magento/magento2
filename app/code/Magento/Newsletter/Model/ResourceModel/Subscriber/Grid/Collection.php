@@ -17,7 +17,8 @@ class Collection extends \Magento\Newsletter\Model\ResourceModel\Subscriber\Coll
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->showCustomerInfo(true)->addSubscriberTypeField()->showStoreInfo();
+        $this->showCustomerInfo()->addSubscriberTypeField()->showStoreInfo();
+
         return $this;
     }
 }

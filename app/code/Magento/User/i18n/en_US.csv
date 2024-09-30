@@ -106,8 +106,8 @@ username,username
 Custom,Custom
 All,All
 Resources,Resources
-"Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?","Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?"
-"Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?"
+"Warning!<br>This action will remove this user from already assigned role.<br>Are you sure?","Warning!<br>This action will remove this user from already assigned role.<br>Are you sure?"
+"Warning!<br>This action will remove those users from already assigned roles.<br>Are you sure?","Warning!<br>This action will remove those users from already assigned roles.<br>Are you sure?"
 "Password Reset Confirmation for %name","Password Reset Confirmation for %name"
 "%name,","%name,"
 "There was recently a request to change the password for your account.","There was recently a request to change the password for your account."

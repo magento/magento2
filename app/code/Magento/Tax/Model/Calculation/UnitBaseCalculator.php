@@ -10,7 +10,15 @@ use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
 class UnitBaseCalculator extends AbstractCalculator
 {
     /**
-     * {@inheritdoc}
+     * Determines the rounding operation type and rounds the amount
+     *
+     * @param float $amount
+     * @param string $rate
+     * @param bool $direction
+     * @param string $type
+     * @param bool $round
+     * @param QuoteDetailsItemInterface $item
+     * @return float|string
      */
     protected function roundAmount(
         $amount,
@@ -31,7 +39,12 @@ class UnitBaseCalculator extends AbstractCalculator
     }
 
     /**
-     * {@inheritdoc}
+     * Calculate tax details for quote item with tax in price with given quantity
+     *
+     * @param QuoteDetailsItemInterface $item
+     * @param int $quantity
+     * @param bool $round
+     * @return \Magento\Tax\Api\Data\TaxDetailsItemInterface
      */
     protected function calculateWithTaxInPrice(QuoteDetailsItemInterface $item, $quantity, $round = true)
     {
@@ -39,7 +52,7 @@ class UnitBaseCalculator extends AbstractCalculator
             $this->taxClassManagement->getTaxClassId($item->getTaxClassKey())
         );
         $rate = $this->calculationTool->getRate($taxRateRequest);
-        $storeRate = $storeRate = $this->calculationTool->getStoreRate($taxRateRequest, $this->storeId);
+        $storeRate = $this->calculationTool->getStoreRate($taxRateRequest, $this->storeId);
 
         // Calculate $priceInclTax
         $applyTaxAfterDiscount = $this->config->applyTaxAfterDiscount($this->storeId);
@@ -104,7 +117,12 @@ class UnitBaseCalculator extends AbstractCalculator
     }
 
     /**
-     * {@inheritdoc}
+     * Calculate tax details for quote item with tax not in price with given quantity
+     *
+     * @param QuoteDetailsItemInterface $item
+     * @param int $quantity
+     * @param bool $round
+     * @return \Magento\Tax\Api\Data\TaxDetailsItemInterface
      */
     protected function calculateWithTaxNotInPrice(QuoteDetailsItemInterface $item, $quantity, $round = true)
     {

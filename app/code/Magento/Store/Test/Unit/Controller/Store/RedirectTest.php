@@ -22,7 +22,10 @@ use Magento\Store\Controller\Store\Redirect;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreResolver;
+use Magento\Store\Model\StoreSwitcher\ContextInterface;
+use Magento\Store\Model\StoreSwitcher\ContextInterfaceFactory;
 use Magento\Store\Model\StoreSwitcher\HashGenerator;
+use Magento\Store\Model\StoreSwitcher\RedirectDataGenerator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -163,6 +166,11 @@ class RedirectTest extends TestCase
             ->method('getCurrentStoreId')
             ->willReturnSelf();
 
+        $redirectDataGenerator = $this->createMock(RedirectDataGenerator::class);
+        $contextFactory = $this->createMock(ContextInterfaceFactory::class);
+        $contextFactory->method('create')
+            ->willReturn($this->createMock(ContextInterface::class));
+
         $objectManager = new ObjectManagerHelper($this);
         $context = $objectManager->getObject(
             Context::class,
@@ -182,6 +190,8 @@ class RedirectTest extends TestCase
                 'sidResolver' => $this->sidResolverMock,
                 'hashGenerator' => $this->hashGeneratorMock,
                 'context' => $context,
+                'redirectDataGenerator' => $redirectDataGenerator,
+                'contextFactory' => $contextFactory,
             ]
         );
     }
@@ -220,11 +230,6 @@ class RedirectTest extends TestCase
             ->expects($this->once())
             ->method('getCode')
             ->willReturn($defaultStoreViewCode);
-        $this->hashGeneratorMock
-            ->expects($this->once())
-            ->method('generateHash')
-            ->with($this->fromStoreMock)
-            ->willReturn([]);
         $this->storeManagerMock
             ->expects($this->once())
             ->method('setCurrentStore')
@@ -239,7 +244,10 @@ class RedirectTest extends TestCase
                     '_query' => [
                         'uenc' => $defaultStoreViewCode,
                         '___from_store' => $defaultStoreViewCode,
-                        '___store' => $storeCode
+                        '___store' => $storeCode,
+                        'data' => '',
+                        'time_stamp' => 0,
+                        'signature' => '',
                     ]
                 ]
             );

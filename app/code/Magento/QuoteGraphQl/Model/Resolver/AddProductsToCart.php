@@ -11,11 +11,13 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Model\Cart\AddProductsToCart as AddProductsToCartService;
 use Magento\Quote\Model\Cart\Data\AddProductsToCartOutput;
 use Magento\Quote\Model\Cart\Data\CartItemFactory;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\Quote\Model\Cart\Data\Error;
+use Magento\QuoteGraphQl\Model\CartItem\DataProvider\Processor\ItemDataProcessorInterface;
 
 /**
  * Resolver for addProductsToCart mutation
@@ -35,15 +37,23 @@ class AddProductsToCart implements ResolverInterface
     private $addProductsToCartService;
 
     /**
+     * @var ItemDataProcessorInterface
+     */
+    private $itemDataProcessor;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param AddProductsToCartService $addProductsToCart
+     * @param  ItemDataProcessorInterface $itemDataProcessor
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        AddProductsToCartService $addProductsToCart
+        AddProductsToCartService $addProductsToCart,
+        ItemDataProcessorInterface $itemDataProcessor
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->addProductsToCartService = $addProductsToCart;
+        $this->itemDataProcessor = $itemDataProcessor;
     }
 
     /**
@@ -68,6 +78,9 @@ class AddProductsToCart implements ResolverInterface
 
         $cartItems = [];
         foreach ($cartItemsData as $cartItemData) {
+            if (!$this->itemIsAllowedToCart($cartItemData, $context)) {
+                continue;
+            }
             $cartItems[] = (new CartItemFactory())->create($cartItemData);
         }
 
@@ -89,5 +102,22 @@ class AddProductsToCart implements ResolverInterface
                 $addProductsToCartOutput->getErrors()
             )
         ];
+    }
+
+    /**
+     * Check if the item can be added to cart
+     *
+     * @param array $cartItemData
+     * @param ContextInterface $context
+     * @return bool
+     */
+    private function itemIsAllowedToCart(array $cartItemData, ContextInterface $context): bool
+    {
+        $cartItemData = $this->itemDataProcessor->process($cartItemData, $context);
+        if (isset($cartItemData['grant_checkout']) && $cartItemData['grant_checkout'] === false) {
+            return false;
+        }
+
+        return true;
     }
 }

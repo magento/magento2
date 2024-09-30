@@ -9,5 +9,7 @@
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontLayeredNavigationSection">
         <element name="shoppingOptionsByName" type="button" selector="//*[text()='Shopping Options']/..//*[contains(text(),'{{arg}}')]" parameterized="true"/>
+        <element name="appliedFilterLabel" type="text" selector=".filter-current .items > li.item:nth-of-type({{position}}) > span.filter-label" parameterized="true"/>
+        <element name="appliedFilterValue" type="text" selector=".filter-current .items > li.item:nth-of-type({{position}}) > span.filter-value" parameterized="true"/>
     </section>
 </sections>

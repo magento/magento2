@@ -174,6 +174,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
                 $this->_redirectSameToken();
                 break;
             case ApiProcessableException::API_ADDRESS_MATCH_FAIL:
+            case ApiProcessableException::API_TRANSACTION_HAS_BEEN_COMPLETED:
                 $this->redirectToOrderReviewPageAndShowError($exception->getUserMessage());
                 break;
             case ApiProcessableException::API_UNABLE_TRANSACTION_COMPLETE:

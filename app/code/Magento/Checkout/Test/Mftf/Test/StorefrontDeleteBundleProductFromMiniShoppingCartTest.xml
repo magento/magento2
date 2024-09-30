@@ -41,7 +41,7 @@
                 <requiredEntity createDataKey="simpleProduct1"/>
             </createData>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
+                <argument name="indices" value="cataloginventory_stock"/>
             </actionGroup>
         </before>
         <after>

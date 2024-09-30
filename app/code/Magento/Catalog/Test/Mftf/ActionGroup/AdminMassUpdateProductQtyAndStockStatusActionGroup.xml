@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Update Product Name and Description attribute-->
+    <actionGroup name="AdminMassUpdateProductQtyAndStockStatusActionGroup">
+        <arguments>
+            <argument name="attributes"/>
+            <argument name="product"/>
+        </arguments>
+        <!--Filter product in product grid-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageFirstTime"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{product.name}}" stepKey="fillProductNameFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillProductSkuFilter"/>
+        <selectOption selector="{{AdminProductGridFilterSection.typeFilter}}" userInput="{{product.type_id}}" stepKey="selectionProductType"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <!--Select first product from grid and open mass action-->
+        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckbox"/>
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickOption"/>
+        <waitForPageLoad stepKey="waitForUploadPage"/>
+        <seeInCurrentUrl url="{{ProductAttributesEditPage.url}}" stepKey="seeAttributePageEditUrl"/>
+        <!--Update inventory attributes and save-->
+        <click selector="{{AdminUpdateAttributesAdvancedInventorySection.inventory}}" stepKey="openInvetoryTab"/>
+        <click selector="{{AdminUpdateAttributesAdvancedInventorySection.changeQty}}" stepKey="uncheckChangeQty"/>
+        <fillField selector="{{AdminUpdateAttributesAdvancedInventorySection.qty}}" userInput="{{attributes.qty}}" stepKey="fillFieldName"/>
+        <click selector="{{AdminUpdateAttributesAdvancedInventorySection.changeStockAvailability}}" stepKey="uncheckChangeStockAvailability"/>
+        <selectOption selector="{{AdminUpdateAttributesAdvancedInventorySection.stockAvailability}}" userInput="{{attributes.stockAvailability}}" stepKey="selectStatus"/>
+        <click selector="{{AdminUpdateAttributesSection.saveButton}}" stepKey="save"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitVisibleSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="Message is added to queue" stepKey="seeSuccessMessage"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageSecondTime"/>
+        <waitForPageLoad stepKey="waitForProductGridPage"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersAfterMassAction"/>
+    </actionGroup>
+</actionGroups>

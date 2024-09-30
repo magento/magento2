@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\QuoteGraphQl\Model\Cart\CheckCartCheckoutAllowance;
@@ -45,21 +46,29 @@ class PlaceOrder implements ResolverInterface
     private $checkCartCheckoutAllowance;
 
     /**
+     * @var PaymentMethodManagementInterface
+     */
+    private $paymentMethodManagement;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param CartManagementInterface $cartManagement
      * @param OrderRepositoryInterface $orderRepository
      * @param CheckCartCheckoutAllowance $checkCartCheckoutAllowance
+     * @param PaymentMethodManagementInterface $paymentMethodManagement
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         CartManagementInterface $cartManagement,
         OrderRepositoryInterface $orderRepository,
-        CheckCartCheckoutAllowance $checkCartCheckoutAllowance
+        CheckCartCheckoutAllowance $checkCartCheckoutAllowance,
+        PaymentMethodManagementInterface $paymentMethodManagement
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartManagement = $cartManagement;
         $this->orderRepository = $orderRepository;
         $this->checkCartCheckoutAllowance = $checkCartCheckoutAllowance;
+        $this->paymentMethodManagement = $paymentMethodManagement;
     }
 
     /**
@@ -84,7 +93,8 @@ class PlaceOrder implements ResolverInterface
         }
 
         try {
-            $orderId = $this->cartManagement->placeOrder($cart->getId());
+            $cartId = $cart->getId();
+            $orderId = $this->cartManagement->placeOrder($cartId, $this->paymentMethodManagement->get($cartId));
             $order = $this->orderRepository->get($orderId);
 
             return [

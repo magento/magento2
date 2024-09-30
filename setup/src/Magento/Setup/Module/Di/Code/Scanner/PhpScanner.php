@@ -175,7 +175,7 @@ class PhpScanner implements ScannerInterface
      */
     public function collectEntities(array $files)
     {
-        $output = [[]];
+        $output = [];
         foreach ($files as $file) {
             $classes = $this->getDeclaredClasses($file);
             foreach ($classes as $className) {
@@ -184,7 +184,7 @@ class PhpScanner implements ScannerInterface
                 $output[] = $this->_fetchMissingExtensionAttributesClasses($reflectionClass, $file);
             }
         }
-        return array_unique(array_merge(...$output));
+        return array_unique(array_merge([], ...$output));
     }
 
     /**

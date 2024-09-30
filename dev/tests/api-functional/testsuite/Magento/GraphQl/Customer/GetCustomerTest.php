@@ -7,13 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
+use Exception;
+use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Bootstrap as TestBootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * GraphQl tests for @see \Magento\CustomerGraphQl\Model\Customer\GetCustomer.
+ */
 class GetCustomerTest extends GraphQlAbstract
 {
     /**
@@ -36,14 +44,23 @@ class GetCustomerTest extends GraphQlAbstract
      */
     private $customerRepository;
 
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @inheridoc
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
-        $this->customerRegistry = Bootstrap::getObjectManager()->get(CustomerRegistry::class);
-        $this->customerAuthUpdate = Bootstrap::getObjectManager()->get(CustomerAuthUpdate::class);
-        $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
+        $this->customerRegistry = $this->objectManager->get(CustomerRegistry::class);
+        $this->customerAuthUpdate = $this->objectManager->get(CustomerAuthUpdate::class);
+        $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
     }
 
     /**
@@ -81,7 +98,7 @@ QUERY;
      */
     public function testGetCustomerIfUserIsNotAuthorized()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('The current customer isn\'t authorized.');
 
         $query = <<<QUERY
@@ -97,17 +114,48 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/User/_files/user_with_role.php
+     * @return void
+     */
+    public function testGetCustomerIfUserHasWrongType(): void
+    {
+        /** @var $adminTokenService AdminTokenServiceInterface */
+        $adminTokenService = $this->objectManager->get(AdminTokenServiceInterface::class);
+        $adminToken = $adminTokenService->createAdminAccessToken('adminUser', TestBootstrap::ADMIN_PASSWORD);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
+        $query = <<<QUERY
+query {
+    customer {
+        firstname
+        lastname
+        email
+    }
+}
+QUERY;
+        $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            ['Authorization' => 'Bearer ' . $adminToken]
+        );
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
     public function testGetCustomerIfAccountIsLocked()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The account is locked.');
-
-        $this->lockCustomer(1);
-
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
+        $customer = $this->customerRepository->get($currentEmail);
+
+        $this->lockCustomer((int)$customer->getId());
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The account is locked.');
 
         $query = <<<QUERY
 query {
@@ -127,18 +175,19 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
+     * @magentoConfigFixture customer/create_account/confirm 1
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedExceptionMessage This account isn't confirmed. Verify and try again.
+     *
      */
     public function testAccountIsNotConfirmed()
     {
+        $this->expectExceptionMessage("This account isn't confirmed. Verify and try again.");
         $customerEmail = 'customer@example.com';
         $currentPassword = 'password';
+        $customer = $this->customerRepository->get($customerEmail);
         $headersMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
-        $customer = $this->customerRepository->getById(1)->setConfirmation(
-            \Magento\Customer\Api\AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED
-        );
+        $customer = $this->customerRepository->getById((int)$customer->getId())
+            ->setConfirmation(AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED);
         $this->customerRepository->save($customer);
         $query = <<<QUERY
 query {
@@ -160,6 +209,7 @@ QUERY;
     private function getCustomerAuthHeaders(string $email, string $password): array
     {
         $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
+
         return ['Authorization' => 'Bearer ' . $customerToken];
     }
 

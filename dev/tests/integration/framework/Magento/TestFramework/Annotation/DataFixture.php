@@ -32,7 +32,7 @@ class DataFixture extends AbstractDataFixture
             if ($this->getDbIsolationState($test) !== ['disabled']) {
                 $param->requestTransactionStart();
             } else {
-                $this->_applyFixtures($fixtures);
+                $this->_applyFixtures($fixtures, $test);
             }
         }
     }
@@ -51,7 +51,7 @@ class DataFixture extends AbstractDataFixture
             if ($this->getDbIsolationState($test) !== ['disabled']) {
                 $param->requestTransactionRollback();
             } else {
-                $this->_revertFixtures();
+                $this->_revertFixtures($test);
             }
         }
     }
@@ -64,12 +64,13 @@ class DataFixture extends AbstractDataFixture
      */
     public function startTransaction(TestCase $test): void
     {
-        $this->_applyFixtures($this->_getFixtures($test));
+        $this->_applyFixtures($this->_getFixtures($test), $test);
     }
 
     /**
      * Handler for 'rollbackTransaction' event
      *
+     * @param TestCase $test
      * @return void
      */
     public function rollbackTransaction(): void

@@ -98,10 +98,7 @@
         </actionGroup>
         <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
 
-        <!-- Flash cache -->
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Assert configurable product on product page -->
         <amOnPage url="{{ApiConfigurableProduct.urlKey}}.html" stepKey="amOnProductPage"/>

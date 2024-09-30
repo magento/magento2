@@ -20,8 +20,14 @@
         </annotations>
 
         <before>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
+            <!-- Should wait a bit for filters really cleared because waitForPageLoad does not wait for javascripts to be finished -->
+            <!-- Without this test will fail sometimes -->
+            <wait time="5" stepKey="waitFilterReallyCleared"/>
+            <reloadPage stepKey="reloadPage"/>
         </before>
 
         <after>

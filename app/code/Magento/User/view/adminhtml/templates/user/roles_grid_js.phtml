@@ -45,7 +45,7 @@ if (is_object($myBlock) && $myBlock->getJsObjectName()):
                 var checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
                 if (checked && warning && radioBoxes.size() > 0) {
                     if ( !confirm("{$myBlock->escapeJs(
-                        __('Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?')
+                        __('Warning!<br>This action will remove this user from already assigned role.<br>Are you sure?')
                         )}") ) {
                         checkbox[0].checked = false;
                         for(i in radioBoxes) {

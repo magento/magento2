@@ -36,10 +36,8 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Delete created data-->
             <comment userInput="Delete created data" stepKey="commentDeleteCreatedData"/>
-            <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid" />
-            <waitForPageLoad stepKey="waitForRolesGridLoad" />
-            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
-                <argument name="role" value="adminRole"/>
+            <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteUserRole">
+                <argument name="roleName" value="{{adminRole.rolename}}"/>
             </actionGroup>
             <amOnPage url="{{AdminUsersPage.url}}" stepKey="goToAllUsersPage"/>
             <waitForPageLoad stepKey="waitForUsersGridLoad" />

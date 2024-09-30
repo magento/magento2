@@ -71,13 +71,6 @@ class SessionCleaner implements SessionCleanerInterface
      */
     public function clearFor(int $customerId): void
     {
-        if ($this->sessionManager->isSessionExists()) {
-            //delete old session and move data to the new session
-            //use this instead of $this->sessionManager->regenerateId because last one doesn't delete old session
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            session_regenerate_id(true);
-        }
-
         $sessionLifetime = $this->scopeConfig->getValue(
             Config::XML_PATH_COOKIE_LIFETIME,
             ScopeInterface::SCOPE_STORE
@@ -89,6 +82,8 @@ class SessionCleaner implements SessionCleanerInterface
         $visitorCollection = $this->visitorCollectionFactory->create();
         $visitorCollection->addFieldToFilter('customer_id', $customerId);
         $visitorCollection->addFieldToFilter('last_visit_at', ['from' => $activeSessionsTime]);
+        $visitorCollection->addFieldToFilter('session_id', ['neq' => $this->sessionManager->getSessionId()]);
+
         /** @var \Magento\Customer\Model\Visitor $visitor */
         foreach ($visitorCollection->getItems() as $visitor) {
             $sessionId = $visitor->getSessionId();

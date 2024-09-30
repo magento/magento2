@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSuccessfullySetCustomerActiveViaGridActionGroup">
+        <annotations>
+            <description>Sets a Customer to the Active status from the admin All Customers grid</description>
+        </annotations>
+        <arguments>
+            <argument name="customerEmail" type="string" defaultValue="{{Simple_US_CA_Customer.email}}"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(customerEmail)}}" stepKey="waitForCustomerRow"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(customerEmail)}}" stepKey="selectCustomer"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.actions}}" stepKey="clickActions"/>
+        <waitForElementVisible selector="{{AdminCustomerGridMainActionsSection.setActive}}" stepKey="waitForDropDownOpen"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.setActive}}" stepKey="clickSetActive"/>
+        <waitForPageLoad stepKey="waitForLoad"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) were updated." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOpenCreditmemoViewPageWithWrongCreditmemoIdTest">
+        <annotations>
+            <stories value="Creditmemo Page With Wrong Creditmemo Id"/>
+            <title value="Open Creditmemo View Page with Wrong Creditmemo Id"/>
+            <description value="Open Creditmemo View Page with Wrong Creditmemo Id."/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-39500"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminGoToCreditmemoViewActionGroup" stepKey="navigateOpenCreditmemoViewPage">
+            <argument name="identifier" value="test"/>
+        </actionGroup>
+
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeInCurrentUrl url="{{AdminCreditMemosGridPage.url}}" stepKey="redirectToCreditMemosGridPage"/>
+        <see selector="{{AdminMessagesSection.error}}" userInput='This creditmemo no longer exists.' stepKey="seeErrorMessage"/>
+    </test>
+</tests>

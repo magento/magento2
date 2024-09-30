@@ -145,7 +145,8 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['e.entity_id as parent_product_id']
         )->where(
             $this->getMainTable() . '.product_id IN(?)',
-            $childId
+            $childId,
+            \Zend_Db::INT_TYPE
         );
 
         return $connection->fetchCol($select);

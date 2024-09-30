@@ -10,3 +10,13 @@ trim_trailing_whitespace = true
 
 [*.md]
 trim_trailing_whitespace = false
+
+[*.{yml,yaml,json}]
+indent_size = 2
+
+[{composer, auth}.json]
+indent_size = 4
+
+[db_schema_whitelist.json]
+indent_size = 4
+trim_trailing_whitespace = false

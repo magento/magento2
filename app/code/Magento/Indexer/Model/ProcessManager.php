@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Indexer\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Psr\Log\LoggerInterface;
+
 /**
  * Provide functionality for executing user functions in multi-thread mode.
  */
@@ -30,14 +33,21 @@ class ProcessManager
     private $threadsCount;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Framework\Registry $registry
      * @param int|null $threadsCount
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Framework\Registry $registry = null,
-        int $threadsCount = null
+        int $threadsCount = null,
+        LoggerInterface $logger = null
     ) {
         $this->resource = $resource;
         if (null === $registry) {
@@ -47,6 +57,9 @@ class ProcessManager
         }
         $this->registry = $registry;
         $this->threadsCount = (int)$threadsCount;
+        $this->logger = $logger ?? ObjectManager::getInstance()->get(
+            LoggerInterface::class
+        );
     }
 
     /**
@@ -98,9 +111,12 @@ class ProcessManager
                 $this->startChildProcess($userFunction);
             }
         }
-        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock,Magento2.Functions.DiscouragedFunction
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         while (pcntl_waitpid(0, $status) != -1) {
             //Waiting for the completion of child processes
+            if ($status > 0) {
+                $this->failInChildProcess = true;
+            }
         }
 
         if ($this->failInChildProcess) {
@@ -135,11 +151,20 @@ class ProcessManager
      */
     private function startChildProcess(callable $userFunction)
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $status = call_user_func($userFunction);
-        $status = is_int($status) ? $status : 0;
-        // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
-        exit($status);
+        try {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $status = call_user_func($userFunction);
+            $status = is_int($status) ? $status : 0;
+        } catch (\Throwable $e) {
+            $status = 1;
+            $this->logger->error(
+                __('Child process failed with message: %1', $e->getMessage()),
+                ['exception' => $e]
+            );
+        } finally {
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
+            exit($status);
+        }
     }
 
     /**

@@ -19,11 +19,20 @@
     false
 ) ?>
 
-<?php $scriptString = '
+<?php
+/** @var \Magento\AdminAnalytics\ViewModel\Metadata $metadata */
+$metadata = $block->getMetadata();
+$scriptString = '
     var adminAnalyticsMetadata = {
-        "version": "' . $block->escapeJs($block->getMetadata()->getMagentoVersion()) . '",
-        "user": "' . $block->escapeJs($block->getMetadata()->getCurrentUser()) . '",
-        "mode": "' . $block->escapeJs($block->getMetadata()->getMode()) . '"
+        "secure_base_url": "' . $block->escapeJs($metadata->getSecureBaseUrlForScope()) . '",
+        "version": "' . $block->escapeJs($metadata->getMagentoVersion()) . '",
+        "product_edition": "' . $block->escapeJs($metadata->getProductEdition()) . '",
+        "user": "' . $block->escapeJs($metadata->getCurrentUser()) . '",
+        "mode": "' . $block->escapeJs($metadata->getMode()) . '",
+        "store_name_default": "' . $block->escapeJs($metadata->getStoreNameForScope()) . '",
+        "admin_user_created": "' . $block->escapeJs($metadata->getCurrentUserCreatedDate()) . '",
+        "admin_user_logdate": "' . $block->escapeJs($metadata->getCurrentUserLogDate()) . '",
+        "admin_user_role_name": "' . $block->escapeJs($metadata->getCurrentUserRoleName()) . '"
     };
 ';
 ?>

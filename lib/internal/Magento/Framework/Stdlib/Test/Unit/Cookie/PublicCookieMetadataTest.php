@@ -20,11 +20,13 @@ class PublicCookieMetadataTest extends TestCase
 {
     /** @var PublicCookieMetadata */
     private $publicCookieMetadata;
+    /** @var  ObjectManager */
+    private $objectManager;
 
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-        $this->publicCookieMetadata = $objectManager->getObject(
+        $this->objectManager = new ObjectManager($this);
+        $this->publicCookieMetadata = $this->objectManager->getObject(
             PublicCookieMetadata::class
         );
     }
@@ -53,6 +55,66 @@ class PublicCookieMetadataTest extends TestCase
             "getHttpOnly" => ["setHttpOnly", 'getHttpOnly', true],
             "getSecure" => ["setSecure", 'getSecure', true],
             "getDurationOneYear" => ["setDurationOneYear", 'getDuration', (3600*24*365)],
+            "getSameSite" => ["setSameSite", 'getSameSite', 'Lax']
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function toArrayDataProvider(): array
+    {
+        return [
+            [
+                [
+                    PublicCookieMetadata::KEY_SECURE => false,
+                    PublicCookieMetadata::KEY_DOMAIN => 'domain',
+                    PublicCookieMetadata::KEY_PATH => 'path',
+                ],
+                [
+                    PublicCookieMetadata::KEY_SECURE => false,
+                    PublicCookieMetadata::KEY_DOMAIN => 'domain',
+                    PublicCookieMetadata::KEY_PATH => 'path',
+                    PublicCookieMetadata::KEY_SAME_SITE => 'Lax',
+                ],
+            ]
+        ];
+    }
+
+    /**
+     * Test To Array
+     *
+     * @param array $metadata
+     * @param array $expected
+     * @dataProvider toArrayDataProvider
+     * @return void
+     */
+    public function testToArray(array $metadata, array $expected): void
+    {
+        /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata $object */
+        $object = $this->objectManager->getObject(
+            PublicCookieMetadata::class,
+            [
+                'metadata' => $metadata,
+            ]
+        );
+        $this->assertEquals($expected, $object->__toArray());
+    }
+
+    /**
+     * Test Set SameSite None With Insecure Cookies
+     *
+     * @return void
+     */
+    public function testSetSecureWithSameSiteNone(): void
+    {
+        /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata $publicCookieMetadata */
+        $publicCookieMetadata = $this->objectManager->getObject(
+            PublicCookieMetadata::class
+        );
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Cookie must be secure in order to use the SameSite None directive.');
+        $publicCookieMetadata->setSameSite('None');
+        $publicCookieMetadata->setSecure(false);
     }
 }

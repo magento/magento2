@@ -111,7 +111,7 @@ class FileProcessorTest extends TestCase
         $this->store->expects($this->once())
             ->method('getBaseUrl')
             ->with(UrlInterface::URL_TYPE_MEDIA)
-            ->willReturn('http://magento2.com/pub/media/');
+            ->willReturn('http://magento2.com/media/');
         $this->directoryWrite->expects($this->once())
             ->method('getAbsolutePath')
             ->with('tmp/' . FileProcessor::FILE_DIR)
@@ -160,7 +160,7 @@ class FileProcessorTest extends TestCase
                 'name' => 'file.jpg',
                 'size' => '234234',
                 'type' => 'image/jpg',
-                'url' => 'http://magento2.com/pub/media/tmp/' . FileProcessor::FILE_DIR . '/file.jpg'
+                'url' => 'http://magento2.com/media/tmp/' . FileProcessor::FILE_DIR . '/file.jpg'
             ],
             $this->fileProcessor->saveToTmp($fieldCode)
         );

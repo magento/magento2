@@ -35,8 +35,8 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Set currency rates-->
-        <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="gotToCurrencyRatesPageSecondTime"/>
-        <waitForPageLoad stepKey="waitForLoadRatesPageSecondTime"/>
+        <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="gotToCurrencyRatesPageSecondTime"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForLoadRatesPageSecondTime"/>
         <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="setCurrencyRates">
             <argument name="firstCurrency" value="USD"/>
             <argument name="secondCurrency" value="RUB"/>

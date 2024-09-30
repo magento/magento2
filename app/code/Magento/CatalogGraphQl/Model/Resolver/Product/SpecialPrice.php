@@ -28,7 +28,10 @@ class SpecialPrice implements ResolverInterface
         /** @var PricingSpecialPrice $specialPrice */
         $specialPrice = $product->getPriceInfo()->getPrice(PricingSpecialPrice::PRICE_CODE);
 
-        if ($specialPrice->getValue()) {
+        if ((!$product->hasData('can_show_price')
+                || ($product->hasData('can_show_price') && $product->getData('can_show_price') === true)
+            )
+                && $specialPrice->getValue()) {
             return $specialPrice->getValue();
         }
 

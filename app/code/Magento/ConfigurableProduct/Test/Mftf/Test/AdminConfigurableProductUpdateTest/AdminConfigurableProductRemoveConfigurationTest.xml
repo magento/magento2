@@ -28,6 +28,15 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProductFilteredBySkuAndName">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersVirtual"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterVirtual">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterVirtual"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->

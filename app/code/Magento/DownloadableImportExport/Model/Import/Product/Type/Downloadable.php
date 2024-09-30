@@ -370,12 +370,12 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
         foreach ($sampleData as $link) {
             if ($this->hasDomainNotInWhitelist($link, 'link_type', 'link_url')) {
-                $this->_entityModel->addRowError(static::ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
+                $this->_entityModel->addRowError(self::ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
                 $result = true;
             }
 
             if ($this->hasDomainNotInWhitelist($link, 'sample_type', 'sample_url')) {
-                $this->_entityModel->addRowError(static::ERROR_SAMPLE_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
+                $this->_entityModel->addRowError(self::ERROR_SAMPLE_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
                 $result = true;
             }
         }
@@ -406,12 +406,12 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
         foreach ($linkData as $link) {
             if ($this->hasDomainNotInWhitelist($link, 'link_type', 'link_url')) {
-                $this->_entityModel->addRowError(static::ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
+                $this->_entityModel->addRowError(self::ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
                 $result = true;
             }
 
             if ($this->hasDomainNotInWhitelist($link, 'sample_type', 'sample_url')) {
-                $this->_entityModel->addRowError(static::ERROR_SAMPLE_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
+                $this->_entityModel->addRowError(self::ERROR_SAMPLE_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
                 $result = true;
             }
         }

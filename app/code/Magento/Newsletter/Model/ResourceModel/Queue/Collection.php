@@ -225,7 +225,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             )->join(
                 ['subscriber' => $this->getTable('newsletter_subscriber')],
                 'link.subscriber_id=subscriber.subscriber_id',
-                ['subscriber_store_id' => 'subscriber.store_id']
+                [
+                    'subscriber_store_id' => 'subscriber.store_id',
+                    'subscriber_id' => 'subscriber.subscriber_id',
+                ]
             )->where(
                 'subscriber.customer_id = ?',
                 $customerId

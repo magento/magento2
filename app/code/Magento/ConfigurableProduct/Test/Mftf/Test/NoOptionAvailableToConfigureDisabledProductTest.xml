@@ -121,7 +121,11 @@
             <argument name="productId" value="$$createConfigChildProduct2.id$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForSecondChildProductPageLoad"/>
-        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="outOfStockStatus"/>
+
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="outOfStockStatus">
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProductForm"/>
         <!-- Go to created customer page -->
         <comment userInput="Go to created customer page" stepKey="goToCreatedCustomerPage"/>
@@ -135,7 +139,8 @@
         <click selector="{{AdminOrderFormConfigureProductSection.configure($$createConfigProduct.id$$)}}" stepKey="clickOnConfigure"/>
         <!-- Click on attribute drop-down and check no option 1 is available -->
         <comment userInput="Click on attribute drop-down and check no option 1 is available" stepKey="commentNoOptionIsAvailable"/>
-        <waitForElement selector="{{AdminOrderFormConfigureProductSection.selectOption}}" stepKey="waitForShippingSectionLoaded"/>
+        <waitForPageLoad stepKey="waitForConfigure"/>
+        <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.selectOption}}" stepKey="waitForShippingSectionLoaded"/>
         <click selector="{{AdminOrderFormConfigureProductSection.selectOption}}" stepKey="clickToSelectOption"/>
         <dontSee userInput="$$createConfigProductAttributeOption1.option[store_labels][1][label]$$" stepKey="dontSeeOption1"/>
         <!-- Go to created customer page again -->
@@ -153,7 +158,7 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickToAddProductToOrder"/>
         <waitForPageLoad stepKey="waitForNewOrderPageLoad"/>
-        <see userInput="This product is out of stock." stepKey="seeTheErrorMessageDisplayed"/>
+        <see userInput="There are no source items with the in stock status" stepKey="seeTheErrorMessageDisplayed"/>
 
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrderThirdTime">
             <argument name="customer" value="$createCustomer$"/>
@@ -172,10 +177,10 @@
         </actionGroup>
         <!-- Select shipping method -->
         <comment userInput="Select shipping method" stepKey="selectShippingMethod"/>
-        <click selector="{{AdminInvoicePaymentShippingSection.getShippingMethodAndRates}}" stepKey="openShippingMethod"/>
-        <waitForPageLoad stepKey="waitForShippingMethods"/>
-        <click selector="{{AdminInvoicePaymentShippingSection.shippingMethod}}" stepKey="chooseShippingMethod"/>
-        <waitForPageLoad stepKey="waitForShippingMethodLoad"/>
+        <actionGroup ref="AdminClickGetShippingMethodsAndRatesActionGroup" stepKey="openShippingMethod"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForShippingMethods"/>
+        <actionGroup ref="AdminSelectFixedShippingMethodActionGroup" stepKey="chooseShippingMethod"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForShippingMethodLoad"/>
         <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="clickSubmitOrder" />
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="checkOrderSuccessfullyCreated"/>
     </test>

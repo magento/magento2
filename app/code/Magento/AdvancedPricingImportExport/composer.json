@@ -13,7 +13,8 @@
         "magento/module-customer": "*",
         "magento/module-eav": "*",
         "magento/module-import-export": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-directory": "*"
     },
     "type": "magento2-module",
     "license": [

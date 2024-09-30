@@ -16,6 +16,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemExtension;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 class OrderSaveTest extends TestCase
@@ -76,18 +77,14 @@ class OrderSaveTest extends TestCase
         $this->orderMock = $this->createMock(
             OrderInterface::class
         );
-        $this->orderExtensionMock = $this->getMockBuilder(OrderExtension::class)
-            ->addMethods(['getGiftMessage', 'setGiftMessage'])
-            ->getMock();
+        $this->orderExtensionMock = $this->getOrderExtensionMock();
         $this->giftMessageMock = $this->createMock(
             MessageInterface::class
         );
         $this->orderItemMock = $this->createMock(
             OrderItemInterface::class
         );
-        $this->orderItemExtensionMock = $this->getMockBuilder(OrderItemExtension::class)
-            ->addMethods(['setGiftMessage', 'getGiftMessage'])
-            ->getMock();
+        $this->orderItemExtensionMock = $this->getOrderItemExtensionMock();
         $this->orderRepositoryMock = $this->createMock(
             \Magento\Sales\Api\OrderRepositoryInterface::class
         );
@@ -191,5 +188,39 @@ class OrderSaveTest extends TestCase
             ->with($orderId, $orderItemId, $this->giftMessageMock)
             ->willThrowException(new \Exception('Test message'));
         $this->plugin->afterSave($this->orderRepositoryMock, $this->orderMock);
+    }
+
+    /**
+     * Build order extension mock.
+     *
+     * @return MockObject
+     */
+    private function getOrderExtensionMock(): MockObject
+    {
+        $mockBuilder = $this->getMockBuilder(OrderExtension::class);
+        try {
+            $mockBuilder->addMethods(['getGiftMessage', 'setGiftMessage']);
+        } catch (RuntimeException $e) {
+            // OrderExtension already generated.
+        }
+
+        return $mockBuilder->getMock();
+    }
+
+    /**
+     * Build order item extension mock.
+     *
+     * @return MockObject
+     */
+    private function getOrderItemExtensionMock(): MockObject
+    {
+        $mockBuilder = $this->getMockBuilder(OrderItemExtension::class);
+        try {
+            $mockBuilder->addMethods(['getGiftMessage', 'setGiftMessage']);
+        } catch (RuntimeException $e) {
+            // OrderItemExtension already generated.
+        }
+
+        return $mockBuilder->getMock();
     }
 }

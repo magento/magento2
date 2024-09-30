@@ -13,8 +13,10 @@ namespace Magento\Framework\View\Test\Unit\Design\Theme;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Image\Factory;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Design\Theme\Image;
 use Magento\Framework\View\Design\Theme\Image\Uploader;
@@ -70,8 +72,20 @@ class ImageTest extends TestCase
      */
     protected $imagePathMock;
 
+    private function setupObjectManagerForCheckImageExist($return)
+    {
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $mockFileSystem = $this->createMock(Filesystem::class);
+        $mockRead = $this->createMock(ReadInterface::class);
+        $objectManagerMock->method($this->logicalOr('get', 'create'))->willReturn($mockFileSystem);
+        $mockFileSystem->method('getDirectoryRead')->willReturn($mockRead);
+        $mockRead->method('isExist')->willReturn($return);
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+    }
+
     protected function setUp(): void
     {
+        $this->setupObjectManagerForCheckImageExist(false);
         $this->_mediaDirectoryMock = $this->createPartialMock(
             Write::class,
             ['isExist', 'copyFile', 'getRelativePath', 'delete']

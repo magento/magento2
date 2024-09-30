@@ -8,6 +8,7 @@
         "php": "~7.3.0||~7.4.0",
         "lib-libxml": "*",
         "magento/framework": "*",
+        "magento/module-authorization": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
         "magento/module-checkout": "*",

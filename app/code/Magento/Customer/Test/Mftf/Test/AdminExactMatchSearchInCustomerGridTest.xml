@@ -28,12 +28,12 @@
         <after>
             <deleteData createDataKey="createFirstCustomer" stepKey="deleteFirstCustomer"/>
             <deleteData createDataKey="createSecondCustomer" stepKey="deleteSecondCustomer"/>
-            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
+            <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
             <actionGroup ref="AdminResetFilterInCustomerAddressGrid" stepKey="clearCustomerGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Step 1: Go to Customers > All Customers-->
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
         <!--Step 2: On Customers grid page search customer by keyword with quotes-->
         <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchCustomer">
             <argument name="keyword" value="$$createSecondCustomer.firstname$$"/>

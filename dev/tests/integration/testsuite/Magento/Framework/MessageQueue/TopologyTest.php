@@ -3,16 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Framework\MessageQueue;
 
+use Magento\TestFramework\Helper\Amqp;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\MessageQueue\PreconditionFailedException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @see dev/tests/integration/_files/Magento/TestModuleMessageQueueConfiguration
  * @see dev/tests/integration/_files/Magento/TestModuleMessageQueueConfigOverride
  */
-class TopologyTest extends \PHPUnit\Framework\TestCase
+class TopologyTest extends TestCase
 {
     /**
      * List of declared exchanges.
@@ -22,13 +26,16 @@ class TopologyTest extends \PHPUnit\Framework\TestCase
     private $declaredExchanges;
 
     /**
-     * @var \Magento\TestFramework\Helper\Amqp
+     * @var Amqp
      */
     private $helper;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
-        $this->helper = Bootstrap::getObjectManager()->create(\Magento\TestFramework\Helper\Amqp::class);
+        $this->helper = Bootstrap::getObjectManager()->create(Amqp::class);
 
         if (!$this->helper->isAvailable()) {
             $this->fail('This test relies on RabbitMQ Management Plugin.');
@@ -42,12 +49,15 @@ class TopologyTest extends \PHPUnit\Framework\TestCase
      * @param array $expectedConfig
      * @param array $bindingConfig
      */
-    public function testTopologyInstallation(array $expectedConfig, array $bindingConfig)
+    public function testTopologyInstallation(array $expectedConfig, array $bindingConfig): void
     {
         $name = $expectedConfig['name'];
         $this->assertArrayHasKey($name, $this->declaredExchanges);
-        unset($this->declaredExchanges[$name]['message_stats']);
-        unset($this->declaredExchanges[$name]['user_who_performed_action']);
+        unset(
+            $this->declaredExchanges[$name]['message_stats'],
+            $this->declaredExchanges[$name]['user_who_performed_action']
+        );
+
         $this->assertEquals(
             $expectedConfig,
             $this->declaredExchanges[$name],
@@ -55,10 +65,11 @@ class TopologyTest extends \PHPUnit\Framework\TestCase
         );
 
         $bindings = $this->helper->getExchangeBindings($name);
-        $bindings = array_map(function ($value) {
+        $bindings = array_map(static function ($value) {
             unset($value['properties_key']);
             return $value;
         }, $bindings);
+
         $this->assertEquals(
             $bindingConfig,
             $bindings,
@@ -70,7 +81,7 @@ class TopologyTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function exchangeDataProvider()
+    public function exchangeDataProvider(): array
     {
         return [
             'magento-topic-based-exchange1' => [
@@ -121,7 +132,7 @@ class TopologyTest extends \PHPUnit\Framework\TestCase
                         'arguments' => [
                             'argument1' => 'value',
                             'argument2' => true,
-                            'argument3' => '150',
+                            'argument3' => 150,
                         ],
                     ],
                 ]

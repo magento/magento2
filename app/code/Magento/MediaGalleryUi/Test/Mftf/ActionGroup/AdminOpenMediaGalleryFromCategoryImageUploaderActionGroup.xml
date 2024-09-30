@@ -15,6 +15,6 @@
         <conditionalClick stepKey="clickExpandContent" selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.selectFromGalleryButton}}" visible="false" />
         <waitForElementVisible selector="{{AdminCategoryContentSection.selectFromGalleryButton}}" stepKey="waitForSelectFromGallery" />
         <click selector="{{AdminCategoryContentSection.selectFromGalleryButton}}" stepKey="clickSelectFromGallery" />
-        <waitForPageLoad stepKey="waitForPageLoad" />
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

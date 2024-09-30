@@ -13,6 +13,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Swatches\Helper\Data;
 use Magento\Swatches\Model\Plugin\EavAttribute;
+use Magento\Swatches\Model\ResourceModel\Swatch as SwatchResource;
 use Magento\Swatches\Model\ResourceModel\Swatch\Collection;
 use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory;
 use Magento\Swatches\Model\Swatch;
@@ -20,6 +21,7 @@ use Magento\Swatches\Model\SwatchAttributeType;
 use Magento\Swatches\Model\SwatchFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Test plugin model for Catalog Resource Attribute
@@ -35,6 +37,7 @@ class EavAttributeTest extends TestCase
     private const OPTION_2_ID = 2;
     private const ADMIN_STORE_ID = 0;
     private const DEFAULT_STORE_ID = 1;
+    private const SECOND_STORE_ID = 2;
     private const NEW_OPTION_KEY = 'option_2';
     private const ATTRIBUTE_DEFAULT_VALUE = [
         0 => self::NEW_OPTION_KEY
@@ -84,10 +87,12 @@ class EavAttributeTest extends TestCase
             self::OPTION_1_ID => [
                 self::ADMIN_STORE_ID => 'S',
                 self::DEFAULT_STORE_ID => 'S',
+                self::SECOND_STORE_ID => '0',
             ],
             self::NEW_OPTION_KEY => [
                 self::ADMIN_STORE_ID => 'M',
                 self::DEFAULT_STORE_ID => 'M',
+                self::SECOND_STORE_ID => '0',
             ],
         ]
     ];
@@ -106,71 +111,66 @@ class EavAttributeTest extends TestCase
     private $eavAttribute;
 
     /** @var Attribute|MockObject */
-    private $attribute;
+    private $attributeMock;
 
     /** @var SwatchFactory|MockObject */
-    private $swatchFactory;
+    private $swatchFactoryMock;
 
     /** @var CollectionFactory|MockObject */
-    private $collectionFactory;
+    private $collectionFactoryMock;
 
     /** @var Data|MockObject */
-    private $swatchHelper;
+    private $swatchHelperMock;
 
     /** @var AbstractSource|MockObject */
-    private $abstractSource;
+    private $abstractSourceMock;
 
-    /** @var \Magento\Swatches\Model\ResourceModel\Swatch|MockObject */
-    private $resource;
+    /** @var SwatchResource|MockObject */
+    private $swatchResourceMock;
 
     /** @var Collection|MockObject */
-    private $collection;
+    private $collectionMock;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->abstractSource = $this->createMock(AbstractSource::class);
-        $this->attribute = $this->createPartialMock(
+        $this->abstractSourceMock = $this->createMock(AbstractSource::class);
+        $this->attributeMock = $this->createPartialMock(
             Attribute::class,
             ['getSource']
         );
-        $this->attribute->setId(self::ATTRIBUTE_ID);
-        $this->swatchFactory = $this->createPartialMock(
+        $this->attributeMock->setId(self::ATTRIBUTE_ID);
+        $this->swatchFactoryMock = $this->createPartialMock(
             SwatchFactory::class,
             ['create']
         );
-        $this->swatchHelper = $objectManager->getObject(
+        $this->swatchHelperMock = $objectManager->getObject(
             Data::class,
             [
                 'swatchTypeChecker' => $objectManager->getObject(SwatchAttributeType::class)
             ]
         );
-        $this->resource = $this->createMock(\Magento\Swatches\Model\ResourceModel\Swatch::class);
-        $this->collection = $this->createMock(Collection::class);
-        $this->collectionFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
-        $serializer = $objectManager->getObject(Json::class);
-        $this->eavAttribute = $objectManager->getObject(
-            EavAttribute::class,
-            [
-                'collectionFactory' => $this->collectionFactory,
-                'swatchFactory' => $this->swatchFactory,
-                'swatchHelper' => $this->swatchHelper,
-                'serializer' => $serializer,
-            ]
+        $this->swatchResourceMock = $this->createMock(SwatchResource::class);
+        $this->collectionMock = $this->createMock(Collection::class);
+        $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
+        $this->attributeMock->method('getSource')
+            ->willReturn($this->abstractSourceMock);
+        $swatchMock = $this->createMock(Swatch::class);
+        $swatchMock->method('getResource')
+            ->willReturn($this->swatchResourceMock);
+        $this->swatchFactoryMock->method('create')
+            ->willReturn($swatchMock);
+
+        $this->eavAttribute = new EavAttribute(
+            $this->collectionFactoryMock,
+            $this->swatchFactoryMock,
+            $this->swatchHelperMock,
+            new Json(),
+            $this->swatchResourceMock
         );
-        $this->attribute->expects($this->any())
-            ->method('getSource')
-            ->willReturn($this->abstractSource);
-        $swatch = $this->createMock(Swatch::class);
-        $swatch->expects($this->any())
-            ->method('getResource')
-            ->willReturn($this->resource);
-        $this->swatchFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($swatch);
     }
 
     /**
@@ -178,7 +178,7 @@ class EavAttributeTest extends TestCase
      */
     public function testBeforeSaveVisualSwatch()
     {
-        $this->attribute->setData(
+        $this->attributeMock->setData(
             [
                 'defaultvisual' => self::ATTRIBUTE_DEFAULT_VALUE,
                 'optionvisual' => self::VISUAL_ATTRIBUTE_OPTIONS,
@@ -186,11 +186,11 @@ class EavAttributeTest extends TestCase
             ]
         );
 
-        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_VISUAL);
-        $this->eavAttribute->beforeBeforeSave($this->attribute);
-        $this->assertEquals(self::ATTRIBUTE_DEFAULT_VALUE, $this->attribute->getData('default'));
-        $this->assertEquals(self::VISUAL_ATTRIBUTE_OPTIONS, $this->attribute->getData('option'));
-        $this->assertEquals(self::VISUAL_SWATCH_OPTIONS, $this->attribute->getData('swatch'));
+        $this->attributeMock->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_VISUAL);
+        $this->eavAttribute->beforeBeforeSave($this->attributeMock);
+        $this->assertEquals(self::ATTRIBUTE_DEFAULT_VALUE, $this->attributeMock->getData('default'));
+        $this->assertEquals(self::VISUAL_ATTRIBUTE_OPTIONS, $this->attributeMock->getData('option'));
+        $this->assertEquals(self::VISUAL_SWATCH_OPTIONS, $this->attributeMock->getData('swatch'));
     }
 
     /**
@@ -198,7 +198,7 @@ class EavAttributeTest extends TestCase
      */
     public function testBeforeSaveTextSwatch()
     {
-        $this->attribute->setData(
+        $this->attributeMock->setData(
             [
                 'defaulttext' => self::ATTRIBUTE_DEFAULT_VALUE,
                 'optiontext' => self::TEXT_ATTRIBUTE_OPTIONS,
@@ -206,11 +206,11 @@ class EavAttributeTest extends TestCase
             ]
         );
 
-        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_TEXT);
-        $this->eavAttribute->beforeBeforeSave($this->attribute);
-        $this->assertEquals(self::ATTRIBUTE_DEFAULT_VALUE, $this->attribute->getData('default'));
-        $this->assertEquals(self::TEXT_ATTRIBUTE_OPTIONS, $this->attribute->getData('option'));
-        $this->assertEquals(self::TEXT_SWATCH_OPTIONS, $this->attribute->getData('swatch'));
+        $this->attributeMock->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_TEXT);
+        $this->eavAttribute->beforeBeforeSave($this->attributeMock);
+        $this->assertEquals(self::ATTRIBUTE_DEFAULT_VALUE, $this->attributeMock->getData('default'));
+        $this->assertEquals(self::TEXT_ATTRIBUTE_OPTIONS, $this->attributeMock->getData('option'));
+        $this->assertEquals(self::TEXT_SWATCH_OPTIONS, $this->attributeMock->getData('swatch'));
     }
 
     /**
@@ -218,11 +218,11 @@ class EavAttributeTest extends TestCase
      */
     public function testBeforeSaveWithFailedValidation()
     {
-        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectException(InputException::class);
         $this->expectExceptionMessage('Admin is a required field in each row');
         $options = self::VISUAL_ATTRIBUTE_OPTIONS;
         $options['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID] = '';
-        $this->attribute->setData(
+        $this->attributeMock->setData(
             [
                 'defaultvisual' => self::ATTRIBUTE_DEFAULT_VALUE,
                 'optionvisual' => $options,
@@ -230,8 +230,8 @@ class EavAttributeTest extends TestCase
             ]
         );
 
-        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_VISUAL);
-        $this->eavAttribute->beforeBeforeSave($this->attribute);
+        $this->attributeMock->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_VISUAL);
+        $this->eavAttribute->beforeBeforeSave($this->attributeMock);
     }
 
     /**
@@ -242,7 +242,7 @@ class EavAttributeTest extends TestCase
         $options = self::VISUAL_ATTRIBUTE_OPTIONS;
         $options['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID] = '';
         $options['delete'][self::NEW_OPTION_KEY] = '1';
-        $this->attribute->setData(
+        $this->attributeMock->setData(
             [
                 'defaultvisual' => self::ATTRIBUTE_DEFAULT_VALUE,
                 'optionvisual' => $options,
@@ -250,11 +250,11 @@ class EavAttributeTest extends TestCase
             ]
         );
 
-        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_VISUAL);
-        $this->eavAttribute->beforeBeforeSave($this->attribute);
-        $this->assertEquals(self::ATTRIBUTE_DEFAULT_VALUE, $this->attribute->getData('default'));
-        $this->assertEquals($options, $this->attribute->getData('option'));
-        $this->assertEquals(self::VISUAL_SWATCH_OPTIONS, $this->attribute->getData('swatch'));
+        $this->attributeMock->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_VISUAL);
+        $this->eavAttribute->beforeBeforeSave($this->attributeMock);
+        $this->assertEquals(self::ATTRIBUTE_DEFAULT_VALUE, $this->attributeMock->getData('default'));
+        $this->assertEquals($options, $this->attributeMock->getData('option'));
+        $this->assertEquals(self::VISUAL_SWATCH_OPTIONS, $this->attributeMock->getData('swatch'));
     }
 
     /**
@@ -268,20 +268,20 @@ class EavAttributeTest extends TestCase
             'use_product_image_for_swatch' => 0
         ];
 
-        $this->attribute->setData(
+        $this->attributeMock->setData(
             [
                 Swatch::SWATCH_INPUT_TYPE_KEY => Swatch::SWATCH_INPUT_TYPE_DROPDOWN,
                 'additional_data' => json_encode($additionalData),
             ]
         );
 
-        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_DROPDOWN);
+        $this->attributeMock->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_DROPDOWN);
 
-        $this->eavAttribute->beforeBeforeSave($this->attribute);
+        $this->eavAttribute->beforeBeforeSave($this->attributeMock);
 
         unset($additionalData[Swatch::SWATCH_INPUT_TYPE_KEY]);
 
-        $this->assertEquals(json_encode($additionalData), $this->attribute->getData('additional_data'));
+        $this->assertEquals(json_encode($additionalData), $this->attributeMock->getData('additional_data'));
     }
 
     /**
@@ -310,7 +310,7 @@ class EavAttributeTest extends TestCase
         $options = self::VISUAL_SWATCH_OPTIONS;
         $options['value'][self::OPTION_1_ID] = $swatch1;
         $options['value'][self::NEW_OPTION_KEY] = $swatch2;
-        $this->attribute->addData(
+        $this->attributeMock->addData(
             [
                 'defaultvisual' => self::ATTRIBUTE_DEFAULT_VALUE,
                 'optionvisual' => self::VISUAL_ATTRIBUTE_OPTIONS,
@@ -318,17 +318,17 @@ class EavAttributeTest extends TestCase
             ]
         );
 
-        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_VISUAL);
-        $this->eavAttribute->beforeBeforeSave($this->attribute);
-        $this->abstractSource->expects($this->once())
+        $this->attributeMock->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_VISUAL);
+        $this->eavAttribute->beforeBeforeSave($this->attributeMock);
+        $this->abstractSourceMock->expects($this->once())
             ->method('getAllOptions')
             ->willReturn(self::VISUAL_SAVED_OPTIONS);
 
-        $this->resource->expects($this->once())
+        $this->swatchResourceMock->expects($this->once())
             ->method('saveDefaultSwatchOption')
             ->with(self::ATTRIBUTE_ID, self::OPTION_2_ID);
 
-        $this->collection->expects($this->exactly(4))
+        $this->collectionMock->expects($this->exactly(4))
             ->method('addFieldToFilter')
             ->withConsecutive(
                 ['option_id', self::OPTION_1_ID],
@@ -338,27 +338,27 @@ class EavAttributeTest extends TestCase
             )
             ->willReturnSelf();
 
-        $this->collection->expects($this->exactly(2))
+        $this->collectionMock->expects($this->exactly(2))
             ->method('getFirstItem')
             ->willReturnOnConsecutiveCalls(
                 $this->createSwatchMock(
                     (string)$swatchType,
-                    (string)$swatch1 ?: null,
+                    $swatch1 ?: null,
                     1
                 ),
                 $this->createSwatchMock(
                     (string)$swatchType,
-                    (string)$swatch2 ?: null,
+                    $swatch2 ?: null,
                     null,
                     self::OPTION_2_ID,
                     self::ADMIN_STORE_ID
                 )
             );
-        $this->collectionFactory->expects($this->exactly(2))
+        $this->collectionFactoryMock->expects($this->exactly(2))
             ->method('create')
-            ->willReturn($this->collection);
+            ->willReturn($this->collectionMock);
 
-        $this->eavAttribute->afterAfterSave($this->attribute);
+        $this->eavAttribute->afterAfterSave($this->attributeMock);
     }
 
     /**
@@ -366,7 +366,7 @@ class EavAttributeTest extends TestCase
      */
     public function testAfterAfterSaveTextualSwatch()
     {
-        $this->attribute->addData(
+        $this->attributeMock->addData(
             [
                 'defaulttext' => self::ATTRIBUTE_DEFAULT_VALUE,
                 'optiontext' => self::TEXT_ATTRIBUTE_OPTIONS,
@@ -374,32 +374,36 @@ class EavAttributeTest extends TestCase
             ]
         );
 
-        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_TEXT);
-        $this->eavAttribute->beforeBeforeSave($this->attribute);
+        $this->attributeMock->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_TEXT);
+        $this->eavAttribute->beforeBeforeSave($this->attributeMock);
 
-        $this->abstractSource->expects($this->once())
+        $this->abstractSourceMock->expects($this->once())
             ->method('getAllOptions')
             ->willReturn(self::TEXT_SAVED_OPTIONS);
 
-        $this->resource->expects($this->once())
+        $this->swatchResourceMock->expects($this->once())
             ->method('saveDefaultSwatchOption')
             ->with(self::ATTRIBUTE_ID, self::OPTION_2_ID);
 
-        $this->collection->expects($this->exactly(8))
+        $this->collectionMock->expects($this->exactly(12))
             ->method('addFieldToFilter')
             ->withConsecutive(
                 ['option_id', self::OPTION_1_ID],
                 ['store_id', self::ADMIN_STORE_ID],
                 ['option_id', self::OPTION_1_ID],
                 ['store_id', self::DEFAULT_STORE_ID],
+                ['option_id', self::OPTION_1_ID],
+                ['store_id', self::SECOND_STORE_ID],
                 ['option_id', self::OPTION_2_ID],
                 ['store_id', self::ADMIN_STORE_ID],
                 ['option_id', self::OPTION_2_ID],
-                ['store_id', self::DEFAULT_STORE_ID]
+                ['store_id', self::DEFAULT_STORE_ID],
+                ['option_id', self::OPTION_2_ID],
+                ['store_id', self::SECOND_STORE_ID]
             )
             ->willReturnSelf();
 
-        $this->collection->expects($this->exactly(4))
+        $this->collectionMock->expects($this->exactly(6))
             ->method('getFirstItem')
             ->willReturnOnConsecutiveCalls(
                 $this->createSwatchMock(
@@ -414,6 +418,11 @@ class EavAttributeTest extends TestCase
                 ),
                 $this->createSwatchMock(
                     (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                    self::TEXT_SWATCH_OPTIONS['value'][self::OPTION_1_ID][self::SECOND_STORE_ID],
+                    1
+                ),
+                $this->createSwatchMock(
+                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
                     self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID],
                     null,
                     self::OPTION_2_ID,
@@ -425,13 +434,20 @@ class EavAttributeTest extends TestCase
                     null,
                     self::OPTION_2_ID,
                     self::DEFAULT_STORE_ID
+                ),
+                $this->createSwatchMock(
+                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::SECOND_STORE_ID],
+                    null,
+                    self::OPTION_2_ID,
+                    self::SECOND_STORE_ID
                 )
             );
-        $this->collectionFactory->expects($this->exactly(4))
+        $this->collectionFactoryMock->expects($this->exactly(6))
             ->method('create')
-            ->willReturn($this->collection);
+            ->willReturn($this->collectionMock);
 
-        $this->eavAttribute->afterAfterSave($this->attribute);
+        $this->eavAttribute->afterAfterSave($this->attributeMock);
     }
 
     /**
@@ -441,7 +457,7 @@ class EavAttributeTest extends TestCase
     {
         $options = self::VISUAL_ATTRIBUTE_OPTIONS;
         $options['delete'][self::OPTION_1_ID] = '1';
-        $this->attribute->addData(
+        $this->attributeMock->addData(
             [
                 'defaultvisual' => self::ATTRIBUTE_DEFAULT_VALUE,
                 'optionvisual' => $options,
@@ -449,17 +465,17 @@ class EavAttributeTest extends TestCase
             ]
         );
 
-        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_VISUAL);
-        $this->eavAttribute->beforeBeforeSave($this->attribute);
-        $this->abstractSource->expects($this->once())
+        $this->attributeMock->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_VISUAL);
+        $this->eavAttribute->beforeBeforeSave($this->attributeMock);
+        $this->abstractSourceMock->expects($this->once())
             ->method('getAllOptions')
             ->willReturn(self::VISUAL_SAVED_OPTIONS);
 
-        $this->resource->expects($this->once())
+        $this->swatchResourceMock->expects($this->once())
             ->method('saveDefaultSwatchOption')
             ->with(self::ATTRIBUTE_ID, self::OPTION_2_ID);
 
-        $this->collection->expects($this->exactly(2))
+        $this->collectionMock->expects($this->exactly(2))
             ->method('addFieldToFilter')
             ->withConsecutive(
                 ['option_id', self::OPTION_2_ID],
@@ -467,7 +483,7 @@ class EavAttributeTest extends TestCase
             )
             ->willReturnSelf();
 
-        $this->collection->expects($this->exactly(1))
+        $this->collectionMock->expects($this->exactly(1))
             ->method('getFirstItem')
             ->willReturnOnConsecutiveCalls(
                 $this->createSwatchMock(
@@ -478,11 +494,11 @@ class EavAttributeTest extends TestCase
                     self::ADMIN_STORE_ID
                 )
             );
-        $this->collectionFactory->expects($this->exactly(1))
+        $this->collectionFactoryMock->expects($this->exactly(1))
             ->method('create')
-            ->willReturn($this->collection);
+            ->willReturn($this->collectionMock);
 
-        $this->eavAttribute->afterAfterSave($this->attribute);
+        $this->eavAttribute->afterAfterSave($this->attributeMock);
     }
 
     /**
@@ -492,7 +508,7 @@ class EavAttributeTest extends TestCase
     {
         $options = self::TEXT_ATTRIBUTE_OPTIONS;
         $options['delete'][self::OPTION_1_ID] = '1';
-        $this->attribute->addData(
+        $this->attributeMock->addData(
             [
                 'defaulttext' => self::ATTRIBUTE_DEFAULT_VALUE,
                 'optiontext' => $options,
@@ -500,28 +516,30 @@ class EavAttributeTest extends TestCase
             ]
         );
 
-        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_TEXT);
-        $this->eavAttribute->beforeBeforeSave($this->attribute);
+        $this->attributeMock->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_TEXT);
+        $this->eavAttribute->beforeBeforeSave($this->attributeMock);
 
-        $this->abstractSource->expects($this->once())
+        $this->abstractSourceMock->expects($this->once())
             ->method('getAllOptions')
             ->willReturn(self::TEXT_SAVED_OPTIONS);
 
-        $this->resource->expects($this->once())
+        $this->swatchResourceMock->expects($this->once())
             ->method('saveDefaultSwatchOption')
             ->with(self::ATTRIBUTE_ID, self::OPTION_2_ID);
 
-        $this->collection->expects($this->exactly(4))
+        $this->collectionMock->expects($this->exactly(6))
             ->method('addFieldToFilter')
             ->withConsecutive(
                 ['option_id', self::OPTION_2_ID],
                 ['store_id', self::ADMIN_STORE_ID],
                 ['option_id', self::OPTION_2_ID],
-                ['store_id', self::DEFAULT_STORE_ID]
+                ['store_id', self::DEFAULT_STORE_ID],
+                ['option_id', self::OPTION_2_ID],
+                ['store_id', self::SECOND_STORE_ID]
             )
             ->willReturnSelf();
 
-        $this->collection->expects($this->exactly(2))
+        $this->collectionMock->expects($this->exactly(3))
             ->method('getFirstItem')
             ->willReturnOnConsecutiveCalls(
                 $this->createSwatchMock(
@@ -537,13 +555,20 @@ class EavAttributeTest extends TestCase
                     null,
                     self::OPTION_2_ID,
                     self::DEFAULT_STORE_ID
+                ),
+                $this->createSwatchMock(
+                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                    self::TEXT_SWATCH_OPTIONS['value'][self::NEW_OPTION_KEY][self::SECOND_STORE_ID],
+                    null,
+                    self::OPTION_2_ID,
+                    self::SECOND_STORE_ID
                 )
             );
-        $this->collectionFactory->expects($this->exactly(2))
+        $this->collectionFactoryMock->expects($this->exactly(3))
             ->method('create')
-            ->willReturn($this->collection);
+            ->willReturn($this->collectionMock);
 
-        $this->eavAttribute->afterAfterSave($this->attribute);
+        $this->eavAttribute->afterAfterSave($this->attributeMock);
     }
 
     /**
@@ -554,9 +579,11 @@ class EavAttributeTest extends TestCase
         $options = self::TEXT_SWATCH_OPTIONS;
         $options['value'][self::OPTION_1_ID][self::ADMIN_STORE_ID] = null;
         $options['value'][self::OPTION_1_ID][self::DEFAULT_STORE_ID] = null;
+        $options['value'][self::OPTION_1_ID][self::SECOND_STORE_ID] = null;
         $options['value'][self::NEW_OPTION_KEY][self::ADMIN_STORE_ID] = null;
         $options['value'][self::NEW_OPTION_KEY][self::DEFAULT_STORE_ID] = null;
-        $this->attribute->addData(
+        $options['value'][self::NEW_OPTION_KEY][self::SECOND_STORE_ID] = null;
+        $this->attributeMock->addData(
             [
                 'defaulttext' => self::ATTRIBUTE_DEFAULT_VALUE,
                 'optiontext' => self::TEXT_ATTRIBUTE_OPTIONS,
@@ -564,34 +591,43 @@ class EavAttributeTest extends TestCase
             ]
         );
 
-        $this->attribute->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_TEXT);
-        $this->eavAttribute->beforeBeforeSave($this->attribute);
+        $this->attributeMock->setData(Swatch::SWATCH_INPUT_TYPE_KEY, Swatch::SWATCH_INPUT_TYPE_TEXT);
+        $this->eavAttribute->beforeBeforeSave($this->attributeMock);
 
-        $this->abstractSource->expects($this->once())
+        $this->abstractSourceMock->expects($this->once())
             ->method('getAllOptions')
             ->willReturn(self::TEXT_SAVED_OPTIONS);
 
-        $this->resource->expects($this->once())
+        $this->swatchResourceMock->expects($this->once())
             ->method('saveDefaultSwatchOption')
             ->with(self::ATTRIBUTE_ID, self::OPTION_2_ID);
 
-        $this->collection->expects($this->exactly(8))
+        $this->collectionMock->expects($this->exactly(12))
             ->method('addFieldToFilter')
             ->withConsecutive(
                 ['option_id', self::OPTION_1_ID],
                 ['store_id', self::ADMIN_STORE_ID],
                 ['option_id', self::OPTION_1_ID],
                 ['store_id', self::DEFAULT_STORE_ID],
+                ['option_id', self::OPTION_1_ID],
+                ['store_id', self::SECOND_STORE_ID],
                 ['option_id', self::OPTION_2_ID],
                 ['store_id', self::ADMIN_STORE_ID],
                 ['option_id', self::OPTION_2_ID],
-                ['store_id', self::DEFAULT_STORE_ID]
+                ['store_id', self::DEFAULT_STORE_ID],
+                ['option_id', self::OPTION_2_ID],
+                ['store_id', self::SECOND_STORE_ID]
             )
             ->willReturnSelf();
 
-        $this->collection->expects($this->exactly(4))
+        $this->collectionMock->expects($this->exactly(6))
             ->method('getFirstItem')
             ->willReturnOnConsecutiveCalls(
+                $this->createSwatchMock(
+                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                    null,
+                    1
+                ),
                 $this->createSwatchMock(
                     (string)Swatch::SWATCH_TYPE_TEXTUAL,
                     null,
@@ -615,13 +651,20 @@ class EavAttributeTest extends TestCase
                     null,
                     self::OPTION_2_ID,
                     self::DEFAULT_STORE_ID
+                ),
+                $this->createSwatchMock(
+                    (string)Swatch::SWATCH_TYPE_TEXTUAL,
+                    null,
+                    null,
+                    self::OPTION_2_ID,
+                    self::SECOND_STORE_ID
                 )
             );
-        $this->collectionFactory->expects($this->exactly(4))
+        $this->collectionFactoryMock->expects($this->exactly(6))
             ->method('create')
-            ->willReturn($this->collection);
+            ->willReturn($this->collectionMock);
 
-        $this->eavAttribute->afterAfterSave($this->attribute);
+        $this->eavAttribute->afterAfterSave($this->attributeMock);
     }
 
     /**
@@ -642,12 +685,10 @@ class EavAttributeTest extends TestCase
         ?int $storeId = null
     ) {
         $swatch = $this->createMock(Swatch::class);
-        $swatch->expects($this->any())
-            ->method('getId')
+        $swatch->method('getId')
             ->willReturn($id);
-        $swatch->expects($this->any())
-            ->method('getResource')
-            ->willReturn($this->resource);
+        $swatch->method('getResource')
+            ->willReturn($this->swatchResourceMock);
         $swatch->expects($this->once())
             ->method('save');
         if ($id) {

@@ -32,15 +32,20 @@ class ApiDataFixture extends DataFixture
     {
         Bootstrap::getInstance()->reinitialize();
         /** Apply method level fixtures if thy are available, apply class level fixtures otherwise */
-        $this->_applyFixtures($this->_getFixtures($test, 'method') ?: $this->_getFixtures($test, 'class'));
+        $this->_applyFixtures(
+            $this->_getFixtures($test, 'method') ?: $this->_getFixtures($test, 'class'),
+            $test
+        );
     }
 
     /**
      * Handler for 'endTest' event
+     *
+     * @param TestCase $test
      */
-    public function endTest()
+    public function endTest(TestCase $test)
     {
-        $this->_revertFixtures();
+        $this->_revertFixtures($test);
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get(AttributeMetadataCache::class)->clean();
     }

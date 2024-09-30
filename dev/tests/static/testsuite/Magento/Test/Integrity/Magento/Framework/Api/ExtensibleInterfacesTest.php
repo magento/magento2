@@ -239,12 +239,11 @@ class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
      */
     protected function getFiles($dir, $pattern)
     {
-        $files = glob($dir . '/' . $pattern, GLOB_NOSORT);
+        $files = [glob($dir . '/' . $pattern, GLOB_NOSORT)];
         foreach (glob($dir . '/*', GLOB_ONLYDIR | GLOB_NOSORT) as $newDir) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $files = array_merge($files, $this->getFiles($newDir, $pattern));
+            $files[] = $this->getFiles($newDir, $pattern);
         }
-        return $files;
+        return array_merge([], ...$files);
     }
 
     /**

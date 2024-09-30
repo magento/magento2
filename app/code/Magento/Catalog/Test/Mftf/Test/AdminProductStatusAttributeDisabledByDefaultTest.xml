@@ -47,9 +47,11 @@
         <waitForPageLoad stepKey="waitForAttributeToSave"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductDropdown"/>
-        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickOnAddSimpleProduct"/>
-        <waitForPageLoad stepKey="waitForProductEditToLoad"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickOnAddProductDropdown"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickOnAddSimpleProduct">
+            <argument name="productType" value="simple"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForProductEditToLoad"/>
         <dontSeeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="dontSeeCheckboxEnableProductIsChecked"/>
 
     </test>

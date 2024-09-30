@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace Magento\CustomerImportExport\Test\Unit\Model\ResourceModel\Import\CustomerComposite;
 
+use Magento\Backend\Model\Auth\Session;
 use Magento\CustomerImportExport\Model\Import\Address;
 use Magento\CustomerImportExport\Model\Import\CustomerComposite;
 use Magento\Framework\App\ResourceConnection;
@@ -20,6 +21,7 @@ use Magento\Framework\Json\DecoderInterface;
 use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,6 +29,36 @@ use PHPUnit\Framework\TestCase;
  */
 class DataTest extends TestCase
 {
+    /**
+     * @var string[]
+     */
+    private $mockBuilderCallbacks = [
+        Session::class => 'getSessionMock'
+    ];
+
+    /**
+     * @inheritDoc
+     */
+    public function getMockBuilder(string $className): MockBuilder
+    {
+        $mockBuilder = parent::getMockBuilder($className);
+        if (isset($this->mockBuilderCallbacks[$className])) {
+            $mockBuilder = call_user_func_array([$this, $this->mockBuilderCallbacks[$className]], [$mockBuilder]);
+        }
+
+        return $mockBuilder;
+    }
+
+    /**
+     * @param MockBuilder $mockBuilder
+     * @return MockBuilder
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Used in callback.
+     */
+    private function getSessionMock(MockBuilder $mockBuilder): MockBuilder
+    {
+        return $mockBuilder->onlyMethods(['isLoggedIn']);
+    }
+
     /**
      * Array of customer attributes
      *
@@ -57,9 +89,10 @@ class DataTest extends TestCase
         );
 
         /** @var $selectMock \Magento\Framework\DB\Select */
-        $selectMock = $this->createPartialMock(Select::class, ['from', 'order']);
+        $selectMock = $this->createPartialMock(Select::class, ['from', 'order', 'where']);
         $selectMock->expects($this->any())->method('from')->willReturnSelf();
         $selectMock->expects($this->any())->method('order')->willReturnSelf();
+        $selectMock->expects($this->any())->method('where')->willReturnSelf();
 
         /** @var AdapterInterface $connectionMock */
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)

@@ -192,7 +192,9 @@ abstract class AbstractSenderTest extends TestCase
     {
         $this->identityContainerMock = $this->getMockBuilder($identityMockClassName)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId'])
+            ->onlyMethods(
+                ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId', 'getCopyMethod']
+            )
             ->getMock();
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')

@@ -5,9 +5,6 @@
  */
 declare(strict_types=1);
 
-/**
- * Test class for \Magento\Sales\Block\Adminhtml\Order\Totals\TaxTest
- */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Totals;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -16,46 +13,75 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Tax\Helper\Data;
+use Magento\Tax\Model\ResourceModel\Sales\Order\Tax\Collection;
+use Magento\Tax\Model\Sales\Order\Tax as TaxModel;
+use Magento\Tax\Model\Sales\Order\TaxFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test for \Magento\Sales\Block\Adminhtml\Order\Totals\Tax
+ */
 class TaxTest extends TestCase
 {
-    /** @var  MockObject|Tax */
+    /**
+     * @var array
+     */
+    private $calculatedData = [
+        'tax' => 'tax',
+        'shipping_tax' => 'shipping_tax',
+    ];
+
+    /**
+     * @var MockObject|Tax
+     */
     private $taxMock;
 
+    /**
+     * @var Data|MockObject
+     */
+    private $taxHelperMock;
+
+    /**
+     * @var TaxFactory|MockObject
+     */
+    private $taxOrderFactory;
+
+    /**
+     * @inheridoc
+     */
     protected function setUp(): void
     {
-        $getCalculatedTax = [
-            'tax' => 'tax',
-            'shipping_tax' => 'shipping_tax',
-        ];
-        $taxHelperMock = $this->getMockBuilder(Data::class)
-            ->setMethods(['getCalculatedTaxes'])
+        $this->taxHelperMock = $this->getMockBuilder(Data::class)
+            ->onlyMethods(['getCalculatedTaxes'])
             ->disableOriginalConstructor()
             ->getMock();
-        $taxHelperMock->expects($this->any())
-            ->method('getCalculatedTaxes')
-            ->willReturn($getCalculatedTax);
 
+        $this->taxOrderFactory = $this->createMock(TaxFactory::class);
+
+        $arguments = $this->getModelArguments(
+            ['taxHelper' => $this->taxHelperMock, 'taxOrderFactory' => $this->taxOrderFactory]
+        );
         $this->taxMock = $this->getMockBuilder(Tax::class)
-            ->setConstructorArgs($this->_getConstructArguments($taxHelperMock))
-            ->setMethods(['getOrder', 'getSource'])
+            ->setConstructorArgs($arguments)
+            ->onlyMethods(['getOrder', 'getSource'])
             ->getMock();
     }
 
     /**
      * Test method for getFullTaxInfo
      *
-     * @param Order $source
-     * @param array $getCalculatedTax
-     * @param array $getShippingTax
+     * @param Order|null $source
      * @param array $expectedResult
+     * @return void
      *
      * @dataProvider getFullTaxInfoDataProvider
      */
-    public function testGetFullTaxInfo($source, $expectedResult)
+    public function testGetFullTaxInfo(?Order $source, array $expectedResult): void
     {
+        $this->taxHelperMock->expects($this->any())
+            ->method('getCalculatedTaxes')
+            ->willReturn($this->calculatedData);
         $this->taxMock->expects($this->once())
             ->method('getOrder')
             ->willReturn($source);
@@ -69,13 +95,15 @@ class TaxTest extends TestCase
      *
      * @param Invoice|Creditmemo $source
      * @param array $expectedResult
+     * @return void
      *
      * @dataProvider getCreditAndInvoiceFullTaxInfoDataProvider
      */
-    public function testGetFullTaxInfoWithCreditAndInvoice(
-        $source,
-        $expectedResult
-    ) {
+    public function testGetFullTaxInfoWithCreditAndInvoice($source, array $expectedResult): void
+    {
+        $this->taxHelperMock->expects($this->any())
+            ->method('getCalculatedTaxes')
+            ->willReturn($this->calculatedData);
         $this->taxMock->expects($this->once())
             ->method('getSource')
             ->willReturn($source);
@@ -85,18 +113,56 @@ class TaxTest extends TestCase
     }
 
     /**
+     * Test method for getFullTaxInfo when order doesn't have tax
+     *
+     * @return void
+     */
+    public function testGetFullTaxInfoOrderWithoutTax(): void
+    {
+        $this->taxHelperMock->expects($this->once())
+            ->method('getCalculatedTaxes')
+            ->willReturn(null);
+
+        $orderMock = $this->createMock(Order::class);
+        $taxCollection = $this->createMock(Collection::class);
+        $taxCollection->expects($this->once())
+            ->method('loadByOrder')
+            ->with($orderMock)
+            ->willReturnSelf();
+        $taxCollection->expects($this->once())
+            ->method('toArray')
+            ->willReturn(['items' => []]);
+
+        $taxOrder = $this->createMock(TaxModel::class);
+        $taxOrder->expects($this->once())
+            ->method('getCollection')
+            ->willReturn($taxCollection);
+        $this->taxOrderFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($taxOrder);
+
+        $invoiceMock = $this->createMock(Invoice::class);
+        $this->taxMock->expects($this->once())
+            ->method('getSource')
+            ->willReturn($invoiceMock);
+        $this->taxMock->expects($this->once())
+            ->method('getOrder')
+            ->willReturn($orderMock);
+
+        $this->assertNull($this->taxMock->getFullTaxInfo());
+    }
+
+    /**
      * Provide the tax helper mock as a constructor argument
      *
-     * @param $taxHelperMock
+     * @param array $arguments
      * @return array
      */
-    protected function _getConstructArguments($taxHelperMock)
+    private function getModelArguments(array $arguments): array
     {
         $objectManagerHelper = new ObjectManager($this);
-        return $objectManagerHelper->getConstructArguments(
-            Tax::class,
-            ['taxHelper' => $taxHelperMock]
-        );
+
+        return $objectManagerHelper->getConstructArguments(Tax::class, $arguments);
     }
 
     /**
@@ -106,19 +172,15 @@ class TaxTest extends TestCase
      *
      * @return array
      */
-    public function getFullTaxInfoDataProvider()
+    public function getFullTaxInfoDataProvider(): array
     {
-        $salesModelOrderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $salesModelOrderMock = $this->createMock(Order::class);
+
         return [
             'source is not an instance of \Magento\Sales\Model\Order' => [null, []],
             'source is an instance of \Magento\Sales\Model\Order and has reasonable data' => [
                 $salesModelOrderMock,
-                [
-                    'tax' => 'tax',
-                    'shipping_tax' => 'shipping_tax',
-                ],
+                $this->calculatedData,
             ]
         ];
     }
@@ -130,22 +192,14 @@ class TaxTest extends TestCase
      *
      * @return array
      */
-    public function getCreditAndInvoiceFullTaxInfoDataProvider()
+    public function getCreditAndInvoiceFullTaxInfoDataProvider(): array
     {
-        $invoiceMock = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $creditMemoMock = $this->getMockBuilder(Creditmemo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $invoiceMock = $this->createMock(Invoice::class);
+        $creditMemoMock = $this->createMock(Creditmemo::class);
 
-        $expected = [
-            'tax' => 'tax',
-            'shipping_tax' => 'shipping_tax',
-        ];
         return [
-            'invoice' => [$invoiceMock, $expected],
-            'creditMemo' => [$creditMemoMock, $expected]
+            'invoice' => [$invoiceMock, $this->calculatedData],
+            'creditMemo' => [$creditMemoMock, $this->calculatedData]
         ];
     }
 }

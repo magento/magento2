@@ -100,11 +100,15 @@
         <!--Verify customer don't see updated virtual product link on magento storefront page -->
         <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductRegularPrice99OutOfStock.urlKey)}}" stepKey="goToMagentoStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{updateVirtualProductRegularPrice99OutOfStock.sku}}" stepKey="fillVirtualProductName"/>
-        <waitForPageLoad stepKey="waitForSearchTextBox"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
-        <waitForPageLoad stepKey="waitForSearch"/>
-        <dontSee selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{updateVirtualProductRegularPrice99OutOfStock.name}}" stepKey="dontSeeVirtualProductLinkOnStorefrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillVirtualProductName">
+            <argument name="phrase" value="{{updateVirtualProductRegularPrice99OutOfStock.sku}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeVirtualProductLinkOnStorefrontPage">
+            <argument name="productName" value="{{updateVirtualProductRegularPrice99OutOfStock.name}}"/>
+        </actionGroup>
 
         <!--Verify customer don't see updated virtual product link on category page -->
         <amOnPage url="{{StorefrontCategoryPage.url($$initialCategoryEntity.name$$)}}" stepKey="openCategoryPage"/>

@@ -385,6 +385,20 @@
         <data key="default_store_label" unique="suffix">Attribute Store label &lt;span&gt; </data>
         <data key="frontend_input">text</data>
     </entity>
+    <entity name="ProductTypeIdAttribute" type="ProductAttribute">
+        <data key="frontend_label">Type id</data>
+        <data key="attribute_code">type_id</data>
+        <data key="frontend_input">text</data>
+        <data key="is_required">No</data>
+        <data key="is_required_admin">No</data>
+    </entity>
+    <entity name="ProductProductTypeAttribute" type="ProductAttribute">
+        <data key="frontend_label">Product type</data>
+        <data key="attribute_code">product_type</data>
+        <data key="frontend_input">text</data>
+        <data key="is_required">No</data>
+        <data key="is_required_admin">No</data>
+    </entity>
     <!-- Product attribute from file "export_import_configurable_product.csv" -->
     <entity name="ProductAttributeWithTwoOptionsForExportImport" extends="productAttributeDropdownTwoOptions" type="ProductAttribute">
         <data key="attribute_code">attribute</data>

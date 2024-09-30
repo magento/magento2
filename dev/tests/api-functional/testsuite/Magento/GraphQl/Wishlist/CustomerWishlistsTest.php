@@ -64,7 +64,7 @@ class CustomerWishlistsTest extends GraphQlAbstract
         $this->assertEquals($wishlistItem->getItemsCount(), $wishlist['items_count']);
         $this->assertEquals($wishlistItem->getSharingCode(), $wishlist['sharing_code']);
         $this->assertEquals($wishlistItem->getUpdatedAt(), $wishlist['updated_at']);
-        $wishlistItemResponse = $wishlist['items_v2'][0];
+        $wishlistItemResponse = $wishlist['items_v2']['items'][0];
         $this->assertEquals('simple', $wishlistItemResponse['product']['sku']);
     }
 
@@ -113,8 +113,7 @@ query {
       sharing_code
       updated_at
       items_v2 {
-        product {
-          sku
+        items {product {name sku}
         }
       }
     }

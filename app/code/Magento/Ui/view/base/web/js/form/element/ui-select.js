@@ -668,7 +668,7 @@ define([
          * @returns {Object} Chainable
          */
         toggleListVisible: function () {
-            this.listVisible(!this.listVisible());
+            this.listVisible(!this.disabled() && !this.listVisible());
 
             return this;
         },
@@ -760,7 +760,7 @@ define([
          *
          * @param {Object} event - mousemove event
          */
-        onDelegatedMouseMouve: function (event) {
+        onDelegatedMouseMove: function (event) {
             var target = $(event.currentTarget).closest(this.visibleOptionSelector)[0];
 
             if (this.isCursorPositionChange(event) || this.hoveredElement === target) {
@@ -1145,7 +1145,7 @@ define([
             $(this.rootList).on(
                 'mousemove',
                 targetSelector,
-                this.onDelegatedMouseMouve.bind(this)
+                this.onDelegatedMouseMove.bind(this)
             );
         },
 

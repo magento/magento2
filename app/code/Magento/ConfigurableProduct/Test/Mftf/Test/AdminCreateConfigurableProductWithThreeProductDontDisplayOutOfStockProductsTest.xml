@@ -119,10 +119,7 @@
         <!-- Save configurable product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProduct"/>
 
-        <!-- Flash cache -->
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!--Assert configurable product in category -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>

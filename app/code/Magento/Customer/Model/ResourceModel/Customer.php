@@ -85,7 +85,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
             ->get(AccountConfirmation::class);
         $this->setType('customer');
-        $this->setConnection('customer_read', 'customer_write');
+        $this->setConnection('customer_read');
         $this->storeManager = $storeManager;
     }
 

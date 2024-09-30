@@ -13,13 +13,14 @@
             <features value="Configuration"/>
             <stories value="Disable configuration inputs"/>
             <title value="Check that all input fields disabled after executing CLI app:config:dump"/>
-            <description value="Check that all input fields disabled after executing CLI app:config:dump"/>
+            <description value="Check that all input fields disabled after executing CLI app:config:dump. Command app:config:dump is not reversible and magento instance stays configuration read only after this test. You need to restore etc/env.php manually to make magento configuration writable again."/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-11158"/>
             <useCaseId value="MAGETWO-96428"/>
             <group value="configuration"/>
         </annotations>
         <before>
+            <!-- Command app:config:dump is not reversible and magento instance stays configuration read only after this test. You need to restore etc/env.php manually to make magento configuration writable again.-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>

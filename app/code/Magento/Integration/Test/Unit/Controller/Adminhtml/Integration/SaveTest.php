@@ -180,7 +180,7 @@ class SaveTest extends IntegrationTest
         // Use real translate model
         $this->_translateModelMock = null;
         // Verify success message
-        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($exceptionMessage);
         $integrationController = $this->_createIntegrationController('Save');
         $integrationController->execute();
     }
@@ -211,7 +211,7 @@ class SaveTest extends IntegrationTest
             ->willReturnArgument(0);
 
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($exceptionMessage);
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -283,7 +283,7 @@ class SaveTest extends IntegrationTest
             ->willThrowException(new AuthenticationException(__($exceptionMessage)));
 
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($exceptionMessage);
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }

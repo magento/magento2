@@ -87,7 +87,7 @@ abstract class EntityAbstract extends AbstractDb
      * Perform actions after object save
      *
      * @param \Magento\Framework\Model\AbstractModel $object
-     * @param string $attribute
+     * @param AbstractAttribute|string[]|string $attribute
      * @return $this
      * @throws \Exception
      */

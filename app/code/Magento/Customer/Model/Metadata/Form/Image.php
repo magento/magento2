@@ -16,15 +16,15 @@ use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Framework\Api\ArrayObjectSearch;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Io\File as IoFileSystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Url\EncoderInterface;
@@ -54,8 +54,6 @@ class Image extends File
     private $mediaEntityTmpDirectory;
 
     /**
-     * Constructor
-     *
      * @param TimezoneInterface $localeDate
      * @param LoggerInterface $logger
      * @param AttributeMetadataInterface $attribute
@@ -207,13 +205,11 @@ class Image extends File
     protected function processUiComponentValue(array $value)
     {
         if ($this->_entityTypeCode == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
-            $result = $this->processCustomerAddressValue($value);
-            return $result;
+            return $this->processCustomerAddressValue($value);
         }
 
         if ($this->_entityTypeCode == CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER) {
-            $result = $this->processCustomerValue($value);
-            return $result;
+            return $this->processCustomerValue($value);
         }
 
         return $this->_value;
@@ -267,6 +263,6 @@ class Image extends File
             return $imageContentDataObject;
         }
 
-        return $this->_value;
+        return $this->_value ?: $value['file'];
     }
 }

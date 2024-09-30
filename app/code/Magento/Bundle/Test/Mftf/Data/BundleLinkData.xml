@@ -17,4 +17,13 @@
         <data key="price_type">1</data>
         <data key="can_change_quantity">1</data>
     </entity>
+    <entity name="ApiBundleLinkFixed" type="bundle_link">
+        <var key="option_id" entityKey="return" entityType="bundle_option"/>
+        <var key="sku" entityKey="sku" entityType="product"/>
+        <data key="qty">1</data>
+        <data key="is_default">1</data>
+        <data key="price">30</data>
+        <data key="price_type">0</data>
+        <data key="can_change_quantity">1</data>
+    </entity>
 </entities>

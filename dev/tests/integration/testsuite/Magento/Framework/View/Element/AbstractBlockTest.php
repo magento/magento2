@@ -490,7 +490,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
     {
         $actualResult = $this->_block->getViewFileUrl('css/styles.css');
         $this->assertStringMatchesFormat(
-            'http://localhost/pub/static/%s/frontend/%s/en_US/css/styles.css',
+            'http://localhost/static/%s/frontend/%s/en_US/css/styles.css',
             $actualResult
         );
     }

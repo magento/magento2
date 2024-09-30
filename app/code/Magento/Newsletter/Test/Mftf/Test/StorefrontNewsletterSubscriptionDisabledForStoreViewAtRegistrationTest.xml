@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontNewsletterSubscriptionDisabledForStoreViewAtRegistrationTest">
+        <annotations>
+            <features value="Newsletter"/>
+            <stories value="Disabled Newsletter Subscription for store View"/>
+            <title value="Disabled Newsletter Subscription for store View"/>
+            <description value="Option to subscribe should not be displayed at registration form if it is switched off for current store"/>
+            <severity value="AVERAGE"/>
+            <group value="newsletter"/>
+            <group value="configuration"/>
+            <testCaseId value="MC-*"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set --scope=stores --scope-code=default newsletter/general/active 0" stepKey="disableSubscriptionForStore"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set --scope=stores --scope-code=default newsletter/general/active 1" stepKey="enableSubscriptionForStore"/>
+        </after>
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <dontSeeElement selector="{{StorefrontCustomerCreateFormSection.signUpForNewsletter}}" stepKey="checkNoSubscriptionOption"/>
+    </test>
+</tests>

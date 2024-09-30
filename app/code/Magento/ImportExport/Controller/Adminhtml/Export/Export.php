@@ -99,10 +99,10 @@ class Export extends ExportController implements HttpPostActionInterface
                 );
             } catch (\Exception $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                $this->messageManager->addError(__('Please correct the data sent value.'));
+                $this->messageManager->addErrorMessage(__('Please correct the data sent value.'));
             }
         } else {
-            $this->messageManager->addError(__('Please correct the data sent value.'));
+            $this->messageManager->addErrorMessage(__('Please correct the data sent value.'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

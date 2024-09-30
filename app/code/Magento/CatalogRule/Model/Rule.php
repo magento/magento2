@@ -895,4 +895,14 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     {
         return ['price'];
     }
+
+    /**
+     * Clear price rules cache.
+     *
+     * @return void;
+     */
+    public function clearPriceRulesData(): void
+    {
+        self::$_priceRulesData = [];
+    }
 }

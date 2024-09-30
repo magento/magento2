@@ -13,4 +13,8 @@
         <requiredEntity type="custom_attribute_array">ApiProductCost</requiredEntity>
         <requiredEntity type="custom_attribute_array">ApiProductMsrp</requiredEntity>
     </entity>
+    <entity name="SimpleProductWithMsrp" type="product" extends="SimpleProduct">
+        <data key="price">100.00</data>
+        <requiredEntity type="custom_attribute_array">ApiProductMsrp</requiredEntity>
+    </entity>
 </entities>

@@ -11,9 +11,13 @@
     <section name="AdminCustomerGridMainActionsSection">
         <element name="addNewCustomer" type="button" selector="#add" timeout="30"/>
         <element name="multicheck" type="checkbox" selector="#container>div>div.admin__data-grid-wrap>table>thead>tr>th.data-grid-multicheck-cell>div>label"/>
+        <element name="multicheckTick" type="checkbox" selector="#container>div>div.admin__data-grid-wrap>table>thead>tr>th.data-grid-multicheck-cell>div>input"/>
         <element name="delete" type="button" selector="//*[contains(@class, 'admin__data-grid-header')]//span[contains(@class,'action-menu-item') and text()='Delete']"/>
-        <element name="actions" type="text" selector=".action-select"/>
         <element name="customerCheckbox" type="button" selector="//*[contains(text(),'{{arg}}')]/parent::td/preceding-sibling::td/label[@class='data-grid-checkbox-cell-inner']//input" parameterized="true"/>
         <element name="ok" type="button" selector="//button[@data-role='action']//span[text()='OK']"/>
+        <element name="addNewAddress" type="button" selector=".add-new-address-button" timeout="30"/>
+        <element name="actions" type="text" selector=".admin__data-grid-header-row .action-select"/>
+        <element name="setActive" type="button" selector="//*[contains(@class, 'admin__data-grid-header')]//span[contains(@class,'action-menu-item') and text()='Set Active']" timeout="30"/>
+        <element name="setInactive" type="button" selector="//*[contains(@class, 'admin__data-grid-header')]//span[contains(@class,'action-menu-item') and text()='Set Inactive']" timeout="30"/>
     </section>
 </sections>

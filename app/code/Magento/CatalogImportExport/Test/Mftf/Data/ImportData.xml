@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <!-- Product Attributes -->
+    <entity name="ProductAttributeFrontendLabelImport1" type="FrontendLabel">
+        <data key="store_id">0</data>
+        <data key="label">import_attribute1</data>
+    </entity>
+    <entity name="ProductAttributeWithThreeOptionsForImport" extends="productAttributeDropdownTwoOptions" type="ProductAttribute">
+        <data key="attribute_code">import_attribute1</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabelImport1</requiredEntity>
+    </entity>
+    <entity name="ProductAttributeOptionThreeForImport" extends="productAttributeOption3" type="ProductAttributeOption">
+        <data key="label">option3</data>
+    </entity>
+
+    <!-- Images -->
+    <entity name="TestImageImageContentExportImport" extends="TestImageContent" type="ImageContent">
+        <data key="name">test_image.jpg</data>
+    </entity>
+    <entity name="AdobeBaseContentExportImport" extends="AdobeBaseContent" type="ImageContent">
+        <data key="name">adobe-base.jpg</data>
+    </entity>
+    <entity name="ApiProductAttributeMediaGalleryForExportImport2" extends="ApiProductAttributeMediaGalleryEntryTestImage" type="ProductAttributeMediaGalleryEntry">
+        <data key="label">Test Image</data>
+        <requiredEntity type="ImageContent">TestImageImageContentExportImport</requiredEntity>
+    </entity>
+    <entity name="ApiProductAttributeMediaGalleryForExportImport3" extends="ApiProductAttributeMediaGalleryEntryTestImage2" type="ProductAttributeMediaGalleryEntry">
+        <data key="label">Adobe Base</data>
+        <requiredEntity type="ImageContent">AdobeBaseContentExportImport</requiredEntity>
+    </entity>
+</entities>

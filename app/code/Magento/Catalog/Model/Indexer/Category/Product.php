@@ -64,8 +64,8 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
      */
     public function execute($ids)
     {
-        $this->executeAction($ids);
         $this->registerEntities($ids);
+        $this->executeAction($ids);
     }
 
     /**

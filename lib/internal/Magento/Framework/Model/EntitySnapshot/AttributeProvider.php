@@ -74,7 +74,7 @@ class AttributeProvider implements AttributeProviderInterface
                 $attributes[] = $provider->getAttributes($entityType);
             }
 
-            $this->registry[$entityType] = \array_merge(...$attributes);
+            $this->registry[$entityType] = \array_merge([], ...$attributes);
         }
 
         return $this->registry[$entityType];

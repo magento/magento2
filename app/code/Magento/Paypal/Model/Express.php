@@ -276,6 +276,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
                 ApiProcessableException::API_MAXIMUM_AMOUNT_FILTER_DECLINE,
                 ApiProcessableException::API_OTHER_FILTER_DECLINE,
                 ApiProcessableException::API_ADDRESS_MATCH_FAIL,
+                ApiProcessableException::API_TRANSACTION_HAS_BEEN_COMPLETED,
                 self::$authorizationExpiredCode
             ]
         );

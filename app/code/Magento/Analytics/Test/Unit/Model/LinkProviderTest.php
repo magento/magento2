@@ -90,7 +90,7 @@ class LinkProviderTest extends TestCase
 
     public function testGet()
     {
-        $baseUrl = 'http://magento.local/pub/media/';
+        $baseUrl = 'http://magento.local/media/';
         $fileInfoPath = 'analytics/data.tgz';
         $fileInitializationVector = 'er312esq23eqq';
         $this->fileInfoManagerMock->expects($this->once())

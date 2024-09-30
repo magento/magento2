@@ -10,8 +10,8 @@
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">
-                <item name="releaseNotification/content_url" xsi:type="string">1</item>
-                <item name="releaseNotification/use_https" xsi:type="string">1</item>
+                <item name="system/release_notification/content_url" xsi:type="string">1</item>
+                <item name="system/release_notification/use_https" xsi:type="string">1</item>
             </argument>
         </arguments>
     </type>

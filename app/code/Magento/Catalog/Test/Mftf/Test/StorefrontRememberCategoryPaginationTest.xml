@@ -61,10 +61,7 @@
             <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="defaultCategory2" stepKey="deleteCategory2"/>
 
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
-
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
     </test>
 </tests>

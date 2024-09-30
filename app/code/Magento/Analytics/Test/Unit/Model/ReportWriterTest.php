@@ -103,7 +103,7 @@ class ReportWriterTest extends TestCase
      * @param array $expectedFileData
      * @return void
      *
-     * @dataProvider configDataProvider
+     * @dataProvider writeDataProvider
      */
     public function testWrite(array $configData, array $fileData, array $expectedFileData): void
     {
@@ -162,7 +162,7 @@ class ReportWriterTest extends TestCase
      * @param array $configData
      * @return void
      *
-     * @dataProvider configDataProvider
+     * @dataProvider writeErrorFileDataProvider
      */
     public function testWriteErrorFile(array $configData): void
     {
@@ -195,10 +195,75 @@ class ReportWriterTest extends TestCase
     /**
      * @return array
      */
-    public function configDataProvider(): array
+    public function writeDataProvider(): array
+    {
+        $configData = [
+            'providers' => [
+                [
+                    'name' => $this->providerName,
+                    'class' => $this->providerClass,
+                    'parameters' => [
+                        'name' => $this->reportName
+                    ],
+                ]
+            ]
+        ];
+        return [
+            [
+                'configData' => $configData,
+                'fileData' => [
+                    ['number' => 1, 'type' => 'Shoes\"" Usual\\\\"']
+                ],
+                'expectedFileData' => [
+                    ['number' => 1, 'type' => 'Shoes"" Usual"']
+                ]
+            ],
+            [
+                'configData' => $configData,
+                'fileData' => [
+                    ['number' => 1, 'type' => 'hello "World"']
+                ],
+                'expectedFileData' => [
+                    ['number' => 1, 'type' => 'hello "World"']
+                ]
+            ],
+            [
+                'configData' => $configData,
+                'fileData' => [
+                    ['number' => 1, 'type' => 'hello \"World\"']
+                ],
+                'expectedFileData' => [
+                    ['number' => 1, 'type' => 'hello "World"']
+                ]
+            ],
+            [
+                'configData' => $configData,
+                'fileData' => [
+                    ['number' => 1, 'type' => 'hello \\"World\\"']
+                ],
+                'expectedFileData' => [
+                    ['number' => 1, 'type' => 'hello "World"']
+                ]
+            ],
+            [
+                'configData' => $configData,
+                'fileData' => [
+                    ['number' => 1, 'type' => 'hello \\\"World\\\"']
+                ],
+                'expectedFileData' => [
+                    ['number' => 1, 'type' => 'hello "World"']
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function writeErrorFileDataProvider(): array
     {
         return [
-            'reportProvider' => [
+            [
                 'configData' => [
                     'providers' => [
                         [
@@ -210,12 +275,6 @@ class ReportWriterTest extends TestCase
                         ]
                     ]
                 ],
-                'fileData' => [
-                    ['number' => 1, 'type' => 'Shoes\"" Usual\\\\"']
-                ],
-                'expectedFileData' => [
-                    ['number' => 1, 'type' => 'Shoes\"\" Usual\\"']
-                ]
             ],
         ];
     }

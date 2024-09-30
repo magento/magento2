@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Model\Plugin;
 
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 
@@ -17,7 +17,7 @@ use Magento\Catalog\Model\Product;
 class ProductIdentitiesExtender
 {
     /**
-     * @var Configurable
+     * @var ConfigurableType
      */
     private $configurableType;
 
@@ -27,10 +27,15 @@ class ProductIdentitiesExtender
     private $productRepository;
 
     /**
-     * @param Configurable $configurableType
+     * @var array
+     */
+    private $cacheParentIdsByChild = [];
+
+    /**
+     * @param ConfigurableType $configurableType
      * @param ProductRepositoryInterface $productRepository
      */
-    public function __construct(Configurable $configurableType, ProductRepositoryInterface $productRepository)
+    public function __construct(ConfigurableType $configurableType, ProductRepositoryInterface $productRepository)
     {
         $this->configurableType = $configurableType;
         $this->productRepository = $productRepository;
@@ -46,11 +51,31 @@ class ProductIdentitiesExtender
      */
     public function afterGetIdentities(Product $subject, array $identities): array
     {
-        foreach ($this->configurableType->getParentIdsByChild($subject->getId()) as $parentId) {
-            $parentProduct = $this->productRepository->getById($parentId);
-            $identities = array_merge($identities, $parentProduct->getIdentities());
+        if ($subject->getTypeId() !== ConfigurableType::TYPE_CODE) {
+            return $identities;
         }
+        $parentProductsIdentities = [];
+        foreach ($this->getParentIdsByChild($subject->getId()) as $parentId) {
+            $parentProduct = $this->productRepository->getById($parentId);
+            $parentProductsIdentities[] = $parentProduct->getIdentities();
+        }
+        $identities = array_merge($identities, ...$parentProductsIdentities);
 
         return array_unique($identities);
+    }
+
+    /**
+     * Get parent ids by child with cache use
+     *
+     * @param int $childId
+     * @return array
+     */
+    private function getParentIdsByChild($childId)
+    {
+        if (!isset($this->cacheParentIdsByChild[$childId])) {
+            $this->cacheParentIdsByChild[$childId] = $this->configurableType->getParentIdsByChild($childId);
+        }
+
+        return $this->cacheParentIdsByChild[$childId];
     }
 }

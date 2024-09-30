@@ -42,12 +42,15 @@ class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractB
     public function validate($object)
     {
         $attributeCode = $this->getAttribute()->getAttributeCode();
-        $data = $object->getData($attributeCode);
-        if (is_array($data)) {
-            $object->setData($attributeCode, implode(',', array_filter($data)));
-        } elseif (empty($data)) {
-            $object->setData($attributeCode, null);
+        if ($object->hasData($attributeCode)) {
+            $data = $object->getData($attributeCode);
+            if (is_array($data)) {
+                $object->setData($attributeCode, implode(',', array_filter($data)));
+            } elseif (empty($data)) {
+                $object->setData($attributeCode, null);
+            }
         }
+
         return parent::validate($object);
     }
 }

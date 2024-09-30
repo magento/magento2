@@ -169,14 +169,14 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             [UrlInterface::URL_TYPE_DIRECT_LINK, false, true, 'http://localhost/index.php/'],
             [UrlInterface::URL_TYPE_DIRECT_LINK, true, false, 'http://localhost/'],
             [UrlInterface::URL_TYPE_DIRECT_LINK, true, true, 'http://localhost/'],
-            [UrlInterface::URL_TYPE_STATIC, false, false, 'http://localhost/pub/static/'],
-            [UrlInterface::URL_TYPE_STATIC, false, true, 'http://localhost/pub/static/'],
-            [UrlInterface::URL_TYPE_STATIC, true, false, 'http://localhost/pub/static/'],
-            [UrlInterface::URL_TYPE_STATIC, true, true, 'http://localhost/pub/static/'],
-            [UrlInterface::URL_TYPE_MEDIA, false, false, 'http://localhost/pub/media/'],
-            [UrlInterface::URL_TYPE_MEDIA, false, true, 'http://localhost/pub/media/'],
-            [UrlInterface::URL_TYPE_MEDIA, true, false, 'http://localhost/pub/media/'],
-            [UrlInterface::URL_TYPE_MEDIA, true, true, 'http://localhost/pub/media/']
+            [UrlInterface::URL_TYPE_STATIC, false, false, 'http://localhost/static/'],
+            [UrlInterface::URL_TYPE_STATIC, false, true, 'http://localhost/static/'],
+            [UrlInterface::URL_TYPE_STATIC, true, false, 'http://localhost/static/'],
+            [UrlInterface::URL_TYPE_STATIC, true, true, 'http://localhost/static/'],
+            [UrlInterface::URL_TYPE_MEDIA, false, false, 'http://localhost/media/'],
+            [UrlInterface::URL_TYPE_MEDIA, false, true, 'http://localhost/media/'],
+            [UrlInterface::URL_TYPE_MEDIA, true, false, 'http://localhost/media/'],
+            [UrlInterface::URL_TYPE_MEDIA, true, true, 'http://localhost/media/']
         ];
     }
 
@@ -196,8 +196,8 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->model = $this->_getStoreModel();
         $this->model->load('default');
 
-        $this->assertEquals('http://localhost/pub/static/', $this->model->getBaseUrl(UrlInterface::URL_TYPE_STATIC));
-        $this->assertEquals('http://localhost/pub/media/', $this->model->getBaseUrl(UrlInterface::URL_TYPE_MEDIA));
+        $this->assertEquals('http://localhost/static/', $this->model->getBaseUrl(UrlInterface::URL_TYPE_STATIC));
+        $this->assertEquals('http://localhost/media/', $this->model->getBaseUrl(UrlInterface::URL_TYPE_MEDIA));
     }
 
     /**

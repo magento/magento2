@@ -132,14 +132,13 @@
         <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="selectFirstRow"/>
         <waitForPageLoad stepKey="waitForProductPageToLoad"/>
         <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToProductQuantity"/>
-        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="disableProduct"/>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="disableProduct">
+           <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>   
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
 
-        <!--Run re-index task-->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!--Open Category in Store Front and select product attribute option from sidebar -->
         <actionGroup ref="SelectStorefrontSideBarAttributeOption" stepKey="selectStorefrontProductAttributeOption">

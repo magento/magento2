@@ -11,6 +11,8 @@
     <section name="AdminHeaderSection">
         <element name="pageTitle" type="text" selector=".page-header h1.page-title"/>
         <element name="adminUserAccountText" type="text" selector=".page-header .admin-user-account-text" />
+        <element name="globalSearchInput" type="text" selector="#search-global" />
+        <element name="globalSearchInputVisible" type="text" selector=".search-global-field._active #search-global" />
         <!-- Legacy heading section. Mostly used for admin 404 and 403 pages -->
         <element name="pageHeading" type="text" selector=".page-content .page-heading"/>
         <!-- Used for page not found error -->

@@ -121,7 +121,7 @@ class Group
      */
     protected function generateProductUrls($websiteId, $originWebsiteId)
     {
-        $urls = [[]];
+        $urls = [];
         $websiteIds = $websiteId != $originWebsiteId
             ? [$websiteId, $originWebsiteId]
             : [$websiteId];
@@ -136,7 +136,7 @@ class Group
             $urls[] = $this->productUrlRewriteGenerator->generate($product);
         }
 
-        return array_merge(...$urls);
+        return array_merge([], ...$urls);
     }
 
     /**
@@ -148,7 +148,7 @@ class Group
      */
     protected function generateCategoryUrls($rootCategoryId, $storeIds)
     {
-        $urls = [[]];
+        $urls = [];
         $categories = $this->categoryFactory->create()->getCategories($rootCategoryId, 1, false, true);
         foreach ($categories as $category) {
             /** @var \Magento\Catalog\Model\Category $category */
@@ -157,6 +157,6 @@ class Group
             $urls[] = $this->categoryUrlRewriteGenerator->generate($category);
         }
 
-        return array_merge(...$urls);
+        return array_merge([], ...$urls);
     }
 }

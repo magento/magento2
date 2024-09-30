@@ -7,6 +7,7 @@
 namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -40,24 +41,32 @@ class ReindexRuleProductPrice
     private $pricesPersistor;
 
     /**
+     * @var bool
+     */
+    private $useWebsiteTimezone;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param RuleProductsSelectBuilder $ruleProductsSelectBuilder
      * @param ProductPriceCalculator $productPriceCalculator
      * @param TimezoneInterface $localeDate
      * @param RuleProductPricesPersistor $pricesPersistor
+     * @param bool $useWebsiteTimezone
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         RuleProductsSelectBuilder $ruleProductsSelectBuilder,
         ProductPriceCalculator $productPriceCalculator,
         TimezoneInterface $localeDate,
-        RuleProductPricesPersistor $pricesPersistor
+        RuleProductPricesPersistor $pricesPersistor,
+        bool $useWebsiteTimezone = true
     ) {
         $this->storeManager = $storeManager;
         $this->ruleProductsSelectBuilder = $ruleProductsSelectBuilder;
         $this->productPriceCalculator = $productPriceCalculator;
         $this->localeDate = $localeDate;
         $this->pricesPersistor = $pricesPersistor;
+        $this->useWebsiteTimezone = $useWebsiteTimezone;
     }
 
     /**
@@ -82,11 +91,9 @@ class ReindexRuleProductPrice
             $prevKey = null;
 
             $storeGroup = $this->storeManager->getGroup($website->getDefaultGroupId());
-            $currentDate = $this->localeDate->scopeDate($storeGroup->getDefaultStoreId(), null, true);
-            $previousDate = (clone $currentDate)->modify('-1 day');
-            $previousDate->setTime(23, 59, 59);
-            $nextDate = (clone $currentDate)->modify('+1 day');
-            $nextDate->setTime(0, 0, 0);
+            $dateInterval = $this->useWebsiteTimezone
+                ? $this->getDateInterval((int)$storeGroup->getDefaultStoreId())
+                : $this->getDateInterval(Store::DEFAULT_STORE_ID);
 
             while ($ruleData = $productsStmt->fetch()) {
                 $ruleProductId = $ruleData['product_id'];
@@ -107,7 +114,7 @@ class ReindexRuleProductPrice
                 /**
                  * Build prices for each day
                  */
-                foreach ([$previousDate, $currentDate, $nextDate] as $date) {
+                foreach ($dateInterval as $date) {
                     $time = $date->getTimestamp();
                     if (($ruleData['from_time'] == 0 ||
                             $time >= $ruleData['from_time']) && ($ruleData['to_time'] == 0 ||
@@ -156,5 +163,22 @@ class ReindexRuleProductPrice
         }
 
         return true;
+    }
+
+    /**
+     * Retrieve date sequence in store time zone
+     *
+     * @param int $storeId
+     * @return \DateTime[]
+     */
+    private function getDateInterval(int $storeId): array
+    {
+        $currentDate = $this->localeDate->scopeDate($storeId, null, true);
+        $previousDate = (clone $currentDate)->modify('-1 day');
+        $previousDate->setTime(23, 59, 59);
+        $nextDate = (clone $currentDate)->modify('+1 day');
+        $nextDate->setTime(0, 0, 0);
+
+        return [$previousDate, $currentDate, $nextDate];
     }
 }

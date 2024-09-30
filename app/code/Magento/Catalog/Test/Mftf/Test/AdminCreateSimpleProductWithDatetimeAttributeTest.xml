@@ -48,10 +48,7 @@
         </actionGroup>
         <!-- Save the product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-        <!-- Flush config cache to reset product attributes in attribute set -->
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushConfigCache">
-            <argument name="tags" value="config"/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushConfigCache"/>
         <reloadPage stepKey="reloadProductEditPage"/>
         <!-- Check default value -->
         <waitForElementVisible selector="{{AdminProductAttributesSection.sectionHeader}}" stepKey="waitAttributesSectionAppears"/>

@@ -39,8 +39,8 @@
             <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="searchCreatedStoreViewInGrid">
                 <argument name="storeViewName" value="{{storeViewData.name}}"/>
             </actionGroup>
-            <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickStoreViewFirstRowInGrid"/>
-            <waitForPageLoad stepKey="waitForAdminSystemStoreViewPageLoad"/>
+            <actionGroup ref="AdminOpenStoreInFirstRowInStoresGridActionGroup" stepKey="clickStoreViewFirstRowInGrid"/>
+
             <!--Update created store view as per requirements-->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="updateStoreView">
                 <argument name="StoreGroup" value="_defaultStoreGroup"/>

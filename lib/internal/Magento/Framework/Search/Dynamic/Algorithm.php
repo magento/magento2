@@ -502,7 +502,7 @@ class Algorithm
         foreach ($newRoundValues as $roundingFactor => $roundValueValues) {
             if (array_key_exists($roundingFactor, $oldRoundValues)) {
                 $oldRoundValues[$roundingFactor] = array_unique(
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     array_merge($oldRoundValues[$roundingFactor], $roundValueValues)
                 );
             } else {

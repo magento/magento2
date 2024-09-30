@@ -82,10 +82,7 @@
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSave"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
 
-        <!-- Flash cache -->
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Go to store's advanced catalog search page -->
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>

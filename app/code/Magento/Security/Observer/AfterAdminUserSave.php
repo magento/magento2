@@ -53,7 +53,7 @@ class AfterAdminUserSave implements ObserverInterface
     {
         /* @var $user \Magento\User\Model\User */
         $user = $observer->getEvent()->getObject();
-        if ($user->getId()) {
+        if ($user->getId() && $user->hasData('expires_at')) {
             $expiresAt = $user->getExpiresAt();
             /** @var \Magento\Security\Model\UserExpiration $userExpiration */
             $userExpiration = $this->userExpirationFactory->create();

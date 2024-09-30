@@ -5,8 +5,13 @@
  */
 namespace Magento\Quote\Api;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteIdMask;
+use Magento\Quote\Model\QuoteIdMaskFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -40,14 +45,14 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
      */
     public function testGetList()
     {
-        /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
+        /** @var Quote $quote */
+        $quote = $this->objectManager->create(Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $cartId = $quote->getId();
 
-        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
+        /** @var QuoteIdMask $quoteIdMask */
+        $quoteIdMask = Bootstrap::getObjectManager()
+            ->create(QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
@@ -92,17 +97,17 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
      */
     public function testAddItem()
     {
-        /** @var  \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class)->load(2);
+        /** @var Product $product */
+        $product = $this->objectManager->create(Product::class)->load(2);
         $productSku = $product->getSku();
-        /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
+        /** @var Quote $quote */
+        $quote = $this->objectManager->create(Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
-        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
+        /** @var QuoteIdMask $quoteIdMask */
+        $quoteIdMask = Bootstrap::getObjectManager()
+            ->create(QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
@@ -141,20 +146,20 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
      */
     public function testRemoveItem()
     {
-        /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
+        /** @var Quote $quote */
+        $quote = $this->objectManager->create(Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $cartId = $quote->getId();
 
-        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
+        /** @var QuoteIdMask $quoteIdMask */
+        $quoteIdMask = Bootstrap::getObjectManager()
+            ->create(QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
-        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
+        $product = $this->objectManager->create(Product::class);
         $productId = $product->getIdBySku('simple_one');
         $product->load($productId);
         $itemId = $quote->getItemByProduct($product)->getId();
@@ -175,7 +180,7 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
             "itemId" => $itemId,
         ];
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
+        $quote = $this->objectManager->create(Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $this->assertFalse($quote->hasProductId($productId));
     }
@@ -189,20 +194,20 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
     public function testUpdateItem(array $stockData, string $errorMessage = null)
     {
         $this->updateStockData('simple_one', $stockData);
-        /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
+        /** @var Quote $quote */
+        $quote = $this->objectManager->create(Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $cartId = $quote->getId();
 
-        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
+        /** @var QuoteIdMask $quoteIdMask */
+        $quoteIdMask = Bootstrap::getObjectManager()
+            ->create(QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
-        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
+        $product = $this->objectManager->create(Product::class);
         $productId = $product->getIdBySku('simple_one');
         $product->load($productId);
         $itemId = $quote->getItemByProduct($product)->getId();
@@ -229,12 +234,68 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
             $this->expectExceptionMessage($errorMessage);
         }
         $this->_webApiCall($serviceInfo, $requestData);
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
+        $quote = $this->objectManager->create(Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $this->assertTrue($quote->hasProductId(1));
         $item = $quote->getItemByProduct($product);
         $this->assertEquals(5, $item->getQty());
         $this->assertEquals($itemId, $item->getItemId());
+    }
+
+    /**
+     * Verifies that store id for quote and quote item is being changed accordingly to the requested store code
+     *
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     */
+    public function testUpdateItemWithChangingStoreId()
+    {
+        /** @var Quote $quote */
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('test_order_item_with_items', 'reserved_order_id');
+        $cartId = $quote->getId();
+
+        /** @var QuoteIdMask $quoteIdMask */
+        $quoteIdMask = Bootstrap::getObjectManager()
+            ->create(QuoteIdMaskFactory::class)
+            ->create();
+        $quoteIdMask->load($cartId, 'quote_id');
+        $cartId = $quoteIdMask->getMaskedId();
+
+        $product = $this->objectManager->create(Product::class);
+        $productId = $product->getIdBySku('simple');
+        $product->load($productId);
+        $itemId = $quote->getItemByProduct($product)->getId();
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/items/' . $itemId,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        $requestData['cartItem']['qty'] = 5;
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
+            $requestData['cartItem'] += [
+                'quote_id' => $cartId,
+                'itemId' => $itemId,
+            ];
+        }
+        $this->_webApiCall($serviceInfo, $requestData, null, 'fixture_second_store');
+        $quote = $this->objectManager->create(Quote::class);
+        $quote->load('test_order_item_with_items', 'reserved_order_id');
+        $this->assertTrue($quote->hasProductId(1));
+        $item = $quote->getItemByProduct($product);
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $storeId = $storeManager->getStore('fixture_second_store')
+            ->getId();
+        $this->assertEquals($storeId, $quote->getStoreId());
+        $this->assertEquals($storeId, $item->getStoreId());
     }
 
     /**
@@ -265,7 +326,7 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
                     'use_config_backorders' => 0,
                     'backorders' => Stock::BACKORDERS_NO,
                 ],
-                'This product is out of stock.'
+                'There are no source items with the in stock status'
             ],
             [
                 [

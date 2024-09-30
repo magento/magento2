@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
-use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\CatalogInventory\Model\StockRegistryPreloader;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
@@ -20,35 +20,26 @@ use Magento\Framework\Event\ObserverInterface;
 class AddStockItemsObserver implements ObserverInterface
 {
     /**
-     * @var StockItemCriteriaInterfaceFactory
-     */
-    private $criteriaInterfaceFactory;
-
-    /**
-     * @var StockItemRepositoryInterface
-     */
-    private $stockItemRepository;
-
-    /**
      * @var StockConfigurationInterface
      */
     private $stockConfiguration;
+    /**
+     * @var StockRegistryPreloader
+     */
+    private $stockRegistryPreloader;
 
     /**
      * AddStockItemsObserver constructor.
      *
-     * @param StockItemCriteriaInterfaceFactory $criteriaInterfaceFactory
-     * @param StockItemRepositoryInterface $stockItemRepository
      * @param StockConfigurationInterface $stockConfiguration
+     * @param StockRegistryPreloader $stockRegistryPreloader
      */
     public function __construct(
-        StockItemCriteriaInterfaceFactory $criteriaInterfaceFactory,
-        StockItemRepositoryInterface $stockItemRepository,
-        StockConfigurationInterface $stockConfiguration
+        StockConfigurationInterface $stockConfiguration,
+        StockRegistryPreloader $stockRegistryPreloader
     ) {
-        $this->criteriaInterfaceFactory = $criteriaInterfaceFactory;
-        $this->stockItemRepository = $stockItemRepository;
         $this->stockConfiguration = $stockConfiguration;
+        $this->stockRegistryPreloader = $stockRegistryPreloader;
     }
 
     /**
@@ -62,11 +53,13 @@ class AddStockItemsObserver implements ObserverInterface
         /** @var Collection $productCollection */
         $productCollection = $observer->getData('collection');
         $productIds = array_keys($productCollection->getItems());
-        $criteria = $this->criteriaInterfaceFactory->create();
-        $criteria->setProductsFilter($productIds);
-        $criteria->setScopeFilter($this->stockConfiguration->getDefaultScopeId());
-        $stockItemCollection = $this->stockItemRepository->getList($criteria);
-        foreach ($stockItemCollection->getItems() as $item) {
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        $stockItems = [];
+        if ($productIds) {
+            $stockItems = $this->stockRegistryPreloader->preloadStockItems($productIds, $scopeId);
+            $this->stockRegistryPreloader->preloadStockStatuses($productIds, $scopeId);
+        }
+        foreach ($stockItems as $item) {
             /** @var Product $product */
             $product = $productCollection->getItemById($item->getProductId());
             $productExtension = $product->getExtensionAttributes();

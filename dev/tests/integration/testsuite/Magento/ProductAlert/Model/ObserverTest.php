@@ -93,7 +93,6 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $secondStore = $storeRepository->get('fixture_second_store');
 
         // check if Portuguese language is specified for the second store
-        CacheCleaner::cleanAll();
         $storeResolver = $this->_objectManager->get(Resolver::class);
         $storeResolver->emulate($secondStore->getId());
         $this->assertEquals('pt_BR', $storeResolver->getLocale());

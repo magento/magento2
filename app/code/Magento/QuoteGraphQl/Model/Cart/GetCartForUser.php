@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
  * Get cart
@@ -30,15 +33,23 @@ class GetCartForUser
     private $cartRepository;
 
     /**
+     * @var StoreRepositoryInterface
+     */
+    private $storeRepository;
+
+    /**
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param CartRepositoryInterface $cartRepository
+     * @param StoreRepositoryInterface $storeRepository
      */
     public function __construct(
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
-        CartRepositoryInterface $cartRepository
+        CartRepositoryInterface $cartRepository,
+        StoreRepositoryInterface $storeRepository = null
     ) {
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->cartRepository = $cartRepository;
+        $this->storeRepository = $storeRepository ?: ObjectManager::getInstance()->get(StoreRepositoryInterface::class);
     }
 
     /**
@@ -49,6 +60,7 @@ class GetCartForUser
      * @param int $storeId
      * @return Quote
      * @throws GraphQlAuthorizationException
+     * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
      * @throws NoSuchEntityException
      */
@@ -75,14 +87,7 @@ class GetCartForUser
             throw new GraphQlNoSuchEntityException(__('The cart isn\'t active.'));
         }
 
-        if ((int)$cart->getStoreId() !== $storeId) {
-            throw new GraphQlNoSuchEntityException(
-                __(
-                    'Wrong store code specified for cart "%masked_cart_id"',
-                    ['masked_cart_id' => $cartHash]
-                )
-            );
-        }
+        $this->updateCartCurrency($cart, $storeId);
 
         $cartCustomerId = (int)$cart->getCustomerId();
 
@@ -100,5 +105,35 @@ class GetCartForUser
             );
         }
         return $cart;
+    }
+
+    /**
+     * Sets cart currency based on specified store.
+     *
+     * @param Quote $cart
+     * @param int $storeId
+     * @throws GraphQlInputException
+     * @throws NoSuchEntityException
+     */
+    private function updateCartCurrency(Quote $cart, int $storeId)
+    {
+        $cartStore = $this->storeRepository->getById($cart->getStoreId());
+        $currentCartCurrencyCode = $cartStore->getCurrentCurrency()->getCode();
+        if ((int)$cart->getStoreId() !== $storeId) {
+            $newStore = $this->storeRepository->getById($storeId);
+            if ($cartStore->getWebsite() !== $newStore->getWebsite()) {
+                throw new GraphQlInputException(
+                    __('Can\'t assign cart to store in different website.')
+                );
+            }
+            $cart->setStoreId($storeId);
+            $cart->setStoreCurrencyCode($newStore->getCurrentCurrency());
+            $cart->setQuoteCurrencyCode($newStore->getCurrentCurrency());
+        } elseif ($cart->getQuoteCurrencyCode() !== $currentCartCurrencyCode) {
+            $cart->setQuoteCurrencyCode($cartStore->getCurrentCurrency());
+        } else {
+            return;
+        }
+        $this->cartRepository->save($cart);
     }
 }

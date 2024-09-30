@@ -24,7 +24,7 @@
         <data key="fileName">png</data>
         <data key="extension">png</data>
      </entity>
-          <entity name="ImageUploadGif" type="uploadImage">
+    <entity name="ImageUploadGif" type="uploadImage">
         <data key="title" unique="suffix">Image1</data>
         <data key="file_type">Upload File</data>
         <data key="value">gif.gif</data>
@@ -39,5 +39,9 @@
         <data key="fileName">Title of the magento image</data>
         <data key="extension">jpg</data>
         <data key="keywords">magento, mediagallerymetadata</data>
+    </entity>
+    <entity name="ImageUploadPngTwo" type="image">
+        <data key="file">magento-logo_2.png</data>
+        <data key="extension">png</data>
     </entity>
 </entities>

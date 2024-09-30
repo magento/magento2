@@ -33,6 +33,7 @@ use Magento\SalesRule\Model\Validator\Pool;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Zend_Db_Select_Exception;
 
 /**
  * Test sales rule model validator
@@ -538,7 +539,7 @@ class ValidatorTest extends TestCase
      * @param int $ruleDiscount
      * @param int $shippingDiscount
      * @dataProvider dataProviderActions
-     * @throws \Zend_Db_Select_Exception
+     * @throws Zend_Db_Select_Exception
      */
     public function testProcessShippingAmountActions($action, $ruleDiscount, $shippingDiscount): void
     {
@@ -592,6 +593,86 @@ class ValidatorTest extends TestCase
             [Rule::TO_FIXED_ACTION, 5, 0],
             [Rule::BY_FIXED_ACTION, 5, 5],
             [Rule::CART_FIXED_ACTION, 5, 0],
+        ];
+    }
+
+    /**
+     * Tests shipping amount with full discount action.
+     *
+     * @dataProvider dataProviderForFullShippingDiscount
+     * @param string $action
+     * @param float $ruleDiscount
+     * @param float $shippingDiscount
+     * @param float $shippingAmount
+     * @param float $quoteBaseSubTotal
+     * @throws Zend_Db_Select_Exception
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testProcessShippingAmountWithFullFixedPercentDiscount(
+        string $action,
+        float $ruleDiscount,
+        float $shippingDiscount,
+        float $shippingAmount,
+        float $quoteBaseSubTotal
+    ): void {
+        $ruleMock = $this->getMockBuilder(Rule::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getApplyToShipping', 'getSimpleAction', 'getDiscountAmount'])
+            ->getMock();
+        $ruleMock->method('getApplyToShipping')
+            ->willReturn(true);
+        $ruleMock->method('getDiscountAmount')
+            ->willReturn($ruleDiscount);
+        $ruleMock->method('getSimpleAction')
+            ->willReturn($action);
+
+        $iterator = new \ArrayIterator([$ruleMock]);
+        $this->ruleCollection->method('getIterator')
+            ->willReturn($iterator);
+
+        $this->utility->method('canProcessRule')
+            ->willReturn(true);
+
+        $this->priceCurrency->method('convert')
+            ->willReturn($ruleDiscount);
+
+        $this->priceCurrency->method('roundPrice')
+            ->willReturn(round($shippingDiscount, 2));
+
+        $this->model->init(
+            $this->model->getWebsiteId(),
+            $this->model->getCustomerGroupId(),
+            $this->model->getCouponCode()
+        );
+
+        $addressMock = $this->setupAddressMock($shippingAmount, $quoteBaseSubTotal);
+
+        self::assertInstanceOf(Validator::class, $this->model->processShippingAmount($addressMock));
+        self::assertEquals($shippingDiscount, $addressMock->getShippingDiscountAmount());
+    }
+
+    /**
+     * Get data provider array for full shipping discount action
+     *
+     * @return array
+     */
+    public function dataProviderForFullShippingDiscount(): array
+    {
+        return [
+            'verify shipping discount when shipping amount is greater than zero' => [
+                Rule::BY_PERCENT_ACTION,
+                100.00,
+                5.0,
+                5.0,
+                10.0
+            ],
+            'verify shipping discount when shipping amount is zero' => [
+                Rule::BY_PERCENT_ACTION,
+                100.00,
+                5.0,
+                0,
+                10.0
+            ]
         ];
     }
 

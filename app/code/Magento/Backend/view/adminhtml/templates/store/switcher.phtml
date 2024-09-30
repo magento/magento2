@@ -200,7 +200,7 @@ script;
                 setLocation(url);
 ';
     } else {
-        $scriptString .= <<<script
+        $scriptString .= <<<'script'
             jQuery('#preview_selected_store').val(scopeId);
             jQuery('#preview_form').submit();
 

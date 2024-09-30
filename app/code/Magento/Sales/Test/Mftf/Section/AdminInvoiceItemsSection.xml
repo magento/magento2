@@ -28,5 +28,6 @@
         <element name="discountAmountColumn" type="text" selector=".order-invoice-tables .col-discount .price"/>
         <element name="totalColumn" type="text" selector=".order-invoice-tables .col-total .price"/>
         <element name="updateQty" type="button" selector=".order-invoice-tables tfoot button[data-ui-id='order-items-update-button']"/>
+        <element name="bundleItem" type="text" selector="#invoice_item_container .option-value"/>
     </section>
 </sections>

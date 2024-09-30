@@ -115,7 +115,7 @@ abstract class AbstractTokenizer
      */
     public function isWhiteSpace()
     {
-        return trim($this->char()) != $this->char();
+        return $this->_string === '' ?: trim($this->char()) !== $this->char();
     }
 
     /**

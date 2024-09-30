@@ -327,7 +327,7 @@ class LinkTest extends TestCase
         $this->linkPurchasedItem->expects($this->any())->method('setStatus')->with('expired')->willReturnSelf();
         $this->linkPurchasedItem->expects($this->any())->method('save')->willThrowException(new \Exception());
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Something went wrong while getting the requested content.')
             ->willReturnSelf();
         $this->redirect->expects($this->once())->method('redirect')->with($this->response, '*/customer/products', []);
@@ -494,7 +494,7 @@ class LinkTest extends TestCase
             ['addNotice', 'expired', 'The link has expired.'],
             ['addNotice', 'pending', 'The link is not available.'],
             ['addNotice', 'payment_review', 'The link is not available.'],
-            ['addError', 'wrong_status', 'Something went wrong while getting the requested content.']
+            ['addErrorMessage', 'wrong_status', 'Something went wrong while getting the requested content.']
         ];
     }
 

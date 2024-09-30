@@ -171,7 +171,7 @@ class MassChangelogTest extends TestCase
         $this->title = $this->createMock(Title::class);
         $this->messageManager = $this->getMockForAbstractClass(
             ManagerInterface::class,
-            ['addError', 'addSuccess'],
+            ['addErrorMessage', 'addSuccess'],
             '',
             false
         );
@@ -206,7 +206,7 @@ class MassChangelogTest extends TestCase
 
         if (!is_array($indexerIds)) {
             $this->messageManager->expects($this->once())
-                ->method('addError')->with(__('Please select indexers.'))
+                ->method('addErrorMessage')->with(__('Please select indexers.'))
                 ->willReturn(1);
         } else {
             $this->objectManager->expects($this->any())
@@ -235,7 +235,7 @@ class MassChangelogTest extends TestCase
             if ($exception !== null) {
                 $this->messageManager
                     ->expects($this->exactly($expectsExceptionValues[2]))
-                    ->method('addError')
+                    ->method('addErrorMessage')
                     ->with($exception->getMessage());
                 $this->messageManager->expects($this->exactly($expectsExceptionValues[1]))
                     ->method('addException')

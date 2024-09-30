@@ -15,4 +15,12 @@
         <data key="path">system/media_gallery/enabled</data>
         <data key="value">0</data>
     </entity>
+    <entity name="MediaGalleryRenditionsDataEnabled">
+        <data key="path">system/media_gallery_renditions/enabled</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="MediaGalleryRenditionsDataDisabled">
+        <data key="path">system/media_gallery_renditions/enabled</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

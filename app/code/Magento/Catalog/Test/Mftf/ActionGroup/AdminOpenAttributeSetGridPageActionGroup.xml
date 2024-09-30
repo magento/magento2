@@ -8,6 +8,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOpenAttributeSetGridPageActionGroup">
+        <annotations>
+            <description>Open the Attribute Sets grid page.</description>
+        </annotations>
+
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetPage"/>
         <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
     </actionGroup>

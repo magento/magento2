@@ -174,13 +174,10 @@ class RouteMapper
         $dependencies = [];
         foreach ($this->getRouterTypes() as $routerId) {
             if (isset($this->getActionsMap()[$routerId][$routeId][$controllerName][$actionName])) {
-                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $dependencies = array_merge(
-                    $dependencies,
-                    $this->getActionsMap()[$routerId][$routeId][$controllerName][$actionName]
-                );
+                $dependencies[] = $this->getActionsMap()[$routerId][$routeId][$controllerName][$actionName];
             }
         }
+        $dependencies = array_merge([], ...$dependencies);
 
         if (empty($dependencies)) {
             throw new NoSuchActionException(implode('/', [$routeId, $controllerName, $actionName]));
@@ -278,6 +275,7 @@ class RouteMapper
             $files = Files::init()->getPhpFiles(Files::INCLUDE_APP_CODE);
             $actionsMap = [];
             foreach ($this->getRoutersMap() as $routerId => $routes) {
+                $actionsMapPerArea = [];
                 foreach ($routes as $routeId => $dependencies) {
                     $actionsMapPerArea[$routeId] = [];
                     foreach ($dependencies as $module) {

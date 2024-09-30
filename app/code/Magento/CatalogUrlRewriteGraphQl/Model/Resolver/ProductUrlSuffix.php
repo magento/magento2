@@ -55,7 +55,7 @@ class ProductUrlSuffix implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): string {
+    ): ?string {
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
         $storeId = (int)$store->getId();
@@ -66,16 +66,16 @@ class ProductUrlSuffix implements ResolverInterface
      * Retrieve product url suffix by store
      *
      * @param int $storeId
-     * @return string
+     * @return string|null
      */
-    private function getProductUrlSuffix(int $storeId): string
+    private function getProductUrlSuffix(int $storeId): ?string
     {
         if (!isset($this->productUrlSuffix[$storeId])) {
             $this->productUrlSuffix[$storeId] = $this->scopeConfig->getValue(
                 self::$xml_path_product_url_suffix,
                 ScopeInterface::SCOPE_STORE,
                 $storeId
-            );
+            ) ?? '';
         }
         return $this->productUrlSuffix[$storeId];
     }

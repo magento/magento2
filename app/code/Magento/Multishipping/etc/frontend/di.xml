@@ -48,4 +48,7 @@
     <type name="Magento\Quote\Model\Quote">
         <plugin name="multishipping_reset_shipping_assigment" type="Magento\Multishipping\Plugin\ResetShippingAssigment"/>
     </type>
+    <type name="Magento\Checkout\Controller\Cart\UpdateItemQty">
+        <plugin name="multishipping_disabler" type="Magento\Multishipping\Plugin\DisableMultishippingMode" sortOrder="10" />
+    </type>
 </config>

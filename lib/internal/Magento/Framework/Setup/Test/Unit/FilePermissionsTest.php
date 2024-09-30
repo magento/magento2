@@ -76,8 +76,8 @@ class FilePermissionsTest extends TestCase
             BP . '/app/etc',
             BP . '/var',
             BP . '/pub/media',
+            BP . '/generated',
             BP . '/pub/static',
-            BP . '/generated'
         ];
 
         $this->assertEquals($expected, $this->filePermissions->getInstallationWritableDirectories());
@@ -94,7 +94,6 @@ class FilePermissionsTest extends TestCase
             BP . '/app/etc',
             BP . '/var',
             BP . '/pub/media',
-            BP . '/pub/static'
         ];
 
         $this->assertEquals($expected, $this->filePermissions->getInstallationWritableDirectories());
@@ -188,8 +187,8 @@ class FilePermissionsTest extends TestCase
         $expected = [
             BP . '/var',
             BP . '/pub/media',
+            BP . '/generated',
             BP . '/pub/static',
-            BP . '/generated'
         ];
 
         $this->assertEquals(
@@ -213,8 +212,7 @@ class FilePermissionsTest extends TestCase
 
         $expected = [
             BP . '/var',
-            BP . '/pub/media',
-            BP . '/pub/static'
+            BP . '/pub/media'
         ];
 
         $this->assertEquals(
@@ -283,10 +281,15 @@ class FilePermissionsTest extends TestCase
     {
         $this->setUpDirectoryListInstallationInProduction();
         $this->directoryListMock
-            ->expects($this->at(4))
+            ->expects($this->at(3))
             ->method('getPath')
             ->with(DirectoryList::GENERATED)
             ->willReturn(BP . '/generated');
+        $this->directoryListMock
+            ->expects($this->at(4))
+            ->method('getPath')
+            ->with(DirectoryList::STATIC_VIEW)
+            ->willReturn(BP . '/pub/static');
     }
 
     public function setUpDirectoryListInstallationInProduction()
@@ -306,11 +309,6 @@ class FilePermissionsTest extends TestCase
             ->method('getPath')
             ->with(DirectoryList::MEDIA)
             ->willReturn(BP . '/pub/media');
-        $this->directoryListMock
-            ->expects($this->at(3))
-            ->method('getPath')
-            ->with(DirectoryList::STATIC_VIEW)
-            ->willReturn(BP . '/pub/static');
     }
 
     public function setUpDirectoryWriteInstallation()
@@ -347,24 +345,6 @@ class FilePermissionsTest extends TestCase
         $this->directoryWriteMock
             ->expects($this->at(6))
             ->method('isDirectory')
-            ->willReturn(false);
-
-        // STATIC_VIEW
-        $this->directoryWriteMock
-            ->expects($this->at(7))
-            ->method('isExist')
-            ->willReturn(true);
-        $this->directoryWriteMock
-            ->expects($this->at(8))
-            ->method('isDirectory')
-            ->willReturn(true);
-        $this->directoryWriteMock
-            ->expects($this->at(9))
-            ->method('isReadable')
-            ->willReturn(true);
-        $this->directoryWriteMock
-            ->expects($this->at(10))
-            ->method('isWritable')
             ->willReturn(false);
     }
 

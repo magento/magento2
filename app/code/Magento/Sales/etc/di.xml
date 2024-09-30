@@ -117,6 +117,7 @@
     <preference for="Magento\Sales\Api\RefundInvoiceInterface" type="Magento\Sales\Model\RefundInvoice"/>
     <preference for="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider" />
     <preference for="Magento\Sales\Model\ConfigInterface" type="Magento\Sales\Model\Config" />
+    <preference for="Magento\Sales\Model\Order\Shipment\ShipmentItemsValidatorInterface" type="Magento\Sales\Model\Order\Shipment\ShipmentItemsValidator" />
     <type name="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
         <arguments>
             <argument name="providers" xsi:type="array">
@@ -213,6 +214,11 @@
             <argument name="dataProviders" xsi:type="array">
                 <item name="order_status" xsi:type="string">Magento\Sales\Model\Rss\OrderStatus</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\EmailSenderHandler">
+        <arguments>
+            <argument name="modifyStartFromDate" xsi:type="string">-1 day</argument>
         </arguments>
     </type>
     <virtualType name="SalesOrderIndexGridSyncRemove" type="Magento\Sales\Observer\GridSyncRemoveObserver">

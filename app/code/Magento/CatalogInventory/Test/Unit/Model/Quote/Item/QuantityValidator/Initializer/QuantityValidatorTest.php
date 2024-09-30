@@ -153,7 +153,7 @@ class QuantityValidatorTest extends TestCase
             ->getMock();
         $this->storeMock = $this->createMock(Store::class);
         $this->quoteItemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getProductId', 'getHasError'])
+            ->addMethods(['getProductId', 'getHasError', 'getStockStateResult'])
             ->onlyMethods(
                 [
                     'getQuote',
@@ -457,6 +457,53 @@ class QuantityValidatorTest extends TestCase
             ->method('getStockItem')
             ->willReturn(null);
         $this->expectException(LocalizedException::class);
+        $this->quantityValidator->validate($this->observerMock);
+    }
+
+    /**
+     * This tests the scenario when the error is in the quote item already
+     *
+     * @return void
+     */
+    public function testValidateOutStockWithAlreadyErrorInQuoteItem(): void
+    {
+        $this->createInitialStub(1);
+        $resultMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['checkQtyIncrements', 'getMessage', 'getQuoteMessage', 'getHasError'])
+            ->getMock();
+        $resultMock->method('getHasError')
+            ->willReturn(true);
+        $this->stockRegistryMock->method('getStockItem')
+            ->willReturn($this->stockItemMock);
+        $this->stockRegistryMock->expects($this->at(1))
+            ->method('getStockStatus')
+            ->willReturn($this->stockStatusMock);
+        $this->quoteItemMock->method('getParentItem')
+            ->willReturn($this->parentItemMock);
+        $this->quoteItemMock->method('getStockStateResult')
+            ->willReturn($resultMock);
+        $this->stockRegistryMock->expects($this->at(2))
+            ->method('getStockStatus')
+            ->willReturn($this->parentStockItemMock);
+        $this->parentStockItemMock->method('getStockStatus')
+            ->willReturn(0);
+        $this->stockStatusMock->expects($this->atLeastOnce())
+            ->method('getStockStatus')
+            ->willReturn(1);
+        $this->quoteItemMock->expects($this->once())
+            ->method('addErrorInfo')
+            ->with(
+                null,
+                Data::ERROR_QTY,
+            );
+        $this->quoteMock->expects($this->once())
+            ->method('addErrorInfo')
+            ->with(
+                'stock',
+                'cataloginventory',
+                Data::ERROR_QTY,
+                __('Some of the products are out of stock.')
+            );
         $this->quantityValidator->validate($this->observerMock);
     }
 

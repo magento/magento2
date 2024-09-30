@@ -43,15 +43,33 @@ class JsTest extends TestCase
             [
                 'phrase' => 'Phrase 1',
                 'file' => $this->_testFile,
-                'line' => $this->_stringsCount - 2,
+                'line' => $this->_stringsCount - 4,
                 'quote' => Phrase::QUOTE_SINGLE,
             ],
             [
                 'phrase' => 'Phrase 2 %1',
                 'file' => $this->_testFile,
-                'line' => $this->_stringsCount - 1,
+                'line' => $this->_stringsCount - 3,
                 'quote' => Phrase::QUOTE_DOUBLE
             ],
+            [
+                'phrase' => 'Field ',
+                'file' => $this->_testFile,
+                'line' => $this->_stringsCount - 2,
+                'quote' => Phrase::QUOTE_SINGLE
+            ],
+            [
+                'phrase' => ' is required.',
+                'file' => $this->_testFile,
+                'line' => $this->_stringsCount - 2,
+                'quote' => Phrase::QUOTE_SINGLE
+            ],
+            [
+                'phrase' => 'Welcome, %1!',
+                'file' => $this->_testFile,
+                'line' => $this->_stringsCount - 1,
+                'quote' => Phrase::QUOTE_SINGLE
+            ]
         ];
 
         $this->_adapter->parse($this->_testFile);

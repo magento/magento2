@@ -6,7 +6,8 @@ type Query {
 }
 
 type EntityUrl @doc(description: "EntityUrl is an output object containing the `id`, `relative_url`, and `type` attributes") {
-    id: Int @doc(description: "The ID assigned to the object associated with the specified url. This could be a product ID, category ID, or page ID.")
+    id: Int @deprecated(reason: "Use `entity_uid` instead.") @doc(description: "The ID assigned to the object associated with the specified url. This could be a product ID, category ID, or page ID.")
+    entity_uid: ID @doc(description: "The unique ID for a `ProductInterface`, `CategoryInterface`, `CmsPage`, etc. object associated with the specified url. This could be a product UID, category UID, or cms page UID.")
     canonical_url: String @deprecated(reason: "The canonical_url field is deprecated, use relative_url instead.")
     relative_url: String @doc(description: "The internal relative URL. If the specified  url is a redirect, the query returns the redirected URL, not the original.")
     redirectCode: Int @doc(description: "301 or 302 HTTP code for url permanent or temporary redirect or 0 for the 200 no redirect")

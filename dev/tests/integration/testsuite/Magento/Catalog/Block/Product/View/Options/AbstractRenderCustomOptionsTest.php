@@ -9,14 +9,14 @@ namespace Magento\Catalog\Block\Product\View\Options;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Product\View\Options;
 use Magento\Catalog\Model\Product\Option;
-use Magento\Catalog\Model\Product\Option\Value;
-use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
@@ -29,12 +29,12 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
     /**
      * @var ObjectManager
      */
-    private $objectManager;
+    protected $objectManager;
 
     /**
      * @var ProductRepositoryInterface
      */
-    private $productRepository;
+    protected $productRepository;
 
     /**
      * @var ProductCustomOptionInterfaceFactory
@@ -57,12 +57,13 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
         $this->productCustomOptionFactory = $this->objectManager->get(ProductCustomOptionInterfaceFactory::class);
         $this->productCustomOptionValuesFactory = $this->objectManager->get(
             ProductCustomOptionValuesInterfaceFactory::class
         );
-        $this->page = $this->objectManager->create(Page::class);
+        $this->page = $this->objectManager->get(PageFactory::class)->create();
         parent::setUp();
     }
 
@@ -94,11 +95,26 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
         $option = $this->findOptionByTitle($product, $optionData[Option::KEY_TITLE]);
         $optionHtml = $this->getOptionHtml($product);
         $this->baseOptionAsserts($option, $optionHtml, $checkArray);
+        $this->additionalTypeTextAsserts($option, $optionHtml, $checkArray);
+    }
 
-        if ($optionData[Option::KEY_MAX_CHARACTERS] > 0) {
+    /**
+     * Additional asserts for rendering text type options.
+     *
+     * @param ProductCustomOptionInterface $option
+     * @param string $optionHtml
+     * @param array $checkArray
+     * @return void
+     */
+    protected function additionalTypeTextAsserts(
+        ProductCustomOptionInterface $option,
+        string $optionHtml,
+        array $checkArray
+    ): void {
+        if ($option->getMaxCharacters() > 0) {
             $this->assertStringContainsString($checkArray['max_characters'], $optionHtml);
         } else {
-            $this->assertStringNotContainsString('class="character-counter', $optionHtml);
+            $this->assertStringNotContainsString($this->getMaxCharactersCssClass(), $optionHtml);
         }
     }
 
@@ -153,22 +169,36 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
         $product = $this->productRepository->get($productSku);
         $product = $this->addOptionToProduct($product, $optionData, $optionValueData);
         $option = $this->findOptionByTitle($product, $optionData[Option::KEY_TITLE]);
-        $optionValues = $option->getValues();
-        $optionValue = reset($optionValues);
         $optionHtml = $this->getOptionHtml($product);
         $this->baseOptionAsserts($option, $optionHtml, $checkArray);
+        $this->additionalTypeSelectAsserts($option, $optionHtml, $checkArray);
+    }
 
+    /**
+     * Additional asserts for rendering select type options.
+     *
+     * @param ProductCustomOptionInterface $option
+     * @param string $optionHtml
+     * @param array $checkArray
+     * @return void
+     */
+    protected function additionalTypeSelectAsserts(
+        ProductCustomOptionInterface $option,
+        string $optionHtml,
+        array $checkArray
+    ): void {
+        $optionValues = $option->getValues();
+        $optionValue = reset($optionValues);
         if (isset($checkArray['not_contain_arr'])) {
             foreach ($checkArray['not_contain_arr'] as $notContainPattern) {
                 $this->assertDoesNotMatchRegularExpression($notContainPattern, $optionHtml);
             }
         }
-
         if (isset($checkArray['option_value_item'])) {
             $checkArray['option_value_item'] = sprintf(
                 $checkArray['option_value_item'],
                 $optionValue->getOptionTypeId(),
-                $optionValueData[Value::KEY_TITLE]
+                $optionValue->getTitle()
             );
             $this->assertMatchesRegularExpression($checkArray['option_value_item'], $optionHtml);
         }
@@ -284,7 +314,7 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
      * @param array $checkArray
      * @return void
      */
-    private function baseOptionAsserts(
+    protected function baseOptionAsserts(
         ProductCustomOptionInterface $option,
         string $optionHtml,
         array $checkArray
@@ -317,7 +347,7 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
      * @param array $optionValueData
      * @return ProductInterface
      */
-    private function addOptionToProduct(
+    protected function addOptionToProduct(
         ProductInterface $product,
         array $optionData,
         array $optionValueData = []
@@ -341,28 +371,16 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
      * @param ProductInterface $product
      * @return string
      */
-    private function getOptionHtml(ProductInterface $product): string
-    {
-        $optionsBlock = $this->getOptionsBlock();
-        $optionsBlock->setProduct($product);
-
-        return $optionsBlock->toHtml();
-    }
-
-    /**
-     * Get options block.
-     *
-     * @return Options
-     */
-    private function getOptionsBlock(): Options
+    protected function getOptionHtml(ProductInterface $product): string
     {
         $this->page->addHandle($this->getHandlesList());
         $this->page->getLayout()->generateXml();
-        /** @var Template $productInfoFormOptionsBlock */
-        $productInfoFormOptionsBlock = $this->page->getLayout()->getBlock('product.info.form.options');
-        $optionsWrapperBlock = $productInfoFormOptionsBlock->getChildBlock('product_options_wrapper');
+        /** @var Options $optionsBlock */
+        $optionsBlock = $this->page->getLayout()->getBlock($this->getOptionsBlockName());
+        $this->assertNotFalse($optionsBlock);
+        $optionsBlock->setProduct($product);
 
-        return $optionsWrapperBlock->getChildBlock('product_options');
+        return $optionsBlock->toHtml();
     }
 
     /**
@@ -372,7 +390,7 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
      * @param string $optionTitle
      * @return null|Option
      */
-    private function findOptionByTitle(ProductInterface $product, string $optionTitle): ?Option
+    protected function findOptionByTitle(ProductInterface $product, string $optionTitle): ?Option
     {
         $option = null;
         foreach ($product->getOptions() as $customOption) {
@@ -386,9 +404,41 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
     }
 
     /**
+     * Find and return custom option value.
+     *
+     * @param ProductCustomOptionInterface $option
+     * @param string $optionValueTitle
+     * @return null|ProductCustomOptionValuesInterface
+     */
+    protected function findOptionValueByTitle(
+        ProductCustomOptionInterface $option,
+        string $optionValueTitle
+    ): ?ProductCustomOptionValuesInterface {
+        $optionValue = null;
+        foreach ($option->getValues() as $customOptionValue) {
+            if ($customOptionValue->getTitle() === $optionValueTitle) {
+                $optionValue = $customOptionValue;
+                break;
+            }
+        }
+
+        return $optionValue;
+    }
+
+    /**
      * Return all need handles for load.
      *
      * @return array
      */
     abstract protected function getHandlesList(): array;
+
+    /**
+     * @return string
+     */
+    abstract protected function getMaxCharactersCssClass(): string;
+
+    /**
+     * @return string
+     */
+    abstract protected function getOptionsBlockName(): string;
 }

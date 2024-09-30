@@ -244,11 +244,21 @@ class CustomerPlugin
      */
     public function afterGetList(CustomerRepositoryInterface $subject, SearchResults $searchResults): SearchResults
     {
+        $customerEmails = [];
+
+        foreach ($searchResults->getItems() as $customer) {
+            $customerEmails[] = $customer->getEmail();
+        }
+
+        $collection = $this->collectionFactory->create();
+        $collection->addFieldToFilter('subscriber_email', ['in' => $customerEmails]);
+
         foreach ($searchResults->getItems() as $customer) {
             /** @var CustomerExtensionInterface $extensionAttributes */
             $extensionAttributes = $customer->getExtensionAttributes();
-
-            $isSubscribed = (int) $extensionAttributes->getIsSubscribed() === Subscriber::STATUS_SUBSCRIBED ?: false;
+            /** @var Subscriber $subscribe */
+            $subscribe = $collection->getItemByColumnValue('subscriber_email', $customer->getEmail());
+            $isSubscribed = $subscribe && (int) $subscribe->getStatus() === Subscriber::STATUS_SUBSCRIBED;
             $extensionAttributes->setIsSubscribed($isSubscribed);
         }
 

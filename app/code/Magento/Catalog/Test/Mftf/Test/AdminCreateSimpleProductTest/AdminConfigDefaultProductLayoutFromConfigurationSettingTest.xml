@@ -5,8 +5,8 @@
   * See COPYING.txt for license details.
   */
 -->
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminConfigDefaultProductLayoutFromConfigurationSettingTest">
         <annotations>
             <features value="Catalog"/>
@@ -21,18 +21,29 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
+            <actionGroup ref="NavigateToDefaultLayoutsSettingActionGroup" stepKey="navigateToWebConfigurationPage1"/>
+            <actionGroup ref="AdminSetProductLayoutSettingsActionGroup" stepKey="sampleActionGroup">
+                <argument name="layout" value="1 column"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheBeforeTestFinishes">
+                <argument name="tags" value="config"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="AdminOpenWebConfigurationPageActionGroup" stepKey="navigateToWebConfigurationPage"/>
-        <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true"/>
-        <waitForElementVisible selector="{{DefaultLayoutsSection.productLayout}}" stepKey="DefaultProductLayout"/>
-        <selectOption selector="{{DefaultLayoutsSection.productLayout}}" userInput="3 columns" stepKey="select3ColumnsLayout"/>
-        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig"/>
-        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
-        <waitForPageLoad stepKey="wait1"/>
-        <click selector="{{ProductDesignSection.DesignTab}}" stepKey="clickOnDesignTab"/>
-        <waitForElementVisible selector="{{ProductDesignSection.LayoutDropdown}}" stepKey="waitForLayoutDropDown"/>
+
+        <actionGroup ref="NavigateToDefaultLayoutsSettingActionGroup" stepKey="navigateToWebConfigurationPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandDefaultLayouts"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="DefaultProductLayout"/>
+        <actionGroup ref="AdminSetProductLayoutSettingsActionGroup" stepKey="select3ColumnsLayout">
+            <argument name="layout" value="3 columns"/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="clickSaveConfig">
+            <argument name="tags" value="config"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait1"/>
+        <actionGroup ref="AdminExpandProductDesignSectionActionGroup" stepKey="clickOnDesignTab"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLayoutDropDown"/>
         <seeOptionIsSelected selector="{{ProductDesignSection.LayoutDropdown}}" userInput="3 columns" stepKey="see3ColumnsSelected"/>
     </test>
 </tests>

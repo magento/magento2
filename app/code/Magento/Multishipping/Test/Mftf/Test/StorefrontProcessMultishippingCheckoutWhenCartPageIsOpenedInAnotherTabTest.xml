@@ -85,6 +85,12 @@
         </actionGroup>
         <switchToNextTab stepKey="switchToNextTab"/>
         <!-- Click 'Continue to Billing Information' and 'Go to Review Your Order' -->
+        <actionGroup ref="StorefrontGoToBillingInformationActionGroup" stepKey="redirectToSelectAddressAfterReset"/>
+        <seeOptionIsSelected selector="{{StorefrontCheckoutShippingMultipleAddressesSection.selectedMultipleShippingAddress('1')}}" userInput="{{US_Address_NY.street[1]}}" stepKey="checkAddressIsReset"/>
+        <actionGroup ref="StorefrontCheckoutShippingSelectMultipleAddressesActionGroup" stepKey="selectMultipleAddressesAfterReset">
+            <argument name="firstAddress" value="{{UK_Not_Default_Address.street[0]}}"/>
+            <argument name="secondAddress" value="{{US_Address_NY.street[1]}}"/>
+        </actionGroup>
         <actionGroup ref="StorefrontGoToBillingInformationActionGroup" stepKey="goToBillingInformation"/>
         <see selector="{{ShipmentFormSection.shippingAddress}}" userInput="{{US_Address_NY.city}}" stepKey="seeBillingAddress"/>
         <waitForElementVisible selector="{{StorefrontMultipleShippingMethodSection.goToReviewYourOrderButton}}" stepKey="waitForGoToReviewYourOrderVisible" />

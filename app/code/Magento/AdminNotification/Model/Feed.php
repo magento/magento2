@@ -12,7 +12,6 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 /**
  * AdminNotification Feed model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2

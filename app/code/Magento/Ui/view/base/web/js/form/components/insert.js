@@ -201,7 +201,7 @@ define([
             var links  = {};
 
             _.each(data, function (value, key) {
-                if (value.split('.')[0] === ns) {
+                if (typeof value === 'string' && value.split('.')[0] === ns) {
                     links[key] = value;
                 }
             });

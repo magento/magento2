@@ -9,6 +9,9 @@
     <publisher topic="demo.exception">
         <connection name="db" exchange="magento"/>
     </publisher>
+    <publisher topic="demo.connection.exception">
+        <connection name="db" exchange="magento"/>
+    </publisher>
     <publisher topic="test.schema.defined.by.method">
         <connection name="db" exchange="magento"/>
     </publisher>

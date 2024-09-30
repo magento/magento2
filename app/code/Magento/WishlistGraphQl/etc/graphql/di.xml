@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="magento_wishlist_general_is_enabled" xsi:type="string">wishlist/general/active</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\WishlistGraphQl\Model\CartItems\CartItemsRequestBuilder">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="customizable_option" xsi:type="object">Magento\WishlistGraphQl\Model\CartItems\CustomizableOptionDataProvider</item>
+                <item name="downloadable" xsi:type="object">Magento\WishlistGraphQl\Model\CartItems\DownloadableLinkDataProvider</item>
+                <item name="bundle" xsi:type="object">Magento\WishlistGraphQl\Model\CartItems\BundleDataProvider</item>
+                <item name="configurable" xsi:type="object">Magento\WishlistGraphQl\Model\CartItems\ConfigurableDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

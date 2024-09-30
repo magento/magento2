@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyCreateCustomProductAttributeTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create product Attribute"/>
+            <title value="Create Custom Product Attribute Dropdown Field (Not Required) from Product Page"/>
+            <description value="login as admin and create simple product with attribute Dropdown field"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-26027"/>
+            <group value="mtf_migrated"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteCreatedAttribute">
+                <argument name="productAttributeLabel" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminPanel"/>
+        </after>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToProductPage">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminStartCreateProductAttributeOnProductPageActionGroup" stepKey="createDropdownAttribute">
+            <argument name="attributeCode" value="{{newProductAttribute.attribute_code}}" />
+            <argument name="attributeLabel" value="{{ProductAttributeFrontendLabel.label}}" />
+            <argument name="inputType" value="Dropdown" />
+        </actionGroup>
+        <scrollTo selector="{{AdminCreateNewProductAttributeSection.storefrontProperties}}"  stepKey="scrollToStorefrontProperties"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.storefrontProperties}}" stepKey="clickOnStorefrontProperties"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.inSearch}}" stepKey="waitForStoreFrontProperties"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.inSearch}}" stepKey="enableInSearchOption"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.advancedSearch}}" stepKey="enableAdvancedSearch"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.visibleOnStorefront}}" stepKey="enableVisibleOnStorefront"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.sortProductListing}}" stepKey="enableSortProductListing"/>
+        <actionGroup ref="AdminAddOptionForDropdownAttributeActionGroup" stepKey="createDropdownOption">
+            <argument name="storefrontViewAttributeValue" value="{{ProductAttributeOption8.label}}"/>
+            <argument name="adminAttributeLabel" value="{{ProductAttributeOption8.label}}"/>
+        </actionGroup>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.defaultRadioButton('1')}}" stepKey="selectRadioButton"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="clickOnSaveAttribute"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveTheProduct"/>
+        <actionGroup ref="AdminAssertProductAttributeOnProductEditPageActionGroup" stepKey="adminProductAssertAttribute">
+            <argument name="attributeLabel" value="{{ProductAttributeFrontendLabel.label}}"/>
+            <argument name="attributeCode" value="{{newProductAttribute.attribute_code}}"/>
+        </actionGroup>
+        <actionGroup ref="SearchAttributeByCodeOnProductAttributeGridActionGroup" stepKey="searchAttributeByCodeOnProductAttributeGrid">
+            <argument name="productAttributeCode" value="{{newProductAttribute.attribute_code}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductAttributeInAttributeGridActionGroup" stepKey="assertAttributeOnProductAttributesGrid">
+            <argument name="productAttributeLabel" value="{{ProductAttributeFrontendLabel.label}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPageOnStorefront">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertUpdatedProductPriceInStorefrontProductPageActionGroup" stepKey="checkProductPriceAndNameInStorefrontProductPage">
+            <argument name="productName" value="$createProduct.name$"/>
+            <argument name="expectedPrice" value="$createProduct.price$"/>
+        </actionGroup>
+        <scrollTo selector="{{StorefrontProductMoreInformationSection.moreInformation}}"  stepKey="scrollToAttribute"/>
+        <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="checkAttributeInMoreInformationTab">
+            <argument name="attributeLabel" value="{{ProductAttributeFrontendLabel.label}}"/>
+            <argument name="attributeValue" value="{{ProductAttributeOption8.value}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductAttribute">
+            <argument name="phrase" value="{{ProductAttributeOption8.value}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeWithOptionInLayeredNavigation">
+            <argument name="attributeLabel" value="{{ProductAttributeFrontendLabel.label}}"/>
+            <argument name="attributeOptionLabel" value="{{ProductAttributeOption8.value}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="assertProductPresentOnSearchPage">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+    </test>
+</tests>

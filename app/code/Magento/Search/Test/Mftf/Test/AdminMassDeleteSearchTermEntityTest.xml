@@ -34,8 +34,7 @@
         </after>
 
         <!-- Go to the catalog search term page -->
-        <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage"/>
-        <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
+        <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage"/>
 
         <!-- Select all created below search terms -->
         <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByFirstSearchQuery">

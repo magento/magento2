@@ -28,7 +28,8 @@
     },
     "suggest": {
         "magento/module-cookie": "*",
-        "magento/module-customer-sample-data": "*"
+        "magento/module-customer-sample-data": "*",
+        "magento/module-webapi": "*"
     },
     "type": "magento2-module",
     "license": [

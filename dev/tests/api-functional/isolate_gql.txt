@@ -1,0 +1,3 @@
+# Optional configuration file for dev/tests/utils/phpunitGroupConfig.php
+# List graphql phpunit tests that have to be isolated in their own groups, e.g. long running test, special environments, etc
+# One per line by class name

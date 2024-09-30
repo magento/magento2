@@ -22,6 +22,7 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
  * @api
  * @since 100.0.2
@@ -153,6 +154,11 @@ class Storage extends \Magento\Framework\DataObject
     private $ioFile;
 
     /**
+     * @var \Magento\Framework\File\Mime|null
+     */
+    private $mime;
+
+    /**
      * Construct
      *
      * @param \Magento\Backend\Model\Session $session
@@ -174,6 +180,7 @@ class Storage extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Filesystem\DriverInterface $file
      * @param \Magento\Framework\Filesystem\Io\File|null $ioFile
      * @param \Psr\Log\LoggerInterface|null $logger
+     * @param \Magento\Framework\File\Mime $mime
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -197,7 +204,8 @@ class Storage extends \Magento\Framework\DataObject
         array $data = [],
         \Magento\Framework\Filesystem\DriverInterface $file = null,
         \Magento\Framework\Filesystem\Io\File $ioFile = null,
-        \Psr\Log\LoggerInterface $logger = null
+        \Psr\Log\LoggerInterface $logger = null,
+        \Magento\Framework\File\Mime $mime = null
     ) {
         $this->_session = $session;
         $this->_backendUrl = $backendUrl;
@@ -217,6 +225,7 @@ class Storage extends \Magento\Framework\DataObject
         $this->_dirs = $dirs;
         $this->file = $file ?: ObjectManager::getInstance()->get(\Magento\Framework\Filesystem\Driver\File::class);
         $this->ioFile = $ioFile ?: ObjectManager::getInstance()->get(\Magento\Framework\Filesystem\Io\File::class);
+        $this->mime = $mime ?: ObjectManager::getInstance()->get(\Magento\Framework\File\Mime::class);
         parent::__construct($data);
     }
 
@@ -354,15 +363,16 @@ class Storage extends \Magento\Framework\DataObject
             $collection->setFilesFilter('/\.(' . implode('|', $allowed) . ')$/i');
         }
 
-        // prepare items
         foreach ($collection as $item) {
             $item->setId($this->_cmsWysiwygImages->idEncode($item->getBasename()));
             $item->setName($item->getBasename());
             $item->setShortName($this->_cmsWysiwygImages->getShortFilename($item->getBasename()));
             $item->setUrl($this->_cmsWysiwygImages->getCurrentUrl() . $item->getBasename());
-            $itemStats = $this->file->stat($item->getFilename());
+            $driver = $this->_directory->getDriver();
+            $itemStats = $driver->stat($item->getFilename());
             $item->setSize($itemStats['size']);
-            $item->setMimeType(\mime_content_type($item->getFilename()));
+            $mimeType = $itemStats['mimetype'] ?? $this->mime->getMimeType($item->getFilename());
+            $item->setMimeType($mimeType);
 
             if ($this->isImage($item->getBasename())) {
                 $thumbUrl = $this->getThumbnailUrl($item->getFilename(), true);
@@ -372,7 +382,9 @@ class Storage extends \Magento\Framework\DataObject
                 }
 
                 try {
-                    $size = getimagesize($item->getFilename());
+                    $size = getimagesizefromstring(
+                        $driver->fileGetContents($item->getFilename())
+                    );
 
                     if (is_array($size)) {
                         $item->setWidth($size[0]);
@@ -429,7 +441,7 @@ class Storage extends \Magento\Framework\DataObject
             $path = $this->_cmsWysiwygImages->getStorageRoot();
         }
 
-        $newPath = $path . '/' . $name;
+        $newPath = rtrim($path, '/') . '/' . $name;
         $relativeNewPath = $this->_directory->getRelativePath($newPath);
         if ($this->_directory->isDirectory($relativeNewPath)) {
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -562,7 +574,7 @@ class Storage extends \Magento\Framework\DataObject
         }
 
         // create thumbnail
-        $this->resizeFile($targetPath . '/' . $uploader->getUploadedFileName(), true);
+        $this->resizeFile($targetPath . '/' . ltrim($uploader->getUploadedFileName(), '/'), true);
 
         return $result;
     }
@@ -646,8 +658,8 @@ class Storage extends \Magento\Framework\DataObject
 
         $image->keepAspectRatio($keepRatio);
 
-        list($imageWidth, $imageHeight) = $this->getResizedParams($source);
-        
+        [$imageWidth, $imageHeight] = $this->getResizedParams($source);
+
         $image->resize($imageWidth, $imageHeight);
         $dest = $targetDir . '/' . $this->ioFile->getPathInfo($source)['basename'];
         $image->save($dest);
@@ -669,8 +681,8 @@ class Storage extends \Magento\Framework\DataObject
         $configHeight = $this->_resizeParameters['height'];
 
         //phpcs:ignore Generic.PHP.NoSilencedErrors
-        list($imageWidth, $imageHeight) = @getimagesize($source);
-     
+        [$imageWidth, $imageHeight] = @getimagesize($source);
+
         if ($imageWidth && $imageHeight) {
             $imageWidth = $configWidth > $imageWidth ? $imageWidth : $configWidth;
             $imageHeight = $configHeight > $imageHeight ? $imageHeight : $configHeight;
@@ -679,7 +691,7 @@ class Storage extends \Magento\Framework\DataObject
         }
         return [$configWidth, $configHeight];
     }
-    
+
     /**
      * Resize images on the fly in controller action
      *
@@ -750,7 +762,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function getThumbnailRoot()
     {
-        return $this->_cmsWysiwygImages->getStorageRoot() . '/' . self::THUMBS_DIRECTORY_NAME;
+        return rtrim($this->_cmsWysiwygImages->getStorageRoot(), '/') . '/' . self::THUMBS_DIRECTORY_NAME;
     }
 
     /**
@@ -835,7 +847,7 @@ class Storage extends \Magento\Framework\DataObject
     {
         return rtrim(
             preg_replace(
-                '~[/\\\]+~',
+                '~[/\\\]+(?<![htps?]://)~',
                 '/',
                 $this->_directory->getDriver()->getRealPathSafety(
                     $this->_directory->getAbsolutePath($path)

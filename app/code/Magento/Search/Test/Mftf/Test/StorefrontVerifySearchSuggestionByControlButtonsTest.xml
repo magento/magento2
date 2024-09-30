@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifySearchSuggestionByControlButtonsTest">
+        <annotations>
+            <stories value="Search Term"/>
+            <title value="Auto suggestion box not reappearing after clicking outside the text field"/>
+            <description value="Auto suggestion box not reappearing after clicking outside the text field"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-40466"/>
+            <useCaseId value="MC-40376"/>
+        </annotations>
+
+        <before>
+            <!-- Create Simple Product -->
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Perform reindex and flush cache -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </before>
+        <after>
+            <!-- Delete create product -->
+            <deleteData createDataKey="simpleProduct"  stepKey="deleteProduct"/>
+
+            <!-- Go to the catalog search term page -->
+            <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage"/>
+
+            <!-- Filter the search term -->
+            <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByThirdSearchQuery">
+                <argument name="searchQuery" value="$simpleProduct.name$"/>
+            </actionGroup>
+            <!-- Delete created below search terms -->
+            <actionGroup ref="AdminDeleteSearchTermActionGroup" stepKey="deleteSearchTerms"/>
+        </after>
+
+        <!-- Go to storefront home page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
+
+         <!-- Storefront quick search by product name -->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName">
+            <argument name="phrase" value="$simpleProduct.name$"/>
+        </actionGroup>
+
+        <!-- Verify search suggestions and select the suggestion from dropdown options -->
+        <actionGroup ref="StoreFrontAssertDropDownSearchSuggestionActionGroup" stepKey="seeDropDownSearchSuggestion">
+            <argument name="searchQuery" value="$simpleProduct.name$"/>
+        </actionGroup>
+    </test>
+</tests>

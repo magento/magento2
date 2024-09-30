@@ -184,10 +184,6 @@ class Bundle extends AbstractView
                 $configValue = $preConfiguredValues->getData('bundle_option/' . $optionId);
                 if ($configValue) {
                     $defaultValues[$optionId] = $configValue;
-                    $configQty = $preConfiguredValues->getData('bundle_option_qty/' . $optionId);
-                    if ($configQty) {
-                        $options[$optionId]['selections'][$configValue]['qty'] = $configQty;
-                    }
                 }
                 $options = $this->processOptions($optionId, $options, $preConfiguredValues);
             }
@@ -222,7 +218,7 @@ class Bundle extends AbstractView
     {
         $optionBlock = $this->getChildBlock($option->getType());
         if (!$optionBlock) {
-            return __('There is no defined renderer for "%1" option type.', $option->getType());
+            return __('There is no defined renderer for "%1" option type.', $this->escapeHtml($option->getType()));
         }
         return $optionBlock->setOption($option)->toHtml();
     }
@@ -411,15 +407,18 @@ class Bundle extends AbstractView
     {
         $preConfiguredQtys = $preConfiguredValues->getData("bundle_option_qty/${optionId}") ?? [];
         $selections = $options[$optionId]['selections'];
-        array_walk($selections, function (&$selection, $selectionId) use ($preConfiguredQtys) {
-            if (is_array($preConfiguredQtys) && isset($preConfiguredQtys[$selectionId])) {
-                $selection['qty'] = $preConfiguredQtys[$selectionId];
-            } else {
-                if ((int)$preConfiguredQtys > 0) {
-                    $selection['qty'] = $preConfiguredQtys;
+        array_walk(
+            $selections,
+            function (&$selection, $selectionId) use ($preConfiguredQtys) {
+                if (is_array($preConfiguredQtys) && isset($preConfiguredQtys[$selectionId])) {
+                    $selection['qty'] = $preConfiguredQtys[$selectionId];
+                } else {
+                    if ((int)$preConfiguredQtys > 0) {
+                        $selection['qty'] = $preConfiguredQtys;
+                    }
                 }
             }
-        });
+        );
         $options[$optionId]['selections'] = $selections;
 
         return $options;

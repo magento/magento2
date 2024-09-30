@@ -17,7 +17,7 @@ use PHP_CodeSniffer\Files\File;
  * - start with a letter (except helper classes);
  * - words should be separated with dash '-';
  *
- * @link https://devdocs.magento.com/guides/v2.3/coding-standards/code-standard-less.html#standard-classes
+ * @link https://devdocs.magento.com/guides/v2.4/coding-standards/code-standard-less.html#standard-classes
  */
 class ClassNamingSniff implements Sniff
 {

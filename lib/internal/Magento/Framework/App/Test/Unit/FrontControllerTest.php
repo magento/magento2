@@ -8,16 +8,19 @@ declare(strict_types=1);
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\AreaInterface;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\App\FrontController;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\Request\ValidatorInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\App\RouterInterface;
 use Magento\Framework\App\RouterList;
 use Magento\Framework\App\State;
+use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\Phrase;
@@ -103,6 +106,9 @@ class FrontControllerTest extends TestCase
             ->getMock();
         $this->areaListMock = $this->createMock(AreaList::class);
         $this->areaMock = $this->getMockForAbstractClass(AreaInterface::class);
+        $actionFlagMock = $this->createMock(ActionFlag::class);
+        $eventManagerMock = $this->createMock(EventManager::class);
+        $requestMock = $this->createMock(RequestInterface::class);
         $this->model = new FrontController(
             $this->routerList,
             $this->response,
@@ -110,7 +116,10 @@ class FrontControllerTest extends TestCase
             $this->messages,
             $this->logger,
             $this->appStateMock,
-            $this->areaListMock
+            $this->areaListMock,
+            $actionFlagMock,
+            $eventManagerMock,
+            $requestMock
         );
     }
 

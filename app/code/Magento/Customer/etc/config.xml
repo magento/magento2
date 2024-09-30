@@ -103,5 +103,12 @@
                 <section_data_lifetime>60</section_data_lifetime>
             </online_customers>
         </customer>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <customer_address_folder>customer_address</customer_address_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
     </default>
 </config>

@@ -17,6 +17,7 @@
         <element name="customerEditLinkByEmail" type="text" selector="//tr[@class='data-row' and //div[text()='{{customerEmail}}']]//a[@class='action-menu-item']" parameterized="true" timeout="30"/>
         <element name="customerGroupByEmail" type="text" selector="//tr[@class='data-row' and //div[text()='{{customerEmail}}']]//div[text()='{{customerGroup}}']" parameterized="true"/>
         <element name="customerGenderByEmail" type="text" selector="//tr[@class='data-row']//div[text()='{{customerEmail}}']/ancestor::tr/td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Gender')]/preceding-sibling::th) +1]" parameterized="true"/>
+        <element name="status" type="text" selector="//tr[@class='data-row' and //div[text()='{{customerEmail}}']]//div[contains(text(), '{{status}}')]" parameterized="true" timeout="30"/>
     </section>
 </sections>
 

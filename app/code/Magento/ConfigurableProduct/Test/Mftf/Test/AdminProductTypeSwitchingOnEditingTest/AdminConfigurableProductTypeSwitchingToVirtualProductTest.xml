@@ -36,7 +36,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveVirtualProductForm"/>
         <!--Assert virtual product on Admin product page grid-->
         <comment userInput="Assert virtual product on Admin product page grid" stepKey="commentAssertVirtualProductOnAdmin"/>
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPageForVirtual"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPageForVirtual"/>
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySkuForVirtual">
             <argument name="sku" value="$createProduct.sku$"/>
         </actionGroup>

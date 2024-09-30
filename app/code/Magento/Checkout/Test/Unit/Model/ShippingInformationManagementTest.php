@@ -32,6 +32,7 @@ use Magento\Quote\Model\ShippingAssignment;
 use Magento\Quote\Model\ShippingAssignmentFactory;
 use Magento\Quote\Model\ShippingFactory;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -148,7 +149,7 @@ class ShippingInformationManagementTest extends TestCase
                     'importCustomerAddressData',
                     'save',
                     'getShippingRateByCode',
-                    'getShippingMethod'
+                    'getShippingMethod',
                 ]
             )
             ->disableOriginalConstructor()
@@ -167,7 +168,7 @@ class ShippingInformationManagementTest extends TestCase
                     'collectTotals',
                     'getExtensionAttributes',
                     'setExtensionAttributes',
-                    'setBillingAddress'
+                    'setBillingAddress',
                 ]
             )
             ->disableOriginalConstructor()
@@ -238,9 +239,7 @@ class ShippingInformationManagementTest extends TestCase
             ->willReturn(null);
         $this->shippingAddressMock->expects($this->once())
             ->method('setLimitCarrier');
-        $this->cartExtensionMock = $this->getMockBuilder(CartExtension::class)
-            ->addMethods(['getShippingAssignments', 'setShippingAssignments'])
-            ->getMock();
+        $this->cartExtensionMock = $this->getCartExtensionMock();
         $this->cartExtensionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->cartExtensionMock);
@@ -621,5 +620,22 @@ class ShippingInformationManagementTest extends TestCase
             $paymentDetailsMock,
             $this->model->saveAddressInformation($cartId, $addressInformationMock)
         );
+    }
+
+    /**
+     * Build cart extension mock.
+     *
+     * @return MockObject
+     */
+    private function getCartExtensionMock(): MockObject
+    {
+        $mockBuilder = $this->getMockBuilder(CartExtension::class);
+        try {
+            $mockBuilder->addMethods(['getShippingAssignments', 'setShippingAssignments']);
+        } catch (RuntimeException $e) {
+            // CartExtension already generated.
+        }
+
+        return $mockBuilder->getMock();
     }
 }

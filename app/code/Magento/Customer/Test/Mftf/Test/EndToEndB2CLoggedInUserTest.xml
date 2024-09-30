@@ -21,10 +21,11 @@
         </annotations>
         <before>
             <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
+            <actionGroup ref="AdminLoginActionGroup" after="resetCookieForCart" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <comment userInput="No need this since it done in before section" stepKey="loginAsAdmin"/>
             <actionGroup ref="DeleteCustomerFromAdminActionGroup" stepKey="deleteCustomerFromAdmin"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>

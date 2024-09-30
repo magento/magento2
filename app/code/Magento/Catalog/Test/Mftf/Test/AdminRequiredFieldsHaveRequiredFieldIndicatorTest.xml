@@ -40,8 +40,10 @@
         </assertEquals>
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="addProductDropdown"/>
-        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="addSimpleProduct"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="addProductDropdown"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="addSimpleProduct">
+            <argument name="productType" value="simple"/>
+        </actionGroup>
 
         <!-- Verify that the Product Name and Sku fields have the required field name indicator -->
         <executeJS function="{{AdminProductFormSection.RequiredNameIndicator}}" stepKey="productNameRequiredFieldIndicator"/>
@@ -56,9 +58,9 @@
         </assertEquals>
 
         <!-- Verify that the CMS page have the required field name indicator next to Page Title -->
-        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPage"/>
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="amOnPagePagesGrid"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad1"/>
+        <actionGroup ref="AdminClickAddNewPageOnPagesGridActionGroup" stepKey="clickAddNewPage"/>
         <executeJS function="{{CmsNewPagePageBasicFieldsSection.RequiredFieldIndicator}}" stepKey="pageTitleRequiredFieldIndicator"/>
         <assertEquals message="pass" stepKey="assertRequiredFieldIndicator5">
 			<actualResult type="variable">pageTitleRequiredFieldIndicator</actualResult>

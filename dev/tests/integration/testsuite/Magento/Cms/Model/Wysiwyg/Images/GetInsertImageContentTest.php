@@ -105,7 +105,7 @@ class GetInsertImageContentTest extends TestCase
                 true,
                 false,
                 1,
-                '/pub/media/catalog/category/test-image.jpg'
+                '/media/catalog/category/test-image.jpg'
             ],
             [
                 'test-image.jpg',

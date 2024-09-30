@@ -27,12 +27,12 @@ class Edit extends \Magento\Integration\Controller\Adminhtml\Integration impleme
                 $integrationData = $this->_integrationService->get($integrationId)->getData();
                 $originalName = $this->escaper->escapeHtml($integrationData[Info::DATA_NAME]);
             } catch (IntegrationException $e) {
-                $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
+                $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
                 $this->_redirect('*/*/');
                 return;
             } catch (\Exception $e) {
                 $this->_logger->critical($e);
-                $this->messageManager->addError(__('Internal error. Check exception log for details.'));
+                $this->messageManager->addErrorMessage(__('Internal error. Check exception log for details.'));
                 $this->_redirect('*/*');
                 return;
             }
@@ -41,7 +41,7 @@ class Edit extends \Magento\Integration\Controller\Adminhtml\Integration impleme
                 $integrationData = array_merge($integrationData, $restoredIntegration);
             }
         } else {
-            $this->messageManager->addError(__('Integration ID is not specified or is invalid.'));
+            $this->messageManager->addErrorMessage(__('Integration ID is not specified or is invalid.'));
             $this->_redirect('*/*/');
             return;
         }

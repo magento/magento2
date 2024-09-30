@@ -40,14 +40,14 @@ $product = $productRepository->get('simple-product-guest-quote');
 $addressData = [
     'telephone' => 3234676,
     'postcode' => 47676,
-    'country_id' => 'US',
+    'country_id' => 'DE',
     'city' => 'CityX',
     'street' => ['Black str, 48'],
     'lastname' => 'Smith',
     'firstname' => 'John',
+    'vat_id' => 12345,
     'address_type' => 'shipping',
     'email' => 'some_email@mail.com',
-    'region_id' => 1,
 ];
 
 $billingAddress = $objectManager->create(
@@ -66,6 +66,7 @@ $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
 $quote->setCustomerIsGuest(true)
     ->setStoreId($store->getId())
     ->setReservedOrderId('guest_quote')
+    ->setCheckoutMethod('guest')
     ->setBillingAddress($billingAddress)
     ->setShippingAddress($shippingAddress)
     ->addProduct($product);

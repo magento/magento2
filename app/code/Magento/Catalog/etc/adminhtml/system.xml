@@ -214,6 +214,13 @@
                     <source_model>Magento\Catalog\Model\Config\Source\LayoutList</source_model>
                 </field>
             </group>
+            <group id="url">
+                <field id="catalog_media_url_format" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Catalog media URL format</label>
+                    <source_model>Magento\Catalog\Model\Config\Source\Web\CatalogMediaUrlFormat</source_model>
+                    <comment><![CDATA[Images should be optimized based on query parameters by your CDN or web server. Use the legacy mode for backward compatibility. <a href="https://docs.magento.com/user-guide/configuration/general/web.html#url-options">Learn more</a> about catalog URL formats.<br/><br/><strong style="color:red">Warning!</strong> If you switch back to legacy mode, you must <a href="https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/themes/theme-images.html#resize-catalog-images">use the CLI to regenerate images</a>.]]></comment>
+                </field>
+            </group>
         </section>
         <section id="system" translate="label" type="text" sortOrder="900" showInDefault="1" showInWebsite="1" showInStore="1">
             <class>separator-top</class>

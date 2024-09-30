@@ -110,14 +110,14 @@ class InlineUtil implements InlineUtilInterface, SecurityProcessorInterface
      */
     private function extractRemoteFonts(string $styleContent): array
     {
-        $urlsFound = [[]];
+        $urlsFound = [];
         preg_match_all('/\@font\-face\s*?\{([^\}]*)[^\}]*?\}/im', $styleContent, $fontFaces);
         foreach ($fontFaces[1] as $fontFaceContent) {
             preg_match_all('/url\([\'\"]?(http(s)?\:[^\)]+)[\'\"]?\)/i', $fontFaceContent, $urls);
             $urlsFound[] = $urls[1];
         }
 
-        return array_map([$this, 'extractHost'], array_merge(...$urlsFound));
+        return array_map([$this, 'extractHost'], array_merge([], ...$urlsFound));
     }
 
     /**

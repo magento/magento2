@@ -13,10 +13,12 @@ define([
     return Component.extend({
         defaults: {
             listingNamespace: null,
+            bookmarkProvider: 'componentType = bookmark, ns = ${ $.listingNamespace }',
             filterProvider: 'componentType = filters, ns = ${ $.listingNamespace }',
             filterKey: 'filters',
             searchString: location.search,
             modules: {
+                bookmarks: '${ $.bookmarkProvider }',
                 filterComponent: '${ $.filterProvider }'
             }
         },
@@ -47,6 +49,16 @@ define([
                 }.bind(this), 100);
 
                 return;
+            }
+
+            if (!_.isUndefined(this.bookmarks())) {
+                if (!_.size(this.bookmarks().getViewData(this.bookmarks().defaultIndex))) {
+                    setTimeout(function () {
+                        this.apply();
+                    }.bind(this), 500);
+
+                    return;
+                }
             }
 
             if (Object.keys(urlFilter).length) {

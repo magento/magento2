@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontProductPageGalleryChangingFullscreenImageByRibbonActionGroup">
+        <annotations>
+            <description>On the product page change main image by clicking on the images in the ribbon. Fullscreen</description>
+        </annotations>
+        <arguments>
+            <argument name="startImage" type="string" />
+            <argument name="expectedImage" type="string" />
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageFullscreen(startImage)}}" stepKey="seeStartFullscreenImage"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(startImage)}}" stepKey="seeActiveImageInThumbnail"/>
+        <click selector="{{StorefrontProductMediaSection.productImageInFotorama(expectedImage)}}" stepKey="clickOnExpectedImage"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageFullscreen(expectedImage)}}" stepKey="seeExpectedImageAfterClick"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(expectedImage)}}" stepKey="seeExpectedImageActiveInThumbnailAfterChange"/>
+        <click selector="{{StorefrontProductMediaSection.productImageInFotorama(startImage)}}" stepKey="clickOnStartImageInRibbon"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageFullscreen(startImage)}}" stepKey="seeStartImageAfterSecondChange"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(startImage)}}" stepKey="seeStartImageActiveInThumbnailAfterSecondChange"/>
+    </actionGroup>
+</actionGroups>

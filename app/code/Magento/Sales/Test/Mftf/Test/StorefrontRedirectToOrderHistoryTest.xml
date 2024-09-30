@@ -18,6 +18,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-92854"/>
             <group value="sales"/>
+            <skip>
+                <issueId value="MQE-2288" />
+            </skip>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -46,15 +49,25 @@
 
         <!--Go to 'print order' page by grabbed order id-->
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderIdFromURL"/>
-        <switchToNextTab stepKey="switchToPrintPage"/>
+        <wait time="5" stepKey="waitForPrintWindowToOpen" />
+        <switchToWindow stepKey="switchToPrintPage"/>
         <waitForElement selector="{{SalesOrderPrintSection.isOrderPrintPage}}" stepKey="checkPrintPage"/>
         <openNewTab stepKey="openNewTab"/>
+        <wait time="5" stepKey="waitForNewTabToOpen" />
         <switchToNextTab stepKey="switchForward"/>
+        <waitForElement selector="body" stepKey="waitForNewTab3HTML" />
         <amOnPage url="{{StorefrontSalesOrderPrintPage.url({$grabOrderIdFromURL})}}" stepKey="duplicatePrintPage"/>
 
+        <wait time="5" stepKey="waitForDuplicatePrintWindowToOpen" />
+        <switchToWindow stepKey="switchToDuplicatePrintPage"/>
+        <waitForElement selector="{{SalesOrderPrintSection.isOrderPrintPage}}" stepKey="checkDuplicatePrintPage"/>
+
         <!--Log out as customer 1-->
-        <switchToNextTab stepKey="switchForward2"/>
         <openNewTab stepKey="openNewTab2"/>
+        <wait time="5" stepKey="waitForNewTabToOpen1" />
+        <switchToNextTab stepKey="switchForward2"/>
+        <waitForElement selector="body" stepKey="waitForNewTab2HTML" />
+
         <amOnPage url="{{StorefrontCustomerSignOutPage.url}}" stepKey="signOut"/>
         <waitForLoadingMaskToDisappear stepKey="waitSignOutPage"/>
 
@@ -69,10 +82,14 @@
         </actionGroup>
 
         <!--Try to load 'print order' page with not relevant order id to be redirected to 'order history' page-->
-        <switchToNextTab stepKey="switchToPrintPage2"/>
+        <wait time="5" stepKey="waitForPrintWindowToOpen2" />
+        <switchToWindow stepKey="switchToPrintPage2"/>
         <waitForElement selector="{{SalesOrderPrintSection.isOrderPrintPage}}" stepKey="checkPrintPage2"/>
+
         <openNewTab stepKey="openNewTab3"/>
+        <wait time="5" stepKey="waitForNewTabToOpen2" />
         <switchToNextTab stepKey="switchForward4"/>
+        <waitForElement selector="body" stepKey="waitForNewTabHTML" />
         <amOnPage url="{{StorefrontSalesOrderPrintPage.url({$grabOrderIdFromURL})}}" stepKey="duplicatePrintPage2"/>
         <seeElement selector="{{StorefrontCustomerOrderSection.isMyOrdersSection}}" stepKey="waitOrderHistoryPage"/>
     </test>

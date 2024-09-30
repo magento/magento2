@@ -190,7 +190,7 @@
         </actionGroup>
         <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
-        <actionGroup ref="AdminReindexAndFlushCache" stepKey="reindexAndFlushCache"/>
+        <comment userInput="Adding the comment to replace AdminReindexAndFlushCache action group ('indexer:reindex', 'cache:flush' commands) for preserving Backward Compatibility" stepKey="reindexAndFlushCache"/>
 
         <!-- Login to storefront from customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomerOnStorefront">

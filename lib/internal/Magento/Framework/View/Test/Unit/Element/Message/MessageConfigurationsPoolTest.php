@@ -41,10 +41,8 @@ class MessageConfigurationsPoolTest extends TestCase
      */
     public function testConstructNoRendererException(array $configuration)
     {
-        static::expectException(
-            '\InvalidArgumentException',
-            'Renderer should be defined.'
-        );
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Renderer should be defined.');
 
         new MessageConfigurationsPool($configuration);
     }
@@ -67,10 +65,8 @@ class MessageConfigurationsPoolTest extends TestCase
      */
     public function testConstructWrongDataException(array $configuration)
     {
-        static::expectException(
-            '\InvalidArgumentException',
-            'Data should be of array type.'
-        );
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Data should be of array type.');
 
         new MessageConfigurationsPool($configuration);
     }

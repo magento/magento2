@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckoutForShowShippingMethodNoApplicableTest">
+        <annotations>
+            <stories value="Checkout for not applicable shipping method"/>
+            <title value="Storefront checkout for not applicable shipping method test"/>
+            <description value="Checkout flow if shipping rates are not applicable"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-37420"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Create simple product -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <!-- Enable flat rate shipping to specific country -  Afghanistan -->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateToSpecificCountriesConfigData.path}} {{EnableFlatRateToSpecificCountriesConfigData.value}}" stepKey="allowFlatRateSpecificCountries"/>
+            <magentoCLI command="config:set {{EnableFlatRateToAfghanistanConfigData.path}} {{EnableFlatRateToAfghanistanConfigData.value}}" stepKey="enableFlatRateToAfghanistan"/>
+            <!-- Enable Show Method if Not Applicable-->
+            <magentoCLI command="config:set {{EnableFlatRateShowMethodNoApplicableConfigData.path}} {{EnableFlatRateShowMethodNoApplicableConfigData.value}}" stepKey="enableShowMethodNoApplicable"/>
+            <!-- Create Customer with filled Shipping & Billing Address -->
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromStorefront"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <magentoCLI command="config:set {{EnableFlatRateToAllAllowedCountriesConfigData.path}} {{EnableFlatRateToAllAllowedCountriesConfigData.value}}" stepKey="allowFlatRateToAllCountries"/>
+            <magentoCLI command="config:set {{EnableFlatRateShowMethodNoApplicableConfigData.path}} 0" stepKey="disableShowMethodNoApplicable"/>
+            <!-- Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+        <!-- Login with created Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Add product to cart -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <!-- Go to checkout page -->
+        <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="openCheckoutShippingPage"/>
+        <!-- Assert shipping price for US > California -->
+        <dontSeeElement selector="{{CheckoutShippingMethodsSection.price}}" stepKey="dontSeePrice"/>
+        <!-- Assert Next button is available -->
+        <seeElement selector="{{CheckoutShippingMethodsSection.next}}" stepKey="seeNextButton"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNextButton"/>
+        <!--  Assert order cannot be placed and error message will shown. -->
+        <waitForPageLoad stepKey="waitForError"/>
+        <seeElementInDOM selector="{{CheckoutHeaderSection.errorMessageContainsText('The shipping method is missing. Select the shipping method and try again')}}" stepKey="seeShippingMethodError"/>
+    </test>
+</tests>
