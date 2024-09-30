@@ -58,6 +58,11 @@ class CurrencyTest extends TestCase
     private $gridColumnMock;
 
     /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfigMock;
+
+    /**
      * @var StoreInterface|MockObject
      */
     private $storeMock;
