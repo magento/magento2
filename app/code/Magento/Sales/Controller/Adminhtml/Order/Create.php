@@ -280,10 +280,8 @@ abstract class Create extends \Magento\Backend\App\Action
 
         if ($paymentData = $this->getRequest()->getPost('payment')) {
             $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentData);
-        } else {
-            $paymentData = array('method' => '');
-            $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentData);
         }
+
         $eventData = [
             'order_create_model' => $this->_getOrderCreateModel(),
             'request' => $this->getRequest()->getPostValue(),
@@ -293,12 +291,10 @@ abstract class Create extends \Magento\Backend\App\Action
 
         $this->_getOrderCreateModel()->saveQuote();
 
-        if ($paymentData = $this->getRequest()->getPost('payment')) {
-            $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentData);
-        } else {
+        if (!($paymentData = $this->getRequest()->getPost('payment'))) {
             $paymentData = array('method' => '');
-            $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentData);
         }
+        $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentData);
 
         /**
          * Saving of giftmessages
