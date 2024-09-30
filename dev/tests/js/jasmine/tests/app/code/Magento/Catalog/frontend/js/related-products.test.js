@@ -48,12 +48,12 @@ define([
 
         it('should select all except manually selected product when "Select All" is clicked after manual selection',
             function () {
-            $(relatedCheckboxSelector).first().prop('checked', true).trigger('click');
-            $(selectAllLinkSelector).trigger('click');
+                $(relatedCheckboxSelector).first().prop('checked', true).trigger('click');
+                $(selectAllLinkSelector).trigger('click');
 
-            // Verify all products are selected, including the manually selected one
-            expect($(relatedCheckboxSelector + ':checked').length).toBe(2);
-        });
+                // Verify all products are selected, including the manually selected one
+                expect($(relatedCheckboxSelector + ':checked').length).toBe(2);
+            });
 
         it('should unselect all products when "Unselect All" is clicked after manual selection', function () {
             $(relatedCheckboxSelector).first().prop('checked', true).trigger('click');
