@@ -365,15 +365,15 @@ class AbstractTypeTest extends TestCase
     {
         return [
             [
-                '$code' => 'attr set name value key',
-                '$optionKey' => 'option key',
-                '$optionValue' => 'option value',
-                '$initAttributes' => [
+                'code' => 'attr set name value key',
+                'optionKey' => 'option key',
+                'optionValue' => 'option value',
+                'initAttributes' => [
                     'attr set name' => [
                         'attr set name value key' => [],
                     ],
                 ],
-                '$resultAttributes' => [
+                'resultAttributes' => [
                     'attr set name' => [
                         'attr set name value key' => [
                             'options' => [
@@ -384,15 +384,15 @@ class AbstractTypeTest extends TestCase
                 ],
             ],
             [
-                '$code' => 'attr set name value key',
-                '$optionKey' => 'option key',
-                '$optionValue' => 'option value',
-                '$initAttributes' => [
+                'code' => 'attr set name value key',
+                'optionKey' => 'option key',
+                'optionValue' => 'option value',
+                'initAttributes' => [
                     'attr set name' => [
                         'not equal to code value' => [],
                     ],
                 ],
-                '$resultAttributes' => [
+                'resultAttributes' => [
                     'attr set name' => [
                         'not equal to code value' => [],
                     ],

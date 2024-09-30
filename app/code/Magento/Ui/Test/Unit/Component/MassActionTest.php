@@ -98,7 +98,7 @@ class MassActionTest extends TestCase
     /**
      * @return array
      */
-    public function getPrepareDataProvider()
+    public static function getPrepareDataProvider()
     {
         return [
             [

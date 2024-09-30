@@ -166,11 +166,11 @@ class AddCommentTest extends TestCase
     /**
      * @return array
      */
-    public function executeWillNotifyCustomerDataProvider()
+    public static function executeWillNotifyCustomerDataProvider()
     {
         return [
             'User Has Access - Notify True' => [
-                'postData' => [
+                'historyData' => [
                     'comment' => 'Great Product!',
                     'is_customer_notified' => true,
                     'status' => 'processing'
@@ -181,7 +181,7 @@ class AddCommentTest extends TestCase
                 'expectedOrderStatus' => 'processing'
             ],
             'User Has Access - Notify False' => [
-                'postData' => [
+                'historyData' => [
                     'comment' => 'Great Product!',
                     'is_customer_notified' => false,
                     'status' => 'processing'
@@ -192,7 +192,7 @@ class AddCommentTest extends TestCase
                 'expectedOrderStatus' => 'processing'
             ],
             'User Has Access - Notify Unset' => [
-                'postData' => [
+                'historyData' => [
                     'comment' => 'Great Product!',
                     'status' => 'processing'
                 ],
@@ -202,7 +202,7 @@ class AddCommentTest extends TestCase
                 'expectedOrderStatus' => 'processing'
             ],
             'User No Access - Notify True' => [
-                'postData' => [
+                'historyData' => [
                     'comment' => 'Great Product!',
                     'is_customer_notified' => true,
                     'status' => 'fraud'
@@ -213,7 +213,7 @@ class AddCommentTest extends TestCase
                 'expectedOrderStatus' => 'fraud'
             ],
             'User No Access - Notify False' => [
-                'postData' => [
+                'historyData' => [
                     'comment' => 'Great Product!',
                     'is_customer_notified' => false,
                     'status' => 'processing'
@@ -224,7 +224,7 @@ class AddCommentTest extends TestCase
                 'expectedOrderStatus' => 'processing'
             ],
             'User No Access - Notify Unset' => [
-                'postData' => [
+                'historyData' => [
                     'comment' => 'Great Product!',
                     'status' => 'processing'
                 ],

@@ -72,7 +72,7 @@ class CollectionTest extends TestCase
      * data provider for testSetValidationFilter
      * @return array
      */
-    public function setValidationFilterDataProvider()
+    public static function setValidationFilterDataProvider()
     {
         return [
             'Check type COUPON' => ['coupon_code', ['#1', '#2', '#5']],
@@ -284,7 +284,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addWebsiteFilterDataProvider(): array
+    public static function addWebsiteFilterDataProvider(): array
     {
         return [
             [

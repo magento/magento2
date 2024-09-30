@@ -182,7 +182,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         }
     }
 
-    public function optionDataProvider()
+    public static function optionDataProvider()
     {
         $fixtureOptions = [];
         $fixture = include '_files/product_options.php';
@@ -232,7 +232,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         $this->_webApiCall($serviceInfo, ['option' => $optionDataPost]);
     }
 
-    public function optionNegativeDataProvider()
+    public static function optionNegativeDataProvider()
     {
         $fixtureOptions = [];
         $fixture = include '_files/product_options_negative.php';
@@ -397,7 +397,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         }
     }
 
-    public function validOptionDataProvider()
+    public static function validOptionDataProvider()
     {
         return [
             'drop_down including previous values' => ['drop_down', true, 3],
@@ -443,7 +443,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function optionNegativeUpdateDataProvider()
+    public static function optionNegativeUpdateDataProvider()
     {
         return include '_files/product_options_update_negative.php';
     }

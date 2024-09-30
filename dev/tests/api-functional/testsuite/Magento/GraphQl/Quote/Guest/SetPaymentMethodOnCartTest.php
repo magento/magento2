@@ -183,7 +183,7 @@ QUERY;
     /**
      * @return array
      */
-    public function dataProviderSetPaymentMethodWithoutRequiredParameters(): array
+    public static function dataProviderSetPaymentMethodWithoutRequiredParameters(): array
     {
         return [
             'missed_cart_id' => [
