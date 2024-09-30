@@ -227,6 +227,7 @@ class CurrencyTest extends TestCase
 
     protected function tearDown(): void
     {
+        unset($this->scopeConfigMock);
         unset($this->storeManagerMock);
         unset($this->currencyLocatorMock);
         unset($this->localeCurrencyMock);
