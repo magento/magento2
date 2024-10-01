@@ -35,5 +35,5 @@ abstract class AbstractCacheCommandTestCase extends TestCase
      * @param array $types
      * @return string
      */
-    abstract public function getExpectedExecutionOutput(array $types);
+    abstract public static function getExpectedExecutionOutput(array $types);
 }

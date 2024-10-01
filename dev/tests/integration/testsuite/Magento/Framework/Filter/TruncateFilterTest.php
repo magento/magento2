@@ -40,7 +40,7 @@ class TruncateFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedRemainder, $result->getRemainder());
     }
 
-    public function truncateDataProvider() : array
+    public static function truncateDataProvider() : array
     {
         return [
             '1' => [

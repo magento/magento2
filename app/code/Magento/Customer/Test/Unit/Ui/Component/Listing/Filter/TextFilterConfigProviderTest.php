@@ -24,7 +24,7 @@ class TextFilterConfigProviderTest extends TestCase
     /**
      * @return array[]
      */
-    public function getConfigDataProvider(): array
+    public static function getConfigDataProvider(): array
     {
         return [
             [

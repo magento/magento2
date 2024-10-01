@@ -77,7 +77,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getEntitiesDataProvider()
+    public static function getEntitiesDataProvider()
     {
         return [
             'entities_key_exist' => [['entities' => 'value'], 'value'],
@@ -115,7 +115,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getEntityTypesDataProvider()
+    public static function getEntityTypesDataProvider()
     {
         return [
             'valid type' => [
@@ -172,7 +172,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getFileFormatsDataProvider()
+    public static function getFileFormatsDataProvider()
     {
         return [
             'fileFormats_key_exist' => [['fileFormats' => 'value'], 'value'],
