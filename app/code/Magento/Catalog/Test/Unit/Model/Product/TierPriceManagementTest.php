@@ -170,7 +170,7 @@ class TierPriceManagementTest extends TestCase
     /**
      * @return array
      */
-    public function getListDataProvider()
+    public static function getListDataProvider()
     {
         return [
             [
@@ -413,7 +413,7 @@ class TierPriceManagementTest extends TestCase
     /**
      * @return array
      */
-    public function addDataProvider()
+    public static function addDataProvider()
     {
         return [
             ['string', 10],

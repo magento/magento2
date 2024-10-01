@@ -101,7 +101,7 @@ class BackendTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigurationCountryCodeFromConfigDataProvider()
+    public static function getConfigurationCountryCodeFromConfigDataProvider()
     {
         return [
             [null],
@@ -128,7 +128,7 @@ class BackendTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigurationCountryCodeFromDefaultDataProvider()
+    public static function getConfigurationCountryCodeFromDefaultDataProvider()
     {
         return [
             [null, false, 'DE'],
