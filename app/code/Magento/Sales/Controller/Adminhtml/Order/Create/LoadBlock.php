@@ -90,6 +90,10 @@ class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGet
             $this->storeManager->setCurrentStore($request->getParam('store_id'));
         }
         try {
+            if(!$request->getParam('payment')){
+                $paymentData = array('payment' => array('method' => ''));
+                $request->setParams($paymentData);
+            }
             $this->_initSession()->_processData();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_reloadQuote();

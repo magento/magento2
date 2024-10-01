@@ -291,10 +291,9 @@ abstract class Create extends \Magento\Backend\App\Action
 
         $this->_getOrderCreateModel()->saveQuote();
 
-        if (!($paymentData = $this->getRequest()->getPost('payment'))) {
-            $paymentData = array('method' => '');
+        if ($paymentData = $this->getRequest()->getPost('payment')) {
+            $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentData);
         }
-        $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentData);
 
         /**
          * Saving of giftmessages
