@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// phpcs:ignore CookieAndSessionMisuse
 namespace Magento\Multishipping\Model\Checkout\Type\Multishipping;
 
 use Magento\Checkout\Model\Session;
@@ -11,6 +10,8 @@ use Magento\Multishipping\Model\Checkout\Type\Multishipping;
 
 /**
  * Multishipping checkout state model
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class State extends \Magento\Framework\DataObject
 {
