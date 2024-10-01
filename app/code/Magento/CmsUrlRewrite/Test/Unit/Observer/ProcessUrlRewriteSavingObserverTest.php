@@ -141,9 +141,9 @@ class ProcessUrlRewriteSavingObserverTest extends TestCase
     public static function executeDataProvider()
     {
         return  [
-            ['identifier' => true, 'storeIdChanged' => true],
-            ['identifier' => true, 'storeIdChanged' => false],
-            ['identifier' => false, 'storeIdChanged' => true],
+            ['identifierChanged' => true, 'storeIdChanged' => true],
+            ['identifierChanged' => true, 'storeIdChanged' => false],
+            ['identifierChanged' => false, 'storeIdChanged' => true],
         ];
     }
 

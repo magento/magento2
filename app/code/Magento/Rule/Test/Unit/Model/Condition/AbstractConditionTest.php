@@ -49,7 +49,7 @@ class AbstractConditionTest extends TestCase
     /**
      * @return array
      */
-    public function validateAttributeDataProvider()
+    public static function validateAttributeDataProvider()
     {
         return [
             // value, operator, valueForValidate, expectedResult
@@ -164,7 +164,7 @@ class AbstractConditionTest extends TestCase
     /**
      * @return array
      */
-    public function validateAttributeArrayInputTypeDataProvider()
+    public static function validateAttributeArrayInputTypeDataProvider()
     {
         return [
             // value, operator, valueForValidate, expectedResult, inputType

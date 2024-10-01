@@ -53,7 +53,7 @@ class ArrayUtilsTest extends TestCase
      * Data provider for ksortMultibyteDataProvider
      * @todo implement provider with values which different depends on locale
      */
-    public function ksortMultibyteDataProvider()
+    public static function ksortMultibyteDataProvider()
     {
         return [[['б' => 2, 'в' => 3, 'а' => 1], 'ru_RU']];
     }
@@ -101,7 +101,7 @@ class ArrayUtilsTest extends TestCase
     /**
      * @return array
      */
-    public function flattenDataProvider()
+    public static function flattenDataProvider()
     {
         return [
             [
@@ -181,7 +181,7 @@ class ArrayUtilsTest extends TestCase
     /**
      * @return array
      */
-    public function recursiveDiffDataProvider()
+    public static function recursiveDiffDataProvider()
     {
         return [
             [
