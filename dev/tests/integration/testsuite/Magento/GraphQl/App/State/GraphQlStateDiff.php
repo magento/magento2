@@ -58,6 +58,16 @@ class GraphQlStateDiff
     private readonly Comparator $comparator;
 
     /**
+     * @var State
+     */
+    private State $appState;
+
+    /**
+     * @var string
+     */
+    private string $currentArea;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -68,7 +78,9 @@ class GraphQlStateDiff
         AppObjectManager::setInstance($this->objectManagerForTest);
         Bootstrap::setObjectManager($this->objectManagerForTest);
         $this->comparator = $this->objectManagerForTest->create(Comparator::class);
-        $this->objectManagerForTest->get(State::class)->setAreaCode(Area::AREA_GRAPHQL);
+        $this->appState = $this->objectManagerForTest->get(State::class);
+        $this->currentArea = $this->appState->getAreaCode();
+        $this->appState->setAreaCode(Area::AREA_GRAPHQL);
         $this->objectManagerForTest->_resetState();
     }
 
@@ -89,6 +101,7 @@ class GraphQlStateDiff
      */
     public function tearDown(): void
     {
+        $this->appState->setAreaCode($this->currentArea);
         $this->objectManagerBeforeTest->getFactory()->setObjectManager($this->objectManagerBeforeTest);
         AppObjectManager::setInstance($this->objectManagerBeforeTest);
         Bootstrap::setObjectManager($this->objectManagerBeforeTest);
