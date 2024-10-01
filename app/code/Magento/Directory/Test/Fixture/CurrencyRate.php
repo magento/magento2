@@ -1,7 +1,18 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ *
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ************************************************************************
  */
 declare(strict_types=1);
 
@@ -11,6 +22,7 @@ use Magento\Directory\Model\Currency;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DataObject;
 use Magento\Framework\Locale\FormatInterface;
+use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
 /**
@@ -24,9 +36,9 @@ class CurrencyRate implements RevertibleDataFixtureInterface
     private $format;
 
     /**
-     * @var Currency
+     * @var ServiceFactory
      */
-    private $currency;
+    private $serviceFactory;
 
     /**
      * @var ResourceConnection
@@ -35,11 +47,11 @@ class CurrencyRate implements RevertibleDataFixtureInterface
 
     public function __construct(
         FormatInterface $format,
-        Currency $currency,
+        ServiceFactory $serviceFactory,
         ResourceConnection $resourceConnection
     ) {
         $this->format = $format;
-        $this->currency = $currency;
+        $this->serviceFactory = $serviceFactory;
         $this->resourceConnection = $resourceConnection;
     }
 
@@ -52,7 +64,9 @@ class CurrencyRate implements RevertibleDataFixtureInterface
                     $data[$currencyCode][$currencyTo] = $value;
                 }
             }
-            $this->currency->saveRates($data);
+            $service = $this->serviceFactory->create(Currency::class, 'saveRates');
+
+            return $service->execute(['rates' => $data]);
         }
     }
 
