@@ -6,6 +6,7 @@
 namespace Magento\Framework\Css\PreProcessor\Adapter\Less;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\Css\PreProcessor\File\Temporary;
 use Magento\Framework\Phrase;
@@ -41,6 +42,10 @@ class Processor implements ContentProcessorInterface
      * @var Temporary
      */
     private $temporaryFile;
+
+    /**
+     * @var DirectoryList
+     */
     private DirectoryList $directoryList;
 
     /**
@@ -50,19 +55,20 @@ class Processor implements ContentProcessorInterface
      * @param State $appState
      * @param Source $assetSource
      * @param Temporary $temporaryFile
+     * @param ?DirectoryList $directoryList
      */
     public function __construct(
         LoggerInterface $logger,
         State $appState,
         Source $assetSource,
         Temporary $temporaryFile,
-        DirectoryList $directoryList
+        ?DirectoryList $directoryList = null,
     ) {
         $this->logger = $logger;
         $this->appState = $appState;
         $this->assetSource = $assetSource;
         $this->temporaryFile = $temporaryFile;
-        $this->directoryList = $directoryList;
+        $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
     }
 
     /**
@@ -73,13 +79,18 @@ class Processor implements ContentProcessorInterface
         $path = $asset->getPath();
         try {
             $mode = $this->appState->getMode();
+            $sourceMapBasePath = sprintf(
+                '%s/pub/',
+                $this->directoryList->getPath(DirectoryList::TEMPLATE_MINIFICATION_DIR),
+            );
+
             $parser = new \Less_Parser(
                 [
                     'relativeUrls' => false,
                     'compress' => $mode !== State::MODE_DEVELOPER,
                     'sourceMap' => $mode === State::MODE_DEVELOPER,
                     'sourceMapRootpath' => '/',
-                    'sourceMapBasepath' => $this->directoryList->getPath(DirectoryList::TEMPLATE_MINIFICATION_DIR) . '/pub/'
+                    'sourceMapBasepath' => $sourceMapBasePath,
                 ]
             );
 
