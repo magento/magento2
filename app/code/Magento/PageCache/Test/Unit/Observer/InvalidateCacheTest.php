@@ -66,7 +66,7 @@ class InvalidateCacheTest extends TestCase
     /**
      * @return array
      */
-    public function invalidateCacheDataProvider()
+    public static function invalidateCacheDataProvider()
     {
         return [[true], [false]];
     }

@@ -165,7 +165,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function datesDataProvider()
+    public static function datesDataProvider()
     {
         return [
             [
