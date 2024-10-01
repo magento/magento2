@@ -156,7 +156,7 @@ class Filesystem extends AbstractBackup
      *
      * @param string $backupDir
      * @param int $size
-     * @phpcs:ignore
+     *
      * @return void
      * @throws NotEnoughFreeSpace
      */
