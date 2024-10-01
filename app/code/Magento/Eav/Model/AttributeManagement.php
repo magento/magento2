@@ -92,7 +92,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function assign($entityTypeCode, $attributeSetId, $attributeGroupId, $attributeCode, $sortOrder)
     {
@@ -134,7 +134,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function unassign($attributeSetId, $attributeCode)
     {
@@ -171,7 +171,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAttributes($entityTypeCode, $attributeSetId)
     {
