@@ -188,7 +188,6 @@ class Discount extends AbstractTotal
         $items = $this->calculator->sortItemsByPriority($items, $address);
         $itemsToApplyRules = $items;
         $rules = $this->calculator->getRules($address);
-        $totalDiscount = 0;
         $address->setBaseDiscountAmount(0);
         /** @var Rule $rule */
         foreach ($rules as $rule) {
@@ -221,11 +220,9 @@ class Discount extends AbstractTotal
                     unset($itemsToApplyRules[$key]);
                 }
 
-                $totalDiscount += $item->getBaseDiscountAmount();
             }
-            $address->setBaseDiscountAmount($totalDiscount);
+            $this->calculator->initTotals($items, $address);
         }
-        $this->calculator->initTotals($items, $address);
         foreach ($items as $item) {
             if (!isset($itemsAggregate[$item->getId()])) {
                 continue;
