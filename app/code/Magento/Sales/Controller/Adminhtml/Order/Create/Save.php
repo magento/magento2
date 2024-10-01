@@ -45,7 +45,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create implements H
                 $this->_getOrderCreateModel()->setPaymentData($paymentData);
                 $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentData);
             }
-            else {
+            elseif ($this->getRequest()->isPost()) {
                 $paymentData = array('method' => '');
                 $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentData);
             }
