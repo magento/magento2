@@ -80,6 +80,7 @@ class SearchCriteriaBuilder
                 'searchRequestName' => $requestName,
                 'currentPage' => $args['currentPage'],
                 'size' => $args['pageSize'],
+                'orders' => null,
             ]
         )->resolve();
         foreach ($args as $argumentName => $argument) {
