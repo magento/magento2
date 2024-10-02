@@ -63,9 +63,9 @@ class GraphQlStateDiff
     private State $appState;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $currentArea;
+    private ?string $currentArea;
 
     /**
      * Constructor
