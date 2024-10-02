@@ -127,7 +127,7 @@ class ExpressionConverter
             return $hashedName;
         }
 
-        $trimmedHash = self::trimHash($hash, $prefix, self::MYSQL_IDENTIFIER_LEN);
+        $trimmedHash = self::trimHash($hash);
         $trimmedName = $prefix . $trimmedHash;
         if (strlen($trimmedName) <= self::MYSQL_IDENTIFIER_LEN) {
             return $trimmedName;
