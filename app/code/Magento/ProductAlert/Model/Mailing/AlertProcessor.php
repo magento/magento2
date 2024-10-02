@@ -162,10 +162,10 @@ class AlertProcessor
             $email->setStoreId($storeId);
 
             try {
-                $collection = $this->getAlertCollection($alertType, $customerIds, $websiteId, $storeId);
+                $collection = $this->getAlertCollection($alertType, $customerIds, $storeId);
             } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
-                return $errors;
+                continue;
             }
 
             /** @var Price|Stock $alert */
@@ -228,22 +228,16 @@ class AlertProcessor
      *
      * @param string $alertType
      * @param array $customerIds
-     * @param int $websiteId
      * @param int $storeId
      * @return AbstractCollection
      * @throws \InvalidArgumentException
      */
-    private function getAlertCollection(
-        string $alertType,
-        array $customerIds,
-        int $websiteId,
-        int $storeId
-    ): AbstractCollection {
+    private function getAlertCollection(string $alertType, array $customerIds, int $storeId): AbstractCollection
+    {
         switch ($alertType) {
             case self::ALERT_TYPE_STOCK:
                 $collection = $this->stockCollectionFactory->create();
                 $collection->addFieldToFilter('customer_id', ['in' => $customerIds])
-                    ->addWebsiteFilter($websiteId)
                     ->addStatusFilter(0)
                     ->addFilter('store_id', $storeId)
                     ->setCustomerOrder()
@@ -252,7 +246,6 @@ class AlertProcessor
             case self::ALERT_TYPE_PRICE:
                 $collection = $this->priceCollectionFactory->create();
                 $collection->addFieldToFilter('customer_id', ['in' => $customerIds])
-                    ->addWebsiteFilter($websiteId)
                     ->addFilter('store_id', $storeId)
                     ->setCustomerOrder()
                     ->addOrder('product_id');
