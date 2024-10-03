@@ -166,6 +166,11 @@ class SortTest extends TestCase
                         'price' => [
                             'order' => 'desc'
                         ]
+                    ],
+                    [
+                        'entity_id' => [
+                            'order' => 'desc'
+                        ]
                     ]
                 ]
             ],
@@ -188,6 +193,11 @@ class SortTest extends TestCase
                 [
                     [
                         'price' => [
+                            'order' => 'desc'
+                        ]
+                    ],
+                    [
+                        'entity_id' => [
                             'order' => 'desc'
                         ]
                     ]
@@ -214,6 +224,11 @@ class SortTest extends TestCase
                         'name.sort_name' => [
                             'order' => 'desc'
                         ]
+                    ],
+                    [
+                        'entity_id' => [
+                            'order' => 'desc'
+                        ]
                     ]
                 ]
             ],
@@ -238,6 +253,11 @@ class SortTest extends TestCase
                         'not_eav_attribute' => [
                             'order' => 'desc'
                         ]
+                    ],
+                    [
+                        'entity_id' => [
+                            'order' => 'desc'
+                        ]
                     ]
                 ]
             ],
@@ -260,6 +280,11 @@ class SortTest extends TestCase
                 [
                     [
                         'color_value.sort_color' => [
+                            'order' => 'desc'
+                        ]
+                    ],
+                    [
+                        'entity_id' => [
                             'order' => 'desc'
                         ]
                     ]

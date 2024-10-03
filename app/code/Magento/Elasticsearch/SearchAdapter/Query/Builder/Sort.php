@@ -124,6 +124,14 @@ class Sort
             ];
         }
 
+        if (!empty($sorts)) {
+            $sorts[] = [
+                'entity_id' => [
+                    'order' => 'desc'
+                ]
+            ];
+        }
+
         return $sorts;
     }
 }
