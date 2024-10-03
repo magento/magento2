@@ -15,6 +15,8 @@
             <description value="As a guest, place an order using paypal payflow pro and assert the order details in order view page in the admin site"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-5272"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct1"/>

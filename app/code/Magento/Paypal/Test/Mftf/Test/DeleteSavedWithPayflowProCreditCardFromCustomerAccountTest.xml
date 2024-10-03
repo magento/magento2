@@ -23,9 +23,7 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct1"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminPayPalPayflowProWithValutActionGroup" stepKey="ConfigPayPalExpress">
-                <argument name="credentials" value="SamplePaypalPaymentsProConfig"/>
-            </actionGroup>
+            <actionGroup ref="AdminPayPalPayflowProWithValutActionGroup" stepKey="ConfigPayPalExpress"/>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
                 <argument name="tags" value="config full_page"/>
             </actionGroup>

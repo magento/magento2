@@ -77,7 +77,7 @@
             <!-- Go to the product page on StoreFront and see the Base image -->
             <amOnPage url="{{StorefrontProductPage.url($simpleProductOne.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
             <waitForPageLoad stepKey="waitForPageLoad"/>
-            <seeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="seeBaseImageOnProductPage"/>
+            <waitForElementVisible selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="seeBaseImageOnProductPage"/>
             <!-- Go to the category page and see the Small image -->
             <amOnPage url="{{StorefrontCategoryPage.url($testCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
             <waitForPageLoad stepKey="waitForPageLoadingToFinish"/>

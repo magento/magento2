@@ -18,5 +18,14 @@ abstract class Queue extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Newsletter::queue';
+    public const ADMIN_RESOURCE = 'Magento_Newsletter::queue';
+
+    /**
+     * @inheritDoc
+     */
+    protected function _isAllowed()
+    {
+        return ($this->_authorization->isAllowed(self::ADMIN_RESOURCE) &&
+            $this->_authorization->isAllowed('Magento_Newsletter::template'));
+    }
 }
