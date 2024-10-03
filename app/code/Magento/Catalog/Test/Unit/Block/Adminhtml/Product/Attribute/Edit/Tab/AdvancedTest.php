@@ -11,6 +11,7 @@ use Magento\Backend\Block\Widget\Form\Element\ElementCreator;
 use Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Config\Model\Config\Source\Yesno;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
 use Magento\Eav\Helper\Data as EavHelper;
 use Magento\Eav\Model\Entity\Type as EntityType;

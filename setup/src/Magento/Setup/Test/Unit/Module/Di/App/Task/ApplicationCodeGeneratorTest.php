@@ -73,7 +73,7 @@ class ApplicationCodeGeneratorTest extends TestCase
     /**
      * @return array
      */
-    public function doOperationWrongDataDataProvider()
+    public static function doOperationWrongDataDataProvider()
     {
         return [
             [[]],

@@ -11,9 +11,9 @@ use Magento\Framework\App\Utility\Classes;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\ObjectManager\FactoryInterface as ObjectManagerFactoryInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\GraphQl\App\State\Collector;
-use Magento\GraphQl\App\State\Comparator;
-use Magento\GraphQl\App\State\CompareType;
+use Magento\Framework\TestFramework\ApplicationStateComparator\Collector;
+use Magento\Framework\TestFramework\ApplicationStateComparator\Comparator;
+use Magento\Framework\TestFramework\ApplicationStateComparator\CompareType;
 
 /**
  * Test that verifies that resetState method for classes cause the state to be the same as it was initially constructed
@@ -57,7 +57,7 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function resetAfterRequestClassDataProvider()
+    public static function resetAfterRequestClassDataProvider()
     {
         $resetAfterRequestClasses = [];
         foreach (Classes::getVirtualClasses() as $name => $type) {
@@ -167,9 +167,15 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
         }
         try {
             /** @var ResetAfterRequestInterface $object */
-            $beforeProperties = $this->collector->getPropertiesFromObject($object, CompareType::CompareBetweenRequests);
+            $beforeProperties = $this->collector->getPropertiesFromObject(
+                $object,
+                CompareType::COMPARE_BETWEEN_REQUESTS
+            );
             $object->_resetState();
-            $afterProperties = $this->collector->getPropertiesFromObject($object, CompareType::CompareBetweenRequests);
+            $afterProperties = $this->collector->getPropertiesFromObject(
+                $object,
+                CompareType::COMPARE_BETWEEN_REQUESTS
+            );
             $differences = [];
             foreach ($afterProperties as $propertyName => $propertyValue) {
                 if ($propertyValue instanceof ObjectManagerInterface) {
@@ -193,7 +199,11 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
                     // TODO: Can we convert _regionModels to member variable,
                     // or move to a dependency injected service class instead?
                 }
-                $result = $this->comparator->checkValues($beforeProperties[$propertyName] ?? null, $propertyValue, 3);
+                $result = $this->comparator->checkValues(
+                    $beforeProperties[$propertyName] ?? null,
+                    $propertyValue,
+                    3
+                );
                 if ($result) {
                     $differences[$propertyName] = $result;
                 }

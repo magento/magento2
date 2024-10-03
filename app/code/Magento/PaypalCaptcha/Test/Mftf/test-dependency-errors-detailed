@@ -1,0 +1,11 @@
+
+File "/var/www/html/app/code/Magento/PaypalCaptcha/Test/Mftf/Test/StorefrontPaymentsCaptchaWithPayflowProTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontPaypalFillCardDataActionGroup from module(s): magento/module-paypal
+
+File "/var/www/html/app/code/Magento/PaypalCaptcha/Test/Mftf/ActionGroup/AddProductToCheckoutPageWithPayPalPayflowProActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontPaypalCheckoutSection from module(s): magento/module-paypal
+	 AddProductToCheckoutPageActionGroup from module(s): magento/module-paypal

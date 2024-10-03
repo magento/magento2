@@ -65,7 +65,7 @@ class EncoderTest extends TestCase
         }, $subDelims);
     }
 
-    public function rfc3986Urls(): array
+    public static function rfc3986Urls(): array
     {
         return [
             ['http://magento2.adobe/encoding/with/longer/url/'],

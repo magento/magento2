@@ -197,7 +197,7 @@ class FileProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function getViewUrlDataProvider(): array
+    public static function getViewUrlDataProvider(): array
     {
         return [
             [
@@ -477,7 +477,15 @@ class FileProcessorTest extends TestCase
         $mockRead = $this->createMock(ReadInterface::class);
         $objectManagerMock->method('get')->willReturn($mockFileSystem);
         $mockFileSystem->method('getDirectoryRead')->willReturn($mockRead);
-        $mockRead->method('isExist')->willReturnOnConsecutiveCalls(true, true, false);
+        $callCount = 0;
+        $mockRead->method('isExist')
+            ->willReturnCallback(function () use (&$callCount) {
+                $callCount++;
+                if ($callCount === 1 || $callCount === 2) {
+                    return true;
+                }
+                return false;
+            });
         ObjectManager::setInstance($objectManagerMock);
 
         $this->mediaDirectory->expects($this->once())
@@ -568,8 +576,10 @@ class FileProcessorTest extends TestCase
     {
         $this->mediaDirectory
             ->method('isExist')
-            ->withConsecutive(['customer/tmp/filename.ext1'], ['customer/filename.ext1'])
-            ->willReturnOnConsecutiveCalls(true, false);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['customer/tmp/filename.ext1'] => true,
+                ['customer/filename.ext1'] => false
+            });
         $this->mediaDirectory->expects($this->once())
             ->method('create')
             ->with($destinationPath)

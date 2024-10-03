@@ -10,7 +10,9 @@ namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Category;
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Adminhtml\Category\AbstractCategory;
 use Magento\Catalog\Model\Category;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
@@ -58,6 +60,18 @@ class AbstractCategoryTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
 
         $this->contextMock = $this->createMock(Context::class);
 

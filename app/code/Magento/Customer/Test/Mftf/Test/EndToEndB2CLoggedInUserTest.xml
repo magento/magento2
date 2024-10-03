@@ -18,9 +18,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-25681"/>
             <group value="SearchEngine"/>
-           <skip>
-            <issueId value="ACQE-4352"/>
-        </skip>
         </annotations>
         <before>
             <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>

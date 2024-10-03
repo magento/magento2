@@ -74,23 +74,23 @@ class DeleteTest extends TestCase
 
         $this->pageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'delete', 'getTitle'])
+            ->onlyMethods(['load', 'delete', 'getTitle'])
             ->getMock();
 
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManager\ObjectManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->setMethods(['setPath'])
+            ->onlyMethods(['setPath'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             RedirectFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRedirectFactoryMock->expects($this->atLeastOnce())
             ->method('create')

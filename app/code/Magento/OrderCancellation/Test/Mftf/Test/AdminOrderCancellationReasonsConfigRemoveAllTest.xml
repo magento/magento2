@@ -24,8 +24,9 @@
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{AdminOrderCancellationConfigPage.url('#sales_cancellation-head')}}" stepKey="navigateToConfigurationPage"/>
+        <amOnPage url="{{AdminOrderCancellationConfigPage.url}}" stepKey="navigateToConfigurationPage"/>
         <waitForPageLoad time="30" stepKey="waitForAdminSalesConfigPageLoad"/>
+        <conditionalClick selector="{{AdminOrderCancellationConfigSection.salesCancellationHead}}" dependentSelector="{{AdminOrderCancellationConfigSection.systemValueForSalesCancellationReasons}}" visible="false"  stepKey="clickElementToExpand"/>
         <uncheckOption selector="{{AdminOrderCancellationConfigSection.systemValueForSalesCancellationReasons}}" stepKey="uncheckUseSystemValue"/>
         <click selector="{{AdminOrderCancellationConfigSection.deleteFirstReason}}" stepKey="deleteDefaultReason1"/>
         <click selector="{{AdminOrderCancellationConfigSection.deleteFirstReason}}" stepKey="deleteDefaultReason2"/>

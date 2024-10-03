@@ -114,7 +114,7 @@ class StateTest extends TestCase
     /**
      * @return array
      */
-    public function isAvailableDataProvider()
+    public static function isAvailableDataProvider()
     {
         return [
             [false, true, true, false],

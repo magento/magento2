@@ -67,26 +67,32 @@ class NameTest extends TestCase
     /**
      * @return array
      */
-    public function expectedPunctuationInNamesDataProvider(): array
+    public static function expectedPunctuationInNamesDataProvider(): array
     {
         return [
             [
                 'firstName' => 'John',
                 'middleName' => '',
-                'lastNameName' => 'O’Doe',
+                'lastName' => 'O’Doe',
                 'message' => 'Inclined apostrophe must be allowed in names (iOS Smart Punctuation compatibility)'
             ],
             [
                 'firstName' => 'John',
                 'middleName' => '',
-                'lastNameName' => 'O\'Doe',
+                'lastName' => 'O\'Doe',
                 'message' => 'Legacy straight apostrophe must be allowed in names'
             ],
             [
                 'firstName' => 'John',
                 'middleName' => '',
-                'lastNameName' => 'O`Doe',
+                'lastName' => 'O`Doe',
                 'message' => 'Grave accent back quote character must be allowed in names'
+            ],
+            [
+                'firstName' => 'John & Smith',
+                'middleName' => '',
+                'lastName' => 'O`Doe',
+                'message' => 'Special character ampersand(&) must be allowed in names'
             ]
         ];
     }

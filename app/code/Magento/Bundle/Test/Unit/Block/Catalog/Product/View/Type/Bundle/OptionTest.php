@@ -42,7 +42,8 @@ class OptionTest extends TestCase
     {
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPriceInfo', 'hasPreconfiguredValues', 'getPreconfiguredValues', '__wakeup'])
+            ->addMethods(['hasPreconfiguredValues'])
+            ->onlyMethods(['getPriceInfo', 'getPreconfiguredValues', '__wakeup'])
             ->getMock();
 
         $registry = $this->getMockBuilder(Registry::class)
@@ -131,7 +132,7 @@ class OptionTest extends TestCase
 
         $priceRenderBlock = $this->getMockBuilder(Render::class)
             ->disableOriginalConstructor()
-            ->setMethods(['renderAmount'])
+            ->onlyMethods(['renderAmount'])
             ->getMock();
 
         $this->product->expects($this->atLeastOnce())
