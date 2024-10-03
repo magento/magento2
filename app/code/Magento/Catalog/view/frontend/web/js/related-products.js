@@ -48,6 +48,7 @@ define([
          */
         _selectAllRelated: function (e) {
             let isChecked = this.options.relatedProductsCheckFlag;
+
             $(e.target).html(isChecked ? this.options.selectAllMessage : this.options.unselectAllMessage);
             this.options.relatedProductsCheckFlag = !isChecked;
 
