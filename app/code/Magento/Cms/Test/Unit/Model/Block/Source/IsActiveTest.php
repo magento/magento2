@@ -38,7 +38,7 @@ class IsActiveTest extends TestCase
         $this->objectManagerHelper = new ObjectManager($this);
         $this->cmsBlockMock = $this->getMockBuilder(Block::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAvailableStatuses'])
+            ->onlyMethods(['getAvailableStatuses'])
             ->getMock();
 
         $this->object = $this->objectManagerHelper->getObject($this->getSourceClassName(), [
@@ -72,7 +72,7 @@ class IsActiveTest extends TestCase
     /**
      * @return array
      */
-    public function getAvailableStatusesDataProvider()
+    public static function getAvailableStatusesDataProvider()
     {
         return [
             [

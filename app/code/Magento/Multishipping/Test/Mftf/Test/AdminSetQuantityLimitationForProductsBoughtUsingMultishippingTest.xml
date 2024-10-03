@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+     /**
+      * Copyright © Magento, Inc. All rights reserved.
+      * See COPYING.txt for license details.
+      */
+    -->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSetQuantityLimitationForProductsBoughtUsingMultishippingTest">
+        <annotations>
+            <features value="Shipping"/>
+            <stories value="Multishipping limited quantity of products"/>
+            <title value="Admin can set quantity limitation for products that can be bought using Multishipping"/>
+            <description value="Verification for Maximum Qty Allowed for Shipping to Multiple Addresses configuration setting"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4309"/>
+        </annotations>
+        <before>
+            <!--Login as admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create simple product with quantity > 15-->
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <field key="quantity">16</field>
+            </createData>
+            <!--Enable Flat Rate shipping method-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <!--Create customer-->
+            <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
+            <!--Set maximum quantity allowed for shipping to multiple addresses as 10-->
+            <magentoCLI command="config:set {{MaximumQtyAllowed10ForShippingToMultipleAddressesConfigData.path}} {{MaximumQtyAllowed10ForShippingToMultipleAddressesConfigData.value}}" stepKey="setMaximumQuantityAllowedForShippingTo10"/>
+            <!--Flush cache-->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Set maximum quantity allowed for shipping to multiple addresses as default-->
+            <magentoCLI command="config:set {{MaximumQtyAllowed100ForShippingToMultipleAddressesConfigData.path}} {{MaximumQtyAllowed100ForShippingToMultipleAddressesConfigData.value}}" stepKey="setMaximumQuantityAllowedForShippingToDefault"/>
+            <!--Delete product-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!--Delete customer-->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Logout from admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Login as customer from storefront-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!--Open product page-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <!--Add product to cart-->
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <!--Open cart page-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCartPage"/>
+        <!--Update product quantity to 11 (10>MaximumQtyAllowedForShippingToMultipleAddresses)-->
+        <actionGroup ref="StorefrontUpdateProductQTYOnShoppingCartPageActionGroup" stepKey="updateMaximumQtyAllowedForShippingTo11">
+            <argument name="product" value="$createProduct.name$"/>
+            <argument name="qty" value="11"/>
+        </actionGroup>
+        <!--"Check Out with Multiple Addresses" link is not present-->
+        <actionGroup ref="AssertStorefrontMultiShippingOptionIsNotPresentOnShoppingCartPageActionGroup" stepKey="MultipleAddressCheckoutIsNotPresent"/>
+        <!--Update product quantity to 10 (10=MaximumQtyAllowedForShippingToMultipleAddresses)-->
+        <actionGroup ref="StorefrontUpdateProductQTYOnShoppingCartPageActionGroup" stepKey="updateMaximumQtyAllowedForShippingTo10">
+            <argument name="product" value="$createProduct.name$"/>
+            <argument name="qty" value="10"/>
+        </actionGroup>
+        <!--"Check Out with Multiple Addresses" link is present-->
+        <actionGroup ref="AssertStorefrontMultiShippingOptionIsPresentOnShoppingCartPageActionGroup" stepKey="assertMultiCheckoutAvailable"/>
+        <!--Checkout with multiple addresses-->
+        <actionGroup ref="StorefrontGoCheckoutWithMultipleAddressesActionGroup" stepKey="goCheckoutWithMultipleAddresses"/>
+        <!--Assert "Ship to Multiple Addresses" page is open-->
+        <seeInCurrentUrl url="{{MultishippingCheckoutAddressesPage.url}}" stepKey="seeShiptoMultipleAddressesPageIsOpened"/>
+        <!--Assert product name & quantity on record 10-->
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemActionGroup" stepKey="assertProductOn10thRecord">
+            <argument name="sequenceNumber" value="10"/>
+            <argument name="productName" value="$createProduct.name$"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <!--Change any product quantity to 2-->
+        <actionGroup ref="StorefrontChangeMultishippingItemQtyActionGroup" stepKey="changeProductQuantityOn10thRecord">
+            <argument name="sequenceNumber" value="10"/>
+            <argument name="quantity" value="2"/>
+        </actionGroup>
+        <!--Click on "Update Qty & Addresses"-->
+        <actionGroup ref="StorefrontUpdateMultishippingItemsQuantityAndAddressesActionGroup" stepKey="clickOnUpdateQtyAndAddress"/>
+        <!--Assert error message-->
+        <waitForText selector="{{MultishippingSection.attentionMessage}}" userInput="Maximum qty allowed for Shipping to multiple addresses is 10" stepKey="assertErrorMessage"/>
+        <!--Accept alert-->
+        <waitForElementClickable selector="{{MultishippingSection.acceptAttention}}" stepKey="waitToAcceptAttention"/>
+        <click selector="{{MultishippingSection.acceptAttention}}" stepKey="acceptAttention"/>
+        <!--Assert product quantity is NOT changed-->
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemActionGroup" stepKey="againAssertProductQuantityOn10thRecord">
+            <argument name="sequenceNumber" value="10"/>
+            <argument name="productName" value="$createProduct.name$"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+    </test>
+</tests>

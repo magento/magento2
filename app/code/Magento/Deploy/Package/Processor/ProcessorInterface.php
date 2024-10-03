@@ -9,6 +9,8 @@ use Magento\Deploy\Package\Package;
 
 /**
  * Deploy packages processor interface
+ *
+ * @api
  */
 interface ProcessorInterface
 {

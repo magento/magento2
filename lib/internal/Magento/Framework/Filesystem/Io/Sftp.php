@@ -15,8 +15,8 @@ use Exception;
  */
 class Sftp extends AbstractIo
 {
-    const REMOTE_TIMEOUT = 10;
-    const SSH2_PORT = 22;
+    public const REMOTE_TIMEOUT = 10;
+    public const SSH2_PORT = 22;
 
     /**
      * @var \phpseclib3\Net\SFTP
@@ -39,7 +39,7 @@ class Sftp extends AbstractIo
         if (!isset($args['timeout'])) {
             $args['timeout'] = self::REMOTE_TIMEOUT;
         }
-        if (strpos($args['host'], ':') !== false) {
+        if (strpos($args['host'] ?? '', ':') !== false) {
             list($host, $port) = explode(':', $args['host'], 2);
         } else {
             $host = $args['host'];
@@ -82,7 +82,7 @@ class Sftp extends AbstractIo
     {
         if ($recursive) {
             $no_errors = true;
-            $dirList = explode('/', $dir);
+            $dirList = explode('/', (string)$dir);
             reset($dirList);
             $currentWorkingDir = $this->_connection->pwd();
             while ($no_errors && ($dir_item = next($dirList))) {

@@ -55,6 +55,15 @@ class Wishlist extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
             $collection = $this->getCreateOrderModel()->getCustomerWishlist(true);
             if ($collection) {
                 $collection = $collection->getItemCollection()->load();
+                $transferredItems = $this->getCreateOrderModel()->getSession()->getTransferredItems() ?? [];
+                $transferredItems = $transferredItems[$this->getDataId()] ?? [];
+                if (!empty($transferredItems)) {
+                    foreach ($collection as $key => $item) {
+                        if (in_array($item->getId(), $transferredItems)) {
+                            $collection->removeItemByKey($key);
+                        }
+                    }
+                }
             }
             $this->setData('item_collection', $collection);
         }

@@ -1,6 +1,5 @@
 <?php
 /**
- * Application configuration object. Used to access configuration when application is initialized and installed.
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -12,14 +11,14 @@ use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Class Config
+ * Application configuration object. Used to access configuration when application is initialized and installed.
  */
 class Config implements ScopeConfigInterface
 {
     /**
      * Config cache tag
      */
-    const CACHE_TAG = 'CONFIG';
+    public const CACHE_TAG = 'CONFIG';
 
     /**
      * @var ScopeCodeResolver
@@ -133,5 +132,16 @@ class Config implements ScopeConfigInterface
         }
 
         return $result !== null ? $result : $default;
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

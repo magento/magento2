@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontBundleProductActionSection">
+        <element name="customizeAndAddToCartButton" type="button" selector="#bundle-slide" timeout="30"/>
+        <element name="quantityField" type="input" selector="#qty"/>
+        <element name="addToCartButton" type="button" selector="#product-addtocart-button" timeout="30"/>
+        <element name="dropdownSelectOption" type="select" selector="//div[@class='control']/select"/>
+        <element name="dropdownProductSelection" type="select" selector="//div[@class='control']/select/option[contains(.,'{{productName}}')]" parameterized="true"/>
+        <element name="customOptionField" type="select" selector="[class='input-text product-custom-option']"/>
+    </section>
+</sections>

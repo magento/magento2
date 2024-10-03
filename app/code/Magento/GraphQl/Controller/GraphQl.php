@@ -1,12 +1,16 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Controller;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\App\AreaList;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http;
@@ -16,6 +20,7 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
 use Magento\Framework\GraphQl\Query\Fields as QueryFields;
+use Magento\Framework\GraphQl\Query\QueryParser;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
@@ -37,6 +42,7 @@ class GraphQl implements FrontControllerInterface
     /**
      * @var \Magento\Framework\Webapi\Response
      * @deprecated 100.3.2
+     * @see no replacement
      */
     private $response;
 
@@ -62,7 +68,8 @@ class GraphQl implements FrontControllerInterface
 
     /**
      * @var ContextInterface
-     * @deprecated 100.3.3 $contextFactory is used for creating Context object
+     * @deprecated 100.3.3
+     * @see $contextFactory is used for creating Context object
      */
     private $resolverContext;
 
@@ -102,6 +109,16 @@ class GraphQl implements FrontControllerInterface
     private $loggerPool;
 
     /**
+     * @var AreaList
+     */
+    private $areaList;
+
+    /**
+     * @var QueryParser
+     */
+    private $queryParser;
+
+    /**
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
@@ -112,9 +129,11 @@ class GraphQl implements FrontControllerInterface
      * @param QueryFields $queryFields
      * @param JsonFactory|null $jsonFactory
      * @param HttpResponse|null $httpResponse
-     * @param ContextFactoryInterface $contextFactory
-     * @param LogData $logDataHelper
-     * @param LoggerPool $loggerPool
+     * @param ContextFactoryInterface|null $contextFactory
+     * @param LogData|null $logDataHelper
+     * @param LoggerPool|null $loggerPool
+     * @param AreaList|null $areaList
+     * @param QueryParser|null $queryParser
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -130,7 +149,9 @@ class GraphQl implements FrontControllerInterface
         HttpResponse $httpResponse = null,
         ContextFactoryInterface $contextFactory = null,
         LogData $logDataHelper = null,
-        LoggerPool $loggerPool = null
+        LoggerPool $loggerPool = null,
+        AreaList $areaList = null,
+        QueryParser $queryParser = null
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
@@ -145,6 +166,8 @@ class GraphQl implements FrontControllerInterface
         $this->contextFactory = $contextFactory ?: ObjectManager::getInstance()->get(ContextFactoryInterface::class);
         $this->logDataHelper = $logDataHelper ?: ObjectManager::getInstance()->get(LogData::class);
         $this->loggerPool = $loggerPool ?: ObjectManager::getInstance()->get(LoggerPool::class);
+        $this->areaList = $areaList ?: ObjectManager::getInstance()->get(AreaList::class);
+        $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
     }
 
     /**
@@ -156,27 +179,29 @@ class GraphQl implements FrontControllerInterface
      */
     public function dispatch(RequestInterface $request): ResponseInterface
     {
+        $this->areaList->getArea(Area::AREA_GRAPHQL)->load(Area::PART_TRANSLATE);
+
         $statusCode = 200;
         $jsonResult = $this->jsonFactory->create();
         $data = $this->getDataFromRequest($request);
         $result = [];
 
         $schema = null;
+        $query = $data['query'] ?? '';
         try {
             /** @var Http $request */
             $this->requestProcessor->validateRequest($request);
-
-            $query = $data['query'] ?? '';
-            $variables = $data['variables'] ?? null;
+            $parsedQuery = $this->queryParser->parse($query);
+            $data['parsedQuery'] = $parsedQuery;
 
             // We must extract queried field names to avoid instantiation of unnecessary fields in webonyx schema
             // Temporal coupling is required for performance optimization
-            $this->queryFields->setQuery($query, $variables);
+            $this->queryFields->setQuery($parsedQuery, $data['variables'] ?? null);
             $schema = $this->schemaGenerator->generate();
 
             $result = $this->queryProcessor->process(
                 $schema,
-                $query,
+                $parsedQuery,
                 $this->contextFactory->create(),
                 $data['variables'] ?? []
             );
@@ -191,7 +216,7 @@ class GraphQl implements FrontControllerInterface
         $jsonResult->renderResult($this->httpResponse);
 
         // log information about the query, unless it is an introspection query
-        if (strpos($data['query'], 'IntrospectionQuery') === false) {
+        if (strpos($query, 'IntrospectionQuery') === false) {
             $queryInformation = $this->logDataHelper->getLogData($request, $data, $schema, $this->httpResponse);
             $this->loggerPool->execute($queryInformation);
         }

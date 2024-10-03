@@ -16,7 +16,7 @@ use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Controller\Adminhtml\Product\Save;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest;
+use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTestCase;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -27,7 +27,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveTest extends ProductTest
+class SaveTest extends ProductTestCase
 {
     /** @var Save */
     protected $action;
@@ -67,7 +67,7 @@ class SaveTest extends ProductTest
         );
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addData', 'getSku', 'getTypeId', 'getStoreId', '__sleep'])->getMock();
+            ->onlyMethods(['addData', 'getSku', 'getTypeId', 'getStoreId', '__sleep'])->getMock();
         $this->product->expects($this->any())->method('getTypeId')->willReturn('simple');
         $this->product->expects($this->any())->method('getStoreId')->willReturn('1');
         $this->productBuilder->expects($this->any())->method('build')->willReturn($this->product);
@@ -82,7 +82,7 @@ class SaveTest extends ProductTest
 
         $resultPageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultPageFactory->expects($this->any())->method('create')->willReturn($this->resultPage);
 
@@ -91,7 +91,7 @@ class SaveTest extends ProductTest
             ->getMock();
         $resultForwardFactory = $this->getMockBuilder(ForwardFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultForwardFactory->expects($this->any())
             ->method('create')
@@ -164,7 +164,7 @@ class SaveTest extends ProductTest
     /**
      * @return array
      */
-    public function exceptionTypeDataProvider()
+    public static function exceptionTypeDataProvider()
     {
         return [
             [new LocalizedException(__('Message')), 'addExceptionMessage'],

@@ -49,6 +49,80 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
+    public function testDefaultPaginationNotAppliedToChildren()
+    {
+        $query = <<<QUERY
+{
+  categories(
+    filters: {ids: {in: ["3", "4", "5", "6", "7", "8", "9"]}}
+    pageSize: 1
+    currentPage: 1
+  ) {
+    total_count
+    page_info {
+      current_page
+      page_size
+      total_pages
+    }
+    items {
+      name
+      children {
+        name
+      }
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayHasKey('page_info', $response['categories']);
+        $this->assertEquals(6, $response['categories']['total_count']);
+        $pageInfo = $response['categories']['page_info'];
+        $this->assertEquals(1, $pageInfo['current_page']);
+        $this->assertEquals(1, $pageInfo['page_size']);
+        $this->assertEquals(6, $pageInfo['total_pages']);
+        $this->assertEquals('Category 1', $response['categories']['items'][0]['name']);
+        $this->assertCount(2, $response['categories']['items'][0]['children']);
+        $this->assertEquals('Category 1.1', $response['categories']['items'][0]['children'][0]['name']);
+        $this->assertEquals('Category 1.2', $response['categories']['items'][0]['children'][1]['name']);
+
+        $query2 = <<<QUERY
+{
+  categories(
+    filters: {ids: {in: ["3", "4", "5", "6", "7", "8", "9"]}}
+    pageSize: 1
+    currentPage: 2
+  ) {
+    total_count
+    page_info {
+      current_page
+      page_size
+      total_pages
+    }
+    items {
+      name
+      children {
+        name
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query2);
+        $this->assertEquals(6, $response['categories']['total_count']);
+        $this->assertArrayHasKey('page_info', $response['categories']);
+        $pageInfo = $response['categories']['page_info'];
+        $this->assertEquals(2, $pageInfo['current_page']);
+        $this->assertEquals(1, $pageInfo['page_size']);
+        $this->assertEquals(6, $pageInfo['total_pages']);
+        $this->assertEquals('Category 1.1', $response['categories']['items'][0]['name']);
+        $this->assertCount(1, $response['categories']['items'][0]['children']);
+        $this->assertEquals('Category 1.1.1', $response['categories']['items'][0]['children'][0]['name']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
     public function testPageSize()
     {
         $query = <<<QUERY

@@ -188,7 +188,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     {
         $this->setAllowRenameFiles(!$renameFileOff);
 
-        if (preg_match('/\bhttps?:\/\//i', $fileName, $matches)) {
+        if ($fileName && preg_match('/\bhttps?:\/\//i', $fileName, $matches)) {
             $url = str_replace($matches[0], '', $fileName);
             $driver = ($matches[0] === $this->httpScheme) ? DriverPool::HTTP : DriverPool::HTTPS;
             $tmpFilePath = $this->downloadFileFromUrl($url, $driver);
@@ -206,7 +206,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
             $result['name'] = self::getCorrectFileName($result['name']);
 
             // Directory and filename must be no more than 255 characters in length
-            if (strlen($result['file']) > $this->maxFilenameLength) {
+            if (strlen($result['file'] ?? '') > $this->maxFilenameLength) {
                 throw new \LengthException(
                     __('Filename is too long; must be %1 characters or less', $this->maxFilenameLength)
                 );

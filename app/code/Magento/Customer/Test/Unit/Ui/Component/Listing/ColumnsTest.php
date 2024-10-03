@@ -12,6 +12,7 @@ use Magento\Customer\Ui\Component\ColumnFactory;
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
 use Magento\Customer\Ui\Component\Listing\Columns;
+use Magento\Customer\Ui\Component\Listing\Filter\FilterConfigProviderInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Ui\Component\Listing\Columns\ColumnInterface;
@@ -56,6 +57,11 @@ class ColumnsTest extends TestCase
     protected $component;
 
     /**
+     * @var FilterConfigProviderInterface|MockObject
+     */
+    private $textFilterConfigProvider;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -86,11 +92,24 @@ class ColumnsTest extends TestCase
         )->disableOriginalConstructor()
             ->getMock();
 
+        $this->textFilterConfigProvider = $this->getMockForAbstractClass(FilterConfigProviderInterface::class);
+        $this->textFilterConfigProvider->method('getConfig')
+            ->willReturn(
+                [
+                    'conditionType' => 'like'
+                ]
+            );
+
         $this->component = new Columns(
             $this->context,
             $this->columnFactory,
             $this->attributeRepository,
-            $this->inlineEditUpdater
+            $this->inlineEditUpdater,
+            [],
+            [],
+            [
+                'text' => $this->textFilterConfigProvider
+            ]
         );
     }
 
@@ -141,7 +160,7 @@ class ColumnsTest extends TestCase
     public function testPrepareWithUpdateColumn(): void
     {
         $attributeCode = 'billing_attribute_code';
-        $backendType = 'backend-type';
+        $frontendInput = 'text';
         $attributeData = [
             'attribute_code' => 'billing_attribute_code',
             'frontend_input' => 'text',
@@ -176,28 +195,37 @@ class ColumnsTest extends TestCase
             ->willReturn([]);
         $this->column
             ->method('setData')
-            ->withConsecutive(
-                [
-                    'config',
-                    [
-                        'options' => [
-                            [
-                                'label' => 'Label',
-                                'value' => 'Value'
+            ->willReturnCallback(function (...$args) use ($attributeCode, $frontendInput) {
+                static $callCount = 0;
+                $callCount++;
+                if ($callCount === 1 && $args === [
+                        'config',
+                        [
+                            'options' => [
+                                [
+                                    'label' => 'Label',
+                                    'value' => 'Value'
+                                ]
                             ]
                         ]
-                    ]
-                ],
-                [
-                    'config',
-                    [
-                        'name' => $attributeCode,
-                        'dataType' => $backendType,
-                        'filter' => 'text',
-                        'visible' => true
-                    ]
-                ]
-            );
+                    ]) {
+                    return null;
+                }
+                if ($callCount === 2 && $args === [
+                        'config',
+                        [
+                            'name' => $attributeCode,
+                            'dataType' => $frontendInput,
+                            'filter' => [
+                                'filterType' => 'text',
+                                'conditionType' => 'like',
+                            ],
+                            'visible' => true
+                        ]
+                    ]) {
+                    return null;
+                }
+            });
 
         $this->component->addColumn($attributeData, $attributeCode);
         $this->component->prepare();
@@ -247,10 +275,10 @@ class ColumnsTest extends TestCase
             ->willReturn(['editor' => 'text']);
         $this->column
             ->method('setData')
-            ->withConsecutive(
-                [
-                    'config',
-                    [
+            ->willReturnCallback(function ($arg1, $arg2) {
+                static $callCount = 0;
+                $callCount++;
+                if ($callCount == 1 && $arg1 == 'config' && $arg2 == [
                         'editor' => 'text',
                         'options' => [
                             [
@@ -258,16 +286,17 @@ class ColumnsTest extends TestCase
                                 'value' => 'Value'
                             ]
                         ]
-                    ]
-                ],
-                [
-                    'config',
-                    [
+                    ]) {
+                    return null;
+                }
+
+                if ($callCount === 2 && $arg1 === 'config' && $arg2 === [
                         'editor' => 'text',
                         'visible' => true
-                    ]
-                ]
-            );
+                    ]) {
+                     return null;
+                }
+            });
 
         $this->component->addColumn($attributeData, $attributeCode);
         $this->component->prepare();

@@ -8,8 +8,10 @@ namespace Magento\PageCache\Model;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
+use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\PageCache\Model\Cache\Type;
 use Magento\PageCache\Model\Varnish\VclGeneratorFactory;
 
 /**
@@ -50,16 +52,25 @@ class Config
     protected $_scopeConfig;
 
     /**
+     * XML path to Varnish 7 config template path
+     */
+    public const VARNISH_7_CONFIGURATION_PATH = 'system/full_page_cache/varnish7/path';
+
+    /**
      * XML path to Varnish 6 config template path
      */
     public const VARNISH_6_CONFIGURATION_PATH = 'system/full_page_cache/varnish6/path';
 
     /**
+     * @deprecated Varnish 5 is EOL
+     * @see VARNISH_6_CONFIGURATION_PATH
      * XML path to Varnish 5 config template path
      */
     public const VARNISH_5_CONFIGURATION_PATH = 'system/full_page_cache/varnish5/path';
 
     /**
+     * @deprecated Varnish 4 is EOL
+     * @see VARNISH_6_CONFIGURATION_PATH
      * XML path to Varnish 4 config template path
      */
     public const VARNISH_4_CONFIGURATION_PATH = 'system/full_page_cache/varnish4/path';
@@ -138,7 +149,8 @@ class Config
      *
      * @param string $vclTemplatePath
      * @return string
-     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0
+     * @see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     public function getVclFile($vclTemplatePath)
     {
@@ -148,17 +160,17 @@ class Config
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         switch ($vclTemplatePath) {
+            case self::VARNISH_7_CONFIGURATION_PATH:
+                $version = 7;
+                break;
             case self::VARNISH_6_CONFIGURATION_PATH:
                 $version = 6;
                 break;
-            case self::VARNISH_5_CONFIGURATION_PATH:
-                $version = 5;
-                break;
             default:
-                $version = 4;
+                $version = 6;
         }
         $sslOffloadedHeader = $this->_scopeConfig->getValue(
-            \Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER
+            Request::XML_PATH_OFFLOADER_HEADER
         );
         $vclGenerator = $this->vclGeneratorFactory->create(
             [
@@ -177,7 +189,8 @@ class Config
      * Prepare data for VCL config
      *
      * @return array
-     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0
+     * @see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getReplacements()
     {
@@ -192,7 +205,7 @@ class Config
             '/* {{ ssl_offloaded_header }} */' => str_replace(
                 '_',
                 '-',
-                $this->_scopeConfig->getValue(\Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER)
+                $this->_scopeConfig->getValue(Request::XML_PATH_OFFLOADER_HEADER) ?? ''
             ),
             '/* {{ grace_period }} */' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_GRACE_PERIOD)
         ];
@@ -207,7 +220,8 @@ class Config
      * }
      *
      * @return mixed|null|string
-     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0
+     * @see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getAccessList()
     {
@@ -227,12 +241,14 @@ class Config
 
     /**
      * Get regexs for design exceptions
+     *
      * Different browser user-agents may use different themes
      * Varnish supports regex with internal modifiers only so
      * we have to convert "/pattern/iU" into "(?Ui)pattern"
      *
      * @return string
-     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0
+     * @see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getDesignExceptions()
     {
@@ -246,7 +262,7 @@ class Config
         if ($expressions) {
             $rules = array_values($this->serializer->unserialize($expressions));
             foreach ($rules as $i => $rule) {
-                if (preg_match('/^[\W]{1}(.*)[\W]{1}(\w+)?$/', $rule['regexp'], $matches)) {
+                if (preg_match('/^[\W]{1}(.*)[\W]{1}(\w+)?$/', $rule['regexp'] ?? '', $matches)) {
                     if (!empty($matches[2])) {
                         $pattern = sprintf("(?%s)%s", $matches[2], $matches[1]);
                     } else {
@@ -267,6 +283,6 @@ class Config
      */
     public function isEnabled()
     {
-        return $this->_cacheState->isEnabled(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER);
+        return $this->_cacheState->isEnabled(Type::TYPE_IDENTIFIER);
     }
 }

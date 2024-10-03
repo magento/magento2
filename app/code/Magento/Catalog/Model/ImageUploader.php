@@ -183,7 +183,9 @@ class ImageUploader
      */
     public function getFilePath($path, $imageName)
     {
-        return rtrim($path, '/') . '/' . ltrim($imageName, '/');
+        $path = $path !== null ? rtrim($path, '/') : '';
+        $imageName = $imageName !== null ? ltrim($imageName, '/') : '';
+        return $path . '/' . $imageName;
     }
 
     /**
@@ -256,7 +258,7 @@ class ImageUploader
         /**
          * Workaround for prototype 1.7 methods "isJSON", "evalJSON" on Windows OS
          */
-        $result['tmp_name'] = str_replace('\\', '/', $result['tmp_name']);
+        $result['tmp_name'] = isset($result['tmp_name']) ? str_replace('\\', '/', $result['tmp_name']) : '';
         $result['url'] = $this->storeManager
                 ->getStore()
                 ->getBaseUrl(

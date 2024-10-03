@@ -104,7 +104,15 @@ class ImageMagick extends AbstractAdapter
         $this->_getFileAttributes();
 
         try {
-            $this->_imageHandler = new \Imagick($this->_fileName);
+            if (is_callable('exif_imagetype')) {
+                $fileType = exif_imagetype($this->_fileName);
+
+                if ($fileType === IMAGETYPE_ICO) {
+                    $filename = 'ico:' . $this->_fileName;
+                }
+            }
+
+            $this->_imageHandler = new \Imagick($filename);
         } catch (\ImagickException $e) {
             //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new LocalizedException(
@@ -163,7 +171,7 @@ class ImageMagick extends AbstractAdapter
      */
     protected function _applyOptions()
     {
-        $this->_imageHandler->setImageCompressionQuality($this->quality());
+        $this->_imageHandler->setImageCompressionQuality((int)$this->quality());
         $this->_imageHandler->setImageCompression(\Imagick::COMPRESSION_JPEG);
         $this->_imageHandler->setImageUnits(\Imagick::RESOLUTION_PIXELSPERINCH);
         $this->_imageHandler->setImageResolution(
@@ -326,8 +334,8 @@ class ImageMagick extends AbstractAdapter
                 $watermark->sampleImage($this->_imageSrcWidth, $this->_imageSrcHeight);
                 break;
             case self::POSITION_CENTER:
-                $positionX = ($this->_imageSrcWidth - $watermark->getImageWidth()) / 2;
-                $positionY = ($this->_imageSrcHeight - $watermark->getImageHeight()) / 2;
+                $positionX = (int) (($this->_imageSrcWidth - $watermark->getImageWidth()) / 2);
+                $positionY = (int) (($this->_imageSrcHeight - $watermark->getImageHeight()) / 2);
                 break;
             case self::POSITION_TOP_RIGHT:
                 $positionX = $this->_imageSrcWidth - $watermark->getImageWidth();

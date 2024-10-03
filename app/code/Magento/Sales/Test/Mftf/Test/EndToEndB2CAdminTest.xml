@@ -31,13 +31,18 @@
         <!--Prerequisites-->
         <!--Create store view to ensure multiple store views-->
         <comment userInput="Create prerequisite store view" stepKey="createStoreViewComment" before="createStoreView"/>
-        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" before="navigateToNewOrderPage"/>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" before="navigateToNewOrderPage">
+            <argument name="customStore" value="customStore"/>
+        </actionGroup>
 
         <!--Admin creates order-->
         <comment userInput="Admin creates order" stepKey="adminCreateOrderComment" before="navigateToNewOrderPage"/>
-        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage" after="deleteCategory"/>
+        <actionGroup ref="AdminNavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage" after="deleteCategory"/>
 
-        <actionGroup ref="CheckRequiredFieldsNewOrderFormActionGroup" stepKey="checkRequiredFieldsNewOrder" after="navigateToNewOrderPage"/>
+        <actionGroup ref="AdminSelectStoreDuringOrderCreationActionGroup" stepKey="selectCustomStore" after="navigateToNewOrderPage">
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+        <actionGroup ref="CheckRequiredFieldsNewOrderFormActionGroup" stepKey="checkRequiredFieldsNewOrder" after="selectCustomStore"/>
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage" after="checkRequiredFieldsNewOrder"/>
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder" after="scrollToTopOfOrderFormPage">
             <argument name="product" value="SimpleProduct"/>
@@ -226,13 +231,13 @@
         <!--Filter order grid by status-->
         <comment userInput="Admin filters order grid by 'Status'" stepKey="filterOrderGridByStatusComment" after="dontSeeSecondOrderInGrid"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterBeforeStatusFilter" after="filterOrderGridByStatusComment"/>
-        <actionGroup ref="FilterOrderGridByStatusActionGroup" stepKey="filterOrderGridByPendingStatus" after="clearFilterBeforeStatusFilter">
-            <argument name="status" value="OrderStatus.pending"/>
+        <actionGroup ref="FilterAdminOrderGridByStatusActionGroup" stepKey="filterOrderGridByPendingStatus" after="clearFilterBeforeStatusFilter">
+            <argument name="orderStatus" value="OrderStatus.pending"/>
         </actionGroup>
         <dontSee selector="{{AdminDataGridTableSection.column('Status')}}" userInput="{{OrderStatus.closed}}" stepKey="dontSeeClosedStatusInOrderGrid" after="filterOrderGridByPendingStatus"/>
         <see selector="{{AdminDataGridTableSection.column('Status')}}" userInput="{{OrderStatus.pending}}" stepKey="seePendingStatusInOrderGrid" after="dontSeeClosedStatusInOrderGrid"/>
-        <actionGroup ref="FilterOrderGridByStatusActionGroup" stepKey="filterOrderGridByClosedStatus" after="seePendingStatusInOrderGrid">
-            <argument name="status" value="OrderStatus.closed"/>
+        <actionGroup ref="FilterAdminOrderGridByStatusActionGroup" stepKey="filterOrderGridByClosedStatus" after="seePendingStatusInOrderGrid">
+            <argument name="orderStatus" value="OrderStatus.closed"/>
         </actionGroup>
         <see selector="{{AdminDataGridTableSection.column('Status')}}" userInput="{{OrderStatus.closed}}" stepKey="seeClosedStatusInOrderGrid" after="filterOrderGridByClosedStatus"/>
         <dontSee selector="{{AdminDataGridTableSection.column('Status')}}" userInput="{{OrderStatus.pending}}" stepKey="dontSeePendingStatusInOrderGrid" after="seeClosedStatusInOrderGrid"/>
@@ -264,7 +269,7 @@
         <seeNumberOfElements selector="{{AdminDataGridTableSection.rows}}" userInput="1" stepKey="see1RowOnSecondPage" after="seeOnSecondPageOrderGrid"/>
         <actionGroup ref="AdminDataGridSelectPerPageActionGroup" stepKey="select50OrdersPerPage" after="see1RowOnSecondPage">
             <!--@TODO Change this to scalar when MQE-498 is implemented-->
-            <argument name="perPage" value="Const.fifty"/>
+            <argument name="perPage" value="50"/>
         </actionGroup>
         <seeNumberOfElements selector="{{AdminDataGridTableSection.rows}}" parameterArray="[2,50]" stepKey="seeCorrectNumberOfRowsPerPage" after="select50OrdersPerPage"/>
 
@@ -289,5 +294,8 @@
         <!--Delete store view created as prerequisites-->
         <comment userInput="Clean up store view" stepKey="cleanUpStoreView" before="deleteStoreView"/>
         <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex" after="deleteStoreView">
+            <argument name="indices" value=""/>
+        </actionGroup>
     </test>
 </tests>

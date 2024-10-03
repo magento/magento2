@@ -125,6 +125,7 @@ class Minifier implements MinifierInterface
 
                 return '__MINIFIED_HEREDOC__' .(count($heredocs) - 1);
             },
+            // phpstan:ignore
             ($content ?? '')
         );
         $content = preg_replace(
@@ -147,7 +148,7 @@ class Minifier implements MinifierInterface
                                 '#(?<!:|\'|")//[^\n\r<]*(\?\>)#',
                                 ' $1',
                                 preg_replace(
-                                    '#(?<!:)//[^\n\r]*(\<\?php)[^\n\r]*(\s\?\>)[^\n\r]*#',
+                                    '#(?<!:)//[^\n\r(\?\>)]*(\<\?php)[^\n\r]*(\s\?\>)[^\n\r]*#',
                                     '',
                                     ($content ?? '')
                                 )
@@ -170,7 +171,10 @@ class Minifier implements MinifierInterface
         if (!$this->htmlDirectory->isExist()) {
             $this->htmlDirectory->create();
         }
-        $this->htmlDirectory->writeFile($this->getRelativeGeneratedPath($file), rtrim($content));
+        $this->htmlDirectory->writeFile(
+            $this->getRelativeGeneratedPath($file),
+            $content !== null ? rtrim($content) : ''
+        );
     }
 
     /**

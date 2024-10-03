@@ -19,24 +19,37 @@ class AddressUpdate
     private $attribute;
 
     /**
+     * Global configuration storage.
+     *
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $globalConfig;
+
+    /**
      * AddressUpdate constructor.
      * @param \Magento\Sales\Model\ResourceModel\GridPool $gridPool
      * @param \Magento\Sales\Model\ResourceModel\Attribute $attribute
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      */
     public function __construct(
         \Magento\Sales\Model\ResourceModel\GridPool $gridPool,
-        \Magento\Sales\Model\ResourceModel\Attribute $attribute
+        \Magento\Sales\Model\ResourceModel\Attribute $attribute,
+        \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
     ) {
         $this->gridPool = $gridPool;
         $this->attribute = $attribute;
+        $this->globalConfig = $globalConfig;
     }
 
     /**
+     * Attach addresses to invoices
+     *
      * @param \Magento\Sales\Model\ResourceModel\Order\Handler\Address $subject
      * @param \Magento\Sales\Model\ResourceModel\Order\Handler\Address $result
      * @param \Magento\Sales\Model\Order $order
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function afterProcess(
         \Magento\Sales\Model\ResourceModel\Order\Handler\Address $subject,
@@ -68,8 +81,7 @@ class AddressUpdate
                     $this->attribute->saveAttribute($invoice, $invoiceAttributesForSave);
                 }
             }
-
-            if ($orderInvoiceHasChanges) {
+            if ($orderInvoiceHasChanges && !$this->globalConfig->getValue('dev/grid/async_indexing')) {
                 $this->gridPool->refreshByOrderId($order->getId());
             }
         }

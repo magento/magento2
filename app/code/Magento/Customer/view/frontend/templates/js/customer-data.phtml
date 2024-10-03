@@ -3,10 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\Customer\ViewModel\Customer\Data;
+use Magento\Framework\App\ObjectManager;
+use Magento\Customer\ViewModel\CookieSettings;
 
 /** @var \Magento\Customer\Block\CustomerData $block */
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+/** @var Auth $auth */
+$auth = $block->getAuth() ?? ObjectManager::getInstance()->get(Auth::class);
+/** @var JsonSerializer $jsonSerializer */
+$jsonSerializer = $block->getJsonSerializer() ??
+    ObjectManager::getInstance()->get(JsonSerializer::class);
+$customerDataUrl = $block->getCustomerDataUrl('customer/account/updateSession');
+$expirableSectionNames = $block->getExpirableSectionNames();
+/** @var CookieSettings $cookieSettings */
+$cookieSettings = $block->getCookieSettings();
 ?>
 <script type="text/x-magento-init">
     {
@@ -14,12 +26,13 @@
             "Magento_Customer/js/customer-data": {
                 "sectionLoadUrl": "<?= $block->escapeJs($block->getCustomerDataUrl('customer/section/load')) ?>",
                 "expirableSectionLifetime": <?= (int)$block->getExpirableSectionLifetime() ?>,
-                "expirableSectionNames": <?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)
-                    ->jsonEncode($block->getExpirableSectionNames()) ?>,
+                "expirableSectionNames": <?= /* @noEscape */ $jsonSerializer->serialize(
+                    $expirableSectionNames
+                ) ?>,
                 "cookieLifeTime": "<?= $block->escapeJs($block->getCookieLifeTime()) ?>",
-                "updateSessionUrl": "<?= $block->escapeJs(
-                    $block->getCustomerDataUrl('customer/account/updateSession')
-                ) ?>"
+                "cookieDomain": "<?= $block->escapeJs($cookieSettings->getCookieDomain()) ?>",
+                "updateSessionUrl": "<?= $block->escapeJs($customerDataUrl) ?>",
+                "isLoggedIn": "<?= /* @noEscape */ $auth->isLoggedIn() ?>"
             }
         }
     }

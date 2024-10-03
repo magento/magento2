@@ -17,9 +17,7 @@ define([
 ], function ($, _, ko, sectionConfig, url) {
     'use strict';
 
-    var options = {
-            cookieLifeTime: 86400 //1 day by default
-        },
+    var options = {},
         storage,
         storageInvalidation,
         invalidateCacheBySessionTimeOut,
@@ -31,22 +29,6 @@ define([
 
     url.setBaseUrl(window.BASE_URL);
     options.sectionLoadUrl = url.build('customer/section/load');
-
-    /**
-     * Storage initialization
-     */
-    function initStorage() {
-        $.cookieStorage.setConf({
-            path: '/',
-            expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000),
-            samesite: 'lax'
-        });
-        storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
-        storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
-    }
-
-    // Initialize storage with default parameters to prevent JS errors while component still not initialized
-    initStorage();
 
     /**
      * @param {Object} invalidateOptions
@@ -65,10 +47,21 @@ define([
      * Invalidate Cache By Close Cookie Session
      */
     invalidateCacheByCloseCookieSession = function () {
+        var isLoggedIn = parseInt(options.isLoggedIn, 10) || 0;
+
         if (!$.cookieStorage.isSet('mage-cache-sessid')) {
-            $.cookieStorage.set('mage-cache-sessid', true);
             storage.removeAll();
         }
+
+        if (!$.localStorage.isSet('mage-customer-login')) {
+            $.localStorage.set('mage-customer-login', isLoggedIn);
+        }
+        if ($.localStorage.get('mage-customer-login') !== isLoggedIn) {
+            $.localStorage.set('mage-customer-login', isLoggedIn);
+            storage.removeAll();
+        }
+
+        $.cookieStorage.set('mage-cache-sessid', true);
     };
 
     dataProvider = {
@@ -234,7 +227,21 @@ define([
         /**
          * Storage init
          */
-        initStorage: initStorage,
+        initStorage: function () {
+            $.cookieStorage.setConf({
+                path: '/',
+                expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000)
+            });
+
+            if (options.cookieDomain) {
+                $.cookieStorage.setConf({
+                    domain: options.cookieDomain
+                });
+            }
+
+            storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
+            storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
+        },
 
         /**
          * Retrieve the list of sections that has expired since last page reload.
@@ -262,7 +269,9 @@ define([
 
             // process sections that can expire due to storage information inconsistency
             _.each(cookieSectionTimestamps, function (cookieSectionTimestamp, sectionName) {
-                sectionData = storage.get(sectionName);
+                if (storage !== undefined) {
+                    sectionData = storage.get(sectionName);
+                }
 
                 if (typeof sectionData === 'undefined' ||
                     typeof sectionData === 'object' &&
@@ -399,10 +408,7 @@ define([
          */
         'Magento_Customer/js/customer-data': function (settings) {
             options = settings;
-
-            // re-init storage with a new settings
             customerData.initStorage();
-
             invalidateCacheBySessionTimeOut(settings);
             invalidateCacheByCloseCookieSession();
             customerData.init();
@@ -423,7 +429,7 @@ define([
     $(document).on('submit', function (event) {
         var sections;
 
-        if (event.target.method.match(/post|put|delete/i)) {
+        if (event.target.hasAttribute('method') && event.target.getAttribute('method').match(/post|put|delete/i)) {
             sections = sectionConfig.getAffectedSections(event.target.action);
 
             if (sections) {

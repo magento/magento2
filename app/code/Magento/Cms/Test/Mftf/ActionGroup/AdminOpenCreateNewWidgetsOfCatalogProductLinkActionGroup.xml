@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenCreateNewWidgetsOfCatalogProductLinkActionGroup">
+        <annotations>
+            <description>Open create new Widgets.</description>
+        </annotations>
+        <arguments>
+            <argument name="WidgetType" type="string" defaultValue="Catalog Product Link"/>
+            <argument name="WidgetTheme" type="string" defaultValue="Magento Luma"/>
+            <argument name="WidgetTitle" type="string" defaultValue="NewWidget"/>
+            <argument name="AssigntoStoreViews" type="string" defaultValue="All Store Views"/>
+            <argument name="WidgetDisplayOn" type="string" defaultValue="All Pages"/>
+            <argument name="Container" type="string" defaultValue="Main Content Area"/>
+            <argument name="Template" type="string" defaultValue="Product Link Block Template"/>
+        </arguments>
+
+        <amOnPage url="{{CmsNewWidgetsPage.url}}" stepKey="navigateToCreateWidgetsPage"/>
+        <waitForPageLoad stepKey="wait1"/>
+
+        <selectOption selector="{{CmsNewWidgetsSettingSection.WidgetType}}" userInput="{{WidgetType}}" stepKey="selectCMSStaticBlock"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear1"/>
+        <selectOption selector="{{CmsNewWidgetsSettingSection.WidgetTheme}}" userInput="{{WidgetTheme}}" stepKey="selectTemplate"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear2"/>
+        <click selector="{{CmsNewWidgetsSettingSection.ContinueButton}}" stepKey="clickContinueButton"/>
+        <waitForPageLoad stepKey="wait2"/>
+
+        <fillField selector="{{CmsNewWidgetStoreforntPropertiesSection.WidgetTitle}}" userInput="{{WidgetTitle}}" stepKey="fillFieldTitle"/>
+        <selectOption selector="{{CmsNewWidgetStoreforntPropertiesSection.AssigntoStoreViews}}" userInput="{{AssigntoStoreViews}}" stepKey="selectView"/>
+        <click selector="{{CmsNewWidgetStoreforntPropertiesSection.AddLayout}}" stepKey="clickAddLayoutButton"/>
+        <scrollTo selector="{{CmsNewWidgetStoreforntPropertiesSection.AddLayout}}" stepKey="scrollToAddLayoutTab"/>
+        <waitForPageLoad stepKey="wait3"/>
+
+        <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.DisplayOn}}" userInput="{{WidgetDisplayOn}}" stepKey="selectDispaly"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear3"/>
+        <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.Container}}" userInput="{{Container}}" stepKey="selectContainer"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear4"/>
+        <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.Template}}" userInput="{{Template}}" stepKey="selectTemplate2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear5"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <waitForPageLoad stepKey="wait4"/>
+
+        <click selector="{{CmsNewWidgetOptionsSection.WidgetOptions}}" stepKey="clickButton22"/>
+        <click selector="{{CmsNewWidgetOptionsSection.SelectProduct}}" stepKey="clickSelectProductButton"/>
+        <waitForPageLoad stepKey="wait5"/>
+        <click selector="{{CmsNewWidgetOptionsSection.FirstProduct}}" stepKey="clickFirstProductToSelect"/>
+        <waitForPageLoad stepKey="wait6"/>
+        <click selector="{{CmsNewWidgetOptionsSection.SaveWidget}}" stepKey="clickSaveWidgetButton"/>
+        <waitForPageLoad stepKey="wait7"/>
+
+        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+    </actionGroup>
+</actionGroups>

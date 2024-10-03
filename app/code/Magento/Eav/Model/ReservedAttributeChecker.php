@@ -18,7 +18,7 @@ use Magento\Framework\Exception\LocalizedException;
 class ReservedAttributeChecker implements ReservedAttributeCheckerInterface
 {
     /**
-     * @var ReservedAttributeCheckerInterface[][]
+     * @var ReservedAttributeCheckerInterface[]
      */
     private $validators;
 
@@ -37,7 +37,8 @@ class ReservedAttributeChecker implements ReservedAttributeCheckerInterface
     public function isReservedAttribute(AbstractAttribute $attribute): bool
     {
         $isReserved = false;
-        $validators = $this->validators[$attribute->getEntityType()->getEntityTypeCode()] ?? [];
+        $entityTypeCode = $this->getAttributeEntityTypeCode($attribute);
+        $validators = $this->validators[$entityTypeCode] ?? [];
         foreach ($validators as $validator) {
             $isReserved = $validator->isReservedAttribute($attribute);
             if ($isReserved === true) {
@@ -46,5 +47,22 @@ class ReservedAttributeChecker implements ReservedAttributeCheckerInterface
         }
 
         return $isReserved;
+    }
+
+    /**
+     * Returns attribute entity type code.
+     *
+     * @param AbstractAttribute $attribute
+     * @return string|null
+     */
+    private function getAttributeEntityTypeCode(AbstractAttribute $attribute): ?string
+    {
+        try {
+            $result = $attribute->getEntityType()->getEntityTypeCode();
+        } catch (LocalizedException $e) {
+            $result = null;
+        }
+
+        return $result;
     }
 }

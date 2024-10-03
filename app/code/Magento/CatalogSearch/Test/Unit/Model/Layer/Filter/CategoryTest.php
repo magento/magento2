@@ -173,17 +173,14 @@ class CategoryTest extends TestCase
             ->willReturn([]);
 
         $this->request->method('getParam')
-            ->withConsecutive([$requestField])
-            ->willReturnOnConsecutiveCalls(
-                function ($field) use ($requestField, $idField, $requestValue, $idValue) {
-                    switch ($field) {
-                        case $requestField:
-                            return $requestValue;
-                        case $idField:
-                            return $idValue;
-                    }
+            ->willReturnCallback(function ($field) use ($requestField, $idField, $requestValue, $idValue) {
+                switch ($field) {
+                    case $requestField:
+                        return $requestValue;
+                    case $idField:
+                        return $idValue;
                 }
-            );
+            });
 
         $result = $this->target->apply($this->request);
         $this->assertSame($this->target, $result);
@@ -192,20 +189,20 @@ class CategoryTest extends TestCase
     /**
      * @return array
      */
-    public function applyWithEmptyRequestDataProvider(): array
+    public static function applyWithEmptyRequestDataProvider(): array
     {
         return [
             [
                 'requestValue' => null,
-                'id' => 0
+                'idValue' => 0
             ],
             [
                 'requestValue' => 0,
-                'id' => false
+                'idValue' => false
             ],
             [
                 'requestValue' => 0,
-                'id' => null
+                'idValue' => null
             ]
         ];
     }
@@ -337,8 +334,13 @@ class CategoryTest extends TestCase
 
         $this->itemDataBuilder
             ->method('addItemData')
-            ->withConsecutive(['Category 1', 120, 10], ['Category 2', 5641, 45])
-            ->willReturnOnConsecutiveCalls($this->itemDataBuilder, $this->itemDataBuilder);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == 'Category 1' && $arg2 == 120 && $arg3 == 10) {
+                    return $this->itemDataBuilder;
+                } elseif ($arg1 == 'Category 2' && $arg2 == 5641 && $arg3 == 45) {
+                    return $this->itemDataBuilder;
+                }
+            });
         $this->itemDataBuilder->expects($this->once())
             ->method('build')
             ->willReturn($builtData);

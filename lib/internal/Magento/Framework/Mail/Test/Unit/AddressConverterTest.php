@@ -56,7 +56,7 @@ class AddressConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertDataProvider(): array
+    public static function convertDataProvider(): array
     {
         return [
             [
@@ -69,6 +69,18 @@ class AddressConverterTest extends TestCase
                 'email' => 'tést@example.com',
                 'name' => 'Test',
                 'emailExpected' => 'xn--tst-bma@example.com',
+                'nameExpected' => 'Test'
+            ],
+            [
+                'email' => 'test.-email@example.com',
+                'name' => 'Test',
+                'emailExpected' => 'test.-email@example.com',
+                'nameExpected' => 'Test'
+            ],
+            [
+                'email' => 'tést.-èmail@example.com',
+                'name' => 'Test',
+                'emailExpected' => 'xn--tst-bma.xn---mail-4ra@example.com',
                 'nameExpected' => 'Test'
             ]
         ];

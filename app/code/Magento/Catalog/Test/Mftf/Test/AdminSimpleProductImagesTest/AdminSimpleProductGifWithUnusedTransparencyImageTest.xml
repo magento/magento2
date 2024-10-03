@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSimpleProductGifWithUnusedTransparencyImageTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Using a GIF image with transparency color declared but not used as a product main image should not prevent the product grid from being rendered properly"/>
+            <title value="Using a GIF image with transparency color declared but not used as a product image"/>
+            <description value="Using a GIF image with transparency color declared but not used as a product main image should not prevent the product grid from being rendered properly"/>
+            <severity value="CRITICAL"/>
+            <useCaseId value="ACP2E-1632"/>
+            <testCaseId value="AC-8028"/>
+            <group value="Catalog"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="_defaultProduct" stepKey="firstProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="category" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="firstProduct" stepKey="deleteFirstProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Navigate to the product grid and edit the product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
+            <argument name="product" value="$$firstProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProducForEditByClickingRow1Column2InProductGrid"/>
+
+        <!-- Set the test GIF image as a main product image and save the product -->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProduct">
+            <argument name="image" value="GifImageWithUnusedTransparencyIndex"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+
+        <!-- Go back to the product grid and make sure the product is present and visible on the grid -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="returnToProductIndex"/>
+        <actionGroup ref="AssertProductOnAdminGridActionGroup" stepKey="assertFirstOnAdminGrid">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+
+        <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="resetProductGridBeforeLeaving"/>
+    </test>
+</tests>

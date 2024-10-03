@@ -69,4 +69,9 @@
     <type name="Magento\Webapi\Controller\Rest">
         <plugin name="webapiContorllerRestAsync" type="Magento\WebapiAsync\Plugin\ControllerRest" />
     </type>
+    <type name="Magento\AsynchronousOperations\Model\MassConsumerEnvelopeCallback">
+        <plugin name="storeIdFieldForAsynchronousOperationsMassConsumerEnvelopeCallback"
+                type="Magento\WebapiAsync\Plugin\AsynchronousOperations\MassConsumerEnvelopeCallback"
+        />
+    </type>
 </config>

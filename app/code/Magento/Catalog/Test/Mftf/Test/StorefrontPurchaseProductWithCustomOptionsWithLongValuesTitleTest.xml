@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-25479"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Create Simple Product with Custom Options-->
@@ -64,10 +65,11 @@
 
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
 
-        <waitForElementVisible selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsVisible"/>
-        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="exposeMiniCart"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsVisible"/>
+        <waitForElementNotVisible selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" stepKey="waitForCartItemsActive"/>
+        <click selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="exposeMiniCart"/>
 
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskForCartItem"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.cartItems}}" stepKey="waitForCartItemsAreaActive"/>
 
         <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="$createProduct.name$" stepKey="seeProductInCart"/>
@@ -96,11 +98,11 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnOrdersPage"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappearOnOrdersPage"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
         <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="fillOrderNum"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchOrderNum"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnSearch"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappearOnSearch"/>
 
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
 

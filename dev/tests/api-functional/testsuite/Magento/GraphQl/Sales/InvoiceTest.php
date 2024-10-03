@@ -7,9 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Sales;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrderFixture;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
+use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
+use Magento\Checkout\Test\Fixture\SetGuestEmail as SetGuestEmailFixture;
+use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\Registry;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\CustomerCart;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
+use Magento\Sales\Test\Fixture\Invoice as InvoiceFixture;
+use Magento\Sales\Test\Fixture\InvoiceComment as InvoiceCommentFixture ;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
@@ -408,6 +422,64 @@ QUERY;
         );
         $this->assertTotalsAndShippingWithTaxesAndDiscountsForOneQty($customerOrderItem['invoices'][0]['total']);
         $this->deleteOrder();
+    }
+
+    #[
+        DataFixture(Customer::class, ['email' => 'customer@search.example.com'], as: 'customer'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
+        DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], 'invoice'),
+        DataFixture(InvoiceCommentFixture::class, [
+            'parent_id' => '$invoice.id$',
+            'comment' => 'visible_comment',
+            'is_visible_on_front' => 1,
+        ]),
+        DataFixture(InvoiceCommentFixture::class, [
+            'parent_id' => '$invoice.id$',
+            'comment' => 'non_visible_comment',
+            'is_visible_on_front' => 0,
+        ]),
+    ]
+    public function testInvoiceCommentsQuery()
+    {
+        $query =
+            <<<QUERY
+{
+  customer {
+    orders {
+      items {
+        invoices {
+          comments {
+            message
+            timestamp
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $currentEmail = 'customer@search.example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
+
+        $invoice = $response['customer']['orders']['items'][0]['invoices'][0];
+        $this->assertCount(1, $invoice['comments']);
+        $this->assertEquals('visible_comment', $invoice['comments'][0]['message']);
+        $this->assertNotEmpty($invoice['comments'][0]['timestamp']);
     }
 
     /**

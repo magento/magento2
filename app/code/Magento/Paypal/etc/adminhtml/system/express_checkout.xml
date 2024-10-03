@@ -13,7 +13,7 @@
         <comment>Add PayPal as an additional payment method to your checkout page.</comment>
         <attribute type="activity_path">payment/paypal_express/active</attribute>
         <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
-            <comment>https://docs.magento.com/user-guide/payment/paypal-express-checkout.html</comment>
+            <comment>https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/payments/paypal/paypal-express-checkout.html</comment>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
         </group>
         <group id="express_checkout_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
@@ -108,6 +108,7 @@
                     <config_path>payment/paypal_express/buyer_country</config_path>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                     <attribute type="shared">1</attribute>
+                    <tooltip>The buyer country determines which funding sources are eligible for a given buyer during testing.</tooltip>
                     <depends>
                         <field id="sandbox_flag">1</field>
                     </depends>

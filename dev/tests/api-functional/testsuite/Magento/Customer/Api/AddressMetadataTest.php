@@ -18,9 +18,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class AddressMetadataTest extends WebapiAbstract
 {
-    const SERVICE_NAME = "customerAddressMetadataV1";
-    const SERVICE_VERSION = "V1";
-    const RESOURCE_PATH = "/V1/attributeMetadata/customerAddress";
+    private const SERVICE_NAME = "customerAddressMetadataV1";
+    private const SERVICE_VERSION = "V1";
+    private const RESOURCE_PATH = "/V1/attributeMetadata/customerAddress";
 
     /**
      * @var Config $config
@@ -84,7 +84,7 @@ class AddressMetadataTest extends WebapiAbstract
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getAttributeMetadataDataProvider()
+    public static function getAttributeMetadataDataProvider()
     {
         return [
             Address::POSTCODE => [
@@ -289,9 +289,9 @@ class AddressMetadataTest extends WebapiAbstract
      *
      * @return array
      */
-    public function getAttributesDataProvider()
+    public static function getAttributesDataProvider()
     {
-        $attributeMetadata = $this->getAttributeMetadataDataProvider();
+        $attributeMetadata = self::getAttributeMetadataDataProvider();
         return [
             [
                 'customer_address_edit',
@@ -370,22 +370,6 @@ class AddressMetadataTest extends WebapiAbstract
             }
         }
         return [$expectedResult, $actualResultSet];
-    }
-
-    /**
-     * Remove test attribute
-     */
-    public static function tearDownAfterClass(): void
-    {
-        parent::tearDownAfterClass();
-        /** @var \Magento\Customer\Model\Attribute $attribute */
-        $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\Attribute::class
-        );
-        foreach (['custom_attribute1', 'custom_attribute2'] as $attributeCode) {
-            $attribute->loadByCode('customer_address', $attributeCode);
-            $attribute->delete();
-        }
     }
 
     /**

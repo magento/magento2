@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-106"/>
             <group value="GroupedProduct"/>
+            <group value="cloud"/>
+            <!-- Excluded from PR builds due to AC-12124 -->
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -32,6 +35,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteGroupedProduct">
                 <argument name="sku" value="{{GroupedProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>

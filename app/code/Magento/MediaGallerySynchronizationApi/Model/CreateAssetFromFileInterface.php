@@ -12,6 +12,7 @@ use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 
 /**
  * Create media asset object from the media file
+ * @api
  */
 interface CreateAssetFromFileInterface
 {

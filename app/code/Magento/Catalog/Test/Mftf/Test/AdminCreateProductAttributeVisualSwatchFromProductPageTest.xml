@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateProductAttributeVisualSwatchFromProductPageTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create Product Attributes"/>
+            <title value="Admin should be able to create a Visual swatch product attribute from product page"/>
+            <description value="Admin should be able to create a Visual swatch product attribute from product page"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-42510"/>
+            <group value="Catalog"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
+                <argument name="ProductAttribute" value="{{visualSwatchProductAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute"/>
+            <comment userInput="BIC workaround" stepKey="clickDelete"/>
+            <comment userInput="BIC workaround" stepKey="clickOk"/>
+            <comment userInput="BIC workaround" stepKey="waitForDeletion"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Open Product Index Page and open Create product attribute Page-->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct"/>
+
+        <!-- Create product attribute-->
+        <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickAddAttributeBtn"/>
+        <waitForText userInput="Select Attribute" stepKey="checkNewAttributePopUpAppeared"/>
+        <click selector="{{AdminProductFormAttributeSection.createNewAttribute}}" stepKey="clickCreateNewAttribute"/>
+        <waitForElementVisible selector="{{AdminProductFormNewAttributeSection.attributeLabel}}" stepKey="waitForAttrLabel" />
+        <fillField selector="{{AdminCreateNewProductAttributeSection.defaultLabel}}" userInput="{{visualSwatchProductAttribute.attribute_code}}" stepKey="fillAttributeLabel"/>
+        <selectOption selector="{{AdminCreateNewProductAttributeSection.inputType}}" userInput="{{visualSwatchProductAttribute.frontend_input}}" stepKey="selectTextField"/>
+        <actionGroup ref="AdminCreateAttributeVisualSwatchNthValueActionGroup" stepKey="createValue">
+            <argument name="row" value="0"></argument>
+            <argument name="adminName" value="{{visualSwatchProductAttribute.option1_admin}}"></argument>
+            <argument name="storeName" value="{{visualSwatchProductAttribute.option1_store}}"></argument>
+        </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="clickOnSaveAttribute"/>
+        <waitForPageLoad stepKey="waitForAttributeToSave"/>
+    </test>
+</tests>

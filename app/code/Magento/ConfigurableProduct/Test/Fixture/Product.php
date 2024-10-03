@@ -53,19 +53,19 @@ class Product extends \Magento\Catalog\Test\Fixture\Product
      * @param ServiceFactory $serviceFactory
      * @param ProcessorInterface $dataProcessor
      * @param DataMerger $dataMerger
-     * @param Config $eavConfig
      * @param ProductRepositoryInterface $productRepository
+     * @param Config $eavConfig
      * @param VariationMatrix $variationMatrix
      */
     public function __construct(
         ServiceFactory $serviceFactory,
         ProcessorInterface $dataProcessor,
         DataMerger $dataMerger,
-        Config $eavConfig,
         ProductRepositoryInterface $productRepository,
+        Config $eavConfig,
         VariationMatrix $variationMatrix
     ) {
-        parent::__construct($serviceFactory, $dataProcessor, $dataMerger);
+        parent::__construct($serviceFactory, $dataProcessor, $dataMerger, $productRepository);
         $this->eavConfig = $eavConfig;
         $this->variationMatrix = $variationMatrix;
         $this->productRepository = $productRepository;
@@ -197,15 +197,15 @@ class Product extends \Magento\Catalog\Test\Fixture\Product
         );
         $variationIndex = 0;
         foreach ($variations as $variation) {
-            foreach ($variation as $attributeId => $valueInfo) {
-                if (isset($links[$variationIndex]) && $links[$variationIndex] !== 0) {
+            if (isset($links[$variationIndex]) && $links[$variationIndex] !== 0) {
+                foreach ($variation as $attributeId => $valueInfo) {
                     $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeId);
                     $product = $this->productRepository->getById($links[$variationIndex]);
                     $product->setCustomAttribute($attribute->getAttributeCode(), $valueInfo['value']);
                     $this->productRepository->save($product);
                 }
-                $variationIndex++;
             }
+            $variationIndex++;
         }
     }
 }

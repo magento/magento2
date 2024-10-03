@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminIsDefaultWebsiteActionGroup">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Select the provided Website Name and select the is default .</description>
+        </annotations>
+        <arguments>
+            <argument name="websiteName" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="fillSearchWebsiteField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <see userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="verifyThatCorrectWebsiteFound"/>
+        <click selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="clickEditExistingStoreRow"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <click selector="{{AdminStoresGridSection.isDefaultUnCheckBox}}" stepKey="clickOnCheckBox"/>
+        <click selector="{{AdminNewWebsiteActionsSection.saveWebsite}}" stepKey="clickSaveWebsite"/>
+        <see userInput="You saved the website." stepKey="seeSavedMessage"/>
+    </actionGroup>
+</actionGroups>

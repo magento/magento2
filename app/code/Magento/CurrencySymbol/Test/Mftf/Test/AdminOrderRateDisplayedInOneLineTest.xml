@@ -78,7 +78,9 @@
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
-        <see selector="{{AdminOrderDetailsInformationSection.orderInformationTable}}" userInput="EUR / USD rate" stepKey="seeEURandUSDRate"/>
+        <actionGroup ref="AdminAssertCurrencyInOrderActionGroup" stepKey="seeEURandUSDRate">
+            <argument name="rate" value="EUR / USD rate"/>
+        </actionGroup>
         <grabMultiple selector="{{AdminOrderDetailsInformationSection.rate}}" stepKey="grabRate" />
         <assertEquals stepKey="assertSelectedCategories">
             <actualResult type="variable">grabRate</actualResult>

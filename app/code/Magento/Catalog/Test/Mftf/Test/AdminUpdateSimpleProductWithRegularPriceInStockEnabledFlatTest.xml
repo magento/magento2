@@ -37,6 +37,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{simpleProductEnabledFlat.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI stepKey="unsetFlatCatalogProduct" command="config:set catalog/frontend/flat_catalog_product 0"/>
         </after>
@@ -54,7 +55,9 @@
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{simpleProductEnabledFlat.sku}}" stepKey="fillSimpleProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{simpleProductEnabledFlat.price}}" stepKey="fillSimpleProductPrice"/>
         <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{simpleProductEnabledFlat.productTaxClass}}" stepKey="selectProductTaxClass"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductEnabledFlat.quantity}}" stepKey="fillSimpleProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillSimpleProductQuantity">
+            <argument name="productQty" value="{{simpleProductEnabledFlat.quantity}}"/>
+        </actionGroup>
         <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickAdvancedInventoryLink"/>
         <conditionalClick selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" dependentSelector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" visible="true" stepKey="checkUseConfigSettingsCheckBox"/>
         <selectOption selector="{{AdminProductFormAdvancedInventorySection.manageStock}}" userInput="No" stepKey="selectManageStock"/>

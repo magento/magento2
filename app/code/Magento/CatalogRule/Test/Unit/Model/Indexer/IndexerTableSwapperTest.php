@@ -48,6 +48,11 @@ class IndexerTableSwapperTest extends TestCase
 
         $this->adapterInterfaceMock = $this->getMockBuilder(AdapterInterface::class)
             ->getMockForAbstractClass();
+        $zendDbStatementInterfaceMock = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)
+            ->getMockForAbstractClass();
+        $this->adapterInterfaceMock->expects($this->any())
+            ->method('query')
+            ->willReturn($zendDbStatementInterfaceMock);
         /** @var \Zend_Db_Statement_Interface $statementInterfaceMock */
         $this->statementInterfaceMock = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)
             ->getMockForAbstractClass();
@@ -91,9 +96,14 @@ class IndexerTableSwapperTest extends TestCase
 
         $this->resourceConnectionMock
             ->method('getTableName')
-            ->withConsecutive([$originalTableName], [$this->stringStartsWith($originalTableName . '__temp')])
-            ->willReturnOnConsecutiveCalls($originalTableName, $temporaryTableName);
-
+            ->willReturnCallback(function ($arg) use ($originalTableName, $temporaryTableName) {
+                if ($arg == $originalTableName) {
+                    return $originalTableName;
+                } elseif (strpos($arg, $originalTableName . '__temp') === 0) {
+                    return $temporaryTableName;
+                }
+            });
+        
         $this->assertEquals(
             $temporaryTableName,
             $model->getWorkingTableName($originalTableName)
@@ -142,8 +152,13 @@ class IndexerTableSwapperTest extends TestCase
 
         $this->resourceConnectionMock
             ->method('getTableName')
-            ->withConsecutive([$originalTableName], [$this->stringStartsWith($originalTableName)])
-            ->willReturnOnConsecutiveCalls($originalTableName, $temporaryOriginalTableName);
+            ->willReturnCallback(function ($arg) use ($originalTableName, $temporaryOriginalTableName) {
+                if ($arg == $originalTableName) {
+                    return $originalTableName;
+                } elseif (strpos($arg, $originalTableName) === 0) {
+                    return $temporaryOriginalTableName;
+                }
+            });
         $model->expects($this->once())
             ->method('getWorkingTableName')
             ->with($originalTableName)

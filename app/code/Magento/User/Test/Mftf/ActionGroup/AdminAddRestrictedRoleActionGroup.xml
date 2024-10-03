@@ -17,6 +17,6 @@
         <remove keyForRemoval="waitForScopeSelection"/>
         <remove keyForRemoval="clickSaveRoleButton"/>
         <remove keyForRemoval="waitForPageLoad2"/>
-        <scrollTo selector="{{AdminEditRoleInfoSection.blockName('restrictedRole')}}"  x="0" y="-100" stepKey="scrollToResourceElement" after="selectResourceAccessCustom"/>
+        <scrollTo selector="{{AdminEditRoleInfoSection.blockName('restrictedRole')}}"  x="0" y="-120" stepKey="scrollToResourceElement" after="selectResourceAccessCustom"/>
     </actionGroup>
 </actionGroups>

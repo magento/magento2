@@ -160,6 +160,7 @@ class Address extends AbstractCustomer
      *
      * @var array
      * @deprecated 100.3.4 field not in use
+     * @see Nothing
      */
     protected $_regionParameters;
 
@@ -190,18 +191,21 @@ class Address extends AbstractCustomer
     /**
      * @var \Magento\Eav\Model\Config
      * @deprecated 100.3.4 field not-in use
+     * @see Nothing
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Customer\Model\AddressFactory
      * @deprecated 100.3.4 not utilized anymore
+     * @see Nothing
      */
     protected $_addressFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
      * @deprecated 100.3.4 the property isn't used
+     * @see Nothing
      */
     protected $dateTime;
 
@@ -268,7 +272,7 @@ class Address extends AbstractCustomer
      * @param array $data
      * @param CountryWithWebsitesSource|null $countryWithWebsites
      * @param AddressStorage|null $addressStorage
-     * @param Processor $indexerProcessor
+     * @param Processor|null $indexerProcessor
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -442,8 +446,8 @@ class Address extends AbstractCustomer
         /** @var $region \Magento\Directory\Model\Region */
         foreach ($this->_regionCollection as $region) {
             $countryNormalized = strtolower($region->getCountryId());
-            $regionCode = strtolower($region->getCode());
-            $regionName = strtolower($region->getDefaultName());
+            $regionCode = $region->getCode() !== null ? strtolower($region->getCode()) : '';
+            $regionName = $region->getDefaultName() !== null ? strtolower($region->getDefaultName()) : '';
             $this->_countryRegions[$countryNormalized][$regionCode] = $region->getId();
             $this->_countryRegions[$countryNormalized][$regionName] = $region->getId();
             $this->_regions[$region->getId()] = $region->getDefaultName();
@@ -512,7 +516,7 @@ class Address extends AbstractCustomer
     {
         //Preparing data for mass validation/import.
         $rows = [];
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $rows[] = $bunch;
         }
 
@@ -521,7 +525,7 @@ class Address extends AbstractCustomer
         $this->_dataSourceModel->getIterator()->rewind();
 
         //Importing
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+        while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $newRows = [];
             $updateRows = [];
             $attributes = [];
@@ -630,7 +634,8 @@ class Address extends AbstractCustomer
 
                 $value = $rowData[$attributeAlias];
 
-                if ($rowData[$attributeAlias] === null || !strlen($rowData[$attributeAlias])) {
+                if ($rowData[$attributeAlias] === null
+                    || (is_string($rowData[$attributeAlias]) && !strlen($rowData[$attributeAlias]))) {
                     if ($attributeParams['is_required']) {
                         continue;
                     }
@@ -685,12 +690,12 @@ class Address extends AbstractCustomer
     /**
      * Process row data, based on attirbute type
      *
-     * @param string $rowAttributeData
+     * @param string|array $rowAttributeData
      * @param array $attributeParams
      * @return \DateTime|int|string
      * @throws \Exception
      */
-    protected function getValueByAttributeType(string $rowAttributeData, array $attributeParams)
+    protected function getValueByAttributeType($rowAttributeData, array $attributeParams)
     {
         $multiSeparator = $this->getMultipleValueSeparator();
         $value = $rowAttributeData;
@@ -705,8 +710,14 @@ class Address extends AbstractCustomer
                 break;
             case 'multiselect':
                 $ids = [];
-                foreach (explode($multiSeparator, mb_strtolower($rowAttributeData)) as $subValue) {
-                    $ids[] = $this->getSelectAttrIdByValue($attributeParams, $subValue);
+                if (is_array($rowAttributeData)) {
+                    foreach ($rowAttributeData as $subValue) {
+                        $ids[] = $this->getSelectAttrIdByValue($attributeParams, mb_strtolower($subValue));
+                    }
+                } elseif (is_string($rowAttributeData)) {
+                    foreach (explode($multiSeparator, mb_strtolower($rowAttributeData)) as $subValue) {
+                        $ids[] = $this->getSelectAttrIdByValue($attributeParams, $subValue);
+                    }
                 }
                 $value = implode(',', $ids);
                 break;
@@ -876,7 +887,9 @@ class Address extends AbstractCustomer
 
                     if (in_array($attributeCode, $this->_ignoredAttributes)) {
                         continue;
-                    } elseif (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
+                    } elseif (isset($rowData[$attributeCode])
+                        && ((is_string($rowData[$attributeCode]) && strlen($rowData[$attributeCode]))
+                            || (is_array($rowData[$attributeCode]) && count($rowData[$attributeCode])))) {
                         $this->isAttributeValid(
                             $attributeCode,
                             $attributeParams,

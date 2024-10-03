@@ -6,21 +6,18 @@
 
 namespace Magento\Downloadable\Setup\Patch\Data;
 
+use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
-/**
- * Class InstallDownloadableAttributes
- * @package Magento\Downloadable\Setup\Patch
- */
 class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
+     * @var ModuleDataSetupInterface
      */
     private $moduleDataSetup;
 
@@ -43,7 +40,8 @@ class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function apply()
@@ -54,7 +52,7 @@ class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionI
          * Add attributes to the eav/attribute table
          */
         $eavSetup->addAttribute(
-            \Magento\Catalog\Model\Product::ENTITY,
+            Product::ENTITY,
             'links_purchased_separately',
             [
                 'type' => 'int',
@@ -64,7 +62,7 @@ class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionI
                 'input' => '',
                 'class' => '',
                 'source' => '',
-                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
+                'global' => ScopedAttributeInterface::SCOPE_GLOBAL,
                 'visible' => false,
                 'required' => true,
                 'user_defined' => false,
@@ -80,7 +78,7 @@ class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionI
         );
 
         $eavSetup->addAttribute(
-            \Magento\Catalog\Model\Product::ENTITY,
+            Product::ENTITY,
             'samples_title',
             [
                 'type' => 'varchar',
@@ -90,7 +88,7 @@ class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionI
                 'input' => '',
                 'class' => '',
                 'source' => '',
-                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                'global' => ScopedAttributeInterface::SCOPE_STORE,
                 'visible' => false,
                 'required' => true,
                 'user_defined' => false,
@@ -104,7 +102,7 @@ class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionI
             ]
         );
         $eavSetup->addAttribute(
-            \Magento\Catalog\Model\Product::ENTITY,
+            Product::ENTITY,
             'links_title',
             [
                 'type' => 'varchar',
@@ -114,7 +112,7 @@ class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionI
                 'input' => '',
                 'class' => '',
                 'source' => '',
-                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                'global' => ScopedAttributeInterface::SCOPE_STORE,
                 'visible' => false,
                 'required' => true,
                 'user_defined' => false,
@@ -128,7 +126,7 @@ class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionI
             ]
         );
         $eavSetup->addAttribute(
-            \Magento\Catalog\Model\Product::ENTITY,
+            Product::ENTITY,
             'links_exist',
             [
                 'type' => 'int',
@@ -166,22 +164,24 @@ class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionI
         foreach ($fieldList as $field) {
             $applyTo = explode(
                 ',',
-                $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $field, 'apply_to')
+                $eavSetup->getAttribute(Product::ENTITY, $field, 'apply_to') ?? ''
             );
             if (!in_array('downloadable', $applyTo)) {
                 $applyTo[] = 'downloadable';
                 $eavSetup->updateAttribute(
-                    \Magento\Catalog\Model\Product::ENTITY,
+                    Product::ENTITY,
                     $field,
                     'apply_to',
                     implode(',', $applyTo)
                 );
             }
         }
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -189,7 +189,7 @@ class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -197,7 +197,7 @@ class InstallDownloadableAttributes implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

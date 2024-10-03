@@ -61,7 +61,7 @@ class Price extends AddController implements HttpGetActionInterface
      */
     protected function isInternal($url)
     {
-        if (strpos($url, 'http') === false) {
+        if ($url === null || strpos($url, 'http') === false) {
             return false;
         }
         $currentStore = $this->storeManager->getStore();

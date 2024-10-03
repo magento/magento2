@@ -22,6 +22,34 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="productA" type="product">
+        <data key="name" unique="suffix">productA</data>
+        <data key="sku" unique="suffix">productAfortest</data>
+        <data key="urlKey" unique="suffix">simple-product-for-producta</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="price">123.00</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="SimpleProductQty100" type="product">
+        <data key="name" unique="suffix">testProductName</data>
+        <data key="sku" unique="suffix">testSku</data>
+        <data key="urlKey" unique="suffix">testproductname</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="price">123.00</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
     <entity name="ApiSimpleProduct" type="product">
         <data key="name" unique="suffix">Api Simple Product</data>
         <data key="sku" unique="suffix">api-simple-product</data>
@@ -417,6 +445,11 @@
         <data key="file">test_image.jpg</data>
         <data key="filename">test_image</data>
     </entity>
+    <entity name="TestImageWithDotInFilename" extends="MagentoLogo" type="image">
+        <data key="title" unique="suffix">TestImageWithDotInFilename</data>
+        <data key="file">m.agento-logo.png</data>
+        <data key="filename">m.agento-logo</data>
+    </entity>
     <entity name="ProductWithUnicode" type="product">
         <data key="name" unique="suffix">&#38657;&#20135;&#21697;</data>
         <data key="sku" unique="suffix">&#38657;&#20135;&#21697;</data>
@@ -810,7 +843,8 @@
     <entity name="virtualProductCustomImportOptions" type="product">
         <data key="name" unique="suffix">VirtualProduct</data>
         <data key="sku" unique="suffix">virtual_sku</data>
-        <data key="price">9,000.00</data>
+        <data key="price">9000.00</data>
+        <data key="formattedPrice">9,000.00</data>
         <data key="quantity">999</data>
         <data key="status">In Stock</data>
         <data key="visibility">Catalog, Search</data>
@@ -831,7 +865,8 @@
     <entity name="virtualProductOutOfStock" type="product">
         <data key="name" unique="suffix">VirtualProduct</data>
         <data key="sku" unique="suffix">virtual_sku</data>
-        <data key="price">9,000.00</data>
+        <data key="price">9000.00</data>
+        <data key="formattedPrice">9,000.00</data>
         <data key="quantity">999</data>
         <data key="status">Out of Stock</data>
         <data key="visibility">Catalog, Search</data>
@@ -898,6 +933,10 @@
     <entity name="ProductWithLongNameSku" extends="ApiSimpleProduct">
         <data key="name" unique="suffix">Product With Long Name And Sku - But not too long</data>
         <data key="sku" unique="suffix">Product With Long Name And Sku - But not too long</data>
+    </entity>
+    <entity name="ProductWithSpecialCharNameSku" extends="ApiSimpleProduct">
+        <data key="name" unique="suffix">Test "Config"</data>
+        <data key="sku" unique="suffix">Test "Config"</data>
     </entity>
     <entity name="PaginationProduct" type="product">
         <data key="name" unique="suffix">pagi</data>
@@ -1447,6 +1486,66 @@
         <data key="quantity">1000</data>
         <data key="weight">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ProductWithSpecialCharsInSKU" extends="SimpleProduct" type="product">
+        <data key="name">Simple Product with special characters in SKU</data>
+        <data key="sku">s000&amp;01</data>
+    </entity>
+    <entity name="simpleProductwithTaxNone" type="product">
+        <data key="name" unique="suffix">Product1</data>
+        <data key="sku" unique="suffix">product-1</data>
+        <data key="urlKey" unique="suffix">product1</data>
+        <data key="price">200.00</data>
+        <data key="quantity">100</data>
+        <data key="status">1</data>
+        <data key="cost">150.00</data>
+        <data key="productTaxClass">None</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="simpleProductwithTaxGoods" type="product">
+        <data key="urlKey" unique="suffix">product2</data>
+        <data key="name" unique="suffix">Product2</data>
+        <data key="sku" unique="suffix">product-2</data>
+        <data key="price">300.00</data>
+        <data key="quantity">300</data>
+        <data key="status">1</data>
+        <data key="storefrontStatus">IN STOCK</data>
+        <data key="cost">250.00</data>
+        <data key="productTaxClass">Taxable Goods</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleProductWithPrice1" type="product2" extends="ApiSimpleOne">
+        <data key="price">1</data>
+        <data key="weight">1</data>
+    </entity>
+    <entity name="SimpleProductWithWeight" extends="SimpleProduct50" type="product">
+        <data key="weight">1</data>
+        <data key="price">10</data>
+    </entity>
+    <entity name="productWithMultiCustomOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <data key="file">magento.jpg</data>
+        <requiredEntity type="product_option">ProductOptionDropDownFor2</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionCheckboxFor2</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionNewField</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithQty1" type="product" extends="_defaultProduct">
+        <data key="name" unique="suffix">Simple Product 3</data>
+        <data key="price">1.00</data>
+        <data key="urlKey" unique="suffix">Simple Product 3</data>
+        <data key="status">1</data>
+        <data key="quantity">1</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
 </entities>

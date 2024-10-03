@@ -50,6 +50,9 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct">
                 <argument name="productId" value="$$createSimpleProduct.id$$"/>
             </actionGroup>
@@ -68,6 +71,9 @@
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="disableGenerateUrlRewrite"/>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
             <deleteData createDataKey="newRootCategory" stepKey="deleteRootCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
