@@ -33,7 +33,7 @@ use PHPUnit\Framework\TestCase;
  * Tests for quote model.
  *
  * @see \Magento\Quote\Model\Quote
- *
+ * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

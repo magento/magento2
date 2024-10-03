@@ -7,6 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
+use Magento\Customer\Model\AccountManagement;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -14,6 +19,25 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class IsEmailAvailableTest extends GraphQlAbstract
 {
+    /**
+     * @var ScopeConfigInterface|null
+     */
+    private ?ScopeConfigInterface $scopeConfig;
+
+    /**
+     * @var string|null
+     */
+    private $storeId;
+
+    public function setUp(): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $this->scopeConfig = $objectManager->get(ScopeConfigInterface::class);
+        /* @var StoreResolverInterface $storeResolver */
+        $storeResolver = $objectManager->get(StoreResolverInterface::class);
+        $this->storeId = $storeResolver->getCurrentStoreId();
+    }
+
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
@@ -31,7 +55,16 @@ QUERY;
 
         self::assertArrayHasKey('isEmailAvailable', $response);
         self::assertArrayHasKey('is_email_available', $response['isEmailAvailable']);
-        self::assertFalse($response['isEmailAvailable']['is_email_available']);
+        $emailConfig = $this->scopeConfig->getValue(
+            AccountManagement::GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG,
+            ScopeInterface::SCOPE_STORE,
+            $this->storeId
+        );
+        if (!$emailConfig) {
+            self::assertTrue($response['isEmailAvailable']['is_email_available']);
+        } else {
+            self::assertFalse($response['isEmailAvailable']['is_email_available']);
+        }
     }
 
     /**

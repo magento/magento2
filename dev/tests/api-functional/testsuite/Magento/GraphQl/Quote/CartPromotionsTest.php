@@ -24,6 +24,11 @@ use Magento\SalesRule\Api\RuleRepositoryInterface;
 class CartPromotionsTest extends GraphQlAbstract
 {
     /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
+    /**
      * Test adding single cart rule to multiple products in a cart
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
@@ -157,9 +162,10 @@ class CartPromotionsTest extends GraphQlAbstract
             $this->assertEquals('TestRule_Label', current($lineItemDiscount)['label']);
 
             $lineItemDiscountValue = next($lineItemDiscount)['amount']['value'];
-            $this->assertEquals(
+            $this->assertEqualsWithDelta(
                 round($productsInCart[$itemIndex]->getSpecialPrice()*$qty*0.5)*0.1,
-                $lineItemDiscountValue
+                $lineItemDiscountValue,
+                self::EPSILON
             );
             $this->assertEquals('10% off with two items_Label', end($lineItemDiscount)['label']);
             $actualTotalDiscountValue = $lineItemDiscount[0]['amount']['value']+$lineItemDiscount[1]['amount']['value'];

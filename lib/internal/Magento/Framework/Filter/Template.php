@@ -18,6 +18,8 @@ use Magento\Framework\Filter\DirectiveProcessor\LegacyDirective;
 use Magento\Framework\Filter\DirectiveProcessor\TemplateDirective;
 use Magento\Framework\Filter\DirectiveProcessor\VarDirective;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\Filter\Template\SignatureProvider;
+use Magento\Framework\Filter\Template\FilteringDepthMeter;
 
 /**
  * Template filter
@@ -101,22 +103,42 @@ class Template implements \Zend_Filter_Interface
     private $variableResolver;
 
     /**
+     * @var SignatureProvider|null
+     */
+    private $signatureProvider;
+
+    /**
+     * @var FilteringDepthMeter|null
+     */
+    private $filteringDepthMeter;
+
+    /**
      * @param StringUtils $string
      * @param array $variables
      * @param DirectiveProcessorInterface[] $directiveProcessors
      * @param VariableResolverInterface|null $variableResolver
+     * @param SignatureProvider|null $signatureProvider
+     * @param FilteringDepthMeter|null $filteringDepthMeter
      */
     public function __construct(
         StringUtils $string,
         $variables = [],
         $directiveProcessors = [],
-        VariableResolverInterface $variableResolver = null
+        VariableResolverInterface $variableResolver = null,
+        SignatureProvider $signatureProvider = null,
+        FilteringDepthMeter $filteringDepthMeter = null
     ) {
         $this->string = $string;
         $this->setVariables($variables);
         $this->directiveProcessors = $directiveProcessors;
         $this->variableResolver = $variableResolver ?? ObjectManager::getInstance()
                 ->get(VariableResolverInterface::class);
+
+        $this->signatureProvider = $signatureProvider ?? ObjectManager::getInstance()
+                ->get(SignatureProvider::class);
+
+        $this->filteringDepthMeter = $filteringDepthMeter ?? ObjectManager::getInstance()
+                ->get(FilteringDepthMeter::class);
 
         if (empty($directiveProcessors)) {
             $this->directiveProcessors = [
@@ -180,6 +202,60 @@ class Template implements \Zend_Filter_Interface
             )->render());
         }
 
+        $this->filteringDepthMeter->descend();
+
+        // Processing of template directives.
+        $templateDirectivesResults = $this->processDirectives($value);
+
+        foreach ($templateDirectivesResults as $result) {
+            $value = str_replace($result['directive'], $result['output'], $value);
+        }
+
+        // Processing of deferred directives received from child templates
+        // or nested directives.
+        $deferredDirectivesResults = $this->processDirectives($value, true);
+
+        foreach ($deferredDirectivesResults as $result) {
+            $value = str_replace($result['directive'], $result['output'], $value);
+        }
+
+        if ($this->filteringDepthMeter->showMark() > 1) {
+            // Signing own deferred directives (if any).
+            $signature = $this->signatureProvider->get();
+
+            foreach ($templateDirectivesResults as $result) {
+                if ($result['directive'] === $result['output']) {
+                    $value = str_replace(
+                        $result['output'],
+                        $signature . $result['output'] . $signature,
+                        $value
+                    );
+                }
+            }
+        }
+
+        $value = $this->afterFilter($value);
+
+        $this->filteringDepthMeter->ascend();
+
+        return $value;
+    }
+
+    /**
+     * Processes template directives and returns an array that contains results produced by each directive.
+     *
+     * @param string $value
+     * @param bool $isSigned
+     *
+     * @return array
+     *
+     * @throws InvalidArgumentException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function processDirectives($value, $isSigned = false): array
+    {
+        $results = [];
+
         foreach ($this->directiveProcessors as $directiveProcessor) {
             if (!$directiveProcessor instanceof DirectiveProcessorInterface) {
                 throw new InvalidArgumentException(
@@ -187,15 +263,57 @@ class Template implements \Zend_Filter_Interface
                 );
             }
 
-            if (preg_match_all($directiveProcessor->getRegularExpression(), $value, $constructions, PREG_SET_ORDER)) {
+            $pattern = $directiveProcessor->getRegularExpression();
+
+            if ($isSigned) {
+                $pattern = $this->embedSignatureIntoPattern($pattern);
+            }
+
+            if (preg_match_all($pattern, $value, $constructions, PREG_SET_ORDER)) {
                 foreach ($constructions as $construction) {
                     $replacedValue = $directiveProcessor->process($construction, $this, $this->templateVars);
-                    $value = str_replace($construction[0], $replacedValue, $value);
+
+                    $results[] = [
+                        'directive' => $construction[0],
+                        'output' => $replacedValue
+                    ];
                 }
             }
         }
 
-        return $this->afterFilter($value);
+        return $results;
+    }
+
+    /**
+     * Modifies given regular expression pattern to be able to recognize signed directives.
+     *
+     * @param string $pattern
+     *
+     * @return string
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function embedSignatureIntoPattern(string $pattern): string
+    {
+        $signature = $this->signatureProvider->get();
+
+        $closingDelimiters = [
+            '(' => ')',
+            '{' => '}',
+            '[' => ']',
+            '<' => '>'
+        ];
+
+        $closingDelimiter = $openingDelimiter = substr(trim($pattern), 0, 1);
+
+        if (array_key_exists($openingDelimiter, $closingDelimiters)) {
+            $closingDelimiter = $closingDelimiters[$openingDelimiter];
+        }
+
+        $pattern = substr_replace($pattern, $signature, strpos($pattern, $openingDelimiter) + 1, 0);
+        $pattern = substr_replace($pattern, $signature, strrpos($pattern, $closingDelimiter), 0);
+
+        return $pattern;
     }
 
     /**
@@ -251,6 +369,7 @@ class Template implements \Zend_Filter_Interface
      * @param string[] $construction
      * @return string
      * @deprecated 102.0.4 Use the directive interfaces instead
+     * @see \Magento\Framework\Filter\DirectiveProcessorInterface
      */
     public function varDirective($construction)
     {
@@ -266,6 +385,7 @@ class Template implements \Zend_Filter_Interface
      * @param string[] $construction
      * @return string
      * @deprecated 102.0.4 Use the directive interfaces instead
+     * @see \Magento\Framework\Filter\DirectiveProcessorInterface
      * @since 102.0.4
      */
     public function forDirective($construction)
@@ -291,6 +411,7 @@ class Template implements \Zend_Filter_Interface
      * @param string[] $construction
      * @return mixed
      * @deprecated 102.0.4 Use the directive interfaces instead
+     * @see \Magento\Framework\Filter\DirectiveProcessorInterface
      */
     public function templateDirective($construction)
     {
@@ -306,6 +427,7 @@ class Template implements \Zend_Filter_Interface
      * @param string[] $construction
      * @return string
      * @deprecated 102.0.4 Use the directive interfaces instead
+     * @see \Magento\Framework\Filter\DirectiveProcessorInterface
      */
     public function dependDirective($construction)
     {
@@ -323,6 +445,7 @@ class Template implements \Zend_Filter_Interface
      * @param string[] $construction
      * @return string
      * @deprecated 102.0.4 Use the directive interfaces instead
+     * @see \Magento\Framework\Filter\DirectiveProcessorInterface
      */
     public function ifDirective($construction)
     {
@@ -340,6 +463,7 @@ class Template implements \Zend_Filter_Interface
      * @param string $value raw parameters
      * @return array
      * @deprecated 102.0.4 Use the directive interfaces instead
+     * @see \Magento\Framework\Filter\DirectiveProcessorInterface
      */
     protected function getParameters($value)
     {
@@ -361,6 +485,7 @@ class Template implements \Zend_Filter_Interface
      * @param string $default default value
      * @return string
      * @deprecated 102.0.4 Use \Magento\Framework\Filter\VariableResolverInterface instead
+     * @see \Magento\Framework\Filter\VariableResolverInterface
      */
     protected function getVariable($value, $default = '{no_value_defined}')
     {
@@ -377,6 +502,7 @@ class Template implements \Zend_Filter_Interface
      * @param array $stack
      * @return array
      * @deprecated 102.0.4 Use new directive processor interfaces
+     * @see \Magento\Framework\Filter\DirectiveProcessorInterface
      */
     protected function getStackArgs($stack)
     {
@@ -405,6 +531,7 @@ class Template implements \Zend_Filter_Interface
      * @return bool The previous mode from before the change
      * @since 102.0.4
      * @deprecated The method is not in use anymore.
+     * @see https://developer.adobe.com/commerce/frontend-core/guide/templates/email-migration/#remove-the-legacy-variable-resolver
      */
     public function setStrictMode(bool $strictMode): bool
     {
@@ -420,6 +547,7 @@ class Template implements \Zend_Filter_Interface
      * @return bool
      * @since 102.0.4
      * @deprecated The method is not in use anymore.
+     * @see https://developer.adobe.com/commerce/frontend-core/guide/templates/email-migration/#remove-the-legacy-variable-resolver
      */
     public function isStrictMode(): bool
     {

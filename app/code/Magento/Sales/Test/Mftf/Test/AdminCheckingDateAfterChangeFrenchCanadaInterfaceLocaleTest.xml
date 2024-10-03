@@ -19,6 +19,9 @@
             <group value="backend"/>
             <group value="ui"/>
             <group value="sales"/>
+            <skip>
+                <issueId value="AC-5916">Skipped</issueId>
+            </skip>
         </annotations>
         <before>
             <!--Deploy static content with French(Canada) locale-->

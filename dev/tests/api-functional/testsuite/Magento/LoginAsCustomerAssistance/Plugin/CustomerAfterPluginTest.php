@@ -77,16 +77,20 @@ class CustomerAfterPluginTest extends WebapiAbstract
     {
         $customerId = (int)$this->customerRepository->get('customer@example.com')->getId();
 
-        $updatedLastname = 'Updated lastname';
+        $updatedLastName = 'Updated lastname';
         $customer = $this->getCustomerData($customerId);
         $customerData = $this->dataObjectProcessor->buildOutputDataArray($customer, Customer::class);
-        $customerData[Customer::LASTNAME] = $updatedLastname;
+        $customerData[Customer::LASTNAME] = $updatedLastName;
         $customerData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['assistance_allowed'] = $state;
 
-        $requestData['customer'] = TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP
+        $requestData['customer'] = (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP)
             ? $customerData
             : [
-                Customer::LASTNAME => $updatedLastname,
+                Customer::FIRSTNAME => $customer->getFirstname(),
+                Customer::LASTNAME => $updatedLastName,
+                Customer::EMAIL => $customer->getEmail(),
+                Customer::WEBSITE_ID => $customer->getWebsiteId(),
+                Customer::ID => $customerId,
                 Customer::EXTENSION_ATTRIBUTES_KEY => ['assistance_allowed' => $state]
             ];
 
@@ -95,7 +99,7 @@ class CustomerAfterPluginTest extends WebapiAbstract
         $this->assertNotNull($response);
 
         $existingCustomerDataObject = $this->getCustomerData($customerId);
-        $this->assertEquals($updatedLastname, $existingCustomerDataObject->getLastname());
+        $this->assertEquals($updatedLastName, $existingCustomerDataObject->getLastname());
         $this->assertEquals($expected, $this->isAssistanceEnabled->execute($customerId));
     }
 
@@ -117,16 +121,20 @@ class CustomerAfterPluginTest extends WebapiAbstract
         ];
         $customerId = (int)$this->customerRepository->get('customer@example.com')->getId();
 
-        $updatedLastname = 'Updated lastname';
+        $updatedLastName = 'Updated lastname';
         $customer = $this->getCustomerData($customerId);
         $customerData = $this->dataObjectProcessor->buildOutputDataArray($customer, Customer::class);
-        $customerData[Customer::LASTNAME] = $updatedLastname;
+        $customerData[Customer::LASTNAME] = $updatedLastName;
         $customerData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['assistance_allowed'] = $state;
 
-        $requestData['customer'] = TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP
+        $requestData['customer'] = (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP)
             ? $customerData
             : [
-                Customer::LASTNAME => $updatedLastname,
+                Customer::FIRSTNAME => $customer->getFirstname(),
+                Customer::LASTNAME => $updatedLastName,
+                Customer::EMAIL => $customer->getEmail(),
+                Customer::WEBSITE_ID => $customer->getWebsiteId(),
+                Customer::ID => $customerId,
                 Customer::EXTENSION_ATTRIBUTES_KEY => ['assistance_allowed' => $state]
             ];
 
@@ -136,7 +144,7 @@ class CustomerAfterPluginTest extends WebapiAbstract
         $this->assertNotNull($response);
 
         $existingCustomerDataObject = $this->getCustomerData($customerId);
-        $this->assertEquals($updatedLastname, $existingCustomerDataObject->getLastname());
+        $this->assertEquals($updatedLastName, $existingCustomerDataObject->getLastname());
         $this->assertEquals(false, $this->isAssistanceEnabled->execute($customerId));
     }
 

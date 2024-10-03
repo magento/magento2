@@ -19,6 +19,23 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Delete Tax Rate If Already Exists -->
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndexCA"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickClearFiltersCA"/>
+            <actionGroup ref="AdminFilterTaxRateByCodeActionGroup" stepKey="filterByCodeCA">
+                <argument name="taxRateCode" value="{{SimpleTaxCA.state}}-{{SimpleTaxCA.rate}}" />
+            </actionGroup>
+            <conditionalClick selector="{{AdminDataGridTableSection.firstRow}}" dependentSelector="{{AdminDataGridTableSection.firstRow}}" visible="true"  stepKey="clickFirstRowInGridCA"/>
+            <conditionalClick selector="{{AdminMainActionsSection.delete}}" dependentSelector="{{AdminMainActionsSection.delete}}" visible="true"  stepKey="clickDeleteRateCA"/>
+            <conditionalClick selector="{{AdminConfirmationModalSection.ok}}" dependentSelector="{{AdminConfirmationModalSection.ok}}" visible="true"  stepKey="clickOkCA"/>
+
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickClearFiltersNY"/>
+            <actionGroup ref="AdminFilterTaxRateByCodeActionGroup" stepKey="filterByCodeNY">
+                <argument name="taxRateCode" value="{{SimpleTaxNY.state}}-{{SimpleTaxNY.rate}}"/>
+            </actionGroup>
+            <conditionalClick selector="{{AdminDataGridTableSection.firstRow}}" dependentSelector="{{AdminDataGridTableSection.firstRow}}" visible="true"  stepKey="clickFirstRowInGridNY"/>
+            <conditionalClick selector="{{AdminMainActionsSection.delete}}" dependentSelector="{{AdminMainActionsSection.delete}}" visible="true"  stepKey="clickDeleteRateNY"/>
+            <conditionalClick selector="{{AdminConfirmationModalSection.ok}}" dependentSelector="{{AdminConfirmationModalSection.ok}}" visible="true"  stepKey="clickOkNY"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
 
             <!-- Fill in rules to display tax in the cart -->
@@ -30,15 +47,16 @@
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
 
             <!-- Add NY and CA tax rules -->
-            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipUIActionGroup" stepKey="addNYTaxRate">
                 <argument name="taxCode" value="SimpleTaxNY"/>
             </actionGroup>
 
-            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipUIActionGroup" stepKey="addCATaxRate">
                 <argument name="taxCode" value="SimpleTaxCA"/>
             </actionGroup>
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+            <see userInput="You saved the tax rule." selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessMessageForSavingRule"/>
             <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
 
             <!-- Fill out form for a new user with address -->
@@ -67,14 +85,14 @@
             <!-- Go to the tax rate page -->
             <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
 
-            <!-- Delete the two tax rates that were created -->
+            <!-- Delete the two created tax rates -->
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
-                <argument name="name" value="{{SimpleTaxNY.state}}-{{SimpleTaxNY.rate}}"/>
+                <argument name="name" value="{{SimpleTaxNY.identifier}}-{{SimpleTaxNY.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteCARate">
-                <argument name="name" value="{{SimpleTaxCA.state}}-{{SimpleTaxCA.rate}}"/>
+                <argument name="name" value="{{SimpleTaxCA.identifier}}-{{SimpleTaxCA.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
 

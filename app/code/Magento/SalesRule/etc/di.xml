@@ -203,4 +203,9 @@
             <argument name="recollectTotals" xsi:type="object">Magento\SalesRule\Model\Rule\RuleQuoteRecollectTotalsAsync\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Generate">
+        <arguments>
+            <argument name="scopeConfig" xsi:type="object">Magento\Framework\App\Config\ScopeConfigInterface\Proxy</argument>
+        </arguments>
+    </type>
 </config>

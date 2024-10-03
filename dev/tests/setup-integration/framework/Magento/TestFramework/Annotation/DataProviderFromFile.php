@@ -20,14 +20,16 @@ class DataProviderFromFile
     /**
      * @var string
      */
-    const FALLBACK_VALUE = 'default';
+    public const FALLBACK_VALUE = 'default';
 
     /**
      * @var array
      */
-    const POSSIBLE_SUFFIXES = [
+    public const POSSIBLE_SUFFIXES = [
         SqlVersionProvider::MYSQL_8_0_VERSION => 'mysql8',
-        SqlVersionProvider::MARIA_DB_10_VERSION => 'mariadb10',
+        SqlVersionProvider::MARIA_DB_10_4_VERSION => 'mariadb10',
+        SqlVersionProvider::MARIA_DB_10_4_27_VERSION => 'mariadb10427',
+        SqlVersionProvider::MYSQL_8_0_29_VERSION => 'mysql829'
     ];
 
     /**

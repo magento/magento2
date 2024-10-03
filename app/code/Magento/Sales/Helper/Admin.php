@@ -160,68 +160,6 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function escapeHtmlWithLinks($data, $allowedTags = null)
     {
-        if (!empty($data) && is_array($allowedTags) && in_array('a', $allowedTags)) {
-            $wrapperElementId = uniqid();
-            $domDocument = $this->domDocumentFactory->create();
-
-            $internalErrors = libxml_use_internal_errors(true);
-
-            $data = mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8');
-            $domDocument->loadHTML(
-                '<html><body id="' . $wrapperElementId . '">' . $data . '</body></html>'
-            );
-
-            libxml_use_internal_errors($internalErrors);
-
-            $linkTags = $domDocument->getElementsByTagName('a');
-
-            foreach ($linkTags as $linkNode) {
-                $linkAttributes = [];
-                foreach ($linkNode->attributes as $attribute) {
-                    $linkAttributes[$attribute->name] = $attribute->value;
-                }
-
-                foreach ($linkAttributes as $attributeName => $attributeValue) {
-                    if ($attributeName === 'href') {
-                        $url = $this->filterUrl($attributeValue ?? '');
-                        $url = $this->escaper->escapeUrl($url);
-                        $linkNode->setAttribute('href', $url);
-                    } else {
-                        $linkNode->removeAttribute($attributeName);
-                    }
-                }
-            }
-
-            $result = mb_convert_encoding($domDocument->saveHTML(), 'UTF-8', 'HTML-ENTITIES');
-            preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
-            $data = !empty($matches) ? $matches[1] : '';
-        }
-
         return $this->escaper->escapeHtml($data, $allowedTags);
-    }
-
-    /**
-     * Filter the URL for allowed protocols.
-     *
-     * @param string $url
-     * @return string
-     */
-    private function filterUrl(string $url): string
-    {
-        if ($url) {
-            //Revert the sprintf escaping
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $urlScheme = parse_url($url, PHP_URL_SCHEME);
-            $urlScheme = $urlScheme ? strtolower($urlScheme) : '';
-            if ($urlScheme !== 'http' && $urlScheme !== 'https') {
-                $url = null;
-            }
-        }
-
-        if (!$url) {
-            $url = '#';
-        }
-
-        return $url;
     }
 }

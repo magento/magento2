@@ -167,3 +167,6 @@ Apply,Apply
 "Rule is not saved with auto generate option enabled. Please save the rule and try again.", "Rule is not saved with auto generate option enabled. Please save the rule and try again."
 "Trigger recollect totals for quotes by rule ID %1","Trigger recollect totals for quotes by rule ID %1"
 "Sorry, something went wrong while triggering recollect totals for affected quotes. Please see log for details.","Sorry, something went wrong while triggering recollect totals for affected quotes. Please see log for details."
+"Coupon quantity should be less than or equal to the coupon quantity in the store configuration.","Coupon quantity should be less than or equal to the coupon quantity in the store configuration."
+"Code Quantity Limit","Code Quantity Limit"
+"For better performance max value allowed is 250,000. Set 0 to disable it.","For better performance max value allowed is 250,000. Set 0 to disable it."
