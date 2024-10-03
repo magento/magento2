@@ -1034,6 +1034,9 @@ class QuoteTest extends TestCase
         $itemMock->expects($this->any())
             ->method('representProduct')
             ->willReturn(true);
+        $itemMock->expects($this->any())
+            ->method('getProduct')
+            ->willReturn($this->productMock);
 
         $iterator = new \ArrayIterator([$itemMock]);
         $collectionMock->expects($this->any())
@@ -1402,20 +1405,26 @@ class QuoteTest extends TestCase
     public function testGetAllItems(): void
     {
         $itemOneMock = $this->getMockBuilder(\Magento\Quote\Model\ResourceModel\Quote\Item::class)
-            ->addMethods(['isDeleted'])
+            ->addMethods(['isDeleted', 'getProduct'])
             ->disableOriginalConstructor()
             ->getMock();
         $itemOneMock->expects($this->once())
             ->method('isDeleted')
             ->willReturn(false);
+        $itemOneMock->expects($this->once())
+            ->method('getProduct')
+            ->willReturn($this->productMock);
 
         $itemTwoMock = $this->getMockBuilder(\Magento\Quote\Model\ResourceModel\Quote\Item::class)
-            ->addMethods(['isDeleted'])
+            ->addMethods(['isDeleted', 'getProduct'])
             ->disableOriginalConstructor()
             ->getMock();
         $itemTwoMock->expects($this->once())
             ->method('isDeleted')
             ->willReturn(true);
+        $itemTwoMock->expects($this->once())
+            ->method('getProduct')
+            ->willReturn($this->productMock);
 
         $items = [$itemOneMock, $itemTwoMock];
         $itemResult = [$itemOneMock];

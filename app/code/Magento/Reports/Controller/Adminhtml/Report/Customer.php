@@ -3,33 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  *
  * Customer reports admin controller
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Response\Http\FileFactory;
+
 /**
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
-abstract class Customer extends \Magento\Backend\App\Action
+abstract class Customer extends Action
 {
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @var FileFactory
      */
     protected $_fileFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param Context $context
+     * @param FileFactory $fileFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        Context $context,
+        FileFactory $fileFactory
     ) {
         $this->_fileFactory = $fileFactory;
         parent::__construct($context);
@@ -47,8 +52,11 @@ abstract class Customer extends \Magento\Backend\App\Action
             $act = 'default';
         }
 
+        // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $this->_view->loadLayout();
+        // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $this->_addBreadcrumb(__('Reports'), __('Reports'));
+        // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $this->_addBreadcrumb(__('Customers'), __('Customers'));
         return $this;
     }
@@ -57,22 +65,25 @@ abstract class Customer extends \Magento\Backend\App\Action
      * Determine if action is allowed for reports module
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _isAllowed()
     {
         switch ($this->getRequest()->getActionName()) {
+            case 'exportAccountsCsv':
+            case 'exportAccountsExcel':
             case 'accounts':
                 return $this->_authorization->isAllowed('Magento_Reports::accounts');
-                break;
+            case 'exportOrdersCsv':
+            case 'exportOrdersExcel':
             case 'orders':
                 return $this->_authorization->isAllowed('Magento_Reports::customers_orders');
-                break;
+            case 'exportTotalsCsv':
+            case 'exportTotalsExcel':
             case 'totals':
                 return $this->_authorization->isAllowed('Magento_Reports::totals');
-                break;
             default:
                 return $this->_authorization->isAllowed('Magento_Reports::customers');
-                break;
         }
     }
 }

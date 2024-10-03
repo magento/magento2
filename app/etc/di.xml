@@ -212,6 +212,7 @@
     <preference for="Magento\Framework\HTTP\ClientInterface" type="Magento\Framework\HTTP\Client\Curl" />
     <preference for="Magento\Framework\Interception\ConfigLoaderInterface" type="Magento\Framework\Interception\PluginListGenerator" />
     <preference for="Magento\Framework\Interception\ConfigWriterInterface" type="Magento\Framework\Interception\PluginListGenerator" />
+    <preference for="Magento\Framework\Filter\Input\PurifierInterface" type="Magento\Framework\Filter\Input\Purifier"/>
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -1853,7 +1854,7 @@
             <argument name="supportedVersionPatterns" xsi:type="array">
                 <item name="MySQL-8" xsi:type="string">^8\.0\.</item>
                 <item name="MySQL-5.7" xsi:type="string">^5\.7\.</item>
-                <item name="MariaDB-(10.2-10.4)" xsi:type="string">^10\.[2-4]\.</item>
+                <item name="MariaDB-(10.2-10.5)" xsi:type="string">^10\.[2-5]\.</item>
             </argument>
         </arguments>
     </type>

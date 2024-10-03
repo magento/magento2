@@ -88,13 +88,6 @@ var config = {
         'mage/backend/bootstrap',
         'mage/adminhtml/globals'
     ],
-    config: {
-        mixins: {
-            'jquery/jquery-ui': {
-                'jquery/patches/jquery-ui-sortable': true
-            }
-        }
-    },
     'paths': {
         'jquery/ui': 'jquery/jquery-ui'
     }

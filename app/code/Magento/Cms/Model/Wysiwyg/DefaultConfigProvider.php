@@ -27,13 +27,13 @@ class DefaultConfigProvider implements \Magento\Framework\Data\Wysiwyg\ConfigPro
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig(\Magento\Framework\DataObject $config) : \Magento\Framework\DataObject
     {
         $config->addData([
             'tinymce' => [
-                'toolbar' => 'formatselect | bold italic underline | alignleft aligncenter alignright | '
+                'toolbar' => ' blocks | formatselect | bold italic underline | alignleft aligncenter alignright | '
                     . 'bullist numlist | link table charmap',
                 'plugins' => implode(
                     ' ',
@@ -44,10 +44,7 @@ class DefaultConfigProvider implements \Magento\Framework\Data\Wysiwyg\ConfigPro
                         'link',
                         'charmap',
                         'media',
-                        'noneditable',
                         'table',
-                        'contextmenu',
-                        'paste',
                         'code',
                         'help',
                         'table'

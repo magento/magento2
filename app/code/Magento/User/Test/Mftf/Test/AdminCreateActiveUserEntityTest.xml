@@ -28,7 +28,7 @@
         </after>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
-        <actionGroup ref="AdminCreateUserWithRoleActionGroup" stepKey="createAdminUser">
+        <actionGroup ref="AdminCreateUserWithRoleAndIsActiveActionGroup" stepKey="createAdminUser">
             <argument name="user" value="activeAdmin"/>
             <argument name="role" value="roleDefaultAdministrator"/>
         </actionGroup>

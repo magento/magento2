@@ -10,30 +10,28 @@ namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Helper\Data;
-use Magento\Backend\Model\Menu;
 use Magento\Backend\Model\Session;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ViewInterface;
-use Magento\Framework\DataObject;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\View\Element\BlockInterface;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Title;
-use Magento\Framework\View\Result\Page;
+use Magento\Backend\Model\View\Result\Page;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\NewAction;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 use Magento\Shipping\Model\ShipmentProviderInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class NewActionTest extends TestCase
 {
@@ -113,6 +111,11 @@ class NewActionTest extends TestCase
     private $shipmentProviderMock;
 
     /**
+     * @var PageFactory|MockObject
+     */
+    protected $resultPageFactoryMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
@@ -156,6 +159,11 @@ class NewActionTest extends TestCase
         $this->view = $this->getMockForAbstractClass(ViewInterface::class);
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['setActiveMenu','getConfig'])
+            ->getMock();
+        $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -188,8 +196,12 @@ class NewActionTest extends TestCase
         $this->newAction = $objectManagerHelper->getObject(
             NewAction::class,
             [
-                'context' => $this->context, 'shipmentLoader' => $this->shipmentLoader, 'request' => $this->request,
-                'response' => $this->response, 'view' => $this->view, 'shipmentProvider' => $this->shipmentProviderMock
+                'context' => $this->context,
+                'resultPageFactory' => $this->resultPageFactoryMock,
+                'shipmentLoader' => $this->shipmentLoader,
+                'request' => $this->request,
+                'response' => $this->response,
+                'shipmentProvider' => $this->shipmentProviderMock
             ]
         );
     }
@@ -236,54 +248,31 @@ class NewActionTest extends TestCase
             ->method('get')
             ->with(Session::class)
             ->willReturn($this->session);
-        $this->view->expects($this->once())
-            ->method('loadLayout')->willReturnSelf();
-        $this->view->expects($this->once())
-            ->method('renderLayout')->willReturnSelf();
-        $this->view->expects($this->any())
-            ->method('getPage')
-            ->willReturn($this->resultPageMock);
         $this->resultPageMock->expects($this->any())
             ->method('getConfig')
             ->willReturn($this->pageConfigMock);
         $this->pageConfigMock->expects($this->any())
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
-        $menuBlock = $this->getMockBuilder(BlockInterface::class)
-            ->addMethods(['setActive', 'getMenuModel'])
-            ->onlyMethods(['toHtml'])
-            ->getMockForAbstractClass();
-        $menuModel = $this->getMockBuilder(Menu::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemId = 'Magento_Sales::sales_order';
-        $parents = [
-            new DataObject(['title' => 'title1']),
-            new DataObject(['title' => 'title2']),
-            new DataObject(['title' => 'title3']),
-        ];
-        $menuModel->expects($this->once())
-            ->method('getParentItems')
-            ->with($itemId)
-            ->willReturn($parents);
-        $menuBlock->expects($this->once())
-            ->method('setActive')
-            ->with($itemId);
-        $menuBlock->expects($this->once())
-            ->method('getMenuModel')
-            ->willReturn($menuModel);
-        $this->view->expects($this->once())
-            ->method('getLayout')
-            ->willReturn($layout);
-        $layout->expects($this->once())
-            ->method('getBlock')
-            ->with('menu')
-            ->willReturn($menuBlock);
+
+        $this->resultPageFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultPageMock);
+        $this->resultPageMock->expects($this->once())
+            ->method('setActiveMenu')
+            ->with('Magento_Sales::sales_order')
+            ->willReturnSelf();
+        $this->resultPageMock->expects($this->atLeastOnce())
+            ->method('getConfig')
+            ->willReturn($this->pageConfigMock);
+
         $this->shipmentProviderMock->expects($this->once())
             ->method('getShipmentData')
             ->willReturn($shipmentData);
 
-        $this->assertNull($this->newAction->execute());
+        $this->assertInstanceOf(
+            Page::class,
+            $this->newAction->execute()
+        );
     }
 }

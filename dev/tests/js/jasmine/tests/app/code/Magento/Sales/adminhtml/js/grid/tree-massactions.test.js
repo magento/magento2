@@ -105,7 +105,7 @@ define([
                 result = obj.defaultCallback(action, data);
 
                 expect(typeof result).toBe('object');
-                spyOn(utils, 'submit').and.callThrough();
+                utils.submit = jasmine.createSpy().and.callThrough();
                 utils.submit({
                     url: action.url,
                     data: data.selected

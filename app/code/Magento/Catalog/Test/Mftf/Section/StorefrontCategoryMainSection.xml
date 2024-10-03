@@ -40,5 +40,6 @@
         <element name="productOptionList" type="text" selector="#narrow-by-list"/>
         <element name="productNameByPosition" type="text" selector=".products-grid li:nth-of-type({{position}}) .product-item-name a" parameterized="true"/>
         <element name="sidebarAdditional" type="block" selector="#maincontent .sidebar.sidebar-additional"/>
+        <element name="searchStore" type="input" selector="//div/input[@id='search']" />
     </section>
 </sections>

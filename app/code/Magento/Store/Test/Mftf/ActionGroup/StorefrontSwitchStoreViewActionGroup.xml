@@ -16,6 +16,7 @@
             <argument name="storeView" defaultValue="customStore"/>
         </arguments>
 
+        <waitForElementVisible selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="waitForStoreViewSwitcher"/>
         <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="clickStoreViewSwitcher"/>
         <waitForElementVisible selector="{{StorefrontHeaderSection.storeViewDropdown}}" stepKey="waitForStoreViewDropdown"/>
         <click selector="{{StorefrontHeaderSection.storeViewOption(storeView.code)}}" stepKey="clickSelectStoreView"/>

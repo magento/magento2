@@ -8,6 +8,7 @@ namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\AuthorizationInterface;
 
 /**
  * Catalog composite product configuration controller
@@ -21,7 +22,7 @@ abstract class Cart extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+    public const ADMIN_RESOURCE = 'Magento_Customer::manage';
 
     /**
      * Customer we're working with
@@ -55,17 +56,25 @@ abstract class Cart extends \Magento\Backend\App\Action
     protected $quoteFactory;
 
     /**
+     * @var AuthorizationInterface
+     */
+    protected $_authorization;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
+     * @param AuthorizationInterface $authorization
      */
     public function __construct(
         Action\Context $context,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
-        \Magento\Quote\Model\QuoteFactory $quoteFactory
+        \Magento\Quote\Model\QuoteFactory $quoteFactory,
+        AuthorizationInterface $authorization
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->quoteFactory = $quoteFactory;
+        $this->_authorization = $authorization;
         parent::__construct($context);
     }
 
@@ -100,5 +109,14 @@ abstract class Cart extends \Magento\Backend\App\Action
         }
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed(self::ADMIN_RESOURCE)
+            && $this->_authorization->isAllowed('Magento_Cart::cart');
     }
 }
