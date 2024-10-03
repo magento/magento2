@@ -16,7 +16,7 @@ use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder;
 
 /**
- * Add simple product to cart
+ * Add simple product to cart mutation
  */
 class AddSimpleProductToCart
 {
@@ -52,6 +52,7 @@ class AddSimpleProductToCart
      */
     public function execute(Quote $cart, array $cartItemData): void
     {
+        $cartItemData['model'] = $cart;
         $sku = $this->extractSku($cartItemData);
 
         try {
@@ -63,6 +64,11 @@ class AddSimpleProductToCart
         try {
             $result = $cart->addProduct($product, $this->buyRequestBuilder->build($cartItemData));
         } catch (Exception $e) {
+
+            if (str_contains($e->getMessage(), 'The requested qty is not available')) {
+                throw new GraphQlInputException(__('The requested qty. is not available'));
+            }
+
             throw new GraphQlInputException(
                 __(
                     'Could not add the product with SKU %sku to the shopping cart: %message',

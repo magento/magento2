@@ -35,16 +35,18 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Set currency rates-->
-        <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="gotToCurrencyRatesPageSecondTime"/>
-        <waitForPageLoad stepKey="waitForLoadRatesPageSecondTime"/>
+        <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="gotToCurrencyRatesPageSecondTime"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForLoadRatesPageSecondTime"/>
         <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="setCurrencyRates">
             <argument name="firstCurrency" value="USD"/>
             <argument name="secondCurrency" value="RUB"/>
             <argument name="rate" value="0.8"/>
         </actionGroup>
         <!--Open created product on Storefront and place for order-->
-        <amOnPage url="{{StorefrontProductPage.url($$createNewProduct.custom_attributes[url_key]$$)}}" stepKey="goToNewProductPage"/>
-        <waitForPageLoad stepKey="waitForNewProductPagePageLoad"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToNewProductPage">
+            <argument name="product" value="$createNewProduct$"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForNewProductPagePageLoad"/>
         <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchCurrency">
             <argument name="currency" value="RUB"/>
         </actionGroup>
@@ -64,8 +66,12 @@
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openNewOrderById">
             <argument name="orderId" value="$grabNewOrderNumber"/>
         </actionGroup>
-        <see selector="{{AdminOrderDetailsInformationSection.orderInformationTable}}" userInput="EUR / USD rate" stepKey="seeUSDandEURRate"/>
-        <see selector="{{AdminOrderDetailsInformationSection.orderInformationTable}}" userInput="RUB / USD rate:" stepKey="seeRUBandEURRate"/>
+        <actionGroup ref="AdminAssertCurrencyInOrderActionGroup" stepKey="seeUSDandEURRate">
+            <argument name="rate" value="EUR / USD rate"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCurrencyInOrderActionGroup" stepKey="seeRUBandEURRate">
+            <argument name="rate" value="RUB / USD rate:"/>
+        </actionGroup>
         <grabMultiple selector="{{AdminOrderDetailsInformationSection.rate}}" stepKey="grabRates" />
         <assertEquals stepKey="assertRates">
             <actualResult type="variable">grabRates</actualResult>

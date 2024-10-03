@@ -13,6 +13,11 @@
                 <width>1000</width>
                 <height>1000</height>
             </media_gallery_renditions>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <renditions_folder>.renditions</renditions_folder>
+                </allowed_resources>
+            </media_storage_configuration>
         </system>
     </default>
 </config>

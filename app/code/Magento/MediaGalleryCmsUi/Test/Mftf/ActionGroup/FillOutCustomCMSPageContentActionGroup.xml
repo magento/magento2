@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="FillOutCustomCMSPageContentActionGroup">
         <annotations>
-            <description>Fills out the Page details (Page Title, Content and URL Key)</description>
+            <description>DEPRECATED. Use AdminCmsPageFillOutBasicFieldsActionGroup and other AGs from CMS module. Fills out the Page details (Page Title, Content and URL Key)</description>
         </annotations>
 
         <arguments>

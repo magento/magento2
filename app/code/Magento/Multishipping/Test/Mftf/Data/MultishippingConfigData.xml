@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="MaximumQtyAllowed2ForShippingToMultipleAddressesConfigData">
+        <data key="path">multishipping/options/checkout_multiple_maximum_qty</data>
+        <data key="value">2</data>
+    </entity>
+    <entity name="MaximumQtyAllowed10ForShippingToMultipleAddressesConfigData">
+        <data key="path">multishipping/options/checkout_multiple_maximum_qty</data>
+        <data key="value">10</data>
+    </entity>
+    <!-- Magento Default Value -->
+    <entity name="MaximumQtyAllowed100ForShippingToMultipleAddressesConfigData">
+        <data key="path">multishipping/options/checkout_multiple_maximum_qty</data>
+        <data key="value">100</data>
+    </entity>
+</entities>

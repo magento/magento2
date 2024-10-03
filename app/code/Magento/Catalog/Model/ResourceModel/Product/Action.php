@@ -160,7 +160,7 @@ class Action extends AbstractResource
         $storeId = (int) $this->_storeManager->getStore($object->getStoreId())->getId();
         $table = $attribute->getBackend()->getTable();
 
-        $entityId = $this->resolveEntityId($object->getId(), $table);
+        $entityId = $this->resolveEntityId($object->getId());
 
         /**
          * If we work in single store mode all values should be saved just

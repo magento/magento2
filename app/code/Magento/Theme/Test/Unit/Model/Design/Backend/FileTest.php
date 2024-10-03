@@ -141,7 +141,7 @@ class FileTest extends TestCase
         $builder =  $this->getMockBuilder($class)
             ->disableOriginalConstructor();
         if (count($methods)) {
-            $builder->setMethods($methods);
+            $builder->onlyMethods($methods);
         }
         return  $builder->getMock();
     }
@@ -195,7 +195,7 @@ class FileTest extends TestCase
         $this->urlBuilder->expects($this->once())
             ->method('getBaseUrl')
             ->with(['_type' => UrlInterface::URL_TYPE_MEDIA])
-            ->willReturn('http://magento2.com/pub/media/');
+            ->willReturn('http://magento2.com/media/');
         $this->mediaDirectory->expects($this->once())
             ->method('getRelativePath')
             ->with('value')
@@ -212,7 +212,7 @@ class FileTest extends TestCase
         $this->assertEquals(
             [
                 [
-                    'url' => 'http://magento2.com/pub/media/design/file/' . $value,
+                    'url' => 'http://magento2.com/media/design/file/' . $value,
                     'file' => $value,
                     'size' => 234234,
                     'exists' => true,
@@ -241,7 +241,7 @@ class FileTest extends TestCase
                 'scope_id' => 1,
                 'value' => [
                     [
-                        'url' => 'http://magento2.com/pub/media/tmp/image/' . $fileName,
+                        'url' => 'http://magento2.com/media/tmp/image/' . $fileName,
                         'file' => $fileName,
                         'size' => 234234,
                     ]
@@ -277,7 +277,7 @@ class FileTest extends TestCase
      *
      * @return array
      */
-    public function beforeSaveDataProvider(): array
+    public static function beforeSaveDataProvider(): array
     {
         return [
             'Normal file name' => ['filename.jpg'],
@@ -314,7 +314,7 @@ class FileTest extends TestCase
             [
                 'value' => [
                     [
-                        'url' => 'http://magento2.com/pub/media/tmp/image/' . $value,
+                        'url' => 'http://magento2.com/media/tmp/image/' . $value,
                         'file' => $value,
                         'size' => 234234,
                         'exists' => true
@@ -354,11 +354,11 @@ class FileTest extends TestCase
      *
      * @return array
      */
-    public function getRelativeMediaPathDataProvider(): array
+    public static function getRelativeMediaPathDataProvider(): array
     {
         return [
             'Normal path' => ['pub/media/', 'filename.jpg'],
-            'Complex path' => ['some_path/pub/media/', 'filename.jpg'],
+            'Complex path' => ['some_path/media/', 'filename.jpg'],
         ];
     }
 }

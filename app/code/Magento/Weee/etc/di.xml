@@ -81,4 +81,10 @@
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
         <plugin name="weeeAttributeOptionsProcess" type="Magento\Weee\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\Helper\ProcessTaxAttribute"/>
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Attribute\RemoveProductAttributeData">
+        <plugin name="removeWeeAttributesData" type="Magento\Weee\Plugin\Catalog\ResourceModel\Attribute\RemoveProductWeeData" />
+    </type>
+    <type name="Magento\Catalog\Ui\Component\Listing\Columns">
+        <plugin name="changeWeeColumnConfig" type="Magento\Weee\Plugin\Catalog\Ui\Component\Listing\Columns"/>
+    </type>
 </config>

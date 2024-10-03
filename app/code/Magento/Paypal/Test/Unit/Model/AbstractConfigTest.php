@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\ScopeInterface as ModelScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -34,7 +35,7 @@ class AbstractConfigTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue', 'isSetFlag'])
+            ->onlyMethods(['getValue', 'isSetFlag'])
             ->getMockForAbstractClass();
 
         $this->config = new AbstractConfigTesting($this->scopeConfigMock);
@@ -47,6 +48,9 @@ class AbstractConfigTest extends TestCase
      */
     public function testSetMethod($method, $expected)
     {
+        if (is_callable($method)) {
+            $method = $method($this);
+        }
         $this->assertSame($this->config, $this->config->setMethod($method));
         $this->assertEquals($expected, $this->config->getMethodCode());
     }
@@ -59,6 +63,15 @@ class AbstractConfigTest extends TestCase
         $this->assertSame($this->config, $this->config->setMethodInstance($methodInterfaceMock));
     }
 
+    protected function getMockForMethodInterface() {
+        $methodInterfaceMock = $this->getMockBuilder(MethodInterface::class)
+            ->getMockForAbstractClass();
+        $methodInterfaceMock->expects($this->once())
+            ->method('getCode')
+            ->willReturn('payment_code');
+        return $methodInterfaceMock;
+    }
+
     /**
      * @case #1 The method value is string - we expected same string value
      * @case #2 The method value is instance of MethodInterface - we expect result MethodInterface::getCode
@@ -66,14 +79,10 @@ class AbstractConfigTest extends TestCase
      *
      * @return array
      */
-    public function setMethodDataProvider()
+    public static function setMethodDataProvider()
     {
         /** @var MethodInterface $methodInterfaceMock */
-        $methodInterfaceMock = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
-        $methodInterfaceMock->expects($this->once())
-            ->method('getCode')
-            ->willReturn('payment_code');
+        $methodInterfaceMock = static fn (self $testCase) => $testCase->getMockForMethodInterface();
         return [
             ['payment_code', 'payment_code'],
             [$methodInterfaceMock, 'payment_code'],
@@ -121,7 +130,7 @@ class AbstractConfigTest extends TestCase
      *
      * @return array
      */
-    public function getValueDataProvider()
+    public static function getValueDataProvider()
     {
         return [
             [
@@ -205,7 +214,7 @@ class AbstractConfigTest extends TestCase
     /**
      * @return array
      */
-    public function isWppApiAvailabeDataProvider()
+    public static function isWppApiAvailabeDataProvider()
     {
         return [
             [
@@ -279,7 +288,7 @@ class AbstractConfigTest extends TestCase
     /**
      * @return array
      */
-    public function isMethodAvailableDataProvider()
+    public static function isMethodAvailableDataProvider()
     {
         return [
             [null, 'payment/settedMethod/active'],
@@ -300,23 +309,33 @@ class AbstractConfigTest extends TestCase
      * Check bill me later active setting uses disable funding options
      *
      * @param string|null $disableFundingOptions
-     * @param int $expectedFlag
+     * @param int $expressBml
      * @param bool $expectedValue
      *
      * @dataProvider isMethodActiveBmlDataProvider
      */
-    public function testIsMethodActiveBml($disableFundingOptions, $expectedFlag, $expectedValue)
-    {
+    public function testIsMethodActiveBml(
+        $disableFundingOptions,
+        $expressBml,
+        $wpsExpress,
+        $wpsExpressBml,
+        $expectedValue
+    ) {
         $this->scopeConfigMock->method('getValue')
             ->with(
                 self::equalTo('paypal/style/disable_funding_options'),
-                self::equalTo('store')
+                self::equalTo(ScopeInterface::SCOPE_STORE)
             )
             ->willReturn($disableFundingOptions);
 
+        $configFlagMap = [
+            ['payment/wps_express/active', ScopeInterface::SCOPE_STORE, null, $wpsExpress],
+            ['payment/wps_express_bml/active', ScopeInterface::SCOPE_STORE, null, $wpsExpressBml],
+            ['payment/paypal_express_bml/active', ScopeInterface::SCOPE_STORE, null, $expressBml]
+        ];
+
         $this->scopeConfigMock->method('isSetFlag')
-            ->with('payment/paypal_express_bml/active')
-            ->willReturn($expectedFlag);
+            ->willReturnMap($configFlagMap);
 
         self::assertEquals($expectedValue, $this->config->isMethodActive('paypal_express_bml'));
     }
@@ -324,17 +343,21 @@ class AbstractConfigTest extends TestCase
     /**
      * @return array
      */
-    public function isMethodActiveBmlDataProvider()
+    public static function isMethodActiveBmlDataProvider()
     {
         return [
-            ['CREDIT,CARD,ELV', 0, false],
-            ['CREDIT,CARD,ELV', 1, true],
-            ['CREDIT', 0, false],
-            ['CREDIT', 1, true],
-            ['CARD', 0, true],
-            ['CARD', 1, true],
-            [null, 0, true],
-            [null, 1, true]
+            ['CREDIT,CARD,ELV', 0, 0, 0, false],
+            ['CREDIT,CARD,ELV', 1, 0, 0,  true],
+            ['CREDIT', 0, 0, 0, false],
+            ['CREDIT', 1, 0, 0, true],
+            ['CARD', 0, 0, 0,  true],
+            ['CARD', 1, 0, 0,  true],
+            [null, 0, 0, 0,  true],
+            [null, 1, 0, 0,  true],
+            ['CREDIT', 0, 1, 0, false],
+            ['', 0, 1, 0, false],
+            ['', 0, 1, 1, true],
+            ['CREDIT', 0, 1, 1, true]
         ];
     }
 

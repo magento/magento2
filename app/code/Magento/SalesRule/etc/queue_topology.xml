@@ -6,7 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
-    <exchange name="magento-db" type="topic" connection="db">
-        <binding id="codegeneratorBinding" topic="sales_rule.codegenerator" destinationType="queue" destination="codegenerator"/>
+    <exchange name="magento">
+        <binding id="codegeneratorBinding" topic="sales_rule.codegenerator" destination="codegenerator"/>
+        <binding id="couponUsageBinding" topic="sales.rule.update.coupon.usage" destination="sales.rule.update.coupon.usage"/>
+        <binding id="salesRuleQuoteTriggerRecollectBinding" topic="sales.rule.quote.trigger.recollect" destination="sales.rule.quote.trigger.recollect"/>
     </exchange>
 </config>

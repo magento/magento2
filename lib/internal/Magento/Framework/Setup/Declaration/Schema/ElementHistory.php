@@ -12,6 +12,8 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
  * Element history container.
  *
  * This class holds history about element modifications.
+ *
+ * @api
  */
 class ElementHistory
 {

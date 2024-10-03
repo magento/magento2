@@ -1,0 +1,76 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+namespace Magento\WishlistGraphQl\Model\WishlistItem\DataProvider\CustomizableOptionValue;
+
+use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Model\Product\Option\Type\Text as TextOptionType;
+use Magento\Framework\GraphQl\Query\Uid;
+use Magento\Wishlist\Model\Item as WishlistItem;
+use Magento\Wishlist\Model\Item\Option as SelectedOption;
+use Magento\WishlistGraphQl\Model\WishlistItem\DataProvider\CustomizableOptionValueInterface;
+
+/**
+ * @inheritdoc
+ */
+class Text implements CustomizableOptionValueInterface
+{
+    /**
+     * Option type name
+     */
+    private const OPTION_TYPE = 'custom-option';
+
+    /**
+     * @var PriceUnitLabel
+     */
+    private $priceUnitLabel;
+
+    /**
+     * @var Uid
+     */
+    private $uidEncoder;
+
+    /**
+     * @param PriceUnitLabel $priceUnitLabel
+     * @param Uid $uidEncoder
+     */
+    public function __construct(
+        PriceUnitLabel $priceUnitLabel,
+        Uid $uidEncoder
+    ) {
+        $this->priceUnitLabel = $priceUnitLabel;
+        $this->uidEncoder = $uidEncoder;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getData(
+        WishlistItem $wishlistItem,
+        Option $option,
+        SelectedOption $selectedOption
+    ): array {
+        /** @var TextOptionType $optionTypeRenderer */
+        $optionTypeRenderer = $option->groupFactory($option->getType());
+        $optionTypeRenderer->setOption($option);
+        $priceValueUnits = $this->priceUnitLabel->getData($option->getPriceType());
+        $uuid = $this->uidEncoder->encode(self::OPTION_TYPE . '/' . $option->getOptionId());
+
+        $selectedOptionValueData = [
+            'id' => $selectedOption->getId(),
+            'customizable_option_value_uid' => $uuid,
+            'label' => '',
+            'value' => $optionTypeRenderer->getFormattedOptionValue($selectedOption->getValue()),
+            'price' => [
+                'type' => strtoupper($option->getPriceType()),
+                'units' => $priceValueUnits,
+                'value' => $option->getPrice(),
+            ],
+        ];
+        return [$selectedOptionValueData];
+    }
+}

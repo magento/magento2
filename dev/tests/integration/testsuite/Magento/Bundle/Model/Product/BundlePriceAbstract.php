@@ -30,6 +30,11 @@ abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
      */
     protected $productCollectionFactory;
 
+    /**
+     * @var \Magento\CatalogRule\Model\RuleFactory
+     */
+    private $ruleFactory;
+
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -43,13 +48,14 @@ abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
             true,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
+        $this->ruleFactory = $this->objectManager->get(\Magento\CatalogRule\Model\RuleFactory::class);
     }
 
     /**
      * Get test cases
      * @return array
      */
-    abstract public function getTestCases();
+    abstract static public function getTestCases();
 
     /**
      * @param array $strategyModifiers
@@ -62,6 +68,8 @@ abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
      */
     protected function prepareFixture($strategyModifiers, $productSku)
     {
+        $this->ruleFactory->create()->clearPriceRulesData();
+
         $bundleProduct = $this->productRepository->get($productSku);
 
         foreach ($strategyModifiers as $modifier) {

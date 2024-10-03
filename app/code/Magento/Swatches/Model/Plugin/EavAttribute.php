@@ -352,7 +352,7 @@ class EavAttribute
                 }
                 $defaultSwatchValue = reset($storeValues);
                 foreach ($storeValues as $storeId => $value) {
-                    if (!$value) {
+                    if ($value === null || $value === '') {
                         $value = $defaultSwatchValue;
                     }
                     $swatch = $this->loadSwatchIfExists($optionId, $storeId);
@@ -378,8 +378,9 @@ class EavAttribute
      */
     protected function getAttributeOptionId($optionId)
     {
-        if (substr($optionId, 0, 6) == self::BASE_OPTION_TITLE || substr($optionId, 0, 3) == self::API_OPTION_PREFIX) {
-            $optionId = isset($this->dependencyArray[$optionId]) ? $this->dependencyArray[$optionId] : null;
+        if (strpos((string)$optionId, self::BASE_OPTION_TITLE) === 0 ||
+            strpos((string)$optionId, self::API_OPTION_PREFIX) === 0) {
+            $optionId = $this->dependencyArray[$optionId] ?? null;
         }
         return $optionId;
     }

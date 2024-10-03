@@ -1,8 +1,5 @@
 <?php
 /**
- * @category    Magento
- * @package     Magento_CatalogInventory
- * @subpackage  unit_tests
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -66,7 +63,7 @@ class StoreGroupTest extends TestCase
     /**
      * @return array
      */
-    public function afterSaveDataProvider(): array
+    public static function afterSaveDataProvider(): array
     {
         return [
             [

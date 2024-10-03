@@ -13,7 +13,7 @@
             <description>Goes to the Custom Variable creation page. Fills in the Custom Variable details. PLEASE NOTE: The Custom Variable details are Hardcoded using 'customVariable'.</description>
         </annotations>
 
-        <amOnPage url="admin/admin/system_variable/new/" stepKey="goToNewCustomVarialePage"/>
+        <amOnPage url="{{AdminNewVariablePage.url}}" stepKey="goToNewCustomVarialePage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <fillField selector="{{CustomVariableSection.variableCode}}" userInput="{{customVariable.code}}" stepKey="fillVariableCode"/>
         <fillField selector="{{CustomVariableSection.variableName}}" userInput="{{customVariable.name}}" stepKey="fillVariableName"/>

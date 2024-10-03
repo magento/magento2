@@ -25,5 +25,16 @@
         <element name="shippingMethod" type="text" selector="#shippingMethodCharge > span.selectedShippingMethod"/>
         <element name="paypalCart" type="text" selector="#transactionCart"/>
         <element name="productNamePosition" type="text" selector=".itemName"/>
+        <element name="orderTotalOnPaypalCheckout" type="text" selector="//div[@id='cart']//span[contains(text(),'$')]"/>
+        <element name="subtotal" type="text" selector="//div[@data-testid='line-item-subtotal']//span[contains(text(),'{{subtotal}}')]" parameterized="true"/>
+        <element name="shipping" type="text" selector="//div[@data-testid='line-item-shipping']//span[contains(text(),'{{shippingAmount}}')]" parameterized="true"/>
+        <element name="total" type="text" selector="//span[@data-testid='cart-sheet-total']"/>
+        <element name="shippingAddress" type="text" selector="//div[@data-testid='shipping-address']/p[@data-testid='ship-to-address']"/>
+        <element name="close" type="button" selector="//button[@aria-label='Close']"/>
+        <element name="paypalPopupButton1" type="button" selector="//button[text()='Pay with Debit or Credit Card']"/>
+        <element name="paypalPopupButton2" type="button" selector="//button[text()='Create an Account']"/>
+        <element name="changeShippingAddressButton" type="button" selector="#change-shipping"/>
+        <element name="shippingAddressDropdown" type="select" selector="#shippingDropdown"/>
+        <element name="selectedShippingAddress" type="text" selector="//div/p[contains(text(), '{{selectedAddress}}')]" parameterized="true"/>
     </section>
 </sections>

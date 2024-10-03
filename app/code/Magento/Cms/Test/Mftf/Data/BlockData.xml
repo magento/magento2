@@ -15,4 +15,11 @@
         <data key="content">sales25off everything!</data>
         <data key="is_active">0</data>
     </entity>
+    <entity name="ActiveTestBlock" type="block">
+        <data key="title" unique="suffix">Test Block</data>
+        <data key="identifier" unique="suffix">ActiveTestBlock</data>
+        <data key="store_id">All Store Views</data>
+        <data key="content">Test Block content</data>
+        <data key="is_active">1</data>
+    </entity>
 </entities>

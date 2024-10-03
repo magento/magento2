@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateLastReviewDateForReviewsByProductsReportTest">
+        <annotations>
+            <features value="Review"/>
+            <stories value="Reports: Review by Products"/>
+            <title value="Admin Validate Last Review Date For Review by Products Reports"/>
+            <description value="Admin Validate Last Review Date For Review by Products Reports"/>
+            <severity value="MAJOR"/>
+            <useCaseId value="MC-39737"/>
+            <testCaseId value="MC-39838"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!--Step1. Login as admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!--Step2. Create product and Category-->
+            <createData stepKey="category" entity="SimpleSubCategory"/>
+            <createData stepKey="createProduct" entity="SimpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <!--Step9. Delete newly created product reviews -->
+            <actionGroup ref="AdminOpenReviewsPageActionGroup" stepKey="openAllReviewsPage"/>
+            <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteFirstCustomerReview">
+                <argument name="nickname" value="{{firstSimpleProductReview.nickname}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteSecondCustomerReview">
+                <argument name="nickname" value="{{secondSimpleProductReview.nickname}}"/>
+            </actionGroup>
+            <!--Step10. delete Category and Products -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <!--Step11. Admin Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Step3. Navigate to Marketing > User Content> All Review -->
+        <amOnPage url="{{AdminReviewsPage.url}}" stepKey="openReviewsPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadCreatedReviewOne"/>
+
+        <!--Step4. Add First and Second Review For Same Product-->
+        <actionGroup ref="AdminAddProductReviewActionGroup" stepKey="addFirstReview">
+            <argument name="review" value="firstSimpleProductReview"/>
+            <argument name="sku" value="$$createProduct.sku$$"/>
+        </actionGroup>
+        <amOnPage url="{{AdminReviewsPage.url}}" stepKey="openReviewsPageAgain"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadCreatedReviewTwo"/>
+        <actionGroup ref="AdminAddProductReviewActionGroup" stepKey="addSecondReview">
+            <argument name="review" value="secondSimpleProductReview"/>
+            <argument name="sku" value="$$createProduct.sku$$"/>
+        </actionGroup>
+        <!--Step5. Navigate to Reports > Reviews > By Products -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsByProductsPage">
+            <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuReportsReviewsByProducts.dataUiId}}"/>
+        </actionGroup>
+        <!--Step6. Search product review by product name -->
+        <actionGroup ref="AdminFilterProductReviewByNameActionGroup" stepKey="navigateToReportsReview">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <!--Step7. Click 'Show Reviews' to see review details-->
+        <grabTextFrom selector="{{AdminCreateNewReviewSection.gridLastReviewColumn}}" stepKey="grabLastReviewDate"/>
+        <click selector="{{AdminCreateNewReviewSection.showReviewsButton}}" stepKey="showReviewsPage"/>
+        <waitForPageLoad stepKey="waitForReviewListPageToLoad"/>
+        <!--Step8. Assert product last review date matches latest user review date-->
+        <fillField selector="{{AdminReviewGridSection.nickname}}" userInput="{{secondSimpleProductReview.nickname}}" stepKey="fillNickname"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickApplyFilters"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForGridViewPageToLoad"/>
+        <grabTextFrom selector="{{AdminCreateNewReviewSection.grabLatestUserReviewDate}}" stepKey="grabLatestUserReviewDate"/>
+        <assertEquals stepKey="assertReviewDate">
+            <actualResult type="string">$grabLastReviewDate</actualResult>
+            <expectedResult type="string">$grabLatestUserReviewDate</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

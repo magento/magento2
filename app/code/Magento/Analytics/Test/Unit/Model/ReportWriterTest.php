@@ -61,17 +61,17 @@ class ReportWriterTest extends TestCase
     /**
      * @var string
      */
-    private $reportName = 'testReport';
+    private static $reportName = 'testReport';
 
     /**
      * @var string
      */
-    private $providerName = 'testProvider';
+    private static $providerName = 'testProvider';
 
     /**
      * @var string
      */
-    private $providerClass = 'Magento\Analytics\Provider';
+    private static $providerClass = 'Magento\Analytics\Provider';
 
     /**
      * @return void
@@ -103,10 +103,12 @@ class ReportWriterTest extends TestCase
      * @param array $expectedFileData
      * @return void
      *
-     * @dataProvider configDataProvider
+     * @dataProvider writeDataProvider
      */
     public function testWrite(array $configData, array $fileData, array $expectedFileData): void
     {
+        $fileData = new \IteratorIterator(new \ArrayIterator($fileData));
+        $emptyFileData = new \IteratorIterator(new \ArrayIterator([]));
         $errors = [];
         $this->configInterfaceMock
             ->expects($this->once())
@@ -116,15 +118,15 @@ class ReportWriterTest extends TestCase
         $this->providerFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->with($this->providerClass)
+            ->with(self::$providerClass)
             ->willReturn($this->reportProviderMock);
         $parameterName = isset(reset($configData)[0]['parameters']['name'])
             ? reset($configData)[0]['parameters']['name']
             : '';
-        $this->reportProviderMock->expects($this->once())
-            ->method('getReport')
+        $this->reportProviderMock->expects($this->exactly(2))
+            ->method('getBatchReport')
             ->with($parameterName ?: null)
-            ->willReturn($fileData);
+            ->willReturnOnConsecutiveCalls($fileData, $emptyFileData);
         $errorStreamMock = $this->getMockBuilder(
             FileWriteInterface::class
         )->getMockForAbstractClass();
@@ -135,10 +137,16 @@ class ReportWriterTest extends TestCase
         $errorStreamMock
             ->expects($this->exactly(2))
             ->method('writeCsv')
-            ->withConsecutive(
-                [array_keys($expectedFileData[0])],
-                [$expectedFileData[0]]
-            );
+            ->willReturnCallback(function (...$args) use ($expectedFileData) {
+                static $index = 0;
+                $expectedArgs = [
+                    [array_keys($expectedFileData[0])],
+                    [$expectedFileData[0]]
+                ];
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? null : null;
+            });
+
         $errorStreamMock->expects($this->once())->method('unlock');
         $errorStreamMock->expects($this->once())->method('close');
         if ($parameterName) {
@@ -162,7 +170,7 @@ class ReportWriterTest extends TestCase
      * @param array $configData
      * @return void
      *
-     * @dataProvider configDataProvider
+     * @dataProvider writeErrorFileDataProvider
      */
     public function testWriteErrorFile(array $configData): void
     {
@@ -195,27 +203,86 @@ class ReportWriterTest extends TestCase
     /**
      * @return array
      */
-    public function configDataProvider(): array
+    public static function writeDataProvider(): array
     {
+        $configData = [
+            'providers' => [
+                [
+                    'name' => self::$providerName,
+                    'class' => self::$providerClass,
+                    'parameters' => [
+                        'name' => self::$reportName
+                    ],
+                ]
+            ]
+        ];
         return [
-            'reportProvider' => [
-                'configData' => [
-                    'providers' => [
-                        [
-                            'name' => $this->providerName,
-                            'class' => $this->providerClass,
-                            'parameters' => [
-                                'name' => $this->reportName
-                            ],
-                        ]
-                    ]
-                ],
+            [
+                'configData' => $configData,
                 'fileData' => [
                     ['number' => 1, 'type' => 'Shoes\"" Usual\\\\"']
                 ],
                 'expectedFileData' => [
-                    ['number' => 1, 'type' => 'Shoes\"\" Usual\\"']
+                    ['number' => 1, 'type' => 'Shoes"" Usual"']
                 ]
+            ],
+            [
+                'configData' => $configData,
+                'fileData' => [
+                    ['number' => 1, 'type' => 'hello "World"']
+                ],
+                'expectedFileData' => [
+                    ['number' => 1, 'type' => 'hello "World"']
+                ]
+            ],
+            [
+                'configData' => $configData,
+                'fileData' => [
+                    ['number' => 1, 'type' => 'hello \"World\"']
+                ],
+                'expectedFileData' => [
+                    ['number' => 1, 'type' => 'hello "World"']
+                ]
+            ],
+            [
+                'configData' => $configData,
+                'fileData' => [
+                    ['number' => 1, 'type' => 'hello \\"World\\"']
+                ],
+                'expectedFileData' => [
+                    ['number' => 1, 'type' => 'hello "World"']
+                ]
+            ],
+            [
+                'configData' => $configData,
+                'fileData' => [
+                    ['number' => 1, 'type' => 'hello \\\"World\\\"']
+                ],
+                'expectedFileData' => [
+                    ['number' => 1, 'type' => 'hello "World"']
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function writeErrorFileDataProvider(): array
+    {
+        return [
+            [
+                'configData' => [
+                    'providers' => [
+                        [
+                            'name' => self::$providerName,
+                            'class' => self::$providerClass,
+                            'parameters' => [
+                                'name' => self::$reportName
+                            ],
+                        ]
+                    ]
+                ],
             ],
         ];
     }

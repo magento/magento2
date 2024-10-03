@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Framework\File;
 
 use Magento\Framework\Filesystem\Driver\File;
@@ -11,7 +13,7 @@ use Magento\Framework\Filesystem\Driver\File;
 /**
  * Csv parse
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Csv
 {
@@ -29,6 +31,11 @@ class Csv
      * @var string
      */
     protected $_enclosure = '"';
+
+    /**
+     * @var string
+     */
+    private $escape = "\0";
 
     /**
      * @var File
@@ -96,7 +103,7 @@ class Csv
         }
 
         $fh = fopen($file, 'r');
-        while ($rowData = fgetcsv($fh, $this->_lineLength, $this->_delimiter, $this->_enclosure)) {
+        while ($rowData = fgetcsv($fh, $this->_lineLength, $this->_delimiter, $this->_enclosure, $this->escape)) {
             $data[] = $rowData;
         }
         fclose($fh);

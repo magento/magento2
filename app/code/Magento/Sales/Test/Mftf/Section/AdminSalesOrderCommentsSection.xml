@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminSalesOrderCommentsSection">
+        <element name="historyComment" type="textarea" selector="#history_comment"/>
+        <element name="historyVisible" type="checkbox" selector="#history_visible"/>
+        <element name="submitOrderComment" type="button" selector=".order-history-comments-actions>button"/>
+    </section>
+</sections>

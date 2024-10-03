@@ -142,6 +142,7 @@
             "SALES_ORDER_STATUS": true,
             "SALES_ORDER_STATE": true,
             "SALES_ORDER_STORE_ID": true,
+            "SALES_ORDER_STORE_ID_STATE_CREATED_AT": true,
             "SALES_ORDER_CREATED_AT": true,
             "SALES_ORDER_CUSTOMER_ID": true,
             "SALES_ORDER_EXT_ORDER_ID": true,
@@ -479,6 +480,7 @@
             "SALES_SHIPMENT_GRID_ORDER_CREATED_AT": true,
             "SALES_SHIPMENT_GRID_SHIPPING_NAME": true,
             "SALES_SHIPMENT_GRID_BILLING_NAME": true,
+            "SALES_SHIPMENT_GRID_ORDER_ID": true,
             "FTI_086B40C8955F167B8EA76653437879B4": true
         },
         "constraint": {

@@ -1,10 +1,11 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * test Magento\Customer\Model\Metadata\Form\Multiselect
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
 use Magento\Customer\Api\Data\OptionInterface;
@@ -49,7 +50,7 @@ class MultiselectTest extends AbstractFormTestCase
         $multiselect = $this->getMockBuilder(
             Multiselect::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['_getRequestValue']
             )->getMock();
         $multiselect->expects($this->once())->method('_getRequestValue')->willReturn($value);
@@ -65,7 +66,7 @@ class MultiselectTest extends AbstractFormTestCase
      *
      * @return array(array)
      */
-    public function extractValueDataProvider()
+    public static function extractValueDataProvider()
     {
         return [
             'false' => [false, false],
@@ -96,7 +97,7 @@ class MultiselectTest extends AbstractFormTestCase
      *
      * @return array(array)
      */
-    public function compactValueDataProvider()
+    public static function compactValueDataProvider()
     {
         return [
             'false' => [false, false],
@@ -139,11 +140,11 @@ class MultiselectTest extends AbstractFormTestCase
      *
      * @return array(array)
      */
-    public function outputValueTextDataProvider()
+    public static function outputValueTextDataProvider()
     {
         return [
             'empty' => ['', ''],
-            'null' => [null, ''],
+            'null' => [false, ''],
             'number' => [14, 'fourteen'],
             'string' => ['some key', 'some string'],
             'array' => [[14, 'some key'], 'fourteen, some string'],
@@ -170,11 +171,11 @@ class MultiselectTest extends AbstractFormTestCase
      *
      * @return array(array)
      */
-    public function outputValueJsonDataProvider()
+    public static function outputValueJsonDataProvider()
     {
         return [
             'empty' => ['', ['']],
-            'null' => [null, ['']],
+            'null' => [false, ['']],
             'number' => [14, ['14']],
             'string' => ['some key', ['some key']],
             'array' => [[14, 'some key'], ['14', 'some key']],
@@ -193,29 +194,23 @@ class MultiselectTest extends AbstractFormTestCase
     {
         $option1 = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLabel', 'getValue'])
+            ->onlyMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();
-        $option1->expects($this->any())
-            ->method('getLabel')
+        $option1->method('getLabel')
             ->willReturn('fourteen');
-        $option1->expects($this->any())
-            ->method('getValue')
+        $option1->method('getValue')
             ->willReturn('14');
 
         $option2 = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLabel', 'getValue'])
+            ->onlyMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();
-        $option2->expects($this->any())
-            ->method('getLabel')
+        $option2->method('getLabel')
             ->willReturn('some string');
-        $option2->expects($this->any())
-            ->method('getValue')
+        $option2->method('getValue')
             ->willReturn('some key');
 
-        $this->attributeMetadataMock->expects(
-            $this->any()
-        )->method(
+        $this->attributeMetadataMock->method(
             'getOptions'
         )->willReturn(
             [

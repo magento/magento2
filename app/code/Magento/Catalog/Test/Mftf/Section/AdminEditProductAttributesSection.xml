@@ -23,5 +23,15 @@
         <element name="defaultLabel" type="text" selector="//td[contains(text(), '{{attributeName}}')]/following-sibling::td[contains(@class, 'col-frontend_label')]" parameterized="true"/>
         <element name="formByStoreId" type="block" selector="//form[contains(@action,'store/{{store_id}}')]" parameterized="true"/>
         <element name="tabButton" type="text" selector="#product_attribute_tabs a[title='{{tabName}}']" parameterized="true"/>
+        <element name="attributeShortDescription" type="text" selector="#short_description"/>
+        <element name="changeAttributeShortDescriptionToggle" type="checkbox" selector="#toggle_short_description"/>
+        <element name="attributeInput" type="input" selector="#{{attributeCode}}"  parameterized="true"/>
+        <element name="toggleAttribute" type="checkbox" selector="#toggle_{{attributeCode}}" parameterized="true"/>
+        <element name="AttributeDynamicPrice" type="select" selector="#price_type"/>
+        <element name="AttributeDynamicSKU" type="select" selector="#sku_type"/>
+        <element name="AttributeDynamicWeight" type="select" selector="#weight_type"/>
+        <element name="ChangeAttributeDynamicPriceToggle" type="checkbox" selector="#toggle_price_type"/>
+        <element name="ChangeAttributeDynamicSKUToggle" type="checkbox" selector="#toggle_sku_type"/>
+        <element name="ChangeAttributeDynamicWeightToggle" type="checkbox" selector="#toggle_weight_type"/>
     </section>
 </sections>

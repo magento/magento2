@@ -31,13 +31,11 @@ class Generator extends AbstractSchemaGenerator
     /**
      * Error response schema
      */
-    const ERROR_SCHEMA = '#/definitions/error-response';
+    private const ERROR_SCHEMA = '#/definitions/error-response';
 
-    /** Unauthorized description */
-    const UNAUTHORIZED_DESCRIPTION = '401 Unauthorized';
+    private const UNAUTHORIZED_DESCRIPTION = '401 Unauthorized';
 
-    /** Array signifier */
-    const ARRAY_SIGNIFIER = '[0]';
+    protected const ARRAY_SIGNIFIER = '[0]';
 
     /**
      * Wrapper node for XML requests
@@ -49,14 +47,14 @@ class Generator extends AbstractSchemaGenerator
      *
      * @var SwaggerFactory
      */
-    protected $swaggerFactory;
+    protected SwaggerFactory $swaggerFactory;
 
     /**
      * Magento product metadata
      *
      * @var ProductMetadataInterface
      */
-    protected $productMetadata;
+    protected ProductMetadataInterface $productMetadata;
 
     /**
      * A map of Tags
@@ -70,7 +68,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @var array
      */
-    protected $tags = [];
+    protected array $tags = [];
 
     /**
      * A map of definition
@@ -84,7 +82,7 @@ class Generator extends AbstractSchemaGenerator
      * Note: definitionName is converted from class name
      * @var array
      */
-    protected $definitions = [];
+    protected array $definitions = [];
 
     /**
      * List of simple parameter types not to be processed by the definitions generator
@@ -92,7 +90,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @var string[]
      */
-    protected $simpleTypeList = [
+    protected array $simpleTypeList = [
         'bool'                              => 'boolean',
         'boolean'                           => 'boolean',
         'int'                               => 'integer',
@@ -167,7 +165,7 @@ class Generator extends AbstractSchemaGenerator
                     $swagger->addPath(
                         $this->convertPathParams($uri),
                         $httpOperation,
-                        $this->generatePathInfo($httpOperation, $httpMethodData, $serviceName)
+                        $this->generatePathInfo($httpOperation, $httpMethodData, $serviceName, $uri)
                     );
                 }
             }
@@ -228,15 +226,15 @@ class Generator extends AbstractSchemaGenerator
      * @param string $methodName
      * @param array $httpMethodData
      * @param string $tagName
+     * @param string $uri
      * @return array
      */
-    protected function generatePathInfo($methodName, $httpMethodData, $tagName)
+    protected function generatePathInfo(string $methodName, array $httpMethodData, string $tagName, string $uri): array
     {
         $methodData = $httpMethodData[Converter::KEY_METHOD];
+        $uri = ucwords(str_replace(['/{', '}/', '{', '}'], '/', $uri), "/");
 
-        $operationId = $this->typeProcessor->getOperationName($tagName, $methodData[Converter::KEY_METHOD]);
-        $operationId .= ucfirst($methodName);
-
+        $operationId = ucfirst($methodName) . str_replace(['/', '-'], '', $uri);
         $pathInfo = [
             'tags' => [$tagName],
             'description' => $methodData['documentation'],
@@ -329,7 +327,7 @@ class Generator extends AbstractSchemaGenerator
             if (!isset($parameterInfo['type'])) {
                 return [];
             }
-            $description = isset($parameterInfo['documentation']) ? $parameterInfo['documentation'] : null;
+            $description = $parameterInfo['documentation'] ?? null;
 
             /** Get location of parameter */
             if (strpos($httpMethodData['uri'], (string) ('{' . $parameterName . '}')) !== false) {
@@ -434,11 +432,11 @@ class Generator extends AbstractSchemaGenerator
             if (!empty($description)) {
                 $result['description'] = $description;
             }
-            $trimedTypeName = rtrim($typeName, '[]');
+            $trimedTypeName = $typeName !== null ? rtrim($typeName, '[]') : '';
             if ($simpleType = $this->getSimpleType($trimedTypeName)) {
                 $result['items'] = ['type' => $simpleType];
             } else {
-                if (strpos($typeName, '[]') !== false) {
+                if ($typeName && strpos($typeName, '[]') !== false) {
                     $result['items'] = ['$ref' => $this->getDefinitionReference($trimedTypeName)];
                 } else {
                     $result = ['$ref' => $this->getDefinitionReference($trimedTypeName)];
@@ -710,14 +708,14 @@ class Generator extends AbstractSchemaGenerator
             // Primitive type or array of primitive types
             return [
                 $this->handlePrimitive($name, $prefix) => [
-                    'type' => substr($type, -2) === '[]' ? $type : $this->getSimpleType($type),
+                    'type' => ($type && substr($type, -2) === '[]') ? $type : $this->getSimpleType($type),
                     'description' => $description
                 ]
             ];
         }
         if ($this->typeProcessor->isArrayType($type)) {
             // Array of complex type
-            $arrayType = substr($type, 0, -2);
+            $arrayType = $type !== null ? substr($type, 0, -2) : '';
             return $this->handleComplex($name, $arrayType, $prefix, true);
         } else {
             // Complex type
@@ -741,9 +739,7 @@ class Generator extends AbstractSchemaGenerator
         $queryNames = [];
         foreach ($parameters as $subParameterName => $subParameterInfo) {
             $subParameterType = $subParameterInfo['type'];
-            $subParameterDescription = isset($subParameterInfo['documentation'])
-                ? $subParameterInfo['documentation']
-                : null;
+            $subParameterDescription = $subParameterInfo['documentation'] ?? null;
             $subPrefix = $prefix
                 ? $prefix . '[' . $name . ']'
                 : $name;
@@ -758,7 +754,7 @@ class Generator extends AbstractSchemaGenerator
             );
         }
 
-        return empty($queryNames) ? [] : array_merge(...$queryNames);
+        return array_merge([], ...$queryNames);
     }
 
     /**
@@ -786,8 +782,8 @@ class Generator extends AbstractSchemaGenerator
         $parts = explode('/', $uri);
         $count = count($parts);
         for ($i=0; $i < $count; $i++) {
-            if (strpos($parts[$i], ':') === 0) {
-                $parts[$i] = '{' . substr($parts[$i], 1) . '}';
+            if (strpos($parts[$i] ?? '', ':') === 0) {
+                $parts[$i] = '{' . substr($parts[$i] ?? '', 1) . '}';
             }
         }
         return implode('/', $parts);

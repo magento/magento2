@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model;
 
+use Magento\Config\Model\Config\Backend\Encrypted;
 use Magento\Framework\App\Config;
+use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\AbstractModel;
@@ -23,6 +26,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test of sales emails sending observer.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailSenderHandlerTest extends TestCase
 {
@@ -71,6 +76,19 @@ class EmailSenderHandlerTest extends TestCase
      */
     private $storeManagerMock;
 
+    /**
+     * @var ValueFactory|MockObject
+     */
+    private $configValueFactory;
+
+    /**
+     * @var string
+     */
+    private $modifyStartFromDate = '-1 day';
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -87,7 +105,7 @@ class EmailSenderHandlerTest extends TestCase
             false,
             false,
             true,
-            ['save']
+            ['saveAttribute']
         );
 
         $this->entityCollection = $this->getMockForAbstractClass(
@@ -110,15 +128,21 @@ class EmailSenderHandlerTest extends TestCase
             StoreManagerInterface::class
         );
 
+        $this->configValueFactory = $this->createMock(
+            ValueFactory::class
+        );
+
         $this->object = $objectManager->getObject(
             EmailSenderHandler::class,
             [
-                'emailSender'       => $this->emailSender,
-                'entityResource'    => $this->entityResource,
-                'entityCollection'  => $this->entityCollection,
-                'globalConfig'      => $this->globalConfig,
-                'identityContainer' => $this->identityContainerMock,
-                'storeManager'      => $this->storeManagerMock,
+                'emailSender'         => $this->emailSender,
+                'entityResource'      => $this->entityResource,
+                'entityCollection'    => $this->entityCollection,
+                'globalConfig'        => $this->globalConfig,
+                'identityContainer'   => $this->identityContainerMock,
+                'storeManager'        => $this->storeManagerMock,
+                'configValueFactory'  => $this->configValueFactory,
+                'modifyStartFromDate' => $this->modifyStartFromDate
             ]
         );
     }
@@ -127,29 +151,50 @@ class EmailSenderHandlerTest extends TestCase
      * @param int $configValue
      * @param array|null $collectionItems
      * @param bool|null $emailSendingResult
-     * @dataProvider executeDataProvider
+     * @param int|null $expectedIsEmailSent
+     *
      * @return void
+     * @dataProvider executeDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testExecute($configValue, $collectionItems, $emailSendingResult)
-    {
-        $path = 'sales_email/general/async_sending';
-
+    public function testExecute(
+        int $configValue,
+        ?array $collectionItems,
+        ?bool $emailSendingResult,
+        ?int $expectedIsEmailSent
+    ): void {
+        if ($collectionItems!=null && !empty($collectionItems)) {
+            $collectionItems[0] = $collectionItems[0]($this);
+        }
         $this->globalConfig
-            ->expects($this->at(0))
             ->method('getValue')
-            ->with($path)
-            ->willReturn($configValue);
+            ->willReturnCallback(function ($path) use ($configValue) {
+                if ($path === 'sales_email/general/async_sending') {
+                    return $configValue;
+                }
+                if ($path === 'sales_email/general/async_sending_attempts') {
+                    return 3;
+                }
+                return null;
+            });
 
         if ($configValue) {
+            $nowDate = date('Y-m-d H:i:s');
+            $fromDate = date('Y-m-d H:i:s', strtotime($nowDate . ' ' . $this->modifyStartFromDate));
             $this->entityCollection
-                ->expects($this->at(0))
                 ->method('addFieldToFilter')
-                ->with('send_email', ['eq' => 1]);
-
-            $this->entityCollection
-                ->expects($this->at(1))
-                ->method('addFieldToFilter')
-                ->with('email_sent', ['null' => true]);
+                ->willReturnCallback(
+                    function ($arg1, $arg2) use ($fromDate) {
+                        if ($arg1 == 'send_email' && $arg2 == ['eq' => 1]) {
+                            return null;
+                        } elseif ($arg1 == 'email_sent' &&
+                            ($arg2 == ['null' => true] || $arg2 == ['lteq' => -1])) {
+                            return null;
+                        } elseif ($arg1 == 'created_at' && $arg2 == ['from' => $fromDate]) {
+                            return null;
+                        }
+                    }
+                );
 
             $this->entityCollection
                 ->expects($this->any())
@@ -174,6 +219,20 @@ class EmailSenderHandlerTest extends TestCase
                 ->expects($this->any())
                 ->method('getItems')
                 ->willReturn($collectionItems);
+
+            /** @var Value|Encrypted|MockObject $valueMock */
+            $backendModelMock = $this->getMockBuilder(Value::class)
+                ->disableOriginalConstructor()
+                ->onlyMethods(['load', 'getId'])
+                ->addMethods(['getUpdatedAt'])
+                ->getMock();
+            $backendModelMock->expects($this->once())->method('load')->willReturnSelf();
+            $backendModelMock->expects($this->once())->method('getId')->willReturn(1);
+            $backendModelMock->expects($this->once())->method('getUpdatedAt')->willReturn($nowDate);
+
+            $this->configValueFactory->expects($this->once())
+                ->method('create')
+                ->willReturn($backendModelMock);
 
             if ($collectionItems) {
 
@@ -203,18 +262,16 @@ class EmailSenderHandlerTest extends TestCase
                     ->method('isEnabled')
                     ->willReturn(true);
 
-                if ($emailSendingResult) {
-                    $collectionItem
-                        ->expects($this->once())
-                        ->method('setEmailSent')
-                        ->with(true)
-                        ->willReturn($collectionItem);
+                $collectionItem
+                    ->expects($this->once())
+                    ->method('setEmailSent')
+                    ->with($expectedIsEmailSent)
+                    ->willReturn($collectionItem);
 
-                    $this->entityResource
-                        ->expects($this->once())
-                        ->method('save')
-                        ->with($collectionItem);
-                }
+                $this->entityResource
+                    ->expects($this->once())
+                    ->method('saveAttribute')
+                    ->with($collectionItem);
             }
         }
 
@@ -224,9 +281,9 @@ class EmailSenderHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider(): array
     {
-        $entityModel = $this->getMockForAbstractClass(
+        $entityModel = static fn (self $testCase) => $testCase->getMockForAbstractClass(
             AbstractModel::class,
             [],
             '',
@@ -241,21 +298,25 @@ class EmailSenderHandlerTest extends TestCase
                 'configValue' => 1,
                 'collectionItems' => [clone $entityModel],
                 'emailSendingResult' => true,
+                'expectedIsEmailSent' => 1
             ],
             [
                 'configValue' => 1,
                 'collectionItems' => [clone $entityModel],
                 'emailSendingResult' => false,
+                'expectedIsEmailSent' => -2
             ],
             [
                 'configValue' => 1,
                 'collectionItems' => [],
                 'emailSendingResult' => null,
+                'expectedIsEmailSent' => 1
             ],
             [
                 'configValue' => 0,
                 'collectionItems' => null,
                 'emailSendingResult' => null,
+                'expectedIsEmailSent' => 1
             ]
         ];
     }

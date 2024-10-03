@@ -21,6 +21,9 @@
         <settings>
             <storageConfig>
                 <param name="cacheRequests" xsi:type="boolean">false</param>
+                <param name="requestConfig" xsi:type="array">
+                    <item name="method" xsi:type="string">POST</item>
+                </param>
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
@@ -58,7 +61,7 @@
                     <label translate="true">Status</label>
                     <dataScope>status</dataScope>
                     <imports>
-                        <link name="visible">componentType = column, index = ${ $.index }:visible</link>
+                        <link name="visible">ns = ${ $.ns }, index = ${ $.index }:visible</link>
                     </imports>
                 </settings>
             </filterSelect>

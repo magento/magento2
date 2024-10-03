@@ -80,12 +80,12 @@ class AttributeRepositoryTest extends TestCase
 
         $this->attributeCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->searchResultsFactory = $this->getMockBuilder(AttributeSearchResultsInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->attributeFactory = $this->getMockBuilder(AttributeFactory::class)
@@ -133,7 +133,7 @@ class AttributeRepositoryTest extends TestCase
         $collectionSize = 1;
 
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['getPageSize'])
+            ->onlyMethods(['getPageSize'])
             ->getMockForAbstractClass();
 
         $searchCriteriaMock->expects($this->any())
@@ -199,7 +199,7 @@ class AttributeRepositoryTest extends TestCase
 
         $entityTypeMock = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAdditionalAttributeTable'])
+            ->addMethods(['getAdditionalAttributeTable'])
             ->getMock();
         $entityTypeMock->expects($this->once())
             ->method('getAdditionalAttributeTable')
@@ -265,7 +265,7 @@ class AttributeRepositoryTest extends TestCase
     {
         /** @var MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(AttributeInterface::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getAttributeCode',
                 'getAttributeId',
             ])

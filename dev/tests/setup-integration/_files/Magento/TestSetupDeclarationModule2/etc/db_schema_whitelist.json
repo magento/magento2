@@ -1,0 +1,14 @@
+{
+  "test_table_one": {
+    "column": []
+  },
+  "test_table_two": {
+    "column": []
+  },
+  "reference_table": {
+    "column": []
+  },
+  "auto_increment_test": {
+    "column": []
+  }
+}

@@ -22,7 +22,7 @@
     },
     "replace": {
         "magento/module-marketplace": "100.0.2",
-        "tinymce/tinymce": "3.4.7"
+        "tinymce/tinymce": "7.3.0"
     },
     "extra": {
         "component_paths": {
@@ -30,7 +30,6 @@
             "components/jquery": [
                 "lib/web/jquery.js",
                 "lib/web/jquery/jquery.min.js",
-                "lib/web/jquery/jquery-migrate.js"
             ],
             "blueimp/jquery-file-upload": "lib/web/jquery/fileUploader",
             "components/jqueryui": [

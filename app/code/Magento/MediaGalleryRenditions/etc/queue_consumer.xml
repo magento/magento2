@@ -7,5 +7,5 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
     <consumer name="media.gallery.renditions.update" queue="media.gallery.renditions.update"
-              connection="db" handler="Magento\MediaGalleryRenditions\Model\Queue\UpdateRenditions::execute"/>
+              handler="Magento\MediaGalleryRenditions\Model\Queue\UpdateRenditions::execute"/>
 </config>

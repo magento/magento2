@@ -16,10 +16,11 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-16679"/>
             <group value="paypal"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="SampleConfigPayPalExpressCheckoutActionGroup" stepKey="ConfigPayPalExpress">
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
                 <argument name="credentials" value="SamplePaypalExpressConfig"/>
             </actionGroup>
         </before>

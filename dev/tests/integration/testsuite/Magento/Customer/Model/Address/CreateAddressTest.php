@@ -165,7 +165,7 @@ class CreateAddressTest extends TestCase
      *
      * @return array
      */
-    public function createDefaultAddressesDataProvider(): array
+    public static function createDefaultAddressesDataProvider(): array
     {
         return [
             'any_addresses_are_default' => [self::STATIC_CUSTOMER_ADDRESS_DATA, false, false],
@@ -208,7 +208,7 @@ class CreateAddressTest extends TestCase
      *
      * @return array
      */
-    public function createAddressesDataProvider(): array
+    public static function createAddressesDataProvider(): array
     {
         return [
             'required_fields_valid_data' => [
@@ -298,7 +298,7 @@ class CreateAddressTest extends TestCase
      *
      * @return array
      */
-    public function createWrongAddressesDataProvider(): array
+    public static function createWrongAddressesDataProvider(): array
     {
         return [
             'required_field_empty_telephone' => [
@@ -425,6 +425,23 @@ class CreateAddressTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
+     * @magentoDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
+     * @magentoConfigFixture default_store general/country/allow BD,BB,AF
+     * @magentoConfigFixture fixture_second_store_store general/country/allow AS,BM
+     *
+     * @return void
+     */
+    public function testCreateAvailableAddress(): void
+    {
+        $countryId = 'BB';
+        $addressData = array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::COUNTRY_ID => $countryId]);
+        $customer = $this->customerRepository->get('customer5@example.com');
+        $address = $this->createAddress((int)$customer->getId(), $addressData);
+        $this->assertSame($countryId, $address->getCountryId());
+    }
+
+    /**
      * Create customer address with provided address data.
      *
      * @param int $customerId
@@ -487,7 +504,7 @@ class CreateAddressTest extends TestCase
                     $this->objectManager->get(PsrLogger::class)
                 ]
             )
-            ->setMethods(['checkVatNumber'])
+            ->onlyMethods(['checkVatNumber'])
             ->getMock();
         $customerVat->method('checkVatNumber')->willReturn($gatewayResponse);
         $this->objectManager->removeSharedInstance(Vat::class);

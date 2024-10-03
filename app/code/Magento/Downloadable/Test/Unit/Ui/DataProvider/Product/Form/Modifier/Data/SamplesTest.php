@@ -74,7 +74,8 @@ class SamplesTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getSamplesTitle', 'getId', 'getTypeId'])
+            ->addMethods(['getSamplesTitle'])
+            ->onlyMethods(['getId', 'getTypeId'])
             ->getMockForAbstractClass();
         $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
@@ -129,32 +130,32 @@ class SamplesTest extends TestCase
     /**
      * @return array
      */
-    public function getSamplesTitleDataProvider()
+    public static function getSamplesTitleDataProvider()
     {
         return [
             [
                 'id' => 1,
                 'typeId' => Type::TYPE_DOWNLOADABLE,
-                'expectedGetTitle' => $this->once(),
-                'expectedGetValue' => $this->never(),
+                'expectedGetTitle' => self::once(),
+                'expectedGetValue' => self::never(),
             ],
             [
                 'id' => null,
                 'typeId' => Type::TYPE_DOWNLOADABLE,
-                'expectedGetTitle' => $this->never(),
-                'expectedGetValue' => $this->once(),
+                'expectedGetTitle' => self::never(),
+                'expectedGetValue' => self::once(),
             ],
             [
                 'id' => 1,
                 'typeId' => 'someType',
-                'expectedGetTitle' => $this->never(),
-                'expectedGetValue' => $this->once(),
+                'expectedGetTitle' => self::never(),
+                'expectedGetValue' => self::once(),
             ],
             [
                 'id' => null,
                 'typeId' => 'someType',
-                'expectedGetTitle' => $this->never(),
-                'expectedGetValue' => $this->once(),
+                'expectedGetTitle' => self::never(),
+                'expectedGetValue' => self::once(),
             ],
         ];
     }

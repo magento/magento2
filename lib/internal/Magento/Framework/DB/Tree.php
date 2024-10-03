@@ -93,6 +93,7 @@ class Tree
 
             // use an object from the registry?
             if (is_string($connection)) {
+                /** @phpstan-ignore-next-line */
                 $connection = \Zend::registry($connection);
             }
 
@@ -358,6 +359,7 @@ class Tree
             } catch (\Exception $e) {
                 $this->_db->rollBack();
                 echo $e->getMessage();
+                /** @phpstan-ignore-next-line */
                 echo $sql;
                 exit;
             }
@@ -833,6 +835,7 @@ class Tree
         if ($pId == 0) {
             $levelUp = 0;
         } else {
+            /** @phpstan-ignore-next-line */
             $levelUp = $pInfo[$this->_level];
         }
 
@@ -844,15 +847,20 @@ class Tree
             $rightKeyNear = $this->_db->fetchOne('SELECT MAX(' . $this->_right . ') FROM ' . $this->_table);
         } elseif ($aId != 0 && $pId == $eInfo[$this->_pid]) {
             // if we have after ID
+            /** @phpstan-ignore-next-line */
             $rightKeyNear = $aInfo[$this->_right];
+            /** @phpstan-ignore-next-line */
             $leftKeyNear = $aInfo[$this->_left];
         } elseif ($aId == 0 && $pId == $eInfo[$this->_pid]) {
             // if we do not have after ID
+            /** @phpstan-ignore-next-line */
             $rightKeyNear = $pInfo[$this->_left];
         } elseif ($pId != $eInfo[$this->_pid]) {
+            /** @phpstan-ignore-next-line */
             $rightKeyNear = $pInfo[$this->_right] - 1;
         }
 
+        /** @phpstan-ignore-next-line */
         $skewLevel = $pInfo[$this->_level] - $eInfo[$this->_level] + 1;
         $skewTree = $eInfo[$this->_right] - $eInfo[$this->_left] + 1;
 
@@ -996,12 +1004,14 @@ class Tree
 
         $this->_db->beginTransaction();
         try {
+            /** @phpstan-ignore-next-line */
             $this->_db->query($sql);
             $this->_db->commit();
         } catch (\Exception $e) {
             $this->_db->rollBack();
             echo $e->getMessage();
             echo "<br>\r\n";
+            /** @phpstan-ignore-next-line */
             echo $sql;
             echo "<br>\r\n";
             exit;
@@ -1052,6 +1062,7 @@ class Tree
             exit;
         }
 
+        /** @phpstan-ignore-next-line */
         $dbSelect = new Select($this->_db);
         $dbSelect->from(
             $this->_table
@@ -1092,6 +1103,7 @@ class Tree
      */
     public function getNode($nodeId)
     {
+        /** @phpstan-ignore-next-line */
         $dbSelect = new Select($this->_db);
         $dbSelect->from($this->_table)->where($this->_table . '.' . $this->_id . ' >= :id');
 

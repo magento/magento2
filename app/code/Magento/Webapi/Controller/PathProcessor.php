@@ -9,13 +9,10 @@ namespace Magento\Webapi\Controller;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Class PathProcessor
- */
 class PathProcessor
 {
     /**  Store code alias to indicate that all stores should be affected by action */
-    const ALL_STORE_CODE = 'all';
+    public const ALL_STORE_CODE = 'all';
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -49,7 +46,7 @@ class PathProcessor
      */
     private function stripPathBeforeStorecode($pathInfo)
     {
-        $pathParts = explode('/', trim($pathInfo, '/'));
+        $pathParts = explode('/', $pathInfo !== null ? trim($pathInfo, '/') : '');
         array_shift($pathParts);
         $path = '/' . implode('/', $pathParts);
         return explode('/', ltrim($path, '/'), 2);

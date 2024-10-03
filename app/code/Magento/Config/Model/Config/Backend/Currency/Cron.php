@@ -9,6 +9,8 @@
  */
 namespace Magento\Config\Model\Config\Backend\Currency;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Cron job configuration for currency
  *
@@ -17,8 +19,7 @@ namespace Magento\Config\Model\Config\Backend\Currency;
  */
 class Cron extends \Magento\Framework\App\Config\Value
 {
-    const CRON_STRING_PATH = 'crontab/default/jobs/currency_rates_update/schedule/cron_expr';
-
+    public const CRON_STRING_PATH = 'crontab/default/jobs/currency_rates_update/schedule/cron_expr';
     /**
      * @var \Magento\Framework\App\Config\ValueFactory
      */
@@ -52,13 +53,28 @@ class Cron extends \Magento\Framework\App\Config\Value
      * After save handler
      *
      * @return $this
-     * @throws \Exception
+     * @throws LocalizedException
      */
     public function afterSave()
     {
         $time = $this->getData('groups/import/fields/time/value');
-        $frequency = $this->getData('groups/import/fields/frequency/value');
-
+        if (empty($time)) {
+            $time = explode(
+                ',',
+                $this->_config->getValue(
+                    'currency/import/time',
+                    $this->getScope(),
+                    $this->getScopeId()
+                ) ?: '0,0,0'
+            );
+            $frequency = $this->_config->getValue(
+                'currency/import/frequency',
+                $this->getScope(),
+                $this->getScopeId()
+            );
+        } else {
+            $frequency = $this->getData('groups/import/fields/frequency/value');
+        }
         $frequencyWeekly = \Magento\Cron\Model\Config\Source\Frequency::CRON_WEEKLY;
         $frequencyMonthly = \Magento\Cron\Model\Config\Source\Frequency::CRON_MONTHLY;
 
@@ -78,7 +94,7 @@ class Cron extends \Magento\Framework\App\Config\Value
             $configValue->load(self::CRON_STRING_PATH, 'path');
             $configValue->setValue($cronExprString)->setPath(self::CRON_STRING_PATH)->save();
         } catch (\Exception $e) {
-            throw new \Exception(__('We can\'t save the Cron expression.'));
+            throw new LocalizedException(__('We can\'t save the Cron expression.'));
         }
         return parent::afterSave();
     }

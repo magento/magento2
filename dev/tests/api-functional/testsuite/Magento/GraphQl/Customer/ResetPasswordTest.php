@@ -156,7 +156,7 @@ QUERY;
     public function testResetPasswordTokenMismatched()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Cannot set the customer\'s password');
+        $this->expectExceptionMessage('The password token is mismatched. Reset and try again');
         $query = <<<QUERY
 mutation {
     resetPassword (
@@ -186,6 +186,55 @@ mutation {
         email: "{$this->getCustomerEmail()}"
         resetPasswordToken: "{$this->getResetPasswordToken()}"
         newPassword: ""
+    )
+}
+QUERY;
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture    Magento/Customer/_files/customer.php
+     *
+     * @throws NoSuchEntityException
+     * @throws Exception
+     * @throws LocalizedException
+     */
+    public function testNewPasswordCheckMinLength()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The password needs at least 8 characters. Create a new password and try again');
+        $query = <<<QUERY
+mutation {
+    resetPassword (
+        email: "{$this->getCustomerEmail()}"
+        resetPasswordToken: "{$this->getResetPasswordToken()}"
+        newPassword: "new_"
+    )
+}
+QUERY;
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture    Magento/Customer/_files/customer.php
+     *
+     * @throws NoSuchEntityException
+     * @throws Exception
+     * @throws LocalizedException
+     */
+    public function testNewPasswordCheckCharactersStrength()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'Minimum of different classes of characters in password is 3. ' .
+            'Classes of characters: Lower Case, Upper Case, Digits, Special Characters.'
+        );
+        $query = <<<QUERY
+mutation {
+    resetPassword (
+        email: "{$this->getCustomerEmail()}"
+        resetPasswordToken: "{$this->getResetPasswordToken()}"
+        newPassword: "new_password"
     )
 }
 QUERY;

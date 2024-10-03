@@ -8,9 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Copier;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Framework\App\Cache\Type\Block;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
@@ -19,8 +23,12 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Math\Random;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\Store;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Magento\Widget\Model\Widget\Instance;
 
 /**
  * Tests product model:
@@ -53,12 +61,18 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
+     * @var DataFixtureStorageManager
+     */
+    private $fixtures;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->fixtures = DataFixtureStorageManager::getStorage();
         $this->_model = $this->objectManager->create(Product::class);
     }
 
@@ -246,36 +260,88 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $mediaDirectory->create($config->getBaseTmpMediaPath());
         $targetFile = $config->getTmpMediaPath(basename($sourceFile));
-        copy($sourceFile, $mediaDirectory->getAbsolutePath($targetFile));
+        $mediaDirectory->getDriver()
+            ->filePutContents(
+                $mediaDirectory->getAbsolutePath($targetFile),
+                file_get_contents($sourceFile)
+            );
 
         return $targetFile;
     }
 
     /**
-     * Test duplicate method
+     * Test Duplicate of product
      *
+     * Product assigned to default and custom scope is used. After duplication the copied product
+     * should retain store view specific data
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_multistore_different_short_description.php
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
+     * @magentoDbIsolation disabled
      */
     public function testDuplicate()
     {
-        $this->_model = $this->productRepository->get('simple');
-
-        // fixture
-        /** @var \Magento\Catalog\Model\Product\Copier $copier */
+        $fixtureProductSku = 'simple-different-short-description';
+        $fixtureCustomStoreCode = 'fixturestore';
+        $defaultStoreId = Store::DEFAULT_STORE_ID;
+        /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
+        $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
+        $customStoreId = $storeRepository->get($fixtureCustomStoreCode)->getId();
+        $defaultScopeProduct = $this->productRepository->get($fixtureProductSku, true, $defaultStoreId);
+        $customScopeProduct = $this->productRepository->get($fixtureProductSku, true, $customStoreId);
+        /** @var Copier $copier */
         $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Catalog\Model\Product\Copier::class
+            Copier::class
         );
-        $duplicate = $copier->copy($this->_model);
+        $duplicate = $copier->copy($defaultScopeProduct);
+
+        /* Fetch duplicate after cloning */
+        $defaultScopeDuplicate = $this->productRepository->getById($duplicate->getId(), true, $defaultStoreId);
+        $customScopeDuplicate = $this->productRepository->getById($duplicate->getId(), true, $customStoreId);
+
         try {
-            $this->assertNotEmpty($duplicate->getId());
-            $this->assertNotEquals($duplicate->getId(), $this->_model->getId());
-            $this->assertNotEquals($duplicate->getSku(), $this->_model->getSku());
+            $this->assertNotEquals(
+                $customScopeDuplicate->getId(),
+                $customScopeProduct->getId(),
+                'Duplicate product Id should not equal to source product Id'
+            );
+            $this->assertNotEquals(
+                $customScopeDuplicate->getSku(),
+                $customScopeProduct->getSku(),
+                'Duplicate product SKU should not equal to source product SKU'
+            );
+            $this->assertNotEquals(
+                $customScopeDuplicate->getShortDescription(),
+                $defaultScopeDuplicate->getShortDescription(),
+                'Short description of the duplicated product on custom scope should not equal to ' .
+                'duplicate product description on default scope'
+            );
+            $this->assertEquals(
+                $customScopeProduct->getShortDescription(),
+                $customScopeDuplicate->getShortDescription(),
+                'Short description of the duplicated product on custom scope should equal to ' .
+                'source product description on custom scope'
+            );
+            $this->assertEquals(
+                $customScopeProduct->getStoreId(),
+                $customScopeDuplicate->getStoreId(),
+                'Store Id of the duplicated product on custom scope should equal to ' .
+                'store Id of source product on custom scope'
+            );
+            $this->assertEquals(
+                $defaultScopeProduct->getStoreId(),
+                $defaultScopeDuplicate->getStoreId(),
+                'Store Id of the duplicated product on default scope should equal to ' .
+                'store Id of source product on default scope'
+            );
+
             $this->assertEquals(
                 Status::STATUS_DISABLED,
-                $duplicate->getStatus()
+                $defaultScopeDuplicate->getStatus(),
+                'Duplicate should be disabled'
             );
-            $this->assertEquals(\Magento\Store\Model\Store::DEFAULT_STORE_ID, $duplicate->getStoreId());
+
             $this->_undo($duplicate);
         } catch (\Exception $e) {
             $this->_undo($duplicate);
@@ -293,9 +359,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->_model = $this->productRepository->get('simple');
 
         $this->assertEquals('simple', $this->_model->getSku());
-        /** @var \Magento\Catalog\Model\Product\Copier $copier */
+        /** @var Copier $copier */
         $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Catalog\Model\Product\Copier::class
+            Copier::class
         );
         $duplicate = $copier->copy($this->_model);
         $this->assertEquals('simple-5', $duplicate->getSku());
@@ -311,7 +377,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Store\Model\StoreManagerInterface::class
         )->getStore()->setId(
-            \Magento\Store\Model\Store::DEFAULT_STORE_ID
+            Store::DEFAULT_STORE_ID
         );
         $duplicate->delete();
     }
@@ -768,7 +834,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function productWithBackordersDataProvider(): array
+    public static function productWithBackordersDataProvider(): array
     {
         return [
             [0, 0, false],
@@ -813,5 +879,48 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product = ObjectManager::getInstance()->create(Product::class, ['data' => $data]);
         $this->assertSame($product->getCustomAttribute('tax_class_id')->getValue(), '3');
         $this->assertSame($product->getCustomAttribute('category_ids')->getValue(), '1,2');
+    }
+
+    public function testSetPriceWithoutTypeId()
+    {
+        $this->_model->setAttributeSetId(4);
+        $this->_model->setName('Some name');
+        $this->_model->setSku('some_sku');
+        $this->_model->setPrice(9.95);
+        $this->productRepository->save($this->_model);
+
+        $product = $this->productRepository->get('some_sku', false, null, true);
+        $this->assertEquals(9.95, $product->getPrice());
+    }
+
+    /**
+     * Tests case for product saving invalidate cache successfully
+     */
+    #[
+        DataFixture(
+            ProductFixture::class,
+            ['sku' => 'simple1', 'price' => 10, 'page_layout' => '1column'],
+            as: 'product'
+        ),
+    ]
+    public function testSavingProductInAdminWithLayoutChangeWillInvalidateCache()
+    {
+        /** @var ProductInterface $product */
+        $product = $this->fixtures->get('product');
+        $product->setStatus(Status::STATUS_ENABLED);
+        $this->productRepository->save($product);
+        $blockHtmlCache = $this->objectManager->get(
+            Block::class
+        );
+        $cacheKey = sprintf(
+            '%s',
+            str_replace('{{ID}}', (string)$product->getId(), Instance::SINGLE_PRODUCT_LAYOUT_HANDLE)
+        );
+
+        $product->setPageLayout('cms-full-width');
+        $this->productRepository->save($product);
+        $this->assertFalse(
+            $blockHtmlCache->test($cacheKey)
+        );
     }
 }

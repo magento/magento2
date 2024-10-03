@@ -40,7 +40,7 @@ class SwatchTextFilterTest extends CategorySwatchTextFilterTest
     /**
      * @return array
      */
-    public function getFiltersWithCustomAttributeDataProvider(): array
+    public static function getFiltersWithCustomAttributeDataProvider(): array
     {
         $dataProvider = parent::getFiltersWithCustomAttributeDataProvider();
 
@@ -48,18 +48,18 @@ class SwatchTextFilterTest extends CategorySwatchTextFilterTest
             $dataProvider,
             [
                 'not_used_in_navigation' => [
-                    'attribute_data' => [
+                    'attributeData' => [
                         'is_filterable_in_search' => 0,
                     ],
                 ],
                 'used_in_navigation_with_results' => [
-                    'attribute_data' => [
+                    'attributeData' => [
                         'is_filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS,
                         'is_filterable_in_search' => 1,
                     ],
                 ],
                 'used_in_navigation_without_results' => [
-                    'attribute_data' => [
+                    'attributeData' => [
                         'is_filterable' => 0,
                         'is_filterable_in_search' => 1,
                     ],
@@ -70,6 +70,25 @@ class SwatchTextFilterTest extends CategorySwatchTextFilterTest
         //unset($dataProvider['used_in_navigation_without_results']['expectation'][0]);
 
         return $dataProvider;
+    }
+
+    /**
+     * @magentoDataFixture Magento/Swatches/_files/product_text_swatch_attribute.php
+     * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
+     * @dataProvider getActiveFiltersWithCustomAttributeDataProvider
+     * @param array $products
+     * @param array $expectation
+     * @param string $filterValue
+     * @param int $productsCount
+     * @return void
+     */
+    public function testGetActiveFiltersWithCustomAttribute(
+        array $products,
+        array $expectation,
+        string $filterValue,
+        int $productsCount
+    ): void {
+        $this->getSearchActiveFiltersAndAssert($products, $expectation, $filterValue, $productsCount);
     }
 
     /**

@@ -28,7 +28,8 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  *
  * This is the hood for all command line tools supported by Magento.
  *
- * @inheritdoc
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Cli extends Console\Application
@@ -36,16 +37,18 @@ class Cli extends Console\Application
     /**
      * Name of input option.
      */
-    const INPUT_KEY_BOOTSTRAP = 'bootstrap';
+    public const INPUT_KEY_BOOTSTRAP = 'bootstrap';
 
     /**#@+
      * Cli exit codes.
      */
-    const RETURN_SUCCESS = 0;
-    const RETURN_FAILURE = 1;
+    public const RETURN_SUCCESS = 0;
+    public const RETURN_FAILURE = 1;
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var $serviceManager
+     */
     private $serviceManager;
 
     /**
@@ -56,8 +59,6 @@ class Cli extends Console\Application
     private $initException;
 
     /**
-     * Object Manager.
-     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -87,8 +88,10 @@ class Cli extends Console\Application
             $output->writeln(
                 '<error>' . $exception->getMessage() . '</error>'
             );
+            // phpcs:disable
             // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit(static::RETURN_FAILURE);
+            // phpcs:enable
         }
 
         if ($version == 'UNKNOWN') {
@@ -129,7 +132,7 @@ class Cli extends Console\Application
     /**
      * @inheritdoc
      */
-    protected function getDefaultCommands()
+    protected function getDefaultCommands():array
     {
         return array_merge(parent::getDefaultCommands(), $this->getApplicationCommands());
     }
@@ -174,7 +177,6 @@ class Cli extends Console\Application
     {
         $params = (new ComplexParameter(self::INPUT_KEY_BOOTSTRAP))->mergeFromArgv($_SERVER, $_SERVER);
         $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
-        $params = $this->documentRootResolver($params);
         $requestParams = $this->serviceManager->get('magento-init-params');
         $appBootstrapKey = Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS;
 
@@ -229,27 +231,5 @@ class Cli extends Console\Application
         }
 
         return array_merge([], ...$commands);
-    }
-
-    /**
-     * Provides updated configuration in accordance to document root settings.
-     *
-     * @param array $config
-     * @return array
-     */
-    private function documentRootResolver(array $config = []): array
-    {
-        $params = [];
-        $deploymentConfig = $this->serviceManager->get(DeploymentConfig::class);
-        if ((bool)$deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DOCUMENT_ROOT_IS_PUB)) {
-            $params[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] = [
-                DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
-                DirectoryList::MEDIA => [DirectoryList::URL_PATH => 'media'],
-                DirectoryList::STATIC_VIEW => [DirectoryList::URL_PATH => 'static'],
-                DirectoryList::UPLOAD => [DirectoryList::URL_PATH => 'media/upload'],
-            ];
-        }
-
-        return array_merge_recursive($config, $params);
     }
 }

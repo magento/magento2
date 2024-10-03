@@ -27,10 +27,11 @@ class Details extends \Magento\Framework\View\Element\Template
      *
      * @return array
      * @since 103.0.1
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getGroupSortedChildNames(string $groupName, string $callback): array
     {
-        $groupChildNames = $this->getGroupChildNames($groupName, $callback);
+        $groupChildNames = $this->getGroupChildNames($groupName);
         $layout = $this->getLayout();
 
         $childNamesSortOrder = [];

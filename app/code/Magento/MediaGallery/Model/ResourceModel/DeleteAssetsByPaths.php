@@ -20,6 +20,7 @@ class DeleteAssetsByPaths implements DeleteAssetsByPathsInterface
 {
     private const TABLE_MEDIA_GALLERY_ASSET = 'media_gallery_asset';
     private const MEDIA_GALLERY_ASSET_PATH = 'path';
+    private const MEDIA_GALLERY_ASSET_ID = 'id';
 
     /**
      * @var ResourceConnection
@@ -78,13 +79,39 @@ class DeleteAssetsByPaths implements DeleteAssetsByPathsInterface
      * Delete assets from database based on the first part (beginning) of the path
      *
      * @param string $path
+     * @throws \Zend_Db_Statement_Exception
      */
     private function deleteAssetsByDirectoryPath(string $path): void
     {
         /** @var AdapterInterface $connection */
         $connection = $this->resourceConnection->getConnection();
+
+        $select = $connection->select()
+            ->from($this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET))
+            ->where(self::MEDIA_GALLERY_ASSET_PATH . ' LIKE ?', $path . '%');
+
+        $assets = $connection->query($select)->fetchAll();
+
+        // Filter out assets with mixed case that doesn't match the paths
+        foreach ($assets as $asset) {
+            if (str_starts_with($asset[self::MEDIA_GALLERY_ASSET_PATH], $path)) {
+                $this->deleteAssetById((int)$asset[self::MEDIA_GALLERY_ASSET_ID]);
+            }
+        }
+    }
+
+    /**
+     * Delete assets from database by asset id
+     *
+     * @param int $id
+     * @return void
+     */
+    private function deleteAssetById(int $id): void
+    {
+        /** @var AdapterInterface $connection */
+        $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);
-        $connection->delete($tableName, [self::MEDIA_GALLERY_ASSET_PATH . ' LIKE ?' => $path . '%']);
+        $connection->delete($tableName, [self::MEDIA_GALLERY_ASSET_ID . ' = ?' => $id]);
     }
 
     /**

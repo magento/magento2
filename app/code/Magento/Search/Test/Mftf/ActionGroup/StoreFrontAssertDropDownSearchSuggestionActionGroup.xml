@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StoreFrontAssertDropDownSearchSuggestionActionGroup">
+        <annotations>
+            <description>Fills the Storefront Quick Search field. Validates that the Search Suggestion is present</description>
+        </annotations>
+        <arguments>
+            <argument name="searchQuery" type="string"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" stepKey="waitForQuickSearchToBeVisible"/>
+        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{searchQuery}}" stepKey="fillSearchInput"/>
+        <waitForElementVisible selector="{{StorefrontQuickSearchSection.searchDropDownSuggestion}}" stepKey="WaitForSearchDropDownSuggestion"/>
+        <click selector="//div[@class='panel wrapper']" stepKey="clickOnSomewhere"/>
+        <dontSee selector="{{StorefrontQuickSearchSection.searchDropDownSuggestion}}" stepKey="dontSeeDropDownSuggestion"/>
+        <click selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="clickOnSearchPhrase"/>
+        <pressKey selector="{{StorefrontQuickSearchSection.searchPhrase}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::DOWN]" stepKey="pressDown"/>
+        <waitForElementVisible selector="{{StorefrontQuickSearchSection.searchDropDownSuggestion}}" stepKey="WaitForSearchDropDownSuggestionSecond"/>
+    </actionGroup>
+</actionGroups>

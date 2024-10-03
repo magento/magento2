@@ -27,6 +27,7 @@ use Magento\Framework\View\ConfigInterface as ViewConfig;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @api
  * @since 100.0.2
  */
@@ -383,7 +384,7 @@ class Context
     public function getAcceptType()
     {
         // TODO: do intelligence here
-        $type = $this->getHeader('Accept', 'html');
+        $type = $this->getHeader('Accept') ?: 'html';
         if (strpos($type, 'json') !== false) {
             return 'json';
         } elseif (strpos($type, 'soap') !== false) {
@@ -486,7 +487,9 @@ class Context
             $result = $result->getParentTheme();
         }
         if (!$result) {
-            throw new \Exception("Unable to find a physical ancestor for a theme '{$theme->getThemeTitle()}'.");
+            throw new \InvalidArgumentException(
+                "Unable to find a physical ancestor for a theme '{$theme->getThemeTitle()}'."
+            );
         }
         return $result;
     }

@@ -9,6 +9,8 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Interface LayoutInterface
+ *
+ * @api
  */
 interface LayoutInterface
 {

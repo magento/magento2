@@ -12,7 +12,6 @@ use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\DataObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 class ShippingTest extends TestCase
 {
@@ -23,17 +22,14 @@ class ShippingTest extends TestCase
 
     protected function setUp(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
-        /** @var LoggerInterface $logger */
-        $this->testable = new Shipping($logger);
+        $this->testable = new Shipping();
     }
 
     public function testBeforeSave()
     {
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDefaultShipping', 'unsetDefaultShipping'])
+            ->addMethods(['getDefaultShipping', 'unsetDefaultShipping'])
             ->getMock();
 
         $object->expects($this->once())->method('getDefaultShipping')->willReturn(null);
@@ -49,21 +45,21 @@ class ShippingTest extends TestCase
         $defaultShipping = 'default Shipping address';
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDefaultShipping', 'getAddresses', 'setDefaultShipping'])
+            ->addMethods(['getDefaultShipping', 'getAddresses', 'setDefaultShipping'])
             ->getMock();
 
         $address = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPostIndex', 'getId'])
+            ->addMethods(['getPostIndex', 'getId'])
             ->getMock();
 
         $attribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['__wakeup', 'getEntity', 'getAttributeCode'])
+            ->onlyMethods(['__wakeup', 'getEntity', 'getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $entity = $this->getMockBuilder(AbstractEntity::class)
-            ->setMethods(['saveAttribute'])
+            ->onlyMethods(['saveAttribute'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

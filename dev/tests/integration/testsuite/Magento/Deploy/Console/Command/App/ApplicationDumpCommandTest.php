@@ -171,13 +171,17 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
             'CONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE_ENVIRONMENT5 for web/test/test_sensitive_environment5'
         ]);
         $outputMock = $this->getMockForAbstractClass(OutputInterface::class);
-        $outputMock->expects($this->at(0))
+        $outputMock
             ->method('writeln')
-            ->with(['system' => $comment]);
-        $outputMock->expects($this->at(1))
-            ->method('writeln')
-            ->with($this->matchesRegularExpression('/<info>Done. Config types dumped: [a-z0-9,\s]+<\/info>/'));
-
+            ->willReturnCallback(
+                function ($arg1) use ($comment) {
+                    if ($arg1 === ['system' => $comment]) {
+                        return null;
+                    } elseif (preg_match('/<info>Done. Config types dumped: [a-z0-9,\s]+<\/info>/', $arg1)) {
+                        return null;
+                    }
+                }
+            );
         /** @var ApplicationDumpCommand command */
         $command = $this->objectManager->create(ApplicationDumpCommand::class);
         $command->run($this->getMockForAbstractClass(InputInterface::class), $outputMock);

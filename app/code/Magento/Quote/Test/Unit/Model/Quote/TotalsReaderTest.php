@@ -48,6 +48,9 @@ class TotalsReaderTest extends TestCase
      */
     protected $collectorMock;
 
+    /**
+     * @inheirtDoc
+     */
     protected function setUp(): void
     {
         $this->totalFactoryMock =
@@ -63,7 +66,10 @@ class TotalsReaderTest extends TestCase
         );
     }
 
-    public function testFetch()
+    /**
+     * @return void
+     */
+    public function testFetch(): void
     {
         $total = [];
         $storeId = 1;
@@ -78,10 +84,8 @@ class TotalsReaderTest extends TestCase
         $this->totalMock->expects($this->once())->method('setData')->with([])->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $this->totalFactoryMock
-            ->expects($this->at(0))
             ->method('create')
-            ->willReturn($this->totalMock);
-        $this->totalFactoryMock->expects($this->at(1))->method('create')->willReturn($testedTotalMock);
+            ->willReturnOnConsecutiveCalls($this->totalMock, $testedTotalMock);
         $this->collectionListMock
             ->expects($this->once())
             ->method('getCollectors')
@@ -96,7 +100,10 @@ class TotalsReaderTest extends TestCase
         $this->assertEquals($expected, $this->model->fetch($this->quoteMock, $total));
     }
 
-    public function testFetchWithEmptyData()
+    /**
+     * @return void
+     */
+    public function testFetchWithEmptyData(): void
     {
         $total = [];
         $storeId = 1;
@@ -118,7 +125,10 @@ class TotalsReaderTest extends TestCase
         $this->assertEquals([], $this->model->fetch($this->quoteMock, $total));
     }
 
-    public function testFetchSeveralCollectors()
+    /**
+     * @return void
+     */
+    public function testFetchSeveralCollectors(): void
     {
         $total = [];
         $storeId = 1;
@@ -139,11 +149,8 @@ class TotalsReaderTest extends TestCase
         $this->totalMock->expects($this->once())->method('setData')->with([])->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $this->totalFactoryMock
-            ->expects($this->at(0))
             ->method('create')
-            ->willReturn($this->totalMock);
-        $this->totalFactoryMock->expects($this->at(1))->method('create')->willReturn($firstTotalMock);
-        $this->totalFactoryMock->expects($this->at(2))->method('create')->willReturn($secondTotalMock);
+            ->willReturnOnConsecutiveCalls($this->totalMock, $firstTotalMock, $secondTotalMock);
         $this->collectionListMock
             ->expects($this->once())
             ->method('getCollectors')
@@ -160,7 +167,10 @@ class TotalsReaderTest extends TestCase
         $this->assertEquals($expected, $this->model->fetch($this->quoteMock, $total));
     }
 
-    public function testConvert()
+    /**
+     * @return void
+     */
+    public function testConvert(): void
     {
         $total = [];
         $storeId = 1;

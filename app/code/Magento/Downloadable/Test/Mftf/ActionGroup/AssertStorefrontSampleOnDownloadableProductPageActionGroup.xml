@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontSampleOnDownloadableProductPageActionGroup">
+        <annotations>
+            <description>Validates that the provided Sample Title is present on Downloadable Product details page.</description>
+        </annotations>
+        <arguments>
+            <argument name="sampleTitle" type="string" defaultValue="{{downloadableSampleUrl.title}}"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontDownloadableProductSection.downloadableSamplesListSection}}" stepKey="waitForDownloadableSamplesList"/>
+        <seeElement selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(sampleTitle)}}" stepKey="seeDownloadableSample"/>
+    </actionGroup>
+</actionGroups>

@@ -20,6 +20,7 @@ define([
             template: 'ui/grid/paging/paging',
             totalTmpl: 'ui/grid/paging-total',
             totalRecords: 0,
+            showTotalRecords: true,
             pages: 1,
             current: 1,
             selectProvider: 'ns = ${ $.ns }, index = ids',
@@ -36,7 +37,9 @@ define([
             imports: {
                 totalSelected: '${ $.selectProvider }:totalSelected',
                 totalRecords: '${ $.provider }:data.totalRecords',
-                filters: '${ $.provider }:params.filters'
+                showTotalRecords: '${ $.provider }:data.showTotalRecords',
+                filters: '${ $.provider }:params.filters',
+                keywordUpdated: '${ $.provider }:params.keywordUpdated'
             },
 
             exports: {
@@ -58,7 +61,9 @@ define([
                 'pages': 'onPagesChange',
                 'pageSize': 'onPageSizeChange',
                 'totalRecords': 'updateCounter',
-                '${ $.provider }:params.filters': 'goFirst'
+                'showTotalRecords': 'updateShowTotalRecords',
+                '${ $.provider }:params.filters': 'goFirst',
+                '${ $.provider }:params.search': 'onSearchUpdate'
             },
 
             modules: {
@@ -89,6 +94,7 @@ define([
                 .track([
                     'totalSelected',
                     'totalRecords',
+                    'showTotalRecords',
                     'pageSize',
                     'pages',
                     'current'
@@ -230,6 +236,16 @@ define([
         },
 
         /**
+         * Updates show total records flag.
+         */
+        updateShowTotalRecords: function () {
+            if (this.showTotalRecords === undefined) {
+                this.showTotalRecords = true;
+            }
+            return this;
+        },
+
+        /**
          * Calculates new page cursor based on the
          * previous and current page size values.
          */
@@ -282,6 +298,17 @@ define([
          */
         onPagesChange: function () {
             this.updateCursor();
+        },
+
+        /**
+         * Resent the pagination to Page 1 on search keyword update
+         */
+        onSearchUpdate: function () {
+            if (!_.isUndefined(this.keywordUpdated) && this.keywordUpdated) {
+                this.goFirst();
+            }
+
+            return this;
         }
     });
 });

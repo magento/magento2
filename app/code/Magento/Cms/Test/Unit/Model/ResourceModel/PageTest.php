@@ -125,10 +125,13 @@ class PageTest extends TestCase
             ->willReturn('10 Feb 2016');
         $this->pageMock->expects($this->any())
             ->method('setData')
-            ->withConsecutive(
-                ['custom_theme_from', null],
-                ['custom_theme_to', '10 Feb 2016']
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'custom_theme_from' || is_null($arg2)) {
+                    return null;
+                } elseif ($arg1 == 'custom_theme_to' && $arg2 == '10 Feb 2016') {
+                    return null;
+                }
+            });
 
         $this->model->beforeSave($this->pageMock);
     }

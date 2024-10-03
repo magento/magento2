@@ -7,7 +7,7 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="reference_table" resource="sales">
+    <table name="reference_table" resource="default">
         <column xsi:type="tinyint" name="tinyint_ref" padding="7" nullable="false" identity="true" unsigned="false"/>
         <column xsi:type="tinyint" name="tinyint_without_padding" default="0" nullable="false" unsigned="false"/>
         <column xsi:type="bigint" name="bigint_without_padding" default="0" nullable="false" unsigned="false"/>

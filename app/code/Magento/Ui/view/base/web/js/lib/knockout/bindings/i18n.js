@@ -119,7 +119,7 @@ define([
                     return $(el).next('span');
                 }
 
-                return $('<span/>').insertAfter(el);
+                return $('<span></span>').insertAfter(el);
             }
 
             return el;

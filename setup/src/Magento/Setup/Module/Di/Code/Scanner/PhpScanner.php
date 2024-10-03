@@ -62,7 +62,7 @@ class PhpScanner implements ScannerInterface
         $parameters = $constructor->getParameters();
         /** @var $parameter \ReflectionParameter */
         foreach ($parameters as $parameter) {
-            preg_match('/\[\s\<\w+?>\s([\w\\\\]+)/s', $parameter->__toString(), $matches);
+            preg_match('/\[\s\<\w+?>\s\??([\w\\\\]+)/s', $parameter->__toString(), $matches);
             if (isset($matches[1]) && substr($matches[1], -strlen($entityType)) == $entityType) {
                 $missingClassName = $matches[1];
                 if ($this->shouldGenerateClass($missingClassName, $entityType, $file)) {
@@ -175,7 +175,7 @@ class PhpScanner implements ScannerInterface
      */
     public function collectEntities(array $files)
     {
-        $output = [[]];
+        $output = [];
         foreach ($files as $file) {
             $classes = $this->getDeclaredClasses($file);
             foreach ($classes as $className) {
@@ -184,7 +184,7 @@ class PhpScanner implements ScannerInterface
                 $output[] = $this->_fetchMissingExtensionAttributesClasses($reflectionClass, $file);
             }
         }
-        return array_unique(array_merge(...$output));
+        return array_unique(array_merge([], ...$output));
     }
 
     /**
@@ -199,6 +199,9 @@ class PhpScanner implements ScannerInterface
     {
         $namespaceParts = [];
         for ($tokenOffset = $tokenIterator + 1; $tokenOffset < $count; ++$tokenOffset) {
+            if ($tokens[$tokenOffset][0] === T_NAME_QUALIFIED) {
+                $namespaceParts[] = $tokens[$tokenOffset][1];
+            }
             if ($tokens[$tokenOffset][0] === T_STRING) {
                 $namespaceParts[] = "\\";
                 $namespaceParts[] = $tokens[$tokenOffset][1];
@@ -206,7 +209,7 @@ class PhpScanner implements ScannerInterface
                 break;
             }
         }
-        return join('', $namespaceParts);
+        return implode('', $namespaceParts);
     }
 
     /**

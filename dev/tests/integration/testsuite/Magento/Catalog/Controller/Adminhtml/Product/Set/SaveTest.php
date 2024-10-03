@@ -25,12 +25,14 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use Psr\Log\LoggerInterface;
 
 /**
  * Testing for saving an existing or creating a new attribute set.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea adminhtml
+ * @magentoAppIsolation enabled
  */
 class SaveTest extends AbstractBackendController
 {
@@ -90,7 +92,7 @@ class SaveTest extends AbstractBackendController
     protected function setUp(): void
     {
         parent::setUp();
-        $this->logger = $this->_objectManager->get(Monolog::class);
+        $this->logger = $this->_objectManager->get(LoggerInterface::class);
         $this->syslogHandler = $this->_objectManager->create(
             Syslog::class,
             [
@@ -162,6 +164,7 @@ class SaveTest extends AbstractBackendController
             [
                 'gotoEdit' => '1',
                 'skeleton_set' => $this->getCatalogProductDefaultAttributeSetId(),
+                'attribute_set_name' => ''
             ]
         );
         $this->dispatch('backend/catalog/product_set/save/');

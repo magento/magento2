@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminProductInfoOnEditPageActionGroup">
+        <annotations>
+            <description>Validates next fields on the Product Edit Page: 
+                        name, sku, price, quantity, stock status, tax class, weight, weigh select, visibility, url key</description>
+        </annotations>
+        <arguments>
+            <argument name="product" type="entity"/>
+        </arguments>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="seeProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="seeProductSku"/>
+        <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="{{product.price}}" stepKey="seeProductPrice"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{product.quantity}}" stepKey="seeProductQuantity"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{product.status}}" stepKey="seeProductStockStatus"/>
+        <seeInField selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{product.productTaxClass}}" stepKey="seeProductTaxClass"/>
+        <seeInField selector="{{AdminProductFormSection.productWeight}}" userInput="{{product.weight}}" stepKey="seeSimpleProductWeight"/>
+        <seeInField selector="{{AdminProductFormSection.productWeightSelect}}" userInput="{{product.weightSelect}}" stepKey="seeSimpleProductWeightSelect"/>
+        <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{product.visibility}}" stepKey="seeVisibility"/>
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
+        <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{product.urlKey}}" stepKey="seeUrlKey"/>
+    </actionGroup>
+</actionGroups>

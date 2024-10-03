@@ -9,7 +9,8 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCategoryMessagesSection">
-        <element name="SuccessMessage" type="text" selector=".message-success"/>
+        <element name="SuccessMessage" type="text" selector=".page-content .message-success"/>
         <element name="errorMessage" type="text" selector="//div[@class='message message-error error']"/>
+        <element name="saveCategoryWarningMessage" type="text" selector=".message-warning"/>
     </section>
 </sections>

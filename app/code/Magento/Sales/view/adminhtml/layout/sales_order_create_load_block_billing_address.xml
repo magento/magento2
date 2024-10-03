@@ -12,6 +12,8 @@
                 <arguments>
                     <argument name="customerAddressFormatter" xsi:type="object">Magento\Sales\ViewModel\Customer\AddressFormatter</argument>
                     <argument name="customerAddressCollection" xsi:type="object">Magento\Customer\Model\ResourceModel\Address\Collection</argument>
+                    <argument name="billingAddressDataProvider" xsi:type="object">Magento\Sales\ViewModel\Customer\Address\Billing\AddressDataProvider</argument>
+                    <argument name="customerAddressCollectionAttributeFilter" xsi:type="object">Magento\Sales\ViewModel\Customer\Address\AddressAttributeFilter</argument>
                 </arguments>
             </block>
         </referenceContainer>

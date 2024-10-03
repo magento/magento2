@@ -10,6 +10,7 @@
             "metadata": true
         },
         "constraint": {
+            "PRIMARY": true,
             "FK_6FDF205946906B0E653E60AA769899F8": true,
             "CAT_PRD_ENTT_MDA_GLR_VAL_VIDEO_STORE_ID_STORE_STORE_ID": true,
             "CAT_PRD_ENTT_MDA_GLR_VAL_VIDEO_VAL_ID_STORE_ID": true

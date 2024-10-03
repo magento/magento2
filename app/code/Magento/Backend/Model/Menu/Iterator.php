@@ -17,6 +17,7 @@ class Iterator extends \ArrayIterator
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->ksort();

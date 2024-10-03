@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 // @codingStandardsIgnoreStart
 namespace {
     $mockPHPFunctions = false;
@@ -11,8 +12,6 @@ namespace {
 namespace Magento\Framework\Session {
 
     use Magento\Framework\App\Filesystem\DirectoryList;
-
-    // @codingStandardsIgnoreEnd
 
     /**
      * Mock ini_get global function
@@ -34,8 +33,11 @@ namespace Magento\Framework\Session {
         } elseif ($mockPHPFunctions == 2) {
             return null;
         }
+        //phpcs:ignore PHPCompatibility
         return call_user_func_array('\ini_get', func_get_args());
     }
+
+    // @codingStandardsIgnoreEnd
 
     /**
      * @magentoAppIsolation enabled
@@ -125,7 +127,7 @@ namespace Magento\Framework\Session {
             $this->assertSame($value, $model->{$getter}());
         }
 
-        public function optionsProvider()
+        public static function optionsProvider()
         {
             return [
                 ['save_path', 'getSavePath', __DIR__],
@@ -181,7 +183,7 @@ namespace Magento\Framework\Session {
             $model->setCookieLifetime('foobar_bogus');
             $this->assertEquals($preVal, $model->getCookieLifetime());
         }
-      
+
         public function testSettingInvalidCookieLifetime2()
         {
             $model = $this->getModel();
@@ -193,8 +195,8 @@ namespace Magento\Framework\Session {
         public function testWrongMethodCall()
         {
             $model = $this->getModel();
-            $this->expectException(
-                '\BadMethodCallException',
+            $this->expectException(\BadMethodCallException::class);
+            $this->expectExceptionMessage(
                 'Method "methodThatNotExist" does not exist in Magento\Framework\Session\Config'
             );
             $model->methodThatNotExist();
@@ -355,7 +357,7 @@ namespace Magento\Framework\Session {
             $mockPHPFunctions = false;
         }
 
-        public function constructorDataProvider()
+        public static function constructorDataProvider()
         {
             // preset value (null = not set), input value (null = not set), expected value
             $savePathGiven = 'explicit_save_path';
@@ -374,6 +376,19 @@ namespace Magento\Framework\Session {
                 \Magento\Framework\Session\Config::class,
                 ['deploymentConfig' => $this->deploymentConfigMock]
             );
+        }
+
+        /**
+         * Test Set SameSite Attribute
+         *
+         * @return void
+         */
+        public function testSetCookieInvalidSameSite(): void
+        {
+            $model = $this->getModel();
+            $this->expectException('InvalidArgumentException');
+            $this->expectExceptionMessage('Invalid Samesite attribute.');
+            $model->setCookieSameSite('foobar');
         }
     }
 }

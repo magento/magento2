@@ -1,7 +1,7 @@
-// /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
-//  */
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 //
 //  Rule tree component
@@ -12,9 +12,13 @@
 }
 
 .rule-tree {
+    /**
+    * @codingStandardsIgnoreStart
+    */
     .admin__field-control & {
         padding-top: .3rem;
     }
+    //@codingStandardsIgnoreEnd
 
     ul {
         border-left: 1px dotted @color-gray52;
@@ -34,6 +38,15 @@
     .x-tree li {
         margin-bottom: 0 !important;
         line-height: normal !important;
+    }
+
+    .jstree ul {
+        border-left: none !important;
+        padding-left: 0 !important;
+    }
+
+    .jstree li {
+        margin: 0 0 0 2.4rem;
     }
 
     .legend {

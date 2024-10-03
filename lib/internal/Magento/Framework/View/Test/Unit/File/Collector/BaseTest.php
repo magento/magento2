@@ -45,7 +45,7 @@ class BaseTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->themeMock = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(['getData'])
+            ->addMethods(['getData'])
             ->getMockForAbstractClass();
 
         $this->dirSearch = $this->createMock(DirSearch::class);
@@ -85,8 +85,7 @@ class BaseTest extends TestCase
             ->method('create')
             ->willReturn($this->createFileMock());
         $this->themeMock->expects($this->once())
-            ->method('getData')
-            ->with('area')
+            ->method('getArea')
             ->willReturn('frontend');
 
         $result = $this->fileCollector->getFiles($this->themeMock, '*.xml');

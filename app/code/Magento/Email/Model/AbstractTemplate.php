@@ -20,7 +20,6 @@ use Magento\MediaStorage\Helper\File\Storage\Database;
  * Template model class.
  *
  * phpcs:disable Magento2.Classes.AbstractApi
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
@@ -31,32 +30,32 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     /**
      * Default design area for emulation
      */
-    const DEFAULT_DESIGN_AREA = 'frontend';
+    public const DEFAULT_DESIGN_AREA = 'frontend';
 
     /**
      * Default path to email logo
      */
-    const DEFAULT_LOGO_FILE_ID = 'Magento_Email::logo_email.png';
+    public const DEFAULT_LOGO_FILE_ID = 'Magento_Email::logo_email.png';
 
     /**
      * Email logo url
      */
-    const XML_PATH_DESIGN_EMAIL_LOGO = 'design/email/logo';
+    public const XML_PATH_DESIGN_EMAIL_LOGO = 'design/email/logo';
 
     /**
      * Email logo alt text
      */
-    const XML_PATH_DESIGN_EMAIL_LOGO_ALT = 'design/email/logo_alt';
+    public const XML_PATH_DESIGN_EMAIL_LOGO_ALT = 'design/email/logo_alt';
 
     /**
      * Email logo width
      */
-    const XML_PATH_DESIGN_EMAIL_LOGO_WIDTH = 'design/email/logo_width';
+    public const XML_PATH_DESIGN_EMAIL_LOGO_WIDTH = 'design/email/logo_width';
 
     /**
      * Email logo height
      */
-    const XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT = 'design/email/logo_height';
+    public const XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT = 'design/email/logo_height';
 
     /**
      * Configuration of design package for template
@@ -144,8 +143,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected $filesystem;
 
     /**
-     * Scope config
-     *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -361,17 +358,11 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $variables = $this->addEmailVariables($variables, $storeId);
         $processor->setVariables($variables);
 
-        $previousStrictMode = $processor->setStrictMode(
-            !$this->getData('is_legacy') && is_numeric($this->getTemplateId())
-        );
-
         try {
             $result = $processor->filter($this->getTemplateText());
         } catch (\Exception $e) {
             $this->cancelDesignConfig();
             throw new \LogicException(__($e->getMessage()), $e->getCode(), $e);
-        } finally {
-            $processor->setStrictMode($previousStrictMode);
         }
 
         if ($isDesignApplied) {
@@ -461,6 +452,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         if (!isset($variables['store'])) {
             $variables['store'] = $store;
         }
+        $storeAddress = $variables['store']->getFormattedAddress();
+        $variables['store']->setData('formatted_address', $storeAddress);
         if (!isset($variables['store']['frontend_name'])) {
             $variables['store']['frontend_name'] = $store->getFrontendName();
         }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontValidateQuantityIncrementsWithDecimalInventoryTest">
+        <annotations>
+            <features value="CatalogInventory"/>
+            <stories value="Qty increments wrong calculation for decimal fraction quantity"/>
+            <title value="Validate qty increments for decimal fraction quantity works"/>
+            <description value="Validate qty increments for decimal fraction quantity works"/>
+            <severity value="MAJOR"/>
+            <useCaseId value="MC-38242"/>
+            <testCaseId value="MC-38883"/>
+            <group value="catalogInventory"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="SimpleProduct" stepKey="createPreReqSimpleProduct">
+                <requiredEntity createDataKey="createPreReqCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!--Clear Filters-->
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFiltersAfter"/>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="createPreReqSimpleProduct" stepKey="deletePreReqSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Step1. Login as admin. Go to Catalog > Products page. Filtering *prod1*. Open *prod1* to edit-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin" />
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="filterGroupedProductOptions">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <!-- Step2. Update product Advanced Inventory Setting.
+        Set *Qty Uses Decimals* to *Yes* and *Enable Qty Increments* to *Yes* and *Qty Increments* to *3.33*. -->
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProduct"/>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
+        <actionGroup ref="AdminSetQtyUsesDecimalsConfigActionGroup" stepKey="setQtyUsesDecimalsConfig">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetEnableQtyIncrementsActionGroup" stepKey="setEnableQtyIncrements">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetQtyIncrementsForProductActionGroup" stepKey="setQtyIncrementsValue">
+            <argument name="qty" value="3.33"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton"/>
+
+        <!--Step3. Save the product-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton2"/>
+        <!--Step4. Open *Customer view* (Go to *Store Front*). Open *prod1* page (Find via search and click on product name) -->
+        <amOnPage url="{{StorefrontHomePage.url}}$$createPreReqSimpleProduct.custom_attributes[url_key]$$.html" stepKey="amOnProductPage"/>
+        <!--Step5. Fill *23.31* in *Qty*. Click on button *Add to Cart*-->
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="23.31" stepKey="fillQty"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="clickOnAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <!--Step6. Verify the product is successfully added to the cart with success message-->
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createPreReqSimpleProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
+    </test>
+</tests>

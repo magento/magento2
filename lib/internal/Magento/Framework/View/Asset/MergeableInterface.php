@@ -7,6 +7,8 @@ namespace Magento\Framework\View\Asset;
 
 /**
  * Interface of an asset that can be merged with other assets
+ *
+ * @api
  */
 interface MergeableInterface extends LocalInterface
 {
