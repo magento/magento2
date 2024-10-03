@@ -103,6 +103,7 @@
         "pdepend/pdepend": "^2.10",
         "phpmd/phpmd": "^2.12",
         "phpstan/phpstan": "^1.9",
+        "phpstan/phpstan-deprecation-rules": "^1.1",
         "phpunit/phpunit": "^10.5",
         "symfony/finder": "^6.4"
     },
