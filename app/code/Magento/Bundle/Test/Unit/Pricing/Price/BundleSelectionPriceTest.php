@@ -107,7 +107,10 @@ class BundleSelectionPriceTest extends TestCase
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
 
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
+        ->disableOriginalConstructor()
+        ->addMethods(['roundPrice'])
+        ->getMockForAbstractClass();
 
         $this->quantity = 1;
 
@@ -169,7 +172,7 @@ class BundleSelectionPriceTest extends TestCase
         }
 
         $this->priceCurrencyMock->expects($this->once())
-            ->method('round')
+            ->method('roundPrice')
             ->with($actualPrice)
             ->willReturn($expectedPrice);
 
@@ -234,7 +237,7 @@ class BundleSelectionPriceTest extends TestCase
         }
 
         $this->priceCurrencyMock->expects($this->once())
-            ->method('round')
+            ->method('roundPrice')
             ->with($actualPrice)
             ->willReturn($expectedPrice);
 
@@ -282,7 +285,7 @@ class BundleSelectionPriceTest extends TestCase
         }
 
         $this->priceCurrencyMock->expects($this->once())
-            ->method('round')
+            ->method('roundPrice')
             ->with($actualPrice)
             ->willReturn($expectedPrice);
 
@@ -343,7 +346,7 @@ class BundleSelectionPriceTest extends TestCase
         }
 
         $this->priceCurrencyMock->expects($this->once())
-            ->method('round')
+            ->method('roundPrice')
             ->with($actualPrice)
             ->willReturn($expectedPrice);
 
@@ -353,7 +356,7 @@ class BundleSelectionPriceTest extends TestCase
     /**
      * @return array
      */
-    public function useRegularPriceDataProvider()
+    public static function useRegularPriceDataProvider()
     {
         return [
             'useRegularPrice' => [
@@ -405,7 +408,7 @@ class BundleSelectionPriceTest extends TestCase
             ->willReturn($price);
 
         $this->priceCurrencyMock->expects($this->once())
-            ->method('round')
+            ->method('roundPrice')
             ->with($price)
             ->willReturn($price);
 

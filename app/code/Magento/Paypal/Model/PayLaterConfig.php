@@ -15,17 +15,17 @@ class PayLaterConfig
     /**
      * Configuration key for Styles settings
      */
-    const CONFIG_KEY_STYLE = 'style';
+    public const CONFIG_KEY_STYLE = 'style';
 
     /**
      * Configuration key for Position setting
      */
-    const CONFIG_KEY_POSITION = 'position';
+    public const CONFIG_KEY_POSITION = 'position';
 
     /**
      * Checkout payment step placement
      */
-    const CHECKOUT_PAYMENT_PLACEMENT = 'checkout_payment';
+    public const CHECKOUT_PAYMENT_PLACEMENT = 'checkout_payment';
 
     /**
      * @var Config
@@ -91,11 +91,11 @@ class PayLaterConfig
     {
         if (!array_key_exists($section, $this->configData)) {
             $sectionName = $section === self::CHECKOUT_PAYMENT_PLACEMENT
-                ? self::CHECKOUT_PAYMENT_PLACEMENT : "${section}page";
+                ? self::CHECKOUT_PAYMENT_PLACEMENT : "{$section}page";
 
             $this->configData[$section] = [
-                'display' => (boolean)$this->config->getPayLaterConfigValue("${sectionName}_display"),
-                'position' => $this->config->getPayLaterConfigValue("${sectionName}_position"),
+                'display' => (boolean)$this->config->getPayLaterConfigValue("{$sectionName}_display"),
+                'position' => $this->config->getPayLaterConfigValue("{$sectionName}_position"),
                 'style' => $this->getConfigStyles($sectionName)
             ];
         }
@@ -113,17 +113,17 @@ class PayLaterConfig
     {
         $logoType = $logoPosition = $textColor = $textSize = null;
         $color = $ratio = null;
-        $styleLayout = $this->config->getPayLaterConfigValue("${sectionName}_stylelayout");
+        $styleLayout = $this->config->getPayLaterConfigValue("{$sectionName}_stylelayout");
         if ($styleLayout === 'text') {
-            $logoType = $this->config->getPayLaterConfigValue("${sectionName}_logotype");
+            $logoType = $this->config->getPayLaterConfigValue("{$sectionName}_logotype");
             if ($logoType === 'primary' || $logoType === 'alternative') {
-                $logoPosition = $this->config->getPayLaterConfigValue("${sectionName}_logoposition");
+                $logoPosition = $this->config->getPayLaterConfigValue("{$sectionName}_logoposition");
             }
-            $textColor = $this->config->getPayLaterConfigValue("${sectionName}_textcolor");
-            $textSize = $this->config->getPayLaterConfigValue("${sectionName}_textsize");
+            $textColor = $this->config->getPayLaterConfigValue("{$sectionName}_textcolor");
+            $textSize = $this->config->getPayLaterConfigValue("{$sectionName}_textsize");
         } elseif ($styleLayout === 'flex') {
-            $color = $this->config->getPayLaterConfigValue("${sectionName}_color");
-            $ratio = $this->config->getPayLaterConfigValue("${sectionName}_ratio");
+            $color = $this->config->getPayLaterConfigValue("{$sectionName}_color");
+            $ratio = $this->config->getPayLaterConfigValue("{$sectionName}_ratio");
         }
 
         return [

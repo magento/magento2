@@ -29,6 +29,6 @@
         <fillField selector="{{QueueInformationSection.queueStartFrom}}" userInput="{{startAt}}" stepKey="setDate"/>
         <conditionalClick selector="{{QueueInformationSection.subscriberFromOption(storeView)}}" dependentSelector="{{QueueInformationSection.subscriberFromOption(storeView)}}" visible="true" stepKey="setStoreview"/>
         <click selector="{{AdminNewsletterMainActionsSection.saveAndResumeButton}}" stepKey="clickSaveAndResumeButton"/>
-        <see userInput="You saved the newsletter queue." stepKey="seeSuccessMessage"/>   
+        <see userInput="You saved the newsletter queue." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>

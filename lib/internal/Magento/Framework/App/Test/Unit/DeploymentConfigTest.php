@@ -53,6 +53,14 @@ class DeploymentConfigTest extends TestCase
     /**
      * @var array
      */
+    private static $flattenedFixtureSecond
+        = [
+            'test_override' => 'overridden2'
+        ];
+
+    /**
+     * @var array
+     */
     protected static $fixtureConfig;
 
     /**
@@ -117,6 +125,25 @@ class DeploymentConfigTest extends TestCase
      * @throws FileSystemException
      * @throws RuntimeException
      */
+    public function testGettersReloadConfig(): void
+    {
+        $this->readerMock->expects($this->any())->method('load')->willReturn(self::$flattenedFixtureSecond);
+        $this->deploymentConfig = new DeploymentConfig(
+            $this->readerMock,
+            ['test_override' => 'overridden2']
+        );
+        $this->assertNull($this->deploymentConfig->get('invalid_key'));
+        $this->assertNull($this->deploymentConfig->getConfigData('invalid_key'));
+        putenv('MAGENTO_DC_A=abc');
+        $this->assertSame('abc', $this->deploymentConfig->get('a'));
+        $this->assertSame('overridden2', $this->deploymentConfig->get('test_override'));
+    }
+
+    /**
+     * @return void
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
     public function testIsAvailable(): void
     {
         $this->readerMock->expects($this->once())->method('load')->willReturn(
@@ -149,7 +176,7 @@ class DeploymentConfigTest extends TestCase
      */
     public function testNotAvailableThenAvailable(): void
     {
-        $this->readerMock->expects($this->exactly(2))->method('load')->willReturn(['Test']);
+        $this->readerMock->expects($this->exactly(1))->method('load')->willReturn(['Test']);
         $object = new DeploymentConfig($this->readerMock);
         $this->assertFalse($object->isAvailable());
         $this->assertFalse($object->isAvailable());
@@ -183,7 +210,7 @@ class DeploymentConfigTest extends TestCase
     /**
      * @return array
      */
-    public function keyCollisionDataProvider(): array
+    public static function keyCollisionDataProvider(): array
     {
         return [
             [
@@ -272,5 +299,69 @@ class DeploymentConfigTest extends TestCase
         $this->assertSame('c', $this->deploymentConfig->get('a'));
         $this->assertSame('D', $this->deploymentConfig->get('b'), 'return value from env');
         $this->assertSame('e$%^&', $this->deploymentConfig->get('c'), 'return default value');
+    }
+
+    /**
+     * @return void
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
+    public function testShouldntReloadDataOnMissingConfig(): void
+    {
+        $this->readerMock->expects($this->once())
+            ->method('load')
+            ->willReturn(['db' => ['connection' => ['default' => ['host' => 'localhost']]]]);
+        $connectionConfig1 = $this->deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/' . 'default'
+        );
+        $this->assertArrayHasKey('host', $connectionConfig1);
+        $connectionConfig2 = $this->deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/' . 'default'
+        );
+        $this->assertArrayHasKey('host', $connectionConfig2);
+        $result1 = $this->deploymentConfig->get('missing/key');
+        $this->assertNull($result1);
+        $result2 = $this->deploymentConfig->get('missing/key');
+        $this->assertNull($result2);
+        $result3 = $this->deploymentConfig->get('missing/key');
+        $this->assertNull($result3);
+    }
+
+    /**
+     * @return void
+     */
+    public function testShouldntLoadMultipleTimes() : void
+    {
+        $this->readerMock->expects($this->once())->method('load')
+            ->willReturn(['a' => ['a' => ['a' => 1]]]);
+        $this->deploymentConfig->get('a/a/a');
+        $this->deploymentConfig->get('a/a/b');
+        $this->deploymentConfig->get('a/a/c');
+        $this->deploymentConfig->get('a/b/a');
+        $this->deploymentConfig->get('a/b/b');
+        $this->deploymentConfig->get('a/b/c');
+    }
+
+    /**
+     * @return void
+     */
+    public function testShouldReloadPreviouslyUnsetKeysAfterReset() : void
+    {
+        $testValue = 42;
+        $loadReturn = ['a' => ['a' => ['a' => 1]]];
+        $this->readerMock->expects($this->any())->method('load')
+            ->will($this->returnCallback(
+                function () use (&$loadReturn) {
+                    return $loadReturn;
+                }
+            ));
+        $this->deploymentConfig->get('a/a/a');
+        $abcReturnValue1 = $this->deploymentConfig->get('a/b/c');
+        $this->assertNull($abcReturnValue1); // first try, it isn't set yet.
+        $loadReturn = ['a' => ['a' => ['a' => 1], 'b' => ['c' => $testValue]]];
+        $this->deploymentConfig->resetData();
+        $this->deploymentConfig->get('a/a/a');
+        $abcReturnValue2 = $this->deploymentConfig->get('a/b/c');
+        $this->assertEquals($testValue, $abcReturnValue2); // second try, it should load the newly set value
     }
 }

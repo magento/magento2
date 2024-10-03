@@ -63,7 +63,9 @@ class AttributeOptionProvider
                     'attribute_id' => 'a.attribute_id',
                     'attribute_code' => 'a.attribute_code',
                     'attribute_label' => 'a.frontend_label',
-                    'position' => 'attribute_configuration.position'
+                    'attribute_type' => 'a.frontend_input',
+                    'position' => 'attribute_configuration.position',
+                    'is_filterable' => 'attribute_configuration.is_filterable',
                 ]
             )
             ->joinLeft(
@@ -106,7 +108,7 @@ class AttributeOptionProvider
                 'options.sort_order ' . Select::SQL_ASC
             );
 
-        $select->where('option_value.option_id IN (?)', $optionIds);
+        $select->where('option_value.option_id IN (?) OR  attribute_configuration.is_filterable = 2', $optionIds);
 
         if (!empty($attributeCodes)) {
             $select->orWhere(
@@ -135,9 +137,10 @@ class AttributeOptionProvider
                 $result[$option['attribute_code']] = [
                     'attribute_id' => $option['attribute_id'],
                     'attribute_code' => $option['attribute_code'],
-                    'attribute_label' => $option['attribute_store_label']
-                        ? $option['attribute_store_label'] : $option['attribute_label'],
+                    'attribute_label' => $option['attribute_store_label'] ?: $option['attribute_label'],
+                    'attribute_type' => $option['attribute_type'],
                     'position' => $option['position'],
+                    'is_filterable' => (int) $option['is_filterable'],
                     'options' => [],
                 ];
             }

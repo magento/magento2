@@ -18,11 +18,14 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
     /**
      * Default value for products count that will be shown
      */
-    const DEFAULT_PRODUCTS_COUNT = 10;
+    public const DEFAULT_PRODUCTS_COUNT = 10;
 
     /**
-     * Products count
-     *
+     * Block cache tag
+     */
+    public const CACHE_TAG = 'cat_p_new';
+
+    /**
      * @var int
      */
     protected $_productsCount;
@@ -33,15 +36,11 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
     protected $httpContext;
 
     /**
-     * Catalog product visibility
-     *
      * @var \Magento\Catalog\Model\Product\Visibility
      */
     protected $_catalogProductVisibility;
 
     /**
-     * Product collection factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
@@ -199,6 +198,6 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
      */
     public function getIdentities()
     {
-        return [\Magento\Catalog\Model\Product::CACHE_TAG];
+        return [self::CACHE_TAG];
     }
 }

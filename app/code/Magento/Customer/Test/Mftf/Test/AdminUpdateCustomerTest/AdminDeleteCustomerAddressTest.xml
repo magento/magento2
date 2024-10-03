@@ -17,6 +17,7 @@
             <testCaseId value="MC-13623"/>
             <group value="Customer"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData stepKey="customer" entity="Simple_US_Customer_Multiple_Addresses"/>
@@ -24,6 +25,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

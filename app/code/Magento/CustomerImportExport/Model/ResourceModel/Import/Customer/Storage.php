@@ -5,6 +5,7 @@
  */
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Customer;
 
+use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Framework\DataObject;
@@ -61,11 +62,18 @@ class Storage
     private $customerStoreIds = [];
 
     /**
+     * @var Share
+     */
+    private $configShare;
+
+    /**
      * @param CustomerCollectionFactory $collectionFactory
+     * @param Share $configShare
      * @param array $data
      */
     public function __construct(
         CustomerCollectionFactory $collectionFactory,
+        Share $configShare,
         array $data = []
     ) {
         $this->_customerCollection = isset(
@@ -73,6 +81,7 @@ class Storage
         ) ? $data['customer_collection'] : $collectionFactory->create();
         $this->_pageSize = isset($data['page_size']) ? (int) $data['page_size'] : 0;
         $this->customerCollectionFactory = $collectionFactory;
+        $this->configShare = $configShare;
     }
 
     /**
@@ -95,12 +104,23 @@ class Storage
         };
         $offset = 0;
         for ($chunk = $getChuck($offset); !empty($chunk); $offset += $pageSize, $chunk = $getChuck($offset)) {
-            $emails = array_column($chunk, 'email');
+            $customerWebsites = array_reduce($chunk, function ($customerWebsiteByEmail, $customer) {
+                $customerWebsiteByEmail[$customer['email']][] = $customer['website_id'];
+                return $customerWebsiteByEmail;
+            }, []);
             $chunkSelect = clone $select;
-            $chunkSelect->where($customerTableId . '.email IN (?)', $emails);
+            $chunkSelect->where($customerTableId . '.email IN (?)', array_keys($customerWebsites));
             $customers = $collection->getConnection()->fetchAll($chunkSelect);
             foreach ($customers as $customer) {
                 $this->addCustomerByArray($customer);
+                if ($this->configShare->isGlobalScope() &&
+                    !in_array((int) $customer['website_id'], $customerWebsites[$customer['email']], true)
+                ) {
+                    foreach ($customerWebsites[$customer['email']] as $websiteId) {
+                        $customer['website_id'] = $websiteId;
+                        $this->addCustomerByArray($customer);
+                    }
+                }
             }
         }
     }
@@ -130,7 +150,8 @@ class Storage
     /**
      * Add customer to array
      *
-     * @deprecated 100.3.0 @see addCustomerByArray
+     * @deprecated 100.3.0
+     * @see addCustomerByArray
      * @param DataObject $customer
      * @return $this
      */

@@ -87,7 +87,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function observerNameProvider()
+    public static function observerNameProvider()
     {
         return [
             ['simple_name'],

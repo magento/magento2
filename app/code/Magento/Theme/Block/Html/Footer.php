@@ -93,7 +93,7 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        return __($this->_copyright);
+        return $this->replaceCurrentYear((string)__($this->_copyright));
     }
 
     /**
@@ -132,5 +132,15 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
     protected function getCacheLifetime()
     {
         return parent::getCacheLifetime() ?: 3600;
+    }
+
+    /**
+     * Replace YYYY with the current year
+     *
+     * @param string $text
+     */
+    private function replaceCurrentYear(string $text): string
+    {
+        return str_replace('{YYYY}', (new \DateTime())->format('Y'), $text);
     }
 }

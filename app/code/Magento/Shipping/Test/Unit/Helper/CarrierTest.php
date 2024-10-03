@@ -67,7 +67,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function getOnlineCarrierCodesDataProvider()
+    public static function getOnlineCarrierCodesDataProvider()
     {
         return [
             [[], ['carrier1' => []]],

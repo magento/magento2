@@ -17,6 +17,8 @@ use Magento\Framework\Url\DecoderInterface;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\View\Design\Theme\Customization;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Filesystem\Io\File;
 use Magento\Theme\Helper\Storage;
 use Magento\Theme\Model\Theme;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -94,6 +96,11 @@ class StorageTest extends TestCase
     private $filesystemDriver;
 
     /**
+     * @var File|MockObject
+     */
+    private $file;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -125,6 +132,15 @@ class StorageTest extends TestCase
         $this->contextHelper->expects($this->any())->method('getUrlDecoder')->willReturn($this->urlDecoder);
         $this->themeFactory->expects($this->any())->method('create')->willReturn($this->theme);
         $this->filesystemDriver = $this->createMock(DriverInterface::class);
+        $this->file = $this->createMock(File::class);
+
+        $this->file->expects($this->any())
+            ->method('getPathInfo')
+            ->willReturnCallback(
+                function ($path) {
+                    return pathinfo($path);
+                }
+            );
 
         $this->theme->expects($this->any())
             ->method('getCustomization')
@@ -135,7 +151,7 @@ class StorageTest extends TestCase
             $this->filesystem,
             $this->session,
             $this->themeFactory,
-            null,
+            $this->file,
             $this->filesystemDriver
         );
     }
@@ -189,7 +205,6 @@ class StorageTest extends TestCase
             '/',
             ['root', 'image', \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY]
         );
-
         $this->assertEquals($thumbnailDir, $this->helper->getThumbnailDirectory($imagePath));
     }
 
@@ -202,10 +217,10 @@ class StorageTest extends TestCase
         $thumbnailPath = '/' . implode(
             '/',
             [
-                \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
-                \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY,
-                $image
-            ]
+                    \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
+                    \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY,
+                    $image
+                ]
         );
 
         $this->customization->expects(
@@ -374,8 +389,15 @@ class StorageTest extends TestCase
         };
         $this->urlDecoder
             ->method('decode')
-            ->withConsecutive([$notRoot], [$filename])
-            ->willReturnOnConsecutiveCalls($this->returnCallback($decode), $this->returnCallback($decode));
+            ->willReturnCallback(
+                function ($arg) use ($notRoot, $filename, $decode) {
+                    if ($arg == $notRoot) {
+                        return $decode($arg);
+                    } elseif ($arg == $filename) {
+                        return $decode($arg);
+                    }
+                }
+            );
 
         $this->assertEquals(
             '../image/not/a/root/filename.ext',
@@ -386,7 +408,7 @@ class StorageTest extends TestCase
     /**
      * @return array
      */
-    public function getStorageTypeForNameDataProvider(): array
+    public static function getStorageTypeForNameDataProvider(): array
     {
         return [
             'font' => [\Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT, Storage::FONTS],
@@ -405,7 +427,6 @@ class StorageTest extends TestCase
     public function testGetStorageTypeName($type, $name): void
     {
         $this->resetRequestMock([[Storage::PARAM_CONTENT_TYPE]], [$type]);
-
         $this->assertEquals($name, $this->helper->getStorageTypeName());
     }
 
@@ -429,15 +450,20 @@ class StorageTest extends TestCase
         $this->initializeDefaultRequestMock();
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Theme was not found');
+
         $this->themeFactory->expects($this->once())
-            ->method('create')
-            ->willReturn(null);
+        ->method('create')
+        ->willReturn(null);
+
         $helper = new Storage(
             $this->contextHelper,
             $this->filesystem,
             $this->session,
-            $this->themeFactory
+            $this->themeFactory,
+            $this->file,
+            $this->filesystemDriver
         );
+
         $helper->getStorageRoot();
     }
 
@@ -492,7 +518,7 @@ class StorageTest extends TestCase
     /**
      * @return array
      */
-    public function getCurrentPathDataProvider(): array
+    public static function getCurrentPathDataProvider(): array
     {
         $rootPath = '/' . \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE;
 
@@ -512,14 +538,16 @@ class StorageTest extends TestCase
     {
         $this->request
             ->method('getParam')
-            ->withConsecutive(
-                [Storage::PARAM_THEME_ID],
-                [Storage::PARAM_CONTENT_TYPE]
-            )
-            ->willReturnOnConsecutiveCalls(
-                6,
-                \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE
-            );
+            ->willReturnCallback(function ($arg1) {
+                static $callCount = 0;
+                if ($arg1 == Storage::PARAM_THEME_ID && $callCount == 0) {
+                    $callCount++;
+                    return 6;
+                } elseif ($arg1 == Storage::PARAM_CONTENT_TYPE && $callCount == 1) {
+                    $callCount++;
+                    return \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE;
+                }
+            });
     }
 
     /**
@@ -539,15 +567,14 @@ class StorageTest extends TestCase
         $this->contextHelper->expects($this->any())->method('getRequest')->willReturn($this->request);
         $this->request
             ->method('getParam')
-            ->withConsecutive(...$withArgs)
-            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+            ->will($this->onConsecutiveCalls(...$willReturnArgs));
 
         $this->helper = new Storage(
             $this->contextHelper,
             $this->filesystem,
             $this->session,
             $this->themeFactory,
-            null,
+            $this->file,
             $this->filesystemDriver
         );
     }

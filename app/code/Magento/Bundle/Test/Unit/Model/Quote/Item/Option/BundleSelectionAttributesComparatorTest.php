@@ -47,7 +47,7 @@ class BundleSelectionAttributesComparatorTest extends TestCase
     /**
      * @return array
      */
-    public function compareDataProvider(): array
+    public static function compareDataProvider(): array
     {
         return [
             [

@@ -17,6 +17,7 @@
             <testCaseId value="MC-41141"/>
             <severity value="MAJOR"/>
             <group value="customers"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -138,7 +139,9 @@
             <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
             <!-- Set Customer Accounts Sharing to Per Website -->
             <magentoCLI command="config:set {{CustomerAccountShareWebsiteConfigData.path}} {{CustomerAccountShareWebsiteConfigData.value}}" stepKey="setConfigCustomerAccountToWebsite"/>
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <!-- Reindex all indexers -->
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>

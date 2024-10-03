@@ -44,7 +44,7 @@ class StatusTest extends TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             'set1' => [

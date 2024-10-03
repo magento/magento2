@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\Currency as LocaleCurrency;
 use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
 use Magento\Framework\NumberFormatterFactory;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
@@ -23,7 +24,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Currency extends \Magento\Framework\Model\AbstractModel
+class Currency extends \Magento\Framework\Model\AbstractModel implements ResetAfterRequestInterface
 {
     /**
      * CONFIG path constants
@@ -427,6 +428,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
 
         $this->numberFormatter = $this->getNumberFormatter($options);
 
+        $this->numberFormatter->setAttribute(
+            \NumberFormatter::ROUNDING_MODE,
+            \NumberFormatter::ROUND_HALFUP
+        );
+
         $formattedCurrency = $this->numberFormatter->formatCurrency(
             $price,
             $this->getCode() ?? $this->numberFormatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)
@@ -435,6 +441,9 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         if ((array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
             && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
             $formattedCurrency = str_replace(' ', '', $formattedCurrency);
+        }
+        if (preg_match('/^(\x{200F})/u', $formattedCurrency, $match)) {
+            $formattedCurrency = preg_replace('/^' . $match[1] . '/u', '', $formattedCurrency);
         }
 
         return preg_replace('/^\s+|\s+$/u', '', $formattedCurrency);
@@ -589,5 +598,13 @@ class Currency extends \Magento\Framework\Model\AbstractModel
             $string = preg_replace('/^' . $match[1] . '/u', '', $string);
         }
         return $string;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_rates = null;
     }
 }

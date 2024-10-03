@@ -188,7 +188,11 @@ class GeneratorTest extends TestCase
         $this->parserMock->expects($this->once())->method('getPhrases')->willReturn($phrases);
         $this->writerMock
             ->method('write')
-            ->withConsecutive([$phrases[0]], [$phrases[1]]);
+            ->willReturnCallback(function ($arg1) use ($phrases) {
+                if ($arg1 == $phrases[0] || $arg1 == $phrases[1]) {
+                    return null;
+                }
+            });
 
         $this->generator->generate($baseDir, 'file.csv');
     }

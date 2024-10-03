@@ -9,20 +9,28 @@ namespace Magento\CustomerGraphQl\Model\Context;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Customer\Model\Session;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\GraphQl\Model\Query\ContextParametersInterface;
 use Magento\GraphQl\Model\Query\UserContextParametersProcessorInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class AddUserInfoToContext implements UserContextParametersProcessorInterface
+class AddUserInfoToContext implements UserContextParametersProcessorInterface, ResetAfterRequestInterface
 {
     /**
      * @var UserContextInterface
      */
     private $userContext;
+
+    /**
+     * @var UserContextInterface
+     */
+    private UserContextInterface $userContextFromConstructor;
 
     /**
      * @var Session
@@ -35,23 +43,42 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
     private $customerRepository;
 
     /**
-     * @var CustomerInterface|null
+     * @var Share
      */
-    private $loggedInCustomerData = null;
+    private $configShare;
 
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
     /**
      * @param UserContextInterface $userContext
      * @param Session $session
      * @param CustomerRepository $customerRepository
+     * @param Share $configShare
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         UserContextInterface $userContext,
         Session $session,
-        CustomerRepository $customerRepository
+        CustomerRepository $customerRepository,
+        Share $configShare,
+        StoreManagerInterface $storeManager
     ) {
         $this->userContext = $userContext;
+        $this->userContextFromConstructor = $userContext;
         $this->session = $session;
         $this->customerRepository = $customerRepository;
+        $this->configShare = $configShare;
+        $this->storeManager = $storeManager;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->userContext = $this->userContextFromConstructor;
     }
 
     /**
@@ -82,10 +109,6 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
         $isCustomer = $this->isCustomer($currentUserId, $currentUserType);
         $contextParameters->addExtensionAttribute('is_customer', $isCustomer);
 
-        if ($this->session->isLoggedIn()) {
-            $this->loggedInCustomerData = $this->session->getCustomerData();
-        }
-
         if ($isCustomer) {
             $customer = $this->customerRepository->getById($currentUserId);
             $this->session->setCustomerData($customer);
@@ -101,7 +124,7 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
      */
     public function getLoggedInCustomerData(): ?CustomerInterface
     {
-        return $this->loggedInCustomerData;
+        return $this->session->isLoggedIn() ? $this->session->getCustomerData() : null;
     }
 
     /**
@@ -113,8 +136,14 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
      */
     private function isCustomer(?int $customerId, ?int $customerType): bool
     {
-        return !empty($customerId)
+        $result = !empty($customerId)
             && !empty($customerType)
             && $customerType === UserContextInterface::USER_TYPE_CUSTOMER;
+
+        if ($result && $this->configShare->isWebsiteScope()) {
+            $customer = $this->customerRepository->getById($customerId);
+            return (int)$customer->getWebsiteId() === (int)$this->storeManager->getStore()->getWebsiteId();
+        }
+        return $result;
     }
 }
