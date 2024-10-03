@@ -91,6 +91,7 @@
             <!-- Check "use default" near "Show Telephone" and save in main website scope -->
             <actionGroup ref="AdminCustomerShowTelephoneUseDefaultActionGroup" stepKey="checkUseDefaultMainWebsite"/>
             <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Delete the new website -->
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">

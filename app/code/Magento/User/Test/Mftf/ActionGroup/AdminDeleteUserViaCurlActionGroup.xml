@@ -14,8 +14,10 @@
         <amOnPage stepKey="amOnAdminUsersPage" url="{{AdminUsersPage.url}}"/>
         <waitForPageLoad stepKey="waitForAdminUserPageLoad"/>
         <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="resetFilters" />
+        <waitForPageLoad stepKey="waitForFiltersToReset" />
+        <waitForElementVisible selector="{{AdminLegacyDataGridTableSection.columnTemplateStrict(user.username, 'user_id')}}" stepKey="waitForUserIdVisible" />
+        <scrollTo  selector="{{AdminLegacyDataGridTableSection.columnTemplateStrict(user.username, 'user_id')}}" stepKey="scrollToUserId" />
         <grabTextFrom selector="{{AdminLegacyDataGridTableSection.columnTemplateStrict(user.username, 'user_id')}}" stepKey="userId" />
-
         <!--
             @TODO: Remove "executeJS" in scope of MQE-1561
             Hack to be able to pass current admin user password without hardcoding it.
@@ -24,7 +26,7 @@
 
         <createData entity="deleteUser" stepKey="deleteUser">
             <field key="user_id">{$userId}</field>
-            <field key="current_password">{$adminPassword}</field>
+            <field key="current_password">{{DefaultAdminUser.password}}</field>
         </createData>
     </actionGroup>
 </actionGroups>

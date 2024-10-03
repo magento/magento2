@@ -43,6 +43,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
 
             <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Unassign order status -->
@@ -103,6 +104,7 @@
             <argument name="tags" value="config full_page"/>
         </actionGroup>
 
+        <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPageToAssertChanges"/>
         <!-- Assert order status in grid -->
         <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterOrderStatusGrid">
             <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>
@@ -111,7 +113,7 @@
         <see selector="{{AdminOrderStatusGridSection.gridCell('1', 'State Code and Title')}}" userInput="new[{{defaultOrderStatus.label}}]" stepKey="seeOrderStatusInOrderGrid"/>
 
         <!-- Create order and grab order id -->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">

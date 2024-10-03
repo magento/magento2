@@ -18,6 +18,7 @@
         </arguments>
         <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrderWithoutTimeout}}" stepKey="clickPlaceOrder"/>
+        <wait time="30" stepKey="waitForThirtySeconds"/>
         <waitForElement selector="{{CheckoutCartMessageSection.errorMessage}}" time="30" stepKey="waitForErrorMessage"/>
         <see selector="{{CheckoutCartMessageSection.errorMessage}}" userInput="{{error}}" stepKey="assertErrorMessage"/>
     </actionGroup>

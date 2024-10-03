@@ -21,6 +21,7 @@
             <group value="secure_storefront_url"/>
         </annotations>
         <before>
+            <actionGroup ref="AdminEnableNewsletterActionGroup" stepKey="enableNewsletter" />
             <createData entity="Simple_US_Customer" stepKey="customer"/>
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
                 <argument name="Customer" value="$$customer$$"/>
@@ -33,7 +34,9 @@
         <after>
             <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="dontUseSecureURLsOnStorefront"/>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminDisableNewsletterActionGroup" stepKey="disableNewsletter" />
         </after>
         <executeJS function="return window.location.host" stepKey="hostname"/>
         <amOnUrl url="http://{$hostname}/newsletter/manage" stepKey="goToUnsecureNewsletterManageURL"/>

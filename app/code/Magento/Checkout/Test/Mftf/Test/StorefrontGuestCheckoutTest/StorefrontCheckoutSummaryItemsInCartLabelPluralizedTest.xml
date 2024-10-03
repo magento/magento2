@@ -14,6 +14,7 @@
             <description value="When adding more then 1 item and check checkout page order summary section text 'Items in Cart' is pluralized correctly or not"/>
             <severity value="AVERAGE"/>
             <group value="Checkout"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>

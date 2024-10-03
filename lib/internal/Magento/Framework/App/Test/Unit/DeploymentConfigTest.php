@@ -53,6 +53,14 @@ class DeploymentConfigTest extends TestCase
     /**
      * @var array
      */
+    private static $flattenedFixtureSecond
+        = [
+            'test_override' => 'overridden2'
+        ];
+
+    /**
+     * @var array
+     */
     protected static $fixtureConfig;
 
     /**
@@ -117,6 +125,25 @@ class DeploymentConfigTest extends TestCase
      * @throws FileSystemException
      * @throws RuntimeException
      */
+    public function testGettersReloadConfig(): void
+    {
+        $this->readerMock->expects($this->any())->method('load')->willReturn(self::$flattenedFixtureSecond);
+        $this->deploymentConfig = new DeploymentConfig(
+            $this->readerMock,
+            ['test_override' => 'overridden2']
+        );
+        $this->assertNull($this->deploymentConfig->get('invalid_key'));
+        $this->assertNull($this->deploymentConfig->getConfigData('invalid_key'));
+        putenv('MAGENTO_DC_A=abc');
+        $this->assertSame('abc', $this->deploymentConfig->get('a'));
+        $this->assertSame('overridden2', $this->deploymentConfig->get('test_override'));
+    }
+
+    /**
+     * @return void
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
     public function testIsAvailable(): void
     {
         $this->readerMock->expects($this->once())->method('load')->willReturn(
@@ -149,7 +176,7 @@ class DeploymentConfigTest extends TestCase
      */
     public function testNotAvailableThenAvailable(): void
     {
-        $this->readerMock->expects($this->exactly(2))->method('load')->willReturn(['Test']);
+        $this->readerMock->expects($this->exactly(1))->method('load')->willReturn(['Test']);
         $object = new DeploymentConfig($this->readerMock);
         $this->assertFalse($object->isAvailable());
         $this->assertFalse($object->isAvailable());
@@ -272,5 +299,35 @@ class DeploymentConfigTest extends TestCase
         $this->assertSame('c', $this->deploymentConfig->get('a'));
         $this->assertSame('D', $this->deploymentConfig->get('b'), 'return value from env');
         $this->assertSame('e$%^&', $this->deploymentConfig->get('c'), 'return default value');
+    }
+
+    /**
+     * @return void
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
+    public function testReloadDataOnMissingConfig(): void
+    {
+        $this->readerMock->expects($this->exactly(2))
+            ->method('load')
+            ->willReturnOnConsecutiveCalls(
+                ['db' => ['connection' => ['default' => ['host' => 'localhost']]]],
+                [],
+                []
+            );
+        $connectionConfig1 = $this->deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/' . 'default'
+        );
+        $this->assertArrayHasKey('host', $connectionConfig1);
+        $connectionConfig2 = $this->deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/' . 'default'
+        );
+        $this->assertArrayHasKey('host', $connectionConfig2);
+        $result1 = $this->deploymentConfig->get('missing/key');
+        $this->assertNull($result1);
+        $result2 = $this->deploymentConfig->get('missing/key');
+        $this->assertNull($result2);
+        $result3 = $this->deploymentConfig->get('missing/key');
+        $this->assertNull($result3);
     }
 }
