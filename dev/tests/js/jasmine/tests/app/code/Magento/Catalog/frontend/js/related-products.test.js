@@ -4,8 +4,7 @@
  */
 define([
     'jquery',
-    'Magento_Catalog/js/related-products',
-    'jquery-ui-modules/widget'
+    'Magento_Catalog/js/related-products'
 ], function ($) {
     'use strict';
 
@@ -46,7 +45,7 @@ define([
             expect($(relatedCheckboxSelector + ':checked').length).toBe(0);
         });
 
-        it('should select all except manually selected product when "Select All" is clicked after manual selection',
+        it('should select all products, including those manually selected, when "Select All" is clicked',
             function () {
                 $(relatedCheckboxSelector).first().prop('checked', true).trigger('click');
                 $(selectAllLinkSelector).trigger('click');
