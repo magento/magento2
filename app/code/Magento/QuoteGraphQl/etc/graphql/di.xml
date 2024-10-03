@@ -79,8 +79,4 @@
         <plugin name="merge_guest_orders_with_customer_after_place"
                 type="Magento\QuoteGraphQl\Plugin\Model\MergeGuestOrder" />
     </type>
-    <type name="Magento\Quote\Model\Cart\CustomerCartResolver">
-        <plugin name="create_customer_cart"
-                type="Magento\QuoteGraphQl\Plugin\Model\Cart\CustomerEmptyCartResolver" />
-    </type>
 </config>

@@ -696,7 +696,9 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
                 }
                 //save here new customer address
                 $shippingAddress->setCustomerId($quote->getCustomerId());
-                $this->addressRepository->save($shippingAddress);
+                if (!$shippingAddress->getId()) {
+                    $this->addressRepository->save($shippingAddress);
+                }
                 $quote->addCustomerAddress($shippingAddress);
                 $shipping->setCustomerAddressData($shippingAddress);
                 $this->addressesToSync[] = $shippingAddress->getId();
@@ -728,7 +730,9 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
                     $billingAddress->setIsDefaultBilling(true);
                 }
                 $billingAddress->setCustomerId($quote->getCustomerId());
-                $this->addressRepository->save($billingAddress);
+                if (!$billingAddress->getId()) {
+                    $this->addressRepository->save($billingAddress);
+                }
                 $quote->addCustomerAddress($billingAddress);
                 $billing->setCustomerAddressData($billingAddress);
                 $this->addressesToSync[] = $billingAddress->getId();
