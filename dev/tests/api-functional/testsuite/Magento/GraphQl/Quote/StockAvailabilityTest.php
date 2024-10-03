@@ -31,7 +31,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test discount totals calculation model
+ * Stock Availability [not_available_message] Test model
  */
 class StockAvailabilityTest extends GraphQlAbstract
 {
@@ -55,11 +55,13 @@ class StockAvailabilityTest extends GraphQlAbstract
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->fixtures = DataFixtureStorageManager::getStorage();
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
     }
 
     #[
+        Config('cataloginventory/options/not_available_message', 0),
         DataFixture(ProductFixture::class, ['price' => 100.00], as: 'product'),
         DataFixture(GuestCartFixture::class, as: 'cart'),
         DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 100]),
@@ -70,19 +72,21 @@ class StockAvailabilityTest extends GraphQlAbstract
     {
         $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
         $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlMutation($query);
+        $response = $this->graphQlQuery($query);
         $responseDataObject = new DataObject($response);
 
         self::assertFalse(
             $responseDataObject->getData('cart/itemsV2/items/0/is_available')
         );
         self::assertEquals(
-            'Not enough items for sale. Please adjust the quantity to continue',
+            'Not enough items for sale',
             $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
         );
     }
 
     #[
+        Config('cataloginventory/options/not_available_message', 1),
+        Config('cataloginventory/options/stock_threshold_qty', 100),
         DataFixture(ProductFixture::class, ['price' => 100.00], as: 'product'),
         DataFixture(GuestCartFixture::class, as: 'cart'),
         DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 100]),
@@ -92,7 +96,7 @@ class StockAvailabilityTest extends GraphQlAbstract
     {
         $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
         $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlMutation($query);
+        $response = $this->graphQlQuery($query);
         $responseDataObject = new DataObject($response);
 
         self::assertTrue(
@@ -104,6 +108,34 @@ class StockAvailabilityTest extends GraphQlAbstract
     }
 
     #[
+        Config('cataloginventory/options/not_available_message', 1),
+        Config('cataloginventory/options/stock_threshold_qty', 100),
+        DataFixture(ProductFixture::class, ['price' => 100.00], as: 'product'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 20]),
+        DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+        DataFixture(ProductStockFixture::class, ['prod_id' => '$product.id$', 'prod_qty' => 10], 'prodStock')
+    ]
+    public function testStockStatusUnavailableSimpleProductOption1(): void
+    {
+        $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query);
+        $responseDataObject = new DataObject($response);
+
+        self::assertFalse(
+            $responseDataObject->getData('cart/itemsV2/items/0/is_available')
+        );
+        self::assertEquals(10, $responseDataObject->getData('cart/itemsV2/items/0/product/only_x_left_in_stock'));
+        self::assertEquals(
+            'Only 10 of 20 available',
+            $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
+        );
+    }
+
+    #[
+        Config('cataloginventory/options/not_available_message', 1),
+        Config('cataloginventory/options/stock_threshold_qty', 100),
         DataFixture(ProductFixture::class, ['sku' => self::SKU, 'price' => 100.00], as: 'product'),
         DataFixture(GuestCartFixture::class, as: 'cart'),
         DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 99]),
@@ -115,6 +147,7 @@ class StockAvailabilityTest extends GraphQlAbstract
         $query = $this->mutationAddSimpleProduct($maskedQuoteId, self::SKU, 1);
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
+
         self::assertTrue(
             $responseDataObject->getData('addProductsToCart/cart/itemsV2/items/0/is_available')
         );
@@ -124,6 +157,7 @@ class StockAvailabilityTest extends GraphQlAbstract
     }
 
     #[
+        Config('cataloginventory/options/not_available_message', 0),
         DataFixture(ProductFixture::class, ['price' => 100.00], as: 'product'),
         DataFixture(
             BundleSelectionFixture::class,
@@ -156,20 +190,72 @@ class StockAvailabilityTest extends GraphQlAbstract
     {
         $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
         $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlMutation($query);
+        $response = $this->graphQlQuery($query);
         $responseDataObject = new DataObject($response);
 
         self::assertFalse(
             $responseDataObject->getData('cart/itemsV2/items/0/is_available')
         );
         self::assertEquals(
-            'Not enough items for sale. Please adjust the quantity to continue',
+            'Not enough items for sale',
             $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
         );
     }
 
     #[
+        Config('cataloginventory/options/not_available_message', 1),
+        Config('cataloginventory/options/stock_threshold_qty', 100),
         DataFixture(ProductFixture::class, ['price' => 100.00], as: 'product'),
+        DataFixture(ProductStockFixture::class, ['prod_id' => '$product.id$', 'prod_qty' => 100], 'prodStock'),
+        DataFixture(
+            BundleSelectionFixture::class,
+            [
+                'sku' => '$product.sku$', 'price' => 100, 'price_type' => 0
+            ],
+            as:'link'
+        ),
+        DataFixture(BundleOptionFixture::class, ['title' => 'Checkbox Options', 'type' => 'checkbox',
+            'required' => 1,'product_links' => ['$link$']], 'option'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['price' => 90, '_options' => ['$option$']],
+            as:'bundleProduct'
+        ),
+        DataFixture(ProductStockFixture::class, ['prod_id' => '$bundleProduct.id$', 'prod_qty' => 100], 'prodStock'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(
+            AddBundleProductToCart::class,
+            [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$bundleProduct.id$',
+                'selections' => [['$product.id$']],
+                'qty' => 100
+            ],
+        ),
+        DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+        DataFixture(ProductStockFixture::class, ['prod_id' => '$product.id$', 'prod_qty' => 90], 'prodStock')
+    ]
+    public function testStockStatusUnavailableBundleProductOption1(): void
+    {
+        $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query);
+        $responseDataObject = new DataObject($response);
+
+        self::assertFalse(
+            $responseDataObject->getData('cart/itemsV2/items/0/is_available')
+        );
+        self::assertEquals(
+            'Only 90 of 100 available',
+            $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
+        );
+    }
+
+    #[
+        Config('cataloginventory/options/not_available_message', 1),
+        Config('cataloginventory/options/stock_threshold_qty', 100),
+        DataFixture(ProductFixture::class, ['price' => 100.00], as: 'product'),
+        DataFixture(ProductStockFixture::class, ['prod_id' => '$product.id$', 'prod_qty' => 100], 'prodStock'),
         DataFixture(
             BundleSelectionFixture::class,
             [
@@ -230,6 +316,7 @@ class StockAvailabilityTest extends GraphQlAbstract
         $query = $this->mutationAddBundleProduct($maskedQuoteId, self::PARENT_SKU_BUNDLE, $bundleOptionIdV2);
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
+
         self::assertTrue(
             $responseDataObject->getData('addProductsToCart/cart/itemsV2/items/0/is_available')
         );
@@ -239,14 +326,12 @@ class StockAvailabilityTest extends GraphQlAbstract
     }
 
     #[
+        Config('cataloginventory/options/not_available_message', 0),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(AttributeFixture::class, as: 'attribute'),
         DataFixture(
             ConfigurableProductFixture::class,
-            [
-                '_options' => ['$attribute$'],
-                '_links' => ['$product$']
-            ],
+            ['_options' => ['$attribute$'], '_links' => ['$product$']],
             'configurable_product'
         ),
         DataFixture(GuestCartFixture::class, as: 'cart'),
@@ -260,52 +345,79 @@ class StockAvailabilityTest extends GraphQlAbstract
                 'qty' => 100
             ],
         ),
-        DataFixture(
-            ProductStockFixture::class,
-            [
-                'prod_id' => '$product.id$',
-                'prod_qty' => 90
-            ],
-            'prodStock'
-        )
+        DataFixture(ProductStockFixture::class, ['prod_id' => '$product.id$', 'prod_qty' => 90], 'prodStock')
     ]
     public function testStockStatusUnavailableConfigurableProduct(): void
     {
         $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
         $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlMutation($query);
+        $response = $this->graphQlQuery($query);
         $responseDataObject = new DataObject($response);
 
         self::assertFalse(
             $responseDataObject->getData('cart/itemsV2/items/0/is_available')
         );
         self::assertEquals(
-            'Not enough items for sale. Please adjust the quantity to continue',
+            'Not enough items for sale',
             $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
         );
     }
 
     #[
+        Config('cataloginventory/options/not_available_message', 1),
+        Config('cataloginventory/options/stock_threshold_qty', 100),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(AttributeFixture::class, as: 'attribute'),
         DataFixture(
             ConfigurableProductFixture::class,
-            [
-                '_options' => ['$attribute$'],
-                '_links' => ['$product$']
-            ],
+            ['_options' => ['$attribute$'], '_links' => ['$product$']],
             'configurable_product'
         ),
         DataFixture(GuestCartFixture::class, as: 'cart'),
         DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
         DataFixture(
-            ProductStockFixture::class,
+            AddConfigurableProductToCartFixture::class,
             [
-                'prod_id' => '$product.id$',
-                'prod_qty' => 100
+                'cart_id' => '$cart.id$',
+                'product_id' => '$configurable_product.id$',
+                'child_product_id' => '$product.id$',
+                'qty' => 100
             ],
-            'prodStock'
         ),
+        DataFixture(ProductStockFixture::class, ['prod_id' => '$product.id$', 'prod_qty' => 90], 'prodStock')
+    ]
+    public function testStockStatusUnavailableConfigurableProductOption1(): void
+    {
+        $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query);
+        $responseDataObject = new DataObject($response);
+
+        self::assertFalse(
+            $responseDataObject->getData('cart/itemsV2/items/0/is_available')
+        );
+
+        self::assertEquals(90, $responseDataObject->getData('cart/itemsV2/items/0/product/only_x_left_in_stock'));
+
+        self::assertEquals(
+            'Only 90 of 100 available',
+            $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
+        );
+    }
+
+    #[
+        Config('cataloginventory/options/not_available_message', 1),
+        Config('cataloginventory/options/stock_threshold_qty', 100),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(AttributeFixture::class, as: 'attribute'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            ['_options' => ['$attribute$'], '_links' => ['$product$']],
+            'configurable_product'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+        DataFixture(ProductStockFixture::class, ['prod_id' => '$product.id$', 'prod_qty' => 100], 'prodStock'),
         DataFixture(
             AddConfigurableProductToCartFixture::class,
             [
@@ -320,18 +432,21 @@ class StockAvailabilityTest extends GraphQlAbstract
     {
         $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
         $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlMutation($query);
+        $response = $this->graphQlQuery($query);
         $responseDataObject = new DataObject($response);
 
         self::assertTrue(
             $responseDataObject->getData('cart/itemsV2/items/0/is_available')
         );
+
         self::assertNull(
             $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
         );
     }
 
     #[
+        Config('cataloginventory/options/not_available_message', 1),
+        Config('cataloginventory/options/stock_threshold_qty', 100),
         DataFixture(
             ProductFixture::class,
             [
@@ -400,9 +515,11 @@ class StockAvailabilityTest extends GraphQlAbstract
 
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
+
         self::assertTrue(
             $responseDataObject->getData('addProductsToCart/cart/itemsV2/items/0/is_available')
         );
+
         self::assertNull(
             $responseDataObject->getData('addProductsToCart/cart/itemsV2/items/0/not_available_message')
         );
@@ -410,6 +527,7 @@ class StockAvailabilityTest extends GraphQlAbstract
 
     #[
         Config('cataloginventory/options/not_available_message', 1),
+        Config('cataloginventory/options/stock_threshold_qty', 100),
         DataFixture(ProductFixture::class, ['price' => 100.00], as: 'product'),
         DataFixture(GuestCartFixture::class, as: 'cart'),
         DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 100]),
@@ -420,11 +538,17 @@ class StockAvailabilityTest extends GraphQlAbstract
     {
         $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
         $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlMutation($query);
+        $response = $this->graphQlQuery($query);
         $responseDataObject = new DataObject($response);
 
+        self::assertFalse(
+            $responseDataObject->getData('cart/itemsV2/items/0/is_available')
+        );
+
+        self::assertEquals(90, $responseDataObject->getData('cart/itemsV2/items/0/product/only_x_left_in_stock'));
+
         self::assertEquals(
-            'Only 90 available for sale. Please adjust the quantity to continue',
+            'Only 90 of 100 available',
             $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
         );
     }
@@ -442,6 +566,10 @@ class StockAvailabilityTest extends GraphQlAbstract
       items {
         is_available
         not_available_message
+        product {
+            sku
+            only_x_left_in_stock
+        }
       }
     }
   }

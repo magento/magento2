@@ -53,4 +53,8 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\ProductImage">
+        <plugin name="updateThumbnailToParentProductThumbnail" type="Magento\GroupedProductGraphQl\Plugin\Model\Resolver\ProductImagePlugin" />
+    </type>
 </config>

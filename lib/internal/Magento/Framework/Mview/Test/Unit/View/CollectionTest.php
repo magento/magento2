@@ -261,14 +261,14 @@ class CollectionTest extends TestCase
                     'view_3',
                     'view_4',
                 ],
-                'state_mode' => [
+                'stateMode' => [
                     'indexer_1' => StateInterface::MODE_DISABLED,
                     'indexer_2' => StateInterface::MODE_DISABLED,
                     'indexer_3' => StateInterface::MODE_DISABLED,
                     'indexer_4' => StateInterface::MODE_ENABLED,
                 ],
-                'num_disabled_views' => 3,
-                'num_enabled_views' => 1,
+                'numDisabledViews' => 3,
+                'numEnabledViews' => 1,
             ],
         ];
     }

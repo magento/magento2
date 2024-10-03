@@ -121,15 +121,15 @@ class AttributeTest extends TestCase
     /**
      * @return array
      */
-    public function getSortWeightDataProvider()
+    public static function getSortWeightDataProvider()
     {
         return [
-            'empty set info' => ['sortWeights' => null, 'expectedWeight' => 0],
-            'no group sort' => ['sortWeights' => ['sort' => 5], 'expectedWeight' => 0.0005],
-            'no sort' => ['sortWeights' => ['group_sort' => 7], 'expectedWeight' => 7000],
+            'empty set info' => ['sortWeights' => null, 'expected' => 0],
+            'no group sort' => ['sortWeights' => ['sort' => 5], 'expected' => 0.0005],
+            'no sort' => ['sortWeights' => ['group_sort' => 7], 'expected' => 7000],
             'group sort and sort' => [
                 'sortWeights' => ['group_sort' => 7, 'sort' => 5],
-                'expectedWeight' => 7000.0005,
+                'expected' => 7000.0005,
             ]
         ];
     }

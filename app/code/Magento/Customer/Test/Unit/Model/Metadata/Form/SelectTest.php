@@ -50,7 +50,7 @@ class SelectTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueDataProvider()
+    public static function validateValueDataProvider()
     {
         return [
             'empty' => ['', true],
@@ -94,7 +94,7 @@ class SelectTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueRequiredDataProvider()
+    public static function validateValueRequiredDataProvider()
     {
         return [
             'empty' => ['', '"" is a required value.'],
@@ -164,7 +164,7 @@ class SelectTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function outputValueDataProvider()
+    public static function outputValueDataProvider()
     {
         return [
             'empty' => ['', ''],

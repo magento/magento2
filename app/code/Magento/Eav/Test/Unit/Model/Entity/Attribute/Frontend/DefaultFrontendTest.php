@@ -156,7 +156,7 @@ class DefaultFrontendTest extends TestCase
      *
      * @return array
      */
-    public function validationRulesDataProvider(): array
+    public static function validationRulesDataProvider(): array
     {
         return [
             ['alphanumeric', 'validate-alphanum'],
