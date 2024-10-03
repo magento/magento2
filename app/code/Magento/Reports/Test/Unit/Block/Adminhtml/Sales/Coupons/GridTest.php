@@ -113,7 +113,7 @@ class GridTest extends TestCase
     /**
      * @return array
      */
-    public function getCountTotalsDataProvider(): array
+    public static function getCountTotalsDataProvider(): array
     {
         return [
             ['created_at_shipment', null, 0, false],

@@ -24,7 +24,7 @@ define([
 
         obj = new Constr();
         obj.eventBus = new window.varienEvents();
-        obj.initialize(1, {
+        obj.initialize('id', {
             'store_id': 0,
             'tinymce': {
                 'content_css': ''

@@ -98,7 +98,7 @@ class ColumnsResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getColumnsDataProvider()
+    public static function getColumnsDataProvider()
     {
         return [
             'COUNT( DISTINCT `cpe`.`name`) AS name' => [

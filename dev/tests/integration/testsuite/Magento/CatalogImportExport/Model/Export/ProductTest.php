@@ -235,7 +235,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function exportWithJsonAndMarkupTextAttributeDataProvider(): array
+    public static function exportWithJsonAndMarkupTextAttributeDataProvider(): array
     {
         return [
             'json' => [
@@ -774,7 +774,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function filterByQuantityAndStockStatusDataProvider(): array
+    public static function filterByQuantityAndStockStatusDataProvider(): array
     {
         return [
             [

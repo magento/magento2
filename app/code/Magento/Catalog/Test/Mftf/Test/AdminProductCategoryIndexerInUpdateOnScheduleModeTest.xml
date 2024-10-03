@@ -19,6 +19,7 @@
             <testCaseId value="MC-26119"/>
             <group value="catalog"/>
             <group value="indexer"/>
+            <group value="indexers_by_schedule_mode_only"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
@@ -55,16 +56,11 @@
                 <requiredEntity createDataKey="createCategoryC"/>
             </createData>
 
-            <!-- Switch indexers to "Update by Schedule" mode -->
-            <actionGroup ref="AdminSwitchAllIndexerToActionModeActionGroup" stepKey="onUpdateBySchedule">
-                <argument name="action" value="Update by Schedule"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace 'AdminSwitchAllIndexerToActionModeActionGroup' action group for preserving Backward Compatibility" stepKey="onUpdateBySchedule"/>
         </before>
         <after>
-            <!-- Switch indexers to "Update on Save" mode -->
-            <actionGroup ref="AdminSwitchAllIndexerToActionModeActionGroup" stepKey="onUpdateOnSave">
-                <argument name="action" value="Update on Save"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace 'AdminSwitchAllIndexerToActionModeActionGroup' action group for preserving Backward Compatibility" stepKey="onUpdateOnSave"/>
+
             <!-- Delete data -->
             <deleteData createDataKey="createProductA1" stepKey="deleteProductA1"/>
             <deleteData createDataKey="createProductB1" stepKey="deleteProductB1"/>
