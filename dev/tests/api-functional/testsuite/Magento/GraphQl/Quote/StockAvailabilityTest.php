@@ -79,7 +79,7 @@ class StockAvailabilityTest extends GraphQlAbstract
             $responseDataObject->getData('cart/itemsV2/items/0/is_available')
         );
         self::assertEquals(
-            'Not enough items for sale. Please adjust the quantity to continue',
+            'Not enough items for sale',
             $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
         );
     }
@@ -128,7 +128,7 @@ class StockAvailabilityTest extends GraphQlAbstract
         );
         self::assertEquals(10, $responseDataObject->getData('cart/itemsV2/items/0/product/only_x_left_in_stock'));
         self::assertEquals(
-            'Only 10 available for sale. Please adjust the quantity to continue',
+            'Only 10 of 20 available',
             $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
         );
     }
@@ -197,7 +197,7 @@ class StockAvailabilityTest extends GraphQlAbstract
             $responseDataObject->getData('cart/itemsV2/items/0/is_available')
         );
         self::assertEquals(
-            'Not enough items for sale. Please adjust the quantity to continue',
+            'Not enough items for sale',
             $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
         );
     }
@@ -246,7 +246,7 @@ class StockAvailabilityTest extends GraphQlAbstract
             $responseDataObject->getData('cart/itemsV2/items/0/is_available')
         );
         self::assertEquals(
-            'Only 90 available for sale. Please adjust the quantity to continue',
+            'Only 90 of 100 available',
             $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
         );
     }
@@ -358,7 +358,7 @@ class StockAvailabilityTest extends GraphQlAbstract
             $responseDataObject->getData('cart/itemsV2/items/0/is_available')
         );
         self::assertEquals(
-            'Not enough items for sale. Please adjust the quantity to continue',
+            'Not enough items for sale',
             $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
         );
     }
@@ -400,7 +400,7 @@ class StockAvailabilityTest extends GraphQlAbstract
         self::assertEquals(90, $responseDataObject->getData('cart/itemsV2/items/0/product/only_x_left_in_stock'));
 
         self::assertEquals(
-            'Only 90 available for sale. Please adjust the quantity to continue',
+            'Only 90 of 100 available',
             $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
         );
     }
@@ -548,7 +548,7 @@ class StockAvailabilityTest extends GraphQlAbstract
         self::assertEquals(90, $responseDataObject->getData('cart/itemsV2/items/0/product/only_x_left_in_stock'));
 
         self::assertEquals(
-            'Only 90 available for sale. Please adjust the quantity to continue',
+            'Only 90 of 100 available',
             $responseDataObject->getData('cart/itemsV2/items/0/not_available_message')
         );
     }
