@@ -106,7 +106,7 @@ class ProductCustomAttributes implements ResolverInterface
             if (!array_key_exists($attributeCode, $productData)) {
                 continue;
             }
-            $attributeValue = $productData[$attributeCode];
+            $attributeValue = $productData[$attributeCode] ?? "";
             if (is_array($attributeValue)) {
                 $attributeValue = implode(',', $attributeValue);
             }
