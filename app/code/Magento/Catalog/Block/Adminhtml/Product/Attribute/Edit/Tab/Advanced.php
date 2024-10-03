@@ -30,7 +30,6 @@ use Magento\Framework\Stdlib\DateTime;
 class Advanced extends Generic
 {
     /**
-     * Eav data
      *
      * @var Data
      */

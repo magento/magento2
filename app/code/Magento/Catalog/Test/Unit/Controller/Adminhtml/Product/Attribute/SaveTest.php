@@ -138,7 +138,7 @@ class SaveTest extends AttributeTest
             ->disableOriginalConstructor()
             ->getMock();
         $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
-            ->setMethods(['stripTags'])
+            ->addMethods(['stripTags'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productHelperMock = $this->getMockBuilder(ProductHelper::class)
@@ -299,7 +299,7 @@ class SaveTest extends AttributeTest
             'frontend_input' => 'test_frontend_input',
         ];
 
-        $this->filterManagerMock
+        $this->filterManagerMock->expects($this->once())
             ->method('stripTags')
             ->willReturn('Test attribute set name');
         $this->requestMock->expects($this->any())
