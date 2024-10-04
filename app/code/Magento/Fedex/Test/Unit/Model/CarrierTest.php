@@ -1,18 +1,7 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ***********************************************************************
  */
 
 declare(strict_types=1);
@@ -945,56 +934,56 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function shipDateDataProvider(): array
+    public static function shipDateDataProvider(): array
     {
         return [
             'tracking1' => [
                 'tracking1',
-                'shipTimestamp' => '2020-08-15T02:06:35+03:00',
+                'shipTimeStamp' => '2020-08-15T02:06:35+03:00',
                 'expectedDate' => '2014-01-09',
                 '18:31:00',
                 0,
             ],
             'tracking1-again' => [
                 'tracking1',
-                'shipTimestamp' => '2014-01-09T02:06:35+03:00',
+                'shipTimeStamp' => '2014-01-09T02:06:35+03:00',
                 'expectedDate' => '2014-01-09',
                 '18:31:00',
                 0,
             ],
             'tracking2' => [
                 'tracking2',
-                'shipTimestamp' => '2014-01-09T02:06:35+03:00',
+                'shipTimeStamp' => '2014-01-09T02:06:35+03:00',
                 'expectedDate' => '2014-01-09',
                 '23:06:35',
             ],
             'tracking3' => [
                 'tracking3',
-                'shipTimestamp' => '2014-01-09T14:06:35',
+                'shipTimeStamp' => '2014-01-09T14:06:35',
                 'expectedDate' => '2014-01-09',
                 '18:31:00',
             ],
             'tracking4' => [
                 'tracking4',
-                'shipTimestamp' => '2016-08-05 14:06:35',
+                'shipTimeStamp' => '2016-08-05 14:06:35',
                 'expectedDate' => null,
                 null,
             ],
             'tracking5' => [
                 'tracking5',
-                'shipTimestamp' => '2016-08-05 14:06:35+00:00',
+                'shipTimeStamp' => '2016-08-05 14:06:35+00:00',
                 'expectedDate' => null,
                 null,
             ],
             'tracking6' => [
                 'tracking6',
-                'shipTimestamp' => '2016-08-05',
+                'shipTimeStamp' => '2016-08-05',
                 'expectedDate' => null,
                 null,
             ],
             'tracking7' => [
                 'tracking7',
-                'shipTimestamp' => '2016/08/05',
+                'shipTimeStamp' => '2016/08/05',
                 'expectedDate' => null,
                 null
             ],

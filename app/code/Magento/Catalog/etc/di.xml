@@ -1345,10 +1345,29 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolverInterface"
+                type="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolver" />
+    <type name="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolverInterface">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\App\State\ReloadProcessorComposite">
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="Magento_Catalog::AttributeRepository" xsi:type="object">Magento\Catalog\Model\Category\AttributeRepository</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Model\LayoutCacheTagResolverFactory">
+        <arguments>
+            <argument name="cacheTagsResolvers" xsi:type="array">
+                <item name="Magento\Catalog\Model\Product" xsi:type="object">
+                    Magento\Catalog\Model\Product\LayoutCacheTagResolver
+                </item>
+                <item name="Magento\Catalog\Model\Category" xsi:type="object">
+                    Magento\Catalog\Model\Category\LayoutCacheTagResolver
+                </item>
             </argument>
         </arguments>
     </type>

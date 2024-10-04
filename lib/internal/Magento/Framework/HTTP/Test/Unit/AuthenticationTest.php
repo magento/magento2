@@ -32,7 +32,7 @@ class AuthenticationTest extends TestCase
     /**
      * @return array
      */
-    public function getCredentialsDataProvider()
+    public static function getCredentialsDataProvider()
     {
         $login = 'login';
         $password = 'password';

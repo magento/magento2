@@ -80,6 +80,13 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     protected $entityManager;
 
     /**
+     * Store associated with rule entities information map
+     *
+     * @var array
+     */
+    protected $_associatedEntitiesMap = [];
+
+    /**
      * Rule constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -93,6 +100,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param PriceCurrencyInterface $priceCurrency
      * @param string|null $connectionName
      * @param EntityManager|null $entityManager
+     * @param \Magento\Framework\DataObject|null $associatedEntityMap
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -107,7 +115,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         \Magento\Framework\Stdlib\DateTime $dateTime,
         PriceCurrencyInterface $priceCurrency,
         $connectionName = null,
-        ?EntityManager $entityManager = null
+        ?EntityManager $entityManager = null,
+        \Magento\Framework\DataObject $associatedEntityMap = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_conditionFactory = $conditionFactory;
@@ -119,10 +128,11 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         $this->dateTime = $dateTime;
         $this->priceCurrency = $priceCurrency;
         $this->entityManager = $entityManager ?? ObjectManager::getInstance()->get(EntityManager::class);
-        $this->_associatedEntitiesMap = ObjectManager::getInstance()
-            // phpstan:ignore this is a virtual class
+        $this->_associatedEntitiesMap = $associatedEntityMap ?? ObjectManager::getInstance()
+            // @phpstan-ignore-next-line - this is a virtual type defined in di.xml
             ->get(\Magento\CatalogRule\Model\ResourceModel\Rule\AssociatedEntityMap::class)
             ->getData();
+
         parent::__construct($context, $connectionName);
     }
 
@@ -207,12 +217,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
-     * Load an object
+     * @inheritDoc
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @param mixed $value
-     * @param string $field
-     * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)

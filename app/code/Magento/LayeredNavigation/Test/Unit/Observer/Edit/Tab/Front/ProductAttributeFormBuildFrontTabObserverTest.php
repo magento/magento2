@@ -52,7 +52,7 @@ class ProductAttributeFormBuildFrontTabObserverTest extends TestCase
         $this->moduleManagerMock = $this->createMock(Manager::class);
         $this->eventObserverMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getForm'])
+            ->addMethods(['getForm'])
             ->getMock();
 
         $objectManager = new ObjectManager($this);

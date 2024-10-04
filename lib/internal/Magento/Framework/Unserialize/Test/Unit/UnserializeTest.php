@@ -31,7 +31,7 @@ class UnserializeTest extends TestCase
     protected function setUp(): void
     {
         $this->serializerMock = $this->getMockBuilder(Serialize::class)
-            ->setMethods(
+            ->onlyMethods(
                 ['serialize', 'unserialize']
             )
             ->getMock();
@@ -70,7 +70,7 @@ class UnserializeTest extends TestCase
     /**
      * @return array
      */
-    public function unserializeObjectDataProvider()
+    public static function unserializeObjectDataProvider()
     {
         return [
             // Upper and lower case serialized object indicators, nested in array

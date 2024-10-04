@@ -214,17 +214,18 @@ input SetGuestEmailOnCartInput @doc(description: "Defines the guest email and ca
     email: String! @doc(description: "The email address of the guest.")
 }
 
-type CartPrices  @doc(description: "Contains details about the final price of items in the cart, including discount and tax information.") {
-    grand_total: Money  @doc(description: "The total, including discounts, taxes, shipping, and other fees.")
-    subtotal_including_tax: Money  @doc(description: "The subtotal including any applied taxes.")
-    subtotal_excluding_tax: Money  @doc(description: "The subtotal without any applied taxes.")
+type CartPrices @doc(description: "Contains details about the final price of items in the cart, including discount and tax information.") {
+    grand_total: Money @doc(description: "The total, including discounts, taxes, shipping, and other fees.")
+    grand_total_excluding_tax: Money @doc(description: "The total of the cart, including discounts, shipping, and other fees without tax.")
+    subtotal_including_tax: Money @doc(description: "The subtotal including any applied taxes.")
+    subtotal_excluding_tax: Money @doc(description: "The subtotal without any applied taxes.")
     discount: CartDiscount @deprecated(reason: "Use discounts instead.")
-    subtotal_with_discount_excluding_tax: Money  @doc(description: "The subtotal with any discounts applied, but not taxes.")
-    applied_taxes: [CartTaxItem]  @doc(description: "An array containing the names and amounts of taxes applied to each item in the cart.")
+    subtotal_with_discount_excluding_tax: Money @doc(description: "The subtotal with any discounts applied, but not taxes.")
+    applied_taxes: [CartTaxItem] @doc(description: "An array containing the names and amounts of taxes applied to each item in the cart.")
     discounts: [Discount] @doc(description:"An array containing cart rule discounts, store credit and gift cards applied to the cart.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Discounts")
 }
 
-type CartTaxItem  @doc(description: "Contains tax information about an item in the cart.") {
+type CartTaxItem @doc(description: "Contains tax information about an item in the cart.") {
     amount: Money! @doc(description: "The amount of tax applied to the item.")
     label: String! @doc(description: "The description of the tax.")
 }
@@ -395,6 +396,7 @@ type AddVirtualProductsToCartOutput @doc(description: "Contains details about th
 
 type UpdateCartItemsOutput @doc(description: "Contains details about the cart after updating items.") {
     cart: Cart! @doc(description: "The cart after updating products.")
+    errors: [CartUserInputError!]! @doc(description: "Contains errors encountered while updating an item to the cart.")
 }
 
 type RemoveItemFromCartOutput @doc(description: "Contains details about the cart after removing an item.") {
@@ -452,6 +454,8 @@ type CartItemPrices @doc(description: "Contains details about the price of the i
     row_total_including_tax: Money! @doc(description: "The value of `row_total` plus the tax applied to the item.")
     discounts: [Discount] @doc(description: "An array of discounts to be applied to the cart item.")
     total_item_discount: Money @doc(description: "The total of all discounts applied to the item.")
+    original_item_price: Money! @doc(description: "The value of the original unit price for the item, including discounts.")
+    original_row_total: Money! @doc(description: "The value of the original price multiplied by the quantity of the item.")
 }
 
 type SelectedCustomizableOption @doc(description: "Identifies a customized product that has been placed in a cart.") {
@@ -497,6 +501,9 @@ enum CartUserInputErrorType {
     PRODUCT_NOT_FOUND
     NOT_SALABLE
     INSUFFICIENT_STOCK
+    COULD_NOT_FIND_CART_ITEM
+    REQUIRED_PARAMETER_MISSING
+    INVALID_PARAMETER_VALUE
     UNDEFINED
 }
 enum PlaceOrderErrorCodes {
@@ -508,13 +515,20 @@ enum PlaceOrderErrorCodes {
 }
 
 type StoreConfig {
-    is_guest_checkout_enabled: Boolean @doc(description: "Extended Config Data - checkout/options/guest_checkout")
-    is_one_page_checkout_enabled: Boolean @doc(description: "Extended Config Data - checkout/options/onepage_checkout_enabled")
-    max_items_in_order_summary: Int @doc(description: "Extended Config Data - checkout/options/max_items_display_count")
-    cart_summary_display_quantity: Int @doc(description: "Extended Config Data - checkout/cart_link/use_qty")
-    minicart_display: Boolean @doc(description: "Extended Config Data - checkout/sidebar/display")
-    minicart_max_items: Int @doc(description: "Extended Config Data - checkout/sidebar/count")
-    cart_expires_in_days: Int @doc(description: "Extended Config Data - checkout/cart/delete_quote_after")
+    is_guest_checkout_enabled: Boolean @doc(description: "checkout/options/guest_checkout: whether the guest checkout is enabled or not.")
+    is_one_page_checkout_enabled: Boolean @doc(description: "checkout/options/onepage_checkout_enabled: whether the one page checkout is enabled or not")
+    max_items_in_order_summary: Int @doc(description: "checkout/options/max_items_display_count: maximum number of items to display in order summary.")
+    cart_summary_display_quantity: Int @doc(description: "checkout/cart_link/use_qty: what to show in the display cart summary, number of items or item quantities.")
+    minicart_display: Boolean @doc(description: "checkout/sidebar/display: whether to display the minicart or not.")
+    minicart_max_items: Int @doc(description: "checkout/sidebar/count: maximum number of items to show in minicart.")
+    cart_expires_in_days: Int @doc(description: "checkout/cart/delete_quote_after: quote lifetime in days.")
+    grouped_product_image: ProductImageThumbnail! @doc(description: "checkout/cart/grouped_product_image: which image to use for grouped products.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\StoreConfig")
+    configurable_product_image: ProductImageThumbnail! @doc(description: "checkout/cart/configurable_product_image: which image to use for configurable products.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\StoreConfig")
+}
+
+enum ProductImageThumbnail {
+    ITSELF @doc(description: "Use thumbnail of product as image.")
+    PARENT @doc(description: "Use thumbnail of product's parent as image.")
 }
 
 input EstimateTotalsInput {

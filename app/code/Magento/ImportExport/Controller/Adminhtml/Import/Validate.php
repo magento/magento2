@@ -28,6 +28,11 @@ class Validate extends ImportResultController implements HttpPostActionInterface
     private $import;
 
     /**
+     * @var Import
+     */
+    private $_validateRowError = false;
+
+    /**
      * Validate uploaded files action
      *
      * @return ResultInterface
@@ -80,10 +85,12 @@ class Validate extends ImportResultController implements HttpPostActionInterface
     {
         $import = $this->getImport();
         $errorAggregator = $import->getErrorAggregator();
-
         if ($import->getProcessedRowsCount()) {
             if ($validationResult) {
-                $this->addMessageForValidResult($resultBlock);
+                $totalError = $errorAggregator->getErrorsCount();
+                $totalRows = $import->getProcessedRowsCount();
+                $this->validateRowError($errorAggregator, $totalRows);
+                $this->addMessageForValidResult($resultBlock, $totalError, $totalRows);
             } else {
                 $resultBlock->addError(
                     __('Data validation failed. Please fix the following errors and upload the file again.')
@@ -111,6 +118,24 @@ class Validate extends ImportResultController implements HttpPostActionInterface
                 $resultBlock->addError(__('This file is empty. Please try another one.'));
             }
         }
+    }
+
+    /**
+     * Validate row error.
+     *
+     * @param object $errorAggregator
+     * @param int $totalRows
+     * @return bool
+     */
+    private function validateRowError(object $errorAggregator, int $totalRows): bool
+    {
+        $errors = $errorAggregator->getAllErrors();
+        $rowNumber = [];
+        foreach ($errors as $error) {
+            $rowNumber = array_unique([...$rowNumber , ...[$error->getRowNumber()]]);
+        }
+        (count($rowNumber) < $totalRows)? $this->_validateRowError = true : $this->_validateRowError = false;
+        return $this->_validateRowError;
     }
 
     /**
@@ -154,12 +179,14 @@ class Validate extends ImportResultController implements HttpPostActionInterface
      * 2. Add message for case when imported data was checked and result is valid, but import is not allowed.
      *
      * @param Result $resultBlock
+     * @param Import $totalError
+     * @param Import $totalRows
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function addMessageForValidResult(Result $resultBlock)
+    private function addMessageForValidResult(Result $resultBlock, $totalError, $totalRows)
     {
-        if ($this->getImport()->isImportAllowed()) {
+        if ($this->getImport()->isImportAllowed() && ($totalRows > $totalError || $this->_validateRowError)) {
             $resultBlock->addSuccess(__('File is valid! To start import process press "Import" button'), true);
         } else {
             $resultBlock->addError(__('The file is valid, but we can\'t import it for some reason.'));

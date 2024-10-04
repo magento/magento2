@@ -254,7 +254,6 @@ class ImportTest extends AbstractImportTestCase
         $this->randomMock = $this->getMockForAbstractClass(Random::class);
         $this->upload = $this->createMock(Upload::class);
         $this->localeEmulator = $this->getMockForAbstractClass(LocaleEmulatorInterface::class);
-
         $this->import = $this->getMockBuilder(Import::class)
             ->setConstructorArgs(
                 [
@@ -329,9 +328,12 @@ class ImportTest extends AbstractImportTestCase
             ->willReturn($this->_importData);
 
         $this->import->expects($this->any())->method('setData')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                ['entity'] => $entityTypeCode,
-                ['behavior'] => $behaviour
+            ->willReturnCallback(function ($arg1, $arg2) use ($entityTypeCode, $behaviour) {
+                if ($arg1 == 'entity' && $arg2 == $entityTypeCode) {
+                    return null;
+                } elseif ($arg1 == 'behavior' && $arg2 == $behaviour) {
+                    return null;
+                }
             });
         $this->_entityAdapter->expects($this->any())
             ->method('importData')
@@ -393,11 +395,15 @@ class ImportTest extends AbstractImportTestCase
         $this->import->expects($this->any())
             ->method('getDataSourceModel')
             ->willReturn($this->_importData);
-        $this->import->expects($this->any())->method('setData')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                ['entity'] => $entityTypeCode,
-                ['behavior'] => $behaviour
-            });
+        $this->import->expects($this->any())->method('setData')->willReturnCallback(
+            function ($arg1, $arg2) use ($entityTypeCode, $behaviour) {
+                if ($arg1 == 'entity' && $arg2 == $entityTypeCode) {
+                    return null;
+                } elseif ($arg1 == 'behavior' && $arg2 == $behaviour) {
+                    return null;
+                }
+            }
+        );
 
         $this->_entityAdapter->expects($this->any())
             ->method('importData')
@@ -1053,14 +1059,14 @@ class ImportTest extends AbstractImportTestCase
     {
         return [
             [
-                '$entity' => null,
-                '$getEntityResult' => null,
-                '$expectedResult' => false,
+                'entity' => null,
+                'getEntityResult' => null,
+                'expectedResult' => false,
             ],
             [
-                '$entity' => 'advanced_pricing',
-                '$getEntityResult' => 'advanced_pricing',
-                '$expectedResult' => null,
+                'entity' => 'advanced_pricing',
+                'getEntityResult' => 'advanced_pricing',
+                'expectedResult' => null,
             ],
         ];
     }
@@ -1074,16 +1080,16 @@ class ImportTest extends AbstractImportTestCase
     {
         return [
             [
-                '$entity' => 'entity',
-                '$getEntitiesResult' => ['catalog_product' => ['model' => 'catalog_product']],
-                '$getEntityResult' => 'catalog_product',
-                '$expectedResult' => false,
+                'entity' => 'entity',
+                'getEntitiesResult' => ['catalog_product' => ['model' => 'catalog_product']],
+                'getEntityResult' => 'catalog_product',
+                'expectedResult' => false,
             ],
             [
-                '$entity' => 'advanced_pricing',
-                '$getEntitiesResult' => ['catalog_product' => ['model' => 'catalog_product']],
-                '$getEntityResult' => 'advanced_pricing',
-                '$expectedResult' => true,
+                'entity' => 'advanced_pricing',
+                'getEntitiesResult' => ['catalog_product' => ['model' => 'catalog_product']],
+                'getEntityResult' => 'advanced_pricing',
+                'expectedResult' => true,
             ],
         ];
     }

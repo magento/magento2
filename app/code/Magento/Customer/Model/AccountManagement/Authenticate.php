@@ -1,18 +1,7 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
@@ -103,15 +92,16 @@ class Authenticate
         if ($this->authentication->isLocked($customerId)) {
             throw new UserLockedException(__('The account is locked.'));
         }
-        try {
-            $this->authentication->authenticate($customerId, $password);
-        } catch (InvalidEmailOrPasswordException $exception) {
-            throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
-        }
 
         if ($customer->getConfirmation()
             && ($this->isConfirmationRequired($customer) || $this->isEmailChangedConfirmationRequired($customer))) {
             throw new EmailNotConfirmedException(__('This account isn\'t confirmed. Verify and try again.'));
+        }
+
+        try {
+            $this->authentication->authenticate($customerId, $password);
+        } catch (InvalidEmailOrPasswordException $exception) {
+            throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
 
         $customerModel = $this->customerFactory->create()->updateData($customer);

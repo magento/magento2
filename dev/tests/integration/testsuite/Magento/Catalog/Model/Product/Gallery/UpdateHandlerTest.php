@@ -295,7 +295,7 @@ class UpdateHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function executeWithTwoImagesAndRolesDataProvider(): array
+    public static function executeWithTwoImagesAndRolesDataProvider(): array
     {
         return [
             'unassign_all_roles' => [
@@ -631,7 +631,7 @@ class UpdateHandlerTest extends TestCase
     /**
      * @return array[]
      */
-    public function updateImageDataProvider(): array
+    public static function updateImageDataProvider(): array
     {
         return [
             [
@@ -699,7 +699,7 @@ class UpdateHandlerTest extends TestCase
     /**
      * @return array[]
      */
-    public function addImagesDataProvider(): array
+    public static function addImagesDataProvider(): array
     {
         return [
             [

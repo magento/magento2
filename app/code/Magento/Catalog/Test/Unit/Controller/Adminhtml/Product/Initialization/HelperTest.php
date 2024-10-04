@@ -161,9 +161,7 @@ class HelperTest extends TestCase
             ->getMock();
         $this->productLinksMock = $this->createMock(ProductLinks::class);
         $this->linkTypeProviderMock = $this->createMock(LinkTypeProvider::class);
-        $this->productLinksMock->expects($this->any())
-            ->method('initializeLinks')
-            ->willReturn($this->productMock);
+
         $this->attributeFilterMock = $this->createMock(AttributeFilter::class);
         $this->localeFormatMock = $this->createMock(Format::class);
 
@@ -184,7 +182,7 @@ class HelperTest extends TestCase
                 $this->customOptionFactoryMock
             ]
         ];
-        $this->prepareObjectManager($objects);
+        $this->objectManager->prepareObjectManager($objects);
 
         $this->helper = $this->objectManager->getObject(
             Helper::class,
@@ -221,6 +219,7 @@ class HelperTest extends TestCase
      * @param array|null $tierPrice
      * @dataProvider initializeDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function testInitialize(
         $isSingleStore,
@@ -229,8 +228,17 @@ class HelperTest extends TestCase
         $links,
         $linkTypes,
         $expectedLinks,
-        $tierPrice = null
+        $tierPrice = null,
+        $isReadOnlyRelatedItems = null,
+        $isReadOnlyUpSellItems = null,
+        $ignoreLinksFlag = false
     ) {
+        $this->productMock->setData('related_readonly', $isReadOnlyRelatedItems);
+        $this->productMock->setData('upsell_readonly', $isReadOnlyUpSellItems);
+        $this->productLinksMock->expects($this->any())
+            ->method('initializeLinks')
+            ->willReturn($this->productMock);
+
         $this->linkTypeProviderMock->expects($this->once())
             ->method('getItems')
             ->willReturn($this->assembleLinkTypes($linkTypes));
@@ -346,6 +354,11 @@ class HelperTest extends TestCase
 
         $productLinks = $this->productMock->getProductLinks();
         $this->assertCount(count($expectedLinks), $productLinks);
+        if ($ignoreLinksFlag) {
+            $this->assertTrue($this->productMock->getDataByKey('ignore_links_flag'));
+        } else {
+            $this->assertFalse($this->productMock->getDataByKey('ignore_links_flag'));
+        }
         $resultLinks = [];
 
         $this->assertEquals($tierPrice ?: [], $this->productMock->getData('tier_price'));
@@ -396,44 +409,44 @@ class HelperTest extends TestCase
     {
         return [
             [
-                'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 2],
-                'expected_website_ids' => ['1' => 1, '2' => 2],
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 1, '2' => 2],
+                'expWebsiteIds' => ['1' => 1, '2' => 2],
                 'links' => [],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
-                'expected_links' => [],
+                'expectedLinks' => [],
                 'tierPrice' => [1, 2, 3],
             ],
             [
-                'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 0],
-                'expected_website_ids' => ['1' => 1],
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 1, '2' => 0],
+                'expWebsiteIds' => ['1' => 1],
                 'links' => [],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
-                'expected_links' => [],
+                'expectedLinks' => [],
             ],
             [
-                'single_store' => false,
-                'website_ids' => ['1' => 0, '2' => 0],
-                'expected_website_ids' => [],
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 0, '2' => 0],
+                'expWebsiteIds' => [],
                 'links' => [],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
-                'expected_links' => [],
+                'expectedLinks' => [],
             ],
             [
-                'single_store' => true,
-                'website_ids' => [],
-                'expected_website_ids' => ['1' => 1],
+                'isSingleStore' => true,
+                'websiteIds' => [],
+                'expWebsiteIds' => ['1' => 1],
                 'links' => [],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
-                'expected_links' => [],
+                'expectedLinks' => [],
             ],
 
             // Related links
             [
-                'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 2],
-                'expected_website_ids' => ['1' => 1, '2' => 2],
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 1, '2' => 2],
+                'expWebsiteIds' => ['1' => 1, '2' => 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -450,16 +463,16 @@ class HelperTest extends TestCase
                     ],
                 ],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
-                'expected_links' => [
+                'expectedLinks' => [
                     ['type' => 'related', 'linked_product_sku' => 'Test'],
                 ],
             ],
 
             // Custom link
             [
-                'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 2],
-                'expected_website_ids' => ['1' => 1, '2' => 2],
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 1, '2' => 2],
+                'expWebsiteIds' => ['1' => 1, '2' => 2],
                 'links' => [
                     'customlink' => [
                         0 => [
@@ -476,16 +489,16 @@ class HelperTest extends TestCase
                     ],
                 ],
                 'linkTypes' => ['related', 'upsell', 'crosssell', 'customlink'],
-                'expected_links' => [
+                'expectedLinks' => [
                     ['type' => 'customlink', 'linked_product_sku' => 'Testcustom'],
                 ],
             ],
 
             // Both links
             [
-                'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 2],
-                'expected_website_ids' => ['1' => 1, '2' => 2],
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 1, '2' => 2],
+                'expWebsiteIds' => ['1' => 1, '2' => 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -515,7 +528,7 @@ class HelperTest extends TestCase
                     ],
                 ],
                 'linkTypes' => ['related', 'upsell', 'crosssell', 'customlink'],
-                'expected_links' => [
+                'expectedLinks' => [
                     ['type' => 'related', 'linked_product_sku' => 'Test'],
                     ['type' => 'customlink', 'linked_product_sku' => 'Testcustom'],
                 ],
@@ -523,9 +536,9 @@ class HelperTest extends TestCase
 
             // Undefined link type
             [
-                'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 2],
-                'expected_website_ids' => ['1' => 1, '2' => 2],
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 1, '2' => 2],
+                'expWebsiteIds' => ['1' => 1, '2' => 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -555,9 +568,37 @@ class HelperTest extends TestCase
                     ],
                 ],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
-                'expected_links' => [
+                'expectedLinks' => [
                     ['type' => 'related', 'linked_product_sku' => 'Test'],
                 ],
+            ],
+
+            // readonly links
+            [
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 1, '2' => 2],
+                'expWebsiteIds' => ['1' => 1, '2' => 2],
+                'links' => [
+                    'related' => [
+                        0 => [
+                            'id' => 1,
+                            'thumbnail' => 'http://magento.dev/media/no-image.jpg',
+                            'name' => 'Test',
+                            'status' => 'Enabled',
+                            'attribute_set' => 'Default',
+                            'sku' => 'Test',
+                            'price' => 1.00,
+                            'position' => 1,
+                            'record_id' => 1,
+                        ],
+                    ],
+                ],
+                'linkTypes' => ['related', 'upsell', 'crosssell'],
+                'expectedLinks' => [],
+                'tierPrice' => [],
+                true,
+                true,
+                true
             ],
         ];
     }
@@ -660,6 +701,7 @@ class HelperTest extends TestCase
                                 'default_key2' => 'val22',
                             ],
                         ],
+                        'is_use_default' => 1,
                     ],
                 ],
             ],
@@ -702,6 +744,7 @@ class HelperTest extends TestCase
                                 'default_key1' => 'val11',
                                 'default_title' => 'val22',
                                 'is_delete_store_title' => 1,
+                                'is_use_default' => 1,
                             ],
                         ],
                     ],
@@ -771,23 +814,5 @@ class HelperTest extends TestCase
         $this->productRepositoryMock->expects($this->any())
             ->method('getById')
             ->willReturnMap($repositoryReturnMap);
-    }
-
-    /**
-     * @param $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->addMethods(['getInstance'])
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
-
-        $objectManagerMock->method('getInstance')->willReturnSelf();
-        $objectManagerMock->method('get')->willReturnMap($map);
-
-        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }
