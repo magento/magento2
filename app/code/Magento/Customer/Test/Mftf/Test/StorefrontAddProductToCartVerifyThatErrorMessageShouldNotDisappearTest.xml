@@ -50,7 +50,7 @@
         <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addProductToCart"/>
         <!-- Check that error remains -->
         <actionGroup ref="StorefrontAssertProductAddToCartErrorMessageActionGroup" stepKey="assertFailure">
-            <argument name="message" value="The requested qty is not available"/>
+            <argument name="message" value="Not enough items for sale"/>
         </actionGroup>
     </test>
 </tests>
