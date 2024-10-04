@@ -11,8 +11,7 @@ use Magento\Framework\Amqp\Connection\Factory;
 use Magento\Framework\Amqp\Connection\FactoryOptions;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PhpAmqpLib\Connection\AMQPSSLConnection;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Connection\AMQPConnectionConfig;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -75,9 +74,9 @@ class FactoryTest extends TestCase
      * @return void
      * @dataProvider connectionDataProvider
      */
-    public function testSSLConnection($sslEnabled, $connectionClass)
+    public function testSSLConnection(bool $sslEnabled, string $connectionClass)
     {
-        $this->optionsMock->expects($this->exactly(2))
+        $this->optionsMock->expects($this->once())
             ->method('isSslEnabled')
             ->willReturn($sslEnabled);
         $this->optionsMock->expects($this->once())
@@ -99,10 +98,18 @@ class FactoryTest extends TestCase
             ->method('getSslOptions')
             ->willReturn(null);
 
+        $connection = $this->objectManager->getObject($connectionClass, [
+                '127.0.0.1',
+                '5672',
+                'guest',
+                'guest',
+                '/']
+        );
+
         $this->objectManagerInterface->expects($this->any())
             ->method('create')
             ->with($connectionClass)
-            ->willReturn($this->createMock($connectionClass));
+            ->willReturn($connection);
 
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerInterface);
 
@@ -118,12 +125,12 @@ class FactoryTest extends TestCase
     {
         return [
             [
-                'sslEnabled' => true,
-                'connectionClass' => AMQPSSLConnection::class,
+                'ssl_enabled' => true,
+                'connection_class' => AMQPConnectionConfig::class,
             ],
             [
-                'sslEnabled' => false,
-                'connectionClass' => AMQPStreamConnection::class,
+                'ssl_enabled' => false,
+                'connection_class' => AMQPConnectionConfig::class,
             ],
         ];
     }
