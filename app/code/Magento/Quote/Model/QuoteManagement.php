@@ -694,14 +694,14 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
                         $hasDefaultBilling = true;
                     }
                 }
-                //save here new customer address
-                $shippingAddress->setCustomerId($quote->getCustomerId());
                 if (!$shippingAddress->getId()) {
+                    //save here new customer address
+                    $shippingAddress->setCustomerId($quote->getCustomerId());
                     $this->addressRepository->save($shippingAddress);
+                    $quote->addCustomerAddress($shippingAddress);
+                    $this->addressesToSync[] = $shippingAddress->getId();
                 }
-                $quote->addCustomerAddress($shippingAddress);
                 $shipping->setCustomerAddressData($shippingAddress);
-                $this->addressesToSync[] = $shippingAddress->getId();
                 $shipping->setCustomerAddressId($shippingAddress->getId());
             }
         }
@@ -729,13 +729,13 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
                     }
                     $billingAddress->setIsDefaultBilling(true);
                 }
-                $billingAddress->setCustomerId($quote->getCustomerId());
                 if (!$billingAddress->getId()) {
+                    $billingAddress->setCustomerId($quote->getCustomerId());
                     $this->addressRepository->save($billingAddress);
+                    $quote->addCustomerAddress($billingAddress);
+                    $this->addressesToSync[] = $billingAddress->getId();
                 }
-                $quote->addCustomerAddress($billingAddress);
                 $billing->setCustomerAddressData($billingAddress);
-                $this->addressesToSync[] = $billingAddress->getId();
                 $billing->setCustomerAddressId($billingAddress->getId());
 
                 // Admin order: `Same As Billing Address`- when new billing address saved in address book
