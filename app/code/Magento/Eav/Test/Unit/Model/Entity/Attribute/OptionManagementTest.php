@@ -130,7 +130,7 @@ class OptionManagementTest extends TestCase
     /**
      * @return array
      */
-    public function optionLabelDataProvider(): array
+    public static function optionLabelDataProvider(): array
     {
         return [
             ['optionLabel'],
@@ -504,7 +504,7 @@ class OptionManagementTest extends TestCase
     private function getAttributeOption()
     {
         return $this->getMockBuilder(EavAttributeOptionInterface::class)
-            ->setMethods(['getSourceLabels'])
+            ->addMethods(['getSourceLabels'])
             ->getMockForAbstractClass();
     }
 

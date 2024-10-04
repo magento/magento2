@@ -42,7 +42,7 @@ class SaveHandlerFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider()
+    public static function createDataProvider()
     {
         return [[[], Native::class, 'files']];
     }

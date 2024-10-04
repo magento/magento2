@@ -737,11 +737,18 @@ class Import extends AbstractModel
         $messages = $this->getOperationResultMessages($errorAggregator);
         $this->addLogComment($messages);
 
-        $result = !$errorAggregator->isErrorLimitExceeded();
-        if ($result) {
-            $this->addLogComment(__('Import data validation is complete.'));
+        if ($errorAggregator->isErrorLimitExceeded()) {
+            return false;
         }
-        return $result;
+
+        if ($this->getProcessedRowsCount() <= $errorAggregator->getInvalidRowsCount()) {
+            $this->addLogComment(__('There are no valid rows to import.'));
+            return false;
+        }
+
+        $this->addLogComment(__('Import data validation is complete.'));
+
+        return true;
     }
 
     /**

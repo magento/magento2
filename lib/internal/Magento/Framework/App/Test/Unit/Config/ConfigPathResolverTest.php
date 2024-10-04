@@ -61,7 +61,7 @@ class ConfigPathResolverTest extends TestCase
     /**
      * @return array
      */
-    public function resolveDataProvider()
+    public static function resolveDataProvider()
     {
         return [
             ['/test/test/test/', 'default', null, null, 'default/test/test/test'],

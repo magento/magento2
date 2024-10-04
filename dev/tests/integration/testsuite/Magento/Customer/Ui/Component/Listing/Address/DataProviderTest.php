@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace Magento\Customer\Ui\Component\Listing\Address;
 
 use Magento\Backend\Model\Locale\Resolver;
+use Magento\Customer\Model\Customer;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -52,6 +54,9 @@ class DataProviderTest extends TestCase
                 'request' => $this->requestMock,
             ]
         );
+        $indexerRegistry = Bootstrap::getObjectManager()->create(IndexerRegistry::class);
+        $indexer = $indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+        $indexer->reindexAll();
     }
 
     /**
@@ -95,7 +100,7 @@ class DataProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getDataByRegionDataProvider(): array
+    public static function getDataByRegionDataProvider(): array
     {
         return [
             [['condition_type' => 'fulltext', 'field' => 'fulltext', 'value' => 'アラバマ']],

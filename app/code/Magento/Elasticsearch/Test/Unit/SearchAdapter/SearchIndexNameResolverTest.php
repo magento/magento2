@@ -49,10 +49,10 @@ class SearchIndexNameResolverTest extends TestCase
     {
         $this->clientConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods(['getIndexSettings'])
+            ->onlyMethods([
                 'getIndexPrefix',
                 'getEntityType',
-                'getIndexSettings',
             ])
             ->getMock();
 

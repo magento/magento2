@@ -9,19 +9,19 @@ use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
 use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item;
 use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Tax\Model\Config;
 
 /**
  * Adminhtml sales order column renderer
  *
  * @api
- * @author     Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
     /**
-     * Option factory
-     *
      * @var \Magento\Catalog\Model\Product\OptionFactory
      */
     protected $_optionFactory;
@@ -122,7 +122,13 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     public function getTotalAmount($item)
     {
-        $totalAmount = $item->getRowTotal() - $item->getDiscountAmount();
+        $storeId = $item->getStoreId();
+        $total =  $this->displaySalesPricesInclTax($storeId) ? $item->getPriceInclTax()
+            : $item->getPrice();
+
+        $totalAmount = $this->displaySalesPricesInclTax($storeId)
+            ? $total - $item->getDiscountAmount() - $item->getTaxAmount()
+            : $total - $item->getDiscountAmount();
 
         return $totalAmount;
     }
@@ -135,8 +141,29 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     public function getBaseTotalAmount($item)
     {
-        $baseTotalAmount =  $item->getBaseRowTotal() - $item->getBaseDiscountAmount();
+        $storeId = $item->getStoreId();
+        $baseTotal =  $this->displaySalesPricesInclTax($storeId) ? $item->getBasePriceInclTax()
+            : $item->getBasePrice();
+
+        $baseTotalAmount = $this->displaySalesPricesInclTax($storeId)
+            ? $baseTotal - $item->getBaseDiscountAmount() - $item->getBaseTaxAmount()
+            : $baseTotal - $item->getBaseDiscountAmount();
 
         return $baseTotalAmount;
+    }
+
+    /**
+     * Return the flag to display sales prices including tax
+     *
+     * @param string|bool|int|Store $store
+     * @return bool
+     */
+    private function displaySalesPricesInclTax($store = null): bool
+    {
+        return $this->_scopeConfig->getValue(
+            Config::XML_PATH_DISPLAY_SALES_PRICE,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        ) == Config::DISPLAY_TYPE_INCLUDING_TAX;
     }
 }
