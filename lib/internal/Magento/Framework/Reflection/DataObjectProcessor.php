@@ -187,8 +187,7 @@ class DataObjectProcessor
     private function getKeyByObjectType(string $key, string $dataObjectType): string
     {
         $dataObjectType = ltrim($dataObjectType, '\\');
-        if (
-            array_key_exists($dataObjectType, $this->objectKeyMap) &&
+        if (array_key_exists($dataObjectType, $this->objectKeyMap) &&
             array_key_exists($key, $this->objectKeyMap[$dataObjectType])
         ) {
             $key = $this->objectKeyMap[$dataObjectType][$key];
