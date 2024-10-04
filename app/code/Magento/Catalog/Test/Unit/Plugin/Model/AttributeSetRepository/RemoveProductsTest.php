@@ -39,7 +39,7 @@ class RemoveProductsTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->testSubject = $objectManager->getObject(
             RemoveProducts::class,
@@ -77,7 +77,7 @@ class RemoveProductsTest extends TestCase
 
         /** @var AttributeSetInterface|MockObject $attributeSet */
         $attributeSet = $this->getMockBuilder(AttributeSetInterface::class)
-            ->setMethods(['getId'])
+            ->addMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $attributeSet->expects(self::once())

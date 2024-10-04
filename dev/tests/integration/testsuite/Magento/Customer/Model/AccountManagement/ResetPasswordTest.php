@@ -73,7 +73,8 @@ class ResetPasswordTest extends TestCase
             1,
             Xpath::getElementsCountForXpath(
                 sprintf(
-                    '//a[contains(@href, \'customer/account/createPassword/?id=%1$d&token=%2$s\')]',
+                    '//a[contains(@href, \'customer/account/createPassword/?email=%1$s&id=%2$d&token=%3$s\')]',
+                    urlencode($customerSecure->getEmail()),
                     $customerSecure->getId(),
                     $customerSecure->getRpToken()
                 ),
@@ -136,15 +137,15 @@ class ResetPasswordTest extends TestCase
     /**
      * @return array
      */
-    public function passwordResetErrorsProvider(): array
+    public static function passwordResetErrorsProvider(): array
     {
         return [
-            'wrong_email' => [
+            'email' => [
                 'email' => 'foo@example.com',
             ],
-            'wrong_website_id' => [
+            'websiteId' => [
                 'email' => 'customer@example.com',
-                'website_id' => 0,
+                'websiteId' => 0,
             ],
         ];
     }

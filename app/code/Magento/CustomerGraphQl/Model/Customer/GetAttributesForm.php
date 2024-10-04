@@ -42,12 +42,6 @@ class GetAttributesForm implements GetAttributesFormInterface
     {
         $attributes = [];
         foreach ($this->entity->getAttributes($formCode) as $attribute) {
-            // region_id and country_id returns large datasets that is also not related between each other and
-            // not filterable. DirectoryGraphQl contains queries that allow to retrieve this information in a
-            // meaningful way
-            if ($attribute->getAttributeCode() === 'region_id' || $attribute->getAttributeCode() === 'country_id') {
-                continue;
-            }
             $attributes[] = ['entity_type' => $this->type, 'attribute_code' => $attribute->getAttributeCode()];
         }
         return $attributes;

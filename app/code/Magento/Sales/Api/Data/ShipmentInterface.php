@@ -9,7 +9,9 @@ namespace Magento\Sales\Api\Data;
  * Shipment interface.
  *
  * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
- * document lists the products and their quantities in the delivery package.
+ * document lists the products and their quantities in the delivery package. This interface creates shipment
+ * record without items quantity (total_qty) validation. To validate total shipped quantity for each item
+ * in the order you must use newer `POST /V1/order/:orderId/ship` endpoint.
  * @api
  * @since 100.0.2
  */
@@ -21,75 +23,75 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /*
      * Entity ID.
      */
-    const ENTITY_ID = 'entity_id';
+    public const ENTITY_ID = 'entity_id';
     /*
      * Store ID.
      */
-    const STORE_ID = 'store_id';
+    public const STORE_ID = 'store_id';
     /*
      * Total weight.
      */
-    const TOTAL_WEIGHT = 'total_weight';
+    public const TOTAL_WEIGHT = 'total_weight';
     /*
-     * Total quantity.
+     * Total quantity. Can be greater than ordered quantity (not validated).
      */
-    const TOTAL_QTY = 'total_qty';
+    public const TOTAL_QTY = 'total_qty';
     /*
      * Email sent flag.
      */
-    const EMAIL_SENT = 'email_sent';
+    public const EMAIL_SENT = 'email_sent';
     /*
      * Order ID.
      */
-    const ORDER_ID = 'order_id';
+    public const ORDER_ID = 'order_id';
     /*
      * Customer ID.
      */
-    const CUSTOMER_ID = 'customer_id';
+    public const CUSTOMER_ID = 'customer_id';
     /*
      * Shipping address ID.
      */
-    const SHIPPING_ADDRESS_ID = 'shipping_address_id';
+    public const SHIPPING_ADDRESS_ID = 'shipping_address_id';
     /*
      * Billing address ID.
      */
-    const BILLING_ADDRESS_ID = 'billing_address_id';
+    public const BILLING_ADDRESS_ID = 'billing_address_id';
     /*
      * Shipment status.
      */
-    const SHIPMENT_STATUS = 'shipment_status';
+    public const SHIPMENT_STATUS = 'shipment_status';
     /*
      * Increment ID.
      */
-    const INCREMENT_ID = 'increment_id';
+    public const INCREMENT_ID = 'increment_id';
     /*
      * Created-at timestamp.
      */
-    const CREATED_AT = 'created_at';
+    public const CREATED_AT = 'created_at';
     /*
      * Updated-at timestamp.
      */
-    const UPDATED_AT = 'updated_at';
+    public const UPDATED_AT = 'updated_at';
     /*
      * Packages.
      */
-    const PACKAGES = 'packages';
+    public const PACKAGES = 'packages';
     /*
      * Shipping label.
      */
-    const SHIPPING_LABEL = 'shipping_label';
+    public const SHIPPING_LABEL = 'shipping_label';
     /*
      * Items.
      */
-    const ITEMS = 'items';
+    public const ITEMS = 'items';
     /*
      * Tracks.
      */
-    const TRACKS = 'tracks';
+    public const TRACKS = 'tracks';
     /*
      * Comments.
      */
-    const COMMENTS = 'comments';
+    public const COMMENTS = 'comments';
 
     /**
      * Gets the billing address ID for the shipment.

@@ -106,19 +106,20 @@ class VariationHandlerTest extends TestCase
     public function testPrepareAttributeSet()
     {
         $productMock = $this->getMockBuilder(Product::class)
-            ->setMethods(['getNewVariationsAttributeSetId'])
+            ->addMethods(['getNewVariationsAttributeSetId'])
             ->disableOriginalConstructor()
             ->getMock();
         $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['isInSet', 'setAttributeSetId', 'setAttributeGroupId', 'save'])
+            ->addMethods(['setAttributeGroupId'])
+            ->onlyMethods(['isInSet', 'setAttributeSetId', 'save'])
             ->disableOriginalConstructor()
             ->getMock();
         $attributeSetMock = $this->getMockBuilder(Set::class)
-            ->setMethods(['load', 'addSetInfo', 'getDefaultGroupId'])
+            ->onlyMethods(['load', 'addSetInfo', 'getDefaultGroupId'])
             ->disableOriginalConstructor()
             ->getMock();
         $eavEntityMock = $this->getMockBuilder(Entity::class)
-            ->setMethods(['setType', 'getTypeId'])
+            ->onlyMethods(['setType', 'getTypeId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -184,9 +185,9 @@ class VariationHandlerTest extends TestCase
         ];
 
         $parentProductMock = $this->getMockBuilder(Product::class)
-            ->setMethods(
+            ->addMethods(['getNewVariationsAttributeSetId'])
+            ->onlyMethods(
                 [
-                    'getNewVariationsAttributeSetId',
                     'getStockData',
                     'getQuantityAndStockStatus',
                     'getWebsiteIds'
@@ -195,7 +196,8 @@ class VariationHandlerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $newSimpleProductMock = $this->getMockBuilder(Product::class)
-            ->setMethods(
+            ->addMethods(['setWebsiteIds'])
+            ->onlyMethods(
                 [
                     'save',
                     'getId',
@@ -205,7 +207,6 @@ class VariationHandlerTest extends TestCase
                     'getTypeInstance',
                     'getStoreId',
                     'addData',
-                    'setWebsiteIds',
                     'setStatus',
                     'setVisibility'
                 ]
@@ -213,15 +214,16 @@ class VariationHandlerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $productTypeMock = $this->getMockBuilder(Type::class)
-            ->setMethods(['getSetAttributes'])
+            ->addMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
         $editableAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['getIsUnique', 'getAttributeCode', 'getFrontend', 'getIsVisible'])
+            ->addMethods(['getIsVisible'])
+            ->onlyMethods(['getIsUnique', 'getAttributeCode', 'getFrontend'])
             ->disableOriginalConstructor()
             ->getMock();
         $frontendAttributeMock = $this->getMockBuilder(FrontendInterface::class)
-            ->setMethods(['getInputType'])
+            ->addMethods(['getInputType'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -262,20 +264,20 @@ class VariationHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderTestGenerateSimpleProducts()
+    public static function dataProviderTestGenerateSimpleProducts()
     {
         return [
             [
                 'weight' => 333,
-                'type_id' => Type::TYPE_SIMPLE,
+                'typeId' => Type::TYPE_SIMPLE,
             ],
             [
                 'weight' => '',
-                'type_id' => Type::TYPE_VIRTUAL,
+                'typeId' => Type::TYPE_VIRTUAL,
             ],
             [
                 'weight' => null,
-                'type_id' => Type::TYPE_VIRTUAL,
+                'typeId' => Type::TYPE_VIRTUAL,
             ],
         ];
     }
@@ -328,14 +330,14 @@ class VariationHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function productDataProviderForProcessMediaGalleryForFillingGallery()
+    public static function productDataProviderForProcessMediaGalleryForFillingGallery()
     {
         return [
             'empty array' => [
                 [], [],
             ],
             'array only with empty image' => [
-                'given' => [
+                'productData' => [
                     'image',
                 ],
                 'expected' => [
@@ -343,7 +345,7 @@ class VariationHandlerTest extends TestCase
                 ],
             ],
             'empty array with not empty image' => [
-                'given' => [
+                'productData' => [
                     'image' => 1,
                 ],
                 'expected' => [

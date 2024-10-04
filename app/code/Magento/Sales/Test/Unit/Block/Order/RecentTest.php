@@ -126,11 +126,18 @@ class RecentTest extends TestCase
             ->willReturn($orderCollection);
         $orderCollection
             ->method('addAttributeToFilter')
-            ->withConsecutive(
-                [$attribute[0], $customerId],
-                [$attribute[1], $storeId],
-                [$attribute[2], ['in' => $statuses]]
-            )->willReturnOnConsecutiveCalls($orderCollection, $orderCollection, $orderCollection);
+            ->willReturnCallback(function ($arg1, $arg2)
+ use ($attribute, $customerId, $storeId, $statuses, $orderCollection) {
+                if ($arg1 == $attribute[0] && $arg2 == $customerId) {
+                    return $orderCollection;
+                }
+                if ($arg1 == $attribute[1] && $arg2 == $storeId) {
+                    return $orderCollection;
+                }
+                if ($arg1 == $attribute[2] && $arg2 == ['in' => $statuses]) {
+                    return $orderCollection;
+                }
+            });
         $this->block = new Recent(
             $this->context,
             $this->orderCollectionFactory,

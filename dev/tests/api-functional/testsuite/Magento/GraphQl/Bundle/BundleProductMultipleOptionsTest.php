@@ -112,11 +112,11 @@ QUERY;
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getBundleProductDataProvider(): array
+    public static function getBundleProductDataProvider(): array
     {
         return [
             'products' => [
-                'items' => [
+                'bundleProductDataProvider' => [
                     [
                         'sku' => 'bundle-product',
                         'type_id' => 'bundle',

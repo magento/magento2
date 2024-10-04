@@ -84,10 +84,10 @@ class AbstractCustomerTest extends AbstractImportTestCase
 
         $modelMock = $this->getMockBuilder(AbstractCustomer::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['_getCustomerCollection'])
+            ->onlyMethods(
                 [
                     'getErrorAggregator',
-                    '_getCustomerCollection',
                     '_validateRowForUpdate',
                     '_validateRowForDelete'
                 ]
@@ -114,57 +114,57 @@ class AbstractCustomerTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function checkUniqueKeyDataProvider()
+    public static function checkUniqueKeyDataProvider()
     {
         return [
             'valid' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_abstract_valid.php',
-                '$errors' => [],
-                '$isValid' => true,
+                'rowData' => include __DIR__ . '/_files/row_data_abstract_valid.php',
+                'errors' => [],
+                'isValid' => true,
             ],
             'no website' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_abstract_no_website.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_abstract_no_website.php',
+                'errors' => [
                     AbstractCustomer::ERROR_WEBSITE_IS_EMPTY => [
                         [1, AbstractCustomer::COLUMN_WEBSITE],
                     ],
                 ],
             ],
             'empty website' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_abstract_empty_website.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_abstract_empty_website.php',
+                'errors' => [
                     AbstractCustomer::ERROR_WEBSITE_IS_EMPTY => [
                         [1, AbstractCustomer::COLUMN_WEBSITE],
                     ],
                 ],
             ],
             'no email' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_abstract_no_email.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_abstract_no_email.php',
+                'errors' => [
                     AbstractCustomer::ERROR_EMAIL_IS_EMPTY => [
                         [1, AbstractCustomer::COLUMN_EMAIL],
                     ],
                 ],
             ],
             'empty email' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_abstract_empty_email.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_abstract_empty_email.php',
+                'errors' => [
                     AbstractCustomer::ERROR_EMAIL_IS_EMPTY => [
                         [1, AbstractCustomer::COLUMN_EMAIL],
                     ],
                 ],
             ],
             'invalid email' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_abstract_invalid_email.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_abstract_invalid_email.php',
+                'errors' => [
                     AbstractCustomer::ERROR_INVALID_EMAIL => [
                         [1, AbstractCustomer::COLUMN_EMAIL],
                     ],
                 ],
             ],
             'invalid website' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_abstract_invalid_website.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_abstract_invalid_website.php',
+                'errors' => [
                     AbstractCustomer::ERROR_INVALID_WEBSITE => [
                         [1, AbstractCustomer::COLUMN_WEBSITE],
                     ],

@@ -96,7 +96,7 @@ class RulePoolTest extends TestCase
     /**
      * @return array
      */
-    public function getRuleDataProvider()
+    public static function getRuleDataProvider()
     {
         return [
             [RulePool::TYPE_LOCALE_FILE],
