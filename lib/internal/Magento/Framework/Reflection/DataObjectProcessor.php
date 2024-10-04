@@ -178,11 +178,14 @@ class DataObjectProcessor
     }
 
     /**
+     * Mapping argument processor to modify output api key
+     *
      * @param string $key
      * @param string $dataObjectType
      * @return string
      */
-    private function getKeyByObjectType(string $key, string $dataObjectType): string {
+    private function getKeyByObjectType(string $key, string $dataObjectType): string
+    {
         $dataObjectType = ltrim($dataObjectType, '\\');
         if (
             array_key_exists($dataObjectType, $this->objectKeyMap) &&
