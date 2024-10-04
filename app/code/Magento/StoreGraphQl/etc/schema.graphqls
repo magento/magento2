@@ -4,7 +4,7 @@ type Query {
     storeConfig : StoreConfig @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\StoreConfigResolver") @doc(description: "Return details about the store's configuration.") @cache(cacheIdentity: "Magento\\StoreGraphQl\\Model\\Resolver\\Store\\ConfigIdentity")
     availableStores(
         useCurrentGroup: Boolean @doc(description: "Filter store views by the current store group.")
-    ): [StoreConfig] @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\AvailableStoresResolver") @doc(description: "Get a list of available store views and their config information.")
+    ): [StoreConfig] @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\AvailableStoresResolver") @doc(description: "Get a list of available store views and their config information.") @cache(cacheIdentity: "Magento\\StoreGraphQl\\Model\\Resolver\\Stores\\ConfigIdentity")
 }
 
 type Website @doc(description: "Deprecated. It should not be used on the storefront. Contains information about a website.") {
@@ -43,4 +43,8 @@ type StoreConfig @doc(description: "Contains information about a store's configu
     secure_base_static_url : String @doc(description: "The secure fully-qualified URL that specifies the location of static view files.")
     secure_base_media_url : String @doc(description: "The secure fully-qualified URL that specifies the location of media files.")
     use_store_in_url: Boolean @doc(description: "Indicates whether the store code should be used in the URL.")
+    default_country: String @doc(description: "Extended Config Data - general/country/default")
+    countries_with_required_region: String @doc(description: "Extended Config Data - general/region/state_required")
+    optional_zip_countries: String @doc(description: "Extended Config Data - general/country/optional_zip_countries")
+    display_state_if_optional: Boolean @doc(description: "Extended Config Data - general/region/display_all")
 }

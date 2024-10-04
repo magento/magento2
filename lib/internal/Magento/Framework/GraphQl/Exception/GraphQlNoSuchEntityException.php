@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Exception;
 
+use GraphQL\Error\ClientAware;
+use GraphQL\Error\ProvidesExtensions;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 
@@ -15,9 +17,9 @@ use Magento\Framework\Phrase;
  *
  * @api
  */
-class GraphQlNoSuchEntityException extends NoSuchEntityException implements \GraphQL\Error\ClientAware
+class GraphQlNoSuchEntityException extends NoSuchEntityException implements ClientAware, ProvidesExtensions
 {
-    const EXCEPTION_CATEGORY = 'graphql-no-such-entity';
+    public const EXCEPTION_CATEGORY = 'graphql-no-such-entity';
 
     /**
      * @var boolean
@@ -52,5 +54,16 @@ class GraphQlNoSuchEntityException extends NoSuchEntityException implements \Gra
     public function getCategory(): string
     {
         return self::EXCEPTION_CATEGORY;
+    }
+
+    /**
+     * Get error category
+     *
+     * @return array
+     */
+    public function getExtensions(): array
+    {
+        $exceptionCategory['category'] = $this->getCategory();
+        return $exceptionCategory;
     }
 }

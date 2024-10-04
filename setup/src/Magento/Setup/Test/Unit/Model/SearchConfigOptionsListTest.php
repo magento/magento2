@@ -36,8 +36,7 @@ class SearchConfigOptionsListTest extends TestCase
         $this->assertEquals('search-engine', $optionsList[0]->getName());
 
         $selectOptions = $optionsList[0]->getSelectOptions();
-        $this->assertCount(4, $selectOptions);
-        $this->assertContains('elasticsearch5', $selectOptions);
+        $this->assertCount(3, $selectOptions);
         $this->assertContains('elasticsearch7', $selectOptions);
         $this->assertContains('elasticsearch8', $selectOptions);
         $this->assertContains('opensearch', $selectOptions);

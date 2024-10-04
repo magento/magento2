@@ -12,6 +12,9 @@
                 <item name="currency_tag_generator" xsi:type="object">
                     Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy\Config\CurrencyTagGenerator
                 </item>
+                <item name="country_tag_generator" xsi:type="object">
+                    Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy\Config\CountryTagGenerator
+                </item>
             </argument>
         </arguments>
     </type>

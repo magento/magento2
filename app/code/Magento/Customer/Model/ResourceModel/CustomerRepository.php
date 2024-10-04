@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
@@ -28,6 +30,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
@@ -196,15 +199,23 @@ class CustomerRepository implements CustomerRepositoryInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function save(CustomerInterface $customer, $passwordHash = null)
     {
         /** @var NewOperation|null $delegatedNewOperation */
         $delegatedNewOperation = !$customer->getId() ? $this->delegatedStorage->consumeNewOperation() : null;
         $prevCustomerData = $prevCustomerDataArr = null;
+        if ($customer->getDefaultBilling()) {
+            $this->validateDefaultAddress($customer, CustomerInterface::DEFAULT_BILLING);
+        }
+        if ($customer->getDefaultShipping()) {
+            $this->validateDefaultAddress($customer, CustomerInterface::DEFAULT_SHIPPING);
+        }
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
             $prevCustomerDataArr = $this->prepareCustomerData($prevCustomerData->__toArray());
+            $customer->setCreatedAt($prevCustomerData->getCreatedAt());
         }
         /** @var $customer \Magento\Customer\Model\Data\Customer */
         $customerArr = $customer->__toArray();
@@ -220,7 +231,6 @@ class CustomerRepository implements CustomerRepositoryInterface
         /** @var CustomerModel $customerModel */
         $customerModel = $this->customerFactory->create(['data' => $customerData]);
         $this->populateWithOrigData($customerModel, $prevCustomerDataArr);
-
         //Model's actual ID field maybe different than "id" so "id" field from $customerData may be ignored.
         $customerModel->setId($customer->getId());
         $storeId = $customerModel->getStoreId();
@@ -229,7 +239,7 @@ class CustomerRepository implements CustomerRepositoryInterface
                 $prevCustomerData ? $prevCustomerData->getStoreId() : $this->storeManager->getStore()->getId()
             );
         }
-        $this->validateGroupId($customer->getGroupId());
+        $this->validateGroupId((int)$customer->getGroupId());
         $this->setCustomerGroupId($customerModel, $customerArr, $prevCustomerDataArr);
         // Need to use attribute set or future updates can cause data loss
         if (!$customerModel->getAttributeSetId()) {
@@ -407,8 +417,8 @@ class CustomerRepository implements CustomerRepositoryInterface
      * Retrieve customers which match a specified criteria.
      *
      * This call returns an array of objects, but detailed information about each object’s attributes might not be
-     * included. See https://developer.adobe.com/commerce/webapi/rest/attributes#CustomerRepositoryInterface to determine
-     * which call to use to get detailed information about all attributes for an object.
+     * included. See https://developer.adobe.com/commerce/webapi/rest/attributes#CustomerRepositoryInterface
+     * to determine which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Customer\Api\Data\CustomerSearchResultsInterface
@@ -540,10 +550,53 @@ class CustomerRepository implements CustomerRepositoryInterface
     {
         if (isset($customerData[CustomerInterface::CUSTOM_ATTRIBUTES])) {
             foreach ($customerData[CustomerInterface::CUSTOM_ATTRIBUTES] as $attribute) {
+                if (empty($attribute['value'])
+                    && !empty($attribute['selected_options'])
+                    && is_array($attribute['selected_options'])
+                ) {
+                    $attribute['value'] = implode(',', array_map(function ($option): string {
+                        return $option['value'] ?? '';
+                    }, $attribute['selected_options']));
+                }
                 $customerData[$attribute['attribute_code']] = $attribute['value'];
             }
             unset($customerData[CustomerInterface::CUSTOM_ATTRIBUTES]);
         }
         return $customerData;
+    }
+
+    /**
+     * To validate default address
+     *
+     * @param CustomerInterface $customer
+     * @param string $defaultAddressType
+     * @return void
+     * @throws InputException
+     */
+    private function validateDefaultAddress(
+        CustomerInterface $customer,
+        string $defaultAddressType
+    ): void {
+        $defaultAddressId = $defaultAddressType === CustomerInterface::DEFAULT_BILLING ?
+            (int) $customer->getDefaultBilling() : (int) $customer->getDefaultShipping();
+
+        if ($customer->getAddresses()) {
+            foreach ($customer->getAddresses() as $address) {
+                $addressArray = $address->__toArray();
+                $addressId = (int) $address->getId();
+                if (!empty($addressArray[$defaultAddressType])
+                    || empty($addressId)
+                    || $defaultAddressId === $addressId) {
+                    return;
+                }
+            }
+
+            throw new InputException(
+                __(
+                    'The %fieldName value is invalid. Set the correct value and try again.',
+                    ['fieldName' => $defaultAddressType]
+                )
+            );
+        }
     }
 }

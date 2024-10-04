@@ -6,6 +6,7 @@ to generate quote (cart) information endpoints. Also provides endpoints for modi
 ## Installation
 
 Before installing this module, note that the Magento_QuoteGraphQl is dependent on the following modules:
+
 - `Magento_CatalogGraphQl`
 
 This module does not introduce any database schema modifications or new data.
@@ -20,7 +21,7 @@ Extension developers can interact with the Magento_QuoteDownloadableLinks module
 
 ## Additional information
 
-You can get more information about [GraphQl In Magento 2](https://devdocs.magento.com/guides/v2.4/graphql).
+You can get more information about [GraphQl In Magento 2](https://developer.adobe.com/commerce/webapi/graphql/).
 
 ### GraphQl Query
 

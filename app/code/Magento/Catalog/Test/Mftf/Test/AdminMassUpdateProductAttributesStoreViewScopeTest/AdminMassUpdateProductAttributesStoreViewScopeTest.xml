@@ -22,7 +22,9 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <createData entity="ApiProductWithDescription" stepKey="createProductOne"/>
             <createData entity="ApiProductWithDescription" stepKey="createProductTwo"/>
             <createData entity="ApiProductNameWithNoSpaces" stepKey="createProductThree"/>
@@ -32,7 +34,9 @@
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="createProductThree" stepKey="deleteProductThree"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="AdminDeleteStoreViewActionGroup"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
@@ -43,10 +47,13 @@
             <argument name="keyword" value="api-simple-product"/>
         </actionGroup>
         <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
+        <waitForElementClickable selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="waitForFirstCheckboxClickable" />
         <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckbox1"/>
         <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckbox2"/>
         <!-- Mass update attributes -->
+        <waitForElementClickable selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="waitForDropdownClickable" />
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
+        <waitForElementClickable selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="waitForOptionClickable" />
         <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickOption"/>
         <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
         <seeInCurrentUrl stepKey="seeInUrl" url="catalog/product_action_attribute/edit/"/>

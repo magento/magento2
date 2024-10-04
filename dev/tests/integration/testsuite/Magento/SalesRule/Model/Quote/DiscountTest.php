@@ -7,8 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Quote;
 
+use Magento\Bundle\Test\Fixture\AddProductToCart as AddBundleProductToCart;
+use Magento\Bundle\Test\Fixture\Link as BundleSelectionFixture;
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\ConfigurableProduct\Test\Fixture\AddProductToCart as AddConfigurableProductToCartFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
@@ -177,15 +184,15 @@ class DiscountTest extends TestCase
     /**
      * @return array
      */
-    public function bundleProductWithDynamicPriceAndCartPriceRuleDataProvider(): array
+    public static function bundleProductWithDynamicPriceAndCartPriceRuleDataProvider(): array
     {
         return [
             [
                 'bundle_cc',
                 [
-                    'bundle_product_with_dynamic_price-simple1-simple2' => 0,
-                    'simple1' => 3,
-                    'simple2' => 7.99,
+                    'bundle_product_with_dynamic_price-simple1-simple2' => 10.99,
+                    'simple1' => 0,
+                    'simple2' => 0,
                 ],
                 -10.99
             ],
@@ -363,6 +370,13 @@ class DiscountTest extends TestCase
     public function testDiscountOnSimpleProductWithDiscardSubsequentRule(): void
     {
         $cartId = (int)$this->fixtures->get('cart')->getId();
+        $rule1Id = (int)$this->fixtures->get('rule1')->getId();
+        $rule2Id = (int)$this->fixtures->get('rule2')->getId();
+        $rule3Id = (int)$this->fixtures->get('rule3')->getId();
+        $product1Id = (int) $this->fixtures->get('p1')->getId();
+        $product2Id = (int) $this->fixtures->get('p2')->getId();
+        $product3Id = (int) $this->fixtures->get('p3')->getId();
+        $product4Id = (int) $this->fixtures->get('p4')->getId();
         $quote = $this->quote->get($cartId);
         $quote->setStoreId(1)->setIsActive(true)->setIsMultiShipping(0)->setCouponCode('test');
         $address = $quote->getShippingAddress();
@@ -372,5 +386,325 @@ class DiscountTest extends TestCase
         $this->subtotalCollector->collect($quote, $this->shippingAssignment, $this->total);
         $this->discountCollector->collect($quote, $this->shippingAssignment, $this->total);
         $this->assertEquals(-32, $this->total->getDiscountAmount());
+        $items = [];
+        foreach ($quote->getAllItems() as $item) {
+            $items[$item->getProductId()] = $item;
+        }
+        $this->assertEqualsCanonicalizing([$rule1Id,$rule2Id,$rule3Id], explode(',', $quote->getAppliedRuleIds()));
+        $this->assertEqualsCanonicalizing([$rule1Id,$rule2Id,$rule3Id], explode(',', $address->getAppliedRuleIds()));
+        $this->assertEqualsCanonicalizing([$rule1Id], explode(',', $items[$product1Id]->getAppliedRuleIds()));
+        $this->assertEqualsCanonicalizing([$rule1Id,$rule2Id], explode(',', $items[$product2Id]->getAppliedRuleIds()));
+        $this->assertEqualsCanonicalizing([$rule2Id], explode(',', $items[$product3Id]->getAppliedRuleIds()));
+        $this->assertEqualsCanonicalizing([$rule3Id], explode(',', $items[$product4Id]->getAppliedRuleIds()));
+    }
+
+    #[
+        AppIsolation(true),
+        DataFixture(AttributeFixture::class, ['options' => [['label' => 'option1', 'sort_order' => 0]]], as: 'attr'),
+        DataFixture(ProductFixture::class, ['price' => 100], as: 'p1'),
+        DataFixture(ConfigurableProductFixture::class, ['_options' => ['$attr$'], '_links' => ['$p1$']], 'cp1'),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'sku', 'value' => '$p1.sku$'],
+            'cond1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            ['simple_action' => Rule::CART_FIXED_ACTION, 'discount_amount' => 50, 'actions' => ['$cond1$']],
+            'rule1'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(
+            AddConfigurableProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$cp1.id$', 'child_product_id' => '$p1.id$', 'qty' => 1],
+        )
+    ]
+    public function testFixedAmountWholeCartDiscountOnConfigurableProduct(): void
+    {
+        $quote = $this->fixtures->get('cart');
+        $this->assertEquals(50, $quote->getGrandTotal());
+        $this->assertEquals(50, $quote->getSubtotalWithDiscount());
+        $this->assertEquals(100, $quote->getSubtotal());
+
+        $quote->getAllItems();
+
+        //emulate a plugin on afterGetPrice
+        foreach ($quote->getAllItems() as $item) {
+            /** @var $item \Magento\Quote\Model\Quote\Item */
+            $item->setPrice(200);
+        }
+
+        $quote->collectTotals();
+
+        $this->assertEquals(50, $quote->getGrandTotal());
+        $this->assertEquals(50, $quote->getSubtotalWithDiscount());
+        $this->assertEquals(100, $quote->getSubtotal());
+    }
+
+    #[
+        AppIsolation(true),
+        DataFixture(ProductFixture::class, ['sku' => 'simple1', 'price' => 10], as:'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple2', 'price' => 20], as:'p2'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p1.sku$', 'price' => 10, 'price_type' => 0], as:'link1'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p2.sku$', 'price' => 25, 'price_type' => 1], as:'link2'),
+        DataFixture(BundleOptionFixture::class, ['title' => 'Checkbox Options', 'type' => 'checkbox',
+            'required' => 1,'product_links' => ['$link1$', '$link2$']], 'opt1'),
+        DataFixture(BundleOptionFixture::class, ['title' => 'Multiselect Options', 'type' => 'multi',
+            'required' => 1,'product_links' => ['$link1$', '$link2$']], 'opt2'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['sku' => 'bundle-product-multiselect-checkbox-options','price' => 50,'price_type' => 1,
+                '_options' => ['$opt1$', '$opt2$']],
+            as:'bp1'
+        ),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'sku', 'value' => 'bundle-product-multiselect-checkbox-options'],
+            as:'cond1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            ['simple_action' => Rule::CART_FIXED_ACTION, 'discount_amount' => 50, 'actions' => ['$cond1$']],
+            as:'rule1'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(
+            AddBundleProductToCart::class,
+            [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$bp1.id$',
+                'selections' => [['$p1.id$'], ['$p1.id$', '$p2.id$']],
+                'qty' => 1
+            ],
+        )
+    ]
+    public function testFixedAmountWholeCartDiscountOnBundleProduct(): void
+    {
+        $quote = $this->fixtures->get('cart');
+        $this->assertEquals(32.5, $quote->getGrandTotal());
+        $this->assertEquals(32.5, $quote->getSubtotalWithDiscount());
+        $this->assertEquals(82.5, $quote->getSubtotal());
+    }
+
+    /**
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    #[
+        DataFixture(CategoryFixture::class, as: 'c1'),
+        DataFixture(ProductFixture::class, [
+            'price' => 123,
+            'sku' => 'p1',
+            'category_ids' => ['$c1.id$']
+        ], 'p1'),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'stop_rules_processing'=> 0,
+                'discount_amount' => 10,
+                'simple_action' => Rule::BY_FIXED_ACTION,
+                'sort_order' => 0
+            ],
+            'rule1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'stop_rules_processing'=> 0,
+                'discount_amount' => 20,
+                'simple_action' => Rule::BY_PERCENT_ACTION,
+                'discount_step' => 3,
+                'sort_order' => 2
+            ],
+            'rule2'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'discount_amount' => 3,
+                'simple_action' => Rule::BUY_X_GET_Y_ACTION,
+                'discount_step' => 5,
+                'sort_order' => 4
+            ],
+            'rule3'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart1'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart1.id$', 'product_id' => '$p1.id$']),
+        DataFixture(GuestCartFixture::class, as: 'cart2'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart2.id$', 'product_id' => '$p1.id$', 'qty' => 3]),
+        DataFixture(GuestCartFixture::class, as: 'cart3'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart3.id$', 'product_id' => '$p1.id$', 'qty' => 9]),
+    ]
+    public function testDiscountOnSimpleProductWhenFurtherRulesHaveDiscountQtyStepSpecified(): void
+    {
+        $cart1Id = (int)$this->fixtures->get('cart1')->getId();
+        $cart2Id = (int)$this->fixtures->get('cart2')->getId();
+        $cart3Id = (int)$this->fixtures->get('cart3')->getId();
+        $quote1 = $this->quote->get($cart1Id);
+        $quote2 = $this->quote->get($cart2Id);
+        $quote3 = $this->quote->get($cart3Id);
+        $rule1Id = (int)$this->fixtures->get('rule1')->getId();
+        $rule2Id = (int)$this->fixtures->get('rule2')->getId();
+        $rule3Id = (int)$this->fixtures->get('rule3')->getId();
+
+        $quote1->setStoreId(1)->setIsActive(true);
+        $address = $quote1->getShippingAddress();
+        $this->shipping->setAddress($address);
+        $this->shippingAssignment->setShipping($this->shipping);
+        $this->shippingAssignment->setItems($address->getAllItems());
+
+        $this->subtotalCollector->collect($quote1, $this->shippingAssignment, $this->total);
+        $this->discountCollector->collect($quote1, $this->shippingAssignment, $this->total);
+
+        $this->assertEquals(-10, $this->total->getDiscountAmount());
+        $this->assertEqualsCanonicalizing([$rule1Id], explode(',', $quote1->getAppliedRuleIds()));
+
+        $quote2->setStoreId(1)->setIsActive(true);
+        $address = $quote2->getShippingAddress();
+        $this->shipping->setAddress($address);
+        $this->shippingAssignment->setShipping($this->shipping);
+        $this->shippingAssignment->setItems($address->getAllItems());
+
+        $this->subtotalCollector->collect($quote2, $this->shippingAssignment, $this->total);
+        $this->discountCollector->collect($quote2, $this->shippingAssignment, $this->total);
+
+        $this->assertEquals(-97.8, $this->total->getDiscountAmount());
+        $this->assertEqualsCanonicalizing([$rule1Id,$rule2Id], explode(',', $quote2->getAppliedRuleIds()));
+
+        $quote3->setStoreId(1)->setIsActive(true);
+        $address = $quote3->getShippingAddress();
+        $this->shipping->setAddress($address);
+        $this->shippingAssignment->setShipping($this->shipping);
+        $this->shippingAssignment->setItems($address->getAllItems());
+
+        $this->subtotalCollector->collect($quote3, $this->shippingAssignment, $this->total);
+        $this->discountCollector->collect($quote3, $this->shippingAssignment, $this->total);
+
+        $this->assertEquals(-662.4, $this->total->getDiscountAmount());
+        $this->assertEqualsCanonicalizing([$rule1Id,$rule2Id,$rule3Id], explode(',', $quote3->getAppliedRuleIds()));
+    }
+
+    /**
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    #[
+        DataFixture(CategoryFixture::class, as: 'c1'),
+        DataFixture(ProductFixture::class, [
+            'price' => 123,
+            'sku' => 'p1',
+            'category_ids' => ['$c1.id$']
+        ], 'p1'),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'stop_rules_processing'=> 0,
+                'discount_amount' => 33,
+                'simple_action' => Rule::CART_FIXED_ACTION,
+                'discount_step' => 3,
+                'sort_order' => 0
+            ],
+            'rule1'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart1'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart1.id$', 'product_id' => '$p1.id$']),
+        DataFixture(GuestCartFixture::class, as: 'cart2'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart2.id$', 'product_id' => '$p1.id$', 'qty' => 5]),
+    ]
+    public function testFixedAmountDiscountForWholeCartOnSimpleProductWhenStepQtyIsSpecified(): void
+    {
+        $cart1Id = (int)$this->fixtures->get('cart1')->getId();
+        $cart2Id = (int)$this->fixtures->get('cart2')->getId();
+        $quote1 = $this->quote->get($cart1Id);
+        $quote2 = $this->quote->get($cart2Id);
+        $rule1Id = (int)$this->fixtures->get('rule1')->getId();
+
+        $quote1->setStoreId(1)->setIsActive(true);
+        $address = $quote1->getShippingAddress();
+        $this->shipping->setAddress($address);
+        $this->shippingAssignment->setShipping($this->shipping);
+        $this->shippingAssignment->setItems($address->getAllItems());
+
+        $this->subtotalCollector->collect($quote1, $this->shippingAssignment, $this->total);
+        $this->discountCollector->collect($quote1, $this->shippingAssignment, $this->total);
+
+        $this->assertEquals(-33, $this->total->getDiscountAmount());
+        $this->assertEqualsCanonicalizing([$rule1Id], explode(',', $quote1->getAppliedRuleIds()));
+
+        $quote2->setStoreId(1)->setIsActive(true);
+        $address = $quote2->getShippingAddress();
+        $this->shipping->setAddress($address);
+        $this->shippingAssignment->setShipping($this->shipping);
+        $this->shippingAssignment->setItems($address->getAllItems());
+
+        $this->subtotalCollector->collect($quote2, $this->shippingAssignment, $this->total);
+        $this->discountCollector->collect($quote2, $this->shippingAssignment, $this->total);
+
+        $this->assertEquals(-33, $this->total->getDiscountAmount());
+        $this->assertEqualsCanonicalizing([$rule1Id], explode(',', $quote2->getAppliedRuleIds()));
+    }
+
+    /**
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    #[
+        DataFixture(CategoryFixture::class, as: 'c1'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'price' => 123,
+                'sku' => 'p1',
+                'category_ids' => ['$c1.id$']
+            ],
+            'p1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'discount_amount' => 1,
+                'simple_action' => Rule::BUY_X_GET_Y_ACTION,
+                'discount_step' => 3,
+            ],
+            'rule1'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart1'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart1.id$', 'product_id' => '$p1.id$', 'qty' => 3]),
+        DataFixture(GuestCartFixture::class, as: 'cart2'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart2.id$', 'product_id' => '$p1.id$', 'qty' => 4]),
+    ]
+    public function testDiscountOnSimpleProductWhenBuyXGetYRuleHasDiscountQtyStepSpecified(): void
+    {
+        $cart1Id = (int)$this->fixtures->get('cart1')->getId();
+        $quote1 = $this->quote->get($cart1Id);
+        $rule1Id = (int)$this->fixtures->get('rule1')->getId();
+
+        $quote1->setStoreId(1)->setIsActive(true);
+        $address = $quote1->getShippingAddress();
+        $this->shipping->setAddress($address);
+        $this->shippingAssignment->setShipping($this->shipping);
+        $this->shippingAssignment->setItems($address->getAllItems());
+
+        $this->subtotalCollector->collect($quote1, $this->shippingAssignment, $this->total);
+        $this->discountCollector->collect($quote1, $this->shippingAssignment, $this->total);
+
+        $this->assertEquals(0, $this->total->getDiscountAmount());
+        $this->assertNull($quote1->getAppliedRuleIds());
+
+        $quote1->addProduct($this->fixtures->get('p1'), 1);
+
+        $this->subtotalCollector->collect($quote1, $this->shippingAssignment, $this->total);
+        $this->discountCollector->collect($quote1, $this->shippingAssignment, $this->total);
+
+        $this->assertEquals(-123, $this->total->getDiscountAmount());
+        $this->assertEqualsCanonicalizing([$rule1Id], explode(',', $quote1->getAppliedRuleIds()));
+
+        $quote1->setItemQty($this->fixtures->get('p1')->getId(), 3);
+
+        $this->subtotalCollector->collect($quote1, $this->shippingAssignment, $this->total);
+        $this->discountCollector->collect($quote1, $this->shippingAssignment, $this->total);
+
+        $this->assertEquals(-123, $this->total->getDiscountAmount());
+        $this->assertEqualsCanonicalizing([$rule1Id], explode(',', $quote1->getAppliedRuleIds()));
     }
 }

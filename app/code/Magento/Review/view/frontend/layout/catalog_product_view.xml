@@ -26,6 +26,7 @@
                     <arguments>
                         <argument name="button_lock_manager" xsi:type="object">Magento\Framework\View\Element\ButtonLockManager</argument>
                     </arguments>
+                    <container name="form.additional.review.info" as="form_additional_review_info"/>
                     <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before"/>
                 </block>
             </block>

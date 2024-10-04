@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\Test\Annotation;
 
 use Magento\TestFramework\Annotation\AdminConfigFixture;
+use Magento\TestFramework\Annotation\TestCaseAnnotation;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Util\Test as TestUtil;
 
 /**
  * Test class for \Magento\TestFramework\Annotation\AdminConfigFixture.
@@ -43,8 +43,15 @@ class AdminConfigFixtureTest extends TestCase
         $this->createResolverMock();
         $this->object
             ->method('_getConfigValue')
-            ->withConsecutive(['any_config'], ['any_config'])
-            ->willReturnOnConsecutiveCalls('some_value', 'some_value');
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == 'any_config') {
+                        return 'some_value';
+                    } elseif ($arg1 == 'any_config') {
+                        return 'some_value';
+                    }
+                }
+            );
 
         $this->object->startTest($this);
 
@@ -77,8 +84,15 @@ class AdminConfigFixtureTest extends TestCase
         $this->object->startTest($this);
         $this->object
             ->method('_getConfigValue')
-            ->withConsecutive(['any_config'], ['any_config'])
-            ->willReturnOnConsecutiveCalls('some_value', 'some_value');
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == 'any_config') {
+                        return 'some_value';
+                    } elseif ($arg1 == 'any_config') {
+                        return 'some_value';
+                    }
+                }
+            );
 
         $this->object->initStoreAfter();
     }
@@ -94,10 +108,7 @@ class AdminConfigFixtureTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['applyConfigFixtures'])
             ->getMock();
-        $annotations = TestUtil::parseTestMethodAnnotations(
-            get_class($this),
-            $this->getName(false)
-        );
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($this);
         $mock->method('applyConfigFixtures')
             ->willReturn($annotations['method'][$this->object::ANNOTATION]);
         $reflection = new \ReflectionClass(Resolver::class);

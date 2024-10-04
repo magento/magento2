@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4931106"/>
             <group value="Cms"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -32,6 +33,7 @@
         </after>
         <amOnPage url="{{CmsPagesPage.url}}?filters[title]=$$createPage.title$$" stepKey="navigateToPageGridWithFilters"/>
         <waitForPageLoad stepKey="waitForPageGrid"/>
+        <seeInCurrentUrl url="{{CmsPagesPage.url}}?filters[title]=$$createPage.title$$" stepKey="assertUrl"/>
         <waitForText selector="{{CmsPagesPageActionsSection.pagesGridRowByTitle($$createPage.title$$)}}" userInput="$$createPage.title$$" stepKey="seePage"/>
         <seeInCurrentUrl url="admin/cms/page?filters" stepKey="seeAdminCMSPageFilters"/>
         <waitForElementVisible selector="{{CmsPagesPageActionsSection.activeFilter}}" stepKey="seeEnabledFilters"/>

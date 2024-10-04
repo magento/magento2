@@ -18,6 +18,9 @@
             <testCaseId value="MC-16471"/>
             <useCaseId value="MAGETWO-70232"/>
             <group value="catalog"/>
+            <group value="cloud"/>
+            <!-- Will be fixed in the scope of ACQE-6795 -->
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Create category-->

@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class SortbyTest extends TestCase
 {
-    const DEFAULT_ATTRIBUTE_CODE = 'attribute_name';
+    private const DEFAULT_ATTRIBUTE_CODE = 'attribute_name';
 
     /**
      * @var Sortby
@@ -45,7 +45,6 @@ class SortbyTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->markTestSkipped('Due to MAGETWO-48956');
         $this->objectHelper = new ObjectManager($this);
         $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->model = $this->objectHelper->getObject(
@@ -88,7 +87,7 @@ class SortbyTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider(): array
+    public static function beforeSaveDataProvider(): array
     {
         return [
             'attribute with specified value' => [
@@ -139,7 +138,7 @@ class SortbyTest extends TestCase
     /**
      * @return array
      */
-    public function afterLoadDataProvider(): array
+    public static function afterLoadDataProvider(): array
     {
         return [
             'attribute with specified value' => [
@@ -184,7 +183,7 @@ class SortbyTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider(): array
+    public static function validateDataProvider(): array
     {
         return [
             'is not required' => [
@@ -217,7 +216,7 @@ class SortbyTest extends TestCase
     {
         $this->attribute->expects($this->any())->method('getName')->willReturn('attribute_name');
         $this->attribute->method('getIsRequired');
-        $this->attribute§('getIsUnique')
+        $this->attribute->method('getIsUnique')
             ->willReturn(true);
 
         $entityMock = $this->getMockForAbstractClass(
@@ -287,7 +286,7 @@ class SortbyTest extends TestCase
     /**
      * @return array
      */
-    public function validateDefaultSortDataProvider(): array
+    public static function validateDefaultSortDataProvider(): array
     {
         return [
             [
@@ -335,7 +334,7 @@ class SortbyTest extends TestCase
     /**
      * @return array
      */
-    public function validateDefaultSortException(): array
+    public static function validateDefaultSortException(): array
     {
         return [
             [

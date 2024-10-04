@@ -16,6 +16,7 @@
             <testCaseId value="MC-63"/>
             <group value="ConfigurableProduct"/>
             <severity value="BLOCKER"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -71,7 +72,9 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!--check storefront for both options-->

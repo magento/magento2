@@ -18,12 +18,16 @@
             <testCaseId value="MC-28786"/>
             <useCaseId value="MAGETWO-94919"/>
             <group value="currency"/>
+            <!--      Remove this group when Subscription is finalized or Mocking is enabled      -->
+            <group value="pr_exclude" />
         </annotations>
         <before>
             <!--Set currency configuration-->
             <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForRHD.value}}" stepKey="setAllowedCurrencyRHDAndUSD"/>
             <magentoCLI command="config:set {{CurrencyConverterApiKeyConfigData.path}} {{CurrencyConverterApiKeyConfigData.value}}" stepKey="setCurrencyConverterApiKey"/>
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <!--Create product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -38,7 +42,9 @@
             <!--Set currency allow previous config-->
             <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="setDefaultAllowedCurrencies"/>
             <magentoCLI command="config:set {{DefaultCurrencyConverterApiKeyConfigData.path}} {{DefaultCurrencyConverterApiKeyConfigData.value}}" stepKey="setDefaultCurrencyConverterApiKey"/>
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <!--Delete created data-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
@@ -65,7 +71,9 @@
             <argument name="messageType" value="warning"/>
         </actionGroup>
         <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForEUR.value}}" stepKey="setAllowedCurrencyEURAndUSD"/>
-        <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
         <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="openCurrencyRatesPageAfterSetEUR"/>
         <actionGroup ref="AdminImportCurrencyRatesActionGroup" stepKey="importCurrencyRatesAfterEUR">
             <argument name="rateService" value="Currency Converter API"/>
@@ -88,7 +96,9 @@
         <see selector="{{StorefrontCategoryMainSection.productPrice}}" userInput="€" stepKey="seeEURCurrencySymbolInPrice"/>
         <!--Set allowed currencies greater then 10-->
         <magentoCLI command="config:set currency/options/allow RHD,CHW,YER,ZMK,CHE,EUR,USD,AMD,RUB,DZD,ARS,AWG" stepKey="setGreaterThanTenAllowedCurrencies"/>
-        <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches2"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches2">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
         <!--Import rates from Currency Converter API with currencies greater then 10-->
         <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="openCurrencyRatesPageAfterChangeAllowed"/>
         <actionGroup ref="AdminImportUnsupportedCurrencyRatesActionGroup" stepKey="importCurrencyRatesGreaterThen10">

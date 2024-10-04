@@ -18,6 +18,7 @@
             <testCaseId value="MC-16103"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create customer -->
@@ -30,9 +31,14 @@
             <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct">
                 <field key="price">560</field>
             </createData>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
+            <!-- Clear customers filters -->
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomersFilter"/>
+
             <!-- Admin logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 

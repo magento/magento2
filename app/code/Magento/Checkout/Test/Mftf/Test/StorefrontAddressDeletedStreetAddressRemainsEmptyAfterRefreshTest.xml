@@ -18,6 +18,7 @@
             <testCaseId value="MC-43255"/>
             <group value="checkout"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="simpleProductWithoutCategory" stepKey="createSimpleProduct"/>

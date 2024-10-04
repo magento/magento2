@@ -31,7 +31,7 @@ class ItemTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->orderItemFactoryMock = $this->getMockBuilder(ItemFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->item = $objectManager->getObject(
             Item::class,
@@ -163,7 +163,7 @@ class ItemTest extends TestCase
         $this->expectExceptionMessage('We found an invalid quantity to refund item "test".');
         $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQtyRefunded'])
+            ->onlyMethods(['getQtyRefunded'])
             ->getMock();
         $orderItemMock->expects($this->once())
             ->method('getQtyRefunded')
@@ -292,7 +292,7 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function calcRowTotalDataProvider()
+    public static function calcRowTotalDataProvider()
     {
         return [
             'qty 1' => [1],

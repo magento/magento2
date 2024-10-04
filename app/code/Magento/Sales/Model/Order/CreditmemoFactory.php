@@ -10,6 +10,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Model\Convert\OrderFactory;
+use Magento\Tax\Model\Config;
 
 /**
  * Factory class for @see \Magento\Sales\Model\Order\Creditmemo
@@ -49,23 +51,32 @@ class CreditmemoFactory
     private $serializer;
 
     /**
+     * @var CreditmemoValidator
+     */
+    private CreditmemoValidator $creditmemoValidator;
+
+    /**
      * Factory constructor
      *
-     * @param \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory
-     * @param \Magento\Tax\Model\Config $taxConfig
-     * @param JsonSerializer $serializer
-     * @param FormatInterface $localeFormat
+     * @param OrderFactory $convertOrderFactory
+     * @param Config $taxConfig
+     * @param JsonSerializer|null $serializer
+     * @param FormatInterface|null $localeFormat
+     * @param CreditmemoValidator|null $creditmemoValidator
      */
     public function __construct(
         \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory,
         \Magento\Tax\Model\Config $taxConfig,
         JsonSerializer $serializer = null,
-        FormatInterface $localeFormat = null
+        FormatInterface $localeFormat = null,
+        CreditmemoValidator $creditmemoValidator = null
     ) {
         $this->convertor = $convertOrderFactory->create();
         $this->taxConfig = $taxConfig;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(JsonSerializer::class);
         $this->localeFormat = $localeFormat ?: ObjectManager::getInstance()->get(FormatInterface::class);
+        $this->creditmemoValidator = $creditmemoValidator ?
+            : ObjectManager::getInstance()->get(CreditmemoValidator::class);
     }
 
     /**
@@ -152,55 +163,25 @@ class CreditmemoFactory
      * @param \Magento\Sales\Model\Order\Item $item
      * @param array $qtys
      * @param array $invoiceQtysRefundLimits
+     *
      * @return bool
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function canRefundItem($item, $qtys = [], $invoiceQtysRefundLimits = [])
     {
-        if ($item->isDummy()) {
-            if ($item->getHasChildren()) {
-                foreach ($item->getChildrenItems() as $child) {
-                    if (empty($qtys) || (count(array_unique($qtys)) === 1 && (int)end($qtys) === 0)) {
-                        if ($this->canRefundNoDummyItem($child, $invoiceQtysRefundLimits)) {
-                            return true;
-                        }
-                    } else {
-                        if (isset($qtys[$child->getId()]) && $qtys[$child->getId()] > 0) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            } elseif ($item->getParentItem()) {
-                $parent = $item->getParentItem();
-                if (empty($qtys)) {
-                    return $this->canRefundNoDummyItem($parent, $invoiceQtysRefundLimits);
-                } else {
-                    return isset($qtys[$parent->getId()]) && $qtys[$parent->getId()] > 0;
-                }
-            }
-            return false;
-        } else {
-            return $this->canRefundNoDummyItem($item, $invoiceQtysRefundLimits);
-        }
+        return $this->creditmemoValidator->canRefundItem($item, $qtys, $invoiceQtysRefundLimits);
     }
 
     /**
-     * Check if no dummy order item can be refunded
+     * Check if no dummy order item can be refunded.
      *
      * @param \Magento\Sales\Model\Order\Item $item
      * @param array $invoiceQtysRefundLimits
+     *
      * @return bool
      */
     protected function canRefundNoDummyItem($item, $invoiceQtysRefundLimits = [])
     {
-        if ($item->getQtyToRefund() < 0) {
-            return false;
-        }
-        if (isset($invoiceQtysRefundLimits[$item->getId()])) {
-            return $invoiceQtysRefundLimits[$item->getId()] > 0;
-        }
-        return true;
+        return $this->creditmemoValidator->canRefundNoDummyItem($item, $invoiceQtysRefundLimits);
     }
 
     /**
