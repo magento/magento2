@@ -9,7 +9,7 @@
         "magento/module-elasticsearch": "*",
         "magento/module-search": "*",
         "magento/module-config": "*",
-        "opensearch-project/opensearch-php": "^1.0 || ^2.0"
+        "opensearch-project/opensearch-php": "^2.2"
     },
     "type": "magento2-module",
     "license": [
