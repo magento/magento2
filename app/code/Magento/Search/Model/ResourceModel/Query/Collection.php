@@ -13,9 +13,12 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Search\Model\Query as ModelQuery;
+use Magento\Search\Model\ResourceModel\Query as ResourceQuery;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
+use Zend_Db_Expr;
 
 /**
  * Search query collection
@@ -75,7 +78,7 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Search\Model\Query::class, \Magento\Search\Model\ResourceModel\Query::class);
+        $this->_init(ModelQuery::class, ResourceQuery::class);
     }
 
     /**
@@ -121,7 +124,7 @@ class Collection extends AbstractCollection
                 'num_results > 0 AND display_in_terms = 1 AND query_text LIKE ?',
                 $this->_resourceHelper->addLikeEscape($query, ['position' => 'start'])
             )
-            ->order('popularity ' . \Magento\Framework\DB\Select::SQL_DESC);
+            ->order('popularity ' . Select::SQL_DESC);
 
         if ($this->getStoreId()) {
             $this->getSelect()->where('store_id = ?', (int)$this->getStoreId());
@@ -139,9 +142,9 @@ class Collection extends AbstractCollection
     public function setPopularQueryFilter($storeIds = null)
     {
         $this->getSelect()->reset(
-            \Magento\Framework\DB\Select::FROM
+            Select::FROM
         )->reset(
-            \Magento\Framework\DB\Select::COLUMNS
+            Select::COLUMNS
         )->distinct(
             true
         )->from(
@@ -169,8 +172,8 @@ class Collection extends AbstractCollection
     public function isTopSearchResult(string $term, int $storeId, int $maxCountCacheableSearchTerms):bool
     {
         $select = $this->getSelect();
-        $select->reset(\Magento\Framework\DB\Select::FROM);
-        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $select->reset(Select::FROM);
+        $select->reset(Select::COLUMNS);
         $select->distinct(true);
         $select->from(['main_table' => $this->getTable('search_query')], ['query_text']);
         $select->where('main_table.store_id IN (?)', $storeId);
@@ -179,7 +182,7 @@ class Collection extends AbstractCollection
 
         $select->limit($maxCountCacheableSearchTerms);
 
-        $subQuery = new \Zend_Db_Expr('(' . $select->assemble() . ')');
+        $subQuery = new Zend_Db_Expr('(' . $select->assemble() . ')');
 
         $select->reset();
         $select->from(['result' =>  $subQuery ], []);

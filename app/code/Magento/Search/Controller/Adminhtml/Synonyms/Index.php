@@ -5,7 +5,11 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
-class Index extends \Magento\Backend\App\Action
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context as ActionContext;
+use Magento\Backend\Model\View\Result\Page as ResultPage;
+
+class Index extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -15,28 +19,22 @@ class Index extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Search::synonyms';
 
     /**
-     * @var \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder
-     */
-    private $pageBuilder;
-
-    /**
      * constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder
+     * @param ActionContext $context
+     * @param ResultPageBuilder $pageBuilder
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder
+        ActionContext $context,
+        private readonly ResultPageBuilder $pageBuilder
     ) {
-        $this->pageBuilder = $pageBuilder;
         parent::__construct($context);
     }
 
     /**
      * Synonyms grid
      *
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return ResultPage
      */
     public function execute()
     {

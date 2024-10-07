@@ -6,9 +6,14 @@
 
 namespace Magento\Search\Model\ResourceModel;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DB\Helper\Mysql\Fulltext;
+use Magento\Framework\DB\Helper\Mysql\Fulltext as MysqlFulltext;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context as DbContext;
+use Magento\Search\Model\SynonymReader as ModelSynonymReader;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -18,50 +23,44 @@ use Magento\Store\Model\StoreManagerInterface;
 class SynonymReader extends AbstractDb
 {
     /**
-     * @var \Magento\Framework\DB\Helper\Mysql\Fulltext $fullTextSelect
+     * @var MysqlFulltext $fullTextSelect
      */
     private $fullTextSelect;
 
     /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\DB\Helper\Mysql\Fulltext $fulltext
+     * @param DbContext $context
+     * @param StoreManagerInterface $storeManager
+     * @param MysqlFulltext $fulltext
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\DB\Helper\Mysql\Fulltext $fulltext,
+        DbContext $context,
+        protected readonly StoreManagerInterface $storeManager,
+        MysqlFulltext $fulltext,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
         $this->fullTextSelect = $fulltext;
-        $this->storeManager = $storeManager;
     }
 
     /**
      * Custom load model: Get data by user query phrase
      *
-     * @param \Magento\Search\Model\SynonymReader $object
+     * @param ModelSynonymReader $object
      * @param string $phrase
      * @return $this
      */
-    public function loadByPhrase(\Magento\Search\Model\SynonymReader $object, $phrase)
+    public function loadByPhrase(ModelSynonymReader $object, $phrase)
     {
         $rows = $this->queryByPhrase($phrase !== null ? strtolower($phrase) : '');
         $synsPerScope = $this->getSynRowsPerScope($rows);
 
-        if (!empty($synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_STORES])) {
-            $object->setData($synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_STORES]);
-        } elseif (!empty($synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES])) {
-            $object->setData($synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES]);
+        if (!empty($synsPerScope[ScopeInterface::SCOPE_STORES])) {
+            $object->setData($synsPerScope[ScopeInterface::SCOPE_STORES]);
+        } elseif (!empty($synsPerScope[ScopeInterface::SCOPE_WEBSITES])) {
+            $object->setData($synsPerScope[ScopeInterface::SCOPE_WEBSITES]);
         } else {
-            $object->setData($synsPerScope[\Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT]);
+            $object->setData($synsPerScope[ScopeConfigInterface::SCOPE_TYPE_DEFAULT]);
         }
         $this->_afterLoad($object);
         return $this;
@@ -161,9 +160,9 @@ class SynonymReader extends AbstractDb
                 $synRowsForDefault[] = $row;
             }
         }
-        $synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_STORES] = $synRowsForStoreView;
-        $synsPerScope[\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES] = $synRowsForWebsite;
-        $synsPerScope[\Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT] = $synRowsForDefault;
+        $synsPerScope[ScopeInterface::SCOPE_STORES] = $synRowsForStoreView;
+        $synsPerScope[ScopeInterface::SCOPE_WEBSITES] = $synRowsForWebsite;
+        $synsPerScope[ScopeConfigInterface::SCOPE_TYPE_DEFAULT] = $synRowsForDefault;
         return $synsPerScope;
     }
 

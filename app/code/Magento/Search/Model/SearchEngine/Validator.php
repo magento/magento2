@@ -15,32 +15,20 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class Validator implements ValidatorInterface
 {
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @var array
      */
     private $excludedEngineList = ['mysql' => 'MySQL'];
 
     /**
-     * @var ValidatorInterface[]
-     */
-    private $engineValidators;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param array $engineValidators
+     * @param ValidatorInterface[] $engineValidators
      * @param array $excludedEngineList
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        array $engineValidators = [],
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly array $engineValidators = [],
         array $excludedEngineList = []
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->engineValidators = $engineValidators;
         $this->excludedEngineList = array_merge($this->excludedEngineList, $excludedEngineList);
     }
 

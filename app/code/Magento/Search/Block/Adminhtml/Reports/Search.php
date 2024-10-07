@@ -5,13 +5,15 @@
  */
 namespace Magento\Search\Block\Adminhtml\Reports;
 
+use Magento\Backend\Block\Widget\Grid\Container;
+
 /**
  * Adminhtml search report page content block
  *
  * @api
  * @since 100.0.2
  */
-class Search extends \Magento\Backend\Block\Widget\Grid\Container
+class Search extends Container
 {
     /**
      * Initialize Grid Container

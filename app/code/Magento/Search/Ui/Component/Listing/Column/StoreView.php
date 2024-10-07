@@ -6,8 +6,10 @@
 namespace Magento\Search\Ui\Component\Listing\Column;
 
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Store\Model\Store;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -16,11 +18,6 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class StoreView extends Column
 {
-    /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
     /**
      * Constructor
      *
@@ -33,11 +30,10 @@ class StoreView extends Column
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        StoreManagerInterface $storeManager,
+        protected readonly StoreManagerInterface $storeManager,
         array $components = [],
         array $data = []
     ) {
-        $this->storeManager = $storeManager;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -46,7 +42,7 @@ class StoreView extends Column
      *
      * @param array $dataSource
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -63,12 +59,12 @@ class StoreView extends Column
      *
      * @param array $item
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     protected function prepareItem(array $item)
     {
 
-        if ($item['store_id'] == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
+        if ($item['store_id'] == Store::DEFAULT_STORE_ID) {
             return __('All Store Views');
         }
         return $this->storeManager->getStore($item['store_id'])->getName();

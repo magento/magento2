@@ -19,29 +19,15 @@ class Options implements OptionSourceInterface
     const ALL_WEBSITES = '0';
 
     /**
-     * Escaper
-     *
-     * @var Escaper
-     */
-    protected $escaper;
-
-    /**
-     * System store
-     *
-     * @var SystemStore
-     */
-    protected $systemStore;
-
-    /**
      * Constructor
      *
-     * @param SystemStore $systemStore
-     * @param Escaper $escaper
+     * @param SystemStore $systemStore System store
+     * @param Escaper $escaper Escaper
      */
-    public function __construct(SystemStore $systemStore, Escaper $escaper)
-    {
-        $this->systemStore = $systemStore;
-        $this->escaper = $escaper;
+    public function __construct(
+        protected readonly SystemStore $systemStore,
+        protected readonly Escaper $escaper
+    ) {
     }
 
     /**

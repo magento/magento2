@@ -12,23 +12,13 @@ namespace Magento\Search\Model;
 class QueryResult
 {
     /**
-     * @var string
-     */
-    private $queryText;
-
-    /**
-     * @var int
-     */
-    private $resultsCount;
-
-    /**
      * @param string $queryText
-     * @param string $resultsCount
+     * @param string|int $resultsCount
      */
-    public function __construct($queryText, $resultsCount)
-    {
-        $this->queryText = $queryText;
-        $this->resultsCount = $resultsCount;
+    public function __construct(
+        private $queryText,
+        private $resultsCount
+    ) {
     }
 
     /**

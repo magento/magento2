@@ -10,6 +10,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Escaper;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Search\Model\Query as SearchQuery;
 use Magento\Search\Model\QueryFactory;
@@ -29,13 +30,6 @@ class Data extends AbstractHelper
     protected $_messages = [];
 
     /**
-     * Magento string lib
-     *
-     * @var String
-     */
-    protected $string;
-
-    /**
      * Core store config
      *
      * @var ScopeConfigInterface
@@ -44,35 +38,20 @@ class Data extends AbstractHelper
     protected $scopeConfig;
 
     /**
-     * @var Escaper
-     * @since 100.1.0
-     */
-    protected $escaper;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     * @since 100.1.0
-     */
-    protected $storeManager;
-
-    /**
      * Construct
      *
      * @param Context $context
-     * @param StringUtils $string
+     * @param StringUtils $string Magento string lib
      * @param Escaper $escaper
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Context $context,
-        StringUtils $string,
-        Escaper $escaper,
-        StoreManagerInterface $storeManager
+        protected readonly StringUtils $string,
+        protected readonly Escaper $escaper,
+        protected readonly StoreManagerInterface $storeManager
     ) {
-        $this->string = $string;
         $this->scopeConfig = $context->getScopeConfig();
-        $this->escaper = $escaper;
-        $this->storeManager = $storeManager;
         parent::__construct($context);
     }
 
@@ -148,7 +127,7 @@ class Data extends AbstractHelper
     {
         return $this->scopeConfig->getValue(
             SearchQuery::XML_PATH_MIN_QUERY_LENGTH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -163,7 +142,7 @@ class Data extends AbstractHelper
     {
         return $this->scopeConfig->getValue(
             SearchQuery::XML_PATH_MAX_QUERY_LENGTH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }

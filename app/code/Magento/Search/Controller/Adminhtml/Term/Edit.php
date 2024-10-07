@@ -5,47 +5,43 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
+use Magento\Backend\Model\Session as BackendSession;
+use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Search\Model\Query as ModelQuery;
 
 class Edit extends TermController implements HttpGetActionInterface
 {
     /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $coreRegistry;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param Context $context
+     * @param Registry $coreRegistry Core registry
      */
     public function __construct(
         Context $context,
-        Registry $coreRegistry
+        protected readonly Registry $coreRegistry
     ) {
-        $this->coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
 
     /**
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $model = $this->_objectManager->create(\Magento\Search\Model\Query::class);
+        $model = $this->_objectManager->create(ModelQuery::class);
 
         if ($id) {
             $model->load($id);
             if (!$model->getId()) {
                 $this->messageManager->addErrorMessage(__('This search no longer exists.'));
-                /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+                /** @var ResultRedirect $resultRedirect */
                 $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
                 $resultRedirect->setPath('search/*');
                 return $resultRedirect;
@@ -53,7 +49,7 @@ class Edit extends TermController implements HttpGetActionInterface
         }
 
         // set entered data if was error when we do save
-        $data = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getPageData(true);
+        $data = $this->_objectManager->get(BackendSession::class)->getPageData(true);
         if (!empty($data)) {
             $model->addData($data);
         }

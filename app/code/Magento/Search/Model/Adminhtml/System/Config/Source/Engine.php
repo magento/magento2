@@ -5,28 +5,22 @@
  */
 namespace Magento\Search\Model\Adminhtml\System\Config\Source;
 
+use Magento\Framework\Option\ArrayInterface;
+
 /**
  * All registered search adapters
  *
  * @api
  * @since 100.0.2
  */
-class Engine implements \Magento\Framework\Option\ArrayInterface
+class Engine implements ArrayInterface
 {
     /**
-     * Engines list
-     *
-     * @var array
-     */
-    private $engines;
-
-    /**
-     * @param array $engines
+     * @param array $engines Engines list
      */
     public function __construct(
-        array $engines
+        private readonly array $engines
     ) {
-        $this->engines = $engines;
     }
 
     /**

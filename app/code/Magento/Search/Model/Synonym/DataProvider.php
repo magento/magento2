@@ -5,23 +5,21 @@
  */
 namespace Magento\Search\Model\Synonym;
 
+use Magento\Search\Model\ResourceModel\SynonymGroup\Collection as SynonymGroupCollection;
 use Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory;
 use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
+use Magento\Search\Model\SynonymGroup;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
  * Class DataProvider
  */
-class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
+class DataProvider extends AbstractDataProvider
 {
     /**
-     * @var \Magento\Search\Model\ResourceModel\SynonymGroup\Collection
+     * @var SynonymGroupCollection
      */
     protected $collection;
-
-    /**
-     * @var FilterPool
-     */
-    protected $filterPool;
 
     /**
      * @var array
@@ -44,13 +42,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $blockCollectionFactory,
-        FilterPool $filterPool,
+        protected readonly FilterPool $filterPool,
         array $meta = [],
         array $data = []
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $blockCollectionFactory->create();
-        $this->filterPool = $filterPool;
     }
 
     /**
@@ -64,7 +61,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             return $this->loadedData;
         }
         $items = $this->collection->getItems();
-        /** @var \Magento\Search\Model\SynonymGroup $synGroup */
+        /** @var SynonymGroup $synGroup */
         foreach ($items as $synGroup) {
             // Set the virtual 'scope_id' column to appropriate value.
             // This is necessary to display the correct selection set

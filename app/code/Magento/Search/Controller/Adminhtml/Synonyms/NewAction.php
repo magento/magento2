@@ -5,7 +5,12 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
-class NewAction extends \Magento\Backend\App\Action
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context as ActionContext;
+use Magento\Backend\Model\View\Result\Forward as ResultForward;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+
+class NewAction extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -15,28 +20,22 @@ class NewAction extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Search::synonyms';
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory
-     */
-    private $forwardFactory;
-
-    /**
      * New Synonym Group Action constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory
+     * @param ActionContext $context
+     * @param ForwardFactory $forwardFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory
+        ActionContext $context,
+        private readonly ForwardFactory $forwardFactory
     ) {
-        $this->forwardFactory = $forwardFactory;
         parent::__construct($context);
     }
 
     /**
      * Create new synonyms group action
      *
-     * @return \Magento\Backend\Model\View\Result\Forward
+     * @return ResultForward
      */
     public function execute()
     {

@@ -11,17 +11,11 @@ namespace Magento\Search\Model;
 class Autocomplete implements AutocompleteInterface
 {
     /**
-     * @var Autocomplete\DataProviderInterface[]
-     */
-    private $dataProviders;
-
-    /**
-     * @param array $dataProviders
+     * @param Autocomplete\DataProviderInterface[] $dataProviders
      */
     public function __construct(
-        array $dataProviders
+        private array $dataProviders
     ) {
-        $this->dataProviders = $dataProviders;
         ksort($this->dataProviders);
     }
 

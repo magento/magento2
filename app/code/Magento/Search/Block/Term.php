@@ -130,7 +130,7 @@ class Term extends Template
      */
     public function getSearchUrl($obj)
     {
-        /** @var $url UrlInterface */
+        /** @var UrlInterface $url */
         $url = $this->_urlFactory->create();
         /*
          * url encoding will be done in Url.php http_build_query

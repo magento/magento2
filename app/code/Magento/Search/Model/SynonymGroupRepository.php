@@ -6,6 +6,8 @@
 
 namespace Magento\Search\Model;
 
+use Exception;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Phrase;
 use Magento\Search\Api\Data\SynonymGroupInterface;
@@ -18,29 +20,15 @@ use Magento\Search\Model\ResourceModel\SynonymGroup as SynonymGroupResourceModel
 class SynonymGroupRepository implements SynonymGroupRepositoryInterface
 {
     /**
-     * @var SynonymGroupFactory
-     */
-    protected $synonymGroupFactory;
-
-    /**
-     * SynonymGroup resource model
-     *
-     * @var SynonymGroupResourceModel
-     */
-    protected $resourceModel;
-
-    /**
      * Constructor
      *
      * @param SynonymGroupFactory $synonymGroupFactory
-     * @param SynonymGroupResourceModel $resourceModel
+     * @param SynonymGroupResourceModel $resourceModel SynonymGroup resource model
      */
     public function __construct(
-        SynonymGroupFactory $synonymGroupFactory,
-        SynonymGroupResourceModel $resourceModel
+        protected readonly SynonymGroupFactory $synonymGroupFactory,
+        protected readonly SynonymGroupResourceModel $resourceModel
     ) {
-        $this->synonymGroupFactory = $synonymGroupFactory;
-        $this->resourceModel = $resourceModel;
     }
 
     /**
@@ -70,7 +58,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
     {
         try {
             $this->resourceModel->delete($synonymGroup);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new CouldNotDeleteException(
                 __(
                     'The synonym group with the "%1" ID can\'t be deleted. %2',
@@ -86,7 +74,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * Return a particular synonym group interface instance based on passed in synonym group id
      *
      * @param int $synonymGroupId
-     * @return \Magento\Search\Api\Data\SynonymGroupInterface
+     * @return SynonymGroupInterface
      */
     public function get($synonymGroupId)
     {
@@ -105,7 +93,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param bool $errorOnMergeConflict
      * @return SynonymGroupInterface
      * @throws Synonym\MergeConflictException
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @throws AlreadyExistsException
      */
     private function create(SynonymGroupInterface $synonymGroup, $errorOnMergeConflict)
     {
@@ -144,7 +132,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param SynonymGroupInterface $synonymGroupToMerge
      * @param array $matchingGroupIds
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     private function merge(SynonymGroupInterface $synonymGroupToMerge, array $matchingGroupIds)
     {
@@ -183,7 +171,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      * @param bool $errorOnMergeConflict
      * @return SynonymGroupInterface
      * @throws Synonym\MergeConflictException
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @throws AlreadyExistsException
      */
     private function update(
         SynonymGroup $oldSynonymGroup,

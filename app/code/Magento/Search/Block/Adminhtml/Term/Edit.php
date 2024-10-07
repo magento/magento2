@@ -5,29 +5,34 @@
  */
 namespace Magento\Search\Block\Adminhtml\Term;
 
+use Magento\Backend\Block\Widget\Context as WidgetContext;
+use Magento\Backend\Block\Widget\Form\Container;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+
 /**
  * Admin term edit block
  *
  * @api
  * @since 100.0.2
  */
-class Edit extends \Magento\Backend\Block\Widget\Form\Container
+class Edit extends Container
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $coreRegistry;
 
     /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param WidgetContext $context
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Framework\Registry $registry,
+        WidgetContext $context,
+        Registry $registry,
         array $data = []
     ) {
         $this->coreRegistry = $registry;
@@ -50,7 +55,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getHeaderText()
     {

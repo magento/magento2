@@ -5,6 +5,7 @@
  */
 namespace Magento\Search\Model\Synonym;
 
+use Exception;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
@@ -17,24 +18,20 @@ use Magento\Framework\Phrase;
 class MergeConflictException extends LocalizedException
 {
     /**
-     * Conflicting synonyms
-     *
-     * @var array
-     */
-    private $conflictingSynonyms;
-
-    /**
      * Constructor
      *
-     * @param array $conflictingSynonyms
+     * @param array $conflictingSynonyms Conflicting synonyms
      * @param Phrase|null $phrase
-     * @param \Exception|null $cause
+     * @param Exception|null $cause
      * @param int $code
      */
-    public function __construct(array $conflictingSynonyms, Phrase $phrase = null, \Exception $cause = null, $code = 0)
-    {
+    public function __construct(
+        private readonly array $conflictingSynonyms,
+        Phrase $phrase = null,
+        Exception $cause = null,
+        $code = 0
+    ) {
         parent::__construct($phrase, $cause, $code);
-        $this->conflictingSynonyms = $conflictingSynonyms;
     }
 
     /**

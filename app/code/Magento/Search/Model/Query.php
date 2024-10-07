@@ -5,6 +5,11 @@
  */
 namespace Magento\Search\Model;
 
+use Exception;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\Context as ModelContext;
+use Magento\Search\Model\ResourceModel\Query as ResourceQuery;
 use Magento\Search\Model\ResourceModel\Query\Collection as QueryCollection;
 use Magento\Search\Model\ResourceModel\Query\CollectionFactory as QueryCollectionFactory;
 use Magento\Search\Model\SearchCollectionInterface as Collection;
@@ -14,29 +19,30 @@ use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Search query model
  *
- * @method \Magento\Search\Model\Query setQueryText(string $value)
+ * @method Query setQueryText(string $value)
  * @method int getNumResults()
- * @method \Magento\Search\Model\Query setNumResults(int $value)
+ * @method Query setNumResults(int $value)
  * @method int getPopularity()
- * @method \Magento\Search\Model\Query setPopularity(int $value)
+ * @method Query setPopularity(int $value)
  * @method string getRedirect()
- * @method \Magento\Search\Model\Query setRedirect(string $value)
+ * @method Query setRedirect(string $value)
  * @method int getDisplayInTerms()
- * @method \Magento\Search\Model\Query setDisplayInTerms(int $value)
- * @method \Magento\Search\Model\Query setQueryNameExceeded(bool $value)
+ * @method Query setDisplayInTerms(int $value)
+ * @method Query setQueryNameExceeded(bool $value)
  * @method int getIsActive()
- * @method \Magento\Search\Model\Query setIsActive(int $value)
+ * @method Query setIsActive(int $value)
  * @method int getIsProcessed()
- * @method \Magento\Search\Model\Query setIsProcessed(int $value)
+ * @method Query setIsProcessed(int $value)
  * @method string getUpdatedAt()
- * @method \Magento\Search\Model\Query setUpdatedAt(string $value)
- * @method \Magento\Search\Model\Query setIsQueryTextExceeded(bool $value)
- * @method \Magento\Search\Model\Query setIsQueryTextShort(bool $value)
+ * @method Query setUpdatedAt(string $value)
+ * @method Query setIsQueryTextExceeded(bool $value)
+ * @method Query setIsQueryTextShort(bool $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -94,18 +100,18 @@ class Query extends AbstractModel implements QueryInterface
     /**
      * Construct
      *
-     * @param \Magento\Framework\Model\Context $context
+     * @param ModelContext $context
      * @param Registry $registry
      * @param QueryCollectionFactory $queryCollectionFactory
      * @param CollectionFactory $searchCollectionFactory
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param AbstractResource $resource
      * @param DbCollection $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
+        ModelContext $context,
         Registry $registry,
         QueryCollectionFactory $queryCollectionFactory,
         CollectionFactory $searchCollectionFactory,
@@ -129,7 +135,7 @@ class Query extends AbstractModel implements QueryInterface
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Search\Model\ResourceModel\Query::class);
+        $this->_init(ResourceQuery::class);
     }
 
     /**
@@ -146,7 +152,7 @@ class Query extends AbstractModel implements QueryInterface
      * Retrieve collection of suggest queries
      *
      * @return QueryCollection
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getSuggestCollection()
     {
@@ -167,7 +173,7 @@ class Query extends AbstractModel implements QueryInterface
      *
      * @param string $text
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @deprecated 100.1.0 "synonym for" feature has been removed
      */
     public function loadByQuery($text)
@@ -181,7 +187,7 @@ class Query extends AbstractModel implements QueryInterface
      *
      * @param string $text
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function loadByQueryText($text)
     {
@@ -206,7 +212,7 @@ class Query extends AbstractModel implements QueryInterface
      * Retrieve store Id
      *
      * @return int
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getStoreId()
     {
@@ -220,7 +226,7 @@ class Query extends AbstractModel implements QueryInterface
      * Prepare save query for result
      *
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function prepare()
     {
@@ -239,7 +245,7 @@ class Query extends AbstractModel implements QueryInterface
      *
      * @return $this
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function saveIncrementalPopularity()
     {
@@ -254,7 +260,7 @@ class Query extends AbstractModel implements QueryInterface
      * @param int $numResults
      * @return $this
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function saveNumResults($numResults)
     {
@@ -268,13 +274,13 @@ class Query extends AbstractModel implements QueryInterface
      * Retrieve minimum query length
      *
      * @return int
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getMinQueryLength()
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_MIN_QUERY_LENGTH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $this->getStoreId()
         );
     }
@@ -283,13 +289,13 @@ class Query extends AbstractModel implements QueryInterface
      * Retrieve maximum query length
      *
      * @return int
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getMaxQueryLength()
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_MAX_QUERY_LENGTH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $this->getStoreId()
         );
     }

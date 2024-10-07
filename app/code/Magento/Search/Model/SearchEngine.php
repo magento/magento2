@@ -20,18 +20,11 @@ class SearchEngine implements SearchEngineInterface
     private $adapter = null;
 
     /**
-     * Adapter factory
-     *
-     * @var AdapterFactory
+     * @param AdapterFactory $adapterFactory Adapter factory
      */
-    private $adapterFactory;
-
-    /**
-     * @param AdapterFactory $adapterFactory
-     */
-    public function __construct(AdapterFactory $adapterFactory)
-    {
-        $this->adapterFactory = $adapterFactory;
+    public function __construct(
+        private readonly AdapterFactory $adapterFactory
+    ) {
     }
 
     /**

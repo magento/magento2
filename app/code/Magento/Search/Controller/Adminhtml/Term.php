@@ -6,6 +6,7 @@
 namespace Magento\Search\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
+use Magento\Backend\Model\View\Result\Page as ResultPage;
 use Magento\Framework\Controller\ResultFactory;
 
 abstract class Term extends Action
@@ -18,11 +19,11 @@ abstract class Term extends Action
     const ADMIN_RESOURCE = 'Magento_Search::search';
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return ResultPage
      */
     protected function createPage()
     {
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        /** @var ResultPage $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
         $resultPage->setActiveMenu('Magento_Search::search_terms')
             ->addBreadcrumb(__('Search'), __('Search'));

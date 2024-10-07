@@ -6,6 +6,8 @@
 
 namespace Magento\Search\Model;
 
+use Magento\Framework\ObjectManagerInterface;
+
 /**
  * @api
  * @since 100.0.2
@@ -15,7 +17,7 @@ class SearchCollectionFactory
     /**
      * Object Manager instance
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager = null;
 
@@ -29,12 +31,12 @@ class SearchCollectionFactory
     /**
      * Factory constructor
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = \Magento\Search\Model\SearchCollectionInterface::class
+        ObjectManagerInterface $objectManager,
+        $instanceName = SearchCollectionInterface::class
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
@@ -44,7 +46,7 @@ class SearchCollectionFactory
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\Search\Model\SearchCollectionInterface
+     * @return SearchCollectionInterface
      */
     public function create(array $data = [])
     {

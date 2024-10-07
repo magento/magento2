@@ -7,27 +7,17 @@ namespace Magento\Search\Ui\Component\Listing\Column\Scope;
 
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Escaper;
+use Magento\Search\Ui\Component\Listing\Column\Website\Options as ColumnWebsiteOptions;
+use Magento\Store\Model\Group;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\System\Store as SystemStore;
+use Magento\Store\Model\Website;
 
 /**
  * Class Options
  */
 class Options implements OptionSourceInterface
 {
-    /**
-     * Escaper
-     *
-     * @var Escaper
-     */
-    protected $escaper;
-
-    /**
-     * System store
-     *
-     * @var SystemStore
-     */
-    protected $systemStore;
-
     /**
      * @var array
      */
@@ -41,13 +31,13 @@ class Options implements OptionSourceInterface
     /**
      * Constructor
      *
-     * @param SystemStore $systemStore
-     * @param Escaper $escaper
+     * @param SystemStore $systemStore System store
+     * @param Escaper $escaper Escaper
      */
-    public function __construct(SystemStore $systemStore, Escaper $escaper)
-    {
-        $this->systemStore = $systemStore;
-        $this->escaper = $escaper;
+    public function __construct(
+        protected readonly SystemStore $systemStore,
+        protected readonly Escaper $escaper
+    ) {
     }
 
     /**
@@ -79,26 +69,26 @@ class Options implements OptionSourceInterface
         // Add option to select All Websites
         $this->currentOptions['All Websites']['label'] = $this->escaper->escapeHtml(__('All Websites'));
         $this->currentOptions['All Websites']['value'] =
-            \Magento\Search\Ui\Component\Listing\Column\Website\Options::ALL_WEBSITES
+            ColumnWebsiteOptions::ALL_WEBSITES
             . ':'
-            . \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+            . Store::DEFAULT_STORE_ID;
 
         foreach ($websiteCollection as $website) {
             $groups = [];
-            /** @var \Magento\Store\Model\Group $group */
+            /** @var Group $group */
             foreach ($groupCollection as $group) {
                 if ($group->getWebsiteId() == $website->getId()) {
                     $stores = [];
-                    /** @var  \Magento\Store\Model\Store $store */
+                    /** @var Store $store */
 
                     // Add an option for All store views for this website
                     $stores['All Store Views']['label'] = $this->escaper->escapeHtml(__('    All Store Views'));
                     $stores['All Store Views']['value'] =
                         $website->getId()
                         . ':'
-                        . \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+                        . Store::DEFAULT_STORE_ID;
 
-                    /** @var \Magento\Store\Model\Website $website */
+                    /** @var Website $website */
                     foreach ($storeCollection as $store) {
                         if ($store->getGroupId() == $group->getId()) {
                             $name = $this->escaper->escapeHtml($store->getName());

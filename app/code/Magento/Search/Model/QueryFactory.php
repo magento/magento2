@@ -7,6 +7,7 @@ namespace Magento\Search\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\StringUtils as StdlibString;
 use Magento\Search\Helper\Data;
@@ -25,7 +26,7 @@ class QueryFactory implements QueryFactoryInterface
     const QUERY_VAR_NAME = 'q';
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     private $request;
 
@@ -35,24 +36,9 @@ class QueryFactory implements QueryFactoryInterface
     private $query;
 
     /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * @var StdlibString
-     */
-    private $string;
-
-    /**
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
-
-    /**
-     * @var Data
-     */
-    private $queryHelper;
 
     /**
      * @param Context $context
@@ -62,13 +48,11 @@ class QueryFactory implements QueryFactoryInterface
      */
     public function __construct(
         Context $context,
-        ObjectManagerInterface $objectManager,
-        StdlibString $string,
-        Data $queryHelper = null
+        private readonly ObjectManagerInterface $objectManager,
+        private readonly StdlibString $string,
+        private ?Data $queryHelper = null
     ) {
         $this->request = $context->getRequest();
-        $this->objectManager = $objectManager;
-        $this->string = $string;
         $this->scopeConfig = $context->getScopeConfig();
         $this->queryHelper = $queryHelper === null ? $this->objectManager->get(Data::class) : $queryHelper;
     }

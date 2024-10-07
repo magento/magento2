@@ -7,21 +7,16 @@
 namespace Magento\Search\Model\Autocomplete;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Search\Model\Autocomplete\Item as AutocompleteItem;
 
 class ItemFactory
 {
     /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
-        ObjectManagerInterface $objectManager
+        private readonly ObjectManagerInterface $objectManager
     ) {
-        $this->objectManager = $objectManager;
     }
 
     /**
@@ -30,6 +25,6 @@ class ItemFactory
      */
     public function create(array $data)
     {
-        return $this->objectManager->create(\Magento\Search\Model\Autocomplete\Item::class, ['data' => $data]);
+        return $this->objectManager->create(AutocompleteItem::class, ['data' => $data]);
     }
 }

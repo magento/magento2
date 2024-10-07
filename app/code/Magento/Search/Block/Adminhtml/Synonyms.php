@@ -5,10 +5,12 @@
  */
 namespace Magento\Search\Block\Adminhtml;
 
+use Magento\Backend\Block\Widget\Grid\Container;
+
 /**
  * Adminhtml synonym group content block
  */
-class Synonyms extends \Magento\Backend\Block\Widget\Grid\Container
+class Synonyms extends Container
 {
     /**
      * @return void
