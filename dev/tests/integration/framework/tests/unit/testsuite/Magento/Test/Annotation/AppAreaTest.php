@@ -185,25 +185,25 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'area_code' => Area::AREA_GLOBAL,
+                'areaCode' => Area::AREA_GLOBAL,
             ],
             [
-                'area_code' => Area::AREA_ADMINHTML,
+                'areaCode' => Area::AREA_ADMINHTML,
             ],
             [
-                'area_code' => Area::AREA_FRONTEND,
+                'areaCode' => Area::AREA_FRONTEND,
             ],
             [
-                'area_code' => Area::AREA_WEBAPI_REST,
+                'areaCode' => Area::AREA_WEBAPI_REST,
             ],
             [
-                'area_code' => Area::AREA_WEBAPI_SOAP,
+                'areaCode' => Area::AREA_WEBAPI_SOAP,
             ],
             [
-                'area_code' => Area::AREA_CRONTAB,
+                'areaCode' => Area::AREA_CRONTAB,
             ],
             [
-                'area_code' => Area::AREA_GRAPHQL,
+                'areaCode' => Area::AREA_GRAPHQL,
             ],
         ];
     }

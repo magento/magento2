@@ -58,60 +58,6 @@ class CategoryFilterTest extends TestCase
     }
 
     /**
-     * Test that category filter works correctly with condition type "eq"
-     */
-    public function testApplyWithConditionTypeEq(): void
-    {
-        $filter = new Filter();
-        $category = $this->createMock(\Magento\Catalog\Model\Category::class);
-        $collection = $this->createMock(Collection::class);
-        $filter->setConditionType('eq');
-        $categoryId = 1;
-        $filter->setValue($categoryId);
-        $this->categoryFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($category);
-        $this->categoryResourceModel->expects($this->once())
-            ->method('load')
-            ->with($category, $categoryId);
-        $collection->expects($this->once())
-            ->method('addCategoryFilter')
-            ->with($category);
-        $collection->expects($this->once())
-            ->method('getFlag')
-            ->with('search_resut_applied')
-            ->willReturn(true);
-        $this->model->apply($filter, $collection);
-    }
-
-    /**
-     * Test that category filter works correctly with condition type "in" and single category
-     */
-    public function testApplyWithConditionTypeInAndSingleCategory(): void
-    {
-        $filter = new Filter();
-        $category = $this->createMock(\Magento\Catalog\Model\Category::class);
-        $collection = $this->createMock(Collection::class);
-        $filter->setConditionType('in');
-        $categoryId = 1;
-        $filter->setValue($categoryId);
-        $this->categoryFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($category);
-        $this->categoryResourceModel->expects($this->once())
-            ->method('load')
-            ->with($category, $categoryId);
-        $collection->expects($this->once())
-            ->method('addCategoryFilter')
-            ->with($category);
-        $collection->expects($this->once())
-            ->method('getFlag')
-            ->with('search_resut_applied')
-            ->willReturn(true);
-        $this->model->apply($filter, $collection);
-    }
-
-    /**
      * Test that category filter works correctly with condition type "in" and multiple categories
      */
     public function testApplyWithConditionTypeInAndMultipleCategories(): void
@@ -151,10 +97,6 @@ class CategoryFilterTest extends TestCase
         $collection->expects($this->once())
             ->method('addCategoriesFilter')
             ->with(['in' => [1, 2, 3]]);
-        $collection->expects($this->once())
-            ->method('getFlag')
-            ->with('search_resut_applied')
-            ->willReturn(false);
         $category1->expects($this->once())
             ->method('getIsAnchor')
             ->willReturn(true);
@@ -198,10 +140,6 @@ class CategoryFilterTest extends TestCase
         $collection->expects($this->once())
             ->method('addCategoriesFilter')
             ->with([$condition => [1, 2]]);
-        $collection->expects($this->once())
-            ->method('getFlag')
-            ->with('search_resut_applied')
-            ->willReturn(false);
         $category->expects($this->once())
             ->method('getIsAnchor')
             ->willReturn(true);

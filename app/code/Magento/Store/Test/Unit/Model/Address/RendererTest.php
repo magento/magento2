@@ -66,7 +66,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function formatDataProvider()
+    public static function formatDataProvider()
     {
         $storeInfo = new DataObject([
             'region' => 'Gondolin',

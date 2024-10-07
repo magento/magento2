@@ -117,7 +117,7 @@ class CanViewNotificationTest extends TestCase
     /**
      * @return array
      */
-    public function isVisibleProvider()
+    public static function isVisibleProvider()
     {
         return [
             [false, '2.2.1-dev', '999.999.999-alpha'],

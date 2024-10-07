@@ -80,7 +80,7 @@ class CollectDataTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             'Subscription is enabled' => [SubscriptionStatusProvider::ENABLED],

@@ -55,7 +55,7 @@ class ModuleConfigStatusCommandTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         $successMessage = 'The modules configuration is up to date.' . PHP_EOL;
         $failureMessage = 'The modules configuration in the \'app/etc/config.php\' '

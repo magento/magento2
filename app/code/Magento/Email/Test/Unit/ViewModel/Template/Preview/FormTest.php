@@ -89,7 +89,7 @@ class FormTest extends TestCase
     /**
      * @return array
      */
-    public function getFormFieldsDataProvider()
+    public static function getFormFieldsDataProvider()
     {
         return [
             'get_request_valid' => [
@@ -132,7 +132,7 @@ class FormTest extends TestCase
     /**
      * @return array
      */
-    public function getFormFieldsInvalidDataProvider()
+    public static function getFormFieldsInvalidDataProvider()
     {
         return [
             'get_request_missing_id' => [
