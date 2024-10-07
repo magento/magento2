@@ -12,6 +12,7 @@ use Magento\Framework\Amqp\Connection\FactoryOptions;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PhpAmqpLib\Connection\AMQPConnectionConfig;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -98,18 +99,18 @@ class FactoryTest extends TestCase
             ->method('getSslOptions')
             ->willReturn(null);
 
-        $connection = $this->objectManager->getObject($connectionClass, [
-                '127.0.0.1',
-                '5672',
-                'guest',
-                'guest',
-                '/']
-        );
-
         $this->objectManagerInterface->expects($this->any())
             ->method('create')
-            ->with($connectionClass)
-            ->willReturn($connection);
+            ->with(AMQPConnectionConfig::class)
+            ->willReturn(
+                $this->objectManager->getObject(AMQPConnectionConfig::class, [
+                    '127.0.0.1',
+                    '5672',
+                    'guest',
+                    'guest',
+                    '/']
+                )
+            );
 
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerInterface);
 
@@ -126,11 +127,11 @@ class FactoryTest extends TestCase
         return [
             [
                 'ssl_enabled' => true,
-                'connection_class' => AMQPConnectionConfig::class,
+                'connection_class' => AMQPStreamConnection::class,
             ],
             [
                 'ssl_enabled' => false,
-                'connection_class' => AMQPConnectionConfig::class,
+                'connection_class' => AMQPStreamConnection::class,
             ],
         ];
     }
