@@ -97,11 +97,14 @@ class ToOrderItemTest extends TestCase
             ->willReturn(['option']);
         $this->objectCopyServiceMock
             ->method('getDataFromFieldset')
-            ->withConsecutive(
-                ['quote_convert_item', 'to_order_item', $this->quoteItemMock],
-                ['quote_convert_item', 'to_order_item_discount', $this->quoteItemMock]
-            )
-            ->willReturnOnConsecutiveCalls([], []);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 === 'quote_convert_item' && $arg2 === 'to_order_item' && $arg3 == $this->quoteItemMock) {
+                    return [];
+                } elseif ($arg1 === 'quote_convert_item' && $arg2 === 'to_order_item_discount' &&
+                    $arg3 == $this->quoteItemMock) {
+                    return [];
+                }
+            });
         $this->orderItemFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->orderItemMock);

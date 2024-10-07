@@ -27,7 +27,9 @@
             <createData entity="ApiBundleProductPriceViewRange" stepKey="createDynamicBundleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

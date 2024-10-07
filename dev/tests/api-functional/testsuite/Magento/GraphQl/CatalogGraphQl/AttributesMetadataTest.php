@@ -11,10 +11,8 @@ use Magento\Catalog\Api\Data\CategoryAttributeInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Test\Fixture\Attribute;
 use Magento\Catalog\Test\Fixture\CategoryAttribute;
-use Magento\EavGraphQl\Model\Uid;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -47,7 +45,6 @@ class AttributesMetadataTest extends GraphQlAbstract
 {
   customAttributeMetadataV2(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
     items {
-      uid
       code
       label
       entity_type
@@ -85,11 +82,6 @@ QRY;
         /** @var ProductAttributeInterface $productAttribute */
         $productAttribute = DataFixtureStorageManager::getStorage()->get('product_attribute');
 
-        $productUid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
-            ProductAttributeInterface::ENTITY_TYPE_CODE,
-            $productAttribute->getAttributeCode()
-        );
-
         $result = $this->graphQlQuery(
             sprintf(
                 self::QUERY,
@@ -103,7 +95,6 @@ QRY;
                 'customAttributeMetadataV2' => [
                     'items' => [
                         [
-                            'uid' => $productUid,
                             'code' => $productAttribute->getAttributeCode(),
                             'label' => $productAttribute->getDefaultFrontendLabel(),
                             'entity_type' => strtoupper(ProductAttributeInterface::ENTITY_TYPE_CODE),
@@ -139,11 +130,6 @@ QRY;
         /** @var CategoryAttributeInterface $categoryAttribute */
         $categoryAttribute = DataFixtureStorageManager::getStorage()->get('category_attribute');
 
-        $categoryUid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
-            CategoryAttributeInterface::ENTITY_TYPE_CODE,
-            $categoryAttribute->getAttributeCode()
-        );
-
         $result = $this->graphQlQuery(
             sprintf(
                 self::QUERY,
@@ -157,7 +143,6 @@ QRY;
                 'customAttributeMetadataV2' => [
                     'items' => [
                         [
-                            'uid' => $categoryUid,
                             'code' => $categoryAttribute->getAttributeCode(),
                             'label' => $categoryAttribute->getDefaultFrontendLabel(),
                             'entity_type' => strtoupper(CategoryAttributeInterface::ENTITY_TYPE_CODE),

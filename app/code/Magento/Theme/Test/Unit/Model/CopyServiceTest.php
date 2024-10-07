@@ -263,10 +263,8 @@ class CopyServiceTest extends TestCase
         )->willReturn(
             $customization
         );
-
         $this->updateCollection->expects($this->once())->method('delete');
         $this->linkCollection->expects($this->once())->method('addThemeFilter');
-
         $targetLinkOne = $this->getMockBuilder(Link::class)
             ->addMethods(['setThemeId', 'setLayoutUpdateId'])
             ->onlyMethods(['__wakeup', 'setId', 'save'])
@@ -279,34 +277,49 @@ class CopyServiceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $targetLinkTwo->setData(['id' => 2, 'layout_update_id' => 2]);
-
         $targetLinkOne
-            ->method('setThemeId')
-            ->withConsecutive([123]);
+            ->method('setThemeId')->willReturnCallback(function ($arg1) {
+                if ($arg1 == 123) {
+                    return null;
+                }
+            });
         $targetLinkOne
             ->method('setLayoutUpdateId')
-            ->withConsecutive([1]);
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 1) {
+                    return null;
+                }
+            });
         $targetLinkOne
-            ->method('setId')
-            ->withConsecutive([null]);
+            ->method('setId')->willReturnCallback(function ($arg1) {
+                if ($arg1 == 1) {
+                    return null;
+                }
+            });
         $targetLinkOne
             ->method('save');
-
         $targetLinkTwo
-            ->method('setThemeId')
-            ->withConsecutive([123]);
+            ->method('setThemeId')->willReturnCallback(function ($arg1) {
+                if ($arg1 == 123) {
+                    return null;
+                }
+            });
         $targetLinkTwo
-            ->method('setLayoutUpdateId')
-            ->withConsecutive([2]);
+            ->method('setLayoutUpdateId')->willReturnCallback(function ($arg1) {
+                if ($arg1 == 2) {
+                    return null;
+                }
+            });
         $targetLinkTwo
-            ->method('setId')
-            ->withConsecutive([null]);
+            ->method('setId')->willReturnCallback(function ($arg1) {
+                if ($arg1 == null) {
+                    return null;
+                }
+            });
         $targetLinkTwo
             ->method('save');
-
         $linkReturnValues = $this->onConsecutiveCalls(new \ArrayIterator([$targetLinkOne, $targetLinkTwo]));
         $this->linkCollection->expects($this->any())->method('getIterator')->will($linkReturnValues);
-
         $targetUpdateOne = $this->createPartialMock(
             Update::class,
             ['__wakeup', 'setId', 'load', 'save']
@@ -317,7 +330,6 @@ class CopyServiceTest extends TestCase
             ['__wakeup', 'setId', 'load', 'save']
         );
         $targetUpdateTwo->setData(['id' => 2]);
-
         $this->updateFactoryReturn = array_merge(
             $this->updateFactoryReturn,
             [
@@ -325,7 +337,6 @@ class CopyServiceTest extends TestCase
                 $targetUpdateTwo
             ]
         );
-
         $this->object->copy($this->sourceTheme, $this->targetTheme);
     }
 

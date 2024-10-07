@@ -205,7 +205,9 @@ class Uploader extends \Magento\Framework\File\Uploader
         parent::_validateFile();
 
         if (!$this->getImageValidator()->isValid($this->_file['tmp_name'])) {
-            throw new ValidationException(__('File validation failed.'));
+            throw new ValidationException(
+                __('File validation failed. Check Image Processing Settings in the Store Configuration.')
+            );
         }
     }
 

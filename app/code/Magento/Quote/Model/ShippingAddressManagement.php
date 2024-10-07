@@ -108,7 +108,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         if ($customerAddressId) {
             $addressData = $this->addressRepository->getById($customerAddressId);
             $address = $quote->getShippingAddress()->importCustomerAddressData($addressData);
-        } elseif ($quote->getCustomerId()) {
+        } elseif ($quote->getCustomerId() && !$address->getEmail()) {
             $address->setEmail($quote->getCustomerEmail());
         }
         $address->setSameAsBilling($sameAsBilling);

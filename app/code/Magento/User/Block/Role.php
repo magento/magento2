@@ -9,7 +9,6 @@ namespace Magento\User\Block;
  * Magento_User role block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Role extends \Magento\Backend\Block\Widget\Grid\Container
@@ -37,6 +36,8 @@ class Role extends \Magento\Backend\Block\Widget\Grid\Container
     }
 
     /**
+     * Get a URL to create a role
+     *
      * @return string
      */
     public function getCreateUrl()
@@ -45,6 +46,8 @@ class Role extends \Magento\Backend\Block\Widget\Grid\Container
     }
 
     /**
+     * Prepare the layout
+     *
      * @return $this
      */
     protected function _prepareLayout()

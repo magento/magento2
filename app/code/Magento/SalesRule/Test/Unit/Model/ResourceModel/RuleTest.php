@@ -119,7 +119,7 @@ class RuleTest extends TestCase
             ->willReturn($this->resourcesMock);
 
         $this->entityManager = $this->getMockBuilder(EntityManager::class)
-            ->setMethods(['load', 'save', 'delete'])
+            ->onlyMethods(['load', 'save', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -248,7 +248,7 @@ class RuleTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForProductAttributes()
+    public static function dataProviderForProductAttributes()
     {
         return [
             [

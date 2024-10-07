@@ -248,11 +248,12 @@ class PatchApplier
                     }
                 }
             } catch (\Exception $e) {
+                $schemaPatchClass = is_object($schemaPatch) ? get_class($schemaPatch) : $schemaPatch;
                 throw new SetupException(
                     new Phrase(
                         'Unable to apply patch %1 for module %2. Original exception message: %3',
                         [
-                            get_class($schemaPatch),
+                            $schemaPatchClass,
                             $moduleName,
                             $e->getMessage()
                         ]

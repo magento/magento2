@@ -14,6 +14,7 @@
                 <show_out_of_stock>0</show_out_of_stock>
                 <stock_threshold_qty>0</stock_threshold_qty>
                 <display_product_stock_status>1</display_product_stock_status>
+                <not_available_message>2</not_available_message>
             </options>
             <item_options>
                 <manage_stock>1</manage_stock>
