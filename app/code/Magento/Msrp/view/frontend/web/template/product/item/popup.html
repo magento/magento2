@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,25 +10,25 @@
         <div class="price-box">
             <div class="map-msrp">
                 <span class="label"
-                      translate="'Price'"/>
+                      translate="'Price'"></span>
 
                 <span class="old-price map-old-price">
                     <span class="price-container price-msrp">
                         <span class="price-wrapper"
-                              html="getPrice($row())['msrp_price']"/>
+                              html="getMsrpPriceUnsanitizedHtml($row())"></span>
                     </span>
                 </span>
             </div>
 
             <div class="map-price">
                 <span class="label"
-                      translate="'Actual Price'"/>
+                      translate="'Actual Price'"></span>
 
                 <span class="actual-price">
                     <if args="isAllowed()">
                         <each args="data: getPrices($row()), as: '$price'">
                             <with args="$price">
-                                <render args="getBody()"/>
+                                <render args="getBody()"></render>
                             </with>
                         </each>
                     </if>
@@ -38,11 +38,11 @@
 
         <div class="map-form-addtocart">
             <with args="$parent.getComponentByCode('addtocart-button')">
-                <render args="getBody()" />
+                <render args="getBody()"></render>
             </with>
         </div>
     </div>
 
     <div class="map-text"
-         html="getExplanationMessage($row())"/>
+         html="getExplanationMessageUnsanitizedHtml($row())"></div>
 </div>

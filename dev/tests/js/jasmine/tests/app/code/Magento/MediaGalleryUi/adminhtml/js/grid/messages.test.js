@@ -68,7 +68,7 @@ define([
             var escapedMessage = 'escaped message';
 
             // eslint-disable-next-line max-nested-callbacks
-            spyOn(escaperInstance, 'escapeHtml').and.callFake(function () {
+            escaperInstance.escapeHtml = jasmine.createSpy().and.callFake(function () {
                 return escapedMessage;
             });
 

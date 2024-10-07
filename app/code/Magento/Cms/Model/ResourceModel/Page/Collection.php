@@ -26,15 +26,11 @@ class Collection extends AbstractCollection
     protected $_previewFlag;
 
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'cms_page_collection';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'page_collection';

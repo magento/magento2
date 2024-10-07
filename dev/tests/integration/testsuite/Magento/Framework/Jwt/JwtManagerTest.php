@@ -76,6 +76,12 @@ class JwtManagerTest extends TestCase
         ) {
             $this->verifyAgainstHeaders([$jwt->getHeader()], $recreated->getHeader());
         }
+        if ($readEncryption instanceof JwsSignatureJwks) {
+            if ($kid = $readEncryption->getJwkSet()->getKeys()[0]->getKeyId()) {
+                $this->assertNotNull($jwt->getHeader()->getParameter('kid'));
+                $this->assertEquals($kid, $jwt->getHeader()->getParameter('kid'));
+            }
+        }
         //Verifying payload
         $this->assertEquals($jwt->getPayload()->getContent(), $recreated->getPayload()->getContent());
         if ($jwt->getPayload() instanceof ClaimsPayloadInterface) {
@@ -144,7 +150,7 @@ class JwtManagerTest extends TestCase
 
     }
 
-    public function getTokenVariants(): array
+    public static function getTokenVariants(): array
     {
         /** @var JwkFactory $jwkFactory */
         $jwkFactory = Bootstrap::getObjectManager()->get(JwkFactory::class);
@@ -319,8 +325,8 @@ class JwtManagerTest extends TestCase
             ),
             null,
             [
-                new JweHeader([new PrivateHeaderParameter('tst', 2), new KeyId('1')]),
-                new JweHeader([new PrivateHeaderParameter('test2', 3), new KeyId('2')])
+                new JweHeader([new PrivateHeaderParameter('tst', 2), new KeyId('2')]),
+                new JweHeader([new PrivateHeaderParameter('test2', 3), new KeyId('1')])
             ],
             new ClaimsPayload(
                 [
@@ -354,8 +360,8 @@ class JwtManagerTest extends TestCase
         );
 
         //Keys
-        [$rsaPrivate, $rsaPublic] = $this->createRsaKeys();
-        $ecKeys = $this->createEcKeys();
+        [$rsaPrivate, $rsaPublic] = self::createRsaKeys();
+        $ecKeys = self::createEcKeys();
         $sharedSecret = random_bytes(2048);
 
         return [
@@ -366,7 +372,7 @@ class JwtManagerTest extends TestCase
             ],
             'jws-HS384' => [
                 $flatJws,
-                $enc = new JwsSignatureJwks($jwkFactory->createHs384($sharedSecret)),
+                $enc = new JwsSignatureJwks($jwkFactory->createHs384($sharedSecret, '3')),
                 [$enc]
             ],
             'jws-HS512' => [
@@ -755,7 +761,7 @@ class JwtManagerTest extends TestCase
         }
     }
 
-    public function getJwtsForHeaders(): array
+    public static function getJwtsForHeaders(): array
     {
 
         /** @var JwkFactory $jwkFactory */
@@ -981,7 +987,7 @@ class JwtManagerTest extends TestCase
      *
      * @return string[] With 1st element as private key, second - public.
      */
-    private function createRsaKeys(): array
+    private static function createRsaKeys(): array
     {
         $rsaPrivateResource = openssl_pkey_new(['private_key_bites' => 512, 'private_key_type' => OPENSSL_KEYTYPE_RSA]);
         if ($rsaPrivateResource === false) {
@@ -991,7 +997,7 @@ class JwtManagerTest extends TestCase
         if (!openssl_pkey_export($rsaPrivateResource, $rsaPrivate, 'pass')) {
             throw new \RuntimeException('Failed to read RSA private key');
         }
-        openssl_free_key($rsaPrivateResource);
+        self::freeResource($rsaPrivateResource);
 
         return [$rsaPrivate, $rsaPublic];
     }
@@ -1001,7 +1007,7 @@ class JwtManagerTest extends TestCase
      *
      * @return array Keys - bits, values contain 2 elements: 0 => private, 1 => public.
      */
-    private function createEcKeys(): array
+    private static function createEcKeys(): array
     {
         $curveNameMap = [
             256 => 'prime256v1',
@@ -1018,11 +1024,23 @@ class JwtManagerTest extends TestCase
             if (!openssl_pkey_export($privateResource, $esPrivate, 'pass')) {
                 throw new \RuntimeException('Failed to read EC private key');
             }
-            openssl_free_key($privateResource);
+            self::freeResource($privateResource);
             $ecKeys[$bits] = [$esPrivate, $esPublic];
             unset($privateResource, $esPublic, $esPrivate);
         }
 
         return $ecKeys;
+    }
+
+    /**
+     * @param mixed $resource
+     *
+     * @return void
+     */
+    private static function freeResource($resource): void
+    {
+        if (\is_resource($resource) && (version_compare(PHP_VERSION, '8.0') < 0)) {
+            openssl_free_key($resource);
+        }
     }
 }

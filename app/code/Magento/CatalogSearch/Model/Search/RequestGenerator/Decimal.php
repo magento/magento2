@@ -17,6 +17,16 @@ use Magento\Framework\Search\Request\FilterInterface;
 class Decimal implements GeneratorInterface
 {
     /**
+     * Price attribute aggregation algorithm
+     */
+    private const AGGREGATION_ALGORITHM_VARIABLE = 'price_dynamic_algorithm';
+
+    /**
+     * Default decimal attribute aggregation algorithm
+     */
+    private const DEFAULT_AGGREGATION_ALGORITHM = 'manual';
+
+    /**
      * @inheritdoc
      */
     public function getFilterData(Attribute $attribute, $filterName)
@@ -39,7 +49,9 @@ class Decimal implements GeneratorInterface
             'type' => BucketInterface::TYPE_DYNAMIC,
             'name' => $bucketName,
             'field' => $attribute->getAttributeCode(),
-            'method' => 'manual',
+            'method' => $attribute->getFrontendInput() === 'price'
+                ? '$' . self::AGGREGATION_ALGORITHM_VARIABLE . '$'
+                : self::DEFAULT_AGGREGATION_ALGORITHM,
             'metric' => [['type' => 'count']],
         ];
     }

@@ -42,6 +42,9 @@ class ReadEntityRowTest extends TestCase
      */
     protected $metadataPool;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->select = $this->createMock(Select::class);
@@ -90,7 +93,10 @@ class ReadEntityRowTest extends TestCase
         );
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $identifier = '100000001';
 
@@ -102,15 +108,17 @@ class ReadEntityRowTest extends TestCase
             ->with(['t' => 'entity_table'])
             ->willReturnSelf();
 
-        $this->select->expects($this->at(1))
+        $this->select
             ->method('where')
-            ->with('identifier = ?', $identifier)
-            ->willReturnSelf();
-
-        $this->select->expects($this->at(2))
-            ->method('where')
-            ->with('store_id = ?', 1)
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($identifier) {
+                    if ($arg1 == 'identifier = ?' && $arg2 == $identifier) {
+                        return $this->select;
+                    } elseif ($arg1 == 'store_id = ?' && $arg2 == 1) {
+                        return $this->select;
+                    }
+                }
+            );
 
         $this->connection->expects($this->once())
             ->method('fetchRow')

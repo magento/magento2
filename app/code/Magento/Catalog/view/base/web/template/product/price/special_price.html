@@ -4,23 +4,23 @@
  * See COPYING.txt for license details.
  */
 -->
-<if args="isSalable($row()) && hasSpecialPrice($row())">
+<if args="hasSpecialPrice($row())">
     <span class="special-price">
         <span class="price-container"
               css="getAdjustmentCssClasses($row())">
             <span if="label"
                   class="price-label"
-                  text="label"/>
+                  text="label"></span>
 
             <span class="price-wrapper"
                   css="priceWrapperCssClasses"
                   attr="priceWrapperAttr"
                   data-price-amount=""
                   data-price-type="finalPrice"
-                  html="getPrice($row())"/>
+                  html="getPriceUnsanitizedHtml($row())"></span>
 
             <each args="data: getAdjustments(), as: '$adj'">
-                <render args="$adj.getBody()"/>
+                <render args="$adj.getBody()"></render>
             </each>
         </span>
     </span>

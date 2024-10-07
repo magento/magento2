@@ -209,7 +209,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     private function sortSources()
     {
         uasort($this->sources, function ($firstItem, $secondItem) {
-            return $firstItem['sortOrder'] > $secondItem['sortOrder'];
+            return ($firstItem['sortOrder'] <=> $secondItem['sortOrder']);
         });
     }
 

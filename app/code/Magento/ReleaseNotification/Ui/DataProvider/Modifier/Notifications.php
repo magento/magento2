@@ -20,6 +20,9 @@ use Psr\Log\LoggerInterface;
  * Modifies the metadata returning to the Release Notification data provider
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @deprecated Starting from Magento OS 2.4.7 Magento_ReleaseNotification module is deprecated
+ * in favor of another in-product messaging mechanism
+ * @see Current in-product messaging mechanism
  */
 class Notifications implements ModifierInterface
 {
@@ -197,7 +200,8 @@ class Notifications implements ModifierInterface
     {
         $version = strtolower($this->getTargetVersion());
         $edition = strtolower($this->productMetadata->getEdition());
-        $locale = strtolower($this->session->getUser()->getInterfaceLocale());
+        $locale = $this->session->getUser()->getInterfaceLocale();
+        $locale = $locale !== null ? strtolower($locale) : '';
 
         $cacheKey = self::$cachePrefix . $version . "-" . $edition . "-" . $locale;
         $modalContent = $this->cacheStorage->load($cacheKey);

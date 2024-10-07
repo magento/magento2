@@ -6,9 +6,16 @@
 
 namespace Magento\CheckoutAgreements\Model\Checkout\Plugin;
 
+use Magento\Checkout\Api\AgreementsValidatorInterface;
+use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
 use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
+use Magento\CheckoutAgreements\Model\EmulateStore;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -37,31 +44,37 @@ class Validation
     private $activeStoreAgreementsFilter;
 
     /**
-     * Quote repository.
-     *
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     private $quoteRepository;
 
     /**
-     * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration
-     * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList
+     * @var Emulation
+     */
+    private Emulation $storeEmulation;
+
+    /**
+     * @param AgreementsValidatorInterface $agreementsValidator
+     * @param ScopeConfigInterface $scopeConfiguration
+     * @param CheckoutAgreementsListInterface $checkoutAgreementsList
      * @param ActiveStoreAgreementsFilter $activeStoreAgreementsFilter
      * @param CartRepositoryInterface $quoteRepository
+     * @param Emulation $storeEmulation
      */
     public function __construct(
         \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration,
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList,
         \Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter $activeStoreAgreementsFilter,
-        CartRepositoryInterface $quoteRepository
+        CartRepositoryInterface $quoteRepository,
+        Emulation $storeEmulation
     ) {
         $this->agreementsValidator = $agreementsValidator;
         $this->scopeConfiguration = $scopeConfiguration;
         $this->checkoutAgreementsList = $checkoutAgreementsList;
         $this->activeStoreAgreementsFilter = $activeStoreAgreementsFilter;
         $this->quoteRepository = $quoteRepository;
+        $this->storeEmulation = $storeEmulation;
     }
 
     /**
@@ -82,24 +95,31 @@ class Validation
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         if ($this->isAgreementEnabled()) {
-            $this->validateAgreements($paymentMethod);
+            $quote = $this->quoteRepository->get($cartId);
+            $storeId = $quote->getStoreId();
+            $this->validateAgreements($paymentMethod, $storeId);
         }
     }
 
     /**
      * Validate agreements base on the payment method
      *
-     * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @param PaymentInterface $paymentMethod
+     * @param int $storeId
      * @return void
+     * @throws CouldNotSaveException
      */
-    protected function validateAgreements(\Magento\Quote\Api\Data\PaymentInterface $paymentMethod)
+    private function validateAgreements(\Magento\Quote\Api\Data\PaymentInterface $paymentMethod, int $storeId)
     {
         $agreements = $paymentMethod->getExtensionAttributes() === null
             ? []
             : $paymentMethod->getExtensionAttributes()->getAgreementIds();
 
-        if (!$this->agreementsValidator->isValid($agreements)) {
+        $this->storeEmulation->startEnvironmentEmulation($storeId);
+        $isValid = $this->agreementsValidator->isValid($agreements);
+        $this->storeEmulation->stopEnvironmentEmulation();
+
+        if (!$isValid) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(
                 __(
                     "The order wasn't placed. "

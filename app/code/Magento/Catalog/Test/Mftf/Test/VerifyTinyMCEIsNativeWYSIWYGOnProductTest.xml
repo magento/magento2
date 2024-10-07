@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyTinyMCEIsNativeWYSIWYGOnProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="MAGETWO-72114-TinyMCE v4.6 as a native WYSIWYG editor"/>
+            <group value="Catalog"/>
+            <title value="Admin should see TinyMCE is the native WYSIWYG on Product Page"/>
+            <description value="Admin should see TinyMCE is the native WYSIWYG on Product Page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-81819"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
+        </before>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct">
+            <argument name="attributeSetId" value="{{AddToDefaultSet.attributeSetId}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait1"/>
+        <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+        <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillQuantity">
+            <argument name="productQty" value="{{_defaultProduct.quantity}}"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
+        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
+        <waitForElementVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForDescription" />
+        <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="TinyMCEDescription" />
+        <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.EditArea}}" stepKey="focusProductDescriptionWysiwyg"/>
+        <executeJS function="tinyMCE.get('product_form_description').setContent('Hello World!');" stepKey="executeJSFillContent1"/>
+        <waitForElementVisible selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForShortDescription" />
+        <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="TinyMCEShortDescription" />
+        <click selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.EditArea}}" stepKey="focusProductShortDescriptionWysiwyg"/>
+        <executeJS function="tinyMCE.get('product_form_short_description').setContent('Hello World! Short Content');" stepKey="executeJSFillContent2"/>
+        <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDesShowHideBtn1" />
+        <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn1" />
+        <waitForElementVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImage1" />
+        <see selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageBtn}}" userInput="Insert Image..." stepKey="seeInsertImage1"/>
+        <dontSee selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="insertWidget1" />
+        <dontSee selector="{{TinyMCESection.InsertVariableBtn}}" stepKey="insertVariable1" />
+        <scrollTo selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDesShowHideBtn2" />
+        <click selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn2" />
+        <waitForElementVisible selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImage2" />
+        <see selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageBtn}}" userInput="Insert Image..." stepKey="seeInsertImage2"/>
+        <dontSee selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="insertWidget2" />
+        <dontSee selector="{{TinyMCESection.InsertVariableBtn}}" stepKey="insertVariable2" />
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+        <!-- Go to storefront product page, assert product content -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <scrollTo selector="{{StorefrontProductInfoMainSection.stock}}" stepKey="scrollToStock"/>
+        <see userInput="Hello World!" selector="{{StorefrontProductInfoMainSection.productDescription}}" stepKey="assertProductDescription"/>
+        <see userInput="Hello World! Short Content" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" stepKey="assertProductShortDescription"/>
+        <after>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

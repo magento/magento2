@@ -9,13 +9,19 @@ namespace Magento\Catalog\Block\Adminhtml\Category\Tab;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
+use Magento\Catalog\Test\Fixture\AssignProducts as AssignProductsFixture;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Checks grid data on the tab 'Products in Category' category view page.
@@ -96,31 +102,31 @@ class ProductTest extends TestCase
      *
      * @return array
      */
-    public function optionsFilterProvider(): array
+    public static function optionsFilterProvider(): array
     {
         return [
             'filter_yes' => [
-                'filter_column' => 'in_category=1',
-                'id_category' => 333,
-                'store_id' => 1,
+                'filterColumn' => 'in_category=1',
+                'categoryId' => 333,
+                'storeId' => 1,
                 'items' => [
                     'simple333',
                     'simple2',
                 ],
             ],
             'filter_no' => [
-                'filter_column' => 'in_category=0',
-                'id_category' => 333,
-                'store_id' => 1,
+                'filterColumn' => 'in_category=0',
+                'categoryId' => 333,
+                'storeId' => 1,
                 'items' => [
                     'product_disabled',
                     'simple',
                 ],
             ],
             'filter_any' => [
-                'filter_column' => "",
-                'id_category' => 333,
-                'store_id' => 1,
+                'filterColumn' => "",
+                'categoryId' => 333,
+                'storeId' => 1,
                 'items' => [
                     'product_disabled',
                     'simple333',
@@ -129,13 +135,109 @@ class ProductTest extends TestCase
                 ],
             ],
             'flag_status' => [
-                'filter_column' => 'status=1',
-                'id_category' => 333,
-                'store_id' => 1,
+                'filterColumn' => 'status=1',
+                'categoryId' => 333,
+                'storeId' => 1,
                 'items' => [
                     'simple333',
                     'simple2',
                     'simple',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider sortingOptionsProvider
+     * @param string $sortField
+     * @param string $sortDirection
+     * @param string $store
+     * @param array $items
+     * @return void
+     */
+    #[
+        DataFixture(CategoryFixture::class, ['name' => 'CategoryA'], as: 'category'),
+        DataFixture(
+            ProductFixture::class,
+            ['name' => 'ProductA','sku' => 'ProductA'],
+            as: 'productA'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            ['name' => 'ProductB','sku' => 'ProductB'],
+            as: 'productB'
+        ),
+        DataFixture(
+            AssignProductsFixture::class,
+            ['products' => ['$productA$', '$productB$'], 'category' => '$category$'],
+            as: 'assignProducts'
+        ),
+        DataFixture(StoreFixture::class, ['code' => 'second_store'], as: 'store2'),
+    ]
+    public function testSortProductsInCategory(
+        string $sortField,
+        string $sortDirection,
+        string $store,
+        array $items
+    ): void {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $fixtures->get('productA')->addAttributeUpdate('name', 'SimpleProductA', $fixtures->get('store2')->getId());
+        $fixtures->get('productB')->addAttributeUpdate('name', 'SimpleProductB', $fixtures->get('store2')->getId());
+        $collection = $this->sortProductsInGrid(
+            $sortField,
+            $sortDirection,
+            (int)$fixtures->get('category')->getId(),
+            $store === 'default' ? 1 : (int)$fixtures->get($store)->getId(),
+        );
+        $productNames = [];
+        foreach ($collection as $product) {
+            $productNames[] = $product->getName();
+        }
+        $this->assertEquals($productNames, $items);
+    }
+
+    /**
+     * Different variations for sorting test.
+     *
+     * @return array
+     */
+    public static function sortingOptionsProvider(): array
+    {
+        return [
+            'default_store_sort_name_asc' => [
+                'sortField' => 'name',
+                'sortDirection' => 'asc',
+                'store' => 'default',
+                'items' => [
+                    'ProductA',
+                    'ProductB',
+                ],
+            ],
+            'default_store_sort_name_desc' => [
+                'sortField' => 'name',
+                'sortDirection' => 'desc',
+                'store' => 'default',
+                'items' => [
+                    'ProductB',
+                    'ProductA',
+                ],
+            ],
+            'second_store_sort_name_asc' => [
+                'sortField' => 'name',
+                'sortDirection' => 'asc',
+                'store' => 'store2',
+                'items' => [
+                    'SimpleProductA',
+                    'SimpleProductB',
+                ],
+            ],
+            'second_store_sort_name_desc' => [
+                'sortField' => 'name',
+                'sortDirection' => 'desc',
+                'store' => 'store2',
+                'items' => [
+                    'SimpleProductB',
+                    'SimpleProductA',
                 ],
             ],
         ];
@@ -173,5 +275,34 @@ class ProductTest extends TestCase
     {
         $this->registry->unregister('category');
         $this->registry->register('category', $category);
+    }
+
+    /**
+     * Sort products in grid
+     *
+     * @param string $sortField
+     * @param string $sortDirection
+     * @param int $categoryId
+     * @param int $storeId
+     * @return AbstractCollection
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function sortProductsInGrid(
+        string $sortField,
+        string $sortDirection,
+        int $categoryId,
+        int $storeId
+    ): AbstractCollection {
+        $this->registerCategory($this->categoryRepository->get($categoryId));
+        $block = $this->layout->createBlock(Product::class);
+        $block->getRequest()->setParams([
+            'id' => $categoryId,
+            'sort' => $sortField,
+            'dir' => $sortDirection,
+            'store' => $storeId,
+        ]);
+        $block->toHtml();
+
+        return $block->getCollection();
     }
 }

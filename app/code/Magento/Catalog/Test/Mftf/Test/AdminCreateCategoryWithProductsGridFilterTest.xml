@@ -28,7 +28,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct2">
                 <argument name="product" value="SimpleProduct"/>
             </actionGroup>
-            <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="NavigateToAndResetProductGridToDefaultView"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="NavigateToAndResetProductGridToDefaultView"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
@@ -77,6 +77,8 @@
         <!--Verify product in Store Front Page-->
         <amOnPage url="{{StorefrontProductPage.url(SimpleProduct.urlKey)}}" stepKey="seeDefaultProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageToLoad1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductInStoreFrontPage"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductInStoreFrontPage">
+            <argument name="value" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
     </test>
 </tests>

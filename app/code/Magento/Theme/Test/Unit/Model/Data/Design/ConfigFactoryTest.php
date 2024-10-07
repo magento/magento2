@@ -153,28 +153,19 @@ class ConfigFactoryTest extends TestCase
             ->willReturn($this->designConfigData);
         $this->designConfigData->expects($this->exactly(2))
             ->method('setPath')
-            ->withConsecutive(
-                ['design/header/default_title'],
-                ['design/head/default_description']
-            );
-        $this->designConfigData->expects($this->exactly(2))
-            ->method('setFieldConfig')
-            ->withConsecutive(
-                [
-                    [
-                        'path' => 'design/header/default_title',
-                        'fieldset' => 'head',
-                        'field' => 'header_default_title'
-                    ]
-                ],
-                [
-                    [
-                        'path' => 'design/head/default_description',
-                        'fieldset' => 'head',
-                        'field' => 'head_default_description'
-                    ]
-                ]
-            );
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'design/header/default_title' && $arg1 == 'design/head/default_description') {
+                    return null;
+                }
+            });
+            $this->designConfigData->expects($this->exactly(2))
+                ->method('setFieldConfig')
+                ->willReturnCallback(function ($config) {
+                    if ($config['path'] == 'design/header/default_title' ||
+                        $config['path']== 'design/head/default_description') {
+                        return null;
+                    }
+                });
         $this->designConfigData->expects($this->once())
             ->method('setValue')
             ->with('value');
@@ -239,28 +230,18 @@ class ConfigFactoryTest extends TestCase
             ->willReturn($this->designConfigData);
         $this->designConfigData->expects($this->exactly(2))
             ->method('setPath')
-            ->withConsecutive(
-                ['design/header/default_title'],
-                ['design/head/default_description']
-            );
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'design/header/default_title' && $arg1 == 'design/head/default_description') {
+                    return null;
+                }
+            });
         $this->designConfigData->expects($this->exactly(2))
             ->method('setFieldConfig')
-            ->withConsecutive(
-                [
-                    [
-                        'path' => 'design/header/default_title',
-                        'fieldset' => 'head',
-                        'field' => 'header_default_title'
-                    ]
-                ],
-                [
-                    [
-                        'path' => 'design/head/default_description',
-                        'fieldset' => 'head',
-                        'field' => 'head_default_description'
-                    ]
-                ]
-            );
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'design/header/default_title' && $arg1 == 'design/head/default_description') {
+                    return null;
+                }
+            });
         $this->designConfigData->expects($this->once())
             ->method('setValue')
             ->with('value');

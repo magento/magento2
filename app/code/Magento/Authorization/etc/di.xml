@@ -24,4 +24,6 @@
         </arguments>
     </type>
     <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\Authorization\Model\CompositeUserContext"/>
+    <preference for="Magento\Framework\App\Backpressure\IdentityProviderInterface"
+                type="Magento\Authorization\Model\IdentityProvider"/>
 </config>

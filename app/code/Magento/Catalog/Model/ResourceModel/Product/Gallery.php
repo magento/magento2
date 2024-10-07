@@ -453,6 +453,9 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $select = $this->getConnection()->select()->from(
             $this->getTable(self::GALLERY_VALUE_TABLE)
         )->where(
+            $linkField . ' = ?',
+            $originalProductId
+        )->where(
             'value_id IN(?)',
             array_keys($valueIdMap)
         );

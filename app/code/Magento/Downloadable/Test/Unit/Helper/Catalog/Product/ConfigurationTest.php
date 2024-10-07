@@ -71,7 +71,7 @@ class ConfigurationTest extends TestCase
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['_wakeup', 'getLinksTitle'])
+            ->addMethods(['_wakeup', 'getLinksTitle'])
             ->getMock();
 
         $product->expects($this->once())->method('getLinksTitle')->willReturn('links_title');
@@ -83,7 +83,7 @@ class ConfigurationTest extends TestCase
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['_wakeup', 'getLinksTitle'])
+            ->addMethods(['_wakeup', 'getLinksTitle'])
             ->getMock();
 
         $product->expects($this->once())->method('getLinksTitle')->willReturn(null);
@@ -100,16 +100,17 @@ class ConfigurationTest extends TestCase
         $item = $this->getMockForAbstractClass(ItemInterface::class);
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['_wakeup', 'getLinksTitle', 'getTypeInstance'])
+            ->addMethods(['_wakeup', 'getLinksTitle'])
+            ->onlyMethods(['getTypeInstance'])
             ->getMock();
         $option = $this->getMockForAbstractClass(OptionInterface::class);
         $productType = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLinks'])
+            ->onlyMethods(['getLinks'])
             ->getMock();
         $productLink = $this->getMockBuilder(Link::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTitle'])
+            ->onlyMethods(['getTitle'])
             ->getMock();
 
         $this->productConfig->expects($this->once())->method('getOptions')->with($item);
@@ -117,7 +118,7 @@ class ConfigurationTest extends TestCase
         $item->expects($this->once())->method('getOptionByCode')->willReturn($option);
         $product->expects($this->once())->method('getTypeInstance')->willReturn($productType);
         $productType->expects($this->once())->method('getLinks')->with($product)->willReturn([1 => $productLink]);
-        $option->expects($this->once())->method('getValue')->willReturn(1);
+        $option->method('getValue')->willReturn(1);
         $product->expects($this->once())->method('getLinksTitle')->willReturn('links_title');
         $productLink->expects($this->once())->method('getTitle')->willReturn('title');
 

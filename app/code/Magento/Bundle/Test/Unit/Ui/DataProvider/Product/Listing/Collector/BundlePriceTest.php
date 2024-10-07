@@ -47,7 +47,7 @@ class BundlePriceTest extends TestCase
             ->getMockForAbstractClass();
         $this->priceInfoFactory = $this->getMockBuilder(PriceInfoInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->formattedPriceInfoBuilder = $this->getMockBuilder(FormattedPriceInfoBuilder::class)
             ->disableOriginalConstructor()
@@ -83,9 +83,9 @@ class BundlePriceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $priceInfo = $this->getMockBuilder(PriceInfoInterface::class)
-            ->setMethods(
+            ->addMethods(['getPrice'])
+            ->onlyMethods(
                 [
-                    'getPrice',
                     'setMaxPrice',
                     'setMaxRegularPrice',
                     'setMinimalPrice',

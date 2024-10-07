@@ -131,6 +131,11 @@ define([
                 data: '<spa>n id="id1">Some string</span>',
                 expected: 'n id="id1"&gt;Some string',
                 allowedTags: ['span']
+            },
+            'link with script content': {
+                data: '<a href="javascript:void">Click</a>',
+                expected: '<a>Click</a>',
+                allowedTags: ['a']
             }
         };
     }

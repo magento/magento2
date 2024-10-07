@@ -35,6 +35,30 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Check PDO stringify fetches options
+     */
+    public function testStringifyFetchesTrue(): void
+    {
+        $tableName = $this->resourceConnection->getTableName('table_with_int_column');
+        $columnId = 'integer_column';
+        $adapter = $this->getDbAdapter();
+
+        $table = $adapter
+            ->newTable($tableName)
+            ->addColumn($columnId, Table::TYPE_INTEGER);
+        $adapter->createTable($table);
+        $adapter->insert($tableName, [$columnId => 100]);
+
+        $select = $adapter->select()
+            ->from($tableName)
+            ->columns([$columnId])
+            ->limit(1);
+        $result = $adapter->fetchOne($select);
+        $this->assertIsString($result);
+        $adapter->dropTable($tableName);
+    }
+
+    /**
      * Test lost connection re-initializing
      *
      * @throws \Exception
@@ -256,16 +280,16 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         $adapter->dropTable($tableName);
     }
 
-    public function getAutoIncrementFieldDataProvider()
+    public static function getAutoIncrementFieldDataProvider()
     {
         return [
             'auto increment field' => [
-                'field options' => ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
-                'expected result' => 'row_id',
+                'options' => ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'expected' => 'row_id',
             ],
             'non auto increment field' => [
-                'field options' => ['unsigned' => true, 'nullable' => false,],
-                'expected result' => false,
+                'options' => ['unsigned' => true, 'nullable' => false,],
+                'expected' => false,
             ]
         ];
     }

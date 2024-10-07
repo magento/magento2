@@ -14,5 +14,6 @@
         <element name="scope" type="select" selector="//select[@name='scope_id']"/>
         <element name="synonyms" type="textarea" selector="//textarea[@name='synonyms']"/>
         <element name="merge" type="checkbox" selector="//input[@name='mergeOnConflict']"/>
+        <element name="selectScope" type="select" selector="//option[contains(text(),'{{scopeName}}')]" parameterized="true"/>
     </section>
 </sections>

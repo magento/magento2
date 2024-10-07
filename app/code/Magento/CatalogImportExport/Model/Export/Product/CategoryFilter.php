@@ -25,6 +25,7 @@ class CategoryFilter implements ProductFilterInterface
         $value = trim($filters[self::NAME] ?? '');
         if ($value) {
             $collection->addCategoriesFilter(['in' => explode(',', $value)]);
+            $collection->setFlag(self::NAME . '_filter_applied');
         }
         return $collection;
     }

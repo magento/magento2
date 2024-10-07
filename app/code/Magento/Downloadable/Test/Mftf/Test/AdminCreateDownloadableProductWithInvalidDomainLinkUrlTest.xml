@@ -14,7 +14,7 @@
             <title value="Create Downloadable Product with invalid domain link url"/>
             <description value="Admin should not be able to create downloadable product with invalid domain link url"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-18282"/>
+            <testCaseId value="MC-28757"/>
             <useCaseId value="MC-17700"/>
             <group value="Downloadable"/>
         </annotations>
@@ -40,6 +40,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAfterAddingDomainToAllowlist" after="addDownloadableProductLinkAgain" />
         <scrollTo selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(downloadableLink.title)}}" stepKey="scrollToLinks"/>
         <click selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(downloadableLink.title)}}" stepKey="selectProductLink"/>
+        <scrollTo selector="{{StorefrontProductInfoMainSection.AddToCart}}" before="addProductToCart" stepKey="scrollToAddToCart"/>
         <see selector="{{CheckoutCartProductSection.ProductPriceByName(DownloadableProduct.name)}}" userInput="$52.99" stepKey="assertProductPriceInCart"/>
     </test>
 </tests>

@@ -122,10 +122,18 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
         $notExistentItemId = 999;
 
-        $this->expectExceptionMessage("Could not find cart item with id: {$notExistentItemId}.");
-
         $query = $this->getQuery($maskedQuoteId, $notExistentItemId, 2);
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+
+        $this->assertArrayHasKey('updateCartItems', $response);
+        $this->assertArrayHasKey('errors', $response['updateCartItems']);
+
+        $responseError = $response['updateCartItems']['errors'][0];
+        $this->assertEquals(
+            "Could not find cart item with id: {$notExistentItemId}.",
+            $responseError['message']
+        );
+        $this->assertEquals('COULD_NOT_FIND_CART_ITEM', $responseError['code']);
     }
 
     /**
@@ -150,10 +158,18 @@ class UpdateCartItemsTest extends GraphQlAbstract
             ->getItemByProduct($this->productRepository->get('virtual-product'))
             ->getId();
 
-        $this->expectExceptionMessage("Could not find cart item with id: {$secondQuoteItemId}.");
-
         $query = $this->getQuery($firstQuoteMaskedId, $secondQuoteItemId, 2);
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+
+        $this->assertArrayHasKey('updateCartItems', $response);
+        $this->assertArrayHasKey('errors', $response['updateCartItems']);
+
+        $responseError = $response['updateCartItems']['errors'][0];
+        $this->assertEquals(
+            "Could not find cart item with id: {$secondQuoteItemId}.",
+            $responseError['message']
+        );
+        $this->assertEquals('COULD_NOT_FIND_CART_ITEM', $responseError['code']);
     }
 
     /**
@@ -213,10 +229,11 @@ class UpdateCartItemsTest extends GraphQlAbstract
     /**
      * @param string $input
      * @param string $message
+     * @param string $errorCode
      * @dataProvider dataProviderUpdateWithMissedRequiredParameters
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      */
-    public function testUpdateWithMissedItemRequiredParameters(string $input, string $message)
+    public function testUpdateWithMissedItemRequiredParameters(string $input, string $message, string $errorCode)
     {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
@@ -234,22 +251,33 @@ mutation {
         quantity
       }
     }
+    errors {
+      message
+      code
+    }
   }
 }
 QUERY;
-        $this->expectExceptionMessage($message);
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+
+        $this->assertArrayHasKey('updateCartItems', $response);
+        $this->assertArrayHasKey('errors', $response['updateCartItems']);
+
+        $responseError = $response['updateCartItems']['errors'][0];
+        $this->assertEquals($message, $responseError['message']);
+        $this->assertEquals($errorCode, $responseError['code']);
     }
 
     /**
      * @return array
      */
-    public function dataProviderUpdateWithMissedRequiredParameters(): array
+    public static function dataProviderUpdateWithMissedRequiredParameters(): array
     {
         return [
             'missed_cart_item_qty' => [
                 'cart_items: [{ cart_item_id: 1 }]',
-                'Required parameter "quantity" for "cart_items" is missing.'
+                'Required parameter "quantity" for "cart_items" is missing.',
+                'REQUIRED_PARAMETER_MISSING'
             ],
         ];
     }
@@ -278,6 +306,10 @@ mutation {
         id
         quantity
       }
+    }
+    errors {
+      message
+      code
     }
   }
 }
