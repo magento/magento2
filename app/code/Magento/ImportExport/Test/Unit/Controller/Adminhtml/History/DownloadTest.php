@@ -177,7 +177,7 @@ class DownloadTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             'Normal file name' => ['filename.csv', 'filename.csv'],

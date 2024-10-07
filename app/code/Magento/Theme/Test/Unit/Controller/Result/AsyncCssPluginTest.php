@@ -68,14 +68,14 @@ class AsyncCssPluginTest extends TestCase
      *
      * @return array
      */
-    public function renderResultDataProvider(): array
+    public static function renderResultDataProvider(): array
     {
         return [
             [
                 "content" => "<head><link rel=\"stylesheet\" href=\"css/async.css\">" .
                     "<style>.critical-css{}</style>" .
                     "</head>",
-                "flag" => true,
+                "isSetFlag" => true,
                 "result" => "<head><style>.critical-css{}</style>\n" .
                     "<link " .
                         "rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" " .
@@ -86,7 +86,7 @@ class AsyncCssPluginTest extends TestCase
                 "content" => "<head><link rel=\"stylesheet\" href=\"css/async.css\">" .
                     "<link rel=\"preload\" href=\"other-file.html\">" .
                     "</head>",
-                "flag" => true,
+                "isSetFlag" => true,
                 "result" => "<head><link rel=\"preload\" href=\"other-file.html\">\n" .
                     "<link " .
                         "rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" " .
@@ -97,7 +97,7 @@ class AsyncCssPluginTest extends TestCase
                 "content" => "<head><link rel=\"stylesheet\" href=\"css/async.css\">" .
                     "<link rel=\"preload\" href=\"other-file.html\">" .
                     "</head>",
-                "flag" => false,
+                "isSetFlag" => false,
                 "result" => "<head><link rel=\"stylesheet\" href=\"css/async.css\">" .
                     "<link rel=\"preload\" href=\"other-file.html\">" .
                     "</head>",
@@ -107,7 +107,7 @@ class AsyncCssPluginTest extends TestCase
                     "<link rel=\"stylesheet\" href=\"css/second.css\">" .
                     "<style>.critical-css{}</style>" .
                     "</head>",
-                "flag" => true,
+                "isSetFlag" => true,
                 "result" => "<head><style>.critical-css{}</style>\n" .
                     "<link " .
                         "rel=\"stylesheet\" media=\"print\" onload=\"this.onload=null;this.media='all'\" " .
@@ -119,12 +119,12 @@ class AsyncCssPluginTest extends TestCase
             ],
             [
                 "content" => "<head><style>.critical-css{}</style></head>",
-                "flag" => false,
+                "isSetFlag" => false,
                 "result" => "<head><style>.critical-css{}</style></head>"
             ],
             [
                 "content" => "<head><style>.critical-css{}</style></head>",
-                "flag" => true,
+                "isSetFlag" => true,
                 "result" => "<head><style>.critical-css{}</style></head>"
             ]
         ];
@@ -163,7 +163,7 @@ class AsyncCssPluginTest extends TestCase
      *
      * @return array
      */
-    public function ifGetContentIsNotAStringDataProvider(): array
+    public static function ifGetContentIsNotAStringDataProvider(): array
     {
         return [
             [

@@ -122,7 +122,7 @@ class SetLinkStatusObserverTest extends TestCase
         return [
             [
                 'orderState' => Order::STATE_HOLDED,
-                'mapping' => [
+                'orderStateMapping' => [
                     Order::STATE_HOLDED => 'pending',
                     Order::STATE_PENDING_PAYMENT => 'payment_pending',
                     Order::STATE_PAYMENT_REVIEW => 'payment_review'
@@ -131,7 +131,7 @@ class SetLinkStatusObserverTest extends TestCase
             ],
             [
                 'orderState' => Order::STATE_PENDING_PAYMENT,
-                'mapping' => [
+                'orderStateMapping' => [
                     Order::STATE_HOLDED => 'pending',
                     Order::STATE_PENDING_PAYMENT => 'pending_payment',
                     Order::STATE_PAYMENT_REVIEW => 'payment_review'
@@ -140,7 +140,7 @@ class SetLinkStatusObserverTest extends TestCase
             ],
             [
                 'orderState' => Order::STATE_PAYMENT_REVIEW,
-                'mapping' => [
+                'orderStateMapping' => [
                     Order::STATE_HOLDED => 'pending',
                     Order::STATE_PENDING_PAYMENT => 'payment_pending',
                     Order::STATE_PAYMENT_REVIEW => 'payment_review'

@@ -70,7 +70,7 @@ class LegacyDataFixturePathResolverTest extends TestCase
     /**
      * @return array
      */
-    public function fixtureDataProvider(): array
+    public static function fixtureDataProvider(): array
     {
         return [
             [
