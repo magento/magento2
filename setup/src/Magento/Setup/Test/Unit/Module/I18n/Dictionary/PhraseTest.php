@@ -27,7 +27,7 @@ class PhraseTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderPhraseCreation()
+    public static function dataProviderPhraseCreation()
     {
         return [
             [['phrase', 'translation'], 'getPhrase', 'phrase'],
@@ -67,7 +67,7 @@ class PhraseTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderWrongParametersWhilePhraseCreation()
+    public static function dataProviderWrongParametersWhilePhraseCreation()
     {
         return [
             [[null, 'translation'], 'Missed phrase'],
@@ -93,7 +93,7 @@ class PhraseTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderAccessorMethods()
+    public static function dataProviderAccessorMethods()
     {
         return [
             ['value1', 'setPhrase', 'getPhrase'],

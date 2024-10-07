@@ -71,7 +71,7 @@ class ScopeResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getScopeDataProvider(): array
+    public static function getScopeDataProvider(): array
     {
         return [[null], [1]];
     }

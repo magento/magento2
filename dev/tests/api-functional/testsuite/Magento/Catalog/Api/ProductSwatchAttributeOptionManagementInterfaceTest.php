@@ -57,7 +57,7 @@ class ProductSwatchAttributeOptionManagementInterfaceTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function addDataProvider()
+    public static function addDataProvider()
     {
         $optionPayload = [
             AttributeOptionInterface::LABEL => 'new color',

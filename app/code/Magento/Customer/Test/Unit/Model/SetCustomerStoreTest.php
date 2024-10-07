@@ -85,7 +85,7 @@ class SetCustomerStoreTest extends TestCase
      *
      * @return array
      */
-    public function requestParamsDataProvider(): array
+    public static function requestParamsDataProvider(): array
     {
         return [
             [[]],
