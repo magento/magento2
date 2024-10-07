@@ -14,6 +14,6 @@
         <element name="emptyCartMessage" type="text" selector=".cart-empty>p"/>
         <element name="errorMessageText" type="text" selector="//div[contains(@class, 'message-error')]/div[text()='{{var}}']" parameterized="true"/>
         <element name="backorderErrorMessage" type="text" selector=".//*[@class='cart item']//div[@class='cart item message notice']"/>
-        <element name="invalidAddressError" type="text" selector="//div[contains(text(),'PayPal gateway has rejected request. A match of the Shipping Address City, State, and Postal Code failed (#10736: Shipping Address Invalid City State Postal Code)')]"/>
+        <element name="invalidAddressError" type="text" selector="//div[contains(text(),'{{errorMessageText}}')]" parameterized="true"/>
     </section>
 </sections>
