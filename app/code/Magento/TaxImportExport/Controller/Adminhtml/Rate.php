@@ -5,10 +5,14 @@
  */
 namespace Magento\TaxImportExport\Controller\Adminhtml;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Response\Http\FileFactory;
+
 /**
  * Adminhtml tax rate controller
  */
-abstract class Rate extends \Magento\Backend\App\Action
+abstract class Rate extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -18,19 +22,13 @@ abstract class Rate extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Tax::manage_tax';
 
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
-     */
-    protected $fileFactory;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param Context $context
+     * @param FileFactory $fileFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        Context $context,
+        protected readonly FileFactory $fileFactory
     ) {
-        $this->fileFactory = $fileFactory;
         parent::__construct($context);
     }
 }

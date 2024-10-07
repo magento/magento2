@@ -8,8 +8,10 @@ namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\View\Result\Layout;
+use Magento\TaxImportExport\Controller\Adminhtml\Rate;
 
-class ExportXml extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
+class ExportXml extends Rate
 {
     /**
      * Export rates grid to XML format
@@ -18,7 +20,7 @@ class ExportXml extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
      */
     public function execute()
     {
-        /** @var \Magento\Framework\View\Result\Layout $resultLayout */
+        /** @var Layout $resultLayout */
         $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
         $content = $resultLayout->getLayout()->getChildBlock('adminhtml.tax.rate.grid', 'grid.export');
 

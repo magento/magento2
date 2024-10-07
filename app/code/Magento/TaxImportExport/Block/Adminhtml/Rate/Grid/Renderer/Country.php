@@ -9,15 +9,18 @@
  */
 namespace Magento\TaxImportExport\Block\Adminhtml\Rate\Grid\Renderer;
 
-class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Country
+use Magento\Backend\Block\Widget\Grid\Column\Renderer\Country as ColumnRendererCountry;
+use Magento\Framework\DataObject;
+
+class Country extends ColumnRendererCountry
 {
     /**
      * Render column for export
      *
-     * @param \Magento\Framework\DataObject $row
+     * @param DataObject $row
      * @return string
      */
-    public function renderExport(\Magento\Framework\DataObject $row)
+    public function renderExport(DataObject $row)
     {
         return $row->getData($this->getColumn()->getIndex());
     }

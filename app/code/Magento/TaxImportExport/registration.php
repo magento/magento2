@@ -6,4 +6,8 @@
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_TaxImportExport', __DIR__);
+ComponentRegistrar::register(
+    ComponentRegistrar::MODULE,
+    'Magento_TaxImportExport',
+    __DIR__
+);

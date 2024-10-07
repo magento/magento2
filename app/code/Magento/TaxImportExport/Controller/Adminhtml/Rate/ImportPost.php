@@ -5,36 +5,41 @@
  */
 namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
 
+use Exception;
+use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TaxImportExport\Controller\Adminhtml\Rate;
+use Magento\TaxImportExport\Model\Rate\CsvImportHandler;
 
-class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
+class ImportPost extends Rate
 {
     /**
      * import action from import/export tax
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return ResultRedirect
      */
     public function execute()
     {
         $importRatesFile = $this->getRequest()->getFiles('import_rates_file');
         if ($this->getRequest()->isPost() && isset($importRatesFile['tmp_name'])) {
             try {
-                /** @var $importHandler \Magento\TaxImportExport\Model\Rate\CsvImportHandler */
+                /** @var CsvImportHandler $importHandler */
                 $importHandler = $this->_objectManager->create(
-                    \Magento\TaxImportExport\Model\Rate\CsvImportHandler::class
+                    CsvImportHandler::class
                 );
                 $importHandler->importFromCsvFile($importRatesFile);
 
                 $this->messageManager->addSuccess(__('The tax rate has been imported.'));
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError(__('Invalid file upload attempt'));
             }
         } else {
             $this->messageManager->addError(__('Invalid file upload attempt'));
         }
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var ResultRedirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setUrl($this->_redirect->getRedirectUrl());
         return $resultRedirect;
