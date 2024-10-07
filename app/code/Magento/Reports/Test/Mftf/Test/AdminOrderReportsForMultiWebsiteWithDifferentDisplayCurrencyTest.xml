@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderReportsForMultiWebsiteWithDifferentDisplayCurrencyTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Admin Order Reports  For Multi Website With Different Display Currency(USD And EUR) Test"/>
+            <title value="Admin Order Reports For Multi Website With Different Display Currency Test"/>
+            <description value="Admin Order Reports For Multi Website With Different Display Currency Test"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-3276"/>
+            <group value="reports"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable"/>
+            <!--Set catalog price scope to Global-->
+            <comment userInput="Set catalog price scope to Website" stepKey="commentSetPriceScope"/>
+            <magentoCLI command="config:set catalog/price/scope 1" stepKey="setPriceScopeWebsite"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+                <argument name="productId" value="$createProduct.id$"/>
+            </actionGroup>
+            <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="assignProductToSecondWebsite">
+                <argument name="website" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminNavigateToCurrencySetupPageActionGroup" stepKey="goToCurrencySetupPage"/>
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="switchToMainWebsite">
+                <argument name="website" value="customWebsite"/>
+            </actionGroup>
+            <uncheckOption selector="{{AdminConfigSection.allowedCurrencyCheckbox}}" stepKey="uncheckUseSystemValueDisplayCurrency"/>
+            <uncheckOption selector="{{AdminConfigSection.defaultCurrencyCheckbox}}" stepKey="uncheckUseSystemValueAllowedCurrency"/>
+            <selectOption selector="{{AdminConfigSection.defaultCurrency}}" userInput="Euro" stepKey="selectAllowedDisplayCurrency"/>
+            <selectOption selector="{{AdminConfigSection.allowedCurrencies}}" parameterArray="['Euro']" stepKey="selectDefaultDisplayCurrency"/>
+            <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="saveStoreConfiguration"/>
+
+            <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="gotToCurrencyRatesPageSecondTime"/>
+            <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForLoadRatesPageSecondTime"/>
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="setCurrencyRates">
+                <argument name="firstCurrency" value="USD"/>
+                <argument name="secondCurrency" value="EUR"/>
+                <argument name="rate" value="0.8"/>
+            </actionGroup>
+
+        </before>
+        <after>
+            <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
+            <magentoCLI command="config:set catalog/price/scope 1" stepKey="setCatalogPriceScopeToGlobal"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersFilters"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+        </after>
+        <!--Create customer account for Second Website-->
+        <actionGroup ref="StorefrontOpenProductPageUsingStoreCodeInUrlActionGroup" stepKey="openProductPageUsingStoreCodeInUrl">
+            <argument name="product" value="$createProduct$"/>
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProductToCart"/>
+        <!-- Go to Checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+
+        <!-- Fill all required fields with valid data and select Flat Rate, price = 5, shipping -->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+            <argument name="shippingMethod" value="Flat Rate"/>
+            <argument name="customerAddressVar" value="US_Address_CA" />
+        </actionGroup>
+
+        <!-- Select payment solution -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="clickCheckMoneyOrderPayment"/>
+
+        <!-- Place Order: order is successfully placed -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumberEUR"/>
+
+        <actionGroup ref="AdminGoToOrdersReportPageActionGroup" stepKey="goToOrdersReportPageActionGroup" />
+
+        <click selector="{{ReportMainSection.storeViewDropdown}}" stepKey="clickOrderReportWebsiteSwitchDropdown"/>
+        <waitForElementVisible selector="{{ReportMainSection.websiteByName('Main Website')}}" stepKey="waitForOrderReportWebsiteAreVisible"/>
+        <click selector="{{ReportMainSection.websiteByName(customWebsite.name)}}" stepKey="clickOrderReportWebsiteByName"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreSwitch"/>
+
+        <generateDate stepKey="generateEndDate" date="+1 day" format="m/d/Y"/>
+        <generateDate stepKey="generateStartDate" date="-1 day" format="m/d/Y"/>
+
+        <actionGroup ref="GenerateOrderReportActionGroup" stepKey="generateReportOrderReportEUR">
+            <argument name="orderFromDate" value="$generateStartDate"/>
+            <argument name="orderToDate" value="$generateEndDate"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForGenerateReportOrderEUR"/>
+
+        <grabTextFrom selector="{{GeneratedReportSection.salesTotals}}" stepKey="grabOrderAmountEURO"/>
+        <assertStringContainsString stepKey="checkOrderCurrencySymbolEuro">
+            <actualResult type="variable">$grabOrderAmountEURO</actualResult>
+            <expectedResult type="string">€</expectedResult>
+        </assertStringContainsString>
+    </test>
+</tests>
