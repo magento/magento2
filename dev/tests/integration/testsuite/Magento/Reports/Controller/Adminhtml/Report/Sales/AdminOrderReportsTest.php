@@ -24,11 +24,15 @@ use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\Sales\Api\InvoiceOrderInterface;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
+use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
@@ -61,6 +65,25 @@ class AdminOrderReportsTest extends AbstractBackendController
      */
     private $storeManager;
 
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var OrderManagementInterface
+     */
+    private $orderManagement;
+
+    /**
+     * @var InvoiceRepositoryInterface
+     */
+    private $invoiceRepository;
+
+    private int $orderId;
+
+    private int $invoiceId;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -68,6 +91,9 @@ class AdminOrderReportsTest extends AbstractBackendController
         $this->invoiceOrder = $this->_objectManager->get(InvoiceOrderInterface::class);
         $this->fixtures = $this->_objectManager->get(DataFixtureStorageManager::class)->getStorage();
         $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
+        $this->orderRepository = $this->_objectManager->get(OrderRepositoryInterface::class);
+        $this->orderManagement = $this->_objectManager->get(OrderManagementInterface::class);
+        $this->invoiceRepository = $this->_objectManager->get(InvoiceRepositoryInterface::class);
     }
 
     /**
@@ -80,6 +106,7 @@ class AdminOrderReportsTest extends AbstractBackendController
      */
     #[
         DbIsolation(false),
+        AppArea('adminhtml'),
         Config(Data::XML_PATH_PRICE_SCOPE, Data::PRICE_SCOPE_WEBSITE),
         DataFixture(WebsiteFixture::class, ['code' => 'website2'], as: 'website2'),
         DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'group2'),
@@ -107,10 +134,10 @@ class AdminOrderReportsTest extends AbstractBackendController
         $store = $this->storeManager->getStore();
         $store->setCurrentCurrencyCode('EUR');
 
-        $orderId = $this->cartManagement->placeOrder($cart->getId());
-        $this->assertNotEmpty($orderId);
-        $invoiceId = $this->invoiceOrder->execute($orderId);
-        $this->assertNotEmpty($invoiceId);
+        $this->orderId = $this->cartManagement->placeOrder($cart->getId());
+        $this->assertNotEmpty($this->orderId);
+        $this->invoiceId = $this->invoiceOrder->execute($this->orderId);
+        $this->assertNotEmpty($this->invoiceId);
 
         $this->_objectManager->create('Magento\Sales\Model\ResourceModel\Report\Order')->aggregate();
 
@@ -133,5 +160,27 @@ class AdminOrderReportsTest extends AbstractBackendController
         $salesReportGrid = $layout->getBlock('adminhtml_sales_sales.grid');
         $blockHtml = $salesReportGrid->toHtml();
         $this->assertStringContainsString('€', $blockHtml);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $store = $this->storeManager->getStore();
+        $store->setCurrentCurrencyCode('USD');
+
+        $order = $this->orderRepository->get($this->orderId);
+        if ($order) {
+            $this->orderManagement->cancel($this->orderId);
+            $this->orderRepository->delete($order);
+        }
+
+        $invoice = $this->invoiceRepository->get($this->invoiceId);
+        $this->invoiceRepository->delete($invoice);
+
+        $this->_objectManager->create('Magento\Sales\Model\ResourceModel\Report\Order')->aggregate();
+
+        parent::tearDown();
     }
 }
