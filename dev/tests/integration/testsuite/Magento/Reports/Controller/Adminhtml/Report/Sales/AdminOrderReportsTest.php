@@ -19,14 +19,14 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\Sales\Api\InvoiceOrderInterface;
-use Magento\Sales\Api\InvoiceRepositoryInterface;
-use Magento\Sales\Api\OrderManagementInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory as OrderCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory as InvoiceCollectionFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
@@ -65,25 +65,6 @@ class AdminOrderReportsTest extends AbstractBackendController
      */
     private $storeManager;
 
-    /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
-
-    /**
-     * @var OrderManagementInterface
-     */
-    private $orderManagement;
-
-    /**
-     * @var InvoiceRepositoryInterface
-     */
-    private $invoiceRepository;
-
-    private int $orderId;
-
-    private int $invoiceId;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -91,9 +72,33 @@ class AdminOrderReportsTest extends AbstractBackendController
         $this->invoiceOrder = $this->_objectManager->get(InvoiceOrderInterface::class);
         $this->fixtures = $this->_objectManager->get(DataFixtureStorageManager::class)->getStorage();
         $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
-        $this->orderRepository = $this->_objectManager->get(OrderRepositoryInterface::class);
-        $this->orderManagement = $this->_objectManager->get(OrderManagementInterface::class);
-        $this->invoiceRepository = $this->_objectManager->get(InvoiceRepositoryInterface::class);
+    }
+
+    protected function tearDown(): void
+    {
+        $store = $this->storeManager->getStore();
+        $store->setCurrentCurrencyCode('USD');
+
+        $registry = $this->_objectManager->get(Registry::class);
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        $orderCollection = $this->_objectManager->create(OrderCollectionFactory::class)->create();
+        foreach ($orderCollection as $order) {
+            $order->delete();
+        }
+
+        $invoiceCollection = $this->_objectManager->create(InvoiceCollectionFactory::class)->create();
+        foreach ($invoiceCollection as $invoice) {
+            $invoice->delete();
+        }
+
+        $this->_objectManager->create('Magento\Sales\Model\ResourceModel\Report\Order')->aggregate();
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
+
+        parent::tearDown();
     }
 
     /**
@@ -134,10 +139,10 @@ class AdminOrderReportsTest extends AbstractBackendController
         $store = $this->storeManager->getStore();
         $store->setCurrentCurrencyCode('EUR');
 
-        $this->orderId = $this->cartManagement->placeOrder($cart->getId());
-        $this->assertNotEmpty($this->orderId);
-        $this->invoiceId = $this->invoiceOrder->execute($this->orderId);
-        $this->assertNotEmpty($this->invoiceId);
+        $orderId = $this->cartManagement->placeOrder($cart->getId());
+        $this->assertNotEmpty($orderId);
+        $invoiceId = $this->invoiceOrder->execute($orderId);
+        $this->assertNotEmpty($invoiceId);
 
         $this->_objectManager->create('Magento\Sales\Model\ResourceModel\Report\Order')->aggregate();
 
@@ -160,27 +165,5 @@ class AdminOrderReportsTest extends AbstractBackendController
         $salesReportGrid = $layout->getBlock('adminhtml_sales_sales.grid');
         $blockHtml = $salesReportGrid->toHtml();
         $this->assertStringContainsString('€', $blockHtml);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tearDown(): void
-    {
-        $store = $this->storeManager->getStore();
-        $store->setCurrentCurrencyCode('USD');
-
-        $order = $this->orderRepository->get($this->orderId);
-        if ($order) {
-            $this->orderManagement->cancel($this->orderId);
-            $this->orderRepository->delete($order);
-        }
-
-        $invoice = $this->invoiceRepository->get($this->invoiceId);
-        $this->invoiceRepository->delete($invoice);
-
-        $this->_objectManager->create('Magento\Sales\Model\ResourceModel\Report\Order')->aggregate();
-
-        parent::tearDown();
     }
 }
