@@ -42,6 +42,8 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
  * Test for order reports.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdminOrderReportsTest extends AbstractBackendController
 {
