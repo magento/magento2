@@ -55,7 +55,7 @@ class IAVSResponseTest extends TestCase
      *
      * @return array
      */
-    public function variationsDataProvider()
+    public static function variationsDataProvider()
     {
         return [
             ['configValue' => 1, 'iavs' => 'Y', 'expected' => false],

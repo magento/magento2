@@ -19,7 +19,7 @@ class AbstractCollectionStub extends AbstractCollection
      * Retrieve item by id
      *
      * @param   mixed $id
-     * @return  DataObject
+     * @return  DataObject|null
      */
     public function getItemById($id)
     {

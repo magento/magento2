@@ -41,7 +41,7 @@ class XsdTest extends TestCase
     /**
      * @return array
      */
-    public function invalidXmlFileDataProvider()
+    public static function invalidXmlFileDataProvider()
     {
         return [['view.xsd', 'view_invalid.xml', 8], ['theme.xsd', 'theme_invalid.xml', 1]];
     }

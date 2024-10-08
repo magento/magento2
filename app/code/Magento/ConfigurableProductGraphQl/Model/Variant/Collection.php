@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProductGraphQl\Model\Variant;
 
+use Exception;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection as ChildCollection;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -91,6 +91,7 @@ class Collection implements ResetAfterRequestInterface
      *
      * @param Product $product
      * @return void
+     * @throws Exception
      */
     public function addParentProduct(Product $product) : void
     {
@@ -123,11 +124,12 @@ class Collection implements ResetAfterRequestInterface
      *
      * @param int $id
      * @param ContextInterface $context
+     * @param array $attributeCodes
      * @return array
      */
-    public function getChildProductsByParentId(int $id, ContextInterface $context) : array
+    public function getChildProductsByParentId(int $id, ContextInterface $context, array $attributeCodes) : array
     {
-        $childrenMap = $this->fetch($context);
+        $childrenMap = $this->fetch($context, $attributeCodes);
 
         if (!isset($childrenMap[$id])) {
             return [];
@@ -140,67 +142,53 @@ class Collection implements ResetAfterRequestInterface
      * Fetch all children products from parent id's.
      *
      * @param ContextInterface $context
+     * @param array $attributeCodes
      * @return array
+     * @throws Exception
      */
-    private function fetch(ContextInterface $context) : array
+    private function fetch(ContextInterface $context, array $attributeCodes) : array
     {
         if (empty($this->parentProducts) || !empty($this->childrenMap)) {
             return $this->childrenMap;
         }
 
+        /** @var ChildCollection $childCollection */
+        $childCollection = $this->childCollectionFactory->create();
         foreach ($this->parentProducts as $product) {
-            $attributeData = $this->getAttributesCodes($product);
-            /** @var ChildCollection $childCollection */
-            $childCollection = $this->childCollectionFactory->create();
             $childCollection->setProductFilter($product);
-            $childCollection->addWebsiteFilter($context->getExtensionAttributes()->getStore()->getWebsiteId());
-            $this->collectionProcessor->process(
-                $childCollection,
-                $this->searchCriteriaBuilder->create(),
-                $attributeData,
-                $context
-            );
-            $childCollection->load();
-            $this->collectionPostProcessor->process($childCollection, $attributeData);
+        }
+        $childCollection->addWebsiteFilter($context->getExtensionAttributes()->getStore()->getWebsiteId());
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $childCollection->getSelect()->group('e.' . $linkField);
+        $childCollection->getSelect()->columns([
+            'parent_ids' => new \Zend_Db_Expr('GROUP_CONCAT(link_table.parent_id)')
+        ]);
 
-            /** @var Product $childProduct */
-            foreach ($childCollection as $childProduct) {
-                if ((int)$childProduct->getStatus() !== Status::STATUS_ENABLED) {
-                    continue;
-                }
-                $formattedChild = ['model' => $childProduct, 'sku' => $childProduct->getSku()];
-                $parentId = (int)$childProduct->getParentId();
+        $attributeCodes = array_unique(array_merge($this->attributeCodes, $attributeCodes));
+
+        $this->collectionProcessor->process(
+            $childCollection,
+            $this->searchCriteriaBuilder->create(),
+            $attributeCodes,
+            $context
+        );
+        $this->collectionPostProcessor->process($childCollection, $attributeCodes);
+
+        /** @var Product $childProduct */
+        foreach ($childCollection as $childProduct) {
+            if ((int)$childProduct->getStatus() !== Status::STATUS_ENABLED) {
+                continue;
+            }
+            $formattedChild = ['model' => $childProduct, 'sku' => $childProduct->getSku()];
+            $parentIds = $childProduct->getParentIds() ? explode(',', $childProduct->getParentIds()) : [];
+            foreach ($parentIds as $parentId) {
                 if (!isset($this->childrenMap[$parentId])) {
                     $this->childrenMap[$parentId] = [];
                 }
-
                 $this->childrenMap[$parentId][] = $formattedChild;
             }
         }
-
         return $this->childrenMap;
-    }
-
-    /**
-     * Get attributes codes for given product
-     *
-     * @param Product $currentProduct
-     * @return array
-     */
-    private function getAttributesCodes(Product $currentProduct): array
-    {
-        $attributeCodes = $this->attributeCodes;
-        if ($currentProduct->getTypeId() == Configurable::TYPE_CODE) {
-            $allowAttributes = $currentProduct->getTypeInstance()->getConfigurableAttributes($currentProduct);
-            foreach ($allowAttributes as $attribute) {
-                $productAttribute = $attribute->getProductAttribute();
-                if (!\in_array($productAttribute->getAttributeCode(), $attributeCodes)) {
-                    $attributeCodes[] = $productAttribute->getAttributeCode();
-                }
-            }
-        }
-
-        return $attributeCodes;
     }
 
     /**

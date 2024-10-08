@@ -85,7 +85,7 @@ class ObserverTest extends TestCase
     {
         $message = 'get website exception';
         $this->expectException(\Exception::class);
-        $this->expectErrorMessage($message);
+        $this->expectExceptionMessage($message);
 
         $this->scopeConfigMock->method('isSetFlag')->willReturn(false);
         $this->storeManagerMock->method('getWebsites')
@@ -103,7 +103,7 @@ class ObserverTest extends TestCase
     {
         $message = 'create collection exception';
         $this->expectException(\Exception::class);
-        $this->expectErrorMessage($message);
+        $this->expectExceptionMessage($message);
 
         $groupMock = $this->createMock(\Magento\Store\Model\Group::class);
         $storeMock = $this->createMock(Store::class);
@@ -131,7 +131,7 @@ class ObserverTest extends TestCase
     {
         $message = 'create collection exception';
         $this->expectException(\Exception::class);
-        $this->expectErrorMessage($message);
+        $this->expectExceptionMessage($message);
 
         $groupMock = $this->createMock(\Magento\Store\Model\Group::class);
         $storeMock = $this->createMock(Store::class);

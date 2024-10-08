@@ -80,14 +80,6 @@ class AddProductsToCart
         $cartId = $this->maskedQuoteIdToQuoteId->execute($maskedCartId);
         $cart = $this->cartRepository->get($cartId);
         $allErrors = [];
-        if ($cart->getData('has_error')) {
-            $errors = $cart->getErrors();
-
-            /** @var MessageInterface $error */
-            foreach ($errors as $error) {
-                $allErrors[] = $this->error->create($error->getText());
-            }
-        }
 
         $failedCartItems = $this->addItemsToCart($cart, $cartItems);
         $saveCart = empty($failedCartItems);
@@ -165,7 +157,8 @@ class AddProductsToCart
                 $cartItemPosition
             );
         } else {
-            $product = $this->productReader->getProductBySku($sku);
+            $productBySku = $this->productReader->getProductBySku($sku);
+            $product = isset($productBySku) ? clone $productBySku : null;
             if (!$product || !$product->isSaleable() || !$product->isAvailable()) {
                 $errors[] = $this->error->create(
                     __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),

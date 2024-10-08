@@ -49,7 +49,7 @@ class ItemTest extends TestCase
         $this->orderFactory = $this->createPartialMock(SalesOrderFactory::class, ['create']);
 
         $this->serializerMock = $this->getMockBuilder(Json::class)
-            ->setMethods(['unserialize'])
+            ->onlyMethods(['unserialize'])
             ->getMock();
 
         $arguments = [
@@ -148,7 +148,7 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function getStatusIdDataProvider()
+    public static function getStatusIdDataProvider()
     {
         return [
             [0, 0, 0, null, 0, 0, Item::STATUS_PENDING],
@@ -218,7 +218,7 @@ class ItemTest extends TestCase
      *
      * @return array
      */
-    public function getProductOptionsDataProvider()
+    public static function getProductOptionsDataProvider()
     {
         return [
             'array' => [
@@ -265,7 +265,7 @@ class ItemTest extends TestCase
      *
      * @return array
      */
-    public function getItemQtyVariants()
+    public static function getItemQtyVariants()
     {
         return [
             'empty_item' => [

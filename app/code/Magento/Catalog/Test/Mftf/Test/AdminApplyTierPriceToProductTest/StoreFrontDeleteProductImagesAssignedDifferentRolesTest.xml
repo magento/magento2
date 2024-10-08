@@ -85,6 +85,7 @@
         </before>
         <after>
             <deleteData createDataKey="testCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="simpleProductOne" stepKey="deleteCustomer"/>
         </after>
 

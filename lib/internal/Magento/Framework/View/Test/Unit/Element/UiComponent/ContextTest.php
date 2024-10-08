@@ -235,7 +235,7 @@ class ContextTest extends TestCase
     /**
      * @return array
      */
-    public function getAcceptTypeDataProvider()
+    public static function getAcceptTypeDataProvider()
     {
         return [
             ['json', 'json'],
@@ -254,7 +254,7 @@ class ContextTest extends TestCase
     /**
      * @return array
      */
-    public function addComponentDefinitionDataProvider()
+    public static function addComponentDefinitionDataProvider()
     {
         return [
             [

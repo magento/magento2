@@ -4,21 +4,20 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Product attributes tab
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\NewAttribute\Product;
 
 use Magento\Backend\Block\Widget\Form;
 
 /**
+ * Product attributes tab
+ *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
 {
     /**
+     * Prepare the form
+     *
      * @return void
      */
     protected function _prepareForm()
@@ -56,6 +55,8 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
     }
 
     /**
+     * Return an array of additional element types
+     *
      * @return array
      */
     protected function _getAdditionalElementTypes()
@@ -78,6 +79,8 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
     }
 
     /**
+     * Return HTML for this block
+     *
      * @return string
      */
     protected function _toHtml()

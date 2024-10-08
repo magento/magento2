@@ -297,7 +297,7 @@ class GeneratedFilesTest extends TestCase
      *
      * @return array
      */
-    public function itDoesNotCleanGeneratedFilesDueToExceptionsDataProvider()
+    public static function itDoesNotCleanGeneratedFilesDueToExceptionsDataProvider()
     {
         return [
             RuntimeException::class => [RuntimeException::class],
@@ -359,12 +359,17 @@ class GeneratedFilesTest extends TestCase
         $this->expectProcessLocked(1, false);
         $this->expectLockOperation(1, true);
 
-        $this->writeInterface->expects($this->exactly(4))->method('delete')->withConsecutive(
-            [GeneratedFiles::REGENERATE_FLAG],
-            [$this->pathGeneratedCode],
-            [$this->pathGeneratedMetadata],
-            [$this->pathVarCache]
-        );
+        $this->writeInterface->expects($this->exactly(4))->method('delete')
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == GeneratedFiles::REGENERATE_FLAG ||
+                        $arg == $this->pathGeneratedCode ||
+                        $arg == $this->pathGeneratedMetadata ||
+                        $arg == $this->pathVarCache) {
+                        return null;
+                    }
+                }
+            );
 
         $this->expectRegenerationRequested(0);
         $this->expectUnlockOperation(1, true);

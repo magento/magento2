@@ -7,7 +7,6 @@
 
 namespace Magento\Tax\Model\Sales\Order;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterfaceFactory as TaxDetailsDataObjectFactory;
 use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface as AppliedTax;
 use Magento\Sales\Model\Order\Tax\Item;
@@ -18,11 +17,6 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
      * @var \Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory
      */
     protected $orderItemTaxFactory;
-
-    /**
-     * @var \Magento\Sales\Model\OrderFactory
-     */
-    protected $orderFactory;
 
     /**
      * @var \Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory
@@ -40,20 +34,17 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
     protected $appliedTaxDataObjectFactory;
 
     /**
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory $orderItemTaxFactory
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory $orderTaxDetailsDataObjectFactory
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory $itemDataObjectFactory
      * @param TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory
      */
     public function __construct(
-        \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory $orderItemTaxFactory,
         \Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory $orderTaxDetailsDataObjectFactory,
         \Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory $itemDataObjectFactory,
         TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory
     ) {
-        $this->orderFactory = $orderFactory;
         $this->orderItemTaxFactory = $orderItemTaxFactory;
         $this->orderTaxDetailsDataObjectFactory = $orderTaxDetailsDataObjectFactory;
         $this->itemDataObjectFactory = $itemDataObjectFactory;
@@ -129,20 +120,10 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOrderTaxDetails($orderId)
     {
-        $order = $this->orderFactory->create()->load($orderId);
-        if (!$order) {
-            throw new NoSuchEntityException(
-                __(
-                    'No such entity with %fieldName = %fieldValue',
-                    ['fieldName' => 'orderId', 'fieldValue' => $orderId]
-                )
-            );
-        }
-
         $orderItemAppliedTaxes = $this->orderItemTaxFactory->create()->getTaxItemsByOrderId($orderId);
         $itemsData = [];
         foreach ($orderItemAppliedTaxes as $itemAppliedTax) {
