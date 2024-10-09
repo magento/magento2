@@ -117,10 +117,10 @@ class FactoryTest extends TestCase
     public static function connectionDataProvider()
     {
         return [
-//            [
-//                'ssl_enabled' => true,
-//                'connection_class' => AMQPStreamConnection::class,
-//            ],
+            [
+                'sslEnabled' => true,
+                'connectionClass' => AMQPStreamConnection::class,
+            ],
             [
                 'sslEnabled' => false,
                 'connectionClass' => AMQPStreamConnection::class,
