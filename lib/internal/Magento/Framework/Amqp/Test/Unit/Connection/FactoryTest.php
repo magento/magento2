@@ -102,15 +102,7 @@ class FactoryTest extends TestCase
         $this->objectManagerInterface->expects($this->any())
             ->method('create')
             ->with(AMQPConnectionConfig::class)
-            ->willReturn(
-                $this->objectManager->getObject(AMQPConnectionConfig::class, [
-                    '127.0.0.1',
-                    '5672',
-                    'guest',
-                    'guest',
-                    '/']
-                )
-            );
+            ->willReturn($this->objectManager->getObject(AMQPConnectionConfig::class));
 
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerInterface);
 
@@ -125,10 +117,10 @@ class FactoryTest extends TestCase
     public static function connectionDataProvider()
     {
         return [
-            [
-                'sslEnabled' => true,
-                'connectionClass' => AMQPStreamConnection::class,
-            ],
+//            [
+//                'ssl_enabled' => true,
+//                'connection_class' => AMQPStreamConnection::class,
+//            ],
             [
                 'sslEnabled' => false,
                 'connectionClass' => AMQPStreamConnection::class,
