@@ -47,6 +47,10 @@ class DummyTestCase extends \PHPUnit\Framework\TestCase
      */
     protected $_testPropertyObject;
 
+    private string $_testTypedNonNullable;
+
+    private ?string $_testTypedNullable;
+
     /**
      * @var string
      */
@@ -71,6 +75,8 @@ class DummyTestCase extends \PHPUnit\Framework\TestCase
         $this->_testPropertyFloat = 1.97;
         $this->_testPropertyString = 'string';
         $this->_testPropertyArray = ['test', 20];
+        $this->_testTypedNonNullable = 'typed non nullable';
+        $this->_testTypedNullable = 'typed nullable';
         self::$testPublicStatic = 'static public';
         self::$_testProtectedStatic = 'static protected';
         self::$_testPrivateStatic = 'static private';
