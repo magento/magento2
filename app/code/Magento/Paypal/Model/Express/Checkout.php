@@ -481,6 +481,7 @@ class Checkout
      */
     public function start($returnUrl, $cancelUrl, $button = null)
     {
+        $this->_quote->setPayment($this->_quote->getPayment());
         $this->_quote->collectTotals();
 
         if (!$this->_quote->getGrandTotal()) {

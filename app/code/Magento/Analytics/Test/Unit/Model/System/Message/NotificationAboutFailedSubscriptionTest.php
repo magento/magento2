@@ -94,7 +94,7 @@ class NotificationAboutFailedSubscriptionTest extends TestCase
      *
      * @return array
      */
-    public function notDisplayedNotificationStatuses()
+    public static function notDisplayedNotificationStatuses()
     {
         return [
             [SubscriptionStatusProvider::PENDING],

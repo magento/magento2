@@ -179,7 +179,7 @@ class PlaceholderTest extends TestCase
     /**
      * @return array
      */
-    public function getPathDataProvider()
+    public static function getPathDataProvider()
     {
         return [
             [
