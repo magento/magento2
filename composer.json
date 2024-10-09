@@ -38,7 +38,7 @@
         "colinmollenhour/cache-backend-file": "^1.4",
         "colinmollenhour/cache-backend-redis": "^1.16",
         "colinmollenhour/credis": "^1.15",
-        "colinmollenhour/php-redis-session-abstract": "^1.5",
+        "colinmollenhour/php-redis-session-abstract": "^2.0",
         "composer/composer": "^2.0, !=2.2.16",
         "elasticsearch/elasticsearch": "~7.17.0 || ~8.5.0",
         "ezyang/htmlpurifier": "^4.17",
@@ -74,8 +74,8 @@
         "magento/zend-cache": "^1.16",
         "magento/zend-db": "^1.16",
         "magento/zend-pdf": "^1.16",
-        "monolog/monolog": "^2.7",
-        "opensearch-project/opensearch-php": "^1.0 || ^2.0",
+        "monolog/monolog": "^3.6",
+        "opensearch-project/opensearch-php": "^2.2",
         "pelago/emogrifier": "^7.0",
         "php-amqplib/php-amqplib": "^3.2",
         "phpseclib/mcrypt_compat": "^2.0",
@@ -90,7 +90,7 @@
         "tubalmartin/cssmin": "^4.1",
         "web-token/jwt-framework": "^3.1",
         "webonyx/graphql-php": "^15.0",
-        "wikimedia/less.php": "^3.2"
+        "wikimedia/less.php": "^5.0"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "^3",
@@ -343,7 +343,7 @@
         "components/jquery": "1.11.0",
         "components/jqueryui": "1.10.4",
         "twbs/bootstrap": "3.1.0",
-        "tinymce/tinymce": "3.4.7",
+        "tinymce/tinymce": "7.3.0",
         "magento/module-csp": "*",
         "magento/module-aws-s3": "*",
         "magento/module-remote-storage": "*",

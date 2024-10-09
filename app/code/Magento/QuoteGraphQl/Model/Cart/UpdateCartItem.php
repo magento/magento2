@@ -16,9 +16,6 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 
-/**
- * Update cart item
- */
 class UpdateCartItem
 {
     /**
@@ -129,6 +126,9 @@ class UpdateCartItem
         if ($cartItem->getHasError()) {
             $errors = [];
             foreach ($cartItem->getMessage(false) as $message) {
+                if (str_contains($message, 'The requested qty is not available')) {
+                    throw new GraphQlInputException(__('The requested qty. is not available'));
+                }
                 $errors[] = $message;
             }
             if (!empty($errors)) {

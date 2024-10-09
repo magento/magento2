@@ -224,7 +224,7 @@ class ControllerAbstractTest extends AbstractController
      *
      * @return array
      */
-    public function assertSessionMessagesDataProvider(): array
+    public static function assertSessionMessagesDataProvider(): array
     {
         return [
             'message warning type filtering' => [

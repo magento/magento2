@@ -47,7 +47,7 @@ class XsdTest extends TestCase
     /**
      * @return array
      */
-    public function exemplarXmlDataProvider()
+    public static function exemplarXmlDataProvider()
     {
         return [
             'valid' => ['<config><group name="test"><attribute name="attr"/></group></config>', []],

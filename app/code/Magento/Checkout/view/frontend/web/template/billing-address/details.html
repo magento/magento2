@@ -17,7 +17,7 @@
     <text args="getCountryName(currentBillingAddress().countryId)"></text><br>
     <a if="currentBillingAddress().telephone" attr="'href': 'tel:' + currentBillingAddress().telephone" text="currentBillingAddress().telephone"></a><br>
     <if args="currentBillingAddress().vatId">
-        VAT: <text args="currentBillingAddress().vatId"></text><br>
+        <translate args="'VAT'"></translate>: <text args="currentBillingAddress().vatId"></text><br>
     </if>
     <each args="data: currentBillingAddress().customAttributes, as: 'element'">
         <text args="$parent.getCustomAttributeLabel(element)"></text>

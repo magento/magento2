@@ -167,39 +167,6 @@ class CachedAdapter implements CachedAdapterInterface
     /**
      * @inheritdoc
      */
-    public function directoryExists(string $path): bool
-    {
-        $cacheHas = $this->cache->exists($path);
-
-        if ($cacheHas !== null) {
-            return $cacheHas;
-        }
-
-        $exists = $this->adapter->directoryExists($path);
-
-        if (!$exists) {
-            try {
-                // check if target is a directory
-                $exists = iterator_count($this->adapter->listContents($path, false)) > 0;
-            } catch (\Throwable $e) {
-                // catch closed iterator
-                $exists = false;
-            }
-        }
-
-        if ($exists) {
-            $cacheEntry = ['type' => 'dir', 'path' => $path];
-            $this->cache->updateMetadata($path, $cacheEntry, true);
-        } else {
-            $this->cache->storeDirNotExists($path);
-        }
-
-        return $exists;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function read(string $path): string
     {
         return $this->adapter->read($path);
@@ -255,5 +222,13 @@ class CachedAdapter implements CachedAdapterInterface
     {
         $result = $this->metadataProvider->getMetadata($path);
         return new FileAttributes($path, null, $result['visibility']);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function directoryExists(string $path): bool
+    {
+        return $this->adapter->directoryExists($path);
     }
 }

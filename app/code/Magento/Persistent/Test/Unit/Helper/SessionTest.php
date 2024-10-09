@@ -122,7 +122,7 @@ class SessionTest extends TestCase
      *
      * @return array
      */
-    public function isPersistentDataProvider()
+    public static function isPersistentDataProvider()
     {
         return [
             'session_id_and_enable_persistent' => [
@@ -171,7 +171,7 @@ class SessionTest extends TestCase
      *
      * @return array
      */
-    public function isRememberMeCheckedProvider()
+    public static function isRememberMeCheckedProvider()
     {
         return [
             'enable_all_config' => [
