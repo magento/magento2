@@ -311,7 +311,7 @@ class ValidateTest extends AttributeTest
     /**
      * @return array
      */
-    public function provideUniqueData()
+    public static function provideUniqueData()
     {
         return [
             'no values' => [
@@ -452,7 +452,7 @@ class ValidateTest extends AttributeTest
      *
      * @return array
      */
-    public function provideEmptyOption()
+    public static function provideEmptyOption()
     {
         return [
             'empty admin scope options' => [
@@ -575,7 +575,7 @@ class ValidateTest extends AttributeTest
      *
      * @return array
      */
-    public function provideWhitespaceOption()
+    public static function provideWhitespaceOption()
     {
         return [
             'whitespace admin scope options' => [
@@ -766,7 +766,7 @@ class ValidateTest extends AttributeTest
      *
      * @return array
      */
-    public function provideInvalidAttributeCodes()
+    public static function provideInvalidAttributeCodes()
     {
         return [
             'invalid attribute code' => [
