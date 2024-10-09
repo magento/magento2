@@ -63,7 +63,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $expectedResult);
     }
 
-    public function getCorrectFlagDataProvider()
+    public static function getCorrectFlagDataProvider()
     {
         return [
             [

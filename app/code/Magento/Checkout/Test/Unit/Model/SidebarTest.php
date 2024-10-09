@@ -57,7 +57,7 @@ class SidebarTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetResponseData()
+    public static function dataProviderGetResponseData()
     {
         return [
             [

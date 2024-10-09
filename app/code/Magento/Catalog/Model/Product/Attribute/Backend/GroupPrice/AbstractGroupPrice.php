@@ -10,13 +10,14 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product\Attribute\Backend\Price;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Catalog product abstract group price backend attribute model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractGroupPrice extends Price
+abstract class AbstractGroupPrice extends Price implements ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
@@ -26,7 +27,7 @@ abstract class AbstractGroupPrice extends Price
     /**
      * Website currency codes and rates
      *
-     * @var array
+     * @var array|null
      */
     protected $_rates;
 
@@ -39,8 +40,6 @@ abstract class AbstractGroupPrice extends Price
     abstract protected function _getDuplicateErrorMessage();
 
     /**
-     * Catalog product type
-     *
      * @var \Magento\Catalog\Model\Product\Type
      */
     protected $_catalogProductType;
@@ -80,6 +79,14 @@ abstract class AbstractGroupPrice extends Price
             $localeFormat,
             $scopeOverriddenValue
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState() : void
+    {
+        $this->_rates = null;
     }
 
     /**
@@ -289,7 +296,9 @@ abstract class AbstractGroupPrice extends Price
             } elseif ($v['website_id'] == 0 && !isset($data[$key])) {
                 $data[$key] = $v;
                 $data[$key]['website_id'] = $websiteId;
-                if ($this->_isPriceFixed($price)) {
+                if ($this->_isPriceFixed($price) &&
+                    $this->isPercentageValue($data[$key])
+                ) {
                     $data[$key]['price'] = $v['price'] * $rates[$websiteId]['rate'];
                     $data[$key]['website_price'] = $v['price'] * $rates[$websiteId]['rate'];
                 }
@@ -458,5 +467,16 @@ abstract class AbstractGroupPrice extends Price
                 ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * Check if data consists of percentage value
+     *
+     * @param array $data
+     * @return bool
+     */
+    private function isPercentageValue(array $data): bool
+    {
+        return (array_key_exists('percentage_value', $data) && $data['percentage_value'] === null);
     }
 }

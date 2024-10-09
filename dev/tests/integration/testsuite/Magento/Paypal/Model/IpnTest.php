@@ -81,6 +81,46 @@ class IpnTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Refund full order amount by Paypal Express IPN message service with concurrent requests.
+     *
+     * @magentoDataFixture Magento/Paypal/_files/order_express_with_invoice_and_shipping.php
+     * @magentoConfigFixture current_store payment/paypal_express/active 1
+     * @magentoConfigFixture current_store paypal/general/merchant_country US
+     */
+    public function testProcessIpnRequestFullRefundConcurrent()
+    {
+        $ipnData = require __DIR__ . '/../_files/ipn_refund.php';
+        $ipnFactory = $this->_objectManager->create(IpnFactory::class);
+        $ipnModel = $ipnFactory->create(
+            [
+                'data' => $ipnData,
+                'curlFactory' => $this->_createMockedHttpAdapter()
+            ]
+        );
+
+        $ipnModel->processIpnRequest();
+        $ipnModel->processIpnRequest();
+
+        $order = $this->_objectManager->create(Order::class);
+        $order->loadByIncrementId('100000001');
+
+        $creditmemoItems = $order->getCreditmemosCollection()->getItems();
+        $creditmemo = current($creditmemoItems);
+
+        $this->assertEquals(Order::STATE_CLOSED, $order->getState()) ;
+        $this->assertCount(1, $creditmemoItems);
+        $this->assertEquals(Creditmemo::STATE_REFUNDED, $creditmemo->getState());
+        $this->assertEquals(10, $order->getSubtotalRefunded());
+        $this->assertEquals(10, $order->getBaseSubtotalRefunded());
+        $this->assertEquals(20, $order->getShippingRefunded());
+        $this->assertEquals(20, $order->getBaseShippingRefunded());
+        $this->assertEquals(30, $order->getTotalRefunded());
+        $this->assertEquals(30, $order->getBaseTotalRefunded());
+        $this->assertEquals(30, $order->getTotalOnlineRefunded());
+        $this->assertEmpty($order->getTotalOfflineRefunded());
+    }
+
+    /**
      * Partial refund of order amount by Paypal Express IPN message service.
      *
      * @magentoDataFixture Magento/Paypal/_files/order_express_with_invoice_and_shipping.php
@@ -253,11 +293,11 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $factory = $this->createPartialMock(\Magento\Framework\HTTP\Adapter\CurlFactory::class, ['create']);
         $adapter = $this->createPartialMock(\Magento\Framework\HTTP\Adapter\Curl::class, ['read', 'write']);
 
-        $adapter->expects($this->once())->method('read')->with()->willReturn("\nVERIFIED");
+        $adapter->expects($this->any())->method('read')->with()->willReturn("\nVERIFIED");
 
-        $adapter->expects($this->once())->method('write');
+        $adapter->expects($this->any())->method('write');
 
-        $factory->expects($this->once())->method('create')->with()->willReturn($adapter);
+        $factory->expects($this->any())->method('create')->with()->willReturn($adapter);
         return $factory;
     }
 

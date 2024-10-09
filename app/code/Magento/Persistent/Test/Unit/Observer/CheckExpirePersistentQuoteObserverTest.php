@@ -98,7 +98,7 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
         $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRequestUri', 'getServer'])
+            ->addMethods(['getRequestUri', 'getServer'])
             ->getMockForAbstractClass();
         $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
 
@@ -113,7 +113,8 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
             $this->quoteRepositoryMock
         );
         $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->setMethods(['getCustomerIsGuest', 'getIsPersistent'])
+            ->addMethods(['getIsPersistent'])
+            ->onlyMethods(['getCustomerIsGuest'])
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -212,36 +213,36 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
      *
      * @return array
      */
-    public function requestDataProvider()
+    public static function requestDataProvider()
     {
         return [
             [
                 'refererUri'           => 'checkout',
                 'requestUri'           => 'index',
-                'expireCounter'        => $this->never(),
-                'dispatchCounter'      => $this->never(),
-                'setCustomerIdCounter' => $this->never(),
+                'expireCounter'        => self::never(),
+                'dispatchCounter'      => self::never(),
+                'setCustomerIdCounter' => self::never(),
             ],
             [
                 'refererUri'           => 'checkout',
                 'requestUri'           => 'checkout',
-                'expireCounter'        => $this->never(),
-                'dispatchCounter'      => $this->never(),
-                'setCustomerIdCounter' => $this->never(),
+                'expireCounter'        => self::never(),
+                'dispatchCounter'      => self::never(),
+                'setCustomerIdCounter' => self::never(),
             ],
             [
                 'refererUri'           => 'index',
                 'requestUri'           => 'checkout',
-                'expireCounter'        => $this->never(),
-                'dispatchCounter'      => $this->never(),
-                'setCustomerIdCounter' => $this->never(),
+                'expireCounter'        => self::never(),
+                'dispatchCounter'      => self::never(),
+                'setCustomerIdCounter' => self::never(),
             ],
             [
                 'refererUri'           => 'index',
                 'requestUri'           => 'index',
-                'expireCounter'        => $this->once(),
-                'dispatchCounter'      => $this->once(),
-                'setCustomerIdCounter' => $this->once(),
+                'expireCounter'        => self::once(),
+                'dispatchCounter'      => self::once(),
+                'setCustomerIdCounter' => self::once(),
             ],
         ];
     }

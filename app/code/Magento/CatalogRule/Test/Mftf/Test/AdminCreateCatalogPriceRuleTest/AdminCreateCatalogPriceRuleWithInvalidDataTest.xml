@@ -15,6 +15,7 @@
             <description value="Admin can not create catalog price rule with the invalid data"/>
             <severity value="MAJOR"/>
             <group value="CatalogRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

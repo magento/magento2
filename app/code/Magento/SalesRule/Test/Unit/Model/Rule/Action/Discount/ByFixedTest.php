@@ -49,7 +49,7 @@ class ByFixedTest extends TestCase
         $this->validator = $this->getMockBuilder(
             Validator::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getItemPrice', 'getItemBasePrice', 'getItemOriginalPrice', 'getItemBaseOriginalPrice']
             )->getMock();
 
@@ -59,7 +59,7 @@ class ByFixedTest extends TestCase
         $this->discountDataFactory = $this->getMockBuilder(
             DataFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['create']
             )->getMock();
 
@@ -94,7 +94,7 @@ class ByFixedTest extends TestCase
         $discountData = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['setAmount', 'setBaseAmount', 'setOriginalAmount', 'setBaseOriginalAmount']
             )->getMock();
 
@@ -103,7 +103,7 @@ class ByFixedTest extends TestCase
         $rule = $this->getMockBuilder(
             Rule::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 ['getDiscountAmount']
             )->getMock();
 
@@ -117,16 +117,15 @@ class ByFixedTest extends TestCase
         $item = $this->getMockBuilder(
             AbstractItem::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['getDiscountAmount', 'getBaseDiscountAmount',])
+            ->onlyMethods(
                 [
-                    'getDiscountAmount',
-                    'getBaseDiscountAmount',
                     'getQuote',
                     'getAddress',
                     'getOptionByCode',
+                    'getQty'
                 ]
             )->getMock();
-
         $this->validator->expects(
             $this->atLeastOnce()
         )->method(
@@ -172,31 +171,11 @@ class ByFixedTest extends TestCase
             $ruleData['discountAmount'],
             $store
         )->willReturn(
-            $validItemData['baseOriginalPrice']
-        );
-
-        $rule->expects(
-            $this->atLeastOnce()
-        )->method(
-            'getDiscountAmount'
-        )->willReturn(
             $ruleData['discountAmount']
         );
 
-        $item->expects(
-            $this->atLeastOnce()
-        )->method(
-            'getDiscountAmount'
-        )->willReturn(
-            $itemData['discountAmount']
-        );
-        $item->expects(
-            $this->atLeastOnce()
-        )->method(
-            'getBaseDiscountAmount'
-        )->willReturn(
-            $itemData['baseDiscountAmount']
-        );
+        $this->setUpMockData($ruleData, $rule);
+        $this->setUpMockData($itemData, $item);
         $item->expects($this->atLeastOnce())->method('getQuote')->willReturn($quote);
 
         $discountData->expects($this->once())->method('setAmount')->with($expectedDiscountData['amount']);
@@ -220,15 +199,31 @@ class ByFixedTest extends TestCase
     }
 
     /**
+     * Sets up mock object data
+     *
+     * @param array $data
+     * @param MockObject $mockObject
+     * @return void
+     */
+    private function setUpMockData(array $data, MockObject $mockObject): void
+    {
+        foreach ($data as $method => $returnValue) {
+            $mockObject->expects($this->atLeastOnce())
+                ->method('get' . ucfirst($method))
+                ->willReturn($returnValue);
+        }
+    }
+
+    /**
      * @return array
      */
-    public function calculateDataProvider()
+    public static function calculateDataProvider()
     {
         return [
             [
                 'qty' => 2,
                 'ruleData' => ['discountAmount' => 100],
-                'itemData' => ['discountAmount' => 139, 'baseDiscountAmount' => 139],
+                'itemData' => ['discountAmount' => 139, 'baseDiscountAmount' => 139, 'qty' => 2],
                 'validItemData' => [
                     'price' => 139,
                     'basePrice' => 139,
@@ -238,6 +233,23 @@ class ByFixedTest extends TestCase
                 'expectedDiscountData' => [
                     'amount' => 139,
                     'baseAmount' => 139,
+                    'originalAmount' => 0,
+                    'baseOriginalAmount' => 0,
+                ],
+            ],
+            [
+                'qty' => 1,
+                'ruleData' => ['discountAmount' => 1000],
+                'itemData' => ['discountAmount' => 9100, 'baseDiscountAmount' => 9100, 'qty' => 13],
+                'validItemData' => [
+                    'price' => 9000,
+                    'basePrice' => 9000,
+                    'originalPrice' => 9000,
+                    'baseOriginalPrice' => 9000,
+                ],
+                'expectedDiscountData' => [
+                    'amount' => 1000,
+                    'baseAmount' => 1000,
                     'originalAmount' => 0,
                     'baseOriginalAmount' => 0,
                 ],
@@ -267,7 +279,7 @@ class ByFixedTest extends TestCase
     /**
      * @return array
      */
-    public function fixQuantityDataProvider()
+    public static function fixQuantityDataProvider()
     {
         return [
             ['step' => 0, 'qty' => 23, 'expected' => 23],

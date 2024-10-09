@@ -69,7 +69,7 @@ class LogoTest extends TestCase
             ->getMockForAbstractClass();
         $this->uploaderFactoryMock = $this->getMockBuilder(UploaderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->requestDataMock
             = $this->getMockBuilder(RequestDataInterface::class)

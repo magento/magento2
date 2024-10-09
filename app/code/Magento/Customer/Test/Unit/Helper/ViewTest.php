@@ -74,7 +74,7 @@ class ViewTest extends TestCase
     /**
      * @return array
      */
-    public function getCustomerServiceDataProvider()
+    public static function getCustomerServiceDataProvider()
     {
         return [
             [

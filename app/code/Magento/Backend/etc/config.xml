@@ -7,6 +7,11 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
+        <admin>
+            <dashboard>
+                <enable_charts>0</enable_charts>
+            </dashboard>
+        </admin>
         <dev>
             <template>
                 <minify_html>0</minify_html>
@@ -22,9 +27,6 @@
                 <forgot_email_template>system_emails_forgot_email_template</forgot_email_template>
                 <forgot_email_identity>general</forgot_email_identity>
             </emails>
-            <dashboard>
-                <enable_charts>1</enable_charts>
-            </dashboard>
             <upload_configuration>
                 <enable_resize>1</enable_resize>
                 <max_width>1920</max_width>

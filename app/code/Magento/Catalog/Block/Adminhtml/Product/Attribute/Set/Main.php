@@ -5,9 +5,6 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set;
 
-/**
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 use Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface;
 
 /**
@@ -25,8 +22,6 @@ class Main extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Catalog::catalog/product/attribute/set/main.phtml';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

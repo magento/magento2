@@ -23,7 +23,7 @@ class AdapterTest extends TestCase
     public function testTranslate($strToTranslate, $translatedStr)
     {
         $translatorMock = $this->getMockBuilder(Translator::class)
-            ->setMethods(['translate'])->getMock();
+            ->onlyMethods(['translate'])->getMock();
         $translatorMock->expects(
             $this->once()
         )->method(
@@ -42,7 +42,7 @@ class AdapterTest extends TestCase
     /**
      * @return array
      */
-    public function translateDataProvider()
+    public static function translateDataProvider()
     {
         return [['Translate me!', 'Translated string']];
     }
@@ -61,6 +61,6 @@ class AdapterTest extends TestCase
      */
     public function testUnderscoresTranslation()
     {
-        $this->markTestIncomplete('MAGETWO-1012: i18n Improvements - Localization/Translations');
+        $this->markTestSkipped('MAGETWO-1012: i18n Improvements - Localization/Translations');
     }
 }

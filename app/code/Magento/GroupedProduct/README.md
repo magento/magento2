@@ -11,12 +11,14 @@ This module extends the existing functionality of Magento_Catalog module by addi
 ## Installation details
 
 Before installing this module, note that the Magento_GroupedProduct module is dependent on the following modules:
+
 - `Magento_Catalog`
 - `Magento_CatalogInventory`
 - `Magento_Sales`
 - `Magento_Quote`
 
 Before disabling or uninstalling this module, note that the following modules depends on this module:
+
 - `Magento_GroupedCatalogInventory`
 - `Magento_GroupedProductGraphQl`
 - `Magento_MsrpGroupedProduct`
@@ -38,6 +40,7 @@ Extension developers can interact with the Magento_GroupedProduct module. For mo
 ### Layouts
 
 This module introduces the following layouts in the `view/frontend/layout`, `view/adminhtml/layout` and `view/base/layout` directories:
+
 - `view/adminhtml/layout`:
     - `catalog_product_grouped`
     - `catalog_product_new`
@@ -73,9 +76,11 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 ### UI components
 
 You can extend a grouped product listing updates using the configuration files located in the `view/adminhtml/ui_component` directory:
+
 - `grouped_product_listing`
 
 This module extends widgets ui components the configuration files located in the `view/frontend/ui_component` directory:
+
 - `widget_recently_compared`
 - `widget_recently_viewed`
 
@@ -85,9 +90,9 @@ For information about a UI component in Magento 2, see [Overview of UI component
 
 - `\Magento\GroupedProduct\Api\Data\GroupedOptionsInterface`
     - represents `product item id with qty` of a grouped product
-    
+
 For information about a public API in Magento 2, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 
 ## Additional information
 
-For more information about creating grouped product, see [Creating Grouped Product](https://docs.magento.com/user-guide/catalog/product-create-grouped.html).
+For more information about creating grouped product, see [Creating Grouped Product](https://experienceleague.adobe.com/docs/commerce-admin/catalog/products/types/product-create-grouped.html).

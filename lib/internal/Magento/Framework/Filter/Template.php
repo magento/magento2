@@ -16,6 +16,8 @@ use Magento\Framework\Filter\DirectiveProcessor\LegacyDirective;
 use Magento\Framework\Filter\DirectiveProcessor\TemplateDirective;
 use Magento\Framework\Filter\DirectiveProcessor\VarDirective;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\Filter\Template\SignatureProvider;
+use Magento\Framework\Filter\Template\FilteringDepthMeter;
 
 /**
  * Template constructions filter
@@ -99,22 +101,42 @@ class Template implements FilterInterface
     private $variableResolver;
 
     /**
+     * @var SignatureProvider|null
+     */
+    private $signatureProvider;
+
+    /**
+     * @var FilteringDepthMeter|null
+     */
+    private $filteringDepthMeter;
+
+    /**
      * @param StringUtils $string
      * @param array $variables
      * @param DirectiveProcessorInterface[] $directiveProcessors
      * @param VariableResolverInterface|null $variableResolver
+     * @param SignatureProvider|null $signatureProvider
+     * @param FilteringDepthMeter|null $filteringDepthMeter
      */
     public function __construct(
         StringUtils $string,
         $variables = [],
         $directiveProcessors = [],
-        VariableResolverInterface $variableResolver = null
+        VariableResolverInterface $variableResolver = null,
+        SignatureProvider $signatureProvider = null,
+        FilteringDepthMeter $filteringDepthMeter = null
     ) {
         $this->string = $string;
         $this->setVariables($variables);
         $this->directiveProcessors = $directiveProcessors;
         $this->variableResolver = $variableResolver ?? ObjectManager::getInstance()
                 ->get(VariableResolverInterface::class);
+
+        $this->signatureProvider = $signatureProvider ?? ObjectManager::getInstance()
+                ->get(SignatureProvider::class);
+
+        $this->filteringDepthMeter = $filteringDepthMeter ?? ObjectManager::getInstance()
+                ->get(FilteringDepthMeter::class);
 
         if (empty($directiveProcessors)) {
             $this->directiveProcessors = [
@@ -167,6 +189,7 @@ class Template implements FilterInterface
      *
      * @param string $value
      * @return string
+     *
      * @throws \Exception
      */
     public function filter($value)
@@ -178,6 +201,62 @@ class Template implements FilterInterface
             )->render());
         }
 
+        $this->filteringDepthMeter->descend();
+
+        // Processing of template directives.
+        $templateDirectivesResults = array_unique(
+            $this->processDirectives($value),
+            SORT_REGULAR
+        );
+
+        $value = $this->applyDirectivesResults($value, $templateDirectivesResults);
+
+        // Processing of deferred directives received from child templates
+        // or nested directives.
+        $deferredDirectivesResults = array_unique(
+            $this->processDirectives($value, true),
+            SORT_REGULAR
+        );
+
+        $value = $this->applyDirectivesResults($value, $deferredDirectivesResults);
+
+        if ($this->filteringDepthMeter->showMark() > 1) {
+            // Signing own deferred directives (if any).
+            $signature = $this->signatureProvider->get();
+
+            foreach ($templateDirectivesResults as $result) {
+                if ($result['directive'] === $result['output']) {
+                    $value = str_replace(
+                        $result['output'],
+                        $signature . $result['output'] . $signature,
+                        $value
+                    );
+                }
+            }
+        }
+
+        $value = $this->afterFilter($value);
+
+        $this->filteringDepthMeter->ascend();
+
+        return $value;
+    }
+
+    /**
+     * Processes template directives and returns an array that contains results produced by each directive.
+     *
+     * @param string $value
+     * @param bool $isSigned
+     *
+     * @return array
+     *
+     * @throws InvalidArgumentException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function processDirectives($value, $isSigned = false): array
+    {
+        $results = [];
+
         foreach ($this->directiveProcessors as $directiveProcessor) {
             if (!$directiveProcessor instanceof DirectiveProcessorInterface) {
                 throw new InvalidArgumentException(
@@ -185,15 +264,100 @@ class Template implements FilterInterface
                 );
             }
 
-            if (preg_match_all($directiveProcessor->getRegularExpression(), $value, $constructions, PREG_SET_ORDER)) {
+            $pattern = $directiveProcessor->getRegularExpression();
+
+            if ($isSigned) {
+                $pattern = $this->embedSignatureIntoPattern($pattern);
+            }
+
+            if (preg_match_all($pattern, $value, $constructions, PREG_SET_ORDER)) {
                 foreach ($constructions as $construction) {
                     $replacedValue = $directiveProcessor->process($construction, $this, $this->templateVars);
-                    $value = str_replace($construction[0], $replacedValue, $value);
+
+                    $result = [
+                        'directive' => $construction[0],
+                        'output' => $replacedValue
+                    ];
+
+                    if (count($this->afterFilterCallbacks) > 0) {
+                        $result['callbacks'] = $this->afterFilterCallbacks;
+
+                        $this->resetAfterFilterCallbacks();
+                    }
+
+                    $results[] = $result;
                 }
             }
         }
 
-        return $this->afterFilter($value);
+        return $results;
+    }
+
+    /**
+     * Applies results produced by directives.
+     *
+     * @param string $value
+     * @param array $results
+     *
+     * @return string
+     */
+    private function applyDirectivesResults(string $value, array $results): string
+    {
+        $processedResults = [];
+
+        foreach ($results as $result) {
+            foreach ($processedResults as $processedResult) {
+                $result['directive'] = str_replace(
+                    $processedResult['directive'],
+                    $processedResult['output'],
+                    $result['directive']
+                );
+            }
+
+            $value = str_replace($result['directive'], $result['output'], $value);
+
+            if (isset($result['callbacks'])) {
+                foreach ($result['callbacks'] as $callback) {
+                    $this->addAfterFilterCallback($callback);
+                }
+            }
+
+            $processedResults[] = $result;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Modifies given regular expression pattern to be able to recognize signed directives.
+     *
+     * @param string $pattern
+     *
+     * @return string
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function embedSignatureIntoPattern(string $pattern): string
+    {
+        $signature = $this->signatureProvider->get();
+
+        $closingDelimiters = [
+            '(' => ')',
+            '{' => '}',
+            '[' => ']',
+            '<' => '>'
+        ];
+
+        $closingDelimiter = $openingDelimiter = substr(trim($pattern), 0, 1);
+
+        if (array_key_exists($openingDelimiter, $closingDelimiters)) {
+            $closingDelimiter = $closingDelimiters[$openingDelimiter];
+        }
+
+        $pattern = substr_replace($pattern, $signature, strpos($pattern, $openingDelimiter) + 1, 0);
+        $pattern = substr_replace($pattern, $signature, strrpos($pattern, $closingDelimiter), 0);
+
+        return $pattern;
     }
 
     /**

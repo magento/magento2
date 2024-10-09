@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\ProductAlert\Model\Mailing;
 
-use Magento\Framework\App\Area;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Data;
@@ -25,15 +24,11 @@ use Magento\ProductAlert\Model\Stock;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\View\DesignInterface;
 
 /**
  * Class for mailing Product Alerts
  *
- * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class AlertProcessor
 {
@@ -86,11 +81,6 @@ class AlertProcessor
     private $errorEmailSender;
 
     /**
-     * @var DesignInterface
-     */
-    private $design;
-
-    /**
      * @param EmailFactory $emailFactory
      * @param PriceCollectionFactory $priceCollectionFactory
      * @param StockCollectionFactory $stockCollectionFactory
@@ -100,7 +90,6 @@ class AlertProcessor
      * @param ProductSalability $productSalability
      * @param StoreManagerInterface $storeManager
      * @param ErrorEmailSender $errorEmailSender
-     * @param DesignInterface|null $design
      */
     public function __construct(
         EmailFactory $emailFactory,
@@ -111,8 +100,7 @@ class AlertProcessor
         Data $catalogData,
         ProductSalability $productSalability,
         StoreManagerInterface $storeManager,
-        ErrorEmailSender $errorEmailSender,
-        DesignInterface $design = null
+        ErrorEmailSender $errorEmailSender
     ) {
         $this->emailFactory = $emailFactory;
         $this->priceCollectionFactory = $priceCollectionFactory;
@@ -123,8 +111,6 @@ class AlertProcessor
         $this->productSalability = $productSalability;
         $this->storeManager = $storeManager;
         $this->errorEmailSender = $errorEmailSender;
-        $this->design = $design ?: ObjectManager::getInstance()
-            ->get(DesignInterface::class);
     }
 
     /**
@@ -159,70 +145,65 @@ class AlertProcessor
      */
     private function processAlerts(string $alertType, array $customerIds, int $websiteId): array
     {
-        //Set the current design theme
-        $this->design->setDesignTheme(
-            $this->design->getConfigurationDesignTheme(Area::AREA_FRONTEND),
-            Area::AREA_FRONTEND
-        );
-
         /** @var Email $email */
         $email = $this->emailFactory->create();
         $email->setType($alertType);
         $email->setWebsiteId($websiteId);
         $errors = [];
 
-        try {
-            $collection = $this->getAlertCollection($alertType, $customerIds, $websiteId);
-        } catch (\Exception $e) {
-            $errors[] = $e->getMessage();
-            return $errors;
-        }
-
-        /** @var CustomerInterface $customer */
-        $customer = null;
         /** @var Website $website */
         $website = $this->storeManager->getWebsite($websiteId);
-        $defaultStoreId = $website->getDefaultStore()->getId();
-        $products = [];
 
-        /** @var Price|Stock $alert */
-        foreach ($collection as $alert) {
+        foreach ($website->getStores() as $store) {
+            /** @var CustomerInterface $customer */
+            $customer = null;
+            $products = [];
+            $storeId = (int)$store->getId();
+            $email->setStoreId($storeId);
+
             try {
-                if ($alert->getStoreId()) {
-                    $email->setStoreId($alert->getStoreId());
-                }
-                if ($customer === null) {
-                    $customer = $this->customerRepository->getById($alert->getCustomerId());
-                } elseif ((int)$customer->getId() !== (int)$alert->getCustomerId()) {
-                    $this->sendEmail($customer, $email);
-                    $customer = $this->customerRepository->getById($alert->getCustomerId());
-                }
-
-                if (!isset($products[$alert->getProductId()])) {
-                    $product = $this->productRepository->getById($alert->getProductId(), false, $defaultStoreId, true);
-                    $products[$alert->getProductId()] = $product;
-                } else {
-                    $product = $products[$alert->getProductId()];
-                }
-
-                switch ($alertType) {
-                    case self::ALERT_TYPE_STOCK:
-                        $this->saveStockAlert($alert, $product, $website, $email);
-                        break;
-                    case self::ALERT_TYPE_PRICE:
-                        $this->savePriceAlert($alert, $product, $customer, $email);
-                        break;
-                }
+                $collection = $this->getAlertCollection($alertType, $customerIds, $storeId);
             } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
+                continue;
             }
-        }
 
-        if ($customer !== null) {
-            try {
-                $this->sendEmail($customer, $email);
-            } catch (\Exception $e) {
-                $errors[] = $e->getMessage();
+            /** @var Price|Stock $alert */
+            foreach ($collection as $alert) {
+                try {
+                    if ($customer === null) {
+                        $customer = $this->customerRepository->getById($alert->getCustomerId());
+                    } elseif ((int)$customer->getId() !== (int)$alert->getCustomerId()) {
+                        $this->sendEmail($customer, $email);
+                        $customer = $this->customerRepository->getById($alert->getCustomerId());
+                    }
+
+                    if (!isset($products[$alert->getProductId()])) {
+                        $product = $this->productRepository->getById($alert->getProductId(), false, $storeId, true);
+                        $products[$alert->getProductId()] = $product;
+                    } else {
+                        $product = $products[$alert->getProductId()];
+                    }
+
+                    switch ($alertType) {
+                        case self::ALERT_TYPE_STOCK:
+                            $this->saveStockAlert($alert, $product, $website, $email);
+                            break;
+                        case self::ALERT_TYPE_PRICE:
+                            $this->savePriceAlert($alert, $product, $customer, $email);
+                            break;
+                    }
+                } catch (\Exception $e) {
+                    $errors[] = $e->getMessage();
+                }
+            }
+
+            if ($customer !== null) {
+                try {
+                    $this->sendEmail($customer, $email);
+                } catch (\Exception $e) {
+                    $errors[] = $e->getMessage();
+                }
             }
         }
 
@@ -247,25 +228,25 @@ class AlertProcessor
      *
      * @param string $alertType
      * @param array $customerIds
-     * @param int $websiteId
+     * @param int $storeId
      * @return AbstractCollection
      * @throws \InvalidArgumentException
      */
-    private function getAlertCollection(string $alertType, array $customerIds, int $websiteId): AbstractCollection
+    private function getAlertCollection(string $alertType, array $customerIds, int $storeId): AbstractCollection
     {
         switch ($alertType) {
             case self::ALERT_TYPE_STOCK:
                 $collection = $this->stockCollectionFactory->create();
                 $collection->addFieldToFilter('customer_id', ['in' => $customerIds])
-                    ->addWebsiteFilter($websiteId)
                     ->addStatusFilter(0)
+                    ->addFilter('store_id', $storeId)
                     ->setCustomerOrder()
                     ->addOrder('product_id');
                 break;
             case self::ALERT_TYPE_PRICE:
                 $collection = $this->priceCollectionFactory->create();
                 $collection->addFieldToFilter('customer_id', ['in' => $customerIds])
-                    ->addWebsiteFilter($websiteId)
+                    ->addFilter('store_id', $storeId)
                     ->setCustomerOrder()
                     ->addOrder('product_id');
                 break;

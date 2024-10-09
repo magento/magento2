@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
+<!-- ko if: $row() -->
 <a
     class="action-menu-item"
     if="$col.isSingle($row()._rowIndex)"
@@ -20,3 +21,4 @@
         </li>
     </ul>
 </div>
+<!-- /ko -->

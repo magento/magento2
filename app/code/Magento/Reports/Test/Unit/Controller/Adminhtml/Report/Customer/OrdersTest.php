@@ -11,9 +11,9 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
 use Magento\Framework\View\Page\Title;
 use Magento\Reports\Controller\Adminhtml\Report\Customer\Orders;
-use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTestCase;
 
-class OrdersTest extends AbstractControllerTest
+class OrdersTest extends AbstractControllerTestCase
 {
     /**
      * @var Orders
@@ -63,10 +63,17 @@ class OrdersTest extends AbstractControllerTest
             ->with('Magento_Reports::report_customers_orders');
         $this->breadcrumbsBlockMock
             ->method('addLink')
-            ->withConsecutive(
-                [new Phrase('Reports'), new Phrase('Reports')],
-                [new Phrase('Customers'), new Phrase('Customers')],
-                [new Phrase('Customers by Number of Orders'), new Phrase('Customers by Number of Orders')]
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == new Phrase('Reports') && $arg2 == new Phrase('Reports')) {
+                        return null;
+                    } elseif ($arg1 == new Phrase('Customers') && $arg2 == new Phrase('Customers')) {
+                        return null;
+                    } elseif ($arg1 == new Phrase('Customers by Number of Orders') &&
+                        $arg2 == new Phrase('Customers by Number of Orders')) {
+                        return null;
+                    }
+                }
             );
         $this->orders->execute();
     }

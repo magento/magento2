@@ -9,12 +9,14 @@ checkbox during first login.
 ## Installation
 
 Before installing this module, note that the Magento_Persistent is dependent on the following modules:
+
 - `Magento_Checkout`
 - `Magento_PageCache`
 
 The Magento_Persistent module creates the `persistent_session` table in the database.
 
 This module modifies the following tables in the database:
+
 - `quote` - adds column `is_persistent`
 
 All database schema changes made by this module are rolled back when the module gets disabled and setup:upgrade command is run.
@@ -50,12 +52,14 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 ## Additional information
 
 More information can get at articles:
-- [Persistent Shopping Cart](https://docs.magento.com/user-guide/configuration/customers/persistent-shopping-cart.html)
+
+- [Persistent Shopping Cart](https://experienceleague.adobe.com/docs/commerce-admin/config/customers/persistent-shopping-cart.html)
 - [Persistent Cart](https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/point-of-purchase/cart/cart-persistent.html)
 
 ### Cron options
 
 Cron group configuration can be set at `etc/crontab.xml`:
+
 - `persistent_clear_expired` - clear expired persistent sessions
 
 [Learn how to configure and run cron in Magento.](https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/cli/configure-cron-jobs.html).

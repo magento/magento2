@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-11008"/>
             <group value="mtf_migrated"/>
+            <group value="indexers_by_schedule_mode_only"/>
         </annotations>
         <before>
             <!--Login as admin -->
@@ -35,13 +36,15 @@
             <!--Enable Flat Catalog Category -->
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 1"/>
             <!--Open Index Management Page and Select Index mode "Update by Schedule" -->
-            <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="schedule" />
+            <comment userInput="Adding the comment to replace 'indexer:set-mode schedule' command for preserving Backward Compatibility" stepKey="setIndexerMode"/>
             <!-- Run cron -->
-            <magentoCron stepKey="runIndexCronJobs" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJobs">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0 "/>
-            <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="realtime" />
+            <comment userInput="Adding the comment to replace 'indexer:set-mode realtime' command for preserving Backward Compatibility" stepKey="setIndexerMode"/>
             <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="indexerReindex"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
                 <argument name="customStore" value="customStoreEN"/>
