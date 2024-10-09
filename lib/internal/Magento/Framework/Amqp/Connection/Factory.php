@@ -19,6 +19,7 @@ class Factory
 {
     /**
      * Create connection according to given options.
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @param FactoryOptions $options
