@@ -36,6 +36,7 @@ class FactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->amqpStreamConnectionMock = $this->createMock(AMQPStreamConnection::class);
+        // Since final class AMQPConnectionConfig cannot be mocked, hence mocking the Factory class
         $this->factoryMock = $this->createMock(Factory::class);
         $this->optionsMock = $this->createMock(FactoryOptions::class);
     }
@@ -55,13 +56,13 @@ class FactoryTest extends TestCase
         $this->optionsMock->method('getPassword')->willReturn('guest');
         $this->optionsMock->method('getVirtualHost')->willReturn('/');
 
-        // Since final class AMQPConnectionConfig cannot be mocked, hence mocking the Factory class
         $this->factoryMock->expects($this->once())
             ->method('create')
             ->with($this->optionsMock)
             ->willReturn($this->amqpStreamConnectionMock);
 
         $connection = $this->factoryMock->create($this->optionsMock);
+
         $this->assertInstanceOf($connectionClass, $connection);
     }
 
