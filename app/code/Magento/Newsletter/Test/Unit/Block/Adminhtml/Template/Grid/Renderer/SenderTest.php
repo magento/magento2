@@ -70,7 +70,7 @@ class SenderTest extends TestCase
     /**
      * @return array
      */
-    public function rendererDataProvider()
+    public static function rendererDataProvider()
     {
         return [
             [
