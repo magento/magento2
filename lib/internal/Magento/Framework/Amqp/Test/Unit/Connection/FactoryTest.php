@@ -126,11 +126,11 @@ class FactoryTest extends TestCase
     {
         return [
             [
-                'ssl_enabled' => true,
+                'sslEnabled' => true,
                 'connection_class' => AMQPStreamConnection::class,
             ],
             [
-                'ssl_enabled' => false,
+                'sslEnabled' => false,
                 'connection_class' => AMQPStreamConnection::class,
             ],
         ];
