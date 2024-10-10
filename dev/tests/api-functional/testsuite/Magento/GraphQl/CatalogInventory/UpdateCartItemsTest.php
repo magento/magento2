@@ -47,11 +47,18 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $itemId = $this->getQuoteItemIdByReservedQuoteIdAndSku->execute('test_quote', 'simple_product');
 
         $quantity = 0.5;
-        $this->expectExceptionMessage(
-            "Could not update the product with SKU simple_product: The fewest you may purchase is 1"
-        );
         $query = $this->getQuery($maskedQuoteId, $itemId, $quantity);
-        $this->graphQlMutation($query);
+        $response = $this->graphQlMutation($query);
+
+        $this->assertArrayHasKey('updateCartItems', $response);
+        $this->assertArrayHasKey('errors', $response['updateCartItems']);
+
+        $responseError = $response['updateCartItems']['errors'][0];
+        $this->assertEquals(
+            "Could not update the product with SKU simple_product: The fewest you may purchase is 1.",
+            $responseError['message']
+        );
+        $this->assertEquals('INVALID_PARAMETER_VALUE', $responseError['code']);
     }
 
     /**
@@ -65,11 +72,18 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $itemId = $this->getQuoteItemIdByReservedQuoteIdAndSku->execute('test_quote', 'simple_product');
 
         $quantity = 100;
-        $this->expectExceptionMessage(
-            "Could not update the product with SKU simple_product: The requested qty is not available"
-        );
         $query = $this->getQuery($maskedQuoteId, $itemId, $quantity);
-        $this->graphQlMutation($query);
+        $response = $this->graphQlMutation($query);
+
+        $this->assertArrayHasKey('updateCartItems', $response);
+        $this->assertArrayHasKey('errors', $response['updateCartItems']);
+
+        $responseError = $response['updateCartItems']['errors'][0];
+        $this->assertEquals(
+            "The requested qty. is not available",
+            $responseError['message']
+        );
+        $this->assertEquals('INSUFFICIENT_STOCK', $responseError['code']);
     }
 
     /**
@@ -96,6 +110,10 @@ mutation {
         id
         quantity
       }
+    }
+    errors {
+      message
+      code
     }
   }
 }

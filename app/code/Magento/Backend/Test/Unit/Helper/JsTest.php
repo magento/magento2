@@ -48,7 +48,7 @@ class JsTest extends TestCase
      *
      * @return array
      */
-    public function getEncodedDataProvider(): array
+    public static function getEncodedDataProvider(): array
     {
         return [
             'Decoding empty serialized string' => [

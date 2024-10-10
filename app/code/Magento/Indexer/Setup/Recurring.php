@@ -90,6 +90,17 @@ class Recurring implements InstallSchemaInterface
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
+        foreach ($this->config->getIndexers() as $index) {
+            $indexerId = $index['indexer_id'];
+            $state = $this->stateFactory->create();
+            $state->loadByIndexer($indexerId);
+            //  If state does not exist, create default index mode to scheduled
+            if (empty($state->getData('state_id'))) {
+                $indexer = $this->indexerFactory->create()->load($indexerId);
+                $indexer->setScheduled(true);
+            }
+        }
+
         /** @var State[] $stateIndexers */
         $stateIndexers = [];
         $states = $this->statesFactory->create();

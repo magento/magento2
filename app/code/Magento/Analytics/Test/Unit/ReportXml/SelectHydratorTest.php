@@ -226,7 +226,7 @@ class SelectHydratorTest extends TestCase
 
         return [
             'Select without expressions' => [
-                'Parts' => [
+                'selectParts' => [
                     Select::COLUMNS => [
                         [
                             'table_name',
@@ -259,7 +259,7 @@ class SelectHydratorTest extends TestCase
                         ]
                     ]
                 ],
-                'expectedExpressions' => [
+                'expressionMocks' => [
                     self::$expressionMock
                 ]
             ]

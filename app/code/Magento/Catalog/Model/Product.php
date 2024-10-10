@@ -1877,8 +1877,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $data = parent::toArray($arrAttributes);
         $stock = $this->getStockItem();
-        if ($stock) {
+        if (is_object($stock) && method_exists($stock, 'toArray')) {
             $data['stock_item'] = $stock->toArray();
+        } elseif (is_array($stock)) {
+            $data['stock_item'] = $stock;
         }
         unset($data['stock_item']['product']);
         return $data;
@@ -2411,6 +2413,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             || $this->isObjectNew();
         if ($isProductNew && ($isStatusChanged || $this->getStatus() == Status::STATUS_ENABLED)) {
             $identities[] = \Magento\Catalog\Block\Product\NewProduct::CACHE_TAG;
+            $identities[] = \Magento\Catalog\Block\Rss\Product\NewProducts::CACHE_TAG;
         }
 
         return array_unique($identities);

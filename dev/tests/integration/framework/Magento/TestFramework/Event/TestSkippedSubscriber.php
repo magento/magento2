@@ -27,10 +27,10 @@ class TestSkippedSubscriber implements SkippedSubscriber
 
         if (!Magento::getTestPrepared()) {
             $objectManager = Bootstrap::getObjectManager();
-            $assetRepo = $objectManager->create($className, ['name' => $methodName]);
+            $testObj = $objectManager->create($className, ['name' => $methodName]);
 
-            $mageEvent = Magento::getDefaultEventManager();
-            $mageEvent->fireEvent('endTest', [$assetRepo], true);
+            $phpUnit = $objectManager->create(PhpUnit::class);
+            $phpUnit->endTest($testObj, 0);
             Magento::setCurrentEventObject(null);
             Magento::setTestPrepared(false);
         }

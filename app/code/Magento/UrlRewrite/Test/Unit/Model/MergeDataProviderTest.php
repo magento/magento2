@@ -37,15 +37,36 @@ class MergeDataProviderTest extends TestCase
      * Run test merge method
      *
      * @param array $urlRewriteMockArray
-     * @param String $expectedData
+     * @param array $expectedData
      * @param int $arrayCount
      * @dataProvider mergeDataProvider
      * @return void
      */
     public function testMerge($urlRewriteMockArray, $expectedData, $arrayCount)
     {
-        $this->urlRewritesSet->merge($urlRewriteMockArray);
-        $this->assertEquals($expectedData, $this->urlRewritesSet->getData());
+        $urlRewriteMockArrayFinal = [];
+        if (!empty($urlRewriteMockArray)) {
+            foreach ($urlRewriteMockArray as $key => $value) {
+                $urlRewriteMockArrayFinal[$key] = $value($this);
+            }
+        }
+        else {
+            $urlRewriteMockArrayFinal = $urlRewriteMockArray;
+        }
+
+        $expectedDataFinal = [];
+
+        if (!empty($expectedData)) {
+            foreach ($expectedData as $key => $value) {
+                $expectedDataFinal[$key] = $value($this);
+            }
+        }
+        else {
+            $expectedDataFinal = $expectedData;
+        }
+
+        $this->urlRewritesSet->merge($urlRewriteMockArrayFinal);
+        $this->assertEquals($expectedDataFinal, $this->urlRewritesSet->getData());
         $this->assertCount($arrayCount, $this->urlRewritesSet->getData());
     }
 
@@ -59,38 +80,39 @@ class MergeDataProviderTest extends TestCase
         $this->assertEmpty($this->urlRewritesSet->getData());
     }
 
+    protected function getMockForUrlRewrite($requestPathForMock, $storeIdForMock) {
+        $urlRewriteMock = $this->createMock(UrlRewrite::class);
+        if ($requestPathForMock!=null && $storeIdForMock!=null) {
+            $urlRewriteMock->expects($this->any())
+                ->method('getRequestPath')
+                ->willReturn($requestPathForMock);
+
+            $urlRewriteMock->expects($this->any())
+                ->method('getStoreId')
+                ->willReturn($storeIdForMock);
+        }
+        return $urlRewriteMock;
+    }
+
     /**
      * Data provider for testMerge
      *
      * @return array
      */
-    public function mergeDataProvider()
+    public static function mergeDataProvider()
     {
-        $urlRewriteMock1 = $this->createMock(UrlRewrite::class);
+        $urlRewriteMock1 = static fn (self $testCase) =>
+            $testCase->getMockForUrlRewrite(null, null);
 
         $requestPathForMock2 = 'magento.tst/products/simpleproduct2';
         $storeIdForMock2 = 'testStore2';
-        $urlRewriteMock2 = $this->createMock(UrlRewrite::class);
-
-        $urlRewriteMock2->expects($this->atLeastOnce())
-            ->method('getRequestPath')
-            ->willReturn($requestPathForMock2);
-
-        $urlRewriteMock2->expects($this->atLeastOnce())
-            ->method('getStoreId')
-            ->willReturn($storeIdForMock2);
+        $urlRewriteMock2 = static fn (self $testCase) =>
+            $testCase->getMockForUrlRewrite($requestPathForMock2, $storeIdForMock2);
 
         $requestPathForMock3 = 'magento.tst/products/simpleproduct3';
         $storeIdForMock3 = 'testStore3';
-        $urlRewriteMock3 = $this->createMock(UrlRewrite::class);
-
-        $urlRewriteMock3->expects($this->atLeastOnce())
-            ->method('getRequestPath')
-            ->willReturn($requestPathForMock3);
-
-        $urlRewriteMock3->expects($this->atLeastOnce())
-            ->method('getStoreId')
-            ->willReturn($storeIdForMock3);
+        $urlRewriteMock3 = static fn (self $testCase) =>
+            $testCase->getMockForUrlRewrite($requestPathForMock3, $storeIdForMock3);
 
         return [
             [

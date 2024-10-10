@@ -76,7 +76,7 @@ class FilterApplierTest extends TestCase
     /**
      * @return array
      */
-    public function applyDataProvider(): array
+    public static function applyDataProvider(): array
     {
         return [
             [

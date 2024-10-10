@@ -16,7 +16,7 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
     const RESOURCE_PATH_SUFFIX = '/V1/categories';
     const RESOURCE_PATH_PREFIX = 'products';
 
-    private $categoryId = 333;
+    private static $categoryId = 333;
 
     /**
      * @dataProvider saveDataProvider
@@ -30,7 +30,7 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH_SUFFIX
-                    . '/' . $this->categoryId . '/' . self::RESOURCE_PATH_PREFIX,
+                    . '/' . self::$categoryId . '/' . self::RESOURCE_PATH_PREFIX,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
@@ -41,19 +41,19 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
         ];
         $result = $this->_webApiCall($serviceInfo, ['productLink' => $productLink]);
         $this->assertTrue($result);
-        $this->assertTrue($this->isProductInCategory($this->categoryId, $productId, $productPosition));
+        $this->assertTrue($this->isProductInCategory(self::$categoryId, $productId, $productPosition));
     }
 
-    public function saveDataProvider()
+    public static function saveDataProvider()
     {
         return [
             [
-                ['sku' => 'simple_with_cross', 'position' => 7, 'category_id' => $this->categoryId],
+                ['sku' => 'simple_with_cross', 'position' => 7, 'category_id' => self::$categoryId],
                 334,
                 7,
             ],
             [
-                ['sku' => 'simple_with_cross', 'category_id' => $this->categoryId],
+                ['sku' => 'simple_with_cross', 'category_id' => self::$categoryId],
                 334,
                 0
             ],
@@ -72,7 +72,7 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH_SUFFIX
-                    . '/' . $this->categoryId . '/' . self::RESOURCE_PATH_PREFIX,
+                    . '/' . self::$categoryId . '/' . self::RESOURCE_PATH_PREFIX,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -83,19 +83,19 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
         ];
         $result = $this->_webApiCall($serviceInfo, ['productLink' => $productLink]);
         $this->assertTrue($result);
-        $this->assertFalse($this->isProductInCategory($this->categoryId, $productId, $productPosition));
+        $this->assertFalse($this->isProductInCategory(self::$categoryId, $productId, $productPosition));
     }
 
-    public function updateProductProvider()
+    public static function updateProductProvider()
     {
         return [
             [
-                ['sku' => 'simple_with_cross', 'position' => 7, 'categoryId' => $this->categoryId],
+                ['sku' => 'simple_with_cross', 'position' => 7, 'categoryId' => self::$categoryId],
                 333,
                 4,
             ],
             [
-                ['sku' => 'simple_with_cross', 'categoryId' => $this->categoryId],
+                ['sku' => 'simple_with_cross', 'categoryId' => self::$categoryId],
                 333,
                 0
             ],
@@ -109,7 +109,7 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH_SUFFIX . '/' . $this->categoryId .
+                'resourcePath' => self::RESOURCE_PATH_SUFFIX . '/' . self::$categoryId .
                     '/' . self::RESOURCE_PATH_PREFIX . '/simple',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
@@ -121,10 +121,10 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
         ];
         $result = $this->_webApiCall(
             $serviceInfo,
-            ['sku' => 'simple', 'categoryId' => $this->categoryId]
+            ['sku' => 'simple', 'categoryId' => self::$categoryId]
         );
         $this->assertTrue($result);
-        $this->assertFalse($this->isProductInCategory($this->categoryId, 333, 10));
+        $this->assertFalse($this->isProductInCategory(self::$categoryId, 333, 10));
     }
 
     /**
