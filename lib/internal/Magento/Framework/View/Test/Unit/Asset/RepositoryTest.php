@@ -118,15 +118,15 @@ class RepositoryTest extends TestCase
         $this->fallbackFactoryMock = $this->getMockBuilder(
             FallbackContextFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextFactoryMock = $this->getMockBuilder(ContextFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->remoteFactoryMock = $this->getMockBuilder(RemoteFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -190,6 +190,9 @@ class RepositoryTest extends TestCase
      */
     public function testUpdateDesignParams($params, $result)
     {
+        if (is_callable($result['themeModel'])) {
+            $result['themeModel'] = $result['themeModel']($this);
+        }
         $this->themeProvider
             ->expects($this->any())
             ->method('getThemeByFullPath')
@@ -246,12 +249,18 @@ class RepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function updateDesignParamsDataProvider()
+    public static function updateDesignParamsDataProvider()
     {
         return [
             [
                 ['area' => 'AREA'],
-                ['area' => 'AREA', 'themeModel' => $this->getThemeMock(), 'module' => false, 'locale' => 'locale']],
+                [
+                    'area' => 'AREA',
+                    'themeModel' => static fn(self $testCase) => $testCase->getThemeMock(),
+                    'module' => false,
+                    'locale' => 'locale'
+                ]
+            ],
             [
                 ['themeId' => 'ThemeID'],
                 [
@@ -410,7 +419,7 @@ class RepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function createRelatedDataProvider()
+    public static function createRelatedDataProvider()
     {
         return [
             ['test/file.js', '/test/file.js', ''],

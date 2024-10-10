@@ -137,7 +137,7 @@ class TextTest extends TestCase
      *
      * @return array
      */
-    public function alphanumDataProvider(): array
+    public static function alphanumDataProvider(): array
     {
         return [
             ['QazWsx', true],
@@ -185,7 +185,7 @@ class TextTest extends TestCase
      *
      * @return array
      */
-    public function alphanumWithSpacesDataProvider(): array
+    public static function alphanumWithSpacesDataProvider(): array
     {
         return [
             ['QazWsx', true],

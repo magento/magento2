@@ -88,7 +88,7 @@ class CaptureOperationTest extends TestCase
             ->method('capture');
 
         $order = $this->getMockBuilder(Order::class)
-            ->setMethods(['prepareInvoice', 'addRelatedObject', 'setStatus'])
+            ->onlyMethods(['prepareInvoice', 'addRelatedObject', 'setStatus'])
             ->disableOriginalConstructor()
             ->getMock();
         $order->expects($this->once())
@@ -107,7 +107,8 @@ class CaptureOperationTest extends TestCase
 
         /** @var Payment|MockObject  $orderPayment | */
         $orderPayment = $this->getMockBuilder(Payment::class)
-            ->setMethods(['setCreatedInvoice', 'getOrder', 'getMethodInstance', 'getIsFraudDetected'])
+            ->addMethods(['setCreatedInvoice'])
+            ->onlyMethods(['getOrder', 'getMethodInstance', 'getIsFraudDetected'])
             ->disableOriginalConstructor()
             ->getMock();
         $orderPayment->expects($this->once())

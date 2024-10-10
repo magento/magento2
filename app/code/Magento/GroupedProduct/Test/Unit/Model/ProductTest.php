@@ -391,13 +391,15 @@ class ProductTest extends TestCase
         $outputGroupLink->setExtensionAttributes($groupExtension);
 
         $this->entityCollectionProviderMock->method('getCollection')
-            ->withConsecutive(
-                [$this->model, 'related'],
-                [$this->model, 'upsell'],
-                [$this->model, 'crosssell'],
-                [$this->model, 'associated']
-            )
-            ->willReturnOnConsecutiveCalls([$inputRelatedLink], [], [], [$inputGroupLink]);
+            ->willReturnCallback(function ($arg1, $arg2) use ($inputRelatedLink, $inputGroupLink) {
+                if ($arg1 == $this->model && $arg2 == 'related') {
+                    return [$inputRelatedLink];
+                } elseif ($arg1 == $this->model && $arg2 == 'associated') {
+                    return [$inputGroupLink];
+                } else {
+                    return [];
+                }
+            });
 
         $expectedOutput = [$outputRelatedLink, $outputGroupLink];
         $typeInstanceMock = $this->getMockBuilder(SimpleProductType::class)

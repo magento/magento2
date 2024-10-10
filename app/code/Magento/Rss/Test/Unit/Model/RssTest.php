@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Rss\Test\Unit\Model;
 
+use Magento\Catalog\Block\Rss\Product\NewProducts;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\FeedFactoryInterface;
 use Magento\Framework\App\FeedInterface;
@@ -125,6 +126,47 @@ class RssTest extends TestCase
         $dataProvider->expects($this->once())
             ->method('getRssData')
             ->willReturn($this->feedData);
+
+        $this->rss->setDataProvider($dataProvider);
+
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->with('cache_key')
+            ->willReturn(false);
+        $this->cacheMock->expects($this->once())
+            ->method('save')
+            ->with('serializedData')
+            ->willReturn(true);
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
+            ->with($this->feedData)
+            ->willReturn(self::STUB_SERIALIZED_DATA);
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with(self::STUB_SERIALIZED_DATA)
+            ->willReturn($this->feedData);
+
+        $this->assertEquals($this->feedData, $this->rss->getFeeds());
+    }
+
+    /**
+     * Get new products feed test
+     *
+     * @return void
+     */
+    public function testGetNewProductsFeed(): void
+    {
+        $dataProvider = $this->createMock(NewProducts::class);
+        $dataProvider->expects($this->atLeastOnce())
+            ->method('getCacheKey')
+            ->willReturn('cache_key');
+        $dataProvider->expects($this->atLeastOnce())
+            ->method('getCacheLifetime')
+            ->willReturn(100);
+        $dataProvider->expects($this->once())
+            ->method('getRssData')
+            ->willReturn($this->feedData);
+        $dataProvider->expects($this->once())->method('getIdentities')->willReturn(['identity']);
 
         $this->rss->setDataProvider($dataProvider);
 

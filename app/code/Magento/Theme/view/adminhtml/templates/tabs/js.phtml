@@ -17,117 +17,165 @@ require([
     "jquery",
     "mage/template",
     "Magento_Ui/js/modal/alert",
-    "jquery/file-uploader",
+    "jquery/uppy-core",
     "Magento_Theme/js/sortable",
     "mage/translate"
 ], function ($, mageTemplate, alert) {
+    let targetElement = $('#js_files_uploader').parent()[0],
+        url = '{$block->escapeJs($block->getJsUploadUrl())}',
+        fileId = null,
+        arrayFromObj = Array.from,
+        options = {
+            proudlyDisplayPoweredByUppy: false,
+            target: targetElement,
+            hideUploadButton: false,
+            hideRetryButton: true,
+            hideCancelButton: true,
+            inline: true,
+            showRemoveButtonAfterComplete: true,
+            showProgressDetails: false,
+            showSelectedFiles: false,
+            allowMultipleUploads: false,
+            hideProgressAfterFinish: true
+        };
 
-    $('#js_files_uploader').fileupload({
-        dataType: 'json',
-        replaceFileInput: false,
-        sequentialUploads: true,
-        url: '{$block->escapeJs($block->getJsUploadUrl())}',
+    const uppy = new Uppy.Uppy({
+        restrictions: {
+            allowedFileTypes: ['.js']
+        },
 
-        /**
-         * Add data
-         * @param e
-         * @param data
-         */
-        add: function (e, data) {
+        onBeforeFileAdded: (currentFile) => {
             var progressTmpl = mageTemplate('#js-file-uploader-template'),
                 fileSize,
                 tmpl;
 
-            $.each(data.files, function (index, file) {
-                fileSize = typeof file.size == "undefined" ?
+            fileSize = typeof currentFile.size == "undefined" ?
                     $.mage.__('We could not detect a size.') :
-                    byteConvert(file.size);
+                    byteConvert(currentFile.size);
 
-                data.fileId = Math.random().toString(36).substr(2, 9);
+            fileId = Math.random().toString(36).substr(2, 9);
 
-                tmpl = progressTmpl({
-                    data: {
-                        name: file.name,
-                        size: fileSize,
-                        id: data.fileId
-                    }
-                });
-
-                $(tmpl).appendTo('#js-file-uploader');
+            tmpl = progressTmpl({
+                data: {
+                    name: currentFile.name,
+                    size: fileSize,
+                    id: fileId
+                }
             });
+
+            // code to allow duplicate files from same folder
+            const modifiedFile = {
+                ...currentFile,
+                id:  currentFile.id + '-' + fileId,
+                tempFileId:  fileId
+            };
+
+            $(tmpl).appendTo('#js-file-uploader');
 
             var uploadButton = $('#js_uploader_button');
             uploadButton.prop('disabled', false);
 
-            uploadButton.on('click', function () {
-                $('#messages').html('');
-                $(this).attr('disabled', 'disabled');
-
-                data.submit();
-            });
+            return modifiedFile;
         },
 
-        /**
-         * On done event
-         * @param e
-         * @param data
-         */
-        done: function (e, data) {
-            $('#no-js-files-found').remove();
-
-            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-            $(progressSelector).css('width', '100%');
-
-            $(this).val('');
-
-            if (!data.result.error) {
-                $(progressSelector).removeClass('upload-progress').addClass('upload-success');
-
-                $('#' + data.fileId).delay(2000).fadeOut(2000);
-                $('body').trigger('refreshJsList', {
-                    jsList: data.result.files
-                });
-            } else {
-                $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
-            }
-
-            $('.ui-sortable').sortable('initButtons');
-        },
-
-        /**
-         * On progress
-         * @param e
-         * @param data
-         */
-        progress: function (e, data) {
-            var progress = parseInt(data.loaded / data.total * 100, 10);
-            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-            $(progressSelector).css('width', progress + '%');
-        },
-
-        /**
-         * Fail event
-         * @param e
-         * @param data
-         */
-        fail: function (e, data) {
-            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-            $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
-
-            $(this).val('');
-            alert({
-                content: $.mage.__("We don't recognize this file extension.")
-            });
+        meta: {
+            'form_key': window.FORM_KEY,
+            isAjax : true
         }
     });
 
-    $('#js_files_uploader').on('click', function () {
+    // initialize Uppy upload
+    uppy.use(Uppy.Dashboard, options);
+
+    // drop area for file upload
+    uppy.use(Uppy.DropTarget, {
+        target: targetElement,
+        onDragOver: () => {
+            // override Array.from method of legacy-build.min.js file
+            Array.from = null;
+        },
+        onDragLeave: () => {
+            Array.from = arrayFromObj;
+        }
+    });
+
+
+    // upload files on server
+    uppy.use(Uppy.XHRUpload, {
+        endpoint: url,
+        fieldName: 'js_files_uploader'
+    });
+
+    uppy.on('file-added', (file) => {
+        if($('#js_files_uploader').parent().find('.file-name').length > 0){
+            $('#js_files_uploader').parent().find('.file-name').html(file.name);
+        }else{
+            $('<span class="file-name">'+file.name+'</span>').insertAfter('#js_files_uploader');
+        }
+    });
+
+    uppy.on('upload-progress', (file, progress) => {
+        let progressWidth = parseInt(progress.bytesUploaded / progress.bytesTotal * 100, 10),
+            progressSelector = '#' + file.tempFileId + ' .progressbar-container .progressbar';
+
+        $(progressSelector).css('width', progressWidth + '%');
+    });
+
+    uppy.on('upload-success', (file, response) => {
+        $('#no-js-files-found').remove();
+
+        var progressSelector = '#' + file.tempFileId + ' .progressbar-container .progressbar';
+        $(progressSelector).css('width', '100%');
+
+        $(this).val('');
+        $('#js_files_uploader').parent().find('.file-name').html('');
+
+        if (!response.body.error) {
+            $(progressSelector).removeClass('upload-progress').addClass('upload-success');
+
+            $('#' + file.tempFileId).delay(2000).fadeOut(2000);
+            $('body').trigger('refreshJsList', {
+                jsList: response.body.files
+            });
+        } else {
+            $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+
+            $(this).val('');
+            $('#js_files_uploader').parent().find('.file-name').html('');
+            alert({
+                content: $.mage.__(response.body.message)
+            });
+        }
+
+        $('.ui-sortable').sortable('initButtons');
+    });
+
+    uppy.on('upload-error', (file, error) => {
+        var progressSelector = '#' + file.tempFileId + ' .progressbar-container .progressbar';
+        $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+
+        $(this).val('');
+        $('#js_files_uploader').parent().find('.file-name').html('');
+        alert({
+            content: $.mage.__("We don't recognize this file extension.")
+        });
+    });
+
+    uppy.on('complete', () => {
+        Array.from = arrayFromObj;
+    });
+
+     $('#js_files_uploader').on('click', function () {
+        $('#js_files_uploader').parent().find('.uppy-Dashboard-browse').trigger('click');
+
         /** Unbind click event on file change */
         $('#js-file-uploader').html('');
         $('#js_uploader_button').off('click');
     });
 
-
+    $(document).on('click', '#js_uploader_button', function () {
+        $('.uppy-StatusBar-actionBtn--upload').trigger('click');
+    });
 });
 
 script;

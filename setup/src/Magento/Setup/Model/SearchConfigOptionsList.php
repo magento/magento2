@@ -150,7 +150,7 @@ class SearchConfigOptionsList
     {
         return [
             'elasticsearch7' => 'Elasticsearch 7.x (deprecated)',
-            'elasticsearch8' => 'Elasticsearch 8.x',
+            'elasticsearch8' => 'Elasticsearch 8.x (deprecated)',
             'opensearch' => 'OpenSearch'
         ];
     }

@@ -83,7 +83,7 @@ class CustomerLoginObserverTest extends TestCase
 
         $this->productIndexFactoryMock = $this->getMockBuilder(
             ViewedFactory::class
-        )->setMethods(['create'])
+        )->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productIndexMock = $this->getMockBuilder(Viewed::class)
@@ -95,7 +95,7 @@ class CustomerLoginObserverTest extends TestCase
             ->willReturn($this->productIndexMock);
 
         $reportEventFactory = $this->getMockBuilder(EventFactory::class)
-            ->setMethods(['create'])->disableOriginalConstructor()
+            ->onlyMethods(['create'])->disableOriginalConstructor()
             ->getMock();
         $this->reportEventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
@@ -112,7 +112,7 @@ class CustomerLoginObserverTest extends TestCase
         $this->productCompFactoryMock = $this->getMockBuilder(
             ComparedFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->productCompFactoryMock->expects($this->any())
             ->method('create')
@@ -187,7 +187,7 @@ class CustomerLoginObserverTest extends TestCase
             ->getMock();
         $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProduct'])->getMock();
+            ->addMethods(['getProduct'])->getMock();
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();

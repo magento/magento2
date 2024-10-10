@@ -84,7 +84,8 @@ class GridTest extends TestCase
             \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['setIndex', 'toHtml'])
+            ->addMethods(['setIndex'])
+            ->onlyMethods(['toHtml'])
             ->getMock();
 
         $this->response->expects($this->once())->method('setBody')->willReturnSelf();
