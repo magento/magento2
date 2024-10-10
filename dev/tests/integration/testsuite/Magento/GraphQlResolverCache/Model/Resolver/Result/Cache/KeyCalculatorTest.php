@@ -181,18 +181,18 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
      *
      * @return array[]
      */
-    public function keyFactorDataProvider()
+    public static function keyFactorDataProvider()
     {
         $salt = Bootstrap::getObjectManager()->get(DeploymentConfig::class)
             ->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
         return [
             'no factors' => [
-                'factorProviders' => [],
+                'factorDataArray' => [],
                 'parentResolverData' => null,
                 'expectedCacheKey' => null
             ],
             'single factor' => [
-                'factorProviders' => [
+                'factorDataArray' => [
                     [
                         'interface' => GenericFactorProviderInterface::class,
                         'name' => 'test',
@@ -203,7 +203,7 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
                 'expectedCacheKey' => hash('sha256', strtoupper('testValue') . "|$salt"),
             ],
             'unsorted multiple factors' => [
-                'factorProviders' => [
+                'factorDataArray' => [
                     [
                         'interface' => GenericFactorProviderInterface::class,
                         'name' => 'ctest',
@@ -227,7 +227,7 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
                 ),
             ],
             'unsorted multiple factors with parent data' => [
-                'factorProviders' => [
+                'factorDataArray' => [
                     [
                         'interface' => GenericFactorProviderInterface::class,
                         'name' => 'ctest',
@@ -253,7 +253,7 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
                 ),
             ],
             'unsorted multifactor with no parent data and parent factored interface' => [
-                'factorProviders' => [
+                'factorDataArray' => [
                     [
                         'interface' => GenericFactorProviderInterface::class,
                         'name' => 'ctest',

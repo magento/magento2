@@ -95,7 +95,7 @@ class DatabaseTest extends TestCase
     /**
      * @return array
      */
-    public function checkDbUsageDataProvider()
+    public static function checkDbUsageDataProvider()
     {
         return [
             'media database' => [Storage::STORAGE_MEDIA_DATABASE, true],
@@ -167,7 +167,7 @@ class DatabaseTest extends TestCase
     /**
      * @return array
      */
-    public function updateFileDataProvider()
+    public static function updateFileDataProvider()
     {
         return [
             'media database' => [Storage::STORAGE_MEDIA_DATABASE, 1],
@@ -252,7 +252,7 @@ class DatabaseTest extends TestCase
     /**
      * @return array
      */
-    public function fileExistsDataProvider()
+    public static function fileExistsDataProvider()
     {
         return [
             'media database' => [Storage::STORAGE_MEDIA_DATABASE, 1, true],
@@ -293,7 +293,7 @@ class DatabaseTest extends TestCase
     /**
      * @return array
      */
-    public function getUniqueFilenameDataProvider()
+    public static function getUniqueFilenameDataProvider()
     {
         return [
             'media database' => [Storage::STORAGE_MEDIA_DATABASE, 1, 'filename_2.ext'],
@@ -339,7 +339,7 @@ class DatabaseTest extends TestCase
     /**
      * @return array
      */
-    public function saveFileToFileSystemDataProvider()
+    public static function saveFileToFileSystemDataProvider()
     {
         return [
             'media database, no id' => [
@@ -465,7 +465,7 @@ class DatabaseTest extends TestCase
     /**
      * @return array
      */
-    public function saveUploadedFileDataProvider()
+    public static function saveUploadedFileDataProvider()
     {
         return [
             'media database, file not unique' => [

@@ -238,7 +238,7 @@ class AbstractCollectionTest extends TestCase
     }
 
     /**
-     * @dataProvider getItemsDataProvider
+     * @dataProvider getItemsDataProviderWithoutCount
      */
     public function testAttributeIdIsInt($values)
     {
@@ -269,12 +269,24 @@ class AbstractCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function getItemsDataProvider()
+    public static function getItemsDataProvider()
     {
         return [
             ['values' => [['id' => 1]], 'count' => 1],
             ['values' => [['id' => 1], ['id' => 2]], 'count' => 2],
             ['values' => [['id' => 2], ['id' => 3]], 'count' => 2]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getItemsDataProviderWithoutCount()
+    {
+        return [
+            ['values' => [['id' => 1]]],
+            ['values' => [['id' => 1], ['id' => 2]]],
+            ['values' => [['id' => 2], ['id' => 3]]]
         ];
     }
 

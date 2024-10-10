@@ -41,7 +41,7 @@ class HtmlTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function displayDataProvider()
+    public static function displayDataProvider()
     {
         return [
             ['statFile' => __DIR__ . '/_files/timers.php', 'expectedHtmlFile' => __DIR__ . '/_files/output.html']

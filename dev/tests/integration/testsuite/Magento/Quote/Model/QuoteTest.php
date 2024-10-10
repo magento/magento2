@@ -485,24 +485,24 @@ class QuoteTest extends TestCase
      *
      * @return array
      */
-    public function giftMessageDataProvider(): array
+    public static function giftMessageDataProvider(): array
     {
         return [
             [
-                'guestItemId' => null,
-                'customerItemId' => 1,
-                'guestOrderId' => null,
-                'customerOrderId' => 11,
-                'expectedItemId' => 1,
-                'expectedOrderId' => 11,
+                'guestItemGiftMessageId' => null,
+                'customerItemGiftMessageId' => 1,
+                'guestOrderGiftMessageId' => null,
+                'customerOrderGiftMessageId' => 11,
+                'expectedItemGiftMessageId' => 1,
+                'expectedOrderGiftMessageId' => 11,
             ],
             [
-                'guestItemId' => 1,
-                'customerItemId' => 2,
-                'guestOrderId' => 11,
-                'customerOrderId' => 22,
-                'expectedItemId' => 1,
-                'expectedOrderId' => 11,
+                'guestItemGiftMessageId' => 1,
+                'customerItemGiftMessageId' => 2,
+                'guestOrderGiftMessageId' => 11,
+                'customerOrderGiftMessageId' => 22,
+                'expectedItemGiftMessageId' => 1,
+                'expectedOrderGiftMessageId' => 11,
             ],
         ];
     }

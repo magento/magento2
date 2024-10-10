@@ -39,7 +39,7 @@ class XsdTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function mergedXmlDataProvider()
+    public static function mergedXmlDataProvider()
     {
         // @codingStandardsIgnoreStart
         return [
