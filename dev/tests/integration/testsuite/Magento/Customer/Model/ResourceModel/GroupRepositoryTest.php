@@ -58,7 +58,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getGroupsDataProvider()
+    public static function getGroupsDataProvider()
     {
         return [
             [[GroupInterface::ID => 0, GroupInterface::CODE => 'NOT LOGGED IN', GroupInterface::TAX_CLASS_ID => 3]],
@@ -218,7 +218,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function searchGroupsDataProvider()
+    public static function searchGroupsDataProvider()
     {
         $builder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Framework\Api\FilterBuilder::class);
@@ -309,7 +309,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function sortOrderDataProvider()
+    public static function sortOrderDataProvider()
     {
         return [
             [

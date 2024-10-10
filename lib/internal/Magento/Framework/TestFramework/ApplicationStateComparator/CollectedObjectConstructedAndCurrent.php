@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
+use WeakReference;
+
 /**
  * Returned by Collector
  */
@@ -14,12 +16,12 @@ class CollectedObjectConstructedAndCurrent
 {
 
     /**
-     * @param object $object
+     * @param object $weakReference
      * @param CollectedObject $constructedCollected
      * @param CollectedObject $currentCollected
      */
     public function __construct(
-        private readonly object $object,
+        private readonly WeakReference   $weakReference,
         private readonly CollectedObject $constructedCollected,
         private readonly CollectedObject $currentCollected,
     ) {
@@ -28,11 +30,11 @@ class CollectedObjectConstructedAndCurrent
     /**
      * Returns the object
      *
-     * @return object
+     * @return WeakReference
      */
-    public function getObject() : object
+    public function getWeakReference() : WeakReference
     {
-        return $this->object;
+        return $this->weakReference;
     }
 
     /**

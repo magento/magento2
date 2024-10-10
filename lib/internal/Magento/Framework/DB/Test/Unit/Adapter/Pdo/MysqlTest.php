@@ -88,7 +88,7 @@ class MysqlTest extends TestCase
     /**
      * Data Provider for testPrepareColumnValueForBigint
      */
-    public function bigintResultProvider()
+    public static function bigintResultProvider()
     {
         return [
             [1, 1],
@@ -434,11 +434,11 @@ class MysqlTest extends TestCase
     /**
      * @return array
      */
-    public function addColumnDataProvider()
+    public static function addColumnDataProvider()
     {
         return [
             [
-                'columnData' => [
+                'options' => [
                     'TYPE'        => 'integer',
                     'IDENTITY'    => true,
                     'UNSIGNED'    => true,
@@ -466,7 +466,7 @@ class MysqlTest extends TestCase
     /**
      * @return array
      */
-    public function getIndexNameDataProvider()
+    public static function getIndexNameDataProvider()
     {
         // 65 characters long - will be compressed
         $longTableName = '__________________________________________________long_table_name';
@@ -602,7 +602,7 @@ class MysqlTest extends TestCase
     /**
      * @return array
      */
-    public function addIndexWithDuplicationsInDBDataProvider(): array
+    public static function addIndexWithDuplicationsInDBDataProvider(): array
     {
         return [
             'New unique index' => [
@@ -747,7 +747,7 @@ class MysqlTest extends TestCase
             ->getMock();
 
         $adapterMock = $this->getMockBuilder(PdoMysqlAdapter::class)
-            ->setMethods(
+            ->onlyMethods(
                 $methods
             )->setConstructorArgs(
                 [
@@ -816,7 +816,7 @@ class MysqlTest extends TestCase
      *
      * @return array[]
      */
-    public function columnDataForTest(): array
+    public static function columnDataForTest(): array
     {
         return [
           [
@@ -853,6 +853,129 @@ class MysqlTest extends TestCase
     }
 
     /**
+     * @param array $actual
+     * @param int|string|\Zend_Db_Expr $expected
+     * @dataProvider columnDataAndValueForTest
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testPrepareColumnValue(array $actual, int|string|\Zend_Db_Expr $expected)
+    {
+        $adapter = $this->getMysqlPdoAdapterMock([]);
+
+        $result = $this->invokeModelMethod($adapter, 'prepareColumnValue', [$actual[0], $actual[1]]);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Data provider for testPrepareColumnValue
+     *
+     * @return array[]
+     */
+    public static function columnDataAndValueForTest(): array
+    {
+        return [
+            [
+                'actual' => [
+                    [
+                        'DATA_TYPE' => 'int',
+                        'DEFAULT' => ''
+                    ],
+                    '10'
+                ],
+                'expected' => 10
+            ],
+            [
+                'actual' => [
+                    [
+                        'DATA_TYPE' => 'datetime /* mariadb-5.3 */',
+                        'DEFAULT' => 'CURRENT_TIMESTAMP'
+                    ],
+                    'null'
+                ],
+                'expected' => new \Zend_Db_Expr('NULL')
+            ],
+            [
+                'actual' => [
+                    [
+                        'DATA_TYPE' => 'date /* mariadb-5.3 */',
+                        'DEFAULT' => ''
+                    ],
+                    'null'
+                ],
+                'expected' => new \Zend_Db_Expr('NULL')
+            ],
+            [
+                'actual' => [
+                    [
+                        'DATA_TYPE' => 'timestamp /* mariadb-5.3 */',
+                        'DEFAULT' => 'CURRENT_TIMESTAMP'
+                    ],
+                    'null'
+                ],
+                'expected' => new \Zend_Db_Expr('NULL')
+            ],
+            [
+                'actual' => [
+                    [
+                        'DATA_TYPE' => 'varchar',
+                        'NULLABLE' => false,
+                        'DEFAULT' => ''
+                    ],
+                    10
+                ],
+                'expected' => '10'
+            ]
+        ];
+    }
+
+    /**
+     * @param string $actual
+     * @param string $expected
+     * @dataProvider providerForSanitizeColumnDataType
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testSanitizeColumnDataType(string $actual, string $expected)
+    {
+        $adapter = $this->getMysqlPdoAdapterMock([]);
+        $result = $this->invokeModelMethod($adapter, 'sanitizeColumnDataType', [$actual]);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Data provider for testSanitizeColumnDataType
+     *
+     * @return array[]
+     */
+    public static function providerForSanitizeColumnDataType()
+    {
+        return [
+            [
+                'actual' => 'int',
+                'expected' => 'int'
+            ],
+            [
+                'actual' => 'varchar',
+                'expected' => 'varchar'
+            ],
+            [
+                'actual' => 'datetime /* mariadb-5.3 */',
+                'expected' => 'datetime'
+            ],
+            [
+                'actual' => 'date /* mariadb-5.3 */',
+                'expected' => 'date'
+            ],
+            [
+                'actual' => 'timestamp /* mariadb-5.3 */',
+                'expected' => 'timestamp'
+            ]
+        ];
+    }
+
+    /**
      * @param string $method
      * @param array $parameters
      * @return mixed
@@ -884,8 +1007,9 @@ class MysqlTest extends TestCase
         $adapter->expects($matcher)
             ->method('_beginTransaction')
             ->willReturnCallback(
-                function () use ($matcher, $exception) {
-                    if ($matcher->getInvocationCount() === 1) {
+                function () use ($exception) {
+                    static $counter = 0;
+                    if (++$counter === 1) {
                         throw $exception;
                     }
                 }
@@ -897,7 +1021,7 @@ class MysqlTest extends TestCase
     /**
      * @return array[]
      */
-    public function retryExceptionDataProvider(): array
+    public static function retryExceptionDataProvider(): array
     {
         $serverHasGoneAwayException = new \PDOException();
         $serverHasGoneAwayException->errorInfo = [1 => 2006];
@@ -932,7 +1056,7 @@ class MysqlTest extends TestCase
     /**
      * @return array[]
      */
-    public function exceptionDataProvider(): array
+    public static function exceptionDataProvider(): array
     {
         $pdoException = new \PDOException();
         $pdoException->errorInfo = [1 => 1213];

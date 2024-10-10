@@ -39,7 +39,6 @@ class Factory
                 ? $options->getSslOptions()
                 : ['verify_peer' => true];
         }
-
         return ObjectManager::getInstance()->create($connectionType, $parameters);
     }
 }

@@ -11,11 +11,17 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Directory\Model\Currency;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Catalog\Helper\Data;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Validate Tier Price and check duplication
@@ -92,6 +98,11 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private $productsCacheBySku = [];
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * TierPriceValidator constructor.
      *
      * @param ProductIdLocatorInterface $productIdLocator
@@ -103,17 +114,20 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param InvalidSkuProcessor $invalidSkuProcessor
      * @param ProductRepositoryInterface $productRepository
      * @param array $allowedProductTypes [optional]
+     * @param ScopeConfigInterface|null $scopeConfig
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        ProductIdLocatorInterface          $productIdLocator,
-        SearchCriteriaBuilder              $searchCriteriaBuilder,
-        FilterBuilder                      $filterBuilder,
-        GroupRepositoryInterface            $customerGroupRepository,
-        WebsiteRepositoryInterface             $websiteRepository,
-        Result                                                    $validationResult,
-        InvalidSkuProcessor                                       $invalidSkuProcessor,
+        ProductIdLocatorInterface $productIdLocator,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        FilterBuilder $filterBuilder,
+        GroupRepositoryInterface $customerGroupRepository,
+        WebsiteRepositoryInterface $websiteRepository,
+        Result $validationResult,
+        InvalidSkuProcessor $invalidSkuProcessor,
         ProductRepositoryInterface $productRepository,
-        array                                                     $allowedProductTypes = []
+        array $allowedProductTypes = [],
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->productIdLocator = $productIdLocator;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -124,6 +138,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
         $this->invalidSkuProcessor = $invalidSkuProcessor;
         $this->productRepository = $productRepository;
         $this->allowedProductTypes = $allowedProductTypes;
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -355,10 +370,19 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param Result $validationResult
      * @return void
      */
-    private function checkWebsite(TierPriceInterface $price, $key, Result $validationResult)
+    private function checkWebsite(TierPriceInterface $price, $key, Result $validationResult): void
     {
         try {
             $this->websiteRepository->getById($price->getWebsiteId());
+            $isWebsiteScope = $this->scopeConfig
+                ->isSetFlag(
+                    Data::XML_PATH_PRICE_SCOPE,
+                    ScopeInterface::SCOPE_STORE,
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+                );
+            if (!$isWebsiteScope && (int) $this->allWebsitesValue !== $price->getWebsiteId()) {
+                throw NoSuchEntityException::singleField('website_id', $price->getWebsiteId());
+            }
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $validationResult->addFailedItem(
                 $key,
@@ -403,7 +427,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
             foreach ($prices[$tierPrice->getSku()] as $price) {
                 if ($price !== $tierPrice) {
                     $checkWebsiteValue = $isExistingPrice ? $this->compareWebsiteValue($price, $tierPrice)
-                        : ($price->getWebsiteId() == $tierPrice->getWebsiteId());
+                        : $this->compareWebsiteValueNewPrice($price, $tierPrice);
                     if (strtolower($price->getCustomerGroup()) === strtolower($tierPrice->getCustomerGroup())
                         && $price->getQuantity() == $tierPrice->getQuantity()
                         && $checkWebsiteValue
@@ -522,6 +546,29 @@ class TierPriceValidator implements ResetAfterRequestInterface
                     || $tierPrice->getWebsiteId() == $this->allWebsitesValue
                 )
                 && $price->getWebsiteId() != $tierPrice->getWebsiteId();
+    }
+
+    /**
+     * Compare Website Values between for new price records
+     *
+     * @param TierPriceInterface $price
+     * @param TierPriceInterface $tierPrice
+     * @return bool
+     */
+    private function compareWebsiteValueNewPrice(TierPriceInterface $price, TierPriceInterface $tierPrice): bool
+    {
+        if ($price->getWebsiteId() == $this->allWebsitesValue ||
+            $tierPrice->getWebsiteId() == $this->allWebsitesValue
+        ) {
+            $baseCurrency = $this->scopeConfig->getValue(Currency::XML_PATH_CURRENCY_BASE, 'default');
+            $websiteId = max($price->getWebsiteId(), $tierPrice->getWebsiteId());
+            $website = $this->websiteRepository->getById($websiteId);
+            $websiteCurrency = $website->getBaseCurrencyCode();
+
+            return $baseCurrency == $websiteCurrency;
+        }
+
+        return $price->getWebsiteId() == $tierPrice->getWebsiteId();
     }
 
     /**

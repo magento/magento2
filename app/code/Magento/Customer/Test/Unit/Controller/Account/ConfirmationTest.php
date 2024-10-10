@@ -56,15 +56,15 @@ class ConfirmationTest extends TestCase
     {
         $this->customerSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isLoggedIn'])
+            ->onlyMethods(['isLoggedIn'])
             ->getMock();
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRequest'])
+            ->onlyMethods(['getRequest'])
             ->getMock();
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPost', 'getParam'])
+            ->onlyMethods(['getPost', 'getParam'])
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getRequest')
@@ -72,11 +72,11 @@ class ConfirmationTest extends TestCase
 
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->customerUrlMock = $this->getMockBuilder(Url::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLoginUrl'])
+            ->onlyMethods(['getLoginUrl'])
             ->getMock();
         $this->model = (new ObjectManagerHelper($this))->getObject(
             Confirmation::class,
@@ -99,21 +99,21 @@ class ConfirmationTest extends TestCase
 
         $resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLayout'])
+            ->onlyMethods(['getLayout'])
             ->getMock();
 
         $this->resultPageFactoryMock->expects($this->once())->method('create')->willReturn($resultPageMock);
 
         $layoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBlock'])
+            ->onlyMethods(['getBlock'])
             ->getMock();
 
         $resultPageMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
 
         $blockMock = $this->getMockBuilder(Template::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setEmail', 'setLoginUrl'])
+            ->addMethods(['setEmail', 'setLoginUrl'])
             ->getMock();
 
         $layoutMock->expects($this->once())->method('getBlock')->with('accountConfirmation')->willReturn($blockMock);

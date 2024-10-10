@@ -37,7 +37,7 @@ class ErrorHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function handlerProvider()
+    public static function handlerProvider()
     {
         return [
             [0, 'DateTimeZone::__construct', 0, false],
@@ -68,7 +68,7 @@ class ErrorHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function handlerProviderException()
+    public static function handlerProviderException()
     {
         return [
             [E_ERROR, 'Error'],

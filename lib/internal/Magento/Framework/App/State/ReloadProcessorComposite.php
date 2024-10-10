@@ -16,6 +16,7 @@ class ReloadProcessorComposite implements ReloadProcessorInterface
      */
     public function __construct(private array $processors)
     {
+        ksort($this->processors, SORT_STRING);
     }
 
     /**
@@ -23,7 +24,6 @@ class ReloadProcessorComposite implements ReloadProcessorInterface
      */
     public function reloadState(): void
     {
-        ksort($this->processors);
         /** @var ReloadProcessorInterface $processor */
         foreach ($this->processors as $processor) {
             $processor->reloadState();

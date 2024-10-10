@@ -28,7 +28,7 @@ class SkipListAndFilterList
     private ?array $filterList = null;
 
     private const FIXTURE_PATH =
-        "/dev/tests/integration/framework/Magento/TestFramework/ApplicationStateComparator/_files";
+        '/dev/tests/integration/framework/Magento/TestFramework/ApplicationStateComparator/_files';
 
     /**
      * Filters properties by the list of property filters

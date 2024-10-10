@@ -87,7 +87,7 @@ class IndexerShowModeCommandTest extends AbstractIndexerCommandCommonSetup
     /**
      * @return array
      */
-    public function executeWithIndexDataProvider()
+    public static function executeWithIndexDataProvider()
     {
         return [
             [
@@ -109,7 +109,7 @@ class IndexerShowModeCommandTest extends AbstractIndexerCommandCommonSetup
                         'title' => 'Title_indexerThree'
                     ],
                 ],
-                'Is Scheduled' => [
+                'isScheduled' => [
                     'id_indexerOne' => true,
                     'id_indexerTwo' => false,
                     'id_indexerThree' => false,

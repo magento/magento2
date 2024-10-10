@@ -50,7 +50,8 @@ class NotificationTest extends TestCase
 
         $elementMock = $this->getMockBuilder(AbstractElement::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getHtmlId', 'getLabel'])
+            ->addMethods(['getLabel'])
+            ->onlyMethods(['getHtmlId'])
             ->getMock();
         $elementMock->expects($this->any())->method('getHtmlId')->willReturn($htmlId);
         $elementMock->expects($this->any())->method('getLabel')->willReturn($label);
@@ -61,6 +62,7 @@ class NotificationTest extends TestCase
             ->with($testDatetime)
             ->willReturn($formattedDate);
 
+        $objectManager->prepareObjectManager();
         /** @var Notification $notification */
         $notification = $objectManager->getObject(
             Notification::class,

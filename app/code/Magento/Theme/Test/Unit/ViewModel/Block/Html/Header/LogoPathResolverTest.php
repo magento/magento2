@@ -36,11 +36,19 @@ class LogoPathResolverTest extends TestCase
     public function testGetPathWhenInSingleStoreModeAndPathNotNull(): void
     {
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['general/single_store_mode/enabled', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],
-                ['design/header/logo_src', ScopeInterface::SCOPE_WEBSITE, null]
-            )
-            ->willReturn('1', 'SingleStore.png');
+            ->willReturnCallback(function ($path, $scope, $scopeCode) {
+                if ($path === 'general/single_store_mode/enabled' &&
+                    $scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT &&
+                    $scopeCode === null) {
+                    return '1';
+                }
+                if ($path === 'design/header/logo_src' &&
+                    $scope === ScopeInterface::SCOPE_WEBSITE &&
+                    $scopeCode === null) {
+                    return 'SingleStore.png';
+                }
+            });
+
         $valueForAssert = $this->model->getPath();
         $this->assertEquals('logo/SingleStore.png', $valueForAssert);
         $this->assertNotNull($valueForAssert);
@@ -54,11 +62,19 @@ class LogoPathResolverTest extends TestCase
     public function testGetPathWhenInSingleStoreModeAndPathIsNull(): void
     {
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['general/single_store_mode/enabled', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],
-                ['design/header/logo_src', ScopeInterface::SCOPE_WEBSITE, null]
-            )
-            ->willReturn('1', null);
+            ->willReturnCallback(function ($path, $scope, $scopeCode) {
+                if ($path === 'general/single_store_mode/enabled' &&
+                    $scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT &&
+                    $scopeCode === null) {
+                    return '1';
+                }
+                if ($path === 'design/header/logo_src' &&
+                    $scope === ScopeInterface::SCOPE_STORE &&
+                    $scopeCode === null) {
+                    return null;
+                }
+            });
+
         $this->assertNull($this->model->getPath());
     }
 
@@ -70,11 +86,18 @@ class LogoPathResolverTest extends TestCase
     public function testGetPathWhenInMultiStoreModeAndPathNotNull(): void
     {
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['general/single_store_mode/enabled', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],
-                ['design/header/logo_src', ScopeInterface::SCOPE_STORE, null]
-            )
-            ->willReturn('0', 'MultiStore.png');
+            ->willReturnCallback(function ($path, $scope, $scopeCode) {
+                if ($path === 'general/single_store_mode/enabled' &&
+                    $scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT &&
+                    $scopeCode === null) {
+                    return '0';
+                }
+                if ($path === 'design/header/logo_src' &&
+                    $scope === ScopeInterface::SCOPE_STORE &&
+                    $scopeCode === null) {
+                    return 'MultiStore.png';
+                }
+            });
         $valueForAssert = $this->model->getPath();
         $this->assertEquals('logo/MultiStore.png', $valueForAssert);
         $this->assertNotNull($valueForAssert);
@@ -88,11 +111,18 @@ class LogoPathResolverTest extends TestCase
     public function testGetPathWhenInMultiStoreModeAndPathIsNull(): void
     {
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['general/single_store_mode/enabled', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],
-                ['design/header/logo_src', ScopeInterface::SCOPE_STORE, null]
-            )
-            ->willReturn('0', null);
+            ->willReturnCallback(function ($path, $scope, $scopeCode) {
+                if ($path === 'general/single_store_mode/enabled' &&
+                    $scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT &&
+                    $scopeCode === null) {
+                    return '0';
+                }
+                if ($path === 'design/header/logo_src' &&
+                    $scope === ScopeInterface::SCOPE_STORE &&
+                    $scopeCode === null) {
+                    return null;
+                }
+            });
         $this->assertNull($this->model->getPath());
     }
 
