@@ -27,6 +27,7 @@
         <element name="templateByIndex" type="select" selector="select[name='widget_instance[{{index}}][pages][template]']" parameterized="true"/>
         <element name="selectTemplate" type="select" selector=".widget-layout-updates .block_template_container .select"/>
         <element name="widgetOptions" type="select" selector="#widget_instace_tabs_properties_section"/>
+        <element name="storefrontProperties" type="select" selector="#widget_instace_tabs_main_section"/>
         <element name="addNewCondition" type="select" selector=".rule-param.rule-param-new-child"/>
         <element name="selectCondition" type="input" selector="#conditions__1__new_child"/>
         <element name="conditionOperator" type="button" selector="#conditions__1__children>li:nth-child(1)>span:nth-child(3) a"/>
@@ -49,13 +50,15 @@
         <element name="specificEntitySelectRadio" type="input" selector="#specific_anchor_categories_0"/>
         <element name="specificEntityOptionsChooser" type="button" selector="#anchor_categories_ids_0 .widget-option-chooser"/>
         <element name="widgetInstanceType" type="select" selector=".admin__field-control select#instance_code" />
+        <element name="expandJsTree" type="button" selector="//*[@class='chooser']/div/ul/li/i[@role='presentation']"/>
+        <element name="jsTreeAnchorCheckbox" type="select" selector="//*[@class='chooser']/div/ul[@role='presentation']/li/ul[@role='group']/li/a/i[@class='jstree-icon jstree-checkbox']"/>
         <!-- Catalog Product List Widget Options -->
         <element name="title" type="input" selector="[name='parameters[title]']"/>
         <element name="displayPageControl" type="select" selector="[name='parameters[show_pager]']"/>
         <element name="numberOfProductsToDisplay" type="input" selector="[name='parameters[products_count]']"/>
         <element name="template" type="select" selector="[name='parameters[template]']"/>
         <element name="cacheLifetime" type="input" selector="[name='parameters[cache_lifetime]']"/>
-        <element name="deleteWidgetLayoutAction" type="button" selector="#page_group_container > div:first-of-type > div.fieldset-wrapper-title > div > .action-default.action-delete"/> 
+        <element name="deleteWidgetLayoutAction" type="button" selector="#page_group_container > div:first-of-type > div.fieldset-wrapper-title > div > .action-default.action-delete"/>
         <element name="CountDeleteButtons" type="button" selector="#page_group_container > .fieldset-wrapper.page_group_container > div.fieldset-wrapper-title > div > .action-default.action-delete"/>
     </section>
 </sections>

@@ -129,7 +129,8 @@ class CustomerOrders implements ResolverInterface
                 'page_size' => $searchResult->getPageSize(),
                 'current_page' => $searchResult->getCurPage(),
                 'total_pages' => $maxPages,
-            ]
+            ],
+            'store_ids' => $storeIds,
         ];
     }
 
