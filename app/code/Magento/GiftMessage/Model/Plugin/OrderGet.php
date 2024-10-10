@@ -22,33 +22,17 @@ class OrderGet
     protected $giftMessageOrderItemRepository;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderExtensionFactory
-     */
-    protected $orderExtensionFactory;
-
-    /**
-     * @var \Magento\Sales\Api\Data\OrderItemExtensionFactory
-     */
-    protected $orderItemExtensionFactory;
-
-    /**
      * Init plugin
      *
      * @param \Magento\GiftMessage\Api\OrderRepositoryInterface $giftMessageOrderRepository
      * @param \Magento\GiftMessage\Api\OrderItemRepositoryInterface $giftMessageOrderItemRepository
-     * @param \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory
-     * @param \Magento\Sales\Api\Data\OrderItemExtensionFactory $orderItemExtensionFactory
      */
     public function __construct(
         \Magento\GiftMessage\Api\OrderRepositoryInterface $giftMessageOrderRepository,
-        \Magento\GiftMessage\Api\OrderItemRepositoryInterface $giftMessageOrderItemRepository,
-        \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory,
-        \Magento\Sales\Api\Data\OrderItemExtensionFactory $orderItemExtensionFactory
+        \Magento\GiftMessage\Api\OrderItemRepositoryInterface $giftMessageOrderItemRepository
     ) {
         $this->giftMessageOrderRepository = $giftMessageOrderRepository;
         $this->giftMessageOrderItemRepository = $giftMessageOrderItemRepository;
-        $this->orderExtensionFactory = $orderExtensionFactory;
-        $this->orderItemExtensionFactory = $orderItemExtensionFactory;
     }
 
     /**
@@ -78,21 +62,18 @@ class OrderGet
     protected function getOrderGiftMessage(\Magento\Sales\Api\Data\OrderInterface $order)
     {
         $extensionAttributes = $order->getExtensionAttributes();
-        if ($extensionAttributes && $extensionAttributes->getGiftMessage()) {
+        if (($extensionAttributes && $extensionAttributes->getGiftMessage()) || !$order->getGiftMessageId()) {
             return $order;
         }
 
         try {
-            /** @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
             $giftMessage = $this->giftMessageOrderRepository->get($order->getEntityId());
         } catch (NoSuchEntityException $e) {
             return $order;
         }
 
-        /** @var \Magento\Sales\Api\Data\OrderExtension $orderExtension */
-        $orderExtension = $extensionAttributes ? $extensionAttributes : $this->orderExtensionFactory->create();
-        $orderExtension->setGiftMessage($giftMessage);
-        $order->setExtensionAttributes($orderExtension);
+        $extensionAttributes->setGiftMessage($giftMessage);
+        $order->setExtensionAttributes($extensionAttributes);
 
         return $order;
     }
@@ -107,15 +88,15 @@ class OrderGet
     {
         $orderItems = $order->getItems();
         if (null !== $orderItems) {
-            /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
             foreach ($orderItems as $orderItem) {
                 $extensionAttributes = $orderItem->getExtensionAttributes();
-                if ($extensionAttributes && $extensionAttributes->getGiftMessage()) {
+                if (($extensionAttributes && $extensionAttributes->getGiftMessage()) ||
+                    !$orderItem->getGiftMessageId()
+                ) {
                     continue;
                 }
 
                 try {
-                    /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
                     $giftMessage = $this->giftMessageOrderItemRepository->get(
                         $order->getEntityId(),
                         $orderItem->getItemId()
@@ -124,18 +105,16 @@ class OrderGet
                     continue;
                 }
 
-                /** @var \Magento\Sales\Api\Data\OrderItemExtension $orderItemExtension */
-                $orderItemExtension = $extensionAttributes
-                    ? $extensionAttributes
-                    : $this->orderItemExtensionFactory->create();
-                $orderItemExtension->setGiftMessage($giftMessage);
-                $orderItem->setExtensionAttributes($orderItemExtension);
+                $extensionAttributes->setGiftMessage($giftMessage);
+                $orderItem->setExtensionAttributes($extensionAttributes);
             }
         }
         return $order;
     }
 
     /**
+     * Add gift message details to orders
+     *
      * @param \Magento\Sales\Api\OrderRepositoryInterface $subject
      * @param \Magento\Sales\Model\ResourceModel\Order\Collection $resultOrder
      * @return \Magento\Sales\Model\ResourceModel\Order\Collection

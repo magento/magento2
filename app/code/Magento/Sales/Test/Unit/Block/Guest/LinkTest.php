@@ -24,7 +24,7 @@ class LinkTest extends TestCase
         $context = $objectManagerHelper->getObject(Context::class);
         $httpContext = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $httpContext->expects($this->once())
             ->method('getValue')

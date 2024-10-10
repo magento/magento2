@@ -41,10 +41,10 @@ class RequestTest extends TestCase
         /** Prepare mocks for request constructor arguments. */
         $this->_deserializerFactory = $this->getMockBuilder(
             DeserializerFactory::class
-        )->setMethods(
-            ['deserialize', 'get']
+        )->onlyMethods(['get'])->addMethods(
+            ['deserialize']
         )->disableOriginalConstructor()
-        ->getMock();
+            ->getMock();
         $areaListMock = $this->createMock(AreaList::class);
         $configScopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
         $areaListMock->expects($this->once())->method('getFrontName')->willReturn('rest');
@@ -53,10 +53,10 @@ class RequestTest extends TestCase
         $this->_cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
         $converterMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
-            ->setMethods(['cleanString'])
+            ->onlyMethods(['cleanString'])
             ->getMock();
         $this->_request = $this->getMockBuilder(Request::class)
-            ->setMethods(['getHeader', 'getMethod', 'isGet', 'isPost', 'isPut', 'isDelete', 'getContent'])
+            ->onlyMethods(['getHeader', 'getMethod', 'isGet', 'isPost', 'isPut', 'isDelete', 'getContent'])
             ->setConstructorArgs(
                 [
                     $this->_cookieManagerMock,
@@ -131,9 +131,9 @@ class RequestTest extends TestCase
         $deserializer = $this->getMockBuilder(
             Json::class
         )->disableOriginalConstructor()
-        ->setMethods(
-            ['deserialize']
-        )->getMock();
+            ->onlyMethods(
+                ['deserialize']
+            )->getMock();
         $deserializer->expects(
             $this->once()
         )->method(
@@ -198,7 +198,7 @@ class RequestTest extends TestCase
      *
      * @return array
      */
-    public function providerAcceptType()
+    public static function providerAcceptType()
     {
         return [
             // Each element is: array(Accept HTTP header value, expected result))
@@ -231,7 +231,7 @@ class RequestTest extends TestCase
      *
      * @return array
      */
-    public function providerContentType()
+    public static function providerContentType()
     {
         return [
             // Each element is: array(Content-Type header value, content-type part[, expected exception message])

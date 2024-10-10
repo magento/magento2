@@ -115,6 +115,96 @@ class ProductSearchTest extends GraphQlAbstract
     }
 
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @dataProvider sortByPriceAndNameDataProvider
+     */
+    #[
+        DataFixture(ProductFixture::class, ['price' => 10, 'name' => 'search product 1'], 'prod1'),
+        DataFixture(ProductFixture::class, ['price' => 10, 'name' => 'search product 2'], 'prod2'),
+        DataFixture(ProductFixture::class, ['price' => 20, 'name' => 'search product 3'], 'prod3'),
+        DataFixture(ProductFixture::class, ['price' => 30, 'name' => 'search product 4'], 'prod4'),
+        DataFixture(ProductFixture::class, ['price' => 40, 'name' => 'search product 5'], 'prod5'),
+    ]
+    public function testSortMultipleFieldsSentInVariables($sort, $expectedOrder): void
+    {
+        $expectedOrderSku = [];
+        foreach ($expectedOrder as $productName) {
+            $expectedOrderSku[] = $this->fixture->get($productName)->getSku();
+        }
+        $query = <<<'QUERY'
+query GetProductsQuery(
+    $search: String,
+    $filter: ProductAttributeFilterInput,
+    $pageSize: Int,
+    $currentPage: Int,
+    $sort: ProductAttributeSortInput
+) {
+    products(
+        search: $search,
+        filter: $filter,
+        pageSize: $pageSize,
+        currentPage: $currentPage,
+        sort: $sort
+    ) {
+        total_count
+        page_info{total_pages}
+        items{
+            __typename
+            url_key
+            sku
+            name
+            stock_status
+            price_range {
+                minimum_price {
+                    final_price {
+                        value
+                        currency
+                    }
+                }
+            }
+        }
+    }
+}
+QUERY;
+        $variables = [
+            'search' => null,
+            'filter' => [],
+            'pageSize' => 24,
+            'currentPage' => 1,
+            'sort' => $sort
+        ];
+
+        $response = $this->graphQlQuery($query, $variables);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertEquals($expectedOrderSku, array_column($response['products']['items'], 'sku'));
+    }
+
+    /**
+     * @return array
+     */
+    public function sortByPriceAndNameDataProvider(): array
+    {
+        return [
+            [
+                ['price' => 'ASC', 'name' => 'ASC'],
+                ['prod1', 'prod2', 'prod3', 'prod4', 'prod5']
+            ],
+            [
+                ['price' => 'DESC', 'name' => 'ASC'],
+                ['prod5', 'prod4', 'prod3', 'prod1', 'prod2']
+            ],
+            [
+                ['price' => 'ASC', 'name' => 'DESC'],
+                ['prod2', 'prod1', 'prod3', 'prod4', 'prod5']
+            ],
+            [
+                ['price' => 'DESC', 'name' => 'DESC'],
+                ['prod5', 'prod4', 'prod3', 'prod2', 'prod1']
+            ],
+        ];
+    }
+
+    /**
      * Verify that filters for non-existing category are empty
      *
      * @throws \Exception
@@ -362,6 +452,54 @@ QUERY;
             $expectedFilters,
             'Returned filters data set does not match the expected value'
         );
+    }
+
+    /**
+     * Verify that products returned in a correct order
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testSortMultipleFields(): void
+    {
+        $query = <<<QUERY
+query products {
+  products(currentPage: 1
+      pageSize: 10
+      filter: {
+        category_id: {
+          eq :"333"
+        }
+      }
+      sort: { price: DESC, name: ASC}
+      ) {
+
+    items {
+      name
+    }
+    total_count
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(5, $response['products']['total_count']);
+        $prod1 = $this->productRepository->get('search_product_5');
+        $prod2 = $this->productRepository->get('search_product_4');
+        $prod3 = $this->productRepository->get('search_product_3');
+        $prod4 = $this->productRepository->get('search_product_1');
+        $prod5 = $this->productRepository->get('search_product_2');
+
+        $filteredProducts = [$prod1, $prod2, $prod3, $prod4, $prod5];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                ]
+            );
+        }
     }
 
     /**
@@ -1487,7 +1625,7 @@ QUERY;
     /**
      * @return array
      */
-    public function sortByPositionWithMultipleCategoriesDataProvider(): array
+    public static function sortByPositionWithMultipleCategoriesDataProvider(): array
     {
         return [
             [
@@ -2158,9 +2296,9 @@ QUERY;
       }
 }
 QUERY;
-        $prod1 = $this->productRepository->get('blue_briefs');
+        $prod1 = $this->productRepository->get('navy-striped-shoes');
         $prod2 = $this->productRepository->get('grey_shorts');
-        $prod3 = $this->productRepository->get('navy-striped-shoes');
+        $prod3 = $this->productRepository->get('blue_briefs');
         $response = $this->graphQlQuery($query);
         $this->assertEquals(3, $response['products']['total_count']);
 
@@ -2857,16 +2995,16 @@ QUERY;
      *
      * @return array[][]
      */
-    public function filterProductsBySingleCategoryIdDataProvider(): array
+    public static function filterProductsBySingleCategoryIdDataProvider(): array
     {
         return [
             [
                 'fieldName' => 'category_id',
-                'categoryId' => '333',
+                'queryCategoryId' => '333',
             ],
             [
                 'fieldName' => 'category_uid',
-                'categoryId' => base64_encode('333'),
+                'queryCategoryId' => base64_encode('333'),
             ],
         ];
     }

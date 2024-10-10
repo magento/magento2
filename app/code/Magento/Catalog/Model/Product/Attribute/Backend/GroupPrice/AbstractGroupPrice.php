@@ -296,7 +296,9 @@ abstract class AbstractGroupPrice extends Price implements ResetAfterRequestInte
             } elseif ($v['website_id'] == 0 && !isset($data[$key])) {
                 $data[$key] = $v;
                 $data[$key]['website_id'] = $websiteId;
-                if ($this->_isPriceFixed($price)) {
+                if ($this->_isPriceFixed($price) &&
+                    $this->isPercentageValue($data[$key])
+                ) {
                     $data[$key]['price'] = $v['price'] * $rates[$websiteId]['rate'];
                     $data[$key]['website_price'] = $v['price'] * $rates[$websiteId]['rate'];
                 }
@@ -465,5 +467,16 @@ abstract class AbstractGroupPrice extends Price implements ResetAfterRequestInte
                 ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * Check if data consists of percentage value
+     *
+     * @param array $data
+     * @return bool
+     */
+    private function isPercentageValue(array $data): bool
+    {
+        return (array_key_exists('percentage_value', $data) && $data['percentage_value'] === null);
     }
 }

@@ -149,7 +149,7 @@ class MultishippingClearItemAddressTest extends TestCase
     /**
      * @return array
      */
-    public function getDataDataProvider()
+    public static function getDataDataProvider()
     {
         return [
             'test with `add` action and multi shipping address enabled' => ['add', 100, 200, true],

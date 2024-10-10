@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontLoginToPayPalExpressCheckoutPayFlowEditionActionGroup">
+        <annotations>
+            <description>On Storefront Login To PayPal Express Checkout Payflow Edition .</description>
+        </annotations>
+        <arguments>
+            <argument name="credentials" defaultValue="_CREDS"/>
+        </arguments>
+        <!--Check in-context-->
+        <switchToNextTab stepKey="switchToInContentTab"/>
+        <waitForPageLoad stepKey="waitForPayPalPageToLoad"/>
+        <waitForElementVisible selector="{{PayPalPaymentSection.email}}" stepKey="waitForEmailField" />
+        <fillField selector="{{PayPalPaymentSection.email}}" userInput="{{credentials.magento/PAYPAL_LOGIN}}" stepKey="fillEmail"/>
+        <waitForElementVisible selector="{{PayPalPaymentSection.password}}" stepKey="waitForPasswordFieldToBeVisible" />
+        <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{credentials.magento/PAYPAL_PWD}}" stepKey="fillPassword"/>
+        <waitForElementClickable selector="{{PayPalPaymentSection.loginBtn}}" stepKey="waitForLoginField"/>
+        <click selector="{{PayPalPaymentSection.loginBtn}}" stepKey="login"/>
+        <waitForPageLoad stepKey="waitForDetailsPageToOpen"/>
+    </actionGroup>
+</actionGroups>

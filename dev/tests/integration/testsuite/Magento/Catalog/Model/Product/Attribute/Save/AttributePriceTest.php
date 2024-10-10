@@ -54,11 +54,11 @@ class AttributePriceTest extends AbstractAttributeTest
     /**
      * @inheritdoc
      */
-    public function productProvider(): array
+    public static function productProvider(): array
     {
         return [
             [
-                'product_sku' => 'simple2',
+                'productSku' => 'simple2',
             ],
         ];
     }
@@ -66,12 +66,12 @@ class AttributePriceTest extends AbstractAttributeTest
     /**
      * @inheritdoc
      */
-    public function uniqueAttributeValueProvider(): array
+    public static function uniqueAttributeValueProvider(): array
     {
         return [
             [
-                'first_product_sku' => 'simple2',
-                'second_product_sku' => 'simple-out-of-stock',
+                'firstSku' => 'simple2',
+                'secondSku' => 'simple-out-of-stock',
             ],
         ];
     }

@@ -78,7 +78,7 @@ class CartTest extends AbstractCartTest
      *
      * @return array
      */
-    public function getQuoteDataProvider(): array
+    public static function getQuoteDataProvider(): array
     {
         return [
             [

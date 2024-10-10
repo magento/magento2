@@ -42,7 +42,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderDirectSettersGettersMethods(): array
+    public static function dataProviderDirectSettersGettersMethods(): array
     {
         return [
             ['setShippingPriceIncludeTax', 'shippingPriceIncludesTax', true],
@@ -80,7 +80,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetCalculationSequence(): array
+    public static function dataProviderGetCalculationSequence(): array
     {
         return [
             [true,  true,  Calculation::CALC_TAX_AFTER_DISCOUNT_ON_INCL],
@@ -118,7 +118,7 @@ class ConfigTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderScopeConfigMethods(): array
+    public static function dataProviderScopeConfigMethods(): array
     {
         return [
             [
