@@ -338,12 +338,12 @@ class ProductPriceTest extends GraphQlAbstract
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function priceDataProvider() : array
+    public static function priceDataProvider() : array
     {
         return [
             [
-                'customer_group' => Group::CUST_GROUP_ALL,
-                'expected_price_range' => [
+                'customerGroup' => Group::CUST_GROUP_ALL,
+                'expectedPriceRange' => [
                     "simple1" => [
                         "minimum_price" => [
                             "regular_price" => ["value" => 10],
@@ -369,7 +369,7 @@ class ProductPriceTest extends GraphQlAbstract
                         ]
                     ]
                 ],
-                'expected_tier_prices' => [
+                'expectedTierPrices' => [
                     "simple1" => [
                         0 => [
                             'discount' =>['amount_off' => 1, 'percent_off' => 10],
@@ -385,11 +385,11 @@ class ProductPriceTest extends GraphQlAbstract
                         ]
                     ]
                 ],
-                'customer_data' => []
+                'customerData' => []
             ],
             [
-                'customer_group' => 1,
-                'expected_price_range' => [
+                'customerGroup' => 1,
+                'expectedPriceRange' => [
                     "simple1" => [
                         "minimum_price" => [
                             "regular_price" => ["value" => 10],
@@ -415,7 +415,7 @@ class ProductPriceTest extends GraphQlAbstract
                         ]
                     ]
                 ],
-                'expected_tier_prices' => [
+                'expectedTierPrices' => [
                     "simple1" => [
                         0 => [
                             'discount' =>['amount_off' => 1, 'percent_off' => 10],
@@ -431,7 +431,7 @@ class ProductPriceTest extends GraphQlAbstract
                         ]
                     ]
                 ],
-                'customer_data' => [
+                'customerData' => [
                     'username' => 'customer@example.com',
                     'password' => 'password'
                 ]
@@ -1371,7 +1371,7 @@ QUERY;
     /**
      * @return array[]
      */
-    public function configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider(): array
+    public static function configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider(): array
     {
         return [
             [

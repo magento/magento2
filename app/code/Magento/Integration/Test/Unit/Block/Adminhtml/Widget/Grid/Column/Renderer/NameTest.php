@@ -101,7 +101,7 @@ class NameTest extends TestCase
     /**
      * @return array
      */
-    public function endpointDataProvider()
+    public static function endpointDataProvider()
     {
         return [
             [

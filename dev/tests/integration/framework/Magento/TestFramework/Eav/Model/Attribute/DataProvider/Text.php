@@ -77,10 +77,10 @@ class Text extends AbstractBaseAttributeData
             parent::getUpdateProvider(),
             [
                 "{$frontendInput}_other_attribute_code" => [
-                    'post_data' => [
+                    'postData' => [
                         'attribute_code' => 'varchar_attribute_update',
                     ],
-                    'expected_data' => [
+                    'expectedData' => [
                         'attribute_code' => 'varchar_attribute',
                     ],
                 ],

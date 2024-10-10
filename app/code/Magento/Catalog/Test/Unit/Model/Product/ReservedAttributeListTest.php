@@ -48,7 +48,7 @@ class ReservedAttributeListTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             [false, 'some_code', false],

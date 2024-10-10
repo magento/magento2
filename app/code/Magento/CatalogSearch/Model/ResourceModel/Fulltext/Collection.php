@@ -581,7 +581,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
          * for the same requests and products with the same relevance
          * NOTE: this does not replace existing orders but ADDs one more
          */
-        $this->setOrder('entity_id');
+        $this->setOrder('entity_id', Select::SQL_ASC);
         return parent::_beforeLoad();
     }
 
