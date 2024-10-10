@@ -201,7 +201,7 @@ class ContextPluginTest extends TestCase
     /**
      * @return array
      */
-    public function beforeExecuteDataProvider()
+    public static function beforeExecuteDataProvider()
     {
         return [
             [false, false, false],

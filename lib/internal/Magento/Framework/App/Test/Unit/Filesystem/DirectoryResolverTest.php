@@ -82,7 +82,7 @@ class DirectoryResolverTest extends TestCase
     /**
      * @return array
      */
-    public function validatePathDataProvider()
+    public static function validatePathDataProvider()
     {
         return [
             ['/path/root/for/validation', true],

@@ -95,7 +95,7 @@ class ChildrenValidationLocatorTest extends TestCase
     /**
      * @return array
      */
-    public function productTypeDataProvider(): array
+    public static function productTypeDataProvider(): array
     {
         return [
             ['type1', true],

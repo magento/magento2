@@ -147,7 +147,7 @@ class LinkProviderTest extends TestCase
     /**
      * @return array
      */
-    public function fileNotReadyDataProvider()
+    public static function fileNotReadyDataProvider()
     {
         return [
             [null, 'initVector'],

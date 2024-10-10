@@ -191,7 +191,7 @@ class AttributeTest extends AbstractBackendController
     {
         return [
             [
-                'arguments' => [
+                'attributes' => [
                     'name'              => 'Name',
                     'description'       => 'Description',
                     'short_description' => 'Short Description',
@@ -213,8 +213,8 @@ class AttributeTest extends AbstractBackendController
     public static function saveActionVisibilityAttrDataProvider()
     {
         return [
-            ['arguments' => ['visibility' => Visibility::VISIBILITY_BOTH]],
-            ['arguments' => ['visibility' => Visibility::VISIBILITY_IN_CATALOG]]
+            ['attributes' => ['visibility' => Visibility::VISIBILITY_BOTH]],
+            ['attributes' => ['visibility' => Visibility::VISIBILITY_IN_CATALOG]]
         ];
     }
 
