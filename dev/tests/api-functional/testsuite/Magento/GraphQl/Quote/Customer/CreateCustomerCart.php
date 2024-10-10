@@ -46,11 +46,6 @@ class CreateCustomerCart extends GraphQlAbstract
      */
     private CustomerTokenServiceInterface $customerTokenService;
 
-    /**
-     * @inheritdoc
-     * 
-     * @throws LocalizedException
-     */
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
