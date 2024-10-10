@@ -6,8 +6,6 @@
 
 /**
  * Product in category grid
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Tab;
 
@@ -127,6 +125,7 @@ class Product extends Extended
         if ($this->getCategory()->getId()) {
             $this->setDefaultFilter(['in_category' => 1]);
         }
+
         $collection = $this->_productFactory->create()->getCollection()->addAttributeToSelect(
             'name'
         )->addAttributeToSelect(
@@ -150,6 +149,7 @@ class Product extends Extended
         if ($storeId > 0) {
             $collection->addStoreFilter($storeId);
         }
+
         $this->setCollection($collection);
 
         if ($this->getCategory()->getProductsReadonly()) {
@@ -157,6 +157,7 @@ class Product extends Extended
             if (empty($productIds)) {
                 $productIds = 0;
             }
+
             $this->getCollection()->addFieldToFilter('entity_id', ['in' => $productIds]);
         }
 
@@ -183,6 +184,7 @@ class Product extends Extended
                 ]
             );
         }
+
         $this->addColumn(
             'entity_id',
             [
@@ -264,6 +266,7 @@ class Product extends Extended
             $products = $this->getCategory()->getProductsPosition();
             return array_keys($products);
         }
+
         return $products;
     }
 }

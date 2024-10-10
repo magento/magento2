@@ -188,26 +188,17 @@ class ProductRepositoryMultiWebsiteTest extends WebapiAbstract
         /** @var ScopeOverriddenValue $scopeOverriddenValue */
         $scopeOverriddenValue = $this->objectManager->get(ScopeOverriddenValue::class);
         $storeId = $store->load('fixture_third_store', 'code')->getId();
-        $this->assertFalse($scopeOverriddenValue->containsValue(
-            ProductInterface::class,
-            $product,
-            'visibility',
-            $storeId
-        ));
 
-        $this->assertFalse($scopeOverriddenValue->containsValue(
-            ProductInterface::class,
-            $product,
-            'tax_class_id',
-            $storeId
-        ));
-
-        $this->assertFalse($scopeOverriddenValue->containsValue(
-            ProductInterface::class,
-            $product,
-            'status',
-            $storeId
-        ));
+        $attributeCodeList = ['visibility', 'tax_class_id', 'status', 'short_description', 'description',
+                           'url_key', 'meta_title', 'meta_keywords', 'meta_description'];
+        foreach ($attributeCodeList as $attributeCode) {
+            $this->assertFalse($scopeOverriddenValue->containsValue(
+                ProductInterface::class,
+                $product,
+                $attributeCode,
+                $storeId
+            ));
+        }
     }
 
     /**

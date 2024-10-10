@@ -105,14 +105,11 @@ class CategoryFilter implements CustomFilterInterface
             } elseif ($conditionType === self::CONDITION_TYPE_IN) {
                 $this->joinMinimalPosition->execute($collection, $ids);
             }
-            /** Prevent filtering duplication as the filter should be already applied to the search result */
-            if (!$collection->getFlag('search_resut_applied')) {
-                $collection->addCategoriesFilter(
-                    [
-                        $conditionType => array_map('intval', $this->getCategoryIds($ids))
-                    ]
-                );
-            }
+            $collection->addCategoriesFilter(
+                [
+                    $conditionType => array_map('intval', $this->getCategoryIds($ids))
+                ]
+            );
         }
 
         return true;

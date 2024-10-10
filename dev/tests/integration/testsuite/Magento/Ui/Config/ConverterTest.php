@@ -56,7 +56,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function getComponentNameDataProvider()
+    public static function getComponentNameDataProvider()
     {
         return [
             ['action'],

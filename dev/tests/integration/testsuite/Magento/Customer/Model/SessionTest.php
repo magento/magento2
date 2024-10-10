@@ -66,6 +66,42 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->_customerSession->isLoggedIn());
     }
 
+    /**
+     * @param bool $expectedResult
+     * @param bool $isCustomerIdValid
+     * @param bool $isCustomerEmulated
+     *
+     * @return void
+     * @dataProvider getIsLoggedInDataProvider
+     */
+    public function testIsLoggedIn(
+        bool $expectedResult,
+        bool $isCustomerIdValid,
+        bool $isCustomerEmulated
+    ): void {
+        if ($isCustomerIdValid) {
+            $this->_customerSession->loginById(1);
+        } else {
+            $this->_customerSession->setCustomerId(1);
+            $this->_customerSession->setId(2);
+        }
+        $this->_customerSession->setIsCustomerEmulated($isCustomerEmulated);
+        $this->assertEquals($expectedResult, $this->_customerSession->isLoggedIn());
+    }
+
+    /**
+     * @return array
+     */
+    public static function getIsLoggedInDataProvider(): array
+    {
+        return [
+            ['expectedResult' => true, 'isCustomerIdValid' => true, 'isCustomerEmulated' => false],
+            ['expectedResult' => false, 'isCustomerIdValid' => true, 'isCustomerEmulated' => true],
+            ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => false],
+            ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => true]
+        ];
+    }
+
     public function testLoginByIdCustomerDataLoadedCorrectly()
     {
         $fixtureCustomerId = 1;

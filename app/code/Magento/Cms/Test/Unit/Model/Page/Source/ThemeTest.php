@@ -38,7 +38,7 @@ class ThemeTest extends TestCase
         $this->objectManagerHelper = new ObjectManager($this);
         $this->listMock = $this->getMockBuilder(ListInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLabels'])
+            ->onlyMethods(['getLabels'])
             ->getMockForAbstractClass();
 
         $this->object = $this->objectManagerHelper->getObject($this->getClassName(), [
@@ -72,7 +72,7 @@ class ThemeTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionsDataProvider()
+    public static function getOptionsDataProvider()
     {
         return [
             [

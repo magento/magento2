@@ -143,10 +143,24 @@ class ProfilerTest extends TestCase
 
         $driver
             ->method('start')
-            ->withConsecutive(['root_level_timer', null], ['root_level_timer->some_other_timer', null]);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'root_level_timer' && $arg2 === null) {
+                        return null;
+                    } elseif ($arg1 == 'root_level_timer->some_other_timer' && $arg2 === null) {
+                        return null;
+                    }
+                }
+            );
         $driver
             ->method('stop')
-            ->withConsecutive(['root_level_timer->some_other_timer'], ['root_level_timer']);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'root_level_timer->some_other_timer' || $arg == 'root_level_timer') {
+                        return null;
+                    }
+                }
+            );
 
         Profiler::add($driver);
         Profiler::start('root_level_timer');
@@ -176,15 +190,29 @@ class ProfilerTest extends TestCase
 
         $driver
             ->method('start')
-            ->withConsecutive(
-                ['timer1', null],
-                ['timer1->timer2', null],
-                ['timer1->timer2->timer1', null],
-                ['timer1->timer2->timer1->timer3', null]
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'timer1' && $arg2 == null) {
+                        return null;
+                    } elseif ($arg1 == 'timer1->timer2' && $arg2 == null) {
+                        return null;
+                    } elseif ($arg1 == 'timer1->timer2->timer1' && $arg2 == null) {
+                        return null;
+                    } elseif ($arg1 == 'timer1->timer2->timer1->timer3' && $arg2 == null) {
+                        return null;
+                    }
+                }
             );
+
         $driver
             ->method('stop')
-            ->withConsecutive(['timer1->timer2->timer1->timer3'], ['timer1->timer2->timer1']);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'timer1->timer2->timer1->timer3' || $arg == 'timer1->timer2->timer1') {
+                        return null;
+                    }
+                }
+            );
 
         $driver->expects($this->exactly(4))->method('start');
         $driver->expects($this->exactly(2))->method('stop');
@@ -206,10 +234,25 @@ class ProfilerTest extends TestCase
 
         $driver
             ->method('start')
-            ->withConsecutive(['timer1', null], ['timer1->timer1', null]);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'timer1' && $arg2 == null) {
+                        return null;
+                    } elseif ($arg1 == 'timer1->timer1' && $arg2 == null) {
+                        return null;
+                    }
+                }
+            );
+
         $driver
             ->method('stop')
-            ->withConsecutive(['timer1->timer1'], ['timer1']);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'timer1->timer1' || $arg == 'timer1') {
+                        return null;
+                    }
+                }
+            );
 
         Profiler::add($driver);
         Profiler::start('timer1');
@@ -245,9 +288,16 @@ class ProfilerTest extends TestCase
         $driver = $this->_getDriverMock();
         $driver
             ->method('start')
-            ->withConsecutive(
-                ['root_level_timer', ['default_tag' => 'default']],
-                ['root_level_timer->some_other_timer', ['default_tag' => 'default', 'type' => 'test']]
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'root_level_timer' &&
+                        $arg2 == ['default_tag' => 'default']) {
+                        return null;
+                    } elseif ($arg1 == 'root_level_timer->some_other_timer' &&
+                        $arg2 == ['default_tag' => 'default', 'type' => 'test']) {
+                        return null;
+                    }
+                }
             );
 
         Profiler::add($driver);
@@ -323,7 +373,7 @@ class ProfilerTest extends TestCase
     /**
      * @return array
      */
-    public function skippedFilterDataProvider(): array
+    public static function skippedFilterDataProvider(): array
     {
         return [
             'no tags' => ['timer', null],
@@ -352,7 +402,7 @@ class ProfilerTest extends TestCase
     /**
      * @return array
      */
-    public function passedFilterDataProvider(): array
+    public static function passedFilterDataProvider(): array
     {
         return [
             'one expected tag' => ['timer', ['type' => 'test']],
@@ -409,6 +459,12 @@ class ProfilerTest extends TestCase
      */
     public function testParseConfig($data, $isAjax, $expected): void
     {
+        if (!empty($data['driverFactory']) && is_callable($data['driverFactory'])) {
+            $data['driverFactory'] = $data['driverFactory']($this);
+        }
+        if (!empty($expected) && is_callable($expected['driverFactory'])) {
+            $expected['driverFactory'] = $expected['driverFactory']($this);
+        }
         $method = new \ReflectionMethod(Profiler::class, '_parseConfig');
         $method->setAccessible(true);
         $this->assertEquals($expected, $method->invoke(null, $data, '', $isAjax));
@@ -418,10 +474,10 @@ class ProfilerTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function parseConfigDataProvider(): array
+    public static function parseConfigDataProvider(): array
     {
         $driverFactory = new Factory();
-        $otherDriverFactory = $this->createMock(Factory::class);
+        $otherDriverFactory = static fn (self $testCase) => $testCase->createMock(Factory::class);
         return [
             'Empty configuration' => [
                 [],

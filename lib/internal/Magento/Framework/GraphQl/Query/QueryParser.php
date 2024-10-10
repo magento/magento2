@@ -10,11 +10,12 @@ namespace Magento\Framework\GraphQl\Query;
 use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\Parser;
 use GraphQL\Language\Source;
+use Magento\Framework\App\State\ReloadProcessorInterface;
 
 /**
  * Wrapper for GraphQl query parser. It parses query string into a `GraphQL\Language\AST\DocumentNode`
  */
-class QueryParser
+class QueryParser implements ReloadProcessorInterface
 {
     /**
      * @var string[]
@@ -35,5 +36,13 @@ class QueryParser
             $this->parsedQueries[$cacheKey] = Parser::parse(new Source($query, 'GraphQL'));
         }
         return $this->parsedQueries[$cacheKey];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function reloadState(): void
+    {
+        $this->parsedQueries = [];
     }
 }

@@ -1,9 +1,13 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Model\Validator;
+
+use Magento\Framework\App\Utility\IPAddress;
 
 /**
  * Class to validate list of IPs for maintenance commands
@@ -26,11 +30,21 @@ class IpValidator
     private $invalidIps;
 
     /**
+     * @param IPAddress $ipAddress
+     */
+    public function __construct(
+        private readonly IPAddress $ipAddress,
+    ) {
+    }
+
+    /**
      * Validates list of ips
      *
      * @param string[] $ips
      * @param bool $noneAllowed
+     *
      * @return string[]
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validateIps(array $ips, $noneAllowed)
@@ -55,6 +69,7 @@ class IpValidator
                 $messages[] = "Invalid IP $invalidIp";
             }
         }
+
         return $messages;
     }
 
@@ -62,15 +77,18 @@ class IpValidator
      * Filter ips into 'none', valid and invalid ips
      *
      * @param string[] $ips
+     *
      * @return void
      */
     private function filterIps(array $ips)
     {
         foreach ($ips as $ip) {
-            if (filter_var($ip, FILTER_VALIDATE_IP)) {
-                $this->validIps[] = $ip;
-            } elseif ($ip == 'none') {
+            if ($ip === 'none') {
                 $this->none[] = $ip;
+            } elseif ($this->ipAddress->isValidAddress($ip)) {
+                $this->validIps[] = $ip;
+            } elseif ($this->ipAddress->isValidRange($ip)) {
+                $this->validIps[] = $ip;
             } else {
                 $this->invalidIps[] = $ip;
             }

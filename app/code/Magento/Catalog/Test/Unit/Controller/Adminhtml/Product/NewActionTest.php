@@ -15,7 +15,7 @@ use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Controller\Adminhtml\Product\NewAction;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest;
+use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTestCase;
 use Magento\Framework\RegexValidator;
 use Magento\Framework\Validator\Regex;
 use Magento\Framework\Validator\RegexFactory;
@@ -23,7 +23,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Result\PageFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class NewActionTest extends ProductTest
+class NewActionTest extends ProductTestCase
 {
     /** @var NewAction */
     protected $action;
@@ -73,7 +73,7 @@ class NewActionTest extends ProductTest
         );
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addData', 'getTypeId', 'getStoreId', '__sleep'])->getMock();
+            ->onlyMethods(['addData', 'getTypeId', 'getStoreId', '__sleep'])->getMock();
         $this->product->expects($this->any())->method('getTypeId')->willReturn('simple');
         $this->product->expects($this->any())->method('getStoreId')->willReturn('1');
         $this->productBuilder->expects($this->any())->method('build')->willReturn($this->product);
@@ -84,7 +84,7 @@ class NewActionTest extends ProductTest
 
         $resultPageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->resultForward = $this->getMockBuilder(Forward::class)
@@ -97,7 +97,7 @@ class NewActionTest extends ProductTest
 
         $this->regexValidatorFactoryMock = $this->getMockBuilder(RegexFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->regexValidatorMock = $this->createMock(Regex::class);
         $this->regexValidatorFactoryMock->method('create')
@@ -153,7 +153,7 @@ class NewActionTest extends ProductTest
      *
      * @return array
      */
-    public function validationCases(): array
+    public static function validationCases(): array
     {
         return [
             'execute-with-exception' => ['simple\' and true()]|*[self%3a%3ahandle%20or%20self%3a%3alayout',true],

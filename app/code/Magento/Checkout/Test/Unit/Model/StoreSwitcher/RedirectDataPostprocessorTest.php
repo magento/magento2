@@ -118,7 +118,7 @@ class RedirectDataPostprocessorTest extends TestCase
     /**
      * @return array
      */
-    public function processDataProvider(): array
+    public static function processDataProvider(): array
     {
         return [
             [

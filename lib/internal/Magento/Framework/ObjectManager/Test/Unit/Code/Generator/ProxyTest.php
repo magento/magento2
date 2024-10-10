@@ -31,7 +31,7 @@ class ProxyTest extends TestCase
     {
         require_once __DIR__ . '/_files/Sample.php';
         $model = $this->getMockBuilder(Proxy::class)
-            ->setMethods(['_validateData'])
+            ->onlyMethods(['_validateData'])
             ->setConstructorArgs(
                 [
                     \Magento\Framework\ObjectManager\Code\Generator\Sample::class,
@@ -63,7 +63,7 @@ class ProxyTest extends TestCase
 
         require_once __DIR__ . '/_files/SampleMixed.php';
         $model = $this->getMockBuilder(Proxy::class)
-            ->setMethods(['_validateData'])
+            ->onlyMethods(['_validateData'])
             ->setConstructorArgs(
                 [
                     \Magento\Framework\ObjectManager\Code\Generator\SampleMixed::class,
