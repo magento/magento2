@@ -84,7 +84,7 @@ class OptionTest extends TestCase
     /**
      * @return array
      */
-    public function getSelectionOptionsDataProvider(): array
+    public static function getSelectionOptionsDataProvider(): array
     {
         return [
             [

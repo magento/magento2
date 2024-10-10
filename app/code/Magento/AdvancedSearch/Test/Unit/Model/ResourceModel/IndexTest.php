@@ -155,7 +155,7 @@ class IndexTest extends TestCase
     /**
      * @return array
      */
-    public function providerForTestPriceIndexData(): array
+    public static function providerForTestPriceIndexData(): array
     {
         return [
             [

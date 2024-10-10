@@ -90,7 +90,7 @@ class StorageTest extends TestCase
     /**
      * @return array
      */
-    public function isInternalStorageDataProvider()
+    public static function isInternalStorageDataProvider()
     {
         return [
             'given external storage' => [5, 0, false],
@@ -163,7 +163,7 @@ class StorageTest extends TestCase
     /**
      * @return array
      */
-    public function processStorageFileDataProvider()
+    public static function processStorageFileDataProvider()
     {
         return [
             'internal storage' => [false, 0, 0, 0],

@@ -14,5 +14,6 @@
         <element name="groupedProductsAssociatedProductName" type="text" parameterized="true" selector="#super-product-table tbody tr:nth-of-type({{index}}) .product-item-name"/>
         <element name="groupedProductsAssociatedProductPrice" type="text" parameterized="true" selector="#super-product-table tbody tr:nth-of-type({{index}}) .price"/>
         <element name="groupedProductsAssociatedProductQuantity" type="input" parameterized="true" selector="#super-product-table tbody tr:nth-of-type({{index}}) input.qty"/>
+        <element name="groupedProductOptions" type="input" selector="//td//strong[text()='{{productName}}']" parameterized="true"/>
     </section>
 </sections>

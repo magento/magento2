@@ -18,7 +18,7 @@ class RadioButtons extends AbstractSelect
     /**
      * @inheritdoc
      */
-    protected function getType(): string
+    protected static function getType(): string
     {
         return ProductCustomOptionInterface::OPTION_TYPE_RADIO;
     }

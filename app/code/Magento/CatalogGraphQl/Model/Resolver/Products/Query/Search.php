@@ -13,13 +13,11 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search\QueryPopularity;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
-use Magento\Search\Model\Search\PageSizeProvider;
 
 /**
  * Full text search for catalog using given search criteria.
@@ -37,11 +35,6 @@ class Search implements ProductQueryInterface
      * @var SearchResultFactory
      */
     private $searchResultFactory;
-
-    /**
-     * @var PageSizeProvider
-     */
-    private $pageSizeProvider;
 
     /**
      * @var FieldSelection
@@ -76,36 +69,31 @@ class Search implements ProductQueryInterface
     /**
      * @param SearchInterface $search
      * @param SearchResultFactory $searchResultFactory
-     * @param PageSizeProvider $pageSize
      * @param FieldSelection $fieldSelection
      * @param ProductSearch $productsProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param ArgumentsProcessorInterface|null $argsSelection
-     * @param Suggestions|null $suggestions
-     * @param QueryPopularity|null $queryPopularity
+     * @param ArgumentsProcessorInterface $argsSelection
+     * @param Suggestions $suggestions
+     * @param QueryPopularity $queryPopularity
      */
     public function __construct(
         SearchInterface $search,
         SearchResultFactory $searchResultFactory,
-        PageSizeProvider $pageSize,
         FieldSelection $fieldSelection,
         ProductSearch $productsProvider,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        ArgumentsProcessorInterface $argsSelection = null,
-        Suggestions $suggestions = null,
-        QueryPopularity $queryPopularity = null
+        ArgumentsProcessorInterface $argsSelection,
+        Suggestions $suggestions,
+        QueryPopularity $queryPopularity
     ) {
         $this->search = $search;
         $this->searchResultFactory = $searchResultFactory;
-        $this->pageSizeProvider = $pageSize;
         $this->fieldSelection = $fieldSelection;
         $this->productsProvider = $productsProvider;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->argsSelection = $argsSelection ?: ObjectManager::getInstance()
-            ->get(ArgumentsProcessorInterface::class);
-        $this->suggestions = $suggestions ?: ObjectManager::getInstance()
-            ->get(Suggestions::class);
-        $this->queryPopularity = $queryPopularity ?: ObjectManager::getInstance()->get(QueryPopularity::class);
+        $this->argsSelection = $argsSelection;
+        $this->suggestions = $suggestions;
+        $this->queryPopularity = $queryPopularity;
     }
 
     /**
@@ -123,18 +111,7 @@ class Search implements ProductQueryInterface
         ContextInterface $context
     ): SearchResult {
         $searchCriteria = $this->buildSearchCriteria($args, $info);
-
-        $realPageSize = $searchCriteria->getPageSize();
-        $realCurrentPage = $searchCriteria->getCurrentPage();
-        //Because of limitations of sort and pagination on search API we will query all IDS
-        $pageSize = $this->pageSizeProvider->getMaxPageSize();
-        $searchCriteria->setPageSize($pageSize);
-        $searchCriteria->setCurrentPage(0);
         $itemsResults = $this->search->search($searchCriteria);
-
-        //Address limitations of sort and pagination on search API apply original pagination from GQL query
-        $searchCriteria->setPageSize($realPageSize);
-        $searchCriteria->setCurrentPage($realCurrentPage);
         $searchResults = $this->productsProvider->getList(
             $searchCriteria,
             $itemsResults,
@@ -142,7 +119,9 @@ class Search implements ProductQueryInterface
             $context
         );
 
-        $totalPages = $realPageSize ? ((int)ceil($searchResults->getTotalCount() / $realPageSize)) : 0;
+        $totalPages = $searchCriteria->getPageSize()
+            ? ((int)ceil($searchResults->getTotalCount() / $searchCriteria->getPageSize()))
+            : 0;
 
         // add query statistics data
         if (!empty($args['search'])) {
@@ -167,8 +146,8 @@ class Search implements ProductQueryInterface
                 'totalCount' => $totalCount,
                 'productsSearchResult' => $productArray,
                 'searchAggregation' => $itemsResults->getAggregations(),
-                'pageSize' => $realPageSize,
-                'currentPage' => $realCurrentPage,
+                'pageSize' => $args['pageSize'],
+                'currentPage' => $args['currentPage'],
                 'totalPages' => $totalPages,
                 'suggestions' => $suggestions,
             ]

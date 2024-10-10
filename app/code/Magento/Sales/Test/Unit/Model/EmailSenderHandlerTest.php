@@ -163,6 +163,9 @@ class EmailSenderHandlerTest extends TestCase
         ?bool $emailSendingResult,
         ?int $expectedIsEmailSent
     ): void {
+        if ($collectionItems!=null && !empty($collectionItems)) {
+            $collectionItems[0] = $collectionItems[0]($this);
+        }
         $this->globalConfig
             ->method('getValue')
             ->willReturnCallback(function ($path) use ($configValue) {
@@ -278,9 +281,9 @@ class EmailSenderHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
-        $entityModel = $this->getMockForAbstractClass(
+        $entityModel = static fn (self $testCase) => $testCase->getMockForAbstractClass(
             AbstractModel::class,
             [],
             '',
