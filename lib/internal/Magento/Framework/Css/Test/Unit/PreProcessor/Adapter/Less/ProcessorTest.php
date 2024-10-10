@@ -19,15 +19,15 @@ use Psr\Log\LoggerInterface;
 
 class ProcessorTest extends TestCase
 {
-    const TEST_CONTENT = 'test-content';
+    private const TEST_CONTENT = 'test-content';
 
-    const ASSET_PATH = 'test-path';
+    private const ASSET_PATH = 'test-path';
 
-    const TMP_PATH_LESS = '_file/test.less';
-    const TMP_PATH_CSS_PRODUCTION = '_file/test-production.css';
-    const TMP_PATH_CSS_DEVELOPER = '_file/test-developer.css';
+    private const TMP_PATH_LESS = '_file/test.less';
+    private const TMP_PATH_CSS_PRODUCTION = '_file/test-production.css';
+    private const TMP_PATH_CSS_DEVELOPER = '_file/test-developer.css';
 
-    const ERROR_MESSAGE = 'Test exception';
+    private const ERROR_MESSAGE = 'Test exception';
 
     /**
      * @var Processor
@@ -179,8 +179,16 @@ class ProcessorTest extends TestCase
 
         $clearSymbol = ["\n", "\r", "\t", ' '];
         self::assertEquals(
-            trim(str_replace($clearSymbol, '', file_get_contents(__DIR__ . '/' . self::TMP_PATH_CSS_PRODUCTION))),
-            trim(str_replace($clearSymbol, '', $this->processor->processContent($assetMock)))
+            trim(str_replace(
+                $clearSymbol,
+                '',
+                file_get_contents(__DIR__ . '/' . self::TMP_PATH_CSS_PRODUCTION)
+            )),
+            trim(str_replace(
+                $clearSymbol,
+                '',
+                $this->processor->processContent($assetMock)
+            ))
         );
     }
 
@@ -214,8 +222,16 @@ class ProcessorTest extends TestCase
 
         $clearSymbol = ["\n", "\r", "\t", ' '];
         self::assertEquals(
-            trim(str_replace($clearSymbol, '', file_get_contents(__DIR__ . '/' . self::TMP_PATH_CSS_DEVELOPER))),
-            trim(str_replace($clearSymbol, '', $this->normalizeInlineSourceMap($this->processor->processContent($assetMock))))
+            trim(str_replace(
+                $clearSymbol,
+                '',
+                file_get_contents(__DIR__ . '/' . self::TMP_PATH_CSS_DEVELOPER)
+            )),
+            trim(str_replace(
+                $clearSymbol,
+                '',
+                $this->normalizeInlineSourceMap($this->processor->processContent($assetMock))
+            ))
         );
     }
 
