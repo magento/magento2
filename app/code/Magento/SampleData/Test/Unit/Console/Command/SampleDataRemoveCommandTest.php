@@ -13,7 +13,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Tests for command `sampledata:remove`
  */
-class SampleDataRemoveCommandTest extends AbstractSampleDataCommandTest
+class SampleDataRemoveCommandTest extends AbstractSampleDataCommandTestCase
 {
     /**
      * @param array $sampleDataPackages
@@ -77,7 +77,7 @@ class SampleDataRemoveCommandTest extends AbstractSampleDataCommandTest
      *
      * @return array
      */
-    public function processDataProvider(): array
+    public static function processDataProvider(): array
     {
         return [
             'No sample data found in require' => [

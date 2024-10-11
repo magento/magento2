@@ -121,11 +121,11 @@ class NewActionTest extends TestCase
         $this->shipmentLoader = $this->getMockBuilder(
             ShipmentLoader::class
         )->disableOriginalConstructor()
-            ->setMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking', 'load'])
+            ->addMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking'])
+            ->onlyMethods(['load'])
             ->getMock();
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->context = $this->createPartialMock(Context::class, [
@@ -149,7 +149,7 @@ class NewActionTest extends TestCase
             ->getMock();
         $this->shipmentProviderMock = $this->getMockBuilder(ShipmentProviderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getShipmentData'])
+            ->onlyMethods(['getShipmentData'])
             ->getMockForAbstractClass();
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->helper = $this->createPartialMock(Data::class, ['getUrl']);

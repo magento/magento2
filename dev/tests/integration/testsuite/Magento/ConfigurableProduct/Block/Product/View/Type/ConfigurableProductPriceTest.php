@@ -102,7 +102,7 @@ class ConfigurableProductPriceTest extends TestCase
     {
         $this->executeInStoreContext->execute('fixture_second_store', [$this, 'assertPrice'], 'configurable', 10.00);
         $this->resetPageLayout();
-        $this->assertPrice('configurable', 150.00);
+        $this->assertAmount('configurable', 150.00);
     }
 
     /**
@@ -112,7 +112,7 @@ class ConfigurableProductPriceTest extends TestCase
      */
     public function testConfigurablePriceWithDisabledFirstChild(): void
     {
-        $this->assertPrice('configurable', 20.00);
+        $this->assertAmount('configurable', 20.00);
     }
 
     /**
@@ -122,7 +122,7 @@ class ConfigurableProductPriceTest extends TestCase
      */
     public function testConfigurablePriceWithOutOfStockFirstChild(): void
     {
-        $this->assertPrice('configurable', 20.00);
+        $this->assertAmount('configurable', 20.00);
     }
 
     /**
@@ -253,5 +253,22 @@ class ConfigurableProductPriceTest extends TestCase
     private function getProduct(string $sku): ProductInterface
     {
         return $this->productRepository->get($sku, false, $this->storeManager->getStore()->getId(), true);
+    }
+
+    /**
+     * Assert that html contain expected final price amount.
+     *
+     * @param string $sku
+     * @param float $expectedPrice
+     * @return void
+     */
+    public function assertAmount(string $sku, float $expectedPrice): void
+    {
+        $priceBlockHtml = $this->processPriceView($sku);
+        $regexp = '/<span\s+class="price">\$%.2f<\/span>/';
+        $this->assertMatchesRegularExpression(
+            sprintf($regexp, $expectedPrice),
+            $priceBlockHtml
+        );
     }
 }

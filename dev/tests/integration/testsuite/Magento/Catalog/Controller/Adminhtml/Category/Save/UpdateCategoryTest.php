@@ -62,11 +62,11 @@ class UpdateCategoryTest extends AbstractSaveCategoryTest
     /**
      * @return array
      */
-    public function categoryDataProvider(): array
+    public static function categoryDataProvider(): array
     {
         return [
             [
-                'post_data' => [
+                'postData' => [
                     'entity_id' => 333,
                     CategoryInterface::KEY_IS_ACTIVE => '0',
                     CategoryInterface::KEY_INCLUDE_IN_MENU => '0',

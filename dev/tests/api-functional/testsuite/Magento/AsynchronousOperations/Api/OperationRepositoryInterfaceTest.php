@@ -168,7 +168,7 @@ class OperationRepositoryInterfaceTest extends WebapiAbstract
                         'filters' => [
                             [
                                 'field' => 'start_time',
-                                'value' => date('Y-m-d H:i:0'),
+                                'value' => date('Y-m-d H:i:s', strtotime('-1 minute')),
                                 'condition_type' => 'gt',
                             ],
                         ],

@@ -60,43 +60,43 @@ class SalableTest extends TestCase
     /**
      * @return array
      */
-    public function salableDataProvider(): array
+    public static function salableDataProvider(): array
     {
         return [
             'all children enabled_and_in_stock' => [
-                'product_skus' => [],
-                'data' => [],
-                'expected_value' => true,
+                'productSkus' => [],
+                'productData' => [],
+                'expectedValue' => true,
             ],
             'one_child_out_of_stock' => [
-                'product_skus' => ['simple_10'],
-                'data' => [
+                'productSkus' => ['simple_10'],
+                'productData' => [
                     'stock_data' => [
                         'use_config_manage_stock' => 1,
                         'is_in_stock' => StockStatusInterface::STATUS_OUT_OF_STOCK,
                     ],
                 ],
-                'expected_value' => true,
+                'expectedValue' => true,
             ],
             'one_child_disabled' => [
-                'product_skus' => ['simple_10'],
-                'data' => ['status' => Status::STATUS_DISABLED],
-                'expected_value' => true,
+                'productSkus' => ['simple_10'],
+                'productData' => ['status' => Status::STATUS_DISABLED],
+                'expectedValue' => true,
             ],
             'all_children_disabled' => [
-                'product_skus' => ['simple_10', 'simple_20'],
-                'data' => ['status' => Status::STATUS_DISABLED],
-                'expected_value' => false,
+                'productSkus' => ['simple_10', 'simple_20'],
+                'productData' => ['status' => Status::STATUS_DISABLED],
+                'expectedValue' => false,
             ],
             'all_children_out_of_stock' => [
-                'product_skus' => ['simple_10', 'simple_20'],
-                'data' => [
+                'productSkus' => ['simple_10', 'simple_20'],
+                'productData' => [
                     'stock_data' => [
                         'use_config_manage_stock' => 1,
                         'is_in_stock' => StockStatusInterface::STATUS_OUT_OF_STOCK,
                     ],
                 ],
-                'expected_value' => false,
+                'expectedValue' => false,
             ]
         ];
     }
