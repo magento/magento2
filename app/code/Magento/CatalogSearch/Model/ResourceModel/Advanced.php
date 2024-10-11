@@ -64,7 +64,7 @@ class Advanced extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function prepareCondition($attribute, $value)
     {
-        $condition = false;
+        $condition = $value;
 
         if (is_array($value)) {
             if ($attribute->getBackendType() == 'varchar') { // multiselect
