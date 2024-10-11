@@ -46,6 +46,12 @@ class CreateCustomerCart extends GraphQlAbstract
      */
     private CustomerTokenServiceInterface $customerTokenService;
 
+    /**
+     * Setup for create customer cart
+     *
+     * @return void
+     * @throws LocalizedException
+     */
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
