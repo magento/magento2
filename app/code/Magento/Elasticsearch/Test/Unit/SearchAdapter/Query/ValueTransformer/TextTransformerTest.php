@@ -68,7 +68,7 @@ class TextTransformerTest extends TestCase
      *
      * @return array
      */
-    public function valuesDataProvider(): array
+    public static function valuesDataProvider(): array
     {
         return [
             ['Laptop^camera{microphone}', 'laptop^camera{microphone}'],

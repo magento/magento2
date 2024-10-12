@@ -52,7 +52,7 @@ class DatabaseTest extends TestCase
         $this->dbStorageFactoryMock = $this->getMockBuilder(
             DatabaseFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->objectManager = new ObjectManager($this);
         $className = Database::class;
@@ -95,7 +95,7 @@ class DatabaseTest extends TestCase
     /**
      * @return array
      */
-    public function checkDbUsageDataProvider()
+    public static function checkDbUsageDataProvider()
     {
         return [
             'media database' => [Storage::STORAGE_MEDIA_DATABASE, true],
@@ -130,7 +130,7 @@ class DatabaseTest extends TestCase
             ->willReturn($dbModelMock);
         $resourceModelMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
+            ->onlyMethods(['__wakeup'])
             ->getMockForAbstractClass();
         $dbModelMock->expects($this->once())
             ->method('getResource')
@@ -167,7 +167,7 @@ class DatabaseTest extends TestCase
     /**
      * @return array
      */
-    public function updateFileDataProvider()
+    public static function updateFileDataProvider()
     {
         return [
             'media database' => [Storage::STORAGE_MEDIA_DATABASE, 1],
@@ -252,7 +252,7 @@ class DatabaseTest extends TestCase
     /**
      * @return array
      */
-    public function fileExistsDataProvider()
+    public static function fileExistsDataProvider()
     {
         return [
             'media database' => [Storage::STORAGE_MEDIA_DATABASE, 1, true],
@@ -293,7 +293,7 @@ class DatabaseTest extends TestCase
     /**
      * @return array
      */
-    public function getUniqueFilenameDataProvider()
+    public static function getUniqueFilenameDataProvider()
     {
         return [
             'media database' => [Storage::STORAGE_MEDIA_DATABASE, 1, 'filename_2.ext'],
@@ -339,7 +339,7 @@ class DatabaseTest extends TestCase
     /**
      * @return array
      */
-    public function saveFileToFileSystemDataProvider()
+    public static function saveFileToFileSystemDataProvider()
     {
         return [
             'media database, no id' => [
@@ -382,7 +382,8 @@ class DatabaseTest extends TestCase
             ->willReturn($dbModelMock);
         $resourceModelMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['deleteFolder', '__wakeup'])
+            ->addMethods(['deleteFolder'])
+            ->onlyMethods(['__wakeup'])
             ->getMockForAbstractClass();
         $dbModelMock->expects($this->exactly($callNum))
             ->method('getResource')
@@ -464,7 +465,7 @@ class DatabaseTest extends TestCase
     /**
      * @return array
      */
-    public function saveUploadedFileDataProvider()
+    public static function saveUploadedFileDataProvider()
     {
         return [
             'media database, file not unique' => [

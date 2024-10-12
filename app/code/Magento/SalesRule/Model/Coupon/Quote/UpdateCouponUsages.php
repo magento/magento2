@@ -72,5 +72,6 @@ class UpdateCouponUsages
 
         $this->couponUsagePublisher->publish($updateInfo);
         $this->processor->updateCustomerRulesUsages($updateInfo);
+        $this->processor->updateCouponUsages($updateInfo);
     }
 }

@@ -355,7 +355,7 @@ class TaxTest extends TestCase
     /**
      * @return array
      */
-    public function getProductWeeeAttributesDataProvider(): array
+    public static function getProductWeeeAttributesDataProvider(): array
     {
         return [
             'store_label_defined' => [
@@ -394,7 +394,7 @@ class TaxTest extends TestCase
     /**
      * @return array
      */
-    public function getWeeeAmountExclTaxDataProvider(): array
+    public static function getWeeeAmountExclTaxDataProvider(): array
     {
         return [
             [

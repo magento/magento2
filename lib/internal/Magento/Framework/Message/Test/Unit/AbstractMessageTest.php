@@ -40,7 +40,7 @@ class AbstractMessageTest extends TestCase
     /**
      * @return array
      */
-    public function setTextGetTextProvider()
+    public static function setTextGetTextProvider()
     {
         return [['', ''], ['some text', 'some text'], [new Phrase('some text'), 'some text']];
     }
@@ -59,7 +59,7 @@ class AbstractMessageTest extends TestCase
     /**
      * @return array
      */
-    public function setIdentifierGetIdentifierProvider()
+    public static function setIdentifierGetIdentifierProvider()
     {
         return [[''], ['some identifier']];
     }
