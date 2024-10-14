@@ -15,8 +15,6 @@ use Magento\Widget\Block\BlockInterface;
 
 /**
  * Cms Static Block Widget
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 class Block extends \Magento\Framework\View\Element\Template implements BlockInterface, IdentityInterface
 {
@@ -33,8 +31,6 @@ class Block extends \Magento\Framework\View\Element\Template implements BlockInt
     protected static $_widgetUsageMap = [];
 
     /**
-     * Block factory
-     *
      * @var \Magento\Cms\Model\BlockFactory
      */
     protected $_blockFactory;
@@ -77,19 +73,18 @@ class Block extends \Magento\Framework\View\Element\Template implements BlockInt
         if (isset(self::$_widgetUsageMap[$blockHash])) {
             return $this;
         }
+
         self::$_widgetUsageMap[$blockHash] = true;
 
         $block = $this->getBlock();
 
         if ($block && $block->isActive()) {
-            try {
-                $storeId = $this->getData('store_id') ?? $this->_storeManager->getStore()->getId();
-                $this->setText(
-                    $this->_filterProvider->getBlockFilter()->setStoreId($storeId)->filter($block->getContent())
-                );
-            } catch (NoSuchEntityException $e) {
-            }
+            $storeId = $this->getData('store_id') ?? $this->_storeManager->getStore()->getId();
+            $this->setText(
+                $this->_filterProvider->getBlockFilter()->setStoreId($storeId)->filter($block->getContent())
+            );
         }
+
         unset(self::$_widgetUsageMap[$blockHash]);
         return $this;
     }
@@ -124,16 +119,13 @@ class Block extends \Magento\Framework\View\Element\Template implements BlockInt
         $blockId = $this->getData('block_id');
 
         if ($blockId) {
-            try {
-                $storeId = $this->_storeManager->getStore()->getId();
-                /** @var \Magento\Cms\Model\Block $block */
-                $block = $this->_blockFactory->create();
-                $block->setStoreId($storeId)->load($blockId);
-                $this->block = $block;
+            $storeId = $this->_storeManager->getStore()->getId();
+            /** @var \Magento\Cms\Model\Block $block */
+            $block = $this->_blockFactory->create();
+            $block->setStoreId($storeId)->load($blockId);
+            $this->block = $block;
 
-                return $block;
-            } catch (NoSuchEntityException $e) {
-            }
+            return $block;
         }
 
         return null;

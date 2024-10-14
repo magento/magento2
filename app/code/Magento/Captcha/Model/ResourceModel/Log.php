@@ -7,24 +7,20 @@ namespace Magento\Captcha\Model\ResourceModel;
 
 /**
  * Log Attempts resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Remote Address log type
      */
-    const TYPE_REMOTE_ADDRESS = 1;
+    public const TYPE_REMOTE_ADDRESS = 1;
 
     /**
      * Type User Login Name
      */
-    const TYPE_LOGIN = 2;
+    public const TYPE_LOGIN = 2;
 
     /**
-     * Core Date
-     *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_coreDate;
