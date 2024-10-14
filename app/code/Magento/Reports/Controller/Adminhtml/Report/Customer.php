@@ -5,14 +5,12 @@
  */
 
 /**
- *
  * Customer reports admin controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
 /**
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -60,6 +58,7 @@ abstract class Customer extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
+        // phpcs:disable
         switch ($this->getRequest()->getActionName()) {
             case 'accounts':
                 return $this->_authorization->isAllowed('Magento_Reports::accounts');

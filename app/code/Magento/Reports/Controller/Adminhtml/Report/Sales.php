@@ -6,13 +6,12 @@
 
 /**
  * Sales report admin controller
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -37,6 +36,7 @@ abstract class Sales extends AbstractReport
      */
     protected function _isAllowed()
     {
+        // phpcs:disable
         switch ($this->getRequest()->getActionName()) {
             case 'sales':
                 return $this->_authorization->isAllowed('Magento_Reports::salesroot_sales');

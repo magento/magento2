@@ -14,7 +14,6 @@ use Magento\Framework\Url\DecoderInterface;
  *
  * @method \Magento\Reports\Model\ResourceModel\Quote\Collection getCollection()
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
