@@ -22,8 +22,7 @@ class ListAjax extends ProductController implements HttpGetActionInterface
      */
     public function execute()
     {
-        if (
-            !$this->getRequest()->isAjax() ||
+        if (!$this->getRequest()->isAjax() ||
             !$this->initProduct()
         ) {
             /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
