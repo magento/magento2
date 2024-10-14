@@ -75,7 +75,7 @@
         "magento/zend-db": "^1.16",
         "magento/zend-pdf": "^1.16",
         "monolog/monolog": "^3.6",
-        "opensearch-project/opensearch-php": "^1.0 || ^2.0",
+        "opensearch-project/opensearch-php": "^2.2",
         "pelago/emogrifier": "^7.0",
         "php-amqplib/php-amqplib": "^3.2",
         "phpseclib/mcrypt_compat": "^2.0",
