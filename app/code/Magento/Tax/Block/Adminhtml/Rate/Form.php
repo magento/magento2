@@ -6,8 +6,6 @@
 
 /**
  * Admin product tax class add form
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 declare(strict_types=1);
 
@@ -27,7 +25,7 @@ use Magento\Tax\Controller\RegistryConstants;
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
-    const FORM_ELEMENT_ID = 'rate-form';
+    public const FORM_ELEMENT_ID = 'rate-form';
 
     /**
      * @var null
@@ -40,8 +38,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_template = 'Magento_Tax::rate/form.phtml';
 
     /**
-     * Tax data
-     *
      * @var \Magento\Tax\Helper\Data|null
      */
     protected $_taxData = null;

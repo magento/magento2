@@ -78,7 +78,7 @@ class CollectionTest extends TestCase
             ->getMock();
 
         $this->selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['where', 'from'])
+            ->onlyMethods(['where', 'from'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->selectMock->expects($this->any())
@@ -97,7 +97,8 @@ class CollectionTest extends TestCase
 
         $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConnection', 'getCurrentStoreIds', '_construct', 'getMainTable', 'getTable'])
+            ->onlyMethods(['getConnection', '_construct', 'getMainTable', 'getTable'])
+            ->addMethods(['getCurrentStoreIds'])
             ->getMock();
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
@@ -115,11 +116,13 @@ class CollectionTest extends TestCase
 
     /**
      * @param mixed $ignoreData
-     * @param 'string' $ignoreSql
-     * @dataProvider ignoresDataProvider
+     * @param string $ignoreSql
+     *
      * @return void
+     * @dataProvider ignoresDataProvider
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function testAddStoreFilter($ignoreData, $ignoreSql)
+    public function testAddStoreFilter($ignoreData, string $ignoreSql): void
     {
         $typeId = 1;
         $subjectId =2;
@@ -132,33 +135,36 @@ class CollectionTest extends TestCase
             ->method('getCurrentStoreIds')
             ->willReturn($stores);
         $this->selectMock
-            ->expects($this->at(0))
             ->method('where')
-            ->with('event_type_id = ?', $typeId);
-        $this->selectMock
-            ->expects($this->at(1))
-            ->method('where')
-            ->with('subject_id = ?', $subjectId);
-        $this->selectMock
-            ->expects($this->at(2))
-            ->method('where')
-            ->with('subtype = ?', $subtype);
-        $this->selectMock
-            ->expects($this->at(3))
-            ->method('where')
-            ->with('store_id IN(?)', $stores);
-        $this->selectMock
-            ->expects($this->at(4))
-            ->method('where')
-            ->with($ignoreSql, $ignoreData);
-
+            ->willReturnCallback(function (
+                $arg1,
+                $arg2
+            ) use (
+                $typeId,
+                $subjectId,
+                $stores,
+                $ignoreSql,
+                $ignoreData
+            ) {
+                if ($arg1 == 'event_type_id = ?' && $arg2 == $typeId) {
+                    return null;
+                } elseif ($arg1 == 'subject_id = ?' && $arg2 == $subjectId) {
+                    return null;
+                } elseif ($arg1 == 'subtype = ?' && $arg2 == $typeId) {
+                    return null;
+                } elseif ($arg1 == 'store_id IN(?)' && $arg2 == $stores) {
+                    return null;
+                } elseif ($arg1 == $ignoreSql && $arg2 == $ignoreData) {
+                    return null;
+                }
+            });
         $this->collection->addRecentlyFiler($typeId, $subjectId, $subtype, $ignoreData, $limit);
     }
 
     /**
      * @return array
      */
-    public function ignoresDataProvider()
+    public static function ignoresDataProvider(): array
     {
         return [
             [

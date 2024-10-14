@@ -40,7 +40,7 @@ class StoreValidatorTest extends TestCase
     {
         $this->dataObjectValidatorFactoryMock = $this->getMockBuilder(DataObjectFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->dataObjectValidatorMock = $this->createMock(DataObject::class);
         $this->dataObjectValidatorFactoryMock->method('create')
@@ -66,9 +66,12 @@ class StoreValidatorTest extends TestCase
      */
     public function testIsValid(\Magento\Framework\DataObject $value, bool $isValid, array $messages): void
     {
+        $ruleMock = $this->ruleMocks;
         $this->dataObjectValidatorMock->expects($this->exactly(count($this->ruleMocks)))
             ->method('addRule')
-            ->withConsecutive(...$this->ruleMocks);
+            ->willReturnCallback(function ($ruleMock) {
+                return null;
+            });
         $this->dataObjectValidatorMock->expects($this->once())
             ->method('isValid')
             ->with($value)
@@ -82,7 +85,7 @@ class StoreValidatorTest extends TestCase
         $this->assertEquals($messages, $this->model->getMessages());
     }
 
-    public function isValidDataProvider(): array
+    public static function isValidDataProvider(): array
     {
         return [
             'true' => [

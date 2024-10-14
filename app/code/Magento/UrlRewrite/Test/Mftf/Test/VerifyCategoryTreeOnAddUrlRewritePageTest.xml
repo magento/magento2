@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyCategoryTreeOnAddUrlRewritePageTest">
+        <annotations>
+            <stories value="Create category URL rewrite"/>
+            <title value="Valid category tree on the Add URL Rewrite page"/>
+            <description value="Validating a category tree while creating category URL rewrites"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-8310"/>
+            <useCaseId value="ACP2E-1703"/>
+            <group value="urlRewrite"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!-- Create six level nested category -->
+            <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
+            <createData entity="Two_nested_categories" stepKey="createTwoLevelNestedCategories">
+                <requiredEntity createDataKey="createDefaultCategory"/>
+            </createData>
+            <createData entity="Three_nested_categories" stepKey="createThreeLevelNestedCategories">
+                <requiredEntity createDataKey="createTwoLevelNestedCategories"/>
+            </createData>
+            <createData entity="Four_nested_categories" stepKey="createFourLevelNestedCategories">
+                <requiredEntity createDataKey="createThreeLevelNestedCategories"/>
+            </createData>
+            <createData entity="Five_nested_categories" stepKey="createFiveLevelNestedCategories">
+                <requiredEntity createDataKey="createFourLevelNestedCategories"/>
+            </createData>
+            <createData entity="Six_nested_categories" stepKey="createSixLevelNestedCategories">
+                <requiredEntity createDataKey="createFiveLevelNestedCategories"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createSixLevelNestedCategories" stepKey="deleteSixNestedCategories"/>
+            <deleteData createDataKey="createFiveLevelNestedCategories" stepKey="deleteFiveNestedCategories"/>
+            <deleteData createDataKey="createFourLevelNestedCategories" stepKey="deleteFourNestedCategories"/>
+            <deleteData createDataKey="createThreeLevelNestedCategories" stepKey="deleteThreeNestedCategories"/>
+            <deleteData createDataKey="createTwoLevelNestedCategories" stepKey="deleteTwoLevelNestedCategory"/>
+            <deleteData createDataKey="createDefaultCategory" stepKey="deleteDefaultCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminGoToAddNewUrlRewritePageActionGroup" stepKey="openUrlRewriteEditPage"/>
+        <actionGroup ref="AdminCreateNewUrlRewriteForCmsPageActionGroup" stepKey="selectForCategoryType">
+            <argument name="customUrlRewriteValue" value="For Category"/>
+        </actionGroup>
+        <executeJS stepKey="getCategoryTreeLevelsCount" function="return document.querySelectorAll(&quot;li[id=&apos;$createDefaultCategory.id$&apos;]  ul&quot;).length;"/>
+        <assertEquals message="Asserting category levels count" stepKey="assertCategoryTreeLevelsCount">
+            <expectedResult type="string">5</expectedResult>
+            <actualResult type="string">{$getCategoryTreeLevelsCount}</actualResult>
+        </assertEquals>
+    </test>
+</tests>

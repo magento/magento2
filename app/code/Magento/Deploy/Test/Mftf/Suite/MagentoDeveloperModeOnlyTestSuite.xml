@@ -14,9 +14,7 @@
             <group name="developer_mode_only"/>
         </include>
         <after>
-            <!-- Command should be uncommented once MQE-1711 is resolved -->
-            <comment userInput="Command should be uncommented once MQE-1711 is resolved" stepKey="comment" />
-            <!-- <magentoCLI command="deploy:mode:set production" stepKey="enableProductionMode"/> -->
+            <magentoCLI command="deploy:mode:set production" stepKey="enableProductionMode"/>
         </after>
     </suite>
 </suites>

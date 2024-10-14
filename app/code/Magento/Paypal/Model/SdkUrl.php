@@ -42,8 +42,6 @@ class SdkUrl
     private $queryParams = [];
 
     /**
-     * Maps the old checkout SDK configuration values to the current ones
-     *
      * @var array
      */
     private $disallowedFundingMap;
@@ -56,13 +54,18 @@ class SdkUrl
     private $unsupportedPaymentMethods;
 
     /**
+     * These payment methods will be added as parameters to the SDK url to enable them.
+     *
+     * @var array
+     */
+    private $supportedPaymentMethods;
+
+    /**
      * @var ResolverInterface
      */
     private $localeResolver;
 
     /**
-     * Generated Url to PayPAl SDK
-     *
      * @var string
      */
     private $url;
@@ -74,6 +77,7 @@ class SdkUrl
      * @param StoreManagerInterface $storeManager
      * @param array $disallowedFundingMap
      * @param array $unsupportedPaymentMethods
+     * @param array $supportedPaymentMethods
      */
     public function __construct(
         ResolverInterface $localeResolver,
@@ -81,7 +85,8 @@ class SdkUrl
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
         $disallowedFundingMap = [],
-        $unsupportedPaymentMethods = []
+        $unsupportedPaymentMethods = [],
+        $supportedPaymentMethods = []
     ) {
         $this->localeResolver = $localeResolver;
         $this->config = $configFactory->create();
@@ -90,6 +95,7 @@ class SdkUrl
         $this->storeManager = $storeManager;
         $this->disallowedFundingMap = $disallowedFundingMap;
         $this->unsupportedPaymentMethods = $unsupportedPaymentMethods;
+        $this->supportedPaymentMethods = $supportedPaymentMethods;
     }
 
     /**
@@ -105,6 +111,8 @@ class SdkUrl
                 'client-id' => $this->getClientId(),
                 'locale' => $this->localeResolver->getLocale(),
                 'currency' => $this->storeManager->getStore()->getBaseCurrencyCode(),
+                'buyer-country' => $this->getBuyerCountry(),
+                'enable-funding' => $this->getAllowedFunding(),
             ];
 
             if ($this->areMessagesEnabled()) {
@@ -156,7 +164,7 @@ class SdkUrl
      */
     private function areButtonsEnabled()
     {
-        return (bool)(int) $this->config->getValue('in_context');
+        return (bool)(int)$this->config->getValue('in_context');
     }
 
     /**
@@ -169,6 +177,16 @@ class SdkUrl
         return (int)$this->config->getValue('sandbox_flag') ?
             $this->config->getValue('sandbox_client_id') :
             $this->config->getValue('client_id');
+    }
+
+    /**
+     * Get Configured value for paypal buyer country
+     *
+     * @return string
+     */
+    private function getBuyerCountry(): ?string
+    {
+        return (int)$this->config->getValue('sandbox_flag') ? $this->config->getValue('buyer_country') : '';
     }
 
     /**
@@ -196,6 +214,23 @@ class SdkUrl
         $result = array_merge($result, $this->unsupportedPaymentMethods);
 
         return implode(',', $result);
+    }
+
+    /**
+     * Returns allowed funding from configuration after validating
+     *
+     * @return string
+     */
+    private function getAllowedFunding(): string
+    {
+        $payLaterActive = (bool)$this->config->getPayLaterConfigValue('experience_active');
+
+        // If Pay Later is disabled, paylater parameter will be removed from enable-funding parameter list
+        if (!$payLaterActive) {
+            unset($this->supportedPaymentMethods['paylater']);
+
+        }
+        return implode(',', $this->supportedPaymentMethods);
     }
 
     /**

@@ -2,30 +2,33 @@
 # See COPYING.txt for license details.
 
 type Mutation {
-    deletePaymentToken(public_hash: String!): DeletePaymentTokenOutput @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\DeletePaymentToken") @doc(description:"Delete a customer payment token")
+    """phpcs:ignore Magento2.GraphQL.ValidArgumentName"""
+    deletePaymentToken(public_hash: String! @doc(description: "The reusable payment token securely stored in the vault.")): DeletePaymentTokenOutput @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\DeletePaymentToken") @doc(description:"Delete a customer's payment token.")
 }
 
-type DeletePaymentTokenOutput {
-    result: Boolean!
-    customerPaymentTokens: CustomerPaymentTokens @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\PaymentTokens")
+type DeletePaymentTokenOutput @doc(description: "Indicates whether the request succeeded and returns the remaining customer payment tokens.") {
+    result: Boolean! @doc(description: "Indicates whether the request succeeded.")
+    customerPaymentTokens: CustomerPaymentTokens @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\PaymentTokens") @doc(description: "A container for the customer's remaining payment tokens.")
 }
 
 type Query {
-    customerPaymentTokens: CustomerPaymentTokens @doc(description: "Return a list of customer payment tokens") @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\PaymentTokens") @cache(cacheable: false)
+    customerPaymentTokens: CustomerPaymentTokens @doc(description: "Return a list of customer payment tokens stored in the vault.") @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\PaymentTokens") @cache(cacheable: false)
 }
 
-type CustomerPaymentTokens @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\PaymentTokens") {
-    items: [PaymentToken]! @doc(description: "An array of payment tokens")
+type CustomerPaymentTokens @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\PaymentTokens") @doc(description: "Contains payment tokens stored in the customer's vault.") {
+    items: [PaymentToken]! @doc(description: "An array of payment tokens.")
 }
 
-type PaymentToken @doc(description: "The stored payment method available to the customer") {
-    public_hash: String! @doc(description: "The public hash of the token")
-    payment_method_code: String! @doc(description: "The payment method code associated with the token")
-    type: PaymentTokenTypeEnum!
-    details: String @doc(description: "Stored account details")
+type PaymentToken @doc(description: "The stored payment method available to the customer.") {
+    public_hash: String! @doc(description: "The public hash of the token.")
+    payment_method_code: String! @doc(description: "The payment method code associated with the token.")
+    type: PaymentTokenTypeEnum! @doc(description: "Specifies the payment token type.")
+    details: String @doc(description: "A description of the stored account details.")
 }
 
-enum PaymentTokenTypeEnum @doc(description: "The list of available payment token types") {
+enum PaymentTokenTypeEnum @doc(description: "The list of available payment token types.") {
+    """phpcs:ignore Magento2.GraphQL.ValidArgumentName"""
     card
+    """phpcs:ignore Magento2.GraphQL.ValidArgumentName"""
     account
 }

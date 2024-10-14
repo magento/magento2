@@ -43,7 +43,7 @@ class TranslitUrlTest extends TestCase
     /**
      * @return array
      */
-    public function filterDataProvider()
+    public static function filterDataProvider()
     {
         $isIconv = '"libiconv"' == ICONV_IMPL;
         return [
@@ -61,7 +61,9 @@ class TranslitUrlTest extends TestCase
                 'eur',
                 $isIconv
             ],
-            ['™', 'tm', 'tm', $isIconv]
+            ['™', 'tm', 'tm', $isIconv],
+            ['ñandú', 'nandu', 'nandu', $isIconv],
+            ['ÑANDÚ', 'nandu', 'nandu', $isIconv],
         ];
     }
 }

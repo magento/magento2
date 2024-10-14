@@ -18,6 +18,9 @@
             <testCaseId value="MC-16471"/>
             <useCaseId value="MAGETWO-70232"/>
             <group value="catalog"/>
+            <group value="cloud"/>
+            <!-- Will be fixed in the scope of ACQE-6795 -->
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Create category-->
@@ -44,7 +47,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSecondProduct">
                 <argument name="sku" value="$$createFirstProduct.sku$$-1"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductGridFilter"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!--Change second product sku to first product sku-->

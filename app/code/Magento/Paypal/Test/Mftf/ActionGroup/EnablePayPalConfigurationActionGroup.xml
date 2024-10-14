@@ -23,8 +23,10 @@
         <click selector="{{payPalConfigType.configureBtn(countryCode)}}" stepKey="clickWPSExpressConfigureBtn"/>
         <waitForElementVisible selector="{{payPalConfigType.enableSolution(countryCode)}}" stepKey="waitForWPSExpressEnable"/>
         <selectOption selector="{{payPalConfigType.enableSolution(countryCode)}}" userInput="Yes" stepKey="enableWPSExpressSolution"/>
+        <wait time="2" stepKey="waitForPopupToAppear" />
         <seeInPopup userInput="There is already another PayPal solution enabled. Enable this solution instead?" stepKey="seeAlertMessage"/>
         <acceptPopup stepKey="acceptEnablePopUp"/>
+        <waitForElementClickable selector="{{AdminConfigSection.saveButton}}" stepKey="waitForSaveConfigClickable" />
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
     </actionGroup>

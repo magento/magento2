@@ -9,7 +9,7 @@
      class="data-grid-info-panel">
     <div if="hasMessages() || hasErrors()" class="messages">
         <div if="hasErrors()" class="message message-warning">
-            <strong><text args="countErrorsMessage()"/></strong>
+            <strong><text args="countErrorsMessage()"></text></strong>
             <span translate="'Please make corrections to the errors in the table below and re-submit.'"></span>
         </div>
         <div class="message" outereach="messages" text="message"

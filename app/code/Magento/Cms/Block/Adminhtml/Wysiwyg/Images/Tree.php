@@ -14,15 +14,11 @@ namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
 class Tree extends \Magento\Backend\Block\Template
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Cms wysiwyg images
-     *
      * @var \Magento\Cms\Helper\Wysiwyg\Images
      */
     protected $_cmsWysiwygImages = null;
@@ -73,14 +69,14 @@ class Tree extends \Magento\Backend\Block\Template
             $data = [
                 'text' => $this->_cmsWysiwygImages->getShortFilename($item->getBasename(), 20),
                 'id' => $this->_cmsWysiwygImages->convertPathToId($item->getFilename()),
-                'path' => substr($item->getFilename(), strlen($storageRoot)),
+                'path' => substr($item->getFilename() ?? '', strlen($storageRoot)),
                 'cls' => 'folder',
             ];
             $hasNestedDirectories = $this->hasNestedDirectories($storageRoot, $item->getFilename());
 
-            // if no nested directories inside dir, add 'leaf' state so that jstree hides dropdown arrow next to dir
-            if (!$hasNestedDirectories) {
-                $data['state'] = 'leaf';
+            // Display node as closed and enable lazy loading
+            if ($hasNestedDirectories) {
+                $data['children'] = true;
             }
 
             $jsonArray[] = $data;
@@ -119,7 +115,7 @@ class Tree extends \Magento\Backend\Block\Template
 
         $currentTreePath = $this->getRequest()->getParam('current_tree_path');
 
-        if (strlen($currentTreePath)) {
+        if ($currentTreePath !== null && strlen($currentTreePath)) {
             $params['current_tree_path'] = $currentTreePath;
         }
 
@@ -154,7 +150,7 @@ class Tree extends \Magento\Backend\Block\Template
             $path = $this->_coreRegistry->registry('storage')->getSession()->getCurrentPath();
         }
 
-        if (strlen($path)) {
+        if ($path) {
             $path = str_replace($this->_cmsWysiwygImages->getStorageRoot(), '', $path);
             $relative = [];
             foreach (explode('/', $path) as $dirName) {

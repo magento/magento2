@@ -137,7 +137,7 @@ define([
             if (this.$wysiwygEditorButton && disabled) {
                 this.$wysiwygEditorButton.prop('disabled', 'disabled');
             } else if (this.$wysiwygEditorButton) {
-                this.$wysiwygEditorButton.removeProp('disabled');
+                this.$wysiwygEditorButton.prop('disabled', false);
             }
 
             /* eslint-disable no-undef */

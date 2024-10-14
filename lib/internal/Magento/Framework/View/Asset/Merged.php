@@ -15,7 +15,7 @@ class Merged implements \Iterator
     /**
      * Directory for dynamically generated public view files, relative to STATIC_VIEW
      */
-    const CACHE_VIEW_REL = '_cache';
+    public const CACHE_VIEW_REL = '_cache';
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -143,10 +143,11 @@ class Merged implements \Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return AssetInterface
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         $this->initialize();
@@ -154,8 +155,9 @@ class Merged implements \Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         $this->initialize();
@@ -163,8 +165,9 @@ class Merged implements \Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         $this->initialize();
@@ -172,8 +175,9 @@ class Merged implements \Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->initialize();
@@ -181,8 +185,9 @@ class Merged implements \Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         $this->initialize();

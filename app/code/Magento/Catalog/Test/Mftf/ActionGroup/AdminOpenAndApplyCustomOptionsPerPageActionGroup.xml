@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenAndApplyCustomOptionsPerPageActionGroup">
+        <annotations>
+            <description>Open the custom option drop down section and assign the user defined custom value</description>
+        </annotations>
+        <arguments>
+            <argument name="perPageInputValue" type="string" defaultValue="1"/>
+        </arguments>
+
+        <click selector="{{AdminProductGridPaginationSection.perPageDropdown}}" stepKey="clickProductPerPageDropdown"/>
+        <click selector="{{AdminProductGridPaginationSection.perPageOption('Custom')}}" stepKey="selectCustomPerPage"/>
+        <fillField selector="{{AdminProductGridPaginationSection.perPageInput}}" userInput="{{perPageInputValue}}" stepKey="fillCustomPerPage"/>
+        <click selector="{{AdminProductGridPaginationSection.perPageApplyInput}}" stepKey="applyCustomPerPage"/>
+        <waitForPageLoad stepKey="waitForPageRefreshCustomPerPage"/>
+    </actionGroup>
+</actionGroups>

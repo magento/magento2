@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<if args="isSalable($row()) && hasSpecialPrice($row())">
+<if args="hasSpecialPrice($row())">
     <span class="special-price">
         <span class="price-container"
               css="getAdjustmentCssClasses($row())">
@@ -20,7 +20,7 @@
                   html="getPriceUnsanitizedHtml($row())"></span>
 
             <each args="data: getAdjustments(), as: '$adj'">
-                <render args="$adj.getBody()"/>
+                <render args="$adj.getBody()"></render>
             </each>
         </span>
     </span>

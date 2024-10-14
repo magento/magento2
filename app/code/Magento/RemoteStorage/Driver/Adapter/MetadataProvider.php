@@ -50,7 +50,7 @@ class MetadataProvider implements MetadataProviderInterface
     private function isDirectory($path): bool
     {
         try {
-            return iterator_count($this->adapter->listContents($path, false)) > 0;
+            return $this->adapter->directoryExists($path);
         } catch (\Throwable $e) {
             // catch closed iterator
             return false;
@@ -62,6 +62,7 @@ class MetadataProvider implements MetadataProviderInterface
      */
     public function getMetadata(string $path): array
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $metadata = $this->cache->getMetadata($path);
         if (isset($metadata['type']) && ($metadata['type'] == 'dir' || $this->isMetadataComplete($metadata))) {
             return $metadata;
@@ -104,8 +105,9 @@ class MetadataProvider implements MetadataProviderInterface
             'visibility' => $meta->visibility(),
             'mimetype' => $meta->mimeType(),
             'dirname' => dirname($meta->path()),
-            'basename' => basename($meta->path()),
+            'basename' => basename($meta->path(), '.' . pathinfo($path, PATHINFO_EXTENSION)),
         ];
+        // phpcs:enable Magento2.Functions.DiscouragedFunction
         $extraMetadata = $meta->extraMetadata();
         if (isset($extraMetadata['Metadata']['image-width']) && isset($extraMetadata['Metadata']['image-height'])) {
             $data['extra'] = $extraMetadata['Metadata'];

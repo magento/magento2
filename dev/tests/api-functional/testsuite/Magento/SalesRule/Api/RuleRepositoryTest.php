@@ -6,14 +6,19 @@
  */
 namespace Magento\SalesRule\Api;
 
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\SalesRule\Model\Coupon;
+use Magento\SalesRule\Model\RuleRepository;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RuleRepositoryTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'salesRuleRuleRepositoryV1';
-    const RESOURCE_PATH = '/V1/salesRules';
-    const SERVICE_VERSION = "V1";
+    public const SERVICE_NAME = 'salesRuleRuleRepositoryV1';
+    public const RESOURCE_PATH = '/V1/salesRules';
+    public const SERVICE_VERSION = "V1";
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -86,6 +91,8 @@ class RuleRepositoryTest extends WebapiAbstract
             'use_auto_generation' => false,
             'uses_per_coupon' => 0,
             'simple_free_shipping' => 0,
+            'from_date' => '2022-04-22',
+            'to_date' => '2022-09-25',
         ];
         return $data;
     }
@@ -98,6 +105,8 @@ class RuleRepositoryTest extends WebapiAbstract
         $ruleId = $result['rule_id'];
         $this->assertArrayHasKey('rule_id', $result);
         $this->assertEquals($ruleId, $result['rule_id']);
+        $this->assertEquals($inputData['from_date'], $result['from_date']);
+        $this->assertEquals($inputData['to_date'], $result['to_date']);
         unset($result['rule_id']);
         unset($result['extension_attributes']);
         $this->assertEquals($inputData, $result);
@@ -236,6 +245,28 @@ class RuleRepositoryTest extends WebapiAbstract
         $this->assertEquals('#1', $result['items'][0]['name']);
         $this->assertEquals('#2', $result['items'][1]['name']);
         $this->assertEquals($searchData, $result['search_criteria']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_100_percent_off_with_coupon.php
+     */
+    public function testUpdateRuleHavingSpecificCouponCode(): void
+    {
+        $searchCriteria = $this->objectManager->create(SearchCriteriaBuilder::class)
+            ->addFilter('name', '100% discount on orders for registered customers')
+            ->create();
+        $salesRules = $this->objectManager->create(RuleRepositoryInterface::class)
+            ->getList($searchCriteria)
+            ->getItems();
+        $ruleId = array_pop($salesRules)->getRuleId();
+        $inputData = $this->getSalesRuleData();
+        unset($inputData['name']);
+        $result = $this->updateRule($ruleId, $inputData);
+        $this->assertNotEmpty($result);
+        $coupon = $this->objectManager->create(Coupon::class);
+        $coupon->loadByCode('free_use');
+        $this->assertInstanceOf(Coupon::class, $coupon);
+        $this->assertEquals($ruleId, $coupon->getRuleId());
     }
 
     /**

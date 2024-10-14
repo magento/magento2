@@ -20,6 +20,7 @@
             <group value="catalog"/>
             <group value="bundle"/>
             <group value="productVideo"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <remove keyForRemoval="setYoutubeApiKeyConfig"/>

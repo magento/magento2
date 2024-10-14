@@ -36,4 +36,9 @@
         <data key="label">Adobe Base</data>
         <requiredEntity type="ImageContent">AdobeBaseContentExportImport</requiredEntity>
     </entity>
+    <entity name="placeholderBaseImageLongName" type="imageFile">
+        <data key="file">adobe-base-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name.jpg</data>
+        <data key="name">adobe-base-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name-image-long-name</data>
+        <data key="extension">jpg</data>
+    </entity>
 </entities>

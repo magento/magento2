@@ -105,7 +105,7 @@ class Invoice extends AbstractItems
             }
 
             if (!isset($drawItems[$optionId])) {
-                $drawItems[$optionId] = ['lines' => [], 'height' => 15];
+                $drawItems[$optionId] = ['lines' => [], 'height' => 20];
             }
 
             if ($childItem->getOrderItem()->getParentItem() && $prevOptionId != $attributes['option_id']) {
@@ -153,7 +153,11 @@ class Invoice extends AbstractItems
             foreach ($this->string->split($this->getItem()->getSku(), 17) as $part) {
                 $text[] = $part;
             }
-            $lines[$index][] = ['text' => $text, 'feed' => 255];
+            $lines[$index][] = [
+                'text' => $text,
+                'feed' => 290,
+                'align' => 'right'
+            ];
         }
 
         return $lines;
@@ -177,8 +181,8 @@ class Invoice extends AbstractItems
 
             $item = $this->getItem();
             $this->_item = $childItem;
-            $feedPrice = 380;
-            $feedSubtotal = $feedPrice + 185;
+            $feedPrice = 395;
+            $feedSubtotal = $feedPrice + 170;
             foreach ($this->getItemPricesForDisplay() as $priceData) {
                 if (isset($priceData['label'])) {
                     // draw Price label
@@ -235,9 +239,10 @@ class Invoice extends AbstractItems
                 if ($option['value']) {
                     $text = [];
                     $printValue = $option['print_value'] ?? $this->filterManager->stripTags($option['value']);
+                    $printValue = str_replace(PHP_EOL, ', ', $printValue);
                     $values = explode(', ', $printValue);
                     foreach ($values as $value) {
-                        foreach ($this->string->split($value, 30, true, true) as $subValue) {
+                        foreach ($this->string->split($value, 50, true, true) as $subValue) {
                             $text[] = $subValue;
                         }
                     }
@@ -245,7 +250,7 @@ class Invoice extends AbstractItems
                     $lines[][] = ['text' => $text, 'feed' => 40];
                 }
 
-                $draw[] = ['lines' => $lines, 'height' => 15];
+                $draw[] = ['lines' => $lines, 'height' => 20, 'shift' => 5];
             }
         }
 

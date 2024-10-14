@@ -79,7 +79,7 @@ class MassPublisher implements PublisherInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function publish($topicName, $data)
     {
@@ -91,6 +91,7 @@ class MassPublisher implements PublisherInterface
                 [
                     'body' => $message,
                     'properties' => [
+                        'topic_name' => $topicName,
                         'delivery_mode' => 2,
                         'message_id' => $this->messageIdGenerator->generate($topicName),
                     ]

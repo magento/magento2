@@ -33,7 +33,7 @@ class ReadHandlerTest extends TestCase
     {
         $this->optionLoader = $this->getMockBuilder(Loader::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load'])
+            ->onlyMethods(['load'])
             ->getMock();
 
         $this->readHandler = new ReadHandler($this->optionLoader);
@@ -46,7 +46,7 @@ class ReadHandlerTest extends TestCase
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getExtensionAttributes'])
+            ->onlyMethods(['getTypeId', 'getExtensionAttributes'])
             ->getMock();
 
         $product->expects(static::once())
@@ -74,7 +74,7 @@ class ReadHandlerTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getTypeId', 'getId', 'getExtensionAttributes', 'setExtensionAttributes', 'getTypeInstance'
             ])
             ->getMock();
@@ -85,7 +85,7 @@ class ReadHandlerTest extends TestCase
 
         $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
+            ->addMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
             ->getMockForAbstractClass();
 
         $product->expects(static::once())
@@ -99,7 +99,7 @@ class ReadHandlerTest extends TestCase
 
         $typeInstance = $this->getMockBuilder(Configurable::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getChildrenIds'])
+            ->onlyMethods(['getChildrenIds'])
             ->getMock();
 
         $product->expects(static::once())

@@ -50,6 +50,7 @@
         <after>
             <!-- Delete Data -->
             <deleteData createDataKey="createImportCategory" stepKey="deleteImportCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
                 <argument name="path">var/import/images/{{ImportProduct_Grouped.name}}</argument>
@@ -244,7 +245,9 @@
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStorefrontPage">
             <argument name="productUrl" value="{{ImportProduct_Grouped.urlKey}}"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Grouped.name}}" stepKey="seeProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="{{ImportProduct_Grouped.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Grouped.sku}}" stepKey="seeSku"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple1_Grouped.baseImageName)}}" stepKey="seeProduct1BaseImage"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple2_Grouped.baseImageName)}}" stepKey="seeProduct2BaseImage"/>

@@ -17,6 +17,7 @@
             <testCaseId value="MC-10897"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -26,9 +27,13 @@
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
                 <argument name="ProductAttribute" value="{{priceProductAttribute.attribute_code}}"/>
             </actionGroup>
-            <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
-            <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
-            <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute"/>
+            <comment userInput="BIC workaround" stepKey="clickDelete"/>
+            <comment userInput="BIC workaround" stepKey="clickOk"/>
+            <comment userInput="BIC workaround" stepKey="waitForDeletion"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -52,7 +57,9 @@
         <seeInField stepKey="assertAttrCode" selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{priceProductAttribute.attribute_code}}"/>
 
         <!--Go to New Product page, add Attribute and check values-->
-        <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToCreateSimpleProductPage"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateSimpleProductPage">
+            <argument name="attributeSetId" value="4"/>
+        </actionGroup>
         <actionGroup ref="AddProductAttributeInProductModalActionGroup" stepKey="addAttributeToProduct">
             <argument name="attributeCode" value="{{priceProductAttribute.attribute_code}}"/>
         </actionGroup>

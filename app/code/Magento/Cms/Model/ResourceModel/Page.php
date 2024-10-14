@@ -33,8 +33,6 @@ class Page extends AbstractDb
     protected $_store = null;
 
     /**
-     * Store manager
-     *
      * @var StoreManagerInterface
      */
     protected $_storeManager;
@@ -133,6 +131,8 @@ class Page extends AbstractDb
     }
 
     /**
+     * Get page identifier
+     *
      * @param AbstractModel $object
      * @param string $value
      * @param string|null $field
@@ -251,7 +251,7 @@ class Page extends AbstractDb
      */
     protected function isNumericPageIdentifier(AbstractModel $object)
     {
-        return preg_match('/^[0-9]+$/', $object->getData('identifier'));
+        return preg_match('/^[0-9]+$/', $object->getData('identifier') ?? '');
     }
 
     /**
@@ -262,12 +262,11 @@ class Page extends AbstractDb
      */
     protected function isValidPageIdentifier(AbstractModel $object)
     {
-        return preg_match('/^[a-z0-9][a-z0-9_\/-]+(\.[a-z0-9_-]+)?$/', $object->getData('identifier'));
+        return preg_match('/^[a-z0-9][a-z0-9_\/-]+(\.[a-z0-9_-]+)?$/', $object->getData('identifier') ?? '');
     }
 
     /**
-     * Check if page identifier exist for specific store
-     * return page id if page exists
+     * Check if page identifier exist for specific store, return page id if page exists
      *
      * @param string $identifier
      * @param int $storeId

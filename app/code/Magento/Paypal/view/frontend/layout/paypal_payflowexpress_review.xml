@@ -20,6 +20,9 @@
         </referenceContainer>
         <referenceContainer name="content">
             <block class="Magento\Paypal\Block\Express\Review" name="paypal.express.review" template="Magento_Paypal::express/review.phtml">
+                <arguments>
+                    <argument name="PaypalFundingSourceDataProvider" xsi:type="object">Magento\Paypal\ViewModel\PaypalFundingSourceDataProvider</argument>
+                </arguments>
                 <action method="setControllerPath">
                     <argument name="prefix" xsi:type="string">paypal/payflowexpress</argument>
                 </action>

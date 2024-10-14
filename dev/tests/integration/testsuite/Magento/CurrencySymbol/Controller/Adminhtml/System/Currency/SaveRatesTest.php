@@ -6,13 +6,13 @@
 
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
+use Magento\Directory\Model\Currency;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Escaper;
 
 class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
-
-    /** @var \Magento\Directory\Model\Currency $currencyRate */
+    /** @var Currency $currencyRate */
     protected $currencyRate;
 
     /**
@@ -21,12 +21,12 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     private $escaper;
 
     /**
-     * Initial setup
+     * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->currencyRate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Directory\Model\Currency::class
+            Currency::class
         );
         $this->escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             Escaper::class
@@ -40,7 +40,7 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      *
      * @magentoDbIsolation enabled
      */
-    public function testSaveAction()
+    public function testSaveAction(): void
     {
         $currencyCode = 'USD';
         $currencyTo = 'USD';
@@ -73,11 +73,42 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      *
      * @magentoDbIsolation enabled
      */
-    public function testSaveWithWarningAction()
+    public function testSaveWithWarningAction(): void
     {
         $currencyCode = 'USD';
         $currencyTo = 'USD';
         $rate = '0';
+
+        $request = $this->getRequest();
+        $request->setMethod(HttpRequest::METHOD_POST);
+        $request->setPostValue(
+            'rate',
+            [
+                $currencyCode => [$currencyTo => $rate]
+            ]
+        );
+        $this->dispatch('backend/admin/system_currency/saveRates');
+
+        $this->assertSessionMessages(
+            $this->containsEqual(
+                $this->escaper->escapeHtml(
+                    (string)__('Please correct the input data for "%1 => %2" rate.', $currencyCode, $currencyTo)
+                )
+            ),
+            \Magento\Framework\Message\MessageInterface::TYPE_WARNING
+        );
+    }
+
+    /**
+     * Test save action with warning
+     *
+     * @magentoDbIsolation enabled
+     */
+    public function testSaveWithNullRates(): void
+    {
+        $currencyCode = 'USD';
+        $currencyTo = 'USD';
+        $rate = null;
 
         $request = $this->getRequest();
         $request->setMethod(HttpRequest::METHOD_POST);

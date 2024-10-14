@@ -11,7 +11,7 @@ use Magento\Checkout\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Paypal\Model\Config as PaypalConfig;
 
 /**
  * Provides configuration values for PayPal in-context checkout
@@ -44,10 +44,16 @@ class SmartButtonConfig
     private $sdkUrl;
 
     /**
+     * @var PaypalConfig
+     */
+    private $paypalConfig;
+
+    /**
      * @param ResolverInterface $localeResolver
      * @param ConfigFactory $configFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param SdkUrl $sdkUrl
+     * @param PaypalConfig $paypalConfig
      * @param array $defaultStyles
      */
     public function __construct(
@@ -55,6 +61,7 @@ class SmartButtonConfig
         ConfigFactory $configFactory,
         ScopeConfigInterface $scopeConfig,
         SdkUrl $sdkUrl,
+        PaypalConfig $paypalConfig,
         $defaultStyles = []
     ) {
         $this->localeResolver = $localeResolver;
@@ -63,6 +70,7 @@ class SmartButtonConfig
         $this->scopeConfig = $scopeConfig;
         $this->defaultStyles = $defaultStyles;
         $this->sdkUrl = $sdkUrl;
+        $this->paypalConfig = $paypalConfig;
     }
 
     /**
@@ -81,7 +89,11 @@ class SmartButtonConfig
             'styles' => $this->getButtonStyles($page),
             'isVisibleOnProductPage'  => (bool)$this->config->getValue('visible_on_product'),
             'isGuestCheckoutAllowed'  => $isGuestCheckoutAllowed,
-            'sdkUrl' => $this->sdkUrl->getUrl()
+            'sdkUrl' => $this->sdkUrl->getUrl(),
+            'dataAttributes' => [
+                'data-partner-attribution-id' => $this->paypalConfig->getBuildNotationCode(),
+                'data-csp-nonce' => $this->paypalConfig->getCspNonce(),
+            ]
         ];
     }
 

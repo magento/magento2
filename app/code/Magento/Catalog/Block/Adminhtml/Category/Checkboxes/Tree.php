@@ -6,14 +6,13 @@
 
 /**
  * Categories tree with checkboxes
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Checkboxes;
 
+use Magento\Catalog\Block\Adminhtml\Category\Tree as CategoryTree;
 use Magento\Framework\Data\Tree\Node;
 
-class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
+class Tree extends CategoryTree
 {
     /**
      * @var int[]
@@ -26,6 +25,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     protected $_expandedPath = [];
 
     /**
+     * Method to prepare layout.
+     *
      * @return void
      */
     protected function _prepareLayout()
@@ -34,6 +35,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     }
 
     /**
+     * Method to get category ids.
+     *
      * @return int[]
      */
     public function getCategoryIds()
@@ -42,6 +45,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     }
 
     /**
+     * Method to set category ids.
+     *
      * @param mixed $ids
      * @return $this
      */
@@ -57,6 +62,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     }
 
     /**
+     * Method to get expanded path.
+     *
      * @return array
      */
     protected function getExpandedPath()
@@ -65,16 +72,20 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     }
 
     /**
+     * Method to set expanded path.
+     *
      * @param string $path
      * @return $this
      */
     protected function setExpandedPath($path)
     {
-        $this->_expandedPath = array_merge($this->_expandedPath, explode('/', $path));
+        $this->_expandedPath = array_merge($this->_expandedPath, explode('/', $path ?: ''));
         return $this;
     }
 
     /**
+     * Method to get node json.
+     *
      * @param array|Node $node
      * @param int $level
      * @return array
