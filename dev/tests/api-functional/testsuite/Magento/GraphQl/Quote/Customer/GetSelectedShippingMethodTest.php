@@ -39,6 +39,7 @@ class GetSelectedShippingMethodTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store tax/calculation/price_includes_tax 1
      * @magentoConfigFixture default_store tax/calculation/shipping_includes_tax 1
      * @magentoConfigFixture default_store tax/cart_display/shipping 2
      * @magentoConfigFixture default_store tax/classes/shipping_tax_class 2

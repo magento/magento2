@@ -1,0 +1,10 @@
+
+File "/var/www/html/app/code/Magento/MediaGalleryCatalogIntegration/Test/Mftf/Test/AdminUploadSameImageDeleteFromTemporaryFolderTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminOpenCategoryGridPageActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AdminEditCategoryInGridPageActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryExpandCatalogTmpFolderActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryFolderSelectByFullPathActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminAssertMediaGalleryEmptyActionGroup from module(s): magento/module-media-gallery-ui

@@ -17,7 +17,7 @@
     <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">
         <arguments>
             <argument name="engines" xsi:type="array">
-                <item sortOrder="30" name="elasticsearch7" xsi:type="string">Elasticsearch 7</item>
+                <item sortOrder="30" name="elasticsearch7" xsi:type="string">Elasticsearch 7 (Deprecated)</item>
             </argument>
         </arguments>
     </type>

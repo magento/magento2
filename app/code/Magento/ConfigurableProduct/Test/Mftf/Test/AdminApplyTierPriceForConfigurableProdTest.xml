@@ -15,6 +15,7 @@
             <description value="admin should be able to create a configurable product with tier prices"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4468"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as Admin -->

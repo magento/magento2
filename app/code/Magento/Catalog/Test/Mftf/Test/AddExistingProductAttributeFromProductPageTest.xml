@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-26780"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -46,9 +47,15 @@
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToAttributeEditPage">
                 <argument name="ProductAttribute" value="Test Attribute"/>
             </actionGroup>
-            <click selector="{{AttributePropertiesSection.DeleteAttribute}}"  stepKey="clickDeleteAttribute" />
-            <click selector="{{AttributeDeleteModalSection.confirm}}" stepKey="clickOkToConfirmDelete" />
-            <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute"/>
+            <comment userInput="BIC workaround" stepKey="clickDeleteAttribute"/>
+            <comment userInput="BIC workaround" stepKey="clickOkToConfirmDelete"/>
+            <comment userInput="BIC workaround" stepKey="waitForDeletion"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Select the Default Category for Main Webstore -->
             <actionGroup ref="UpdateRootCategoryForStoresActionGroup" stepKey="UpdateRootCategoryForStores">

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnablePayPalPayFlowLinkActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Payment Methods'. Fills in the provided Sample PayPal Payflow link credentials and other details. Clicks on Save.</description>
+        </annotations>
+        <arguments>
+            <argument name="credentials" defaultValue="SamplePaypalPaymentsFlowLinkConfig"/>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab1(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab(countryCode)}}" visible="false" stepKey="clickOtherPayPalPaymentsSection"/>
+        <conditionalClick selector ="{{OtherPayPalPaymentsConfigSection.expandTabNew(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTabNew(countryCode)}}" visible="false" stepKey="expandPaypalPaymentGatewaysConfigButton"/>
+        <scrollTo selector="{{AdminPayPalPayFlowLinkConfigSection.paymentGateway(countryCode)}}" stepKey="scrollToConfigure"/>
+        <conditionalClick selector ="{{AdminPayPalPayFlowLinkConfigSection.configureBtn(countryCode)}}" dependentSelector="{{AdminPayPalPayFlowLinkConfigSection.configureBtn(countryCode)}}" visible="true" stepKey="clickPayPalPayflowPaymentConfigureBtn"/>
+        <waitForElementVisible selector ="{{AdminPayPalPayFlowLinkConfigSection.partner(countryCode)}}" stepKey="waitForPartnerFieldToBeVisible"/>
+        <fillField selector ="{{AdminPayPalPayFlowLinkConfigSection.partner(countryCode)}}" userInput="{{credentials.paypal_paymentsflowlink_partner}}" stepKey="inputPartner"/>
+        <waitForElementVisible selector ="{{AdminPayPalPayFlowLinkConfigSection.user(countryCode)}}" stepKey="waitForUserFieldToBeVisible"/>
+        <fillField selector ="{{AdminPayPalPayFlowLinkConfigSection.user(countryCode)}}" userInput="{{credentials.paypal_paymentsflowlink_user}}" stepKey="inputUser"/>
+        <waitForElementVisible selector ="{{AdminPayPalPayFlowLinkConfigSection.vendor(countryCode)}}" stepKey="waitForvendorFieldToBeVisible"/>
+        <fillField selector ="{{AdminPayPalPayFlowLinkConfigSection.vendor(countryCode)}}" userInput="{{credentials.paypal_paymentsflowlink_vendor}}" stepKey="inputVendor"/>
+        <waitForElementVisible selector ="{{AdminPayPalPayFlowLinkConfigSection.password(countryCode)}}" stepKey="waitForpasswordFieldToBeVisible"/>
+        <fillField selector ="{{AdminPayPalPayFlowLinkConfigSection.password(countryCode)}}" userInput="{{credentials.paypal_paymentsflowlink_password}}" stepKey="inputPassword"/>
+        <waitForElementClickable selector ="{{AdminPayPalPayFlowLinkConfigSection.testMode(countryCode)}}" stepKey="waitFortestModeFieldToBeClickable"/>
+        <selectOption selector="{{AdminPayPalPayFlowLinkConfigSection.testMode(countryCode)}}" userInput="Yes" stepKey="enableTestMode"/>
+        <waitForElementClickable selector ="{{AdminPayPalPayFlowLinkConfigSection.enableSolution(countryCode)}}" stepKey="waitForSolutionFieldToBeClickable"/>
+        <selectOption selector ="{{AdminPayPalPayFlowLinkConfigSection.enableSolution(countryCode)}}" userInput="Yes" stepKey="enableSolution"/>
+        <waitForElementClickable selector ="{{AdminConfigSection.saveButton}}" stepKey="waitForSaveConfigToBeVisible"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForSaving"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess"/>
+    </actionGroup>
+</actionGroups>

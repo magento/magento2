@@ -42,7 +42,7 @@
         </after>
 
         <!-- Start Order Creation -->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
 
@@ -96,7 +96,7 @@
         <magentoCLI stepKey="setCustomRecordsLimit" command="config:set admin/grid/records_limit 3"/>
 
         <!-- Start order creation again -->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer2">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer2">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
 

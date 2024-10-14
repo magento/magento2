@@ -44,7 +44,7 @@ class QueryResultTest extends TestCase
      * Data provider for testGetProperties
      * @return array
      */
-    public function getPropertiesDataProvider()
+    public static function getPropertiesDataProvider()
     {
         return [
             [

@@ -38,7 +38,7 @@ class DateTimeTypeTest extends TestCase
     {
         $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['convert'])
+            ->onlyMethods(['convert'])
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManagerHelper($this);
@@ -61,7 +61,7 @@ class DateTimeTypeTest extends TestCase
     {
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isDateTimeType'])
+            ->onlyMethods(['isDateTimeType'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('isDateTimeType')
@@ -79,7 +79,7 @@ class DateTimeTypeTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldTypeProvider()
+    public static function getFieldTypeProvider()
     {
         return [
             [true, 'something'],

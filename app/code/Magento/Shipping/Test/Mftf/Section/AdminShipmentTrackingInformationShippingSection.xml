@@ -13,5 +13,12 @@
         <element name="shippingMethod" type="text" selector="#shipment_tracking_info .odd .col-carrier"/>
         <element name="shippingMethodTitle" type="text" selector="#shipment_tracking_info .odd .col-title"/>
         <element name="shippingNumber" type="text" selector="#shipment_tracking_info .odd .col-number"/>
+        <element name="trackOrder" type="button" selector=".order-view-billing-shipping .order-shipping-method .admin__page-section-item-content p a"/>
+        <element name="trackingInformation" type="text" selector="//div[@class='table-wrapper'][1]//table//tbody//tr[{{row}}]//td" parameterized="true"/>
+        <element name="trackingCloseButton" type="text" selector="//button[@title='Close Window']"/>
+        <element name="printShippingLabelButton" type="button" selector="//span[text()='Print Shipping Label']"/>
+        <element name="showPackage" type="button" selector="//span[text()='Show Packages']"/>
+        <element name="getPackage" type="text" selector="#packed_window .admin__page-section:nth-child({{row}}) .admin__page-section-title span" parameterized="true"/>
+        <element name="cancelPackageSideWindow" type="text" selector="//aside[contains(@class, 'modal-slide _show')]//div[contains(@class, 'modal-inner-wrap')]//button/span[contains(text(),'Cancel')]"/>
     </section>
 </sections>

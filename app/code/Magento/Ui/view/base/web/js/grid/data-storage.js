@@ -186,6 +186,10 @@ define([
                 delay = this.cachedRequestDelay,
                 result;
 
+            if (request.showTotalRecords === undefined) {
+                request.showTotalRecords = true;
+            }
+
             result = {
                 items: this.getByIds(request.ids),
                 totalRecords: request.totalRecords,
@@ -213,6 +217,10 @@ define([
 
             if (cached) {
                 this.removeRequest(cached);
+            }
+
+            if (data.showTotalRecords === undefined) {
+                data.showTotalRecords = true;
             }
 
             this._requests.push({

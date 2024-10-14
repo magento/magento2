@@ -88,7 +88,7 @@ class FileTest extends TestCase
 
         $this->serializer = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
-            ->setMethods(['serialize', 'unserialize'])
+            ->onlyMethods(['serialize', 'unserialize'])
             ->getMock();
 
         $this->urlBuilder = $this->getMockBuilder(UrlBuilder::class)
@@ -100,7 +100,7 @@ class FileTest extends TestCase
             ->getMock();
 
         $this->itemOptionFactoryMock = $this->getMockBuilder(OptionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -182,7 +182,7 @@ class FileTest extends TestCase
     {
         $optionMock = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMockForAbstractClass();
 
         $quotePath = '/quote/path/path/uploaded.file';
@@ -238,7 +238,7 @@ class FileTest extends TestCase
     {
         $optionMock = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMockForAbstractClass();
 
         $quotePath = '/quote/path/path/uploaded.file';
@@ -314,7 +314,7 @@ class FileTest extends TestCase
             ->willReturn(json_encode($resultValue));
 
         $option = $this->getMockBuilder(Option::class)
-            ->setMethods(['setValue'])
+            ->addMethods(['setValue'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -338,7 +338,8 @@ class FileTest extends TestCase
         $configurationItemOption = $this->getMockBuilder(
             OptionInterface::class
         )->disableOriginalConstructor()
-            ->setMethods(['getId', 'getValue'])
+            ->addMethods(['getId'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $configurationItemOption->expects($this->once())
             ->method('getId')
@@ -378,7 +379,7 @@ class FileTest extends TestCase
 
         $itemMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getValue'])
+            ->onlyMethods(['load', 'getValue'])
             ->getMock();
 
         $itemMock->expects($this->any())
@@ -404,7 +405,7 @@ class FileTest extends TestCase
 
         $itemMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getValue'])
+            ->onlyMethods(['load', 'getValue'])
             ->getMock();
 
         $itemMock->expects($this->any())
@@ -430,7 +431,7 @@ class FileTest extends TestCase
 
         $itemMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getValue'])
+            ->onlyMethods(['load', 'getValue'])
             ->getMock();
 
         $itemMock->expects($this->any())

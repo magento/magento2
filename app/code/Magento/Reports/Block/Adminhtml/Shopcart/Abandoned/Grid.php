@@ -5,6 +5,10 @@
  */
 namespace Magento\Reports\Block\Adminhtml\Shopcart\Abandoned;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\Parameters;
+use Magento\Framework\Url\DecoderInterface;
+
 /**
  * Adminhtml abandoned shopping carts report grid block
  *
@@ -16,6 +20,16 @@ namespace Magento\Reports\Block\Adminhtml\Shopcart\Abandoned;
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 {
     /**
+     * @var DecoderInterface
+     */
+    private $urlDecoder;
+
+    /**
+     * @var Parameters
+     */
+    private $parameters;
+
+    /**
      * @var \Magento\Reports\Model\ResourceModel\Quote\CollectionFactory
      */
     protected $_quotesFactory;
@@ -24,16 +38,22 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\ResourceModel\Quote\CollectionFactory $quotesFactory
+     * @param DecoderInterface|null $urlDecoder
+     * @param Parameters|null $parameters
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Reports\Model\ResourceModel\Quote\CollectionFactory $quotesFactory,
+        DecoderInterface $urlDecoder = null,
+        Parameters $parameters = null,
         array $data = []
     ) {
         $this->_quotesFactory = $quotesFactory;
         parent::__construct($context, $backendHelper, $data);
+        $this->urlDecoder = $urlDecoder ?? ObjectManager::getInstance()->get(DecoderInterface::class);
+        $this->parameters = $parameters ?? ObjectManager::getInstance()->get(Parameters::class);
     }
 
     /**
@@ -59,8 +79,12 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 
         $filter = $this->getParam($this->getVarNameFilter(), []);
         if ($filter) {
-            $filter = base64_decode($filter);
-            parse_str(urldecode($filter), $data);
+            // this is a replacement for base64_decode()
+            $filter = $this->urlDecoder->decode($filter);
+
+            // this is a replacement for parse_str()
+            $this->parameters->fromString($filter);
+            $data = $this->parameters->toArray();
         }
 
         if (!empty($data)) {

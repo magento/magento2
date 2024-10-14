@@ -57,9 +57,11 @@ class QuoteCreation
         $quote->setCustomer($customer->getDataModel());
         $quote->setCustomerIsGuest(0);
         $quote->getShippingAddress()
-            ->importCustomerAddressData($shippingAddress->getDataModel());
+            ->importCustomerAddressData($shippingAddress->getDataModel())
+            ->setCollectShippingRates(true);
         $quote->getBillingAddress()
-            ->importCustomerAddressData($billingAddress->getDataModel());
+            ->importCustomerAddressData($billingAddress->getDataModel())
+            ->setCollectShippingRates(true);
         $quote->setInventoryProcessed(false);
         return $quote;
     }

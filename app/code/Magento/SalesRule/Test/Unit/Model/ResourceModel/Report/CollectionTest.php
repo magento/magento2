@@ -189,14 +189,20 @@ class CollectionTest extends TestCase
         $rulesList = [1 => 'test rule 1', 10 => 'test rule 10', 30 => 'test rule 30'];
         $this->connection
             ->method('quoteInto')
-            ->withConsecutive(
-                ['rule_name = ?', $rulesList[1]],
-                ['rule_name = ?', $rulesList[30]]
-            )->willReturnOnConsecutiveCalls('test_1', 'test_2');
-
+            ->willReturnCallback(function ($arg1, $arg2) use ($rulesList) {
+                if ($arg1 == 'rule_name = ?' && $arg2 = $rulesList[1]) {
+                    return 'test_1';
+                } elseif ($arg1 == 'rule_name = ?' && $arg2 = $rulesList[30]) {
+                    return 'test_2';
+                }
+            });
         $this->selectMock
             ->method('where')
-            ->withConsecutive([], [implode(' OR ', ['test_1', 'test_2'])]);
+            ->willReturnCallback(function ($arg1) {
+                if (is_null($arg1) || $arg1 == implode(' OR ', ['test_1', 'test_2'])) {
+                    return null;
+                }
+            });
 
         $ruleMock = $this->getRuleMock();
         $ruleMock->expects($this->once())

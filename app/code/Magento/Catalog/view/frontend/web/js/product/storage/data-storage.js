@@ -149,7 +149,7 @@ define([
             if (data.items && ids.length) {
                 //we can extend only items
                 data = data.items;
-                this.data(_.extend(data, currentData));
+                this.data(_.extend(currentData, data));
             }
         },
 
@@ -271,13 +271,9 @@ define([
                 sentDataIds = _.keys(this.request.data);
                 currentDataIds = _.keys(ids);
 
-                _.each(currentDataIds, function (id) {
-                    if (_.lastIndexOf(sentDataIds, id) === -1) {
-                        return false;
-                    }
+                return _.every(currentDataIds, function (id) {
+                    return _.lastIndexOf(sentDataIds, id) !== -1;
                 });
-
-                return true;
             }
 
             return false;

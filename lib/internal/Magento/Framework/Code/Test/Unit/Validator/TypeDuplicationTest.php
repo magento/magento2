@@ -41,7 +41,7 @@ class TypeDuplicationTest extends TestCase
     /**
      * @return array
      */
-    public function validClassesDataProvider()
+    public static function validClassesDataProvider()
     {
         return [
             'Duplicated interface injection' => ['\TypeDuplication\ValidClassWithTheSameInterfaceTypeArguments'],

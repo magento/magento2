@@ -66,7 +66,7 @@ class PriceBoxTest extends TestCase
 
         $this->rendererPool = $this->getMockBuilder(RendererPool::class)
             ->disableOriginalConstructor()
-            ->setMethods(['createAmountRender'])
+            ->onlyMethods(['createAmountRender'])
             ->getMock();
 
         $layout = $this->getMockForAbstractClass(LayoutInterface::class);
@@ -74,11 +74,8 @@ class PriceBoxTest extends TestCase
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $cacheState = $this->getMockBuilder(StateInterface::class)
             ->getMockForAbstractClass();
-        $storeConfig = $this->getMockBuilder(\Magento\Store\Model\Store\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getLayout', 'getEventManager', 'getStoreConfig', 'getScopeConfig', 'getCacheState'])
+            ->onlyMethods(['getLayout', 'getEventManager', 'getScopeConfig', 'getCacheState'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())
@@ -87,9 +84,6 @@ class PriceBoxTest extends TestCase
         $this->context->expects($this->any())
             ->method('getEventManager')
             ->willReturn($eventManager);
-        $this->context->expects($this->any())
-            ->method('getStoreConfig')
-            ->willReturn($storeConfig);
         $this->context->expects($this->any())
             ->method('getScopeConfig')
             ->willReturn($scopeConfigMock);
@@ -141,18 +135,18 @@ class PriceBoxTest extends TestCase
     /**
      * @return array
      */
-    public function toHtmlDataProvider()
+    public static function toHtmlDataProvider()
     {
         return [
             [
                 'data' => [],
-                'price_code' => 'test_price',
-                'css_classes' => 'price-test_price',
+                'priceCode' => 'test_price',
+                'cssClasses' => 'price-test_price',
             ],
             [
                 'data' => ['css_classes' => 'some_css_class'],
-                'price_code' => 'test_price',
-                'css_classes' => 'some_css_class price-test_price'
+                'priceCode' => 'test_price',
+                'cssClasses' => 'some_css_class price-test_price'
             ]];
     }
 
@@ -193,7 +187,7 @@ class PriceBoxTest extends TestCase
 
         $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
-            ->setMethods(['toHtml'])
+            ->onlyMethods(['toHtml'])
             ->getMock();
         $amountRender->expects($this->once())
             ->method('toHtml')
@@ -247,7 +241,7 @@ class PriceBoxTest extends TestCase
     /**
      * @return array
      */
-    public function getPriceIdProvider()
+    public static function getPriceIdProvider()
     {
         return [
             ['prefix', 'suffix', 'default_prefix', 'default_suffix'],
