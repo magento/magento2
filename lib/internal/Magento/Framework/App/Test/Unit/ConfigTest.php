@@ -80,7 +80,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getValueDataProvider()
+    public static function getValueDataProvider()
     {
         return [
             ['store', 1],
