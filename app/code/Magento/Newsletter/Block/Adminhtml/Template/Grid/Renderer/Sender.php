@@ -6,13 +6,11 @@
 
 /**
  * Newsletter templates grid block sender item renderer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer;
 
 /**
- * Class Sender
+ * Class Newsletter Grid Renderer Sender
  */
 class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -34,7 +32,7 @@ class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
         if ($str == '') {
             $str .= '---';
         }
-        
+
         return $str;
     }
 }

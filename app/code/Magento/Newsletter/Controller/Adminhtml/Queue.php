@@ -6,8 +6,6 @@
 
 /**
  * Newsletter queue controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Controller\Adminhtml;
 
@@ -18,5 +16,5 @@ abstract class Queue extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Newsletter::queue';
+    public const ADMIN_RESOURCE = 'Magento_Newsletter::queue';
 }

@@ -6,8 +6,6 @@
 
 /**
  * Newsletter templates grid block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template;
 

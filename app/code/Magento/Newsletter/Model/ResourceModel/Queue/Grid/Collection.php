@@ -6,14 +6,14 @@
 
 /**
  * Newsletter queue data grid collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Model\ResourceModel\Queue\Grid;
 
 class Collection extends \Magento\Newsletter\Model\ResourceModel\Queue\Collection
 {
     /**
+     * Init select method
+     *
      * @return $this
      */
     protected function _initSelect()

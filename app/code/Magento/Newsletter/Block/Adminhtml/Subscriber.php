@@ -6,8 +6,6 @@
 
 /**
  * Newsletter subscriber grid block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Block\Adminhtml;
 
@@ -25,7 +23,7 @@ use Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory;
 class Subscriber extends Template
 {
     /**
-     * Queue collection
+     * Queue collection property
      *
      * @var Collection
      */
