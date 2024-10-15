@@ -46,7 +46,7 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function isRowDownloadableEmptyOptionsDataProvider()
+    public static function isRowDownloadableEmptyOptionsDataProvider()
     {
         return [
             'Data set include downloadable link and sample' => [
@@ -122,7 +122,7 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function fillExistOptionsDataProvider()
+    public static function fillExistOptionsDataProvider()
     {
         return [
             'Data set 1' => [
@@ -201,7 +201,7 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function prepareDataForSaveDataProvider()
+    public static function prepareDataForSaveDataProvider()
     {
         return [
             'Data set 1' => [
@@ -263,7 +263,7 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function getTypeByValueDataProvider()
+    public static function getTypeByValueDataProvider()
     {
         return [
             'Case File Option Value' => [
