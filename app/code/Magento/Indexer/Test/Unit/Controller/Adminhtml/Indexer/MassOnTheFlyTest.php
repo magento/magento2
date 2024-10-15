@@ -82,7 +82,7 @@ class MassOnTheFlyTest extends TestCase
     protected $indexReg;
 
     /**
-     * @return ResponseInterface
+     * @var ResponseInterface
      */
     protected $response;
 
@@ -224,6 +224,8 @@ class MassOnTheFlyTest extends TestCase
 
             if ($exception !== null) {
                 $indexerInterface->expects($this->any())
+                    ->method('isScheduled')->willReturn(true);
+                $indexerInterface->expects($this->any())
                     ->method('setScheduled')->with(false)->willThrowException($exception);
             } else {
                 $indexerInterface->expects($this->any())
@@ -252,28 +254,28 @@ class MassOnTheFlyTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             'set1' => [
-                'idexers' => 1,
+                'indexerIds' => 1,
                 "exception" => null,
-                "expectsValues" => [0, 0, 0]
+                "expectsExceptionValues" => [0, 0, 0]
             ],
             'set2' => [
-                'idexers' => [1],
+                'indexerIds' => [1],
                 "exception" => null,
-                "expectsException" => [1, 0, 0]
+                "expectsExceptionValues" => [1, 0, 0]
             ],
             'set3' => [
-                'idexers' => [1],
+                'indexerIds' => [1],
                 "exception" => new LocalizedException(__('Test Phrase')),
-                "expectsException" => [0, 0, 1]
+                "expectsExceptionValues" => [0, 0, 1]
             ],
             'set4' => [
-                'idexers' => [1],
+                'indexerIds' => [1],
                 "exception" => new \Exception(),
-                "expectsException" => [0, 1, 0]
+                "expectsExceptionValues" => [0, 1, 0]
             ]
         ];
     }

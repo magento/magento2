@@ -135,7 +135,7 @@ class SitemapTest extends TestCase
         ];
 
         $this->resourceMock = $this->getMockBuilder(SitemapResource::class)
-            ->setMethods($resourceMethods)
+            ->onlyMethods($resourceMethods)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -150,7 +150,7 @@ class SitemapTest extends TestCase
             ->willReturn($this->fileMock);
 
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
-            ->setMethods(['getDirectoryWrite'])
+            ->onlyMethods(['getDirectoryWrite'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -508,17 +508,19 @@ class SitemapTest extends TestCase
      */
     protected function getModelMock($mockBeforeSave = false)
     {
+        $addMethods = [
+            '_getFileObject',
+            '_afterSave',
+            '_getCategoryItemsCollection',
+            '_getProductItemsCollection',
+            '_getPageItemsCollection'
+        ];
         $methods = [
             '_construct',
             '_getResource',
             '_getBaseDir',
-            '_getFileObject',
-            '_afterSave',
             '_getCurrentDateTime',
-            '_getCategoryItemsCollection',
-            '_getProductItemsCollection',
-            '_getPageItemsCollection',
-            '_getDocumentRoot',
+            '_getDocumentRoot'
         ];
         if ($mockBeforeSave) {
             $methods[] = 'beforeSave';
@@ -560,7 +562,8 @@ class SitemapTest extends TestCase
 
         /** @var Sitemap $model */
         $model = $this->getMockBuilder(Sitemap::class)
-            ->setMethods($methods)
+            ->addMethods($addMethods)
+            ->onlyMethods($methods)
             ->setConstructorArgs($this->getModelConstructorArgs())
             ->getMock();
 
@@ -638,7 +641,7 @@ class SitemapTest extends TestCase
     {
         /** @var Sitemap $model */
         $model = $this->getMockBuilder(Sitemap::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     '_getStoreBaseUrl',
                     '_getDocumentRoot',
@@ -747,7 +750,7 @@ class SitemapTest extends TestCase
         $this->directoryMock->method('getAbsolutePath')->willReturn($baseDir);
         /** @var Sitemap $model */
         $model = $this->getMockBuilder(Sitemap::class)
-            ->setMethods(['_construct'])
+            ->onlyMethods(['_construct'])
             ->setConstructorArgs($this->getModelConstructorArgs())
             ->getMock();
 
@@ -761,7 +764,7 @@ class SitemapTest extends TestCase
      *
      * @return array
      */
-    public function getDocumentRootFromBaseDirUrlDataProvider(): array
+    public static function getDocumentRootFromBaseDirUrlDataProvider(): array
     {
         return [
             [

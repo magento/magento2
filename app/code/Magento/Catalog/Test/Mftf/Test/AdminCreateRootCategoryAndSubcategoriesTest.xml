@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-46142"/>
             <group value="category"/>
+            <group value="cloud"/>
         </annotations>
         <!--Delete all created data during the test execution and assign Default Root Category to Store-->
         <after>

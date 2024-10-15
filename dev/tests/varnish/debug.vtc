@@ -1,0 +1,54 @@
+varnishtest "X-Magento-Cache-Debug header"
+
+server s1 {
+    # first request will be the probe, handle it and be on our way
+    rxreq
+    expect req.url == "/health_check.php"
+    txresp
+
+    # the probe expects the connection to close
+    close
+    accept
+
+    rxreq
+    txresp -hdr "answer-to: POST"
+
+    rxreq
+    txresp -hdr "answer-to: GET"
+} -start
+
+# generate usable VCL pointing towards s1
+# mostly, we replace the place-holders, but we also jack up the probe
+# interval to avoid further interference
+shell {
+    # testdir is automatically set to the directory containing the present vtc
+    sed \
+        -e 's@\.interval = 5s;@.interval = 5m; .initial = 10;@' \
+        -e 's@/\* {{ host }} \*/@${s1_addr}@' \
+        -e 's@/\* {{ port }} \*/@${s1_port}@' \
+        -e 's@/\* {{ ssl_offloaded_header }} \*/@unused@' \
+        -e 's@/\* {{ grace_period }} \*/@0@' \
+        ${testdir}/../../../app/code/Magento/PageCache/etc/varnish6.vcl > ${tmpdir}/output.vcl
+}
+
+varnish v1 -arg "-f" -arg "${tmpdir}/output.vcl" -start
+
+# make surethe probe request fired
+delay 1
+
+client c1 {
+    txreq -method "POST"
+    rxresp
+    expect resp.http.answer-to == "POST"
+    expect resp.http.X-Magento-Cache-Debug == "UNCACHEABLE"
+
+    txreq
+    rxresp
+    expect resp.http.answer-to == "GET"
+    expect resp.http.X-Magento-Cache-Debug == "MISS"
+
+    txreq
+    rxresp
+    expect resp.http.answer-to == "GET"
+    expect resp.http.X-Magento-Cache-Debug == "HIT"
+} -run

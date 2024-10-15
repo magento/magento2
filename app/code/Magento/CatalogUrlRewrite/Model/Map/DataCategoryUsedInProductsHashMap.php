@@ -6,11 +6,12 @@
 namespace Magento\CatalogUrlRewrite\Model\Map;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Map that holds data for categories used by products found in root category
  */
-class DataCategoryUsedInProductsHashMap implements HashMapInterface
+class DataCategoryUsedInProductsHashMap implements HashMapInterface, ResetAfterRequestInterface
 {
     /**
      * @var int[]
@@ -40,8 +41,7 @@ class DataCategoryUsedInProductsHashMap implements HashMapInterface
     }
 
     /**
-     * Returns an array of product ids for all DataProductHashMap list,
-     * that occur in other categories not part of DataCategoryHashMap list
+     * Returns product ids for all DataProductHashMap list from other categories not part of DataCategoryHashMap list
      *
      * @param int $categoryId
      * @return array
@@ -81,7 +81,7 @@ class DataCategoryUsedInProductsHashMap implements HashMapInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getData($categoryId, $key)
     {
@@ -93,12 +93,20 @@ class DataCategoryUsedInProductsHashMap implements HashMapInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resetData($categoryId)
     {
         $this->hashMapPool->resetMap(DataProductHashMap::class, $categoryId);
         $this->hashMapPool->resetMap(DataCategoryHashMap::class, $categoryId);
         unset($this->hashMap[$categoryId]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->hashMap = [];
     }
 }

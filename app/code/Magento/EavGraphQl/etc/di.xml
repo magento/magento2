@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Eav\Model\Entity\Attribute">
+        <plugin name="entityAttributeChangePlugin" type="Magento\EavGraphQl\Plugin\Eav\AttributePlugin" />
+    </type>
+    <type name="Magento\EavGraphQl\Model\Output\GetAttributeData">
+        <arguments>
+            <argument name="skipOptionsForAttributeCodes" xsi:type="array">
+                <item name="region_id" xsi:type="string">region_id</item>
+                <item name="country_id" xsi:type="string">country_id</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

@@ -89,7 +89,7 @@ class Gd2Test extends TestCase
     /**
      * @return array
      */
-    public function filesProvider()
+    public static function filesProvider()
     {
         $smallFile = [
             0 => 480,

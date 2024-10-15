@@ -61,7 +61,7 @@ class ProcessingErrorTest extends TestCase
      *
      * @return array
      */
-    public function errorMessageInfo()
+    public static function errorMessageInfo()
     {
         return [
             [
@@ -104,7 +104,7 @@ class ProcessingErrorTest extends TestCase
      *
      * @return array
      */
-    public function errorCodeData()
+    public static function errorCodeData()
     {
         return [
             [
@@ -135,7 +135,7 @@ class ProcessingErrorTest extends TestCase
      *
      * @return array
      */
-    public function errorMessageData()
+    public static function errorMessageData()
     {
         return [
             [
@@ -166,7 +166,7 @@ class ProcessingErrorTest extends TestCase
      *
      * @return array
      */
-    public function rowNumberData()
+    public static function rowNumberData()
     {
         return [
             [
@@ -197,7 +197,7 @@ class ProcessingErrorTest extends TestCase
      *
      * @return array
      */
-    public function columnNameData()
+    public static function columnNameData()
     {
         return [
             [
@@ -233,7 +233,7 @@ class ProcessingErrorTest extends TestCase
      *
      * @return array
      */
-    public function errorLevelData()
+    public static function errorLevelData()
     {
         return [
             [
@@ -270,7 +270,7 @@ class ProcessingErrorTest extends TestCase
      *
      * @return array
      */
-    public function errorDescriptionData()
+    public static function errorDescriptionData()
     {
         return [
             [

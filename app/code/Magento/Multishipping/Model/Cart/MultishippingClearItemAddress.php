@@ -104,6 +104,7 @@ class MultishippingClearItemAddress
                 $quote = $this->cartRepository->get($quote->getId());
                 $this->cartmodel->setQuote($quote);
             }
+            $this->checkoutSession->clearQuote();
         } elseif ($this->disableMultishipping->execute($quote) && $this->isVirtualItemInQuote($quote)) {
             $quote->setTotalsCollectedFlag(false);
             $this->cartRepository->save($quote);

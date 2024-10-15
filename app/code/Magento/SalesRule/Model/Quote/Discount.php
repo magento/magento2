@@ -20,11 +20,10 @@ use Magento\SalesRule\Api\Data\DiscountDataInterface;
 use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
 use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
 use Magento\SalesRule\Model\Data\RuleDiscount;
-use Magento\SalesRule\Model\Discount\PostProcessorFactory;
 use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\RulesApplier;
 use Magento\SalesRule\Model\Validator;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\SalesRule\Model\RulesApplier;
 
 /**
  * Discount totals calculation model.
@@ -111,6 +110,15 @@ class Discount extends AbstractTotal
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->setCode(self::COLLECTOR_TYPE_CODE);
+    }
+
+    /**
      * Collect address discount amount
      *
      * @param Quote $quote
@@ -159,7 +167,7 @@ class Discount extends AbstractTotal
         $address->setCartFixedRules([]);
         $quote->setCartFixedRules([]);
         foreach ($items as $item) {
-            $this->rulesApplier->setAppliedRuleIds($item, []);
+            $item->setAppliedRuleIds(null);
             if ($item->getExtensionAttributes()) {
                 $item->getExtensionAttributes()->setDiscounts(null);
             }
@@ -173,28 +181,51 @@ class Discount extends AbstractTotal
                     $child->setDiscountPercent(0);
                 }
             }
+            $item->getAddress()->setBaseDiscountAmount(0);
         }
-        $this->calculator->init($store->getWebsiteId(), $quote->getCustomerGroupId(), $quote->getCouponCode());
+        $this->calculator->initFromQuote($quote);
         $this->calculator->initTotals($items, $address);
         $items = $this->calculator->sortItemsByPriority($items, $address);
+        $itemsToApplyRules = $items;
         $rules = $this->calculator->getRules($address);
+        $totalDiscount = [];
+        $address->setBaseDiscountAmount(0);
         /** @var Rule $rule */
         foreach ($rules as $rule) {
             /** @var Item $item */
-            foreach ($items as $item) {
+            foreach ($itemsToApplyRules as $key => $item) {
                 if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item) || $item->getParentItem()) {
                     continue;
                 }
+
+                switch ($rule->getSimpleAction()) {
+                    case Rule::BY_PERCENT_ACTION:
+                    case Rule::BY_FIXED_ACTION:
+                        if ($rule->getDiscountStep() > $item->getQty()) {
+                            continue 2;
+                        }
+                        break;
+                    case Rule::BUY_X_GET_Y_ACTION:
+                        if ($rule->getDiscountStep() >= $item->getQty()) {
+                            continue 2;
+                        }
+                        break;
+                }
+
                 $eventArgs['item'] = $item;
                 $this->eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
+
                 $this->calculator->process($item, $rule);
+                $appliedRuleIds = $item->getAppliedRuleIds() ? explode(',', $item->getAppliedRuleIds()) : [];
+                if ($rule->getStopRulesProcessing() && in_array($rule->getId(), $appliedRuleIds)) {
+                    unset($itemsToApplyRules[$key]);
+                }
+
+                $totalDiscount[$item->getId()] = $item->getBaseDiscountAmount();
             }
-            $appliedRuleIds = $quote->getAppliedRuleIds() ? explode(',', $quote->getAppliedRuleIds()) : [];
-            if ($rule->getStopRulesProcessing() && in_array($rule->getId(), $appliedRuleIds)) {
-                break;
-            }
-            $this->calculator->initTotals($items, $address);
+            $address->setBaseDiscountAmount(array_sum(array_values($totalDiscount)));
         }
+        $this->calculator->initTotals($items, $address);
         foreach ($items as $item) {
             if (!isset($itemsAggregate[$item->getId()])) {
                 continue;
@@ -219,6 +250,8 @@ class Discount extends AbstractTotal
         $total->setBaseSubtotalWithDiscount($total->getBaseSubtotal() + $total->getBaseDiscountAmount());
         $address->setDiscountAmount($total->getDiscountAmount());
         $address->setBaseDiscountAmount($total->getBaseDiscountAmount());
+        $address->setBaseSubtotalWithDiscount($total->getBaseSubtotal() + $total->getBaseDiscountAmount());
+        $address->setSubtotalWithDiscount($total->getSubtotal() + $total->getDiscountAmount());
         return $this;
     }
 

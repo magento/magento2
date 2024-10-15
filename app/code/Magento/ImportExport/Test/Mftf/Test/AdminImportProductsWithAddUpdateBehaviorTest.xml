@@ -18,6 +18,7 @@
             <testCaseId value="MC-14077"/>
             <group value="importExport"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create Simple Product1 -->
@@ -49,7 +50,9 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -57,7 +60,9 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
                 <argument name="websiteName" value="secondWebsite"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!-- Delete all products that replaced products in the before block post import -->
             <deleteData stepKey="deleteSimpleProduct2" url="/V1/products/SimpleProductForTest2"/>
             <deleteData stepKey="deleteSimpleProduct3" url="/V1/products/SimpleProductForTest3"/>

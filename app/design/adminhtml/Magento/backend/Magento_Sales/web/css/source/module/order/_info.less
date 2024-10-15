@@ -1,0 +1,23 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Invoice, Credit Memo, Shipment information
+//  ---------------------------------------------
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .invoice-information,
+    .creditmemo-information,
+    .shipment-information {
+        float: left;
+        width: ~'calc( (100% * 0.5) - 30px )';
+    }
+}
+
+.invoice-information-table,
+.creditmemo-information-table,
+.shipment-information-table {
+    &:extend(.abs-admin__table-secondary-edit-order all);
+}

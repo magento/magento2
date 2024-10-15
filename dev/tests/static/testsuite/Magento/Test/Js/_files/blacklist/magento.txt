@@ -13,9 +13,14 @@ lib/web/mage/adminhtml/varienLoader.js
 lib/web/magnifier/magnifier.js
 lib/web/magnifier/magnify.js
 lib/web/varien/js.js
+lib/web/jquery/jquery.validate.js
+lib/web/prototype/**/*.js
 
 // MINIFIED FILES
 app/code/**/*.min.js
+lib/web/legacy-build.min.js
+lib/web/tiny_mce_7/**/*.js
+lib/web/tiny_mce_7/***/*.js
 
 // TEST
 vendor/magento/magento-coding-standard/Magento2/Tests/Eslint/*
