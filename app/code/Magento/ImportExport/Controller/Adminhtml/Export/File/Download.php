@@ -16,6 +16,8 @@ use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\LocalizedFileName;
 use Throwable;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\App\ResponseInterface;
 
 /**
  * Controller that download file by name.
@@ -25,7 +27,7 @@ class Download extends ExportController implements HttpGetActionInterface
     /**
      * Url to this controller
      */
-    const URL = 'adminhtml/export_file/download/';
+    public const URL = 'adminhtml/export_file/download/';
 
     /**
      * @var FileFactory
@@ -64,13 +66,24 @@ class Download extends ExportController implements HttpGetActionInterface
     /**
      * Controller basic method implementation.
      *
-     * @return \Magento\Framework\Controller\Result\Redirect | \Magento\Framework\App\ResponseInterface
+     * @return Redirect|ResponseInterface
      */
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('adminhtml/export/index');
+
         $fileName = $this->getRequest()->getParam('filename');
+
+        if (empty($fileName)) {
+            $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
+
+            return $resultRedirect;
+        }
+
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $fileName = basename($fileName);
+
         $exportDirectory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_IMPORT_EXPORT);
 
         try {
