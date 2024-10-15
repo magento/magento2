@@ -152,6 +152,8 @@ class Navigation extends \Magento\Framework\View\Element\Template implements
 
         $shortCacheId = array_values($shortCacheId);
         $shortCacheId = implode('|', $shortCacheId);
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $shortCacheId = md5($shortCacheId);
 
         $cacheId['category_path'] = $this->getCurrentCategoryKey();

@@ -88,7 +88,7 @@ class ColumnsRendererTest extends TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             [[['', 'column', null]], 'SELECT', 'SELECT `column`'],

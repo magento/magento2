@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreatePartialCaptureForOrderPaidWithPayPalPayflowProTest" extends="StorefrontRegisteredCustomerCheckoutWithPayPalPayflowProCreditCardWithPaymentActionSaleAndVirtualQuoteAndVerifyTheOrderInBackendTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Paypal payflow Pro"/>
+            <title value="Create partial capture for order paid with PayPal Payflow Pro"/>
+            <description value="Admin creates partial capture for order paid with PayPal Payflow Pro and assert the transaction in transaction tab"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5191"/>
+            <group value="paypalPayflowPro"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="createVirtualProduct"/>
+            <remove keyForRemoval="setPaymentActionSale"/>
+            <remove keyForRemoval="setPaymentActionSale"/>
+            <!-- Create product -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct" before="loginAsAdmin"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex" after="loginAsAdmin">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache" after="reindex">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <remove keyForRemoval="deleteVirtualProduct"/>
+            <remove keyForRemoval="setPaymentActionAuthorization"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <remove keyForRemoval="goToProductOnStorefront"/>
+        <remove keyForRemoval="addToCartFromStorefrontProductPage"/>
+        <remove keyForRemoval="assertGrandTotal"/>
+        <remove keyForRemoval="seeOrderHistoryNotes"/>
+        <remove keyForRemoval="openTransactionTabOrdersPage"/>
+        <remove keyForRemoval="getVoidTransaction"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <fillField userInput="2" selector="{{StorefrontProductPageSection.qtyInput}}" stepKey="fillProductQty" after="goToProductOnStorefront"/>
+        <!-- Add product to cart -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCartFromStorefrontProductPage" after="fillProductQty">
+            <argument name="productName" value="$createSimpleProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage" after="clickProceedToCheckout"/>
+        <!--Click on invoice button and update qty and then submit invoice-->
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButton" after="openOrder"/>
+        <actionGroup ref="AdminFillQtyToInvoiceOnCreateInvoicePageActionGroup" stepKey="fillInvoiceQuantity" after="clickInvoiceButton">
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickUpdateQtysButtonOnCreateInvoicePageActionGroup" stepKey="clickUpdateQtyAfterUpdatingInvoiceBtn" after="fillInvoiceQuantity"/>
+        <waitForPageLoad stepKey="waitPageToBeLoaded" after="clickUpdateQtyAfterUpdatingInvoiceBtn"/>
+        <seeOptionIsSelected userInput="Capture Online" selector="{{AdminInvoiceTotalSection.amount}}" stepKey="seeOptionType" after="waitPageToBeLoaded"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice" after="seeOptionType"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoadSubmitInvoice" after="clickSubmitInvoice"/>
+        <!--Check order status and grab transaction id-->
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkOrderStatus" before="waitForTransactionIDFieldToBeAppeared">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Captured')}}" userInput="Captured amount of $133.00 online. Transaction ID: &quot;{$grabTransactionID}&quot;" stepKey="seeOrderHistoryNotesAlongWithAmount" after="clickOnCommentsHistory"/>
+        <!-- Assert Authorization Transaction-->
+        <actionGroup ref="AdminAssertTransactionTypeInTransactionTabActionGroup" stepKey="assertAuthorizationTransactionType" after="clickOnBackButton">
+            <argument name="transactionType" value="authorization"/>
+        </actionGroup>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="No" stepKey="seeIfClosedHeaderIsSetAsNoForAuthorization" after="assertAuthorizationTransactionType"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClickedFromAuthorization" after="seeIfClosedHeaderIsSetAsNoForAuthorization"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButtonFromAuthorization" after="waitForBackButtonToBeClickedFromAuthorization"/>
+        <!-- Assert Capture Transaction-->
+        <actionGroup ref="AdminAssertTransactionTypeInTransactionTabActionGroup" after="clickBackButtonFromAuthorization" stepKey="assertCaptureTransactionType">
+            <argument name="transactionType" value="capture"/>
+        </actionGroup>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="No" stepKey="seeIfClosedHeaderIsSetAsNoForCapture" after="assertCaptureTransactionType"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClickedFromCapture" after="seeIfClosedHeaderIsSetAsNoForCapture"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButtonFromCapture" after="waitForBackButtonToBeClickedFromCapture"/>
+    </test>
+</tests>

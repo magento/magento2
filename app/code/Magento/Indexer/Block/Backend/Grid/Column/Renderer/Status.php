@@ -33,6 +33,10 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
                 $class = 'grid-severity-minor';
                 $text = __('Processing');
                 break;
+            case \Magento\Framework\Indexer\StateInterface::STATUS_SUSPENDED:
+                $class = 'grid-severity-minor';
+                $text = __('Suspended');
+                break;
         }
         return '<span class="' . $class . '"><span>' . $text . '</span></span>';
     }

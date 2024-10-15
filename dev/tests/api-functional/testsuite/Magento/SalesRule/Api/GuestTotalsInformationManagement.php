@@ -7,12 +7,21 @@
 
 namespace Magento\SalesRule\Api;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Webapi\Rest\Request;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResourceModel;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
+use Magento\TestFramework\MessageQueue\PreconditionFailedException;
+use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Tests disabled cart rules for guest's cart
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GuestTotalsInformationManagement extends WebapiAbstract
 {
@@ -24,6 +33,49 @@ class GuestTotalsInformationManagement extends WebapiAbstract
     private const SALES_RULE_ID = 'Magento/SalesRule/_files/cart_rule_50_percent_off_no_condition/salesRuleId';
 
     /**
+     * @var PublisherConsumerController
+     */
+    private $publisherConsumerController;
+
+    /**
+     * @var string[]
+     */
+    private $consumers = ['sales.rule.quote.trigger.recollect'];
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var PublisherConsumerController publisherConsumerController */
+        $this->publisherConsumerController = $objectManager->create(PublisherConsumerController::class, [
+            'consumers' => $this->consumers,
+            'logFilePath' => TESTS_TEMP_DIR . "/MessageQueueTestLog.txt",
+            'appInitParams' => \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams()
+        ]);
+
+        try {
+            $this->publisherConsumerController->initialize();
+        } catch (EnvironmentPreconditionException $e) {
+            $this->markTestSkipped($e->getMessage());
+        } catch (PreconditionFailedException $e) {
+            $this->fail($e->getMessage());
+        }
+
+        parent::setUp();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        $this->publisherConsumerController->stopConsumers();
+        parent::tearDown();
+    }
+
+    /**
      * Test sales rule changes should be persisted in the database
      *
      * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_50_percent_off_no_condition.php
@@ -31,7 +83,7 @@ class GuestTotalsInformationManagement extends WebapiAbstract
      */
     public function testCalculate()
     {
-        /** @var \Magento\Quote\Model\Quote $quote */
+        /** @var Quote $quote */
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         /** @var \Magento\SalesRule\Model\Rule $salesRule */
         /** @var \Magento\Framework\Registry $registry */
@@ -44,8 +96,10 @@ class GuestTotalsInformationManagement extends WebapiAbstract
         $salesRule = Bootstrap::getObjectManager()->create(\Magento\SalesRule\Model\RuleFactory::class)->create();
         $salesRule->load($salesRuleId);
         $this->assertContains($salesRule->getRuleId(), str_getcsv($quote->getAppliedRuleIds()));
+        $this->assertEquals(0, $quote->getTriggerRecollect());
         $salesRule->setIsActive(0);
         $salesRule->save();
+        $this->assertQuoteTriggerRecollectIsUpdated($quote);
         $response = $this->_webApiCall(
             [
                 'rest' => [
@@ -67,5 +121,32 @@ class GuestTotalsInformationManagement extends WebapiAbstract
         $this->assertNotEmpty($response);
         $quote->load(self::QUOTE_RESERVED_ORDER_ID, 'reserved_order_id');
         $this->assertNotContains($salesRule->getId(), str_getcsv($quote->getAppliedRuleIds()));
+    }
+
+    /**
+     * Assert that quote trigger_recollect value was set to 1
+     *
+     * @param Quote $quote
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function assertQuoteTriggerRecollectIsUpdated(Quote $quote) : void
+    {
+        $quoteResource = Bootstrap::getObjectManager()->get(QuoteResourceModel::class);
+        $resourceConnection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
+        $select = $resourceConnection->getConnection()
+            ->select()
+            ->from($quoteResource->getMainTable(), ['trigger_recollect'])
+            ->where('entity_id = ?', (int) $quote->getId());
+        try {
+            $this->publisherConsumerController->waitForAsynchronousResult(
+                function (ResourceConnection $resourceConnection, Select $select) {
+                    return (int) $resourceConnection->getConnection()->fetchOne($select) === 1;
+                },
+                [$resourceConnection, $select]
+            );
+        } catch (PreconditionFailedException $e) {
+            $this->fail("trigger_recollect was not updated for quote ID {$quote->getId()}");
+        }
     }
 }

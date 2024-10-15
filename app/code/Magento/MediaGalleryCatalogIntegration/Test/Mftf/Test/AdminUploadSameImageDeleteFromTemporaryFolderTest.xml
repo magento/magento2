@@ -18,6 +18,9 @@
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/943908/scenarios/4836631"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
+            <skip>
+                <issueId value="DEPRECATED">Cannot access catalog/tmp/ directory in media gallery anymore</issueId>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
@@ -39,6 +42,7 @@
 
         <!-- Open tmp/category folder -->
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandCatalogTmpFolderActionGroup" stepKey="expandTmpFolder"/>
         <actionGroup ref="AdminMediaGalleryFolderSelectByFullPathActionGroup" stepKey="selectCategoryFolder">
             <argument name="path" value="catalog/tmp/category"/>

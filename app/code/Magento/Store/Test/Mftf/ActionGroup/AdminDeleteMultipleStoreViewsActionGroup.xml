@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteMultipleStoreViewsActionGroup">
+        <annotations>
+            <description>Deletes all specified store views one by one on the 'Stores' page. Defaults to delete all store
+                views except the default 'Default Store View'.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeViewsToDelete" defaultValue="{{AdminStoresMainActionsSection.allNonDefaultStoreViews}}" type="string"/>
+            <argument name="expectedRemainingStoreViews" defaultValue="1" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="waitForResetFilter"/>
+        <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="clickResetFilter"/>
+        <waitForPageLoad stepKey="waitForGridReset"/>
+        <helper class="Magento\Store\Test\Mftf\Helper\StoreHelpers" method="deleteAllSpecifiedStoreViews" stepKey="deleteAllSpecifiedStoreViews">
+            <argument name="storeViewsToDelete">{{storeViewsToDelete}}</argument>
+            <argument name="deleteButton">{{AdminMainActionsSection.delete}}</argument>
+            <argument name="createDbBackupButton">{{AdminStoresDeleteStoreGroupSection.createDbBackup}}</argument>
+            <argument name="successMessage">You deleted the store view.</argument>
+            <argument name="successMessageContainer">{{AdminMessagesSection.success}}</argument>
+        </helper>
+        <waitForPageLoad stepKey="waitForGridLoad"/>
+        <seeNumberOfElements userInput="{{expectedRemainingStoreViews}}" selector="{{AdminStoresMainActionsSection.allStoreViews}}" stepKey="seeExpectedFinalStoreViews"/>
+    </actionGroup>
+</actionGroups>

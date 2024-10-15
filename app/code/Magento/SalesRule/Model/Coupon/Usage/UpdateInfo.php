@@ -18,6 +18,8 @@ class UpdateInfo extends DataObject
     private const COUPON_CODE_KEY = 'coupon_code';
     private const CUSTOMER_ID_KEY = 'customer_id';
     private const IS_INCREMENT_KEY = 'is_increment';
+    private const IS_COUPON_ALREADY_APPLIED = 'is_coupon_already_applied';
+    private const COUPON_CODES = 'coupon_codes';
 
     /**
      * Get applied rule ids
@@ -62,6 +64,27 @@ class UpdateInfo extends DataObject
     }
 
     /**
+     * Get coupon code
+     *
+     * @return string[]
+     */
+    public function getCouponCodes(): array
+    {
+        return $this->getData(self::COUPON_CODES) ?? [];
+    }
+
+    /**
+     * Set coupon code
+     *
+     * @param string[] $value
+     * @return void
+     */
+    public function setCouponCodes(array $value): void
+    {
+        $this->setData(self::COUPON_CODES, $value);
+    }
+
+    /**
      * Get customer id
      *
      * @return int|null
@@ -103,5 +126,27 @@ class UpdateInfo extends DataObject
     public function setIsIncrement(bool $value): void
     {
         $this->setData(self::IS_INCREMENT_KEY, $value);
+    }
+
+    /**
+     * Check if coupon already used
+     *
+     * @return bool
+     */
+    public function isCouponAlreadyApplied(): bool
+    {
+        return $this->getData(self::IS_COUPON_ALREADY_APPLIED) !== false
+            && (bool)$this->getData(self::IS_COUPON_ALREADY_APPLIED);
+    }
+
+    /**
+     * Set if coupon already used for
+     *
+     * @param bool $value
+     * @return void
+     */
+    public function setCouponAlreadyApplied(bool $value): void
+    {
+        $this->setData(self::IS_COUPON_ALREADY_APPLIED, $value);
     }
 }

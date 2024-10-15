@@ -16,6 +16,11 @@ namespace Magento\CatalogSearch\Model\Attribute;
 class SearchWeight
 {
     /**
+     * @var \Magento\Framework\Search\Request\Config
+     */
+    private $config;
+
+    /**
      * @param \Magento\Framework\Search\Request\Config $config
      */
     public function __construct(

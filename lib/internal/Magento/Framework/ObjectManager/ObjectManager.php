@@ -1,5 +1,11 @@
 <?php
 /**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Framework\ObjectManager;
+
+/**
  * Magento object manager. Responsible for instantiating objects taking into account:
  * - constructor arguments (using configured, and provided parameters)
  * - class instances life style (singleton, transient)
@@ -7,11 +13,7 @@
  *
  * Intentionally contains multiple concerns for best performance
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
  */
-namespace Magento\Framework\ObjectManager;
-
 class ObjectManager implements \Magento\Framework\ObjectManagerInterface
 {
     /**
@@ -32,6 +34,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
     protected $_config;
 
     /**
+     * phpcs:disable Magento2.Annotation.MethodArguments.VisualAlignment
      * @param FactoryInterface $factory
      * @param ConfigInterface $config
      * @param array &$sharedInstances
@@ -64,7 +67,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
      */
     public function get($type)
     {
-        $type = ltrim($type, '\\');
+        $type = \ltrim($type, '\\');
         $type = $this->_config->getPreference($type);
         if (!isset($this->_sharedInstances[$type])) {
             $this->_sharedInstances[$type] = $this->_factory->create($type);
@@ -74,6 +77,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
 
     /**
      * Configure di instance
+     *
      * Note: All arguments should be pre-processed (sort order, translations, etc) before passing to method configure.
      *
      * @param array $configuration
@@ -82,5 +86,16 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
     public function configure(array $configuration)
     {
         $this->_config->extend($configuration);
+    }
+
+    /**
+     * Disable show ObjectManager internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

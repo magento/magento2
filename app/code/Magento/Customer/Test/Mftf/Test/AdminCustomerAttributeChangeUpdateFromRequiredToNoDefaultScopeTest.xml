@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCustomerAttributeChangeUpdateFromRequiredToNoDefaultScopeTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Customer attribute change from required to no"/>
+            <title value="Admin should be able to save customer after changing attributes from required to no"/>
+            <description value="Admin should be able to save customer after changing attributes from required to no in default scope"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-6748"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <!-- Login to admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!-- Create a customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <!-- Navigate to customer configuration page -->
+            <actionGroup ref="AdminNavigateToCustomerConfigurationActionGroup" stepKey="gotoCustomerConfiguration"/>
+            <!-- Expand "Name and Address Option" section -->
+            <actionGroup ref="AdminExpandConfigSectionActionGroup" stepKey="expandConfigSectionDefaultScope">
+                <argument name="sectionName" value="{{CustomerConfigurationSectionNameAndAddressOptions.title}}"/>
+            </actionGroup>
+
+            <!-- Set "Show Date of Birth" to Required and save in default config scope -->
+            <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValue">
+                <argument name="rowId" value="row_customer_address_company_show"/>
+            </actionGroup>
+            <click selector="{{StoreConfigSection.Save}}" stepKey="saveConfig"/>
+            <waitForPageLoad stepKey="waitForConfigToApply" />
+
+            <!-- Reindex -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+
+            <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Logout from admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Navigate to customer configuration page -->
+        <actionGroup ref="AdminNavigateToCustomerConfigurationActionGroup" stepKey="gotoCustomerConfiguration"/>
+        <!-- Expand "Name and Address Option" section -->
+        <actionGroup ref="AdminExpandConfigSectionActionGroup" stepKey="expandConfigSectionDefaultScope">
+            <argument name="sectionName" value="{{CustomerConfigurationSectionNameAndAddressOptions.title}}"/>
+        </actionGroup>
+        <!-- Set "Show Company" to Required and save in default config scope -->
+        <actionGroup ref="AdminCustomerShowCompanyActionGroup" stepKey="setShowCompanyRequiredDefaultScope">
+            <argument name="value" value="{{ShowCompany.required}}"/>
+        </actionGroup>
+
+        <!-- Open the customer edit page -->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="goToCustomerEditPage">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+        <!-- Switch the addresses tab -->
+        <actionGroup ref="AdminOpenAddressesTabFromCustomerEditPageActionGroup" stepKey="openAddressesTab"/>
+        <!-- Click "Add New Address" -->
+        <actionGroup ref="AdminClickAddNewAddressButtonOnCustomerAddressesTabActionGroup" stepKey="clickAddNewAddressButton"/>
+        <!-- Fill address -->
+        <actionGroup ref="AdminFillAndSaveCustomerAddressInformationActionGroup" stepKey="fillAndSaveCustomerAddressInformationActionGroup">
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <!-- Assert that the address is successfully added -->
+        <actionGroup stepKey="saveAndContinue" ref="AdminCustomerSaveAndContinue"/>
+
+        <!-- Navigate to customer configuration page -->
+        <actionGroup ref="AdminNavigateToCustomerConfigurationActionGroup" stepKey="gotoCustomerConfigurationAgain"/>
+        <!-- Expand "Name and Address Option" section -->
+        <actionGroup ref="AdminExpandConfigSectionActionGroup" stepKey="expandConfigSectionDefaultScopeAgain">
+            <argument name="sectionName" value="{{CustomerConfigurationSectionNameAndAddressOptions.title}}"/>
+        </actionGroup>
+        <!-- Set "Show Company" to Required and save in default config scope -->
+        <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkCompanyUseSystemValue">
+            <argument name="rowId" value="row_customer_address_company_show"/>
+        </actionGroup>
+
+        <click selector="{{StoreConfigSection.Save}}" stepKey="saveConfig"/>
+        <!-- Open the customer edit page -->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="goToCustomerEditPageAgain">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+        <!-- Switch the addresses tab -->
+        <actionGroup ref="AdminOpenAddressesTabFromCustomerEditPageActionGroup" stepKey="openAddressesTabAgain"/>
+        <!-- Click "Add New Address" -->
+        <actionGroup ref="AdminClickAddNewAddressButtonOnCustomerAddressesTabActionGroup" stepKey="clickAddNewAddressButtonAgain"/>
+        <!-- Fill address -->
+        <actionGroup ref="AdminFillAndSaveCustomerAddressInformationActionGroup" stepKey="fillAndSaveCustomerAddressInformationActionGroupAgain">
+            <argument name="address" value="addressNoCompany"/>
+        </actionGroup>
+        <!-- Assert that the address is successfully added -->
+        <actionGroup stepKey="saveAndContinueAgain" ref="AdminCustomerSaveAndContinue"/>
+    </test>
+</tests>

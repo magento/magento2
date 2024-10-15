@@ -1,7 +1,5 @@
 <?php
 /**
- * Form Element Multiselect Data Model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,10 +8,13 @@ namespace Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\ElementFactory;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Form Element Multiselect Data Model
+ */
 class Multiselect extends Select
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function extractValue(RequestInterface $request)
     {
@@ -25,7 +26,7 @@ class Multiselect extends Select
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function compactValue($value)
     {
@@ -40,13 +41,13 @@ class Multiselect extends Select
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function outputValue($format = ElementFactory::OUTPUT_FORMAT_TEXT)
     {
         $values = $this->_value;
         if (!is_array($values)) {
-            $values = explode(',', $values);
+            $values = explode(',', (string)$values);
         }
 
         if (ElementFactory::OUTPUT_FORMAT_ARRAY === $format || ElementFactory::OUTPUT_FORMAT_JSON === $format) {

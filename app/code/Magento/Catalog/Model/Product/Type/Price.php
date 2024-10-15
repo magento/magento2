@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
@@ -23,12 +24,12 @@ use Magento\Store\Api\Data\WebsiteInterface;
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
-class Price
+class Price implements ResetAfterRequestInterface
 {
     /**
      * Product price cache tag
      */
-    const CACHE_TAG = 'PRODUCT_PRICE';
+    public const CACHE_TAG = 'PRODUCT_PRICE';
 
     /**
      * @var array
@@ -43,8 +44,6 @@ class Price
     protected $_eventManager;
 
     /**
-     * Customer session
-     *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
@@ -55,15 +54,11 @@ class Price
     protected $_localeDate;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Rule factory
-     *
      * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory
      */
     protected $_ruleFactory;
@@ -298,7 +293,7 @@ class Price
 
         $custGroup = $this->_getCustomerGroupId($product);
         if ($qty) {
-            $prevQty = 1;
+            $prevQty = 0;
             $prevPrice = $product->getPrice();
             $prevGroup = $allGroupsId;
 
@@ -386,7 +381,7 @@ class Price
             if (isset($price['percentage_value'])) {
                 $tierPrice->getExtensionAttributes()->setPercentageValue($price['percentage_value']);
             }
-            $websiteId = isset($price['website_id']) ? $price['website_id'] : $this->getWebsiteForPriceScope();
+            $websiteId = $price['website_id'] ?? $this->getWebsiteForPriceScope();
             $tierPrice->getExtensionAttributes()->setWebsiteId($websiteId);
             $prices[] = $tierPrice;
         }
@@ -480,10 +475,10 @@ class Price
     /**
      * Get formatted by currency tier price
      *
-     * @param   float $qty
-     * @param   Product $product
+     * @param float $qty
+     * @param Product $product
      *
-     * @return  array|float
+     * @return array|float
      * @since 102.0.6
      */
     public function getFormattedTierPrice($qty, $product)
@@ -521,8 +516,9 @@ class Price
     /**
      * Get formatted by currency product price
      *
-     * @param   Product $product
-     * @return  array|float
+     * @param Product $product
+     *
+     * @return array|float
      * @since 102.0.6
      */
     public function getFormattedPrice($product)
@@ -558,7 +554,7 @@ class Price
         $optionIds = $product->getCustomOption('option_ids');
         if ($optionIds) {
             $basePrice = $finalPrice;
-            foreach (explode(',', $optionIds->getValue()) as $optionId) {
+            foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
                 if ($option = $product->getOptionById($optionId)) {
                     $confItemOption = $product->getCustomOption('option_' . $option->getId());
 
@@ -661,5 +657,13 @@ class Price
     public function isTierPriceFixed()
     {
         return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        self::$attributeCache = [];
     }
 }

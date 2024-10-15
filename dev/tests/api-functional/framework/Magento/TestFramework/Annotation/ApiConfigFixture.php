@@ -15,9 +15,11 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\App\ApiMutableScopeConfig;
 use Magento\TestFramework\Config\Model\ConfigStorage;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @inheritDoc
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class ApiConfigFixture extends ConfigFixture
 {
@@ -27,6 +29,19 @@ class ApiConfigFixture extends ConfigFixture
      * @var array
      */
     private $valuesToDeleteFromDatabase = [];
+
+    /**
+     * Put Poison Pill
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function putPill(): void
+    {
+        Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class)
+            ->put();
+    }
 
     /**
      * @inheritdoc
@@ -47,11 +62,26 @@ class ApiConfigFixture extends ConfigFixture
     }
 
     /**
+     * @inheritDoc
+     */
+    protected function _assignConfigData(TestCase $test)
+    {
+        parent::_assignConfigData($test);
+        $needUpdates = !empty($this->globalConfigValues)
+            || !empty($this->storeConfigValues)
+            || !empty($this->websiteConfigValues);
+        if ($needUpdates) {
+            $this->putPill();
+        }
+    }
+
+    /**
      * @inheritdoc
      */
     protected function setGlobalConfigValue($configPathAndValue): void
     {
         [$configPath, $requiredValue] = preg_split('/\s+/', $configPathAndValue, 2);
+        $configPath = str_starts_with($configPath, 'default/') ? substr($configPath, 8) : $configPath;
         /** @var ConfigStorage $configStorage */
         $configStorage = Bootstrap::getObjectManager()->get(ConfigStorage::class);
         if (!$configStorage->checkIsRecordExist($configPath)) {
@@ -87,6 +117,9 @@ class ApiConfigFixture extends ConfigFixture
      */
     protected function _restoreConfigData()
     {
+        $needUpdates = !empty($this->globalConfigValues)
+            || !empty($this->storeConfigValues)
+            || !empty($this->websiteConfigValues);
         /** @var ConfigResource $configResource */
         $configResource = Bootstrap::getObjectManager()->get(ConfigResource::class);
         /* Restore global values */
@@ -108,7 +141,7 @@ class ApiConfigFixture extends ConfigFixture
                 } else {
                     $this->setScopeConfigValue(
                         $configPath,
-                        $originalValue,
+                        (string)$originalValue,
                         ScopeInterface::SCOPE_STORES,
                         $storeCode
                     );
@@ -134,6 +167,9 @@ class ApiConfigFixture extends ConfigFixture
             }
         }
         $this->websiteConfigValues = [];
+        if ($needUpdates) {
+            $this->putPill();
+        }
     }
 
     /**

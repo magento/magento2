@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportDuplicateBundleProductsWithoutImagesTest">
+        <annotations>
+            <title value="Bundle product import issue"/>
+            <stories value="Asserting bundle product import functionality and verify data in product option "/>
+            <description value="The merchant is having issues with importing Bundled Products via CSV. When they import a CSV where the same SKU is duplicated, duplicated records are created for the product option."/>
+            <testCaseId value="AC-7646"/>
+            <useCaseId value="ACP2E-1478"/>
+            <features value="Sales"/>
+            <severity value="AVERAGE"/>
+            <group value="importExport"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <!-- Create Simple Product1 -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
+                <field key="name">SimpleProduct1</field>
+                <field key="sku">SimpleProduct1</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create Simple Product2 -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct2">
+                <field key="name">SimpleProduct2</field>
+                <field key="sku">SimpleProduct2</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData url="/V1/products/{{ImportProduct_Bundle2.urlKey}}" stepKey="deleteImportedBundleProduct"/>
+            <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="navigateToAndResetProductGridToDefaultView"/>
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Import Bundle Product & Assert No Errors -->
+        <actionGroup ref="AdminNavigateToImportPageActionGroup" stepKey="navigateToImportPage"/>
+        <actionGroup ref="AdminFillImportFormActionGroup" stepKey="fillImportForm">
+            <argument name="importFile" value="{{ImportProduct_Bundle2.fileName}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickCheckDataImportActionGroup" stepKey="clickCheckData"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="{{ImportCommonMessages.validFile}}" stepKey="seeCheckDataResultMessage"/>
+        <dontSeeElementInDOM selector="{{AdminImportValidationMessagesSection.importErrorList}}" stepKey="dontSeeErrorMessage"/>
+        <actionGroup ref="AdminClickImportActionGroup" stepKey="clickImport"/>
+        <see selector="{{AdminImportValidationMessagesSection.messageByType('success')}}" userInput="{{ImportCommonMessages.success}}" stepKey="seeImportMessage"/>
+        <dontSeeElementInDOM selector="{{AdminImportValidationMessagesSection.importErrorList}}" stepKey="dontSeeErrorMessage2"/>
+        <!-- Reindex -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <!-- Admin: Verify Bundle Product Options Data on Edit Product Page -->
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToBundleProductEditPage">
+            <argument name="product" value="ImportProduct_Bundle2"/>
+        </actionGroup>
+        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
+        <scrollTo selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" stepKey="scrollUpABit"/>
+        <actionGroup ref="AdminVerifyBundleProductOptionActionGroup" stepKey="verifyBundleProductOption1">
+            <argument name="optionTitle" value="{{ImportProduct_Bundle.bundleOption1Title}}"/>
+            <argument name="inputType" value="{{ImportProduct_Bundle.bundleOption1InputType}}"/>
+            <argument name="required" value="{{ImportProduct_Bundle.bundleOption1Required}}"/>
+            <argument name="numberOfProducts" value="{{ImportProduct_Bundle.bundleOption1NumberOfProducts}}"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+    </test>
+</tests>

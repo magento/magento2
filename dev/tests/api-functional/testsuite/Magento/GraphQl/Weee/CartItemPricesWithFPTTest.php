@@ -126,7 +126,7 @@ class CartItemPricesWithFPTTest extends GraphQlAbstract
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function cartItemFixedProductTaxDataProvider(): array
+    public static function cartItemFixedProductTaxDataProvider(): array
     {
         return [
             [
@@ -326,6 +326,10 @@ class CartItemPricesWithFPTTest extends GraphQlAbstract
           value
           currency
         }
+        price_including_tax {
+            value
+            currency
+          }
         row_total {
           value
           currency

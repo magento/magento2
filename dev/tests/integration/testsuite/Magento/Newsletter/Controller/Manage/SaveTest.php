@@ -12,6 +12,7 @@ use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Newsletter\Model\CustomerSubscriberCache;
 use Magento\Newsletter\Model\Plugin\CustomerPlugin;
 use Magento\TestFramework\TestCase\AbstractController;
 
@@ -69,7 +70,6 @@ class SaveTest extends AbstractController
     public function testSaveAction(bool $isSubscribed, string $expectedMessage): void
     {
         $this->loginCustomer('new_customer@example.com');
-        $this->_objectManager->removeSharedInstance(CustomerPlugin::class);
         $this->dispatchSaveAction($isSubscribed);
         $this->assertSuccessSubscription($expectedMessage);
     }
@@ -77,16 +77,16 @@ class SaveTest extends AbstractController
     /**
      * @return array
      */
-    public function subscriptionDataProvider(): array
+    public static function subscriptionDataProvider(): array
     {
         return [
             'subscribe_customer' => [
-                'is_subscribed' => true,
-                'expected_message' => 'We have saved your subscription.',
+                'isSubscribed' => true,
+                'expectedMessage' => 'We have saved your subscription.',
             ],
             'unsubscribe_customer' => [
-                'is_subscribed' => false,
-                'expected_message' => 'We have updated your subscription.',
+                'isSubscribed' => false,
+                'expectedMessage' => 'We have updated your subscription.',
             ],
         ];
     }
@@ -112,7 +112,6 @@ class SaveTest extends AbstractController
     public function testUnsubscribeSubscribedCustomer(): void
     {
         $this->loginCustomer('new_customer@example.com');
-        $this->_objectManager->removeSharedInstance(CustomerPlugin::class);
         $this->dispatchSaveAction(false);
         $this->assertSuccessSubscription('We have removed your newsletter subscription.');
     }
@@ -126,6 +125,7 @@ class SaveTest extends AbstractController
     private function dispatchSaveAction(bool $isSubscribed): void
     {
         $this->_objectManager->removeSharedInstance(CustomerPlugin::class);
+        $this->_objectManager->removeSharedInstance(CustomerSubscriberCache::class);
         $this->getRequest()->setParam('form_key', $this->formKey->getFormKey())
             ->setParam('is_subscribed', $isSubscribed);
         $this->dispatch('newsletter/manage/save');

@@ -12,6 +12,7 @@ use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Setup\Option\TextConfigOption;
 
 /**
  * Deployment configuration consumers options needed for Setup application
@@ -21,17 +22,20 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * Input key for the option
      */
-    const INPUT_KEY_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES ='consumers-wait-for-messages';
+    public const INPUT_KEY_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES ='consumers-wait-for-messages';
+    public const INPUT_KEY_QUEUE_DEFAULT_CONNECTION ='queue-default-connection';
 
     /**
-     * Path to the value in the deployment config
+     * Path to the values in the deployment config
      */
-    const CONFIG_PATH_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES = 'queue/consumers_wait_for_messages';
+    public const CONFIG_PATH_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES = 'queue/consumers_wait_for_messages';
+    public const CONFIG_PATH_QUEUE_DEFAULT_CONNECTION = 'queue/default_connection';
 
     /**
      * Default value
      */
-    const DEFAULT_CONSUMERS_WAIT_FOR_MESSAGES = 1;
+    public const DEFAULT_CONSUMERS_WAIT_FOR_MESSAGES = 1;
+    public const DEFAULT_QUEUE_CONNECTION = 'db';
 
     /**
      * The available configuration values
@@ -54,6 +58,13 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 'Should consumers wait for a message from the queue? 1 - Yes, 0 - No',
                 self::DEFAULT_CONSUMERS_WAIT_FOR_MESSAGES
             ),
+            new TextConfigOption(
+                self::INPUT_KEY_QUEUE_DEFAULT_CONNECTION,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_QUEUE_DEFAULT_CONNECTION,
+                'Message queues default connection. Can be \'db\', \'amqp\' or a custom queue system.'
+                . 'The queue system must be installed and configured, otherwise messages won\'t be processed correctly.'
+            ),
         ];
     }
 
@@ -69,6 +80,13 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             $configData->set(
                 self::CONFIG_PATH_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES,
                 (int)$data[self::INPUT_KEY_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES]
+            );
+        }
+
+        if (!$this->isDataEmpty($data, self::INPUT_KEY_QUEUE_DEFAULT_CONNECTION)) {
+            $configData->set(
+                self::CONFIG_PATH_QUEUE_DEFAULT_CONNECTION,
+                $data[self::INPUT_KEY_QUEUE_DEFAULT_CONNECTION]
             );
         }
 

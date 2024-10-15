@@ -22,7 +22,7 @@ class Html extends AbstractAdapter
      * @deprecated Not used anymore because of newly introduced constants
      * @see self::REGEX_I18N_BINDING and self::REGEX_TRANSLATE_TAG_OR_ATTR
      */
-    const HTML_FILTER = "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/";
+    public const HTML_FILTER = "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/";
 
     /**
      * Covers
@@ -50,6 +50,21 @@ class Html extends AbstractAdapter
             throw new Exception('Failed to load file from disk.');
         }
 
+        $this->extractPhrasesFromTransDirective($data);
+        $this->extractPhrases(self::REGEX_I18N_BINDING, $data, 2, 1);
+        $this->extractPhrases(self::REGEX_TRANSLATE_TAG_OR_ATTR, $data, 3, 2);
+        $this->extractPhrases(Js::REGEX_TRANSLATE_FUNCTION, $data, 3, 2);
+    }
+
+    /**
+     * Extracts all phrases from trans directives in the given string.
+     *
+     * @param string $data
+     *
+     * @return void
+     */
+    private function extractPhrasesFromTransDirective(string $data): void
+    {
         $results = [];
         preg_match_all(Filter::CONSTRUCTION_PATTERN, $data, $results, PREG_SET_ORDER);
         for ($i = 0, $count = count($results); $i < $count; $i++) {
@@ -61,15 +76,16 @@ class Html extends AbstractAdapter
 
                 $quote = $directive[1];
                 $this->_addPhrase($quote . $directive[2] . $quote);
+            } elseif (in_array($results[$i][1], ['depend', 'if'], true) && isset($results[$i][3])) {
+                // make sure to process trans directives nested inside depend / if directives
+                $this->extractPhrasesFromTransDirective($results[$i][3]);
             }
         }
-
-        $this->extractPhrases(self::REGEX_I18N_BINDING, $data, 2, 1);
-        $this->extractPhrases(self::REGEX_TRANSLATE_TAG_OR_ATTR, $data, 3, 2);
-        $this->extractPhrases(Js::REGEX_TRANSLATE_FUNCTION, $data, 3, 2);
     }
 
     /**
+     * Extracts all phrases with the given regex in the given string.
+     *
      * @param string $regex
      * @param string $data
      * @param int $expectedGroupsCount

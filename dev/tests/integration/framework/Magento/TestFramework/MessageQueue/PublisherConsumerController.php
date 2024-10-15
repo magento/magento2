@@ -10,11 +10,9 @@ namespace Magento\TestFramework\MessageQueue;
 
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\OsInfo;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Amqp;
 
-/**
- * Publisher Consumer Controller
- */
 class PublisherConsumerController
 {
     /**
@@ -53,7 +51,11 @@ class PublisherConsumerController
     private $amqpHelper;
 
     /**
-     * PublisherConsumerController constructor.
+     * @var ClearQueueProcessor
+     */
+    private $clearQueueProcessor;
+
+    /**
      * @param PublisherInterface $publisher
      * @param OsInfo $osInfo
      * @param Amqp $amqpHelper
@@ -61,23 +63,27 @@ class PublisherConsumerController
      * @param array $consumers
      * @param array $appInitParams
      * @param null|int $maxMessages
+     * @param ClearQueueProcessor $clearQueueProcessor
      */
     public function __construct(
         PublisherInterface $publisher,
         OsInfo $osInfo,
         Amqp $amqpHelper,
-        $logFilePath,
-        $consumers,
-        $appInitParams,
-        $maxMessages = null
+        string $logFilePath = TESTS_TEMP_DIR . '/MessageQueueTestLog.txt',
+        array $consumers = [],
+        array $appInitParams = [],
+        ?int $maxMessages = null,
+        ClearQueueProcessor $clearQueueProcessor = null
     ) {
         $this->consumers = $consumers;
         $this->publisher = $publisher;
         $this->logFilePath = $logFilePath;
         $this->maxMessages = $maxMessages;
         $this->osInfo = $osInfo;
-        $this->appInitParams = $appInitParams;
+        $this->appInitParams = $appInitParams ?: Bootstrap::getInstance()->getAppInitParams();
         $this->amqpHelper = $amqpHelper;
+        $this->clearQueueProcessor = $clearQueueProcessor
+            ?: Bootstrap::getObjectManager()->get(ClearQueueProcessor::class);
     }
 
     /**
@@ -90,12 +96,7 @@ class PublisherConsumerController
     {
         $this->validateEnvironmentPreconditions();
 
-        $connections = $this->amqpHelper->getConnections();
-        foreach (array_keys($connections) as $connectionName) {
-            $this->amqpHelper->deleteConnection($connectionName);
-        }
-        $this->amqpHelper->clearQueue("async.operations.all");
-
+        $this->clearQueueProcessor->execute("async.operations.all");
         $this->stopConsumers();
         $this->startConsumers();
 
@@ -123,12 +124,6 @@ class PublisherConsumerController
                 "This test relies on *nix shell and should be skipped in Windows environment."
             );
         }
-
-        if (!$this->amqpHelper->isAvailable()) {
-            throw new PreconditionFailedException(
-                'This test relies on RabbitMQ Management Plugin.'
-            );
-        }
     }
 
     /**
@@ -138,6 +133,8 @@ class PublisherConsumerController
     {
         foreach ($this->consumers as $consumer) {
             foreach ($this->getConsumerProcessIds($consumer) as $consumerProcessId) {
+                // exec() have to be here since this is test.
+                // phpcs:ignore Magento2.Security.InsecureFunction
                 exec("kill {$consumerProcessId}");
             }
         }
@@ -165,6 +162,8 @@ class PublisherConsumerController
      */
     private function getConsumerProcessIds($consumer)
     {
+        // exec() have to be here since this is test.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         exec("ps ax | grep -v grep | grep '{$this->getConsumerStartCommand($consumer)}' | awk '{print $1}'", $output);
         return $output;
     }
@@ -200,13 +199,13 @@ class PublisherConsumerController
      * @param array $params
      * @throws PreconditionFailedException
      */
-    public function waitForAsynchronousResult(callable $condition, $params)
+    public function waitForAsynchronousResult(callable $condition, $params = [])
     {
         $i = 0;
         do {
-            sleep(1);
+            sleep(3);
             $assertion = call_user_func_array($condition, $params);
-        } while (!$assertion && ($i++ < 180));
+        } while (!$assertion && ($i++ < 20));
 
         if (!$assertion) {
             throw new PreconditionFailedException("No asynchronous messages were processed.");
@@ -232,6 +231,8 @@ class PublisherConsumerController
     {
         foreach ($this->consumers as $consumer) {
             if (!$this->getConsumerProcessIds($consumer)) {
+                // exec() have to be here since this is test.
+                // phpcs:ignore Magento2.Security.InsecureFunction
                 exec("{$this->getConsumerStartCommand($consumer, true)} > /dev/null &");
             }
             sleep(5);

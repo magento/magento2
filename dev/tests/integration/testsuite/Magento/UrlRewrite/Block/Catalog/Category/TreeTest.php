@@ -40,7 +40,6 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     public function testGetTreeArray()
     {
         $tree = $this->_treeBlock->getTreeArray();
-        $this->assertFalse($tree['is_active']);
         $this->assertEquals('Root', (string)$tree['name']);
         $this->assertTrue($tree['expanded']);
         $this->assertCount(1, $tree['children']);

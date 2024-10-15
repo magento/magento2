@@ -24,6 +24,8 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 
 /**
  * Provide static fields for mapping of product.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class StaticField implements FieldProviderInterface
 {
@@ -127,6 +129,9 @@ class StaticField implements FieldProviderInterface
      *
      * @param AbstractAttribute $attribute
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getField(AbstractAttribute $attribute): array
     {
@@ -150,7 +155,7 @@ class StaticField implements FieldProviderInterface
             $fieldMapping[$fieldName]['index'] = $index;
         }
 
-        if ($attributeAdapter->isSortable()) {
+        if ($attributeAdapter->isSortable() && !$attributeAdapter->isComplexType()) {
             $sortFieldName = $this->fieldNameResolver->getFieldName(
                 $attributeAdapter,
                 ['type' => FieldMapperInterface::TYPE_SORT]
@@ -161,7 +166,8 @@ class StaticField implements FieldProviderInterface
                 ),
                 'index' => $this->indexTypeConverter->convert(
                     IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
-                )
+                ),
+                'normalizer' => 'folding',
             ];
         }
 
@@ -188,6 +194,21 @@ class StaticField implements FieldProviderInterface
             $fieldMapping[$childFieldName] = [
                 'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_STRING)
             ];
+            if ($attributeAdapter->isSortable()) {
+                $sortFieldName = $this->fieldNameResolver->getFieldName(
+                    $attributeAdapter,
+                    ['type' => FieldMapperInterface::TYPE_SORT]
+                );
+                $fieldMapping[$childFieldName]['fields'][$sortFieldName] = [
+                    'type' => $this->fieldTypeConverter->convert(
+                        FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD
+                    ),
+                    'index' => $this->indexTypeConverter->convert(
+                        IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
+                    ),
+                    'normalizer' => 'folding',
+                ];
+            }
         }
 
         return $fieldMapping;

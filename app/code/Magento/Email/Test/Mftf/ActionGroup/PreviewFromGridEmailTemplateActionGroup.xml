@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="PreviewFromGridEmailTemplateActionGroup" extends="FindEmailTemplateActionGroup">
+        <arguments>
+            <argument name="template" defaultValue="EmailTemplate"/>
+        </arguments>
+
+        <click selector="{{AdminEmailTemplateIndexSection.templateActionByName(template.templateName)}}" stepKey="clickPreviewTemplate"/>
+        <wait time="3" stepKey="waitForWindow"/>
+        <switchToNextTab after="waitForWindow" stepKey="switchToNewOpenedTab"/>
+        <seeInCurrentUrl url="{{AdminEmailTemplatePreviewPage.url}}" after="switchToNewOpenedTab" stepKey="seeWindowCurrentUrl"/>
+        <seeElement selector="{{AdminEmailTemplatePreviewSection.iframe}}" after="seeWindowCurrentUrl" stepKey="seeIframeOnPage"/>
+        <switchToIFrame userInput="preview_iframe" after="seeIframeOnPage" stepKey="switchToIframe"/>
+        <waitForText userInput="{{template.templateText}}" after="switchToIframe" stepKey="waitForText"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCaptchaCheckoutWithEnabledCaptchaTest">
+        <annotations>
+            <features value="Captcha"/>
+            <stories value="Order Placement With Enabled Captcha"/>
+            <title value="Captcha on checkout page"/>
+            <description value="Customer should be able to place an order with enabled captcha"/>
+            <severity value="MAJOR"/>
+            <group value="captcha"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaLength3ConfigData.path}} {{StorefrontCustomerCaptchaLength3ConfigData.value}}" stepKey="setCaptchaLength"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaSymbols1ConfigData.path}} {{StorefrontCustomerCaptchaSymbols1ConfigData.value}}" stepKey="setCaptchaSymbols"/>
+            <magentoCLI command="config:set {{StorefrontCaptchaOnCheckoutConfigData.path}} {{StorefrontCaptchaOnCheckoutConfigData.value}}" stepKey="enableCaptchaOnCheckout"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaModeAlwaysConfigData.path}} {{StorefrontCustomerCaptchaModeAlwaysConfigData.value}}" stepKey="setCaptchaAlwaysVisible"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultLengthConfigData.path}} {{StorefrontCustomerCaptchaDefaultLengthConfigData.value}}" stepKey="setDefaultCaptchaLength"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.path}} {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaModeAfterFailConfigData.path}} {{StorefrontCustomerCaptchaModeAfterFailConfigData.value}}" stepKey="setCaptchaDefaultVisibility"/>
+            <magentoCLI command="config:set {{StorefrontCaptchaOnCustomerLoginConfigData.path}} {{StorefrontCaptchaOnCustomerLoginConfigData.value}},{{StorefrontCaptchaOnCustomerForgotPasswordConfigData.value}}" stepKey="enableCaptchaOnDefaultForms"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="category" value="$createCategory$"/>
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToTheCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckout"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToReview"/>
+        <actionGroup ref="AssertCaptchaVisibleOnSecondCheckoutStepActionGroup" stepKey="assertCaptchaIsVisible"/>
+        <waitForPageLoad stepKey="waitForSpinner"/>
+        <actionGroup ref="StorefrontFillCaptchaFieldOnCheckoutActionGroup" stepKey="placeOrderWithIncorrectValue">
+            <argument name="captcha" value="{{WrongCaptcha.value}}"/>
+        </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="StorefrontClickPlaceOrderButtonActionGroup" stepKey="clickPlaceOrderButton"/>
+        <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="assertErrorMessage">
+            <argument name="message" value="Incorrect CAPTCHA"/>
+            <argument name="messageType" value="error"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontFillCaptchaFieldOnCheckoutActionGroup" stepKey="placeOrderWithCorrectValue">
+            <argument name="captcha" value="{{PreconfiguredCaptcha.value}}"/>
+        </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+    </test>
+</tests>

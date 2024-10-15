@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit;
 
+use Exception;
 use Magento\Framework\App\State;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DataObject;
@@ -185,13 +186,13 @@ class LayoutTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageConfigStructure = $this->getMockBuilder(Structure::class)
-            ->setMethods(['__toArray', 'populateWithArray'])
+            ->onlyMethods(['__toArray', 'populateWithArray'])
             ->getMock();
         $this->layoutScheduledSructure = $this->getMockBuilder(ScheduledStructure::class)
-            ->setMethods(['__toArray', 'populateWithArray'])
+            ->onlyMethods(['__toArray', 'populateWithArray'])
             ->getMock();
         $this->readerContextMock = $this->getMockBuilder(LayoutReaderContext::class)
-            ->setMethods(['getPageConfigStructure', 'getScheduledStructure'])
+            ->onlyMethods(['getPageConfigStructure', 'getScheduledStructure'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->readerContextMock->expects($this->any())->method('getPageConfigStructure')
@@ -235,7 +236,7 @@ class LayoutTest extends TestCase
                 'appState' => $this->appStateMock,
                 'logger' => $this->loggerMock,
                 'cacheable' => true,
-                'serializer' => $this->serializer,
+                'serializer' => $this->serializer
             ]
         );
     }
@@ -515,6 +516,7 @@ class LayoutTest extends TestCase
      * @param bool $hasElement
      * @param string $attribute
      * @param bool $result
+     *
      * @return void
      * @dataProvider isContainerDataProvider
      */
@@ -537,13 +539,13 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function isContainerDataProvider(): array
+    public static function isContainerDataProvider(): array
     {
         return [
             [false, '', false],
             [true, 'container', true],
             [true, 'block', false],
-            [true, 'something', false],
+            [true, 'something', false]
         ];
     }
 
@@ -551,6 +553,7 @@ class LayoutTest extends TestCase
      * @param bool $parentName
      * @param array $containerConfig
      * @param bool $result
+     *
      * @return void
      * @dataProvider isManipulationAllowedDataProvider
      */
@@ -580,12 +583,12 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function isManipulationAllowedDataProvider(): array
+    public static function isManipulationAllowedDataProvider(): array
     {
         return [
             ['parent', ['has_element' => true, 'attribute' => 'container'], true],
             ['parent', ['has_element' => true, 'attribute' => 'block'], false],
-            [false, [], false],
+            [false, [], false]
         ];
     }
 
@@ -593,6 +596,7 @@ class LayoutTest extends TestCase
      * @covers \Magento\Framework\View\Layout::setBlock
      * @covers \Magento\Framework\View\Layout::getAllBlocks
      * @covers \Magento\Framework\View\Layout::unsetElement
+     *
      * @return void
      */
     public function testSetGetBlock(): void
@@ -685,7 +689,8 @@ class LayoutTest extends TestCase
 
     /**
      * @param array $type
-     * @param array $blockInstance
+     * @param string $blockInstance
+     *
      * @return void
      * @dataProvider getBlockSingletonDataProvider
      */
@@ -708,14 +713,14 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function getBlockSingletonDataProvider(): array
+    public static function getBlockSingletonDataProvider(): array
     {
         return [
             [
                 'some_type',
                 Template::class,
-                true,
-            ],
+                true
+            ]
         ];
     }
 
@@ -723,6 +728,7 @@ class LayoutTest extends TestCase
      * @param array $rendererData
      * @param array $getData
      * @param bool $result
+     *
      * @return void
      * @dataProvider getRendererOptionsDataProvider
      */
@@ -748,7 +754,7 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function getRendererOptionsDataProvider(): array
+    public static function getRendererOptionsDataProvider(): array
     {
         $rendererData = [
             'namespace' => 'namespace_value',
@@ -756,7 +762,7 @@ class LayoutTest extends TestCase
             'dynamic_type' => 'dynamic_type_value',
             'type' => 'type_value',
             'template' => 'template.phtml',
-            'data' => ['some' => 'data'],
+            'data' => ['some' => 'data']
         ];
         return [
             'wrong namespace' => [
@@ -764,7 +770,7 @@ class LayoutTest extends TestCase
                 [
                     'namespace' => 'wrong namespace',
                     'static_type' => 'static_type_value',
-                    'dynamic_type' => 'dynamic_type_value',
+                    'dynamic_type' => 'dynamic_type_value'
                 ],
                 null,
             ],
@@ -773,7 +779,7 @@ class LayoutTest extends TestCase
                 [
                     'namespace' => 'namespace_value',
                     'static_type' => 'wrong static type',
-                    'dynamic_type' => 'dynamic_type_value',
+                    'dynamic_type' => 'dynamic_type_value'
                 ],
                 null,
             ],
@@ -782,7 +788,7 @@ class LayoutTest extends TestCase
                 [
                     'namespace' => 'namespace_value',
                     'static_type' => 'static_type_value',
-                    'dynamic_type' => 'wrong dynamic type',
+                    'dynamic_type' => 'wrong dynamic type'
                 ],
                 null,
             ],
@@ -791,14 +797,14 @@ class LayoutTest extends TestCase
                 [
                     'namespace' => 'namespace_value',
                     'static_type' => 'static_type_value',
-                    'dynamic_type' => 'dynamic_type_value',
+                    'dynamic_type' => 'dynamic_type_value'
                 ],
                 [
                     'type' => 'type_value',
                     'template' => 'template.phtml',
-                    'data' => ['some' => 'data'],
-                ],
-            ],
+                    'data' => ['some' => 'data']
+                ]
+            ]
         ];
     }
 
@@ -807,6 +813,7 @@ class LayoutTest extends TestCase
      * @param string $blockName
      * @param bool $hasElement
      * @param bool $cacheable
+     *
      * @return void
      * @dataProvider isCacheableDataProvider
      */
@@ -821,59 +828,59 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function isCacheableDataProvider(): array
+    public static function isCacheableDataProvider(): array
     {
         return [
             'blockWithoutName' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<block></block></layout>',
                 'blockName' => '',
                 'hasElement' => true,
-                'cacheable' => true,
+                'cacheable' => true
             ],
             'notCacheableBlockWithoutName' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<block cacheable="false"></block></layout>',
                 'blockName' => '',
                 'hasElement' => true,
-                'cacheable' => true,
+                'cacheable' => true
             ],
             'notCacheableBlockWithMissingBlockReference' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<referenceBlock name="not_existing_block">'
                     . '<block name="non_cacheable_block" cacheable="false"></block>'
                     . '</referenceBlock></layout>',
                 'blockName' => 'non_cacheable_block',
                 'hasElement' => false,
-                'cacheable' => true,
+                'cacheable' => true
             ],
             'notCacheableBlockWithMissingContainerReference' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<referenceContainer name="not_existing_container">'
                     . '<block name="non_cacheable_block" cacheable="false"></block>'
                     . '</referenceContainer></layout>',
                 'blockName' => 'non_cacheable_block',
                 'hasElement' => false,
-                'cacheable' => true,
+                'cacheable' => true
             ],
             'notCacheableBlockWithExistingBlockReference' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<referenceBlock name="existing_block">'
                     . '<block name="non_cacheable_block" cacheable="false"></block>'
                     . '</referenceBlock></layout>',
                 'blockName' => 'non_cacheable_block',
                 'hasElement' => true,
-                'cacheable' => false,
+                'cacheable' => false
             ],
             'notCacheableBlockWithExistingContainerReference' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<referenceContainer name="existing_container">'
                     . '<block name="non_cacheable_block" cacheable="false"></block>'
                     . '</referenceContainer></layout>',
                 'blockName' => 'non_cacheable_block',
                 'hasElement' => true,
-                'cacheable' => false,
-            ],
+                'cacheable' => false
+            ]
         ];
     }
 
@@ -923,8 +930,8 @@ class LayoutTest extends TestCase
             'field_3' => [
                 'field_3_1' => '1244',
                 'field_3_2' => null,
-                'field_3_3' => false,
-            ],
+                'field_3_3' => false
+            ]
         ];
         $this->pageConfigStructure->expects($this->any())
             ->method('__toArray')
@@ -932,7 +939,7 @@ class LayoutTest extends TestCase
 
         $layoutScheduledStructureData = [
             'field_1' => 1283,
-            'field_2' => 'text_qwertyuiop[]asdfghjkl;',
+            'field_2' => 'text_qwertyuiop[]asdfghjkl;'
         ];
         $this->layoutScheduledSructure->expects($this->any())
             ->method('__toArray')
@@ -964,7 +971,7 @@ class LayoutTest extends TestCase
             'name_1' => ['type' => '', 'parent' => null],
             'name_2' => ['type' => Element::TYPE_CONTAINER, 'parent' => null],
             'name_3' => ['type' => '', 'parent' => 'parent'],
-            'name_4' => ['type' => Element::TYPE_CONTAINER, 'parent' => 'parent'],
+            'name_4' => ['type' => Element::TYPE_CONTAINER, 'parent' => 'parent']
         ];
 
         $this->structureMock->expects($this->once())
@@ -1006,7 +1013,7 @@ class LayoutTest extends TestCase
             'field_3' => [
                 'field_3_1' => '1244',
                 'field_3_2' => null,
-                'field_3_3' => false,
+                'field_3_3' => false
             ]
         ];
         $this->pageConfigStructure->expects($this->once())
@@ -1052,7 +1059,7 @@ class LayoutTest extends TestCase
             'name_1' => ['type' => '', 'parent' => null],
             'name_2' => ['type' => Element::TYPE_CONTAINER, 'parent' => null],
             'name_3' => ['type' => '', 'parent' => 'parent'],
-            'name_4' => ['type' => Element::TYPE_CONTAINER, 'parent' => 'parent'],
+            'name_4' => ['type' => Element::TYPE_CONTAINER, 'parent' => 'parent']
         ];
 
         $this->structureMock->expects($this->once())
@@ -1073,6 +1080,7 @@ class LayoutTest extends TestCase
 
     /**
      * @param mixed $displayValue
+     *
      * @return void
      * @dataProvider renderElementDisplayDataProvider
      */
@@ -1089,16 +1097,12 @@ class LayoutTest extends TestCase
                 [
                     [$name, 'display', $displayValue],
                     [$child, 'display', $displayValue],
-                    [$child, 'type', Element::TYPE_BLOCK],
+                    [$child, 'type', Element::TYPE_BLOCK]
                 ]
             );
 
         $this->structureMock->expects($this->atLeastOnce())->method('hasElement')
-            ->willReturnMap(
-                [
-                    [$child, true],
-                ]
-            );
+            ->willReturnMap([[$child, true]]);
 
         $this->structureMock->expects($this->once())
             ->method('getChildren')
@@ -1111,18 +1115,17 @@ class LayoutTest extends TestCase
         $renderingOutput = new DataObject();
         $renderingOutput->setData('output', $blockHtml);
 
-        $this->eventManagerMock->expects($this->at(0))
+        $this->eventManagerMock
             ->method('dispatch')
-            ->with(
-                'core_layout_render_element',
-                ['element_name' => $child, 'layout' => $this->model, 'transport' => $renderingOutput]
-            );
-        $this->eventManagerMock->expects($this->at(1))
-            ->method('dispatch')
-            ->with(
-                'core_layout_render_element',
-                ['element_name' => $name, 'layout' => $this->model, 'transport' => $renderingOutput]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($child, $renderingOutput, $name) {
+                if ($arg1 == 'core_layout_render_element' &&
+                    $arg2 == ['element_name' => $child, 'layout' => $this->model, 'transport' => $renderingOutput]) {
+                    return null;
+                } elseif ($arg1 == 'core_layout_render_element' &&
+                    $arg2 == ['element_name' => $name, 'layout' => $this->model, 'transport' => $renderingOutput]) {
+                    return null;
+                }
+            });
 
         $this->model->setBlock($child, $block);
         $this->assertEquals($blockHtml, $this->model->renderElement($name, false));
@@ -1130,9 +1133,11 @@ class LayoutTest extends TestCase
 
     /**
      * @param mixed $displayValue
+     *
+     * @return void
      * @dataProvider renderElementDoNotDisplayDataProvider
      */
-    public function testRenderElementDoNotDisplay($displayValue)
+    public function testRenderElementDoNotDisplay($displayValue): void
     {
         $name = 'test_container';
         $blockHtml = '';
@@ -1145,21 +1150,71 @@ class LayoutTest extends TestCase
     }
 
     /**
+     * @param string $expectedResult
+     * @param string $blockHtml
+     *
+     * @return void
+     * @dataProvider trimWhitespaceContainingBlockHtmlDataProvider
+     */
+    public function testTrimWhitespaceContainingBlockHtml($expectedResult, $blockHtml): void
+    {
+        $name = 'test_container';
+        $child = 'child_block';
+        $children = [$child => true];
+        $displayValue = true;
+
+        $this->structureMock->expects($this->atLeastOnce())
+            ->method('getAttribute')
+            ->willReturnMap(
+                [
+                    [$name, 'display', $displayValue],
+                    [$child, 'display', $displayValue],
+                    [$child, 'type', Element::TYPE_BLOCK]
+                ]
+            );
+
+        $this->structureMock->expects($this->atLeastOnce())->method('hasElement')
+            ->willReturnMap([[$child, true]]);
+
+        $this->structureMock->expects($this->once())
+            ->method('getChildren')
+            ->with($name)
+            ->willReturn($children);
+
+        $block = $this->createMock(AbstractBlock::class);
+        $block->expects($this->once())->method('toHtml')->willReturn($blockHtml);
+
+        $this->model->setBlock($child, $block);
+        $this->assertEquals($expectedResult, $this->model->renderElement($name, false));
+    }
+
+    /**
      * @return array
      */
-    public function renderElementDoNotDisplayDataProvider(): array
+    public static function renderElementDoNotDisplayDataProvider(): array
     {
         return [
             ['false'],
             ['0'],
-            [0],
+            [0]
         ];
     }
 
     /**
      * @return array
      */
-    public function renderElementDisplayDataProvider(): array
+    public static function trimWhitespaceContainingBlockHtmlDataProvider(): array
+    {
+        return [
+            ['', ' '],
+            [' <html/>', ' <html/>']
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function renderElementDisplayDataProvider(): array
     {
         return [
             [true],
@@ -1167,18 +1222,18 @@ class LayoutTest extends TestCase
             [1],
             ['true'],
             [false],
-            [null],
+            [null]
         ];
     }
 
     /**
-     * Test render element with exception
+     * Test render element with exception.
      *
      * @return void
      */
     public function testRenderNonCachedElementWithException(): void
     {
-        $exception = new \Exception('Error message');
+        $exception = new Exception('Error message');
 
         $builderMock = $this->createMock(BuilderInterface::class);
         $builderMock->expects($this->once())

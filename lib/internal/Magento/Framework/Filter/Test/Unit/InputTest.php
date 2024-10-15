@@ -7,20 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Filter\Test\Unit;
 
+use Laminas\Filter\FilterInterface;
 use Magento\Framework\Filter\Input;
 use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\TestCase;
 
 class InputTest extends TestCase
 {
-    public function testFilterZendFilterAsObject()
+    public function testFilterLaminasFilterAsObject()
     {
         $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $inputFilter = new Input($objectManagerMock);
 
-        /** @var \Zend_Filter_Interface $filterMock */
+        /** @var FilterInterface $filterMock */
         /** This filter should be applied to 'field1' field value only */
-        $filterMock = $this->createMock(\Zend_Filter_Interface::class);
+        $filterMock = $this->createMock(FilterInterface::class);
         $filterMock->expects($this->exactly(1))->method('filter')->willReturnCallback(
             function ($input) {
                 return '(' . $input . ')';
@@ -34,7 +35,7 @@ class InputTest extends TestCase
         $this->assertEquals($expectedOutput, $inputFilter->filter($inputArray), 'Array was filtered incorrectly.');
     }
 
-    public function testFilterZendFilterAsArray()
+    public function testFilterLaminasFilterAsArray()
     {
         $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $inputFilter = new Input($objectManagerMock);
@@ -44,7 +45,7 @@ class InputTest extends TestCase
             [
                 'field1' => [
                     [
-                        'zend' => 'StringToUpper',
+                        'laminas' => 'StringToUpper',
                         'args' => ['encoding' => 'utf-8'],
                     ],
                 ],

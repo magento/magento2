@@ -16,6 +16,7 @@
             <description value="Admin select widgets in grid and try to mass delete action, will show pop-up with confirm action"/>
             <severity value="MAJOR"/>
             <group value="widget"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>

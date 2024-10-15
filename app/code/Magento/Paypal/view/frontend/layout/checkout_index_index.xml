@@ -23,6 +23,20 @@
                                             <item name="children" xsi:type="array">
                                                 <item name="payment" xsi:type="array">
                                                     <item name="children" xsi:type="array">
+                                                        <item name="payments-list" xsi:type="array">
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="paypal-method-extra-content" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">uiComponent</item>
+                                                                    <item name="displayArea" xsi:type="string">paypal-method-extra-content</item>
+                                                                    <item name="children" xsi:type="array">
+                                                                        <item name="paylater-place-order" xsi:type="array">
+                                                                            <item name="component" xsi:type="string">Magento_Paypal/js/view/paylater</item>
+                                                                            <item name="displayArea" xsi:type="string">paypal-method-extra-content</item>
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
                                                         <item name="renders" xsi:type="array">
                                                             <!-- merge payment method renders here -->
                                                             <item name="children" xsi:type="array">

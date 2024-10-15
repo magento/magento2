@@ -17,10 +17,10 @@ class CurrencyTest extends TestCase
      * @var array
      */
     protected $expectedCurrencies = [
-        'USD',
-        'EUR',
-        'UAH',
-        'GBP',
+        'USD' => 'US Dollar (USD)',
+        'EUR' => 'Euro (EUR)',
+        'UAH' => 'Ukrainian Hryvnia (UAH)',
+        'GBP' => 'British Pound (GBP)'
     ];
 
     public function testIsValid()

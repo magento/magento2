@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Framework\Pricing\Helper\Data;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Bundle\Model\Product\OriginalPrice;
 
 /**
  * Data provider for bundled product options
@@ -25,21 +26,6 @@ class BundleOptionDataProvider
      */
     private const OPTION_TYPE = 'bundle';
 
-    /**
-     * @var Data
-     */
-    private $pricingHelper;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
-     * @var Configuration
-     */
-    private $configuration;
-
     /** @var Uid */
     private $uidEncoder;
 
@@ -47,17 +33,16 @@ class BundleOptionDataProvider
      * @param Data $pricingHelper
      * @param SerializerInterface $serializer
      * @param Configuration $configuration
+     * @param OriginalPrice $originalPrice
      * @param Uid|null $uidEncoder
      */
     public function __construct(
-        Data $pricingHelper,
-        SerializerInterface $serializer,
-        Configuration $configuration,
+        private readonly Data $pricingHelper,
+        private readonly SerializerInterface $serializer,
+        private readonly Configuration $configuration,
+        private readonly OriginalPrice $originalPrice,
         Uid $uidEncoder = null
     ) {
-        $this->pricingHelper = $pricingHelper;
-        $this->serializer = $serializer;
-        $this->configuration = $configuration;
         $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
             ->get(Uid::class);
     }
@@ -139,12 +124,12 @@ class BundleOptionDataProvider
         $values = [];
 
         $product = $item->getProduct();
+        $currencyCode = $item->getQuote()->getQuoteCurrencyCode();
         foreach ($selections as $selection) {
             $qty = (float) $this->configuration->getSelectionQty($product, $selection->getSelectionId());
             if (!$qty) {
                 continue;
             }
-
             $selectionPrice = $this->configuration->getSelectionFinalPrice($item, $selection);
             $optionDetails = [
                 self::OPTION_TYPE,
@@ -152,15 +137,21 @@ class BundleOptionDataProvider
                 $selection->getData('selection_id'),
                 (int) $selection->getData('selection_qty')
             ];
+            $price = $this->pricingHelper->currency($selectionPrice, false, false);
             $values[] = [
                 'id' => $selection->getSelectionId(),
                 'uid' => $this->uidEncoder->encode(implode('/', $optionDetails)),
                 'label' => $selection->getName(),
                 'quantity' => $qty,
-                'price' => $this->pricingHelper->currency($selectionPrice, false, false),
+                'price' => $price,
+                'priceV2' => ['currency' => $currencyCode, 'value' => $price],
+                'original_price' => [
+                    'currency' => $currencyCode,
+                    'value' => $this->originalPrice
+                        ->getSelectionOriginalPrice($item->getProduct(), $selection)
+                ],
             ];
         }
-
         return $values;
     }
 }

@@ -62,15 +62,15 @@ class OutOfStockProductsFilterTest extends AbstractFiltersTest
     /**
      * @return array
      */
-    public function getFiltersWithOutOfStockProduct(): array
+    public static function getFiltersWithOutOfStockProduct(): array
     {
         return [
             'show_out_of_stock' => [
-                'show_out_of_stock' => 1,
+                'showOutOfStock' => 1,
                 'expectation' => [['label' => 'Option 1', 'count' => 1], ['label' => 'Option 2', 'count' => 1]],
             ],
             'not_show_out_of_stock' => [
-                'show_out_of_stock' => 0,
+                'showOutOfStock' => 0,
                 'expectation' => [['label' => 'Option 2', 'count' => 1]],
             ],
         ];

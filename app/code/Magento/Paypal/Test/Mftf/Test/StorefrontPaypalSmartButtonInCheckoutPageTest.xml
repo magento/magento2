@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="MC-37236"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Login -->
@@ -47,6 +48,7 @@
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
             <!--Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!-- Logout -->
@@ -57,7 +59,7 @@
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage"/>
         <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>

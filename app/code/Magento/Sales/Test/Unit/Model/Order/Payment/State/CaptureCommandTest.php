@@ -28,7 +28,7 @@ class CaptureCommandTest extends TestCase
     /**
      * @var string
      */
-    private $newOrderStatus = 'custom_status';
+    private static $newOrderStatus = 'custom_status';
 
     /**
      * @see CaptureCommand::execute
@@ -61,21 +61,21 @@ class CaptureCommandTest extends TestCase
     /**
      * @return array
      */
-    public function commandResultDataProvider()
+    public static function commandResultDataProvider()
     {
         return [
             [
                 false,
                 false,
                 Order::STATE_PROCESSING,
-                $this->newOrderStatus,
+                self::$newOrderStatus,
                 'Captured amount of %1 online.'
             ],
             [
                 true,
                 false,
                 Order::STATE_PAYMENT_REVIEW,
-                $this->newOrderStatus,
+                self::$newOrderStatus,
                 'An amount of %1 will be captured after being approved at the payment gateway.'
             ],
             [
@@ -106,7 +106,7 @@ class CaptureCommandTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $statusResolver->method('getOrderStatusByState')
-            ->willReturn($this->newOrderStatus);
+            ->willReturn(self::$newOrderStatus);
 
         return $statusResolver;
     }
@@ -133,7 +133,7 @@ class CaptureCommandTest extends TestCase
     private function getPayment($isTransactionPending, $isFraudDetected)
     {
         $payment = $this->getMockBuilder(OrderPaymentInterface::class)
-            ->setMethods(['getIsTransactionPending', 'getIsFraudDetected'])
+            ->addMethods(['getIsTransactionPending', 'getIsFraudDetected'])
             ->getMockForAbstractClass();
         $payment->method('getIsTransactionPending')
             ->willReturn($isTransactionPending);

@@ -22,7 +22,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * Swatch area inside media folder
      *
      */
-    const  SWATCH_MEDIA_PATH = 'attribute/swatch';
+    public const  SWATCH_MEDIA_PATH = 'attribute/swatch';
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
@@ -42,8 +42,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     protected $fileStorageDb = null;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
@@ -112,6 +110,8 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Method to get swatch attribute image.
+     *
      * @param string $swatchType
      * @param string $file
      * @return string
@@ -138,6 +138,14 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         return $basePath . '/' . $this->getRelativeTransformationParametersPath($swatchType, $file);
     }
 
+    /**
+     * Method to get relative transformation parameters path.
+     *
+     * @param string $swatchType
+     * @param string $file
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     private function getRelativeTransformationParametersPath($swatchType, $file)
     {
         $imageConfig = $this->getImageConfig();
@@ -150,14 +158,14 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * move image from tmp to catalog dir
+     * Move image from tmp to catalog dir
      *
      * @param string $file
      * @return string path
      */
     public function moveImageFromTmp($file)
     {
-        if (strrpos($file, '.tmp') == strlen($file) - 4) {
+        if ($file && strrpos($file, '.tmp') == strlen($file) - 4) {
             $file = substr($file, 0, strlen($file) - 4);
         }
         $destinationFile = $this->getUniqueFileName($file);
@@ -182,7 +190,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
             );
         }
 
-        return str_replace('\\', '/', $destinationFile);
+        return $destinationFile !== null ? str_replace('\\', '/', $destinationFile) : '';
     }
 
     /**
@@ -199,6 +207,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
                 $file
             );
         } else {
+            //phpcs:ignore Magento2.Functions.DiscouragedFunction
             $destFile = dirname($file) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
                 $this->getOriginalFilePath($file)
             );
@@ -207,6 +216,12 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         return $destFile;
     }
 
+    /**
+     * Method to get original file path.
+     *
+     * @param string $file
+     * @return string
+     */
     private function getOriginalFilePath($file)
     {
         return $this->mediaDirectory->getAbsolutePath($this->getAttributeSwatchPath($file));
@@ -278,7 +293,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * Generate folder name WIDTHxHEIGHT based on config in view.xml
      *
      * @param string $swatchType
-     * @param null $imageConfig
+     * @param array|null $imageConfig
      * @return string
      */
     public function getFolderNameSize($swatchType, $imageConfig = null)
@@ -314,7 +329,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function prepareFileName($imageUrl)
     {
-        $fileArray = explode('/', $imageUrl);
+        $fileArray = explode('/', $imageUrl ?: '');
         $fileName = array_pop($fileArray);
         $filePath = implode('/', $fileArray);
         return ['name' => $fileName, 'path' => $filePath];
@@ -372,6 +387,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function prepareFile($file)
     {
-        return ltrim(str_replace('\\', '/', $file), '/');
+        return $file !== null ? ltrim(str_replace('\\', '/', $file), '/') : '';
     }
 }
