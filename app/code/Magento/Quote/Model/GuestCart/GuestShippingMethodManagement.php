@@ -6,8 +6,8 @@
 
 namespace Magento\Quote\Model\GuestCart;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\Data\EstimateAddressInterface;
 use Magento\Quote\Api\GuestShipmentEstimationInterface;
 use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
@@ -42,13 +42,16 @@ class GuestShippingMethodManagement implements
      *
      * @param ShippingMethodManagementInterface $shippingMethodManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @param ShipmentEstimationInterface $shipmentEstimationManagement
      */
     public function __construct(
         ShippingMethodManagementInterface $shippingMethodManagement,
-        QuoteIdMaskFactory $quoteIdMaskFactory
+        QuoteIdMaskFactory $quoteIdMaskFactory,
+        ShipmentEstimationInterface $shipmentEstimationManagement
     ) {
         $this->shippingMethodManagement = $shippingMethodManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+        $this->shipmentEstimationManagement = $shipmentEstimationManagement;
     }
 
     /**
@@ -84,7 +87,7 @@ class GuestShippingMethodManagement implements
     /**
      * {@inheritDoc}
      */
-    public function estimateByAddress($cartId, \Magento\Quote\Api\Data\EstimateAddressInterface $address)
+    public function estimateByAddress($cartId, EstimateAddressInterface $address)
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
@@ -99,21 +102,7 @@ class GuestShippingMethodManagement implements
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
 
-        return $this->getShipmentEstimationManagement()
-            ->estimateByExtendedAddress((int) $quoteIdMask->getQuoteId(), $address);
-    }
-
-    /**
-     * Get shipment estimation management service
-     * @return ShipmentEstimationInterface
-     * @deprecated 100.0.7
-     */
-    private function getShipmentEstimationManagement()
-    {
-        if ($this->shipmentEstimationManagement === null) {
-            $this->shipmentEstimationManagement = ObjectManager::getInstance()
-                ->get(ShipmentEstimationInterface::class);
-        }
-        return $this->shipmentEstimationManagement;
+        return $this->shipmentEstimationManagement
+            ->estimateByExtendedAddress((int)$quoteIdMask->getQuoteId(), $address);
     }
 }
