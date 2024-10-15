@@ -10,10 +10,12 @@ namespace Magento\GraphQl\App\State;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Http as HttpApp;
 use Magento\Framework\App\ObjectManager as AppObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
@@ -56,25 +58,29 @@ class GraphQlStateDiff
     private readonly Comparator $comparator;
 
     /**
-     * Constructor
-     *
-     * @param TestCase $test
+     * @var State
      */
-    public function __construct(TestCase $test)
+    private State $appState;
+
+    /**
+     * @var string|null
+     */
+    private ?string $currentArea;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
-        if (8 == PHP_MAJOR_VERSION && 3 == PHP_MINOR_VERSION && PHP_RELEASE_VERSION  < 5) {
-            $test->markTestSkipped(
-                "This test isn't compatible with PHP 8.3 versions less than PHP 8.3.5 because of "
-                . "bug in garbage collector. https://github.com/php/php-src/issues/13569"
-                . " will roll back in AC-11491"
-            );
-        }
         $this->objectManagerBeforeTest = Bootstrap::getObjectManager();
         $this->objectManagerForTest = new ObjectManager($this->objectManagerBeforeTest);
         $this->objectManagerForTest->getFactory()->setObjectManager($this->objectManagerForTest);
         AppObjectManager::setInstance($this->objectManagerForTest);
         Bootstrap::setObjectManager($this->objectManagerForTest);
         $this->comparator = $this->objectManagerForTest->create(Comparator::class);
+        $this->appState = $this->objectManagerForTest->get(State::class);
+        $this->currentArea = $this->appState->getAreaCode();
+        $this->appState->setAreaCode(Area::AREA_GRAPHQL);
         $this->objectManagerForTest->_resetState();
     }
 
@@ -95,6 +101,7 @@ class GraphQlStateDiff
      */
     public function tearDown(): void
     {
+        $this->appState->setAreaCode($this->currentArea);
         $this->objectManagerBeforeTest->getFactory()->setObjectManager($this->objectManagerBeforeTest);
         AppObjectManager::setInstance($this->objectManagerBeforeTest);
         Bootstrap::setObjectManager($this->objectManagerBeforeTest);

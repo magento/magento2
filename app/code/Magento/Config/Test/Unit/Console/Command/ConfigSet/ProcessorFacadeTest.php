@@ -160,7 +160,7 @@ class ProcessorFacadeTest extends TestCase
     /**
      * @return array
      */
-    public function processWithValidatorExceptionDataProvider()
+    public static function processWithValidatorExceptionDataProvider()
     {
         return [
             [new LocalizedException(__('Some error'))],

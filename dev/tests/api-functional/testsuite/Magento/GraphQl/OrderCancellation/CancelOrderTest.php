@@ -60,8 +60,7 @@ use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
     DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
     DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
     DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
-    DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], 'invoice'),
-    Config('sales/cancellation/enabled', 1)
+    DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], 'invoice')
 ]
 class CancelOrderTest extends GraphQlAbstract
 {
@@ -89,6 +88,9 @@ class CancelOrderTest extends GraphQlAbstract
      * @throws AuthenticationException
      * @throws LocalizedException
      */
+    #[
+        Config('sales/cancellation/enabled', 1)
+    ]
     public function testAttemptToCancelOrderWhenMissingReason()
     {
         $query = <<<QUERY
@@ -171,6 +173,9 @@ QUERY;
      * @throws AuthenticationException
      * @throws LocalizedException
      */
+    #[
+        Config('sales/cancellation/enabled', 1)
+    ]
     public function testAttemptToCancelOrderWhenMissingOrderId()
     {
         $query = <<<QUERY
@@ -205,6 +210,9 @@ QUERY;
      * @throws AuthenticationException
      * @throws LocalizedException
      */
+    #[
+        Config('sales/cancellation/enabled', 1)
+    ]
     public function testAttemptToCancelNonExistingOrder()
     {
         $query = <<<QUERY
@@ -268,7 +276,8 @@ QUERY;
         DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
-        DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], 'invoice')
+        DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], 'invoice'),
+        Config('sales/cancellation/enabled', 1)
     ]
     public function testAttemptToCancelOrderFromAnotherCustomer()
     {
@@ -316,6 +325,9 @@ QUERY;
     /**
      * @dataProvider orderStatusProvider
      */
+    #[
+        Config('sales/cancellation/enabled', 1)
+    ]
     public function testAttemptToCancelOrderWithSomeStatuses(string $status, string $expectedStatus)
     {
         /**
@@ -994,7 +1006,7 @@ QUERY;
     /**
      * @return array[]
      */
-    public function orderStatusProvider(): array
+    public static function orderStatusProvider(): array
     {
         return [
             'On Hold status' => [

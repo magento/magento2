@@ -14,4 +14,13 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\SalesGraphQl\Api\OrderAvailableActionProviderInterface"
+                type="Magento\OrderCancellationGraphQl\Model\GetOrderCancellationAvailableActions" />
+    <type name="Magento\SalesGraphQl\Model\GetOrderAvailableActions">
+        <arguments>
+            <argument name="actions" xsi:type="array">
+                <item name="cancel_action" xsi:type="object">Magento\OrderCancellationGraphQl\Model\GetOrderCancellationAvailableActions</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

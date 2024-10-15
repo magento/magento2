@@ -78,7 +78,7 @@ class VersionTest extends TestCase
     /**
      * @return array
      */
-    public function getValueFromStorageDataProvider()
+    public static function getValueFromStorageDataProvider()
     {
         return [
             'default mode'      => [State::MODE_DEFAULT],

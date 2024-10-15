@@ -78,7 +78,7 @@ class FulltextTest extends TestCase
     /**
      * @return array
      */
-    public function matchProvider(): array
+    public static function matchProvider(): array
     {
         return [[true], [false]];
     }
