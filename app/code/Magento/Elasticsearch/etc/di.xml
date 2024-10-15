@@ -19,13 +19,6 @@
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Action\Rows">
         <plugin name="catalogsearchFulltextProductAssignment" type="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Action\Rows"/>
     </type>
-    <type name="Magento\Elasticsearch\Model\Config">
-        <arguments>
-            <argument name="engineList" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="string">elasticsearch5</item>
-            </argument>
-        </arguments>
-    </type>
 
     <virtualType name="Magento\Elasticsearch\Model\Layer\Search\Context" type="Magento\Catalog\Model\Layer\Search\Context">
         <arguments>
@@ -66,7 +59,6 @@
         <arguments>
             <argument name="factories" xsi:type="array">
                 <item name="mysql" xsi:type="object">Magento\CatalogSearch\Model\ResourceModel\Fulltext\SearchCollectionFactory</item>
-                <item name="elasticsearch5" xsi:type="object">elasticsearchFulltextSearchCollectionFactory</item>
             </argument>
         </arguments>
     </virtualType>
@@ -88,7 +80,6 @@
         <arguments>
             <argument name="factories" xsi:type="array">
                 <item name="mysql" xsi:type="object">Magento\CatalogSearch\Model\ResourceModel\Fulltext\CollectionFactory</item>
-                <item name="elasticsearch5" xsi:type="object">elasticsearchCategoryCollectionFactory</item>
             </argument>
         </arguments>
     </virtualType>
@@ -106,18 +97,10 @@
             <argument name="instanceName" xsi:type="string">elasticsearchAdvancedCollection</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\CatalogSearch\Model\Search\ItemCollectionProvider">
-        <arguments>
-            <argument name="factories" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="object">elasticsearchAdvancedCollectionFactory</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategyProvider">
         <arguments>
             <argument name="strategies" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Elasticsearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
-                <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
             </argument>
         </arguments>
     </type>
@@ -171,73 +154,6 @@
     </type>
     <preference for="Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface" type="Magento\Elasticsearch\Model\Adapter\Index\Builder" />
     <preference for="Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface" type="Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig" />
-    <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">
-        <arguments>
-            <argument name="engines" xsi:type="array">
-                <item sortOrder="10" name="elasticsearch5" xsi:type="string">Elasticsearch 5.0+ (Deprecated)</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProviderProxy">
-        <arguments>
-            <argument name="categoryFieldsProviders" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProvider</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapperProxy">
-        <arguments>
-            <argument name="productFieldMappers" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapper</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\AdvancedSearch\Model\Client\ClientResolver">
-        <arguments>
-            <argument name="clientFactories" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="string">\Magento\Elasticsearch\Elasticsearch5\Model\Client\ElasticsearchFactory</item>
-            </argument>
-            <argument name="clientOptions" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\Model\Config</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\Model\Indexer\IndexerHandler</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogSearch\Model\Indexer\IndexStructureFactory">
-        <arguments>
-            <argument name="structures" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\Model\Indexer\IndexStructure</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogSearch\Model\ResourceModel\EngineProvider">
-        <arguments>
-            <argument name="engines" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\Model\ResourceModel\Engine</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Search\Model\AdapterFactory">
-        <arguments>
-            <argument name="adapters" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Adapter</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Search\Model\EngineResolver">
-        <arguments>
-            <argument name="engines" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="string">elasticsearch5</item>
-            </argument>
-            <argument name="defaultEngine" xsi:type="string">elasticsearch5</argument>
-        </arguments>
-    </type>
     <virtualType name="Magento\Elasticsearch\SearchAdapter\ProductEntityMetadata" type="Magento\Framework\Search\EntityMetadata">
         <arguments>
             <argument name="entityId" xsi:type="string">_id</argument>
@@ -256,33 +172,12 @@
     </type>
     <virtualType name="Magento\Elasticsearch\Elasticsearch5\Model\Client\ElasticsearchFactory" type="Magento\AdvancedSearch\Model\Client\ClientFactory">
         <arguments>
-            <argument name="clientClass" xsi:type="string">Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch</argument>
+            <argument name="clientClass" xsi:type="string">Magento\Elasticsearch\ElasticAdapter\Model\Client\Elasticsearch</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Client\ClientFactoryProxy">
-        <arguments>
-            <argument name="clientFactories" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Client\ElasticsearchFactory</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Adapter">
         <arguments>
             <argument name="connectionManager" xsi:type="object">Magento\Elasticsearch\SearchAdapter\ConnectionManager</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Search\Dynamic\IntervalFactory">
-        <arguments>
-            <argument name="intervals" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Aggregation\Interval</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Search\Dynamic\DataProviderFactory">
-        <arguments>
-            <argument name="dataProviders" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider</item>
-            </argument>
         </arguments>
     </type>
     <type name="Magento\Elasticsearch\SearchAdapter\Aggregation\Builder">
@@ -319,40 +214,14 @@
             <argument name="cacheId" xsi:type="string">elasticsearch_index_config</argument>
         </arguments>
     </type>
-    <type name="Magento\AdvancedSearch\Model\SuggestedQueries">
-        <arguments>
-            <argument name="data" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\Model\DataProvider\Suggestions</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider">
         <arguments>
             <argument name="indexerId" xsi:type="const">\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID</argument>
         </arguments>
     </type>
-    <type name="Magento\Config\Model\Config\TypePool">
-        <arguments>
-            <argument name="sensitive" xsi:type="array">
-                <item name="catalog/search/elasticsearch5_password" xsi:type="string">1</item>
-                <item name="catalog/search/elasticsearch5_server_hostname" xsi:type="string">1</item>
-                <item name="catalog/search/elasticsearch5_username" xsi:type="string">1</item>
-            </argument>
-            <argument name="environment" xsi:type="array">
-
-                <item name="catalog/search/elasticsearch5_enable_auth" xsi:type="string">1</item>
-                <item name="catalog/search/elasticsearch5_index_prefix" xsi:type="string">1</item>
-                <item name="catalog/search/elasticsearch5_password" xsi:type="string">1</item>
-                <item name="catalog/search/elasticsearch5_server_hostname" xsi:type="string">1</item>
-                <item name="catalog/search/elasticsearch5_server_port" xsi:type="string">1</item>
-                <item name="catalog/search/elasticsearch5_username" xsi:type="string">1</item>
-                <item name="catalog/search/elasticsearch5_server_timeout" xsi:type="string">1</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProvider">
         <arguments>
-            <argument name="fieldNameResolver" xsi:type="object">elasticsearch5FieldNameResolver</argument>
+            <argument name="fieldNameResolver" xsi:type="object">elasticsearchFieldNameResolver</argument>
         </arguments>
     </type>
     <type name="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver">
@@ -367,7 +236,7 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="elasticsearch5FieldNameResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver">
+    <virtualType name="elasticsearchFieldNameResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver">
         <arguments>
             <argument name="items" xsi:type="array">
                 <item name="notEav" xsi:type="object" sortOrder="10">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\NotEavAttribute</item>
@@ -375,11 +244,11 @@
                 <item name="price" xsi:type="object" sortOrder="30">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Price</item>
                 <item name="categoryName" xsi:type="object" sortOrder="40">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CategoryName</item>
                 <item name="position" xsi:type="object" sortOrder="50">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Position</item>
-                <item name="default" xsi:type="object" sortOrder="100">elasticsearch5FieldNameDefaultResolver</item>
+                <item name="default" xsi:type="object" sortOrder="100">elasticsearchFieldNameDefaultResolver</item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="elasticsearch5FieldNameDefaultResolver" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver">
+    <virtualType name="elasticsearchFieldNameDefaultResolver" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver">
         <arguments>
             <argument name="fieldTypeResolver" xsi:type="object">\Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\CompositeResolver</argument>
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
@@ -400,9 +269,9 @@
             <argument name="items" xsi:type="array">
                 <item name="keyword" xsi:type="object" sortOrder="10">\Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\KeywordType</item>
                 <item name="integer" xsi:type="object" sortOrder="20">\Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\IntegerType</item>
-                <item name="datetime" xsi:type="object" sortOrder="30">elasticsearch5FieldTypeDateTimeResolver</item>
-                <item name="float" xsi:type="object" sortOrder="40">elasticsearch5FieldTypeFloatResolver</item>
-                <item name="default" xsi:type="object" sortOrder="100">elasticsearch5FieldTypeDefaultResolver</item>
+                <item name="datetime" xsi:type="object" sortOrder="30">elasticsearchFieldTypeDateTimeResolver</item>
+                <item name="float" xsi:type="object" sortOrder="40">elasticsearchFieldTypeFloatResolver</item>
+                <item name="default" xsi:type="object" sortOrder="100">elasticsearchFieldTypeDefaultResolver</item>
             </argument>
         </arguments>
     </type>
@@ -417,21 +286,21 @@
     <virtualType name="elasticsearch5FieldProvider" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\CompositeFieldProvider">
         <arguments>
             <argument name="providers" xsi:type="array">
-                <item name="static" xsi:type="object">elasticsearch5StaticFieldProvider</item>
-                <item name="dynamic" xsi:type="object">elasticsearch5DynamicFieldProvider</item>
+                <item name="static" xsi:type="object">elasticsearchStaticFieldProvider</item>
+                <item name="dynamic" xsi:type="object">elasticsearchDynamicFieldProvider</item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="elasticsearch5StaticFieldProvider" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\StaticField">
+    <virtualType name="elasticsearchStaticFieldProvider" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\StaticField">
         <arguments>
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
             <argument name="indexTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\Converter</argument>
             <argument name="fieldIndexResolver" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\IndexResolver</argument>
             <argument name="fieldTypeResolver" xsi:type="object">\Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\CompositeResolver</argument>
-            <argument name="fieldNameResolver" xsi:type="object">elasticsearch5FieldNameResolver</argument>
+            <argument name="fieldNameResolver" xsi:type="object">elasticsearchFieldNameResolver</argument>
         </arguments>
     </virtualType>
-    <virtualType name="elasticsearch5DynamicFieldProvider" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\DynamicField">
+    <virtualType name="elasticsearchDynamicFieldProvider" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\DynamicField">
         <arguments>
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
             <argument name="indexTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\Converter</argument>
@@ -447,30 +316,30 @@
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
         </arguments>
     </type>
-    <virtualType name="elasticsearch5FieldTypeDateTimeResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\DateTimeType">
+    <virtualType name="elasticsearchFieldTypeDateTimeResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\DateTimeType">
         <arguments>
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
         </arguments>
     </virtualType>
-    <virtualType name="elasticsearch5FieldTypeFloatResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\FloatType">
+    <virtualType name="elasticsearchFieldTypeFloatResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\FloatType">
         <arguments>
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
         </arguments>
     </virtualType>
-    <virtualType name="elasticsearch5FieldTypeDefaultResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\DefaultResolver">
+    <virtualType name="elasticsearchFieldTypeDefaultResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\DefaultResolver">
         <arguments>
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Elasticsearch\Model\Adapter\Elasticsearch">
         <arguments>
-            <argument name="staticFieldProvider" xsi:type="object">elasticsearch5StaticFieldProvider</argument>
+            <argument name="staticFieldProvider" xsi:type="object">elasticsearchStaticFieldProvider</argument>
         </arguments>
     </type>
     <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapper">
         <arguments>
             <argument name="fieldProvider" xsi:type="object">elasticsearch5FieldProvider</argument>
-            <argument name="fieldNameResolver" xsi:type="object">elasticsearch5FieldNameResolver</argument>
+            <argument name="fieldNameResolver" xsi:type="object">elasticsearchFieldNameResolver</argument>
         </arguments>
     </type>
     <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\IndexResolver">
@@ -478,13 +347,6 @@
             <argument name="converter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\Converter</argument>
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
             <argument name="fieldTypeResolver" xsi:type="object">\Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\CompositeResolver</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Search\Model\Search\PageSizeProvider">
-        <arguments>
-            <argument name="pageSizeBySearchEngine" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="number">10000</item>
-            </argument>
         </arguments>
     </type>
     <type name="Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool">
@@ -513,37 +375,6 @@
         </arguments>
     </type>
 
-    <virtualType name="Magento\Elasticsearch\Setup\InstallConfig" type="Magento\Search\Setup\InstallConfig">
-        <arguments>
-            <argument name="searchConfigMapping" xsi:type="array">
-                <item name="elasticsearch-host" xsi:type="string">elasticsearch5_server_hostname</item>
-                <item name="elasticsearch-port" xsi:type="string">elasticsearch5_server_port</item>
-                <item name="elasticsearch-timeout" xsi:type="string">elasticsearch5_server_timeout</item>
-                <item name="elasticsearch-index-prefix" xsi:type="string">elasticsearch5_index_prefix</item>
-                <item name="elasticsearch-enable-auth" xsi:type="string">elasticsearch5_enable_auth</item>
-                <item name="elasticsearch-username" xsi:type="string">elasticsearch5_username</item>
-                <item name="elasticsearch-password" xsi:type="string">elasticsearch5_password</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\Search\Setup\CompositeInstallConfig">
-        <arguments>
-            <argument name="installConfigList" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Setup\InstallConfig</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Search\Model\SearchEngine\Validator">
-        <arguments>
-            <argument name="excludedEngineList" xsi:type="array">
-                <item name="elasticsearch" xsi:type="string">Elasticsearch 2</item>
-                <item name="elasticsearch6" xsi:type="string">Elasticsearch 6</item>
-            </argument>
-            <argument name="engineValidators" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Setup\Validator</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Attribute">
         <arguments>
             <argument name="dimensionProvider" xsi:type="object" shared="false">Magento\Store\Model\StoreDimensionProvider</argument>
@@ -565,6 +396,31 @@
             <argument name="reservedAttributes" xsi:type="array">
                 <item name="category_name" xsi:type="string">category_name</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort\Position">
+        <arguments>
+            <argument name="fieldNameResolver" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Position</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort\ExpressionBuilder">
+        <arguments>
+            <argument name="defaultExpressionBuilder" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort\DefaultExpression</argument>
+            <argument name="customExpressionBuilders" xsi:type="array">
+                <item name="entity_id" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort\EntityId</item>
+                <item name="relevance" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort\Relevance</item>
+                <item name="position" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort\Position</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort">
+        <arguments>
+            <argument name="sortExpressionBuilder" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort\ExpressionBuilder</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolver</argument>
         </arguments>
     </type>
 </config>

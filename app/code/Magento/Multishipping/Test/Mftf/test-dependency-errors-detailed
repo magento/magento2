@@ -1,0 +1,50 @@
+
+File "/var/www/html/app/code/Magento/Multishipping/Test/Mftf/Test/AdminInvoiceCheckingWithMultishipmentWithMultipleTaxTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliEnableCheckMoneyOrderPaymentMethodActionGroup from module(s): magento/module-offline-payments
+
+File "/var/www/html/app/code/Magento/Multishipping/Test/Mftf/Test/MultishipmentCheckoutWithDifferentProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 colorProductAttribute2 from module(s): magento/module-configurable-product
+	 colorProductAttribute3 from module(s): magento/module-configurable-product
+	 colorProductAttribute1 from module(s): magento/module-configurable-product
+	 FillDefaultQuantityForLinkedToGroupProductInGridActionGroup from module(s): magento/module-grouped-product, magento/module-inventory-grouped-product-admin-ui
+	 AdminCreateThreeConfigurationsForConfigurableProductActionGroup from module(s): magento/module-inventory-admin-ui
+
+File "/var/www/html/app/code/Magento/Multishipping/Test/Mftf/Test/StoreFrontCheckingWithMultishipmentTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliEnableCheckMoneyOrderPaymentMethodActionGroup from module(s): magento/module-offline-payments
+
+File "/var/www/html/app/code/Magento/Multishipping/Test/Mftf/Test/StoreFrontCheckingWithSingleShipmentTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliEnableCheckMoneyOrderPaymentMethodActionGroup from module(s): magento/module-offline-payments
+
+File "/var/www/html/app/code/Magento/Multishipping/Test/Mftf/Test/StoreFrontGuestCheckingWithMultishipmentTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliEnableCheckMoneyOrderPaymentMethodActionGroup from module(s): magento/module-offline-payments
+
+File "/var/www/html/app/code/Magento/Multishipping/Test/Mftf/Test/StoreFrontMinicartWithMultishipmentTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliEnableCheckMoneyOrderPaymentMethodActionGroup from module(s): magento/module-offline-payments
+
+File "/var/www/html/app/code/Magento/Multishipping/Test/Mftf/Test/StorefrontCreateOrderWithMultishippingAfterReturningToCartTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliEnableFreeShippingMethodActionGroup from module(s): magento/module-offline-shipping
+	 CliEnableFlatRateShippingMethodActionGroup from module(s): magento/module-offline-shipping
+	 CliEnableCheckMoneyOrderPaymentMethodActionGroup from module(s): magento/module-offline-payments
+	 CliDisableFreeShippingMethodActionGroup from module(s): magento/module-offline-shipping
+
+File "/var/www/html/app/code/Magento/Multishipping/Test/Mftf/Test/StorefrontOrderWithMultishippingTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliEnableFreeShippingMethodActionGroup from module(s): magento/module-offline-shipping
+	 CliEnableFlatRateShippingMethodActionGroup from module(s): magento/module-offline-shipping
+	 CliEnableCheckMoneyOrderPaymentMethodActionGroup from module(s): magento/module-offline-payments
+	 CliDisableFreeShippingMethodActionGroup from module(s): magento/module-offline-shipping

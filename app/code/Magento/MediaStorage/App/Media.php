@@ -228,6 +228,18 @@ class Media implements AppInterface
     }
 
     /**
+     * Create local vopy for the placeholder
+     *
+     * @param ?string $relativeFileName
+     * @return void
+     */
+    private function createPlaceholderLocalCopy(?string $relativeFileName): void
+    {
+        $synchronizer = $this->syncFactory->create(['directory' => $this->directoryMedia]);
+        $synchronizer->synchronize($relativeFileName);
+    }
+
+    /**
      * Check if media directory changed
      *
      * @return bool
@@ -248,6 +260,7 @@ class Media implements AppInterface
     private function setPlaceholderImage(): void
     {
         $placeholder = $this->placeholderFactory->create(['type' => 'image']);
+        $this->createPlaceholderLocalCopy($placeholder->getRelativePath());
         $this->response->setFilePath($placeholder->getPath());
     }
 

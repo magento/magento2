@@ -45,7 +45,7 @@ class LowStockItemsTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function getLowStockItemsDataProvider()
+    public static function getLowStockItemsDataProvider()
     {
         return [
             [

@@ -280,7 +280,7 @@ define([
             // tier prise selectors end
 
             // A price label selector
-            normalPriceLabelSelector: '.product-info-main .normal-price .price-label',
+            normalPriceLabelSelector: '.normal-price .price-label',
             qtyInfo: '#qty'
         },
 
@@ -385,7 +385,7 @@ define([
                 isInProductView = false;
 
             productId = this.element.parents('.product-item-details')
-                    .find('.price-box.price-final_price').attr('data-product-id');
+                .find('.price-box.price-final_price').attr('data-product-id');
 
             if (!productId) {
                 // Check individual product.
@@ -854,7 +854,7 @@ define([
          */
         _toggleCheckedAttributes: function ($this, $wrapper) {
             $wrapper.attr('aria-activedescendant', $this.attr('id'))
-                    .find('.' + this.options.classes.optionClass).attr('aria-checked', false);
+                .find('.' + this.options.classes.optionClass).attr('aria-checked', false);
             $this.attr('aria-checked', true);
         },
 
@@ -1039,18 +1039,18 @@ define([
                 $(this.options.tierPriceBlockSelector).hide();
             }
 
-            $(this.options.normalPriceLabelSelector).hide();
+            $product.find(this.options.normalPriceLabelSelector).hide();
 
-            _.each($('.' + this.options.classes.attributeOptionsWrapper), function (attribute) {
+            _.each(this.element.find('.' + this.options.classes.attributeOptionsWrapper), function (attribute) {
                 if ($(attribute).find('.' + this.options.classes.optionClass + '.selected').length === 0) {
                     if ($(attribute).find('.' + this.options.classes.selectClass).length > 0) {
                         _.each($(attribute).find('.' + this.options.classes.selectClass), function (dropdown) {
                             if ($(dropdown).val() === '0') {
-                                $(this.options.normalPriceLabelSelector).show();
+                                $product.find(this.options.normalPriceLabelSelector).show();
                             }
                         }.bind(this));
                     } else {
-                        $(this.options.normalPriceLabelSelector).show();
+                        $product.find(this.options.normalPriceLabelSelector).show();
                     }
                 }
             }.bind(this));
@@ -1309,7 +1309,10 @@ define([
                 }
 
                 imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
-                isInitial = _.isEqual(imagesToUpdate, initialImages);
+                isInitial = _.isEqual(
+                    imagesToUpdate.map(({thumb, img, full, type, videoUrl}) => ({thumb, img, full, type, videoUrl})),
+                    initialImages.map(({thumb, img, full, type, videoUrl}) => ({thumb, img, full, type, videoUrl}))
+                );
 
                 if (this.options.gallerySwitchStrategy === 'prepend' && !isInitial) {
                     imagesToUpdate = imagesToUpdate.concat(initialImages);

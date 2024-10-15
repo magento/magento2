@@ -18,6 +18,7 @@ use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Eav\Model\Entity\AttributeLoaderInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Locale\Format;
@@ -35,7 +36,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductTest extends TestCase
 {
-    const STUB_CATEGORY_ID = 5;
+    private const STUB_CATEGORY_ID = 5;
     /** @var SalesRuleProduct */
     protected $model;
 
@@ -96,7 +97,7 @@ class ProductTest extends TestCase
             ->getMockForAbstractClass();
         $this->attributeLoaderInterfaceMock = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributesByCode'])
+            ->onlyMethods(['getAttributesByCode'])
             ->getMock();
         $this->attributeLoaderInterfaceMock
             ->expects($this->any())
@@ -104,7 +105,7 @@ class ProductTest extends TestCase
             ->willReturn([]);
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->setMethods(['distinct', 'from', 'where'])
+            ->onlyMethods(['distinct', 'from', 'where'])
             ->getMock();
         $this->selectMock
             ->expects($this->any())
@@ -117,7 +118,7 @@ class ProductTest extends TestCase
             ->willReturnSelf();
         $this->adapterInterfaceMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['fetchCol', 'select'])
+            ->onlyMethods(['fetchCol', 'select'])
             ->getMockForAbstractClass();
         $this->adapterInterfaceMock
             ->expects($this->any())
@@ -125,7 +126,7 @@ class ProductTest extends TestCase
             ->willReturn($this->selectMock);
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['loadAllAttributes', 'getConnection', 'getTable'])
+            ->onlyMethods(['loadAllAttributes', 'getConnection', 'getTable'])
             ->getMock();
         $this->productMock
             ->expects($this->any())
@@ -176,7 +177,7 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    public function getValueElementChooserUrlDataProvider()
+    public static function getValueElementChooserUrlDataProvider()
     {
         return [
             'category_ids_without_js_object' => [
@@ -236,7 +237,8 @@ class ProductTest extends TestCase
         /* @var \Magento\Catalog\Model\Product|MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttribute', 'getId', 'setQuoteItemQty', 'setQuoteItemPrice'])
+            ->onlyMethods(['getId'])
+            ->addMethods(['getAttribute', 'setQuoteItemQty', 'setQuoteItemPrice'])
             ->getMock();
         $product
             ->method('setQuoteItemQty')
@@ -269,7 +271,7 @@ class ProductTest extends TestCase
     {
         $attr = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttribute'])
+            ->addMethods(['getAttribute'])
             ->getMockForAbstractClass();
 
         $attr->expects($this->any())
@@ -279,7 +281,8 @@ class ProductTest extends TestCase
         /* @var \Magento\Catalog\Model\Product|MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setQuoteItemPrice', 'getResource', 'hasData', 'getData'])
+            ->addMethods(['setQuoteItemPrice'])
+            ->onlyMethods(['getResource', 'hasData', 'getData'])
             ->getMock();
 
         $product->expects($this->any())
@@ -302,7 +305,7 @@ class ProductTest extends TestCase
         /* @var AbstractItem|MockObject $item */
         $item = $this->getMockBuilder(AbstractItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPrice', 'getProduct'])
+            ->onlyMethods(['getPrice', 'getProduct'])
             ->getMockForAbstractClass();
 
         $item->expects($this->any())
@@ -324,7 +327,7 @@ class ProductTest extends TestCase
      *
      * @return array
      */
-    public function localisationProvider(): array
+    public static function localisationProvider(): array
     {
         return [
             'number' => [true, 500.01],
@@ -333,5 +336,39 @@ class ProductTest extends TestCase
             'stringOperation' => [false, '1,500.03', '{}'],
             'smallPrice' => [false, '1,500.03', '>=', 1000],
         ];
+    }
+
+    public function testValidateWhenAttributeValueIsMissingInTheProduct(): void
+    {
+        $attributeCode = 'test_attr';
+        $attribute = new DataObject();
+        $attribute->setBackendType('varchar');
+        $attribute->setFrontendInput('text');
+
+        $newResource = $this->createPartialMock(Product::class, ['getAttribute']);
+        $newResource->expects($this->any())
+            ->method('getAttribute')
+            ->with($attributeCode)
+            ->willReturn($attribute);
+
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getId', 'load', 'getResource'])
+            ->getMock();
+        $product->method('getId')
+            ->willReturn(1);
+        $product->expects($this->never())
+            ->method('load')
+            ->willReturnSelf();
+        $product->expects($this->atLeastOnce())
+            ->method('getResource')
+            ->willReturn($newResource);
+
+        $item = $this->createMock(AbstractItem::class);
+        $item->expects($this->any())
+            ->method('getProduct')
+            ->willReturn($product);
+        $this->model->setAttribute($attributeCode);
+        $this->model->validate($item);
     }
 }

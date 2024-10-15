@@ -8,6 +8,7 @@ namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -203,6 +204,11 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     private $productEntityIdentifierField;
 
     /**
+     * @var SkuStorage
+     */
+    private SkuStorage $skuStorage;
+
+    /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -211,6 +217,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac
      * @param MetadataPool $metadataPool
+     * @param SkuStorage $skuStorage
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -220,13 +227,16 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig,
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac,
-        MetadataPool $metadataPool = null
+        MetadataPool $metadataPool = null,
+        SkuStorage $skuStorage = null
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
         $this->_productTypesConfig = $productTypesConfig;
         $this->_resourceHelper = $resourceHelper;
         $this->_productColFac = $_productColFac;
         $this->_connection = $this->_entityModel->getConnection();
+        $this->skuStorage = $skuStorage ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(SkuStorage::class);
     }
 
     /**
@@ -377,11 +387,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @param array $bunch - portion of products to process
      * @param array $newSku - imported variations list
-     * @param array $oldSku - present variations list
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _loadSkuSuperAttributeValues($bunch, $newSku, $oldSku)
+    protected function _loadSkuSuperAttributeValues($bunch, $newSku)
     {
         if ($this->_superAttributes) {
             $attrSetIdToName = $this->_entityModel->getAttrSetIdToName();
@@ -397,10 +406,11 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
                 foreach ($dataWithExtraVirtualRows as $data) {
                     if (!empty($data['_super_products_sku'])) {
-                        if (isset($newSku[$data['_super_products_sku']])) {
-                            $productIds[] = $newSku[$data['_super_products_sku']][$this->getProductEntityLinkField()];
-                        } elseif (isset($oldSku[$data['_super_products_sku']])) {
-                            $productIds[] = $oldSku[$data['_super_products_sku']][$this->getProductEntityLinkField()];
+                        $sku = $data['_super_products_sku'];
+                        if (isset($newSku[$sku])) {
+                            $productIds[] = $newSku[$sku][$this->getProductEntityLinkField()];
+                        } elseif ($this->skuStorage->has($sku)) {
+                            $productIds[] = $this->skuStorage->get($sku)[$this->getProductEntityLinkField()];
                         }
                     }
                 }
@@ -437,11 +447,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function _loadSkuSuperDataForBunch(array $bunch)
     {
         $newSku = $this->_entityModel->getNewSku();
-        $oldSku = $this->_entityModel->getOldSku();
         $productIds = [];
         foreach ($bunch as $rowData) {
             $sku = isset($rowData[ImportProduct::COL_SKU]) ? strtolower($rowData[ImportProduct::COL_SKU]) : '';
-            $productData = $newSku[$sku] ?? $oldSku[$sku];
+            $productData = $newSku[$sku] ?? $this->skuStorage->get($sku);
             $productIds[] = $productData[$this->getProductEntityLinkField()];
         }
 
@@ -547,9 +556,12 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function _parseVariations($rowData)
     {
         $additionalRows = [];
+
         if (empty($rowData['configurable_variations'])) {
             return $additionalRows;
-        } elseif (!empty($rowData['store_view_code'])) {
+        }
+
+        if (!empty($rowData['store_view_code'])) {
             throw new LocalizedException(
                 __(
                     'Product with assigned super attributes should not have specified "%1" value',
@@ -557,51 +569,15 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 )
             );
         }
-        $variations = explode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['configurable_variations']);
+
+        $variations = is_array($rowData['configurable_variations'])
+            ? $rowData['configurable_variations']
+            : explode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['configurable_variations']);
+
         foreach ($variations as $variation) {
-            $fieldAndValuePairsText = explode($this->_entityModel->getMultipleValueSeparator(), $variation);
-            $additionalRow = [];
+            $fieldAndValuePairs = $this->getFieldAndValuePairs($variation);
 
-            $fieldAndValuePairs = [];
-            foreach ($fieldAndValuePairsText as $nameAndValue) {
-                // If field value contains comma. For example: sku=C100-10,2cm,size=10,2cm
-                // then this results in $fieldAndValuePairsText = ["sku=C100-10", "2cm", "size=10", "2cm"]
-                // This code block makes sure that the array element that do not contain the equal sign "="
-                // will be appended to the preceding element value.
-                // As a result $fieldAndValuePairs = ["sku" => "C100-10,2cm", "size" => "10,2cm"]
-                if (strpos($nameAndValue, ImportProduct::PAIR_NAME_VALUE_SEPARATOR) === false
-                    && isset($fieldName)
-                    && isset($fieldAndValuePairs[$fieldName])
-                ) {
-                    $fieldAndValuePairs[$fieldName] .= $this->_entityModel->getMultipleValueSeparator() . $nameAndValue;
-                    continue;
-                }
-                $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue, 2);
-                if ($nameAndValue) {
-                    $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';
-                    // Ignoring field names' case.
-                    $fieldName  = isset($nameAndValue[0]) ? strtolower(trim($nameAndValue[0])) : '';
-                    if ($fieldName) {
-                        $fieldAndValuePairs[$fieldName] = $value;
-                    }
-                }
-            }
-
-            if (!empty($fieldAndValuePairs['sku'])) {
-                $position = 0;
-                $additionalRow['_super_products_sku'] = strtolower($fieldAndValuePairs['sku']);
-                unset($fieldAndValuePairs['sku']);
-                $additionalRow['display'] = $fieldAndValuePairs['display'] ?? 1;
-                unset($fieldAndValuePairs['display']);
-                foreach ($fieldAndValuePairs as $attrCode => $attrValue) {
-                    $additionalRow['_super_attribute_code'] = $attrCode;
-                    $additionalRow['_super_attribute_option'] = $attrValue;
-                    $additionalRow['_super_attribute_position'] = $position;
-                    $additionalRows[] = $additionalRow;
-                    $additionalRow = [];
-                    $position ++;
-                }
-            } else {
+            if (empty($fieldAndValuePairs['sku'])) {
                 throw new LocalizedException(
                     __(
                         sprintf(
@@ -611,9 +587,83 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     )
                 );
             }
+
+            $additionalRow = [
+                '_super_products_sku' => strtolower($fieldAndValuePairs['sku']),
+                'display' => $fieldAndValuePairs['display'] ?? 1,
+            ];
+            unset($fieldAndValuePairs['sku'], $fieldAndValuePairs['display']);
+
+            $position = 0;
+            foreach ($fieldAndValuePairs as $attrCode => $attrValue) {
+                $additionalRow['_super_attribute_code'] = $attrCode;
+                $additionalRow['_super_attribute_option'] = $attrValue;
+                $additionalRow['_super_attribute_position'] = $position;
+                $additionalRows[] = $additionalRow;
+                $additionalRow = [];
+                $position ++;
+            }
         }
 
         return $additionalRows;
+    }
+
+    /**
+     * Get field and value pairs.
+     *
+     * @param array|string $variation
+     * @return array
+     */
+    private function getFieldAndValuePairs(array|string $variation): array
+    {
+        if (is_array($variation)) {
+            return $variation;
+        }
+
+        $fieldAndValuePairsText = explode($this->_entityModel->getMultipleValueSeparator(), $variation);
+
+        return $this->processFieldAndValuePairs($fieldAndValuePairsText);
+    }
+
+    /**
+     * Process field and value pairs.
+     *
+     * @param array $fieldAndValuePairsText
+     * @return array
+     */
+    private function processFieldAndValuePairs(array $fieldAndValuePairsText): array
+    {
+        $fieldAndValuePairs = [];
+        $fieldName = null;
+
+        foreach ($fieldAndValuePairsText as $nameAndValue) {
+            // If field value contains comma. For example: sku=C100-10,2cm,size=10,2cm
+            // then this results in $fieldAndValuePairsText = ["sku=C100-10", "2cm", "size=10", "2cm"]
+            // This code block makes sure that the array element that do not contain the equal sign "="
+            // will be appended to the preceding element value.
+            // As a result $fieldAndValuePairs = ["sku" => "C100-10,2cm", "size" => "10,2cm"]
+            if (!str_contains($nameAndValue, ImportProduct::PAIR_NAME_VALUE_SEPARATOR)
+                && isset($fieldName)
+                && isset($fieldAndValuePairs[$fieldName])
+            ) {
+                $fieldAndValuePairs[$fieldName] .= $this->_entityModel->getMultipleValueSeparator() . $nameAndValue;
+                continue;
+            }
+
+            $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue, 2);
+
+            if ($nameAndValue) {
+                $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';
+                // Ignoring field names' case.
+                $fieldName = isset($nameAndValue[0]) ? strtolower(trim($nameAndValue[0])) : '';
+
+                if ($fieldName) {
+                    $fieldAndValuePairs[$fieldName] = $value;
+                }
+            }
+        }
+
+        return $fieldAndValuePairs;
     }
 
     /**
@@ -631,21 +681,27 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         if (!isset($rowData['configurable_variation_labels'])) {
             return $labels;
         }
-        $pairFieldAndValue = explode(
-            $this->_entityModel->getMultipleValueSeparator(),
-            $rowData['configurable_variation_labels']
-        );
 
-        foreach ($pairFieldAndValue as $nameAndValue) {
-            $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue);
-            if ($nameAndValue) {
-                $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';
-                $attrCode  = isset($nameAndValue[0]) ? trim($nameAndValue[0]) : '';
-                if ($attrCode) {
-                    $labels[$attrCode] = $value;
+        $variationLabels = $rowData['configurable_variation_labels'];
+        if (!is_array($variationLabels)) {
+            $pairFieldAndValue = explode($this->_entityModel->getMultipleValueSeparator(), $variationLabels);
+
+            foreach ($pairFieldAndValue as $nameAndValue) {
+                $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue, 2);
+                if ($nameAndValue) {
+                    $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';
+                    $attrCode  = isset($nameAndValue[0]) ? trim($nameAndValue[0]) : '';
+                    if ($attrCode) {
+                        $labels[$attrCode] = $value;
+                    }
                 }
             }
+        } else {
+            foreach ($variationLabels as $attrCode => $value) {
+                $labels[trim($attrCode)] = trim($value);
+            }
         }
+
         return $labels;
     }
 
@@ -780,14 +836,14 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function _collectAssocIds($data)
     {
         $newSku = $this->_entityModel->getNewSku();
-        $oldSku = $this->_entityModel->getOldSku();
         if (!empty($data['_super_products_sku'])) {
             if (isset($newSku[$data['_super_products_sku']])) {
                 $superProductRowId = $newSku[$data['_super_products_sku']][$this->getProductEntityLinkField()];
                 $superProductEntityId = $newSku[$data['_super_products_sku']][$this->getProductEntityIdentifierField()];
-            } elseif (isset($oldSku[$data['_super_products_sku']])) {
-                $superProductRowId = $oldSku[$data['_super_products_sku']][$this->getProductEntityLinkField()];
-                $superProductEntityId = $oldSku[$data['_super_products_sku']][$this->getProductEntityIdentifierField()];
+            } elseif ($this->skuStorage->has($data['_super_products_sku'])) {
+                $oldSkuData = $this->skuStorage->get($data['_super_products_sku']);
+                $superProductRowId = $oldSkuData[$this->getProductEntityLinkField()];
+                $superProductEntityId = $oldSkuData[$this->getProductEntityIdentifierField()];
             }
             if (isset($superProductRowId)) {
                 if (isset($data['display']) && $data['display'] == 0) {
@@ -839,7 +895,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     public function saveData()
     {
         $newSku = $this->_entityModel->getNewSku();
-        $oldSku = $this->_entityModel->getOldSku();
         $this->_productSuperData = [];
         $this->_productData = null;
 
@@ -860,7 +915,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
             $this->_simpleIdsToDelete = [];
 
-            $this->_loadSkuSuperAttributeValues($bunch, $newSku, $oldSku);
+            $this->_loadSkuSuperAttributeValues($bunch, $newSku);
 
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum)) {
@@ -871,7 +926,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if (ImportProduct::SCOPE_DEFAULT == $scope &&
                     !empty($rowData[ImportProduct::COL_SKU])) {
                     $sku = strtolower($rowData[ImportProduct::COL_SKU]);
-                    $this->_productData = $newSku[$sku] ?? $oldSku[$sku];
+                    $this->_productData = $newSku[$sku] ?? $this->skuStorage->get($sku);
 
                     if ($this->_type != $this->_productData['type_id']) {
                         $this->_productData = null;

@@ -118,7 +118,7 @@ class MatchQueryTest extends TestCase
     /**
      * @return array
      */
-    public function buildDataProvider(): array
+    public static function buildDataProvider(): array
     {
         return [
             'match query without minimum_should_match' => [
@@ -207,7 +207,7 @@ class MatchQueryTest extends TestCase
     /**
      * @return array
      */
-    public function buildDataProviderForMatchPhrasePrefix()
+    public static function buildDataProviderForMatchPhrasePrefix()
     {
         return [
         'match_phrase_prefix query with minimum_should_match' => [

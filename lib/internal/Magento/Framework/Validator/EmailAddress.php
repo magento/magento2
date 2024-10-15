@@ -55,17 +55,4 @@ class EmailAddress extends LaminasEmailAddress implements ValidatorInterface
     {
         $this->getHostnameValidator()->setOptions(['useTldCheck' => $shouldValidate]);
     }
-
-    /**
-     * Method to skipped validate internationalized local part.
-     *
-     * @param string $localPart
-     *
-     * @return false
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected function validateInternationalizedLocalPart($localPart)
-    {
-        return false;
-    }
 }

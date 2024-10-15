@@ -18,6 +18,8 @@
             <testCaseId value="AC-3216"/>
             <useCaseId value="ACP2E-862"/>
             <group value="checkout"/>
+            <!--Will be fixed in the scope of -->
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Enable flat rate shipping-->

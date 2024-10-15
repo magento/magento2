@@ -8,31 +8,41 @@ declare(strict_types=1);
 namespace Magento\EavGraphQl\Model\Resolver\Cache;
 
 use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
+use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute;
 
 /**
  * Cache identity provider for attributes list query results.
  */
 class AttributesListIdentity implements IdentityInterface
 {
-    public const CACHE_TAG = 'ATTRIBUTES_LIST';
-
     /**
      * @inheritDoc
      */
     public function getIdentities(array $resolvedData): array
     {
-        if (empty($resolvedData['items'])) {
+        if (empty($resolvedData['entity_type']) || $resolvedData['entity_type'] === "") {
             return [];
         }
 
-        if (!is_array($resolvedData['items'][0])) {
-            return [];
+        $identities = [
+            Config::ENTITIES_CACHE_ID . "_" . $resolvedData['entity_type'] . "_ENTITY"
+        ];
+
+        if (empty($resolvedData['items']) || !is_array($resolvedData['items'][0])) {
+            return $identities;
         }
 
-        return [sprintf(
-            "%s_%s",
-            self::CACHE_TAG,
-            $resolvedData['items'][0]['entity_type']
-        )];
+        foreach ($resolvedData['items'] as $item) {
+            if ($item['attribute'] instanceof AttributeInterface) {
+                $identities[] = sprintf(
+                    "%s_%s",
+                    Attribute::CACHE_TAG,
+                    $item['attribute']->getAttributeId()
+                );
+            }
+        }
+        return $identities;
     }
 }

@@ -51,7 +51,7 @@ class DomTest extends TestCase
     /**
      * @return array
      */
-    public function mergeDataProvider()
+    public static function mergeDataProvider()
     {
         // note differences of XML declaration in fixture files: sometimes encoding is specified, sometimes isn't
         return [
@@ -165,13 +165,16 @@ class DomTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             'valid' => ['<root><node id="id1"/><node id="id2"/></root>', []],
             'invalid' => [
                 '<root><node id="id1"/><unknown_node/></root>',
-                ["Element 'unknown_node': This element is not expected. Expected is ( node ).\nLine: 1\n"],
+                [
+                    "Element 'unknown_node': This element is not expected. Expected is ( node ).\nLine: 1\n" .
+                    "The xml was: \n0:<?xml version=\"1.0\"?>\n1:<root><node id=\"id1\"/><unknown_node/></root>\n2:\n"
+                ],
             ],
         ];
     }
@@ -181,7 +184,8 @@ class DomTest extends TestCase
         $xml = '<root><unknown_node/></root>';
         $errorFormat = 'Error: `%message%`';
         $expectedErrors = [
-            "Error: `Element 'unknown_node': This element is not expected. Expected is ( node ).`",
+            "Error: `Element 'unknown_node': This element is not expected. Expected is ( node ).`The xml was: \n" .
+            "0:<?xml version=\"1.0\"?>\n1:<root><unknown_node/></root>\n2:\n",
         ];
         $dom = new Dom($xml, $this->validationStateMock, [], null, null, $errorFormat);
         $actualResult = $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
