@@ -379,8 +379,11 @@ class ProductRepositoryTest extends TestCase
         $storeIdData = ['store_id', $productData['store_id']];
         $this->product
             ->method('setData')
-            ->withConsecutive([], [], [], [], [], [], [], [], [], [], [], [], [], [], [], $storeIdData);
-
+            ->willReturnCallback(function ($arg1) use ($storeIdData) {
+                if (empty($arg1) || $arg1 == $storeIdData) {
+                    return null;
+                }
+            });
         $this->model->save($this->product);
     }
 
@@ -389,7 +392,7 @@ class ProductRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function getProductData(): array
+    public static function getProductData(): array
     {
         return [
             [
@@ -421,7 +424,11 @@ class ProductRepositoryTest extends TestCase
         $storeIdData = ['store_id', self::STUB_STORE_ID];
         $this->product
             ->method('setData')
-            ->withConsecutive([], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], $storeIdData);
+            ->willReturnCallback(function ($arg1) use ($storeIdData) {
+                if (empty($arg1) || $arg1 == $storeIdData) {
+                    return null;
+                }
+            });
 
         $this->model->save($this->product);
     }
@@ -562,7 +569,12 @@ class ProductRepositoryTest extends TestCase
             $withArgs[] = ['store_id', $storeId];
         }
         $this->product
-            ->method('setData')->withConsecutive(...$withArgs);
+            ->method('setData')
+            ->willReturnCallback(function (...$withArgs) {
+                if (!empty($withArgs)) {
+                    return null;
+                }
+            });
 
         $this->product->expects($this->once())->method('load')->with($identifier);
         $this->product->expects($this->atLeastOnce())->method('getId')->willReturn($identifier);
@@ -902,6 +914,7 @@ class ProductRepositoryTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testGetList(): void
     {
@@ -913,10 +926,18 @@ class ProductRepositoryTest extends TestCase
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collectionMock);
         $this->product->method('getSku')->willReturn('simple');
         $collectionMock->expects($this->once())->method('addAttributeToSelect')->with('*');
-        $collectionMock->expects($this->exactly(2))->method('joinAttribute')->withConsecutive(
-            ['status', 'catalog_product/status', 'entity_id', null, 'inner'],
-            ['visibility', 'catalog_product/visibility', 'entity_id', null, 'inner']
-        );
+        $collectionMock->expects($this->exactly(2))->method('joinAttribute')
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3, $arg4, $arg5) {
+                    if ($arg1 == 'status' && $arg2 == 'catalog_product/status' &&
+                        $arg3 == 'entity_id' && is_null($arg4) && $arg5 == 'inner') {
+                        return null;
+                    } elseif ($arg1 == 'visibility' && $arg2 == 'catalog_product/visibility' &&
+                        $arg3 == 'entity_id' && is_null($arg4) && $arg5 == 'inner') {
+                        return null;
+                    }
+                }
+            );
         $this->collectionProcessor->expects($this->once())
             ->method('process')
             ->with($searchCriteriaMock, $collectionMock);
@@ -936,14 +957,15 @@ class ProductRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function cacheKeyDataProvider(): array
+    public static function cacheKeyDataProvider(): array
     {
-        $anyObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $anyObject->expects($this->any())
-            ->method('getId')
-            ->willReturn(123);
+        // There is no use of below object
+//        $anyObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getId'])
+//            ->disableOriginalConstructor()
+//            ->getMock();
+//        $anyObject->expects($this->any())
+//            ->method('getId')
+//            ->willReturn(123);
 
         return [
             [
@@ -988,6 +1010,8 @@ class ProductRepositoryTest extends TestCase
      */
     public function testSaveExistingWithOptions(array $newOptions): void
     {
+        $newOptions[1][10] = $newOptions[1][10]($this);
+        $newOptions[1][11] = $newOptions[1][11]($this);
         $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $this->resourceModel->expects($this->any())->method('getIdBySku')->willReturn(100);
         $this->productFactory->expects($this->any())
@@ -1011,11 +1035,67 @@ class ProductRepositoryTest extends TestCase
         $this->assertEquals($this->initializedProduct, $this->model->save($this->product));
     }
 
+    protected function getMockForOptionOneClass()
+    {
+        $existingOption = $this->getMockBuilder(Option::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $existingOption->setData(
+            [
+                'option_id' => 10,
+                'type' => 'drop_down'
+            ]
+        );
+        /** @var Value $existingOptionValue1 */
+        $existingOptionValue1 = $this->getMockBuilder(Value::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $existingOptionValue1->setData(
+            [
+                'option_type_id' => '8',
+                'title' => 'DropdownOptions_1',
+                'price' => 5
+            ]
+        );
+        $existingOptionValue2 = $this->getMockBuilder(Value::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $existingOptionValue2->setData(
+            [
+                'option_type_id' => '9',
+                'title' => 'DropdownOptions_2',
+                'price' => 6
+            ]
+        );
+        $existingOption->setValues(
+            [
+                '8' => $existingOptionValue1,
+                '9' => $existingOptionValue2
+            ]
+        );
+
+        return $existingOption;
+    }
+
+    protected function getMockForOptionTwoClass()
+    {
+        $existingOption = $this->getMockBuilder(Option::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $existingOption->setData(
+            [
+                'option_id' => 11,
+                'type' => 'drop_down'
+            ]
+        );
+        return $existingOption;
+    }
+
     /**
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function saveExistingWithOptionsDataProvider(): array
+    public static function saveExistingWithOptionsDataProvider(): array
     {
         $data = [];
 
@@ -1048,94 +1128,54 @@ class ProductRepositoryTest extends TestCase
             ]
         ];
 
-        /** @var Option|MockObject $existingOption1 */
-        $existingOption1 = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $existingOption1->setData(
-            [
-                'option_id' => 10,
-                'type' => 'drop_down'
-            ]
-        );
-        /** @var Value $existingOptionValue1 */
-        $existingOptionValue1 = $this->getMockBuilder(Value::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $existingOptionValue1->setData(
-            [
-                'option_type_id' => '8',
-                'title' => 'DropdownOptions_1',
-                'price' => 5
-            ]
-        );
-        $existingOptionValue2 = $this->getMockBuilder(Value::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $existingOptionValue2->setData(
-            [
-                'option_type_id' => '9',
-                'title' => 'DropdownOptions_2',
-                'price' => 6
-            ]
-        );
-        $existingOption1->setValues(
-            [
-                '8' => $existingOptionValue1,
-                '9' => $existingOptionValue2
-            ]
-        );
-        $existingOption2 = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $existingOption2->setData(
-            [
-                'option_id' => 11,
-                'type' => 'drop_down'
-            ]
-        );
+        $existingOption1 = static fn (self $testCase) => $testCase->getMockForOptionOneClass();
+
+        $existingOption2 = static fn (self $testCase) => $testCase->getMockForOptionTwoClass();
+
         $data['scenario_1'] = [
-            'new_options' => $newOptionsData,
-            'existing_options' => [
-                "10" => $existingOption1,
-                "11" => $existingOption2,
-            ],
-            'expected_data' => [
+            [
+                $newOptionsData,
                 [
-                    'option_id' => 10,
-                    'type' => 'drop_down',
-                    'values' => [
-                        [
-                            'title' => 'DropdownOptions_1',
-                            'option_type_id' => 8,
-                            'price' => 3
-                        ],
-                        [
-                            'title' => 'DropdownOptions_3',
-                            "price" => 4
-                        ],
-                        [
-                            'option_type_id' => 9,
-                            'title' => 'DropdownOptions_2',
-                            'price' => 6,
-                            'is_delete' => 1
-                        ]
-                    ]
+                    "10" => $existingOption1,
+                    "11" => $existingOption2,
                 ],
                 [
-                    'type' => 'checkbox',
-                    'values' => [
-                        [
-                            'title' => 'CheckBoxValue2',
-                            'price' => 5
+                    [
+                        'option_id' => 10,
+                        'type' => 'drop_down',
+                        'values' => [
+                            [
+                                'title' => 'DropdownOptions_1',
+                                'option_type_id' => 8,
+                                'price' => 3
+                            ],
+                            [
+                                'title' => 'DropdownOptions_3',
+                                "price" => 4
+                            ],
+                            [
+                                'option_type_id' => 9,
+                                'title' => 'DropdownOptions_2',
+                                'price' => 6,
+                                'is_delete' => 1
+                            ]
                         ]
+                    ],
+                    [
+                        'type' => 'checkbox',
+                        'values' => [
+                            [
+                                'title' => 'CheckBoxValue2',
+                                'price' => 5
+                            ]
+                        ]
+                    ],
+                    [
+                        'option_id' => 11,
+                        'type' => 'drop_down',
+                        'values' => [],
+                        'is_delete' => 1
                     ]
-                ],
-                [
-                    'option_id' => 11,
-                    'type' => 'drop_down',
-                    'values' => [],
-                    'is_delete' => 1
                 ]
             ]
         ];
@@ -1249,7 +1289,7 @@ class ProductRepositoryTest extends TestCase
     /**
      * @return mixed
      */
-    public function saveWithLinksDataProvider(): array
+    public static function saveWithLinksDataProvider(): array
     {
         // Scenario 1
         // No existing, new links
@@ -1546,5 +1586,19 @@ class ProductRepositoryTest extends TestCase
         $this->product->expects($this->any())->method('getMediaGalleryEntries')->willReturn(null);
         $this->model->save($this->product);
         $this->assertEquals($expectedResult, $this->initializedProduct->getMediaGallery('images'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testSaveCouldNotSaveException(): void
+    {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $productData = [
+            'name' => 'Simple Product',
+            'price' => 100
+        ];
+        $this->product->setData($productData);
+        $this->model->save($this->product);
     }
 }

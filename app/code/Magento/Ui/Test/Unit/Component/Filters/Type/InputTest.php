@@ -174,7 +174,7 @@ class InputTest extends TestCase
     /**
      * @return array
      */
-    public function getPrepareDataProvider(): array
+    public static function getPrepareDataProvider(): array
     {
         return [
             [

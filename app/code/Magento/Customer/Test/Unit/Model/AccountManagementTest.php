@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model;
 
+use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -29,9 +30,12 @@ use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
 use Magento\Directory\Model\AllowedCountries;
+use Magento\Email\Model\ResourceModel\Template\CollectionFactory as TemplateCollectionFactory;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Area;
+use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Encryption\EncryptorInterface;
@@ -279,6 +283,7 @@ class AccountManagementTest extends TestCase
      */
     protected function setUp(): void
     {
+
         $this->customerFactory = $this->createPartialMock(CustomerFactory::class, ['create']);
         $this->manager = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->store = $this->getMockBuilder(Store::class)
@@ -342,6 +347,53 @@ class AccountManagementTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $objects = [
+            [
+                AccountManagementInterface::class,
+                $this->createMock(AccountManagementInterface::class)
+            ],
+            [
+                CustomerInterfaceFactory::class,
+                $this->createMock(CustomerInterfaceFactory::class)
+            ],
+            [
+                DataObjectHelper::class,
+                $this->createMock(DataObjectHelper::class)
+            ],
+            [
+                StoreManagerInterface::class,
+                $this->createMock(StoreManagerInterface::class)
+            ],
+            [
+                CustomerRepositoryInterface::class,
+                $this->createMock(CustomerRepositoryInterface::class)
+            ],
+            [
+                ExtensibleDataObjectConverter::class,
+                $this->createMock(ExtensibleDataObjectConverter::class)
+            ],
+            [
+                CustomerFactory::class,
+                $this->createMock(CustomerFactory::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ],
+            [
+                EncryptorInterface::class,
+                $this->createMock(EncryptorInterface::class)
+            ],
+            [
+                MutableScopeConfigInterface::class,
+                $this->createMock(MutableScopeConfigInterface::class)
+            ],
+            [
+                TemplateCollectionFactory::class,
+                $this->createMock(TemplateCollectionFactory::class)
+            ],
+        ];
+        $this->objectManagerHelper->prepareObjectManager($objects);
         $this->accountManagement = $this->objectManagerHelper->getObject(
             AccountManagement::class,
             [
@@ -648,9 +700,12 @@ class AccountManagementTest extends TestCase
         $customer->expects($this->atLeastOnce())
             ->method('getWebsiteId')
             ->willReturn($websiteId);
+        $callCount = 0;
         $customer
             ->method('getStoreId')
-            ->willReturnOnConsecutiveCalls(null, null, 1);
+            ->willReturnCallback(function () use (&$callCount) {
+                return $callCount++ < 2 ? null : 1;
+            });
         $customer->expects($this->once())
             ->method('setStoreId')
             ->with($defaultStoreId);
@@ -998,6 +1053,9 @@ class AccountManagementTest extends TestCase
         $customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $customer->expects($this->atLeastOnce())
+            ->method('getEmail')
+            ->willReturn('email@email.com');
         $this->accountManagement->createAccount($customer, $password);
     }
 
@@ -1021,6 +1079,9 @@ class AccountManagementTest extends TestCase
         $customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $customer->expects($this->atLeastOnce())
+            ->method('getEmail')
+            ->willReturn('email@email.com');
         $this->accountManagement->createAccount($customer, $password);
     }
 

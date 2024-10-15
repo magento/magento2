@@ -42,7 +42,7 @@ class CategoriesUrlRewriteGeneratorTest extends TestCase
     protected function setUp(): void
     {
         $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->urlRewrite = $this->getMockBuilder(UrlRewrite::class)

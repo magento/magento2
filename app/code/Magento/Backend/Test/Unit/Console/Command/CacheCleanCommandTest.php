@@ -10,7 +10,7 @@ namespace Magento\Backend\Test\Unit\Console\Command;
 use Magento\Backend\Console\Command\CacheCleanCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CacheCleanCommandTest extends AbstractCacheManageCommandTest
+class CacheCleanCommandTest extends AbstractCacheManageCommandTestCase
 {
     protected function setUp(): void
     {
@@ -51,7 +51,7 @@ class CacheCleanCommandTest extends AbstractCacheManageCommandTest
      * @param array $types
      * @return string
      */
-    public function getExpectedExecutionOutput(array $types)
+    public static function getExpectedExecutionOutput(array $types)
     {
         return 'Cleaned cache types:' . PHP_EOL . implode(PHP_EOL, $types) . PHP_EOL;
     }

@@ -208,7 +208,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function hasPluginsDataProvider()
+    public static function hasPluginsDataProvider()
     {
         return [
             // item container has plugins only in the backend scope

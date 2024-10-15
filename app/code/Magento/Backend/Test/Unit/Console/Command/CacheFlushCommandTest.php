@@ -10,7 +10,7 @@ namespace Magento\Backend\Test\Unit\Console\Command;
 use Magento\Backend\Console\Command\CacheFlushCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CacheFlushCommandTest extends AbstractCacheManageCommandTest
+class CacheFlushCommandTest extends AbstractCacheManageCommandTestCase
 {
     protected function setUp(): void
     {
@@ -48,7 +48,7 @@ class CacheFlushCommandTest extends AbstractCacheManageCommandTest
     /**
      * {@inheritdoc}
      */
-    public function getExpectedExecutionOutput(array $types)
+    public static function getExpectedExecutionOutput(array $types)
     {
         return 'Flushed cache types:' . PHP_EOL . implode(PHP_EOL, $types) . PHP_EOL;
     }
