@@ -16,6 +16,19 @@ use Magento\Framework\Validation\ValidationException;
 class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
 {
     /**
+     * @var string
+     */
+    private static string $xssFiltrationPattern =
+        '/((javascript(\\\\x3a|:|%3A))|(data(\\\\x3a|:|%3A))|(vbscript:)|(script)|(alert\())|'
+        . '((\\\\x6A\\\\x61\\\\x76\\\\x61\\\\x73\\\\x63\\\\x72\\\\x69\\\\x70\\\\x74(\\\\x3a|:|%3A))|'
+        . '(\\\\x64\\\\x61\\\\x74\\\\x61(\\\\x3a|:|%3A)))/i';
+
+    /**
+     * @var string
+     */
+    private static string $contentFiltrationPattern = "/(<body)/i";
+
+    /**
      * @var string[]
      */
     private $allowedTags;
@@ -84,6 +97,7 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
         $this->validateConfigured($xpath);
         $this->callAttributeValidators($xpath);
         $this->callTagValidators($xpath);
+        $this->validateAttributeValue($xpath);
     }
 
     /**
@@ -96,18 +110,19 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
     private function validateConfigured(\DOMXPath $xpath): void
     {
         //Validating tags
+        $this->allowedTags = array_merge($this->allowedTags, ["body", "html"]);
         $found = $xpath->query(
             '//*['
-                . implode(
-                    ' and ',
-                    array_map(
-                        function (string $tag): string {
-                            return "name() != '$tag'";
-                        },
-                        array_merge($this->allowedTags, ['body', 'html'])
-                    )
+            . implode(
+                ' and ',
+                array_map(
+                    function (string $tag): string {
+                        return "name() != '$tag'";
+                    },
+                    $this->allowedTags
                 )
-                .']'
+            )
+            .']'
         );
         if (count($found)) {
             throw new ValidationException(
@@ -234,12 +249,33 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
                 $loaded = false;
             }
         );
-        $loaded = $dom->loadHTML("<html><body>$content</body></html>");
+        $matches = [];
+        preg_match_all(self::$contentFiltrationPattern, $content, $matches);
+        $loaded = !(count($matches[0]) > 1) && $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED);
         restore_error_handler();
         if (!$loaded) {
             throw new ValidationException(__('Invalid HTML content provided'));
         }
 
         return $dom;
+    }
+
+    /**
+     * Validate values of html attributes
+     *
+     * @param \DOMXPath $xpath
+     * @return void
+     * @throws ValidationException
+     */
+    private function validateAttributeValue(\DOMXPath $xpath): void
+    {
+        $nodes = $xpath->query('//@*');
+        foreach ($nodes as $node) {
+            if (preg_match(self::$xssFiltrationPattern, $node->parentNode->getAttribute($node->nodeName))) {
+                throw new ValidationException(
+                    __('Invalid value provided for attribute %1', $node->nodeName)
+                );
+            }
+        }
     }
 }
