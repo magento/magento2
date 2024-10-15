@@ -187,7 +187,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function prepareLayoutDataProvider()
+    public static function prepareLayoutDataProvider()
     {
         /** @var $urlRewrite \Magento\UrlRewrite\Model\UrlRewrite */
         $urlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

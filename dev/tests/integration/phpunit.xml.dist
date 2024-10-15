@@ -6,15 +6,13 @@
  */
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.4/phpunit.xsd"
          colors="true"
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
-         stderr="true"
-         testSuiteLoaderClass="Magento\TestFramework\SuiteLoader"
-         testSuiteLoaderFile="framework/Magento/TestFramework/SuiteLoader.php">
-    <coverage>
+         stderr="true">
+    <source>
         <include>
             <directory suffix=".php">../../../app/code/Magento</directory>
             <directory suffix=".php">../../../lib/internal/Magento</directory>
@@ -25,12 +23,9 @@
             <directory>../../../lib/internal/*/*/*/Test</directory>
             <directory>../../../setup/src/*/*/Test</directory>
         </exclude>
-    </coverage>
+    </source>
     <!-- Test suites definition -->
     <testsuites>
-        <testsuite name="Magento Integration Tests">
-            <file>testsuite/Magento/IntegrationTest.php</file>
-        </testsuite>
         <!-- Memory tests run first to prevent influence of other tests on accuracy of memory measurements -->
         <testsuite name="Memory Usage Tests">
             <file>testsuite/Magento/MemoryUsageTest.php</file>
@@ -39,7 +34,6 @@
             <directory>testsuite</directory>
             <directory>../../../app/code/*/*/Test/Integration</directory>
             <exclude>testsuite/Magento/MemoryUsageTest.php</exclude>
-            <exclude>testsuite/Magento/IntegrationTest.php</exclude>
         </testsuite>
     </testsuites>
     <!-- Code coverage filters -->
@@ -86,19 +80,11 @@
         <!--<const name="TESTS_PARALLEL_RUN" value="1"/>-->
         <const name="USE_OVERRIDE_CONFIG" value="enabled"/>
     </php>
-    <!-- Test listeners -->
-    <listeners>
-        <!-- Run after AllureAdapter to allow it to initialize properly -->
-        <listener class="Magento\TestFramework\Event\PhpUnit"/>
-        <listener class="Magento\TestFramework\ErrorLog\Listener"/>
-    </listeners>
     <extensions>
-        <extension class="Qameta\Allure\PHPUnit\AllureExtension">
-            <!-- Optional arguments block; omit it if you want to use default values -->
-            <arguments>
-                <!-- Path to config file (default is config/allure.config.php) -->
-                <string>allure/allure.config.php</string>
-            </arguments>
-        </extension>
+        <bootstrap class="Qameta\Allure\PHPUnit\AllureExtension">
+            <!-- Path to config file (default is config/allure.config.php) -->
+            <parameter name="config" value="allure/allure.config.php" />
+        </bootstrap>
+        <bootstrap class="Magento\TestFramework\Event\Subscribers"/>
     </extensions>
 </phpunit>

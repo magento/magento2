@@ -28,7 +28,7 @@ class CartTest extends TestCase
     /**
      * @var DataObject
      */
-    protected $_validItem;
+    protected static $_validItem;
 
     /**
      * @var SalesModelInterface|MockObject
@@ -40,10 +40,10 @@ class CartTest extends TestCase
      * @param array $data
      * @param string $dataName
      */
-    public function __construct($name = null, array $data = [], $dataName = '')
+    public function __construct($name = null, array $data = [], string $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
-        $this->_validItem = new DataObject(
+        self::$_validItem = new DataObject(
             [
                 'parent_item' => null,
                 'price' => 2.0,
@@ -78,7 +78,7 @@ class CartTest extends TestCase
      * @param array $items
      * @dataProvider invalidGetAllItemsDataProvider
      */
-    public function testInvalidGetAllItems($items)
+    public function testInvalidGetAllItems(array $items)
     {
         $taxContainer = new DataObject(
             ['base_discount_tax_compensation_amount' => 0.2, 'base_shipping_discount_tax_compensation_amnt' => 0.1]
@@ -99,8 +99,17 @@ class CartTest extends TestCase
     /**
      * @return array
      */
-    public function invalidGetAllItemsDataProvider()
+    public static function invalidGetAllItemsDataProvider()
     {
+        self::$_validItem = new DataObject(
+            [
+                'parent_item' => null,
+                'price' => 2.0,
+                'qty' => 3,
+                'name' => 'valid item',
+                'original_item' => new DataObject(['base_row_total' => 6.0]),
+            ]
+        );
         return [
             [[]],
             [
@@ -117,7 +126,7 @@ class CartTest extends TestCase
             ],
             [
                 [
-                    $this->_validItem,
+                    self::$_validItem,
                     new DataObject(
                         [
                             'price' => 2.0,
@@ -130,7 +139,7 @@ class CartTest extends TestCase
             ],
             [
                 [
-                    $this->_validItem,
+                    self::$_validItem,
                     new DataObject(
                         [
                             'price' => sqrt(2),
@@ -172,7 +181,7 @@ class CartTest extends TestCase
     /**
      * @return array
      */
-    public function invalidTotalsGetAllItemsDataProvider()
+    public static function invalidTotalsGetAllItemsDataProvider()
     {
         return [
             [
@@ -211,9 +220,9 @@ class CartTest extends TestCase
             [
                 new DataObject(
                     [
-                        'name' => $this->_validItem->getName(),
-                        'qty' => $this->_validItem->getQty(),
-                        'amount' => $this->_validItem->getPrice(),
+                        'name' => self::$_validItem->getName(),
+                        'qty' => self::$_validItem->getQty(),
+                        'amount' => self::$_validItem->getPrice(),
                     ]
                 ),
             ],
@@ -249,10 +258,10 @@ class CartTest extends TestCase
     /**
      * @return array
      */
-    public function invalidGetAmountsDataProvider()
+    public static function invalidGetAmountsDataProvider()
     {
         $data = [];
-        $invalidTotalsData = $this->invalidTotalsGetAllItemsDataProvider();
+        $invalidTotalsData = self::invalidTotalsGetAllItemsDataProvider();
         foreach ($invalidTotalsData as $dataItem) {
             $data[] = [$dataItem[0], $dataItem[1], true];
             $data[] = [$dataItem[0], $dataItem[1], false];
@@ -290,7 +299,7 @@ class CartTest extends TestCase
         )->method(
             'getAllItems'
         )->willReturn(
-            [$this->_validItem]
+            [self::$_validItem]
         );
         $this->_salesModel->expects(
             $this->once()
@@ -355,7 +364,7 @@ class CartTest extends TestCase
         )->method(
             'getAllItems'
         )->willReturn(
-            [$this->_validItem]
+            [self::$_validItem]
         );
         $this->_salesModel->expects(
             $this->once()

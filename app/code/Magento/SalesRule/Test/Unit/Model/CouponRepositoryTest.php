@@ -191,7 +191,7 @@ class CouponRepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function saveExceptionsDataProvider()
+    public static function saveExceptionsDataProvider()
     {
         $msg = 'kiwis';
         $phrase = new Phrase($msg);

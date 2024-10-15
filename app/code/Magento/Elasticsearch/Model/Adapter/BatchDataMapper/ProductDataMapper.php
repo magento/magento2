@@ -17,6 +17,8 @@ use Magento\Eav\Api\Data\AttributeOptionInterface;
 
 /**
  * Map product index data to search engine metadata
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class ProductDataMapper implements BatchDataMapperInterface
 {
@@ -313,7 +315,7 @@ class ProductDataMapper implements BatchDataMapperInterface
             && in_array($attribute->getAttributeCode(), $this->sortableAttributesValuesToImplode)
             && count($attributeValues) > 1
         ) {
-            $attributeValues = [$productId => implode(' ', $attributeValues)];
+            $attributeValues = [$productId => implode("\n", $attributeValues)];
         }
 
         if (in_array($attribute->getAttributeCode(), $this->sortableCaseSensitiveAttributes)) {

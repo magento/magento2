@@ -157,7 +157,8 @@ class AddProductsToCart
                 $cartItemPosition
             );
         } else {
-            $product = $this->productReader->getProductBySku($sku);
+            $productBySku = $this->productReader->getProductBySku($sku);
+            $product = isset($productBySku) ? clone $productBySku : null;
             if (!$product || !$product->isSaleable() || !$product->isAvailable()) {
                 $errors[] = $this->error->create(
                     __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),

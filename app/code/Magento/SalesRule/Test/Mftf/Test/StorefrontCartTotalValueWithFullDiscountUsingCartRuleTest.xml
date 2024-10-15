@@ -70,10 +70,8 @@
             </actionGroup>
             <!-- Delete the tax rate that were created -->
             <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
-                <argument name="name" value="{{SimpleTaxNYRate.state}}-{{SimpleTaxNYRate.rate}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
-            </actionGroup>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
+            <comment userInput="Preserve BiC" stepKey="deleteNYRate"/>
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
                 <argument name="ruleName" value="{{SalesRuleWithFullDiscount.name}}"/>
             </actionGroup>

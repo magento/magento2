@@ -13,6 +13,9 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Data as CatalogConfig;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogImportExport\Model\Import\ProductTestBase;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
 use Magento\ImportExport\Helper\Data as ImportExportConfig;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -20,6 +23,7 @@ use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
@@ -90,7 +94,7 @@ class ProductOptionsTest extends ProductTestBase
         $importModel->importData();
 
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $productRepository = Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
         $product = $productRepository->get($sku);
@@ -187,7 +191,7 @@ class ProductOptionsTest extends ProductTestBase
         array $expected
     ) {
         $expected = $this->getFullExpectedOptions($expected);
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
         /** @var StoreManagerInterface $storeManager */
         $storeManager = $objectManager->get(StoreManagerInterface::class);
         $pathToFile = __DIR__ . '/../_files/' . $importFile;
@@ -195,9 +199,9 @@ class ProductOptionsTest extends ProductTestBase
         $errors = $importModel->validateData();
         $this->assertTrue($errors->getErrorsCount() == 0, 'Import File Validation Failed');
         $importModel->importData();
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $objectManager->get(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
+            ProductRepositoryInterface::class
         );
         $actual = [];
         foreach ($expected as $sku => $storesData) {
@@ -290,7 +294,7 @@ class ProductOptionsTest extends ProductTestBase
     /**
      * @return array
      */
-    public function getBehaviorDataProvider(): array
+    public static function getBehaviorDataProvider(): array
     {
         return [
             'Append behavior with existing product' => [
@@ -315,7 +319,7 @@ class ProductOptionsTest extends ProductTestBase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function saveCustomOptionsWithMultipleStoreViewsDataProvider(): array
+    public static function saveCustomOptionsWithMultipleStoreViewsDataProvider(): array
     {
         return [
             [
@@ -982,9 +986,9 @@ class ProductOptionsTest extends ProductTestBase
         $this->assertTrue($errors->getErrorsCount() == 0);
         $importModel->importData();
 
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = Bootstrap::getObjectManager()->create(
+            ProductRepositoryInterface::class
         );
         $product1 = $productRepository->get($sku1);
 
@@ -1015,13 +1019,73 @@ class ProductOptionsTest extends ProductTestBase
     /**
      * @return array
      */
-    public function getCustomOptionDataProvider(): array
+    public static function getCustomOptionDataProvider(): array
     {
         return [
             [
                 'importFile' => 'multi_store_products_with_custom_options.csv',
                 'sku1' => 'simple',
                 'sku2' => 'simple2',
+            ],
+        ];
+    }
+
+    /**
+     * Tests import product custom options with multiple uploads.
+     *
+     * @dataProvider getProductCustomOptionDataProvider
+     * @param string $importFile
+     * @param string $sku
+     * @param int $uploadCount
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @throws StateException
+     */
+    public function testImportProductCustomOptionsOnMultipleUploads(
+        string $importFile,
+        string $sku,
+        int $uploadCount
+    ): void {
+        $pathToFile = __DIR__ . '/../_files/' . $importFile;
+
+        for ($count = 0; $count < $uploadCount; $count++) {
+            $productImportModel = $this->createImportModel($pathToFile);
+            $errors = $productImportModel->validateData();
+            $this->assertTrue($errors->getErrorsCount() == 0);
+            $productImportModel->importData();
+        }
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = Bootstrap::getObjectManager()->create(
+            ProductRepositoryInterface::class
+        );
+        $product = $productRepository->get($sku);
+
+        $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $product);
+        $options = $product->getOptionInstance()->getProductOptions($product);
+
+        $expectedData = $this->getExpectedOptionsData($pathToFile, 'default');
+        $expectedOptions = $expectedData['options'];
+
+        $this->assertCount(count($expectedOptions), $options);
+
+        // Cleanup imported products
+        try {
+            $this->productRepository->delete($product);
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public static function getProductCustomOptionDataProvider(): array
+    {
+        return [
+            [
+                'importFile' => 'product_with_custom_options_and_multiple_uploads.csv',
+                'sku' => 'p1',
+                'uploadCount' => 2,
             ],
         ];
     }

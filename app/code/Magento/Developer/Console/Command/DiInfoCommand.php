@@ -9,22 +9,22 @@ namespace Magento\Developer\Console\Command;
 use Magento\Developer\Model\Di\Information;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Helper\Table;
 
 class DiInfoCommand extends Command
 {
     /**
      * Command name
      */
-    const COMMAND_NAME = 'dev:di:info';
+    public const COMMAND_NAME = 'dev:di:info';
 
     /**
      * input name
      */
-    const CLASS_NAME = 'class';
+    public const CLASS_NAME = 'class';
 
     /**
      * @var Information
@@ -42,7 +42,8 @@ class DiInfoCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * Initialization of the command
+     *
      * @throws InvalidArgumentException
      */
     protected function configure()
@@ -93,7 +94,7 @@ class DiInfoCommand extends Command
             $paramsTableArray[] = $parameterRow;
         }
         $paramsTable->setRows($paramsTableArray);
-        $output->writeln($paramsTable->render());
+        $paramsTable->render();
     }
 
     /**
@@ -142,12 +143,14 @@ class DiInfoCommand extends Command
             ->setHeaders(['Plugin', 'Method', 'Type'])
             ->setRows($parameters);
 
-        $output->writeln($table->render());
+        $table->render();
     }
 
     /**
-     * {@inheritdoc}
-     * @throws \InvalidArgumentException
+     * Displays dependency injection configuration information for a class.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

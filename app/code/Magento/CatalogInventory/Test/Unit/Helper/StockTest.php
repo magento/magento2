@@ -73,7 +73,7 @@ class StockTest extends TestCase
         $this->statusFactoryMock =
             $this->getMockBuilder(StatusFactory::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->getMock();
         $this->stockConfiguration = $this->getMockBuilder(
             StockConfigurationInterface::class
@@ -110,7 +110,8 @@ class StockTest extends TestCase
 
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setIsSalable', 'getId'])
+            ->addMethods(['setIsSalable'])
+            ->onlyMethods(['getId'])
             ->getMock();
         $productMock->expects($this->once())
             ->method('setIsSalable')
@@ -126,7 +127,8 @@ class StockTest extends TestCase
 
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setIsSalable', 'getId'])
+            ->addMethods(['setIsSalable'])
+            ->onlyMethods(['getId'])
             ->getMock();
         $productMock->expects($this->once())
             ->method('setIsSalable')
@@ -169,6 +171,10 @@ class StockTest extends TestCase
      */
     public function testAddInStockFilterToCollection($configMock)
     {
+        if ($configMock!=null) {
+            $configMock = $configMock($this);
+        }
+
         $collectionMock = $this->getMockBuilder(
             Collection::class
         )->disableOriginalConstructor()
@@ -181,14 +187,20 @@ class StockTest extends TestCase
         $this->assertNull($this->stock->addInStockFilterToCollection($collectionMock));
     }
 
-    /**
-     * @return array
-     */
-    public function filterProvider()
+    public function getMockForConfigClass()
     {
         $configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
+        return $configMock;
+    }
+
+    /**
+     * @return array
+     */
+    public static function filterProvider()
+    {
+        $configMock = static fn (self $testCase) => $testCase->getMockForConfigClass();
         return [
             [$configMock],
             [null],
@@ -202,7 +214,7 @@ class StockTest extends TestCase
             ->getMock();
         $stockStatusMock = $this->getMockBuilder(Status::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addStockDataToCollection'])
+            ->onlyMethods(['addStockDataToCollection'])
             ->getMock();
         $stockStatusMock->expects($this->once())
             ->method('addStockDataToCollection')

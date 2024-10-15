@@ -66,7 +66,7 @@ class AwsS3Test extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getAbsolutePathDataProvider(): array
+    public static function getAbsolutePathDataProvider(): array
     {
         return [
             [
@@ -182,7 +182,7 @@ class AwsS3Test extends TestCase
     /**
      * @return array
      */
-    public function getRelativePathDataProvider(): array
+    public static function getRelativePathDataProvider(): array
     {
         return [
             [
@@ -243,7 +243,7 @@ class AwsS3Test extends TestCase
     /**
      * @return array
      */
-    public function isDirectoryDataProvider(): array
+    public static function isDirectoryDataProvider(): array
     {
         return [
             'empty metadata' => [
@@ -322,7 +322,7 @@ class AwsS3Test extends TestCase
     /**
      * @return array
      */
-    public function isFileDataProvider(): array
+    public static function isFileDataProvider(): array
     {
         return [
             [
@@ -390,7 +390,7 @@ class AwsS3Test extends TestCase
     /**
      * @return array
      */
-    public function getRealPathSafetyDataProvider(): array
+    public static function getRealPathSafetyDataProvider(): array
     {
         return [
             [
@@ -439,8 +439,8 @@ class AwsS3Test extends TestCase
         $this->metadataProviderMock->expects(self::any())->method('getMetadata')
             ->willReturnMap([
                 ['path', ['type' => AwsS3::TYPE_DIR]],
-                ['path/1', ['type' => AwsS3::TYPE_FILE]],
-                ['path/2', ['type' => AwsS3::TYPE_FILE]],
+                ['path/1', ['type' => AwsS3::TYPE_DIR]],
+                ['path/2', ['type' => AwsS3::TYPE_DIR]],
             ]);
         $this->adapterMock->expects(self::atLeastOnce())->method('listContents')
             ->willReturn(new \ArrayIterator($subPaths));
@@ -558,7 +558,7 @@ class AwsS3Test extends TestCase
      *
      * @return array[]
      */
-    public function fileOpenModesDataProvider(): array
+    public static function fileOpenModesDataProvider(): array
     {
         return [
             [

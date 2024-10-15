@@ -69,24 +69,29 @@ class CacheTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
         $this->cacheState = $this->objectManager->get(CacheState::class);
         $this->origCacheEnabled = $this->cacheState->isEnabled(Type::TYPE_IDENTIFIER);
+
         if (!$this->origCacheEnabled) {
             $this->cacheState->setEnabled(Type::TYPE_IDENTIFIER, true);
             $this->cacheState->persist();
         }
+
         $this->graphQlResolverCache = $this->objectManager->get(Type::class);
         $this->graphQlResolverCache->clean();
+
+        $this->preconfigureMocks();
+        $this->configurePlugin();
     }
 
     /**
      * @inheritdoc
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->cacheState->setEnabled(Type::TYPE_IDENTIFIER, $this->origCacheEnabled);
         $this->cacheState->persist();
@@ -97,33 +102,36 @@ class CacheTest extends TestCase
     /**
      * @magentoAppArea graphql
      */
-    public function testCachingSkippedOnKeyCalculationFailure()
+    public function testCachingSkippedOnKeyCalculationFailure(): void
     {
-        $this->preconfigureMocks();
-        $this->configurePlugin();
         $this->keyFactorMock->expects($this->any())
             ->method('getFactorValue')
             ->willThrowException(new \Exception("Test key factor exception"));
+
         $this->graphqlResolverCacheMock->expects($this->never())
             ->method('load');
+
         $this->graphqlResolverCacheMock->expects($this->never())
             ->method('save');
+
         $this->graphQlRequest->send($this->getTestQuery());
     }
 
     /**
      * @magentoAppArea graphql
      */
-    public function testCachingNotSkippedWhenKeysOk()
+    public function testCachingNotSkippedWhenKeysOk(): void
     {
-        $this->preconfigureMocks();
-        $this->configurePlugin();
-        $this->loggerMock->expects($this->never())->method('warning');
+        $this->loggerMock->expects($this->never())
+            ->method('warning');
+
         $this->graphqlResolverCacheMock->expects($this->once())
             ->method('load')
             ->willReturn(false);
+
         $this->graphqlResolverCacheMock->expects($this->once())
             ->method('save');
+
         $this->graphQlRequest->send($this->getTestQuery());
     }
 
@@ -132,25 +140,13 @@ class CacheTest extends TestCase
      *
      * @return void
      */
-    private function preconfigureMocks()
+    private function preconfigureMocks(): void
     {
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['warning'])
-            ->setMockClassName('CacheLoggerMockForTest')
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->graphqlResolverCacheMock = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['load', 'save'])
-            ->setMockClassName('GraphqlResolverCacheMockForTest')
-            ->getMock();
+        $this->graphqlResolverCacheMock = $this->createMock(Type::class);
 
-        $this->keyFactorMock = $this->getMockBuilder(GenericFactorProviderInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getFactorValue', 'getFactorName'])
-            ->setMockClassName('TestFailingKeyFactor')
-            ->getMock();
+        $this->keyFactorMock = $this->createMock(GenericFactorProviderInterface::class);
 
         $this->objectManager->addSharedInstance($this->keyFactorMock, 'TestFailingKeyFactor');
 
@@ -180,12 +176,7 @@ class CacheTest extends TestCase
             ]
         );
 
-        $identityProviderMock = $this->getMockBuilder(IdentityInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getIdentities'])
-            ->setMockClassName('TestIdentityProvider')
-            ->getMock();
-
+        $identityProviderMock = $this->createMock(IdentityInterface::class);
         $identityProviderMock->expects($this->any())
             ->method('getIdentities')
             ->willReturn(['test_identity']);
@@ -205,7 +196,7 @@ class CacheTest extends TestCase
         );
     }
 
-    private function getTestQuery()
+    private function getTestQuery(): string
     {
         return <<<QUERY
 {
@@ -224,12 +215,13 @@ QUERY;
      *
      * @return void
      */
-    private function configurePlugin()
+    private function configurePlugin(): void
     {
         // need to reset plugins list to inject new plugin with mocks as it is cached at runtime
         /** @var PluginList $pluginList */
         $pluginList = $this->objectManager->get(PluginList::class);
         $pluginList->reset();
+
         $this->objectManager->removeSharedInstance(CachePlugin::class);
         $this->objectManager->addSharedInstance(
             $this->objectManager->create(CachePlugin::class, [

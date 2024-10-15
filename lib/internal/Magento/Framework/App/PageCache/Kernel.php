@@ -7,6 +7,7 @@ namespace Magento\Framework\App\PageCache;
 
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\CookieDisablerInterface;
 
 /**
  * Builtin cache processor
@@ -68,6 +69,9 @@ class Kernel
      */
     private $identifierForSave;
 
+    // phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+    private readonly CookieDisablerInterface $cookieDisabler;
+
     /**
      * @param Cache $cache
      * @param \Magento\Framework\App\PageCache\IdentifierInterface $identifier
@@ -79,6 +83,7 @@ class Kernel
      * @param AppState|null $state
      * @param \Magento\PageCache\Model\Cache\Type|null $fullPageCache
      * @param  \Magento\Framework\App\PageCache\IdentifierInterface|null $identifierForSave
+     * @param CookieDisablerInterface|null $cookieDisabler
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -91,7 +96,8 @@ class Kernel
         \Magento\Framework\Serialize\SerializerInterface $serializer = null,
         AppState $state = null,
         \Magento\PageCache\Model\Cache\Type $fullPageCache = null,
-        \Magento\Framework\App\PageCache\IdentifierInterface $identifierForSave = null
+        \Magento\Framework\App\PageCache\IdentifierInterface $identifierForSave = null,
+        ?CookieDisablerInterface $cookieDisabler = null,
     ) {
         $this->cache = $cache;
         $this->identifier = $identifier;
@@ -113,6 +119,7 @@ class Kernel
         $this->identifierForSave = $identifierForSave ?? ObjectManager::getInstance()->get(
             \Magento\Framework\App\PageCache\IdentifierInterface::class
         );
+        $this->cookieDisabler = $cookieDisabler ?? ObjectManager::getInstance()->get(CookieDisablerInterface::class);
     }
 
     /**
@@ -163,9 +170,7 @@ class Kernel
                 if ($this->state->getMode() != AppState::MODE_DEVELOPER) {
                     $response->clearHeader('X-Magento-Tags');
                 }
-                if (!headers_sent()) {
-                    header_remove('Set-Cookie');
-                }
+                $this->cookieDisabler->setCookiesDisabled(true);
 
                 $this->fullPageCache->save(
                     $this->serializer->serialize($this->getPreparedData($response)),

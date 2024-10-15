@@ -49,11 +49,15 @@ class NodeMergingConfigTest extends TestCase
         $xpath = '/root/two[@attr="value"]';
         $this->nodePathMatcher
             ->method('match')
-            ->withConsecutive(
-                ['/root/one', $xpath],
-                ['/root/two', $xpath]
-            )
-            ->willReturnOnConsecutiveCalls(false, true);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($xpath) {
+                    if ($arg1 == '/root/one' && $arg2 == $xpath) {
+                        return false;
+                    } elseif ($arg1 == '/root/two' && $arg2 == $xpath) {
+                        return true;
+                    }
+                }
+            );
         $this->assertEquals('id', $this->object->getIdAttribute($xpath));
     }
 
@@ -65,12 +69,17 @@ class NodeMergingConfigTest extends TestCase
         $xpath = '/root/four[@attr="value"]';
         $this->nodePathMatcher
             ->method('match')
-            ->withConsecutive(
-                ['/root/one', $xpath],
-                ['/root/two', $xpath],
-                ['/root/three', $xpath]
-            )
-            ->willReturnOnConsecutiveCalls(false, false, false);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($xpath) {
+                    if ($arg1 == '/root/one' && $arg2 == $xpath) {
+                        return false;
+                    } elseif ($arg1 == '/root/two' && $arg2 == $xpath) {
+                        return false;
+                    } elseif ($arg1 == '/root/three' && $arg2 == $xpath) {
+                        return false;
+                    }
+                }
+            );
         $this->assertNull($this->object->getIdAttribute($xpath));
     }
 }
