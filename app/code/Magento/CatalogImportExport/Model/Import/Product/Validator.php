@@ -21,6 +21,11 @@ use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
 class Validator extends AbstractValidator implements RowValidatorInterface
 {
     /**
+     * Filter chain const
+     */
+    private const FILTER_CHAIN = "php://filter";
+    
+    /**
      * @var RowValidatorInterface[]|AbstractValidator[]
      */
     protected $validators = [];
@@ -91,6 +96,10 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     protected function textValidation($attrCode, $type)
     {
         $val = $this->string->cleanString($this->_rowData[$attrCode]);
+        if (stripos($val, self::FILTER_CHAIN) !== false) {
+            $this->_addMessages([RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE]);
+            return false;
+        }
         if ($type == 'text') {
             $valid = $this->string->strlen($val) < Product::DB_MAX_TEXT_LENGTH;
         } elseif ($attrCode == Product::COL_SKU) {
