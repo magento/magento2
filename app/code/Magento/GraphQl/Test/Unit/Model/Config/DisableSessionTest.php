@@ -53,7 +53,7 @@ class DisableSessionTest extends TestCase
      * Data provider for session disabled config test.
      * @return array[]
      */
-    public function disableSessionDataProvider()
+    public static function disableSessionDataProvider()
     {
         return [
             ['configValue' => '1', true],

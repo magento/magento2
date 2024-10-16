@@ -132,12 +132,12 @@ class LoadBlockTest extends AbstractBackendController
     {
         return [
             'as_json' => [
-                'as_json' => true,
-                'as_js_varname' => false,
+                'asJson' => true,
+                'asJsVarname' => false,
             ],
             'as_plain' => [
-                'as_json' => false,
-                'as_js_varname' => true,
+                'asJson' => false,
+                'asJsVarname' => true,
             ],
         ];
     }

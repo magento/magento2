@@ -92,25 +92,25 @@ class DesignTest extends TestCase
 
         return [
             'schedule_design_applied' => [
-                'design_settings' => [
+                'designSettings' => [
                     'custom_layout' => '2columns-left',
                     'custom_design' => '2',
                     'custom_design_from' => $fromApplied,
                     'custom_design_to' => $to,
                 ],
-                'expected_settings' => [
+                'expectedSetting' => [
                     'page_layout' => '2columns-left',
                     'custom_design' => '2',
                 ]
             ],
             'schedule_design_not_applied' => [
-                'design_settings' => [
+                'designSettings' => [
                     'custom_layout' => '2columns-left',
                     'custom_design' => '2',
                     'custom_design_from' => $fromNotApplied,
                     'custom_design_to' => $to,
                 ],
-                'expected_settings' => [
+                'expectedSetting' => [
                     'page_layout' => '3columns',
                     'custom_design' => null,
                 ]

@@ -130,7 +130,7 @@ class ShipmentRepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function getDataProvider()
+    public static function getDataProvider()
     {
         return [
             [null, null],

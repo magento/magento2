@@ -268,7 +268,7 @@ class QuantityValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForValidateQty()
+    public static function dataProviderForValidateQty()
     {
         $sku = 'sku';
 

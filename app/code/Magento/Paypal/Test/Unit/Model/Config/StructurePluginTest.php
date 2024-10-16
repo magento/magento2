@@ -110,7 +110,7 @@ class StructurePluginTest extends TestCase
     /**
      * @return array
      */
-    public function aroundGetElementByPathPartsNonPaymentDataProvider()
+    public static function aroundGetElementByPathPartsNonPaymentDataProvider()
     {
         return [
             [['non-payment', 'group1', 'group2', 'field'], true],
@@ -167,7 +167,7 @@ class StructurePluginTest extends TestCase
     /**
      * @return array
      */
-    public function aroundGetElementByPathPartsDataProvider()
+    public static function aroundGetElementByPathPartsDataProvider()
     {
         return [
             [
