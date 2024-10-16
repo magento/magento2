@@ -27,6 +27,8 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     protected $allowedCssUnits = ['px', 'pc', 'pt', 'ex', 'em', 'mm', 'cm', 'in', '%'];
 
     /**
+     * Agreement constructor
+     *
      * @return void
      * @codeCoverageIgnore
      */
@@ -36,6 +38,8 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
+     * Validate agreement data
+     *
      * @param \Magento\Framework\DataObject $agreementData
      * @return array|bool
      */
@@ -205,7 +209,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface|null
      */
@@ -215,7 +219,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface $extensionAttributes
      * @return $this
