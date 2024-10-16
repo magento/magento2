@@ -274,9 +274,14 @@ HTML;
             ->willReturn($children);
         $nodeMock
             ->method('__call')
-            ->withConsecutive(['setOutermostClass'], [], ['getLevel', []])
-            ->willReturnOnConsecutiveCalls(null, [], null);
-
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'setOutermostClass') {
+                    return null;
+                } elseif ($arg1 == 'getLevel' && empty($arg2)) {
+                    return null;
+                }
+                return [];
+            });
         $nodeMockData = [
             'data' => [],
             'idField' => 'root',

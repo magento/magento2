@@ -45,11 +45,11 @@ class CategoryNameTest extends TestCase
     {
         $this->storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
         $this->coreRegistry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['registry'])
+            ->onlyMethods(['registry'])
             ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
@@ -75,14 +75,14 @@ class CategoryNameTest extends TestCase
     {
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode'])
+            ->onlyMethods(['getAttributeCode'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
         $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRootCategoryId'])
+            ->addMethods(['getRootCategoryId'])
             ->getMockForAbstractClass();
         $store->expects($this->any())
             ->method('getRootCategoryId')
@@ -94,7 +94,7 @@ class CategoryNameTest extends TestCase
         if ($fromRegistry) {
             $category = $this->getMockBuilder(CategoryInterface::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['getId'])
+                ->onlyMethods(['getId'])
                 ->getMockForAbstractClass();
             $category->expects($this->any())
                 ->method('getId')
@@ -113,7 +113,7 @@ class CategoryNameTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldNameProvider()
+    public static function getFieldNameProvider()
     {
         return [
             ['category_name', [], true, 'name_category_1'],

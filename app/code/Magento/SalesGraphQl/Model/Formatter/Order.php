@@ -18,25 +18,13 @@ use Magento\SalesGraphQl\Model\Order\OrderPayments;
 class Order
 {
     /**
-     * @var OrderAddress
-     */
-    private $orderAddress;
-
-    /**
-     * @var OrderPayments
-     */
-    private $orderPayments;
-
-    /**
      * @param OrderAddress $orderAddress
      * @param OrderPayments $orderPayments
      */
     public function __construct(
-        OrderAddress $orderAddress,
-        OrderPayments $orderPayments
+        private readonly OrderAddress $orderAddress,
+        private readonly OrderPayments $orderPayments
     ) {
-        $this->orderAddress = $orderAddress;
-        $this->orderPayments = $orderPayments;
     }
 
     /**
@@ -57,6 +45,7 @@ class Order
             'order_date' => $orderModel->getCreatedAt(),
             'order_number' => $orderModel->getIncrementId(),
             'status' => $orderModel->getStatusLabel(),
+            'email' => $orderModel->getCustomerEmail(),
             'shipping_method' => $orderModel->getShippingDescription(),
             'shipping_address' => $this->orderAddress->getOrderShippingAddress($orderModel),
             'billing_address' => $this->orderAddress->getOrderBillingAddress($orderModel),

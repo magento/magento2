@@ -23,6 +23,10 @@ class SqlVersionProvider
 
     public const MYSQL_5_7_VERSION = '5.7.';
 
+    /**
+     * @deprecated MARIA_DB_10_VERSION const
+     * @see isMysqlGte8029(), isMariaDbEngine()
+     */
     public const MARIA_DB_10_VERSION = '10.';
 
     public const MARIA_DB_10_4_VERSION = '10.4.';
@@ -34,6 +38,12 @@ class SqlVersionProvider
     public const MARIA_DB_10_6_11_VERSION = '10.6.11';
 
     public const MARIA_DB_10_4_27_VERSION = '10.4.27';
+
+    public const MYSQL_8_4_VERSION = '8.4.';
+
+    public const MARIA_DB_11_4_VERSION = '11.4.';
+
+    public const MARIA_DB = "mariadb";
 
     /**#@-*/
 
@@ -135,8 +145,7 @@ class SqlVersionProvider
      */
     public function isMysqlGte8029(): bool
     {
-        $sqlVersion = $this->getSqlVersion();
-        $isMariaDB = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_VERSION);
+        $isMariaDB = $this->isMariaDbEngine();
         $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
         if (!$isMariaDB && version_compare($sqlExactVersion, '8.0.29', '>=')) {
             return true;
@@ -145,36 +154,45 @@ class SqlVersionProvider
     }
 
     /**
-     * Check if MariaDB version is greater than equal to 10.6.11
+     * Get MariaDB current version
      *
-     * @return bool
+     * @return string
      * @throws ConnectionException
      */
-    public function isMariaDBGte10611(): bool
+    public function getMariaDbSuffixKey(): string
     {
         $sqlVersion = $this->getSqlVersion();
+        $defaultSuffixKey = SqlVersionProvider::MARIA_DB_10_6_11_VERSION;
+        $isMariaDB104 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_4_VERSION);
         $isMariaDB106 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_6_VERSION);
+        $isMariaDB114 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_11_4_VERSION);
         $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
-        if ($isMariaDB106 && version_compare($sqlExactVersion, '10.6.11', '>=')) {
-            return true;
+        if (version_compare($sqlExactVersion, '10.4.27', '>=')) {
+            if ($isMariaDB104) {
+                return SqlVersionProvider::MARIA_DB_10_4_27_VERSION;
+            } elseif ($isMariaDB106) {
+                return SqlVersionProvider::MARIA_DB_10_6_11_VERSION;
+            } elseif ($isMariaDB114) {
+                return SqlVersionProvider::MARIA_DB_10_6_11_VERSION;
+            }
         }
-        return false;
+        return $defaultSuffixKey;
     }
 
     /**
-     * Check if MariaDB version is greater than equal to 10.4.27
+     * Checks if MariaDB used as SQL engine
      *
      * @return bool
      * @throws ConnectionException
      */
-    public function isMariaDBGte10427(): bool
+    public function isMariaDbEngine(): bool
     {
-        $sqlVersion = $this->getSqlVersion();
-        $isMariaDB104 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_4_VERSION);
+        // check current version else send exception
+        $this->getSqlVersion();
+
+        // check current db is Maria DB
         $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
-        if ($isMariaDB104 && version_compare($sqlExactVersion, '10.4.27', '>=')) {
-            return true;
-        }
-        return false;
+        $isMariaDB = str_contains(strtolower($sqlExactVersion), SqlVersionProvider::MARIA_DB);
+        return $isMariaDB ? true : false;
     }
 }

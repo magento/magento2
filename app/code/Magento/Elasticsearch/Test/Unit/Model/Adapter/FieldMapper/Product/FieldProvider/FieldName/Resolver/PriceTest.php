@@ -44,11 +44,11 @@ class PriceTest extends TestCase
     {
         $this->customerSession = $this->getMockBuilder(CustomerSession::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerGroupId'])
+            ->onlyMethods(['getCustomerGroupId'])
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManagerHelper($this);
@@ -73,7 +73,7 @@ class PriceTest extends TestCase
     {
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode'])
+            ->onlyMethods(['getAttributeCode'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('getAttributeCode')
@@ -83,7 +83,7 @@ class PriceTest extends TestCase
             ->willReturn(1);
         $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsiteId'])
+            ->onlyMethods(['getWebsiteId'])
             ->getMockForAbstractClass();
         $store->expects($this->any())
             ->method('getWebsiteId')
@@ -101,7 +101,7 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldNameProvider()
+    public static function getFieldNameProvider()
     {
         return [
             ['price', [], 'price_1_2'],

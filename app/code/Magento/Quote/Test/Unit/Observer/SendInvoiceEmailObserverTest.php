@@ -82,11 +82,11 @@ class SendInvoiceEmailObserverTest extends TestCase
         $this->invoiceSenderMock = $this->createMock(InvoiceSender::class);
         $this->invoiceIdentityMock = $this->getMockBuilder(InvoiceIdentity::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isEnabled'])
+            ->onlyMethods(['isEnabled'])
             ->getMock();
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getOrder'])
+            ->addMethods(['getQuote', 'getOrder'])
             ->getMock();
         $this->observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
         $this->observerMock->expects($this->any())->method('getEvent')->willReturn($eventMock);

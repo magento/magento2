@@ -46,7 +46,7 @@ class PaymentMethodListTest extends TestCase
     protected function setUp(): void
     {
         $this->methodFactoryMock = $this->getMockBuilder(PaymentMethodInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->helperMock = $this->getMockBuilder(Data::class)
@@ -108,7 +108,14 @@ class PaymentMethodListTest extends TestCase
      */
     public function testGetList($storeId, $paymentMethodConfig, $methodInstancesMap, $expected)
     {
-        $this->setUpGetList($paymentMethodConfig, $methodInstancesMap);
+        $methodInstancesMapFinal = array();
+        $i = 0;
+        foreach ($methodInstancesMap as $methodInstances) {
+            $methodInstancesMapFinal[$i][0] = $methodInstances[0];
+            $methodInstancesMapFinal[$i][1] = $methodInstances[1]($this);
+            $i++;
+        }
+        $this->setUpGetList($paymentMethodConfig, $methodInstancesMapFinal);
 
         $codes = array_map(
             function ($method) {
@@ -125,15 +132,15 @@ class PaymentMethodListTest extends TestCase
      *
      * @return array
      */
-    public function getListDataProvider()
+    public static function getListDataProvider()
     {
         return [
             [
                 1,
                 ['method_code_1' => [], 'method_code_2' => []],
                 [
-                    ['method_code_1', $this->mockPaymentMethodInstance(1, 10, 'method_code_1', 'title', true)],
-                    ['method_code_2', $this->mockPaymentMethodInstance(1, 5, 'method_code_2', 'title', true)]
+                    ['method_code_1', static fn (self $testCase) => $testCase->mockPaymentMethodInstance(1, 10, 'method_code_1', 'title', true)],
+                    ['method_code_2', static fn (self $testCase) => $testCase->mockPaymentMethodInstance(1, 5, 'method_code_2', 'title', true)]
                 ],
                 ['method_code_2', 'method_code_1']
             ]
@@ -153,7 +160,14 @@ class PaymentMethodListTest extends TestCase
      */
     public function testGetActiveList($storeId, $paymentMethodConfig, $methodInstancesMap, $expected)
     {
-        $this->setUpGetList($paymentMethodConfig, $methodInstancesMap);
+        $methodInstancesMapFinal = array();
+        $i = 0;
+        foreach ($methodInstancesMap as $methodInstances) {
+            $methodInstancesMapFinal[$i][0] = $methodInstances[0];
+            $methodInstancesMapFinal[$i][1] = $methodInstances[1]($this);
+            $i++;
+        }
+        $this->setUpGetList($paymentMethodConfig, $methodInstancesMapFinal);
 
         $codes = array_map(
             function ($method) {
@@ -170,15 +184,15 @@ class PaymentMethodListTest extends TestCase
      *
      * @return array
      */
-    public function getActiveListDataProvider()
+    public static function getActiveListDataProvider()
     {
         return [
             [
                 1,
                 ['method_code_1' => [], 'method_code_2' => []],
                 [
-                    ['method_code_1', $this->mockPaymentMethodInstance(1, 10, 'method_code_1', 'title', false)],
-                    ['method_code_2', $this->mockPaymentMethodInstance(1, 5, 'method_code_2', 'title', true)]
+                    ['method_code_1', static fn (self $testCase) => $testCase->mockPaymentMethodInstance(1, 10, 'method_code_1', 'title', false)],
+                    ['method_code_2', static fn (self $testCase) => $testCase->mockPaymentMethodInstance(1, 5, 'method_code_2', 'title', true)]
                 ],
                 ['method_code_2']
             ]
@@ -198,7 +212,7 @@ class PaymentMethodListTest extends TestCase
     private function mockPaymentMethodInstance($storeId, $sortOrder, $code, $title, $isActive)
     {
         $paymentMethodInstance = $this->getMockBuilder(AbstractMethod::class)
-            ->setMethods(['getCode', 'getTitle', 'isActive', 'getConfigData'])
+            ->onlyMethods(['getCode', 'getTitle', 'isActive', 'getConfigData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $paymentMethodInstance->expects($this->any())

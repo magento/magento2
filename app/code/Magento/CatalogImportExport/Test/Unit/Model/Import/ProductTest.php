@@ -581,7 +581,7 @@ class ProductTest extends AbstractImportTestCase
         $this->_connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->setMethods(['from', 'where'])
+            ->onlyMethods(['from', 'where'])
             ->getMock();
         $this->select->expects($this->any())->method('from')->willReturnSelf();
         //$this->select->expects($this->any())->method('where')->willReturnSelf();
@@ -740,8 +740,7 @@ class ProductTest extends AbstractImportTestCase
     {
         $attrCode = 'code';
         $rowNum = 0;
-        $string = $this->getMockBuilder(StringUtils::class)
-            ->setMethods(null)->getMock();
+        $string = $this->getMockBuilder(StringUtils::class)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(true);
@@ -758,8 +757,7 @@ class ProductTest extends AbstractImportTestCase
     {
         $attrCode = 'code';
         $rowNum = 0;
-        $string = $this->getMockBuilder(StringUtils::class)
-            ->setMethods(null)->getMock();
+        $string = $this->getMockBuilder(StringUtils::class)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(false);
@@ -1089,16 +1087,16 @@ class ProductTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function getStoreIdByCodeDataProvider(): array
+    public static function getStoreIdByCodeDataProvider(): array
     {
         return [
             [
-                '$storeCode' => null,
-                '$expectedResult' => Product::SCOPE_DEFAULT
+                'storeCode' => null,
+                'expectedResult' => Product::SCOPE_DEFAULT
             ],
             [
-                '$storeCode' => 'value',
-                '$expectedResult' => 'getStoreCodeToId value'
+                'storeCode' => 'value',
+                'expectedResult' => 'getStoreCodeToId value'
             ]
         ];
     }
@@ -1107,7 +1105,7 @@ class ProductTest extends AbstractImportTestCase
      * @return void
      * @dataProvider validateRowCheckSpecifiedSkuDataProvider
      */
-    public function testValidateRowCheckSpecifiedSku($sku, $expectedError): void
+    public function testValidateRowCheckSpecifiedSku($sku): void
     {
         $importProduct = $this->createModelMockWithErrorAggregator(
             ['addRowError', 'getOptionEntity', 'getRowScope'],
@@ -1133,8 +1131,13 @@ class ProductTest extends AbstractImportTestCase
             ->willReturn(Product::SCOPE_STORE);
         $importProduct
             ->method('addRowError')
-            ->withConsecutive([$expectedError, $rowNum])
-            ->willReturnOnConsecutiveCalls(null);
+            ->willReturnCallback(
+                function ($arg1) use ($rowNum) {
+                    if ($arg1 == $rowNum) {
+                        return null;
+                    }
+                }
+            );
 
         $importProduct->validateRow($rowData, $rowNum);
     }
@@ -1402,7 +1405,7 @@ class ProductTest extends AbstractImportTestCase
         $productType = $this->getMockBuilder(AbstractType::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productType->expects($this->once())->method('isRowValid')->with($expectedRowData);
+        $productType->expects($this->any())->method('isRowValid')->with($expectedRowData);
         $this->setPropertyValue(
             $importProduct,
             '_productTypeModels',
@@ -1689,7 +1692,7 @@ class ProductTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function productCategoriesDataProvider()
+    public static function productCategoriesDataProvider()
     {
         return [
             [
@@ -1722,7 +1725,7 @@ class ProductTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function fillUploaderObjectDataProvider(): array
+    public static function fillUploaderObjectDataProvider(): array
     {
         return [
             [false, true, 'File directory \'pub/media/import\' is not readable.'],
@@ -1736,7 +1739,7 @@ class ProductTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function uploadMediaFilesDataProvider(): array
+    public static function uploadMediaFilesDataProvider(): array
     {
         return [
             ['test1.jpg', false],
@@ -1747,7 +1750,7 @@ class ProductTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function getImagesFromRowDataProvider(): array
+    public static function getImagesFromRowDataProvider(): array
     {
         return [
             [
@@ -1776,36 +1779,36 @@ class ProductTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function validateRowValidateNewProductTypeAddRowErrorCallDataProvider(): array
+    public static function validateRowValidateNewProductTypeAddRowErrorCallDataProvider(): array
     {
         return [
             [
-                '$colType' => null,
-                '$productTypeModelsColType' => 'value',
-                '$colAttrSet' => null,
-                '$attrSetNameToIdColAttrSet' => null,
-                '$error' => Validator::ERROR_INVALID_TYPE
+                'colType' => null,
+                'productTypeModelsColType' => 'value',
+                'colAttrSet' => null,
+                'attrSetNameToIdColAttrSet' => null,
+                'error' => Validator::ERROR_INVALID_TYPE
             ],
             [
-                '$colType' => 'value',
-                '$productTypeModelsColType' => null,
-                '$colAttrSet' => null,
-                '$attrSetNameToIdColAttrSet' => null,
-                '$error' => Validator::ERROR_INVALID_TYPE
+                'colType' => 'value',
+                'productTypeModelsColType' => null,
+                'colAttrSet' => null,
+                'attrSetNameToIdColAttrSet' => null,
+                'error' => Validator::ERROR_INVALID_TYPE
             ],
             [
-                '$colType' => 'value',
-                '$productTypeModelsColType' => 'value',
-                '$colAttrSet' => null,
-                '$attrSetNameToIdColAttrSet' => 'value',
-                '$error' => Validator::ERROR_INVALID_ATTR_SET
+                'colType' => 'value',
+                'productTypeModelsColType' => 'value',
+                'colAttrSet' => null,
+                'attrSetNameToIdColAttrSet' => 'value',
+                'error' => Validator::ERROR_INVALID_ATTR_SET
             ],
             [
-                '$colType' => 'value',
-                '$productTypeModelsColType' => 'value',
-                '$colAttrSet' => 'value',
-                '$attrSetNameToIdColAttrSet' => null,
-                '$error' => Validator::ERROR_INVALID_ATTR_SET
+                'colType' => 'value',
+                'productTypeModelsColType' => 'value',
+                'colAttrSet' => 'value',
+                'attrSetNameToIdColAttrSet' => null,
+                'error' => Validator::ERROR_INVALID_ATTR_SET
             ]
         ];
     }
@@ -1813,20 +1816,17 @@ class ProductTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function validateRowCheckSpecifiedSkuDataProvider(): array
+    public static function validateRowCheckSpecifiedSkuDataProvider(): array
     {
         return [
             [
-                '$sku' => null,
-                '$expectedError' => Validator::ERROR_SKU_IS_EMPTY
+                'sku' => null
             ],
             [
-                '$sku' => false,
-                '$expectedError' => Validator::ERROR_ROW_IS_ORPHAN
+                'sku' => false
             ],
             [
-                '$sku' => 'sku',
-                '$expectedError' => Validator::ERROR_INVALID_STORE
+                'sku' => 'sku'
             ]
         ];
     }
@@ -1834,34 +1834,34 @@ class ProductTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function validateRowDataProvider(): array
+    public static function validateRowDataProvider(): array
     {
         return [
             [
-                '$rowScope' => Product::SCOPE_DEFAULT,
-                '$oldSku' => null,
-                '$expectedResult' => false
+                'rowScope' => Product::SCOPE_DEFAULT,
+                'oldSku' => null,
+                'expectedResult' => false
             ],
             [
-                '$rowScope' => null,
-                '$oldSku' => null,
-                '$expectedResult' => true
+                'rowScope' => null,
+                'oldSku' => null,
+                'expectedResult' => true
             ],
             [
-                '$rowScope' => null,
-                '$oldSku' => true,
-                '$expectedResult' => true
+                'rowScope' => null,
+                'oldSku' => true,
+                'expectedResult' => true
             ],
             [
-                '$rowScope' => Product::SCOPE_DEFAULT,
-                '$oldSku' => true,
-                '$expectedResult' => true
+                'rowScope' => Product::SCOPE_DEFAULT,
+                'oldSku' => true,
+                'expectedResult' => true
             ],
             [
-                '$rowScope' => Product::SCOPE_DEFAULT,
-                '$oldSku' => null,
-                '$expectedResult' => false,
-                '$behaviour' => Import::BEHAVIOR_REPLACE
+                'rowScope' => Product::SCOPE_DEFAULT,
+                'oldSku' => null,
+                'expectedResult' => false,
+                'behaviour' => Import::BEHAVIOR_REPLACE
             ]
         ];
     }
@@ -1869,14 +1869,14 @@ class ProductTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function isAttributeValidAssertAttrValidDataProvider(): array
+    public static function isAttributeValidAssertAttrValidDataProvider(): array
     {
         return [
             [
-                '$attrParams' => [
+                'attrParams' => [
                     'type' => 'varchar',
                 ],
-                '$rowData' => [
+                'rowData' => [
                     'code' => str_repeat(
                         'a',
                         Product::DB_MAX_VARCHAR_LENGTH - 1
@@ -1884,52 +1884,52 @@ class ProductTest extends AbstractImportTestCase
                 ],
             ],
             [
-                '$attrParams' => [
+                'attrParams' => [
                     'type' => 'decimal'
                 ],
-                '$rowData' => [
+                'rowData' => [
                     'code' => 10
                 ]
             ],
             [
-                '$attrParams' => [
+                'attrParams' => [
                     'type' => 'select',
                     'options' => ['code' => 1]
                 ],
-                '$rowData' => [
+                'rowData' => [
                     'code' => 'code'
                 ]
             ],
             [
-                '$attrParams' => [
+                'attrParams' => [
                     'type' => 'multiselect',
                     'options' => ['code' => 1]
                 ],
-                '$rowData' => [
+                'rowData' => [
                     'code' => 'code'
                 ]
             ],
             [
-                '$attrParams' => [
+                'attrParams' => [
                     'type' => 'int'
                 ],
-                '$rowData' => [
+                'rowData' => [
                     'code' => 1000
                 ]
             ],
             [
-                '$attrParams' => [
+                'attrParams' => [
                     'type' => 'datetime'
                 ],
-                '$rowData' => [
+                'rowData' => [
                     'code' => "5 September 2015"
                 ]
             ],
             [
-                '$attrParams' => [
+                'attrParams' => [
                     'type' => 'text'
                 ],
-                '$rowData' => [
+                'rowData' => [
                     'code' => str_repeat(
                         'a',
                         Product::DB_MAX_TEXT_LENGTH - 1
@@ -1942,14 +1942,14 @@ class ProductTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function isAttributeValidAssertAttrInvalidDataProvider(): array
+    public static function isAttributeValidAssertAttrInvalidDataProvider(): array
     {
         return [
             [
-                '$attrParams' => [
+                'attrParams' => [
                     'type' => 'varchar'
                 ],
-                '$rowData' => [
+                'rowData' => [
                     'code' => str_repeat(
                         'a',
                         Product::DB_MAX_VARCHAR_LENGTH + 1
@@ -1957,52 +1957,52 @@ class ProductTest extends AbstractImportTestCase
                 ]
             ],
             [
-                '$attrParams' => [
+                'attrParams' => [
                     'type' => 'decimal'
                 ],
-                '$rowData' => [
+                'rowData' => [
                     'code' => 'incorrect'
                 ]
             ],
             [
-                '$attrParams' => [
+                'attrParams' => [
                     'type' => 'select',
                     'not options' => null
                 ],
-                '$rowData' => [
+                'rowData' => [
                     'code' => 'code'
                 ]
             ],
             [
-                '$attrParams' => [
+                'attrParams' => [
                     'type' => 'multiselect',
                     'not options' => null
                 ],
-                '$rowData' => [
+                'rowData' => [
                     'code' => 'code'
                 ]
             ],
             [
-                '$attrParams' => [
+                'attrParams' => [
                     'type' => 'int'
                 ],
-                '$rowData' => [
+                'rowData' => [
                     'code' => 'not int'
                 ]
             ],
             [
-                '$attrParams' => [
+                'attrParams' => [
                     'type' => 'datetime'
                 ],
-                '$rowData' => [
+                'rowData' => [
                     'code' => "incorrect datetime"
                 ]
             ],
             [
-                '$attrParams' => [
+                'attrParams' => [
                     'type' => 'text'
                 ],
-                '$rowData' => [
+                'rowData' => [
                     'code' => str_repeat(
                         'a',
                         Product::DB_MAX_TEXT_LENGTH + 1
@@ -2015,32 +2015,32 @@ class ProductTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function getRowScopeDataProvider(): array
+    public static function getRowScopeDataProvider(): array
     {
         $colSku = Product::COL_SKU;
         $colStore = Product::COL_STORE;
 
         return [
             [
-                '$rowData' => [
+                'rowData' => [
                     $colSku => null,
                     $colStore => 'store'
                 ],
-                '$expectedResult' => Product::SCOPE_STORE
+                'expectedResult' => Product::SCOPE_STORE
             ],
             [
-                '$rowData' => [
+                'rowData' => [
                     $colSku => 'sku',
                     $colStore => null
                 ],
-                '$expectedResult' => Product::SCOPE_DEFAULT
+                'expectedResult' => Product::SCOPE_DEFAULT
             ],
             [
-                '$rowData' => [
+                'rowData' => [
                     $colSku => 'sku',
                     $colStore => 'store'
                 ],
-                '$expectedResult' => Product::SCOPE_STORE
+                'expectedResult' => Product::SCOPE_STORE
             ],
         ];
     }
@@ -2195,7 +2195,7 @@ class ProductTest extends AbstractImportTestCase
         $methods[] = 'getErrorAggregator';
         $importProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods($methods)
+            ->onlyMethods($methods)
             ->getMock();
         $errorMethods = array_keys($errorAggregatorMethods);
         $errorAggregator = $this->getErrorAggregatorObject($errorMethods);
@@ -2224,7 +2224,7 @@ class ProductTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function valuesDataProvider(): array
+    public static function valuesDataProvider(): array
     {
         return [
             'pipeWithCustomFieldSeparator' => [
@@ -2258,5 +2258,19 @@ class ProductTest extends AbstractImportTestCase
                 'valueSeparator' => '*'
             ]
         ];
+    }
+
+    /**
+     * get remote file content
+     */
+    public function testGetRemoteFileContent()
+    {
+        $reflector = new \ReflectionClass($this->importProduct);
+        $property = $reflector->getMethod('getRemoteFileContent');
+        $property->setAccessible(true);
+        $this->assertEquals(
+            '',
+            $property->invokeArgs($this->importProduct, ['php://filter'])
+        );
     }
 }

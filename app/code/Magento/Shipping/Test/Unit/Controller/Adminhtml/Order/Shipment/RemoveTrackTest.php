@@ -174,8 +174,13 @@ class RemoveTrackTest extends TestCase
             ->willReturn($trackId);
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['track_id'], ['order_id'], ['shipment_id'], ['shipment'], ['tracking'])
-            ->willReturnOnConsecutiveCalls($trackId, $orderId, $shipmentId, $shipment, $tracking);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['track_id'] =>$trackId,
+                ['order_id'] => $orderId,
+                ['shipment_id'] => $shipmentId,
+                ['shipment'] => $shipment,
+                ['tracking'] =>  $tracking
+            });
         $this->shipmentLoaderMock->expects($this->once())->method('setOrderId')->with($orderId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipmentId')->with($shipmentId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipment')->with($shipment);

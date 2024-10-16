@@ -152,7 +152,7 @@ class StorePathInfoValidatorTest extends TestCase
         $this->assertNull($result);
     }
 
-    public function getValidStoreCodeExceptionDataProvider(): array
+    public static function getValidStoreCodeExceptionDataProvider(): array
     {
         return [
             [new NoSuchEntityException()],
@@ -183,7 +183,7 @@ class StorePathInfoValidatorTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function getValidStoreCodeDataProvider(): array
+    public static function getValidStoreCodeDataProvider(): array
     {
         return [
             ['store1', true, 'store1'],

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminConfigurepaymentsAdvancedSection">
+        <element name="user" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_user" parameterized="true"/>
+        <element name="password" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_pwd" parameterized="true"/>
+        <element name="payflowEdition" type="radio" selector="//input[@id ='payflow_express']" timeout="10"/>
+    </section>
+</sections>

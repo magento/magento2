@@ -78,12 +78,12 @@ class ImportResultTest extends \Magento\TestFramework\TestCase\AbstractBackendCo
     /**
      * @return array
      */
-    public function validationDataProvider(): array
+    public static function validationDataProvider(): array
     {
         return [
             [
-                'file_name' => 'invalid_catalog_products.csv',
-                'mime-type' => 'text/csv',
+                'fileName' => 'invalid_catalog_products.csv',
+                'mimeType' => 'text/csv',
                 'delimiter' => ',',
             ],
         ];

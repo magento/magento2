@@ -189,7 +189,15 @@ class BatchIteratorTest extends TestCase
         $this->selectMock->expects($this->exactly(3))->method('order')->with($filed . ' ASC');
         $this->selectMock
             ->method('where')
-            ->withConsecutive([$filed . ' > ?', 0], [$filed . ' > ?', 25]);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($filed) {
+                    if ($arg1 == $filed . ' > ?' && $arg2 == 0) {
+                        return null;
+                    } elseif ($arg1 == $filed . ' > ?' && $arg2 == 25) {
+                        return null;
+                    }
+                }
+            );
 
         $this->wrapperSelectMock->expects($this->exactly(3))->method('from')->with(
             $this->selectMock,

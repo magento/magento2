@@ -73,7 +73,8 @@ class TablerateTest extends TestCase
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'isSetFlag', 'getValue'])
+            ->addMethods(['create'])
+            ->onlyMethods(['isSetFlag', 'getValue'])
             ->getMockForAbstractClass();
 
         $this->errorFactoryMock = $this
@@ -87,19 +88,20 @@ class TablerateTest extends TestCase
 
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->methodFactoryMock = $this
             ->getMockBuilder(MethodFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->tablerateFactoryMock = $this
             ->getMockBuilder(TablerateFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'getRate'])
+            ->addMethods([ 'getRate'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->helper = new ObjectManager($this);
@@ -131,19 +133,17 @@ class TablerateTest extends TestCase
 
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllItems', 'getPackageQty', 'getFreeShipping'])
+            ->addMethods(['getAllItems', 'getPackageQty', 'getFreeShipping'])
             ->getMock();
 
         $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['getHasChildren', 'getChildren',  'getQty'])
+            ->onlyMethods(
                 [
                     'getProduct',
                     'getParentItem',
-                    'getHasChildren',
                     'isShipSeparately',
-                    'getChildren',
-                    'getQty',
                     'getFreeShipping',
                     'getBaseRowTotal'
                 ]
@@ -152,12 +152,12 @@ class TablerateTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isVirtual'])
+            ->onlyMethods(['isVirtual'])
             ->getMock();
 
         $tablerate = $this->getMockBuilder(Tablerate::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRate'])
+            ->onlyMethods(['getRate'])
             ->getMock();
 
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(true);
@@ -167,13 +167,14 @@ class TablerateTest extends TestCase
 
         $method = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCarrier', 'setCarrierTitle', 'setMethod', 'setMethodTitle', 'setPrice', 'setCost'])
+            ->onlyMethods([ 'setPrice'])
+            ->addMethods(['setCarrier', 'setCarrierTitle', 'setMethod', 'setMethodTitle', 'setCost'])
             ->getMock();
         $this->methodFactoryMock->expects($this->once())->method('create')->willReturn($method);
 
         $result = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
-            ->setMethods(['append'])
+            ->onlyMethods(['append'])
             ->getMock();
         $this->resultFactoryMock->expects($this->once())->method('create')->willReturn($result);
 
@@ -229,7 +230,7 @@ class TablerateTest extends TestCase
     /**
      * @return array
      */
-    public function collectRatesWithGlobalFreeShippingDataProvider()
+    public static function collectRatesWithGlobalFreeShippingDataProvider()
     {
         return [
             ['freeshipping' => true, 'isShipSeparately' => false],

@@ -12,6 +12,8 @@ namespace Magento\Backend\Test\Unit\Block\Widget;
 
 use Magento\Backend\Block\Widget\Button;
 use Magento\Backend\Model\Url;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -49,6 +51,18 @@ class ButtonTest extends TestCase
         ];
 
         $objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
+
         $this->_blockMock = $objectManagerHelper->getObject(Button::class, $arguments);
     }
 
@@ -72,7 +86,7 @@ class ButtonTest extends TestCase
     /**
      * @return array
      */
-    public function getAttributesHtmlDataProvider()
+    public static function getAttributesHtmlDataProvider()
     {
         return [
             [

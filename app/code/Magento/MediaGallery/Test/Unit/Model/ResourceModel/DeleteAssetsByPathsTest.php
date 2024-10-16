@@ -2,15 +2,6 @@
 /**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
  */
 declare(strict_types=1);
 
@@ -100,33 +91,33 @@ class DeleteAssetsByPathsTest extends TestCase
             ->willReturn(self::TABLE_NAME);
     }
 
-    public function assetDeleteByPathDataProvider(): array
+    public static function assetDeleteByPathDataProvider(): array
     {
         return [
             [
-                'assets' => $this->getAssets(),
-                'pathToDelete' => 'catalog/category/folder/image.jpg',
-                'assetIdToAssertDelete' => 1
+                'assets' => self::getAssets(),
+                'assetPathToDelete' => 'catalog/category/folder/image.jpg',
+                'assetIdToAssert' => 1
             ],
             [
-                'assets' => $this->getAssets(),
-                'pathToDelete' => 'catalog/category/folder/Image.jpg',
-                'assetIdToAssertDelete' => 2
+                'assets' => self::getAssets(),
+                'assetPathToDelete' => 'catalog/category/folder/Image.jpg',
+                'assetIdToAssert' => 2
             ],
             [
-                'assets' => $this->getAssets(),
-                'pathToDelete' => 'catalog/category/folder/IMAGE.JPG',
-                'assetIdToAssertDelete' => 3
+                'assets' => self::getAssets(),
+                'assetPathToDelete' => 'catalog/category/folder/IMAGE.JPG',
+                'assetIdToAssert' => 3
             ],
             [
-                'assets' => $this->getAssets(),
-                'pathToDelete' => 'catalog/category/FOLDER',
-                'assetIdToAssertDelete' => 4
+                'assets' => self::getAssets(),
+                'assetPathToDelete' => 'catalog/category/FOLDER',
+                'assetIdToAssert' => 4
             ],
         ];
     }
 
-    private function getAssets(): array
+    private static function getAssets(): array
     {
         return [
             [

@@ -19,7 +19,7 @@ class StyleAttributeValidatorTest extends TestCase
      *
      * @return array
      */
-    public function getAttributes(): array
+    public static function getAttributes(): array
     {
         return [
             'not a style' => ['class', 'value', true],
