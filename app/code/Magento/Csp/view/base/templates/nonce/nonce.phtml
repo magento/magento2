@@ -1,0 +1,22 @@
+<?php
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+$nonceProvider = $block->getNonceProvider();
+
+?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "nonceInjector": {
+                "nonce": "<?= $escaper->escapeJs($nonceProvider->getNonce()); ?>"
+        }
+    }
+}
+</script>

@@ -243,7 +243,7 @@ class DefaultConfigProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigQuoteAddressDataDataProvider(): array
+    public static function getConfigQuoteAddressDataDataProvider(): array
     {
         return [
             [

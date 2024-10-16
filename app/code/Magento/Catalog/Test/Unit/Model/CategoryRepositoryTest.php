@@ -109,6 +109,15 @@ class CategoryRepositoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $objectHelper = new ObjectManager($this);
+        $objects = [
+            [
+                PopulateWithValues::class,
+                $this->createMock(PopulateWithValues::class)
+            ]
+        ];
+        $objectHelper->prepareObjectManager($objects);
+
         $this->model = (new ObjectManager($this))->getObject(
             CategoryRepository::class,
             [
@@ -171,7 +180,7 @@ class CategoryRepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function filterExtraFieldsOnUpdateCategoryDataProvider()
+    public static function filterExtraFieldsOnUpdateCategoryDataProvider()
     {
         return [
             [
@@ -239,8 +248,11 @@ class CategoryRepositoryTest extends TestCase
             ->willReturn($categoryData);
         $categoryMock = $this->createMock(CategoryModel::class);
         $parentCategoryMock = $this->createMock(CategoryModel::class);
+        $callCount = 0;
         $categoryMock->expects($this->any())->method('getId')
-            ->will($this->onConsecutiveCalls($categoryId, $newCategoryId));
+            ->willReturnCallback(function () use (&$callCount, $categoryId, $newCategoryId) {
+                return $callCount++ === 0 ? $categoryId : $newCategoryId;
+            });
         $this->categoryFactoryMock->expects($this->exactly(2))->method('create')->willReturn($parentCategoryMock);
         $parentCategoryMock->expects($this->atLeastOnce())->method('getId')->willReturn($parentCategoryId);
 
@@ -312,7 +324,7 @@ class CategoryRepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function saveWithValidateCategoryExceptionDataProvider()
+    public static function saveWithValidateCategoryExceptionDataProvider()
     {
         return [
             [

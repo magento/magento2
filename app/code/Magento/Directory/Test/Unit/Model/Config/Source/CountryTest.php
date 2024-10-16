@@ -59,7 +59,7 @@ class CountryTest extends TestCase
     /**
      * @return array
      */
-    public function toOptionArrayDataProvider()
+    public static function toOptionArrayDataProvider()
     {
         return [
             [true, 'US', []],

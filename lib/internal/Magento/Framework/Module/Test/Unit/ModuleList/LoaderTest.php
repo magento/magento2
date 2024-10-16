@@ -134,7 +134,7 @@ class LoaderTest extends TestCase
     /**
      * @return array
      */
-    public function testLoadDataProvider(): array
+    public static function testLoadDataProvider(): array
     {
         return [
             'Ordered modules list returned by registrar' => [
