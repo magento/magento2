@@ -308,8 +308,12 @@ class Config extends DataObject
      * @param array $extraOldGroups Need for compatibility with _processGroup()
      * @return string
      */
-    private function getFieldPath(FieldElement $field, string $fieldId, array &$oldConfig, array &$extraOldGroups): string // phpcs:ignore Generic.Files.LineLength
-    {
+    private function getFieldPath(
+        FieldElement $field,
+        string $fieldId,
+        array &$oldConfig,
+        array &$extraOldGroups
+    ): string {
         $path = $field->getGroupPath() . '/' . $fieldId;
 
         /**
