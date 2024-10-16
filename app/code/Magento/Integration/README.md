@@ -107,5 +107,5 @@ Cron group configuration can be set at `etc/crontab.xml`:
 
 More information can get at articles:
 
-- [Learn more about an Integration](https://docs.magento.com/user-guide/system/integrations.html)
+- [Learn more about an Integration](https://experienceleague.adobe.com/docs/commerce-admin/systems/integrations.html)
 - [Lear how to create an Integration](https://developer.adobe.com/commerce/webapi/get-started/create-integration/)

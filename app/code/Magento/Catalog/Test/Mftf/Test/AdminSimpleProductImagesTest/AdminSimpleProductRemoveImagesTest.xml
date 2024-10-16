@@ -99,12 +99,12 @@
         <!-- Go to the product page and see the Base image -->
         <amOnPage url="{{StorefrontProductPage.url($product.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="wait4"/>
-        <seeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="seeBase"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="seeBase"/>
 
         <!-- Go to the category page and see the Small image -->
         <amOnPage url="{{StorefrontCategoryPage.url($category.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
         <waitForPageLoad stepKey="wait3"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-small')}}" stepKey="seeThumb"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-small')}}" stepKey="seeThumb"/>
 
         <!-- Go to the admin grid and see the Thumbnail image -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex2"/>
@@ -112,7 +112,7 @@
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku2">
             <argument name="product" value="$product$"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductGridSection.productThumbnailBySrc('/adobe-thumb')}}" stepKey="seeBaseInGrid"/>
+        <waitForElementVisible selector="{{AdminProductGridSection.productThumbnailBySrc('/adobe-thumb')}}" stepKey="seeBaseInGrid"/>
 
         <!-- Go to the product edit page again -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex3"/>
@@ -137,18 +137,18 @@
             <argument name="product" value="$product$"/>
         </actionGroup>
         <dontSeeElement selector="{{AdminProductGridSection.productThumbnailBySrc('/adobe-thumb')}}" stepKey="dontSeeBaseInGrid"/>
-        <seeElement selector="{{AdminProductGridSection.productThumbnailBySrc('/placeholder/thumbnail')}}" stepKey="seePlaceholderThumb"/>
+        <waitForElementVisible selector="{{AdminProductGridSection.productThumbnailBySrc('/placeholder/thumbnail')}}" stepKey="seePlaceholderThumb"/>
 
         <!-- Check category page for placeholder -->
         <amOnPage url="{{StorefrontCategoryPage.url($category.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage2"/>
         <waitForPageLoad stepKey="wait7"/>
         <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-small')}}" stepKey="dontSeeThumb"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('placeholder/small_image')}}" stepKey="seePlaceholderSmall"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductImageBySrc('placeholder/small_image')}}" stepKey="seePlaceholderSmall"/>
 
         <!-- Check product page for placeholder -->
         <amOnPage url="{{StorefrontProductPage.url($product.custom_attributes[url_key]$)}}" stepKey="goToProductPage2"/>
         <waitForPageLoad stepKey="wait8"/>
         <dontSeeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="dontSeeBase"/>
-        <seeElement selector="{{StorefrontProductMediaSection.imageFile('placeholder/image')}}" stepKey="seePlaceholderBase"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imageFile('placeholder/image')}}" stepKey="seePlaceholderBase"/>
     </test>
 </tests>

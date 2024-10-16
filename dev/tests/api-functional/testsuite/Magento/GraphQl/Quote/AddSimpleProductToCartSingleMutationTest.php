@@ -395,7 +395,7 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function addProductNotAssignedToWebsiteDataProvider(): array
+    public static function addProductNotAssignedToWebsiteDataProvider(): array
     {
         return [
             ['cart1', 'product2', []],
@@ -407,7 +407,7 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function wrongSkuDataProvider(): array
+    public static function wrongSkuDataProvider(): array
     {
         return [
             'Non-existent SKU' => [
@@ -424,7 +424,7 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function wrongQuantityDataProvider(): array
+    public static function wrongQuantityDataProvider(): array
     {
         return [
             'More quantity than in stock' => [

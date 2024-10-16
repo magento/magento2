@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Related;
 
 use Magento\Catalog\Ui\DataProvider\Product\Related\RelatedDataProvider;
 
-class RelatedDataProviderTest extends AbstractDataProviderTest
+class RelatedDataProviderTest extends AbstractDataProviderTestCase
 {
     /**
      * {@inheritdoc}

@@ -18,6 +18,11 @@ use PHPUnit\Framework\TestCase;
 class TaxTest extends TestCase
 {
     /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
+    /**
      * @var Tax
      */
     protected $model;
@@ -75,7 +80,7 @@ class TaxTest extends TestCase
         foreach ($orderData['previous_invoices'] as $previousInvoiceData) {
             $previousInvoice = $this->getMockBuilder(Invoice::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['isCanceled'])
+                ->onlyMethods(['isCanceled'])
                 ->getMock();
             $previousInvoice->setData('shipping_amount', $previousInvoiceData['shipping_amount']);
             $previousInvoices[] = $previousInvoice;
@@ -115,13 +120,13 @@ class TaxTest extends TestCase
 
         //verify invoice data
         foreach ($expectedResults['invoice_data'] as $key => $value) {
-            $this->assertEquals($value, $this->invoice->getData($key));
+            $this->assertEqualsWithDelta($value, $this->invoice->getData($key), self::EPSILON);
         }
         //verify invoice item data
         foreach ($expectedResults['invoice_items'] as $itemKey => $itemData) {
             $invoiceItem = $invoiceItems[$itemKey];
             foreach ($itemData as $key => $value) {
-                $this->assertEquals($value, $invoiceItem->getData($key));
+                $this->assertEqualsWithDelta($value, $invoiceItem->getData($key), self::EPSILON);
             }
         }
     }
@@ -130,12 +135,12 @@ class TaxTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function collectDataProvider()
+    public static function collectDataProvider()
     {
         $result = [];
         // 3 item_1, 3 item_2, $99 each, 8.19 tax rate
         $result['partial_invoice'] = [
-            'order_data' => [
+            'orderData' => [
                 'previous_invoices' => [
                 ],
                 'data_fields' => [
@@ -147,7 +152,7 @@ class TaxTest extends TestCase
                     'base_tax_amount' => 53.56,
                 ],
             ],
-            'invoice_data' => [
+            'invoiceData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -184,7 +189,7 @@ class TaxTest extends TestCase
                     'base_grand_total' => 327,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'invoice_items' => [
                     'item_1' => [
                         'tax_amount' => 8.11,
@@ -207,7 +212,7 @@ class TaxTest extends TestCase
         // 3 item_1, 3 item_2, $99 each, 8.19 tax rate
         // item_1 has 1 already invoiced, item_2 has 2 already invoiced
         $result['partial_invoice_second_invoice'] = [
-            'order_data' => [
+            'orderData' => [
                 'previous_invoices' => [
                     [
                         'shipping_amount' => 30,
@@ -223,7 +228,7 @@ class TaxTest extends TestCase
                     'base_tax_amount' => 53.56,
                 ],
             ],
-            'invoice_data' => [
+            'invoiceData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -260,7 +265,7 @@ class TaxTest extends TestCase
                     'base_grand_total' => 99,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'invoice_items' => [
                     'item_1' => [
                         'tax_amount' => 8.11,
@@ -278,7 +283,7 @@ class TaxTest extends TestCase
         // 3 item_1, 3 item_2, $99 each, 8.19 tax rate
         // item_1 has 1 already invoiced, item_2 has 2 already invoiced
         $result['partial_invoice_last_invoice'] = [
-            'order_data' => [
+            'orderData' => [
                 'previous_invoices' => [
                     [
                         'shipping_amount' => 30,
@@ -294,7 +299,7 @@ class TaxTest extends TestCase
                     'base_tax_amount' => 53.56,
                 ],
             ],
-            'invoice_data' => [
+            'invoiceData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -331,7 +336,7 @@ class TaxTest extends TestCase
                     'base_grand_total' => 198,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'invoice_items' => [
                     'item_1' => [
                         'tax_amount' => 8.10,

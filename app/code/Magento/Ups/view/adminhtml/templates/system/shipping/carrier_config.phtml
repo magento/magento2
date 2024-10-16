@@ -86,14 +86,20 @@ require(["prototype"], function(){
             this.checkingUpsXmlId = ['carriers_ups_gateway_xml_url','carriers_ups_username',
                 'carriers_ups_password','carriers_ups_access_license_number'];
             this.checkingUpsId = ['carriers_ups_gateway_url'];
+            this.checkingUpsRestId = ['carriers_ups_gateway_rest_url','carriers_ups_username',
+                'carriers_ups_password'];
             this.originShipmentTitle = '';
             this.allowedMethodsId = 'carriers_ups_allowed_methods';
             this.freeShipmentId = 'carriers_ups_free_method';
-            this.onlyUpsXmlElements = ['carriers_ups_gateway_xml_url','carriers_ups_tracking_xml_url',
+            this.onlyUpsXmlElements = ['carriers_ups_gateway_xml_url','carriers_ups_tracking_url',
                 'carriers_ups_username','carriers_ups_password','carriers_ups_access_license_number',
                 'carriers_ups_origin_shipment','carriers_ups_negotiated_active','carriers_ups_shipper_number',
                 'carriers_ups_mode_xml','carriers_ups_include_taxes'];
             this.onlyUpsElements = ['carriers_ups_gateway_url'];
+            this.onlyUpsRestElements = ['carriers_ups_gateway_rest_url','carriers_ups_tracking_rest_url',
+            'carriers_ups_username','carriers_ups_password','carriers_ups_origin_shipment',
+            'carriers_ups_negotiated_active','carriers_ups_shipper_number','carriers_ups_mode_xml',
+            'carriers_ups_include_taxes'];
             this.authUpsXmlElements = ['carriers_ups_username',
                 'carriers_ups_password','carriers_ups_access_license_number'];
 
@@ -170,28 +176,52 @@ $scriptString .= <<<script
                 for (a = 0; a < this.checkingUpsXmlId.length; a++) {
                     $(this.checkingUpsXmlId[a]).removeClassName('required-entry');
                 }
+                for (a = 0; a < this.checkingUpsRestId.length; a++) {
+                    $(this.checkingUpsRestId[a]).removeClassName('required-entry');
+                }
                 for (a = 0; a < this.checkingUpsId.length; a++) {
                     $(this.checkingUpsId[a]).addClassName('required-entry');
                     this.changeFieldsDisabledState(this.checkingUpsId, a);
                 }
                 Event.stopObserving($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
-                showRowArrayElements(this.onlyUpsElements);
                 hideRowArrayElements(this.onlyUpsXmlElements);
+                hideRowArrayElements(this.onlyUpsRestElements);
+                showRowArrayElements(this.onlyUpsElements);
                 this.changeOriginShipment(null, 'default');
-            } else {
+            } else if (\$F(this.carriersUpsTypeId) == 'UPS_REST') {
                 for (a = 0; a < this.checkingUpsXmlId.length; a++) {
-                    $(this.checkingUpsXmlId[a]).addClassName('required-entry');
-                    this.changeFieldsDisabledState(this.checkingUpsXmlId, a);
+                    $(this.checkingUpsXmlId[a]).removeClassName('required-entry');
                 }
                 for (a = 0; a < this.checkingUpsId.length; a++) {
                     $(this.checkingUpsId[a]).removeClassName('required-entry');
                 }
+                for (a = 0; a < this.checkingUpsRestId.length; a++) {
+                    $(this.checkingUpsRestId[a]).addClassName('required-entry');
+                    this.changeFieldsDisabledState(this.checkingUpsRestId, a);
+                }
                 Event.observe($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
+                hideRowArrayElements(this.onlyUpsXmlElements);
+                hideRowArrayElements(this.onlyUpsElements);
+                showRowArrayElements(this.onlyUpsRestElements);
+                this.changeOriginShipment(null, null);
+            } else {
+                for (a = 0; a < this.checkingUpsId.length; a++) {
+                    $(this.checkingUpsId[a]).removeClassName('required-entry');
+                }
+                for (a = 0; a < this.checkingUpsRestId.length; a++) {
+                    $(this.checkingUpsRestId[a]).removeClassName('required-entry');
+                }
+                for (a = 0; a < this.checkingUpsXmlId.length; a++) {
+                    $(this.checkingUpsXmlId[a]).addClassName('required-entry');
+                    this.changeFieldsDisabledState(this.checkingUpsXmlId, a);
+                }
+                Event.observe($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
+                hideRowArrayElements(this.onlyUpsElements);
+                hideRowArrayElements(this.onlyUpsRestElements);
                 showRowArrayElements(this.onlyUpsXmlElements);
                 if (\$F(this.carriersUpsActiveId) !== '1'){
                     hideRowArrayElements(this.authUpsXmlElements);
                 }
-                hideRowArrayElements(this.onlyUpsElements);
                 this.changeOriginShipment(null, null);
             }
         },

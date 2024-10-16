@@ -250,8 +250,13 @@ TEXT;
 
         $this->htmlDirectoryMock
             ->method('isExist')
-            ->withConsecutive([$relativeGeneratedPath])
-            ->willReturnOnConsecutiveCalls(false);
+            ->willReturnCallback(
+                function ($arg1) use ($relativeGeneratedPath) {
+                    if ($arg1 == $relativeGeneratedPath) {
+                        return false;
+                    }
+                }
+            );
 
         $this->htmlDirectoryMock
             ->expects($this->once())

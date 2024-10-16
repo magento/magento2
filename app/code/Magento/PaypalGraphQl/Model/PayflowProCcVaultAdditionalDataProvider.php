@@ -15,20 +15,15 @@ use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
  */
 class PayflowProCcVaultAdditionalDataProvider implements AdditionalDataProviderInterface
 {
-    const CC_VAULT_CODE = 'payflowpro_cc_vault';
-
-    /**
-     * @var ArrayManager
-     */
-    private $arrayManager;
+    public const CC_VAULT_CODE = 'payflowpro_cc_vault';
 
     /**
      * @param ArrayManager $arrayManager
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
-    public function __construct(
-        ArrayManager $arrayManager
-    ) {
-        $this->arrayManager = $arrayManager;
+    public function __construct(ArrayManager $arrayManager)
+    {
     }
 
     /**

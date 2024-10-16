@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Setup\CategorySetup;
 use Magento\Catalog\Test\Fixture\Attribute;
@@ -18,13 +17,9 @@ use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend;
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
 use Magento\Eav\Test\Fixture\AttributeOption as AttributeOptionFixture;
-use Magento\Framework\GraphQl\Query\Uid;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\EavGraphQl\Model\Uid as EAVUid;
 
 /**
  * Test products with custom attributes query output
@@ -35,6 +30,7 @@ use Magento\EavGraphQl\Model\Uid as EAVUid;
         [
             'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
             'attribute_code' => 'product_custom_attribute',
+            'is_comparable' => 1,
             'is_visible_on_front' => 1
         ],
         'varchar_custom_attribute'
@@ -93,11 +89,6 @@ use Magento\EavGraphQl\Model\Uid as EAVUid;
 class GetProductWithCustomAttributesTest extends GraphQlAbstract
 {
     /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * @var AttributeInterface|null
      */
     private $varcharCustomAttribute;
@@ -123,25 +114,12 @@ class GetProductWithCustomAttributesTest extends GraphQlAbstract
     private $product;
 
     /**
-     * @var EAVUid $eavUid
-     */
-    private $eavUid;
-
-    /**
-     * @var Uid $uid
-     */
-    private $uid;
-
-    /**
      * @inheridoc
      */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->uid = $this->objectManager->get(Uid::class);
-        $this->eavUid = $this->objectManager->get(EAVUid::class);
         $this->varcharCustomAttribute = DataFixtureStorageManager::getStorage()->get(
             'varchar_custom_attribute'
         );
@@ -170,18 +148,22 @@ class GetProductWithCustomAttributesTest extends GraphQlAbstract
         {
             sku
             name
-            custom_attributes {
-                uid
-                code
-                ... on AttributeValue {
-                    value
-                }
-                ... on AttributeSelectedOptions {
-                    selected_options {
-                        uid
-                        label
+            custom_attributesV2 {
+                items {
+                    code
+                    ... on AttributeValue {
                         value
                     }
+                    ... on AttributeSelectedOptions {
+                        selected_options {
+                            label
+                            value
+                        }
+                    }
+                },
+                errors {
+                    type
+                    message
                 }
             }
         }
@@ -190,57 +172,9 @@ class GetProductWithCustomAttributesTest extends GraphQlAbstract
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('items', $response['products'], 'Query result does not contain products');
-        $this->assertGreaterThanOrEqual(2, count($response['products']['items'][0]['custom_attributes']));
 
-        $this->assertResponseFields(
-            $response['products']['items'][0],
-            [
-                'sku' => $this->product->getSku(),
-                'name' => $this->product->getName()
-            ]
-        );
-
-        $this->assertResponseFields(
-            $this->getAttributeByCode(
-                $response['products']['items'][0]['custom_attributes'],
-                $this->varcharCustomAttribute->getAttributeCode()
-            ),
-            [
-                'uid' => $this->eavUid->encode(
-                    ProductAttributeInterface::ENTITY_TYPE_CODE,
-                    $this->varcharCustomAttribute->getAttributeCode()
-                ),
-                'code' => $this->varcharCustomAttribute->getAttributeCode(),
-                'value' => 'test_value'
-            ]
-        );
-
-        $this->assertResponseFields(
-            $this->getAttributeByCode(
-                $response['products']['items'][0]['custom_attributes'],
-                $this->multiselectCustomAttribute->getAttributeCode()
-            ),
-            [
-                'uid' => $this->eavUid->encode(
-                    ProductAttributeInterface::ENTITY_TYPE_CODE,
-                    $this->multiselectCustomAttribute->getAttributeCode()
-                ),
-                'code' => $this->multiselectCustomAttribute->getAttributeCode(),
-                'selected_options' => [
-                    [
-                        'uid' => $this->uid->encode($this->multiselectCustomAttributeOption2->getValue()),
-                        'label' => $this->multiselectCustomAttributeOption2->getLabel(),
-                        'value' => $this->multiselectCustomAttributeOption2->getValue(),
-                    ],
-                    [
-                        'uid' => $this->uid->encode($this->multiselectCustomAttributeOption1->getValue()),
-                        'label' => $this->multiselectCustomAttributeOption1->getLabel(),
-                        'value' => $this->multiselectCustomAttributeOption1->getValue(),
-                    ]
-                ]
-            ]
-        );
+        $this->assertProductCustomAttributesResult($response);
+        $this->assertEmpty(count($response['products']['items'][0]['custom_attributesV2']['errors']));
     }
 
     public function testGetNoResultsWhenFilteringByNotExistingSku()
@@ -253,17 +187,17 @@ QUERY;
         {
             sku
             name
-            custom_attributes {
-                uid
-                code
-                ... on AttributeValue {
-                    value
-                }
-                ... on AttributeSelectedOptions {
-                    selected_options {
-                        uid
-                        label
+            custom_attributesV2 {
+                items {
+                    code
+                    ... on AttributeValue {
                         value
+                    }
+                    ... on AttributeSelectedOptions {
+                        selected_options {
+                            label
+                            value
+                        }
                     }
                 }
             }
@@ -289,18 +223,22 @@ QUERY;
         {
             sku
             name
-            custom_attributes(filter: {is_visible_on_front: true}) {
-                uid
-                code
-                ... on AttributeValue {
-                    value
-                }
-                ... on AttributeSelectedOptions {
-                    selected_options {
-                        uid
-                        label
+            custom_attributesV2(filters: {is_comparable: true, is_visible_on_front: true}) {
+                items {
+                    code
+                    ... on AttributeValue {
                         value
                     }
+                    ... on AttributeSelectedOptions {
+                        selected_options {
+                            label
+                            value
+                        }
+                    }
+                },
+                errors {
+                    type
+                    message
                 }
             }
         }
@@ -316,15 +254,14 @@ QUERY;
                         0 => [
                             'sku' => $this->product->getSku(),
                             'name' => $this->product->getName(),
-                            'custom_attributes' => [
-                                [
-                                    'uid' => $this->eavUid->encode(
-                                        ProductAttributeInterface::ENTITY_TYPE_CODE,
-                                        $this->varcharCustomAttribute->getAttributeCode()
-                                    ),
-                                    'code' => $this->varcharCustomAttribute->getAttributeCode(),
-                                    'value' => 'test_value'
-                                ]
+                            'custom_attributesV2' => [
+                                'items' => [
+                                    0 => [
+                                        'code' => $this->varcharCustomAttribute->getAttributeCode(),
+                                        'value' => 'test_value'
+                                    ]
+                                ],
+                                'errors' => []
                             ]
                         ]
                     ]
@@ -348,17 +285,17 @@ QUERY;
         {
             sku
             name
-            custom_attributes(filter: {not_existing_filter: true}) {
-                uid
-                code
-                ... on AttributeValue {
-                    value
-                }
-                ... on AttributeSelectedOptions {
-                    selected_options {
-                        uid
-                        label
+            custom_attributesV2(filters: {not_existing_filter: true}) {
+                items {
+                    code
+                    ... on AttributeValue {
                         value
+                    }
+                    ... on AttributeSelectedOptions {
+                        selected_options {
+                            label
+                            value
+                        }
                     }
                 }
             }
@@ -384,5 +321,58 @@ QUERY;
         });
 
         return array_merge(...$attribute);
+    }
+
+    /**
+     * @param array $response
+     */
+    private function assertProductCustomAttributesResult(array $response): void
+    {
+        $this->assertArrayHasKey('items', $response['products'], 'Query result does not contain products');
+        $this->assertArrayHasKey(
+            'items',
+            $response['products']['items'][0]['custom_attributesV2'],
+            'Query result does not contain custom attributes'
+        );
+        $this->assertGreaterThanOrEqual(2, count($response['products']['items'][0]['custom_attributesV2']['items']));
+
+        $this->assertResponseFields(
+            $response['products']['items'][0],
+            [
+                'sku' => $this->product->getSku(),
+                'name' => $this->product->getName()
+            ]
+        );
+
+        $this->assertResponseFields(
+            $this->getAttributeByCode(
+                $response['products']['items'][0]['custom_attributesV2']['items'],
+                $this->varcharCustomAttribute->getAttributeCode()
+            ),
+            [
+                'code' => $this->varcharCustomAttribute->getAttributeCode(),
+                'value' => 'test_value'
+            ]
+        );
+
+        $this->assertResponseFields(
+            $this->getAttributeByCode(
+                $response['products']['items'][0]['custom_attributesV2']['items'],
+                $this->multiselectCustomAttribute->getAttributeCode()
+            ),
+            [
+                'code' => $this->multiselectCustomAttribute->getAttributeCode(),
+                'selected_options' => [
+                    [
+                        'label' => $this->multiselectCustomAttributeOption2->getLabel(),
+                        'value' => $this->multiselectCustomAttributeOption2->getValue(),
+                    ],
+                    [
+                        'label' => $this->multiselectCustomAttributeOption1->getLabel(),
+                        'value' => $this->multiselectCustomAttributeOption1->getValue(),
+                    ]
+                ]
+            ]
+        );
     }
 }

@@ -45,8 +45,10 @@
 
         <!-- Step1: Create Visual Swatch attribute -->
         <createData entity="VisualSwatchProductAttributeForm" stepKey="createVisualSwatchAttribute"/>
-        <magentoCLI stepKey="reindexPostCreatingVisualSwatchAttribute" command="indexer:reindex"/>
-        <magentoCLI stepKey="flushCachePostCreatingVisualSwatchAttribute" command="cache:flush"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="reindexPostCreatingVisualSwatchAttribute"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCachePostCreatingVisualSwatchAttribute">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!-- Go to the edit page for the visual Swatch attribute -->
         <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributesToEditVisualSwatchAttribute"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="$createVisualSwatchAttribute.attribute_code$" stepKey="fillFilterToEditVisualSwatchAttribute"/>
@@ -116,6 +118,9 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableProductForConfigProd1"/>
         <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="confirmDefaultAttributeSetForConfigurableProductForConfigProd1"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkProductSavedMessageForConfigProd1"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPostProductConfiguration">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <!-- Step3: Navigate to default store view -->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goToStorefrontCategoryPageForDefaultStoreLayeredNavigation">
             <argument name="categoryName" value="$$createCategory.name$$" />

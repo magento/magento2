@@ -8,7 +8,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Sales\Helper\Data as SalesData;
-use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 
 class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
@@ -18,7 +18,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
+    public const ADMIN_RESOURCE = 'Magento_Sales::creditmemo';
 
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
@@ -85,6 +85,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             $this->creditmemoLoader->setCreditmemo($this->getRequest()->getParam('creditmemo'));
             $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
             $creditmemo = $this->creditmemoLoader->load();
+            $this->adjustCreditMemoItemQuantities($creditmemo);
             if ($creditmemo) {
                 if (!$creditmemo->isValidGrandTotal()) {
                     throw new \Magento\Framework\Exception\LocalizedException(
@@ -140,5 +141,34 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
         }
         $resultRedirect->setPath('sales/*/new', ['_current' => true]);
         return $resultRedirect;
+    }
+
+    /**
+     * Adjust credit memo parent item quantities with children quantities
+     *
+     * @param Creditmemo $creditMemo
+     * @return void
+     */
+    private function adjustCreditMemoItemQuantities(Creditmemo $creditMemo): void
+    {
+        $items = $creditMemo->getAllItems();
+        $parentQuantities = [];
+        foreach ($items as $item) {
+            if ($parentId = $item->getOrderItem()->getParentItemId()) {
+                if (empty($parentQuantities[$parentId])) {
+                    $parentQuantities[$parentId] = $item->getQty();
+                } else {
+                    $parentQuantities[$parentId] += $item->getQty();
+                }
+            }
+        }
+
+        foreach ($parentQuantities as $parentId => $quantity) {
+            foreach ($items as $item) {
+                if ($item->getOrderItemId() == $parentId) {
+                    $item->setQty($quantity);
+                }
+            }
+        }
     }
 }

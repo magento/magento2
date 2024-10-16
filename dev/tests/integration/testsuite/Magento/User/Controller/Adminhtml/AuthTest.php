@@ -225,7 +225,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         }
     }
 
-    public function resetPasswordDataProvider()
+    public static function resetPasswordDataProvider()
     {
         $password = uniqid('123q');
         return [
@@ -316,13 +316,13 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     protected function prepareEmailMock($occurrenceNumber, $templateId, $sender)
     {
         $transportMock = $this->getMockBuilder(\Magento\Framework\Mail\TransportInterface::class)
-            ->setMethods(['sendMessage'])
+            ->onlyMethods(['sendMessage'])
             ->getMockForAbstractClass();
         $transportMock->expects($this->exactly($occurrenceNumber))
             ->method('sendMessage');
         $transportBuilderMock = $this->getMockBuilder(\Magento\Framework\Mail\Template\TransportBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setTemplateModel',
                     'addTo',
@@ -372,7 +372,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         );
         $factoryMock = $this->getMockBuilder(\Magento\User\Model\UserFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'create'
                 ]

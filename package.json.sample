@@ -9,33 +9,77 @@
   },
   "homepage": "https://magento.com/",
   "devDependencies": {
-    "glob": "~8.0.1",
-    "grunt": "~1.5.2",
+    "glob": "~8.1.0",
+    "grunt": "~1.6.1",
     "grunt-banner": "~0.6.0",
     "grunt-continue": "~0.1.0",
-    "grunt-contrib-clean": "~2.0.0",
-    "grunt-contrib-connect": "~3.0.0",
-    "grunt-contrib-cssmin": "~4.0.0",
+    "grunt-contrib-clean": "~2.0.1",
+    "grunt-contrib-connect": "~4.0.0",
+    "grunt-contrib-cssmin": "~5.0.0",
     "grunt-contrib-imagemin": "~4.0.0",
     "grunt-contrib-jasmine": "~4.0.0",
-    "grunt-contrib-less": "~2.1.0",
+    "grunt-contrib-less": "~3.0.0",
     "grunt-contrib-watch": "~1.1.0",
-    "grunt-eslint": "~24.0.0",
+    "grunt-eslint": "~24.3.0",
     "grunt-exec": "~3.0.0",
     "grunt-replace": "~2.0.2",
     "grunt-styledocco": "~0.3.0",
     "grunt-template-jasmine-requirejs": "~0.2.3",
     "grunt-text-replace": "~0.4.0",
     "imagemin-svgo": "~9.0.0",
-    "less": "3.13.1",
+    "less": "4.2.0",
     "load-grunt-config": "~4.0.1",
     "morgan": "~1.10.0",
     "node-minify": "~3.6.0",
     "path": "~0.12.7",
     "serve-static": "~1.15.0",
     "squirejs": "~0.2.1",
-    "strip-json-comments": "~3.1.1",
+    "strip-comments": "~2.0.1",
     "time-grunt": "~2.0.0",
-    "underscore": "1.13.3"
-  }
+    "underscore": "1.13.6"
+  },
+ "overrides": {
+   "styledocco": {
+     "uglify-js": "~3.4.9",
+     "marked": "~5.1.0",
+     "clean-css": "~5.3.2"
+   },
+   "mkdirp" : {
+     "minimist":"~1.2.6"
+   },
+   "optimist" : {
+     "minimist":"~1.2.6"
+   },
+   "meow": {
+     "trim-newlines":"~3.0.1"
+   },
+   "node-minify": {
+     "terser": "~5.18.0"
+   },
+   "grunt-contrib-imagemin": {
+     "css-select":"~5.1.0",
+     "nth-check": "~2.1.1"
+   },
+   "bin-version-check": {
+     "semver-regex": "~3.1.4"
+   },
+   "cacheable-request": {
+     "http-cache-semantics": "~4.1.1"
+   },
+   "babel-core": {
+     "json5": "~2.2.3"
+   },
+   "svgo": {
+     "js-yaml": "~4.1.0"
+   },
+   "css-select": {
+     "nth-check": "~2.1.1"
+   },
+   "latest-version": {
+     "package-json": "~7.0.0"
+   },
+   "fast-glob": {
+     "glob-parent": "~6.0.2"
+   }
+ }
 }
