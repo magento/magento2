@@ -199,7 +199,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getSourceOptionIdDataProvider()
+    public static function getSourceOptionIdDataProvider()
     {
         return [
             [1, [['label' => 'name', 'value' => 1]], 1],

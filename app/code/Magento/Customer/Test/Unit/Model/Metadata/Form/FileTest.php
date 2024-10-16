@@ -118,9 +118,11 @@ class FileTest extends AbstractFormTestCase
     {
         $value = 'value';
 
-        $this->requestMock
-            ->method('getParam')
-            ->willReturnOnConsecutiveCalls($this->returnValue(['delete' => $delete]));
+        $callCount = 0;
+        $this->requestMock->method('getParam')
+            ->willReturnCallback(function () use (&$callCount, $delete) {
+                return $callCount++ === 0 ? ['delete' => $delete] : '';
+            });
 
         $this->attributeMetadataMock->expects(
             $this->any()

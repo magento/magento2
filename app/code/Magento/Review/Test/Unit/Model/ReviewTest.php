@@ -217,7 +217,7 @@ class ReviewTest extends TestCase
     /**
      * @return array
      */
-    public function getProductUrlDataProvider()
+    public static function getProductUrlDataProvider()
     {
         return [
             'store id specified' => [3, 5, 'http://some.url'],
@@ -251,7 +251,7 @@ class ReviewTest extends TestCase
     /**
      * @return array
      */
-    public function isAvailableOnStoreDataProvider()
+    public static function isAvailableOnStoreDataProvider()
     {
         return [
             'store id is set and not in list' => [1, false],

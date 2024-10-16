@@ -102,7 +102,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getDependencyInfoDataProvider()
+    public static function getDependencyInfoDataProvider()
     {
         return [
             'Extend class in same module' => [
@@ -249,7 +249,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getDependencyInfoDataCaseGetUrlDataProvider()
+    public static function getDependencyInfoDataCaseGetUrlDataProvider()
     {
         return [
             'getUrl from same module' => [
@@ -332,7 +332,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array[]
      */
-    public function getDependencyInfoDataCaseGetTemplateUrlDataProvider()
+    public static function getDependencyInfoDataCaseGetTemplateUrlDataProvider()
     {
         return [ 'getUrl from ignore template' => [
             'app/code/Magento/Backend/view/adminhtml/templates/dashboard/totalbar/script.phtml',
@@ -377,7 +377,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array[]
      */
-    public function processWildcardUrlDataProvider()
+    public static function processWildcardUrlDataProvider()
     {
         return [
             'wildcard controller route' => [
@@ -432,7 +432,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getDependencyInfoDataCaseGetUrlExceptionDataProvider()
+    public static function getDependencyInfoDataCaseGetUrlExceptionDataProvider()
     {
         return [
             'getUrl from same module' => [
@@ -471,7 +471,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getDefaultModelDependencyDataProvider()
+    public static function getDefaultModelDependencyDataProvider()
     {
         return [
             [

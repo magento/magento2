@@ -251,6 +251,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      */
     private $parentConnections = [];
 
+    /***
+     * Get exact version of MySQL
+     *
+     * @var string
+     */
+    private $mysqlversion;
+    
     /**
      * Constructor
      *
@@ -432,6 +439,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             $this->parentConnections[] = $this->_connection;
             $this->_connection = null;
             $this->pid = getmypid();
+
+            // Reset config host to avoid issue with multiple connections
+            if (!empty($this->_config['port']) && strpos($this->_config['host'], ':') === false) {
+                $this->_config['host'] = implode(':', [$this->_config['host'], $this->_config['port']]);
+                unset($this->_config['port']);
+            }
         }
     }
 
@@ -3069,7 +3082,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         $this->rawQuery("SET SQL_MODE=''");
         $this->rawQuery("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0");
         $this->rawQuery("SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO'");
-
+        $this->mysqlversion = $this->fetchPairs("SHOW variables LIKE 'version'")['version'] ?? '';
+        if ($this->isMysql8EngineUsed() && str_contains($this->mysqlversion, '8.4')) {
+            $this->rawQuery("SET @OLD_RESTRICT_FK_ON_NON_STANDARD_KEY=@@RESTRICT_FK_ON_NON_STANDARD_KEY");
+            $this->rawQuery("SET RESTRICT_FK_ON_NON_STANDARD_KEY=0");
+        }
         return $this;
     }
 
@@ -3082,7 +3099,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     {
         $this->rawQuery("SET SQL_MODE=IFNULL(@OLD_SQL_MODE,'')");
         $this->rawQuery("SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS=0, 0, 1)");
-
+        if ($this->isMysql8EngineUsed() && str_contains($this->mysqlversion, '8.4')) {
+            $this->rawQuery("SET RESTRICT_FK_ON_NON_STANDARD_KEY=IF(@OLD_RESTRICT_FK_ON_NON_STANDARD_KEY=0, 0, 1)");
+        }
         return $this;
     }
 

@@ -58,7 +58,7 @@ class IndexerTest extends TestCase
 
     /**
      * @param bool $isExist
-     * @param array $callCount
+     * @param int $callCount
      * @dataProvider executeProvider
      */
     public function testExecute($isExist, $callCount)
@@ -80,8 +80,8 @@ class IndexerTest extends TestCase
     public static function executeProvider()
     {
         return [
-            'set1' => ['isExist' => true, 'expectsValue' => 1],
-            'set2' => ['delete' => false, 'expectsValue' => 0]
+            'set1' => ['isExist' => true, 'callCount' => 1],
+            'set2' => ['isExist' => false, 'callCount' => 0]
         ];
     }
 

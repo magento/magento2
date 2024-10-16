@@ -51,7 +51,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function addAttributeDataProvider()
+    public static function addAttributeDataProvider()
     {
         return [
             ['eav_setup_test'],
