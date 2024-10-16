@@ -6,6 +6,7 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
+use Laminas\Validator\Regex;
 use Magento\Catalog\Api\Data\EavAttributeInterface;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\Exception\InputException;
@@ -252,9 +253,8 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             Attribute::ATTRIBUTE_CODE_MAX_LENGTH
         );
 
-        try {
-            $this->validateCode($code);
-        } catch (InputException $e) {
+        $validatorAttrCode = new Regex(['pattern' => '/^[a-z][a-z_0-9]{0,29}[a-z0-9]$/']);
+        if (!$validatorAttrCode->isValid($code)) {
             $code = 'attr_' . ($code ?: substr(hash('sha256', time()), 0, 8));
         }
 
