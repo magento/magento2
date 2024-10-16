@@ -18,8 +18,10 @@
             <testCaseId value="MC-14739"/>
             <group value="checkout"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>
             <!-- Create Simple Product -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <field key="price">560</field>
@@ -40,6 +42,7 @@
 
             <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 0" stepKey="DisablingGuestCheckoutLogin"/>
         </after>
 
         <!-- Add Simple Product to cart -->
@@ -64,11 +67,15 @@
         <click selector="{{CheckoutShippingSection.shipHereButton(DE_Address_Berlin_Not_Default_Address.street[0])}}" stepKey="clickShipHere"/>
 
         <!-- Click next button to open payment section -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="waitForElementSelectPaymentSolutionToBeClickable"/>
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution"/>
 
         <!-- Change the address -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.editAddress}}" stepKey="waitForEditAddressElementToBeClickable"/>
         <click selector="{{CheckoutPaymentSection.editAddress}}" stepKey="editAddress"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.addressDropdown}}" stepKey="waitForDropDownToBeVisible"/>
         <see selector="{{CheckoutPaymentSection.addressDropdownSelected}}" userInput="{{US_Address_NY.street[0]}}" stepKey="seeDefaultBillingAddressStreet"/>

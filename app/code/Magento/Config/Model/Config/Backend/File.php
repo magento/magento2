@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Model\Config\Backend;
 
 use Exception;
@@ -114,7 +116,7 @@ class File extends \Magento\Framework\App\Config\Value
             if (is_array($value) && !empty($value['delete'])) {
                 $this->setValue('');
             } elseif (is_array($value) && !empty($value['value'])) {
-                $this->setValue($value['value']);
+                $this->setValueAfterValidation($value['value']);
             } else {
                 $this->unsValue();
             }
@@ -265,5 +267,24 @@ class File extends \Magento\Framework\App\Config\Value
     protected function _getAllowedExtensions()
     {
         return [];
+    }
+
+    /**
+     * Validate if the value is intercepted
+     *
+     * @param string $value
+     * @return void
+     * @throws LocalizedException
+     */
+    private function setValueAfterValidation(string $value): void
+    {
+        if (preg_match('/[^a-z0-9_\/\\-\\.]+/i', $value)
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            || !$this->_mediaDirectory->isFile($this->_getUploadDir() . DIRECTORY_SEPARATOR . basename($value))
+        ) {
+            throw new LocalizedException(__('Invalid file name'));
+        }
+
+        $this->setValue($value);
     }
 }

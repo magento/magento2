@@ -42,7 +42,7 @@ class RowCustomizerTest extends TestCase
     /**
      * @var int
      */
-    private $productId = 11;
+    private static $productId = 11;
 
     protected function setUp(): void
     {
@@ -89,19 +89,19 @@ class RowCustomizerTest extends TestCase
     /**
      * @return array
      */
-    public function addDataDataProvider()
+    public static function addDataDataProvider()
     {
-        $expectedConfigurableData = $this->getExpectedConfigurableData();
-        $data = $expectedConfigurableData[$this->productId];
+        $expectedConfigurableData = self::getExpectedConfigurableData();
+        $data = $expectedConfigurableData[self::$productId];
 
         return [
             [
-                '$expected' => [
+                'expected' => [
                     'key_1' => 'value_1',
                     'key_2' => 'value_2',
                     'key_3' => 'value_3'
                 ],
-                '$data' => [
+                'data' => [
                     'data_row' => [
                         'key_1' => 'value_1',
                         'key_2' => 'value_2',
@@ -111,20 +111,20 @@ class RowCustomizerTest extends TestCase
                 ]
             ],
             [
-                '$expected' => [
+                'expected' => [
                     'key_1' => 'value_1',
                     'key_2' => 'value_2',
                     'key_3' => 'value_3',
                     'configurable_variations' => $data['configurable_variations'],
                     'configurable_variation_labels' => $data['configurable_variation_labels']
                 ],
-                '$data' => [
+                'data' => [
                     'data_row' => [
                         'key_1' => 'value_1',
                         'key_2' => 'value_2',
                         'key_3' => 'value_3'
                     ],
-                    'product_id' => $this->productId
+                    'product_id' => self::$productId
                 ]
             ]
         ];
@@ -149,7 +149,7 @@ class RowCustomizerTest extends TestCase
     /**
      * @return array
      */
-    public function getAdditionalRowsCountDataProvider()
+    public static function getAdditionalRowsCountDataProvider()
     {
         return [
             [
@@ -212,7 +212,7 @@ class RowCustomizerTest extends TestCase
 
         $productMock->expects(static::any())
             ->method('getId')
-            ->willReturn($this->productId);
+            ->willReturn(self::$productId);
         $productMock->expects(static::any())
             ->method('getTypeInstance')
             ->willReturn($this->configurableProductTypeMock);
@@ -243,10 +243,10 @@ class RowCustomizerTest extends TestCase
      *
      * @return array
      */
-    private function getExpectedConfigurableData()
+    private static function getExpectedConfigurableData()
     {
         return [
-            $this->productId => [
+            self::$productId => [
                 'configurable_variations' => implode(
                     ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
                     [

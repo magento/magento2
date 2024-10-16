@@ -17,6 +17,7 @@
             <testCaseId value="MC-10925"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>

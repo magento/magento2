@@ -86,7 +86,7 @@ class Pool implements \Iterator
          * default cache_dir setting from di.xml when a cache id_prefix is configured in app/etc/env.php.
          */
         $cacheInfo = $this->deploymentConfig->getConfigData(FrontendPool::KEY_CACHE);
-        if (null !== $cacheInfo) {
+        if (null !== $cacheInfo && array_key_exists(FrontendPool::KEY_FRONTEND_CACHE, $cacheInfo)) {
             return array_replace_recursive($this->_frontendSettings, $cacheInfo[FrontendPool::KEY_FRONTEND_CACHE]);
         }
         return $this->_frontendSettings;

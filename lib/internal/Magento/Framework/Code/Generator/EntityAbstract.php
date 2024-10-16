@@ -321,6 +321,7 @@ abstract class EntityAbstract
     /**
      * Extract parameter type
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @param \ReflectionParameter $parameter
      * @return null|string
      */
@@ -338,6 +339,9 @@ abstract class EntityAbstract
         if ($parameterType instanceof \ReflectionUnionType) {
             $parameterType = $parameterType->getTypes();
             $parameterType = implode('|', $parameterType);
+        } elseif ($parameterType instanceof \ReflectionIntersectionType) {
+            $parameterType = $parameterType->getTypes();
+            $parameterType = implode('&', $parameterType);
         } else {
             $parameterType = $parameterType->getName();
         }
@@ -352,8 +356,9 @@ abstract class EntityAbstract
             $typeName = $parameterType;
         }
 
-        if ($parameter->allowsNull()) {
-            $typeName = '?' . $typeName;
+        // Type "?array|string|null" is a union type, and therefore cannot be also marked nullable with the "?" prefix
+        if ($parameter->allowsNull() && $typeName !== 'mixed') {
+            $typeName = str_contains($typeName, "null") ? $typeName : '?' . $typeName;
         }
 
         return $typeName;

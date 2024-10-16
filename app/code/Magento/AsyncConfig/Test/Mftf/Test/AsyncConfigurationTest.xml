@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AsyncConfigurationTest">
+        <annotations>
+            <features value="Config"/>
+            <stories value="Add AsyncConfig Feature"/>
+            <title value="Admin user should be able to save configuration asynchronously"/>
+            <description value="Configuration changes saved in async mode will be applied by the consumer"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACPT-885"/>
+            <group value="configuration"/>
+            <group value="async_operations" />
+        </annotations>
+        <before>
+            <!--Enable Async Configuration-->
+            <magentoCLI stepKey="EnableAsyncConfig" command="setup:config:set --no-interaction --config-async 1"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="ClearConfigCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <!--Login to Admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="DisableAsyncConfig" command="setup:config:set --no-interaction --config-async 0"/>
+            <magentoCLI stepKey="setBackDefaultConfigValue" command="config:set catalog/frontend/grid_per_page 12" />
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="ClearConfigCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!--Go to Configuration Page-->
+        <amOnPage url="{{CatalogConfigPage.url}}" stepKey="navigateToConfigurationPage" />
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{CatalogSection.storefront}}" dependentSelector="{{CatalogSection.CheckIfTabExpand}}" visible="true" stepKey="expandStorefrontTab"/>
+        <scrollTo selector="{{CatalogSection.storefront}}" stepKey="scrollToOption" />
+
+        <!--Check Default Value of the Option-->
+        <seeInField userInput="12" selector="{{CatalogSection.productsPerPageOnGridDefaultValue}}" stepKey="SeeDefaultValue"/>
+
+        <!--Change Default Value of the Option-->
+        <uncheckOption selector="{{CatalogSection.productsPerPageOnGridDefaultValueUseConfigCheckbox}}" stepKey="uncheckUseSystemValue"/>
+        <fillField selector="{{CatalogSection.productsPerPageOnGridDefaultValue}}" userInput="24" stepKey="fillProductQuantity"/>
+
+        <!--Save Configuration-->
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="clickSaveConfig"/>
+        <waitForPageLoad stepKey="waitForSaving"/>
+        <waitForPageLoad time="30" stepKey="waitForConfigPageLoad"/>
+
+        <!--Check that Configuration Remains the Same and Custom Success Message is Shown-->
+        <seeInField userInput="12" selector="{{CatalogSection.productsPerPageOnGridDefaultValue}}" stepKey="SeeInsertedValue"/>
+        <see selector="{{CatalogSection.successMessage}}" userInput="Configuration changes will be applied by consumer soon." stepKey="seeCustomSuccessMessage"/>
+
+        <!--Trigger the Consumer-->
+        <magentoCLI stepKey="EnableAsyncConfig" command="queue:consumers:start saveConfigProcessor --max-messages=1"/>
+
+        <!--Open Configuration Page Again-->
+        <amOnPage url="{{CatalogConfigPage.url}}" stepKey="navigateToConfigurationPageAgain" />
+        <waitForPageLoad stepKey="waitForPageLoadAgain"/>
+        <conditionalClick selector="{{CatalogSection.storefront}}" dependentSelector="{{CatalogSection.CheckIfTabExpand}}" visible="true" stepKey="expandStorefrontTabAgain"/>
+
+        <!--Check that the Config Change Has Been Applied by the Consumer-->
+        <scrollTo selector="{{CatalogSection.storefront}}" stepKey="scrollToOptionAgain" />
+        <seeInField userInput="24" selector="{{CatalogSection.productsPerPageOnGridDefaultValue}}" stepKey="SeeUpdatedValue"/>
+    </test>
+</tests>

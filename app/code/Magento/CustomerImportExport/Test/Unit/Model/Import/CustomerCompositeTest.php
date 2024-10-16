@@ -21,7 +21,9 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\File\Read;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\AbstractSource;
@@ -163,7 +165,7 @@ class CustomerCompositeTest extends TestCase
         $this->errorAggregator = $this->getMockBuilder(
             ProcessingErrorAggregator::class
         )
-            ->setMethods(['hasToBeTerminated'])
+            ->onlyMethods(['hasToBeTerminated'])
             ->setConstructorArgs([$this->errorFactory])
             ->getMock();
 
@@ -177,6 +179,15 @@ class CustomerCompositeTest extends TestCase
      */
     protected function _createModelMock($data)
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Json::class,
+                $this->createMock(Json::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         return new CustomerComposite(
             $this->_string,
             $this->_scopeConfigMock,
@@ -255,6 +266,7 @@ class CustomerCompositeTest extends TestCase
     protected function _getModelMockForImportData($isDeleteBehavior, $customerImport, $addressImport)
     {
         $customerEntity = $this->_getCustomerEntityMock();
+        $customerEntity->expects($this->once())->method('setIds')->willReturnSelf();
         $customerEntity->expects($this->once())->method('importData')->willReturn($customerImport);
 
         $addressEntity = $this->_getAddressEntityMock();
@@ -262,7 +274,8 @@ class CustomerCompositeTest extends TestCase
         if ($isDeleteBehavior || !$customerImport) {
             $addressEntity->expects($this->never())->method('importData');
         } else {
-            $addressEntity->expects($this->once())->method('setCustomerAttributes')->willReturnSelf();
+            $addressEntity->expects($this->atMost(2))->method('setCustomerAttributes')->willReturnSelf();
+            $addressEntity->expects($this->once())->method('setIds')->willReturnSelf();
             $addressEntity->expects($this->once())->method('importData')->willReturn($addressImport);
         }
 
@@ -270,7 +283,9 @@ class CustomerCompositeTest extends TestCase
         $data['customer_entity'] = $customerEntity;
         $data['address_entity'] = $addressEntity;
 
-        return $this->_createModelMock($data);
+        $obj = $this->_createModelMock($data);
+        $obj->setIds([1, 2]);
+        return $obj;
     }
 
     /**
@@ -463,11 +478,11 @@ class CustomerCompositeTest extends TestCase
     /**
      * @return array
      */
-    public function getRowDataProvider()
+    public static function getRowDataProvider()
     {
         return [
             'customer and address rows, append behavior' => [
-                '$rows' => [
+                'rows' => [
                     [
                         Customer::COLUMN_EMAIL => 'test@test.com',
                         Customer::COLUMN_WEBSITE => 'admin',
@@ -479,13 +494,13 @@ class CustomerCompositeTest extends TestCase
                         Address::COLUMN_ADDRESS_ID => 1
                     ],
                 ],
-                '$calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 2],
-                '$validationReturn' => true,
-                '$expectedErrors' => [],
-                '$behavior' => Import::BEHAVIOR_APPEND,
+                'calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 2],
+                'validationReturn' => true,
+                'expectedErrors' => [],
+                'behavior' => Import::BEHAVIOR_APPEND,
             ],
             'customer and address rows, delete behavior' => [
-                '$rows' => [
+                'rows' => [
                     [
                         Customer::COLUMN_EMAIL => 'test@test.com',
                         Customer::COLUMN_WEBSITE => 'admin',
@@ -497,13 +512,13 @@ class CustomerCompositeTest extends TestCase
                         Address::COLUMN_ADDRESS_ID => 1
                     ],
                 ],
-                '$calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 0],
-                '$validationReturn' => true,
-                '$expectedErrors' => [],
-                '$behavior' => Import::BEHAVIOR_DELETE,
+                'calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 0],
+                'validationReturn' => true,
+                'expectedErrors' => [],
+                'behavior' => Import::BEHAVIOR_DELETE,
             ],
             'customer and two addresses row, append behavior' => [
-                '$rows' => [
+                'rows' => [
                     [
                         Customer::COLUMN_EMAIL => 'test@test.com',
                         Customer::COLUMN_WEBSITE => 'admin',
@@ -520,10 +535,10 @@ class CustomerCompositeTest extends TestCase
                         Address::COLUMN_ADDRESS_ID => 2
                     ],
                 ],
-                '$calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 3],
-                '$validationReturn' => true,
-                '$expectedErrors' => [],
-                '$behavior' => Import::BEHAVIOR_APPEND,
+                'calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 3],
+                'validationReturn' => true,
+                'expectedErrors' => [],
+                'behavior' => Import::BEHAVIOR_APPEND,
             ],
         ];
     }
@@ -625,44 +640,44 @@ class CustomerCompositeTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderTestImportData()
+    public static function dataProviderTestImportData()
     {
         return [
             'add_update_behavior_customer_true_address_true' => [
-                '$behavior' => Import::BEHAVIOR_ADD_UPDATE,
-                '$customerImport' => true,
-                '$addressImport' => true,
-                '$result' => true,
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'customerImport' => true,
+                'addressImport' => true,
+                'result' => true,
             ],
             'add_update_behavior_customer_true_address_false' => [
-                '$behavior' => Import::BEHAVIOR_ADD_UPDATE,
-                '$customerImport' => true,
-                '$addressImport' => false,
-                '$result' => false,
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'customerImport' => true,
+                'addressImport' => false,
+                'result' => false,
             ],
             'add_update_behavior_customer_false_address_true' => [
-                '$behavior' => Import::BEHAVIOR_ADD_UPDATE,
-                '$customerImport' => false,
-                '$addressImport' => true,
-                '$result' => false,
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'customerImport' => false,
+                'addressImport' => true,
+                'result' => false,
             ],
             'add_update_behavior_customer_false_address_false' => [
-                '$behavior' => Import::BEHAVIOR_ADD_UPDATE,
-                '$customerImport' => false,
-                '$addressImport' => false,
-                '$result' => false,
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'customerImport' => false,
+                'addressImport' => false,
+                'result' => false,
             ],
             'delete_behavior_customer_true' => [
-                '$behavior' => Import::BEHAVIOR_DELETE,
-                '$customerImport' => true,
-                '$addressImport' => false,
-                '$result' => true,
+                'behavior' => Import::BEHAVIOR_DELETE,
+                'customerImport' => true,
+                'addressImport' => false,
+                'result' => true,
             ],
             'delete_behavior_customer_false' => [
-                '$behavior' => Import::BEHAVIOR_DELETE,
-                '$customerImport' => false,
-                '$addressImport' => false,
-                '$result' => false,
+                'behavior' => Import::BEHAVIOR_DELETE,
+                'customerImport' => false,
+                'addressImport' => false,
+                'result' => false,
             ]
         ];
     }

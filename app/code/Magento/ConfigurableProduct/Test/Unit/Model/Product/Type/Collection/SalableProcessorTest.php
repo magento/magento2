@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class SalableProcessorTest extends TestCase
 {
-    const STOCK_FLAG = 'has_stock_status_filter';
+    private const STOCK_FLAG = 'has_stock_status_filter';
 
     /** @var ObjectManager */
     private $objectManager;
@@ -36,7 +36,7 @@ class SalableProcessorTest extends TestCase
         $this->stockStatusFactory = $this->getMockBuilder(
             StatusFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -51,7 +51,7 @@ class SalableProcessorTest extends TestCase
     public function testProcess()
     {
         $productCollection = $this->getMockBuilder(Collection::class)
-            ->setMethods(['addAttributeToFilter'])
+            ->onlyMethods(['addAttributeToFilter'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -60,7 +60,7 @@ class SalableProcessorTest extends TestCase
             ->with(ProductInterface::STATUS, Status::STATUS_ENABLED)->willReturnSelf();
 
         $stockStatusResource = $this->getMockBuilder(\Magento\CatalogInventory\Model\ResourceModel\Stock\Status::class)
-            ->setMethods(['addStockDataToCollection'])
+            ->onlyMethods(['addStockDataToCollection'])
             ->disableOriginalConstructor()
             ->getMock();
         $stockStatusResource->expects($this->once())

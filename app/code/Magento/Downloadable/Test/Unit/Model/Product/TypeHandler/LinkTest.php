@@ -54,11 +54,11 @@ class LinkTest extends TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->linkFactory = $this->getMockBuilder(LinkFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->linkResource = $this->getMockBuilder(\Magento\Downloadable\Model\ResourceModel\Link::class)
             ->disableOriginalConstructor()
-            ->setMethods(['deleteItems'])
+            ->onlyMethods(['deleteItems'])
             ->getMock();
         $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
@@ -81,12 +81,13 @@ class LinkTest extends TestCase
 
     /**
      * @dataProvider saveDataProvider
-     * @param \Magento\Catalog\Model\Product|MockObject $product
+     * @param \Closure $product
      * @param array $data
      * @param array $modelData
      */
-    public function testSave($product, array $data, array $modelData)
+    public function testSave(\Closure $product, array $data, array $modelData)
     {
+        $product = $product($this);
         $link = $this->createLinkkModel($product, $modelData, true);
         $this->linkFactory->expects($this->once())
             ->method('create')
@@ -99,11 +100,11 @@ class LinkTest extends TestCase
     /**
      * @return array
      */
-    public function saveDataProvider()
+    public static function saveDataProvider()
     {
         return [
             [
-                'product' => $this->createProductMock(100500, 1, 10, [10]),
+                'product' => static fn (self $testCase) => $testCase->createProductMock(100500, 1, 10, [10]),
                 'data' => [
                     'link' => [
                         [
@@ -169,13 +170,14 @@ class LinkTest extends TestCase
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product|MockObject $product
+     * @param \Closure $product
      * @param array $data
      * @param array $expectedItems
      * @dataProvider deleteDataProvider
      */
-    public function testDelete($product, array $data, array $expectedItems)
+    public function testDelete(\Closure $product, array $data, array $expectedItems)
     {
+        $product = $product($this);
         $this->linkResource->expects($this->once())
             ->method('deleteItems')
             ->with($expectedItems);
@@ -185,11 +187,11 @@ class LinkTest extends TestCase
     /**
      * @return array
      */
-    public function deleteDataProvider()
+    public static function deleteDataProvider()
     {
         return [
             [
-                'product' => $this->createProductMock(1, 1, 1, [1]),
+                'product' => static fn (self $testCase) => $testCase->createProductMock(1, 1, 1, [1]),
                 'data' => [
                     'link' => [
                         [
@@ -229,22 +231,18 @@ class LinkTest extends TestCase
     {
         $link = $this->getMockBuilder(\Magento\Downloadable\Model\Link::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['setProductId','setStoreId','setWebsiteId','setProductWebsiteIds','getIsUnlimited'])
+            ->onlyMethods(
                 [
                     'setData',
                     'setLinkType',
-                    'setProductId',
-                    'setStoreId',
-                    'setWebsiteId',
-                    'setProductWebsiteIds',
                     'setPrice',
                     'setNumberOfDownloads',
                     'setSampleUrl',
                     'setSampleType',
                     'setLinkFile',
                     'setSampleFile',
-                    'save',
-                    'getIsUnlimited'
+                    'save'
                 ]
             )
             ->getMock();
@@ -283,18 +281,22 @@ class LinkTest extends TestCase
      * @return \Magento\Catalog\Model\Product|MockObject
      * @internal param bool $isUnlimited
      */
-    private function createProductMock($id, $storeId, $storeWebsiteId, array $websiteIds)
+    protected function createProductMock($id, $storeId, $storeWebsiteId, array $websiteIds)
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
+                [
+                    'getLinksPurchasedSeparately',
+                    'setIsCustomOptionChanged'
+                ]
+            )
+            ->onlyMethods(
                 [
                     'getId',
                     'getStoreId',
                     'getStore',
                     'getWebsiteIds',
-                    'getLinksPurchasedSeparately',
-                    'setIsCustomOptionChanged',
                     'getData'
                 ]
             )
@@ -310,7 +312,7 @@ class LinkTest extends TestCase
             ->willReturn($websiteIds);
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsiteId'])
+            ->onlyMethods(['getWebsiteId'])
             ->getMock();
         $store->expects($this->any())
             ->method('getWebsiteId')

@@ -15,6 +15,7 @@
                 <severity value="CRITICAL"/>
                 <group value="store"/>
                 <group value="mtf_migrated"/>
+                <group value="cloud"/>
             </annotations>
             <before>
                 <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -29,13 +30,17 @@
                     <argument name="storeGroupName" value="{{customStore.name}}"/>
                     <argument name="storeGroupCode" value="{{customStore.code}}"/>
                 </actionGroup>
-                <magentoCron groups="index" stepKey="reindex"/>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
             </before>
             <after>
                 <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                     <argument name="websiteName" value="{{customWebsite.name}}"/>
                 </actionGroup>
-                <magentoCron groups="index" stepKey="reindex"/>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
                 <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             </after>
 

@@ -35,7 +35,7 @@ class BackendModelTest extends TestCase
     /**
      * @return array
      */
-    public function adminSessionLifetimeDataProvider()
+    public static function adminSessionLifetimeDataProvider()
     {
         return [
             [

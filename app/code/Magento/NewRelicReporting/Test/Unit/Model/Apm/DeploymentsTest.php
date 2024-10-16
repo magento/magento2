@@ -7,8 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\NewRelicReporting\Test\Unit\Model\Apm;
 
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
+use Laminas\Http\Exception\RuntimeException;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\NewRelicReporting\Model\Apm\Deployments;
 use Magento\NewRelicReporting\Model\Config;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -28,45 +32,38 @@ class DeploymentsTest extends TestCase
     protected $configMock;
 
     /**
-     * @var ZendClientFactory|MockObject
+     * @var LaminasClientFactory|MockObject
      */
-    protected $zendClientFactoryMock;
+    protected $httpClientFactoryMock;
 
     /**
-     * @var ZendClient|MockObject
+     * @var LaminasClient|MockObject
      */
-    protected $zendClientMock;
+    protected $httpClientMock;
 
     /**
      * @var LoggerInterface|MockObject
      */
     protected $loggerMock;
 
+    /**
+     * @var SerializerInterface|MockObject
+     */
+    private $serializerMock;
+
     protected function setUp(): void
     {
-        $this->zendClientFactoryMock = $this->getMockBuilder(ZendClientFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->zendClientMock = $this->getMockBuilder(ZendClient::class)
-            ->setMethods(['request', 'setUri', 'setMethod', 'setHeaders', 'setParameterPost'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['getNewRelicApiUrl', 'getNewRelicApiKey', 'getNewRelicAppId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->httpClientFactoryMock = $this->createMock(LaminasClientFactory::class);
+        $this->httpClientMock = $this->createMock(LaminasClient::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->configMock = $this->createMock(Config::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $this->model = new Deployments(
             $this->configMock,
             $this->loggerMock,
-            $this->zendClientFactoryMock
+            $this->httpClientFactoryMock,
+            $this->serializerMock
         );
     }
 
@@ -79,24 +76,28 @@ class DeploymentsTest extends TestCase
     {
         $data = $this->getDataVariables();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setUri')
             ->with($data['self_uri'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setMethod')
             ->with($data['method'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setHeaders')
             ->with($data['headers'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
-            ->method('setParameterPost')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->with($data['params'])
+            ->willReturn(json_encode($data['params']));
+        $this->httpClientMock->expects($this->once())
+            ->method('setRawBody')
+            ->with(json_encode($data['params']))
             ->willReturnSelf();
 
         $this->configMock->expects($this->once())
@@ -113,18 +114,18 @@ class DeploymentsTest extends TestCase
             ->method('getNewRelicAppId')
             ->willReturn($data['app_id']);
 
-        $zendHttpResponseMock = $this->getMockBuilder(
-            \Zend_Http_Response::class
+        $httpResponseMock = $this->getMockBuilder(
+            Response::class
         )->disableOriginalConstructor()
             ->getMock();
-        $zendHttpResponseMock->expects($this->any())->method('getStatus')->willReturn($data['status_ok']);
-        $zendHttpResponseMock->expects($this->once())->method('getBody')->willReturn($data['response_body']);
+        $httpResponseMock->expects($this->any())->method('getStatusCode')->willReturn($data['status_ok']);
+        $httpResponseMock->expects($this->once())->method('getBody')->willReturn($data['response_body']);
 
-        $this->zendClientMock->expects($this->once())->method('request')->willReturn($zendHttpResponseMock);
+        $this->httpClientMock->expects($this->once())->method('send')->willReturn($httpResponseMock);
 
-        $this->zendClientFactoryMock->expects($this->once())
+        $this->httpClientFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->zendClientMock);
+            ->willReturn($this->httpClientMock);
 
         $this->assertIsString(
             $this->model->setDeployment(
@@ -145,24 +146,28 @@ class DeploymentsTest extends TestCase
     {
         $data = $this->getDataVariables();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setUri')
             ->with($data['uri'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setMethod')
             ->with($data['method'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setHeaders')
             ->with($data['headers'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
-            ->method('setParameterPost')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->with($data['params'])
+            ->willReturn(json_encode($data['params']));
+        $this->httpClientMock->expects($this->once())
+            ->method('setRawBody')
+            ->with(json_encode($data['params']))
             ->willReturnSelf();
 
         $this->configMock->expects($this->once())
@@ -177,18 +182,18 @@ class DeploymentsTest extends TestCase
             ->method('getNewRelicAppId')
             ->willReturn($data['app_id']);
 
-        $zendHttpResponseMock = $this->getMockBuilder(
-            \Zend_Http_Response::class
+        $httpResponseMock = $this->getMockBuilder(
+            Response::class
         )->disableOriginalConstructor()
             ->getMock();
-        $zendHttpResponseMock->expects($this->any())->method('getStatus')->willReturn($data['status_bad']);
+        $httpResponseMock->expects($this->any())->method('getStatusCode')->willReturn($data['status_bad']);
 
-        $this->zendClientMock->expects($this->once())->method('request')->willReturn($zendHttpResponseMock);
+        $this->httpClientMock->expects($this->once())->method('send')->willReturn($httpResponseMock);
         $this->loggerMock->expects($this->once())->method('warning');
 
-        $this->zendClientFactoryMock->expects($this->once())
+        $this->httpClientFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->zendClientMock);
+            ->willReturn($this->httpClientMock);
 
         $this->assertIsBool(
             $this->model->setDeployment(
@@ -207,24 +212,28 @@ class DeploymentsTest extends TestCase
     {
         $data = $this->getDataVariables();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setUri')
             ->with($data['uri'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setMethod')
             ->with($data['method'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setHeaders')
             ->with($data['headers'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
-            ->method('setParameterPost')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->with($data['params'])
+            ->willReturn(json_encode($data['params']));
+        $this->httpClientMock->expects($this->once())
+            ->method('setRawBody')
+            ->with(json_encode($data['params']))
             ->willReturnSelf();
 
         $this->configMock->expects($this->once())
@@ -239,14 +248,14 @@ class DeploymentsTest extends TestCase
             ->method('getNewRelicAppId')
             ->willReturn($data['app_id']);
 
-        $this->zendClientMock->expects($this->once())->method('request')->willThrowException(
-            new \Zend_Http_Client_Exception()
+        $this->httpClientMock->expects($this->once())->method('send')->willThrowException(
+            new RuntimeException()
         );
         $this->loggerMock->expects($this->once())->method('critical');
 
-        $this->zendClientFactoryMock->expects($this->once())
+        $this->httpClientFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->zendClientMock);
+            ->willReturn($this->httpClientMock);
 
         $this->assertIsBool(
             $this->model->setDeployment(
@@ -261,7 +270,7 @@ class DeploymentsTest extends TestCase
     /**
      * @return array
      */
-    private function getDataVariables()
+    private function getDataVariables(): array
     {
         $description = 'Event description';
         $change = 'flush the cache username';
@@ -271,7 +280,7 @@ class DeploymentsTest extends TestCase
         $apiKey = '1234';
         $appName = 'app_name';
         $appId = 'application_id';
-        $method = ZendClient::POST;
+        $method = Request::METHOD_POST;
         $headers = ['Api-Key' => $apiKey, 'Content-Type' => 'application/json'];
         $responseBody = 'Response body content';
         $statusOk = '200';

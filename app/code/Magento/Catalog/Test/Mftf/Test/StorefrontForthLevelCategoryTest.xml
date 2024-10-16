@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <group value="Catalog"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category1"/>

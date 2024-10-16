@@ -18,7 +18,7 @@
             <testCaseId value="MC-6310"/>
             <useCaseId value="MAGETWO-91625"/>
             <group value="elasticsearch"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
             <group value="pr_exclude"/>
         </annotations>
         <before>
@@ -35,7 +35,9 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
         </before>
         <after>

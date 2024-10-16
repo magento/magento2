@@ -10,6 +10,9 @@
         <tab id="general" translate="label" sortOrder="100">
             <label>General</label>
         </tab>
+        <tab id="security" translate="label" sortOrder="200">
+            <label>Security</label>
+        </tab>
         <tab id="service" translate="label" sortOrder="99999">
             <label>Services</label>
         </tab>
@@ -349,9 +352,10 @@
                         <field id="transport">smtp</field>
                     </depends>
                 </field>
-                <field id="password" translate="label comment" type="password" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="password" translate="label comment" type="obscure" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Password</label>
-                    <comment>Username</comment>
+                    <comment>Password</comment>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <depends>
                         <field id="transport">smtp</field>
                     </depends>
@@ -478,6 +482,23 @@
                 <field id="enable_charts" translate="label" type="select" sortOrder="1" showInDefault="1" canRestore="1">
                     <label>Enable Charts</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="grid" translate="label" type="text" sortOrder="45" showInDefault="1">
+                <label>Admin Grids</label>
+                <field id="limit_total_number_of_products" translate="label comment"
+                       type="select" sortOrder="1" showInDefault="1" canRestore="1">
+                    <label>Limit Number of Products in Grid</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Limit total number of products in grid collection.</comment>
+                </field>
+                <field id="records_limit" translate="label comment" type="text" sortOrder="2" showInDefault="1" canRestore="1">
+                    <label>Records Limit</label>
+                    <validate>validate-digits validate-digits-range digits-range-20000-</validate>
+                    <comment>Limit total number of products in grid collection if their number is greater than this value. Minimum value: 20000.</comment>
+                    <depends>
+                        <field id="limit_total_number_of_products">1</field>
+                    </depends>
                 </field>
             </group>
         </section>

@@ -16,11 +16,9 @@
             <description value="Verify that UI elements are not shown if 'Login as customer' functionality is disabled"/>
             <severity value="CRITICAL"/>
             <group value="login_as_customer"/>
-            <skip>
-                <issueId value="ACQE-3908"/>
-            </skip>
         </annotations>
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0" stepKey="disableLoginAsCustomer"/>
             <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -31,6 +29,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>

@@ -37,31 +37,31 @@ class SwatchVisualFilterTest extends AbstractFiltersTest
     /**
      * @return array
      */
-    public function getFiltersWithCustomAttributeDataProvider(): array
+    public static function getFiltersWithCustomAttributeDataProvider(): array
     {
         return [
             'not_used_in_navigation' => [
-                'products_data' => [],
-                'attribute_data' => ['is_filterable' => 0],
+                'products' => [],
+                'attributeData' => ['is_filterable' => 0],
                 'expectation' => [],
             ],
             'used_in_navigation_with_results' => [
-                'products_data' => [
+                'products' => [
                     'simple1000' => 'option 1',
                     'simple1001' => 'option 2',
                 ],
-                'attribute_data' => ['is_filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS],
+                'attributeData' => ['is_filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS],
                 'expectation' => [
                     ['label' => 'option 1', 'count' => 1],
                     ['label' => 'option 2', 'count' => 1],
                 ],
             ],
             'used_in_navigation_without_results' => [
-                'products_data' => [
+                'products' => [
                     'simple1000' => 'option 1',
                     'simple1001' => 'option 2',
                 ],
-                'attribute_data' => ['is_filterable' => 2],
+                'attributeData' => ['is_filterable' => 2],
                 'expectation' => [
                     ['label' => 'option 1', 'count' => 1],
                     ['label' => 'option 2', 'count' => 1],
@@ -93,26 +93,26 @@ class SwatchVisualFilterTest extends AbstractFiltersTest
     /**
      * @return array
      */
-    public function getActiveFiltersWithCustomAttributeDataProvider(): array
+    public static function getActiveFiltersWithCustomAttributeDataProvider(): array
     {
         return [
             'filter_by_first_option_in_products_with_first_option' => [
-                'products_data' => ['simple1000' => 'option 1', 'simple1001' => 'option 1'],
+                'products' => ['simple1000' => 'option 1', 'simple1001' => 'option 1'],
                 'expectation' => ['label' =>  'option 1', 'count' => 0],
-                'filter_value' =>  'option 1',
-                'products_count' => 2,
+                'filterValue' =>  'option 1',
+                'productsCount' => 2,
             ],
             'filter_by_first_option_in_products_with_different_options' => [
-                'products_data' => ['simple1000' => 'option 1', 'simple1001' => 'option 2'],
+                'products' => ['simple1000' => 'option 1', 'simple1001' => 'option 2'],
                 'expectation' => ['label' =>  'option 1', 'count' => 0],
-                'filter_value' =>  'option 1',
-                'products_count' => 1,
+                'filterValue' =>  'option 1',
+                'productsCount' => 1,
             ],
             'filter_by_second_option_in_products_with_different_options' => [
-                'products_data' => ['simple1000' => 'option 1', 'simple1001' => 'option 2'],
+                'products' => ['simple1000' => 'option 1', 'simple1001' => 'option 2'],
                 'expectation' => ['label' => 'option 2', 'count' => 0],
-                'filter_value' => 'option 2',
-                'products_count' => 1,
+                'filterValue' => 'option 2',
+                'productsCount' => 1,
             ],
         ];
     }

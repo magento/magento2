@@ -15,6 +15,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
  *
  * @api
  * @deprecated 100.2.0 in favour of UI component implementation
+ * @see don't recommend this approach in favour of UI component implementation
  * @since 100.0.2
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
@@ -132,7 +133,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
         }
 
         if (empty($action['id'])) {
-            $action['id'] = 'id' .$this->random->getRandomString(10);
+            $action['id'] = 'id' . $this->random->getRandomString(10);
         }
         $actionAttributes->setData($action);
         $onclick = $actionAttributes->getData('onclick');
@@ -140,6 +141,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
         $actionAttributes->unsetData(['onclick', 'style']);
         $html = '<a ' . $actionAttributes->serialize() . '>' . $actionCaption . '</a>';
         if ($onclick) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $onclick = html_entity_decode($onclick);
             $html .= $this->secureHtmlRenderer->renderEventListenerAsTag('onclick', $onclick, "#{$action['id']}");
         }
         if ($style) {

@@ -19,6 +19,7 @@
             <severity value="CRITICAL"/>
             <group value="security"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

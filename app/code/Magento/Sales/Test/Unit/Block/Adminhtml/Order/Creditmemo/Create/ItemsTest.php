@@ -58,7 +58,7 @@ class ItemsTest extends TestCase
         $this->contextMock = $this->createMock(Context::class);
         $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStockItem'])
+            ->onlyMethods(['getStockItem'])
             ->getMock();
 
         $this->stockItemMock = $this->createPartialMock(
@@ -174,7 +174,7 @@ class ItemsTest extends TestCase
     /**
      * @return array
      */
-    public function canReturnItemsToStockDataProvider()
+    public static function canReturnItemsToStockDataProvider()
     {
         return [
             'cannot subtract by config' => [false, true, false],

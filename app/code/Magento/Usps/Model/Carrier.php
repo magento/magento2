@@ -12,6 +12,8 @@ use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\AsyncClient\HttpException;
 use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\Framework\Measure\Length;
 use Magento\Framework\Measure\Weight;
 use Magento\Framework\Xml\Security;
@@ -27,6 +29,7 @@ use Magento\Usps\Helper\Data as DataHelper;
  * USPS shipping
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  */
 class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
@@ -91,13 +94,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_request = null;
 
     /**
-     * Rate result data
-     *
-     * @var Result|null
-     */
-    protected $_result = null;
-
-    /**
      * Default cgi gateway url
      *
      * @var string
@@ -124,7 +120,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_productCollectionFactory;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClientFactory
+     * @var LaminasClientFactory
      * @deprecated Use asynchronous client.
      * @see $httpClient
      */
@@ -175,7 +171,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Shipping\Helper\Carrier $carrierHelper
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+     * @param LaminasClientFactory $httpClientFactory
      * @param array $data
      * @param AsyncClientInterface|null $httpClient
      * @param ProxyDeferredFactory|null $proxyDeferredFactory
@@ -201,7 +197,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         CarrierHelper $carrierHelper,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
+        LaminasClientFactory $httpClientFactory,
         array $data = [],
         ?AsyncClientInterface $httpClient = null,
         ?ProxyDeferredFactory $proxyDeferredFactory = null,
@@ -812,6 +808,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'INT_24' => __('Priority Mail International DVD Flat Rate priced box'),
                 'INT_25' => __('Priority Mail International Large Video Flat Rate priced box'),
                 'INT_27' => __('Priority Mail Express International Padded Flat Rate Envelope'),
+                '1058' => __('Ground Advantage™'),
+                '4058' => __('Ground Advantage™ HAZMAT'),
+                '6058' => __('Ground Advantage™ Parcel locker'),
+                '2058' => __('Ground Advantage™ Hold for pickup'),
+                '4096' => __('Ground Advantage™ Cubic HAZMAT'),
+                '1096' => __('Ground Advantage™ Cubic'),
+                '2096' => __('Ground Advantage™ Cubic Hold for pickup'),
+                '6096' => __('Ground Advantage™ Cubic Parcel locker')
             ],
             'service_to_code' => [
                 '0_FCLE' => 'First Class',
@@ -888,6 +892,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'INT_24' => 'Priority',
                 'INT_25' => 'Priority',
                 'INT_27' => 'Priority Express',
+                '1058' => 'Ground Advantage',
+                '4058' => 'Ground Advantage',
+                '6058' => 'Ground Advantage',
+                '2058' => 'Ground Advantage',
+                '4096' => 'Ground Advantage',
+                '1096' => 'Ground Advantage',
+                '2096' => 'Ground Advantage',
+                '6096' => 'Ground Advantage',
             ],
             'method_to_code' => [
                 'First-Class Mail Large Envelope' => '0_FCLE',
@@ -1992,12 +2004,17 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (!$url) {
             $url = $this->_defaultGatewayUrl;
         }
+        /** @var LaminasClient $client */
         $client = $this->_httpClientFactory->create();
         $client->setUri($url);
-        $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
-        $client->setParameterGet('API', $api);
-        $client->setParameterGet('XML', $requestXml);
-        $response = $client->request()->getBody();
+        $client->setOptions(['maxredirects' => 0, 'timeout' => 30]);
+        $client->setParameterGet(
+            [
+                'API' => $api,
+                'XML' => $requestXml
+            ]
+        );
+        $response = $client->send()->getBody();
 
         $response = $this->parseXml($response);
 

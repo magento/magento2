@@ -16,29 +16,21 @@ use Magento\Sales\Model\ConfigInterface;
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Block group
-     *
      * @var string
      */
     protected $_blockGroup = 'Magento_Sales';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Sales config
-     *
      * @var \Magento\Sales\Model\Config
      */
     protected $_salesConfig;
 
     /**
-     * Reorder helper
-     *
      * @var \Magento\Sales\Helper\Reorder
      */
     protected $_reorderHelper;
@@ -121,7 +113,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             );
         }
 
-        if ($this->_isAllowedAction('Magento_Sales::emails') && !$order->isCanceled()) {
+        if ($this->_isAllowedAction('Magento_Sales::email') && !$order->isCanceled()) {
             $message = __('Are you sure you want to send an order email to customer?');
             $this->addButton(
                 'send_notification',

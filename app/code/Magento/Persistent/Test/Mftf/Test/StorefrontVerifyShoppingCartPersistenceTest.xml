@@ -18,6 +18,7 @@
             <testCaseId value="AC-2619"/>
             <group value="persistent"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Enable Persistence-->
@@ -85,6 +86,7 @@
 
         <wait time="15" stepKey="waitSometime3" />
         <reloadPage stepKey="refreshSessionCookieByPageRefresh3" />
+        <waitForPageLoad stepKey="waitForPageLoadToSeeSuccessMessage"/>
 
         <actionGroup ref="StorefrontAssertPersistentCustomerWelcomeMessageActionGroup" stepKey="seeWelcomeForJohnDoeCustomer">
             <argument name="customerFullName" value="{{John_Smith_Customer.fullname}}"/>

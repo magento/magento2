@@ -48,7 +48,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestIsActive(): array
+    public static function dataProviderForTestIsActive(): array
     {
         return [
             [true, 1234, true],
@@ -108,7 +108,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestConvertLanguage(): array
+    public static function dataProviderForTestConvertLanguage(): array
     {
         return [
             ['some-language', 'some-language'],
@@ -155,8 +155,11 @@ class DataTest extends TestCase
         );
         $this->_scopeConfigMock
             ->method('getValue')
-            ->withConsecutive([Data::XML_PATH_CONVERSION_IMG_SRC, 'default'])
-            ->willReturnOnConsecutiveCalls($imgSrc);
+            ->willReturnCallback(function ($arg1, $arg2) use ($imgSrc) {
+                if ($arg1 == Data::XML_PATH_CONVERSION_IMG_SRC && $arg2 == 'default') {
+                    return $imgSrc;
+                }
+            });
         $this->assertEquals($imgSrc, $this->_helper->getConversionImgSrc());
     }
 
@@ -181,7 +184,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestStoreConfig(): array
+    public static function dataProviderForTestStoreConfig(): array
     {
         return [
             ['getConversionId', Data::XML_PATH_CONVERSION_ID, 123],
@@ -278,7 +281,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestConversionValueConstant(): array
+    public static function dataProviderForTestConversionValueConstant(): array
     {
         return [[1.4, 1.4], ['', Data::CONVERSION_VALUE_DEFAULT]];
     }
@@ -295,8 +298,10 @@ class DataTest extends TestCase
         $this->_registryMock->expects($this->never())->method('registry');
         $this->_scopeConfigMock
             ->method('getValue')
-            ->withConsecutive([Data::XML_PATH_CONVERSION_VALUE_TYPE], [Data::XML_PATH_CONVERSION_VALUE])
-            ->willReturnOnConsecutiveCalls(Data::CONVERSION_VALUE_TYPE_CONSTANT, $conversionValueConst);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Data::XML_PATH_CONVERSION_VALUE_TYPE] => Data::CONVERSION_VALUE_TYPE_CONSTANT,
+                [Data::XML_PATH_CONVERSION_VALUE] => $conversionValueConst
+            });
 
         $this->assertEquals($returnValue, $this->_helper->getConversionValue());
     }

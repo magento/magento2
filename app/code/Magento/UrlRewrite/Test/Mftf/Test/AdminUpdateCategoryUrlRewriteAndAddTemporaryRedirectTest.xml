@@ -15,6 +15,7 @@
             <testCaseId value="MC-5356"/>
             <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

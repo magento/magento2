@@ -195,14 +195,14 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     {
         $localData = $this->local->load($id);
 
-        if ($localData) {
+        if ($localData !== false) {
             if ($this->getDataVersion($localData) === $this->loadRemoteDataVersion($id)) {
                 return $localData;
             }
         }
 
         $remoteData = $this->remote->load($id);
-        if ($remoteData) {
+        if ($remoteData !== false) {
             $this->local->save($remoteData, $id);
 
             return $remoteData;
@@ -223,7 +223,9 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function test($id)
     {
-        return $this->local->test($id) ?? $this->remote->test($id);
+        return $this->_options['use_stale_cache'] ?
+            ($this->local->test($id) ?? $this->remote->test($id))
+            : $this->remote->test($id);
     }
 
     /**
@@ -233,10 +235,15 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     {
         $dataToSave = $data;
         $remHash = $this->loadRemoteDataVersion($id);
-
+        $isRemoteUpToDate = false;
         if ($remHash !== false && $this->getDataVersion($data) === $remHash) {
-            $dataToSave = $this->remote->load($id);
-        } else {
+            $remoteData = $this->remote->load($id);
+            if ($remoteData !== false && $this->getDataVersion($data) === $this->getDataVersion($remoteData)) {
+                $isRemoteUpToDate = true;
+                $dataToSave = $remoteData;
+            }
+        }
+        if (!$isRemoteUpToDate) {
             $this->remote->save($data, $id, $tags, $specificLifetime);
             $this->saveRemoteDataVersion($data, $id, $tags, $specificLifetime);
         }

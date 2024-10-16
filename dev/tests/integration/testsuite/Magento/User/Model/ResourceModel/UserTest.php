@@ -7,14 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\User\Model\ResourceModel;
 
+use Laminas\Validator\ValidatorInterface;
 use Magento\Authorization\Model\ResourceModel\Role\Collection as UserRoleCollection;
 use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory as UserRoleCollectionFactory;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Math\Random;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\User\Model\ResourceModel\User as UserResourceModel;
 use Magento\User\Model\User;
 use Magento\User\Model\UserFactory;
-use Magento\Framework\Math\Random;
 
 /**
  * @magentoAppArea adminhtml
@@ -118,7 +119,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     public function testGetValidationRulesBeforeSave(): void
     {
         $rules = $this->model->getValidationRulesBeforeSave();
-        $this->assertInstanceOf('Zend_Validate_Interface', $rules);
+        $this->assertInstanceOf(ValidatorInterface::class, $rules);
     }
 
     /**
@@ -131,7 +132,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $token = 'randomstring';
         $username = $this->random->getRandomString(6);
         $email = $username . "@example.com";
-        $password = uniqid().$this->random->getRandomString(10);
+        $password = uniqid() . $this->random->getRandomString(10);
         $userModel = Bootstrap::getObjectManager()->get(User::class);
 
         $userModel->setData(

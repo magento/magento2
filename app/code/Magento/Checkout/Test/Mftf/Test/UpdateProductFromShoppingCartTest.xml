@@ -17,6 +17,7 @@
             <testCaseId value="MC-42907"/>
             <group value="shoppingCart"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
