@@ -57,6 +57,11 @@ class Product extends AbstractEntity
     public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
 
     /**
+     * Filter chain const
+     */
+    private const FILTER_CHAIN = "php://filter";
+
+    /**
      * Size of bunch - part of products to save in one step.
      */
     public const BUNCH_SIZE = 20;
@@ -776,6 +781,11 @@ class Product extends AbstractEntity
     private ?SkuStorage $skuStorage;
 
     /**
+     * @var File|null
+     */
+    private ?File $fileDriver;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -950,6 +960,8 @@ class Product extends AbstractEntity
                 ->get(ProductRepositoryInterface::class);
         $this->stockItemProcessor = $stockItemProcessor ?? ObjectManager::getInstance()
                 ->get(StockItemProcessorInterface::class);
+        $this->fileDriver = $fileDriver ?? ObjectManager::getInstance()
+            ->get(File::class);
     }
 
     /**
@@ -2126,7 +2138,10 @@ class Product extends AbstractEntity
     {
         try {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $content = file_get_contents($filename);
+            if (stripos($filename, self::FILTER_CHAIN) !== false) {
+                return '';
+            }
+            $content = $this->fileDriver->fileGetContents($filename);
         } catch (\Exception $e) {
             $content = false;
         }
