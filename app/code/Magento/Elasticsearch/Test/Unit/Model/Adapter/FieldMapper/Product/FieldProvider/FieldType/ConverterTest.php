@@ -52,7 +52,7 @@ class ConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertProvider()
+    public static function convertProvider()
     {
         return [
             ['string', 'string'],

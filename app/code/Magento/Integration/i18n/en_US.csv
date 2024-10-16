@@ -125,3 +125,4 @@ OAuth,OAuth
 "Integrations API configuration file","Integrations API configuration file"
 "We couldn't find any records.","We couldn't find any records."
 Status,Status
+"Invalid Identity Link URL", "Invalid Identity Link URL"

@@ -13,6 +13,7 @@
             <argument name="orderNumber" type="string"/>
             <argument name="customer" type="entity"/>
         </arguments>
+        <waitForElementVisible selector="{{StorefrontGuestOrderSearchSection.orderId}}" stepKey="waitForElementInputOrderId"/>
         <fillField selector="{{StorefrontGuestOrderSearchSection.orderId}}" userInput="{{orderNumber}}" stepKey="inputOrderId"/>
         <fillField selector="{{StorefrontGuestOrderSearchSection.billingLastName}}" userInput="{{customer.lastname}}" stepKey="inputBillingLastName"/>
         <selectOption selector="{{StorefrontGuestOrderSearchSection.findOrderBy}}" userInput="email" stepKey="selectFindOrderByEmail"/>

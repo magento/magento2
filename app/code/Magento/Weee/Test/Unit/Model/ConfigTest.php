@@ -50,7 +50,7 @@ class ConfigTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderScopeConfigMethods()
+    public static function dataProviderScopeConfigMethods()
     {
         return [
             [

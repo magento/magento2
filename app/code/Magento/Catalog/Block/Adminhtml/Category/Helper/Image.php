@@ -6,8 +6,6 @@
 
 /**
  * Category form image field helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Helper;
 
@@ -39,6 +37,8 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
     }
 
     /**
+     * Return the URL
+     *
      * @return bool|string
      */
     protected function _getUrl()

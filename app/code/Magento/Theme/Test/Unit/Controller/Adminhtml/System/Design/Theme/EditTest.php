@@ -17,13 +17,13 @@ use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\Page;
 use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css;
 use Magento\Theme\Helper\Theme;
-use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest;
+use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditTest extends ThemeTest
+class EditTest extends ThemeTestCase
 {
     /**
      * @var string
@@ -241,8 +241,11 @@ class EditTest extends ThemeTest
 
         $layout
             ->method('getBlock')
-            ->withConsecutive(['theme_edit_tabs_tab_css_tab'], ['menu'])
-            ->willReturnOnConsecutiveCalls($tab, $menu);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['theme_edit_tabs_tab_css_tab'] => $tab,
+                ['menu'] => $menu
+            });
+
         $this->view->expects($this->atLeastOnce())
             ->method('getLayout')
             ->willReturn($layout);

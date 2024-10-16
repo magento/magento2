@@ -46,7 +46,7 @@ class DisableAutoGroupAssignDefaultTest extends TestCase
         $value = true;
 
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['save', 'setData'])
+            ->onlyMethods(['save', 'setData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

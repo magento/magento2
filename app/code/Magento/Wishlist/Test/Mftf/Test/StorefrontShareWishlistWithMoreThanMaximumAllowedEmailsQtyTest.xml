@@ -22,21 +22,19 @@
         <before>
             <magentoCLI command="config:set wishlist/email/number_limit 1" stepKey="changeEmailsQtyLimit"/>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
-                <argument name="tags" value="config"/>
+                <argument name="tags" value="config full_page"/>
             </actionGroup>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="runCronIndexer"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>
             <magentoCLI command="config:set wishlist/email/number_limit 10" stepKey="returnDefaultValue"/>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheClean">
-                <argument name="tags" value="config"/>
+                <argument name="tags" value="config full_page"/>
             </actionGroup>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Tax\Test\Unit\Model\Sales\Total\Quote;
 
 use Magento\Catalog\Model\Product;
+use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
@@ -23,6 +24,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Api\Data\QuoteDetailsInterface;
 use Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory;
+use Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterfaceFactory;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
@@ -30,6 +32,7 @@ use Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory;
 use Magento\Tax\Api\Data\TaxDetailsInterface;
 use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Tax\Helper\Data;
+use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Tax\Model\Calculation;
 use Magento\Tax\Model\Calculation\CalculatorFactory;
 use Magento\Tax\Model\Calculation\TotalBaseCalculator;
@@ -79,7 +82,7 @@ class TaxTest extends TestCase
         $taxData = $this->createMock(Data::class);
         $taxConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['priceIncludesTax', 'getShippingTaxClass', 'shippingPriceIncludesTax', 'discountTax'])
+            ->onlyMethods(['priceIncludesTax', 'getShippingTaxClass', 'shippingPriceIncludesTax', 'discountTax'])
             ->getMock();
         $taxConfig->method('priceIncludesTax')
             ->willReturn(false);
@@ -93,7 +96,7 @@ class TaxTest extends TestCase
         $product = $this->createMock(Product::class);
         $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParentItem', 'getHasChildren', 'getProduct', 'getQuote', 'getCode'])
+            ->onlyMethods(['getParentItem', 'getHasChildren', 'getProduct', 'getQuote', 'getCode'])
             ->getMock();
         $item->method('getParentItem')
             ->willReturn(null);
@@ -115,7 +118,7 @@ class TaxTest extends TestCase
 
         $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getStore',
                     'hasSingleStore',
@@ -141,11 +144,11 @@ class TaxTest extends TestCase
 
         $calculatorFactory = $this->getMockBuilder(CalculatorFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $calculationTool = $this->getMockBuilder(Calculation::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRate', 'getAppliedRates', 'round', 'calcTaxAmount'])
+            ->onlyMethods(['getRate', 'getAppliedRates', 'round', 'calcTaxAmount'])
             ->getMock();
         $calculationTool->expects($this->any())->method('round')
             ->willReturnArgument(0);
@@ -195,12 +198,12 @@ class TaxTest extends TestCase
 
         $regionFactory = $this->getMockBuilder(RegionInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setRegionId', 'create'])
+            ->onlyMethods(['setRegionId', 'create'])
             ->getMock();
 
         $addressFactory = $this->getMockBuilder(AddressInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRegionBuilder', 'create'])
+            ->onlyMethods(['getRegionBuilder', 'create'])
             ->getMock();
         $region = $this->getMockForAbstractClass(RegionInterface::class, [], '', false);
         $regionFactory->method('setRegionId')
@@ -236,7 +239,7 @@ class TaxTest extends TestCase
 
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['convertPrice', 'getStoreId'])
+            ->onlyMethods(['convertPrice', 'getStoreId'])
             ->getMock();
         $store->method('getStoreId')
             ->willReturn(1);
@@ -277,7 +280,7 @@ class TaxTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderCollectArray()
+    public static function dataProviderCollectArray()
     {
         $data = [
             'default' => [
@@ -285,7 +288,7 @@ class TaxTest extends TestCase
                     "qty" => 1, "price" => 100, "tax_percent" => 20, "product_type" => "simple",
                     "code" => "sequence-1", "tax_calculation_item_id" => "sequence-1", "converted_price" => 100,
                 ],
-                '$appliedRates' => [
+                'appliedRatesData' => [
                     [
                         "rates" => [
                             [
@@ -387,6 +390,21 @@ class TaxTest extends TestCase
             ->willReturn($calculationSequence);
 
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                TaxHelper::class,
+                $this->createMock(TaxHelper::class)
+            ],
+            [
+                QuoteDetailsItemExtensionInterfaceFactory::class,
+                $this->createMock(QuoteDetailsItemExtensionInterfaceFactory::class)
+            ],
+            [
+                CustomerAccountManagement::class,
+                $this->createMock(CustomerAccountManagement::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $taxTotalsCalcModel = $objectManager->getObject(
             Tax::class,
             ['taxData' => $taxData]
@@ -399,7 +417,7 @@ class TaxTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderProcessConfigArray()
+    public static function dataProviderProcessConfigArray()
     {
         return [
             [Calculation::CALC_TAX_BEFORE_DISCOUNT_ON_INCL, 'before', 'after'],
@@ -434,7 +452,7 @@ class TaxTest extends TestCase
             ->willReturnSelf();
 
         $itemDataObjectMock = $this->getMockBuilder(QuoteDetailsItemInterface::class)
-            ->setMethods(['getAssociatedTaxables'])
+            ->addMethods(['getAssociatedTaxables'])
             ->getMockForAbstractClass();
         $itemDataObjectFactoryMock = $this->getMockBuilder(QuoteDetailsItemInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -448,12 +466,14 @@ class TaxTest extends TestCase
 
         $regionFactory = $this->getMockBuilder(RegionInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setRegionId', 'create'])
+            ->addMethods(['setRegionId'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $addressFactory = $this->getMockBuilder(AddressInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRegionBuilder', 'create'])
+            ->addMethods(['getRegionBuilder'])
+            ->onlyMethods(['create'])
             ->getMock();
         $region = $this->getMockForAbstractClass(RegionInterface::class, [], '', false);
         $regionFactory->method('setRegionId')
@@ -466,7 +486,8 @@ class TaxTest extends TestCase
         $product = $this->createMock(Product::class);
         $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParentItem', 'getHasChildren', 'getProduct', 'getQuote', 'getCode'])
+            ->addMethods(['getHasChildren', 'getCode'])
+            ->onlyMethods(['getParentItem', 'getProduct', 'getQuote'])
             ->getMock();
         $item->method('getParentItem')
             ->willReturn(null);
@@ -520,7 +541,7 @@ class TaxTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderMapQuoteExtraTaxablesArray()
+    public static function dataProviderMapQuoteExtraTaxablesArray()
     {
         $data = [
             'default' => [
@@ -560,7 +581,7 @@ class TaxTest extends TestCase
             ->getMock();
         $taxConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['displayCartTaxWithGrandTotal', 'displayCartZeroTax', 'displayCartSubtotalBoth'])
+            ->onlyMethods(['displayCartTaxWithGrandTotal', 'displayCartZeroTax', 'displayCartSubtotalBoth'])
             ->getMock();
         $shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
         $shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
@@ -603,7 +624,7 @@ class TaxTest extends TestCase
 
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['convertPrice'])
+            ->addMethods(['convertPrice'])
             ->getMock();
         $quote = $this->createMock(Quote::class);
         $items = [];
@@ -648,7 +669,7 @@ class TaxTest extends TestCase
     /*
      * @return array
      */
-    public function dataProviderFetchArray()
+    public static function dataProviderFetchArray()
     {
         $appliedDataString = [
             'amount' => 80.0,
@@ -712,7 +733,7 @@ class TaxTest extends TestCase
         /** @var $address \Magento\Quote\Model\Quote\Address|MockObject */
         $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getAllItems',
                     '__wakeup',

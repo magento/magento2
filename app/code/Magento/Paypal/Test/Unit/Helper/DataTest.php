@@ -71,7 +71,7 @@ class DataTest extends TestCase
 
         $configMockFactory = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $configMockFactory->expects($this->any())->method('create')->willReturn($this->configMock);
         $this->configMock->expects($this->any())->method('setMethod')->willReturnSelf();
@@ -106,6 +106,19 @@ class DataTest extends TestCase
      */
     public function testGetBillingAgreementMethods($store, $quote, $paymentMethodsMap, $expectedResult)
     {
+        $quote = $quote($this);
+        if (!empty($expectedResult)) {
+            $expectedResult[0] = $expectedResult[0]($this);
+        }
+
+        $paymentMethodsMapFinal = array();
+        if (!empty($paymentMethodsMap[0])) {
+            foreach ($paymentMethodsMap[0] as $paymentMethodM) {
+                $paymentMethodsMapFinal[0][] = $paymentMethodM($this);
+            }
+        }
+        $paymentMethodsMap = $paymentMethodsMapFinal;
+
         $this->paymentMethodList->expects(static::once())
             ->method('getActiveList')
             ->with($store)
@@ -118,20 +131,22 @@ class DataTest extends TestCase
         $this->assertEquals($expectedResult, $this->_helper->getBillingAgreementMethods($store, $quote));
     }
 
-    /**
-     * @return array
-     */
-    public function getBillingAgreementMethodsDataProvider()
-    {
+    protected function getMockForQuote() {
         $quoteMock = $this->getMockBuilder(
             Quote::class
         )->disableOriginalConstructor()
             ->getMock();
+        return $quoteMock;
+    }
 
+    protected function getMockForPaymentMethod() {
         $methodMock = $this->getMockBuilder(
             PaymentMethodInterface::class
         )->getMock();
+        return $methodMock;
+    }
 
+    protected function getMockForAgreementClass() {
         $agreementMethodInstanceMock = $this->getMockBuilder(
             Agreement::class
         )->disableOriginalConstructor()
@@ -139,16 +154,39 @@ class DataTest extends TestCase
         $agreementMethodInstanceMock->expects($this->any())
             ->method('isAvailable')
             ->willReturn(true);
+        return $agreementMethodInstanceMock;
+    }
 
+    protected function getMockForCcClass() {
         $abstractMethodInstanceMock = $this->getMockBuilder(
             Cc::class
         )->disableOriginalConstructor()
             ->getMock();
+        return $abstractMethodInstanceMock;
+    }
 
+    protected function getMockForAdapterClass() {
         $adapterMethodInstanceMock = $this->getMockBuilder(
             Adapter::class
         )->disableOriginalConstructor()
             ->getMock();
+        return $adapterMethodInstanceMock;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getBillingAgreementMethodsDataProvider()
+    {
+        $quoteMock = static fn (self $testCase) => $testCase->getMockForQuote();
+
+        $methodMock = static fn (self $testCase) => $testCase->getMockForPaymentMethod();
+
+        $agreementMethodInstanceMock = static fn (self $testCase) => $testCase->getMockForAgreementClass();
+
+        $abstractMethodInstanceMock = static fn (self $testCase) => $testCase->getMockForCcClass();
+
+        $adapterMethodInstanceMock = static fn (self $testCase) => $testCase->getMockForAdapterClass();
 
         return [
             [
@@ -225,7 +263,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function getHtmlTransactionIdProvider()
+    public static function getHtmlTransactionIdProvider()
     {
         return [
             ['paypal_express'],

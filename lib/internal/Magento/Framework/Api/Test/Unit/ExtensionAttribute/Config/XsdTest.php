@@ -49,7 +49,7 @@ class XsdTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function exemplarXmlDataProvider()
+    public static function exemplarXmlDataProvider()
     {
         return [
             /** Valid configurations */
@@ -131,7 +131,10 @@ class XsdTest extends TestCase
             /** Invalid configurations */
             'invalid missing extension_attributes' => [
                 '<config/>',
-                ["Element 'config': Missing child element(s). Expected is ( extension_attributes )."],
+                [
+                    "Element 'config': Missing child element(s). Expected is ( extension_attributes ).The " .
+                    "xml was: \n0:<?xml version=\"1.0\"?>\n1:<config/>\n2:\n"
+                ],
             ],
             'invalid with attribute code with resources without single resource' => [
                 '<config>
@@ -142,7 +145,15 @@ class XsdTest extends TestCase
                         </attribute>
                     </extension_attributes>
                 </config>',
-                ["Element 'resources': Missing child element(s). Expected is ( resource )."],
+                [
+                    "Element 'resources': Missing child element(s). Expected is ( resource ).The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <extension_attributes " .
+                    "for=\"Magento\Tax\Api\Data\TaxRateInterface\">\n3:                        <attribute " .
+                    "code=\"custom_1\" type=\"Magento\Customer\Api\Data\CustomerCustom\">\n" .
+                    "4:                            <resources>\n5:                            </resources>\n" .
+                    "6:                        </attribute>\n7:                    </extension_attributes>\n" .
+                    "8:                </config>\n9:\n"
+                ],
             ],
             'invalid with attribute code without join attributes' => [
                 '<config>
@@ -153,10 +164,30 @@ class XsdTest extends TestCase
                     </extension_attributes>
                 </config>',
                 [
-                    "Element 'join': The attribute 'reference_table' is required but missing.",
-                    "Element 'join': The attribute 'join_on_field' is required but missing.",
-                    "Element 'join': The attribute 'reference_field' is required but missing.",
-                    "Element 'join': Missing child element(s). Expected is ( field ).",
+                    "Element 'join': The attribute 'reference_table' is required but missing.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <extension_attributes " .
+                    "for=\"Magento\Tax\Api\Data\TaxRateInterface\">\n3:                        <attribute " .
+                    "code=\"custom_1\" type=\"Magento\Customer\Api\Data\CustomerCustom\">\n" .
+                    "4:                            <join/>\n5:                        </attribute>\n" .
+                    "6:                    </extension_attributes>\n7:                </config>\n8:\n",
+                    "Element 'join': The attribute 'join_on_field' is required but missing.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <extension_attributes " .
+                    "for=\"Magento\Tax\Api\Data\TaxRateInterface\">\n3:                        <attribute " .
+                    "code=\"custom_1\" type=\"Magento\Customer\Api\Data\CustomerCustom\">\n" .
+                    "4:                            <join/>\n5:                        </attribute>\n" .
+                    "6:                    </extension_attributes>\n7:                </config>\n8:\n",
+                    "Element 'join': The attribute 'reference_field' is required but missing.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <extension_attributes " .
+                    "for=\"Magento\Tax\Api\Data\TaxRateInterface\">\n3:                        <attribute " .
+                    "code=\"custom_1\" type=\"Magento\Customer\Api\Data\CustomerCustom\">\n" .
+                    "4:                            <join/>\n5:                        </attribute>\n" .
+                    "6:                    </extension_attributes>\n7:                </config>\n8:\n",
+                    "Element 'join': Missing child element(s). Expected is ( field ).The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <extension_attributes " .
+                    "for=\"Magento\Tax\Api\Data\TaxRateInterface\">\n3:                        <attribute " .
+                    "code=\"custom_1\" type=\"Magento\Customer\Api\Data\CustomerCustom\">\n" .
+                    "4:                            <join/>\n5:                        </attribute>\n" .
+                    "6:                    </extension_attributes>\n7:                </config>\n8:\n",
                 ],
             ],
         ];

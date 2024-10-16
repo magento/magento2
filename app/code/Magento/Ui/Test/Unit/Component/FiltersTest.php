@@ -71,7 +71,7 @@ class FiltersTest extends TestCase
         $componentConfig = [0, 1, 2];
         $columnInterface = $this->getMockBuilder(ColumnInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData', 'getName', 'getConfiguration'])
+            ->onlyMethods(['getData', 'getName', 'getConfiguration'])
             ->getMockForAbstractClass();
         $columnInterface->expects($this->atLeastOnce())
             ->method('getData')
@@ -81,7 +81,7 @@ class FiltersTest extends TestCase
         $columnInterface->expects($this->once())->method('getConfiguration')->willReturn($componentConfig);
         $filterComponent = $this->getMockBuilder(UiComponentInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setData', 'prepare'])
+            ->onlyMethods(['setData', 'prepare'])
             ->getMockForAbstractClass();
         $filterComponent->expects($this->once())->method('setData')->with('config', $componentConfig)
             ->willReturnSelf();
@@ -98,7 +98,7 @@ class FiltersTest extends TestCase
     /**
      * @return array
      */
-    public function updateDataProvider(): array
+    public static function updateDataProvider(): array
     {
         return [
             ['text', 'filterInput'],

@@ -9,6 +9,7 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\Type\Simple;
+use Magento\CatalogImportExport\Model\Import\Product\UniqueAttributeValidator;
 use Magento\CatalogImportExport\Model\Import\Product\Validator;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\Media;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\Website;
@@ -18,6 +19,9 @@ use Magento\ImportExport\Model\Import;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ValidatorTest extends TestCase
 {
     /** @var Validator */
@@ -38,6 +42,11 @@ class ValidatorTest extends TestCase
     /** @var Validator\Website|MockObject */
     protected $validatorTwo;
 
+    /**
+     * @var UniqueAttributeValidator|MockObject
+     */
+    private $uniqueAttributeValidator;
+
     protected function setUp(): void
     {
         $entityTypeModel = $this->createPartialMock(
@@ -47,7 +56,7 @@ class ValidatorTest extends TestCase
         $entityTypeModel->expects($this->any())->method('retrieveAttributeFromCache')->willReturn([]);
         $this->context = $this->createPartialMock(
             Product::class,
-            ['retrieveProductTypeByName', 'retrieveMessageTemplate', 'getBehavior']
+            ['retrieveProductTypeByName', 'retrieveMessageTemplate', 'getBehavior', 'getMultipleValueSeparator']
         );
         $this->context->expects($this->any())->method('retrieveProductTypeByName')->willReturn($entityTypeModel);
         $this->context->expects($this->any())->method('retrieveMessageTemplate')->willReturn('error message');
@@ -60,15 +69,23 @@ class ValidatorTest extends TestCase
             Website::class,
             ['init', 'isValid', 'getMessages']
         );
+        $this->uniqueAttributeValidator = $this->createMock(UniqueAttributeValidator::class);
 
         $this->validators = [$this->validatorOne, $this->validatorTwo];
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->validator = $this->objectManagerHelper->getObject(
-            Validator::class,
-            [
-                'string' => new StringUtils(),
-                'validators' => $this->validators
-            ]
+        $timezone = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $timezone->expects($this->any())
+            ->method('date')
+            ->willReturnCallback(
+                function ($date = null) {
+                    return new \DateTime($date);
+                }
+            );
+
+        $this->validator = new Validator(
+            new StringUtils(),
+            $this->validators,
+            $timezone,
+            $this->uniqueAttributeValidator
         );
         $this->validator->init($this->context);
     }
@@ -79,10 +96,19 @@ class ValidatorTest extends TestCase
      * @param array $rowData
      * @param bool $isValid
      * @param string $attrCode
+     * @param bool $uniqueAttributeValidatorResult
      * @dataProvider attributeValidationProvider
      */
-    public function testAttributeValidation($behavior, $attrParams, $rowData, $isValid, $attrCode = 'attribute_code')
-    {
+    public function testAttributeValidation(
+        string $behavior,
+        array $attrParams,
+        array $rowData,
+        bool $isValid,
+        string $attrCode = 'attribute_code',
+        bool $uniqueAttributeValidatorResult = true
+    ) {
+        $this->uniqueAttributeValidator->method('isValid')->willReturn($uniqueAttributeValidatorResult);
+        $this->context->method('getMultipleValueSeparator')->willReturn(Product::PSEUDO_MULTI_LINE_SEPARATOR);
         $this->context->expects($this->any())->method('getBehavior')->willReturn($behavior);
         $result = $this->validator->isAttributeValid(
             $attrCode,
@@ -99,7 +125,7 @@ class ValidatorTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function attributeValidationProvider()
+    public static function attributeValidationProvider()
     {
         return [
             [
@@ -216,6 +242,14 @@ class ValidatorTest extends TestCase
                 ['product_type' => 'any', 'unique_attribute' => 'unique-value', Product::COL_SKU => 'sku-0'],
                 true,
                 'unique_attribute'
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'varchar', 'is_unique' => true],
+                ['product_type' => 'any', 'unique_attribute' => 'unique-value', Product::COL_SKU => 'sku-0'],
+                false,
+                'unique_attribute',
+                false
             ]
         ];
     }

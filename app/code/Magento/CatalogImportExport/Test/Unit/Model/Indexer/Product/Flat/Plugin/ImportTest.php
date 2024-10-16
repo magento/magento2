@@ -40,12 +40,12 @@ class ImportTest extends TestCase
     {
         $this->processorMock = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['markIndexerAsInvalid', 'isIndexerScheduled'])
+            ->onlyMethods(['markIndexerAsInvalid', 'isIndexerScheduled'])
             ->getMock();
 
         $this->flatStateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isFlatEnabled'])
+            ->onlyMethods(['isFlatEnabled'])
             ->getMock();
 
         $this->subjectMock = $this->getMockBuilder(\Magento\ImportExport\Model\Import::class)
