@@ -289,7 +289,7 @@
                         <label translate="true">Compared Products List Template</label>
                     </option>
                     <option name="sidebar" value="product/widget/compared/sidebar.phtml">
-                        <label translate="true">Viewed Products Sidebar Template</label>
+                        <label translate="true">Compared Products Sidebar Template</label>
                     </option>
                 </options>
             </parameter>
