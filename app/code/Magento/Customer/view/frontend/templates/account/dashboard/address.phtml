@@ -8,13 +8,15 @@
 ?>
 <div class="block block-dashboard-addresses">
     <div class="block-title">
-        <strong><?= $block->escapeHtml(__('Address Book')) ?></strong>
-        <a class="action edit" href="<?= $block->escapeUrl($block->getAddressBookUrl()) ?>"><span><?= $block->escapeHtml(__('Manage Addresses')) ?></span></a>
+        <strong><?= $escaper->escapeHtml(__('Address Book')) ?></strong>
+        <a class="action edit" href="<?= $escaper->escapeUrl($block->getAddressBookUrl()) ?>">
+            <span><?= $escaper->escapeHtml(__('Manage Addresses')) ?></span>
+        </a>
     </div>
     <div class="block-content">
         <div class="box box-billing-address">
             <strong class="box-title">
-                <span><?= $block->escapeHtml(__('Default Billing Address')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Default Billing Address')) ?></span>
             </strong>
             <div class="box-content">
                 <address>
@@ -22,12 +24,17 @@
                 </address>
             </div>
             <div class="box-actions">
-                <a class="action edit" href="<?= $block->escapeUrl($block->getPrimaryBillingAddressEditUrl()) ?>" data-ui-id="default-billing-edit-link"><span><?= $block->escapeHtml(__('Edit Address')) ?></span></a>
+                <a 
+                class="action edit" 
+                href="<?= $escaper->escapeUrl($block->getPrimaryBillingAddressEditUrl() . '?billingAddress') ?>" 
+                data-ui-id="default-billing-edit-link">
+                    <span><?= $escaper->escapeHtml(__('Edit Billing Address')) ?></span>
+                </a>
             </div>
         </div>
         <div class="box box-shipping-address">
             <strong class="box-title">
-                <span><?= $block->escapeHtml(__('Default Shipping Address')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Default Shipping Address')) ?></span>
             </strong>
             <div class="box-content">
                 <address>
@@ -35,7 +42,12 @@
                 </address>
             </div>
             <div class="box-actions">
-                <a class="action edit" href="<?= $block->escapeUrl($block->getPrimaryShippingAddressEditUrl()) ?>" data-ui-id="default-shipping-edit-link"><span><?= $block->escapeHtml(__('Edit Address')) ?></span></a>
+                <a
+                class="action edit"
+                href="<?= $escaper->escapeUrl($block->getPrimaryShippingAddressEditUrl() . '?shippingAddress') ?>"
+                data-ui-id="default-shipping-edit-link">
+                    <span><?= $escaper->escapeHtml(__('Edit Shipping Address')) ?></span>
+                </a>
             </div>
         </div>
     </div>

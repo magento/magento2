@@ -12,6 +12,8 @@
 $viewModel = $block->getViewModel();
 $regionProvider = $block->getRegionProvider();
 ?>
+<?php $shippingParam = $block->getRequest()->getParam('shippingAddress') !== null; ?>
+<?php $billingParam = $block->getRequest()->getParam('billingAddress') !== null; ?>
 <?php $_company = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Company::class) ?>
 <?php $_telephone = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Telephone::class) ?>
 <?php $_fax = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Fax::class) ?>
@@ -31,11 +33,11 @@ $regionProvider = $block->getRegionProvider();
     trim(str_replace('required-entry', '', $_streetValidationClass)) : ''; ?>
 <?php $_regionValidationClass = $viewModel->addressGetAttributeValidationClass('region'); ?>
 <form class="form-address-edit"
-      action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>"
-      method="post"
-      id="form-validate"
-      enctype="multipart/form-data"
-      data-hasrequired="<?= $escaper->escapeHtmlAttr(__('* Required Fields')) ?>">
+action="<?= $escaper->escapeUrl($block->getSaveUrl($shippingParam, $billingParam)) ?>"
+        method="post"
+        id="form-validate"
+        enctype="multipart/form-data"
+        data-hasrequired="<?= $escaper->escapeHtmlAttr(__('* Required Fields')) ?>">
     <fieldset class="fieldset">
         <legend class="legend"><span><?= $escaper->escapeHtml(__('Contact Information')) ?></span></legend><br>
         <?= $block->getBlockHtml('formkey') ?>

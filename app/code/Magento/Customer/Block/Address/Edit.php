@@ -240,14 +240,32 @@ class Edit extends \Magento\Directory\Block\Data
     /**
      * Return the Url for saving.
      *
+     * @param int $defaultShipping Default shipping flag
+     * @param int $defaultBilling Default billing flag
      * @return string
      */
-    public function getSaveUrl()
+    public function getSaveUrl($defaultShipping = 0, $defaultBilling = 0)
     {
-        return $this->_urlBuilder->getUrl(
-            'customer/address/formPost',
-            ['_secure' => true, 'id' => $this->getAddress()->getId()]
-        );
+        $queryParams = ['_secure' => true];
+        if ($defaultShipping == 1) {
+            $queryParams['default_shipping'] = 1;
+        } elseif ($defaultBilling == 1) {
+            $queryParams['default_billing'] = 1;
+        }
+
+        if ($this->getAddress()->isDefaultBilling() && $this->getAddress()->isDefaultShipping()) {
+            $postURL = $this->_urlBuilder->getUrl(
+                'customer/address/formPost',
+                $queryParams
+            );
+        } else {
+            $queryParams['id'] = $this->getAddress()->getId();
+            $postURL = $this->_urlBuilder->getUrl(
+                'customer/address/formPost',
+                $queryParams
+            );
+        }
+        return $postURL;
     }
 
     /**
