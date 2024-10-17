@@ -148,6 +148,15 @@ define([
                 },
 
                 /**
+                 * Reset Is Default option
+                 *
+                 */
+                reset: function () {
+                    jQuery('input[name="defaultvisual[]"]').prop('checked', false);
+                    jQuery('input[name="reset_is-default_option"]').val(1);
+                },
+
+                /**
                  * Update items count field
                  */
                 updateItemsCountField: function () {
@@ -226,6 +235,14 @@ define([
                 'add_new_swatch_visual_option_button',
                 'click',
                 swatchVisualOption.add.bind(swatchVisualOption, {}, true)
+            );
+        }
+
+        if ($('reset_default_swatch_visual_option_button')) {
+            Event.observe(
+                'reset_default_swatch_visual_option_button',
+                'click',
+                swatchVisualOption.reset.bind(swatchVisualOption, true)
             );
         }
 
@@ -319,7 +336,7 @@ define([
                     }).appendTo($('body'));
 
                     this.iframe = $('<iframe></iframe>', {
-                        id:  'upload_iframe',
+                        id: 'upload_iframe',
                         name: 'upload_iframe'
                     }).appendTo(this.wrapper);
 
