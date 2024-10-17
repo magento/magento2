@@ -60,7 +60,6 @@
                 </item>
             </argument>
             <settings>
-                <required>true</required>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                     <rule name="validate-no-html-tags" xsi:type="boolean">true</rule>

@@ -169,12 +169,10 @@
                 <dataType>string</dataType>
                 <label translate="true">Category Image</label>
                 <visible>true</visible>
-                <required>false</required>
             </settings>
             <formElements>
                 <imageUploader>
                     <settings>
-                        <required>false</required>
                         <uploaderConfig>
                             <param xsi:type="url" name="url" path="catalog/category_image/upload"/>
                         </uploaderConfig>
