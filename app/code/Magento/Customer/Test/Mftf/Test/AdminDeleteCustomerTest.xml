@@ -39,7 +39,7 @@
 
         <!--Assert Customer is not in Grid -->
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="clickFilterButton"/>
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="cleanFiltersIfTheySet"/>
         <waitForPageLoad stepKey="waitForClearFilters1"/>
         <fillField selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="$$createCustomer.email$$" stepKey="filterEmail"/>
         <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>
