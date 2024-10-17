@@ -25,31 +25,6 @@ use Psr\Log\LoggerInterface;
 class MassConsumerEnvelopeCallback
 {
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var MessageEncoder
-     */
-    private $messageEncoder;
-
-    /**
-     * @var MessageValidator
-     */
-    private $messageValidator;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var Json
-     */
-    private $jsonHelper;
-
-    /**
      * @param StoreManagerInterface $storeManager
      * @param MessageEncoder $messageEncoder
      * @param MessageValidator $messageValidator
@@ -57,17 +32,12 @@ class MassConsumerEnvelopeCallback
      * @param LoggerInterface $logger
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        MessageEncoder $messageEncoder,
-        MessageValidator $messageValidator,
-        Json $jsonHelper,
-        LoggerInterface $logger
+        private readonly StoreManagerInterface $storeManager,
+        private readonly MessageEncoder $messageEncoder,
+        private readonly MessageValidator $messageValidator,
+        private readonly Json $jsonHelper,
+        private readonly LoggerInterface $logger
     ) {
-        $this->storeManager = $storeManager;
-        $this->messageEncoder = $messageEncoder;
-        $this->messageValidator = $messageValidator;
-        $this->jsonHelper = $jsonHelper;
-        $this->logger = $logger;
     }
 
     /**

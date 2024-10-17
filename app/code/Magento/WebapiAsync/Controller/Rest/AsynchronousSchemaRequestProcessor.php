@@ -8,6 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Controller\Rest;
 
+use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Webapi\Exception;
+use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Webapi\Model\Rest\Swagger\Generator;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
 use Magento\Framework\Webapi\Request;
@@ -25,35 +29,17 @@ class AsynchronousSchemaRequestProcessor implements RequestProcessorInterface
     const BULK_PROCESSOR_PATH = 'async/bulk/schema';
 
     /**
-     * @var \Magento\Webapi\Model\Rest\Swagger\Generator
-     */
-    private $swaggerGenerator;
-
-    /**
-     * @var \Magento\Framework\Webapi\Rest\Response
-     */
-    private $response;
-
-    /**
-     * @var string
-     */
-    private $processorPath;
-
-    /**
      * Initial dependencies
      *
-     * @param \Magento\Webapi\Model\Rest\Swagger\Generator $swaggerGenerator
-     * @param \Magento\Framework\Webapi\Rest\Response $response
+     * @param Generator $swaggerGenerator
+     * @param RestResponse $response
      * @param string $processorPath
      */
     public function __construct(
-        Generator $swaggerGenerator,
-        RestResponse $response,
-        $processorPath = self::PROCESSOR_PATH
+        private readonly Generator $swaggerGenerator,
+        private readonly RestResponse $response,
+        private $processorPath = self::PROCESSOR_PATH
     ) {
-        $this->swaggerGenerator = $swaggerGenerator;
-        $this->response = $response;
-        $this->processorPath = $processorPath;
     }
 
     /**
@@ -61,11 +47,11 @@ class AsynchronousSchemaRequestProcessor implements RequestProcessorInterface
      *
      * @return void
      *
-     * @throws \Magento\Framework\Exception\AuthorizationException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Webapi\Exception
+     * @throws AuthorizationException
+     * @throws InputException
+     * @throws Exception
      */
-    public function process(\Magento\Framework\Webapi\Rest\Request $request)
+    public function process(RestRequest $request)
     {
         $requestedServices = $request->getRequestedServices('all');
         $requestedServices = $requestedServices == Request::ALL_SERVICES
@@ -83,10 +69,10 @@ class AsynchronousSchemaRequestProcessor implements RequestProcessorInterface
     /**
      * @inheritdoc
      *
-     * @param \Magento\Framework\Webapi\Rest\Request $request
+     * @param RestRequest $request
      * @return bool
      */
-    public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
+    public function canProcess(RestRequest $request)
     {
         if (strpos(ltrim($request->getPathInfo(), '/'), (string) $this->processorPath) === 0) {
             return true;
@@ -97,10 +83,10 @@ class AsynchronousSchemaRequestProcessor implements RequestProcessorInterface
     /**
      * Check if a request is a bulk request.
      *
-     * @param \Magento\Framework\Webapi\Rest\Request $request
+     * @param RestRequest $request
      * @return bool
      */
-    public function isBulk(\Magento\Framework\Webapi\Rest\Request $request)
+    public function isBulk(RestRequest $request)
     {
         if (strpos(ltrim($request->getPathInfo(), '/'), self::BULK_PROCESSOR_PATH) === 0) {
             return true;

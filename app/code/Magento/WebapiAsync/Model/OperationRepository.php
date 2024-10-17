@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Model;
 
+use InvalidArgumentException;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
 use Magento\AsynchronousOperations\Model\OperationRepositoryInterface;
@@ -24,35 +25,6 @@ use Magento\WebapiAsync\Controller\Rest\Asynchronous\InputParamsResolver;
 class OperationRepository implements OperationRepositoryInterface
 {
     /**
-     * @var OperationInterfaceFactory
-     */
-    private $operationFactory;
-
-    /**
-     * @var Json
-     */
-    private $jsonSerializer;
-
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
-
-    /**
-     * @var MessageValidator
-     */
-    private $messageValidator;
-    /**
-     * @var InputParamsResolver
-     */
-    private $inputParamsResolver;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * Initialize dependencies.
      *
      * @param OperationInterfaceFactory $operationFactory
@@ -63,18 +35,13 @@ class OperationRepository implements OperationRepositoryInterface
      * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
-        OperationInterfaceFactory $operationFactory,
-        EntityManager $entityManager,
-        MessageValidator $messageValidator,
-        Json $jsonSerializer,
-        InputParamsResolver $inputParamsResolver,
-        StoreManagerInterface $storeManager = null
+        private readonly OperationInterfaceFactory $operationFactory,
+        private readonly EntityManager $entityManager,
+        private readonly MessageValidator $messageValidator,
+        private readonly Json $jsonSerializer,
+        private readonly InputParamsResolver $inputParamsResolver,
+        private ?StoreManagerInterface $storeManager = null
     ) {
-        $this->operationFactory = $operationFactory;
-        $this->jsonSerializer = $jsonSerializer;
-        $this->messageValidator = $messageValidator;
-        $this->entityManager = $entityManager;
-        $this->inputParamsResolver = $inputParamsResolver;
         $this->storeManager = $storeManager?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
@@ -87,7 +54,7 @@ class OperationRepository implements OperationRepositoryInterface
         $this->messageValidator->validate($topicName, $entityParams);
         $requestData = $this->inputParamsResolver->getInputData();
         if ($operationId === null || !isset($requestData[$operationId])) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Parameter "$operationId" must not be NULL and must exist in input data'
             );
         }

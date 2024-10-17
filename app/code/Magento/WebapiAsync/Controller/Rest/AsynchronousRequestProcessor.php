@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\WebapiAsync\Controller\Rest;
 
 use Magento\Framework\Exception\BulkException;
+use Magento\Framework\Webapi\Rest\Request;
 use Magento\Webapi\Controller\Rest\RequestProcessorInterface;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
 use Magento\WebapiAsync\Controller\Rest\Asynchronous\InputParamsResolver;
@@ -29,33 +30,9 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     const BULK_PROCESSOR_PATH = "/^\\/async\/bulk(\\/V.+)/";
 
     /**
-     * @var \Magento\Framework\Webapi\Rest\Response
-     */
-    private $response;
-    /**
-     * @var \Magento\WebapiAsync\Controller\Rest\Asynchronous\InputParamsResolver
-     */
-    private $inputParamsResolver;
-    /**
-     * @var MassSchedule
-     */
-    private $asyncBulkPublisher;
-    /**
-     * @var WebApiAsyncConfig
-     */
-    private $webapiAsyncConfig;
-    /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor
-     */
-    private $dataObjectProcessor;
-    /**
      * @var AsyncResponseInterfaceFactory
      */
     private $asyncResponseFactory;
-    /**
-     * @var string Regex pattern
-     */
-    private $processorPath;
 
     /**
      * Initialize dependencies.
@@ -69,27 +46,20 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
      * @param string $processorPath
      */
     public function __construct(
-        RestResponse $response,
-        InputParamsResolver $inputParamsResolver,
-        MassSchedule $asyncBulkPublisher,
-        WebApiAsyncConfig $webapiAsyncConfig,
-        DataObjectProcessor $dataObjectProcessor,
+        private readonly RestResponse $response,
+        private readonly InputParamsResolver $inputParamsResolver,
+        private readonly MassSchedule $asyncBulkPublisher,
+        private readonly WebApiAsyncConfig $webapiAsyncConfig,
+        private readonly DataObjectProcessor $dataObjectProcessor,
         AsyncResponseInterfaceFactory $asyncResponse,
-        $processorPath = self::PROCESSOR_PATH
+        private $processorPath = self::PROCESSOR_PATH
     ) {
-        $this->response = $response;
-        $this->inputParamsResolver = $inputParamsResolver;
-        $this->asyncBulkPublisher = $asyncBulkPublisher;
-        $this->webapiAsyncConfig = $webapiAsyncConfig;
-        $this->dataObjectProcessor = $dataObjectProcessor;
-        $this->asyncResponseFactory = $asyncResponse;
-        $this->processorPath = $processorPath;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function process(\Magento\Framework\Webapi\Rest\Request $request)
+    public function process(Request $request)
     {
         $path = $request->getPathInfo();
         $path = preg_replace($this->processorPath, "$1", $path);
@@ -119,7 +89,7 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
-     * @param \Magento\Framework\Webapi\Rest\Request $request
+     * @param Request $request
      * @return string
      */
     private function getTopicName($request)
@@ -135,9 +105,9 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
+    public function canProcess(Request $request)
     {
-        if ($request->getHttpMethod() === \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET) {
+        if ($request->getHttpMethod() === Request::HTTP_METHOD_GET) {
             return false;
         }
 
@@ -148,10 +118,10 @@ class AsynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
-     * @param \Magento\Framework\Webapi\Rest\Request $request
+     * @param Request $request
      * @return bool
      */
-    public function isBulk(\Magento\Framework\Webapi\Rest\Request $request)
+    public function isBulk(Request $request)
     {
         if (preg_match(self::BULK_PROCESSOR_PATH, $request->getPathInfo()) === 1) {
             return true;
