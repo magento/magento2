@@ -264,7 +264,7 @@
         </actionGroup>
         <seeNumberOfElements selector="{{AdminDataGridTableSection.rows}}" userInput="1" stepKey="see1RowOnFirstPage" after="select1OrderPerPage"/>
         <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="1" stepKey="seeOnFirstPageOrderGrid" after="see1RowOnFirstPage"/>
-        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPageOrderGrid" after="seeOnFirstPageOrderGrid"/>
+        <actionGroup ref="AdminGridGoToNextPageActionGroup" stepKey="clickNextPageOrderGrid" after="seeOnFirstPageOrderGrid"/>
         <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="2" stepKey="seeOnSecondPageOrderGrid" after="clickNextPageOrderGrid"/>
         <seeNumberOfElements selector="{{AdminDataGridTableSection.rows}}" userInput="1" stepKey="see1RowOnSecondPage" after="seeOnSecondPageOrderGrid"/>
         <actionGroup ref="AdminDataGridSelectPerPageActionGroup" stepKey="select50OrdersPerPage" after="see1RowOnSecondPage">
