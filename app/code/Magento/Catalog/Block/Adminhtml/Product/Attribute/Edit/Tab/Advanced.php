@@ -6,13 +6,18 @@
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
+use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Catalog\Model\Attribute\Source\ApplyTo;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
 use Magento\Eav\Helper\Data;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime;
 
 /**
@@ -25,11 +30,10 @@ use Magento\Framework\Stdlib\DateTime;
 class Advanced extends Generic
 {
     /**
-     * Eav data
      *
      * @var Data
      */
-    protected $_eavData = null;
+    protected $_eavData;
 
     /**
      * @var Yesno
@@ -47,27 +51,38 @@ class Advanced extends Generic
     private $propertyLocker;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @var ApplyTo
+     */
+    private $applyTo;
+
+    /**
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
      * @param Yesno $yesNo
      * @param Data $eavData
      * @param array $disableScopeChangeList
      * @param array $data
+     * @param PropertyLocker|null $propertyLocker
+     * @param ApplyTo|null $applyTo
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
         Yesno $yesNo,
         Data $eavData,
         array $disableScopeChangeList = [],
-        array $data = []
+        array $data = [],
+        ?PropertyLocker $propertyLocker = null,
+        ?ApplyTo $applyTo = null
     ) {
         $this->_yesNo = $yesNo;
         $this->_eavData = $eavData;
         $this->disableScopeChangeList = $disableScopeChangeList;
         parent::__construct($context, $registry, $formFactory, $data);
+        $this->propertyLocker = $propertyLocker ?? ObjectManager::getInstance()->get(PropertyLocker::class);
+        $this->applyTo = $applyTo ?? ObjectManager::getInstance()->get(ApplyTo::class);
     }
 
     /**
@@ -230,22 +245,35 @@ class Advanced extends Generic
             ]
         );
 
+        $fieldset->addField(
+            'apply_to',
+            'multiselect',
+            [
+                'name' => 'apply_to',
+                'label' => __('Apply To'),
+                'title' => __('Apply To'),
+                'values' => $this->applyTo->toOptionArray(),
+                'value' => $attributeObject->getApplyTo()
+            ]
+        );
+
         if ($attributeObject->getId()) {
             $form->getElement('attribute_code')->setDisabled(1);
             if (!$attributeObject->getIsUserDefined()) {
                 $form->getElement('is_unique')->setDisabled(1);
+                $form->getElement('apply_to')->setDisabled(1);
             }
         }
 
         $scopes = [
-            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE => __('Store View'),
-            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE => __('Website'),
-            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL => __('Global'),
+            ScopedAttributeInterface::SCOPE_STORE => __('Store View'),
+            ScopedAttributeInterface::SCOPE_WEBSITE => __('Website'),
+            ScopedAttributeInterface::SCOPE_GLOBAL => __('Global'),
         ];
 
         if ($attributeObject->getAttributeCode() == 'status' || $attributeObject->getAttributeCode() == 'tax_class_id'
         ) {
-            unset($scopes[\Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE]);
+            unset($scopes[ScopedAttributeInterface::SCOPE_STORE]);
         }
 
         $fieldset->addField(
@@ -266,7 +294,7 @@ class Advanced extends Generic
             $form->getElement('is_global')->setDisabled(1);
         }
         $this->setForm($form);
-        $this->getPropertyLocker()->lock($form);
+        $this->propertyLocker->lock($form);
         return $this;
     }
 
@@ -289,19 +317,6 @@ class Advanced extends Generic
     private function getAttributeObject()
     {
         return $this->_coreRegistry->registry('entity_attribute');
-    }
-
-    /**
-     * Get property locker
-     *
-     * @return PropertyLocker
-     */
-    private function getPropertyLocker()
-    {
-        if (null === $this->propertyLocker) {
-            $this->propertyLocker = ObjectManager::getInstance()->get(PropertyLocker::class);
-        }
-        return $this->propertyLocker;
     }
 
     /**

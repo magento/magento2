@@ -22,5 +22,11 @@
         <element name="UseInProductListing" type="select" selector="#used_in_product_listing"/>
         <element name="UseInSearch" type="select" selector="#is_searchable"/>
         <element name="VisibleInAdvancedSearch" type="select" selector="#is_visible_in_advanced_search"/>
+        <element name="ApplyToSimple" type="multiselect" selector="//select[@id='apply_to']/option[@value='simple']"/>
+        <element name="ApplyToVirtual" type="multiselect" selector="//select[@id='apply_to']/option[@value='virtual']"/>
+        <element name="ApplyToDownloadable" type="multiselect" selector="//select[@id='apply_to']/option[@value='downloadable']"/>
+        <element name="ApplyToConfigurable" type="multiselect" selector="//select[@id='apply_to']/option[@value='configurable']"/>
+        <element name="ApplyToGrouped" type="multiselect" selector="//select[@id='apply_to']/option[@value='grouped']"/>
+        <element name="ApplyToBundle" type="multiselect" selector="//select[@id='apply_to']/option[@value='bundle']"/>
     </section>
 </sections>
