@@ -724,6 +724,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'STANDARD_OVERNIGHT' => __('Standard Overnight'),
                 'FEDEX_FREIGHT' => __('Freight'),
                 'FEDEX_NATIONAL_FREIGHT' => __('National Freight'),
+                'FEDEX_REGIONAL_ECONOMY' => __('Regional Economy'),
+                'FEDEX_INTERNATIONAL_PRIORITY_EXPRESS' => __('International Priority Express'),
             ],
             'dropoff' => [
                 'REGULAR_PICKUP' => __('Regular Pickup'),
