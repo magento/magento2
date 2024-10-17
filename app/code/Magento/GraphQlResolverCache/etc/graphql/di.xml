@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface" type="Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\Provider" />
+    <preference for="Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorProviderInterface" type="Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorDehydratorProvider"/>
+    <preference for="Magento\GraphQlResolverCache\Model\Resolver\Result\DehydratorProviderInterface" type="Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorDehydratorProvider"/>
+    <preference for="Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface" type="Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor"/>
+    <preference for="Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\FlagSetter\FlagSetterInterface" type="Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\FlagSetter\SingleObject"/>
+    <preference for="Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\FlagGetter\FlagGetterInterface" type="Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\FlagGetter\SingleObject"/>
+    <type name="Magento\Framework\GraphQl\Query\ResolverInterface">
+        <plugin name="cacheResolverResult" type="Magento\GraphQlResolverCache\Model\Plugin\Resolver\Cache" sortOrder="20"/>
+    </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor">
+        <arguments>
+            <argument name="typeConfig" xsi:type="array">
+                <item name="setters" xsi:type="array">
+                    <item name="Magento\Framework\GraphQl\Schema\Type\ListOfType" xsi:type="string">Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\FlagSetter\ListOfObjects</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

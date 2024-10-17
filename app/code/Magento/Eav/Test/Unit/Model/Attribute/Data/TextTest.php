@@ -10,6 +10,7 @@ namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 use Magento\Eav\Model\Attribute;
 use Magento\Eav\Model\Attribute\Data\Text;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\Entity\TypeFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
@@ -136,7 +137,7 @@ class TextTest extends TestCase
      *
      * @return array
      */
-    public function alphanumDataProvider(): array
+    public static function alphanumDataProvider(): array
     {
         return [
             ['QazWsx', true],
@@ -184,7 +185,7 @@ class TextTest extends TestCase
      *
      * @return array
      */
-    public function alphanumWithSpacesDataProvider(): array
+    public static function alphanumWithSpacesDataProvider(): array
     {
         return [
             ['QazWsx', true],
@@ -197,6 +198,16 @@ class TextTest extends TestCase
                 __('"%1" length must be equal or less than %2 characters.', 'Test', 10)]
             ],
         ];
+    }
+
+    /**
+     * Test for string with diacritics validation
+     */
+    public function testValidateValueStringWithDiacritics(): void
+    {
+        $inputValue = "á â à å ä ð é ê è ë í î ì ï ó ô ò ø õ ö ú û ù ü æ œ ç ß a ĝ ń ŕ ý ð ñ";
+        $expectedResult = true;
+        self::assertEquals($expectedResult, $this->model->validateValue($inputValue));
     }
 
     /**
@@ -213,12 +224,18 @@ class TextTest extends TestCase
             ['eavTypeFactory' => $eavTypeFactory, 'data' => $attributeData]
         );
 
+        $entityTypeMock = $this->createMock(Type::class);
+
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|MockObject $attribute
          */
         $attribute = $this->getMockBuilder($attributeClass)
-            ->setMethods(['_init'])
+            ->onlyMethods(['_init', 'getEntityType'])
             ->setConstructorArgs($arguments)
             ->getMock();
+
+        $attribute->expects($this->any())
+            ->method('getEntityType')
+            ->willReturn($entityTypeMock);
         return $attribute;
     }
 }

@@ -7,9 +7,9 @@ namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
 /**
  * Base class for credit memo total
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 abstract class AbstractTotal extends \Magento\Sales\Model\Order\Total\AbstractTotal

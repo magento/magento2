@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\CatalogGraphQl\Model\Category\Filter\SearchCriteria;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
@@ -89,47 +90,45 @@ class CategoryList implements ResolverInterface
             $processedArgs = $this->argsSelection->process($info->fieldName, $args);
             $filterResults = $this->categoryFilter->getResult($processedArgs, $store, [], $context);
 
-            $rootCategoryIds = $filterResults['category_ids'];
+            $topLevelCategoryIds = $filterResults['category_ids'];
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
-        return $this->fetchCategories($rootCategoryIds, $info, $processedArgs, $store, [], $context);
+
+        return $this->fetchCategoriesByTopLevelIds($topLevelCategoryIds, $info, $processedArgs, [], $context);
     }
 
     /**
      * Fetch category tree data
      *
-     * @param array $categoryIds
+     * @param array $topLevelCategoryIds
      * @param ResolveInfo $info
-     * @param array $criteria
-     * @param StoreInterface $store
+     * @param array $processedArgs
      * @param array $attributeNames
      * @param ContextInterface $context
      * @return array
      * @throws LocalizedException
      */
-    private function fetchCategories(
-        array $categoryIds,
+    private function fetchCategoriesByTopLevelIds(
+        array $topLevelCategoryIds,
         ResolveInfo $info,
-        array $criteria,
-        StoreInterface $store,
+        array $processedArgs,
         array $attributeNames,
         ContextInterface $context
     ) : array {
-        $fetchedCategories = [];
-        foreach ($categoryIds as $categoryId) {
-            $searchCriteria = $this->searchCriteria->buildCriteria($criteria, $store);
-            $categoryTree = $this->categoryTree->getFilteredTree(
-                $info,
-                $categoryId,
-                $searchCriteria,
-                $store,
-                $attributeNames,
-                $context
-            );
-            $fetchedCategories[] = current($this->extractDataFromCategoryTree->execute($categoryTree));
-        }
-
-        return $fetchedCategories;
+        // pagination must be applied to top level category results, children categories are not paginated
+        $processedArgs['pageSize'] = 0;
+        $searchCriteria = $this->searchCriteria->buildCriteria(
+            $processedArgs,
+            $context->getExtensionAttributes()->getStore()
+        );
+        $categoryCollection = $this->categoryTree->getFlatCategoriesByRootIds(
+            $info,
+            $topLevelCategoryIds,
+            $searchCriteria,
+            $attributeNames,
+            $context
+        );
+        return $this->extractDataFromCategoryTree->buildTree($categoryCollection, $topLevelCategoryIds);
     }
 }

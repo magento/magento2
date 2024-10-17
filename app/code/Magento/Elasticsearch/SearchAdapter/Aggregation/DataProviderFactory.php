@@ -14,12 +14,12 @@ use Magento\Framework\Search\Dynamic\DataProviderInterface;
 /**
  * It's a factory which allows to override instance of DataProviderInterface
  * with the instance of the same class but with injected search query.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class DataProviderFactory
 {
     /**
-     * Object Manager
-     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -33,8 +33,9 @@ class DataProviderFactory
     }
 
     /**
-     * Recreates an instance of the DataProviderInterface in order to support QueryAware interface
-     * and add a QueryContainer to the DataProvider
+     * Recreates an instance of the DataProviderInterface.
+     *
+     * It should be done in order to support QueryAware interface and add a QueryContainer to the DataProvider.
      *
      * The Query is an optional argument as it's not required to pass the QueryContainer for data providers
      * who not implementing QueryAwareInterface, but the method is also responsible for checking

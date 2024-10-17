@@ -304,7 +304,7 @@ class CategoryTest extends AbstractBackendController
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function saveActionDataProvider(): array
+    public static function saveActionDataProvider(): array
     {
         $result = [
             'default values' => [
@@ -549,7 +549,7 @@ class CategoryTest extends AbstractBackendController
      *
      * @return array
      */
-    public function moveActionDataProvider(): array
+    public static function moveActionDataProvider(): array
     {
         return [
             [400, 401, 'first_url_key', 402, 'second_url_key', false],
@@ -596,7 +596,7 @@ class CategoryTest extends AbstractBackendController
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function saveActionWithDifferentWebsitesDataProvider(): array
+    public static function saveActionWithDifferentWebsitesDataProvider(): array
     {
         return [
             'default_values' => [

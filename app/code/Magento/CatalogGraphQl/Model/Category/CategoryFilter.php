@@ -67,7 +67,7 @@ class CategoryFilter
      * @param StoreInterface $store
      * @param array $attributeNames
      * @param ContextInterface $context
-     * @return int[]
+     * @return array
      * @throws InputException
      */
     public function getResult(array $criteria, StoreInterface $store, array $attributeNames, ContextInterface $context)
@@ -84,6 +84,7 @@ class CategoryFilter
             ->columns(
                 'e.entity_id'
             );
+        $collection->setOrder('entity_id');
 
         $categoryIds = $collection->load()->getLoadedIds();
 

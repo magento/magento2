@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-6484"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create product with description -->
@@ -60,6 +61,7 @@
             <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
 
             <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
@@ -185,6 +187,6 @@
 
         <!-- Scroll so that the description is visible and More info tab is on the upper middle of the page -->
         <scrollTo selector="{{StorefrontProductInfoDetailsSection.detailsTab}}" stepKey="scrollToMoreInfoTab"/>
-        <resizeWindow width="1280" height="1024" stepKey="resizeWindowToDesktop"/>
+        <resizeWindow width="1920" height="1080" stepKey="resizeWindowToDesktop"/>
     </test>
 </tests>

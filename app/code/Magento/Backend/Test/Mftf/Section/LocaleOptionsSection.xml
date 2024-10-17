@@ -16,5 +16,10 @@
         <element name="localeDisabled" type="select" selector="#general_locale_code[disabled=disabled]"/>
         <element name="useDefault" type="checkbox" selector="#general_locale_timezone_inherit"/>
         <element name="defaultLocale" type="checkbox" selector="#general_locale_code_inherit"/>
+        <element name="checkIfTabExpand" type="button" selector="#general_locale-head:not(.open)"/>
+        <element name="timeZoneDropdown" type="select" selector="//select[@id='general_locale_timezone']"/>
+        <element name="changeStoreConfigButton" type="button" selector="//button[@id='store-change-button']"/>
+        <element name="changeStoreConfigToSpecificWebsite" type="select" selector="//a[contains(text(),'{{var}}')]" parameterized="true"/>
+        <element name="changeWebsiteConfirmButton" type="button" selector="//button[@class='action-primary action-accept']/span"/>
     </section>
 </sections>

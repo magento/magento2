@@ -53,14 +53,13 @@ class ProductOptionProcessorTest extends TestCase
     protected function setUp(): void
     {
         $this->dataObject = $this->getMockBuilder(DataObject::class)
-            ->setMethods([
-                'getOptions', 'addData',
-            ])
+            ->addMethods(['getOptions'])
+            ->onlyMethods(['addData'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->dataObjectFactory = $this->getMockBuilder(\Magento\Framework\DataObject\Factory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectFactory->expects($this->any())
@@ -70,7 +69,7 @@ class ProductOptionProcessorTest extends TestCase
         $this->customOption = $this->getMockBuilder(
             CustomOptionInterface::class
         )
-            ->setMethods([
+            ->addMethods([
                 'getDownloadableLinks',
             ])
             ->getMockForAbstractClass();
@@ -78,7 +77,7 @@ class ProductOptionProcessorTest extends TestCase
         $this->customOptionFactory = $this->getMockBuilder(
             CustomOptionFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->customOptionFactory->expects($this->any())
@@ -92,7 +91,7 @@ class ProductOptionProcessorTest extends TestCase
 
         $urlBuilder = $this->getMockBuilder(UrlBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUrl'])
+            ->onlyMethods(['getUrl'])
             ->getMock();
         $urlBuilder->expects($this->any())->method('getUrl')->willReturn('http://built.url/string/');
 
@@ -111,15 +110,14 @@ class ProductOptionProcessorTest extends TestCase
         $options,
         $requestData
     ) {
+        if (!empty($options)) {
+            $options[0] = $options[0]($this);
+        }
         $productOptionMock = $this->getMockBuilder(ProductOptionInterface::class)
             ->getMockForAbstractClass();
 
-        $productOptionExtensionMock = $this->getMockBuilder(
-            ProductOptionExtensionInterface::class
-        )
-            ->setMethods([
-                'getCustomOptions',
-            ])
+        $productOptionExtensionMock = $this->getMockBuilder(ProductOptionExtensionInterface::class)
+            ->addMethods(['getCustomOptions'])
             ->getMockForAbstractClass();
 
         $productOptionMock->expects($this->any())
@@ -138,10 +136,7 @@ class ProductOptionProcessorTest extends TestCase
         $this->assertEquals($this->dataObject, $this->processor->convertToBuyRequest($productOptionMock));
     }
 
-    /**
-     * @return array
-     */
-    public function dataProviderConvertToBuyRequest()
+    protected function getOptionsDataForprovider()
     {
         $objectManager = new ObjectManager($this);
 
@@ -149,6 +144,17 @@ class ProductOptionProcessorTest extends TestCase
         $option = $objectManager->getObject(CustomOption::class);
         $option->setOptionId(1);
         $option->setOptionValue(1);
+        return $option;
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderConvertToBuyRequest()
+    {
+
+        /** @var CustomOption $option */
+        $option = static fn (self $testCase) => $testCase->getOptionsDataForprovider();
 
         return [
             [
@@ -206,7 +212,7 @@ class ProductOptionProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderConvertToProductOption()
+    public static function dataProviderConvertToProductOption()
     {
         return [
             [

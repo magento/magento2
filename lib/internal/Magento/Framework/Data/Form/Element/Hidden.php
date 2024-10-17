@@ -1,18 +1,17 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Form hidden element
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * Form hidden element
+ */
 class Hidden extends AbstractElement
 {
     /**
@@ -33,6 +32,8 @@ class Hidden extends AbstractElement
     }
 
     /**
+     * Get default HTML
+     *
      * @return mixed
      */
     public function getDefaultHtml()
@@ -41,6 +42,7 @@ class Hidden extends AbstractElement
         if ($html === null) {
             $html = $this->getElementHtml();
         }
+
         return $html;
     }
 }

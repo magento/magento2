@@ -55,10 +55,17 @@ class PartialSearchModifierTest extends TestCase
     public function testModify(array $attributes, array $requests, array $expected): void
     {
         $items = [];
+        $searchWeight = 10;
         foreach ($attributes as $attribute) {
-            $item = $this->getMockForAbstractClass(\Magento\Eav\Api\Data\AttributeInterface::class);
+            $item = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+                ->addMethods(['getSearchWeight'])
+                ->onlyMethods(['getAttributeCode'])
+                ->disableOriginalConstructor()
+                ->getMock();
             $item->method('getAttributeCode')
                 ->willReturn($attribute);
+            $item->method('getSearchWeight')
+                ->willReturn($searchWeight);
             $items[] = $item;
         }
         $reflectionProperty = new \ReflectionProperty($this->collection, '_items');
@@ -70,12 +77,13 @@ class PartialSearchModifierTest extends TestCase
     /**
      * @return array
      */
-    public function modifyDataProvider(): array
+    public static function modifyDataProvider(): array
     {
         return [
             [
                 [
                     'name',
+                    'sku',
                 ],
                 [
                     'search_1' => [
@@ -134,8 +142,14 @@ class PartialSearchModifierTest extends TestCase
                                         'field' => '*'
                                     ],
                                     [
+                                        'field' => 'sku',
+                                        'matchCondition' => 'match_phrase_prefix',
+                                        'boost' => 10
+                                    ],
+                                    [
                                         'field' => 'name',
                                         'matchCondition' => 'match_phrase_prefix',
+                                        'boost' => 10
                                     ],
                                 ]
                             ]

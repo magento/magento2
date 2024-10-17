@@ -107,8 +107,10 @@ class ProductDataMapperTest extends TestCase
 
         $this->builderMock->expects($this->any())
             ->method('addFields')
-            ->withConsecutive([$additionalFields])
-            ->willReturnSelf();
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$additionalFields] => $this->builderMock,
+            });
+
         $this->builderMock->expects($this->any())
             ->method('build')
             ->willReturn([]);
@@ -365,6 +367,57 @@ class ProductDataMapperTest extends TestCase
                     'backend_type' => 'text',
                     'frontend_input' => 'select',
                     'is_searchable' => true,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                    ],
+                ],
+                [10 => '44', 11 => '45'],
+                ['color' => [44, 45], 'color_value' => ['red', 'black']],
+            ],
+            'select with options with sort by and filterable' => [
+                10,
+                [
+                    'attribute_code' => 'color',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'select',
+                    'is_searchable' => true,
+                    'used_for_sort_by' => true,
+                    'is_filterable_in_grid' => true,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                    ],
+                ],
+                [10 => '44', 11 => '45'],
+                ['color' => [44, 45], 'color_value' => ['red', 'black']],
+            ],
+            'unsearchable select with options with sort by and filterable' => [
+                10,
+                [
+                    'attribute_code' => 'color',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'select',
+                    'is_searchable' => false,
+                    'used_for_sort_by' => false,
+                    'is_filterable_in_grid' => false,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                    ],
+                ],
+                '44',
+                ['color' => 44],
+            ],
+            'select with options with sort by only' => [
+                10,
+                [
+                    'attribute_code' => 'color',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'select',
+                    'is_searchable' => false,
+                    'used_for_sort_by' => true,
+                    'is_filterable_in_grid' => false,
                     'options' => [
                         ['value' => '44', 'label' => 'red'],
                         ['value' => '45', 'label' => 'black'],

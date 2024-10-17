@@ -15,6 +15,7 @@
             <description value="Recently Ordered widget contains no more 5 products if qty of products > 5"/>
             <testCaseId value="MC-26846"/>
             <severity value="MAJOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -85,9 +86,10 @@
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSecondSimpleProductProductToCart6">
             <argument name="product" value="$$createProduct6$$"/>
         </actionGroup>
-
+        
         <!--Place the order-->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder">
             <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>

@@ -18,6 +18,8 @@
             <testCaseId value="AC-3216"/>
             <useCaseId value="ACP2E-862"/>
             <group value="checkout"/>
+            <!--Will be fixed in the scope of -->
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Enable flat rate shipping-->
@@ -37,7 +39,7 @@
         </before>
         <after>
             <!-- Disable shipping method for customer with default address -->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <!--Disable Cash On Delivery method-->
             <actionGroup ref="CashOnDeliverySpecificCountryActionGroup" stepKey="disableCashOnDelivery"/>
             <!--Customer log out-->

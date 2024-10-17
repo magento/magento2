@@ -133,7 +133,7 @@ class PagerTest extends TestCase
      *
      * @return array
      */
-    public function limitUrlDataProvider(): array
+    public static function limitUrlDataProvider(): array
     {
         return [
             [2, 21, 10, ['limit' => 10]],

@@ -140,7 +140,7 @@ class MatrixTest extends TestCase
     /**
      * @return array
      */
-    public function getVariationWizardDataProvider()
+    public static function getVariationWizardDataProvider()
     {
         return [['WizardBlockName', 'WizardHtml'], ['', '']];
     }

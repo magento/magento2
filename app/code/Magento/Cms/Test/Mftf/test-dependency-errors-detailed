@@ -1,0 +1,69 @@
+
+File "/var/www/html/app/code/Magento/Cms/Test/Mftf/Test/AdminAddImageToWYSIWYGBlockTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliMediaGalleryEnhancedEnableActionGroup from module(s): magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/Cms/Test/Mftf/Test/AdminAddImageToWYSIWYGCMSTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliMediaGalleryEnhancedEnableActionGroup from module(s): magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/Cms/Test/Mftf/Test/AdminAddLargeImageToWYSIWYGCMSTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliMediaGalleryEnhancedEnableActionGroup from module(s): magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/Cms/Test/Mftf/Test/AdminCheckCreateFolderEscapeAndEnterHandlesForWYSIWYGBlockTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliMediaGalleryEnhancedEnableActionGroup from module(s): magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/Cms/Test/Mftf/Test/AdminConfigureStoreInformationTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 HtmlOnConfiguration from module(s): magento/module-page-builder
+	 switchToPageBuilderStage from module(s): magento/module-page-builder
+	 dragContentTypeToStage from module(s): magento/module-page-builder
+	 expandPageBuilderPanelMenuSection from module(s): magento/module-page-builder
+	 openPageBuilderEditPanel from module(s): magento/module-page-builder
+	 saveEditPanelSettingsFullScreen from module(s): magento/module-page-builder
+	 exitPageBuilderFullScreen from module(s): magento/module-page-builder
+
+File "/var/www/html/app/code/Magento/Cms/Test/Mftf/Test/AdminMediaGalleryPopupUploadImagesWithoutErrorTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliMediaGalleryEnhancedEnableActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickOkButtonTinyMceActionGroup from module(s): magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/Cms/Test/Mftf/Test/CheckOrderOfProdsInWidgetOnCMSPageTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 InsertWidgetSection from module(s): magento/module-catalog-widget
+
+File "/var/www/html/app/code/Magento/Cms/Test/Mftf/Test/StoreFrontWidgetTitleWithReservedCharsTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminFillCatalogProductsListWidgetTitleActionGroup from module(s): magento/module-catalog-widget
+	 StorefrontAssertWidgetTitleActionGroup from module(s): magento/module-catalog-widget
+
+File "/var/www/html/app/code/Magento/Cms/Test/Mftf/ActionGroup/AdminEditCMSPageContentActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 CatalogWidgetSection from module(s): magento/module-catalog-widget
+
+File "/var/www/html/app/code/Magento/Cms/Test/Mftf/ActionGroup/AdminInsertRecentlyViewedWidgetActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 CatalogWidgetSection from module(s): magento/module-catalog-widget
+	 InsertWidgetSection from module(s): magento/module-catalog-widget
+
+File "/var/www/html/app/code/Magento/Cms/Test/Mftf/ActionGroup/ClearWidgetsForCMSHomePageContentWYSIWYGDisabledActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 CatalogWidgetSection from module(s): magento/module-catalog-widget
+
+File "/var/www/html/app/code/Magento/Cms/Test/Mftf/ActionGroup/ClearWidgetsFromCMSContentActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 InsertWidgetSection from module(s): magento/module-catalog-widget

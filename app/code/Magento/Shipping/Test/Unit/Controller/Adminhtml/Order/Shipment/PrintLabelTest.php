@@ -167,18 +167,13 @@ class PrintLabelTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(
-                ['order_id'],
-                ['shipment_id'],
-                ['shipment'],
-                ['tracking']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $orderId,
-                $shipmentId,
-                $shipment,
-                $tracking
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['order_id'] => $orderId,
+                ['shipment_id'] => $shipmentId,
+                ['shipment'] => $shipment,
+                ['tracking'] => $tracking
+            });
+
         $this->shipmentLoaderMock->expects($this->once())
             ->method('setOrderId')
             ->with($orderId);
@@ -294,23 +289,15 @@ class PrintLabelTest extends TestCase
         $shipmentId = 1;
         $shipment = [];
         $tracking = [];
-
+        $exception = new \Exception();
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(
-                ['order_id'],
-                ['shipment_id'],
-                ['shipment'],
-                ['tracking'],
-                ['shipment_id']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $orderId,
-                $shipmentId,
-                $shipment,
-                $tracking,
-                $shipmentId
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['order_id'] => $orderId,
+                ['shipment_id'] => $shipmentId,
+                ['shipment'] => $shipment,
+                ['tracking'] => $tracking
+            });
 
         $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
@@ -329,14 +316,20 @@ class PrintLabelTest extends TestCase
             ->willReturn(false);
         $this->messageManagerMock
             ->method('addError')
-            ->withConsecutive(
-                [sprintf('We don\'t recognize or support the file extension in this shipment: %s.', $incrementId)],
-                ['An error occurred while creating shipping label.']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $this->throwException(new \Exception()),
-                $this->messageManagerMock
+            ->willReturnCallback(
+                function ($arg1) use ($incrementId) {
+                    if ($arg1 ==
+                        sprintf(
+                            'We don\'t recognize or support the file extension in this shipment: %s.',
+                            $incrementId
+                        )) {
+                        throw new \Exception();
+                    } elseif ($arg1 == 'An error occurred while creating shipping label.') {
+                        return $this->messageManagerMock;
+                    }
+                }
             );
+
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(LoggerInterface::class)

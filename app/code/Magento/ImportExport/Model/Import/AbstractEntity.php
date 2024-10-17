@@ -14,9 +14,9 @@ use Magento\Framework\Stdlib\StringUtils;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\ImportExport\Model\Import\Source\Base64EncodedCsvData;
 use Magento\ImportExport\Model\ImportFactory;
 use Magento\ImportExport\Model\ResourceModel\Helper;
+use Magento\ImportExport\Model\ResourceModel\Import\Data as DataSourceModel;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -26,9 +26,10 @@ use Magento\Store\Model\ScopeInterface;
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 100.0.2
  */
-abstract class AbstractEntity
+abstract class AbstractEntity implements EntityInterface
 {
     /**
      * Custom row import behavior column name
@@ -121,7 +122,7 @@ abstract class AbstractEntity
     /**
      * DB data source model
      *
-     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data
+     * @var DataSourceModel
      */
     protected $_dataSourceModel;
 
@@ -421,9 +422,7 @@ abstract class AbstractEntity
         $startNewBunch = false;
 
         $source->rewind();
-        if (!$source instanceof Base64EncodedCsvData) {
-            $this->_dataSourceModel->cleanBunches();
-        }
+        $this->_dataSourceModel->cleanProcessedBunches();
         $mainAttributeCode = $this->getMasterAttributeCode();
 
         while ($source->valid() || count($bunchRows) || isset($entityGroup)) {
@@ -442,17 +441,13 @@ abstract class AbstractEntity
                 $startNewBunch = false;
             }
             if ($source->valid()) {
-                $valid = true;
                 try {
                     $rowData = $source->current();
+                    $valid = true;
                     foreach ($rowData as $attrName => $element) {
-                        if (!mb_check_encoding($element, 'UTF-8')) {
-                            $valid = false;
-                            $this->addRowError(
-                                AbstractEntity::ERROR_CODE_ILLEGAL_CHARACTERS,
-                                $this->_processedRowsCount,
-                                $attrName
-                            );
+                        $valid = $this->validateEncoding($element, $attrName);
+                        if (!$valid) {
+                            break;
                         }
                     }
                 } catch (\InvalidArgumentException $e) {
@@ -495,6 +490,42 @@ abstract class AbstractEntity
             }
         }
         return $this;
+    }
+
+    /**
+     * Validates encoding.
+     *
+     * @param array|string|null $element
+     * @param string $attrName
+     * @return bool
+     */
+    private function validateEncoding(array|string|null $element, string $attrName): bool
+    {
+        if (is_array($element)) {
+            foreach ($element as $value) {
+                if (!mb_check_encoding($value, 'UTF-8')) {
+                    $this->addRowError(
+                        AbstractEntity::ERROR_CODE_ILLEGAL_CHARACTERS,
+                        $this->_processedRowsCount,
+                        $attrName
+                    );
+                    return false;
+                }
+            }
+        } elseif (is_string($element)) {
+            if (!mb_check_encoding($element, 'UTF-8')) {
+                $this->addRowError(
+                    AbstractEntity::ERROR_CODE_ILLEGAL_CHARACTERS,
+                    $this->_processedRowsCount,
+                    $attrName
+                );
+                return false;
+            }
+        } elseif ($element === null) {
+            return true;
+        }
+
+        return true;
     }
 
     /**
@@ -695,12 +726,19 @@ abstract class AbstractEntity
             case 'multiselect':
             case 'boolean':
                 $valid = true;
-                foreach (explode($multiSeparator, mb_strtolower($rowData[$attributeCode])) as $value) {
-                    $valid = isset($attributeParams['options'][$value]);
+                $values = $rowData[$attributeCode];
+
+                if (!is_array($values)) {
+                    $values = explode($multiSeparator, mb_strtolower($values));
+                }
+
+                foreach ($values as $value) {
+                    $valid = isset($attributeParams['options'][mb_strtolower($value)]);
                     if (!$valid) {
                         break;
                     }
                 }
+
                 $message = self::ERROR_INVALID_ATTRIBUTE_OPTION;
                 break;
             case 'int':
@@ -893,9 +931,9 @@ abstract class AbstractEntity
      */
     protected function updateItemsCounterStats(array $created = [], array $updated = [], array $deleted = [])
     {
-        $this->countItemsCreated = count($created);
-        $this->countItemsUpdated = count($updated);
-        $this->countItemsDeleted = count($deleted);
+        $this->countItemsCreated += count($created);
+        $this->countItemsUpdated += count($updated);
+        $this->countItemsDeleted += count($deleted);
         return $this;
     }
 
@@ -914,8 +952,29 @@ abstract class AbstractEntity
      *
      * @return array
      */
-    public function getIds()
+    public function getIds() : array
     {
         return $this->ids;
+    }
+
+    /**
+     * Set Ids of Validated Rows
+     *
+     * @param array $ids
+     * @return void
+     */
+    public function setIds(array $ids)
+    {
+        $this->ids = $ids;
+    }
+
+    /**
+     * Gets the currently used DataSourceModel
+     *
+     * @return DataSourceModel
+     */
+    public function getDataSourceModel() : DataSourceModel
+    {
+        return $this->_dataSourceModel;
     }
 }

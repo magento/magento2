@@ -122,7 +122,7 @@ define([
         isFullscreen: false,
         FTCF: '[data-gallery-role="fotorama__fullscreen-icon"]',
         Base: 0, //on check for video is base this setting become true if there is any video with base role
-        MobileMaxWidth: 768,
+        MobileMaxWidth: 767,
         GP: 'gallery-placeholder', //gallery placeholder class is needed to find and erase <script> tag
         videoData: null,
         videoDataPlaceholder: [{
@@ -558,7 +558,7 @@ define([
             }
 
             if (this.isFullscreen && this.fotoramaItem.data('fotorama').activeFrame.i === number) {
-                this.fotoramaItem.data('fotorama').activeFrame.$stageFrame[0].trigger('click');
+                this.fotoramaItem.data('fotorama').activeFrame.$stageFrame.trigger('click');
             }
         },
 
@@ -700,7 +700,7 @@ define([
             if (activeIndexIsBase && number === 1 && $(window).width() > this.MobileMaxWidth) {
                 setTimeout($.proxy(function () {
                     fotorama.requestFullScreen();
-                    this.fotoramaItem.data('fotorama').activeFrame.$stageFrame[0].trigger('click');
+                    this.fotoramaItem.data('fotorama').activeFrame.$stageFrame.trigger('click');
                     this.Base = false;
                 }, this), 50);
             }

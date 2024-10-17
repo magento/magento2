@@ -190,4 +190,51 @@ class AbstractModelTest extends TestCase
         $this->model->setDataChanges(true);
         $this->assertTrue($this->model->hasDataChanges());
     }
+
+    /**
+     * Test case for checking setData function is working for all possible key value pairs
+     *
+     * @dataProvider getKeyValueDataPairs
+     */
+    public function testSetDataWithDifferentKeyValuePairs(
+        array $data,
+        mixed $testKey,
+        mixed $testValue,
+        bool $hasDataChangedFor
+    ): void {
+        $this->model->setData($data);
+        $this->model->setOrigData();
+        $this->model->setData($testKey, $testValue);
+        $this->assertEquals($data, $this->model->getOrigData());
+        $this->assertEquals($hasDataChangedFor, $this->model->dataHasChangedFor($testKey));
+    }
+
+    /**
+     * Data provider for testSetDataWithDifferentKeyValuePairs
+     *
+     * @return array
+     */
+    public static function getKeyValueDataPairs(): array
+    {
+        return [
+            'when test data and compare data are string' => [['key' => 'value'], 'key', 'value', false],
+            'when test data and compare data are different' => [['key' => 'value'], 'key', 10, true],
+            'when test data string and compare data is null' => [['key' => 'value'], 'key', null, true],
+            'when test data and compare data both null' => [['key' => null], 'key', null, false],
+            'when test data empty string and compare data is null' => [['key' => ''], 'key', null, false],
+            'when test data and compare data are empty string' => [['key' => ''], 'key', '', false],
+            'when test data is null and compare data is empty string' => [['key' => null], 'key', '', false],
+            'when test data and compare data are int' => [['key' => 1], 'key', 1, false],
+            'when test data is int and compare data is float' => [['key' => 1.0], 'key', 1, false],
+            'when test data is string and compare data is float' => [['key' => '1.0'], 'key', 1.0, false],
+            'when test data is string and compare data is int' => [['key' => '1'], 'key', 1, false],
+            'when test data is float and compare data is string' => [['key' => 1.0], 'key', '1.0', false],
+            'when test data is int and compare data is string' => [['key' => 1], 'key', '1', false],
+            'when test data and compare data are float' => [['key' => 1.0], 'key', 1.0, false],
+            'when test data is 0 and compare data is null' => [['key' => 0], 'key', null, false],
+            'when test data is null and compare data is 0' => [['key' => null], 'key', 0, false],
+            'when test data is string array and compare data is int' => [['key' => '10'], 'key', 10, false],
+            'when test data is string array and compare data is float' => [['key' => '22.00'], 'key', 22.00, false]
+        ];
+    }
 }

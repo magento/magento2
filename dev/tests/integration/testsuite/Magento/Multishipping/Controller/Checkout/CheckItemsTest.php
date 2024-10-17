@@ -143,31 +143,31 @@ class CheckItemsTest extends \Magento\TestFramework\TestCase\AbstractController
      * Variations of request data.
      * @returns array
      */
-    public function requestDataProvider(): array
+    public static function requestDataProvider(): array
     {
         return [
             [
-                'request' => [],
-                'response' => [
+                'requestQuantity' => [],
+                'expectedResponse' => [
                     'success' => false,
                     'error_message' => 'We are unable to process your request. Please, try again later.'
                 ]
             ],
             [
-                'request' => ['qty' => 2],
-                'response' => [
+                'requestQuantity' => ['qty' => 2],
+                'expectedResponse' => [
                     'success' => true,
                 ]
             ],
             [
-                'request' => ['qty' => 101],
-                'response' => [
+                'requestQuantity' => ['qty' => 101],
+                'expectedResponse' => [
                     'success' => false,
-                    'error_message' => 'The requested qty is not available']
+                    'error_message' => 'Not enough items for sale']
             ],
             [
-                'request' => ['qty' => 230],
-                'response' => [
+                'requestQuantity' => ['qty' => 230],
+                'expectedResponse' => [
                     'success' => false,
                     'error_message' => 'Maximum qty allowed for Shipping to multiple addresses is 200']
             ],

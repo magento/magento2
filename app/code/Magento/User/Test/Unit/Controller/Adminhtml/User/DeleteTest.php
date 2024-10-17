@@ -72,32 +72,32 @@ class DeleteTest extends TestCase
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get', 'create'])
+            ->onlyMethods(['get', 'create'])
             ->getMock();
 
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setRedirect'])
+            ->addMethods(['setRedirect'])
             ->getMockForAbstractClass();
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPost'])
+            ->addMethods(['getPost'])
             ->getMockForAbstractClass();
 
         $this->authSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUser'])
+            ->addMethods(['getUser'])
             ->getMock();
 
         $this->userMock = $this->getMockBuilder(User::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'performIdentityCheck', 'delete'])
+            ->onlyMethods(['getId', 'performIdentityCheck', 'delete'])
             ->getMock();
 
         $this->userFactoryMock = $this->getMockBuilder(UserFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
@@ -197,7 +197,7 @@ class DeleteTest extends TestCase
      *
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             [
