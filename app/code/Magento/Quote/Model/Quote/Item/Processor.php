@@ -12,6 +12,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\DataObject;
 use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Catalog\Helper\Data;
 
 /**
  * Class Processor
@@ -36,18 +37,26 @@ class Processor
     protected $appState;
 
     /**
+     * @var \Magento\Catalog\Helper\Data
+     */
+    protected $taxHelper;
+
+    /**
      * @param ItemFactory $quoteItemFactory
      * @param StoreManagerInterface $storeManager
      * @param State $appState
+     * @param Data $taxHelper
      */
     public function __construct(
         ItemFactory $quoteItemFactory,
         StoreManagerInterface $storeManager,
-        State $appState
+        State $appState,
+        Data $taxHelper
     ) {
         $this->quoteItemFactory = $quoteItemFactory;
         $this->storeManager = $storeManager;
         $this->appState = $appState;
+        $this->taxHelper = $taxHelper;
     }
 
     /**
@@ -99,6 +108,12 @@ class Processor
         if (!$item->getParentItem() || $item->getParentItem()->isChildrenCalculated()) {
             $item->setPrice($candidate->getFinalPrice());
         }
+
+        $basePrice = $candidate->getPriceInfo()->getPrice('base_price')->getValue();
+        $basePriceInclTax = $this->taxHelper->getTaxPrice($candidate, $basePrice, true);
+
+        $item->setBasePrice($basePrice);
+        $item->setBasePriceInclTax($basePriceInclTax);
 
         $customPrice = $request->getCustomPrice();
         if (!empty($customPrice) && !$candidate->getParentProductId()) {
