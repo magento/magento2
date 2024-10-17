@@ -56,6 +56,13 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
     protected $_template = 'Magento_Config::system/config/form/field/array.phtml';
 
     /**
+     * Increment id for each row of a table
+     *
+     * @var int
+     */
+    protected $_incrementId = 1;
+
+    /**
      * Check if columns are defined, set template
      *
      * @return void
@@ -115,6 +122,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
         $this->setElement($element);
         $html = $this->_toHtml();
         $this->_arrayRowsCache = null;
+        $this->_incrementId = ++$this->_incrementId;
         // doh, the object is used as singleton!
         return $html;
     }
@@ -287,5 +295,15 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
     public function getAddButtonLabel()
     {
         return $this->_addButtonLabel;
+    }
+
+    /**
+     * Return row increment id
+     *
+     * @return int
+     */
+    public function getIncrementId()
+    {
+        return $this->_incrementId;
     }
 }
