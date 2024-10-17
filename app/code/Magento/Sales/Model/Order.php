@@ -2001,7 +2001,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         if (empty($this->_shipments)) {
             if ($this->getId()) {
-                $this->_shipments = $this->_shipmentCollectionFactory->create()->setOrderFilter($this)->load();
+                $this->_shipments = $this->_shipmentCollectionFactory->create()->setOrderFilter($this);
             } else {
                 return false;
             }
@@ -2018,7 +2018,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         if (empty($this->_creditmemos)) {
             if ($this->getId()) {
-                $this->_creditmemos = $this->_memoCollectionFactory->create()->setOrderFilter($this)->load();
+                $this->_creditmemos = $this->_memoCollectionFactory->create()->setOrderFilter($this);
             } else {
                 return false;
             }
