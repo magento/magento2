@@ -9,15 +9,21 @@ namespace Magento\Config\App\Config\Type;
 use Magento\Config\App\Config\Type\System\Reader;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\ConfigTypeInterface;
+use Magento\Framework\App\Config\ScopeCodeResolver;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\Config\Spi\PreProcessorInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
@@ -31,6 +37,8 @@ use Psr\Log\LoggerInterface;
  * @since 100.1.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class System implements ConfigTypeInterface
 {
@@ -109,6 +117,31 @@ class System implements ConfigTypeInterface
      * @var LoggerInterface
      */
     private $logger;
+
+    /**
+     * @var ScopeCodeResolver
+     */
+    private $scopeCodeResolver;
+
+    /**
+     * Deployment configuration
+     *
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
+     * The resolver for configuration paths according to source type.
+     *
+     * @var ConfigPathResolver
+     */
+    private $configPathResolver;
+
+    /**
+     * @var array
+     */
+    private $websiteCode = [];
+
     /**
      * System constructor.
      * @param ConfigSourceInterface $source
@@ -124,7 +157,10 @@ class System implements ConfigTypeInterface
      * @param LockManagerInterface|null $locker
      * @param LockGuardedCacheLoader|null $lockQuery
      * @param StateInterface|null $cacheState
-     * @param LoggerInterface $logger
+     * @param LoggerInterface|null $logger
+     * @param ScopeCodeResolver|null $scopeCodeResolver
+     * @param DeploymentConfig|null $deploymentConfig
+     * @param ConfigPathResolver|null $configPathResolver
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -142,7 +178,10 @@ class System implements ConfigTypeInterface
         LockManagerInterface $locker = null,
         LockGuardedCacheLoader $lockQuery = null,
         StateInterface $cacheState = null,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        ScopeCodeResolver $scopeCodeResolver = null,
+        DeploymentConfig $deploymentConfig = null,
+        ConfigPathResolver $configPathResolver = null
     ) {
         $this->postProcessor = $postProcessor;
         $this->cache = $cache;
@@ -157,6 +196,12 @@ class System implements ConfigTypeInterface
             ?: ObjectManager::getInstance()->get(StateInterface::class);
         $this->logger = $logger
             ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->scopeCodeResolver = $scopeCodeResolver
+            ?: ObjectManager::getInstance()->get(ScopeCodeResolver::class);
+        $this->deploymentConfig = $deploymentConfig
+            ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
+        $this->configPathResolver = $configPathResolver
+            ?: ObjectManager::getInstance()->get(ConfigPathResolver::class);
     }
 
     /**
@@ -181,9 +226,38 @@ class System implements ConfigTypeInterface
      */
     public function get($path = '')
     {
+        $pathParts = explode('/', $path);
+        $scopeType = array_shift($pathParts);
+        $scopeId = array_shift($pathParts);
         if ($path === '') {
             $this->data = $this->loadAllData();
             return $this->data;
+        }
+
+        if ($scopeType === ScopeInterface::SCOPE_DEFAULT) {
+            return $this->getWithParts($path);
+        }
+
+        $configPath = implode('/', $pathParts);
+
+        try {
+            if ($scopeType === StoreScope::SCOPE_STORES) {
+                $websiteCode = $this->getWebsiteCodeFromStore($scopeType, $this->getScopeCode($scopeType, $scopeId));
+                if ($websiteCode) {
+                    if ($this->isLocked($configPath, StoreScope::SCOPE_WEBSITES, $websiteCode)) {
+                        array_unshift($pathParts, StoreScope::SCOPE_WEBSITES, $websiteCode);
+                        $path = implode('/', $pathParts);
+                    } elseif ($this->isLocked($configPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null)) {
+                        array_unshift($pathParts, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+                        $path = implode('/', $pathParts);
+                    }
+                }
+            } elseif ($this->isLocked($configPath, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null)) {
+                array_unshift($pathParts, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+                $path = implode('/', $pathParts);
+            }
+        } catch (FileSystemException|RuntimeException $e) {
+            $this->logger->error($e->getMessage());
         }
 
         return $this->getWithParts($path);
@@ -439,6 +513,64 @@ class System implements ConfigTypeInterface
         );
 
         return $this->data;
+    }
+
+    /**
+     * Checks whether configuration is locked in file storage.
+     *
+     * @param string $path The path to configuration
+     * @param string $scope The scope of configuration
+     * @param string|null $scopeCode The scope code of configuration
+     * @return bool
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
+    private function isLocked(string $path, string $scope, ?string $scopeCode): bool
+    {
+        $scopePath = $this->configPathResolver->resolve($path, $scope, $scopeCode, System::CONFIG_TYPE);
+
+        return $this->deploymentConfig->get($scopePath) !== null;
+    }
+
+    /**
+     * Get Website code from store code
+     *
+     * @param string $scope
+     * @param string $scopeCode
+     * @return false|mixed
+     */
+    private function getWebsiteCodeFromStore(string $scope, string $scopeCode): mixed
+    {
+        if (!array_key_exists($scopeCode, $this->websiteCode)) {
+            try {
+                $websiteCode = false;
+                $resolverScope = $this->scopeCodeResolver->resolvedScopeCode($scope, $scopeCode);
+                if ($resolverScope instanceof ScopeInterface) {
+                    $websiteCode = $resolverScope->getWebsite()->getCode();
+                }
+            } catch (\Exception $e) {
+                $this->logger->error($e->getMessage());
+            }
+            $this->websiteCode[$scopeCode] = $websiteCode;
+        }
+        return $this->websiteCode[$scopeCode];
+    }
+
+    /**
+     * Get Scope code
+     *
+     * @param string $scope
+     * @param int|string|null $scopeCode
+     * @return string
+     */
+    private function getScopeCode(string $scope, int|string|null $scopeCode): string
+    {
+        if (is_numeric($scopeCode) || $scopeCode === null) {
+            $scopeCode = $this->scopeCodeResolver->resolve($scope, $scopeCode);
+        } elseif ($scopeCode instanceof ScopeInterface) {
+            $scopeCode = $scopeCode->getCode();
+        }
+        return $scopeCode;
     }
 
     /**
