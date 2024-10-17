@@ -5,26 +5,23 @@
  */
 namespace Magento\SampleData\Console;
 
+use Exception;
+use Magento\Framework\Console\CommandListInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\SampleData\Console\Command\SampleDataDeployCommand;
+use Magento\SampleData\Console\Command\SampleDataRemoveCommand;
 
 /**
  * Class CommandList
  */
-class CommandList implements \Magento\Framework\Console\CommandListInterface
+class CommandList implements CommandListInterface
 {
     /**
-     * Object Manager
-     *
-     * @var ObjectManagerInterface
+     * @param ObjectManagerInterface $objectManager Object Manager
      */
-    private $objectManager;
-
-    /**
-     * @param ObjectManagerInterface $objectManager
-     */
-    public function __construct(ObjectManagerInterface $objectManager)
-    {
-        $this->objectManager = $objectManager;
+    public function __construct(
+        private readonly ObjectManagerInterface $objectManager
+    ) {
     }
 
     /**
@@ -35,8 +32,8 @@ class CommandList implements \Magento\Framework\Console\CommandListInterface
     protected function getCommandsClasses()
     {
         return [
-            \Magento\SampleData\Console\Command\SampleDataDeployCommand::class,
-            \Magento\SampleData\Console\Command\SampleDataRemoveCommand::class
+            SampleDataDeployCommand::class,
+            SampleDataRemoveCommand::class
         ];
     }
 
@@ -50,7 +47,7 @@ class CommandList implements \Magento\Framework\Console\CommandListInterface
             if (class_exists($class)) {
                 $commands[] = $this->objectManager->get($class);
             } else {
-                throw new \Exception('Class ' . $class . ' does not exist');
+                throw new Exception('Class ' . $class . ' does not exist');
             }
         }
         return $commands;

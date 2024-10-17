@@ -31,28 +31,16 @@ class SampleDataDeployCommand extends Command
 {
     public const OPTION_NO_UPDATE = 'no-update';
 
-    /** @var Filesystem */
-    private Filesystem $filesystem;
-
-    /** @var Dependency */
-    private Dependency $sampleDataDependency;
-
-    /** @var ApplicationFactory */
-    private ApplicationFactory $applicationFactory;
-
     /**
      * @param Filesystem $filesystem
      * @param Dependency $sampleDataDependency
      * @param ApplicationFactory $applicationFactory
      */
     public function __construct(
-        Filesystem $filesystem,
-        Dependency $sampleDataDependency,
-        ApplicationFactory $applicationFactory
+        private readonly Filesystem $filesystem,
+        private readonly Dependency $sampleDataDependency,
+        private readonly ApplicationFactory $applicationFactory
     ) {
-        $this->filesystem = $filesystem;
-        $this->sampleDataDependency = $sampleDataDependency;
-        $this->applicationFactory = $applicationFactory;
 
         parent::__construct();
     }
