@@ -12,16 +12,16 @@
             <values>
                 <value id="google_ad_services_conversion" type="host">googleads.g.doubleclick.net</value>
                 <value id="google_ad_services" type="host">www.googleadservices.com</value>
-                <value id="google_analytics" type="host">www.google-analytics.com</value>
-                <value id="google_analytics_4" type="host">analytics.google.com</value>
+                <value id="google_analytics" type="host">*.google-analytics.com</value>
+                <value id="google_analytics_4" type="host">*.analytics.google.com</value>
                 <value id="google_tag_manager" type="host">www.googletagmanager.com</value>
             </values>
         </policy>
         <policy id="connect-src">
             <values>
-            <value id="google_ad_services" type="host">www.googleadservices.com</value>
-                <value id="google_analytics" type="host">www.google-analytics.com</value>
-                <value id="google_analytics_4" type="host">analytics.google.com</value>
+                <value id="google_ad_services" type="host">www.googleadservices.com</value>
+                <value id="google_analytics" type="host">*.google-analytics.com</value>
+                <value id="google_analytics_4" type="host">*.analytics.google.com</value>
                 <value id="google_tag_manager" type="host">www.googletagmanager.com</value>
             </values>
         </policy>
@@ -32,12 +32,12 @@
         </policy>
         <policy id="img-src">
             <values>
-               <value id="google_ad_services_pixel" type="host">googleads.g.doubleclick.net</value>
-               <value id="google_ad_services_conversion" type="host">www.google.com</value>
-               <value id="google_ad_services_bid" type="host">bid.g.doubleclick.net</value>
+                <value id="google_ad_services_pixel" type="host">googleads.g.doubleclick.net</value>
+                <value id="google_ad_services_conversion" type="host">www.google.com</value>
+                <value id="google_ad_services_bid" type="host">bid.g.doubleclick.net</value>
                 <value id="google_ad_services" type="host">www.googleadservices.com</value>
-                <value id="google_analytics" type="host">www.google-analytics.com</value>
-                <value id="google_analytics_4" type="host">analytics.google.com</value>
+                <value id="google_analytics" type="host">*.google-analytics.com</value>
+                <value id="google_analytics_4" type="host">*.analytics.google.com</value>
                 <value id="google_tag_manager" type="host">www.googletagmanager.com</value>
             </values>
         </policy>
