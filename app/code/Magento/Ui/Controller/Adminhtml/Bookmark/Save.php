@@ -247,9 +247,7 @@ class Save extends AbstractAction implements HttpPostActionInterface
                 $existingConfig = $bookmarkConfig['views'][$bookmark->getIdentifier()]['data'] ?? null;
                 $currentConfig = $data[self::CURRENT_IDENTIFIER] ?? null;
                 if ($existingConfig && $currentConfig) {
-                    if ($existingConfig['filters'] === $currentConfig['filters']
-                        && $existingConfig['positions'] !== $currentConfig['positions']
-                    ) {
+                    if ($this->shouldUpdateCurrentBookmarkConfig($existingConfig, $currentConfig)) {
                         $bookmarkConfig['views'][$bookmark->getIdentifier()]['data'] = $data[self::CURRENT_IDENTIFIER];
                         $bookmark->setConfig($this->serializer->serialize($bookmarkConfig));
                         $this->bookmarkRepository->save($bookmark);
@@ -258,5 +256,26 @@ class Save extends AbstractAction implements HttpPostActionInterface
                 break;
             }
         }
+    }
+
+    /**
+     * Check should update current bookmark
+     *
+     * @param array $existingConfig
+     * @param array $currentConfig
+     * @return bool
+     */
+    private function shouldUpdateCurrentBookmarkConfig($existingConfig, $currentConfig)
+    {
+        if (!empty($existingConfig['filters'])
+            && !empty($currentConfig['filters'])
+            && !empty($existingConfig['positions'])
+            && !empty($currentConfig['positions'])
+            && $existingConfig['filters'] === $currentConfig['filters']
+            && $existingConfig['positions'] !== $currentConfig['positions']
+        ) {
+            return true;
+        }
+        return false;
     }
 }

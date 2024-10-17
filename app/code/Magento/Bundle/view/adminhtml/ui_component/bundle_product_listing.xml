@@ -46,11 +46,6 @@
                     </item>
                 </item>
             </argument>
-            <settings>
-                <statefull>
-                    <property name="applied" xsi:type="boolean">false</property>
-                </statefull>
-            </settings>
             <filterSelect name="status" provider="${ $.parentName }">
                 <settings>
                     <options class="Magento\Catalog\Model\Product\Attribute\Source\Status"/>
