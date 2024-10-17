@@ -14,13 +14,15 @@ use Magento\Setup\Module\Dependency\ServiceLocator;
  */
 class DependenciesShowModulesCircularCommand extends AbstractDependenciesCommand
 {
+    public const NAME = 'info:dependencies:show-modules-circular';
+
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
         $this->setDescription('Shows number of circular dependencies between modules')
-            ->setName('info:dependencies:show-modules-circular');
+            ->setName(self::NAME);
         parent::configure();
     }
 

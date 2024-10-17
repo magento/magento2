@@ -18,6 +18,7 @@ use Magento\Framework\App\ObjectManager;
  */
 class InfoTimezoneListCommand extends Command
 {
+    public const NAME = 'info:timezone:list';
     /**
      * List model provides lists of available options for currency, language locales, timezones
      *
@@ -42,18 +43,18 @@ class InfoTimezoneListCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
-        $this->setName('info:timezone:list')
+        $this->setName(self::NAME)
             ->setDescription('Displays the list of available timezones');
 
         parent::configure();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

@@ -23,6 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ModuleConfigStatusCommand extends Command
 {
+    public const NAME = 'module:config:status';
     /**
      * Deployment config reader
      *
@@ -57,7 +58,7 @@ class ModuleConfigStatusCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('module:config:status')
+            ->setName(self::NAME)
             ->setDescription(
                 'Checks the modules configuration in the \'app/etc/config.php\' file '
                 . 'and reports if they are up to date or not'

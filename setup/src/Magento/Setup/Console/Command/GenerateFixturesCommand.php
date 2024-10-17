@@ -25,6 +25,8 @@ class GenerateFixturesCommand extends Command
 
     public const SKIP_REINDEX_OPTION = 'skip-reindex';
 
+    public const NAME = 'setup:performance:generate-fixtures';
+
     /**
      * @var FixtureModel
      */
@@ -44,7 +46,7 @@ class GenerateFixturesCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('setup:performance:generate-fixtures')
+        $this->setName(self::NAME)
             ->setDescription('Generates fixtures')
             ->setDefinition([
                 new InputArgument(
