@@ -10,6 +10,7 @@ namespace Magento\Setup\Test\Unit\Module\Di\Code\Generator;
 use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Interception\Cache\CompiledConfig;
 use Magento\Framework\Interception\Config\Config;
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\InterceptableValidator;
 use Magento\Setup\Module\Di\Code\Generator\InterceptionConfigurationBuilder;
 use Magento\Setup\Module\Di\Code\Generator\PluginList;
@@ -50,6 +51,11 @@ class InterceptionConfigurationBuilderTest extends TestCase
      */
     private $interceptableValidator;
 
+    /**
+     * @var MockObject
+     */
+    private $omConfig;
+
     protected function setUp(): void
     {
         $this->interceptionConfig =
@@ -61,6 +67,7 @@ class InterceptionConfigurationBuilderTest extends TestCase
         $this->cacheManager = $this->createMock(Manager::class);
         $this->interceptableValidator =
             $this->createMock(InterceptableValidator::class);
+        $this->omConfig = $this->getMockForAbstractClass(ConfigInterface::class);
 
         $this->typeReader = $this->createPartialMock(Type::class, ['isConcrete']);
         $this->model = new InterceptionConfigurationBuilder(
@@ -68,7 +75,8 @@ class InterceptionConfigurationBuilderTest extends TestCase
             $this->pluginList,
             $this->typeReader,
             $this->cacheManager,
-            $this->interceptableValidator
+            $this->interceptableValidator,
+            $this->omConfig
         );
     }
 
@@ -105,6 +113,10 @@ class InterceptionConfigurationBuilderTest extends TestCase
         $this->pluginList->expects($this->once())
             ->method('getPluginsConfig')
             ->willReturn(['instance' => $plugins]);
+
+        $this->omConfig->expects($this->any())
+            ->method('getOriginalInstanceType')
+            ->willReturnArgument(0);
 
         $this->model->addAreaCode('areaCode');
         $this->model->getInterceptionConfiguration($definedClasses);
