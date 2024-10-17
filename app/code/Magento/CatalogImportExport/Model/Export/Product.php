@@ -65,6 +65,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
     public const COL_MEDIA_IMAGE = '_media_image';
 
+    public const COL_WEBSITE_ID = 'website_id';
+
     public const COL_ADDITIONAL_ATTRIBUTES = 'additional_attributes';
 
     /**
@@ -434,7 +436,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $this->dateAttrCodes = array_merge($this->dateAttrCodes, $dateAttrCodes);
         $this->filter = $filter ?? ObjectManager::getInstance()->get(ProductFilterInterface::class);
         $this->stockConfiguration = $stockConfiguration ?? ObjectManager::getInstance()
-                ->get(StockConfigurationInterface::class);
+            ->get(StockConfigurationInterface::class);
         parent::__construct($localeDate, $config, $resource, $storeManager);
 
         $this->initTypeModels()
@@ -1295,6 +1297,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 foreach ($multiRawData['rowWebsites'][$productId] as $productWebsite) {
                     $websiteCodes[] = $this->_websiteIdToCode[$productWebsite];
                 }
+                $websiteIds = [];
+                foreach ($multiRawData['rowWebsites'][$productId] as $productWebsite) {
+                    $websiteIds[] = $productWebsite;
+                }
+                $dataRow[self::COL_WEBSITE_ID]= implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $websiteIds);
                 $dataRow[self::COL_PRODUCT_WEBSITES] =
                     implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $websiteCodes);
                 $multiRawData['rowWebsites'][$productId] = [];
