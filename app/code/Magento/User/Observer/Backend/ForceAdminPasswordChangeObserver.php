@@ -98,7 +98,7 @@ class ForceAdminPasswordChangeObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        if (!$this->observerConfig->isPasswordChangeForced()) {
+        if ($this->observerConfig->isPasswordChangeForced()) {
             return;
         }
         if (!$this->authSession->isLoggedIn()) {
