@@ -4,20 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Catalog price rules
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\CatalogRule\Block\Adminhtml\Promo;
 
 /**
+ * Catalog price rules
+ *
  * @api
  * @since 100.0.2
  */
 class Catalog extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()

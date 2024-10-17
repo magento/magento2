@@ -37,7 +37,6 @@ use Psr\Log\LoggerInterface;
  * Catalog product linked products collection
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */

@@ -4,11 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Backend Catalog Price Rules controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo;
 
 use Magento\Backend\App\Action;
@@ -16,6 +11,9 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 
+/**
+ * Backend Catalog Price Rules controller
+ */
 abstract class Catalog extends Action
 {
     /**
@@ -23,33 +21,24 @@ abstract class Catalog extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_CatalogRule::promo_catalog';
+    public const ADMIN_RESOURCE = 'Magento_CatalogRule::promo_catalog';
 
     /**
-     * Dirty rules notice message
-     *
-     *
      * @var string
      */
     protected $_dirtyRulesNoticeMessage;
 
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Date filter instance
-     *
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      */
     protected $_dateFilter;
 
     /**
-     * Constructor
-     *
      * @param Context $context
      * @param Registry $coreRegistry
      * @param Date $dateFilter
