@@ -33,37 +33,49 @@
         </after>
 
         <!--Open Category page-->
-        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
-        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCategory"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openAdminCategoryIndexPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnExpandTree"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectCategory"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad"/>
 
         <!--Enable Anchor for _defaultCategory category -->
-        <scrollTo selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" x="0" y="-80" stepKey="scrollToDisplaySetting"/>
-        <click selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" stepKey="selectDisplaySetting"/>
-        <checkOption selector="{{CategoryDisplaySettingsSection.anchor}}" stepKey="enableAnchor"/>
-        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToDisplaySetting"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectDisplaySetting"/>
+        <actionGroup ref="AdminAnchorCategoryActionGroup" stepKey="enableAnchor">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="saveSubCategory"/>
 
         <!--Create a Subcategory under _defaultCategory category-->
-        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="addSubCategoryName"/>
+        <actionGroup ref="AdminClickAddSubcategoryButtonActionGroup" stepKey="clickOnAddSubCategoryButton"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="addSubCategoryName">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
 
         <!--Add a product to SimpleSubCategory category-->
-        <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
-        <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
-        <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="$$simpleProduct.name$$" stepKey="selectProduct"/>
-        <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
-        <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToProductInCategory"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnProductInCategory"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchButton"/>
+        <actionGroup ref="AdminAddProductToCategoryActionGroup" stepKey="selectProductFromTableRow">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory1"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
+            <argument name="message" value="You saved the category."/>
+        </actionGroup>
 
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!--Verify category displayed in store front page-->
         <amOnPage url="/$$createDefaultCategory.custom_attributes[url_key]$$/{{SimpleSubCategory.urlKey}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
         <waitForPageLoad  stepKey="waitForStoreFrontPageLoad"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeDefaultCategoryOnStoreNavigationBar"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="dontSeeSubCategoryOnStoreNavigationBar"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeDefaultCategoryOnStoreNavigationBar">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="dontSeeSubCategoryOnStoreNavigationBar">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
 
         <!--Check category breadcrumbs in store  front page-->
         <grabMultiple selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}"  stepKey="breadcrumbs"/>
@@ -91,8 +103,10 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You moved the category." stepKey="seeSuccessMoveMessage"/>
 
         <!--Open category in store front page-->
-        <amOnPage url="/{{SimpleSubCategory.urlKey}}.html" stepKey="seeTheCategoryInStoreFrontPage1"/>
-        <waitForPageLoad  stepKey="waitForStoreFrontPageLoad1"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="seeTheCategoryInStoreFrontPage1">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}" />
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStoreFrontPageLoad1"/>
 
         <!--Verify breadcrumbs after the move in store front page-->
         <grabMultiple selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}"  stepKey="breadcrumbsAfterMove"/>
@@ -102,12 +116,14 @@
         </assertEquals>
 
        <!--Open category store front page -->
-        <amOnPage url="{{StorefrontCategoryPage.url(SimpleSubCategory.urlKey)}}"  stepKey="amOnCategoryPage"/>
-        <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="amOnCategoryPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToBeLoaded"/>
 
         <!--Verify Category in store front-->
         <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(SimpleSubCategory.name)}}" stepKey="seeCategoryInTitle"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="seeSubCategoryOnStoreNavigationBarAfterMove"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeSubCategoryOnStoreNavigationBarAfterMove">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
         <click selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="openSearchedProduct1"/>
         <waitForPageLoad  stepKey="waitForProductToLoad2"/>
 
