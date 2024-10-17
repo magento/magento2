@@ -9,15 +9,12 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter;
  * Sales Adminhtml report filter form
  *
  * @api
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @since 100.0.2
  */
 class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
 {
     /**
-     * Order config
-     *
      * @var \Magento\Sales\Model\Order\ConfigFactory
      */
     protected $_orderConfig;
