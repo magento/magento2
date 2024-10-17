@@ -6,17 +6,23 @@
 
 namespace Magento\AsynchronousOperations\Controller\Adminhtml\Index;
 
-class Index extends \Magento\Backend\App\Action
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+
+class Index extends Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Logging::system_magento_logging_bulk_operations';
+    public const ADMIN_RESOURCE = 'Magento_Logging::system_magento_logging_bulk_operations';
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     private $resultPageFactory;
 
@@ -26,14 +32,13 @@ class Index extends \Magento\Backend\App\Action
     private $menuId;
 
     /**
-     * Details constructor.
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
      * @param string $menuId
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        Context $context,
+        PageFactory $resultPageFactory,
         $menuId = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations'
     ) {
         $this->resultPageFactory = $resultPageFactory;
@@ -42,17 +47,9 @@ class Index extends \Magento\Backend\App\Action
     }
 
     /**
-     * @inheritDoc
-     */
-    protected function _isAllowed()
-    {
-        return parent::_isAllowed();
-    }
-
-    /**
      * Bulk list action
      *
-     * @return \Magento\Framework\View\Result\Page
+     * @return Page
      */
     public function execute()
     {
