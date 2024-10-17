@@ -7,8 +7,6 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Frontend;
 
 /**
  * Quote address attribute frontend grand resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Grand extends \Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Frontend
 {

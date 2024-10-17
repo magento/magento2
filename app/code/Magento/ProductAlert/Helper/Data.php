@@ -10,8 +10,6 @@ use Magento\Store\Model\Store;
 /**
  * ProductAlert data helper
  *
- * @author     Magento Core Team <core@magentocommerce.com>
- *
  * @api
  * @since 100.0.2
  */
@@ -25,8 +23,6 @@ class Data extends \Magento\Framework\Url\Helper\Data
     protected $_product = null;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -85,6 +81,8 @@ class Data extends \Magento\Framework\Url\Helper\Data
     }
 
     /**
+     * Get store
+     *
      * @return Store
      */
     public function getStore()
@@ -93,6 +91,8 @@ class Data extends \Magento\Framework\Url\Helper\Data
     }
 
     /**
+     * Get Save Url
+     *
      * @param string $type
      * @return string
      */

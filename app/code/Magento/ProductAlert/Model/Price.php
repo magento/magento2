@@ -29,8 +29,6 @@ use Magento\ProductAlert\Model\ResourceModel\Price\Customer\Collection;
  * @method int getStoreId()
  * @method \Magento\ProductAlert\Model\Stock setStoreId(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  * @api
  * @since 100.0.2
  */
