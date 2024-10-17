@@ -1107,7 +1107,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         }
 
         if (!empty($address)) {
-            $address->setEmail($this->getCustomerEmail());
+            $address->getEmail() ?: $address->setEmail($this->getCustomerEmail());
             $this->addAddress($address->setAddressType('shipping'));
         }
         return $this;

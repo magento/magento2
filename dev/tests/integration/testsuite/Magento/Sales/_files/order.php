@@ -18,6 +18,7 @@ Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simp
 /** @var \Magento\Catalog\Model\Product $product */
 
 $addressData = include __DIR__ . '/address_data.php';
+$shippingAddressData = include __DIR__ . '/shipping_address_data.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var ProductRepositoryInterface $productRepository */
@@ -26,8 +27,8 @@ $product = $productRepository->get('simple');
 $billingAddress = $objectManager->create(OrderAddress::class, ['data' => $addressData]);
 $billingAddress->setAddressType('billing');
 
-$shippingAddress = clone $billingAddress;
-$shippingAddress->setId(null)->setAddressType('shipping');
+$shippingAddress = $objectManager->create(OrderAddress::class, ['data' => $shippingAddressData]);
+$shippingAddress->setAddressType('shipping');
 
 /** @var Payment $payment */
 $payment = $objectManager->create(Payment::class);
