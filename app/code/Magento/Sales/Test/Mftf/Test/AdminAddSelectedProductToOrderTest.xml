@@ -71,6 +71,6 @@
             <argument name="productQty" value="1"/>
         </actionGroup>
         <!-- Check that error remains -->
-        <see userInput="The requested qty is not available" stepKey="assertProductErrorRemains"/>
+        <see userInput="Not enough items for sale" stepKey="assertProductErrorRemains"/>
     </test>
 </tests>
