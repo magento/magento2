@@ -60,4 +60,35 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="is_guest_checkout_enabled" xsi:type="string">checkout/options/guest_checkout</item>
+                <item name="is_one_page_checkout_enabled" xsi:type="string">checkout/options/onepage_checkout_enabled</item>
+                <item name="max_items_in_order_summary" xsi:type="string">checkout/options/max_items_display_count</item>
+                <item name="cart_summary_display_quantity" xsi:type="string">checkout/cart_link/use_qty</item>
+                <item name="minicart_display" xsi:type="string">checkout/sidebar/display</item>
+                <item name="minicart_max_items" xsi:type="string">checkout/sidebar/max_items_display_count</item>
+                <item name="cart_expires_in_days" xsi:type="string">checkout/cart/delete_quote_after</item>
+                <item name="grouped_product_image" xsi:type="string">checkout/cart/grouped_product_image</item>
+                <item name="configurable_product_image" xsi:type="string">checkout/cart/configurable_product_image</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\QuoteManagement">
+        <plugin name="merge_guest_orders_with_customer_after_place"
+                type="Magento\QuoteGraphQl\Plugin\Model\MergeGuestOrder" />
+    </type>
+    <type name="Magento\QuoteGraphQl\Model\Resolver\UpdateCartItems">
+        <arguments>
+            <argument name="messageCodesMapper" xsi:type="array">
+                <item name="The requested qty" xsi:type="string">INSUFFICIENT_STOCK</item>
+                <item name="Could not find cart item" xsi:type="string">COULD_NOT_FIND_CART_ITEM</item>
+                <item name="Required parameter" xsi:type="string">REQUIRED_PARAMETER_MISSING</item>
+                <item name="The fewest you may purchase" xsi:type="string">INVALID_PARAMETER_VALUE</item>
+                <item name="Not enough items for sale" xsi:type="string">INSUFFICIENT_STOCK</item>
+                <item name="Only %s of %s available" xsi:type="string">INSUFFICIENT_STOCK</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

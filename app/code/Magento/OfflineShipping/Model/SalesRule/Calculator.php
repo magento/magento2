@@ -32,7 +32,7 @@ class Calculator extends Validator
         $address = $item->getAddress();
         $item->setFreeShipping(false);
 
-        foreach ($this->_getRules($address) as $rule) {
+        foreach ($this->getRules($address) as $rule) {
             /* @var $rule \Magento\SalesRule\Model\Rule */
             if (!$this->validatorUtility->canProcessRule($rule, $address)) {
                 continue;

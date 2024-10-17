@@ -139,7 +139,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     protected $_optionsByCode = [];
 
     /**
-     * Not Represent options
+     * Not Represent option
      *
      * @var array
      */
@@ -148,6 +148,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * Flag stating that options were successfully saved
      *
+     * @var bool
      */
     protected $_flagOptionsSaved;
 
@@ -176,6 +177,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      * @deprecated 101.0.0
+     * @see nothing
      */
     protected $stockRegistry;
 
@@ -348,6 +350,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         if (!$this->getParentItem() || !$this->getId()) {
             $qty = $this->_prepareQty($qty);
             $this->setQtyToAdd($qty);
+            $this->setPreviousQty($this->getQty());
             $this->setQty($this->getQty() + $qty);
         }
         return $this;

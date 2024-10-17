@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminJsCalenderDateFormatTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Storefront should reflect the js calender format configured in the backend" />
+            <title value="Check if js calender format configured in backend is reflected on storefront" />
+            <description value="Check if js calender format configured in backend is reflected on storefront" />
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-12164"/>
+            <group value="Catalog"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilter"/>
+
+            <actionGroup ref="AdminOpenStoreConfigCatalogPageActionGroup" stepKey="navigateToConfigurationPage2"/>
+            <actionGroup ref="AdminConfigExpandDateAndTimeTabActionGroup" stepKey="expandDateAndTimeCustomOptionsTab2"/>
+            <actionGroup ref="SelectDropdownDateAndTimeActionGroup" stepKey="RevertDateAndTimeFieldOrder">
+                <argument name="useJsCalender" value="No"/>
+                <argument name="firstFieldOfDateOrder" value="Month"/>
+                <argument name="secondFieldOfDateOrder" value="Day"/>
+            </actionGroup>
+            <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForDateFieldsOrder">
+                <argument name="rowId" value="row_catalog_custom_options_date_fields_order"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveDateAndTimeConfig2"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!--   Open admin configuration, got to catalog, expand date and time tab     -->
+        <actionGroup ref="AdminOpenStoreConfigCatalogPageActionGroup" stepKey="navigateToConfigurationPage"/>
+        <actionGroup ref="AdminConfigExpandDateAndTimeTabActionGroup" stepKey="expandDateAndTimeCustomOptionsTab"/>
+
+        <!--   Customize date and time configuration to D/M/Y     -->
+        <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValueForDateFieldsOrder">
+            <argument name="rowId" value="row_catalog_custom_options_date_fields_order"/>
+        </actionGroup>
+        <actionGroup ref="SelectDropdownDateAndTimeActionGroup" stepKey="CustomizeDateAndTimeFieldOrder">
+            <argument name="useJsCalender" value="Yes"/>
+            <argument name="firstFieldOfDateOrder" value="Day"/>
+            <argument name="secondFieldOfDateOrder" value="Month"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveDateAndTimeConfig"/>
+
+        <!--   Create simple product on storefront     -->
+        <actionGroup ref="FillAdminSimpleProductFormActionGroup" stepKey="fillProductFieldsInAdmin">
+            <argument name="category" value="$$createPreReqCategory$$"/>
+            <argument name="simpleProduct" value="_defaultProduct"/>
+        </actionGroup>
+
+        <!--    Add customizable date option        -->
+        <actionGroup ref="AdminAddCustomizableOptionToSimpleProductActionGroup" stepKey="AddCustomizableDateOption"/>
+
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!--   Assert date on storefront     -->
+        <actionGroup ref="AssertProductDateFormatInStorefrontActionGroup" stepKey="assertDateFormat">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+    </test>
+</tests>

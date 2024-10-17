@@ -240,7 +240,7 @@ class CartFixedTest extends TestCase
     /**
      * @return array
      */
-    public function applyFixedDiscountDataProvider(): array
+    public static function applyFixedDiscountDataProvider(): array
     {
         return [
             'prices when discount had wrong value 15.01' => [[22, 14, 43, 7.50, 0.00]],
@@ -362,85 +362,59 @@ class CartFixedTest extends TestCase
         $orderSender = $this->getMockBuilder(OrderSender::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $model = $this->objectManager->create(
-            Multishipping::class,
-            ['orderSender' => $orderSender]
-        );
+        $model = $this->objectManager->create(Multishipping::class, ['orderSender' => $orderSender]);
         $model->createOrders();
         $orderList = $this->getOrderList((int)$quote->getId());
         $this->assertCount(3, $orderList);
+
         /**
          * The order with $10 simple product
          * @var Order $firstOrder
          */
         $firstOrder = array_shift($orderList);
+        $this->assertNotEmpty($firstOrder->getAppliedRuleIds());
+        $this->assertEquals($firstOrderTotals['subtotal'], $firstOrder->getSubtotal());
+        $this->assertEquals($firstOrderTotals['discount_amount'], $firstOrder->getDiscountAmount());
+        $this->assertEquals($firstOrderTotals['shipping_amount'], $firstOrder->getShippingAmount());
+        $this->assertEquals($firstOrderTotals['grand_total'], $firstOrder->getGrandTotal());
+        $firstOrderItem = array_values($firstOrder->getItems())[0];
+        $this->assertNotEmpty($firstOrderItem->getAppliedRuleIds());
+        $this->assertEquals($firstOrderTotals['discount_amount'] * -1, $firstOrderItem->getDiscountAmount());
 
-        $this->assertEquals(
-            $firstOrderTotals['subtotal'],
-            $firstOrder->getSubtotal()
-        );
-        $this->assertEquals(
-            $firstOrderTotals['discount_amount'],
-            $firstOrder->getDiscountAmount()
-        );
-        $this->assertEquals(
-            $firstOrderTotals['shipping_amount'],
-            $firstOrder->getShippingAmount()
-        );
-        $this->assertEquals(
-            $firstOrderTotals['grand_total'],
-            $firstOrder->getGrandTotal()
-        );
         /**
          * The order with $20 simple product
          * @var Order $secondOrder
          */
         $secondOrder = array_shift($orderList);
-        $this->assertEquals(
-            $secondOrderTotals['subtotal'],
-            $secondOrder->getSubtotal()
-        );
-        $this->assertEquals(
-            $secondOrderTotals['discount_amount'],
-            $secondOrder->getDiscountAmount()
-        );
-        $this->assertEquals(
-            $secondOrderTotals['shipping_amount'],
-            $secondOrder->getShippingAmount()
-        );
-        $this->assertEquals(
-            $secondOrderTotals['grand_total'],
-            $secondOrder->getGrandTotal()
-        );
+        $this->assertNotEmpty($secondOrder->getAppliedRuleIds());
+        $this->assertEquals($secondOrderTotals['subtotal'], $secondOrder->getSubtotal());
+        $this->assertEquals($secondOrderTotals['discount_amount'], $secondOrder->getDiscountAmount());
+        $this->assertEquals($secondOrderTotals['shipping_amount'], $secondOrder->getShippingAmount());
+        $this->assertEquals($secondOrderTotals['grand_total'], $secondOrder->getGrandTotal());
+        $secondOrderItem = array_values($secondOrder->getItems())[0];
+        $this->assertNotEmpty($secondOrderItem->getAppliedRuleIds());
+        $this->assertEquals($secondOrderTotals['discount_amount'] * -1, $secondOrderItem->getDiscountAmount());
+
         /**
          * The order with $5 virtual product and billing address as shipping
          * @var Order $thirdOrder
          */
         $thirdOrder = array_shift($orderList);
-        $this->assertEquals(
-            $thirdOrderTotals['subtotal'],
-            $thirdOrder->getSubtotal()
-        );
-        $this->assertEquals(
-            $thirdOrderTotals['discount_amount'],
-            $thirdOrder->getDiscountAmount()
-        );
-        $this->assertEquals(
-            $thirdOrderTotals['shipping_amount'],
-            $thirdOrder->getShippingAmount()
-        );
-        $this->assertEquals(
-            $thirdOrderTotals['grand_total'],
-            $thirdOrder->getGrandTotal()
-        );
+        $this->assertNotEmpty($thirdOrder->getAppliedRuleIds());
+        $this->assertEquals($thirdOrderTotals['subtotal'], $thirdOrder->getSubtotal());
+        $this->assertEquals($thirdOrderTotals['discount_amount'], $thirdOrder->getDiscountAmount());
+        $this->assertEquals($thirdOrderTotals['shipping_amount'], $thirdOrder->getShippingAmount());
+        $this->assertEquals($thirdOrderTotals['grand_total'], $thirdOrder->getGrandTotal());
+        $thirdOrderItem = array_values($thirdOrder->getItems())[0];
+        $this->assertNotEmpty($thirdOrderItem->getAppliedRuleIds());
+        $this->assertEquals($thirdOrderTotals['discount_amount'] * -1, $thirdOrderItem->getDiscountAmount());
     }
 
     /**
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function multishippingDataProvider(): array
+    public static function multishippingDataProvider(): array
     {
         return [
             'Discount $5 proportionally spread between products' => [
@@ -527,7 +501,6 @@ class CartFixedTest extends TestCase
         $rule->setDiscountAmount($percentDiscount);
         $this->saveRule($rule);
         $quote = $this->getQuote('test_quote_with_simple_products');
-        $quote->setCouponCode('2?ds5!2d');
         $quote->collectTotals();
         $this->quoteRepository->save($quote);
         $this->assertEquals(21.98, $quote->getBaseSubtotal());
@@ -544,7 +517,7 @@ class CartFixedTest extends TestCase
         $this->assertEqualsWithDelta($expectedDiscounts[$item->getSku()], $item->getDiscountAmount(), self::EPSILON);
     }
 
-    public function discountByPercentDataProvider()
+    public static function discountByPercentDataProvider()
     {
         return [
             [

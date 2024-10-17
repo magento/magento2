@@ -84,15 +84,9 @@ class DataFixtureTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->fixture1 = $this->getMockBuilder(RevertibleDataFixtureInterface::class)
-            ->setMockClassName('MockFixture1')
-            ->getMockForAbstractClass();
-        $this->fixture2 = $this->getMockBuilder(RevertibleDataFixtureInterface::class)
-            ->setMockClassName('MockFixture2')
-            ->getMockForAbstractClass();
-        $this->fixture3 = $this->getMockBuilder(DataFixtureInterface::class)
-            ->setMockClassName('MockFixture3')
-            ->getMockForAbstractClass();
+        $this->fixture1 = $this->getMock(RevertibleDataFixtureInterface::class, 'MockFixture1');
+        $this->fixture2 = $this->getMock(RevertibleDataFixtureInterface::class, 'MockFixture2');
+        $this->fixture3 = $this->getMock(DataFixtureInterface::class, 'MockFixture3');
 
         $this->fixtureStorage = new DataFixtureStorage();
         DataFixtureStorageManager::setStorage($this->fixtureStorage);
@@ -139,6 +133,22 @@ class DataFixtureTest extends TestCase
         }
 
         $this->createResolverMock();
+    }
+
+    /**
+     * @param string $class
+     * @param string $mockClassName
+     * @return MockObject
+     */
+    private function getMock(string $class, string $mockClassName): MockObject
+    {
+        if (class_exists($mockClassName)) {
+            return new $mockClassName();
+        }
+
+        $mockBuilder = $this->getMockBuilder($class);
+        $mockBuilder->setMockClassName($mockClassName);
+        return $mockBuilder->getMockForAbstractClass();
     }
 
     /**
@@ -519,7 +529,14 @@ class DataFixtureTest extends TestCase
         $this->assertNull($this->fixtureStorage->get('fixture3'));
         $this->fixture1->expects($this->exactly(2))
             ->method('revert')
-            ->withConsecutive([$fixture12], [$fixture11]);
+            ->willReturnCallback(
+                function ($arg) use ($fixture12, $fixture11) {
+                    if ($arg == $fixture12 || $arg == $fixture11) {
+                        return null;
+                    }
+                }
+            );
+
         $this->fixture2->expects($this->once())
             ->method('revert')
             ->with($fixture2);

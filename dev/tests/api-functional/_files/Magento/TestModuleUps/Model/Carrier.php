@@ -12,6 +12,7 @@ use Magento\Framework\HTTP\ClientFactory;
 use Magento\Framework\Xml\Security;
 use Magento\Shipping\Model\Rate\Result\ProxyDeferredFactory;
 use Magento\Ups\Helper\Config;
+use Magento\Ups\Model\UpsAuth;
 
 /**
  * Mock UPS shipping implementation
@@ -42,6 +43,7 @@ class Carrier extends \Magento\Ups\Model\Carrier
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param Config $configHelper
+     * @param UpsAuth $upsAuth
      * @param ClientFactory $httpClientFactory
      * @param array $data
      * @param AsyncClientInterface $asyncHttpClient
@@ -68,6 +70,7 @@ class Carrier extends \Magento\Ups\Model\Carrier
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         Config $configHelper,
+        UpsAuth $upsAuth,
         ClientFactory $httpClientFactory,
         AsyncClientInterface $asyncHttpClient,
         ProxyDeferredFactory $proxyDeferredFactory,
@@ -92,6 +95,7 @@ class Carrier extends \Magento\Ups\Model\Carrier
             $stockRegistry,
             $localeFormat,
             $configHelper,
+            $upsAuth,
             $httpClientFactory,
             $data,
             $asyncHttpClient,

@@ -242,7 +242,7 @@ class StaticResourceTest extends TestCase
     /**
      * @return array
      */
-    public function launchDataProvider()
+    public static function launchDataProvider()
     {
         return [
             'developer mode with non-modular resource' => [
@@ -440,7 +440,7 @@ class StaticResourceTest extends TestCase
     /**
      * @return array
      */
-    public function themesDataProvider(): array
+    public static function themesDataProvider(): array
     {
         return  [
             [

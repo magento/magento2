@@ -224,13 +224,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function _resetState(): void
     {
-        parent::_resetState();
         $this->queryText = null;
         $this->search = null;
         $this->searchCriteriaBuilder = null;
         $this->searchResult = null;
         $this->filterBuilder = null;
         $this->searchOrders = null;
+        parent::_resetState();
     }
 
     /**
@@ -581,7 +581,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
          * for the same requests and products with the same relevance
          * NOTE: this does not replace existing orders but ADDs one more
          */
-        $this->setOrder('entity_id');
+        $this->setOrder('entity_id', Select::SQL_ASC);
         return parent::_beforeLoad();
     }
 

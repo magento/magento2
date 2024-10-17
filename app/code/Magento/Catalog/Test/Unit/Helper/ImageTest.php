@@ -98,8 +98,6 @@ class ImageTest extends TestCase
 
         $this->catalogMediaConfigMock = $this->createPartialMock(CatalogMediaConfig::class, ['getMediaUrlFormat']);
         $this->catalogMediaConfigMock->method('getMediaUrlFormat')->willReturn(CatalogMediaConfig::HASH);
-
-
         $this->helper = new Image(
             $this->context,
             $this->imageFactory,
@@ -127,7 +125,7 @@ class ImageTest extends TestCase
     {
         $this->imageFactory = $this->getMockBuilder(ProductImageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->image = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image::class)
@@ -164,7 +162,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function initDataProvider()
+    public static function initDataProvider()
     {
         return [
             [
@@ -224,34 +222,34 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function initKeepFrameDataProvider()
+    public static function initKeepFrameDataProvider()
     {
         return [
             // when frame defined explicitly, it wins
             [
-                'mediaImage' => [
+                'data' => [
                     'frame' => 1,
                 ],
                 'whiteBorders' => true,
-                'expected' => true,
+                'expectedKeepFrame' => true,
             ],
             [
-                'mediaImage' => [
+                'data' => [
                     'frame' => 0,
                 ],
                 'whiteBorders' => true,
-                'expected' => false,
+                'expectedKeepFrame' => false,
             ],
             // when frame is not defined, var is used
             [
-                'mediaImage' => [],
+                'data' => [],
                 'whiteBorders' => true,
-                'expected' => true,
+                'expectedKeepFrame' => true,
             ],
             [
-                'mediaImage' => [],
+                'data' => [],
                 'whiteBorders' => false,
-                'expected' => false,
+                'expectedKeepFrame' => false,
             ],
         ];
     }
@@ -439,7 +437,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function getHeightDataProvider()
+    public static function getHeightDataProvider()
     {
         return [
             'data' => [
@@ -479,7 +477,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function getFrameDataProvider()
+    public static function getFrameDataProvider()
     {
         return [
             'data' => [
@@ -524,7 +522,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function getLabelDataProvider()
+    public static function getLabelDataProvider()
     {
         return [
             [
@@ -614,70 +612,70 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function getResizedImageInfoDataProvider()
+    public static function getResizedImageInfoDataProvider()
     {
         return [
             [
-                'image_id' => 'test_image_id',
-                'image_file' => '/path/to/test_image_id.png',
-                'base_file' => '/path/to/base_image.png',
+                'imageId' => 'test_image_id',
+                'imageFile' => '/path/to/test_image_id.png',
+                'baseFile' => '/path/to/base_image.png',
                 'destination' => 'small_image',
-                'set_image_file' => true,
-                'is_cached' => false,
-                'is_base_file_placeholder' => false,
-                'resized_image_info' => [
+                'setImageFile' => true,
+                'isCached' => false,
+                'isBaseFilePlaceholder' => false,
+                'resizedImageInfo' => [
                     'x' => 100,
                     'y' => 100,
                 ],
             ],
             [
-                'image_id' => 'test_image_id',
-                'image_file' => '/path/to/test_image_id.png',
-                'base_file' => null,
+                'imageId' => 'test_image_id',
+                'imageFile' => '/path/to/test_image_id.png',
+                'baseFile' => null,
                 'destination' => 'small_image',
-                'set_image_file' => false,
-                'is_cached' => false,
-                'is_base_file_placeholder' => false,
-                'resized_image_info' => [
+                'setImageFile' => false,
+                'isCached' => false,
+                'isBaseFilePlaceholder' => false,
+                'resizedImageInfo' => [
                     'x' => 100,
                     'y' => 100,
                 ],
             ],
             [
-                'image_id' => 'test_image_id',
-                'image_file' => '/path/to/test_image_id.png',
-                'base_file' => null,
+                'imageId' => 'test_image_id',
+                'imageFile' => '/path/to/test_image_id.png',
+                'baseFile' => null,
                 'destination' => 'small_image',
-                'set_image_file' => true,
-                'is_cached' => false,
-                'is_base_file_placeholder' => false,
-                'resized_image_info' => [
+                'setImageFile' => true,
+                'isCached' => false,
+                'isBaseFilePlaceholder' => false,
+                'resizedImageInfo' => [
                     'x' => 100,
                     'y' => 100,
                 ],
             ],
             [
-                'image_id' => 'test_image_id',
-                'image_file' => '/path/to/test_image_id.png',
-                'base_file' => null,
+                'imageId' => 'test_image_id',
+                'imageFile' => '/path/to/test_image_id.png',
+                'baseFile' => null,
                 'destination' => 'small_image',
-                'set_image_file' => true,
-                'is_cached' => false,
-                'is_base_file_placeholder' => true,
-                'resized_image_info' => [
+                'setImageFile' => true,
+                'isCached' => false,
+                'isBaseFilePlaceholder' => true,
+                'resizedImageInfo' => [
                     'x' => 100,
                     'y' => 100,
                 ],
             ],
             [
-                'image_id' => 'test_image_id',
-                'image_file' => '/path/to/test_image_id.png',
-                'base_file' => null,
+                'imageId' => 'test_image_id',
+                'imageFile' => '/path/to/test_image_id.png',
+                'baseFile' => null,
                 'destination' => 'small_image',
-                'set_image_file' => true,
-                'is_cached' => false,
-                'is_base_file_placeholder' => false,
-                'resized_image_info' => [
+                'setImageFile' => true,
+                'isCached' => false,
+                'isBaseFilePlaceholder' => false,
+                'resizedImageInfo' => [
                     'x' => 100,
                     'y' => 100,
                 ],

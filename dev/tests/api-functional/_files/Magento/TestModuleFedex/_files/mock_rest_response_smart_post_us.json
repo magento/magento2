@@ -1,0 +1,145 @@
+{
+  "transactionId": "TEST-RESPONSE-SMART-POST-US-0de9-4f74-89ab-d23e63d743bf",
+  "customerTransactionId": "customer test",
+  "output": {
+          "alerts": [
+          {
+              "code": "VIRTUAL.RESPONSE",
+              "message": "This is a Virtual Response.",
+              "alertType": "NOTE"
+          }
+      ],
+      "rateReplyDetails": [
+          {
+              "serviceType": "SMART_POST",
+              "serviceName": "FedEx SmartPost®",
+              "packagingType": "YOUR_PACKAGING",
+              "ratedShipmentDetails": [
+                  {
+                      "rateType": "LIST",
+                      "ratedWeightMethod": "ACTUAL",
+                      "totalDiscounts": 0.0,
+                      "totalBaseCharge": 35.42,
+                      "totalNetCharge": 41.61,
+                      "totalNetFedExCharge": 41.61,
+                      "shipmentRateDetail": {
+                          "rateZone": "5",
+                          "dimDivisor": 139,
+                          "fuelSurchargePercent": 14.25,
+                          "totalSurcharges": 6.19,
+                          "totalFreightDiscount": 0.0,
+                          "surCharges": [
+                              {
+                                  "type": "DELIVERY_CONFIRMATION",
+                                  "description": "Delivery and Returns",
+                                  "level": "PACKAGE",
+                                  "amount": 1.0
+                              },
+                              {
+                                  "type": "FUEL",
+                                  "description": "Fuel Surcharge",
+                                  "level": "PACKAGE",
+                                  "amount": 5.19
+                              }
+                          ],
+                          "totalBillingWeight": {
+                              "units": "LB",
+                              "value": 25.0
+                          },
+                          "dimDivisorType": "COUNTRY",
+                          "currency": "USD"
+                      },
+                      "ratedPackages": [
+                          {
+                              "groupNumber": 0,
+                              "effectiveNetDiscount": 0.0,
+                              "packageRateDetail": {
+                                  "rateType": "PAYOR_LIST_PACKAGE",
+                                  "ratedWeightMethod": "ACTUAL",
+                                  "baseCharge": 35.42,
+                                  "netFreight": 35.42,
+                                  "totalSurcharges": 6.19,
+                                  "netFedExCharge": 41.61,
+                                  "totalTaxes": 0.0,
+                                  "netCharge": 41.61,
+                                  "totalRebates": 0.0,
+                                  "billingWeight": {
+                                      "units": "LB",
+                                      "value": 25.0
+                                  },
+                                  "totalFreightDiscounts": 0.0,
+                                  "surcharges": [
+                                      {
+                                          "type": "DELIVERY_CONFIRMATION",
+                                          "description": "Delivery and Returns",
+                                          "level": "PACKAGE",
+                                          "amount": 1.0
+                                      },
+                                      {
+                                          "type": "FUEL",
+                                          "description": "Fuel Surcharge",
+                                          "level": "PACKAGE",
+                                          "amount": 5.19
+                                      }
+                                  ],
+                                  "currency": "USD"
+                              }
+                          }
+                      ],
+                      "currency": "USD"
+                  }
+              ],
+              "operationalDetail": {
+                  "ineligibleForMoneyBackGuarantee": false,
+                  "astraDescription": "SMART POST"
+              },
+              "signatureOptionType": "SERVICE_DEFAULT",
+              "serviceDescription": {
+                  "serviceId": "EP1000000141",
+                  "serviceType": "SMART_POST",
+                  "names": [
+                      {
+                          "type": "long",
+                          "encoding": "utf-8",
+                          "value": "FedEx SmartPost®"
+                      },
+                      {
+                          "type": "long",
+                          "encoding": "ascii",
+                          "value": "FedEx SmartPost"
+                      },
+                      {
+                          "type": "medium",
+                          "encoding": "utf-8",
+                          "value": "SmartPost®"
+                      },
+                      {
+                          "type": "medium",
+                          "encoding": "ascii",
+                          "value": "SmartPost"
+                      },
+                      {
+                          "type": "short",
+                          "encoding": "utf-8",
+                          "value": "SP"
+                      },
+                      {
+                          "type": "short",
+                          "encoding": "ascii",
+                          "value": "SP"
+                      },
+                      {
+                          "type": "abbrv",
+                          "encoding": "ascii",
+                          "value": "SP"
+                      }
+                  ],
+                  "description": "Smart Post",
+                  "astraDescription": "SMART POST"
+              }
+          }
+      ],
+      "quoteDate": "2023-08-14",
+      "encoded": false
+  }
+}

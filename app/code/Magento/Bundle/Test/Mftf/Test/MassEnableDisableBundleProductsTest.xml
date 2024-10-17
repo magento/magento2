@@ -24,7 +24,9 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct4"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!--Clear Filters-->
@@ -45,7 +47,7 @@
 
         <!--Create bundle product-->
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
-        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption3"/>
+        <actionGroup ref="AdminClickAddOptionForBundleItemsActionGroup" stepKey="clickAddOption3"/>
         <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
         <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
@@ -87,7 +89,7 @@
 
         <!--Create bundle product 2-->
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems2"/>
-        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption32"/>
+        <actionGroup ref="AdminClickAddOptionForBundleItemsActionGroup" stepKey="clickAddOption32"/>
         <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions2"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle2"/>
         <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType2"/>
@@ -141,7 +143,9 @@
         <click selector="{{AdminProductFiltersSection.disable}}" stepKey="ClickOnDisable"/>
         <waitForPageLoad stepKey="waitForPageloadToExecute"/>
 
-        <magentoCron stepKey="runCronReindex" groups="index"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronReindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <actionGroup ref="ClearPageCacheActionGroup" stepKey="clearing"/>
 
         <!--Confirm bundle products have been disabled-->
