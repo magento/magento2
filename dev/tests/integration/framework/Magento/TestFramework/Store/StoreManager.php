@@ -10,20 +10,12 @@ use Magento\TestFramework\ObjectManager;
 
 /**
  * Integration tests decoration of store manager
- *
- * @package Magento\TestFramework\Store
  */
 class StoreManager implements \Magento\Store\Model\StoreManagerInterface
 {
-    /**
-     * @var \Magento\Store\Model\StoreManager
-     */
-    protected $decoratedStoreManager;
-
-    /**
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $eventManager;
+    private \Magento\Store\Model\StoreManager $decoratedStoreManager;
+    private \Magento\Framework\Event\ManagerInterface $eventManager;
+    private \Magento\TestFramework\App\Config $config;
 
     /**
      * @var null|bool
@@ -36,14 +28,16 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
      */
     public function __construct(
         \Magento\Store\Model\StoreManager $decoratedStoreManager,
-        \Magento\Framework\Event\ManagerInterface $eventManager
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\TestFramework\App\Config $config
     ) {
         $this->decoratedStoreManager = $decoratedStoreManager;
         $this->eventManager = $eventManager;
+        $this->config = $config;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCurrentStore($store)
     {
@@ -52,7 +46,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setIsSingleStoreModeAllowed($value)
     {
@@ -61,7 +55,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function hasSingleStore()
     {
@@ -71,7 +65,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isSingleStoreMode()
     {
@@ -81,7 +75,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStore($storeId = null)
     {
@@ -91,7 +85,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStores($withDefault = false, $codeKey = false)
     {
@@ -101,7 +95,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getWebsite($websiteId = null)
     {
@@ -111,7 +105,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getWebsites($withDefault = false, $codeKey = false)
     {
@@ -121,25 +115,30 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function reinitStores()
     {
         //In order to restore configFixture values
-        $testAppConfig = ObjectManager::getInstance()->get(Config::class);
-        $reflection = new \ReflectionClass($testAppConfig);
-        $dataProperty = $reflection->getProperty('data');
+        $reflection = new \ReflectionClass($this->config);
+
+        if (\substr($reflection->getName(), -12) === '\Interceptor') {
+            $dataProperty = $reflection->getParentClass()->getProperty('data');
+        } else {
+            $dataProperty = $reflection->getProperty('data');
+        }
+
         $dataProperty->setAccessible(true);
-        $savedConfig = $dataProperty->getValue($testAppConfig);
+        $savedConfig = $dataProperty->getValue($this->config);
 
         $this->decoratedStoreManager->reinitStores();
 
-        $dataProperty->setValue($testAppConfig, $savedConfig);
+        $dataProperty->setValue($this->config, $savedConfig);
         $this->dispatchInitCurrentStoreAfterEvent();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultStoreView()
     {
@@ -149,7 +148,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGroup($groupId = null)
     {
@@ -159,7 +158,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGroups($withDefault = false)
     {
