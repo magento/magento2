@@ -12,21 +12,16 @@ use Magento\Customer\Model\Context;
  * Email to a Friend Block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Send extends \Magento\Framework\View\Element\Template
 {
     /**
-     * SendFriend data
-     *
      * @var \Magento\SendFriend\Helper\Data
      */
     protected $_sendfriendData = null;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -229,6 +224,7 @@ class Send extends \Magento\Framework\View\Element\Template
     /**
      * @inheritdoc
      * @since 100.3.1
+     * phpstan:ignore
      */
     protected function _prepareLayout()
     {
