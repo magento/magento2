@@ -18,7 +18,7 @@ define([
          * @protected
          * @type {String}
          */
-        this.dateFormat_ = 'YYYY-MM-DD hh:mm:ss';
+        this.dateFormat_ = 'YYYY-MM-DD HH:mm:ssZ';
 
         /**
          * @protected
