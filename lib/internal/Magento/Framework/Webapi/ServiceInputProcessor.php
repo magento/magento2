@@ -26,6 +26,7 @@ use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
 use Laminas\Code\Reflection\ClassReflection;
 use Magento\Framework\Webapi\Validator\IOLimit\DefaultPageSizeSetter;
+use Magento\Framework\Webapi\Validator\IOLimit\IOLimitConfigProvider;
 use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
 
 /**
@@ -131,6 +132,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         AttributeValueFactory $attributeValueFactory,
         CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
         MethodsMap $methodsMap,
+        IOLimitConfigProvider $validationConfigProvider,
         ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null,
         ConfigInterface $config = null,
         array $customAttributePreprocessors = [],
@@ -143,6 +145,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         $this->attributeValueFactory = $attributeValueFactory;
         $this->customAttributeTypeLocator = $customAttributeTypeLocator;
         $this->methodsMap = $methodsMap;
+        $this->validationConfigProvider = $validationConfigProvider;
         $this->serviceTypeToEntityTypeMap = $serviceTypeToEntityTypeMap
             ?: ObjectManager::getInstance()->get(ServiceTypeToEntityTypeMap::class);
         $this->config = $config
@@ -341,9 +344,14 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
             }
         }
 
-        if ($object instanceof SearchCriteriaInterface) {
-            $this->defaultPageSizeSetter->processSearchCriteria($object, $this->defaultPageSize);
-        }
+        if ($object instanceof SearchCriteriaInterface)
+            if($object->getPageSize() === null && $this->validationConfigProvider->isInputLimitingEnabled()
+            ) {
+                $object->setPageSize( $this->validationConfigProvider->getDefaultPageSize());
+            }
+            else {
+                $object->setPageSize($this->defaultPageSize);
+            }
 
         return $object;
     }
