@@ -7,8 +7,6 @@ namespace Magento\Paypal\Model\ResourceModel\Report\Settlement\Options;
 
 /**
  * Transaction Events Types Options
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class TransactionEvents implements \Magento\Framework\Option\ArrayInterface
 {
@@ -26,7 +24,7 @@ class TransactionEvents implements \Magento\Framework\Option\ArrayInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

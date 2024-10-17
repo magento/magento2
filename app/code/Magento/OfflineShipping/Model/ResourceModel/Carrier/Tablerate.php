@@ -6,8 +6,6 @@
 
 /**
  * Shipping table rates
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier;

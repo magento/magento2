@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 /**
  * Custom import CSV file field for shipping table rates
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\OfflineShipping\Test\Unit\Block\Adminhtml\Form\Field;
 
