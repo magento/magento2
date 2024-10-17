@@ -53,12 +53,12 @@
         <comment userInput="BIC workaround" stepKey="checkIfCategoryPresent"/>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryAdminPage"/>
         <actionGroup ref="AdminCategoriesExpandAllActionGroup" stepKey="expandAllCategories"/>
-        <see userInput="{{_defaultCategory.name}}" selector="{{AdminCategorySidebarTreeSection.treeContainer}}" stepKey="assertCategoryOnAdminPage"/>
+        <actionGroup ref="AssertAdminCategoryIsListedInCategoriesTreeActionGroup" stepKey="assertCategoryOnAdminPage">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
 
         <!-- Check on storefront that category was created -->
-        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryStorefrontPage">
-            <argument name="categoryUrl" value="{{_defaultCategory.urlKey}}"/>
-        </actionGroup>
-        <see userInput="{{_defaultCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryNameOnStorefront"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToCategoryStorefrontPage"/>
+        <actionGroup ref="CheckCategoryOnStorefrontActionGroup" stepKey="assertCategoryNameOnStorefront"/>
     </test>
 </tests>
