@@ -247,8 +247,8 @@ class Save extends AbstractAction implements HttpPostActionInterface
                 $existingConfig = $bookmarkConfig['views'][$bookmark->getIdentifier()]['data'] ?? null;
                 $currentConfig = $data[self::CURRENT_IDENTIFIER] ?? null;
                 if ($existingConfig && $currentConfig) {
-                    if ($existingConfig['filters'] === $currentConfig['filters']
-                        && $existingConfig['positions'] !== $currentConfig['positions']
+                    if ((isset($existingConfig['filters']) && $existingConfig['filters'] === $currentConfig['filters'])
+                        && (isset($existingConfig['positions']) && $existingConfig['positions'] !== $currentConfig['positions'])
                     ) {
                         $bookmarkConfig['views'][$bookmark->getIdentifier()]['data'] = $data[self::CURRENT_IDENTIFIER];
                         $bookmark->setConfig($this->serializer->serialize($bookmarkConfig));
