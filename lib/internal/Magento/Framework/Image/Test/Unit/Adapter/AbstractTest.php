@@ -98,7 +98,7 @@ class AbstractTest extends TestCase
             'frame' => ['width' => 135, 'height' => 135],
         ];
 
-        return [[135, null, $expected], [null, 135, $expected]];
+        return [[134.5, null, $expected], [null, 134.5, $expected]];
     }
 
     /**
