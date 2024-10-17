@@ -6,9 +6,9 @@
 
 namespace Magento\Test\Workaround\Cleanup;
 
+use Magento\TestFramework\Workaround\Cleanup\TestCaseProperties;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestSuite;
-use Magento\TestFramework\Workaround\Cleanup\TestCaseProperties;
 
 /**
  * Test class for \Magento\TestFramework\Workaround\Cleanup\TestCaseProperties.
@@ -19,16 +19,18 @@ class TestCasePropertiesTest extends TestCase
      * @var array
      */
     protected $fixtureProperties = [
-        'testPublic' => ['name' => 'testPublic', 'is_static' => false],
-        '_testPrivate' => ['name' => '_testPrivate', 'is_static' => false],
-        '_testPropertyBoolean' => ['name' => '_testPropertyBoolean', 'is_static' => false],
-        '_testPropertyInteger' => ['name' => '_testPropertyInteger', 'is_static' => false],
-        '_testPropertyFloat' => ['name' => '_testPropertyFloat', 'is_static' => false],
-        '_testPropertyString' => ['name' => '_testPropertyString', 'is_static' => false],
-        '_testPropertyArray' => ['name' => '_testPropertyArray', 'is_static' => false],
-        'testPublicStatic' => ['name' => 'testPublicStatic', 'is_static' => true],
-        '_testProtectedStatic' => ['name' => '_testProtectedStatic', 'is_static' => true],
-        '_testPrivateStatic' => ['name' => '_testPrivateStatic', 'is_static' => true]
+        'testPublic' => ['name' => 'testPublic', 'is_static' => false, 'nullable' => true],
+        '_testPrivate' => ['name' => '_testPrivate', 'is_static' => false, 'nullable' => true],
+        '_testPropertyBoolean' => ['name' => '_testPropertyBoolean', 'is_static' => false, 'nullable' => true],
+        '_testPropertyInteger' => ['name' => '_testPropertyInteger', 'is_static' => false, 'nullable' => true],
+        '_testPropertyFloat' => ['name' => '_testPropertyFloat', 'is_static' => false, 'nullable' => true],
+        '_testPropertyString' => ['name' => '_testPropertyString', 'is_static' => false, 'nullable' => true],
+        '_testPropertyArray' => ['name' => '_testPropertyArray', 'is_static' => false, 'nullable' => true],
+        '_testTypedNonNullable' => ['name' => '_testTypedNonNullable', 'is_static' => false, 'nullable' => false],
+        '_testTypedNullable' => ['name' => '_testTypedNullable', 'is_static' => false, 'nullable' => true],
+        'testPublicStatic' => ['name' => 'testPublicStatic', 'is_static' => true, 'nullable' => true],
+        '_testProtectedStatic' => ['name' => '_testProtectedStatic', 'is_static' => true, 'nullable' => true],
+        '_testPrivateStatic' => ['name' => '_testPrivateStatic', 'is_static' => true, 'nullable' => true]
     ];
 
     /**
@@ -61,7 +63,13 @@ class TestCasePropertiesTest extends TestCase
             if (in_array($property->getName(), $fixturePropertiesNames)) {
                 $property->setAccessible(true);
                 $value = $property->getValue($testSuite);
-                $this->assertNull($value);
+                $isNullable = $this->fixtureProperties[$property->getName()]['nullable'];
+
+                if ($isNullable) {
+                    $this->assertNull($value);
+                } else {
+                    $this->assertNotNull($value);
+                }
             }
         }
     }

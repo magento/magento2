@@ -35,7 +35,7 @@ class TestCaseProperties
 
                 if (is_array($property->getDefaultValue())) {
                     $property->setValue($test, []);
-                } else {
+                } elseif (!$property->hasType() || $property->getType()->allowsNull()) {
                     $property->setValue($test, null);
                 }
             }
