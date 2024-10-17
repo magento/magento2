@@ -134,7 +134,9 @@
             <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
         <click selector="{{StorefrontProductInfoDetailsSection.detailsTab}}" stepKey="clickDetailsTab"/>
-        <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="$$createProduct.custom_attributes[description]$$" stepKey="assertProductDescription"/>
+        <actionGroup ref="AssertStorefrontProductDescriptionActionGroup" stepKey="assertProductDescription">
+            <argument name="productDescription" value="$$createProduct.custom_attributes[description]$$"/>
+        </actionGroup>
 
         <!-- Assert that product page has added reviews -->
         <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="clickReviewTab"/>
