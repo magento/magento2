@@ -78,7 +78,7 @@ class ShardingTest extends SetupTestCase
         self::assertCount(2, $default);
         self::assertCount(1, $shard1);
         self::assertCount(1, $shard2);
-        self::assertEquals($this->getData(), array_replace($default, $shard1, $shard2));
+        $this->assertTableCreationStatements($this->getData(), array_replace($default, $shard1, $shard2));
     }
 
     /**
@@ -99,6 +99,26 @@ class ShardingTest extends SetupTestCase
         self::assertCount(2, $default);
         self::assertCount(1, $shard1);
         self::assertCount(1, $shard2);
-        self::assertEquals($this->getData(), array_replace($default, $shard1, $shard2));
+        $this->assertTableCreationStatements($this->getData(), array_replace($default, $shard1, $shard2));
+    }
+
+    /**
+     * Assert table creation statements
+     *
+     * @param array $expectedData
+     * @param array $actualData
+     */
+    private function assertTableCreationStatements(array $expectedData, array $actualData): void
+    {
+        if (!$this->isUsingAuroraDb()) {
+            $this->assertEquals($expectedData, $actualData);
+        } else {
+            ksort($expectedData);
+            ksort($actualData);
+            $this->assertSameSize($expectedData, $actualData);
+            foreach ($expectedData as $key => $value) {
+                $this->assertStringContainsString($actualData[$key], $value);
+            }
+        }
     }
 }

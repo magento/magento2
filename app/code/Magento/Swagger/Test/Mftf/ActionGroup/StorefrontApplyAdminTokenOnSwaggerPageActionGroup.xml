@@ -15,8 +15,13 @@
             <argument name="token" type="string" defaultValue=""/>
         </arguments>
 
-        <clearField selector="{{SwaggerHeaderSection.apiKeyInput}}" stepKey="clearApiTokenField"/>
-        <fillField selector="{{SwaggerHeaderSection.apiKeyInput}}" userInput="{{token}}" stepKey="fillApiTokenInput"/>
-        <click selector="{{SwaggerHeaderSection.applyButton}}" stepKey="clickApplyButton" />
+        <click selector="{{SwaggerAuthorizeSection.authorizeButtonUnlocked}}" stepKey="clickAuthorizeButton"/>
+        <waitForElementVisible selector="{{SwaggerAuthorizeSection.apiKeyInput}}" stepKey="waitModalPopUp"/>
+        <clearField selector="{{SwaggerAuthorizeSection.apiKeyInput}}" stepKey="clearApiTokenField"/>
+        <fillField selector="{{SwaggerAuthorizeSection.apiKeyInput}}" userInput="{{token}}" stepKey="fillApiTokenInput"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickApplyButton"/>
+        <click selector="{{SwaggerAuthorizeSection.authorizeModalButton}}" stepKey="clickModalAuthorizeButton"/>
+        <waitForPageLoad stepKey="waitForPageReloaded"/>
+        <click selector="{{SwaggerAuthorizeSection.closeModalButton}}" stepKey="clickModalCloseButton"/>
     </actionGroup>
 </actionGroups>

@@ -17,7 +17,6 @@ use Magento\Sales\Model\Order\Status\History;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
-
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -48,6 +47,9 @@ class CreditmemoNotifierTest extends TestCase
      */
     protected $creditmemoSenderMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->historyCollectionFactory = $this->createPartialMock(
@@ -72,8 +74,10 @@ class CreditmemoNotifierTest extends TestCase
 
     /**
      * Test case for successful email sending
+     *
+     * @return void
      */
-    public function testNotifySuccess()
+    public function testNotifySuccess(): void
     {
         $historyCollection = $this->getMockBuilder(Collection::class)
             ->addMethods(['setIsCustomerNotified'])
@@ -84,11 +88,8 @@ class CreditmemoNotifierTest extends TestCase
             History::class,
             ['setIsCustomerNotified', 'save']
         );
-        $historyItem->expects($this->at(0))
-            ->method('setIsCustomerNotified')
+        $historyItem->method('setIsCustomerNotified')
             ->with(1);
-        $historyItem->expects($this->at(1))
-            ->method('save');
         $historyCollection->expects($this->once())
             ->method('getUnnotifiedForInstance')
             ->with($this->creditmemo)
@@ -109,8 +110,10 @@ class CreditmemoNotifierTest extends TestCase
 
     /**
      * Test case when email has not been sent
+     *
+     * @return void
      */
-    public function testNotifyFail()
+    public function testNotifyFail(): void
     {
         $this->creditmemo->expects($this->once())
             ->method('getEmailSent')
@@ -120,8 +123,10 @@ class CreditmemoNotifierTest extends TestCase
 
     /**
      * Test case when Mail Exception has been thrown
+     *
+     * @return void
      */
-    public function testNotifyException()
+    public function testNotifyException(): void
     {
         $exception = new MailException(__('Email has not been sent'));
         $this->creditmemoSenderMock->expects($this->once())

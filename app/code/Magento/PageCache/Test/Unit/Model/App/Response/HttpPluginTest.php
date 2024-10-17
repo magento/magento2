@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\PageCache\Test\Unit\Model\App\Response;
 
+use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\MediaStorage\Model\File\Storage\Response as FileResponse;
 use Magento\PageCache\Model\App\Response\HttpPlugin;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -24,12 +26,27 @@ class HttpPluginTest extends TestCase
     private $httpPlugin;
 
     /**
+     * @var Context|MockObject
+     */
+    private $context;
+
+    /**
+     * @var HttpRequest|MockObject
+     */
+    private $request;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         parent::setUp();
-        $this->httpPlugin = new HttpPlugin();
+        $this->context = $this->createMock(Context::class);
+        $this->request = $this->createMock(HttpRequest::class);
+        $this->httpPlugin = new HttpPlugin(
+            $this->context,
+            $this->request
+        );
     }
 
     /**
@@ -53,7 +70,7 @@ class HttpPluginTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSendResponseDataProvider(): array
+    public static function beforeSendResponseDataProvider(): array
     {
         return [
             'http_response_headers_not_sent' => [HttpResponse::class, false, 1],
@@ -61,5 +78,18 @@ class HttpPluginTest extends TestCase
             'file_response_headers_not_sent' => [FileResponse::class, false, 0],
             'file_response_headers_sent' => [FileResponse::class, true, 0],
         ];
+    }
+
+    public function testBeforeSendResponseVaryMismatch()
+    {
+        /** @var HttpResponse|MockObject $responseMock */
+        $this->context->expects($this->any())->method('getVaryString')->willReturn('currentVary');
+        $this->request->expects($this->any())->method('get')->willReturn('varyCookie');
+        /** @var HttpResponse|MockObject $responseMock */
+        $responseMock = $this->createMock(HttpResponse::class);
+        $responseMock->expects($this->once())->method('setNoCacheHeaders');
+        $responseMock->expects($this->once())->method('sendVary');
+
+        $this->httpPlugin->beforeSendResponse($responseMock);
     }
 }

@@ -10,6 +10,7 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
  * Interface CommandInterface using for payment related changes of order state
+ * @api
  */
 interface CommandInterface
 {

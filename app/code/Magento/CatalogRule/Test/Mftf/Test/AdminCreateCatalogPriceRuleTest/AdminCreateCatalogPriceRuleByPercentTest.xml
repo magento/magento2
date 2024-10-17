@@ -36,7 +36,7 @@
         </before>
         <after>
             <!-- delete the simple product and catalog price rule and logout -->
-            <amOnPage stepKey="goToPriceRulePage" url="admin/catalog_rule/promo_catalog/"/>
+            <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
             <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>

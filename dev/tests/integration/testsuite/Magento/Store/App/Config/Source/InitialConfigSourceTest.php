@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test that initial scopes config are loaded if database is available
  * @magentoAppIsolation enabled
+ * @magentoCache config disabled
  */
 class InitialConfigSourceTest extends TestCase
 {
@@ -111,7 +112,7 @@ class InitialConfigSourceTest extends TestCase
     /**
      * @return array
      */
-    public function getDefaultDataProvider(): array
+    public static function getDefaultDataProvider(): array
     {
         return [
             [

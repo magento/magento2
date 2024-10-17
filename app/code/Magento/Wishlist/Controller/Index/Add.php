@@ -8,9 +8,11 @@ namespace Magento\Wishlist\Controller\Index;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -26,7 +28,7 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPostActionInterface
+class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var WishlistProviderInterface
@@ -73,8 +75,8 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
         WishlistProviderInterface $wishlistProvider,
         ProductRepositoryInterface $productRepository,
         Validator $formKeyValidator,
-        RedirectInterface $redirect = null,
-        UrlInterface $urlBuilder = null
+        ?RedirectInterface $redirect = null,
+        ?UrlInterface $urlBuilder = null
     ) {
         $this->_customerSession = $customerSession;
         $this->wishlistProvider = $wishlistProvider;
@@ -93,11 +95,16 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $session = $this->_customerSession;
+        $data = empty($session->getBeforeWishlistUrl())
+            ? $this->getRequest()->getParams()
+            : $session->getBeforeRequestParams();
         if (!$this->formKeyValidator->validate($this->getRequest())) {
             return $resultRedirect->setPath('*/');
         }
@@ -107,16 +114,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
             throw new NotFoundException(__('Page not found.'));
         }
 
-        $session = $this->_customerSession;
-
-        $requestParams = $this->getRequest()->getParams();
-
-        if ($session->getBeforeWishlistRequest()) {
-            $requestParams = $session->getBeforeWishlistRequest();
-            $session->unsBeforeWishlistRequest();
-        }
-
-        $productId = isset($requestParams['product']) ? (int)$requestParams['product'] : null;
+        $productId = isset($data['product']) ? (int)$data['product'] : null;
         if (!$productId) {
             $resultRedirect->setPath('*/');
             return $resultRedirect;
@@ -135,9 +133,9 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
         }
 
         try {
-            $buyRequest = new \Magento\Framework\DataObject($requestParams);
+            $buyRequest = new DataObject($data);
 
-            $result = $wishlist->addNewItem($product, $buyRequest);
+            $result = $wishlist->addNewItem($product, $buyRequest, true);
             if (is_string($result)) {
                 throw new LocalizedException(__($result));
             }
@@ -153,6 +151,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
             if ($referer) {
                 $session->setBeforeWishlistUrl(null);
             } else {
+                // phpcs:ignore
                 $referer = $this->_redirect->getRefererUrl();
             }
 
@@ -178,7 +177,12 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
         }
 
         if ($this->getRequest()->isAjax()) {
-            $url = $this->urlBuilder->getUrl('*', $this->redirect->updatePathParams(['wishlist_id' => $wishlist->getId()]));
+            $url = $this->urlBuilder->getUrl(
+                '*',
+                $this->redirect->updatePathParams(
+                    ['wishlist_id' => $wishlist->getId()]
+                )
+            );
             /** @var Json $resultJson */
             $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
             $resultJson->setData(['backUrl' => $url]);

@@ -6,7 +6,9 @@
 namespace Magento\Framework\Api\Search;
 
 /**
- * Facet Bucket
+ * Interface for facet Bucket
+ *
+ * @api
  */
 interface BucketInterface
 {

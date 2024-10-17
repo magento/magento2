@@ -15,7 +15,7 @@ class Start extends \Magento\Backend\App\Action implements HttpGetActionInterfac
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+    public const ADMIN_RESOURCE = 'Magento_Sales::ship';
 
     /**
      * Start create shipment action

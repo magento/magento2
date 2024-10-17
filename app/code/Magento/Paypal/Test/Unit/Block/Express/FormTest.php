@@ -114,7 +114,7 @@ class FormTest extends TestCase
     /**
      * @return array
      */
-    public function getBillingAgreementCodeDataProvider()
+    public static function getBillingAgreementCodeDataProvider()
     {
         return [
             [true, Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT],

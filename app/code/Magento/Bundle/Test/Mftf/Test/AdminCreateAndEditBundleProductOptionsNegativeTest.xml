@@ -20,10 +20,14 @@
                 <issueId value="https://github.com/magento/magento2/issues/25468"/>
             </skip>
             <group value="Catalog"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Create a Website -->
             <createData entity="customWebsite" stepKey="createWebsite"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Create first simple product for a bundle option -->
             <createData entity="SimpleProduct2" stepKey="createFirstSimpleProduct"/>
@@ -44,6 +48,9 @@
             <!-- Delete a Website -->
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="Second Website"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
 
             <!-- Log out -->
@@ -118,5 +125,6 @@
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

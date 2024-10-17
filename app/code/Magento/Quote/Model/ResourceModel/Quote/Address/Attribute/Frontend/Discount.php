@@ -24,7 +24,7 @@ class Discount extends \Magento\Quote\Model\ResourceModel\Quote\Address\Attribut
         if ($amount != 0) {
             $title = __('Discount');
             $couponCode = $address->getQuote()->getCouponCode();
-            if (strlen($couponCode)) {
+            if ($couponCode !== null && strlen($couponCode)) {
                 $title .= sprintf(' (%s)', $couponCode);
             }
             $address->addTotal(['code' => 'discount', 'title' => $title, 'value' => -$amount]);

@@ -27,10 +27,22 @@
         <arguments>
             <argument name="extendedConfigData" xsi:type="array">
                 <item name="use_store_in_url" xsi:type="string">web/url/use_store</item>
+                <item name="default_country" xsi:type="string">general/country/default</item>
+                <item name="countries_with_required_region" xsi:type="string">general/region/state_required</item>
+                <item name="display_state_if_optional" xsi:type="string">general/region/display_all</item>
+                <item name="optional_zip_countries" xsi:type="string">general/country/optional_zip_countries</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Mail\Template\TransportBuilder">
         <plugin name="graphQlEmulateEmail" type="Magento\StoreGraphQl\Plugin\LocalizeEmail" />
+    </type>
+    <type name="Magento\GraphQlCache\Model\CacheId\CacheIdCalculator">
+        <arguments>
+            <argument name="idFactorProviders" xsi:type="array">
+                <item name="currency" xsi:type="object">Magento\StoreGraphQl\CacheIdFactorProviders\CurrencyProvider</item>
+                <item name="store" xsi:type="object">Magento\StoreGraphQl\CacheIdFactorProviders\StoreProvider</item>
+            </argument>
+        </arguments>
     </type>
 </config>

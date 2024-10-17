@@ -24,10 +24,13 @@
 
         <after>
             <deleteData createDataKey="createDatetimeAttribute" stepKey="deleteDatetimeAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -62,7 +65,7 @@
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openProductFilters"/>
         <fillField selector="{{AdminProductGridFilterSection.inputByCodeRangeFrom($createDatetimeAttribute.attribute_code$)}}" userInput="{$generateDefaultValue}" stepKey="fillProductDatetimeFromFilter"/>
         <fillField selector="{{AdminProductGridFilterSection.inputByCodeRangeTo($createDatetimeAttribute.attribute_code$)}}" userInput="{$generateFilterToDate}" stepKey="fillProductDatetimeToFilter"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickApplyFilters"/>
         <see selector="{{AdminDataGridTableSection.gridCell('1', 'Name')}}" userInput="{{_defaultProduct.name}}" stepKey="checkAppliedDatetimeFilter"/>
         <see selector="{{AdminDataGridTableSection.rowTemplateStrict(_defaultProduct.name)}}" userInput="{$generateDefaultGridValue}" stepKey="checkDefaultValueInGrid"/>
     </test>

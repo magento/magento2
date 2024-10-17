@@ -10,6 +10,7 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel;
 use Magento\Framework\DB\Adapter\AdapterInterface as ConnectionAdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Grid\LastUpdateTimeCache;
 use Magento\Sales\Model\ResourceModel\Grid;
 use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -36,6 +37,11 @@ class GridTest extends TestCase
     private $connection;
 
     /**
+     * @var LastUpdateTimeCache|MockObject
+     */
+    private $lastUpdateTimeCache;
+
+    /**
      * @var string
      */
     private $mainTable = 'sales_order';
@@ -49,8 +55,9 @@ class GridTest extends TestCase
      * @var array
      */
     private $columns = [
-        'column_1_key' => 'column_1_value',
-        'column_2_key' => 'column_2_value'
+        'entity_id' => 'sales_order.entity_id',
+        'status' => 'sales_order.status',
+        'updated_at' => 'sales_order.updated_at',
     ];
 
     /**
@@ -59,14 +66,9 @@ class GridTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->notSyncedDataProvider = $this->getMockBuilder(NotSyncedDataProviderInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getIds'])
-            ->getMockForAbstractClass();
-        $this->connection = $this->getMockBuilder(ConnectionAdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['select', 'fetchAll', 'insertOnDuplicate'])
-            ->getMockForAbstractClass();
+        $this->notSyncedDataProvider = $this->createMock(NotSyncedDataProviderInterface::class);
+        $this->connection = $this->createMock(ConnectionAdapterInterface::class);
+        $this->lastUpdateTimeCache = $this->createMock(LastUpdateTimeCache::class);
 
         $this->grid = $objectManager->getObject(
             Grid::class,
@@ -76,7 +78,8 @@ class GridTest extends TestCase
                 'gridTableName' => $this->gridTable,
                 'connection' => $this->connection,
                 '_tables' => ['sales_order' => $this->mainTable, 'sales_order_grid' => $this->gridTable],
-                'columns' => $this->columns
+                'columns' => $this->columns,
+                'lastUpdateTimeCache' => $this->lastUpdateTimeCache,
             ]
         );
     }
@@ -87,25 +90,48 @@ class GridTest extends TestCase
     public function testRefreshBySchedule()
     {
         $notSyncedIds = ['1', '2', '3'];
-        $fetchResult = ['column_1' => '1', 'column_2' => '2'];
+        $fetchResult = [];
+        for ($i = 1; $i <= 220; $i++) {
+            $fetchResult[] = [
+                'entity_id' => $i,
+                'status' => 1,
+                'updated_at' => '2021-01-01 01:02:03',
+            ];
+        }
+        $fetchResult[50]['updated_at'] = '2021-02-03 01:02:03';
+        $fetchResult[150]['updated_at'] = '2021-03-04 01:02:03';
 
-        $this->notSyncedDataProvider->expects($this->atLeastOnce())->method('getIds')->willReturn($notSyncedIds);
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['from', 'columns', 'where'])
-            ->getMock();
-        $select->expects($this->atLeastOnce())->method('from')->with(['sales_order' => $this->mainTable], [])
+        $this->notSyncedDataProvider->expects($this->atLeastOnce())
+            ->method('getIds')
+            ->willReturn($notSyncedIds);
+        $select = $this->createMock(Select::class);
+        $select->expects($this->atLeastOnce())
+            ->method('from')
+            ->with(['sales_order' => $this->mainTable], [])
             ->willReturnSelf();
-        $select->expects($this->atLeastOnce())->method('columns')->willReturnSelf();
-        $select->expects($this->atLeastOnce())->method('where')
+        $select->expects($this->atLeastOnce())
+            ->method('columns')
+            ->willReturnSelf();
+        $select->expects($this->atLeastOnce())
+            ->method('where')
             ->with($this->mainTable . '.entity_id IN (?)', $notSyncedIds)
             ->willReturnSelf();
 
-        $this->connection->expects($this->atLeastOnce())->method('select')->willReturn($select);
-        $this->connection->expects($this->atLeastOnce())->method('fetchAll')->with($select)->willReturn($fetchResult);
-        $this->connection->expects($this->atLeastOnce())->method('insertOnDuplicate')
+        $this->connection->expects($this->atLeastOnce())
+            ->method('select')
+            ->willReturn($select);
+        $this->connection->expects($this->atLeastOnce())
+            ->method('fetchAll')
+            ->with($select)
+            ->willReturn($fetchResult);
+        $this->connection->expects($this->atLeastOnce())
+            ->method('insertOnDuplicate')
             ->with($this->gridTable, $fetchResult, array_keys($this->columns))
             ->willReturn(array_count_values($notSyncedIds));
+
+        $this->lastUpdateTimeCache->expects($this->once())
+            ->method('save')
+            ->with($this->gridTable, '2021-03-04 01:02:03');
 
         $this->grid->refreshBySchedule();
     }

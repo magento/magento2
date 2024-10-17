@@ -21,6 +21,12 @@
 
         <before>
             <magentoCLI command="config:set {{MinimalQueryLengthFourConfigData.path}} {{MinimalQueryLengthFourConfigData.value}}" after="createSimpleProduct" stepKey="setMinimalQueryLengthToFour"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
 
         <after>

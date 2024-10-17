@@ -17,4 +17,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Observer\SubmitObserver">
+        <plugin name="beforeSendOrderNotification" type="Magento\Quote\Plugin\SendOrderNotification" sortOrder="1" disabled="false" />
+    </type>
 </config>

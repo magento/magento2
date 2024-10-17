@@ -45,6 +45,7 @@ class DisableMultishippingTest extends TestCase
      * Test 'execute' method if 'MultiShipping' mode is enabled.
      *
      * @param bool $hasShippingAssignments
+     *
      * @return void
      * @dataProvider executeWithMultishippingModeEnabledDataProvider
      */
@@ -83,7 +84,7 @@ class DisableMultishippingTest extends TestCase
      *
      * @return array
      */
-    public function executeWithMultishippingModeEnabledDataProvider(): array
+    public static function executeWithMultishippingModeEnabledDataProvider(): array
     {
         return [
             'check_with_shipping_assignments' => [true],

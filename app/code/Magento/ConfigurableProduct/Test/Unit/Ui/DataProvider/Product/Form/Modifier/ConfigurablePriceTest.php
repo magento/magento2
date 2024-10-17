@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
+use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTestCase;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePrice as ConfigurablePriceModifier;
 
-class ConfigurablePriceTest extends AbstractModifierTest
+class ConfigurablePriceTest extends AbstractModifierTestCase
 {
     /**
      * {@inheritdoc}
@@ -39,7 +39,7 @@ class ConfigurablePriceTest extends AbstractModifierTest
     /**
      * @return array
      */
-    public function metaDataProvider()
+    public static function metaDataProvider()
     {
         $priceComponentConfig = [
             'arguments' => [

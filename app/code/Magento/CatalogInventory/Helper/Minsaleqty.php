@@ -8,13 +8,14 @@ namespace Magento\CatalogInventory\Helper;
 
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\Store;
 
 /**
  * MinSaleQty value manipulation helper
  */
-class Minsaleqty
+class Minsaleqty implements ResetAfterRequestInterface
 {
     /**
      * Core store config
@@ -59,6 +60,14 @@ class Minsaleqty
         $this->mathRandom = $mathRandom;
         $this->groupManagement = $groupManagement;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->minSaleQtyCache = [];
     }
 
     /**

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertDefaultTaxDestinationActionGroup">
+        <annotations>
+            <description>Assert admin settings (country, state, postcode) for default tax destination calculation</description>
+        </annotations>
+        <arguments>
+            <argument name="country" type="string" defaultValue="{{US_Address_TX.country}}"/>
+            <argument name="state" type="string" defaultValue="*"/>
+            <argument name="postcode" type="string" defaultValue=""/>
+        </arguments>
+
+        <!-- Navigate to the tax configuration page -->
+        <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="goToAdminTaxPage"/>
+        <waitForPageLoad stepKey="waitForTaxConfigLoad"/>
+        <!-- Verify default tax destination calculation settings-->
+        <conditionalClick selector="{{AdminConfigureTaxSection.defaultDestination}}" dependentSelector="#tax_defaults" visible="false" stepKey="clickCalculationSettings"/>
+        <seeOptionIsSelected selector="{{AdminConfigureTaxSection.dropdownDefaultCountry}}" userInput="{{country}}" stepKey="assertDefaultCountry"/>
+        <seeOptionIsSelected selector="{{AdminConfigureTaxSection.dropdownDefaultState}}" userInput="{{state}}" stepKey="assertDefaultRegion"/>
+        <seeInField selector="{{AdminConfigureTaxSection.defaultPostCode}}" userInput="{{postcode}}" stepKey="assertDefaultPostCode"/>
+    </actionGroup>
+</actionGroups>

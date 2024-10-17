@@ -51,6 +51,9 @@
             </actionGroup>
             <!--  Set Stores > Configurations > Catalog > Recently Viewed/Compared Products > Show for Current = store -->
             <magentoCLI command="config:set {{RecentlyViewedProductScopeStoreGroup.path}} {{RecentlyViewedProductScopeStoreGroup.value}}" stepKey="RecentlyViewedProductScopeStoreGroup"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete Product and Category -->
@@ -74,7 +77,9 @@
             </actionGroup>
             <!-- Logout Admin -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterDeletion"/>
         </after>
         <!--Create widget for recently viewed products-->

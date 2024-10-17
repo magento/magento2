@@ -30,7 +30,7 @@ class DomTest extends TestCase
     /**
      * @return array
      */
-    public function convertDataProvider()
+    public static function convertDataProvider()
     {
         return [
             ['cdata.xml', 'cdata.php'],

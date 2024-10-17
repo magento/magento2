@@ -42,8 +42,8 @@ class SmartButtonConfigTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
-        $this->configMock = $this->getMockBuilder(Config::class)
+        $this->localeResolverMock   = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->configMock           = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -55,7 +55,7 @@ class SmartButtonConfigTest extends TestCase
         /** @var ConfigFactory|MockObject $configFactoryMock */
         $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $configFactoryMock->expects($this->any())->method('create')->willReturn($this->configMock);
 
@@ -67,7 +67,8 @@ class SmartButtonConfigTest extends TestCase
             $configFactoryMock,
             $scopeConfigMock,
             $sdkUrl,
-            $this->getDefaultStyles(),
+            $this->configMock,
+            $this->getDefaultStyles()
         );
     }
 
@@ -123,7 +124,7 @@ class SmartButtonConfigTest extends TestCase
      *
      * @return array
      */
-    public function getConfigDataProvider()
+    public static function getConfigDataProvider()
     {
         return include __DIR__ . '/_files/expected_style_config.php';
     }

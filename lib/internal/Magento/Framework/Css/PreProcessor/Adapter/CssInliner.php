@@ -83,8 +83,8 @@ class CssInliner
      */
     public function process()
     {
-        $emogrifier = EmogrifierCssInliner::fromHtml($this->html)
-            ->setDebug($this->appState->getMode() === State::MODE_DEVELOPER);
+        $emogrifier = EmogrifierCssInliner::fromHtml($this->html);
+        $emogrifier->setDebug($this->appState->getMode() === State::MODE_DEVELOPER);
 
         if ($this->disableStyleBlocksParsing) {
             $emogrifier->disableStyleBlocksParsing();

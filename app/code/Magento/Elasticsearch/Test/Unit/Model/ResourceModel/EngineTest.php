@@ -47,11 +47,11 @@ class EngineTest extends TestCase
     {
         $this->connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIfNullSql'])
+            ->onlyMethods(['getIfNullSql'])
             ->getMockForAbstractClass();
         $resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConnection', 'getTableName'])
+            ->onlyMethods(['getConnection', 'getTableName'])
             ->getMock();
         $resource->expects($this->any())
             ->method('getConnection')
@@ -63,14 +63,14 @@ class EngineTest extends TestCase
 
         $this->catalogProductVisibility = $this->getMockBuilder(Visibility::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getVisibleInSiteIds'])
+            ->onlyMethods(['getVisibleInSiteIds'])
             ->getMock();
 
         $this->indexScopeResolver = $this->getMockBuilder(
             IndexScopeResolver::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['getVisibleInSiteIds'])
+            ->addMethods(['getVisibleInSiteIds'])
             ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
@@ -133,7 +133,7 @@ class EngineTest extends TestCase
     /**
      * @return array
      */
-    public function prepareEntityIndexDataProvider()
+    public static function prepareEntityIndexDataProvider()
     {
         return [
             [

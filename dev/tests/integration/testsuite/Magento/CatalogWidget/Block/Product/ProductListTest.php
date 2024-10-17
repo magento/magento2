@@ -6,10 +6,17 @@
 
 namespace Magento\CatalogWidget\Block\Product;
 
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Catalog\Model\Indexer\Product\Eav\Processor;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -34,11 +41,17 @@ class ProductListTest extends TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->block = $this->objectManager->create(ProductsList::class);
         $this->categoryCollection = $this->objectManager->create(CategoryCollection::class);
+        $this->fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -173,7 +186,7 @@ class ProductListTest extends TestCase
     /**
      * @return array
      */
-    public function createCollectionForSkuDataProvider()
+    public static function createCollectionForSkuDataProvider()
     {
         return [
             'contains' => ['^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,'
@@ -257,6 +270,29 @@ class ProductListTest extends TestCase
         );
     }
 
+    #[
+        DbIsolation(false),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p1'),
+        DataFixture(ProductFixture::class, ['price' => 20], 'p2'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$p1$', '$p2$']], 'opt1'),
+        DataFixture(BundleProductFixture::class, ['_options' => ['$opt1$']], 'bundle1'),
+    ]
+    public function testBundleProductList()
+    {
+        $postParams = $this->block->getAddToCartPostParams($this->fixtures->get('bundle1'));
+
+        $this->assertArrayHasKey(
+            'product',
+            $postParams['data'],
+            'Bundle product options is missing from POST params.'
+        );
+        $this->assertArrayHasKey(
+            'options',
+            $postParams['data'],
+            'Bundle product options is missing from POST params.'
+        );
+    }
+
     /**
      * Test that price rule condition works correctly
      *
@@ -289,7 +325,7 @@ class ProductListTest extends TestCase
         $this->assertEmpty(array_diff($matches, $skus));
     }
 
-    public function priceFilterDataProvider(): array
+    public static function priceFilterDataProvider(): array
     {
         return [
             [

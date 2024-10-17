@@ -60,6 +60,9 @@ class ReaderTest extends TestCase
      */
     protected $domFactoryMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
@@ -77,18 +80,22 @@ class ReaderTest extends TestCase
         $this->domFactoryMock = $this->createMock(DomFactory::class);
     }
 
-    public function testConstructor()
+    /**
+     * @return void
+     */
+    public function testConstructor(): void
     {
         $this->createModelAndVerifyConstructor();
     }
 
     /**
+     * @return void
      * @covers \Magento\Framework\App\Config\Initial\Reader::read
      */
-    public function testReadNoFiles()
+    public function testReadNoFiles(): void
     {
         $this->createModelAndVerifyConstructor();
-        $this->fileResolverMock->expects($this->at(0))
+        $this->fileResolverMock
             ->method('get')
             ->with('config.xml', 'global')
             ->willReturn([]);
@@ -97,9 +104,10 @@ class ReaderTest extends TestCase
     }
 
     /**
+     * @return void
      * @covers \Magento\Framework\App\Config\Initial\Reader::read
      */
-    public function testReadValidConfig()
+    public function testReadValidConfig(): void
     {
         $this->createModelAndVerifyConstructor();
         $this->prepareDomFactoryMock();
@@ -109,7 +117,7 @@ class ReaderTest extends TestCase
         ];
         $expectedConfig = ['data' => [], 'metadata' => []];
 
-        $this->fileResolverMock->expects($this->at(0))
+        $this->fileResolverMock
             ->method('get')
             ->with('config.xml', 'global')
             ->willReturn($testXmlFilesList);
@@ -121,8 +129,10 @@ class ReaderTest extends TestCase
 
         $this->assertEquals($expectedConfig, $this->model->read());
     }
-
-    private function prepareDomFactoryMock()
+    /**
+     * @return void
+     */
+    private function prepareDomFactoryMock(): void
     {
         $validationStateMock = $this->validationStateMock;
         $this->domFactoryMock->expects($this->once())
@@ -141,9 +151,10 @@ class ReaderTest extends TestCase
     }
 
     /**
+     * @return void
      * @covers \Magento\Framework\App\Config\Initial\Reader::read
      */
-    public function testReadInvalidConfig()
+    public function testReadInvalidConfig(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Verify the XML and try again.');
@@ -155,7 +166,7 @@ class ReaderTest extends TestCase
         ];
         $expectedConfig = ['data' => [], 'metadata' => []];
 
-        $this->fileResolverMock->expects($this->at(0))
+        $this->fileResolverMock
             ->method('get')
             ->with('config.xml', 'global')
             ->willReturn($testXmlFilesList);
@@ -168,7 +179,10 @@ class ReaderTest extends TestCase
         $this->model->read();
     }
 
-    private function createModelAndVerifyConstructor()
+    /**
+     * @return void
+     */
+    private function createModelAndVerifyConstructor(): void
     {
         $schemaFile = $this->filePath . 'config.xsd';
         $this->schemaLocatorMock->expects($this->once())->method('getSchema')->willReturn($schemaFile);

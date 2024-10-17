@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use StorefrontApplyCatalogRuleForSimpleProductWithSelectFixedMethodTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
@@ -36,7 +37,9 @@
 
             <!-- Update all products to have custom options -->
             <updateData createDataKey="createProduct1" entity="productWithFixedOptions" stepKey="updateProductWithOptions1"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete products and category -->

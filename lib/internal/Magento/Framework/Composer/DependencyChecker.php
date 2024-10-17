@@ -6,6 +6,7 @@
 namespace Magento\Framework\Composer;
 
 use Composer\Console\Application;
+use Composer\Console\ApplicationFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -16,9 +17,9 @@ use Symfony\Component\Console\Output\BufferedOutput;
 class DependencyChecker
 {
     /**
-     * @var Application
+     * @var ApplicationFactory
      */
-    private $composerApp;
+    private $applicationFactory;
 
     /**
      * @var DirectoryList
@@ -28,12 +29,12 @@ class DependencyChecker
     /**
      * Constructor
      *
-     * @param Application $composerApp
+     * @param ApplicationFactory $applicationFactory
      * @param DirectoryList $directoryList
      */
-    public function __construct(Application $composerApp, DirectoryList $directoryList)
+    public function __construct(ApplicationFactory $applicationFactory, DirectoryList $directoryList)
     {
-        $this->composerApp = $composerApp;
+        $this->applicationFactory = $applicationFactory;
         $this->directoryList = $directoryList;
     }
 
@@ -49,12 +50,13 @@ class DependencyChecker
      */
     public function checkDependencies(array $packages, $excludeSelf = false)
     {
-        $this->composerApp->setAutoExit(false);
+        $app = $this->applicationFactory->create();
+        $app->setAutoExit(false);
         $dependencies = [];
         foreach ($packages as $package) {
             $buffer = new BufferedOutput();
-            $this->composerApp->resetComposer();
-            $this->composerApp->run(
+            $app->resetComposer();
+            $app->run(
                 new ArrayInput(
                     ['command' => 'depends', '--working-dir' => $this->directoryList->getRoot(), 'package' => $package]
                 ),

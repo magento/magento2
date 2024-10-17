@@ -6,7 +6,6 @@ define([
     "jquery",
     "matchMedia",
     "jquery-ui-modules/menu",
-    "jquery/jquery.mobile.custom",
     "mage/translate"
 ], function ($, mediaCheck) {
     'use strict';
@@ -54,8 +53,7 @@ define([
 
         _assignControls: function () {
             this.controls = {
-                toggleBtn: $('[data-action="toggle-nav"]'),
-                swipeArea: $('.nav-sections')
+                toggleBtn: $('[data-action="toggle-nav"]')
             };
 
             return this;
@@ -66,7 +64,6 @@ define([
             var toggle = this.toggle;
 
             this._on(controls.toggleBtn, {'click': toggle});
-            this._on(controls.swipeArea, {'swipeleft': toggle});
         },
 
         toggle: function () {

@@ -75,7 +75,7 @@ define([
                     $('#new_category_name').val(enteredName);
 
                     if (enteredName === '') {
-                        $('#new_category_name').focus();
+                        $('#new_category_name').trigger('focus');
                     }
                     $('#new_category_messages').html('');
                 },
@@ -88,7 +88,7 @@ define([
                     validationOptions.unhighlight($('#new_category_parent-suggest').get(0),
                         validationOptions.errorClass, validationOptions.validClass || '');
                     newCategoryForm.validation('clearError');
-                    $('#category_ids-suggest').focus();
+                    $('#category_ids-suggest').trigger('focus');
                 },
                 buttons: [{
                     text: $.mage.__('Create Category'),

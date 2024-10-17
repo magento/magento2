@@ -8,7 +8,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="ProductDescriptionWysiwygSection">
-        <element name="EditArea" type="text" selector="#editorproduct_form_description .mce-edit-area"/>
+        <element name="form" type="block" selector="#editorproduct_form_description"/>
         <element name="attributeEditArea" type="textarea" selector="#product_form_{{attributeCode}}" parameterized="true" timeout="30"/>
     </section>
 </sections>

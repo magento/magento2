@@ -16,7 +16,8 @@ define([
     'Magento_Ui/js/lib/key-codes',
     'jquery-ui-modules/widget',
     'jquery-ui-modules/core',
-    'mage/translate'
+    'mage/translate',
+    'jquery/z-index'
 ], function ($, _, template, popupTpl, slideTpl, customTpl, keyCodes) {
     'use strict';
 
@@ -24,7 +25,7 @@ define([
      * Detect browser transition end event.
      * @return {String|undefined} - transition event.
      */
-    var transitionEvent =  (function () {
+    var transitionEvent = (function () {
         var transition,
             elementStyle = document.createElement('div').style,
             transitions = {
@@ -260,15 +261,15 @@ define([
                 infelicity;
 
             if (type === 'opened' && this.options.focus) {
-                this.modal.find($(this.options.focus)).focus();
+                this.modal.find($(this.options.focus)).trigger('focus');
             } else if (type === 'opened' && !this.options.focus) {
-                this.modal.find(this.options.focusableScope).focus();
+                this.modal.find(this.options.focusableScope).trigger('focus');
             } else if (position === 'end') {
-                this.modal.find(this.options.modalCloseBtn).focus();
+                this.modal.find(this.options.modalCloseBtn).trigger('focus');
             } else if (position === 'start') {
                 infelicity = 2; //Constant for find last focusable element
                 focusableElements = this.modal.find(':focusable');
-                focusableElements.eq(focusableElements.length - infelicity).focus();
+                focusableElements.eq(focusableElements.length - infelicity).trigger('focus');
             }
         },
 
@@ -331,7 +332,7 @@ define([
         _close: function () {
             var trigger = _.bind(this._trigger, this, 'closed', this.modal);
 
-            $(this.focussedElement).focus();
+            $(this.focussedElement).trigger('focus');
             this._destroyOverlay();
             this._unsetActive();
             _.defer(trigger, this);

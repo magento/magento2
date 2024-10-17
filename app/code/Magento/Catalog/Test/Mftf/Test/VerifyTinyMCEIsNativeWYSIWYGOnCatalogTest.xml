@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyTinyMCEIsNativeWYSIWYGOnCatalogTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="MAGETWO-72137-Apply new WYSIWYG on Categories Page"/>
+            <group value="Catalog"/>
+            <title value="Admin should see TinyMCE is the native WYSIWYG on Catalog Page"/>
+            <description value="Admin should see TinyMCE is the native WYSIWYG on Catalog Page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-82551"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
+        </before>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToNewCatalog"/>
+        <waitForLoadingMaskToDisappear stepKey="wait2" />
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>
+        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE" />
+        <seeElement selector="{{TinyMCESection.ShowHideBtn}}" stepKey="seeShowHideBtn" />
+        <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE"/>
+        <executeJS function="tinyMCE.get('category_form_description').setContent('Hello World!');" stepKey="executeJSFillContent"/>
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn" />
+        <waitForElementVisible selector="{{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImage" />
+        <seeElement selector="{{TinyMCESection.InsertImageBtn}}" stepKey="insertImage"/>
+        <dontSee selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="insertWidget" />
+        <dontSee selector="{{TinyMCESection.InsertVariableBtn}}" stepKey="insertVariable" />
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCatalog"/>
+        <!-- Go to storefront product page, assert product content -->
+        <amOnPage url="/{{SimpleSubCategory.urlKey}}.html" stepKey="goToCategoryFrontPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.CatalogDescription}}"  stepKey="waitForDesVisible" />
+        <see userInput="Hello World!" selector="{{StorefrontCategoryMainSection.CatalogDescription}}" stepKey="assertCatalogDescription"/>
+        <after>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

@@ -46,7 +46,7 @@ class Dom extends ConfigDom
      * @param ValidationStateInterface $validationState
      * @param SchemaLocatorInterface $schemaLocator
      * @param array $idAttributes
-     * @param null $typeAttributeName
+     * @param string|null $typeAttributeName
      * @param string $errorFormat
      */
     public function __construct(
@@ -142,7 +142,7 @@ class Dom extends ConfigDom
     private function createXPath(\DOMNode $node)
     {
         $parentXPath = '';
-        $currentXPath = $node->getNodePath();
+        $currentXPath = $node->getNodePath() ?? '';
         if ($node->parentNode !== null && !$node->isSameNode($node->parentNode)) {
             $parentXPath = $this->createXPath($node->parentNode);
             $pathParts = explode('/', $currentXPath);
