@@ -72,7 +72,8 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFi
         $value = $this->getValue();
         foreach ($this->_getOptions() as $option) {
             if (is_array($option['value'])) {
-                $html .= '<optgroup label="' . $this->escapeHtml($option['label']) . '">';
+                $label = isset($option['label']) ? $option['label'] : '';
+                $html .= '<optgroup label="' . $this->escapeHtml($label) . '">';
                 foreach ($option['value'] as $subOption) {
                     $html .= $this->_renderOption($subOption, $value);
                 }
