@@ -30,6 +30,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Asset\Repository">
+        <plugin name="addThemeIdInGetUrlWithParams"
+            type="Magento\GraphQl\Plugin\View\Asset\RepositoryPlugin"
+            sortOrder="10"
+            disabled="false"/>
+    </type>
     <type name="Magento\GraphQl\Model\Mutation\Resolver\ErrorTypeResolver">
         <arguments>
             <argument name="validErrorTypes" xsi:type="array">
