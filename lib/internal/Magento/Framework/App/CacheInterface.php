@@ -1,9 +1,11 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types = 1);
+
 namespace Magento\Framework\App;
 
 /**
@@ -22,10 +24,10 @@ interface CacheInterface
     public function getFrontend();
 
     /**
-     * Load data from cache by id
+     * Load Data from Cache by ID
      *
-     * @param  string $identifier
-     * @return string
+     * @param string $identifier
+     * @return bool|string
      */
     public function load($identifier);
 
