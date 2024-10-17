@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Magento\Catalog\Api\Data\CategoryAttributeInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
@@ -26,7 +27,6 @@ use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Category;
 use Zend_Db_Expr;
-use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 
 /**
  * Product collection
@@ -225,6 +225,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @var bool
      */
     protected $needToAddWebsiteNamesToResult;
+
+    /**
+     * @var bool
+     */
+    protected $needToAddCategoryNamesToResult;
 
     /**
      * @var Gallery
@@ -825,6 +830,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
+     * Adding product assigned category names to result collection.
+     *
+     * @return $this
+     */
+    public function addCategoryNamesToResult()
+    {
+        $this->needToAddCategoryNamesToResult = true;
+        return $this;
+    }
+
+    /**
      * @inheritdoc
      */
     public function load($printQuery = false, $logQuery = false)
@@ -837,6 +853,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($this->needToAddWebsiteNamesToResult) {
             $this->doAddWebsiteNamesToResult();
         }
+        if ($this->needToAddCategoryNamesToResult) {
+            $this->doAddCategoryNamesToResult();
+        }
+
         return $this;
     }
 
@@ -878,6 +898,50 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             if (isset($productWebsites[$product->getId()])) {
                 $product->setData('websites', $productWebsites[$product->getId()]);
                 $product->setData('website_ids', $productWebsites[$product->getId()]);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Process adding product assigned category names to result collection
+     *
+     * @return $this
+     */
+    protected function doAddCategoryNamesToResult()
+    {
+        $productCategories = [];
+        foreach ($this as $product) {
+            $productCategories[$product->getId()] = [];
+        }
+
+        if (!empty($productCategories)) {
+            $entityFieldId = $this->categoryResourceModel->getEntityIdField();
+            $select = $this->getConnection()->select()->from(
+                ['category_product' => $this->_productCategoryTable]
+            )->joinLeft(
+                ['category' => $this->getResource()->getTable('catalog_category_entity')],
+                'category.entity_id = category_product.category_id'
+            )->joinLeft(
+                ['category_name' => $this->getResource()->getTable('catalog_category_entity_varchar')],
+                'category_name.' . $entityFieldId .  ' = category.' . $entityFieldId .
+                      ' AND category_name.attribute_id = ' . $this->getCategoryNameAttributeId() .
+                      ' AND category_name.store_id = ' . $this->getStoreId()
+            )->where(
+                'category_product.product_id IN (?)',
+                array_keys($productCategories),
+                \Zend_Db::INT_TYPE
+            );
+
+            $data = $this->getConnection()->fetchAll($select);
+            foreach ($data as $row) {
+                $productCategories[$row['product_id']][] = $row['value'];
+            }
+        }
+
+        foreach ($this as $product) {
+            if (isset($productCategories[$product->getId()])) {
+                $product->setData('categories', implode(', ', $productCategories[$product->getId()]));
             }
         }
         return $this;
@@ -2574,5 +2638,30 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_totalRecords = null;
 
         return $this;
+    }
+
+    /**
+     * Returns the category name EAV attribute ID.
+     *
+     * @return int
+     */
+    private function getCategoryNameAttributeId(): int
+    {
+        $select = $this->getConnection()->select()->from(
+            ['eav_attribute' => $this->getResource()->getTable('eav_attribute')],
+            'attribute_id'
+        )->join(
+            ['eav_entity_type' => $this->getResource()->getTable('eav_entity_type')],
+            'eav_attribute.entity_type_id = eav_entity_type.entity_type_id',
+            ''
+        )->where(
+            'eav_attribute.attribute_code = ?',
+            CategoryInterface::KEY_NAME
+        )->where(
+            'eav_entity_type.entity_type_code = ?',
+            CategoryAttributeInterface::ENTITY_TYPE_CODE
+        );
+
+        return (int) $this->getConnection()->fetchOne($select);
     }
 }
