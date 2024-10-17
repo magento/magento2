@@ -130,8 +130,10 @@
         <selectOption stepKey="clickFirstAttribute" selector="{{ModifyAttributes.nthExistingAttribute($$createModifiableProductAttribute.default_frontend_label$$)}}" userInput="option1"/>
 
         <!-- Save the product -->
-        <click stepKey="saveProductAttribute" selector="{{AdminProductFormActionSection.saveButton}}"/>
-        <see stepKey="assertSuccess" selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveProductAttribute"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccess">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <!-- Go back to the configurable product page and check to see if it has changed -->
         <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage2"/>
