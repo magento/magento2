@@ -2034,9 +2034,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function collectTotals()
     {
+        /* To fix null quote in observers
         if ($this->getTotalsCollectedFlag()) {
             return $this;
         }
+        */
 
         $total = $this->totalsCollector->collect($this);
         $this->addData($total->getData());
