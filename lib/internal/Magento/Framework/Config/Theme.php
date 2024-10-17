@@ -74,7 +74,11 @@ class Theme
         if (!empty($configContent)) {
             $dom = new \DOMDocument();
             $dom->loadXML($configContent);
-            // todo: validation of the document
+            // todo: optimize validation of the document
+            $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, 'urn:magento:framework:Config/etc/theme.xsd');
+            if (count($errors)) {
+                throw new \Magento\Framework\Config\Dom\ValidationException(implode("\n", $errors));
+            }
             /** @var $themeNode \DOMElement */
             $themeNode = $dom->getElementsByTagName('theme')->item(0);
             $themeTitleNode = $themeNode->getElementsByTagName('title')->item(0);
