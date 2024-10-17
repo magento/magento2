@@ -8,14 +8,13 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 /**
  * Text grid column filter
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */
 class Text extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getHtml()
     {

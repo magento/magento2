@@ -6,8 +6,6 @@
 
 /**
  * Adminhtml page
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backend\Block;
 
@@ -62,6 +60,8 @@ class Page extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Returns true if we are running in single store mode
+     *
      * @return bool
      */
     public function isSingleStoreMode()

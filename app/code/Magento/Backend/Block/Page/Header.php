@@ -10,7 +10,6 @@ namespace Magento\Backend\Block\Page;
  * Adminhtml header block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Header extends \Magento\Backend\Block\Template
@@ -21,8 +20,6 @@ class Header extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Backend::page/header.phtml';
 
     /**
-     * Backend data
-     *
      * @var \Magento\Backend\Helper\Data
      */
     protected $_backendData = null;
@@ -50,6 +47,8 @@ class Header extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return URL to homepage
+     *
      * @return string
      */
     public function getHomeLink()
@@ -58,6 +57,8 @@ class Header extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return the current user
+     *
      * @return \Magento\User\Model\User|null
      */
     public function getUser()
@@ -66,6 +67,8 @@ class Header extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return URL to log out from admin
+     *
      * @return string
      */
     public function getLogoutLink()
