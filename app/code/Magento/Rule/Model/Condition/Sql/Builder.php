@@ -204,6 +204,14 @@ class Builder
                 );
             }
         }
+        elseif (is_array($bindValue) && \in_array($conditionOperator, ['!()', '!{}'], true)) {
+            foreach ($bindValue as $item) {
+                $expression .= $this->_connection->quoteInto(
+                    " AND (IFNULL(FIND_IN_SET (?, {$this->_connection->quoteIdentifier($argument)}), 0) = 0)",
+                    $item
+                );
+            }
+        }
         return $this->_expressionFactory->create(
             ['expression' => $expression]
         );
