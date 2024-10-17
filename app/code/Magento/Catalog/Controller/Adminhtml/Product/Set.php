@@ -7,8 +7,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 /**
  * Adminhtml entity sets controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class Set extends \Magento\Backend\App\Action
 {
@@ -17,11 +15,9 @@ abstract class Set extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Catalog::sets';
+    public const ADMIN_RESOURCE = 'Magento_Catalog::sets';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;

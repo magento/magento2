@@ -24,16 +24,13 @@ use Magento\Framework\View\DesignInterface;
  * Catalog Custom Category design Model
  *
  * @api
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Design extends \Magento\Framework\Model\AbstractModel
 {
-    const APPLY_FOR_PRODUCT = 1;
-
-    const APPLY_FOR_CATEGORY = 2;
+    public const APPLY_FOR_PRODUCT = 1;
+    public const APPLY_FOR_CATEGORY = 2;
 
     /**
      * Design package instance
