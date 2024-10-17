@@ -75,9 +75,11 @@
         <click selector="{{AdminCategoryContentSection.sectionHeader}}"  stepKey="selectContent1"/>
         <scrollTo selector="{{AdminCategoryContentSection.description}}" stepKey="scrollToDescription1"/>
         <seeInField stepKey="seeUpdatedDiscription" selector="{{AdminCategoryContentSection.description}}" userInput="Updated category Description Fields"/>
-        <scrollTo  selector="{{AdminCategorySEOSection.SectionHeader}}" x="0" y="-80" stepKey="scrollToSearchEngineOptimization1"/>
-        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="selectSearchEngineOptimization1"/>
-        <seeInField stepKey="seeUpdatedUrlKey" selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{SimpleRootSubCategory.url_key}}"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToSearchEngineOptimization1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectSearchEngineOptimization1"/>
+        <actionGroup ref="AdminAssertProperCategoryUrlActionGroup" stepKey="seeUpdatedUrlKey">
+            <argument name="categoryUrlKey" value="{{SimpleRootSubCategory.url_key}}"/>
+        </actionGroup>
         <seeInField stepKey="seeUpdatedMetaTitleInput" selector="{{AdminCategorySEOSection.MetaTitleInput}}" userInput="{{SimpleRootSubCategory.name}}"/>
     </test>
 </tests>
