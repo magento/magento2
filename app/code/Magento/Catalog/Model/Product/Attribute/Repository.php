@@ -57,6 +57,11 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     protected $searchCriteriaBuilder;
 
     /**
+     * @var \Magento\Eav\Model\Validator\Attribute\Code
+     */
+    protected $attributeCodeValidator;
+
+    /**
      * @param \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Filter\FilterManager $filterManager
@@ -64,6 +69,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Eav\Model\Validator\Attribute\Code $attributeCodeValidator
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource,
@@ -72,7 +78,8 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
         \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Eav\Model\Validator\Attribute\Code $attributeCodeValidator
     ) {
         $this->attributeResource = $attributeResource;
         $this->productHelper = $productHelper;
@@ -81,6 +88,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
         $this->eavConfig = $eavConfig;
         $this->inputtypeValidatorFactory = $validatorFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->attributeCodeValidator = $attributeCodeValidator;
     }
 
     /**
@@ -244,6 +252,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             0,
             Attribute::ATTRIBUTE_CODE_MAX_LENGTH
         );
+
         $validatorAttrCode = new Regex(['pattern' => '/^[a-z][a-z_0-9]{0,29}[a-z0-9]$/']);
         if (!$validatorAttrCode->isValid($code)) {
             $code = 'attr_' . ($code ?: substr(hash('sha256', time()), 0, 8));
@@ -261,10 +270,8 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      */
     protected function validateCode($code)
     {
-        $validatorAttrCode = new Regex(
-            ['pattern' => '/^[a-z][a-z_0-9]{0,' . Attribute::ATTRIBUTE_CODE_MAX_LENGTH . '}$/']
-        );
-        if (!$validatorAttrCode->isValid($code)) {
+        $isValid = $this->attributeCodeValidator->isValid($code);
+        if (!$isValid) {
             throw InputException::invalidFieldValue('attribute_code', $code);
         }
     }
