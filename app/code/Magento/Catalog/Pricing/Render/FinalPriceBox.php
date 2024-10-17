@@ -65,26 +65,36 @@ class FinalPriceBox extends BasePriceBox
      */
     protected function _toHtml()
     {
-        if (!$this->salableResolver->isSalable($this->getSaleableItem())) {
-            return '';
-        }
-
         $result = parent::_toHtml();
-        //Renders MSRP in case it is enabled
-        if ($this->isMsrpPriceApplicable()) {
-            /** @var BasePriceBox $msrpBlock */
-            $msrpBlock = $this->rendererPool->createPriceRender(
-                MsrpPrice::PRICE_CODE,
-                $this->getSaleableItem(),
-                [
-                    'real_price_html' => $result,
-                    'zone' => $this->getZone(),
-                ]
-            );
-            $result = $msrpBlock->toHtml();
-        }
 
-        return $this->wrapResult($result);
+        if(!$result) {
+            $result = BasePriceBox::_toHtml();
+            try {
+                /** @var MsrpPrice $msrpPriceType */
+                $msrpPriceType = $this->getSaleableItem()->getPriceInfo()->getPrice('msrp_price');
+            } catch (\InvalidArgumentException $e) {
+                $this->_logger->critical($e);
+                return $this->wrapResult($result);
+            }
+
+            //Renders MSRP in case it is enabled
+            $_productSalable = $this->getSaleableItem();
+            if ($msrpPriceType->canApplyMsrp($_productSalable) && $msrpPriceType->isMinimalPriceLessMsrp($_productSalable)) {
+                /** @var BasePriceBox $msrpBlock */
+                $msrpBlock = $this->rendererPool->createPriceRender(
+                    MsrpPrice::PRICE_CODE,
+                    $this->getSaleableItem(),
+                    [
+                        'real_price_html' => $result,
+                        'zone' => $this->getZone(),
+                    ]
+                );
+                $result = $msrpBlock->toHtml();
+            }
+
+            return $this->wrapResult($result);
+        }
+        return $result;
     }
 
     /**
