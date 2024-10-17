@@ -300,7 +300,7 @@ define([
             changed = !utils.compare(rules, this.validation).equal;
 
             if (changed) {
-                this.required(!!rules['required-entry']);
+                this.required(!!this.validation['required-entry']);
                 this.validate();
             }
 
