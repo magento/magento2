@@ -493,7 +493,7 @@ class CreateAddressTest extends TestCase
                     'request_date' => '',
                     'request_identifier' => '123123123',
                     'request_success' => $isRequestSuccess,
-                    'request_message' => __(''),
+                    'request_message' => '',
                 ],
             ]
         );
