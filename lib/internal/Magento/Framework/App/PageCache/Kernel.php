@@ -176,7 +176,7 @@ class Kernel
                     $this->serializer->serialize($this->getPreparedData($response)),
                     $this->identifierForSave->getValue(),
                     $tags,
-                    $maxAge
+                    (int) $maxAge
                 );
             }
         }
