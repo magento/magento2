@@ -362,7 +362,7 @@ class Collection implements
      * Search all items by field value
      *
      * @param string $column
-     * @param array $value
+     * @param float|int|null|string $value
      * @return array
      */
     public function getItemsByColumnValue($column, $value)
