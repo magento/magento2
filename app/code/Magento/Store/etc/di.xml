@@ -382,6 +382,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="commandStoreList" xsi:type="object">Magento\Store\Console\Command\StoreListCommand</item>
+                <item name="commandStoreCreate" xsi:type="object">Magento\Store\Console\Command\StoreCreateCommand</item>
                 <item name="commandWebsiteList" xsi:type="object">Magento\Store\Console\Command\WebsiteListCommand</item>
             </argument>
         </arguments>
