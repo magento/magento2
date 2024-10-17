@@ -10,8 +10,6 @@ use Magento\GiftMessage\Model\Message;
 
 /**
  * Gift message inline edit form
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Inline extends \Magento\Framework\View\Element\Template
 {

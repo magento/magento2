@@ -6,8 +6,6 @@
 
 /**
  * Multishipping checkout payment information data
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Multishipping\Block\Checkout\Payment;
 
@@ -49,6 +47,8 @@ class Info extends \Magento\Payment\Block\Info\AbstractContainer
     }
 
     /**
+     * To Html
+     *
      * @return string
      */
     protected function _toHtml()
