@@ -6,7 +6,10 @@
  */
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
-class CategoriesJson extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
+use Magento\UrlRewrite\Block\Catalog\Category\Tree;
+use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
+
+class CategoriesJson extends Rewrite
 {
     /**
      * Ajax categories tree loader action
@@ -18,7 +21,7 @@ class CategoriesJson extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrit
         $categoryId = $this->getRequest()->getParam('id', null);
         $this->getResponse()->setBody(
             $this->_objectManager->get(
-                \Magento\UrlRewrite\Block\Catalog\Category\Tree::class
+                Tree::class
             )->getTreeArray(
                 $categoryId,
                 true,

@@ -24,27 +24,15 @@ use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory as Collec
 class MassDelete extends Rewrite implements HttpPostActionInterface
 {
     /**
-     * @var Filter
-     */
-    private $filter;
-
-    /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         Context $context,
-        Filter $filter,
-        CollectionFactory $collectionFactory
+        private readonly Filter $filter,
+        private readonly CollectionFactory $collectionFactory
     ) {
-        $this->filter = $filter;
-        $this->collectionFactory = $collectionFactory;
         parent::__construct($context);
     }
 

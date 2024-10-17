@@ -6,14 +6,24 @@
 
 namespace Magento\UrlRewrite\Block\Catalog\Category;
 
+use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Helper\Data as BackendHelper;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Block\Adminhtml\Category\AbstractCategory;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\Tree as CategoryTree;
+use Magento\Framework\Data\Tree\Node;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Registry;
 
 /**
  * Categories tree block for URL rewrites editing process
  */
-class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
+class Tree extends AbstractCategory
 {
     /**
      * List of allowed category ids
@@ -28,50 +38,45 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     protected $_template = 'Magento_UrlRewrite::categories.phtml';
 
     /**
-     * @var \Magento\Backend\Helper\Data
+     * @var BackendHelper
      */
     protected $_adminhtmlData = null;
 
     /**
-     * @var \Magento\Catalog\Model\CategoryFactory
+     * @var CategoryFactory
      */
     protected $_categoryFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var ProductFactory
      */
     protected $_productFactory;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
+     * @var EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
-     * @var CategoryRepositoryInterface
-     */
-    protected $categoryRepository;
-
-    /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Backend\Helper\Data $adminhtmlData
+     * @param Context $context
+     * @param CategoryTree $categoryTree
+     * @param Registry $registry
+     * @param CategoryFactory $categoryFactory
+     * @param EncoderInterface $jsonEncoder
+     * @param ProductFactory $productFactory
+     * @param BackendHelper $adminhtmlData
      * @param CategoryRepositoryInterface $categoryRepository
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree,
-        \Magento\Framework\Registry $registry,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Backend\Helper\Data $adminhtmlData,
-        CategoryRepositoryInterface $categoryRepository,
+        Context $context,
+        CategoryTree $categoryTree,
+        Registry $registry,
+        CategoryFactory $categoryFactory,
+        EncoderInterface $jsonEncoder,
+        ProductFactory $productFactory,
+        BackendHelper $adminhtmlData,
+        protected readonly CategoryRepositoryInterface $categoryRepository,
         array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
@@ -79,7 +84,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         $this->_productFactory = $productFactory;
         $this->_adminhtmlData = $adminhtmlData;
         parent::__construct($context, $categoryTree, $registry, $categoryFactory, $data);
-        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -128,7 +132,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * Get categories collection
      *
-     * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
+     * @return Collection
      */
     public function getCategoryCollection()
     {
@@ -148,7 +152,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * Convert categories tree to array recursively
      *
-     * @param  \Magento\Framework\Data\Tree\Node $node
+     * @param Node $node
      * @return array
      */
     protected function _getNodesArray($node)

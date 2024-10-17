@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewrite\Model\StoreSwitcher;
 
+use Magento\Framework\App\Response\Http;
+use Magento\Framework\HTTP\PhpEnvironment\Request;
+use Magento\Framework\HTTP\PhpEnvironment\RequestFactory;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreSwitcherInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
@@ -18,25 +21,13 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 class RewriteUrl implements StoreSwitcherInterface
 {
     /**
-     * @var UrlFinderInterface
-     */
-    private $urlFinder;
-
-    /**
-     * @var \Magento\Framework\HTTP\PhpEnvironment\RequestFactory
-     */
-    private $requestFactory;
-
-    /**
      * @param UrlFinderInterface $urlFinder
-     * @param \Magento\Framework\HTTP\PhpEnvironment\RequestFactory $requestFactory
+     * @param RequestFactory $requestFactory
      */
     public function __construct(
-        UrlFinderInterface $urlFinder,
-        \Magento\Framework\HTTP\PhpEnvironment\RequestFactory $requestFactory
+        private readonly UrlFinderInterface $urlFinder,
+        private readonly RequestFactory $requestFactory
     ) {
-        $this->urlFinder = $urlFinder;
-        $this->requestFactory = $requestFactory;
     }
 
     /**
@@ -50,7 +41,7 @@ class RewriteUrl implements StoreSwitcherInterface
     public function switch(StoreInterface $fromStore, StoreInterface $targetStore, string $redirectUrl): string
     {
         $targetUrl = $redirectUrl;
-        /** @var \Magento\Framework\HTTP\PhpEnvironment\Request $request */
+        /** @var Request $request */
         $request = $this->requestFactory->create(['uri' => $targetUrl]);
 
         $urlPath = ltrim($request->getPathInfo(), '/');
@@ -86,7 +77,7 @@ class RewriteUrl implements StoreSwitcherInterface
             );
 
             if ($existingRewrite && !$currentRewrite) {
-                /** @var \Magento\Framework\App\Response\Http $response */
+                /** @var Http $response */
                 $targetUrl = $targetStore->getBaseUrl();
             }
         }

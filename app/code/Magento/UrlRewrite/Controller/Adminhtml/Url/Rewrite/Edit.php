@@ -7,8 +7,14 @@
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\UrlRewrite\Block\Catalog\Category\Edit as CatalogCategoryEdit;
+use Magento\UrlRewrite\Block\Catalog\Product\Edit as CatalogProductEdit;
+use Magento\UrlRewrite\Block\Cms\Page\Edit as CmsPageEdit;
+use Magento\UrlRewrite\Block\Edit as UrlRewriteEdit;
+use Magento\UrlRewrite\Block\Selector;
+use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
-class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implements HttpGetActionInterface
+class Edit extends Rewrite implements HttpGetActionInterface
 {
     /**#@+
      * Modes
@@ -35,7 +41,7 @@ class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
         } elseif ($this->getRequest()->has('id')) {
             $mode = self::ID_MODE;
         } else {
-            $mode = $this->_objectManager->get(\Magento\UrlRewrite\Block\Selector::class)->getDefaultMode();
+            $mode = $this->_objectManager->get(Selector::class)->getDefaultMode();
         }
         return $mode;
     }
@@ -54,7 +60,7 @@ class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
         switch ($mode) {
             case self::PRODUCT_MODE:
                 $editBlock = $this->_view->getLayout()->createBlock(
-                    \Magento\UrlRewrite\Block\Catalog\Product\Edit::class,
+                    CatalogProductEdit::class,
                     '',
                     [
                         'data' => [
@@ -68,7 +74,7 @@ class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
                 break;
             case self::CATEGORY_MODE:
                 $editBlock = $this->_view->getLayout()->createBlock(
-                    \Magento\UrlRewrite\Block\Catalog\Category\Edit::class,
+                    CatalogCategoryEdit::class,
                     '',
                     [
                         'data' => ['category' => $this->_getCategory(), 'url_rewrite' => $this->_getUrlRewrite()]
@@ -77,7 +83,7 @@ class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
                 break;
             case self::CMS_PAGE_MODE:
                 $editBlock = $this->_view->getLayout()->createBlock(
-                    \Magento\UrlRewrite\Block\Cms\Page\Edit::class,
+                    CmsPageEdit::class,
                     '',
                     [
                         'data' => ['cms_page' => $this->_getCmsPage(), 'url_rewrite' => $this->_getUrlRewrite()]
@@ -87,7 +93,7 @@ class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
             case self::ID_MODE:
             default:
                 $editBlock = $this->_view->getLayout()->createBlock(
-                    \Magento\UrlRewrite\Block\Edit::class,
+                    UrlRewriteEdit::class,
                     '',
                     ['data' => ['url_rewrite' => $this->_getUrlRewrite()]]
                 );
