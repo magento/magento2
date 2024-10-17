@@ -8,6 +8,8 @@ namespace Magento\Sales\Helper;
 
 /**
  * Sales module base helper
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Reorder extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -41,9 +43,11 @@ class Reorder extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Is reorder allowed ?
+     *
      * @return bool
      */
-    public function isAllow()
+    public function isAllow(): bool
     {
         return $this->isAllowed();
     }
@@ -54,7 +58,7 @@ class Reorder extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Store\Model\Store|int|null $store
      * @return bool
      */
-    public function isAllowed($store = null)
+    public function isAllowed($store = null): bool
     {
         if ($this->scopeConfig->getValue(
             self::XML_PATH_SALES_REORDER_ALLOW,
@@ -72,16 +76,30 @@ class Reorder extends \Magento\Framework\App\Helper\AbstractHelper
      * @param int $orderId
      * @return bool
      */
-    public function canReorder($orderId)
+    public function canReorder($orderId): bool
     {
         $order = $this->orderRepository->get($orderId);
         if (!$this->isAllowed($order->getStore())) {
             return false;
         }
         if ($this->customerSession->isLoggedIn()) {
-            return $order->canReorder();
+            return (bool) $order->canReorder();
         } else {
             return true;
         }
+    }
+
+    /**
+     * Check is it possible to reorder one item.
+     *
+     * @param \Magento\Sales\Model\Order\Item $item
+     * @param \Magento\Catalog\Model\Product $product
+     * @return bool
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function canReorderItem($item, $product): bool
+    {
+        return true;
     }
 }
