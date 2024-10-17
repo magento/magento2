@@ -12,7 +12,8 @@ use Magento\Framework\Locale\Bundle\LanguageBundle;
 use Magento\Framework\Locale\Bundle\RegionBundle;
 
 /**
- * Translated lists.
+ * Translatable lists of locale names and calendrical terms
+ * includes languages, countries, timezones, weekdays, currencies
  */
 class TranslatedLists implements ListsInterface
 {
@@ -185,7 +186,7 @@ class TranslatedLists implements ListsInterface
     }
 
     /**
-     * Sort option array.
+     * Sort option array by localized labels
      *
      * @param array $option
      * @return array
@@ -196,7 +197,7 @@ class TranslatedLists implements ListsInterface
         foreach ($option as $item) {
             $data[$item['value']] = $item['label'];
         }
-        asort($data);
+        asort($data, SORT_LOCALE_STRING);
         $option = [];
         foreach ($data as $key => $label) {
             $option[] = ['value' => $key, 'label' => $label];
