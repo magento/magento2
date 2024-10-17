@@ -83,7 +83,7 @@
         <comment userInput="BIC workaround" stepKey="loginAsAdmin"/>
 
         <comment userInput="2. Open Marketing - SEO and Search - URL Rewrites " stepKey="commentVerifyUrlRewrite" />
-        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
+        <actionGroup ref="AdminOpenUrlRewritesGridPageActionGroup" stepKey="amOnUrlRewriteIndexPage"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
         <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
         <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickSearchButton"/>
@@ -105,7 +105,7 @@
         </actionGroup>
 
         <comment userInput="5. Open Marketing - SEO and Search - URL Rewrites" stepKey="commentVerifyURLAfterImport" />
-        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage2"/>
+        <actionGroup ref="AdminOpenUrlRewritesGridPageActionGroup" stepKey="amOnUrlRewriteIndexPage2"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters2"/>
         <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="$createSimpleProduct.custom_attributes[url_key]$-new.html" stepKey="inputProductName2"/>
         <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickSearchButton2"/>
