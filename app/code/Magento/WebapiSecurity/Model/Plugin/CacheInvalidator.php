@@ -5,39 +5,38 @@
  */
 namespace Magento\WebapiSecurity\Model\Plugin;
 
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\Config\Value;
+use Magento\Webapi\Model\Cache\Type\Webapi;
+
 class CacheInvalidator
 {
     /**
-     * @var \Magento\Framework\App\Cache\TypeListInterface
-     */
-    protected $cacheTypeList;
-
-    /**
      * CacheInvalidator constructor.
      *
-     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param TypeListInterface $cacheTypeList
      */
-    public function __construct(\Magento\Framework\App\Cache\TypeListInterface $cacheTypeList)
-    {
-        $this->cacheTypeList = $cacheTypeList;
+    public function __construct(
+        protected readonly TypeListInterface $cacheTypeList
+    ) {
     }
 
     /**
      * Invalidate WebApi cache if needed.
      *
-     * @param \Magento\Framework\App\Config\Value $subject
-     * @param \Magento\Framework\App\Config\Value $result
-     * @return \Magento\Framework\App\Config\Value
+     * @param Value $subject
+     * @param Value $result
+     * @return Value
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterAfterSave(
-        \Magento\Framework\App\Config\Value $subject,
-        \Magento\Framework\App\Config\Value $result
+        Value $subject,
+        Value $result
     ) {
-        if ($result->getPath() == \Magento\WebapiSecurity\Model\Plugin\AnonymousResourceSecurity::XML_ALLOW_INSECURE
+        if ($result->getPath() == AnonymousResourceSecurity::XML_ALLOW_INSECURE
             && $result->isValueChanged()
         ) {
-            $this->cacheTypeList->invalidate(\Magento\Webapi\Model\Cache\Type\Webapi::TYPE_IDENTIFIER);
+            $this->cacheTypeList->invalidate(Webapi::TYPE_IDENTIFIER);
         }
 
         return $result;
