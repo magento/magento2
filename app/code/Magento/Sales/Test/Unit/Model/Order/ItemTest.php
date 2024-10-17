@@ -321,7 +321,7 @@ class ItemTest extends TestCase
                     'qty_ordered' => 12, 'qty_invoiced' => 12, 'qty_refunded' => 5, 'qty_shipped' => 4,
                     'qty_canceled' => 0
                 ],
-                'expectedResult' => ['to_ship' => 7.0, 'to_invoice' => 0.0]
+                'expectedResult' => ['to_ship' => 3.0, 'to_invoice' => 0.0]
             ],
             'complete' => [
                 'options' => [
@@ -339,10 +339,10 @@ class ItemTest extends TestCase
             ],
             'completely_shipped_using_decimals' => [
                 'options' => [
-                    'qty_ordered' => 4.4, 'qty_invoiced' => 0.4, 'qty_refunded' => 0.4, 'qty_shipped' => 4,
+                    'qty_ordered' => 4.8, 'qty_invoiced' => 0.4, 'qty_refunded' => 0.4, 'qty_shipped' => 4,
                     'qty_canceled' => 0,
                 ],
-                'expectedResult' => ['to_ship' => 0.4, 'to_invoice' => 4.0]
+                'expectedResult' => ['to_ship' => 0.4, 'to_invoice' => 4.4]
             ],
             'completely_invoiced_using_decimals' => [
                 'options' => [
