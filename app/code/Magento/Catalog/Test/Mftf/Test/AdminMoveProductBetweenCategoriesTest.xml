@@ -106,7 +106,7 @@
         </actionGroup>
 
         <!-- Clear invalidated cache on System>Tools>Cache Management page  -->
-        <amOnPage url="{{AdminCacheManagementPage.url}}" stepKey="onCachePage"/>
+        <actionGroup ref="AdminGoToCacheManagementPageActionGroup" stepKey="onCachePage"/>
         <waitForPageLoad stepKey="waitForCacheManagementPage"/>
 
         <checkOption selector="{{AdminCacheManagementSection.configurationCheckbox}}" stepKey="checkConfigCache"/>
