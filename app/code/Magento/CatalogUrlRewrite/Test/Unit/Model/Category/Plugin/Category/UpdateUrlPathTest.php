@@ -147,7 +147,7 @@ class UpdateUrlPathTest extends TestCase
         $this->category->expects($this->once())->method('setStoreId')->with($categoryStoreIds[2])->willReturnSelf();
         $this->category->expects($this->once())->method('unsUrlPath')->willReturnSelf();
         $this->category->expects($this->once())->method('setUrlPath')->with($generatedUrlPath)->willReturnSelf();
-        $this->storeViewService->expects($this->exactly(2))->method('doesEntityHaveOverriddenUrlPathForStore')
+        $this->storeViewService->expects($this->exactly(3))->method('doesEntityHaveOverriddenUrlPathForStore')
             ->willReturnMap(
                 [
                     [$categoryStoreIds[1], $parentId, 'catalog_category', false],

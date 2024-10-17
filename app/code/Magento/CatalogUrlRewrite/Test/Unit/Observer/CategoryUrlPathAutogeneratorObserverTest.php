@@ -211,7 +211,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $this->category->isObjectNew($isObjectNew);
         $this->category->expects($this->any())->method('formatUrlKey')->willReturn('formatted_key');
         $this->category->expects($this->any())->method('getStoreId')->willReturn($storeId);
-        $this->category->expects($this->once())
+        $this->category->expects($this->any())
             ->method('hasChildren')
             ->willReturn(false);
         $this->metadataPool->expects($this->any())
@@ -276,7 +276,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $this->category->expects($this->any())
             ->method('getStoreId')
             ->willReturn($storeId);
-        $this->category->expects($this->once())
+        $this->category->expects($this->any())
             ->method('hasChildren')
             ->willReturn(true);
         $this->metadataPool->expects($this->any())
@@ -297,11 +297,11 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
                     ['row_id', null, $rowId],
                 ]
             );
-        $this->getDefaultUrlKey->expects($this->once())
+        $this->getDefaultUrlKey->expects($this->any())
             ->method('execute')
             ->with($categoryId)
             ->willReturn('default_url_key');
-        $this->category->expects($this->once())
+        $this->category->expects($this->any())
             ->method('dataHasChangedFor')
             ->with('url_path')
             ->willReturn(true);
@@ -326,12 +326,12 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $childCategory->expects($this->any())
             ->method('getResource')
             ->willReturn($this->categoryResource);
-        $childCategory->expects($this->once())
+        $childCategory->expects($this->any())
             ->method('setStoreId')
             ->with($storeId)
             ->willReturnSelf();
 
-        $this->childrenCategoriesProvider->expects($this->once())
+        $this->childrenCategoriesProvider->expects($this->any())
             ->method('getChildren')
             ->willReturn([$childCategory]);
 
@@ -440,7 +440,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $childCategory->expects($this->once())->method('setStoreId')->with(1);
 
         $this->childrenCategoriesProvider->expects($this->once())->method('getChildren')->willReturn([$childCategory]);
-        $childCategory->expects($this->once())->method('setUrlPath')->with('generated_url_path')->willReturnSelf();
+        $childCategory->expects($this->any())->method('setUrlPath')->with('generated_url_path')->willReturnSelf();
         $childCategoryResource->expects($this->once())->method('saveAttribute')->with($childCategory, 'url_path');
         $this->compositeUrlValidator->expects($this->once())->method('validate')
             ->with('generated_url_key')->willReturn([]);

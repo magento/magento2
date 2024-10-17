@@ -114,7 +114,11 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                 $resultUrlKey = $category->formatUrlKey($category->getOrigData('name'));
                 $this->updateUrlKey($category, $resultUrlKey);
             }
-            if ($category->hasChildren()) {
+
+            if ($category->hasChildren()
+                && $category->getUrlKey() === null
+                && $category->getStoreId()=== Store::DEFAULT_STORE_ID
+            ) {
                 $metadata = $this->metadataPool->getMetadata(CategoryInterface::class);
                 $linkField = $metadata->getLinkField();
                 $id = $category->getData($linkField);
@@ -122,6 +126,21 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                     $defaultUrlKey = $this->getDefaultUrlKey->execute((int)$id);
                     if ($defaultUrlKey) {
                         $this->updateUrlKey($category, $defaultUrlKey);
+                    }
+                }
+            }
+
+            if ($category->hasChildren()
+                && $category->getUrlKey() === null
+                && $category->getStoreId() !== Store::DEFAULT_STORE_ID
+            ) {
+                $metadata = $this->metadataPool->getMetadata(CategoryInterface::class);
+                $linkField = $metadata->getLinkField();
+                $id = $category->getData($linkField);
+                if ($id) {
+                    $defaultUrlKey = $this->getDefaultUrlKey->execute((int)$id);
+                    if ($defaultUrlKey) {
+                        $this->removeUrlKey($category, $defaultUrlKey);
                     }
                 }
             }
@@ -142,6 +161,17 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
         $this->validateUrlKey($category, $urlKey);
         $category->setUrlKey($urlKey)
             ->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
+        if (!$category->isObjectNew()) {
+            $category->getResource()->saveAttribute($category, 'url_path');
+            if ($category->dataHasChangedFor('url_path')) {
+                $this->updateUrlPathForChildren($category);
+            }
+        }
+    }
+
+    public function removeUrlKey(Category $category, ?string $urlKey): void
+    {
+        $category->unsUrlPath();
         if (!$category->isObjectNew()) {
             $category->getResource()->saveAttribute($category, 'url_path');
             if ($category->dataHasChangedFor('url_path')) {
@@ -249,7 +279,22 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     protected function updateUrlPathForCategory(Category $category, Category $parentCategory = null)
     {
         $category->unsUrlPath();
-        $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category, $parentCategory));
+
+        if ($parentCategory == null) {
+            $category->getResource()->saveAttribute($category, 'url_path');
+            return;
+        }
+
+        if ($category->getStoreId()=== Store::DEFAULT_STORE_ID || $parentCategory->getUrlKey() !== null) {
+            $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category, $parentCategory));
+        }
+        if ($category->getStoreId()=== Store::DEFAULT_STORE_ID && $parentCategory->getUrlKey() === null) {
+            $category->setStoreId(Store::DEFAULT_STORE_ID)->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category, $parentCategory));
+            $category->getResource()->saveAttribute($category, 'url_path');
+        }
+        if ($category->getStoreId()!== Store::DEFAULT_STORE_ID && $parentCategory->getUrlKey() === null) {
+            $category->getResource()->saveAttribute($category, 'url_path');
+        }
         $category->getResource()->saveAttribute($category, 'url_path');
     }
 }
