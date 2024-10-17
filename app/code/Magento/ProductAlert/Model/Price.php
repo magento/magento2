@@ -95,7 +95,7 @@ class Price extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Method for deleting customer from website.
+     * Method for deleting customer's price alert from website.
      *
      * @param int $customerId
      * @param int $websiteId
