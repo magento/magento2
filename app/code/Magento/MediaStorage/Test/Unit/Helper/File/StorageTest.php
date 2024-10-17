@@ -90,7 +90,7 @@ class StorageTest extends TestCase
     /**
      * @return array
      */
-    public function isInternalStorageDataProvider()
+    public static function isInternalStorageDataProvider()
     {
         return [
             'given external storage' => [5, 0, false],
@@ -134,14 +134,15 @@ class StorageTest extends TestCase
 
         $storageModelMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['loadByFileName', '__wakeup'])
+            ->addMethods(['loadByFileName'])
+            ->onlyMethods(['__wakeup'])
             ->getMock();
         $this->storageMock->expects($this->exactly($callNum))
             ->method('getStorageModel')
             ->willReturn($storageModelMock);
         $fileMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Storage\Database::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', '__wakeup'])
+            ->onlyMethods(['getId', '__wakeup'])
             ->getMock();
         $storageModelMock->expects($this->exactly($callNum))
             ->method('loadByFilename')
@@ -162,7 +163,7 @@ class StorageTest extends TestCase
     /**
      * @return array
      */
-    public function processStorageFileDataProvider()
+    public static function processStorageFileDataProvider()
     {
         return [
             'internal storage' => [false, 0, 0, 0],

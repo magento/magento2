@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMassOrdersHoldOnProcessingAndPendingTest">
+        <annotations>
+            <stories value="Mass Update Orders"/>
+            <title value="Mass put orders in statuses Pending, Processing on Hold"/>
+            <description value="Put orders in statuses Pending, Processing on Hold"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-16185"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="defaultSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <createData entity="CustomerCart" stepKey="createCustomerCartOne">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItemOne">
+                <requiredEntity createDataKey="createCustomerCartOne"/>
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCartOne"/>
+            </createData>
+            <updateData createDataKey="createCustomerCartOne" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformationOne">
+                <requiredEntity createDataKey="createCustomerCartOne"/>
+            </updateData>
+
+            <createData entity="CustomerCart" stepKey="createCustomerCartTwo">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItemTwo">
+                <requiredEntity createDataKey="createCustomerCartTwo"/>
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddressTwo">
+                <requiredEntity createDataKey="createCustomerCartTwo"/>
+            </createData>
+            <updateData createDataKey="createCustomerCartTwo" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformationTwo">
+                <requiredEntity createDataKey="createCustomerCartTwo"/>
+            </updateData>
+            <createData entity="Invoice" stepKey="invoiceOrderTwo">
+                <requiredEntity createDataKey="createCustomerCartTwo"/>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
+        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createCustomerCartOne.return$)}}" stepKey="getFirstOrderId"/>
+        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createCustomerCartTwo.return$)}}" stepKey="getSecondOrderId"/>
+
+        <actionGroup ref="AdminTwoOrderActionOnGridActionGroup" stepKey="massActionHold">
+            <argument name="action" value="Hold"/>
+            <argument name="orderId" value="{$getFirstOrderId}"/>
+            <argument name="secondOrderId" value="{$getSecondOrderId}"/>
+        </actionGroup>
+        <see userInput="You have put 2 order(s) on hold." stepKey="assertOrderOnHoldSuccessMessage"/>
+
+        <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeFirstOrder">
+            <argument name="orderId" value="{$getFirstOrderId}"/>
+            <argument name="orderStatus" value="On Hold"/>
+        </actionGroup>
+        <see userInput="{$getFirstOrderId}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertFirstOrderID"/>
+        <see userInput="On Hold" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertFirstOrderStatus"/>
+
+        <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeSecondOrder">
+            <argument name="orderId" value="{$getSecondOrderId}"/>
+            <argument name="orderStatus" value="On Hold"/>
+        </actionGroup>
+        <see userInput="{$getSecondOrderId}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertSecondOrderID"/>
+        <see userInput="On Hold" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertSecondStatus"/>
+    </test>
+</tests>

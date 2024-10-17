@@ -46,7 +46,7 @@ class AddStockItemsObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
-            ->setMethods(['getDefaultScopeId'])
+            ->onlyMethods(['getDefaultScopeId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->stockRegistryPreloader = $this->createMock(StockRegistryPreloader::class);
@@ -65,7 +65,7 @@ class AddStockItemsObserverTest extends TestCase
         $defaultScopeId = 0;
 
         $stockItem = $this->getMockBuilder(StockItemInterface::class)
-            ->setMethods(['getProductId'])
+            ->onlyMethods(['getProductId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $stockItem->expects(self::once())
@@ -91,7 +91,7 @@ class AddStockItemsObserverTest extends TestCase
             ->willReturn($defaultScopeId);
 
         $productExtension = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->setMethods(['setStockItem'])
+            ->addMethods(['setStockItem'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $productExtension->expects(self::once())

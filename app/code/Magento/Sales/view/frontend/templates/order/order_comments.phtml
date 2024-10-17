@@ -17,7 +17,7 @@
                         <?= /* @noEscape */
                         $block->formatDate($_historyItem->getCreatedAt(), \IntlDateFormatter::MEDIUM, true) ?>
                     </dt>
-                    <dd class="comment-content"><?= $block->escapeHtml($_historyItem->getComment()) ?></dd>
+                    <dd class="comment-content"><?= $block->escapeHtml($_historyItem->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></dd>
                 <?php endforeach; ?>
             </dl>
         </div>

@@ -5,7 +5,6 @@
 
 /*global FORM_KEY*/
 /*global bSelection*/
-/*global $H*/
 /**
  * @api
  */
@@ -146,8 +145,8 @@ define([
 
                         if ($(this).is(':checked')) {
                             selectedProductList[$(this).val()] = {
-                                name: $.trim(tr.find('.col-name').html()),
-                                sku: $.trim(tr.find('.col-sku').html()),
+                                name: tr.find('.col-name').html().trim(),
+                                sku: tr.find('.col-sku').html().trim(),
                                 'product_id': $(this).val(),
                                 'option_id': $('bundle_selection_id_' + optionIndex).val(),
                                 'selection_price_value': 0,
@@ -186,7 +185,9 @@ define([
                                 });
                                 bSelection.gridRemoval.each(function (pair) {
                                     $optionBox.find('.col-sku').filter(function () {
-                                        return $.trim($(this).text()) === pair.key; // find row by SKU
+                                        let text = $(this).text();
+
+                                        return text.trim() === pair.key; // find row by SKU
                                     }).closest('tr').find('button.delete').trigger('click');
                                 });
                                 widget.refreshSortableElements();

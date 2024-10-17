@@ -75,6 +75,9 @@ class EditTest extends TestCase
      */
     protected $model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -87,7 +90,8 @@ class EditTest extends TestCase
 
         $this->customerSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAddressFormData', 'getCustomerId'])
+            ->onlyMethods(['getCustomerId'])
+            ->addMethods(['getAddressFormData'])
             ->getMock();
 
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
@@ -99,7 +103,7 @@ class EditTest extends TestCase
             ->getMock();
 
         $this->addressDataFactoryMock = $this->getMockBuilder(AddressInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -116,19 +120,22 @@ class EditTest extends TestCase
                 'pageConfig' => $this->pageConfigMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
                 'addressDataFactory' => $this->addressDataFactoryMock,
-                'currentCustomer' => $this->currentCustomerMock,
+                'currentCustomer' => $this->currentCustomerMock
             ]
         );
     }
 
-    public function testSetLayoutWithOwnAddressAndPostedData()
+    /**
+     * @return void
+     */
+    public function testSetLayoutWithOwnAddressAndPostedData(): void
     {
         $addressId = 1;
         $customerId = 1;
         $title = __('Edit Address');
         $postedData = [
             'region_id' => 1,
-            'region' => 'region',
+            'region' => 'region'
         ];
         $newPostedData = $postedData;
         $newPostedData['region'] = $postedData;
@@ -152,10 +159,6 @@ class EditTest extends TestCase
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        $this->customerSessionMock->expects($this->at(0))
-            ->method('getCustomerId')
-            ->willReturn($customerId);
-
         $addressMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($addressId);
@@ -172,7 +175,10 @@ class EditTest extends TestCase
             ->with($title)
             ->willReturnSelf();
 
-        $this->customerSessionMock->expects($this->at(1))
+        $this->customerSessionMock
+            ->method('getCustomerId')
+            ->willReturn($customerId);
+        $this->customerSessionMock
             ->method('getAddressFormData')
             ->with(true)
             ->willReturn($postedData);
@@ -190,10 +196,11 @@ class EditTest extends TestCase
     }
 
     /**
+     * @return void
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testSetLayoutWithAlienAddress()
+    public function testSetLayoutWithAlienAddress(): void
     {
         $addressId = 1;
         $customerId = 1;
@@ -223,7 +230,7 @@ class EditTest extends TestCase
             ->method('getCustomerId')
             ->willReturn($customerId);
 
-        $this->customerSessionMock->expects($this->at(0))
+        $this->customerSessionMock
             ->method('getCustomerId')
             ->willReturn($customerId + 1);
 
@@ -296,7 +303,10 @@ class EditTest extends TestCase
         $this->assertEquals($layoutMock, $this->model->getLayout());
     }
 
-    public function testSetLayoutWithoutAddressId()
+    /**
+     * @return void
+     */
+    public function testSetLayoutWithoutAddressId(): void
     {
         $customerPrefix = 'prefix';
         $customerFirstName = 'firstname';
@@ -380,7 +390,10 @@ class EditTest extends TestCase
         $this->assertEquals($layoutMock, $this->model->getLayout());
     }
 
-    public function testSetLayoutWithoutAddress()
+    /**
+     * @return void
+     */
+    public function testSetLayoutWithoutAddress(): void
     {
         $addressId = 1;
         $customerPrefix = 'prefix';

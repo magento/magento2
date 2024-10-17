@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertProductInfoOnEditPageActionGroup">
+        <annotations>
+            <description>Verifies the general data on the Edit product details page in admin for a product.</description>
+        </annotations>
+        <arguments>
+            <argument name="productStatus" defaultValue="{{_defaultProduct.status}}" type="string"/>
+            <argument name="productAttributeSet" defaultValue="Default" type="string"/>
+            <argument name="productName" defaultValue="{{_defaultProduct.name}}" type="string"/>
+            <argument name="productSku" defaultValue="{{_defaultProduct.sku}}" type="string"/>
+            <argument name="productPrice" defaultValue="{{_defaultProduct.price}}" type="string"/>
+            <argument name="productQuantity" defaultValue="{{_defaultProduct.quantity}}" type="string"/>
+            <argument name="productStockStatus" defaultValue="In Stock" type="string"/>
+            <argument name="productWeight" defaultValue="{{_defaultProduct.weight}}" type="string"/>
+            <argument name="productVisibility" defaultValue="Catalog, Search" type="string"/>
+            <argument name="categoryName" defaultValue="{{_defaultCategory.name}}" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminProductFormSection.productStatus}}" stepKey="waitForProductStatus"/>
+        <seeElement selector="{{AdminProductFormSection.productStatusValue(productStatus)}}" stepKey="seeProductStatus"/>
+        <seeOptionIsSelected selector="{{AdminProductFormSection.attributeSet}}" userInput="{{productAttributeSet}}" stepKey="seeProductAttributeSet"/>
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{productName}}" stepKey="seeProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{productSku}}" stepKey="seeProductSku"/>
+        <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="{{productPrice}}" stepKey="seeProductPrice"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{productQuantity}}" stepKey="seeProductQuantity"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{productStockStatus}}" stepKey="seeProductStockStatus"/>
+        <seeInField selector="{{AdminProductFormSection.productWeight}}" userInput="{{productWeight}}" stepKey="seeProductWeight"/>
+        <seeOptionIsSelected selector="{{AdminProductFormSection.visibility}}" userInput="{{productVisibility}}" stepKey="seeProductVisibility"/>
+        <seeElement selector="{{AdminProductFormSection.categories(categoryName)}}" stepKey="seeProductCategories"/>
+    </actionGroup>
+</actionGroups>

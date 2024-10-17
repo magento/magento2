@@ -7,8 +7,6 @@ namespace Magento\Tax\Model\ResourceModel\Calculation\Rate;
 
 /**
  * Tax Rate Title Collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Title extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

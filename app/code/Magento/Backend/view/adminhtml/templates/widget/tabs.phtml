@@ -25,7 +25,7 @@
             endif;
             ?>
             <?php $_tabClass = 'tab-item-link ' . $block->getTabClass($_tab) . ' ' .
-                (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
+                (preg_match('/\s?ajax\s?/', $_tab->getClass() ?? '') ? 'notloaded' : '') ?>
             <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $block->getTabUrl($_tab) != '#') ?
                 'link' : '' ?>
             <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' :

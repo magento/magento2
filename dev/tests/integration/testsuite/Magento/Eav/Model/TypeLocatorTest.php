@@ -42,7 +42,7 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getExpectedAttributeTypesProvider(): array
+    public static function getExpectedAttributeTypesProvider(): array
     {
         return [
             'product' => [
@@ -193,7 +193,7 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
                     'custom_design_to' => 'string',
                     'available_sort_by' => 'string[]',
                     'page_layout' => 'string',
-                    'default_sort_by' => 'string[]',
+                    'default_sort_by' => 'string',
                     'filter_price_range' => 'double',
                     'custom_layout_update' => 'string',
                 ]
@@ -203,5 +203,20 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
                 ['media_gallery' => 'anyType', 'undefine_attribute' => 'anyType']
             ]
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setAccessible(true);
+                $property->setValue($this, null);
+            }
+        }
     }
 }

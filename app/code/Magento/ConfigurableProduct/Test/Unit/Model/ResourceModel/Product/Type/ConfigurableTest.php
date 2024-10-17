@@ -75,11 +75,11 @@ class ConfigurableTest extends TestCase
     protected function setUp(): void
     {
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['select', 'fetchAll', 'insertOnDuplicate'])
+            ->onlyMethods(['select', 'fetchAll', 'insertOnDuplicate'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->resource = $this->getMockBuilder(ResourceConnection::class)
-            ->setMethods(['getConnection', 'getTableName'])
+            ->onlyMethods(['getConnection', 'getTableName'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -90,11 +90,11 @@ class ConfigurableTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->abstractAttribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getBackendTable', 'getAttributeId'])
+            ->onlyMethods(['getBackendTable', 'getAttributeId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->product = $this->getMockBuilder(Product::class)
-            ->setMethods(['__sleep', 'getData'])
+            ->onlyMethods(['__sleep', 'getData'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeOptionProvider = $this->getMockBuilder(AttributeOptionProvider::class)
@@ -106,7 +106,7 @@ class ConfigurableTest extends TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getResources'])
+            ->onlyMethods(['getResources'])
             ->setConstructorArgs(
                 $this->objectManagerHelper->getConstructArguments(
                     Context::class,
@@ -142,7 +142,7 @@ class ConfigurableTest extends TestCase
         $this->resource->expects($this->any())->method('getTableName')->willReturn('table name');
 
         $select = $this->getMockBuilder(Select::class)
-            ->setMethods(['from', 'where'])
+            ->onlyMethods(['from', 'where'])
             ->disableOriginalConstructor()
             ->getMock();
         $select->expects($this->exactly(1))->method('from')->willReturnSelf();

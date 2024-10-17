@@ -13,16 +13,20 @@ use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Search\RequestInterface;
-use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as Elasticsearch5Builder;
+use Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Query\Builder as ElasticsearchBuilder;
 
 /**
  * Query builder for search adapter.
  *
  * @api
  * @since 100.1.0
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
-class Builder extends Elasticsearch5Builder
+class Builder extends ElasticsearchBuilder
 {
+    private const ELASTIC_INT_MAX = 2147483647;
+
     /**
      * @var Sort
      */
@@ -61,7 +65,7 @@ class Builder extends Elasticsearch5Builder
             'index' => $this->searchIndexNameResolver->getIndexName($storeId, $request->getIndex()),
             'type' => $this->clientConfig->getEntityType(),
             'body' => [
-                'from' => $request->getFrom(),
+                'from' => min(self::ELASTIC_INT_MAX, $request->getFrom()),
                 'size' => $request->getSize(),
                 'fields' => ['_id', '_score'],
                 'sort' => $this->sortBuilder->getSort($request),

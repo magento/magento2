@@ -35,7 +35,7 @@ class AbstractSwatchTest extends TestCase
 
         $this->swatch = $this->getMockBuilder(AbstractSwatch::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMockForAbstractClass();
     }
 

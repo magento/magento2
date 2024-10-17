@@ -166,6 +166,7 @@ class ProductViewCounterTest extends TestCase
     {
         $productMock = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
+            ->addMethods(['isAvailable'])
             ->getMockForAbstractClass();
         $productRendererMock = $this->getMockBuilder(ProductRenderInterface::class)
             ->disableOriginalConstructor()
@@ -173,7 +174,6 @@ class ProductViewCounterTest extends TestCase
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->registryMock->expects($this->once())
             ->method('registry')
             ->with('product')

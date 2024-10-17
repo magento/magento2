@@ -17,9 +17,11 @@
         </arguments>
 
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productVar.name)}}" stepKey="addCategoryProductToWishlistMoveMouseOverProduct"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductAddToWishlistByName(productVar.name)}}" stepKey="waitForAddCategoryProductToWishlist"/>
         <click selector="{{StorefrontCategoryProductSection.ProductAddToWishlistByName(productVar.name)}}" stepKey="addCategoryProductToWishlistClickAddProductToWishlist"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addCategoryProductToWishlistWaitForSuccessMessage"/>
-        <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been added to your Wish List." stepKey="addCategoryProductToWishlistSeeProductNameAddedToWishlist"/>
+        <waitForText selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productVar.name}} has been added to your Wish List." stepKey="addCategoryProductToWishlistSeeProductNameAddedToWishlist"/>
         <seeCurrentUrlMatches regex="~/wishlist_id/\d+/$~" stepKey="seeCurrentUrlMatches"/>
     </actionGroup>
 </actionGroups>

@@ -9,7 +9,7 @@ namespace Magento\Widget\Test\Unit\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
 use Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container;
 
-class ContainerTest extends AbstractContainerTest
+class ContainerTest extends AbstractContainerTestCase
 {
     /**
      * @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container
@@ -23,13 +23,12 @@ class ContainerTest extends AbstractContainerTest
     {
         parent::setUp();
 
-        $this->containerBlock = $this->objectManagerHelper->getObject(
-            Container::class,
-            [
-                'context' => $this->contextMock,
-                'themesFactory' => $this->themeCollectionFactoryMock,
-                'layoutProcessorFactory' => $this->layoutProcessorFactoryMock
-            ]
+        $this->containerBlock = new Container(
+            $this->contextMock,
+            $this->layoutProcessorFactoryMock,
+            $this->themeCollectionFactoryMock,
+            [],
+            $this->pageLayoutConfigBuilderMock
         );
     }
 

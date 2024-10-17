@@ -67,7 +67,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $this->_assertLayoutUpdate($expectedFile, $layout->getUpdate());
     }
 
-    public function getLayoutFromFixtureDataProvider()
+    public static function getLayoutFromFixtureDataProvider()
     {
         return [
             'single fixture file' => [

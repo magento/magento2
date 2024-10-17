@@ -7,6 +7,8 @@ namespace Magento\Framework\Amqp;
 
 /**
  * Factory class for @see Config
+ *
+ * @api
  */
 class ConfigFactory
 {

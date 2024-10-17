@@ -10,7 +10,7 @@
 /* @var \Magento\Sales\Model\Order $_order */
 $_order = $block->getOrder() ?>
 <?php if ($_shipment && $_order) : ?>
-    <?php $trackCollection = $_order->getTracksCollection($_shipment->getId()) ?>
+    <?php $trackCollection = $_shipment->getTracksCollection() ?>
     <?php if ($trackCollection) : ?>
         <br />
         <table class="shipment-track">

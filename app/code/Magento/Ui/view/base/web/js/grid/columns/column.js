@@ -299,7 +299,17 @@ define([
          * @returns {String}
          */
         getLabel: function (record) {
-            return record[this.index];
+            return record !== undefined ? record[this.index] : null;
+        },
+
+        /**
+         * UnsanitizedHtml version of getLabel.
+         *
+         * @param {Object} record - Data to be preprocessed.
+         * @returns {String}
+         */
+        getLabelUnsanitizedHtml: function (record) {
+            return this.getLabel(record);
         },
 
         /**

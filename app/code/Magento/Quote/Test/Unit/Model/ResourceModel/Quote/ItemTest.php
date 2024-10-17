@@ -18,7 +18,9 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Quote\Model\Quote\Item\Option;
 use Magento\Quote\Model\ResourceModel\Quote\Item;
+use Magento\Quote\Model\ResourceModel\Quote\Item\Option as OptionResourceModel;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -126,7 +128,7 @@ class ItemTest extends TestCase
             ->with($this->quoteItemMock)
             ->willReturn(false);
 
-        $this->quoteItemMock->expects($this->never())
+        $this->quoteItemMock->expects($this->once())
             ->method('isOptionsSaved');
         $this->quoteItemMock->expects($this->never())
             ->method('saveItemOptions');
@@ -174,6 +176,63 @@ class ItemTest extends TestCase
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
+
+        $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
+    }
+
+    public function testSaveWithNewOption(): void
+    {
+        $this->entitySnapshotMock->expects($this->exactly(2))
+            ->method('isModified')
+            ->with($this->quoteItemMock)
+            ->willReturn(false);
+
+        $this->quoteItemMock->expects($this->once())
+            ->method('isOptionsSaved')
+            ->willReturn(false);
+        $this->quoteItemMock->expects($this->once())
+            ->method('saveItemOptions');
+
+        $this->resourceMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
+        $optionMock = $this->createMock(Option::class);
+        $this->quoteItemMock->expects($this->once())
+            ->method('getOptions')
+            ->willReturn([$optionMock]);
+
+        $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
+    }
+
+    public function testSaveWithModifiedOption(): void
+    {
+        $this->entitySnapshotMock->expects($this->exactly(2))
+            ->method('isModified')
+            ->with($this->quoteItemMock)
+            ->willReturn(false);
+
+        $this->quoteItemMock->expects($this->once())
+            ->method('isOptionsSaved')
+            ->willReturn(false);
+        $this->quoteItemMock->expects($this->once())
+            ->method('saveItemOptions');
+
+        $this->resourceMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
+        $optionMock = $this->createMock(Option::class);
+        $optionMock->method('getId')
+            ->willReturn(1);
+        $optionResourceModelMock = $this->createMock(OptionResourceModel::class);
+        $optionResourceModelMock->expects($this->once())
+            ->method('hasDataChanged')
+            ->with($optionMock)
+            ->willReturn(true);
+        $optionMock->method('getResource')
+            ->willReturn($optionResourceModelMock);
+        $this->quoteItemMock->expects($this->once())
+            ->method('getOptions')
+            ->willReturn([$optionMock]);
 
         $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
     }

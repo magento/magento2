@@ -6,8 +6,14 @@
 
 namespace Magento\Bundle\Api;
 
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Bundle\Api\Data\LinkInterface;
@@ -17,15 +23,20 @@ use Magento\Bundle\Api\Data\LinkInterface;
  */
 class ProductServiceTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/products';
-    const BUNDLE_PRODUCT_ID = 'sku-test-product-bundle';
+    private const SERVICE_NAME = 'catalogProductRepositoryV1';
+    private const SERVICE_VERSION = 'V1';
+    private const RESOURCE_PATH = '/V1/products';
+    private const BUNDLE_PRODUCT_ID = 'sku-test-product-bundle';
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected $productCollection;
+
+    /**
+     * @var bool
+     */
+    private $cleanUpOnTearDown = true;
 
     /**
      * Execute per test initialization
@@ -34,6 +45,7 @@ class ProductServiceTest extends WebapiAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->productCollection = $objectManager->get(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
+        $this->cleanUpOnTearDown = true;
     }
 
     /**
@@ -41,7 +53,9 @@ class ProductServiceTest extends WebapiAbstract
      */
     protected function tearDown(): void
     {
-        $this->deleteProductBySku(self::BUNDLE_PRODUCT_ID);
+        if ($this->cleanUpOnTearDown) {
+            $this->deleteProductBySku(self::BUNDLE_PRODUCT_ID);
+        }
         parent::tearDown();
     }
 
@@ -225,8 +239,6 @@ class ProductServiceTest extends WebapiAbstract
     public function testUpdateBundleAddAndDeleteOption()
     {
         $bundleProduct = $this->createDynamicBundleProduct();
-        $linkedProductPrice = 20;
-
         $bundleProductOptions = $this->getBundleProductOptions($bundleProduct);
 
         $oldOptionId = $bundleProductOptions[0]['option_id'];
@@ -239,7 +251,7 @@ class ProductServiceTest extends WebapiAbstract
                 [
                     'sku' => 'simple2',
                     'qty' => 2,
-                    "price" => $linkedProductPrice,
+                    "price" => 20,
                     "price_type" => 1,
                     "is_default" => false,
                 ],
@@ -250,6 +262,7 @@ class ProductServiceTest extends WebapiAbstract
 
         $updatedProduct = $this->getProduct(self::BUNDLE_PRODUCT_ID);
         $bundleOptions = $this->getBundleProductOptions($updatedProduct);
+        $simpleProduct = $this->getProduct('simple2');
         $this->assertEquals('new option', $bundleOptions[0]['title']);
         $this->assertTrue($bundleOptions[0]['required']);
         $this->assertEquals('select', $bundleOptions[0]['type']);
@@ -257,7 +270,88 @@ class ProductServiceTest extends WebapiAbstract
         $this->assertFalse(isset($bundleOptions[1]));
         $this->assertEquals('simple2', $bundleOptions[0]['product_links'][0]['sku']);
         $this->assertEquals(2, $bundleOptions[0]['product_links'][0]['qty']);
-        $this->assertEquals($linkedProductPrice, $bundleOptions[0]['product_links'][0]['price']);
+        $this->assertEquals($simpleProduct['price'], $bundleOptions[0]['product_links'][0]['price']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_new.php
+     * @magentoApiDataFixture Magento/Catalog/_files/second_product_simple.php
+     */
+    public function testUpdateFixedPriceBundleProductOptionSelectionPrice()
+    {
+        $optionPrice = 20;
+        $bundleProduct = $this->createFixedPriceBundleProduct();
+        $bundleProductOptions = $this->getBundleProductOptions($bundleProduct);
+
+        //replace current option with a new option
+        $bundleProductOptions[0] = [
+            'title' => 'new option',
+            'required' => true,
+            'type' => 'select',
+            'product_links' => [
+                [
+                    'sku' => 'simple2',
+                    'qty' => 2,
+                    "price" => $optionPrice,
+                    "price_type" => 1,
+                    "is_default" => false,
+                ],
+            ],
+        ];
+        $this->setBundleProductOptions($bundleProduct, $bundleProductOptions);
+        $this->saveProduct($bundleProduct);
+
+        $updatedProduct = $this->getProduct(self::BUNDLE_PRODUCT_ID);
+        $bundleOptions = $this->getBundleProductOptions($updatedProduct);
+        $this->assertEquals('simple2', $bundleOptions[0]['product_links'][0]['sku']);
+        $this->assertEquals(2, $bundleOptions[0]['product_links'][0]['qty']);
+        $this->assertEquals($optionPrice, $bundleOptions[0]['product_links'][0]['price']);
+    }
+
+    #[
+        DataFixture(StoreFixture::class, as: 'store2'),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p1'),
+        DataFixture(ProductFixture::class, ['price' => 20], 'p2'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$p1$']], 'opt1'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$p2$']], 'opt2'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['_options' => ['$opt1$', '$opt2$']],
+            'bundle1'
+        ),
+    ]
+
+    public function testUpdateBundleProductOptionsTitleOnStoreView(): void
+    {
+        $this->cleanUpOnTearDown = false;
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $product = $fixtures->get('bundle1');
+        $store2 = $fixtures->get('store2');
+        $data = $this->getProduct($product->getSku());
+        $defaultOptions = $this->getBundleProductOptions($data);
+        $store2Options = $defaultOptions;
+        $store2Options[0]['title'] .= ' - custom';
+        $store2Options[1]['title'] .= ' - custom';
+        $this->setBundleProductOptions($data, $store2Options);
+        $this->saveProduct($data, $store2->getCode());
+
+        // check that option titles are updated on store 2
+        $data = $this->getProduct($product->getSku(), $store2->getCode());
+        $options = $this->getBundleProductOptions($data);
+        $this->assertEquals($store2Options[0]['title'], $options[0]['title']);
+        $this->assertEquals($store2Options[1]['title'], $options[1]['title']);
+
+        // check that option titles have not changed on default store
+        $data = $this->getProduct($product->getSku(), 'default');
+        $options = $this->getBundleProductOptions($data);
+        $this->assertEquals($defaultOptions[0]['title'], $options[0]['title']);
+        $this->assertEquals($defaultOptions[1]['title'], $options[1]['title']);
+
+        // check that option titles have not changed in global scope
+        $data = $this->getProduct($product->getSku(), 'all');
+        $options = $this->getBundleProductOptions($data);
+        $this->assertEquals($defaultOptions[0]['title'], $options[0]['title']);
+        $this->assertEquals($defaultOptions[1]['title'], $options[1]['title']);
     }
 
     /**
@@ -422,7 +516,7 @@ class ProductServiceTest extends WebapiAbstract
      * @param string $productSku
      * @return array the product data
      */
-    protected function getProduct($productSku)
+    protected function getProduct($productSku, ?string $storeCode = null)
     {
         $serviceInfo = [
             'rest' => [
@@ -436,10 +530,9 @@ class ProductServiceTest extends WebapiAbstract
             ],
         ];
 
-        $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ?
-            $this->_webApiCall($serviceInfo, ['sku' => $productSku]) : $this->_webApiCall($serviceInfo);
-
-        return $response;
+        return TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP
+            ? $this->_webApiCall($serviceInfo, ['sku' => $productSku], storeCode: $storeCode)
+            : $this->_webApiCall($serviceInfo, storeCode: $storeCode);
     }
 
     /**
@@ -495,9 +588,10 @@ class ProductServiceTest extends WebapiAbstract
      * Save product
      *
      * @param array $product
+     * @param string|null $storeCode
      * @return array the created product data
      */
-    protected function saveProduct($product)
+    protected function saveProduct($product, ?string $storeCode = null)
     {
         if (isset($product['custom_attributes'])) {
             $count = count($product['custom_attributes']);
@@ -522,7 +616,7 @@ class ProductServiceTest extends WebapiAbstract
             ],
         ];
         $requestData = ['product' => $product];
-        $response = $this->_webApiCall($serviceInfo, $requestData);
+        $response = $this->_webApiCall($serviceInfo, $requestData, storeCode: $storeCode);
         return $response;
     }
 }

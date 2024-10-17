@@ -83,9 +83,10 @@
                 <label translate="true">Admin Name</label>
             </settings>
         </column>
-        <column name="time" sortOrder="60">
+        <column name="time" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date" sortOrder="60">
             <settings>
-                <filter>text</filter>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
                 <label translate="true">Logged In</label>
             </settings>
         </column>

@@ -17,7 +17,6 @@ use Magento\Sales\Model\OrderNotifier;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
-
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -48,6 +47,9 @@ class OrderNotifierTest extends TestCase
      */
     protected $orderSenderMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->historyCollectionFactory = $this->createPartialMock(
@@ -69,8 +71,10 @@ class OrderNotifierTest extends TestCase
 
     /**
      * Test case for successful email sending
+     *
+     * @return void
      */
-    public function testNotifySuccess()
+    public function testNotifySuccess(): void
     {
         $historyCollection = $this->getMockBuilder(Collection::class)
             ->addMethods(['setIsCustomerNotified'])
@@ -81,11 +85,9 @@ class OrderNotifierTest extends TestCase
             History::class,
             ['setIsCustomerNotified', 'save']
         );
-        $historyItem->expects($this->at(0))
+        $historyItem
             ->method('setIsCustomerNotified')
             ->with(1);
-        $historyItem->expects($this->at(1))
-            ->method('save');
         $historyCollection->expects($this->once())
             ->method('getUnnotifiedForInstance')
             ->with($this->order)
@@ -107,7 +109,7 @@ class OrderNotifierTest extends TestCase
     /**
      * Test case when email has not been sent
      */
-    public function testNotifyFail()
+    public function testNotifyFail(): void
     {
         $this->order->expects($this->once())
             ->method('getEmailSent')
@@ -118,7 +120,7 @@ class OrderNotifierTest extends TestCase
     /**
      * Test case when Mail Exception has been thrown
      */
-    public function testNotifyException()
+    public function testNotifyException(): void
     {
         $exception = new MailException(__('Email has not been sent'));
         $this->orderSenderMock->expects($this->once())

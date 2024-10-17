@@ -35,7 +35,7 @@ class ConfigTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue', 'isSetFlag'])
+            ->onlyMethods(['getValue', 'isSetFlag'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -69,7 +69,7 @@ class ConfigTest extends TestCase
      *
      * @return array
      */
-    public function isEnabledDataProvider(): array
+    public static function isEnabledDataProvider(): array
     {
         return [
             [true, true],

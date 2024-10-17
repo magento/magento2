@@ -19,15 +19,12 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class FixtureModel
 {
-    /**
-     * Area code
-     */
-    const AREA_CODE = 'adminhtml';
+    public const AREA_CODE = 'adminhtml';
 
     /**
      * Fixtures file name pattern
      */
-    const FIXTURE_PATTERN = '?*Fixture.php';
+    private const FIXTURE_PATTERN = '?*Fixture.php';
 
     /**
      * Application object
@@ -44,14 +41,14 @@ class FixtureModel
     /**
      * List of fixtures applied to the application
      *
-     * @var \Magento\Setup\Fixtures\Fixture[]
+     * @var Fixture[]
      */
     protected $fixtures = [];
 
     /**
      * List of fixtures indexed by class names
      *
-     * @var \Magento\Setup\Fixtures\Fixture[]
+     * @var Fixture[]
      */
     private $fixturesByNames = [];
 
@@ -74,8 +71,11 @@ class FixtureModel
     private $config;
 
     /**
-     * Constructor
-     *
+     * @var IndexerReindexCommand
+     */
+    private $reindexCommand;
+
+    /**
      * @param IndexerReindexCommand $reindexCommand
      * @param array $initArguments
      */
@@ -106,10 +106,9 @@ class FixtureModel
     public function loadFixtures()
     {
         $files = glob(__DIR__ . DIRECTORY_SEPARATOR . self::FIXTURE_PATTERN, GLOB_NOSORT);
-
         foreach ($files as $file) {
             $file = basename($file, '.php');
-            /** @var \Magento\Setup\Fixtures\Fixture $fixture */
+            /** @var Fixture $fixture */
             $type = 'Magento\Setup\Fixtures' . '\\' . $file;
             $fixture = $this->getObjectManager()->create(
                 $type,
@@ -117,22 +116,51 @@ class FixtureModel
                     'fixtureModel' => $this,
                 ]
             );
-
-            if (isset($this->fixtures[$fixture->getPriority()])) {
-                throw new \InvalidArgumentException(
-                    sprintf('Duplicate priority %d in fixture %s', $fixture->getPriority(), $type)
-                );
-            }
-
-            if ($fixture->getPriority() >= 0) {
-                $this->fixtures[$fixture->getPriority()] = $fixture;
-            }
-
-            $this->fixturesByNames[get_class($fixture)] = $fixture;
+            $this->loadFixture($fixture);
         }
-
+        foreach ($this->getFixturesFromRegistry() as $fixture) {
+            $this->loadFixture($fixture);
+        }
         ksort($this->fixtures);
         return $this;
+    }
+
+    /**
+     * Gets Fixtures from FixtureRegistry and gets instances of them from ObjectManager
+     *
+     * @return array
+     */
+    private function getFixturesFromRegistry() : array
+    {
+        $fixtureRegistry = $this->getObjectManager()->create(FixtureRegistry::class);
+        $fixtures = [];
+        foreach ($fixtureRegistry->getFixtures() as $fixtureClassName) {
+            $fixtures[] = $this->getObjectManager()->create(
+                $fixtureClassName,
+                ['fixtureModel' => $this]
+            );
+        }
+        return $fixtures;
+    }
+
+    /**
+     * Loads fixture into $this->fixturesByName and $this->fixtures
+     *
+     * @param Fixture $fixture
+     * @return void
+     */
+    private function loadFixture(Fixture $fixture)
+    {
+        $fixtureClassName = get_class($fixture);
+        if (isset($this->fixtures[$fixture->getPriority()])) {
+            throw new \InvalidArgumentException(
+                sprintf('Duplicate priority %d in fixture %s', $fixture->getPriority(), $fixtureClassName)
+            );
+        }
+        if ($fixture->getPriority() >= 0) {
+            $this->fixtures[$fixture->getPriority()] = $fixture;
+        }
+        $this->fixturesByNames[$fixtureClassName] = $fixture;
     }
 
     /**
@@ -158,8 +186,9 @@ class FixtureModel
 
     /**
      * Returns fixture by name
-     * @param $name string
-     * @return \Magento\Setup\Fixtures\Fixture
+     *
+     * @param string $name
+     * @return Fixture
      * @throws \Magento\Setup\Exception
      */
     public function getFixtureByName($name)
@@ -233,6 +262,8 @@ class FixtureModel
     }
 
     /**
+     * Gets instance of FixtureConfig from ObjectManager
+     *
      * @return FixtureConfig
      */
     private function getConfig()
@@ -240,7 +271,6 @@ class FixtureModel
         if (null === $this->config) {
             $this->config = $this->getObjectManager()->get(FixtureConfig::class);
         }
-
         return $this->config;
     }
 
