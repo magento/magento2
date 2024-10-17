@@ -11,21 +11,16 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Adminhtml order create gift message block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
-     * Gift message save
-     *
      * @var \Magento\GiftMessage\Model\Save
      */
     protected $_giftMessageSave;
 
     /**
-     * Message helper
-     *
      * @var \Magento\GiftMessage\Helper\Message
      */
     protected $_messageHelper;

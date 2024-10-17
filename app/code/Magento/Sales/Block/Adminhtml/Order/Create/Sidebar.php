@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
  * Adminhtml sales order create sidebar
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Sidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
@@ -37,6 +36,7 @@ class Sidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         }
 
         if ($this->getCustomerId()) {
+            // phpstan:ignore
             $button = clone $button;
             $button->unsId();
             $this->setChild('bottom_button', $button);
