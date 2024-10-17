@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SendFriend\Controller\Product;
 
+use Exception;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Session;
@@ -32,21 +33,6 @@ use Magento\SendFriend\Model\SendFriend;
 class Sendmail extends Product implements HttpPostActionInterface
 {
     /**
-     * @var CategoryRepositoryInterface
-     */
-    private $categoryRepository;
-
-    /**
-     * @var Session
-     */
-    private $catalogSession;
-
-    /**
-     * @var CaptchaValidator
-     */
-    private $captchaValidator;
-
-    /**
      * @param Context $context
      * @param Registry $coreRegistry
      * @param Validator $formKeyValidator
@@ -54,7 +40,7 @@ class Sendmail extends Product implements HttpPostActionInterface
      * @param ProductRepositoryInterface $productRepository
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Session $catalogSession
-     * @param CaptchaValidator|null $captchaValidator
+     * @param CaptchaValidator $captchaValidator
      */
     public function __construct(
         Context $context,
@@ -62,14 +48,11 @@ class Sendmail extends Product implements HttpPostActionInterface
         Validator $formKeyValidator,
         SendFriend $sendFriend,
         ProductRepositoryInterface $productRepository,
-        CategoryRepositoryInterface $categoryRepository,
-        Session $catalogSession,
-        CaptchaValidator $captchaValidator
+        private readonly CategoryRepositoryInterface $categoryRepository,
+        private readonly Session $catalogSession,
+        private readonly CaptchaValidator $captchaValidator
     ) {
         parent::__construct($context, $coreRegistry, $formKeyValidator, $sendFriend, $productRepository);
-        $this->categoryRepository = $categoryRepository;
-        $this->catalogSession = $catalogSession;
-        $this->captchaValidator = $captchaValidator;
     }
 
     /**
@@ -134,7 +117,7 @@ class Sendmail extends Product implements HttpPostActionInterface
             }
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addExceptionMessage($e, __('Some emails were not sent.'));
         }
 

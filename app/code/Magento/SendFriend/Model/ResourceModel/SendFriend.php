@@ -5,11 +5,15 @@
  */
 namespace Magento\SendFriend\Model\ResourceModel;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\SendFriend\Model\SendFriend as ModelSendFriend;
+use Zend_Db_Expr;
+
 /**
  * @api
  * @since 100.0.2
  */
-class SendFriend extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class SendFriend extends AbstractDb
 {
     /**
      * Initialize connection and table
@@ -24,7 +28,7 @@ class SendFriend extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Retrieve Sended Emails By Ip
      *
-     * @param \Magento\SendFriend\Model\SendFriend $object
+     * @param ModelSendFriend $object
      * @param int $ip
      * @param int $startTime
      * @param int $websiteId
@@ -37,7 +41,7 @@ class SendFriend extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection = $this->getConnection();
         $select = $connection->select()->from(
             $this->getMainTable(),
-            ['count' => new \Zend_Db_Expr('count(*)')]
+            ['count' => new Zend_Db_Expr('count(*)')]
         )->where(
             'ip=:ip
                 AND  time>=:time

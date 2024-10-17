@@ -5,36 +5,41 @@
  */
 namespace Magento\SendFriend\Controller\Product;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Session as CatalogSession;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Controller\Result\Forward;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\Page;
+use Magento\SendFriend\Block\Send as BlockSend;
+use Magento\SendFriend\Controller\Product as ControllerProduct;
+use Magento\SendFriend\Model\SendFriend;
 
 /**
  * Controller class. Represents rendering and request flow
  */
-class Send extends \Magento\SendFriend\Controller\Product implements HttpGetActionInterface
+class Send extends ControllerProduct implements HttpGetActionInterface
 {
     /**
-     * @var \Magento\Catalog\Model\Session
-     */
-    protected $catalogSession;
-
-    /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
-     * @param \Magento\SendFriend\Model\SendFriend $sendFriend
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Model\Session $catalogSession
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param FormKeyValidator $formKeyValidator
+     * @param SendFriend $sendFriend
+     * @param ProductRepositoryInterface $productRepository
+     * @param CatalogSession $catalogSession
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
-        \Magento\SendFriend\Model\SendFriend $sendFriend,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Model\Session $catalogSession
+        Context $context,
+        Registry $coreRegistry,
+        FormKeyValidator $formKeyValidator,
+        SendFriend $sendFriend,
+        ProductRepositoryInterface $productRepository,
+        protected readonly CatalogSession $catalogSession
     ) {
-        $this->catalogSession = $catalogSession;
         parent::__construct(
             $context,
             $coreRegistry,
@@ -47,14 +52,14 @@ class Send extends \Magento\SendFriend\Controller\Product implements HttpGetActi
     /**
      * Show Send to a Friend Form
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {
         $product = $this->_initProduct();
 
         if (!$product) {
-            /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+            /** @var Forward $resultForward */
             $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
             $resultForward->forward('noroute');
             return $resultForward;
@@ -66,7 +71,7 @@ class Send extends \Magento\SendFriend\Controller\Product implements HttpGetActi
             );
         }
 
-        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        /** @var Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
 
         $this->_eventManager->dispatch('sendfriend_product', ['product' => $product]);
@@ -75,7 +80,7 @@ class Send extends \Magento\SendFriend\Controller\Product implements HttpGetActi
             $this->catalogSession->setSendfriendFormData(true);
             $block = $resultPage->getLayout()->getBlock('sendfriend.send');
             if ($block) {
-                /** @var \Magento\SendFriend\Block\Send $block */
+                /** @var BlockSend $block */
                 $block->setFormData($data);
             }
         }
