@@ -37,4 +37,7 @@
     <type name="Magento\Sales\Api\OrderManagementInterface">
         <plugin name="reset_payment_attempts_after_order_is_placed_plugin" type="Magento\Captcha\Plugin\ResetPaymentAttemptsAfterOrderIsPlacedPlugin"/>
     </type>
+    <type name="Magento\Customer\Block\Account\AuthenticationPopup">
+        <plugin name="check_captcha_on_storefront" type="Magento\Captcha\Plugin\CheckCaptchaOnStorefront" sortOrder="10"/>
+    </type>
 </config>
