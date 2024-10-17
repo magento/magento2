@@ -1,0 +1,20 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+body {
+   background: #333333;
+   color: #454545;
+}
+a {
+   color: #ff9900;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+   color: #333333;
+}
+/*#sourceMappingURL=data:application/json,{"version":3,"sources":["lib/internal/Magento/Framework/Css/Test/Unit/PreProcessor/Adapter/Less/_file/test.less"],"names":[],"mappings":";;;;AASA;EACE,mBAAA;EACA,cAAA;;AAEF;EACE,cAAA;;AAEF;AAAI;AAAI;AAAI;AAAI;AAAI;EAClB,cAAA"}*/
