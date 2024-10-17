@@ -11,6 +11,8 @@ use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Attribute\FrontendLabel;
 use Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,6 +41,28 @@ class AttributeTest extends TestCase
     protected function tearDown(): void
     {
         $this->_model = null;
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetStoreLabel() : void
+    {
+        $objectManager = new ObjectManager($this);
+        $storeMock = $this->createMock(StoreInterface::class);
+        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $storeManagerMock->method('getStore')->willReturn($storeMock);
+        $resource = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class)
+            ->onlyMethods(['getStoreLabelsByAttributeId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $arguments = [
+            '_resource' => $resource,
+            'storeManager' => $storeManagerMock,
+        ];
+        $this->_model = $objectManager->getObject(Attribute::class, $arguments);
+
+        $this->assertEmpty($this->_model->getStoreLabel());
     }
 
     /**
