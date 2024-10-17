@@ -113,7 +113,7 @@ class InvoiceItems implements ResolverInterface
     {
         $orderItem = $this->orderItemProvider->getOrderItemById((int)$invoiceItem->getOrderItemId());
         return [
-            'id' => base64_encode($invoiceItem->getEntityId()),
+            'id' => \base64_encode((string)$invoiceItem->getEntityId()),
             'product_name' => $invoiceItem->getName(),
             'product_sku' => $invoiceItem->getSku(),
             'product_sale_price' => [
