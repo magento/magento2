@@ -75,4 +75,20 @@ class ProductCollection extends \Magento\Catalog\Model\ResourceModel\Product\Col
 
         return max(array_column($results, 'rows'));
     }
+
+    /**
+     * When the filter is set after the backendCollection was performed, we can set the order. At this time, array_reverse is the only way for me to return good results
+     *
+     * @param $productId
+     * @param $exclude
+     * 
+     * @return ProductCollection
+     */
+    public function addIdFilter($productId, $exclude = false): ProductCollection
+    {
+        if (is_array($productId)) {
+            $this->getSelect()->order("find_in_set(e.entity_id,'".implode(',', array_reverse($productId))."')");
+        }
+        return parent::addIdFilter($productId, $exclude);
+    }
 }

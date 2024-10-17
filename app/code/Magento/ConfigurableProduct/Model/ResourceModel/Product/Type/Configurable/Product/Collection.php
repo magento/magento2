@@ -71,6 +71,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Set the collection with a list of products as filter so that we can return all the linked product for a list of products
+     *
+     * @param array $products
+     * @return $this
+     */
+    public function setProductListFilter(array $products)
+    {
+        $this->products = $products;
+        return $this;
+    }
+
+    /**
      * Add parent ids to `in` filter before load.
      *
      * @return $this
