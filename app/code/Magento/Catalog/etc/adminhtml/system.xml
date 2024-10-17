@@ -22,19 +22,19 @@
                 <label>Product Fields Auto-Generation</label>
                 <field id="sku" translate="label comment" type="text" sortOrder="10" showInDefault="1" canRestore="1">
                     <label>Mask for SKU</label>
-                    <comment>Use {{name}} as Product Name placeholder</comment>
+                    <comment><![CDATA[Use {{name}} as Product Name placeholder]]></comment>
                 </field>
                 <field id="meta_title" translate="label comment" type="text" sortOrder="20" showInDefault="1" canRestore="1">
                     <label>Mask for Meta Title</label>
-                    <comment>Use {{name}} as Product Name placeholder</comment>
+                    <comment><![CDATA[Use {{name}} as Product Name placeholder]]></comment>
                 </field>
                 <field id="meta_keyword" translate="label comment" type="text" sortOrder="30" showInDefault="1" canRestore="1">
                     <label>Mask for Meta Keywords</label>
-                    <comment>Use {{name}} as Product Name or {{sku}} as Product SKU placeholders</comment>
+                    <comment><![CDATA[Use {{name}} as Product Name or {{sku}} as Product SKU placeholders]]></comment>
                 </field>
                 <field id="meta_description" translate="label comment" type="text" sortOrder="40" showInDefault="1" canRestore="1">
                     <label>Mask for Meta Description</label>
-                    <comment>Use {{name}} and {{description}} as Product Name and Product Description placeholders</comment>
+                    <comment><![CDATA[Use {{name}} and {{description}} as Product Name and Product Description placeholders]]></comment>
                 </field>
             </group>
             <group id="recently_products" translate="label" type="text" sortOrder="350" showInDefault="1" showInWebsite="1">
