@@ -1,7 +1,7 @@
-# CatalogGraphQl module
+#Magento_ConfigurableImportExport module 
+This module implements Configurable products import/export functionality.
 
-**CatalogGraphQl** provides type and resolver information for the GraphQl module
-to generate catalog and product information endpoints.
+This module is designed to extend existing functionality of Magento_CatalogImportExport module by adding new product type.
 
 ## Extensibility
 
