@@ -154,7 +154,7 @@ define([
          */
         navigateTo: function (code, scrollToElementId) {
             var sortedItems = steps().sort(this.sortItems),
-                bodyElem = $('body');
+                scrollContext = $('html, body');
 
             scrollToElementId = scrollToElementId || null;
 
@@ -164,14 +164,14 @@ define([
             sortedItems.forEach(function (element) {
                 if (element.code == code) { //eslint-disable-line eqeqeq
                     element.isVisible(true);
-                    bodyElem.animate({
+                    scrollContext.animate({
                         scrollTop: $('#' + code).offset().top
                     }, 0, function () {
                         window.location = window.checkoutConfig.checkoutUrl + '#' + code;
                     });
 
                     if (scrollToElementId && $('#' + scrollToElementId).length) {
-                        bodyElem.animate({
+                        scrollContext.animate({
                             scrollTop: $('#' + scrollToElementId).offset().top
                         }, 0);
                     }
