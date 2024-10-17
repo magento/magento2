@@ -7,14 +7,10 @@ namespace Magento\Sales\Model\ResourceModel\Report\Invoiced\Collection;
 
 /**
  * Sales report invoiced collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Order extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
 {
     /**
-     * Period format
-     *
      * @var string
      */
     protected $_periodFormat;
@@ -84,6 +80,8 @@ class Order extends \Magento\Sales\Model\ResourceModel\Report\Collection\Abstrac
     }
 
     /**
+     * Before load
+     *
      * @return $this
      */
     protected function _beforeLoad()

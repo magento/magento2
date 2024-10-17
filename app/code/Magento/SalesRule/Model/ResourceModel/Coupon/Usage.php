@@ -7,8 +7,6 @@ namespace Magento\SalesRule\Model\ResourceModel\Coupon;
 
 /**
  * SalesRule Model Resource Coupon_Usage
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
