@@ -20,7 +20,7 @@ class ExportCsv extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
     {
         $this->_view->loadLayout();
         $fileName = 'subscribers.csv';
-        $content = $this->_view->getLayout()->getChildBlock('adminhtml.newslettrer.subscriber.grid', 'grid.export');
+        $content = $this->_view->getLayout()->getChildBlock('adminhtml.newsletter.subscriber.grid', 'grid.export');
 
         return $this->_fileFactory->create(
             $fileName,
