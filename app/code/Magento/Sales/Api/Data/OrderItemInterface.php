@@ -948,6 +948,13 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     public function getRowWeight();
 
     /**
+     * Gets the status for the order item.
+     *
+     * @return string status.
+     */
+    public function getStatus();
+
+    /**
      * Gets the SKU for the order item.
      *
      * @return string SKU.
