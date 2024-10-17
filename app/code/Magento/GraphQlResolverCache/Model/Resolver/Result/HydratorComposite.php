@@ -10,15 +10,15 @@ namespace Magento\GraphQlResolverCache\Model\Resolver\Result;
 /**
  * Composite hydrator for resolver result data.
  */
-class HydratorComposite implements HydratorInterface
+class HydratorComposite implements HydratorInterface, PrehydratorInterface
 {
     /**
-     * @var HydratorInterface[]
+     * @var HydratorInterface[]|PrehydratorInterface[]
      */
     private array $hydrators = [];
 
     /**
-     * @param HydratorInterface[] $hydrators
+     * @param HydratorInterface[]|PrehydratorInterface[] $hydrators
      */
     public function __construct(array $hydrators = [])
     {
@@ -34,7 +34,24 @@ class HydratorComposite implements HydratorInterface
             return;
         }
         foreach ($this->hydrators as $hydrator) {
-            $hydrator->hydrate($resolverData);
+            if ($hydrator instanceof HydratorInterface) {
+                $hydrator->hydrate($resolverData);
+            }
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function prehydrate(array &$resolverData): void
+    {
+        if (empty($resolverData)) {
+            return;
+        }
+        foreach ($this->hydrators as $hydrator) {
+            if ($hydrator instanceof PrehydratorInterface) {
+                $hydrator->prehydrate($resolverData);
+            }
         }
     }
 }

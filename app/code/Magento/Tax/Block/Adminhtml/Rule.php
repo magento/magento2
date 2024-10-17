@@ -6,8 +6,6 @@
 
 /**
  * Admin tax rule content block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Block\Adminhtml;
 
@@ -18,6 +16,8 @@ namespace Magento\Tax\Block\Adminhtml;
 class Rule extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()

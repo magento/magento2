@@ -49,7 +49,7 @@
                 <zero_tax>0</zero_tax>
             </sales_display>
             <notification>
-                <info_url>https://docs.magento.com/user-guide/tax/warning-messages.html</info_url>
+                <info_url>https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/site-store/taxes/taxes.html#warning-messages</info_url>
             </notification>
         </tax>
     </default>

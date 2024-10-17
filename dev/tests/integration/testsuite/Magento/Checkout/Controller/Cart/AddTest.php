@@ -135,7 +135,7 @@ class AddTest extends AbstractController
     /**
      * @return array
      */
-    public function wrongParamsDataProvider(): array
+    public static function wrongParamsDataProvider(): array
     {
         return [
             'empty_params' => ['params' => []],

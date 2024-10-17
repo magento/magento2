@@ -26,7 +26,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @var string
      */
-    private $fileName = '/m/a/magento_image.jpg';
+    private static $fileName = '/m/a/magento_image.jpg';
 
     /**
      * @var string
@@ -80,8 +80,8 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithImageDuplicate(): void
     {
         $data = [
-            'media_gallery' => ['images' => ['image' => ['file' => $this->fileName, 'label' => $this->fileLabel]]],
-            'image' => $this->fileName,
+            'media_gallery' => ['images' => ['image' => ['file' => self::$fileName, 'label' => $this->fileLabel]]],
+            'image' => self::$fileName,
         ];
         $product = $this->initProduct($data);
         $this->createHandler->execute($product);
@@ -91,7 +91,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         $product->setIsDuplicate(true);
         $product->setData(
             'media_gallery',
-            ['images' => ['image' => ['value_id' => '100', 'file' => $this->fileName, 'label' => $this->fileLabel]]]
+            ['images' => ['image' => ['value_id' => '100', 'file' => self::$fileName, 'label' => $this->fileLabel]]]
         );
         $this->createHandler->execute($product);
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('media_gallery/duplicate/100'));
@@ -121,7 +121,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function illegalFilenameDataProvider(): array
+    public static function illegalFilenameDataProvider(): array
     {
         return [
             ['../../../../../.htaccess'],
@@ -146,7 +146,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         string $thumbnail
     ): void {
         $data = [
-            'media_gallery' => ['images' => ['image' => ['file' => $this->fileName, 'label' => '']]],
+            'media_gallery' => ['images' => ['image' => ['file' => self::$fileName, 'label' => '']]],
             'image' => $image,
             'small_image' => $smallImage,
             'swatch_image' => $swatchImage,
@@ -174,7 +174,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         string $thumbnail
     ): void {
         $data = [
-            'media_gallery' => ['images' => ['image' => ['file' => $this->fileName, 'label' => '']]],
+            'media_gallery' => ['images' => ['image' => ['file' => self::$fileName, 'label' => '']]],
             'image' => $image,
             'small_image' => $smallImage,
             'swatch_image' => $swatchImage,
@@ -193,19 +193,19 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             [
-                'image' => $this->fileName,
-                'small_image' => $this->fileName,
-                'swatch_image' => $this->fileName,
-                'thumbnail' => $this->fileName,
+                'image' => self::$fileName,
+                'smallImage' => self::$fileName,
+                'swatchImage' => self::$fileName,
+                'thumbnail' => self::$fileName,
             ],
             [
                 'image' => 'no_selection',
-                'small_image' => 'no_selection',
-                'swatch_image' => 'no_selection',
+                'smallImage' => 'no_selection',
+                'swatchImage' => 'no_selection',
                 'thumbnail' => 'no_selection',
             ],
         ];
@@ -226,7 +226,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         ?string $expectedValue
     ): void {
         $data = [
-            'media_gallery' => ['images' => ['image' => ['file' => $this->fileName, $mediaField => $value]]],
+            'media_gallery' => ['images' => ['image' => ['file' => self::$fileName, $mediaField => $value]]],
         ];
         $product = $this->initProduct($data);
         $this->createHandler->execute($product);
@@ -239,7 +239,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function additionalGalleryFieldsProvider(): array
+    public static function additionalGalleryFieldsProvider(): array
     {
         return [
             ['label', '', null],
@@ -260,12 +260,12 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithCustomMediaAttribute(): void
     {
         $data = [
-            'media_gallery' => ['images' => ['image' => ['file' => $this->fileName, 'label' => '']]],
+            'media_gallery' => ['images' => ['image' => ['file' => self::$fileName, 'label' => '']]],
             'image' => 'no_selection',
             'small_image' => 'no_selection',
             'swatch_image' => 'no_selection',
             'thumbnail' => 'no_selection',
-            'image_attribute' => $this->fileName
+            'image_attribute' => self::$fileName
         ];
         $product = $this->initProduct($data);
         $this->createHandler->execute($product);
@@ -274,7 +274,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
             ['image_attribute'],
             $product->getStoreId()
         );
-        $this->assertEquals($this->fileName, $mediaAttributeValue);
+        $this->assertEquals(self::$fileName, $mediaAttributeValue);
     }
 
     /**

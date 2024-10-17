@@ -30,7 +30,9 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewFr">
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!-- Create Category and Simple Product -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
@@ -49,7 +51,9 @@
             </actionGroup>
             <!-- Clear Filter Store -->
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetFiltersOnStorePage"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!-- Delete Category and Simple Product -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

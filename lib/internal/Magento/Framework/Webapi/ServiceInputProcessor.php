@@ -13,8 +13,11 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\InvalidArgumentException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\ObjectManager\ConfigInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
@@ -32,12 +35,12 @@ use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
  * @api
  * @since 100.0.2
  */
-class ServiceInputProcessor implements ServicePayloadConverterInterface
+class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAfterRequestInterface
 {
     public const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
     /**
-     * @var \Magento\Framework\Reflection\TypeProcessor
+     * @var TypeProcessor
      */
     protected $typeProcessor;
 
@@ -220,7 +223,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array $data
      * @return array
      * @throws \ReflectionException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getConstructorData(string $className, array $data): array
     {
@@ -275,6 +278,12 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         // convert to string directly to avoid situations when $className is object
         // which implements __toString method like \ReflectionObject
         $className = (string) $className;
+        if (is_subclass_of($className, \SimpleXMLElement::class)
+            || is_subclass_of($className, \DOMElement::class)) {
+            throw new SerializationException(
+                new Phrase('Invalid data type')
+            );
+        }
         $class = new ClassReflection($className);
         if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
             $className = substr($className, 0, -strlen('Interface'));
@@ -293,38 +302,42 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
             // This use case is for REST only. SOAP request data is already camel cased
             $camelCaseProperty = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName);
-            $methodName = $this->getNameFinder()->getGetterMethodName($class, $camelCaseProperty);
-            if (!isset($this->methodReflectionStorage[$className . $methodName])) {
-                $this->methodReflectionStorage[$className . $methodName] = $class->getMethod($methodName);
-            }
-            $methodReflection = $this->methodReflectionStorage[$className . $methodName];
-            if ($methodReflection->isPublic()) {
-                $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
-                try {
-                    $setterName = $this->getNameFinder()->getSetterMethodName($class, $camelCaseProperty);
-                } catch (\Exception $e) {
-                    if (empty($value)) {
-                        continue;
-                    } else {
-                        throw $e;
-                    }
+            try {
+                $methodName = $this->getNameFinder()->getGetterMethodName($class, $camelCaseProperty);
+                if (!isset($this->methodReflectionStorage[$className . $methodName])) {
+                    $this->methodReflectionStorage[$className . $methodName] = $class->getMethod($methodName);
                 }
-                try {
-                    if ($camelCaseProperty === 'CustomAttributes') {
-                        $setterValue = $this->convertCustomAttributeValue($value, $className);
-                    } else {
-                        $setterValue = $this->convertValue($value, $returnType);
+                $methodReflection = $this->methodReflectionStorage[$className . $methodName];
+                if ($methodReflection->isPublic()) {
+                    $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
+                    try {
+                        $setterName = $this->getNameFinder()->getSetterMethodName($class, $camelCaseProperty);
+                    } catch (\Exception $e) {
+                        if (empty($value)) {
+                            continue;
+                        } else {
+                            throw $e;
+                        }
                     }
-                } catch (SerializationException $e) {
-                    throw new SerializationException(
-                        new Phrase(
-                            'Error occurred during "%field_name" processing. %details',
-                            ['field_name' => $propertyName, 'details' => $e->getMessage()]
-                        )
-                    );
+                    try {
+                        if ($camelCaseProperty === 'CustomAttributes') {
+                            $setterValue = $this->convertCustomAttributeValue($value, $className);
+                        } else {
+                            $setterValue = $this->convertValue($value, $returnType);
+                        }
+                    } catch (SerializationException $e) {
+                        throw new SerializationException(
+                            new Phrase(
+                                'Error occurred during "%field_name" processing. %details',
+                                ['field_name' => $propertyName, 'details' => $e->getMessage()]
+                            )
+                        );
+                    }
+                    $this->serviceInputValidator->validateEntityValue($object, $propertyName, $setterValue);
+                    $object->{$setterName}($setterValue);
                 }
-                $this->serviceInputValidator->validateEntityValue($object, $propertyName, $setterValue);
-                $object->{$setterName}($setterValue);
+            } catch (\LogicException $e) {
+                $this->processInputErrorForNestedSet([$camelCaseProperty]);
             }
         }
 
@@ -498,32 +511,52 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param mixed $data
      * @param string $type Convert given value to the this type
      * @return mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function convertValue($data, $type)
     {
-        $isArrayType = $this->typeProcessor->isArrayType($type);
-        if ($isArrayType && isset($data['item'])) {
+        if ($this->typeProcessor->isArrayType($type) && isset($data['item'])) {
             $data = $this->_removeSoapItemNode($data);
         }
+
         if ($this->typeProcessor->isTypeSimple($type) || $this->typeProcessor->isTypeAny($type)) {
-            $result = $this->typeProcessor->processSimpleAndAnyType($data, $type);
-        } else {
-            /** Complex type or array of complex types */
-            if ($isArrayType) {
-                // Initializing the result for array type else it will return null for empty array
-                $result = is_array($data) ? [] : null;
-                $itemType = $this->typeProcessor->getArrayItemType($type);
-                if (is_array($data)) {
-                    $this->serviceInputValidator->validateComplexArrayType($itemType, $data);
-                    foreach ($data as $key => $item) {
-                        $result[$key] = $this->_createFromArray($itemType, $item);
-                    }
-                }
-            } else {
-                $result = $this->_createFromArray($type, $data);
+            return $this->typeProcessor->processSimpleAndAnyType($data, $type);
+        }
+
+        if ($type == TypeProcessor::UNSTRUCTURED_ARRAY) {
+            return $data;
+        }
+
+        return $this->processComplexTypes($data, $type);
+    }
+
+    /**
+     * Process complex types or array of complex types.
+     *
+     * @param mixed $data
+     * @param string $type
+     * @return array|object|SearchCriteriaInterface
+     * @throws SerializationException
+     * @throws InvalidArgumentException
+     */
+    private function processComplexTypes($data, $type)
+    {
+        $isArrayType = $this->typeProcessor->isArrayType($type);
+
+        if (!$isArrayType) {
+            return $this->_createFromArray($type, $data);
+        }
+
+        $result = is_array($data) ? [] : null;
+        $itemType = $this->typeProcessor->getArrayItemType($type);
+
+        if (is_array($data)) {
+            $this->serviceInputValidator->validateComplexArrayType($itemType, $data);
+            foreach ($data as $key => $item) {
+                $result[$key] = $this->_createFromArray($itemType, $item);
             }
         }
+
         return $result;
     }
 
@@ -568,6 +601,39 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             foreach ($inputError as $errorParamField) {
                 $exception->addError(
                     new Phrase('"%fieldName" is required. Enter and try again.', ['fieldName' => $errorParamField])
+                );
+            }
+            if ($exception->wasErrorAdded()) {
+                throw $exception;
+            }
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->attributesPreprocessorsMap = [];
+    }
+
+    /**
+     * Process an input error for child parameters
+     *
+     * @param array $inputError
+     * @return void
+     * @throws InputException
+     */
+    private function processInputErrorForNestedSet(array $inputError): void
+    {
+        if (!empty($inputError)) {
+            $exception = new InputException();
+            foreach ($inputError as $errorParamField) {
+                $exception->addError(
+                    new Phrase(
+                        '"%fieldName" is not supported. Correct the field name and try again.',
+                        ['fieldName' => $errorParamField]
+                    )
                 );
             }
             if ($exception->wasErrorAdded()) {

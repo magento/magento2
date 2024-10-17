@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Go to Address Book -->
+    <actionGroup name="StorefrontFillCustomerAddressWithAttributeActionGroup">
+        <annotations>
+            <description>Fill address with customer address attribute in address book.</description>
+        </annotations>
+        <arguments>
+            <argument name="street" defaultValue="{{UK_Not_Default_Address.street[0]}}" type="string"/>
+            <argument name="city" defaultValue="{{UK_Not_Default_Address.city}}" type="string"/>
+            <argument name="postcode" defaultValue="{{UK_Not_Default_Address.postcode}}" type="string"/>
+            <argument name="countryid" defaultValue="{{UK_Not_Default_Address.country_id}}" type="string"/>
+            <argument name="telephone" defaultValue="{{UK_Not_Default_Address.telephone}}" type="string"/>
+            <argument name="attributeValue" defaultValue="{{UK_Not_Default_Address.street[0]}}" type="string"/>
+        </arguments>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{street}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{city}}" stepKey="enterCity"/>
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{postcode}}" stepKey="enterPostcode"/>
+        <selectOption selector="{{CheckoutShippingSection.country}}" userInput="{{countryid}}" stepKey="enterCountry"/>
+        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{telephone}}" stepKey="enterTelephone"/>
+        <fillField selector="{{CheckoutShippingSection.customerAddressAttribute(AddressAttributeTextField.attribute_code)}}" userInput="{{attributeValue}}" stepKey="enterAttributeValue"/>
+        <!-- Save Shipping Address info -->
+        <click selector="{{StorefrontCustomerAddressSection.saveAddress}}" stepKey="clickSaveAddress"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+    </actionGroup>
+</actionGroups>

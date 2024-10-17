@@ -18,7 +18,7 @@ namespace Magento\Backend\Block;
  */
 class Menu extends \Magento\Backend\Block\Template
 {
-    const CACHE_TAGS = 'BACKEND_MAINMENU';
+    public const CACHE_TAGS = 'BACKEND_MAINMENU';
 
     /**
      * @var string
@@ -347,6 +347,11 @@ class Menu extends \Magento\Backend\Block\Template
             }
             $result[] = ['place' => $place, 'colbrake' => $colbrake];
         }
+
+        if (isset($result[1]) && $result[1]['colbrake'] === true && isset($result[2])) {
+            $result[2]['colbrake'] = true;
+        }
+
         return $result;
     }
 

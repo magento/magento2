@@ -21,5 +21,8 @@
         <element name="addressSection" type="text" selector="//div[@class='block-title']/strong[text()='Address {{var}} ']" parameterized="true"/>
         <element name="flatRateCharge" type="text" selector="//span[@class='price' and text()='${{price}}']/../../label[contains(text(),'Fixed')]" parameterized="true"/>
         <element name="enterNewAddress" type="button" selector=".action.add"/>
+        <element name="updateQtyAndAddress" type="button" selector="//button[@type='submit' and @class='action update']"/>
+        <element name="attentionMessage" type="text" selector="//div[@class='modal-inner-wrap']//div[contains(text(),'Maximum qty allowed for Shipping to multiple addresses is 10')]"/>
+        <element name="acceptAttention" type="button" selector="//button[@class='action-primary action-accept']//span[contains(text(),'OK')]"/>
     </section>
 </sections>

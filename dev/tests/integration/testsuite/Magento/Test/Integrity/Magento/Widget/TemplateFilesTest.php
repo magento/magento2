@@ -35,7 +35,7 @@ class TemplateFilesTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function widgetTemplatesDataProvider()
+    public static function widgetTemplatesDataProvider()
     {
         $result = [];
         /** @var $model \Magento\Widget\Model\Widget */
