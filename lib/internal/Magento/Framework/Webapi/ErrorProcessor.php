@@ -34,7 +34,7 @@ class ErrorProcessor
 
     public const DEFAULT_RESPONSE_CHARSET = 'UTF-8';
 
-    public const INTERNAL_SERVER_ERROR_MSG = 'Internal Error. Details are available in Magento log file. Report ID: %s';
+    public const INTERNAL_SERVER_ERROR_MSG = 'Internal Error. Details are available in Magento log file. Report ID: %1';
 
     /**
      * Error data representation formats.
@@ -145,17 +145,17 @@ class ErrorProcessor
                 $stackTrace
             );
         } else {
-            $message = $exception->getMessage();
+            $message = new Phrase($exception->getMessage());
             $code = $exception->getCode();
             //if not in Dev mode, make sure the message and code is masked for unanticipated exceptions
             if (!$isDevMode) {
                 /** Log information about actual exception */
                 $reportId = $this->_critical($exception);
-                $message = sprintf(self::INTERNAL_SERVER_ERROR_MSG, $reportId);
+                $message = new Phrase(self::INTERNAL_SERVER_ERROR_MSG, [$reportId]);
                 $code = 0;
             }
             $maskedException = new WebapiException(
-                new Phrase($message),
+                $message,
                 $code,
                 WebapiException::HTTP_INTERNAL_ERROR,
                 [],
