@@ -115,6 +115,7 @@ class CategoryProcessor
         if (!($parentCategory = $this->getCategoryById($parentId))) {
             $parentCategory = $this->categoryFactory->create()->load($parentId);
         }
+        $category->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
         $category->setPath($parentCategory->getPath());
         $category->setParentId($parentId);
         $category->setName($this->unquoteDelimiter($name));
