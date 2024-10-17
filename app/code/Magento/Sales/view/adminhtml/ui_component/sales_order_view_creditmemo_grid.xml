@@ -214,14 +214,14 @@
                 <visible>false</visible>
             </settings>
         </column>
-        <column name="shipping_and_handling" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+        <column name="shipping_and_handling" class="Magento\Sales\Ui\Component\Listing\Column\PurchasedPrice">
             <settings>
                 <filter>textRange</filter>
                 <label translate="true">Shipping &amp; Handling</label>
                 <visible>false</visible>
             </settings>
         </column>
-        <column name="adjustment_positive" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+        <column name="adjustment_positive" class="Magento\Sales\Ui\Component\Listing\Column\PurchasedPrice">
             <settings>
                 <filter>textRange</filter>
                 <label translate="true">Adjustment Refund</label>
