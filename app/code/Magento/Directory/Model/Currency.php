@@ -440,6 +440,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel implements ResetAf
 
         if ((array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
             && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
+            $formattedCurrency = str_replace($this->numberFormatter->getSymbol(\NumberFormatter::CURRENCY_SYMBOL), '', $formattedCurrency);
             $formattedCurrency = str_replace(' ', '', $formattedCurrency);
         }
         if (preg_match('/^(\x{200F})/u', $formattedCurrency, $match)) {
@@ -484,10 +485,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel implements ResetAf
                 \NumberFormatter::CURRENCY_SYMBOL,
                 $options[LocaleCurrency::CURRENCY_OPTION_SYMBOL]
             );
-        }
-        if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
-            && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL) {
-            $this->numberFormatter->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, '');
         }
         if (array_key_exists('precision', $options)) {
             $this->numberFormatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $options['precision']);
