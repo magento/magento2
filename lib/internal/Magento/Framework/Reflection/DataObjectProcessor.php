@@ -52,6 +52,11 @@ class DataObjectProcessor
     private $excludedMethodsClassMap;
 
     /**
+     * @var array[]
+     */
+    private $objectKeyMap;
+
+    /**
      * @param MethodsMap $methodsMapProcessor
      * @param TypeCaster $typeCaster
      * @param FieldNamer $fieldNamer
@@ -59,6 +64,7 @@ class DataObjectProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
      * @param array $processors
      * @param array $excludedMethodsClassMap
+     * @param array $objectKeyMap
      */
     public function __construct(
         MethodsMap $methodsMapProcessor,
@@ -67,7 +73,8 @@ class DataObjectProcessor
         CustomAttributesProcessor $customAttributesProcessor,
         ExtensionAttributesProcessor $extensionAttributesProcessor,
         array $processors = [],
-        array $excludedMethodsClassMap = []
+        array $excludedMethodsClassMap = [],
+        array $objectKeyMap = []
     ) {
         $this->methodsMapProcessor = $methodsMapProcessor;
         $this->typeCaster = $typeCaster;
@@ -76,6 +83,7 @@ class DataObjectProcessor
         $this->customAttributesProcessor = $customAttributesProcessor;
         $this->processors = $processors;
         $this->excludedMethodsClassMap = $excludedMethodsClassMap;
+        $this->objectKeyMap = $objectKeyMap;
     }
 
     /**
@@ -143,7 +151,7 @@ class DataObjectProcessor
                 }
             }
 
-            $outputData[$key] = $value;
+            $outputData[$this->getKeyByObjectType($key, $dataObjectType)] = $value;
         }
 
         $outputData = $this->changeOutputArray($dataObject, $outputData);
@@ -167,5 +175,23 @@ class DataObjectProcessor
         }
 
         return $outputData;
+    }
+
+    /**
+     * Mapping argument processor to modify output api key
+     *
+     * @param string $key
+     * @param string $dataObjectType
+     * @return string
+     */
+    private function getKeyByObjectType(string $key, string $dataObjectType): string
+    {
+        $dataObjectType = ltrim($dataObjectType, '\\');
+        if (array_key_exists($dataObjectType, $this->objectKeyMap) &&
+            array_key_exists($key, $this->objectKeyMap[$dataObjectType])
+        ) {
+            $key = $this->objectKeyMap[$dataObjectType][$key];
+        }
+        return $key;
     }
 }
