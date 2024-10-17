@@ -15,6 +15,7 @@ use Magento\Framework\Validator\NotEmpty;
 use Magento\Framework\Validator\ValidateException;
 use Magento\Framework\Validator\ValidatorChain;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Address country and region validator.
@@ -37,17 +38,25 @@ class Country implements ValidatorInterface
     private $allowedCountriesReader;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param Data $directoryData
      * @param AllowedCountries $allowedCountriesReader
+     * @param StoreManagerInterface $storeManager
      * @param Escaper|null $escaper
      */
     public function __construct(
         Data $directoryData,
         AllowedCountries $allowedCountriesReader,
+        StoreManagerInterface $storeManager,
         Escaper $escaper = null
     ) {
         $this->directoryData = $directoryData;
         $this->allowedCountriesReader = $allowedCountriesReader;
+        $this->storeManager = $storeManager;
         $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
             Escaper::class
         );
@@ -134,7 +143,13 @@ class Country implements ValidatorInterface
      */
     private function getWebsiteAllowedCountries(AbstractAddress $address): array
     {
-        $storeId = $address->getData('store_id');
-        return $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $storeId);
+        $scopeCode = $address->getData('store_id');
+        $scope = ScopeInterface::SCOPE_STORE;
+        if (!$scopeCode && $address->getCustomer() && $address->getCustomer()->getSharingConfig()?->isGlobalScope()) {
+            $scopeCode = array_keys($this->storeManager->getWebsites(false, true));
+            $scope = ScopeInterface::SCOPE_WEBSITES;
+        }
+
+        return $this->allowedCountriesReader->getAllowedCountries($scope, $scopeCode);
     }
 }
