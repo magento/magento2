@@ -7,9 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\SwatchesGraphQl\Plugin\Filters;
 
+use Closure;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters;
 use Magento\CatalogGraphQl\Model\Resolver\Layer\FiltersProvider;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Swatches\Block\LayeredNavigation\RenderLayered;
+use Magento\Swatches\Helper\Data as SwatchHelper;
 
 /**
  * Plugin to add swatch data to filters data from filters data provider.
@@ -17,53 +21,35 @@ use Magento\CatalogGraphQl\Model\Resolver\Layer\FiltersProvider;
 class DataProviderPlugin
 {
     /**
-     * @var FiltersProvider
-     */
-    private $filtersProvider;
-
-    /**
-     * @var \Magento\Swatches\Helper\Data
-     */
-    private $swatchHelper;
-
-    /**
-     * @var \Magento\Swatches\Block\LayeredNavigation\RenderLayered
-     */
-    private $renderLayered;
-
-    /**
      * Filters constructor.
      *
      * @param FiltersProvider $filtersProvider
-     * @param \Magento\Swatches\Helper\Data $swatchHelper
-     * @param \Magento\Swatches\Block\LayeredNavigation\RenderLayered $renderLayered
+     * @param SwatchHelper $swatchHelper
+     * @param RenderLayered $renderLayered
      */
     public function __construct(
-        FiltersProvider $filtersProvider,
-        \Magento\Swatches\Helper\Data $swatchHelper,
-        \Magento\Swatches\Block\LayeredNavigation\RenderLayered $renderLayered
+        private readonly FiltersProvider $filtersProvider,
+        private readonly SwatchHelper $swatchHelper,
+        private readonly RenderLayered $renderLayered
     ) {
-        $this->filtersProvider = $filtersProvider;
-        $this->swatchHelper = $swatchHelper;
-        $this->renderLayered = $renderLayered;
     }
 
     /**
      * Using around as layout type has to be passed.
      *
      * @param Filters $subject
-     * @param \Closure $proceed
+     * @param Closure $proceed
      * @param string $layerType
      * @param array|null $attributesToFilter
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function aroundGetData(
         Filters $subject,
-        \Closure $proceed,
+        Closure $proceed,
         string $layerType,
         $attributesToFilter = null
     ) : array {
