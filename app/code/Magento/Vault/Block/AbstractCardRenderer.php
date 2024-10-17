@@ -16,11 +16,6 @@ use Magento\Payment\Model\CcConfigProvider;
 abstract class AbstractCardRenderer extends AbstractTokenRenderer implements CardRendererInterface
 {
     /**
-     * @var CcConfigProvider
-     */
-    private $iconsProvider;
-
-    /**
      * Constructor
      *
      * @param Template\Context $context
@@ -29,11 +24,10 @@ abstract class AbstractCardRenderer extends AbstractTokenRenderer implements Car
      */
     public function __construct(
         Template\Context $context,
-        CcConfigProvider $iconsProvider,
+        private readonly CcConfigProvider $iconsProvider,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->iconsProvider = $iconsProvider;
     }
 
     /**

@@ -6,6 +6,7 @@
 
 namespace Magento\Vault\Setup\Patch\Data;
 
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\CreditCardTokenFactory;
 use Magento\Framework\App\ResourceConnection;
@@ -19,18 +20,12 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 class SetCreditCardAsDefaultTokenType implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
      * SetCreditCardAsDefaultTokenType constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+        private readonly ModuleDataSetupInterface $moduleDataSetup
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**

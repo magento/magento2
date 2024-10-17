@@ -17,24 +17,14 @@ use Magento\Vault\Api\PaymentMethodListInterface as VaultPaymentMethodListInterf
 class PaymentMethodList implements VaultPaymentMethodListInterface
 {
     /**
-     * @var InstanceFactory
-     */
-    private $instanceFactory;
-
-    /**
-     * @var PaymentMethodListInterface
-     */
-    private $paymentMethodList;
-
-    /**
      * PaymentMethodList constructor.
      * @param PaymentMethodListInterface $paymentMethodList
      * @param InstanceFactory $instanceFactory
      */
-    public function __construct(PaymentMethodListInterface $paymentMethodList, InstanceFactory $instanceFactory)
-    {
-        $this->instanceFactory = $instanceFactory;
-        $this->paymentMethodList = $paymentMethodList;
+    public function __construct(
+        private readonly PaymentMethodListInterface $paymentMethodList,
+        private readonly InstanceFactory $instanceFactory
+    ) {
     }
 
     /**

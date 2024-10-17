@@ -5,6 +5,11 @@
  */
 namespace Magento\Vault\Plugin;
 
+use Magento\Checkout\Block\Checkout\LayoutProcessor;
+use Magento\Payment\Api\PaymentMethodListInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Vault\Api\PaymentMethodListInterface as VaultApiPaymentMethodListInterface;
+
 /**
  * Class PaymentVaultConfigurationProcess
  *
@@ -13,44 +18,26 @@ namespace Magento\Vault\Plugin;
 class PaymentVaultConfigurationProcess
 {
     /**
-     * @var \Magento\Vault\Api\PaymentMethodListInterface
-     */
-    private $vaultPaymentList;
-
-    /**
-     * @var \Magento\Vault\Api\PaymentMethodListInterface
-     */
-    private $paymentMethodList;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @param \Magento\Vault\Api\PaymentMethodListInterface $vaultPaymentList
-     * @param \Magento\Payment\Api\PaymentMethodListInterface $paymentMethodList
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param VaultApiPaymentMethodListInterface $vaultPaymentList
+     * @param PaymentMethodListInterface $paymentMethodList
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Vault\Api\PaymentMethodListInterface $vaultPaymentList,
-        \Magento\Payment\Api\PaymentMethodListInterface $paymentMethodList,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        private readonly VaultApiPaymentMethodListInterface $vaultPaymentList,
+        private readonly PaymentMethodListInterface $paymentMethodList,
+        private readonly StoreManagerInterface $storeManager
     ) {
-        $this->vaultPaymentList = $vaultPaymentList;
-        $this->paymentMethodList = $paymentMethodList;
-        $this->storeManager = $storeManager;
     }
 
     /**
      * Checkout LayoutProcessor before process plugin.
      *
-     * @param \Magento\Checkout\Block\Checkout\LayoutProcessor $processor
+     * @param LayoutProcessor $processor
      * @param array $jsLayout
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeProcess(\Magento\Checkout\Block\Checkout\LayoutProcessor $processor, $jsLayout)
+    public function beforeProcess(LayoutProcessor $processor, $jsLayout)
     {
         $configuration = &$jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
         ['children']['payment']['children']['renders']['children'];

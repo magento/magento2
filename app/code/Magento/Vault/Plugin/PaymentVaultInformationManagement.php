@@ -19,27 +19,15 @@ use Magento\Store\Model\StoreManagerInterface;
 class PaymentVaultInformationManagement
 {
     /**
-     * @var PaymentMethodListInterface
-     */
-    private $vaultPaymentMethodList;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * PaymentVaultInformationManagement constructor.
      *
      * @param PaymentMethodListInterface $vaultPaymentMethodList
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        PaymentMethodListInterface $vaultPaymentMethodList,
-        StoreManagerInterface $storeManager
+        private readonly PaymentMethodListInterface $vaultPaymentMethodList,
+        private readonly StoreManagerInterface $storeManager
     ) {
-        $this->vaultPaymentMethodList = $vaultPaymentMethodList;
-        $this->storeManager = $storeManager;
     }
 
     /**

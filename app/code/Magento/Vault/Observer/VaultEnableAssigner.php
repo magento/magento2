@@ -16,7 +16,7 @@ class VaultEnableAssigner extends AbstractDataAssignObserver
      * @param Observer $observer
      * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $data = $this->readDataArgument($observer);
 

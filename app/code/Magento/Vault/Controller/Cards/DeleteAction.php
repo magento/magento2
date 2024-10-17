@@ -5,6 +5,7 @@
  */
 namespace Magento\Vault\Controller\Cards;
 
+use Exception;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http;
@@ -35,26 +36,6 @@ class DeleteAction extends CardsManagement
     private $errorsMap = [];
 
     /**
-     * @var JsonFactory
-     */
-    private $jsonFactory;
-
-    /**
-     * @var Validator
-     */
-    private $fkValidator;
-
-    /**
-     * @var PaymentTokenRepositoryInterface
-     */
-    private $tokenRepository;
-
-    /**
-     * @var PaymentTokenManagement
-     */
-    private $paymentTokenManagement;
-
-    /**
      * @param Context $context
      * @param Session $customerSession
      * @param JsonFactory $jsonFactory
@@ -65,16 +46,12 @@ class DeleteAction extends CardsManagement
     public function __construct(
         Context $context,
         Session $customerSession,
-        JsonFactory $jsonFactory,
-        Validator $fkValidator,
-        PaymentTokenRepositoryInterface $tokenRepository,
-        PaymentTokenManagement $paymentTokenManagement
+        private readonly JsonFactory $jsonFactory,
+        private readonly Validator $fkValidator,
+        private readonly PaymentTokenRepositoryInterface $tokenRepository,
+        private readonly PaymentTokenManagement $paymentTokenManagement
     ) {
         parent::__construct($context, $customerSession);
-        $this->jsonFactory = $jsonFactory;
-        $this->fkValidator = $fkValidator;
-        $this->tokenRepository = $tokenRepository;
-        $this->paymentTokenManagement = $paymentTokenManagement;
 
         $this->errorsMap = [
             self::WRONG_TOKEN => __('No token found.'),
@@ -107,7 +84,7 @@ class DeleteAction extends CardsManagement
 
         try {
             $this->tokenRepository->delete($paymentToken);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->createErrorResponse(self::ACTION_EXCEPTION);
         }
 
