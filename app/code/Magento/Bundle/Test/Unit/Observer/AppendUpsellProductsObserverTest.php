@@ -398,6 +398,127 @@ class AppendUpsellProductsObserverTest extends TestCase
     }
 
     /**
+     * Test products limit
+     *
+     * @param $limit
+     * @param $methodName
+     * @dataProvider dataProviderTestProductsLimit
+     */
+    public function testProductsLimit($limit, $methodName)
+    {
+        $parentIds = [1, 3];
+        $productId = 2;
+        $productAttributes = ['attribute1', 'attribute2'];
+        $visibleInCatalogIds = [10, 11, 12];
+
+        $collectionItems = [
+            1 => $this->getMockBuilder(Product::class)
+                ->disableOriginalConstructor()
+                ->getMock()
+        ];
+
+        $this->observerMock
+            ->expects($this->exactly(3))
+            ->method('getEvent')
+            ->willReturn($this->eventMock);
+
+        $this->eventMock
+            ->expects($this->once())
+            ->method('getProduct')
+            ->willReturn($this->productMock);
+
+        $this->bundleDataMock
+            ->expects($this->once())
+            ->method('getAllowedSelectionTypes')
+            ->willReturn($this->getAllowedSelectionTypes());
+
+        $this->productMock
+            ->expects($this->once())
+            ->method('getTypeId')
+            ->willReturn(ProductType::TYPE_SIMPLE);
+
+        $this->eventMock
+            ->expects($this->once())
+            ->method('getCollection')
+            ->willReturn($this->collectionMock);
+
+        $this->eventMock
+            ->expects($this->once())
+            ->method('getLimit')
+            ->willReturn($limit);
+
+        $this->collectionMock
+            ->expects($this->any())
+            ->method('getItems')
+            ->willReturn($collectionItems);
+
+        $this->productMock
+            ->expects($this->{$methodName}())
+            ->method('getId')
+            ->willReturn($productId);
+
+        $this->bundleSelectionMock
+            ->expects($this->{$methodName}())
+            ->method('getParentIdsByChild')
+            ->willReturn($parentIds);
+
+        $this->productMock
+            ->expects($this->{$methodName}())
+            ->method('getCollection')
+            ->willReturn($this->bundleCollectionMock);
+
+        $this->bundleCollectionMock
+            ->expects($this->{$methodName}())
+            ->method('addAttributeToSelect')
+            ->willReturn($this->bundleCollectionMock);
+
+        $this->configMock
+            ->expects($this->{$methodName}())
+            ->method('getProductAttributes')
+            ->willReturn($productAttributes);
+
+        $this->productVisibilityMock
+            ->expects($this->{$methodName}())
+            ->method('getVisibleInCatalogIds')
+            ->willReturn($visibleInCatalogIds);
+
+        $this->bundleCollectionMock
+            ->expects($this->{$methodName}())
+            ->method('setPageSize')
+            ->willReturn($this->bundleCollectionMock);
+
+        $this->bundleCollectionMock
+            ->expects($this->{$methodName}())
+            ->method('addFieldToFilter')
+            ->willReturn($this->bundleCollectionMock);
+
+        $this->bundleCollectionMock
+            ->expects($this->{$methodName}())
+            ->method('setFlag')
+            ->willReturn($this->bundleCollectionMock);
+
+        $this->collectionMock
+            ->expects($this->{$methodName}())
+            ->method('setItems')
+            ->willReturn($collectionItems);
+
+        $this->observer->execute($this->observerMock);
+    }
+
+    /**
+     * Data provider for testProductsLimit method.
+     *
+     * @return array
+     */
+    public function dataProviderTestProductsLimit()
+    {
+        return [
+            [1, 'never'],
+            [4, 'once']
+        ];
+    }
+
+    /**
      * Returns allowed products types
      *
      * @return array
