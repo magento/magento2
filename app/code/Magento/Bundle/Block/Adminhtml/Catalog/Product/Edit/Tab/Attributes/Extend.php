@@ -8,23 +8,18 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes;
 
 /**
  * Bundle Extended Attributes Block.
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
 {
     /**
-     * Initialize block template
+     * @var string
      */
     private $template = 'Magento_Bundle::catalog/product/edit/tab/attributes/extend.phtml';
 
-    const DYNAMIC = 0;
-
-    const FIXED = 1;
+    public const DYNAMIC = 0;
+    public const FIXED = 1;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

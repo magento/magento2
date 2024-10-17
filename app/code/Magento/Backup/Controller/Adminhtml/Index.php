@@ -12,7 +12,7 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Backup admin controller
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @phpcs:ignore Magento2.Classes.AbstractApi.AbstractApi
  * @api
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.AllPurposeAction)
@@ -24,11 +24,9 @@ abstract class Index extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Backup::backup';
+    public const ADMIN_RESOURCE = 'Magento_Backup::backup';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
