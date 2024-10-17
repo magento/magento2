@@ -7,12 +7,14 @@
 namespace Magento\Downloadable\Console\Command;
 
 use Exception;
+use InvalidArgumentException;
 use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Downloadable\Helper\Download as DownloadManager;
 
 /**
  * Class DomainsRemoveCommand
@@ -32,14 +34,22 @@ class DomainsRemoveCommand extends Command
     private $domainManager;
 
     /**
+     * @var DownloadManager
+     */
+    private $downloadManager;
+
+    /**
      * DomainsRemoveCommand constructor.
      *
      * @param DomainManager $domainManager
+     * @param DownloadManager $downloadManager
      */
     public function __construct(
-        DomainManager $domainManager
+        DomainManager   $domainManager,
+        DownloadManager $downloadManager
     ) {
         $this->domainManager = $domainManager;
+        $this->downloadManager = $downloadManager;
         parent::__construct();
     }
 
@@ -70,26 +80,24 @@ class DomainsRemoveCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            if ($input->getArgument(self::INPUT_KEY_DOMAINS)) {
-                $whitelistBefore = $this->domainManager->getDomains();
-                $removeDomains = $input->getArgument(self::INPUT_KEY_DOMAINS);
-                $removeDomains = array_filter(array_map('trim', $removeDomains), 'strlen');
-                $this->domainManager->removeDomains($removeDomains);
+            $domains = $input->getArgument(self::INPUT_KEY_DOMAINS);
 
-                foreach (array_diff($whitelistBefore, $this->domainManager->getDomains()) as $removedHost) {
-                    $output->writeln(
-                        $removedHost . ' was removed from the whitelist.'
-                    );
-                }
+            $this->downloadManager->validateDomains($domains);
+
+            $whitelistBefore = $this->domainManager->getDomains();
+            $removedDomains = array_filter(array_map('trim', $domains), 'strlen');
+
+            $this->domainManager->removeDomains($removedDomains);
+
+            foreach (array_intersect($removedDomains, $whitelistBefore) as $removedHost) {
+                $output->writeln($removedHost . ' was removed from the whitelist.' . PHP_EOL);
             }
+
+            return Cli::RETURN_SUCCESS;
+        } catch (InvalidArgumentException $e) {
+            return $this->downloadManager->handleInvalidArgumentException($e, $output);
         } catch (Exception $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
-            if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-                $output->writeln($e->getTraceAsString());
-            }
-            return Cli::RETURN_FAILURE;
+            return $this->downloadManager->handleException($e, $output);
         }
-
-        return Cli::RETURN_SUCCESS;
     }
 }
