@@ -8,9 +8,10 @@ declare(strict_types=1);
 namespace Magento\PageCache\Model\App\Request\Http;
 
 use Magento\Framework\App\Http\Context;
+use Magento\Framework\App\PageCache\Identifier;
+use Magento\Framework\App\PageCache\IdentifierInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\App\PageCache\IdentifierInterface;
 
 /**
  * Page unique identifier
@@ -38,9 +39,11 @@ class IdentifierForSave implements IdentifierInterface
      */
     public function getValue()
     {
+        $pattern = Identifier::PATTERN_MARKETING_PARAMETERS;
+        $replace = array_fill(0, count($pattern), '');
         $data = [
             $this->request->isSecure(),
-            $this->request->getUriString(),
+            preg_replace($pattern, $replace, (string)$this->request->getUriString()),
             $this->context->getVaryString()
         ];
 
