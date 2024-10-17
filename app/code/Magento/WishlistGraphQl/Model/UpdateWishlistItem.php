@@ -25,16 +25,6 @@ class UpdateWishlistItem
     private const ERROR_UNDEFINED = 'UNDEFINED';
 
     /**
-     * @var WishlistResourceModel
-     */
-    private $wishlistResource;
-
-    /**
-     * @var BuyRequestBuilder
-     */
-    private $buyRequestBuilder;
-
-    /**
      * @var array
      */
     private $errors = [];
@@ -44,11 +34,9 @@ class UpdateWishlistItem
      * @param BuyRequestBuilder $buyRequestBuilder
      */
     public function __construct(
-        WishlistResourceModel $wishlistResource,
-        BuyRequestBuilder $buyRequestBuilder
+        private readonly WishlistResourceModel $wishlistResource,
+        private readonly BuyRequestBuilder $buyRequestBuilder
     ) {
-        $this->wishlistResource = $wishlistResource;
-        $this->buyRequestBuilder = $buyRequestBuilder;
     }
 
     /**

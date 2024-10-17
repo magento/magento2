@@ -27,31 +27,6 @@ use Magento\WishlistGraphQl\Mapper\WishlistDataMapper;
 class RemoveProductsFromWishlist implements ResolverInterface
 {
     /**
-     * @var WishlistDataMapper
-     */
-    private $wishlistDataMapper;
-
-    /**
-     * @var RemoveProductsFromWishlistModel
-     */
-    private $removeProductsFromWishlist;
-
-    /**
-     * @var WishlistFactory
-     */
-    private $wishlistFactory;
-
-    /**
-     * @var WishlistConfig
-     */
-    private $wishlistConfig;
-
-    /**
-     * @var WishlistResourceModel
-     */
-    private $wishlistResource;
-
-    /**
      * @param WishlistFactory $wishlistFactory
      * @param WishlistResourceModel $wishlistResource
      * @param WishlistConfig $wishlistConfig
@@ -59,17 +34,12 @@ class RemoveProductsFromWishlist implements ResolverInterface
      * @param RemoveProductsFromWishlistModel $removeProductsFromWishlist
      */
     public function __construct(
-        WishlistFactory $wishlistFactory,
-        WishlistResourceModel $wishlistResource,
-        WishlistConfig $wishlistConfig,
-        WishlistDataMapper $wishlistDataMapper,
-        RemoveProductsFromWishlistModel $removeProductsFromWishlist
+        private readonly WishlistFactory $wishlistFactory,
+        private readonly WishlistResourceModel $wishlistResource,
+        private readonly WishlistConfig $wishlistConfig,
+        private readonly WishlistDataMapper $wishlistDataMapper,
+        private readonly RemoveProductsFromWishlistModel $removeProductsFromWishlist
     ) {
-        $this->wishlistResource = $wishlistResource;
-        $this->wishlistConfig = $wishlistConfig;
-        $this->wishlistFactory = $wishlistFactory;
-        $this->wishlistDataMapper = $wishlistDataMapper;
-        $this->removeProductsFromWishlist = $removeProductsFromWishlist;
     }
 
     /**

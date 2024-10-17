@@ -21,11 +21,6 @@ use Magento\WishlistGraphQl\Model\WishlistItem\DataProvider\CustomizableOptionVa
 class Composite implements CustomizableOptionValueInterface
 {
     /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * @var CustomizableOptionValueInterface[]
      */
     private $customizableOptionValues;
@@ -35,10 +30,9 @@ class Composite implements CustomizableOptionValueInterface
      * @param CustomizableOptionValueInterface[] $customizableOptionValues
      */
     public function __construct(
-        ObjectManagerInterface $objectManager,
+        private readonly ObjectManagerInterface $objectManager,
         array $customizableOptionValues = []
     ) {
-        $this->objectManager = $objectManager;
         $this->customizableOptionValues = $customizableOptionValues;
     }
 

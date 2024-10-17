@@ -16,25 +16,13 @@ use Magento\Wishlist\Model\Item;
 class CartItemsRequestBuilder
 {
     /**
-     * @var CartItemsRequestDataProviderInterface[]
-     */
-    private $providers;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * @param ProductRepositoryInterface $productRepository
-     * @param array $providers
+     * @param CartItemsRequestDataProviderInterface[] $providers
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
-        array $providers = []
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly array $providers = []
     ) {
-        $this->productRepository = $productRepository;
-        $this->providers = $providers;
     }
 
     /**

@@ -17,16 +17,11 @@ use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 class WishlistItemType implements TypeResolverInterface
 {
     /**
-     * @var array
-     */
-    private $supportedTypes = [];
-
-    /**
      * @param array $supportedTypes
      */
-    public function __construct(array $supportedTypes = [])
-    {
-        $this->supportedTypes = $supportedTypes;
+    public function __construct(
+        private array $supportedTypes = []
+    ) {
     }
 
     /**

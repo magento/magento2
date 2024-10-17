@@ -22,25 +22,13 @@ use Magento\Wishlist\Model\WishlistFactory;
 class CustomerWishlistResolver implements ResolverInterface
 {
     /**
-     * @var WishlistFactory
-     */
-    private $wishlistFactory;
-
-    /**
-     * @var WishlistConfig
-     */
-    private $wishlistConfig;
-
-    /**
      * @param WishlistFactory $wishlistFactory
      * @param WishlistConfig $wishlistConfig
      */
     public function __construct(
-        WishlistFactory $wishlistFactory,
-        WishlistConfig $wishlistConfig
+        private readonly WishlistFactory $wishlistFactory,
+        private readonly WishlistConfig $wishlistConfig
     ) {
-        $this->wishlistFactory = $wishlistFactory;
-        $this->wishlistConfig = $wishlistConfig;
     }
 
     /**

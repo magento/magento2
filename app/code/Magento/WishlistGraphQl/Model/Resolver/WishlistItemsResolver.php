@@ -24,25 +24,13 @@ use Magento\Wishlist\Model\Wishlist;
 class WishlistItemsResolver implements ResolverInterface
 {
     /**
-     * @var WishlistItemCollectionFactory
-     */
-    private $wishlistItemCollectionFactory;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param WishlistItemCollectionFactory $wishlistItemCollectionFactory
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        WishlistItemCollectionFactory $wishlistItemCollectionFactory,
-        StoreManagerInterface $storeManager
+        private readonly WishlistItemCollectionFactory $wishlistItemCollectionFactory,
+        private readonly StoreManagerInterface $storeManager
     ) {
-        $this->wishlistItemCollectionFactory = $wishlistItemCollectionFactory;
-        $this->storeManager = $storeManager;
     }
 
     /**

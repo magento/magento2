@@ -15,18 +15,12 @@ use Magento\Framework\GraphQl\Query\Uid;
  */
 class ConfigurableDataProvider implements CartItemsRequestDataProviderInterface
 {
-    /** 
-     * @var Uid 
-     */
-    private $uidEncoder;
-
     /**
      * @param Uid $uidEncoder
      */
     public function __construct(
-        Uid $uidEncoder
+        private readonly Uid $uidEncoder
     ) {
-        $this->uidEncoder = $uidEncoder;
     }
 
     /**
