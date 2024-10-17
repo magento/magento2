@@ -14,11 +14,12 @@ class ConstructorArgumentTest extends TestCase
 {
     public function testInterface()
     {
-        $argument = ['configuration', 'array', true, null];
+        $argument = ['configuration', 'array', true, null, false];
         $model = new ConstructorArgument($argument);
         $this->assertEquals($argument[0], $model->getName());
         $this->assertEquals($argument[1], $model->getType());
         $this->assertTrue($model->isRequired());
         $this->assertNull($model->getDefaultValue());
+        $this->assertFalse($model->isVariadic());
     }
 }

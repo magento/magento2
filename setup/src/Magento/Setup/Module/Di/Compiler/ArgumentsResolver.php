@@ -60,6 +60,15 @@ class ArgumentsResolver
     ];
 
     /**
+     * Variadic pattern used for configuration
+     *
+     * @var array
+     */
+    private $variadicPattern = [
+        '_vdic_' => [],
+    ];
+
+    /**
      * Configured argument pattern used for configuration
      *
      * @var array
@@ -89,11 +98,26 @@ class ArgumentsResolver
         if (!$constructor) {
             return null;
         }
+
         $configuredArguments = $this->getConfiguredArguments($instanceType);
 
         $arguments = [];
         /** @var ConstructorArgument $constructorArgument */
         foreach ($constructor as $constructorArgument) {
+            if ($constructorArgument->isVariadic()) {
+                $argument = $this->variadicPattern;
+                $variadicArguments = $configuredArguments[$constructorArgument->getName()] ?? [];
+
+                foreach ($variadicArguments as $variadicArgument) {
+                    $argument['_vdic_'][] = $this->getConfiguredArgument($variadicArgument, $constructorArgument);
+                }
+
+                $arguments[$constructorArgument->getName()] = $argument;
+
+                // Variadic argument is always the last one
+                break;
+            }
+
             $argument = $this->getNonObjectArgument(null);
             if (!$constructorArgument->isRequired()) {
                 $argument = $this->getNonObjectArgument($constructorArgument->getDefaultValue());
@@ -107,8 +131,10 @@ class ArgumentsResolver
                     $constructorArgument
                 );
             }
+
             $arguments[$constructorArgument->getName()] = $argument;
         }
+
         return $arguments;
     }
 

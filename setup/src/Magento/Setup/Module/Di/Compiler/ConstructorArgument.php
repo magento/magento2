@@ -30,6 +30,11 @@ class ConstructorArgument
     private $defaultValue;
 
     /**
+     * @var bool
+     */
+    private $isVariadic;
+
+    /**
      * @param array $configuration
      */
     public function __construct(array $configuration)
@@ -38,6 +43,7 @@ class ConstructorArgument
         $this->type = $configuration[1];
         $this->isRequired = $configuration[2];
         $this->defaultValue = $configuration[3];
+        $this->isVariadic = $configuration[4];
     }
 
     /**
@@ -78,5 +84,15 @@ class ConstructorArgument
     public function getDefaultValue()
     {
         return $this->defaultValue;
+    }
+
+    /**
+     * Returns argument is variadic
+     *
+     * @return bool
+     */
+    public function isVariadic(): bool
+    {
+        return $this->isVariadic;
     }
 }
