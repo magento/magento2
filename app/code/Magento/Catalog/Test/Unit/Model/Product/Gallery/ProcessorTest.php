@@ -231,4 +231,49 @@ class ProcessorTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $file
+     * @param string $newFile
+     * @param string|string[] $mediaAttribute
+     * @param boolean $move
+     * @param boolean $exclude
+     * @dataProvider addImageDataProvider
+     */
+    public function testAddImage($product, $file, $newFile, $mediaAttribute, $move, $exclude)
+    {
+        $model = $this->getMockBuilder(Processor::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addImage'])
+            ->getMock();
+
+        $model->expects($this->once())
+            ->method('addImage')
+            ->with($product, $file, $mediaAttribute, $move, $exclude)
+            ->willReturn('/t/test_1.jpg');
+
+        $this->assertEquals($newFile, $model->addImage($product, $file, $mediaAttribute, $move, $exclude));
+    }
+
+    /**
+     * @return array
+     */
+    public function addImageDataProvider(): array
+    {
+        $productMock = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        return [
+            [
+                'product' => $productMock,
+                'file' => '/t/test.jpg',
+                'new_file' => '/t/test_1.jpg',
+                'mediaAttribute' => [],
+                'move' => false,
+                'exclude' => true,
+            ]
+        ];
+    }
 }
