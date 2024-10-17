@@ -1,8 +1,8 @@
 <?php
 /**
- * @category   Magento
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ * @category   Magento
  */
 declare(strict_types=1);
 
@@ -22,7 +22,7 @@ class CollectionTest extends TestCase
      */
     protected $collection;
 
-    /*
+    /**
      * Array of events in the collection
      *
      * @var array
