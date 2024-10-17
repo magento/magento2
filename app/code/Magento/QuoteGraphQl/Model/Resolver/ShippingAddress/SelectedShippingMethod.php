@@ -72,7 +72,7 @@ class SelectedShippingMethod implements ResolverInterface
             'carrier_title' => $selectedShippingMethod->getCarrierTitle() ?? '',
             'method_title' => $selectedShippingMethod->getMethodTitle() ?? '',
             'amount' => [
-                'value' => $address->getShippingAmount(),
+                'value' => $address->getShippingInclTax(),
                 'currency' => $cart->getQuoteCurrencyCode(),
             ],
             'price_excl_tax' => [
