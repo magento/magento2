@@ -5,8 +5,10 @@
 
 define([
     'jquery',
-    'jquery-ui-modules/widget'
-], function ($) {
+    'Magento_PageCache/js/form-key-provider',
+    'jquery-ui-modules/widget',
+    'jquery/jquery.cookie'
+], function ($, formKeyInit) {
     'use strict';
 
     /**
@@ -176,7 +178,10 @@ define([
                 }
                 formKey = document.createElement('input');
                 formKey.name = 'form_key';
-                formKey.value = this.options.formKey;
+                if (!$.cookie(formKey.name)) {
+                    formKeyInit();
+                }
+                formKey.value = $.cookie(formKey.name);
                 form.appendChild(formKey);
 
                 paramData = $.param(paramData);
