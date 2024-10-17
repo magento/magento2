@@ -38,7 +38,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private const OPTION_REMOTE_STORAGE_SECRET_KEY = 'remote-storage-secret';
     private const CONFIG_PATH__REMOTE_STORAGE_SECRET_KEY = RemoteDriverPool::PATH_CONFIG . '/credentials/secret';
     private const OPTION_REMOTE_STORAGE_PATH_STYLE = 'remote-storage-path-style';
-    private const CONFIG_PATH__REMOTE_STORAGE_PATH_STYLE = RemoteDriverPool::PATH_CONFIG . '/path-style';
+    private const CONFIG_PATH__REMOTE_STORAGE_PATH_STYLE = RemoteDriverPool::PATH_CONFIG . '/path_style';
 
     /**
      * Map of option to config path relations.
