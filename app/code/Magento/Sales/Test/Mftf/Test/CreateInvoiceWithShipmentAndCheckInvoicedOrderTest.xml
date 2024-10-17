@@ -91,7 +91,7 @@
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the invoice and shipment." stepKey="seeSuccessMessage"/>
 
         <!-- Assert order graph image is visible on admin dashboard -->
-        <amOnPage url="{{AdminDashboardPage.url}}" stepKey="amOnDashboardPage"/>
+        <actionGroup ref="AdminOpenDashboardPageActionGroup" stepKey="amOnDashboardPage"/>
         <waitForPageLoad stepKey="waitForDashboardPageLoad"/>
         <actionGroup ref="AssertOrderGraphImageOnDashboardActionGroup" stepKey="seeOrderGraphImage"/>
 

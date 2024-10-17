@@ -111,7 +111,7 @@
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="seeShipmentCreateSuccess"/>
         <!-- Go to dashboard page -->
         <comment userInput="Go to dashboard page" stepKey="goToDashboardPage"/>
-        <amOnPage url="{{AdminDashboardPage.url}}" stepKey="amOnDashboardPage"/>
+        <actionGroup ref="AdminOpenDashboardPageActionGroup" stepKey="amOnDashboardPage"/>
         <waitForPageLoad stepKey="waitForDashboardPageLoad4"/>
         <!-- Grab quantity value -->
         <comment userInput="Grab quantity value from dashboard at the end" stepKey="grabQuantityFromDashboardAtTheEnd"/>

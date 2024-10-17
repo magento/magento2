@@ -29,7 +29,7 @@
         </after>
 
         <!--Navigate through Advanced Reporting button on dashboard to Sign Up page-->
-        <amOnPage url="{{AdminDashboardPage.url}}" stepKey="amOnDashboardPage"/>
+        <actionGroup ref="AdminOpenDashboardPageActionGroup" stepKey="amOnDashboardPage"/>
         <waitForPageLoad stepKey="waitForDashboardPageLoad"/>
         <click selector="{{AdminAdvancedReportingSection.goToAdvancedReporting}}" stepKey="clickGoToAdvancedReporting"/>
         <actionGroup ref="AssertAdminAdvancedReportingPageUrlActionGroup" stepKey="assertAdvancedReportingPageUrl"/>
