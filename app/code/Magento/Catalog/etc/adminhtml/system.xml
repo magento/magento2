@@ -142,6 +142,14 @@
                     <hide_in_single_store_mode>1</hide_in_single_store_mode>
                 </field>
             </group>
+            <group id="catalog_price_rules" translate="label" type="text" sortOrder="450" showInDefault="1">
+                <label>Catalog Price Rules</label>
+                <field id="apply_to_custom_options" translate="label comment" type="select" sortOrder="1" showInDefault="1">
+                    <label>Apply to Custom Options</label>
+                    <comment><![CDATA[Determines whether catalog price rules should also apply to the custom option prices.]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
             <group id="layered_navigation">
                 <field id="display_category" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Display Category Filter</label>

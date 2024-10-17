@@ -55,6 +55,9 @@
                 <time_format>12h</time_format>
                 <forbidden_extensions>php,exe</forbidden_extensions>
             </custom_options>
+            <catalog_price_rules>
+                <apply_to_custom_options>0</apply_to_custom_options>
+            </catalog_price_rules>
             <layered_navigation>
                 <display_category>1</display_category>
             </layered_navigation>
