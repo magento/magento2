@@ -6,6 +6,8 @@
 namespace Magento\Swatches\Observer;
 
 use Magento\Config\Model\Config\Source;
+use Magento\Config\Model\Config\Source\Yesno;
+use Magento\Framework\Data\Form as FormData;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
@@ -16,29 +18,19 @@ use Magento\Framework\Event\ObserverInterface;
 class AddFieldsToAttributeObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Config\Model\Config\Source\Yesno
-     */
-    protected $yesNo;
-
-    /**
-     * @var \Magento\Framework\Module\Manager
-     */
-    protected $moduleManager;
-
-    /**
      * @param Manager $moduleManager
-     * @param Source\Yesno $yesNo
+     * @param Yesno $yesNo
      */
-    public function __construct(Manager $moduleManager, Source\Yesno $yesNo)
-    {
-        $this->moduleManager = $moduleManager;
-        $this->yesNo = $yesNo;
+    public function __construct(
+        protected readonly Manager $moduleManager,
+        protected readonly Yesno $yesNo
+    ) {
     }
 
     /**
      * Execute.
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param EventObserver $observer
      * @return void
      */
     public function execute(EventObserver $observer)
@@ -47,7 +39,7 @@ class AddFieldsToAttributeObserver implements ObserverInterface
             return;
         }
 
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var FormData $form */
         $form = $observer->getForm();
         $fieldset = $form->getElement('base_fieldset');
         $yesnoSource = $this->yesNo->toOptionArray();

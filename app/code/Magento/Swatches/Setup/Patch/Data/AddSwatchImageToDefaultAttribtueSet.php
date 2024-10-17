@@ -6,48 +6,35 @@
 
 namespace Magento\Swatches\Setup\Patch\Data;
 
+use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
-/**
- * Class AddSwatchImageToDefaultAttribtueSet
- * @package Magento\Swatches\Setup\Patch
- */
 class AddSwatchImageToDefaultAttribtueSet implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
-     * @var EavSetupFactory
-     */
-    private $eavSetupFactory;
-
-    /**
      * PatchInitial constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
+     * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
-        EavSetupFactory $eavSetupFactory
+        private readonly ModuleDataSetupInterface $moduleDataSetup,
+        private readonly EavSetupFactory $eavSetupFactory
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->eavSetupFactory = $eavSetupFactory;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
         $this->moduleDataSetup->getConnection()->startSetup();
 
-        /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
+        /** @var EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $attributeSetId = $eavSetup->getDefaultAttributeSetId(Product::ENTITY);
         $groupId = (int)$eavSetup->getAttributeGroupByCode(
@@ -59,10 +46,12 @@ class AddSwatchImageToDefaultAttribtueSet implements DataPatchInterface, PatchVe
         $eavSetup->addAttributeToGroup(Product::ENTITY, $attributeSetId, $groupId, 'swatch_image');
 
         $this->moduleDataSetup->getConnection()->endSetup();
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -72,7 +61,7 @@ class AddSwatchImageToDefaultAttribtueSet implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -80,7 +69,7 @@ class AddSwatchImageToDefaultAttribtueSet implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

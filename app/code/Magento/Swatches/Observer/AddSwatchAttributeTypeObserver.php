@@ -6,9 +6,11 @@
 namespace Magento\Swatches\Observer;
 
 use Magento\Config\Model\Config\Source;
+use Magento\Framework\DataObject;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Swatches\Model\Swatch;
 
 /**
  * Observer model
@@ -16,22 +18,17 @@ use Magento\Framework\Event\ObserverInterface;
 class AddSwatchAttributeTypeObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Framework\Module\Manager
-     */
-    protected $moduleManager;
-
-    /**
      * @param Manager $moduleManager
      */
-    public function __construct(Manager $moduleManager)
-    {
-        $this->moduleManager = $moduleManager;
+    public function __construct(
+        protected readonly Manager $moduleManager
+    ) {
     }
 
     /**
      * Execute.
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param EventObserver $observer
      * @return void
      */
     public function execute(EventObserver $observer)
@@ -40,11 +37,11 @@ class AddSwatchAttributeTypeObserver implements ObserverInterface
             return;
         }
 
-        /** @var \Magento\Framework\DataObject $response */
+        /** @var DataObject $response */
         $response = $observer->getEvent()->getResponse();
         $types = $response->getTypes();
         $types[] = [
-            'value' => \Magento\Swatches\Model\Swatch::SWATCH_TYPE_VISUAL_ATTRIBUTE_FRONTEND_INPUT,
+            'value' => Swatch::SWATCH_TYPE_VISUAL_ATTRIBUTE_FRONTEND_INPUT,
             'label' => __('Visual Swatch'),
             'hide_fields' => [
                 'is_unique',
@@ -56,7 +53,7 @@ class AddSwatchAttributeTypeObserver implements ObserverInterface
             ],
         ];
         $types[] = [
-            'value' => \Magento\Swatches\Model\Swatch::SWATCH_TYPE_TEXTUAL_ATTRIBUTE_FRONTEND_INPUT,
+            'value' => Swatch::SWATCH_TYPE_TEXTUAL_ATTRIBUTE_FRONTEND_INPUT,
             'label' => __('Text Swatch'),
             'hide_fields' => [
                 'is_unique',

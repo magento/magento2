@@ -16,11 +16,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 class SwatchAttributeType
 {
     /**
-     * @var Json
-     */
-    private $serializer;
-
-    /**
      * Data key which should populated to Attribute entity from "additional_data" field
      *
      * @var array
@@ -34,9 +29,9 @@ class SwatchAttributeType
     /**
      * @param Json $serializer
      */
-    public function __construct(Json $serializer)
-    {
-        $this->serializer = $serializer;
+    public function __construct(
+        private readonly Json $serializer
+    ) {
     }
 
     /**

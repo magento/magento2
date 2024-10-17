@@ -6,6 +6,7 @@
 
 namespace Magento\Swatches\Block\Adminhtml\Product\Attribute\Edit;
 
+use Magento\Framework\Data\Form as FormData;
 use Magento\Framework\Data\Form\Element\CollectionFactory as ElementCollectionFactory;
 use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Data\Form\FormKey;
@@ -13,18 +14,8 @@ use Magento\Swatches\Model\Swatch;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 
-/**
- * Class Form
- */
-class Form extends \Magento\Framework\Data\Form
+class Form extends FormData
 {
-    /**
-     * Serializer that allow convert arrays to string.
-     *
-     * @var Json
-     */
-    private $serializer;
-
     /**
      * Form constructor.
      *
@@ -32,20 +23,22 @@ class Form extends \Magento\Framework\Data\Form
      * @param ElementCollectionFactory $factoryCollection
      * @param FormKey $formKey
      * @param array $data
-     * @param Json|null $serializer
+     * @param Json|null $serializer Serializer that allow convert arrays to string.
      */
     public function __construct(
         Factory $factoryElement,
         ElementCollectionFactory $factoryCollection,
         FormKey $formKey,
         array $data = [],
-        Json $serializer = null
+        private ?Json $serializer = null
     ) {
         parent::__construct($factoryElement, $factoryCollection, $formKey, $data);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
+     * Add additional data when type is swatch.
+     *
      * @param array $values
      * @return $this
      */
@@ -68,6 +61,8 @@ class Form extends \Magento\Framework\Data\Form
     }
 
     /**
+     * Check if key additional_data is set and unserialize the data.
+     *
      * @param array $values
      * @return array
      */

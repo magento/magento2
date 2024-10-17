@@ -17,25 +17,10 @@ use Magento\Framework\App\ObjectManager;
 class SwatchAttributesProvider
 {
     /**
-     * @var Configurable
-     */
-    private $typeConfigurable;
-
-    /**
-     * @var SwatchAttributeCodes
-     */
-    private $swatchAttributeCodes;
-
-    /**
      * Key is productId, value is list of attributes
      * @var Attribute[]
      */
     private $attributesPerProduct;
-
-    /**
-     * @var SwatchAttributeType
-     */
-    private $swatchTypeChecker;
 
     /**
      * @param Configurable $typeConfigurable
@@ -43,18 +28,18 @@ class SwatchAttributesProvider
      * @param SwatchAttributeType|null $swatchTypeChecker
      */
     public function __construct(
-        Configurable $typeConfigurable,
-        SwatchAttributeCodes $swatchAttributeCodes,
-        SwatchAttributeType $swatchTypeChecker = null
+        private readonly Configurable $typeConfigurable,
+        private readonly SwatchAttributeCodes $swatchAttributeCodes,
+        private ?SwatchAttributeType $swatchTypeChecker = null
     ) {
-        $this->typeConfigurable = $typeConfigurable;
-        $this->swatchAttributeCodes = $swatchAttributeCodes;
         $this->swatchTypeChecker = $swatchTypeChecker
             ?: ObjectManager::getInstance()->create(SwatchAttributeType::class);
     }
 
     /**
-     * Provide list of swatch attributes for product. If product is not configurable return empty array
+     * Provide list of swatch attributes for product.
+     *
+     * If product is not configurable return empty array
      * Key is productId, value is list of attributes
      *
      * @param Product $product

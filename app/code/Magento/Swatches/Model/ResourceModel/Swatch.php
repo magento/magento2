@@ -6,6 +6,9 @@
 
 namespace Magento\Swatches\Model\ResourceModel;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * Swatch Resource Model
  *
@@ -13,7 +16,7 @@ namespace Magento\Swatches\Model\ResourceModel;
  * @api
  * @since 100.0.2
  */
-class Swatch extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Swatch extends AbstractDb
 {
     /**
      * Initialize resource model
@@ -46,7 +49,7 @@ class Swatch extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array $optionIDs
      * @param int $type
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @since 100.2.4
      */
     public function clearSwatchOptionByOptionIdAndType($optionIDs, $type = null)
