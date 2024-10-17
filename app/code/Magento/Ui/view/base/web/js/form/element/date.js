@@ -177,28 +177,20 @@ define([
          * with moment.js library.
          */
         prepareDateTimeFormats: function () {
-            if (this.options.timeOnly) {
-                this.pickerDateTimeFormat = this.options.timeFormat;
-            } else {
-                this.pickerDateTimeFormat = this.options.dateFormat;
+            this.pickerDateTimeFormat = this.options.dateFormat;
 
-                if (this.options.showsTime) {
-                    this.pickerDateTimeFormat += ' ' + this.options.timeFormat;
-                }
+            if (this.options.showsTime) {
+                this.pickerDateTimeFormat += ' ' + this.options.timeFormat;
             }
 
-            this.pickerDateTimeFormat = utils.convertToMomentFormat(this.pickerDateTimeFormat);
+            this.pickerDateTimeFormat = utils.normalizeDate(this.pickerDateTimeFormat);
 
-            if (this.options.dateFormat) {
-                this.outputDateFormat = this.options.dateFormat;
+            if (this.dateFormat) {
+                this.inputDateFormat = this.dateFormat;
             }
 
-            this.inputDateFormat = this.options.timeOnly ?
-                utils.convertToMomentFormat(this.pickerDefaultTimeFormat) :
-                utils.convertToMomentFormat(this.inputDateFormat);
-            this.outputDateFormat = this.options.timeOnly ?
-                utils.convertToMomentFormat(this.options.timeFormat) :
-                utils.convertToMomentFormat(this.outputDateFormat);
+            this.inputDateFormat = utils.normalizeDate(this.inputDateFormat);
+            this.outputDateFormat = utils.normalizeDate(this.outputDateFormat);
 
             this.validationParams.dateFormat = this.outputDateFormat;
         }
