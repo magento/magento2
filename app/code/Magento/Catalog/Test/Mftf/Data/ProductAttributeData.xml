@@ -290,7 +290,7 @@
         <data key="is_unique">false</data>
         <data key="is_searchable">false</data>
         <data key="is_visible">true</data>
-        <data key="backend_type">text</data>
+        <data key="backend_type">varchar</data>
         <data key="is_wysiwyg_enabled">false</data>
         <data key="is_visible_in_advanced_search">false</data>
         <data key="is_visible_on_front">true</data>

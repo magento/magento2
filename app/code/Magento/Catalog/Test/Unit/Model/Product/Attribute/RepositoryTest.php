@@ -10,13 +10,12 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductAttributeOptionManagementInterface;
 use Magento\Catalog\Helper\Product;
 use Magento\Catalog\Model\Product\Attribute\Repository;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Eav\Api\AttributeOptionManagementInterface;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeFrontendLabelInterface;
+use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator;
 use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\FrontendLabel;
@@ -361,6 +360,41 @@ class RepositoryTest extends TestCase
             ->method('setDefaultFrontendLabel')
             ->with('Default Label');
         $this->attributeResourceMock->expects($this->once())->method('save')->with($attributeMock);
+
+        $this->model->save($attributeMock);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSaveInputExceptionInvalidBackendType()
+    {
+        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectExceptionMessage('Invalid value of "decimal" provided for the backend_type field.');
+        $attributeMock = $this->createPartialMock(
+            Attribute::class,
+            [
+                'getFrontendLabels',
+                'getDefaultFrontendLabel',
+                'getAttributeId',
+                'setAttributeId',
+                'getAttributeCode',
+                'getBackendTypeByInput',
+                'getBackendType'
+            ]
+        );
+        $attributeMock->expects($this->once())->method('getAttributeId')->willReturn(null);
+        $attributeMock->expects($this->once())->method('setAttributeId')->with(null)->willReturnSelf();
+        $labelMock = $this->createMock(FrontendLabel::class);
+        $attributeMock->expects($this->any())->method('getFrontendLabels')->willReturn([$labelMock]);
+        $attributeMock->expects($this->any())->method('getDefaultFrontendLabel')->willReturn('default_label');
+        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('attribute_code');
+        $attributeMock->expects($this->any())->method('getBackendTypeByInput')->willReturn('varchar');
+        $attributeMock->expects($this->any())->method('getBackendType')->willReturn('decimal');
+
+        $validateMock = $this->createMock(Validator::class);
+        $this->validatorFactoryMock->expects($this->any())->method('create')->willReturn($validateMock);
+        $validateMock->expects($this->any())->method('isValid')->willReturn(true);
 
         $this->model->save($attributeMock);
     }
