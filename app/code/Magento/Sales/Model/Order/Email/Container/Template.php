@@ -25,7 +25,7 @@ class Template implements ResetAfterRequestInterface
     protected $templateId;
 
     /**
-     * @var int
+     * @var int|string
      */
     protected $id;
 
@@ -74,7 +74,7 @@ class Template implements ResetAfterRequestInterface
     /**
      * Set email template id
      *
-     * @param int $id
+     * @param int|string $id
      * @return void
      */
     public function setTemplateId($id)
@@ -85,7 +85,7 @@ class Template implements ResetAfterRequestInterface
     /**
      * Get email template id
      *
-     * @return int
+     * @return int|string
      */
     public function getTemplateId()
     {
