@@ -177,7 +177,8 @@ class FilterTest extends TestCase
             [[1, 2, 3], 'false', 0, 'in'],
             [[1, 2, 3], [1, 2, 3], 1, 'nin'],
             ['false', [1, 2, 3], 1, 'nin'],
-            ['false', 'false', 0, '']
+            ['false', 'false', 0, ''],
+            ['all', 'false', 0, '']
         ];
     }
 
