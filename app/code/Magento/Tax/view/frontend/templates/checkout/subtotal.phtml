@@ -21,7 +21,7 @@ $checkoutHelper = $block->getData('checkoutHelper');
     <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
         <?= $block->escapeHtml(__('Subtotal (Excl. Tax)')) ?>
     </th>
-    <tdclass="amount" data-th="<?= $block->escapeHtmlAttr(__('Subtotal (Excl. Tax)')) ?>">
+    <td class="amount" data-th="<?= $block->escapeHtmlAttr(__('Subtotal (Excl. Tax)')) ?>">
         <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotal()->getValueExclTax()) ?>
     </td>
 </tr>
