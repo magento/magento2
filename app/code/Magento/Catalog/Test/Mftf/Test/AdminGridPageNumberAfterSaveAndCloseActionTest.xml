@@ -62,6 +62,8 @@
         </actionGroup>
         <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="saveAndCloseProduct"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="2" stepKey="seeOnSecondPageOrderGrid"/>
+        <actionGroup ref="AdminGridAssertCurrentPageNumberActionGroup" stepKey="seeOnSecondPageOrderGrid">
+            <argument name="expectedCurrentPageNumber" value="2"/>
+        </actionGroup>
     </test>
 </tests>
