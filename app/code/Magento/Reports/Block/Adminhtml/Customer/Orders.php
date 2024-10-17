@@ -9,7 +9,6 @@ namespace Magento\Reports\Block\Adminhtml\Customer;
  * Backend customers by orders report content block
  *
  * @api
- * @author     Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Orders extends \Magento\Backend\Block\Widget\Grid\Container
@@ -22,6 +21,8 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_blockGroup = 'Magento_Reports';
 
     /**
+     * Initialize Orders
+     *
      * @return void
      */
     protected function _construct()

@@ -9,7 +9,6 @@ namespace Magento\Reports\Block\Adminhtml\Sales;
  * Adminhtml invoiced report page content block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Invoiced extends \Magento\Backend\Block\Widget\Grid\Container
@@ -22,7 +21,7 @@ class Invoiced extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_template = 'Magento_Reports::report/grid/container.phtml';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {

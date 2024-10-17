@@ -23,7 +23,6 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Adminhtml grid item renderer currency
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  *
