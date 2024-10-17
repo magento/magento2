@@ -2002,6 +2002,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     protected function _prepareQuoteItems()
     {
+        $store = $this->getQuote()->getStore();
+        $this->storeManager->setCurrentStore($store);
         foreach ($this->getQuote()->getAllItems() as $item) {
             $options = [];
             $productOptions = $item->getProduct()->getTypeInstance()->getOrderOptions($item->getProduct());
