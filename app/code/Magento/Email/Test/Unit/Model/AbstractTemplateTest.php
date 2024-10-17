@@ -309,7 +309,7 @@ class AbstractTemplateTest extends TestCase
 
         $filterTemplate->expects($this->once())
             ->method('filter')
-            ->willThrowException(new \Exception());
+            ->willThrowException(new \Exception('Unit test'));
         $model->getProcessedTemplate([]);
     }
 

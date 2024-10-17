@@ -149,7 +149,7 @@ class AttributeMetadataResolverTest extends TestCase
             ->method('getDataUsingMethod')
             ->willReturnCallback(function ($arg1) use ($defaultGroupId) {
                 if (empty($arg1)) {
-                    return null;
+                    return 'Unit test';
                 } elseif ($arg1 == 'default_value') {
                     return $defaultGroupId;
                 }

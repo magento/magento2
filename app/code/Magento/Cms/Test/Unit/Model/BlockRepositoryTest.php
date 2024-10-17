@@ -219,7 +219,7 @@ class BlockRepositoryTest extends TestCase
         $this->blockResource->expects($this->once())
             ->method('save')
             ->with($this->block)
-            ->willThrowException(new \Exception());
+            ->willThrowException(new \Exception('Unit test'));
         $this->repository->save($this->block);
     }
 
@@ -232,7 +232,7 @@ class BlockRepositoryTest extends TestCase
         $this->blockResource->expects($this->once())
             ->method('delete')
             ->with($this->block)
-            ->willThrowException(new \Exception());
+            ->willThrowException(new \Exception('Unit test'));
         $this->repository->delete($this->block);
     }
 
