@@ -24,7 +24,7 @@ class AccessList extends Varnish
         parent::beforeSave();
 
         $value = $this->getValue();
-        if (!is_string($value) || !preg_match('/^[\w\s\.\-\,\:]+$/', $value)) {
+        if (!is_string($value) || !preg_match('/^[\w\s\.\-\,\:(\/\d+)?]+$/', $value)) {
             throw new LocalizedException(
                 new Phrase(
                     'Access List value "%1" is not valid. '
