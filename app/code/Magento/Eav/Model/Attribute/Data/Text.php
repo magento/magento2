@@ -17,7 +17,6 @@ use Psr\Log\LoggerInterface;
 /**
  * EAV Entity Attribute Text Data Model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData

@@ -13,8 +13,6 @@
  * @method \Magento\Eav\Model\Entity\Attribute\Set setAttributeSetName(string $value)
  * @method int getSortOrder()
  * @method \Magento\Eav\Model\Entity\Attribute\Set setSortOrder(int $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 
@@ -31,13 +29,13 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**#@+
      * Constants
      */
-    const KEY_ATTRIBUTE_SET_ID = 'attribute_set_id';
-    const KEY_ATTRIBUTE_SET_NAME = 'attribute_set_name';
-    const KEY_SORT_ORDER = 'sort_order';
-    const KEY_ENTITY_TYPE_ID = 'entity_type_id';
+    public const KEY_ATTRIBUTE_SET_ID = 'attribute_set_id';
+    public const KEY_ATTRIBUTE_SET_NAME = 'attribute_set_name';
+    public const KEY_SORT_ORDER = 'sort_order';
+    public const KEY_ENTITY_TYPE_ID = 'entity_type_id';
     /**#@-*/
 
-    /**#@-*/
+    /** @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb */
     protected $_resource;
 
     /**
@@ -253,6 +251,8 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * Initialise a group model
+     *
      * @param array $group
      * @return Group
      */
@@ -383,7 +383,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      * @codeCoverageIgnoreStart
      */
     public function getAttributeSetId()
@@ -392,7 +392,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getAttributeSetName()
     {
@@ -400,7 +400,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getSortOrder()
     {
@@ -408,7 +408,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getEntityTypeId()
     {
@@ -471,7 +471,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
      * @return \Magento\Eav\Api\Data\AttributeSetExtensionInterface|null|null
      */
@@ -481,7 +481,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
      * @param \Magento\Eav\Api\Data\AttributeSetExtensionInterface|null $extensionAttributes
      * @return $this

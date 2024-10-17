@@ -7,8 +7,6 @@ namespace Magento\Eav\Model\Validator\Attribute;
 
 /**
  * Validation EAV entity via EAV attributes' backend models
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Backend extends \Magento\Framework\Validator\AbstractValidator
 {

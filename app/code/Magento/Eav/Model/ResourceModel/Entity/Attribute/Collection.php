@@ -22,7 +22,6 @@ use Psr\Log\LoggerInterface;
  * EAV attribute resource collection
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
