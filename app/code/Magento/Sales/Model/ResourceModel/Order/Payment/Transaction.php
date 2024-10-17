@@ -10,7 +10,6 @@ use Magento\Sales\Model\Spi\TransactionResourceInterface;
 
 /**
  * Sales transaction resource model
- *
  */
 class Transaction extends EntityAbstract implements TransactionResourceInterface
 {

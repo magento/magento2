@@ -12,21 +12,15 @@ use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
 
 /**
  * Flat sales order status history collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends AbstractCollection implements OrderStatusHistorySearchResultInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_status_history_collection';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'order_status_history_collection';

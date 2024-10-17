@@ -12,28 +12,21 @@ use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
  * Flat sales order creditmemo collection
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Collection extends AbstractCollection implements CreditmemoSearchResultInterface
 {
     /**
-     * Id field name
-     *
      * @var string
      */
     protected $_idFieldName = 'entity_id';
 
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_creditmemo_collection';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'order_creditmemo_collection';
