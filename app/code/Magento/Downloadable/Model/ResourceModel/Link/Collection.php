@@ -9,8 +9,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Downloadable links resource collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

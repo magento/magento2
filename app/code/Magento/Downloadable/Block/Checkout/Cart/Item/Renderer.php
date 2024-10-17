@@ -6,8 +6,6 @@
 
 /**
  * Shopping cart downloadable item render block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Downloadable\Block\Checkout\Cart\Item;
 

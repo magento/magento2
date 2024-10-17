@@ -14,7 +14,6 @@ use Magento\Framework\Registry;
 /**
  * Adminhtml catalog product downloadable items tab and form
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @deprecated 100.3.1
  * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Composite
  */
@@ -45,8 +44,6 @@ class Downloadable extends Widget implements TabInterface
     protected $blockId = 'downloadableInfo';
 
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;

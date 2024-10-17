@@ -10,8 +10,6 @@ use Magento\Framework\App\Response\Http as HttpResponse;
 
 /**
  * Download controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class Download extends \Magento\Framework\App\Action\Action
 {
