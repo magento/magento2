@@ -6,11 +6,10 @@
 define([
     'jquery',
     'domReady',
-    'consoleLogger',
     'Magento_PageCache/js/form-key-provider',
     'jquery-ui-modules/widget',
     'mage/cookies'
-], function ($, domReady, consoleLogger, formKeyInit) {
+], function ($, domReady, formKeyInit) {
     'use strict';
 
     /**
@@ -45,18 +44,6 @@ define([
          * @param {jQuery} element - Comment holder
          */
         (function lookup(element) {
-            var iframeHostName;
-
-            // prevent cross origin iframe content reading
-            if ($(element).prop('tagName') === 'IFRAME') {
-                iframeHostName = $('<a>').prop('href', $(element).prop('src'))
-                    .prop('hostname');
-
-                if (window.location.hostname !== iframeHostName) {
-                    return [];
-                }
-            }
-
             /**
              * Rewrite jQuery contents().
              *
@@ -64,12 +51,24 @@ define([
              */
             contents = function (elem) {
                 return $.map(elem, function (el) {
+                    var iframeHostName;
+
+                    // prevent cross origin iframe content reading
+                    if ($(element).prop('tagName') === 'IFRAME') {
+                        iframeHostName = $('<a>').prop('href', $(element).prop('src'))
+                            .prop('hostname');
+
+                        if (window.location.hostname !== iframeHostName) {
+                            return [];
+                        }
+                    }
+
                     try {
                         return el.nodeName.toLowerCase() === 'iframe' ?
                             el.contentDocument || (el.contentWindow ? el.contentWindow.document : []) :
                             $.merge([], el.childNodes);
                     } catch (e) {
-                        consoleLogger.error(e);
+                        console.error(e);
 
                         return [];
                     }
