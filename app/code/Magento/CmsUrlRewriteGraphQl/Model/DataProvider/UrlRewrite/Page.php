@@ -47,6 +47,7 @@ class Page implements EntityDataProviderInterface
         int $storeId = null
     ): array {
         $result = $this->pageDataProvider->getDataByPageId((int)$id);
+        $result['id'] = $id;
         $result['type_id'] = $entity_type;
         return $result;
     }
