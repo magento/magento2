@@ -43,9 +43,15 @@ class Category extends AbstractPlugin
             $resourceCategory->beginTransaction();
             $result = $proceed($category);
             $resourceCategory->addCommitCallback(function () use ($category) {
-                $affectedProducts = $category->getAffectedProductIds();
-                if (is_array($affectedProducts)) {
-                    $this->reindexList($affectedProducts);
+                $affectedProductIds = $category->getAffectedProductIds() ?? [];
+
+                if ($category->dataHasChangedFor('is_anchor')
+                    || $category->dataHasChangedFor('is_active')) {
+                    $affectedProductIds = $category->getProductCollection()->getAllIds();
+                }
+
+                if (!empty($affectedProductIds)) {
+                    $this->reindexList($affectedProductIds);
                 }
             });
             $resourceCategory->commit();
