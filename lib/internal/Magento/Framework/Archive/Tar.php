@@ -10,8 +10,6 @@ use Magento\Framework\Archive\Helper\File;
 
 /**
  * Class to work with tar archives
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento\Framework\Archive\ArchiveInterface
 {

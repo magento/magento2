@@ -6,8 +6,6 @@
 
 /**
  * Class to work with gz archives
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Archive;
 
