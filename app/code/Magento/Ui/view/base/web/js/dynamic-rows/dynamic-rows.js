@@ -955,7 +955,7 @@ define([
                     elems[idx].recordId = rec[this.identificationProperty];
                 }
 
-                if (!rec.position) {
+                if (!rec.position && rec.position !== 0) {
                     rec.position = this.maxPosition;
                     this.setMaxPosition();
                 }
