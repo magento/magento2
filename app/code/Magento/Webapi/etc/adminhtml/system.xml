@@ -29,12 +29,14 @@
                 <field id="complex_array_limit" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Input List Limit</label>
                     <comment>Maximum number of items allowed in an entity's array property.</comment>
+                    <validate>validate-zero-or-greater validate-digits</validate>
                     <depends>
                         <field id="input_limit_enabled">1</field>
                     </depends>
                 </field>
                 <field id="maximum_page_size" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Maximum Page Size</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
                     <comment>Maximum number of items allowed in a paginated search result.</comment>
                     <depends>
                         <field id="input_limit_enabled">1</field>
@@ -42,6 +44,7 @@
                 </field>
                 <field id="default_page_size" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Default Page Size</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
                     <comment>Default number of items a paginated search result.</comment>
                 </field>
             </group>
