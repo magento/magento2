@@ -16,10 +16,12 @@ use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection as ProductLinkCollection;
+use Magento\Framework\App\Config as ScopeConfig;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
+use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -90,6 +92,11 @@ class AppendUpsellProductsObserverTest extends TestCase
     private $productVisibilityMock;
 
     /**
+     * @var ScopeConfig|MockObject
+     */
+    private $scopeConfigMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -111,6 +118,11 @@ class AppendUpsellProductsObserverTest extends TestCase
                 'setPageSize',
                 'setVisibility'
             ])
+            ->getMock();
+
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfig::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isSetFlag'])
             ->getMock();
 
         $this->bundleDataMock = $this->getMockBuilder(BundleHelper::class)
@@ -155,6 +167,7 @@ class AppendUpsellProductsObserverTest extends TestCase
                 'productVisibility' => $this->productVisibilityMock,
                 'config' => $this->configMock,
                 'bundleSelection' => $this->bundleSelectionMock,
+                'scopeConfig' => $this->scopeConfigMock,
             ]
         );
     }
@@ -172,6 +185,15 @@ class AppendUpsellProductsObserverTest extends TestCase
         $productId = 2;
         $productAttributes = ['attribute1', 'attribute2'];
         $visibleInCatalogIds = [10, 11, 12];
+        $upsellAddBundlesFlag = true;
+
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('isSetFlag')
+            ->with(
+                AppendUpsellProductsObserver::XML_CONFIG_PATH_UPSELL_ADD_BUNDLES,
+                ScopeInterface::SCOPE_STORE
+            )->willReturn($upsellAddBundlesFlag);
 
         $this->observerMock
             ->expects($this->exactly(3))
@@ -272,6 +294,15 @@ class AppendUpsellProductsObserverTest extends TestCase
         $parentIds = [1];
         $limit = 2;
         $productId = 2;
+        $upsellAddBundlesFlag = true;
+
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('isSetFlag')
+            ->with(
+                AppendUpsellProductsObserver::XML_CONFIG_PATH_UPSELL_ADD_BUNDLES,
+                ScopeInterface::SCOPE_STORE
+            )->willReturn($upsellAddBundlesFlag);
 
         $this->observerMock
             ->expects($this->exactly(3))
@@ -330,6 +361,15 @@ class AppendUpsellProductsObserverTest extends TestCase
             1 => 1
         ];
         $limit = 1;
+        $upsellAddBundlesFlag = true;
+
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('isSetFlag')
+            ->with(
+                AppendUpsellProductsObserver::XML_CONFIG_PATH_UPSELL_ADD_BUNDLES,
+                ScopeInterface::SCOPE_STORE
+            )->willReturn($upsellAddBundlesFlag);
 
         $this->observerMock
             ->expects($this->exactly(3))
@@ -374,6 +414,16 @@ class AppendUpsellProductsObserverTest extends TestCase
      */
     public function testCurrentProductIsNotAllowedForBundleSelection()
     {
+        $upsellAddBundlesFlag = true;
+
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('isSetFlag')
+            ->with(
+                AppendUpsellProductsObserver::XML_CONFIG_PATH_UPSELL_ADD_BUNDLES,
+                ScopeInterface::SCOPE_STORE
+            )->willReturn($upsellAddBundlesFlag);
+
         $this->bundleDataMock
             ->expects($this->once())
             ->method('getAllowedSelectionTypes')
@@ -393,6 +443,27 @@ class AppendUpsellProductsObserverTest extends TestCase
             ->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Grouped::TYPE_CODE);
+
+        $this->observer->execute($this->observerMock);
+    }
+
+    /**
+     * Test observer when bundles are configured not to be added to upsells automatically.
+     */
+    public function testUpsellAddBundlesNotAllowed()
+    {
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('isSetFlag')
+            ->with(
+                AppendUpsellProductsObserver::XML_CONFIG_PATH_UPSELL_ADD_BUNDLES,
+                ScopeInterface::SCOPE_STORE
+            )->willReturn(false);
+
+        $this->observerMock
+            ->expects($this->never())
+            ->method('getEvent')
+            ->willReturn($this->eventMock);
 
         $this->observer->execute($this->observerMock);
     }
