@@ -255,6 +255,9 @@
             <argument name="storage" xsi:type="object">Magento\Catalog\Model\Session\Storage</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
+        <plugin name="removeProductRelationAfterDelete" type="\Magento\Catalog\Plugin\Model\Product\Relation\RemoveRelations"/>
+    </type>
     <type name="Magento\Store\Model\ResourceModel\Website">
         <plugin name="invalidatePriceIndexerOnWebsite" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\Website"/>
         <plugin name="categoryProductWebsiteAfterDelete" type="\Magento\Catalog\Model\Indexer\Category\Product\Plugin\Website"/>

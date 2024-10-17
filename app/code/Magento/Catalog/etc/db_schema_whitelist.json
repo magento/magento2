@@ -646,9 +646,7 @@
             "CATALOG_PRODUCT_RELATION_CHILD_ID": true
         },
         "constraint": {
-            "PRIMARY": true,
-            "CAT_PRD_RELATION_CHILD_ID_CAT_PRD_ENTT_ENTT_ID": true,
-            "CAT_PRD_RELATION_PARENT_ID_CAT_PRD_ENTT_ENTT_ID": true
+            "PRIMARY": true
         }
     },
     "catalog_product_index_eav": {
