@@ -92,7 +92,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                         'formElement' => Form\Element\Checkbox::NAME,
                                         'prefer' => 'radio',
                                         'description' => __(
-                                            'Add configurable attributes to the new Attribute Set based on current'
+                                            'Add configurable attributes to a new Attribute Set based on current'
                                         ),
                                         'dataScope' => 'configurableAffectedAttributeSet',
                                         'valueMap' => [
@@ -115,7 +115,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                         'formElement' => Form\Element\Checkbox::NAME,
                                         'prefer' => 'radio',
                                         'description' => __(
-                                            'Add configurable attributes to the existing Attribute Set'
+                                            'Add configurable attributes to an existing Attribute Set'
                                         ),
                                         'dataScope' => 'configurableAffectedAttributeSet',
                                         'valueMap' => [
