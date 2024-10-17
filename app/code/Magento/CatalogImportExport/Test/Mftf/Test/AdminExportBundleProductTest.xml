@@ -119,8 +119,8 @@
             <argument name="consumerName" value="{{AdminExportMessageConsumerData.consumerName}}"/>
             <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
         </actionGroup>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitForReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForReload"/>
         <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="getFilename"/>
         <actionGroup ref="AdminGetExportFilenameOnServerActionGroup" stepKey="grabNameFile">

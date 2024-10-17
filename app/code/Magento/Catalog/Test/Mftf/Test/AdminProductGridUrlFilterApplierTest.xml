@@ -28,7 +28,7 @@
             <!-- Should wait a bit for filters really cleared because waitForPageLoad does not wait for javascripts to be finished -->
             <!-- Without this test will fail sometimes -->
             <wait time="5" stepKey="waitFilterReallyCleared"/>
-            <reloadPage stepKey="reloadPage"/>
+            <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
         </before>
 
         <after>

@@ -58,7 +58,7 @@
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
             <argument name="tags" value="config full_page"/>
         </actionGroup>
-        <reloadPage stepKey="realoadPageAfterConfigChanged"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="realoadPageAfterConfigChanged"/>
         <see selector="{{StorefrontCustomerAddressSection.country}}" userInput="United States" stepKey="seeUnitedStatesCountry"/>
         <see selector="{{StorefrontCustomerAddressSection.country}}" userInput="Brazil" stepKey="seeBrazilCountry"/>
     </test>

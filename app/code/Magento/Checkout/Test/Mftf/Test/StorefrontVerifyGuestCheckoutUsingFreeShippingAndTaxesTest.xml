@@ -138,8 +138,8 @@
         </actionGroup>
         <click selector="{{CheckoutCartSummarySection.shippingMethodElementId('freeshipping', 'freeshipping')}}" stepKey="selectShippingMethod"/>
         <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$9.72" stepKey="seeTaxAmount"/>
-        <reloadPage stepKey="reloadThePage"/>
-        <waitForPageLoad stepKey="waitForPageToReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadThePage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageToReload"/>
         <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$9.72" stepKey="seeTaxAmountAfterLoadPage"/>
         <scrollTo selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="scrollToProceedToCheckout" />
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>

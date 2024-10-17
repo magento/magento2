@@ -267,7 +267,7 @@
         <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct10FromMiniCart">
             <argument name="productName" value="$$simpleProduct1.name$$"/>
         </actionGroup>
-        <reloadPage stepKey="reloadPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
 
         <!--Check the minicart is empty and verify EmptyCartMessage and AssertProductAbsentInMiniShoppingCart-->
         <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="miniCartEnpty"/>

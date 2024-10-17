@@ -40,7 +40,7 @@
         <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
-        <reloadPage stepKey="reloadPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
 
         <!--Verify Customer in grid -->
         <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomerByEmail1">

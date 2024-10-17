@@ -54,8 +54,8 @@
         <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProductFromMiniCart">
             <argument name="productName" value="$$simpleProduct.name$$"/>
         </actionGroup>
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageLoad"/>
 
         <!--Check the minicart is empty and verify AssertProductAbsentInMiniShoppingCart-->
         <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="miniCartEnpty"/>

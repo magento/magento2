@@ -47,7 +47,7 @@
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
             <argument name="tags" value="compiled_config"/>
         </actionGroup>
-        <reloadPage stepKey="reloadPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
 
         <!--Verify Customer in grid -->
         <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomerByEmail1">
