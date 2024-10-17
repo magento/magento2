@@ -111,8 +111,7 @@
             <argument name="buttonName" value="Delete Folder"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="attemptDeleteWysiwygFolder"/>
-        <actionGroup ref="AdminMediaGalleryAssertAttentionModalActionGroup" stepKey="assertAttentionModalWysiwyg">
-            <argument name="action" value="delete"/>
+        <actionGroup ref="AdminMediaGalleryAssertAttentionModalDeleteFolderActionGroup" stepKey="assertAttentionModalWysiwyg">
             <argument name="folderName" value="wysiwyg"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryCloseAttentionModalActionGroup" stepKey="closeAttentionModalWysiwyg"/>
@@ -128,8 +127,7 @@
             <argument name="buttonName" value="Delete Folder"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="attemptDeleteCategoryFolder"/>
-        <actionGroup ref="AdminMediaGalleryAssertAttentionModalActionGroup" stepKey="assertAttentionModalCategory">
-            <argument name="action" value="delete"/>
+        <actionGroup ref="AdminMediaGalleryAssertAttentionModalDeleteFolderActionGroup" stepKey="assertAttentionModalCategory">
             <argument name="folderName" value="catalog/category"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryCloseAttentionModalActionGroup" stepKey="closeAttentionModalCategory"/>
