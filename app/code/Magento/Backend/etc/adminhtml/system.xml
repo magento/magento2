@@ -280,19 +280,19 @@
                     <frontend_class>countries</frontend_class>
                     <can_be_empty>1</can_be_empty>
                 </field>
-                <field id="region_id" translate="label" type="text" sortOrder="27" showInDefault="1" showInWebsite="1">
+                <field id="region_id" translate="label" type="text" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Region/State</label>
                 </field>
                 <field id="postcode" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1">
                     <label>ZIP/Postal Code</label>
                 </field>
-                <field id="city" translate="label" type="text" sortOrder="45" showInDefault="1" showInWebsite="1">
+                <field id="city" translate="label" type="text" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>City</label>
                 </field>
-                <field id="street_line1" translate="label" type="text" sortOrder="55" showInDefault="1" showInWebsite="1">
+                <field id="street_line1" translate="label" type="text" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Street Address</label>
                 </field>
-                <field id="street_line2" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1">
+                <field id="street_line2" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Street Address Line 2</label>
                 </field>
                 <field id="merchant_vat_number" translate="label" type="text" sortOrder="61" showInDefault="1" showInWebsite="1">
