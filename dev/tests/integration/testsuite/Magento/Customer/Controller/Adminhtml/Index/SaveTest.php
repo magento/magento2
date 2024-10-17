@@ -425,7 +425,8 @@ class SaveTest extends AbstractBackendController
         $this->dispatchCustomerSave($postData);
         $this->assertSessionMessages(
             $this->equalTo([
-                (string)__('A customer with the same email address already exists in an associated website.'),
+                (string) __('A customer with the same email address (customer@example.com)'
+                    . ' already exists in an associated website.'),
             ]),
             MessageInterface::TYPE_ERROR
         );
