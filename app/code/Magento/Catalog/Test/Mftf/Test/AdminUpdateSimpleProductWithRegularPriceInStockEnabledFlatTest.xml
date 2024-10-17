@@ -64,7 +64,9 @@
         <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickDoneButtonOnAdvancedInventorySection"/>
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{simpleProductEnabledFlat.status}}" stepKey="selectStockStatusInStock"/>
         <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductEnabledFlat.weight}}" stepKey="fillSimpleProductWeight"/>
-        <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="{{simpleProductEnabledFlat.weightSelect}}" stepKey="selectProductWeight"/>
+        <actionGroup ref="AdminSelectWeightTypeOnProductFormActionGroup" stepKey="selectProductWeight">
+            <argument name="weightOption" value="{{simpleProductEnabledFlat.weightSelect}}"/>
+        </actionGroup>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory" />
         <waitForPageLoad stepKey="waitForCategory1"/>

@@ -40,7 +40,7 @@
             <argument name="productId" value="$$createProduct.id$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForDownloadableProductPageLoad"/>
-        <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has no weight" stepKey="selectNoWeightForProduct"/>
+        <actionGroup ref="AdminSelectWeightTypeOnProductFormActionGroup" stepKey="selectNoWeightForProduct"/>
         <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>
         <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately"/>
         <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addDownloadableProductLink">
