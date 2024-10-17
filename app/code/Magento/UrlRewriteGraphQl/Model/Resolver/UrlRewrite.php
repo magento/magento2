@@ -23,41 +23,17 @@ use Magento\Framework\EntityManager\MetadataPool;
 class UrlRewrite implements ResolverInterface
 {
     /**
-     * @var UrlFinderInterface
-     */
-    private $urlFinder;
-
-    /**
-     * @var array
-     */
-    private $entityTypeMapping;
-
-    /**
-     * @var MetadataPool
-     */
-    private $metadataPool;
-
-    /**
-     * @var TypeResolver
-     */
-    private $typeResolver;
-
-    /**
      * @param UrlFinderInterface $urlFinder
      * @param TypeResolver $typeResolver
      * @param MetadataPool $metadataPool
      * @param array $entityTypeMapping
      */
     public function __construct(
-        UrlFinderInterface $urlFinder,
-        TypeResolver $typeResolver,
-        MetadataPool $metadataPool,
-        array $entityTypeMapping = []
+        private readonly UrlFinderInterface $urlFinder,
+        private readonly TypeResolver $typeResolver,
+        private readonly MetadataPool $metadataPool,
+        private readonly array $entityTypeMapping = []
     ) {
-        $this->urlFinder = $urlFinder;
-        $this->typeResolver = $typeResolver;
-        $this->metadataPool = $metadataPool;
-        $this->entityTypeMapping = $entityTypeMapping;
     }
 
     /**
