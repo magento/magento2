@@ -3,45 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Observer;
+namespace Magento\Catalog\Model;
+
+use Magento\Catalog\Helper\Category as CategoryHelper;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Framework\Registry;
 
 class MenuCategoryData
 {
     /**
-     * Catalog category
-     *
-     * @var \Magento\Catalog\Helper\Category
+     * @var CategoryHelper
      */
     protected $catalogCategory;
 
     /**
-     * Catalog layer
-     *
-     * @var \Magento\Catalog\Model\Layer
+     * @var Layer
      */
     private $catalogLayer = null;
 
     /**
-     * Catalog layer resolver
-     *
-     * @var \Magento\Catalog\Model\Layer\Resolver
+     * @var Resolver
      */
     protected $layerResolver;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $registry;
 
     /**
-     * @param \Magento\Catalog\Helper\Category $catalogCategory
-     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
-     * @param \Magento\Framework\Registry $registry
+     * @param CategoryHelper $catalogCategory
+     * @param Resolver $layerResolver
+     * @param Registry $registry
      */
     public function __construct(
-        \Magento\Catalog\Helper\Category $catalogCategory,
-        \Magento\Catalog\Model\Layer\Resolver $layerResolver,
-        \Magento\Framework\Registry $registry
+        CategoryHelper $catalogCategory,
+        Resolver $layerResolver,
+        Registry $registry
     ) {
         $this->catalogCategory = $catalogCategory;
         $this->layerResolver = $layerResolver;
@@ -51,15 +51,15 @@ class MenuCategoryData
     /**
      * Get category data to be added to the Menu
      *
-     * @param \Magento\Framework\Data\Tree\Node $category
+     * @param Category $category
      * @return array
      */
-    public function getMenuCategoryData($category)
+    public function getMenuCategoryData(Category $category): array
     {
         $nodeId = 'category-node-' . $category->getId();
 
         $isActiveCategory = false;
-        /** @var \Magento\Catalog\Model\Category $currentCategory */
+        /** @var Category $currentCategory */
         $currentCategory = $this->registry->registry('current_category');
         if ($currentCategory && $currentCategory->getId() == $category->getId()) {
             $isActiveCategory = true;
@@ -79,10 +79,10 @@ class MenuCategoryData
     /**
      * Checks whether category belongs to active category's path
      *
-     * @param \Magento\Framework\Data\Tree\Node $category
+     * @param Category $category
      * @return bool
      */
-    protected function hasActive($category)
+    protected function hasActive(Category $category): bool
     {
         $catalogLayer = $this->getCatalogLayer();
         if (!$catalogLayer) {
@@ -100,9 +100,10 @@ class MenuCategoryData
 
     /**
      * Get catalog layer
-     * @return \Magento\Catalog\Model\Layer
+     *
+     * @return Layer
      */
-    private function getCatalogLayer()
+    private function getCatalogLayer(): Layer
     {
         if ($this->catalogLayer === null) {
             $this->catalogLayer = $this->layerResolver->get();
