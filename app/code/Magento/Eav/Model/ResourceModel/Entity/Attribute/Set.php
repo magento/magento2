@@ -86,7 +86,37 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
         }
 
+        if ($this->eavConfig->isCacheEnabled()) {
+            $this->eavConfig->getCache()->remove($this->getCacheKey());
+            $this->eavConfig->getCache()->remove($this->getCacheKey($object->getEntityId()));
+        }
+
         return parent::_afterSave($object);
+    }
+
+    /**
+     * Perform actions after object delete
+     *
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($this->eavConfig->isCacheEnabled()) {
+            $this->eavConfig->getCache()->remove($this->getCacheKey($object->getEntityId()));
+        }
+
+        return parent::_afterDelete($object);
+    }
+
+    /**
+     * @param null|int|string $setId
+     * @return string
+     */
+    protected function getCacheKey($setId = null): string
+    {
+        return self::ATTRIBUTES_CACHE_ID . $setId;
     }
 
     /**
@@ -150,7 +180,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getSetInfo(array $attributeIds, $setId = null)
     {
-        $cacheKey = self::ATTRIBUTES_CACHE_ID . $setId;
+        $cacheKey = $this->getCacheKey($setId);
 
         if ($this->eavConfig->isCacheEnabled() && ($cache = $this->eavConfig->getCache()->load($cacheKey))) {
             $setInfoData = $this->getSerializer()->unserialize($cache);
