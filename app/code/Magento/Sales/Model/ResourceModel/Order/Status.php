@@ -6,12 +6,7 @@
 
 namespace Magento\Sales\Model\ResourceModel\Order;
 
-use Magento\Framework\App\ResourceConnection;
-use Psr\Log\LoggerInterface as LogWriter;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\SalesSequence\Model\Manager;
-use \Magento\Sales\Model\ResourceModel\EntityAbstract;
-use \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 
 /**
  * Order status resource model
@@ -33,6 +28,11 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var string
      */
     protected $stateTable;
+
+    /**
+     * @var array
+     */
+    private $storeLabels = [];
 
     /**
      * Internal constructor
@@ -87,14 +87,18 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getStoreLabels(\Magento\Sales\Model\Order\Status $status)
     {
-        $select = $this->getConnection()->select()
-            ->from(['ssl' => $this->labelsTable], [])
-            ->where('status = ?', $status->getStatus())
-            ->columns([
-                'store_id',
-                'label',
-            ]);
-        return $this->getConnection()->fetchPairs($select);
+        $orderStatus = $status->getStatus();
+        if (!isset($this->storeLabels[$orderStatus])) {
+            $select = $this->getConnection()->select()
+                ->from(['ssl' => $this->labelsTable], [])
+                ->where('status = ?', $orderStatus)
+                ->columns([
+                    'store_id',
+                    'label',
+                ]);
+            $this->storeLabels[$orderStatus] = $this->getConnection()->fetchPairs($select);
+        }
+        return $this->storeLabels[$orderStatus];
     }
 
     /**
