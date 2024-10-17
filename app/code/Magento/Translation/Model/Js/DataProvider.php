@@ -6,7 +6,16 @@
 
 namespace Magento\Translation\Model\Js;
 
+use Exception;
+use Magento\Framework\App\State;
+use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\DirSearch;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filesystem\File\ReadFactory;
+use Magento\Framework\Phrase\RendererInterface;
+use Magento\Framework\View\Design\Theme\ThemePackageList;
 
 /**
  * DataProvider for js translation
@@ -16,64 +25,27 @@ use Magento\Framework\Exception\LocalizedException;
 class DataProvider implements DataProviderInterface
 {
     /**
-     * Application state
-     *
-     * @var \Magento\Framework\App\State
-     */
-    protected $appState;
-
-    /**
-     * Js translation configuration
-     *
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * @var \Magento\Framework\App\Utility\Files
-     */
-    protected $filesUtility;
-
-    /**
-     * Filesystem
-     *
-     * @var \Magento\Framework\Filesystem\File\ReadFactory
-     */
-    protected $fileReadFactory;
-
-    /**
-     * Basic translate renderer
-     *
-     * @var \Magento\Framework\Phrase\RendererInterface
-     */
-    protected $translate;
-
-    /**
-     * @param \Magento\Framework\App\State $appState
+     * @param State $appState
      * @param Config $config
-     * @param \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory
-     * @param \Magento\Framework\Phrase\RendererInterface $translate
-     * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
-     * @param \Magento\Framework\Component\DirSearch $dirSearch
-     * @param \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList
-     * @param \Magento\Framework\App\Utility\Files|null $filesUtility
+     * @param ReadFactory $fileReadFactory
+     * @param RendererInterface $translate
+     * @param ComponentRegistrar $componentRegistrar
+     * @param DirSearch $dirSearch
+     * @param ThemePackageList $themePackageList
+     * @param Files|null $filesUtility
      */
     public function __construct(
-        \Magento\Framework\App\State $appState,
-        Config $config,
-        \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory,
-        \Magento\Framework\Phrase\RendererInterface $translate,
-        \Magento\Framework\Component\ComponentRegistrar $componentRegistrar,
-        \Magento\Framework\Component\DirSearch $dirSearch,
-        \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList,
-        \Magento\Framework\App\Utility\Files $filesUtility = null
+        protected readonly State $appState,
+        protected readonly Config $config,
+        protected readonly ReadFactory $fileReadFactory,
+        protected readonly RendererInterface $translate,
+        ComponentRegistrar $componentRegistrar,
+        DirSearch $dirSearch,
+        ThemePackageList $themePackageList,
+        protected ?Files $filesUtility = null
     ) {
-        $this->appState = $appState;
-        $this->config = $config;
-        $this->fileReadFactory = $fileReadFactory;
-        $this->translate = $translate;
         $this->filesUtility = (null !== $filesUtility) ?
-            $filesUtility : new \Magento\Framework\App\Utility\Files(
+            $filesUtility : new Files(
                 $componentRegistrar,
                 $dirSearch,
                 $themePackageList
@@ -85,8 +57,8 @@ class DataProvider implements DataProviderInterface
      *
      * @param string $themePath
      * @return array
-     * @throws \Exception
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws Exception
+     * @throws LocalizedException
      */
     public function getData($themePath)
     {
@@ -101,7 +73,7 @@ class DataProvider implements DataProviderInterface
 
         $dictionary = [];
         foreach ($files as $filePath) {
-            $read = $this->fileReadFactory->create($filePath[0], \Magento\Framework\Filesystem\DriverPool::FILE);
+            $read = $this->fileReadFactory->create($filePath[0], DriverPool::FILE);
             $content = $read->readAll();
             foreach ($this->getPhrases($content) as $phrase) {
                 try {
@@ -109,7 +81,7 @@ class DataProvider implements DataProviderInterface
                     if ($phrase != $translatedPhrase) {
                         $dictionary[$phrase] = $translatedPhrase;
                     }
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     throw new LocalizedException(
                         __('Error while translating phrase "%s" in file %s.', $phrase, $filePath[0]),
                         $e
@@ -128,7 +100,7 @@ class DataProvider implements DataProviderInterface
      *
      * @param string $content
      * @return string[]
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function getPhrases($content)
     {

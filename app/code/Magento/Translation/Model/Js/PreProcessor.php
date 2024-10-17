@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Translation\Model\Js;
 
+use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Deploy\Console\DeployStaticOptions;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\TranslateInterface;
 use Magento\Framework\View\Asset\File\FallbackContext;
@@ -22,31 +24,9 @@ use Magento\Deploy\Strategy\DeployStrategyFactory;
 class PreProcessor implements PreProcessorInterface
 {
     /**
-     * Javascript translation configuration
-     *
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * @var AreaList
-     */
-    protected $areaList;
-
-    /**
-     * @var TranslateInterface
-     */
-    protected $translate;
-
-    /**
      * @var array
      */
     protected $areasThemesLocales = [];
-
-    /**
-     * @var ArgvInput
-     */
-    private $input;
 
     /**
      * @param Config $config
@@ -55,15 +35,11 @@ class PreProcessor implements PreProcessorInterface
      * @param ArgvInput $input
      */
     public function __construct(
-        Config $config,
-        AreaList $areaList,
-        TranslateInterface $translate,
-        ArgvInput $input
+        protected readonly Config $config,
+        protected readonly AreaList $areaList,
+        protected readonly TranslateInterface $translate,
+        private readonly ArgvInput $input
     ) {
-        $this->config = $config;
-        $this->areaList = $areaList;
-        $this->translate = $translate;
-        $this->input = $input;
     }
 
     /**
@@ -77,7 +53,7 @@ class PreProcessor implements PreProcessorInterface
         if ($this->config->isEmbeddedStrategy()) {
             $context = $chain->getAsset()->getContext();
 
-            $areaCode = \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;
+            $areaCode = FrontNameResolver::AREA_CODE;
 
             if ($context instanceof FallbackContext) {
                 $areaCode = $context->getAreaCode();
@@ -86,7 +62,7 @@ class PreProcessor implements PreProcessorInterface
             }
 
             $area = $this->areaList->getArea($areaCode);
-            $area->load(\Magento\Framework\App\Area::PART_TRANSLATE);
+            $area->load(Area::PART_TRANSLATE);
 
             if (!$this->isCheckStrategyCompact()) {
                 $chain->setContent($this->translate($chain->getContent()));

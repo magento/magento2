@@ -24,35 +24,6 @@ use Magento\Translation\Model\Js\DataProviderInterface;
 class PreProcessor implements PreProcessorInterface
 {
     /**
-     * Js translation configuration
-     *
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * Translation data provider
-     *
-     * @var DataProviderInterface
-     */
-    protected $dataProvider;
-
-    /**
-     * @var AreaList
-     */
-    protected $areaList;
-
-    /**
-     * @var TranslateInterface
-     */
-    protected $translate;
-
-    /**
-     * @var DesignInterface
-     */
-    private $viewDesign;
-
-    /**
      * @param Config $config
      * @param DataProviderInterface $dataProvider
      * @param AreaList $areaList
@@ -60,17 +31,12 @@ class PreProcessor implements PreProcessorInterface
      * @param DesignInterface $viewDesign
      */
     public function __construct(
-        Config $config,
-        DataProviderInterface $dataProvider,
-        AreaList $areaList,
-        TranslateInterface $translate,
-        DesignInterface $viewDesign
+        protected readonly Config $config,
+        protected readonly DataProviderInterface $dataProvider,
+        protected readonly AreaList $areaList,
+        protected readonly TranslateInterface $translate,
+        private readonly DesignInterface $viewDesign
     ) {
-        $this->config = $config;
-        $this->dataProvider = $dataProvider;
-        $this->areaList = $areaList;
-        $this->translate = $translate;
-        $this->viewDesign = $viewDesign;
     }
 
     /**

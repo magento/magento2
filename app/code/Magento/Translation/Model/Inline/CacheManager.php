@@ -6,49 +6,30 @@
 
 namespace Magento\Translation\Model\Inline;
 
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Translate\ResourceInterface;
+use Magento\Translation\Model\FileManager;
+
 /**
  * To manage translations cache
  */
 class CacheManager
 {
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
-     * @var \Magento\Framework\Translate\ResourceInterface
-     */
-    protected $translateResource;
-
-    /**
-     * @var \Magento\Framework\Locale\ResolverInterface
-     */
-    protected $localeResolver;
-
-    /**
-     * @var \Magento\Translation\Model\FileManager
-     */
-    protected $fileManager;
-
-    /**
      * Initialize dependencies
      *
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Translate\ResourceInterface $translateResource
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Translation\Model\FileManager $fileManager
+     * @param ManagerInterface $eventManager
+     * @param ResourceInterface $translateResource
+     * @param ResolverInterface $localeResolver
+     * @param FileManager $fileManager
      */
     public function __construct(
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Translate\ResourceInterface $translateResource,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Translation\Model\FileManager $fileManager
+        protected readonly ManagerInterface $eventManager,
+        protected readonly ResourceInterface $translateResource,
+        protected readonly ResolverInterface $localeResolver,
+        protected readonly FileManager $fileManager
     ) {
-        $this->eventManager = $eventManager;
-        $this->translateResource = $translateResource;
-        $this->localeResolver = $localeResolver;
-        $this->fileManager = $fileManager;
     }
 
     /**
