@@ -128,9 +128,6 @@ class UpdateHandlerTest extends TestCase
         $this->entityMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Type::TYPE_DOWNLOADABLE . 'some');
-        $this->entityMock->expects($this->once())
-            ->method('getExtensionAttributes')
-            ->willReturn($this->productExtensionMock);
         $this->entityMock->expects($this->never())
             ->method('getSku');
         $this->entityMock->expects($this->never())
