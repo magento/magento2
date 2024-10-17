@@ -11,8 +11,9 @@ define([
     'mageUtils',
     'uiLayout',
     'uiElement',
-    'Magento_Ui/js/lib/validation/validator'
-], function (_, utils, layout, Element, validator) {
+    'Magento_Ui/js/lib/validation/validator',
+    'uiRegistry'
+], function (_, utils, layout, Element, validator, registry) {
     'use strict';
 
     return Element.extend({
@@ -483,6 +484,16 @@ define([
             }
 
             return id;
+        },
+
+        /**
+         * Destroy switcher element instance if enabled.
+         */
+        destroy: function () {
+            if (this.switcherConfig.enabled) {
+                registry.async(this.switcherConfig.name)('destroy');
+            }
+            this._super();
         }
     });
 });
