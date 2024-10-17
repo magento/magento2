@@ -54,7 +54,7 @@ class TaxRateCollection extends AbstractServiceCollection
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
@@ -68,6 +68,25 @@ class TaxRateCollection extends AbstractServiceCollection
             $this->_setIsLoaded();
         }
         return $this;
+    }
+
+    /**
+     * Retrieve field values from all items
+     *
+     * @param string $colName
+     *
+     * @return array
+     */
+    public function getColumnValues($colName)
+    {
+        $col = [];
+        $searchCriteria = $this->getSearchCriteria();
+        $searchResults = $this->taxRateRepository->getList($searchCriteria);
+        foreach ($searchResults->getItems() as $taxRate) {
+            $col[] = $this->createTaxRateCollectionItem($taxRate)->getData($colName);
+        }
+
+        return $col;
     }
 
     /**
