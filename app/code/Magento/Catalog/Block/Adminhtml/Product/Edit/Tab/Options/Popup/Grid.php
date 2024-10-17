@@ -4,16 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Adminhtml product grid in custom options popup
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Popup;
 
 use Magento\Catalog\Model\Product;
 
 /**
+ * Adminhtml product grid in custom options popup
+ *
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @since 100.0.2
@@ -59,6 +56,8 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     }
 
     /**
+     * Prepare the collection
+     *
      * @return $this
      */
     protected function _prepareCollection()

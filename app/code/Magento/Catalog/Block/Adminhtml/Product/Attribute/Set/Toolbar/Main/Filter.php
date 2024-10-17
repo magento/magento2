@@ -4,9 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Main;
 
 use Magento\Backend\Block\Widget\Form;
@@ -37,6 +34,8 @@ class Filter extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Prepare the form
+     *
      * @return void
      */
     protected function _prepareForm()

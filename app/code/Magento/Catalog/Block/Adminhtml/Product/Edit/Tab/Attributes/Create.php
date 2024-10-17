@@ -4,15 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * New attribute panel on product edit page
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes;
 
 use Magento\Backend\Block\Widget\Button;
 
+/**
+ * New attribute panel on product edit page
+ */
 class Create extends Button
 {
     /**
@@ -37,6 +35,8 @@ class Create extends Button
     }
 
     /**
+     * Add 'new attribute' button
+     *
      * @return $this
      */
     protected function _beforeToHtml()
@@ -85,6 +85,8 @@ class Create extends Button
     }
 
     /**
+     * Return the HTML for this block
+     *
      * @return string
      */
     protected function _toHtml()
@@ -102,6 +104,8 @@ class Create extends Button
     }
 
     /**
+     * Return the JavaScript object name
+     *
      * @return string
      */
     public function getJsObjectName()

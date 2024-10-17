@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * customers defined options
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type;
 
+/**
+ * Customers defined options
+ */
 class AbstractType extends \Magento\Backend\Block\Widget
 {
     /**
@@ -38,6 +36,8 @@ class AbstractType extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Prepare the layout
+     *
      * @return $this
      */
     protected function _prepareLayout()
