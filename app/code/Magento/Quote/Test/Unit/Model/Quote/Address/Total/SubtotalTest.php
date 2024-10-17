@@ -76,7 +76,7 @@ class SubtotalTest extends TestCase
     /**
      * @return array
      */
-    public function collectDataProvider(): array
+    public static function collectDataProvider(): array
     {
         return [
             [12, 10, false, 12, 10],

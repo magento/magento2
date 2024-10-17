@@ -396,6 +396,7 @@ type AddVirtualProductsToCartOutput @doc(description: "Contains details about th
 
 type UpdateCartItemsOutput @doc(description: "Contains details about the cart after updating items.") {
     cart: Cart! @doc(description: "The cart after updating products.")
+    errors: [CartUserInputError!]! @doc(description: "Contains errors encountered while updating an item to the cart.")
 }
 
 type RemoveItemFromCartOutput @doc(description: "Contains details about the cart after removing an item.") {
@@ -453,6 +454,7 @@ type CartItemPrices @doc(description: "Contains details about the price of the i
     row_total_including_tax: Money! @doc(description: "The value of `row_total` plus the tax applied to the item.")
     discounts: [Discount] @doc(description: "An array of discounts to be applied to the cart item.")
     total_item_discount: Money @doc(description: "The total of all discounts applied to the item.")
+    original_item_price: Money! @doc(description: "The value of the original unit price for the item, including discounts.")
     original_row_total: Money! @doc(description: "The value of the original price multiplied by the quantity of the item.")
 }
 
@@ -499,6 +501,9 @@ enum CartUserInputErrorType {
     PRODUCT_NOT_FOUND
     NOT_SALABLE
     INSUFFICIENT_STOCK
+    COULD_NOT_FIND_CART_ITEM
+    REQUIRED_PARAMETER_MISSING
+    INVALID_PARAMETER_VALUE
     UNDEFINED
 }
 enum PlaceOrderErrorCodes {

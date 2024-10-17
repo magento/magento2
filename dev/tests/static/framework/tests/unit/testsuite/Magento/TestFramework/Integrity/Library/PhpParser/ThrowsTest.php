@@ -70,7 +70,7 @@ class ThrowsTest extends TestCase
      *
      * @return array
      */
-    public function tokensDataProvider(): array
+    public static function tokensDataProvider(): array
     {
         return [
             'PHP 7' => [

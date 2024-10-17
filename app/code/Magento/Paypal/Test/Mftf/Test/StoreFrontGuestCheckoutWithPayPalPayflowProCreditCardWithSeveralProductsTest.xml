@@ -16,6 +16,8 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-5272"/>
             <group value="paypalPayflowPro"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct1"/>
