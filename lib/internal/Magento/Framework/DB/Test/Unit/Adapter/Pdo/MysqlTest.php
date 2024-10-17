@@ -474,7 +474,7 @@ class MysqlTest extends TestCase
             [$longTableName, [], AdapterInterface::INDEX_TYPE_UNIQUE, 'UNQ_'],
             [$longTableName, [], AdapterInterface::INDEX_TYPE_FULLTEXT, 'FTI_'],
             [$longTableName, [], AdapterInterface::INDEX_TYPE_INDEX, 'IDX_'],
-            ['short_table_name', ['field1', 'field2'], '', 'SHORT_TABLE_NAME_FIELD1_FIELD2'],
+            ['short_table_name', ['field1', 'field2'], '', 'IDX_SHORT_TABLE_NAME_FIELD1_FIELD2'],
         ];
     }
 
