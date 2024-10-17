@@ -325,6 +325,9 @@ class ProductScopeRewriteGenerator
      */
     private function generateCategoryUrls(int $storeId, Product $product, ObjectRegistry $categories): array
     {
+        if (!$this->isCategoryRewritesEnabled()) {
+            return [];
+        }
         $generatedUrls[] = $this->categoriesUrlRewriteGenerator->generate(
             $storeId,
             $product,

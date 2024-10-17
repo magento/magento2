@@ -701,6 +701,9 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         }
     }
 
+    /**
+     * @magentoConfigFixture catalog/seo/generate_category_product_rewrites 1
+     */
     #[
         AppIsolation(true),
         DbIsolation(true),
@@ -762,6 +765,9 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         }
     }
 
+    /**
+     * @magentoConfigFixture catalog/seo/generate_category_product_rewrites 1
+     */
     #[
         DataFixture(StoreFixture::class, ['group_id' => 1, 'website_id' => 1], as: 'store2'),
         DataFixture(CategoryFixture::class, as: 'category'),
@@ -807,6 +813,149 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
             [
                 'request_path' => $category->getUrlKey() . '/' . $product->getUrlKey() . '.html',
                 'target_path' => 'catalog/product/view/id/' . $product->getId() . '/category/' . $category->getId(),
+                'is_auto_generated' => 1,
+                'redirect_type' => 0,
+                'store_id' => $secondStore->getId(),
+            ]
+        ];
+
+        $unexpected = [
+            [
+                'request_path' => $product->getUrlKey() . '.html',
+                'target_path' => 'catalog/product/view/id/' . $product->getId(),
+                'is_auto_generated' => 1,
+                'redirect_type' => 0,
+                'store_id' => 1 //not expected url rewrite for store 1
+            ],
+            [
+                'request_path' => $category->getUrlKey() . '/' . $product->getUrlKey() . '.html',
+                'target_path' => 'catalog/product/view/id/' . $product->getId() . '/category/' . $category->getId(),
+                'is_auto_generated' => 1,
+                'redirect_type' => 0,
+                'store_id' => 1,
+            ],
+            [
+                'request_path' => '/'.$product->getUrlKey() . '.html',// not expected anchor root category url rewrite
+                'target_path' => 'catalog/product/view/id/' . $product->getId(),
+                'is_auto_generated' => 1,
+                'redirect_type' => 0,
+                'store_id' => $secondStore->getId(),
+            ],
+            [
+                'request_path' => '/'.$product->getUrlKey() . '.html',// not expected anchor root category url rewrite
+                'target_path' => 'catalog/product/view/id/' . $product->getId(),
+                'is_auto_generated' => 1,
+                'redirect_type' => 0,
+                'store_id' => 1,
+            ]
+        ];
+
+        foreach ($expected as $row) {
+            $this->assertContains($row, $actualResults);
+        }
+
+        foreach ($unexpected as $row) {
+            $this->assertNotContains($row, $actualResults);
+        }
+    }
+
+    /**
+     * @magentoConfigFixture catalog/seo/generate_category_product_rewrites 0
+     */
+    #[
+        AppIsolation(true),
+        DbIsolation(true),
+        DataFixtureBeforeTransaction(
+            StoreFixture::class,
+            ['store_group_id' => 1, 'website_id' => 1],
+            as: 'store2'
+        ),
+        DataFixture(CategoryFixture::class, as: 'category'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category.id$']], as: 'product')
+    ]
+    public function testNotVisibleOnDefaultStoreVisibleOnDefaultScopeIgnoreCategories()
+    {
+        $product = $this->fixtures->get('product');
+        $secondStore = $this->fixtures->get('store2');
+
+        $this->urlPersist->deleteByData(
+            [
+                UrlRewrite::ENTITY_ID => $product->getId(),
+                UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+                UrlRewrite::STORE_ID => [1, $secondStore->getId()],
+            ]
+        );
+
+        $productFilter = [
+            UrlRewrite::ENTITY_TYPE => 'product',
+            'entity_id' => $product->getId(),
+            'store_id' => [$secondStore->getId()]
+        ];
+
+        $actualResults = $this->getActualResults($productFilter);
+        $this->assertCount(0, $actualResults);
+
+        $product->setStoreId(0);
+        $this->productRepository->save($product);
+
+        $actualResults = $this->getActualResults($productFilter);
+        $this->assertCount(1, $actualResults);
+
+        $expected = [
+            [
+                'request_path' => $product->getUrlKey() . '.html',
+                'target_path' => 'catalog/product/view/id/' . $product->getId(),
+                'is_auto_generated' => 1,
+                'redirect_type' => 0,
+                'store_id' => $secondStore->getId(),
+            ]
+        ];
+        foreach ($expected as $row) {
+            $this->assertContains($row, $actualResults);
+        }
+    }
+
+    /**
+     * @magentoConfigFixture catalog/seo/generate_category_product_rewrites 0
+     */
+    #[
+        DataFixture(StoreFixture::class, ['group_id' => 1, 'website_id' => 1], as: 'store2'),
+        DataFixture(CategoryFixture::class, as: 'category'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category.id$']], as: 'product')
+    ]
+    public function testUrlRewriteGenerationBasedOnScopeVisibilityIgnoreCategories()
+    {
+        $secondStore = $this->fixtures->get('store2');
+        $category = $this->fixtures->get('category');
+        $product = $this->fixtures->get('product');
+
+        $productFilter = [
+            UrlRewrite::ENTITY_TYPE => 'product',
+            'entity_id' => $product->getId(),
+            'store_id' => [1, $secondStore->getId()]
+        ];
+
+        $actualResults = $this->getActualResults($productFilter);
+        $this->assertCount(2, $actualResults);
+
+        $productScopeStore1 = $this->productRepository->get($product->getSku(), true, 1);
+        $productScopeStore1->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
+        $this->productRepository->save($productScopeStore1);
+
+        $actualResults = $this->getActualResults($productFilter);
+        $this->assertCount(1, $actualResults);
+
+        $productGlobal = $this->productRepository->get($product->getSku(), true, Store::DEFAULT_STORE_ID);
+        $productGlobal->setVisibility(Visibility::VISIBILITY_IN_CATALOG);
+        $this->productRepository->save($productGlobal);
+
+        $actualResults = $this->getActualResults($productFilter);
+        $this->assertCount(1, $actualResults);
+
+        $expected = [
+            [
+                'request_path' => $product->getUrlKey() . '.html',
+                'target_path' => 'catalog/product/view/id/' . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
                 'store_id' => $secondStore->getId(),
