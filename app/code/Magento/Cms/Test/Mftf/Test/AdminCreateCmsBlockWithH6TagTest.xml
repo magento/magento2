@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCmsBlockWithH6TagTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="CMS Block Content with H6 tag"/>
+            <title value="Admin should be able to create a CMS block with H6 tag"/>
+            <description value="Admin should be able to create a CMS block with H6 tag"/>
+            <severity value="CRITICAL"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+        </before>
+        <after>
+            <actionGroup ref="deleteBlock" stepKey="deleteCreatedBlock">
+                <argument name="Block" value="blockWithH6Tag"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnBlocksCreationForm"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <!--Create new CMS Block page with h6 tag in content field-->
+        <actionGroup ref="AdminFillCmsBlockFormActionGroup" stepKey="FillOutBlockContent">
+            <argument name="cmsBlockDataTitle" value="{{blockWithH6Tag.title}}" />
+            <argument name="cmsBlockDataIdentifier" value="{{blockWithH6Tag.identifier}}" />
+            <argument name="cmsBlockDataContent" value="{{blockWithH6Tag.content}}" />
+        </actionGroup>
+        <click selector="{{CmsNewBlockBlockActionsSection.savePage}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessageAppear"/>
+        <see userInput="You saved the block." selector="{{AdminMessagesSection.success}}" stepKey="assertSaveBlockSuccessMessage"/>
+        <dontSee userInput="Temporarily allowed to save HTML value that contains restricted elements" selector="{{BlockPageActionsSection.saveBlockWarningMessage}}" stepKey="assertSavePageWarningMessage"/>
+    </test>
+</tests>
