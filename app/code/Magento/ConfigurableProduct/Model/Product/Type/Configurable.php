@@ -81,7 +81,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
      *
      * @var string
      */
-    protected $_usedProducts = '_cache_instance_products';
+    public $_usedProducts = '_cache_instance_products';
 
     /**
      * Cache key for salable used products
@@ -1435,7 +1435,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
      * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function getConfiguredUsedProductCollection(
+    public function getConfiguredUsedProductCollection(
         \Magento\Catalog\Model\Product $product,
         $skipStockFilter = true,
         $requiredAttributeIds = null
