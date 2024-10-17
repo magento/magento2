@@ -43,7 +43,7 @@ class DryRunTest extends SetupTestCase
         $logFileName = TESTS_TEMP_DIR . '/var/log/' . DryRunLogger::FILE_NAME;
         $this->cliCommad->install(
             ['Magento_TestSetupDeclarationModule1'],
-            ['dry-run' => true]
+            ['dry-run' => 'dry-run']
         );
         self::assertFileExists($logFileName);
         $data = file_get_contents($logFileName);
@@ -64,7 +64,7 @@ class DryRunTest extends SetupTestCase
             'db_schema.xml',
             'etc'
         );
-        $this->cliCommad->upgrade(['dry-run' => true]);
+        $this->cliCommad->upgrade(['dry-run' => 'dry-run']);
         self::assertFileExists($logFileName);
         $data = file_get_contents($logFileName);
         self::assertEquals($this->getData()[0], $data);
