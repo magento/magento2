@@ -502,9 +502,9 @@ class Collection extends AbstractCollection
     /**
      * Join table to collection select
      *
-     * @param string $table
+     * @param string|array<string, string> $table
      * @param string $cond
-     * @param string $cols
+     * @param string|array<string> $cols
      * @return $this
      * @since 100.1.0
      */
