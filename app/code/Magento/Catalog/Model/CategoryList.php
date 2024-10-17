@@ -14,9 +14,14 @@ use Magento\Catalog\Api\Data\CategorySearchResultsInterface;
 use Magento\Catalog\Api\Data\CategorySearchResultsInterfaceFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class for getting category list.
@@ -49,28 +54,40 @@ class CategoryList implements CategoryListInterface
     private $collectionProcessor;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param CollectionFactory $categoryCollectionFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param CategorySearchResultsInterfaceFactory $categorySearchResultsFactory
      * @param CategoryRepositoryInterface $categoryRepository
      * @param CollectionProcessorInterface|null $collectionProcessor
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         CollectionFactory $categoryCollectionFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
         CategorySearchResultsInterfaceFactory $categorySearchResultsFactory,
         CategoryRepositoryInterface $categoryRepository,
-        CollectionProcessorInterface $collectionProcessor = null
+        CollectionProcessorInterface $collectionProcessor = null,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->categorySearchResultsFactory = $categorySearchResultsFactory;
         $this->categoryRepository = $categoryRepository;
-        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
+        $this->collectionProcessor = $collectionProcessor
+            ?? ObjectManager::getInstance()->get(CollectionProcessor::class); // @phpstan-ignore-line
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
      * @inheritdoc
+     *
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -78,11 +95,13 @@ class CategoryList implements CategoryListInterface
         $collection = $this->categoryCollectionFactory->create();
         $this->extensionAttributesJoinProcessor->process($collection);
         $this->collectionProcessor->process($searchCriteria, $collection);
+        $currentStoreId = $this->storeManager->getStore()->getId();
 
         $items = [];
         foreach ($collection->getData() as $categoryData) {
             $items[] = $this->categoryRepository->get(
-                $categoryData[$collection->getEntity()->getIdFieldName()]
+                $categoryData[$collection->getEntity()->getIdFieldName()],
+                $currentStoreId
             );
         }
 
@@ -92,21 +111,5 @@ class CategoryList implements CategoryListInterface
         $searchResult->setItems($items);
         $searchResult->setTotalCount($collection->getSize());
         return $searchResult;
-    }
-
-    /**
-     * Retrieve collection processor
-     *
-     * @deprecated 102.0.0
-     * @return CollectionProcessorInterface
-     */
-    private function getCollectionProcessor()
-    {
-        if (!$this->collectionProcessor) {
-            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor'
-            );
-        }
-        return $this->collectionProcessor;
     }
 }

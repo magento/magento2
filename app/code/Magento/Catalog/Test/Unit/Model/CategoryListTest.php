@@ -20,6 +20,8 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -59,6 +61,16 @@ class CategoryListTest extends TestCase
     private $collectionProcessorMock;
 
     /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManager;
+
+    /**
+     * @var store
+     */
+    private $store;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -75,6 +87,12 @@ class CategoryListTest extends TestCase
         $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = (new ObjectManager($this))->getObject(
             CategoryList::class,
@@ -84,6 +102,7 @@ class CategoryListTest extends TestCase
                 'categorySearchResultsFactory' => $this->categorySearchResultsFactory,
                 'categoryRepository' => $this->categoryRepository,
                 'collectionProcessor' => $this->collectionProcessorMock,
+                'storeManager' => $this->storeManager
             ]
         );
     }
@@ -132,6 +151,11 @@ class CategoryListTest extends TestCase
         $this->categorySearchResultsFactory->expects($this->once())->method('create')->willReturn($searchResult);
         $this->categoryCollectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $this->extensionAttributesJoinProcessor->expects($this->once())->method('process')->with($collection);
+
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->any())->method('getId')->willReturn(1);
 
         $this->assertEquals($searchResult, $this->model->getList($searchCriteria));
     }
