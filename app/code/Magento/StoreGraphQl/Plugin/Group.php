@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\StoreGraphQl\Plugin;
 
+use Magento\Store\Model\Group as ModelGroup;
 use Magento\StoreGraphQl\Model\Resolver\Store\ConfigIdentity;
 
 /**
@@ -17,11 +18,11 @@ class Group
     /**
      * Add graphql store config tag to the store group cache identities.
      *
-     * @param \Magento\Store\Model\Group $subject
+     * @param ModelGroup $subject
      * @param array $result
      * @return array
      */
-    public function afterGetIdentities(\Magento\Store\Model\Group $subject, array $result): array
+    public function afterGetIdentities(ModelGroup $subject, array $result): array
     {
         $storeIds = $subject->getStoreIds();
         if (count($storeIds) > 0) {
