@@ -236,6 +236,12 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Category\Form\Modifier\Pool" type="Magento\Ui\DataProvider\Modifier\Pool"/>
+    <type name="Magento\Catalog\Model\Category\DataProvider">
+        <arguments>
+            <argument name="pool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Category\Form\Modifier\Pool</argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\Catalog\Ui\Component\Form\Field\Category\PageLayout" type="Magento\Ui\Component\Form\Field\DefaultValue">
         <arguments>
             <argument name="path" xsi:type="string">web/default_layouts/default_category_layout</argument>
