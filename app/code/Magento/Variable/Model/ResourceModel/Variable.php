@@ -6,10 +6,16 @@
 
 namespace Magento\Variable\Model\ResourceModel;
 
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Store\Model\Store;
+use Magento\Variable\Model\Variable as ModelVariable;
+
 /**
  * Custom variable resource model
  */
-class Variable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Variable extends AbstractDb
 {
     /**
      * Constructor
@@ -24,11 +30,11 @@ class Variable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Load variable by code
      *
-     * @param \Magento\Variable\Model\Variable $object
+     * @param ModelVariable $object
      * @param string $code
      * @return $this
      */
-    public function loadByCode(\Magento\Variable\Model\Variable $object, $code)
+    public function loadByCode(ModelVariable $object, $code)
     {
         if ($result = $this->getVariableByCode($code, true, $object->getStoreId())) {
             $object->setData($result);
@@ -61,10 +67,10 @@ class Variable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Perform actions after object save
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _afterSave(AbstractModel $object)
     {
         parent::_afterSave($object);
         if ($object->getUseDefaultValue()) {
@@ -100,7 +106,7 @@ class Variable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      */
     protected function _getLoadSelect($field, $value, $object)
@@ -113,13 +119,13 @@ class Variable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Add variable store and default value to select
      *
-     * @param \Magento\Framework\DB\Select $select
+     * @param Select $select
      * @param integer $storeId
-     * @return \Magento\Variable\Model\ResourceModel\Variable
+     * @return Variable
      */
     protected function _addValueToSelect(
-        \Magento\Framework\DB\Select $select,
-        $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID
+        Select $select,
+        $storeId = Store::DEFAULT_STORE_ID
     ) {
         $connection = $this->getConnection();
         $ifNullPlainValue = $connection->getCheckSql(

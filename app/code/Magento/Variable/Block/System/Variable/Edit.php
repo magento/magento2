@@ -5,29 +5,33 @@
  */
 namespace Magento\Variable\Block\System\Variable;
 
+use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Block\Widget\Form\Container;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+use Magento\Variable\Model\Variable;
+
 /**
  * Custom Variable Edit Container
  *
  * @api
  * @since 100.0.2
  */
-class Edit extends \Magento\Backend\Block\Widget\Form\Container
+class Edit extends Container
 {
     /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param Context $context
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Framework\Registry $registry,
+        Context $context,
+        Registry $registry,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
@@ -51,7 +55,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Getter
      *
-     * @return \Magento\Variable\Model\Variable
+     * @return Variable
      */
     public function getVariable()
     {
@@ -60,6 +64,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * Prepare layout.
+     *
      * Adding save_and_continue button
      *
      * @return $this
@@ -87,6 +92,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Return form HTML
      *
      * @return string
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
      */
     public function getFormHtml()
     {
@@ -96,7 +102,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Return translated header text depending on creating/editing action
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getHeaderText()
     {

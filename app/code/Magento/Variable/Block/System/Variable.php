@@ -5,13 +5,15 @@
  */
 namespace Magento\Variable\Block\System;
 
+use Magento\Backend\Block\Widget\Grid\Container;
+
 /**
  * Custom Variable Block
  *
  * @api
  * @since 100.0.2
  */
-class Variable extends \Magento\Backend\Block\Widget\Grid\Container
+class Variable extends Container
 {
     /**
      * Block constructor

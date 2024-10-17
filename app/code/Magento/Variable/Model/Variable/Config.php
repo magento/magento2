@@ -5,7 +5,13 @@
  */
 namespace Magento\Variable\Model\Variable;
 
+use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Variable\Model\ResourceModel\Variable\CollectionFactory;
+use Magento\Variable\Model\Source\Variables;
 
 /**
  * Variable Wysiwyg Plugin Config
@@ -16,51 +22,36 @@ use Magento\Framework\App\ObjectManager;
 class Config
 {
     /**
-     * @var \Magento\Framework\View\Asset\Repository
+     * @var Repository
      */
     protected $_assetRepo;
 
     /**
-     * @var \Magento\Backend\Model\UrlInterface
+     * @var UrlInterface
      */
     protected $_url;
 
     /**
-     * @var \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var \Magento\Variable\Model\Source\Variables
-     */
-    private $storesVariables;
-
-    /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
-     */
-    private $encoder;
-
-    /**
      * Config constructor.
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Backend\Model\UrlInterface $url
-     * @param \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory|null $collectionFactory
-     * @param \Magento\Variable\Model\Source\Variables|null $storesVariables
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $encoder
+     * @param Repository $assetRepo
+     * @param UrlInterface $url
+     * @param CollectionFactory|null $collectionFactory
+     * @param Variables|null $storesVariables
+     * @param Json|null $encoder
      */
     public function __construct(
-        \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Backend\Model\UrlInterface $url,
-        \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory $collectionFactory = null,
-        \Magento\Variable\Model\Source\Variables $storesVariables = null,
-        \Magento\Framework\Serialize\Serializer\Json $encoder = null
+        Repository $assetRepo,
+        UrlInterface $url,
+        private ?CollectionFactory $collectionFactory = null,
+        private ?Variables $storesVariables = null,
+        private ?Json $encoder = null
     ) {
         $this->collectionFactory = $collectionFactory ?: ObjectManager::getInstance()
-            ->get(\Magento\Variable\Model\ResourceModel\Variable\CollectionFactory::class);
+            ->get(CollectionFactory::class);
         $this->storesVariables = $storesVariables ?: ObjectManager::getInstance()
-            ->get(\Magento\Variable\Model\Source\Variables::class);
+            ->get(Variables::class);
         $this->encoder = $encoder ?: ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+            ->get(Json::class);
         $this->_url = $url;
         $this->_assetRepo = $assetRepo;
     }
@@ -68,7 +59,7 @@ class Config
     /**
      * Prepare variable wysiwyg config
      *
-     * @param \Magento\Framework\DataObject $config
+     * @param DataObject $config
      * @return array
      */
     public function getWysiwygPluginSettings($config)
@@ -133,7 +124,7 @@ class Config
             $variables[$variable['value']] = [
                 'code' => $variable['value'],
                 'variable_name' => $variable['label'],
-                'variable_type' => \Magento\Variable\Model\Source\Variables::DEFAULT_VARIABLE_TYPE
+                'variable_type' => Variables::DEFAULT_VARIABLE_TYPE
             ];
         }
 

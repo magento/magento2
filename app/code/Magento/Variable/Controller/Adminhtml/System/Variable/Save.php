@@ -6,25 +6,30 @@
  */
 namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
+use Exception;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Variable\Controller\Adminhtml\System\Variable;
+
 /**
  * Save variable POST controller
  *
  * @api
  * @since 100.0.2
  */
-class Save extends \Magento\Variable\Controller\Adminhtml\System\Variable
+class Save extends Variable implements HttpPostActionInterface
 {
     /**
      * Save Action
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
         $variable = $this->_initVariable();
         $data = $this->getRequest()->getPost('variable');
         $back = $this->getRequest()->getParam('back', false);
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $data['variable_id'] = $variable->getId();
@@ -41,7 +46,7 @@ class Save extends \Magento\Variable\Controller\Adminhtml\System\Variable
                     $resultRedirect->setPath('adminhtml/*/');
                 }
                 return $resultRedirect;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 return $resultRedirect->setPath('adminhtml/*/edit', ['_current' => true]);
             }
