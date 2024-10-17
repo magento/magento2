@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="google" translate="label" type="text" sortOrder="340" showInDefault="1" showInWebsite="1" showInStore="1">
-            <label>Google API</label>
+            <label>Google Analytics</label>
             <tab>sales</tab>
             <resource>Magento_GoogleAnalytics::google</resource>
             <group id="analytics" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
