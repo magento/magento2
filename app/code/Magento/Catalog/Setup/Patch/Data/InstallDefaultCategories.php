@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Setup\Patch\Data;
 
@@ -17,7 +18,6 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 /**
  * Class InstallDefaultCategories data patch.
  *
- * @package Magento\Catalog\Setup\Patch
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterface
@@ -54,7 +54,8 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -117,6 +118,7 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
         $categorySetup->updateAttributeGroup($entityTypeId, $attributeSetId, $attributeGroupId, 'sort_order', '10');
 
         $groups = [
+            'content' => ['name' => 'Content', 'code' => 'cms-content', 'sort' => 10, 'id' => null],
             'display' => ['name' => 'Display Settings', 'code' => 'display-settings', 'sort' => 20, 'id' => null],
             'design' => ['name' => 'Custom Design', 'code' => 'custom-design', 'sort' => 30, 'id' => null],
         ];
@@ -129,16 +131,15 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
         // update attributes group and sort
         $attributes = [
             'custom_design' => ['group' => 'design', 'sort' => 10],
-            // 'custom_design_apply' => array('group' => 'design', 'sort' => 20),
-            'custom_design_from' => ['group' => 'design', 'sort' => 30],
-            'custom_design_to' => ['group' => 'design', 'sort' => 40],
-            'page_layout' => ['group' => 'design', 'sort' => 50],
-            'custom_layout_update' => ['group' => 'design', 'sort' => 60],
+            'custom_design_from' => ['group' => 'design', 'sort' => 20],
+            'custom_design_to' => ['group' => 'design', 'sort' => 30],
+            'page_layout' => ['group' => 'design', 'sort' => 40],
+            'custom_layout_update' => ['group' => 'design', 'sort' => 50],
             'display_mode' => ['group' => 'display', 'sort' => 10],
-            'landing_page' => ['group' => 'display', 'sort' => 20],
-            'is_anchor' => ['group' => 'display', 'sort' => 30],
-            'available_sort_by' => ['group' => 'display', 'sort' => 40],
-            'default_sort_by' => ['group' => 'display', 'sort' => 50],
+            'landing_page' => ['group' => 'content', 'sort' => 10],
+            'is_anchor' => ['group' => 'display', 'sort' => 20],
+            'available_sort_by' => ['group' => 'display', 'sort' => 30],
+            'default_sort_by' => ['group' => 'display', 'sort' => 40],
         ];
 
         foreach ($attributes as $attributeCode => $attributeProp) {
@@ -349,10 +350,12 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
             'frontend_model',
             \Magento\Eav\Model\Entity\Attribute\Frontend\Datetime::class
         );
+        
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -360,15 +363,15 @@ class InstallDefaultCategories implements DataPatchInterface, PatchVersionInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
-        return '2.0.0';
+        return '2.0.1';
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
