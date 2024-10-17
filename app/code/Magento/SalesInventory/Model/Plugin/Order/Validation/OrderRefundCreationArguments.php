@@ -19,18 +19,12 @@ use Magento\Sales\Model\ValidatorResultInterface;
 class OrderRefundCreationArguments
 {
     /**
-     * @var ReturnValidator
-     */
-    private $returnValidator;
-
-    /**
      * OrderRefundCreationArguments constructor.
      * @param ReturnValidator $returnValidator
      */
     public function __construct(
-        ReturnValidator $returnValidator
+        private readonly ReturnValidator $returnValidator
     ) {
-        $this->returnValidator = $returnValidator;
     }
 
     /**

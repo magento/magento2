@@ -5,8 +5,14 @@
  */
 namespace Magento\SalesInventory\Model\Order;
 
+use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceProcessor;
+use Magento\CatalogInventory\Api\StockManagementInterface;
+use Magento\CatalogInventory\Model\Indexer\Stock\Processor as StockProcessor;
 use Magento\Sales\Api\Data\CreditmemoInterface;
+use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderItemRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class ReturnProcessor
@@ -17,50 +23,26 @@ use Magento\Sales\Api\Data\OrderInterface;
 class ReturnProcessor
 {
     /**
-     * @var \Magento\CatalogInventory\Api\StockManagementInterface
-     */
-    private $stockManagement;
-
-    /**
-     * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
+     * @var StockProcessor
      */
     private $stockIndexerProcessor;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
-     */
-    private $priceIndexer;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var \Magento\Sales\Api\OrderItemRepositoryInterface
-     */
-    private $orderItemRepository;
-
-    /**
      * ReturnProcessor constructor.
-     * @param \Magento\CatalogInventory\Api\StockManagementInterface $stockManagement
-     * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexer
-     * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Sales\Api\OrderItemRepositoryInterface $orderItemRepository
+     * @param StockManagementInterface $stockManagement
+     * @param StockProcessor $stockIndexer
+     * @param PriceProcessor $priceIndexer
+     * @param StoreManagerInterface $storeManager
+     * @param OrderItemRepositoryInterface $orderItemRepository
      */
     public function __construct(
-        \Magento\CatalogInventory\Api\StockManagementInterface $stockManagement,
-        \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexer,
-        \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Sales\Api\OrderItemRepositoryInterface $orderItemRepository
+        private readonly StockManagementInterface $stockManagement,
+        StockProcessor $stockIndexer,
+        private readonly PriceProcessor $priceIndexer,
+        private readonly StoreManagerInterface $storeManager,
+        private readonly OrderItemRepositoryInterface $orderItemRepository
     ) {
-        $this->stockManagement = $stockManagement;
         $this->stockIndexerProcessor = $stockIndexer;
-        $this->priceIndexer = $priceIndexer;
-        $this->storeManager = $storeManager;
-        $this->orderItemRepository = $orderItemRepository;
     }
 
     /**
@@ -109,14 +91,14 @@ class ReturnProcessor
     }
 
     /**
-     * @param \Magento\Sales\Api\Data\CreditmemoItemInterface $item
+     * @param CreditmemoItemInterface $item
      * @param int $qty
      * @param int[] $returnToStockItems
      * @param int $parentItemId
      * @return bool
      */
     private function canReturnItem(
-        \Magento\Sales\Api\Data\CreditmemoItemInterface $item,
+        CreditmemoItemInterface $item,
         $qty,
         $parentItemId = null,
         array $returnToStockItems = []
