@@ -116,7 +116,7 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
             $baseTotalWeeeAmount += $baseWeeeAmountExclTax;
 
             $item->setWeeeTaxAppliedRowAmount($weeeAmountExclTax);
-            $item->setBaseWeeeTaxAppliedRowAmount($baseWeeeAmountExclTax);
+            $item->setBaseWeeeTaxAppliedRowAmnt($baseWeeeAmountExclTax);
 
             $totalTaxAmount += $itemTaxAmount;
             $baseTotalTaxAmount += $itemBaseTaxAmount;
