@@ -74,7 +74,7 @@ class GenericTest extends TestCase
     /**
      * @return array
      */
-    public function metaDataProvider(): array
+    public static function metaDataProvider(): array
     {
         return [
             [

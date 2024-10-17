@@ -60,7 +60,7 @@ class ViewTest extends TestCase
     /**
      * @return array
      */
-    public function afterCanEmailToFriendDataSet()
+    public static function afterCanEmailToFriendDataSet()
     {
         return [
             [true, 'never'],

@@ -297,7 +297,7 @@ class GeneratedFilesTest extends TestCase
      *
      * @return array
      */
-    public function itDoesNotCleanGeneratedFilesDueToExceptionsDataProvider()
+    public static function itDoesNotCleanGeneratedFilesDueToExceptionsDataProvider()
     {
         return [
             RuntimeException::class => [RuntimeException::class],

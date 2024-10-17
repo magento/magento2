@@ -27,7 +27,7 @@ class ResourceConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getConnectionNameDataProvider()
+    public static function getConnectionNameDataProvider()
     {
         return [
             'validResourceName' => ['validResourceName'],
