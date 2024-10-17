@@ -8,6 +8,8 @@
  * Core URL helper
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @deprecated Use @api \Magento\Framework\Url\EncoderInterface::encode and \Magento\Framework\UrlInterface::getCurrentUrl
  */
 namespace Magento\Framework\Url\Helper;
 

@@ -9,6 +9,7 @@ use Magento\Framework\EntityManager\OperationInterface;
 
 /**
  * Interface for updating entity
+ * @deprecated
  */
 interface UpdateInterface extends OperationInterface
 {

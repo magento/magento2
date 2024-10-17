@@ -8,6 +8,7 @@
  * Magento HTTP Client
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @deprecated Use \Magento\Framework\HTTP\ClientInterface
  */
 namespace Magento\Framework\HTTP;
 

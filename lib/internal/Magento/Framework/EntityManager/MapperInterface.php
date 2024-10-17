@@ -7,6 +7,7 @@ namespace Magento\Framework\EntityManager;
 
 /**
  * MapperInterface
+ * @deprecated
  */
 interface MapperInterface
 {

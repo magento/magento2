@@ -9,6 +9,7 @@ use Magento\Framework\EntityManager\OperationInterface;
 
 /**
  * Interface for creating entity
+ * @deprecated
  */
 interface CreateInterface extends OperationInterface
 {

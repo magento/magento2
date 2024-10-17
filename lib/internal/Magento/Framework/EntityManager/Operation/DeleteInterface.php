@@ -9,6 +9,7 @@ use Magento\Framework\EntityManager\OperationInterface;
 
 /**
  * Interface for deleting entity
+ * @deprecated
  */
 interface DeleteInterface extends OperationInterface
 {

@@ -7,6 +7,7 @@ namespace Magento\Framework\EntityManager;
 
 /**
  * Marker interface for entity manager operations.
+ * @deprecated this component was never finished and not recommended for usage
  */
 interface OperationInterface
 {
