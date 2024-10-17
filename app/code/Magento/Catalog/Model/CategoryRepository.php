@@ -149,7 +149,7 @@ class CategoryRepository implements CategoryRepositoryInterface, ResetAfterReque
      */
     public function get($categoryId, $storeId = null)
     {
-        $cacheKey = $storeId ?? 'all';
+        $cacheKey = $storeId ?? $this->storeManager->getStore()->getId();
         if (!isset($this->instances[$categoryId][$cacheKey])) {
             /** @var Category $category */
             $category = $this->categoryFactory->create();
@@ -231,7 +231,7 @@ class CategoryRepository implements CategoryRepositoryInterface, ResetAfterReque
      * Lazy loader for the converter.
      *
      * @return ExtensibleDataObjectConverter
-     *
+     * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
      * @deprecated 101.0.0
      * @see we don't recommend this approach anymore
      */
