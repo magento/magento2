@@ -80,7 +80,7 @@ class StockRegistry implements StockRegistryInterface
     /**
      * @param int $productId
      * @param int $scopeId
-     * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
+     * @return StockItemInterface
      */
     public function getStockItem($productId, $scopeId = null)
     {
@@ -91,7 +91,7 @@ class StockRegistry implements StockRegistryInterface
     /**
      * @param string $productSku
      * @param int $scopeId
-     * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
+     * @return StockItemInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getStockItemBySku($productSku, $scopeId = null)
@@ -167,7 +167,7 @@ class StockRegistry implements StockRegistryInterface
     /**
      * @inheritdoc
      */
-    public function updateStockItemBySku($productSku, \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem)
+    public function updateStockItemBySku($productSku, StockItemInterface $stockItem)
     {
         $productId = $this->resolveProductId($productSku);
         $websiteId = $stockItem->getWebsiteId() ?: null;
