@@ -200,12 +200,18 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
         }
         $column = $this->_columns[$columnName];
         $inputName = $this->_getCellInputElementName($columnName);
+        $inputId = $this->_getCellInputElementId('<%- _id %>', $columnName);
 
         if ($column['renderer']) {
-            return $column['renderer']->setInputName(
+            return $column['renderer']->setName(
+                $inputName
+            )->setId(
+                $inputId
+            // setInputName() and setInputId() are called for BC.
+            )->setInputName(
                 $inputName
             )->setInputId(
-                $this->_getCellInputElementId('<%- _id %>', $columnName)
+                $inputId
             )->setColumnName(
                 $columnName
             )->setColumn(
@@ -213,10 +219,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
             )->toHtml();
         }
 
-        return '<input type="text" id="' . $this->_getCellInputElementId(
-            '<%- _id %>',
-            $columnName
-        ) .
+        return '<input type="text" id="' . $inputId .
             '"' .
             ' name="' .
             $inputName .
