@@ -6,8 +6,6 @@
 
 /**
  * Catalog product abstract price backend attribute model with customer group specific
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\GroupPrice;
 
@@ -32,6 +30,8 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\ResourceModel
     }
 
     /**
+     * Return the select object
+     *
      * @param int|null $websiteId
      * @return \Magento\Framework\DB\Select
      */
@@ -61,6 +61,8 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\ResourceModel
     }
 
     /**
+     * Return the product ID field name
+     *
      * @return string
      */
     protected function getProductIdFieldName()

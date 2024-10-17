@@ -19,17 +19,14 @@ use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection as Produ
  * @method int getLinkTypeId()
  * @method \Magento\Catalog\Model\Product\Link setLinkTypeId(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 class Link extends \Magento\Framework\Model\AbstractModel
 {
-    const LINK_TYPE_RELATED = 1;
-
-    const LINK_TYPE_UPSELL = 4;
-
-    const LINK_TYPE_CROSSSELL = 5;
+    public const LINK_TYPE_RELATED = 1;
+    public const LINK_TYPE_UPSELL = 4;
+    public const LINK_TYPE_CROSSSELL = 5;
 
     /**
      * @var mixed
@@ -37,15 +34,11 @@ class Link extends \Magento\Framework\Model\AbstractModel
     protected $_attributes = null;
 
     /**
-     * Product collection factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
 
     /**
-     * Link collection factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory
      */
     protected $_linkCollectionFactory;
@@ -99,6 +92,8 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Set this link to use related links
+     *
      * @return $this
      */
     public function useRelatedLinks()
@@ -108,6 +103,8 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Set this link to use upsell links
+     *
      * @return $this
      */
     public function useUpSellLinks()
@@ -117,6 +114,8 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Set this link to use cross-sell links
+     *
      * @return $this
      */
     public function useCrossSellLinks()
@@ -159,6 +158,8 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Return attributes
+     *
      * @param int $type
      * @return array
      */
@@ -187,6 +188,8 @@ class Link extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Return product link save handler
+     *
      * @return Link\SaveHandler
      */
     private function getProductLinkSaveHandler()
