@@ -403,7 +403,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
         $associatedProducts = !$isStrictProcessMode || !empty($productsInfo)
             ? $this->getAssociatedProducts($product)
-            : false;
+            : [];
 
         foreach ($associatedProducts as $subProduct) {
             $qty = $productsInfo[$subProduct->getId()];
