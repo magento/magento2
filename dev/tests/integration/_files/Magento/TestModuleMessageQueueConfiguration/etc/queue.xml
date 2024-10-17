@@ -13,10 +13,10 @@
     <broker topic="deprecated.config.async.bool.topic" type="db" exchange="deprecatedExchange">
         <queue consumer="deprecatedConfigAsyncBoolConsumer" name="deprecated.config.queue.2" />
     </broker>
-    <broker topic="deprecated.config.sync.bool.topic" type="amqp" exchange="customExchange">
+    <broker topic="deprecated.config.sync.bool.topic" type="db" exchange="customExchange">
         <queue consumer="deprecatedConfigSyncBoolConsumer" name="deprecated.config.queue.4"/>
     </broker>
-    <broker topic="overlapping.topic.declaration" type="amqp" exchange="overlappingDeprecatedExchange">
+    <broker topic="overlapping.topic.declaration" exchange="overlappingDeprecatedExchange">
         <queue consumer="overlappingConsumerDeclaration" name="consumer.config.queue" consumerInstance="Magento\Framework\MessageQueue\BatchConsumer" maxMessages="222" handler="Magento\TestModuleMessageQueueConfiguration\AsyncHandler::methodWithMixedParam"/>
     </broker>
 </config>

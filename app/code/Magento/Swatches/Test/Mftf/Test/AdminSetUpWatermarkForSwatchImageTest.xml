@@ -18,6 +18,7 @@
             <testCaseId value="MC-17607"/>
             <useCaseId value="MC-15523"/>
             <group value="swatches"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as Admin -->

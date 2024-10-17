@@ -1,10 +1,10 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
-type Item {
+type TestItemOutput {
     integer_list: [Int] @resolver(class: "Magento\\TestModuleGraphQlQueryExtension\\Model\\Resolver\\IntegerList")
 }
 
-type MutationItem {
+type MutationItemOutput {
     integer_list: [Int] @resolver(class: "Magento\\TestModuleGraphQlQueryExtension\\Model\\Resolver\\IntegerList")
 }

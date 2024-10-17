@@ -53,7 +53,7 @@ class ConverterTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderExpectedData()
+    public static function dataProviderExpectedData()
     {
         return [
             [

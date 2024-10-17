@@ -7,6 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
     <topic name="demo.exception" request="Magento\TestModuleMysqlMq\Model\DataObject"/>
+    <topic name="demo.connection.exception" request="Magento\TestModuleMysqlMq\Model\DataObject"/>
     <topic name="test.schema.defined.by.method" schema="Magento\TestModuleMysqlMq\Model\DataObjectRepository::delayedOperation" is_synchronous="false"/>
     <topic name="demo.object.created" request="Magento\TestModuleMysqlMq\Model\DataObject"/>
     <topic name="demo.object.updated" request="Magento\TestModuleMysqlMq\Model\DataObject"/>

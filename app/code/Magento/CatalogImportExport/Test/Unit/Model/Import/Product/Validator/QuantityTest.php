@@ -30,7 +30,7 @@ class QuantityTest extends TestCase
             ->method('getEmptyAttributeValueConstant')
             ->willReturn(Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT);
 
-        $contextStub->method('retrieveMessageTemplate')->willReturn(null);
+        $contextStub->method('retrieveMessageTemplate')->willReturn('some template');
         $this->quantity->init($contextStub);
     }
 
@@ -48,7 +48,7 @@ class QuantityTest extends TestCase
     /**
      * @return array
      */
-    public function isValidDataProvider()
+    public static function isValidDataProvider()
     {
         return [
             [true, ['qty' => 0]],

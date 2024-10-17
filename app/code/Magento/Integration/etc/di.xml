@@ -35,4 +35,23 @@
     <type name="Magento\Customer\Model\Customer">
         <plugin name="revokeTokensFromInactiveCustomers" type="Magento\Integration\Plugin\Model\CustomerUser" />
     </type>
+    <type name="Magento\Integration\Model\CompositeUserTokenValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="expiration" xsi:type="object">Magento\Integration\Model\UserToken\ExpirationValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Integration\Api\Data\UserTokenParametersInterface" type="Magento\Integration\Model\UserToken\UserTokenParameters" />
+    <preference for="Magento\Integration\Api\UserTokenValidatorInterface" type="Magento\Integration\Model\CompositeUserTokenValidator" />
+    <preference for="Magento\Integration\Api\UserTokenIssuerInterface" type="Magento\Integration\Model\OpaqueToken\Issuer" />
+    <preference for="Magento\Integration\Api\UserTokenReaderInterface" type="Magento\Integration\Model\CompositeTokenReader" />
+    <preference for="Magento\Integration\Api\UserTokenRevokerInterface" type="Magento\Integration\Model\OpaqueToken\Revoker" />
+    <type name="Magento\Integration\Model\CompositeTokenReader">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="5" xsi:type="object">Magento\Integration\Model\OpaqueToken\Reader</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

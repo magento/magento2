@@ -59,7 +59,25 @@ class TokenizerTest extends TestCase
     }
 
     /**
+     * Test getting next Real token for PHP > 8, where namespaced names are treated as single token.
+     *
+     * @requires PHP >= 8.0
+     * @return void
+     */
+    public function testGetNextRealTokenWhenNamespaceIsSingleToken(): void
+    {
+        $this->parseFile();
+        $this->assertEquals('new', $this->tokenizer->getNextRealToken()->getValue());
+        $this->assertEquals('\\Magento\\Framework\\Phrase', $this->tokenizer->getNextRealToken()->getValue());
+        $this->assertEquals('(', $this->tokenizer->getNextRealToken()->getValue());
+        $this->assertEquals('\'Testing\'', $this->tokenizer->getNextRealToken()->getValue());
+        $this->assertEquals(')', $this->tokenizer->getNextRealToken()->getValue());
+        $this->assertEquals(';', $this->tokenizer->getNextRealToken()->getValue());
+    }
+
+    /**
      * @covers \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer::getNextRealToken
+     * @requires PHP < 8.0
      */
     public function testGetNextRealToken()
     {
@@ -79,6 +97,7 @@ class TokenizerTest extends TestCase
 
     /**
      * @covers \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer::isEndOfLoop
+     * @requires PHP < 8.0
      */
     public function testIsEndOfLoop()
     {

@@ -37,7 +37,7 @@ class WebsiteTest extends TestCase
     {
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->addMethods(['getId'])
             ->getMock();
 
         $object->expects($this->once())->method('getId')->willReturn(1);
@@ -53,11 +53,11 @@ class WebsiteTest extends TestCase
         $websiteId = 1;
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['hasData', 'setData'])
+            ->onlyMethods(['hasData', 'setData'])
             ->getMock();
 
         $store = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getWebsiteId'])->getMock();
+            ->addMethods(['getWebsiteId'])->getMock();
         $store->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
 
         $this->storeManager->expects($this->once())

@@ -115,15 +115,21 @@ class GaTest extends TestCase
             ga('ec:addProduct', {
                                     'id': 'sku0',
                                     'name': 'testName0',
-                                    'price': '0.00',
+                                    'price': 0.00,
                                     'quantity': 1
+                                });
+            ga('ec:addProduct', {
+                                    'id': 'sku1',
+                                    'name': 'testName1',
+                                    'price': 1.00,
+                                    'quantity': 1.11
                                 });
             ga('ec:setAction', 'purchase', {
                                 'id': '100',
                                 'affiliation': 'test',
-                                'revenue': '10',
-                                'tax': '2',
-                                'shipping': '1'
+                                'revenue': 10.00,
+                                'tax': 2.00,
+                                'shipping': 2.00
                             });
             ga('send', 'pageview');";
 
@@ -163,9 +169,9 @@ class GaTest extends TestCase
                 [
                     'id' => 100,
                     'affiliation' => 'test',
-                    'revenue' => 10,
-                    'tax' => 2,
-                    'shipping' => 1
+                    'revenue' => 10.00,
+                    'tax' => 2.00,
+                    'shipping' => 2.0
                 ]
             ],
             'products' => [
@@ -174,6 +180,12 @@ class GaTest extends TestCase
                     'name' => 'testName0',
                     'price' => 0.00,
                     'quantity' => 1
+                ],
+                [
+                    'id' => 'sku1',
+                    'name' => 'testName1',
+                    'price' => 1.00,
+                    'quantity' => 1.11
                 ]
             ],
             'currency' => 'USD'
@@ -204,7 +216,7 @@ class GaTest extends TestCase
      * @param int $orderItemCount
      * @return Order|MockObject
      */
-    protected function createOrderMock($orderItemCount = 1)
+    protected function createOrderMock($orderItemCount = 2)
     {
         $orderItems = [];
         for ($i = 0; $i < $orderItemCount; $i++) {
@@ -213,8 +225,8 @@ class GaTest extends TestCase
                 ->getMockForAbstractClass();
             $orderItemMock->expects($this->once())->method('getSku')->willReturn('sku' . $i);
             $orderItemMock->expects($this->once())->method('getName')->willReturn('testName' . $i);
-            $orderItemMock->expects($this->once())->method('getPrice')->willReturn($i . '.00');
-            $orderItemMock->expects($this->once())->method('getQtyOrdered')->willReturn($i + 1);
+            $orderItemMock->expects($this->once())->method('getPrice')->willReturn((float)($i . '.0000'));
+            $orderItemMock->expects($this->once())->method('getQtyOrdered')->willReturn($i == 1 ? 1.11 : $i + 1);
             $orderItems[] = $orderItemMock;
         }
 
@@ -223,9 +235,9 @@ class GaTest extends TestCase
             ->getMock();
         $orderMock->expects($this->once())->method('getIncrementId')->willReturn(100);
         $orderMock->expects($this->once())->method('getAllVisibleItems')->willReturn($orderItems);
-        $orderMock->expects($this->once())->method('getGrandTotal')->willReturn(10);
-        $orderMock->expects($this->once())->method('getTaxAmount')->willReturn(2);
-        $orderMock->expects($this->once())->method('getShippingAmount')->willReturn($orderItemCount);
+        $orderMock->expects($this->once())->method('getGrandTotal')->willReturn(10.00);
+        $orderMock->expects($this->once())->method('getTaxAmount')->willReturn(2.00);
+        $orderMock->expects($this->once())->method('getShippingAmount')->willReturn(round((float)$orderItemCount, 2));
         $orderMock->expects($this->once())->method('getOrderCurrencyCode')->willReturn('USD');
         return $orderMock;
     }
@@ -241,7 +253,7 @@ class GaTest extends TestCase
 
         $collectionMock->expects($this->any())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->createOrderMock(1)]));
+            ->willReturn(new \ArrayIterator([$this->createOrderMock(2)]));
         return $collectionMock;
     }
 

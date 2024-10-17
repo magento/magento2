@@ -33,7 +33,7 @@
                         <each args="{ data: value, as: 'item'}">
                           <div class="value">
                             <a attr="href: $parents[1].getFilterUrl(item.link)"
-                               text="$parents[1].getUsedInText(item)"></a></br>
+                               text="$parents[1].getUsedInText(item)"></a><br/>
                           </div>
                         </each>
                       </if>
@@ -59,6 +59,6 @@
             </div>
         </div>
 
-        <each args="getRegion('additional_image_details')" render=""/>
+        <each args="getRegion('additional_image_details')" render=""></each>
     </div>
 </div>

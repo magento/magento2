@@ -5,11 +5,11 @@
  */
 -->
 <div class="data-grid-cell-content">
-    <span text="$col.getFullLabel($row())" ifnot="$col.isExpandable($row())"/>
+    <span text="$col.getFullLabel($row())" ifnot="$col.isExpandable($row())"></span>
 
     <div if="$col.isExpandable($row())">
-        <div text="$col.getShortLabel($row())" class="admin__control-short-label" />
-        <a attr="'data-tooltip-trigger': ++ko.uid" translate="'Show more'"/>
+        <div text="$col.getShortLabel($row())" class="admin__control-short-label"></div>
+        <a attr="'data-tooltip-trigger': ++ko.uid" translate="'Show more'"></a>
         <div
             tooltip="
                 tooltipClasses: 'data-grid-column-tooltip',
@@ -21,7 +21,7 @@
                 closeButton: true,
                 closeOnScroll: false
             ">
-            <div render="$data.tooltipTmpl"/>
+            <div render="$data.tooltipTmpl"></div>
         </div>
     </div>
 </div>

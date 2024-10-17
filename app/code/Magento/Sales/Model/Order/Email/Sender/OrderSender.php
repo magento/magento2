@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order\Email\Sender;
 
 use Magento\Payment\Helper\Data as PaymentHelper;
@@ -18,6 +20,7 @@ use Magento\Framework\DataObject;
 /**
  * Sends order email to the customer.
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderSender extends Sender
@@ -98,6 +101,7 @@ class OrderSender extends Sender
      */
     public function send(Order $order, $forceSyncMode = false)
     {
+        $this->identityContainer->setStore($order->getStore());
         $order->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {

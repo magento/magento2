@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckProductQtyAfterOrderCancellingTest">
+
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Cancel order"/>
+            <title value="Product quantity return after order cancel"/>
+            <description value="Check Product quantity return after order cancel"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-97228"/>
+            <useCaseId value="MAGETWO-82221"/>
+            <group value="ConfigurableProduct"/>
+            <group value="cloud_smoke"/>
+        </annotations>
+
+        <before>
+             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+
+            <createData entity="defaultSimpleProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <createData entity="GuestCart" stepKey="createGuestCart"/>
+                <createData entity="FourCartItems" stepKey="addCartItem">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createConfigProduct"/>
+            </createData>
+            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddress">
+                <requiredEntity createDataKey="createGuestCart"/>
+            </createData>
+            <updateData createDataKey="createGuestCart" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformation">
+                <requiredEntity createDataKey="createGuestCart"/>
+            </updateData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <comment userInput="BIC workaround" stepKey="filterOrderGridById"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="$createGuestCart.return$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminInvoiceWithUpdatedProductQtyActionGroup" stepKey="createPartialInvoice">
+           <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminCreateShipmentFromOrderPage" stepKey="createShipment">
+             <argument name="Qty" value="1"/>
+             <argument name="Number" value="111"/>
+        </actionGroup>
+
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelOrder">
+            <argument name="orderStatus" value="Complete"/>
+        </actionGroup>
+
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Canceled 3" stepKey="seeCanceledQty"/>
+
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
+
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySku">
+            <argument name="sku" value="$$createConfigProduct.sku$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="assertProductDataInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Quantity"/>
+            <argument name="value" value="99"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
+
+    </test>
+</tests>

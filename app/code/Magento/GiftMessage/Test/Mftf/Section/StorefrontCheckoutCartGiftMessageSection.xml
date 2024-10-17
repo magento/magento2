@@ -7,6 +7,6 @@
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCheckoutCartGiftMessageSection">
-        <element name="giftItemMessage" type="textarea" selector="tbody.cart:nth-of-type({{blockNumber}}) #gift-message-whole-message" parameterized="true"/>
+        <element name="giftItemMessage" type="textarea" selector="tbody.cart:nth-of-type({{blockNumber}}) .gift-message .field.text .input-text" parameterized="true"/>
     </section>
 </sections>

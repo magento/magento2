@@ -9,6 +9,8 @@ use Magento\Deploy\Package\PackageFile;
 
 /**
  * Provide list of files located in some source location (e.g. modules directories, library, themes, else)
+ *
+ * @api
  */
 interface SourceInterface
 {

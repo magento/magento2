@@ -70,7 +70,7 @@
         <constraint xsi:type="foreign" referenceId="WIDGET_INSTANCE_PAGE_LYT_LYT_UPDATE_ID_LYT_UPDATE_LYT_UPDATE_ID"
                     table="widget_instance_page_layout" column="layout_update_id" referenceTable="layout_update"
                     referenceColumn="layout_update_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" referenceId="WIDGET_INSTANCE_PAGE_LAYOUT_LAYOUT_UPDATE_ID_PAGE_ID">
+        <constraint xsi:type="primary" referenceId="WIDGET_INSTANCE_PAGE_LAYOUT_LAYOUT_UPDATE_ID_PAGE_ID">
             <column name="layout_update_id"/>
             <column name="page_id"/>
         </constraint>

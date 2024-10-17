@@ -22,26 +22,18 @@ define([
             $(document.body).append(htmlContainer);
         });
 
-        afterEach(function () {
-            window.navigator = navigator;
-        });
-
         it('defines cookieStatus widget', function () {
             expect($.fn.cookieStatus).toBeDefined();
         });
 
         it('does not show a modal when cookies are supported', function () {
-            window.navigator = {
-                cookieEnabled: true
-            };
+            Object.defineProperty(navigator,'cookieEnabled',{value: true, configurable: true});
             widget._init();
             expect($(document.body).html()).not.toContain('<aside role="dialog" class="modal-popup');
         });
 
         it('shows the modal when cookies are not supported', function () {
-            window.navigator = {
-                cookieEnabled: false
-            };
+            Object.defineProperty(navigator,'cookieEnabled',{value: false, configurable: true});
             widget._init();
             expect($(document.body).html()).toContain('<aside role="dialog" class="modal-popup');
         });

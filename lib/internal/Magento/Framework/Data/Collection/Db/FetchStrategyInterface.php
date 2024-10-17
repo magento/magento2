@@ -3,10 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Interface of collection data retrieval
- */
 namespace Magento\Framework\Data\Collection\Db;
 
 use Magento\Framework\DB\Select;
@@ -14,6 +12,7 @@ use Magento\Framework\DB\Select;
 /**
  * Interface \Magento\Framework\Data\Collection\Db\FetchStrategyInterface
  *
+ * @api
  */
 interface FetchStrategyInterface
 {

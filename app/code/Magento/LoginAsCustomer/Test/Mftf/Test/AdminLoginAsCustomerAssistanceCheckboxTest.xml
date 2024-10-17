@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerAssistanceCheckboxTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Opt in/out"/>
+            <title value="Login as Customer assistance checkbox test"/>
+            <description
+                value="Verify that 'Allow remote shopping assistance' checkbox is present on Edit Account Information page"/>
+            <severity value="CRITICAL"/>
+            <group value="login_as_customer"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createFirstCustomer"/>
+            <createData entity="Simple_US_Customer" stepKey="createSecondCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultUser"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirstCustomer" stepKey="deleteFirstCustomer"/>
+            <deleteData createDataKey="createSecondCustomer" stepKey="deleteSecondCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAfter"/>
+        </after>
+        <!-- Login into First Customer account -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsFirstCustomer">
+            <argument name="Customer" value="$createFirstCustomer$"/>
+        </actionGroup>
+
+        <!-- Open My Account > Order by SKU -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToFirstMyAccountPage"/>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="openFirstAccountInformation">
+            <argument name="menu" value="Account Information"/>
+        </actionGroup>
+
+        <!-- Assert Assistance checkbox is present and checked -->
+        <actionGroup ref="StorefrontAssertLoginAssistanceAllowedCheckboxCheckedActionGroup"
+                     stepKey="assertAssistanceAllowedCheckboxChecked"/>
+
+        <!-- Logout customer -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFirstCustomer"/>
+
+        <!-- Login into Second Customer account -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsSecondCustomer">
+            <argument name="Customer" value="$createSecondCustomer$"/>
+        </actionGroup>
+
+        <!-- Open My Account > Order by SKU -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToSecondMyAccountPage"/>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="openSecondAccountInformation">
+            <argument name="menu" value="Account Information"/>
+        </actionGroup>
+
+        <!-- Assert Assistance checkbox is present and unchecked -->
+        <actionGroup ref="StorefrontAssertLoginAssistanceAllowedCheckboxUncheckedActionGroup"
+                     stepKey="assertAssistanceAllowedCheckboxUnchecked"/>
+    </test>
+</tests>

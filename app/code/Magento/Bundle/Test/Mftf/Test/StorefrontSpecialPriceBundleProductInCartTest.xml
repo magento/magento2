@@ -17,7 +17,8 @@
                 <testCaseId value="MC-19134"/>
                 <useCaseId value="MC-18963"/>
                 <group value="bundle"/>
-            </annotations>
+            <group value="pr_exclude"/>
+        </annotations>
             <before>
                 <!-- Create the Simple product with Special price -->
                 <createData entity="SimpleProduct2" stepKey="simpleProduct"/>

@@ -13,8 +13,10 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataManagementInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\OptionInterface;
+use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Customer\Model\Indexer\Attribute\Filter;
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -46,6 +48,16 @@ class AttributeRepositoryTest extends TestCase
 
     /** @var AttributeRepository */
     protected $component;
+
+    /**
+     * @var AttributeMetadataDataProvider|MockObject
+     */
+    private $attributeMetadataDataProvider;
+
+    /**
+     * @var AbstractAttribute|MockObject
+     */
+    private $attributeModel;
 
     protected function setUp(): void
     {
@@ -83,12 +95,21 @@ class AttributeRepositoryTest extends TestCase
 
         $this->attributeFilter = $this->createMock(Filter::class);
 
+        $this->attributeMetadataDataProvider = $this->createMock(
+            AttributeMetadataDataProvider::class
+        );
+
+        $this->attributeModel = $this->getMockBuilder(AbstractAttribute::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->component = new AttributeRepository(
             $this->customerMetadataManagement,
             $this->addressMetadataManagement,
             $this->customerMetadata,
             $this->addressMetadata,
-            $this->attributeFilter
+            $this->attributeFilter,
+            $this->attributeMetadataDataProvider
         );
     }
 
@@ -148,6 +169,10 @@ class AttributeRepositoryTest extends TestCase
             ->method('filter')
             ->willReturnArgument(0);
 
+        $this->attributeModel->addData(['grid_filter_condition_type' => 1]);
+        $this->attributeMetadataDataProvider->method('getAttribute')
+            ->willReturn($this->attributeModel);
+
         $this->assertEquals(
             [
                 $billingPrefix . $attributeCode => [
@@ -169,6 +194,7 @@ class AttributeRepositoryTest extends TestCase
                     'validation_rules' => [],
                     'required'=> false,
                     'entity_type_code' => 'customer_address',
+                    'grid_filter_condition_type' => 1
                 ]
             ],
             $this->component->getList()

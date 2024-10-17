@@ -34,7 +34,7 @@ class BooleanTest extends TestCase
     public function testBeforeSave($value, $defaultValue, $result)
     {
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getName', 'getDefaultValue'])
+            ->onlyMethods(['getName', 'getDefaultValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $customerMock = $this->getMockBuilder(Customer::class)
@@ -65,7 +65,7 @@ class BooleanTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider()
     {
         return [
             [null, null, '0'],

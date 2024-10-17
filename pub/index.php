@@ -20,6 +20,7 @@ try {
     <p>{$e->getMessage()}</p>
 </div>
 HTML;
+    http_response_code(500);
     exit(1);
 }
 

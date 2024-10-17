@@ -18,6 +18,7 @@
             <useCaseId value="MC-38242"/>
             <testCaseId value="MC-38883"/>
             <group value="catalogInventory"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>

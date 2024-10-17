@@ -44,5 +44,10 @@
             <block class="Magento\Sales\Block\Order\Info" as="sales.order.print.info" name="sales.order.print.info" template="Magento_Sales::order/info.phtml"/>
         </referenceContainer>
         <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Theme::template.phtml"/>
+        <referenceBlock name="logo">
+            <arguments>
+                <argument name="logoPathResolver" xsi:type="object">Magento\Sales\ViewModel\Header\LogoPathResolver</argument>
+            </arguments>
+        </referenceBlock>
     </body>
 </page>

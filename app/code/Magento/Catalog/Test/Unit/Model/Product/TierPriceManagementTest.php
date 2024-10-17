@@ -170,7 +170,7 @@ class TierPriceManagementTest extends TestCase
     /**
      * @return array
      */
-    public function getListDataProvider()
+    public static function getListDataProvider()
     {
         return [
             [
@@ -244,7 +244,7 @@ class TierPriceManagementTest extends TestCase
     public function testSetNewPriceWithGlobalPriceScopeAll()
     {
         $websiteMock = $this->getMockBuilder(Website::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $websiteMock->expects($this->once())->method('getId')->willReturn(0);
@@ -413,7 +413,7 @@ class TierPriceManagementTest extends TestCase
     /**
      * @return array
      */
-    public function addDataProvider()
+    public static function addDataProvider()
     {
         return [
             ['string', 10],

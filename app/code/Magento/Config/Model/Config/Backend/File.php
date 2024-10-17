@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Model\Config\Backend;
 
+use Exception;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\MediaStorage\Model\File\Uploader;
 
@@ -82,12 +86,13 @@ class File extends \Magento\Framework\App\Config\Value
      * Save uploaded file before saving config value
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function beforeSave()
     {
         $value = $this->getValue();
         $file = $this->getFileData();
+
         if (!empty($file)) {
             $uploadDir = $this->_getUploadDir();
             try {
@@ -97,12 +102,11 @@ class File extends \Magento\Framework\App\Config\Value
                 $uploader->setAllowRenameFiles(true);
                 $uploader->addValidateCallback('size', $this, 'validateMaxSize');
                 $result = $uploader->save($uploadDir);
-            } catch (\Exception $e) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('%1', $e->getMessage()));
+            } catch (Exception $e) {
+                throw new LocalizedException(__('%1', $e->getMessage()));
             }
-
-            $filename = $result['file'];
-            if ($filename) {
+            if ($result !== false) {
+                $filename = $result['file'];
                 if ($this->_addWhetherScopeInfo()) {
                     $filename = $this->_prependScopeInfo($filename);
                 }
@@ -112,7 +116,7 @@ class File extends \Magento\Framework\App\Config\Value
             if (is_array($value) && !empty($value['delete'])) {
                 $this->setValue('');
             } elseif (is_array($value) && !empty($value['value'])) {
-                $this->setValue($value['value']);
+                $this->setValueAfterValidation($value['value']);
             } else {
                 $this->unsValue();
             }
@@ -148,7 +152,7 @@ class File extends \Magento\Framework\App\Config\Value
      *
      * @param  string $filePath Path to temporary uploaded file
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function validateMaxSize($filePath)
     {
@@ -157,7 +161,7 @@ class File extends \Magento\Framework\App\Config\Value
             $directory->getRelativePath($filePath)
         )['size'] > $this->_maxFileSize * 1024
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The file you\'re uploading exceeds the server size limit of %1 kilobytes.', $this->_maxFileSize)
             );
         }
@@ -179,14 +183,14 @@ class File extends \Magento\Framework\App\Config\Value
      * Return path to directory for upload file
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _getUploadDir()
     {
         $fieldConfig = $this->getFieldConfig();
 
         if (!array_key_exists('upload_dir', $fieldConfig)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The base directory to upload file is not specified.')
             );
         }
@@ -263,5 +267,24 @@ class File extends \Magento\Framework\App\Config\Value
     protected function _getAllowedExtensions()
     {
         return [];
+    }
+
+    /**
+     * Validate if the value is intercepted
+     *
+     * @param string $value
+     * @return void
+     * @throws LocalizedException
+     */
+    private function setValueAfterValidation(string $value): void
+    {
+        if (preg_match('/[^a-z0-9_\/\\-\\.]+/i', $value)
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            || !$this->_mediaDirectory->isFile($this->_getUploadDir() . DIRECTORY_SEPARATOR . basename($value))
+        ) {
+            throw new LocalizedException(__('Invalid file name'));
+        }
+
+        $this->setValue($value);
     }
 }

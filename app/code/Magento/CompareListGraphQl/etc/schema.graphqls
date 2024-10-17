@@ -1,0 +1,64 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type ComparableItem @doc(description: "Defines an object used to iterate through items for product comparisons.") {
+    uid: ID! @doc(description: "The unique ID of an item in a compare list.")
+    product: ProductInterface! @doc(description: "Details about a product in a compare list.")
+    attributes: [ProductAttribute]! @doc(description: "An array of product attributes that can be used to compare products.")
+}
+
+type ProductAttribute @doc(description: "Contains a product attribute code and value.") {
+    code: String! @doc(description: "The unique identifier for a product attribute code.")
+    value: String! @doc(description:"The display value of the attribute.")
+}
+
+type ComparableAttribute @doc(description: "Contains an attribute code that is used for product comparisons.") {
+    code: String! @doc(description: "An attribute code that is enabled for product comparisons.")
+    label: String! @doc(description: "The label of the attribute code.")
+}
+
+type CompareList @doc(description: "Contains iterable information such as the array of items, the count, and attributes that represent the compare list.") {
+    uid: ID! @doc(description: "The unique ID assigned to the compare list.")
+    items: [ComparableItem] @doc(description: "An array of products to compare.")
+    attributes: [ComparableAttribute] @doc(description: "An array of attributes that can be used for comparing products.")
+    item_count: Int! @doc(description: "The number of items in the compare list.")
+}
+
+type Customer {
+    compare_list: CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CustomerCompareList") @doc(description: "The contents of the customer's compare list.")
+}
+
+type Query {
+    compareList(uid: ID! @doc(description: "The unique ID of the compare list to be queried.")): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CompareList") @doc(description: "Return products that have been added to the specified compare list.")
+}
+
+type Mutation {
+    createCompareList(input: CreateCompareListInput): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CreateCompareList") @doc(description: "Create a new compare list. The compare list is saved for logged in customers.")
+    addProductsToCompareList(input: AddProductsToCompareListInput @doc(description: "An input object that defines which products to add to an existing compare list.")): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AddProductsToCompareList") @doc(description: "Add products to the specified compare list.")
+    removeProductsFromCompareList(input: RemoveProductsFromCompareListInput @doc(description: "An input object that defines which products to remove from a compare list.")): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\RemoveProductsFromCompareList") @doc(description: "Remove products from the specified compare list.")
+    assignCompareListToCustomer(uid: ID! @doc(description: "The unique ID of the compare list to be assigned.")): AssignCompareListToCustomerOutput @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AssignCompareListToCustomer") @doc(description: "Assign the specified compare list to the logged in customer.")
+    deleteCompareList(uid: ID! @doc(description: "The unique ID of the compare list to be deleted.")): DeleteCompareListOutput @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\DeleteCompareList") @doc(description: "Delete the specified compare list.")
+}
+
+input CreateCompareListInput @doc(description: "Contains an array of product IDs to use for creating a compare list.") {
+    products: [ID!] @doc(description: "An array of product IDs to add to the compare list.")
+}
+
+input AddProductsToCompareListInput @doc(description: "Contains products to add to an existing compare list.") {
+    uid: ID!, @doc(description: "The unique identifier of the compare list to modify.")
+    products: [ID!]! @doc(description: "An array of product IDs to add to the compare list.")
+}
+
+input RemoveProductsFromCompareListInput @doc(description: "Defines which products to remove from a compare list.") {
+    uid: ID!, @doc(description: "The unique identifier of the compare list to modify.")
+    products: [ID!]! @doc(description: "An array of product IDs to remove from the compare list.")
+}
+
+type DeleteCompareListOutput @doc(description: "Contains the results of the request to delete a compare list.") {
+    result: Boolean! @doc(description: "Indicates whether the compare list was successfully deleted.")
+}
+
+type AssignCompareListToCustomerOutput @doc(description: "Contains the results of the request to assign a compare list.") {
+    result: Boolean! @doc(description: "Indicates whether the compare list was successfully assigned to the customer.")
+    compare_list: CompareList @doc(description: "The contents of the customer's compare list.")
+}

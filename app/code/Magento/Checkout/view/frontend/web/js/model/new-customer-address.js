@@ -22,8 +22,6 @@ define([
 
         if (addressData.region && addressData.region['region_id']) {
             regionId = addressData.region['region_id'];
-        } else if (!addressData['region_id']) {
-            regionId = undefined;
         } else if (
             /* eslint-disable */
             addressData['country_id'] && addressData['country_id'] == window.checkoutConfig.defaultCountryId ||
@@ -40,7 +38,7 @@ define([
             regionCode: addressData.region ? addressData.region['region_code'] : null,
             region: addressData.region ? addressData.region.region : null,
             customerId: addressData['customer_id'] || addressData.customerId,
-            street: addressData.street ? _.compact(addressData.street) : addressData.street,
+            street: addressData.street,
             company: addressData.company,
             telephone: addressData.telephone,
             fax: addressData.fax,
@@ -54,6 +52,7 @@ define([
             vatId: addressData['vat_id'],
             saveInAddressBook: addressData['save_in_address_book'],
             customAttributes: addressData['custom_attributes'],
+            extensionAttributes: addressData['extension_attributes'],
 
             /**
              * @return {*}

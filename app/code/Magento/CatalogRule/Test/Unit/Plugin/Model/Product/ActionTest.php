@@ -26,7 +26,7 @@ class ActionTest extends TestCase
         $this->productRuleProcessor = $this->getMockBuilder(
             ProductRuleProcessor::class
         )->disableOriginalConstructor()
-            ->setMethods(['reindexList'])
+            ->onlyMethods(['reindexList'])
             ->getMock();
 
         $this->action = new Action($this->productRuleProcessor);
@@ -36,12 +36,12 @@ class ActionTest extends TestCase
     {
         $subject = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $result = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributesData', 'getProductIds'])
+            ->addMethods(['getAttributesData', 'getProductIds'])
             ->getMock();
 
         $result->expects($this->once())
@@ -62,12 +62,12 @@ class ActionTest extends TestCase
         $productIds = [1, 2, 3];
         $subject = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $result = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributesData', 'getProductIds'])
+            ->addMethods(['getAttributesData', 'getProductIds'])
             ->getMock();
 
         $result->expects($this->once())

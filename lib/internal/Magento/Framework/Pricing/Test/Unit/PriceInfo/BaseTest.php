@@ -73,7 +73,7 @@ class BaseTest extends TestCase
      *
      * @return array
      */
-    public function providerGetPrice()
+    public static function providerGetPrice()
     {
         return [
             'case with empty quantity' => [

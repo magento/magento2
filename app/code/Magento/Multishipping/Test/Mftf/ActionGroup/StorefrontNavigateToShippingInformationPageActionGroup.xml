@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontNavigateToShippingInformationPageActionGroup">
+        <annotations>
+            <description>Navigate to shipping information page. Starts on multishipping addressees page.</description>
+        </annotations>
+
+        <waitForElementVisible selector="{{SingleShippingSection.goToShippingInfo}}" stepKey="waitForButton"/>
+        <click selector="{{SingleShippingSection.goToShippingInfo}}" stepKey="goToShippingInformation"/>
+        <waitForPageLoad stepKey="waitForShippingInfoPage"/>
+    </actionGroup>
+</actionGroups>

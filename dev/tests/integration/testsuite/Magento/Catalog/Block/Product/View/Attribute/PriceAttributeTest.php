@@ -44,7 +44,7 @@ class PriceAttributeTest extends AbstractAttributeTest
     /**
      * @return array
      */
-    public function pricesDataProvider(): array
+    public static function pricesDataProvider(): array
     {
         return [
             'zero_price' => [

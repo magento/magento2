@@ -8,16 +8,22 @@ namespace Magento\Customer\Model\ResourceModel\Grid;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Customer;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Indexer\TestCase;
 
 /**
  * Customer grid collection tests.
  */
-class CollectionTest extends \Magento\TestFramework\Indexer\TestCase
+class CollectionTest extends TestCase
 {
+
     public static function setUpBeforeClass(): void
     {
-        $db = Bootstrap::getInstance()->getBootstrap()
+        $db = Bootstrap::getInstance()
+            ->getBootstrap()
             ->getApplication()
             ->getDbInstance();
         if (!$db->isDbDumpExists()) {
@@ -25,6 +31,9 @@ class CollectionTest extends \Magento\TestFramework\Indexer\TestCase
         }
         $db->restoreFromDbDump();
 
+        $indexerRegistry = Bootstrap::getObjectManager()->create(IndexerRegistry::class);
+        $indexer = $indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+        $indexer->reindexAll();
         parent::setUpBeforeClass();
     }
 
@@ -42,12 +51,10 @@ class CollectionTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testGetItemByIdForUpdateOnSchedule()
     {
-        $targetObject = Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\ResourceModel\Grid\Collection::class
-        );
-        $customerRepository = Bootstrap::getObjectManager()->create(
-            CustomerRepositoryInterface::class
-        );
+        $targetObject = Bootstrap::getObjectManager()
+            ->create(Collection::class);
+        $customerRepository = Bootstrap::getObjectManager()
+            ->create(CustomerRepositoryInterface::class);
         /** Verify after first save */
 
         /** @var CustomerInterface $newCustomer */
@@ -68,10 +75,23 @@ class CollectionTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
-     * teardown
+     * Verifies that filter condition date is being converted to config timezone before select sql query
+     *
+     * @return void
      */
-    protected function tearDown(): void
+    public function testAddFieldToFilter(): void
     {
-        parent::tearDown();
+        $filterDate = "2021-01-26 00:00:00";
+        /** @var TimezoneInterface $timeZone */
+        $timeZone = Bootstrap::getObjectManager()
+            ->get(TimezoneInterface::class);
+        /** @var Collection $gridCollection */
+        $gridCollection = Bootstrap::getObjectManager()
+            ->get(Collection::class);
+        $convertedDate = $timeZone->convertConfigTimeToUtc($filterDate);
+        $collection = $gridCollection->addFieldToFilter('created_at', ['qteq' => $filterDate]);
+        $expectedSelect = "WHERE (((`main_table`.`created_at` = '{$convertedDate}')))";
+
+        $this->assertStringContainsString($expectedSelect, $collection->getSelectSql(true));
     }
 }

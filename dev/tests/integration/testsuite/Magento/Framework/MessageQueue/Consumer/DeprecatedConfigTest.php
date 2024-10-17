@@ -6,6 +6,7 @@
 namespace Magento\Framework\MessageQueue\Consumer;
 
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Handler\Iterator as HandlerIterator;
+use Magento\Framework\MessageQueue\DefaultValueProvider;
 
 /**
  * Test access to consumer configuration declared in deprecated queue.xml configs using Consumer\ConfigInterface.
@@ -19,9 +20,15 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
+    /**
+     * @var DefaultValueProvider
+     */
+    private $defaultValueProvider;
+
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->defaultValueProvider = $this->objectManager->get(DefaultValueProvider::class);
     }
 
     public function testGetConsumerMultipleHandlersFromCommunicationConfig()
@@ -40,9 +47,9 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(HandlerIterator::class, $handlers);
         $this->assertCount(2, $handlers);
         $this->assertEquals('methodWithBoolParam', $handlers[0]->getMethod());
-        $this->assertEquals(\Magento\TestModuleMessageQueueConfiguration\AsyncHandler::class, $handlers[0]->getType());
+        $this->assertEquals('Magento\TestModuleMessageQueueConfiguration\AsyncHandler', $handlers[0]->getType());
         $this->assertEquals('methodWithMixedParam', $handlers[1]->getMethod());
-        $this->assertEquals(\Magento\TestModuleMessageQueueConfiguration\AsyncHandler::class, $handlers[1]->getType());
+        $this->assertEquals('Magento\TestModuleMessageQueueConfiguration\AsyncHandler', $handlers[1]->getType());
     }
 
     public function testGetConsumerCustomHandler()
@@ -53,7 +60,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('deprecatedConfigAsyncMixedConsumer', $consumer->getName());
         $this->assertEquals('deprecated.config.queue.3', $consumer->getQueue());
-        $this->assertEquals('amqp', $consumer->getConnection());
+        $this->assertEquals($this->defaultValueProvider->getConnection(), $consumer->getConnection());
         $this->assertEquals(\Magento\Framework\MessageQueue\ConsumerInterface::class, $consumer->getConsumerInstance());
         $this->assertNull($consumer->getMaxMessages());
 
@@ -61,7 +68,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(HandlerIterator::class, $handlers);
         $this->assertCount(1, $handlers);
         $this->assertEquals('methodWithMixedParam', $handlers[0]->getMethod());
-        $this->assertEquals(\Magento\TestModuleMessageQueueConfiguration\AsyncHandler::class, $handlers[0]->getType());
+        $this->assertEquals('Magento\TestModuleMessageQueueConfiguration\AsyncHandler', $handlers[0]->getType());
     }
 
     public function testGetConsumerCustomConnectionSync()
@@ -72,7 +79,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('deprecatedConfigSyncBoolConsumer', $consumer->getName());
         $this->assertEquals('deprecated.config.queue.4', $consumer->getQueue());
-        $this->assertEquals('amqp', $consumer->getConnection());
+        $this->assertEquals('db', $consumer->getConnection());
         $this->assertEquals(\Magento\Framework\MessageQueue\ConsumerInterface::class, $consumer->getConsumerInstance());
         $this->assertNull($consumer->getMaxMessages());
 
@@ -80,7 +87,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(HandlerIterator::class, $handlers);
         $this->assertCount(1, $handlers);
         $this->assertEquals('methodWithBoolParam', $handlers[0]->getMethod());
-        $this->assertEquals(\Magento\TestModuleMessageQueueConfiguration\SyncHandler::class, $handlers[0]->getType());
+        $this->assertEquals('Magento\TestModuleMessageQueueConfiguration\SyncHandler', $handlers[0]->getType());
     }
 
     public function testGetConsumerCustomConsumerAndMaxMessages()
@@ -91,7 +98,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('deprecatedConfigAsyncStringConsumer', $consumer->getName());
         $this->assertEquals('deprecated.config.queue.1', $consumer->getQueue());
-        $this->assertEquals('amqp', $consumer->getConnection());
+        $this->assertEquals($this->defaultValueProvider->getConnection(), $consumer->getConnection());
         $this->assertEquals(\Magento\Framework\MessageQueue\BatchConsumer::class, $consumer->getConsumerInstance());
         $this->assertEquals(200, $consumer->getMaxMessages());
 
