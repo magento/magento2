@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\Framework\Error;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\Escaper;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Response\Http;
+use Magento\Framework\Escaper;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Error processor
@@ -530,7 +530,7 @@ class Processor
         }
         $this->_setReportData($reportData);
 
-        @file_put_contents($this->_reportFile, $this->serializer->serialize($reportData). PHP_EOL);
+        @file_put_contents($this->_reportFile, $this->serializer->serialize($reportData) . PHP_EOL);
 
         if (isset($reportData['skin']) && self::DEFAULT_SKIN != $reportData['skin']) {
             $this->_setSkin($reportData['skin']);
@@ -637,7 +637,7 @@ class Processor
     {
         $envName = 'MAGE_ERROR_REPORT_DIR_NESTING_LEVEL';
         $value = $_ENV[$envName] ?? getenv($envName);
-        if(false === $value && property_exists($this->_config, 'dir_nesting_level')) {
+        if (false === $value && property_exists($this->_config, 'dir_nesting_level')) {
             $value = $this->_config->dir_nesting_level;
         }
         $value = (int)$value;
