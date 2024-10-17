@@ -58,11 +58,6 @@ class Security
 
         $document = new DOMDocument();
 
-        if (version_compare(PHP_VERSION, '8.0') < 0) {
-            // this function no longer has an effect in PHP 8.0, but it's required in earlier versions
-            // phpcs:ignore
-            $loadEntities = libxml_disable_entity_loader(true);
-        }
         $useInternalXmlErrors = libxml_use_internal_errors(true);
 
         /**
@@ -92,11 +87,6 @@ class Security
             }
         }
         restore_error_handler();
-        // Entity load to previous setting
-        if (isset($loadEntities)) {
-            // phpcs:ignore
-            libxml_disable_entity_loader($loadEntities);
-        }
         libxml_use_internal_errors($useInternalXmlErrors);
 
         if (!$result) {
