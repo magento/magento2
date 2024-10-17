@@ -33,19 +33,25 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="amOnAdminSystemStorePage"/>
-        <click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="selectCreateStore"/>
-        <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" stepKey="fillStoreName"/>
-        <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" stepKey="fillStoreCode"/>
-        <selectOption userInput="{{NewRootCategory.name}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectStoreStatus"/>
-        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
-        <see userInput="You saved the store." stepKey="seeSaveMessage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="amOnAdminSystemStorePage"/>
+        <actionGroup ref="CreateCustomStoreActionGroup" stepKey="selectCreateStore">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+            <argument name="store" value="{{customStore.name}}"/>
+            <argument name="rootCategory" value="{{NewRootCategory.name}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillStoreName"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillStoreCode"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectStoreStatus"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSaveStoreButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSaveMessage"/>
 
         <!--Verify Delete Root Category can not be deleted-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandToSeeAllCategories"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(NewRootCategory.name))}}" stepKey="clickRootCategoryInTree"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickRootCategoryInTree">
+            <argument name="category" value="NewRootCategory"/>
+        </actionGroup>
 
         <!--Verify Delete button is not displayed-->
         <dontSeeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="dontSeeDeleteButton"/>
