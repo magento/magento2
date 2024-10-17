@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 ?>
+<?php $helperConfig = $this->helper('Magento\Theme\Helper\Config'); ?>
 <div data-bind="scope: 'messages'">
     <!-- ko if: cookieMessagesObservable() && cookieMessagesObservable().length > 0 -->
     <div aria-atomic="true" role="alert" class="messages" data-bind="foreach: {
@@ -36,7 +37,8 @@
             "Magento_Ui/js/core/app": {
                 "components": {
                         "messages": {
-                            "component": "Magento_Theme/js/view/messages"
+                            "component": "Magento_Theme/js/view/messages",
+                            "cookieDomain": "<?= $helperConfig->getConfig( 'web/cookie/cookie_domain' ) ?>"
                         }
                     }
                 }
