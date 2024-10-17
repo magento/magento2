@@ -40,7 +40,9 @@ class WrapperGenerator
     public function generateTestWrapper(\ReflectionClass $class): string
     {
         $wrapperCode = $this->classGenerator->setNamespaceName($class->getName())
-            ->setClassDocBlock(['longDescription' => str_replace(['/**', '*/', '*'], '', $class->getDocComment())])
+            ->setClassDocBlock(
+                ['longDescription' => str_replace(['/**', '*/', '*'], '', (string)$class->getDocComment())]
+            )
             ->setExtendedClass($class->getName())
             ->setName(self::SKIPPABLE_SUFFIX)
             ->setImplementedInterfaces([SkippableInterface::class])
