@@ -4,13 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Multishipping\Block\Checkout;
+
 /**
  * Multishipping checkout state
  *
+ * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Multishipping\Block\Checkout;
-
 class State extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -33,10 +34,25 @@ class State extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return multishipping steps
+     *
      * @return array
      */
     public function getSteps()
     {
         return $this->_multishippingState->getSteps();
+    }
+
+    /**
+     * Return multishipping steps to render
+     *
+     * @return array
+     */
+    public function getStepsToRender(): array
+    {
+        $allSteps = $this->_multishippingState->getSteps();
+        array_splice($allSteps, -2);
+
+        return $allSteps;
     }
 }
