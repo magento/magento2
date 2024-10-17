@@ -28,6 +28,7 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
                 'flush_magento',
                 [
                     'label' => __('Flush Magento Cache'),
+                    'title' => __('Similar action as bin/magento cache:clean'),
                     'onclick' => 'setLocation(\'' . $this->getFlushSystemUrl() . '\')',
                     'class' => 'primary flush-cache-magento'
                 ]
@@ -40,6 +41,7 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
                 'flush_system',
                 [
                     'label' => __('Flush Cache Storage'),
+                    'title' => __('Similar action as bin/magento cache:flush'),
                     'onclick' => 'confirmSetLocation(\'' . $message . '\', \'' . $this->getFlushStorageUrl() . '\')',
                     'class' => 'flush-cache-storage'
                 ]
