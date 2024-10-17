@@ -68,6 +68,7 @@ class PackageResult extends Result
                             throw new \InvalidArgumentException('Same object received from carrier.');
                         }
                         $rate->setPrice($rate->getPrice() + $currentRate->getPrice());
+                        $rate->setCost($rate->getCost() + $currentRate->getCost());
                         continue 2;
                     }
                 }
