@@ -71,20 +71,36 @@ class ConfigTest extends TestCase
     /**
      * Test get customer service email
      * @return void
+     * @dataProvider dataProviderForGetCustomerServiceEmail
      */
-    public function testGetCustomerServiceEmail()
+    public function testGetCustomerServiceEmail($scope)
     {
         $email = 'test@example.com';
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                Config::XML_PATH_EMAIL_RECIPIENT,
+                $this->getXmlPathPrefix($scope)
+                . Config::XML_PATH_PASSWORD_RESET_SERVICE_EMAIL,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
             ->willReturn(
                 $email
             );
+        $this->scopeMock->expects($this->once())
+            ->method('getCurrentScope')
+            ->willReturn($scope);
         $this->assertEquals($email, $this->model->getCustomerServiceEmail());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderForGetCustomerServiceEmail()
+    {
+        return [
+            [Area::AREA_ADMINHTML],
+            [Area::AREA_FRONTEND]
+        ];
     }
 
     /**

@@ -57,9 +57,9 @@ class Config implements ConfigInterface
     const XML_PATH_MIN_TIME_BETWEEN_PASSWORD_RESET_REQUESTS = 'min_time_between_password_reset_requests';
 
     /**
-     * Recipient email config path
+     * Configuration key to password reset service email
      */
-    const XML_PATH_EMAIL_RECIPIENT = 'contact/email/recipient_email';
+    const XML_PATH_PASSWORD_RESET_SERVICE_EMAIL = 'password_reset_service_email';
 
     /**
      * @var ScopeConfigInterface
@@ -93,7 +93,7 @@ class Config implements ConfigInterface
     public function getCustomerServiceEmail()
     {
         return $this->scopeConfig->getValue(
-            self::XML_PATH_EMAIL_RECIPIENT,
+            $this->getXmlPathPrefix() . self::XML_PATH_PASSWORD_RESET_SERVICE_EMAIL,
             StoreScopeInterface::SCOPE_STORE
         );
     }
