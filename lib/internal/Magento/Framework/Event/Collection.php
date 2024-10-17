@@ -6,8 +6,6 @@
 
 /**
  * Collection of events
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Event;
 

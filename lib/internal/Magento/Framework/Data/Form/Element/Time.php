@@ -12,8 +12,6 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * Form time element
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Time extends AbstractElement
 {
