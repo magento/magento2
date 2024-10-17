@@ -6,8 +6,6 @@
 
 /**
  * Report event type resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Event;
 

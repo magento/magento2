@@ -6,8 +6,6 @@
 
 /**
  * Wishlist Report collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Wishlist\Product;
 
@@ -44,7 +42,7 @@ class Collection extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
         )->group(
             'wi.product_id'
         );
-
+        // phpstan:ignore
         $this->getEntity()->setStore(0);
         return $this;
     }

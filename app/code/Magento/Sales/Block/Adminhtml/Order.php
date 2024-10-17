@@ -7,8 +7,6 @@ namespace Magento\Sales\Block\Adminhtml;
 
 /**
  * Adminhtml sales orders block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Order extends \Magento\Backend\Block\Widget\Grid\Container
 {

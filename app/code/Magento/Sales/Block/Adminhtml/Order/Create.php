@@ -9,14 +9,11 @@ namespace Magento\Sales\Block\Adminhtml\Order;
  * Adminhtml sales order create
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Create extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Session quote
-     *
      * @var \Magento\Backend\Model\Session\Quote
      */
     protected $_sessionQuote;
@@ -86,7 +83,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return $this
      */

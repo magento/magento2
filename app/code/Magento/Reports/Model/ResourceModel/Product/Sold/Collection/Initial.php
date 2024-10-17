@@ -6,8 +6,6 @@
 
 /**
  * Report Reviews collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Sold\Collection;
 
