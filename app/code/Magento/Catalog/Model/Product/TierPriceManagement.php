@@ -100,7 +100,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         ) {
             throw new InputException(__('The data was invalid. Verify the data and try again.'));
         }
-        $product = $this->productRepository->get($sku, ['edit_mode' => true]);
+        $product = $this->productRepository->get($sku, ['edit_mode' => true, 'force_reload' => true]);
         $tierPrices = $product->getData('tier_price');
         $websiteIdentifier = 0;
         $value = $this->config->getValue('catalog/price/scope', ScopeInterface::SCOPE_WEBSITE);
@@ -109,19 +109,22 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         }
         $found = false;
 
-        foreach ($tierPrices as &$item) {
-            if ('all' == $customerGroupId) {
-                $isGroupValid = ($item['all_groups'] == 1);
-            } else {
-                $isGroupValid = ($item['cust_group'] == $customerGroupId);
-            }
+        if($tierPrices !== null) {
+            foreach ($tierPrices as &$item) {
+                if ('all' == $customerGroupId) {
+                    $isGroupValid = ($item['all_groups'] == 1);
+                } else {
+                    $isGroupValid = ($item['cust_group'] == $customerGroupId);
+                }
 
-            if ($isGroupValid && $item['website_id'] == $websiteIdentifier && $item['price_qty'] == $qty) {
-                $item['price'] = $price;
-                $found = true;
-                break;
+                if ($isGroupValid && $item['website_id'] == $websiteIdentifier && $item['price_qty'] == $qty) {
+                    $item['price'] = $price;
+                    $found = true;
+                    break;
+                }
             }
         }
+
         if (!$found) {
             $mappedCustomerGroupId = 'all' == $customerGroupId
                 ? $this->groupManagement->getAllCustomersGroup()->getId()
