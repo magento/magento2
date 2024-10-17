@@ -158,7 +158,7 @@ class CachedAdapter implements CachedAdapterInterface
             $this->cache->storeFileNotExists($path);
         } else {
             $cacheEntry = is_array($exists) ? $exists : ['path' => $path];
-            $this->cache->updateMetadata($path, $cacheEntry, true);
+            $this->cache->updateMetadata($path, $cacheEntry, false);
         }
 
         return $exists;

@@ -112,7 +112,7 @@ class MetadataProvider implements MetadataProviderInterface
         if (isset($extraMetadata['Metadata']['image-width']) && isset($extraMetadata['Metadata']['image-height'])) {
             $data['extra'] = $extraMetadata['Metadata'];
         }
-        $this->cache->updateMetadata($path, $data, true);
+        $this->cache->updateMetadata($path, $data, false);
         return $data;
     }
 
