@@ -22,6 +22,7 @@
                 <minify_files>0</minify_files>
                 <minify_exclude>
                     <tiny_mce>/tiny_mce/</tiny_mce>
+                    <tiny_mce_7>/tiny_mce_7/</tiny_mce_7>
                 </minify_exclude>
             </js>
             <css>
