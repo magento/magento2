@@ -36,6 +36,11 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Multishipping\Model\Checkout\Type\Multishipping
+     */
+    private $_multishipping;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Filter\DataObject\GridFactory $filterGridFactory
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping

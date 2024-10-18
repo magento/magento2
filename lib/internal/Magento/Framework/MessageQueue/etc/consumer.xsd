@@ -19,10 +19,10 @@
     </xs:element>
     <xs:complexType name="consumerType">
         <xs:attribute type="xs:string" name="name" use="required"/>
-        <xs:attribute type="xs:string" name="queue" use="required"/>
+        <xs:attribute type="xs:string" name="queue" use="optional"/>
         <xs:attribute type="handlerType" name="handler" use="optional"/>
         <xs:attribute type="xs:string" name="consumerInstance" use="optional"/>
-        <xs:attribute name="connection" use="optional" type="xs:string" />
+        <xs:attribute type="xs:string" name="connection" use="optional" />
         <xs:attribute type="xs:integer" name="maxMessages" use="optional"/>
         <xs:attribute type="xs:integer" name="maxIdleTime" use="optional"/>
         <xs:attribute type="xs:integer" name="sleep" use="optional"/>

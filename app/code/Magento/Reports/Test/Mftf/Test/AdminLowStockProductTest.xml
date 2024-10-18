@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLowStockProductTest">
+        <annotations>
+            <features value="Reports"/>
+            <stories value="Display low stock products in Reports Section"/>
+            <title value="Display low stock products in Reports Section"/>
+            <description value="In Reports section check all the low stock products based on the stock quantity settings"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-3918"/>
+            <group value="reports"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set cataloginventory/item_options/notify_stock_qty 1" stepKey="checkSystemValue1"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Go to Inventory configuration page -->
+        <magentoCLI command="config:set cataloginventory/item_options/notify_stock_qty 2" stepKey="checkSystemValue1"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="clearCacheAfterEnablingStockQuantity">
+            <argument name="tags" value="config"/>
+        </actionGroup>
+        <!--Create Category-->
+        <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+        <!--Create Simple Product-->
+        <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+            <requiredEntity createDataKey="createCategory"/>
+        </createData>
+        <!-- Open Product Index Page-->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <!-- Select Created Product-->
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}" stepKey="waitForOpenFirstProduct"/>
+        <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQty">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveTheProduct"/>
+        <!--Navigate to low stock-->
+        <actionGroup ref="AdminLowStockReportActionGroup" stepKey="navigateToLowStockReport"/>
+        <!-- Verify Product-->
+        <waitForText userInput="$$createSimpleProduct.name$$" selector="{{LowStockProductGridSection.productName}}" time="30" stepKey="assertProductName1"/>
+        <!-- Verify Product Sku-->
+        <waitForText userInput="$$createSimpleProduct.sku$$" selector="{{LowStockProductGridSection.productSku}}" time="30" stepKey="assertProductSku1"/>
+        <!-- Verify Product Qty-->
+        <waitForText userInput="1" selector="{{LowStockProductGridSection.productQty}}" time="30" stepKey="assertProductQty1"/>
+    </test>
+</tests>

@@ -179,7 +179,7 @@ class Base implements \Magento\Framework\App\RouterInterface
 
         $path = trim($request->getPathInfo(), '/');
 
-        $params = explode('/', $path ? $path : $this->pathConfig->getDefaultPath());
+        $params = explode('/', strlen($path) ? $path : $this->pathConfig->getDefaultPath());
         foreach ($this->_requiredParams as $paramName) {
             $output[$paramName] = array_shift($params);
         }
@@ -202,15 +202,16 @@ class Base implements \Magento\Framework\App\RouterInterface
         // get module name
         if ($request->getModuleName()) {
             $moduleFrontName = $request->getModuleName();
-        } elseif (!empty($param)) {
+        } elseif (strlen((string) $param)) {
             $moduleFrontName = $param;
         } else {
             $moduleFrontName = $this->_defaultPath->getPart('module');
             $request->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, '');
+            if (!$moduleFrontName) {
+                return null;
+            }
         }
-        if (!$moduleFrontName) {
-            return null;
-        }
+
         return $moduleFrontName;
     }
 
@@ -270,7 +271,7 @@ class Base implements \Magento\Framework\App\RouterInterface
     protected function matchAction(\Magento\Framework\App\RequestInterface $request, array $params)
     {
         $moduleFrontName = $this->matchModuleFrontName($request, $params['moduleFrontName']);
-        if (empty($moduleFrontName)) {
+        if (!strlen((string) $moduleFrontName)) {
             return null;
         }
 
@@ -278,7 +279,6 @@ class Base implements \Magento\Framework\App\RouterInterface
          * Searching router args by module name from route using it as key
          */
         $modules = $this->_routeConfig->getModulesByFrontName($moduleFrontName);
-
         if (empty($modules) === true) {
             return null;
         }

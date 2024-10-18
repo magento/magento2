@@ -247,7 +247,8 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
                     'simple-product-9',
                     'simple-product-10',
                     'simple-product-11',
-                    'simple-product-12'
+                    'simple-product-12',
+                    'simple-product-13',
                 ]
             ],
 
@@ -272,7 +273,8 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
                     'simple-product-9',
                     'simple-product-10',
                     'simple-product-11',
-                    'simple-product-12'
+                    'simple-product-12',
+                    'simple-product-13',
                 ]
             ],
 
@@ -386,7 +388,8 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
                     'simple-product-9',
                     'simple-product-10',
                     'simple-product-11',
-                    'simple-product-12'
+                    'simple-product-12',
+                    'simple-product-13',
                 ]
             ],
 
@@ -416,7 +419,8 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
                     'simple-product-9',
                     'simple-product-10',
                     'simple-product-11',
-                    'simple-product-12'
+                    'simple-product-12',
+                    'simple-product-13',
                 ]
             ],
 
@@ -424,12 +428,25 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
             'variation 22' => [
                 'condition' => $this->getConditionsForVariation22(),
                 'expected-sku' => [
-                    'simple-product-1',
-                    'simple-product-2',
+                    'simple-product-7',
+                    'simple-product-8',
+                    'simple-product-13',
+                ]
+            ],
+
+            // test filter by multiple sku and "is not one of" condition
+            'variation 23' => [
+                'condition' => $this->getConditionsForVariation23(),
+                'expected-sku' => [
                     'simple-product-3',
                     'simple-product-4',
+                    'simple-product-6',
                     'simple-product-7',
-                    'simple-product-8'
+                    'simple-product-8',
+                    'simple-product-9',
+                    'simple-product-11',
+                    'simple-product-12',
+                    'simple-product-13',
                 ]
             ],
         ];
@@ -1050,6 +1067,25 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
                             'attribute' => 'category_ids'
                         ]
                     ]
+                ]
+            ]
+        ];
+
+        return $this->getCombineConditionFromArray($conditions);
+    }
+
+    private function getConditionsForVariation23()
+    {
+        $conditions = [
+            'type' => \Magento\CatalogRule\Model\Rule\Condition\Combine::class,
+            'aggregator' => 'all',
+            'value' => 1,
+            'conditions' => [
+                [
+                    'type' => \Magento\CatalogRule\Model\Rule\Condition\Product::class,
+                    'operator' => '!()',
+                    'value' => 'simple-product-1, simple-product-2, simple-product-5, simple-product-10',
+                    'attribute' => 'sku'
                 ]
             ]
         ];

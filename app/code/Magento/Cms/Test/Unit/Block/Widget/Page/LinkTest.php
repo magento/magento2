@@ -9,7 +9,10 @@ namespace Magento\Cms\Test\Unit\Block\Widget\Page;
 
 use Magento\Cms\Block\Widget\Page\Link;
 use Magento\Cms\Helper\Page;
+use Magento\Framework\Math\Random;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,9 +38,26 @@ class LinkTest extends TestCase
      */
     protected $mockResourcePage;
 
+    /**
+     * @var ObjectManagerHelper
+     */
+    protected $objectManagerHelper;
+
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
+
         $this->mockCmsPage = $this->createMock(Page::class);
         $this->mockResourcePage = $this->createMock(\Magento\Cms\Model\ResourceModel\Page::class);
 
@@ -161,4 +181,22 @@ class LinkTest extends TestCase
     {
         $this->assertEmpty($this->linkElement->getLabel());
     }
+
+//    /**
+//     * @param $map
+//     */
+//    private function prepareObjectManager($map)
+//    {
+//        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+//            ->addMethods(['getInstance'])
+//            ->onlyMethods(['get'])
+//            ->getMockForAbstractClass();
+//
+//        $objectManagerMock->method('getInstance')->willReturnSelf();
+//        $objectManagerMock->method('get')->willReturnMap($map);
+//
+//        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+//        $reflectionProperty->setAccessible(true);
+//        $reflectionProperty->setValue($objectManagerMock);
+//    }
 }

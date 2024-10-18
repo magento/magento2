@@ -5,6 +5,7 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Frontend;
 
+use Magento\Catalog\Model\Product;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -55,7 +56,6 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        CacheCleaner::cleanAll();
         $this->objectManager = Bootstrap::getObjectManager();
 
         $this->defaultFrontend = $this->objectManager->get(DefaultFrontend::class);
@@ -83,7 +83,7 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
      */
     public function testAttributeEntityValueNotSet()
     {
-        $entity = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
+        $entity = $this->objectManager->create(Product::class);
         $entity->setStoreId(0);
         $entity->load(1);
         $frontEnd = $this->attribute->loadByCode('catalog_product', 'dropdown_attribute');
@@ -100,5 +100,20 @@ class DefaultFrontendTest extends \PHPUnit\Framework\TestCase
         return 'attribute-navigation-option-' .
             $this->defaultFrontend->getAttribute()->getAttributeCode() . '-' .
             $this->storeManager->getStore()->getId();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setAccessible(true);
+                $property->setValue($this, null);
+            }
+        }
     }
 }

@@ -15,5 +15,6 @@
         <element name="search" type="button" selector="//div[@id='promo_catalog_grid']//button[@title='Search']" timeout="30"/>
         <element name="selectRowByRuleName" type="text" selector="//tr[@data-role='row']//td[contains(.,'{{ruleName}}')]" parameterized="true"/>
         <element name="firstRow" type="text" selector="//tr[@data-role='row']"/>
+        <element name="firstNotEmptyRow" type="text" selector="tr[data-role='row']:not([class*='no-data'])"/>
     </section>
 </sections>

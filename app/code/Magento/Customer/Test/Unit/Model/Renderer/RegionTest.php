@@ -135,7 +135,7 @@ class RegionTest extends TestCase
 
         $static = new \ReflectionProperty(Region::class, '_regionCollections');
         $static->setAccessible(true);
-        $static->setValue([]);
+        $static->setValue(null, null);
 
         $html = $model->render($elementMock);
 
@@ -146,7 +146,7 @@ class RegionTest extends TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             'with no defined regions' => [[]],

@@ -10,7 +10,8 @@ var config = {
             orderOverview: 'Magento_Multishipping/js/overview',
             payment: 'Magento_Multishipping/js/payment',
             billingLoader: 'Magento_Checkout/js/checkout-loader',
-            cartUpdate: 'Magento_Checkout/js/action/update-shopping-cart'
+            cartUpdate: 'Magento_Checkout/js/action/update-shopping-cart',
+            multiShippingBalance: 'Magento_Multishipping/js/multi-shipping-balance'
         }
     }
 };

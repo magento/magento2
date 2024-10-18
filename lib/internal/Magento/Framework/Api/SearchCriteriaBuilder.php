@@ -4,12 +4,16 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Framework\Api;
 
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 
 /**
  * Builder for SearchCriteria Service Data Object
+ *
+ * @api
  */
 class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
 {
@@ -67,6 +71,8 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
     }
 
     /**
+     * Add search filter
+     *
      * @param string $field
      * @param mixed $value
      * @param string $conditionType

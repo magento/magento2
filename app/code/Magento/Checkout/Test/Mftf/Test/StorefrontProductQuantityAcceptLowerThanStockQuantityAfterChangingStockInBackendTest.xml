@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductQuantityAcceptLowerThanStockQuantityAfterChangingStockInBackendTest">
+        <annotations>
+            <stories value="Cart"/>
+            <title value="Verify if lower than stock product quantity is accepted after changing stock qty in backend"/>
+            <description value="Verify if lower than stock product quantity is accepted after changing stock qty in backend"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5987"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct">
+                <field key="price">10.00</field>
+                <field key="quantity">20</field>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Open Product page in StoreFront and assert product and price range -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+
+        <!--Add product to the cart -->
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToTheCart">
+            <argument name="productQty" value="12"/>
+        </actionGroup>
+
+        <!--Open View and edit -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
+
+        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+
+        <!--Edit product qty via admin panel-->
+        <openNewTab stepKey="openNewTab"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$simpleProduct.id$$"/>
+        </actionGroup>
+        <fillField userInput="10" selector="{{AdminProductFormSection.productQuantity}}"  stepKey="setNewQty"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <closeTab stepKey="closeTab"/>
+
+        <!--Check quantity-->
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForCheckoutPageReload"/>
+
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad1"/>
+
+        <!--Assert "The requested qty is not available"-->
+        <see selector="{{CheckoutCartMessageSection.errorMessage}}" userInput="Not enough items for sale" stepKey="seeTheErrorMessageDisplayed"/>
+
+        <fillField selector="{{CheckoutCartProductSection.qty($$simpleProduct.sku$$)}}" userInput="8" stepKey="updateProductQty"/>
+        <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCart"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad2"/>
+        <waitForAjaxLoad stepKey="waitForPageLoad2"/>
+
+        <dontSee userInput="Not enough items for sale" stepKey="dontSeeTheErrorMessageDisplayed"/>
+
+    </test>
+</tests>

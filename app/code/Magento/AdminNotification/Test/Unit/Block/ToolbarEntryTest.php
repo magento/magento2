@@ -12,6 +12,8 @@ namespace Magento\AdminNotification\Test\Unit\Block;
 
 use Magento\AdminNotification\Block\ToolbarEntry;
 use Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Unread;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
@@ -26,6 +28,17 @@ class ToolbarEntryTest extends TestCase
     protected function _getBlockInstance($unreadNotifications)
     {
         $objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
         // mock collection of unread notifications
         $notificationList = $this->createPartialMock(
             Unread::class,
@@ -51,6 +64,18 @@ class ToolbarEntryTest extends TestCase
     public function testGetLatestUnreadNotifications()
     {
         $helper = new ObjectManager($this);
+
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $helper->prepareObjectManager($objects);
 
         // 1. Create mocks
         $notificationList = $this->createMock(Unread::class);

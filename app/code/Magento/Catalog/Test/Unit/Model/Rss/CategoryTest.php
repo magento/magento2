@@ -65,7 +65,7 @@ class CategoryTest extends TestCase
         /** @var MockObject|Resolver $layerResolver */
         $layerResolver = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get', 'create'])
+            ->onlyMethods(['get', 'create'])
             ->getMock();
         $layerResolver->expects($this->any())
             ->method($this->anything())
@@ -177,7 +177,7 @@ class CategoryTest extends TestCase
         /** @var MockObject|Resolver $layerResolver */
         $layerResolver = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get', 'create'])
+            ->onlyMethods(['get', 'create'])
             ->getMock();
         $layerResolver->expects($this->any())
             ->method($this->anything())

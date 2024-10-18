@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertProductPriceAndPriceLabelIfPresentOnCategoryPageActionGroup">
+        <annotations>
+            <description>Validate that the price and price label if present on category page.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="price" type="string"/>
+            <argument name="priceLabel" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productNameWithPriceOrLabel(productName,priceLabel)}}" stepKey="assertProductPriceLabel"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productNameWithPriceOrLabel(productName,price)}}" stepKey="assertProductPrice"/>
+    </actionGroup>
+</actionGroups>

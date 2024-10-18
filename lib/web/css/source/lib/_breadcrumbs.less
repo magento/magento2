@@ -12,6 +12,7 @@
     @_breadcrumbs-display: @breadcrumbs__display,
     @_breadcrumbs-container-margin: @breadcrumbs__container-margin,
     @_breadcrumbs-padding: @breadcrumbs__padding,
+    @_breadcrumbs-min-height: @breadcrumbs__min-height,
 
     //  Breadcrumbs separating symbol
     @_breadcrumbs-separator-symbol: @breadcrumbs-separator__symbol,
@@ -74,6 +75,7 @@
     @_breadcrumbs-link-gradient-color-end-active: @breadcrumbs-link__active__gradient-color-end
 ) {
     .lib-css(margin, @_breadcrumbs-container-margin);
+    .lib-css(min-height, @_breadcrumbs-min-height);
     .items {
         .lib-font-size(@_breadcrumbs-font-size);
         .lib-css(color, @_breadcrumbs-current-color);

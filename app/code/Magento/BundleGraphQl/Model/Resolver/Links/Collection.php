@@ -11,13 +11,17 @@ use Magento\Bundle\Model\Selection;
 use Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as LinkCollection;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Framework\GraphQl\Query\Uid;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Zend_Db_Select_Exception;
 
 /**
  * Collection to fetch link data at resolution time.
  */
-class Collection
+class Collection implements ResetAfterRequestInterface
 {
     /**
      * @var CollectionFactory
@@ -85,6 +89,9 @@ class Collection
      *
      * @param int $optionId
      * @return array
+     * @throws NoSuchEntityException
+     * @throws RuntimeException
+     * @throws Zend_Db_Select_Exception
      */
     public function getLinksForOptionId(int $optionId) : array
     {
@@ -101,6 +108,9 @@ class Collection
      * Fetch link data and return in array format. Keys for links will be their option Ids.
      *
      * @return array
+     * @throws RuntimeException
+     * @throws Zend_Db_Select_Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function fetch() : array
     {
@@ -128,7 +138,7 @@ class Collection
                 'price' => $link->getSelectionPriceValue(),
                 'position' => $link->getPosition(),
                 'id' => $link->getSelectionId(),
-                'uid' => $this->uidEncoder->encode((string) $link->getSelectionId()),
+                'uid' => $this->uidEncoder->encode((string)$link->getSelectionId()),
                 'qty' => (float)$link->getSelectionQty(),
                 'quantity' => (float)$link->getSelectionQty(),
                 'is_default' => (bool)$link->getIsDefault(),
@@ -146,5 +156,15 @@ class Collection
         }
 
         return $this->links;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->links = [];
+        $this->optionIds = [];
+        $this->parentIds = [];
     }
 }

@@ -61,11 +61,6 @@ class ImageResizeTest extends TestCase
     protected $imageFactoryMock;
 
     /**
-     * @var Image|MockObject
-     */
-    protected $imageMock;
-
-    /**
      * @var ParamsBuilder|MockObject
      */
     protected $paramsBuilderMock;
@@ -124,10 +119,21 @@ class ImageResizeTest extends TestCase
      * @var string
      */
     private $testfilepath;
+
+    /**
+     * @var string
+     */
+    private $testImageHiddenFilename;
+
     /**
      * @var MockObject|StoreManagerInterface
      */
     private $storeManager;
+
+    /**
+     * @var string
+     */
+    private $testImageHiddenfilepath;
 
     /**
      * @inheritDoc
@@ -136,12 +142,15 @@ class ImageResizeTest extends TestCase
     protected function setUp(): void
     {
         $this->testfilename = "image.jpg";
+        $this->testImageHiddenFilename = "image_hidden.jpg";
         $this->testfilepath = "/image.jpg";
+        $this->testImageHiddenfilepath = "/image_hidden.jpg";
+
 
         $this->appStateMock = $this->createMock(State::class);
-        $this->imageConfigMock = $this->createMock(MediaConfig::class);
+        $this->imageConfigMock = $this->getMockBuilder(MediaConfig::class)
+                                    ->getMock();
         $this->productImageMock = $this->createMock(ProductImage::class);
-        $this->imageMock = $this->createMock(Image::class);
         $this->imageFactoryMock = $this->createMock(ImageFactory::class);
         $this->paramsBuilderMock = $this->createMock(ParamsBuilder::class);
         $this->viewMock = $this->createMock(View::class);
@@ -156,7 +165,7 @@ class ImageResizeTest extends TestCase
 
         $this->mediaDirectoryMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAbsolutePath','isFile','getRelativePath'])
+            ->addMethods(['getAbsolutePath','isFile','getRelativePath'])
             ->getMock();
 
         $this->filesystemMock->expects($this->any())
@@ -164,12 +173,9 @@ class ImageResizeTest extends TestCase
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectoryMock);
 
-        $this->imageFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->imageMock);
         $this->assetImageMock->expects($this->any())
             ->method('getPath')
-            ->willReturn($this->testfilepath);
+            ->willReturnOnConsecutiveCalls($this->testfilepath, $this->testImageHiddenfilepath);
         $this->assetImageFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->assetImageMock);
@@ -191,16 +197,21 @@ class ImageResizeTest extends TestCase
 
         $this->imageConfigMock->expects($this->any())
             ->method('getMediaPath')
-            ->with($this->testfilename)
-            ->willReturn($this->testfilepath);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$this->testfilename] => $this->testfilepath,
+                [$this->testImageHiddenFilename] => $this->testImageHiddenfilepath
+            });
+
         $this->mediaDirectoryMock->expects($this->any())
             ->method('getAbsolutePath')
-            ->with($this->testfilepath)
-            ->willReturn($this->testfilepath);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$this->testfilepath] => $this->testfilepath,
+                [$this->testImageHiddenfilepath] => $this->testImageHiddenfilepath
+            });
+
         $this->mediaDirectoryMock->expects($this->any())
             ->method('getRelativePath')
-            ->with($this->testfilepath)
-            ->willReturn($this->testfilepath);
+            ->willReturnOnConsecutiveCalls($this->testfilepath, $this->testImageHiddenfilepath);
 
         $this->viewMock->expects($this->any())
             ->method('getMediaEntities')
@@ -256,6 +267,11 @@ class ImageResizeTest extends TestCase
             ->method('fileExists')
             ->willReturn(false);
 
+        $imageMock = $this->createMock(Image::class);
+        $this->imageFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($imageMock);
+
         $this->productImageMock->expects($this->any())
             ->method('getCountUsedProductImages')
             ->willReturn(1);
@@ -272,18 +288,182 @@ class ImageResizeTest extends TestCase
 
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')
-            ->with($this->testfilepath)
-            ->willReturn(true);
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == $this->testfilepath) {
+                        return true;
+                    } elseif ($arg1 == $this->testImageHiddenfilepath) {
+                        return true;
+                    }
+                }
+            );
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock->expects($this->any())
             ->method('saveFileToFilesystem')
-            ->with($this->testfilepath);
-        $this->databaseMock->expects($this->once())
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 === $this->testfilepath) {
+                        return null;
+                    } elseif ($arg1 === $this->testImageHiddenfilepath) {
+                        return null;
+                    }
+                }
+            );
+        $this->databaseMock->expects($this->any())
             ->method('saveFile')
-            ->with($this->testfilepath);
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 === $this->testfilepath) {
+                        return [];
+                    } elseif ($arg1 === $this->testImageHiddenfilepath) {
+                        return [];
+                    }
+                }
+            );
+
+        $generator = $this->service->resizeFromThemes(['test-theme'], true);
+        while ($generator->valid()) {
+            $resizeInfo = $generator->key();
+            $this->assertEquals('image.jpg', $resizeInfo['filename']);
+            $this->assertEmpty($resizeInfo['error']);
+            $generator->next();
+        }
+    }
+
+    public function testResizeFromThemesHiddenImagesMediaStorageDatabase()
+    {
+        $this->databaseMock->expects($this->any())
+            ->method('checkDbUsage')
+            ->willReturn(true);
+        $this->databaseMock->expects($this->any())
+            ->method('fileExists')
+            ->willReturn(false);
+
+        $imageMock = $this->createMock(Image::class);
+        $this->imageFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($imageMock);
+
+        $this->productImageMock->expects($this->any())
+            ->method('getCountUsedProductImages')
+            ->willReturn(1);
+        $this->productImageMock->expects($this->any())
+            ->method('getUsedProductImages')
+            ->willReturnCallback(
+                function () {
+                    $data = [[ 'filepath' => $this->testfilename ]];
+                    foreach ($data as $e) {
+                        yield $e;
+                    }
+                }
+            );
+
+        $this->productImageMock->expects($this->any())
+            ->method('getCountAllProductImages')
+            ->willReturn(2);
+        $this->productImageMock->expects($this->any())
+            ->method('getAllProductImages')
+            ->willReturnCallback(
+                function () {
+                    $data = [[ 'filepath' => $this->testfilename ], [ 'filepath' => $this->testImageHiddenFilename ]];
+                    foreach ($data as $e) {
+                        yield $e;
+                    }
+                }
+            );
+
+        $this->mediaDirectoryMock->expects($this->any())
+            ->method('isFile')
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == $this->testfilepath) {
+                        return true;
+                    } elseif ($arg1 == $this->testImageHiddenfilepath) {
+                        return true;
+                    }
+                }
+            );
+
+        $this->databaseMock->expects($this->any())
+            ->method('saveFileToFilesystem')
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 === $this->testfilepath) {
+                        return null;
+                    } elseif ($arg1 === $this->testImageHiddenfilepath) {
+                        return null;
+                    }
+                }
+            );
+        $this->databaseMock->expects($this->any())
+            ->method('saveFile')
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 === $this->testfilepath) {
+                        return null;
+                    } elseif ($arg1 === $this->testImageHiddenfilepath) {
+                        return null;
+                    }
+                }
+            );
+
+        $this->assertEquals(2, $this->service->getCountProductImages());
+        $this->assertEquals(1, $this->service->getCountProductImages(true));
 
         $generator = $this->service->resizeFromThemes(['test-theme']);
         while ($generator->valid()) {
+            $resizeInfo = $generator->key();
+            $this->assertContains($resizeInfo['filename'], [$this->testfilename, $this->testImageHiddenFilename]);
+            $this->assertEmpty($resizeInfo['error']);
+            $generator->next();
+        }
+
+    }
+
+    public function testResizeFromThemesUnsupportedImage()
+    {
+        $this->databaseMock->expects($this->any())
+            ->method('checkDbUsage')
+            ->willReturn(true);
+        $this->databaseMock->expects($this->any())
+            ->method('fileExists')
+            ->willReturn(false);
+
+        $this->imageFactoryMock->expects($this->any())
+            ->method('create')
+            ->willThrowException(new \InvalidArgumentException('Unsupported image format.'));
+
+        $this->productImageMock->expects($this->any())
+            ->method('getCountUsedProductImages')
+            ->willReturn(1);
+        $this->productImageMock->expects($this->any())
+            ->method('getUsedProductImages')
+            ->willReturnCallback(
+                function () {
+                    $data = [[ 'filepath' => $this->testfilename ]];
+                    foreach ($data as $e) {
+                        yield $e;
+                    }
+                }
+            );
+
+        $this->mediaDirectoryMock->expects($this->any())
+            ->method('isFile')
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == $this->testfilepath) {
+                        return true;
+                    } elseif ($arg1 == $this->testImageHiddenfilepath) {
+                        return true;
+                    }
+                }
+            );
+
+
+        $generator = $this->service->resizeFromThemes(['test-theme'], true);
+        while ($generator->valid()) {
+            $resizeInfo = $generator->key();
+            $this->assertEquals('Unsupported image format.', $resizeInfo['error']);
             $generator->next();
         }
     }
@@ -296,6 +476,11 @@ class ImageResizeTest extends TestCase
         $this->databaseMock->expects($this->any())
             ->method('fileExists')
             ->willReturn(false);
+
+        $imageMock = $this->createMock(Image::class);
+        $this->imageFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($imageMock);
 
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')

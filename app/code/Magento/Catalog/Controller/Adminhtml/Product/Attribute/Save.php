@@ -135,7 +135,6 @@ class Save extends Attribute implements HttpPostActionInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @throws \Zend_Validate_Exception
      */
     public function execute()
     {
@@ -185,6 +184,9 @@ class Save extends Attribute implements HttpPostActionInterface
             }
 
             $attributeId = $this->getRequest()->getParam('attribute_id');
+            if (!empty($data['attribute_id']) && $data['attribute_id'] != $attributeId) {
+                $attributeId = $data['attribute_id'];
+            }
 
             /** @var ProductAttributeInterface $model */
             $model = $this->attributeFactory->create();
@@ -324,6 +326,9 @@ class Save extends Attribute implements HttpPostActionInterface
                 return $this->returnResult('catalog/*/', [], ['error' => false]);
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
+                if ($attributeId === null) {
+                    unset($data['frontend_input']);
+                }
                 $this->_session->setAttributeData($data);
                 return $this->returnResult(
                     'catalog/*/edit',

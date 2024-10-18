@@ -15,7 +15,15 @@ use Magento\Framework\Session\SessionStartChecker;
  */
 class TransparentSessionChecker
 {
-    private const TRANSPARENT_REDIRECT_PATH = 'paypal/transparent/redirect';
+    /**
+     * @var string[]
+     */
+    private $disableSessionUrls = [
+        'paypal/transparent/redirect',
+        'paypal/payflowadvanced/returnUrl',
+        'paypal/payflow/returnUrl',
+        'paypal/hostedpro/return',
+    ];
 
     /**
      * @var Http
@@ -45,6 +53,12 @@ class TransparentSessionChecker
             return false;
         }
 
-        return strpos((string)$this->request->getPathInfo(), self::TRANSPARENT_REDIRECT_PATH) === false;
+        foreach ($this->disableSessionUrls as $url) {
+            if (strpos((string)$this->request->getPathInfo(), $url) !== false) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

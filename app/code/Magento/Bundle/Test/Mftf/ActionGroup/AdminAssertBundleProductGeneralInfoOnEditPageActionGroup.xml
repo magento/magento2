@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertBundleProductGeneralInfoOnEditPageActionGroup" extends="AdminAssertProductInfoOnEditPageActionGroup">
+        <annotations>
+            <description>Verifies the general data on the Edit product details page in admin for a bundle product.</description>
+        </annotations>
+        <arguments>
+            <argument name="dynamicSku" defaultValue="true" type="string"/>
+            <argument name="dynamicPrice" defaultValue="true" type="string"/>
+            <argument name="dynamicWeight" defaultValue="true" type="string"/>
+        </arguments>
+        <executeJS function="return document.querySelector(&quot;{{AdminProductFormSection.attributeSet}}&quot;).innerText" stepKey="seeProductAttributeSet"/>
+        <assertEquals stepKey="assertProductAttributeSet" after="seeProductAttributeSet">
+            <actualResult type="variable">seeProductAttributeSet</actualResult>
+            <expectedResult type="string">{{productAttributeSet}}</expectedResult>
+        </assertEquals>
+        <executeJS function="return document.querySelector(&quot;{{AdminProductFormBundleSection.dynamicSkuInput}}&quot;).checked.toString()" stepKey="dynamicSkuCheckedValue" after="seeProductSku"/>
+        <assertEquals stepKey="assertDynamicSku" after="dynamicSkuCheckedValue">
+            <actualResult type="variable">dynamicSkuCheckedValue</actualResult>
+            <expectedResult type="string">{{dynamicSku}}</expectedResult>
+        </assertEquals>
+        <executeJS function="return document.querySelector(&quot;{{AdminProductFormBundleSection.dynamicPriceInput}}&quot;).checked.toString()" stepKey="dynamicPriceCheckedValue" after="seeProductPrice"/>
+        <assertEquals stepKey="assertDynamicPrice" after="dynamicPriceCheckedValue">
+            <actualResult type="variable">dynamicPriceCheckedValue</actualResult>
+            <expectedResult type="string">{{dynamicPrice}}</expectedResult>
+        </assertEquals>
+        <executeJS function="return document.querySelector(&quot;{{AdminProductFormBundleSection.dynamicWeightInput}}&quot;).checked.toString()" stepKey="dynamicWeightCheckedValue" after="seeProductWeight"/>
+        <assertEquals stepKey="assertDynamicWeight" after="dynamicWeightCheckedValue">
+            <actualResult type="variable">dynamicWeightCheckedValue</actualResult>
+            <expectedResult type="string">{{dynamicWeight}}</expectedResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

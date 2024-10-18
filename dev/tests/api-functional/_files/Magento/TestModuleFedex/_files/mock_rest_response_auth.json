@@ -1,0 +1,6 @@
+{
+    "access_token": "TEST_ACCESS_TOKEN",
+    "token_type": "bearer",
+    "expires_in": 3599,
+    "scope": "CXS-TP"
+ }

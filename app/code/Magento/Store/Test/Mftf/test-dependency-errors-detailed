@@ -1,0 +1,6 @@
+
+File "/var/www/html/app/code/Magento/Store/Test/Mftf/ActionGroup/VerifyTheProductAttributeOnStoreFrontActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminGlobalSearchSection from module(s): magento/module-search
+	 StorefrontLayeredNavigationSection from module(s): magento/module-layered-navigation

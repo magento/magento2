@@ -10,19 +10,17 @@ namespace Magento\Catalog\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
- * Class Url
- * @package Magento\Catalog\Model\ResourceModel
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements ResetAfterRequestInterface
 {
     /**
      * Stores configuration array
@@ -65,29 +63,21 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_logger;
 
     /**
-     * Catalog category
-     *
      * @var \Magento\Catalog\Model\Category
      */
     protected $_catalogCategory;
 
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Model\Product
      */
     protected $_catalogProduct;
 
     /**
-     * Eav config
-     *
      * @var \Magento\Eav\Model\Config
      */
     protected $_eavConfig;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -115,7 +105,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param Product $productResource
      * @param \Magento\Catalog\Model\Category $catalogCategory
      * @param \Psr\Log\LoggerInterface $logger
-     * @param null $connectionName
+     * @param string|null $connectionName
      * @param TableMaintainer|null $tableMaintainer
      */
     public function __construct(
@@ -204,7 +194,8 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ['value' => $attributeCode, 'entity_id' => 'entity_id']
             )->where(
                 'entity_id IN(?)',
-                $categoryIds
+                $categoryIds,
+                \Zend_Db::INT_TYPE
             );
         } elseif ($this->_categoryAttributes[$attributeCode]['is_global'] || $storeId == 0) {
             $select->from(
@@ -216,7 +207,8 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ['value']
             )->where(
                 "t1.{$identifierFiled} IN(?)",
-                $categoryIds
+                $categoryIds,
+                \Zend_Db::INT_TYPE
             )->where(
                 'e.attribute_id = :attribute_id'
             )->where(
@@ -229,7 +221,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $valueExpr = $connection->getCheckSql('t2.value_id > 0', 't2.value', 't1.value');
             $select->from(
                 ['t1' => $attributeTable],
-                [$identifierFiled => 'e.'.$identifierFiled, 'value' => $valueExpr]
+                [$identifierFiled => 'e.' . $identifierFiled, 'value' => $valueExpr]
             )->joinLeft(
                 ['t2' => $attributeTable],
                 "t1.{$linkField} = t2.{$linkField} AND t1.attribute_id = t2.attribute_id AND t2.store_id = :store_id",
@@ -245,7 +237,8 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 't1.attribute_id = :attribute_id'
             )->where(
                 "e.entity_id IN(?)",
-                $categoryIds
+                $categoryIds,
+                \Zend_Db::INT_TYPE
             )->group('e.entity_id');
 
             $bind['attribute_id'] = $this->_categoryAttributes[$attributeCode]['attribute_id'];
@@ -308,7 +301,8 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 0
             )->where(
                 'entity_id IN(?)',
-                $productIds
+                $productIds,
+                \Zend_Db::INT_TYPE
             );
         } else {
             $valueExpr = $connection->getCheckSql('t2.value_id > 0', 't2.value', 't1.value');
@@ -326,7 +320,8 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 't1.attribute_id = :attribute_id'
             )->where(
                 't1.entity_id IN(?)',
-                $productIds
+                $productIds,
+                \Zend_Db::INT_TYPE
             );
             $bind['store_id'] = $storeId;
         }
@@ -356,7 +351,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _prepareCategoryParentId(\Magento\Framework\DataObject $category)
     {
         if ($category->getPath() != $category->getId()) {
-            $split = explode('/', $category->getPath());
+            $split = explode('/', $category->getPath() ?? '');
             $category->setParentId($split[count($split) - 2]);
         } else {
             $category->setParentId(0);
@@ -395,6 +390,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Retrieve categories objects
+     *
      * Either $categoryIds or $path (with ending slash) must be specified
      *
      * @param int|array $categoryIds
@@ -430,7 +426,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         // Prepare variables for checking whether categories belong to store
         if ($path === null) {
-            $select->where('main_table.entity_id IN(?)', $categoryIds);
+            $select->where('main_table.entity_id IN(?)', $categoryIds, \Zend_Db::INT_TYPE);
         } else {
             // Ensure that path ends with '/', otherwise we can get wrong results - e.g. $path = '1/2' will get '1/20'
             if (substr($path, -1) != '/') {
@@ -452,20 +448,23 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         if ($storeId !== null) {
             $rootCategoryPath = $this->getStores($storeId)->getRootCategoryPath();
-            $rootCategoryPathLength = strlen($rootCategoryPath);
+            $rootCategoryPathLength = $rootCategoryPath !== null ? strlen($rootCategoryPath) : 0;
         }
         $bind = ['attribute_id' => (int)$isActiveAttribute->getId(), 'store_id' => (int)$storeId];
-
         $rowSet = $connection->fetchAll($select, $bind);
+
         foreach ($rowSet as $row) {
             if ($storeId !== null) {
+                $rowPath = $row['path'] ?? '';
                 // Check the category to be either store's root or its descendant
                 // First - check that category's start is the same as root category
-                if (substr($row['path'], 0, $rootCategoryPathLength) != $rootCategoryPath) {
+                // @phpstan-ignore-next-line
+                if (substr($rowPath, 0, $rootCategoryPathLength) != $rootCategoryPath) {
                     continue;
                 }
                 // Second - check non-root category - that it's really a descendant, not a simple string match
-                if (strlen($row['path']) > $rootCategoryPathLength && $row['path'][$rootCategoryPathLength] != '/') {
+                // @phpstan-ignore-next-line
+                if (strlen($rowPath) > $rootCategoryPathLength && $row['path'][$rootCategoryPathLength] != '/') {
                     continue;
                 }
             }
@@ -480,7 +479,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
         unset($rowSet);
 
-        if ($storeId !== null && $categories) {
+        if ($storeId !== null && $categories && isset($category)) {
             foreach (['name', 'url_key', 'url_path'] as $attributeCode) {
                 $attributes = $this->_getCategoryAttribute(
                     $attributeCode,
@@ -536,9 +535,9 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Retrieve Product data objects
      *
      * @param int|array $productIds
-     * @param int $storeId
-     * @param int $entityId
-     * @param int &$lastEntityId
+     * @param int       $storeId
+     * @param int       $entityId
+     * @param int      &$lastEntityId
      * @return array
      */
     protected function _getProducts($productIds, $storeId, $entityId, &$lastEntityId)
@@ -569,7 +568,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->_productLimit
         );
         if ($productIds !== null) {
-            $select->where('e.entity_id IN(?)', $productIds);
+            $select->where('e.entity_id IN(?)', $productIds, \Zend_Db::INT_TYPE);
         }
 
         $rowSet = $connection->fetchAll($select, $bind);
@@ -591,7 +590,8 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ['product_id', 'category_id']
             )->where(
                 'product_id IN(?)',
-                array_keys($products)
+                array_keys($products),
+                \Zend_Db::INT_TYPE
             );
             $categories = $connection->fetchAll($select);
             foreach ($categories as $category) {
@@ -632,7 +632,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Retrieve Product data objects for store
      *
-     * @param int $storeId
+     * @param int  $storeId
      * @param int &$lastEntityId
      * @return array
      */
@@ -716,6 +716,8 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Method to get metadata pool.
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
@@ -725,5 +727,16 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_categoryAttributes = [];
+        $this->_productAttributes = [];
+        $this->_rootChildrenIds = [];
+        $this->_stores = null;
     }
 }

@@ -20,6 +20,7 @@
             <argument name="commands" xsi:type="array">
                 <item name="startConsumerCommand" xsi:type="object">Magento\MessageQueue\Console\StartConsumerCommand\Proxy</item>
                 <item name="consumerListCommand" xsi:type="object">Magento\MessageQueue\Console\ConsumerListCommand\Proxy</item>
+                <item name="restartConsumerCommand" xsi:type="object">Magento\MessageQueue\Console\RestartConsumerCommand\Proxy</item>
             </argument>
         </arguments>
     </type>

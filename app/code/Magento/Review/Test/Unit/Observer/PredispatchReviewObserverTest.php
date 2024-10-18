@@ -66,7 +66,7 @@ class PredispatchReviewObserverTest extends TestCase
             ->getMockForAbstractClass();
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setRedirect'])
+            ->addMethods(['setRedirect'])
             ->getMockForAbstractClass();
         $this->redirectMock = $this->getMockBuilder(RedirectInterface::class)
             ->getMock();
@@ -82,12 +82,15 @@ class PredispatchReviewObserverTest extends TestCase
 
     /**
      * Test with enabled review active config.
+     *
+     * @return void
      */
     public function testReviewEnabled() : void
     {
         $observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getResponse', 'getData', 'setRedirect'])
+            ->onlyMethods(['getData'])
+            ->addMethods(['getResponse', 'setRedirect'])
             ->getMockForAbstractClass();
 
         $this->configMock->method('getValue')
@@ -107,26 +110,28 @@ class PredispatchReviewObserverTest extends TestCase
 
     /**
      * Test with disabled review active config.
+     *
+     * @return void
      */
     public function testReviewDisabled() : void
     {
         $observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getControllerAction', 'getResponse'])
+            ->addMethods(['getControllerAction', 'getResponse'])
             ->getMockForAbstractClass();
-
-        $this->configMock->expects($this->at(0))
-            ->method('getValue')
-            ->with(PredispatchReviewObserver::XML_PATH_REVIEW_ACTIVE, ScopeInterface::SCOPE_STORE)
-            ->willReturn(false);
 
         $expectedRedirectUrl = 'https://test.com/index';
 
-        $this->configMock->expects($this->at(1))
+        $this->configMock
             ->method('getValue')
-            ->with('web/default/no_route', ScopeInterface::SCOPE_STORE)
-            ->willReturn($expectedRedirectUrl);
-
+            ->willReturnCallback(function ($arg1, $arg2) use ($expectedRedirectUrl) {
+                if ($arg1 == PredispatchReviewObserver::XML_PATH_REVIEW_ACTIVE &&
+                    $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return false;
+                } elseif ($arg1 == 'web/default/no_route' && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return $expectedRedirectUrl;
+                }
+            });
         $this->urlMock->expects($this->once())
             ->method('getUrl')
             ->willReturn($expectedRedirectUrl);

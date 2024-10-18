@@ -37,31 +37,31 @@ use Zend_Cache_Core;
 class DobTest extends TestCase
 {
     /** Constants used in the unit tests */
-    const MIN_DATE = '01/01/2010';
+    private const MIN_DATE = '01/01/2010';
 
-    const MAX_DATE = '01/01/2020';
+    private const MAX_DATE = '01/01/2020';
 
-    const DATE = '01/01/2014';
+    private const DATE = '01/01/2014';
 
-    const DAY = '01';
+    private const DAY = '01';
 
     // Value of date('d', strtotime(self::DATE))
-    const MONTH = '01';
+    private const MONTH = '01';
 
     // Value of date('m', strtotime(self::DATE))
-    const YEAR = '2014';
+    private const YEAR = '2014';
 
     // Value of date('Y', strtotime(self::DATE))
-    const DATE_FORMAT = 'M/dd/y';
+    private const DATE_FORMAT = 'MM/dd/y';
 
     /** Constants used by Dob::setDateInput($code, $html) */
-    const DAY_HTML =
+    private const DAY_HTML =
         '<div><label for="day"><span>d</span></label><input type="text" id="day" name="Day" value="1"></div>';
 
-    const MONTH_HTML =
+    private const MONTH_HTML =
         '<div><label for="month"><span>M</span></label><input type="text" id="month" name="Month" value="jan"></div>';
 
-    const YEAR_HTML =
+    private const YEAR_HTML =
         '<div><label for="year"><span>yy</span></label><input type="text" id="year" name="Year" value="14"></div>';
 
     /** @var MockObject|AttributeMetadataInterface */
@@ -140,7 +140,7 @@ class DobTest extends TestCase
         $this->context->expects($this->any())->method('getLocaleDate')->willReturn($timezone);
         $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['escapeHtml'])
+            ->onlyMethods(['escapeHtml'])
             ->getMock();
         $this->context->expects($this->any())->method('getEscaper')->willReturn($this->escaper);
 
@@ -198,7 +198,7 @@ class DobTest extends TestCase
     /**
      * @return array
      */
-    public function isEnabledDataProvider()
+    public static function isEnabledDataProvider()
     {
         return [[true, true], [false, false]];
     }
@@ -251,7 +251,7 @@ class DobTest extends TestCase
     /**
      * @return array
      */
-    public function isRequiredDataProvider()
+    public static function isRequiredDataProvider()
     {
         return [[true, true], [false, false]];
     }
@@ -274,7 +274,7 @@ class DobTest extends TestCase
     /**
      * @return array
      */
-    public function setDateDataProvider()
+    public static function setDateDataProvider()
     {
         return [
             [false, false, false],
@@ -306,7 +306,7 @@ class DobTest extends TestCase
     /**
      * @return array
      */
-    public function getDayDataProvider()
+    public static function getDayDataProvider()
     {
         return [[self::DATE, self::DAY], [false, '']];
     }
@@ -326,7 +326,7 @@ class DobTest extends TestCase
     /**
      * @return array
      */
-    public function getMonthDataProvider()
+    public static function getMonthDataProvider()
     {
         return [[self::DATE, self::MONTH], [false, '']];
     }
@@ -346,7 +346,7 @@ class DobTest extends TestCase
     /**
      * @return array
      */
-    public function getYearDataProvider()
+    public static function getYearDataProvider()
     {
         return [[self::DATE, self::YEAR], [false, '']];
     }
@@ -367,7 +367,7 @@ class DobTest extends TestCase
     /**
      * @return array
      */
-    public function getDateFormatDataProvider(): array
+    public static function getDateFormatDataProvider(): array
     {
         return [
             [
@@ -425,32 +425,60 @@ class DobTest extends TestCase
      */
     public function testGetMinDateRange($validationRules, $expectedValue)
     {
+        if (!empty($validationRules[0]) && is_callable($validationRules[0])) {
+            $validationRules[0] = $validationRules[0]($this);
+        }
         $this->attribute->expects($this->once())
             ->method('getValidationRules')
             ->willReturn($validationRules);
         $this->assertEquals($expectedValue, $this->_block->getMinDateRange());
     }
 
-    /**
-     * @return array
-     */
-    public function getMinDateRangeDataProvider()
+    protected function getValidationRuleClass($type)
+    {
+        $validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getName', 'getValue'])
+            ->getMockForAbstractClass();
+        if ($type=="MIN") {
+            $validationRule->expects($this->any())
+                ->method('getName')
+                ->willReturn(Dob::MIN_DATE_RANGE_KEY);
+            $validationRule->expects($this->any())
+                ->method('getValue')
+                ->willReturn(strtotime(self::MIN_DATE));
+        }
+        elseif ($type=="MAX") {
+            $validationRule->expects($this->any())
+                ->method('getName')
+                ->willReturn(Dob::MAX_DATE_RANGE_KEY);
+            $validationRule->expects($this->any())
+                ->method('getValue')
+                ->willReturn(strtotime(self::MAX_DATE));
+        }
+
+
+        return $validationRule;
+    }
+
+    protected function getEmptyValidationRuleClass()
     {
         $emptyValidationRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getValue'])
+            ->onlyMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
 
-        $validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getValue'])
-            ->getMockForAbstractClass();
-        $validationRule->expects($this->any())
-            ->method('getName')
-            ->willReturn(Dob::MIN_DATE_RANGE_KEY);
-        $validationRule->expects($this->any())
-            ->method('getValue')
-            ->willReturn(strtotime(self::MIN_DATE));
+        return $emptyValidationRule;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getMinDateRangeDataProvider()
+    {
+        $emptyValidationRule = static fn (self $testCase) => $testCase->getEmptyValidationRuleClass();
+
+        $validationRule = static fn (self $testCase) => $testCase->getValidationRuleClass('MIN');
 
         return [
             [
@@ -494,6 +522,9 @@ class DobTest extends TestCase
      */
     public function testGetMaxDateRange($validationRules, $expectedValue)
     {
+        if (!empty($validationRules[0]) && is_callable($validationRules[0])) {
+            $validationRules[0] = $validationRules[0]($this);
+        }
         $this->attribute->expects($this->once())
             ->method('getValidationRules')
             ->willReturn($validationRules);
@@ -503,23 +534,12 @@ class DobTest extends TestCase
     /**
      * @return array
      */
-    public function getMaxDateRangeDataProvider()
+    public static function getMaxDateRangeDataProvider()
     {
-        $emptyValidationRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getValue'])
-            ->getMockForAbstractClass();
+        $emptyValidationRule = static fn (self $testCase) => $testCase->getEmptyValidationRuleClass();
 
-        $validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getValue'])
-            ->getMockForAbstractClass();
-        $validationRule->expects($this->any())
-            ->method('getName')
-            ->willReturn(Dob::MAX_DATE_RANGE_KEY);
-        $validationRule->expects($this->any())
-            ->method('getValue')
-            ->willReturn(strtotime(self::MAX_DATE));
+        $validationRule = static fn (self $testCase) => $testCase->getValidationRuleClass('MAX');
+
         return [
             [
                 [
@@ -652,7 +672,7 @@ class DobTest extends TestCase
      *
      * @return array
      */
-    public function getTranslatedCalendarConfigJsonDataProvider()
+    public static function getTranslatedCalendarConfigJsonDataProvider()
     {
         return [
             [

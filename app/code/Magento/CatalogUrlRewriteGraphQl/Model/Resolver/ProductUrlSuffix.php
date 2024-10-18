@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewriteGraphQl\Model\Resolver;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -17,7 +18,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 /**
  * Returns the url suffix for product
  */
-class ProductUrlSuffix implements ResolverInterface
+class ProductUrlSuffix implements ResolverInterface, ResetAfterRequestInterface
 {
     /**
      * System setting for the url suffix for products
@@ -75,8 +76,16 @@ class ProductUrlSuffix implements ResolverInterface
                 self::$xml_path_product_url_suffix,
                 ScopeInterface::SCOPE_STORE,
                 $storeId
-            );
+            ) ?? '';
         }
         return $this->productUrlSuffix[$storeId];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->productUrlSuffix = [];
     }
 }

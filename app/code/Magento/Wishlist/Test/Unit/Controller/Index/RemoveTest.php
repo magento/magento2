@@ -24,6 +24,8 @@ use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\Wishlist;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
+use Magento\Framework\Event\Manager as EventManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -71,7 +73,7 @@ class RemoveTest extends TestCase
     protected $resultFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Redirect|MockObject
+     * @var ResultRedirect|MockObject
      */
     protected $resultRedirectMock;
 
@@ -80,6 +82,9 @@ class RemoveTest extends TestCase
      */
     protected $formKeyValidator;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
@@ -92,7 +97,7 @@ class RemoveTest extends TestCase
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
+        $this->resultRedirectMock = $this->getMockBuilder(ResultRedirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -106,6 +111,9 @@ class RemoveTest extends TestCase
             ->getMock();
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown(): void
     {
         unset(
@@ -119,9 +127,12 @@ class RemoveTest extends TestCase
         );
     }
 
-    protected function prepareContext()
+    /**
+     * @return void
+     */
+    protected function prepareContext(): void
     {
-        $eventManager = $this->createMock(\Magento\Framework\Event\Manager::class);
+        $eventManager = $this->createMock(EventManager::class);
         $actionFlag = $this->createMock(ActionFlag::class);
 
         $this->context
@@ -160,7 +171,7 @@ class RemoveTest extends TestCase
     /**
      * @return Remove
      */
-    public function getController()
+    public function getController(): Remove
     {
         $this->prepareContext();
 
@@ -176,7 +187,10 @@ class RemoveTest extends TestCase
         );
     }
 
-    public function testExecuteWithInvalidFormKey()
+    /**
+     * @return void
+     */
+    public function testExecuteWithInvalidFormKey(): void
     {
         $this->prepareContext();
 
@@ -199,7 +213,10 @@ class RemoveTest extends TestCase
         $this->assertSame($this->resultRedirectMock, $controller->execute());
     }
 
-    public function testExecuteWithoutItem()
+    /**
+     * @return void
+     */
+    public function testExecuteWithoutItem(): void
     {
         $this->expectException('Magento\Framework\Exception\NotFoundException');
         $item = $this->createMock(Item::class);
@@ -228,7 +245,10 @@ class RemoveTest extends TestCase
         $this->getController()->execute();
     }
 
-    public function testExecuteWithoutWishlist()
+    /**
+     * @return void
+     */
+    public function testExecuteWithoutWishlist(): void
     {
         $this->expectException('Magento\Framework\Exception\NotFoundException');
         $item = $this->createMock(Item::class);
@@ -248,7 +268,6 @@ class RemoveTest extends TestCase
             ->willReturn(2);
 
         $this->request
-            ->expects($this->at(0))
             ->method('getParam')
             ->with('item')
             ->willReturn(1);
@@ -268,7 +287,10 @@ class RemoveTest extends TestCase
         $this->getController()->execute();
     }
 
-    public function testExecuteCanNotSaveWishlist()
+    /**
+     * @return void
+     */
+    public function testExecuteCanNotSaveWishlist(): void
     {
         $referer = 'http://referer-url.com';
 
@@ -351,7 +373,10 @@ class RemoveTest extends TestCase
         $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
 
-    public function testExecuteCanNotSaveWishlistAndWithRedirect()
+    /**
+     * @return void
+     */
+    public function testExecuteCanNotSaveWishlistAndWithRedirect(): void
     {
         $referer = 'http://referer-url.com';
 

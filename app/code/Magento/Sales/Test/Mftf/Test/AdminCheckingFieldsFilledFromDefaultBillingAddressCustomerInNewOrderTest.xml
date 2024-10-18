@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckingFieldsFilledFromDefaultBillingAddressCustomerInNewOrderTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Create order in Admin"/>
+            <title value="Checking fields filled from default billing address customer"/>
+            <description value="Checking fields filled from default billing address customer on create new order page"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-40646"/>
+            <useCaseId value="MC-37657"/>
+            <group value="sales"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <createData entity="Customer_With_Vat_Number" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminBillingAddressFieldsOnOrderCreateFormActionGroup" stepKey="assertFieldsFilled"/>
+    </test>
+</tests>

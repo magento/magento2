@@ -5,6 +5,8 @@
  */
 namespace Magento\Integration\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Integration\Api\OauthServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Authentication\OauthHelper;
 
@@ -63,5 +65,46 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $item = $this->_webApiCall($serviceInfo, [], null, null, $this->integration);
         $this->assertEquals($itemId, $item['entity_id'], 'id field returned incorrectly');
         $this->assertEquals($name, $item['name'], 'name field returned incorrectly');
+    }
+
+    /**
+     * Test Integration access token cannot be used as Bearer token by default
+     * @magentoConfigFixture default_store oauth/consumer/enable_integration_as_bearer 0
+     */
+    public function testIntegrationAsBearerTokenDefault()
+    {
+        $this->_markTestAsRestOnly();
+        $oauthService = ObjectManager::getInstance()->get(OauthServiceInterface::class);
+        $accessToken = $oauthService->getAccessToken($this->integration->getConsumerId());
+        $serviceInfo = [
+            'rest' => [
+                'token' => $accessToken,
+                'resourcePath' => '/V1/store/storeViews',
+                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+            ],
+        ];
+        self::expectException(\Exception::class);
+        self::expectExceptionMessage('The consumer isn\'t authorized to access %resources.');
+        $this->_webApiCall($serviceInfo);
+    }
+
+    /**
+     * Test Integration access token can be used as Bearer token when explicitly enabled
+     *
+     * @doesNotPerformAssertions
+     */
+    public function testIntegrationAsBearerTokenEnabled()
+    {
+        $this->_markTestAsRestOnly();
+        $oauthService = ObjectManager::getInstance()->get(OauthServiceInterface::class);
+        $accessToken = $oauthService->getAccessToken($this->integration->getConsumerId());
+        $serviceInfo = [
+            'rest' => [
+                'token' => $accessToken->getToken(),
+                'resourcePath' => '/V1/store/storeViews',
+                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+            ],
+        ];
+        $this->_webApiCall($serviceInfo);
     }
 }

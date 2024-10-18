@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenCreateNewWidgetsOfCMSStaticBlockActionGroup">
+        <annotations>
+            <description>Open create new Widgets.</description>
+        </annotations>
+        <arguments>
+            <argument name="WidgetType" type="string" defaultValue="Catalog Product Link"/>
+            <argument name="WidgetTheme" type="string" defaultValue="Magento Luma"/>
+            <argument name="WidgetDisplayOn" type="string"/>
+            <argument name="RootCat" type="string" defaultValue="Default Category"/>
+            <argument name="FirstSubCat" type="string"/>
+            <argument name="SecondSubCat" type="string"/>
+            <argument name="ThirdSubCat" type="string"/>
+            <argument name="FourthSubCat" type="string"/>
+            <argument name="FifthSubCat" type="string"/>
+        </arguments>
+        <amOnPage url="{{CmsNewWidgetsPage.url}}" stepKey="navigateToCreateWidgetsPage"/>
+        <waitForPageLoad stepKey="waitForWidgetPageToLoad"/>
+        <selectOption selector="{{CmsNewWidgetsSettingSection.WidgetType}}" userInput="{{WidgetType}}" stepKey="selectCMSStaticBlock" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear1"/>
+        <selectOption selector="{{CmsNewWidgetsSettingSection.WidgetTheme}}" userInput="{{WidgetTheme}}" stepKey="selectTemplate" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear2"/>
+        <click selector="{{CmsNewWidgetsSettingSection.ContinueButton}}" stepKey="clickContinueButton"/>
+        <waitForPageLoad stepKey="waitForStorefrontPropertiesSectionToLoad"/>
+        <click selector="{{CmsNewWidgetStoreforntPropertiesSection.AddLayout}}" stepKey="clickAddLayoutButton" />
+        <scrollTo selector="{{CmsNewWidgetStoreforntPropertiesSection.AddLayout}}" stepKey="scrollToAddLayoutTab" />
+        <waitForPageLoad stepKey="waitForAddLayoutTabToLoad"/>
+        <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.DisplayOn}}" userInput="{{WidgetDisplayOn}}" stepKey="selectDisplay"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear3" />
+        <selectOption selector="{{CmsNewWidgetUpdateLayoutSection.SpecificCategories}}" userInput="Specific Categories" stepKey="selectSpecificCategoryRadioButton"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.CategoryChooserButton}}" stepKey="clickCategoryChooserButton"/>
+        <waitForPageLoad stepKey="waitForRootCategoryToLoad"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.BranchCat(RootCat)}}" stepKey="clickRootCat"/>
+        <waitForPageLoad stepKey="waitForRootCategoryToExpand"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.BranchCat(FirstSubCat)}}" stepKey="clickFirstSubCat"/>
+        <waitForPageLoad stepKey="waitForFirstSubCatToExpand"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.BranchCat(SecondSubCat)}}" stepKey="expandSecondSubCat"/>
+        <waitForPageLoad stepKey="waitForSecondSubCatToExpand"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.BranchCat(ThirdSubCat)}}" stepKey="expandThirdFirstSubCat"/>
+        <waitForPageLoad stepKey="waitForThirdSubCatToExpand"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.BranchCat(FourthSubCat)}}" stepKey="expandFourthSubCat"/>
+        <waitForPageLoad stepKey="waitForFourthSubCatToExpand"/>
+        <click selector="{{CmsNewWidgetUpdateLayoutSection.BranchCat(FifthSubCat)}}" stepKey="expandFifthSubCat"/>
+        <waitForPageLoad stepKey="waitForFifthSubCatToExpand"/>
+        <grabMultiple selector="{{CmsNewWidgetUpdateLayoutSection.CountAllNestedCat}}" stepKey="countNestedCategory"/>
+        <assertCount stepKey="check">
+            <expectedResult type="int">7</expectedResult>
+            <actualResult type="variable">countNestedCategory</actualResult>
+        </assertCount>
+    </actionGroup>
+</actionGroups>

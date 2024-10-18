@@ -116,6 +116,25 @@ class PageCacheTest extends TestCase
      */
     public function testCreateConfigWithRedisConfiguration()
     {
+        $this->deploymentConfigMock->method('get')
+            ->willReturnCallback(function ($arg1, $arg2 = null) {
+                if ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_ID_PREFIX) {
+                    return 'XXX_';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER && $arg2 == '127.0.0.1') {
+                    return '127.0.0.1';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE && $arg2 == '1') {
+                    return '1';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT && $arg2 == '6379') {
+                    return '6379';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD && $arg2 == '') {
+                    return '';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA && $arg2 == '0') {
+                    return '0';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB && $arg2 == '') {
+                    return '';
+                }
+            });
+
         $expectedConfigData = [
             'cache' => [
                 'frontend' => [
@@ -129,7 +148,6 @@ class PageCacheTest extends TestCase
                             'compress_data' => '1',
                             'compression_lib' => 'gzip',
                         ],
-                        'id_prefix' => $this->expectedIdPrefix(),
                     ]
                 ]
             ]

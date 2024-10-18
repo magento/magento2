@@ -3,13 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\SalesRule\Model\Rule\Condition;
 
 /**
  * Product rule condition data model
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
@@ -22,7 +19,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     protected function _addSpecialAttributes(array &$attributes)
     {
         parent::_addSpecialAttributes($attributes);
-        $attributes['quote_item_qty'] = __('Quantity in cart');
+        $attributes['parent::quote_item_qty'] = __('Quantity in cart');
         $attributes['quote_item_price'] = __('Price in cart');
         $attributes['quote_item_row_total'] = __('Row total in cart');
 
@@ -38,7 +35,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function getAttribute(): string
     {
         $attribute = $this->getData('attribute');
-        if (strpos($attribute, '::') !== false) {
+        if ($attribute !== null && strpos($attribute, '::') !== false) {
             list(, $attribute) = explode('::', $attribute);
         }
 
@@ -195,7 +192,26 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             }
         }
 
-        return parent::validate($product);
+        /**
+         * \Magento\Rule\Model\Condition\AbstractCondition::validate() will attempt to reload the product
+         * if the attribute value is missing in the product. We need to ensure that logic is not executed
+         * because not only it is unnecessary as all attributes used in rules conditions are loaded into
+         * the product model, but it also causes performance issues.
+         * @see \Magento\Rule\Model\Condition\AbstractCondition::validate()
+         * @see \Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes::afterLoadAttributes()
+         */
+        $hasAttribute = $product->hasData($attrCode);
+        // value is most likely null if $hasAttribute === false, but it could be provided from custom attributes
+        $value = $product->getData($attrCode);
+        if (!$hasAttribute) {
+            $product->setData($attrCode, $value);
+        }
+        $isValid = parent::validate($product);
+        if (!$hasAttribute && $value === null) {
+            $product->unsetData($attrCode);
+        }
+
+        return $isValid;
     }
 
     /**

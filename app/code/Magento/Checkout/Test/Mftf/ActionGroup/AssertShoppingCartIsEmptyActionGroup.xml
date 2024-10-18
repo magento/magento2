@@ -15,6 +15,6 @@
 
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
         <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
-        <see userInput="You have no items in your shopping cart." stepKey="seeNoItemsInShoppingCart"/>
+        <waitForText userInput="You have no items in your shopping cart." stepKey="seeNoItemsInShoppingCart"/>
     </actionGroup>
 </actionGroups>

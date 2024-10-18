@@ -9,6 +9,7 @@ namespace Magento\Framework\Session\Test\Unit\SaveHandler;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Session\SaveHandler\DbTable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -61,11 +62,11 @@ class DbTableTest extends TestCase
      *
      * @return array
      */
-    public function readDataProvider()
+    public static function readDataProvider()
     {
         return [
-            'session_encoded' => ['$dataEncoded' => true],
-            'session_not_encoded' => ['$dataEncoded' => false]
+            'session_encoded' => ['isDataEncoded' => true],
+            'session_not_encoded' => ['isDataEncoded' => false]
         ];
     }
 
@@ -157,7 +158,10 @@ class DbTableTest extends TestCase
         $resource->expects($this->once())->method('getTableName')->willReturn(self::SESSION_TABLE);
         $resource->expects($this->once())->method('getConnection')->willReturn($connection);
 
-        $this->_model = new DbTable($resource);
+        $encryptorMock = $this->createMock(EncryptorInterface::class);
+        $encryptorMock->expects($this->any())->method('hash')->willReturnArgument(0);
+
+        $this->_model = new DbTable($resource, $encryptorMock);
     }
 
     /**
@@ -217,11 +221,11 @@ class DbTableTest extends TestCase
      *
      * @return array
      */
-    public function writeDataProvider()
+    public static function writeDataProvider()
     {
         return [
-            'session_exists' => ['$sessionExists' => true],
-            'session_not_exists' => ['$sessionExists' => false]
+            'session_exists' => ['sessionExists' => true],
+            'session_not_exists' => ['sessionExists' => false]
         ];
     }
 

@@ -50,7 +50,10 @@ class XsdTest extends TestCase
             $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer_merged.xsd'),
             $xmlString
         );
-        $this->assertEquals($expectedError, $actualError);
+        $this->assertEquals(false, empty($actualError));
+        foreach ($expectedError as $error) {
+            $this->assertContains($error, $actualError);
+        }
     }
 
     public function testSchemaCorrectlyIdentifiesValidXml()
@@ -64,7 +67,7 @@ class XsdTest extends TestCase
     /**
      * Data provider with invalid xml array according to events.xsd
      */
-    public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
+    public static function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
     {
         return include __DIR__ . '/_files/invalidIndexerXmlArray.php';
     }

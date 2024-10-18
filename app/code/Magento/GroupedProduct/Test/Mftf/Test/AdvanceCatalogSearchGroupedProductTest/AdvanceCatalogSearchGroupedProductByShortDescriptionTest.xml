@@ -14,9 +14,9 @@
             <title value="Guest customer should be able to advance search Grouped product with product short description"/>
             <description value="Guest customer should be able to advance search Grouped product with product short description"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-283"/>
-            <group value="GroupedProduct"/>
-            <group value="SearchEngineElasticsearch"/>
+            <testCaseId value="MC-25444"/>
+            <group value="groupedProduct"/>
+            <group value="SearchEngine"/>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
@@ -30,20 +30,16 @@
                 <requiredEntity createDataKey="product"/>
                 <requiredEntity createDataKey="simple2"/>
             </updateData>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
             <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
         </after>
-        <see userInput="3 items" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
-        <see userInput="$$product.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('1')}}" stepKey="seeProductName"/>
-        <see userInput="$$simple1.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('2')}}" stepKey="seeSimple1ProductName"/>
-        <see userInput="$$simple2.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('3')}}" stepKey="seeSimple2ProductName"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$product.name$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.nthProductName('1')}}" stepKey="seeProductName"/>
+        <comment userInput="BIC workaround" stepKey="seeSimple1ProductName"/>
+        <comment userInput="BIC workaround" stepKey="seeSimple2ProductName"/>
     </test>
 </tests>

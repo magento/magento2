@@ -1,0 +1,56 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="panel header">
+    <!-- This markup portion is the source for Mobile View Navigation Menu -->
+    <ul class="header links">
+        <li class="greet welcome" data-bind="scope: 'customer'">
+            <span class="logged-in">Welcome, John Doe!</span>
+        </li>
+
+        <li class="customer-welcome active">
+            <span class="customer-name active" role="button">
+                <button type="button" class="action switch" data-action="customer-menu-toggle">
+                    <span>Change</span>
+                </button>
+            </span>
+            <!-- Markup portion for Logged in customer -->
+            <div class="customer-menu" data-target="dropdown" aria-hidden="false">
+                <ul class="header links">
+                    <li>
+                        <a href="http://magento.store/account/" id="my-account">My Account</a>
+                    </li>
+                    <li class="link wishlist" data-bind="scope: 'wishlist'">
+                        <a href="http://magento.store/wishlist/" id="my-wishlist">My WishList</a>
+                    </li>
+                    <li>
+                        <a href="http://magento.store/orders/" id="my-orders">My Orders</a>
+                    </li>
+                    <li>
+                        <a href="http://magento.store/addresses/" id="my-addresses">My Addresses</a>
+                    </li>
+                    <li class="link authorization-link" data-label="or">
+                        <a href="http://magento.store/customer/account/logout/">Sign Out</a>
+                    </li>
+                </ul>
+            </div>
+            <li class="link authorization-link" data-label="or">
+                <a href="http://magento.store/customer/account/logout/">Sign Out</a>
+            </li>
+        </li>
+        <!-- Markup portion for Logged out customer -->
+        <li class="link authorization-link" data-label="or">
+            <a href="http://magento.store/customer/account/login/">Sign In</a>
+        </li>
+        <li>
+            <a href="http://magento.store/customer/account/create/" id="create-account">Create an Account</a>
+        </li>
+    </ul>
+</div>
+
+<div id="store.links">
+    <!-- Navigation Menu for Mobile View will be cloned here from the source -->
+</div>
