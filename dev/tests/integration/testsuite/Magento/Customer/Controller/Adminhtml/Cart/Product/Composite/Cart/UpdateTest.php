@@ -270,7 +270,7 @@ class UpdateTest extends AbstractBackendController
             ],
             'Quantity, greater than available' => [
                 '1000',
-                'The requested qty is not available',
+                'Not enough items for sale',
             ],
             'Quantity, greater than allowed in the Shopping Cart' => [
                 '100000',
