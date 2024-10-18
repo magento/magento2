@@ -62,14 +62,20 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
 
         $label = trim((string)$option->getLabel());
         if ($label === '') {
-            throw new InputException(__('The attribute option label is empty. Enter the value and try again.'));
+            throw new InputException(
+                __(
+                    'The attribute option label for attribute \'%1\' is empty. Enter the value and try again.', 
+                    $attribute->getAttributeCode()
+                )
+            );
         }
 
         if ($attribute->getSource()->getOptionId($label) !== null) {
             throw new InputException(
                 __(
-                    'Admin store attribute option label "%1" is already exists.',
-                    $option->getLabel()
+                    'Admin store attribute option label "%1" for attribute \'%2\' already exists.',
+                    $option->getLabel(),
+                    $$attribute->getAttributeCode()
                 )
             );
         }
@@ -91,11 +97,21 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
     ): bool {
         $attribute = $this->loadAttribute($entityType, (string)$attributeCode);
         if (empty($optionId)) {
-            throw new InputException(__('The option id is empty. Enter the value and try again.'));
+            throw new InputException(
+                __(
+                    'The option id for attribute \'%1\' is empty. Enter the value and try again.',
+                    $attribute->getAttributeCode()
+                )
+            );
         }
         $label = trim((string)$option->getLabel());
         if ($label === '') {
-            throw new InputException(__('The attribute option label is empty. Enter the value and try again.'));
+            throw new InputException(
+                __(
+                    'The attribute option label for attribute \'%1\' is empty. Enter the value and try again.',
+                    $attribute->getAttributeCode()
+                )
+            );
         }
         if ($attribute->getSource()->getOptionText($optionId) === false) {
             throw new InputException(
@@ -110,8 +126,9 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         if (!empty($optionIdByLabel) && (int)$optionIdByLabel !== (int)$optionId) {
             throw new InputException(
                 __(
-                    'Admin store attribute option label \'%1\' is already exists.',
-                    $option->getLabel()
+                    'Admin store attribute option label \'%1\' for attribute \'%2\' already exists.',
+                    $option->getLabel(),
+                    $attribute->getAttributeCode()
                 )
             );
         }
