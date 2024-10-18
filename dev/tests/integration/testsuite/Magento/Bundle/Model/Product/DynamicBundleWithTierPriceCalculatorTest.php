@@ -72,7 +72,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                 #1 Testing product price for dynamic bundle
                 with one required option and tier price
             ' => [
-                'strategy' => self::getBundleConfiguration1(),
+                'strategyModifiers' => self::getBundleConfiguration1(),
                 'expectedResults' => [
                     // 0.5 * 10
                     'minimalPrice' => 5,
@@ -85,7 +85,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                 #2 Testing product price for dynamic bundle
                 with one non required option and tier price
             ' => [
-                'strategy' => self::getBundleConfiguration2(),
+                'strategyModifiers' => self::getBundleConfiguration2(),
                 'expectedResults' => [
                     // 0.5 * 2 * 10
                     'minimalPrice' => 10,
@@ -98,7 +98,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                 #3 Testing product price for dynamic bundle
                 with one required checkbox type option and tier price
             ' => [
-                'strategy' => self::getBundleConfiguration3(),
+                'strategyModifiers' => self::getBundleConfiguration3(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
@@ -111,7 +111,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                 #4 Testing product price for dynamic bundle
                 with one required multi type option and tier price
             ' => [
-                'strategy' => self::getBundleConfiguration4(),
+                'strategyModifiers' => self::getBundleConfiguration4(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
@@ -124,7 +124,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                 #5 Testing product price for dynamic bundle
                 with one required radio type option and tier price
             ' => [
-                'strategy' => self::getBundleConfiguration5(),
+                'strategyModifiers' => self::getBundleConfiguration5(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
@@ -138,7 +138,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                 #6 Testing product price for dynamic bundle
                 with two required options and tier price
             ' => [
-                'strategy' => self::getBundleConfiguration6(),
+                'strategyModifiers' => self::getBundleConfiguration6(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10 + 1 * 10)
                     'minimalPrice' => 10,
@@ -151,7 +151,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                 #7 Testing product price for dynamic bundle
                 with one required option, one non required option and tier price
             ' => [
-                'strategy' => self::getBundleConfiguration7(),
+                'strategyModifiers' => self::getBundleConfiguration7(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10)
                     'minimalPrice' => 5,
@@ -164,7 +164,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                 #8 Testing product price for dynamic bundle
                 with two non required options and tier price
             ' => [
-                'strategy' => self::getBundleConfiguration8(),
+                'strategyModifiers' => self::getBundleConfiguration8(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10)
                     'minimalPrice' => 5,
@@ -177,7 +177,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                 #9 Testing product price for dynamic bundle
                 with tier price and with simple with tier price
             ' => [
-                'strategy' => self::getBundleConfiguration9(),
+                'strategyModifiers' => self::getBundleConfiguration9(),
                 'expectedResults' => [
                     // 0.5 * 1 * 2.5
                     'minimalPrice' => 1.25,

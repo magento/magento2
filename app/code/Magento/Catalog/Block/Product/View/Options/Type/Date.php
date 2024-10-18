@@ -93,7 +93,10 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
         $yearStart = $this->_catalogProductOptionTypeDate->getYearStart();
         $yearEnd = $this->_catalogProductOptionTypeDate->getYearEnd();
 
-        $dateFormat = $this->_localeDate->getDateFormatWithLongYear();
+        $fieldsSeparator = '/';
+        $fieldsOrder = $this->_catalogProductOptionTypeDate->getConfigData('date_fields_order') ?? '';
+        $fieldsOrder = str_replace(",", $fieldsSeparator, $fieldsOrder);
+        $dateFormat = $fieldsOrder !== "m/d/y" ? $fieldsOrder : $this->_localeDate->getDateFormatWithLongYear();
         /** Escape RTL characters which are present in some locales and corrupt formatting */
         $escapedDateFormat = preg_replace('/[^MmDdYy\/\.\-]/', '', $dateFormat);
         $value = null;

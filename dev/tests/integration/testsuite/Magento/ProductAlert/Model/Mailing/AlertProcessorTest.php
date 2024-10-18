@@ -243,6 +243,78 @@ class AlertProcessorTest extends TestCase
         );
     }
 
+    #[
+        DbIsolation(false),
+        DataFixture(StoreFixture::class, ['code' => 'pt_br_store'], 'store2'),
+        DataFixture(CustomerFixture::class, as: 'customer'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(
+            PriceAlertFixture::class,
+            [
+                'customer_id' => '$customer.id$',
+                'product_id' => '$product.id$',
+                'store_id' => '1',
+            ]
+        ),
+        DataFixture(
+            PriceAlertFixture::class,
+            [
+                'customer_id' => '$customer.id$',
+                'product_id' => '$product.id$',
+                'store_id' => '$store2.id$',
+            ]
+        ),
+        DataFixture(
+            TranslationFixture::class,
+            [
+                'string' => 'Price change alert! We wanted you to know that prices have changed for these products:',
+                'translate' => 'Alerte changement de prix! Nous voulions que vous sachiez' .
+                    ' que les prix ont changé pour ces produits:',
+                'locale' => 'fr_FR',
+            ],
+            'frTxt'
+        ),
+        DataFixture(
+            TranslationFixture::class,
+            [
+                'string' => 'Price change alert! We wanted you to know that prices have changed for these products:',
+                'translate' => 'Alerta de mudanca de preco! Queriamos que voce soubesse' .
+                    ' que os precos mudaram para esses produtos:',
+                'locale' => 'pt_BR',
+            ],
+            'ptTxt'
+        ),
+        Config('catalog/productalert/allow_price', 1),
+        Config('general/locale/code', 'fr_FR', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('general/locale/code', 'pt_BR', ScopeInterface::SCOPE_STORE, 'pt_br_store'),
+    ]
+    public function testEmailShouldBeTranslatedToStoreViewLanguage()
+    {
+        $customerId = (int)$this->fixtures->get('customer')->getId();
+
+        $frMailSent = false;
+        $ptMailSent = false;
+        $this->transportBuilder->setOnMessageSentCallback(
+            function ($message) use (&$frMailSent, &$ptMailSent) {
+                $messageContent = $message->getBody()->getParts()[0]->getRawContent();
+                $frTxt = $this->fixtures->get('frTxt')->getTranslate();
+                $ptTxt = $this->fixtures->get('ptTxt')->getTranslate();
+
+                if (str_contains($messageContent, $frTxt)) {
+                    $frMailSent = true;
+                }
+
+                if (str_contains($messageContent, $ptTxt)) {
+                    $ptMailSent = true;
+                }
+            }
+        );
+
+        $this->processAlerts($customerId);
+        $this->assertTrue($frMailSent);
+        $this->assertTrue($ptMailSent);
+    }
+
     /**
      * @param int $customerId
      * @param int $websiteId

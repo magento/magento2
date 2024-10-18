@@ -25,41 +25,24 @@ use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 class UpdateCartItems implements ResolverInterface
 {
     /**
-     * @var GetCartForUser
+     * Undefined error code
      */
-    private $getCartForUser;
-
-    /**
-     * @var CartRepositoryInterface
-     */
-    private $cartRepository;
-
-    /**
-     * @var UpdateCartItemsProvider
-     */
-    private $updateCartItems;
-
-    /**
-     * @var ArgumentsProcessorInterface
-     */
-    private $argsSelection;
+    private const CODE_UNDEFINED = 'UNDEFINED';
 
     /**
      * @param GetCartForUser $getCartForUser
      * @param CartRepositoryInterface $cartRepository
      * @param UpdateCartItemsProvider $updateCartItems
      * @param ArgumentsProcessorInterface $argsSelection
+     * @param array $messageCodesMapper
      */
     public function __construct(
-        GetCartForUser $getCartForUser,
-        CartRepositoryInterface $cartRepository,
-        UpdateCartItemsProvider $updateCartItems,
-        ArgumentsProcessorInterface $argsSelection
+        private readonly GetCartForUser $getCartForUser,
+        private readonly CartRepositoryInterface $cartRepository,
+        private readonly UpdateCartItemsProvider $updateCartItems,
+        private readonly ArgumentsProcessorInterface $argsSelection,
+        private readonly array $messageCodesMapper,
     ) {
-        $this->getCartForUser = $getCartForUser;
-        $this->cartRepository = $cartRepository;
-        $this->updateCartItems = $updateCartItems;
-        $this->argsSelection = $argsSelection;
     }
 
     /**
@@ -75,10 +58,15 @@ class UpdateCartItems implements ResolverInterface
 
         $maskedCartId = $processedArgs['input']['cart_id'];
 
+        $errors = [];
         if (empty($processedArgs['input']['cart_items'])
             || !is_array($processedArgs['input']['cart_items'])
         ) {
-            throw new GraphQlInputException(__('Required parameter "cart_items" is missing.'));
+            $message = 'Required parameter "cart_items" is missing.';
+            $errors[] = [
+                'message' => __($message),
+                'code' => $this->getErrorCode($message)
+            ];
         }
 
         $cartItems = $processedArgs['input']['cart_items'];
@@ -87,17 +75,41 @@ class UpdateCartItems implements ResolverInterface
 
         try {
             $this->updateCartItems->processCartItems($cart, $cartItems);
-            $this->cartRepository->save($cart);
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
-        } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()), $e);
+            $this->cartRepository->save(
+                $this->cartRepository->get((int)$cart->getId())
+            );
+        } catch (NoSuchEntityException | LocalizedException $e) {
+            $message = (str_contains($e->getMessage(), 'The requested qty is not available'))
+                ? 'The requested qty. is not available'
+                : $e->getMessage();
+            $errors[] = [
+                'message' => __($message),
+                'code' => $this->getErrorCode($e->getMessage())
+            ];
         }
 
         return [
             'cart' => [
                 'model' => $cart,
             ],
+            'errors' => $errors,
         ];
+    }
+
+    /**
+     * Returns error code based on error message
+     *
+     * @param string $message
+     * @return string
+     */
+    private function getErrorCode(string $message): string
+    {
+        $message = preg_replace('/\d+/', '%s', $message);
+        foreach ($this->messageCodesMapper as $key => $code) {
+            if (str_contains($message, $key)) {
+                return $code;
+            }
+        }
+        return self::CODE_UNDEFINED;
     }
 }

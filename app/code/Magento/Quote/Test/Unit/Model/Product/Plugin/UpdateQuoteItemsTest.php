@@ -62,7 +62,7 @@ class UpdateQuoteItemsTest extends TestCase
     /**
      * @return array
      */
-    public function aroundUpdateDataProvider()
+    public static function aroundUpdateDataProvider()
     {
         return [
             [10, 20, 'once'],

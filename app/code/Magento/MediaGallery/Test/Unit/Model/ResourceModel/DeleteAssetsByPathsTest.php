@@ -91,33 +91,33 @@ class DeleteAssetsByPathsTest extends TestCase
             ->willReturn(self::TABLE_NAME);
     }
 
-    public function assetDeleteByPathDataProvider(): array
+    public static function assetDeleteByPathDataProvider(): array
     {
         return [
             [
-                'assets' => $this->getAssets(),
-                'pathToDelete' => 'catalog/category/folder/image.jpg',
-                'assetIdToAssertDelete' => 1
+                'assets' => self::getAssets(),
+                'assetPathToDelete' => 'catalog/category/folder/image.jpg',
+                'assetIdToAssert' => 1
             ],
             [
-                'assets' => $this->getAssets(),
-                'pathToDelete' => 'catalog/category/folder/Image.jpg',
-                'assetIdToAssertDelete' => 2
+                'assets' => self::getAssets(),
+                'assetPathToDelete' => 'catalog/category/folder/Image.jpg',
+                'assetIdToAssert' => 2
             ],
             [
-                'assets' => $this->getAssets(),
-                'pathToDelete' => 'catalog/category/folder/IMAGE.JPG',
-                'assetIdToAssertDelete' => 3
+                'assets' => self::getAssets(),
+                'assetPathToDelete' => 'catalog/category/folder/IMAGE.JPG',
+                'assetIdToAssert' => 3
             ],
             [
-                'assets' => $this->getAssets(),
-                'pathToDelete' => 'catalog/category/FOLDER',
-                'assetIdToAssertDelete' => 4
+                'assets' => self::getAssets(),
+                'assetPathToDelete' => 'catalog/category/FOLDER',
+                'assetIdToAssert' => 4
             ],
         ];
     }
 
-    private function getAssets(): array
+    private static function getAssets(): array
     {
         return [
             [
