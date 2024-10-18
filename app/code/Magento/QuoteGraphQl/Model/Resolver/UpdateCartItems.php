@@ -104,6 +104,7 @@ class UpdateCartItems implements ResolverInterface
      */
     private function getErrorCode(string $message): string
     {
+        $message = preg_replace('/\d+/', '%s', $message);
         foreach ($this->messageCodesMapper as $key => $code) {
             if (str_contains($message, $key)) {
                 return $code;
