@@ -23,6 +23,8 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Block\Html\Topmenu;
+use Magento\Backend\Model\Menu;
+use Magento\Backend\Model\Menu\Item as MenuItem;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -76,6 +78,21 @@ class TopmenuTest extends TestCase
      */
     private $requestMock;
 
+    /**
+     * @var Menu
+     */
+    private $menuMock;
+
+    /**
+     * @var MenuItem
+     */
+    private $menuItemMock;
+
+    /**
+     * @var Node
+     */
+    private $nodeMock;
+
     // @codingStandardsIgnoreStart
     /** @var string  */
     private $navigationMenuHtml = <<<HTML
@@ -105,6 +122,21 @@ HTML;
             ->getMock();
         $this->treeFactory = $this->getMockBuilder(TreeFactory::class)
             ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->menuMock = $this->getMockBuilder(Menu::class)
+            ->onlyMethods(['count', 'getIterator'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->menuItemMock = $this->getMockBuilder(MenuItem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->nodeMock = $this->getMockBuilder(Node::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getClass'])
+            ->onlyMethods(['getChildren', 'hasChildren', '__call'])
             ->getMock();
 
         $objectManager = new ObjectManager($this);
@@ -265,14 +297,10 @@ HTML;
 
         $children->expects($this->once())->method('count')->willReturn(10);
 
-        $nodeMock = $this->getMockBuilder(Node::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getChildren', '__call'])
-            ->getMock();
-        $nodeMock->expects($this->once())
+        $this->nodeMock->expects($this->once())
             ->method('getChildren')
             ->willReturn($children);
-        $nodeMock
+        $this->nodeMock
             ->method('__call')
             ->willReturnCallback(function ($arg1, $arg2) {
                 if ($arg1 == 'setOutermostClass') {
@@ -291,13 +319,13 @@ HTML;
         $this->nodeFactory->expects($this->any())
             ->method('create')
             ->with($nodeMockData)
-            ->willReturn($nodeMock);
+            ->willReturn($this->nodeMock);
 
         $this->treeFactory->expects($this->once())
             ->method('create')
             ->willReturn($treeMock);
 
-        return $nodeMock;
+        return $this->nodeMock;
     }
 
     /**
@@ -315,20 +343,180 @@ HTML;
             'tree' => $treeMock
         ];
 
-        $nodeMock = $this->getMockBuilder(Node::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->nodeFactory->expects($this->any())
             ->method('create')
             ->with($nodeMockData)
-            ->willReturn($nodeMock);
+            ->willReturn($this->nodeMock);
 
         $this->treeFactory->expects($this->once())
             ->method('create')
             ->willReturn($treeMock);
 
         $topmenuBlock = $this->getTopmenu();
-        $this->assertEquals($nodeMock, $topmenuBlock->getMenu());
+        $this->assertEquals($this->nodeMock, $topmenuBlock->getMenu());
+    }
+
+    /**
+     * Test counting items when there are no children.
+     * @return void
+     */
+    public function testCountItemsNoChildren():void
+    {
+        $this->menuMock->expects($this->any())
+            ->method('count')
+            ->willReturn(5);
+        $this->menuMock->expects($this->any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$this->menuItemMock]));
+
+        $this->menuItemMock->expects($this->any())
+            ->method('hasChildren')
+            ->willReturn(false);
+
+        $method = new \ReflectionMethod(
+            Topmenu::class,
+            '_countItems'
+        );
+        $method->setAccessible(true);
+
+        $this->assertEquals(5, $method->invoke($this->getTopmenu(), $this->menuMock));
+    }
+
+    /**
+     * Test counting items when there are children.
+     * @return void
+     */
+    public function testCountItemsWithChildren(): void
+    {
+        // Setup child menu mock
+        $childMenuMock = $this->createMock(Menu::class);
+        $childMenuMock->expects($this->any())
+            ->method('count')
+            ->willReturn(3);
+        $childMenuMock->expects($this->any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([]));
+
+        $this->menuItemMock->expects($this->any())
+            ->method('hasChildren')
+            ->willReturn(true);
+        $this->menuItemMock->expects($this->any())
+            ->method('getChildren')
+            ->willReturn($childMenuMock);
+
+        // Setup menu mock
+        $this->menuMock->expects($this->any())
+            ->method('count')
+            ->willReturn(2);
+        $this->menuMock->expects($this->any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$this->menuItemMock, $this->menuItemMock]));
+
+        $method = new \ReflectionMethod(
+            Topmenu::class,
+            '_countItems'
+        );
+        $method->setAccessible(true);
+
+        // Total should be 2 (top level) + 2 * 3 (children) = 8
+        $this->assertEquals(8, $method->invoke($this->getTopmenu(), $this->menuMock));
+    }
+
+    /**
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testColumnBrakeEmptyArray(): void
+    {
+        $this->testCountItemsNoChildren();
+
+        $method = new \ReflectionMethod(
+            Topmenu::class,
+            '_columnBrake'
+        );
+        $method->setAccessible(true);
+
+        $this->assertEquals([], $method->invoke($this->getTopmenu(), $this->menuMock, 5));
+    }
+
+    /**
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testColumnBrakeWithoutItem(): void
+    {
+        $result = [
+            [   'total' => 8,
+                'max' => 2
+            ],
+            [
+                'place' => 4,
+                'colbrake' => false
+            ],
+            [
+                'place' => 4,
+                'colbrake' => false
+            ]
+        ];
+
+        $this->testCountItemsWithChildren();
+
+        $method = new \ReflectionMethod(
+            Topmenu::class,
+            '_columnBrake'
+        );
+        $method->setAccessible(true);
+
+        $this->assertEquals($result, $method->invoke($this->getTopmenu(), $this->menuMock, 2));
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddSubMenu(): void
+    {
+        $container = $this->createMock(CategoryTree::class);
+
+        $children = $this->getMockBuilder(Collection::class)
+            ->onlyMethods(['count'])
+            ->setConstructorArgs(['container' => $container])
+            ->getMock();
+
+        $this->nodeMock->expects($this->atLeastOnce())
+            ->method('hasChildren')
+            ->willReturn(true);
+
+        $this->nodeMock->expects($this->any())
+            ->method('getChildren')
+            ->willReturn($children);
+
+        $method = new \ReflectionMethod(
+            Topmenu::class,
+            '_addSubMenu'
+        );
+        $method->setAccessible(true);
+
+        $this->assertEquals(
+            '<ul class="level0 "></ul>',
+            $method->invoke($this->getTopmenu(), $this->nodeMock, 0, '', 2)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testSetCurrentClass(): void
+    {
+        $this->nodeMock->expects($this->once())
+            ->method('getClass')
+            ->willReturn(null);
+
+        $method = new \ReflectionMethod(
+            Topmenu::class,
+            'setCurrentClass'
+        );
+        $method->setAccessible(true);
+
+        $method->invoke($this->getTopmenu(), $this->nodeMock, '');
     }
 }
