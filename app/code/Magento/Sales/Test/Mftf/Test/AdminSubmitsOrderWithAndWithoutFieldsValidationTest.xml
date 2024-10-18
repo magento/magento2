@@ -33,13 +33,14 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToOrderIndexPage"/>
+
         <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeIndexPageTitle">
             <argument name="value" value="Orders"/>
         </actionGroup>
         <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
         <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
         <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeNewOrderPageTitle">
-            <argument name="value" value="Create New Order"/>
+            <argument name="value" value="Create New Order"/>\
         </actionGroup>
 
         <!--Check if order can be submitted without the required fields including email address-->
@@ -65,17 +66,25 @@
                      after="fillWrongCustomerAddress"/>
 
         <!--Verify totals on Order page-->
-        <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleProduct.subtotal}}" stepKey="seeOrderSubTotal" after="selectFlatRateShipping"/>
-        <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="${{AdminOrderSimpleProduct.shipping}}" stepKey="seeOrderShipping" after="seeOrderSubTotal"/>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeOrderSubTotal" after="selectFlatRateShipping">
+            <argument name="selector" value="{{AdminOrderFormTotalSection.total('Subtotal')}}"/>
+            <argument name="userInput" value="${{AdminOrderSimpleProduct.subtotal}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeOrderShipping" after="seeOrderSubTotal">
+            <argument name="selector" value="{{AdminOrderFormTotalSection.total('Shipping')}}"/>
+            <argument name="userInput" value="${{AdminOrderSimpleProduct.shipping}}"/>
+        </actionGroup>
         <scrollTo selector="{{AdminOrderFormTotalSection.grandTotal}}" stepKey="scrollToOrderGrandTotal"/>
-        <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="${{AdminOrderSimpleProduct.grandTotal}}" stepKey="seeCorrectGrandTotal" after="scrollToOrderGrandTotal"/>
-
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeCorrectGrandTotal" after="scrollToOrderGrandTotal">
+            <argument name="selector" value="{{AdminOrderFormTotalSection.grandTotal}}"/>
+            <argument name="userInput" value="${{AdminOrderSimpleProduct.grandTotal}}"/>
+        </actionGroup>
         <!--Submit Order and verify information-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrderWrong"
-               after="seeCorrectGrandTotal"/>
-        <see selector="{{AdminOrderFormBillingAddressSection.firstNameError}}"
-             userInput="Please enter less or equal than 255 symbols." stepKey="firstNameError"
-             after="clickSubmitOrderWrong"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="clickSubmitOrderWrong" after="seeCorrectGrandTotal"/>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="firstNameError" after="clickSubmitOrderWrong">
+            <argument name="selector" value="{{AdminOrderFormBillingAddressSection.firstNameError}}"/>
+            <argument name="userInput" value="Please enter less or equal than 255 symbols."/>
+        </actionGroup>
 
         <!--Fill correct customer address information-->
         <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress" after="firstNameError">
@@ -88,8 +97,13 @@
         <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="selectShipping" after="clickShipping"/>
 
         <!--Submit Order and verify information-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder" after="selectShipping"/>
-        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage" after="clickSubmitOrder"/>
-        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage" after="seeViewOrderPage"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="clickSubmitOrder" after="selectShipping"/>
+        <actionGroup ref="StorefrontAssertProperUrlIsShownActionGroup" stepKey="seeViewOrderPage" after="clickSubmitOrder">
+            <argument name="urlPath" value="{{AdminOrderDetailsPage.url}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeSuccessMessage" after="seeViewOrderPage">
+            <argument name="selector" value="{{AdminOrderDetailsMessagesSection.successMessage}}"/>
+            <argument name="userInput" value="You created the order."/>
+        </actionGroup>
     </test>
 </tests>

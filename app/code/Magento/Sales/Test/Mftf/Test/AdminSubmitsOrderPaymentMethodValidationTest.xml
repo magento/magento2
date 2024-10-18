@@ -39,6 +39,7 @@
         <!--Create order via Admin-->
         <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToOrderIndexPage"/>
+
         <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeIndexPageTitle">
             <argument name="value" value="Orders"/>
         </actionGroup>
@@ -55,7 +56,10 @@
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
         <actionGroup ref="CheckRequiredFieldsNewOrderFormActionGroup" stepKey="checkRequiredFieldsNewOrder" after="addSimpleProductToOrder"/>
-        <see selector="{{AdminOrderFormPaymentSection.paymentError}}" userInput="Please select one of the options." stepKey="seePaymentMethodRequired" after="checkRequiredFieldsNewOrder"/>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePaymentMethodRequired" after="checkRequiredFieldsNewOrder">
+            <argument name="selector" value="{{AdminOrderFormPaymentSection.paymentError}}"/>
+            <argument name="userInput" value="Please select one of the options."/>
+        </actionGroup>
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage" after="seePaymentMethodRequired"/>
 
         <!--Fill customer group and customer email-->
@@ -76,14 +80,27 @@
         <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRateShipping" after="fillCustomerAddress"/>
 
         <!--Verify totals on Order page-->
-        <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleProduct.subtotal}}" stepKey="seeOrderSubTotal" after="selectFlatRateShipping"/>
-        <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="${{AdminOrderSimpleProduct.shipping}}" stepKey="seeOrderShipping" after="seeOrderSubTotal"/>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeOrderSubTotal" after="selectFlatRateShipping">
+            <argument name="selector" value="{{AdminOrderFormTotalSection.total('Subtotal')}}"/>
+            <argument name="userInput" value="${{AdminOrderSimpleProduct.subtotal}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeOrderShipping" after="seeOrderSubTotal">
+            <argument name="selector" value="{{AdminOrderFormTotalSection.total('Shipping')}}"/>
+            <argument name="userInput" value="${{AdminOrderSimpleProduct.shipping}}"/>
+        </actionGroup>
         <scrollTo selector="{{AdminOrderFormTotalSection.grandTotal}}" stepKey="scrollToOrderGrandTotal"/>
-        <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="${{AdminOrderSimpleProduct.grandTotal}}" stepKey="seeCorrectGrandTotal" after="scrollToOrderGrandTotal"/>
-
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeCorrectGrandTotal" after="scrollToOrderGrandTotal">
+            <argument name="selector" value="{{AdminOrderFormTotalSection.grandTotal}}"/>
+            <argument name="userInput" value="${{AdminOrderSimpleProduct.grandTotal}}"/>
+        </actionGroup>
         <!--Submit Order and verify information-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder" after="seeCorrectGrandTotal"/>
-        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage" after="clickSubmitOrder"/>
-        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage" after="seeViewOrderPage"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="clickSubmitOrder" after="seeCorrectGrandTotal"/>
+        <actionGroup ref="StorefrontAssertProperUrlIsShownActionGroup" stepKey="seeViewOrderPage" after="clickSubmitOrder">
+            <argument name="urlPath" value="{{AdminOrderDetailsPage.url}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeSuccessMessage" after="seeViewOrderPage">
+            <argument name="selector" value="{{AdminOrderDetailsMessagesSection.successMessage}}"/>
+            <argument name="userInput" value="You created the order."/>
+        </actionGroup>
     </test>
 </tests>
