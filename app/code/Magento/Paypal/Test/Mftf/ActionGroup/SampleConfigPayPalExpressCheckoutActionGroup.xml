@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="SampleConfigPayPalExpressCheckoutActionGroup">
+    <actionGroup name="SampleConfigPayPalExpressCheckoutActionGroup" deprecated="Use AdminPayPalExpressCheckoutEnableActionGroup instead">
         <annotations>
             <description>Goes to the 'Configuration' page for 'Payment Methods'. Fills in the provided Sample PayPal credentials and other details. Clicks on Save.</description>
         </annotations>

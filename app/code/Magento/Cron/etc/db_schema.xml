@@ -21,16 +21,10 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="schedule_id"/>
         </constraint>
-        <index referenceId="CRON_SCHEDULE_JOB_CODE" indexType="btree">
+        <index referenceId="CRON_SCHEDULE_JOB_CODE_STATUS_SCHEDULED_AT" indexType="btree">
             <column name="job_code"/>
-        </index>
-        <index referenceId="CRON_SCHEDULE_SCHEDULED_AT_STATUS" indexType="btree">
+            <column name="status"/>
             <column name="scheduled_at"/>
-            <column name="status"/>
-        </index>
-        <index referenceId="CRON_SCHEDULE_SCHEDULE_ID_STATUS" indexType="btree">
-            <column name="schedule_id"/>
-            <column name="status"/>
         </index>
     </table>
 </schema>

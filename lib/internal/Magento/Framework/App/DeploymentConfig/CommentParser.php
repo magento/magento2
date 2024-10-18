@@ -99,7 +99,7 @@ class CommentParser implements CommentParserInterface
     private function getCommentText($commentBlock)
     {
         $commentsLine = [];
-        foreach (preg_split("/(\r?\n)/", $commentBlock) as $commentLine) {
+        foreach (preg_split("/(\r?\n)/", (string)$commentBlock) as $commentLine) {
             if (preg_match('/^(?=\s+?\*[^\/])(.+)/', $commentLine, $matches)
                 && false === strpos($commentLine, 'For the section')
             ) {

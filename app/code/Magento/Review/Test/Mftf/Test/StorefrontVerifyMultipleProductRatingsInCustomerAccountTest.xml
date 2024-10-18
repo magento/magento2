@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyMultipleProductRatingsInCustomerAccountTest">
+        <annotations>
+            <features value="Review"/>
+            <stories value="Review by Customer"/>
+            <title value="Product Ratings are shown correctly in Customer's Account"/>
+            <description value="Customer should see correct product ratings on My Product Reviews page in Customer account and on My Account page"/>
+            <severity value="AVERAGE"/>
+            <useCaseId value="MC-41194"/>
+            <testCaseId value="MC-41325"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Enable singe store view to view ratings-->
+            <magentoCLI command="config:set general/single_store_mode/enabled 1" stepKey="enabledSingleStoreMode"/>
+            <!--Login-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!--Create category and products-->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createProduct2" >
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createProduct3">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+
+        <after>
+            <!-- Delete reviews -->
+            <actionGroup ref="AdminOpenReviewsPageActionGroup" stepKey="openAllReviewsPage"/>
+            <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearNickNameReviewFilters"/>
+            <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="CustomerEntityOne.email"/>
+            </actionGroup>
+            <!--Delete category and products-->
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createProduct3" stepKey="deleteProduct3"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Disable single store view back-->
+            <magentoCLI command="config:set general/single_store_mode/enabled 0" stepKey="enabledSingleStoreMode"/>
+        </after>
+
+        <!-- Go to frontend and make a user account and login with it -->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <!-- Go to first product view page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="$$createProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Click on reviews and add reviews with current user -->
+        <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab"/>
+        <!-- Set product rating stars -->
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setQualityStars">
+            <argument name="ratingName" value="Quality"/>
+            <argument name="stars" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setValueStars">
+            <argument name="ratingName" value="Value"/>
+            <argument name="stars" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setPriceStars">
+            <argument name="ratingName" value="Price"/>
+            <argument name="stars" value="1"/>
+        </actionGroup>
+        <!-- Add review -->
+        <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addReview"/>
+
+        <!-- Go to second product view page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage2">
+            <argument name="productUrl" value="$$createProduct2.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!-- Click on reviews and add reviews with current user -->
+        <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab2"/>
+        <!-- Set product rating stars -->
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setQualityStars2">
+            <argument name="ratingName" value="Quality"/>
+            <argument name="stars" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setValueStars2">
+            <argument name="ratingName" value="Value"/>
+            <argument name="stars" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setPriceStars2">
+            <argument name="ratingName" value="Price"/>
+            <argument name="stars" value="1"/>
+        </actionGroup>
+        <!-- Add review -->
+        <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addReview2"/>
+
+        <!-- Go to third product view page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage3">
+            <argument name="productUrl" value="$$createProduct3.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!-- Click on reviews and add reviews with current user -->
+        <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab3"/>
+        <!-- Set product rating stars -->
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setQualityStars3">
+            <argument name="ratingName" value="Quality"/>
+            <argument name="stars" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setValueStars3">
+            <argument name="ratingName" value="Value"/>
+            <argument name="stars" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setPriceStars3">
+            <argument name="ratingName" value="Price"/>
+            <argument name="stars" value="1"/>
+        </actionGroup>
+        <!-- Add review -->
+        <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addReview3"/>
+
+        <!-- Approve all reviews -->
+        <actionGroup ref="AdminOpenPendingReviewsPageActionGroup" stepKey="openPendingReviewsPage"/>
+        <actionGroup ref="AdminApproveAllReviewsActionGroup" stepKey="approveAllCustomerReview"/>
+
+        <!-- Checking that all 3 reviews on the My Product Reviews page have one star ratings  -->
+        <actionGroup ref="StorefrontNavigateToMyProductReviewsPageActionGroup" stepKey="navigateToProductReviewsPage"/>
+        <seeElement selector="{{StorefrontMyProductReviewsSection.reviewRating('1', '20%')}}"  stepKey="seeFirstOneStarReviewOnMyReviews"/>
+        <seeElement selector="{{StorefrontMyProductReviewsSection.reviewRating('2', '20%')}}"  stepKey="seeSecondOneStarReviewOnMyReviews"/>
+        <seeElement selector="{{StorefrontMyProductReviewsSection.reviewRating('3', '20%')}}"  stepKey="seeThirdOneStarReviewOnMyReviews"/>
+
+        <!-- Checking that all 3 reviews on the My Account page have one star ratings-->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="openCustomerAccountPage"/>
+        <seeElement selector="{{StorefrontCustomerMyRecentReviewsSection.reviewRating('1', '20%')}}"  stepKey="seeFirstOneStarReviewOnMyAccount"/>
+        <seeElement selector="{{StorefrontCustomerMyRecentReviewsSection.reviewRating('2', '20%')}}"  stepKey="seeSecondOneStarReviewOnMyAccount"/>
+        <seeElement selector="{{StorefrontCustomerMyRecentReviewsSection.reviewRating('3', '20%')}}"  stepKey="seeThirdOneStarReviewOnMyAccount"/>
+
+    </test>
+</tests>

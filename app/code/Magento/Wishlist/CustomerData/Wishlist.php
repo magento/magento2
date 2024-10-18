@@ -8,6 +8,7 @@ namespace Magento\Wishlist\CustomerData;
 use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Wishlist section
@@ -17,7 +18,7 @@ class Wishlist implements SectionSourceInterface
     /**
      * @var string
      */
-    const SIDEBAR_ITEMS_NUMBER = 3;
+    public const SIDEBAR_ITEMS_NUMBER = 3;
 
     /**
      * @var \Magento\Wishlist\Helper\Data
@@ -45,18 +46,25 @@ class Wishlist implements SectionSourceInterface
     private $itemResolver;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      * @param \Magento\Wishlist\Block\Customer\Sidebar $block
      * @param \Magento\Catalog\Helper\ImageFactory $imageHelperFactory
      * @param \Magento\Framework\App\ViewInterface $view
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface|null $itemResolver
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         \Magento\Wishlist\Block\Customer\Sidebar $block,
         \Magento\Catalog\Helper\ImageFactory $imageHelperFactory,
         \Magento\Framework\App\ViewInterface $view,
-        \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemResolver = null
+        \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemResolver = null,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->wishlistHelper = $wishlistHelper;
         $this->imageHelperFactory = $imageHelperFactory;
@@ -65,10 +73,11 @@ class Wishlist implements SectionSourceInterface
         $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface::class
         );
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionData()
     {
@@ -76,10 +85,13 @@ class Wishlist implements SectionSourceInterface
         return [
             'counter' => $counter,
             'items' => $counter ? $this->getItems() : [],
+            'websiteId' => $this->storeManager->getWebsite()->getId()
         ];
     }
 
     /**
+     * Get counter
+     *
      * @return string
      */
     protected function getCounter()
@@ -156,7 +168,6 @@ class Wishlist implements SectionSourceInterface
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getImageData($product)
     {
@@ -164,27 +175,11 @@ class Wishlist implements SectionSourceInterface
         $helper = $this->imageHelperFactory->create()
             ->init($product, 'wishlist_sidebar_block');
 
-        $template = 'Magento_Catalog/product/image_with_borders';
-
-        try {
-            $imagesize = $helper->getResizedImageInfo();
-        } catch (NotLoadInfoImageException $exception) {
-            $imagesize = [$helper->getWidth(), $helper->getHeight()];
-        }
-
-        $width = $helper->getFrame()
-            ? $helper->getWidth()
-            : $imagesize[0];
-
-        $height = $helper->getFrame()
-            ? $helper->getHeight()
-            : $imagesize[1];
-
         return [
-            'template' => $template,
+            'template' => 'Magento_Catalog/product/image_with_borders',
             'src' => $helper->getUrl(),
-            'width' => $width,
-            'height' => $height,
+            'width' => $helper->getWidth(),
+            'height' => $helper->getHeight(),
             'alt' => $helper->getLabel(),
         ];
     }

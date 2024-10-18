@@ -13,6 +13,7 @@ use Magento\Framework\Translate\Inline;
 use Magento\Framework\ZendEscaper;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Translate\Inline\StateInterface;
 
 /**
  * \Magento\Framework\Escaper test case
@@ -23,6 +24,11 @@ class EscaperTest extends TestCase
      * @var Escaper
      */
     protected $escaper;
+
+    /**
+     * @var ObjectManager
+     */
+    private $objectManagerHelper;
 
     /**
      * @var ZendEscaper
@@ -44,14 +50,14 @@ class EscaperTest extends TestCase
      */
     protected function setUp(): void
     {
-        $objectManagerHelper = new ObjectManager($this);
+        $this->objectManagerHelper = new ObjectManager($this);
         $this->escaper = new Escaper();
         $this->zendEscaper = new ZendEscaper();
-        $this->translateInline = $objectManagerHelper->getObject(Inline::class);
+        $this->translateInline = $this->objectManagerHelper->getObject(Inline::class);
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'escaper', $this->zendEscaper);
-        $objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'logger', $this->loggerMock);
-        $objectManagerHelper->setBackwardCompatibleProperty(
+        $this->objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'escaper', $this->zendEscaper);
+        $this->objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'logger', $this->loggerMock);
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->escaper,
             'translateInline',
             $this->translateInline
@@ -127,10 +133,12 @@ class EscaperTest extends TestCase
     /**
      * @return array
      */
-    public function escapeJsDataProvider()
+    public static function escapeJsDataProvider()
     {
         return [
             'zero length string' => ['', ''],
+            'null as string' => [null, ''],
+            'Magento\Framework\Phrase as string' => [__('test'), 'test'],
             'only digits' => ['123', '123'],
             '<' => ['<', '\u003C'],
             '>' => ['>', '\\u003E'],
@@ -170,6 +178,57 @@ class EscaperTest extends TestCase
     }
 
     /**
+     * Tests escapeHtmlAttr method when Inline translate is configured.
+     *
+     * @param string $input
+     * @param string $output
+     * @return void
+     * @dataProvider escapeHtmlAttributeWithInlineTranslateEnabledDataProvider
+     */
+    public function testEscapeHtmlAttributeWithInlineTranslateEnabled(string $input, string $output): void
+    {
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->translateInline,
+            'isAllowed',
+            true
+        );
+        $stateMock = $this->createMock(StateInterface::class);
+        $stateMock->method('isEnabled')
+            ->willReturn(true);
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->translateInline,
+            'state',
+            $stateMock
+        );
+
+        $actual = $this->escaper->escapeHtmlAttr($input);
+        $this->assertEquals($output, $actual);
+    }
+
+    /**
+     * Data provider for escapeHtmlAttrWithInline test.
+     *
+     * @return array
+     */
+    public static function escapeHtmlAttributeWithInlineTranslateEnabledDataProvider(): array
+    {
+        return [
+            [
+                '{{{Search entire store here...}}}',
+                '{{{Search&#x20;entire&#x20;store&#x20;here...}}}',
+            ],
+            [
+                '{{{Product search}}{{Translated to language}}{{themeMagento/Luma}}}',
+                '{{{Product&#x20;search}}{{Translated&#x20;to&#x20;language}}{{themeMagento&#x2F;Luma}}}',
+            ],
+            [
+                'Simple string',
+                'Simple&#x20;string',
+            ],
+        ];
+    }
+
+    /**
      * @covers \Magento\Framework\Escaper::escapeHtml
      * @dataProvider escapeHtmlInvalidDataProvider
      */
@@ -184,7 +243,7 @@ class EscaperTest extends TestCase
     /**
      * @return array
      */
-    public function escapeHtmlDataProvider()
+    public static function escapeHtmlDataProvider()
     {
         return [
             'array -> [text with no tags, text with no allowed tags]' => [
@@ -269,13 +328,18 @@ class EscaperTest extends TestCase
                 'expected' => ' some text',
                 'allowedTags' => ['span'],
             ],
+            'text with japanese lang' => [
+                'data' => '<span>だ だ だ some text in tags<br /></span>',
+                'expected' => '<span>だ だ だ some text in tags</span>',
+                'allowedTags' => ['span'],
+            ],
         ];
     }
 
     /**
      * @return array
      */
-    public function escapeHtmlInvalidDataProvider()
+    public static function escapeHtmlInvalidDataProvider()
     {
         return [
             'text with allowed script tag' => [
@@ -307,9 +371,79 @@ class EscaperTest extends TestCase
     }
 
     /**
+     * @covers \Magento\Framework\Escaper::escapeCss
+     *
+     * @param string $data
+     * @param string $expected
+     * @return void
+     *
+     * @dataProvider escapeCssDataProvider
+     */
+    public function testEscapeCss($data, string $expected): void
+    {
+        $this->assertEquals($expected, $this->escaper->escapeCss($data));
+    }
+
+    /**
      * @return array
      */
-    public function escapeUrlDataProvider(): array
+    public static function escapeCssDataProvider(): array
+    {
+        return [
+            [
+                'data' => 1,
+                'expected' => '1',
+            ],
+            [
+                'data' => '*%string{foo}%::',
+                'expected' => '\2A \25 string\7B foo\7D \25 \3A \3A ',
+            ]
+        ];
+    }
+
+    /**
+     * @covers \Magento\Framework\Escaper::encodeUrlParam
+     *
+     * @param string $data
+     * @param string $expected
+     * @return void
+     *
+     * @dataProvider encodeUrlParamDataProvider
+     */
+    public function testEncodeUrlParam($data, string $expected): void
+    {
+        $this->assertEquals($expected, $this->escaper->encodeUrlParam($data));
+    }
+
+    /**
+     * @return array
+     */
+    public static function encodeUrlParamDataProvider(): array
+    {
+        return [
+            [
+                'data' => "a3==",
+                'expected' => "a3%3D%3D",
+            ],
+            [
+                'data' => "example string",
+                'expected' => "example%20string",
+            ],
+            [
+                'data' => 1,
+                'expected' => "1",
+            ],
+            [
+                'data' => null,
+                'expected' => "",
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function escapeUrlDataProvider(): array
     {
         return [
             [
@@ -367,7 +501,7 @@ class EscaperTest extends TestCase
      * Get escape variations
      * @return array
      */
-    public function escapeDataProvider()
+    public static function escapeDataProvider()
     {
         return [
             [

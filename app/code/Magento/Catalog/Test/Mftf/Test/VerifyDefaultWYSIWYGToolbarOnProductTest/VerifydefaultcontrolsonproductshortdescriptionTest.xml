@@ -16,31 +16,34 @@
             <description value="Admin should be able to see default toolbar display on Short Description content area"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-80505"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE"/>
         </before>
-        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToProduct"/>
-        <waitForPageLoad stepKey="wait"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToProduct">
+            <argument name="attributeSetId" value="{{AddToDefaultSet.attributeSetId}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait"/>
         <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty"/>
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab"/>
-        <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitforTinyMCE4Visible2"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4ShortDescription"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Style}}" stepKey="assertInfo16"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Bold}}" stepKey="assertInfo17"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Italic}}" stepKey="assertInfo18"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Underline}}" stepKey="assertInfo19"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.AlignLeft}}" stepKey="assertInfo20"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.AlignCenter}}" stepKey="assertInfo21"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.AlignRight}}" stepKey="assertInfo22"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Numlist}}" stepKey="assertInfo23"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Bullet}}" stepKey="assertInfo324"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertLink}}" stepKey="assertInfo25"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" stepKey="assertInfo26"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertTable}}" stepKey="assertInfo27"/>
-        <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.SpecialCharacter}}" stepKey="assertInfo28"/>
+        <waitForElementVisible selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitforTinyMCEVisible2"/>
+        <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="TinyMCEShortDescription"/>
+        <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.Style}}" stepKey="assertInfo16"/>
+        <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.Bold}}" stepKey="assertInfo17"/>
+        <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.Italic}}" stepKey="assertInfo18"/>
+        <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.Underline}}" stepKey="assertInfo19"/>
+        <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.AlignLeft}}" stepKey="assertInfo20"/>
+        <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.AlignCenter}}" stepKey="assertInfo21"/>
+        <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.AlignRight}}" stepKey="assertInfo22"/>
+        <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.Numlist}}" stepKey="assertInfo23"/>
+        <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.Bullet}}" stepKey="assertInfo324"/>
+        <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.InsertLink}}" stepKey="assertInfo25"/>
+        <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageIcon}}" stepKey="assertInfo26"/>
+        <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.InsertTable}}" stepKey="assertInfo27"/>
+        <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.SpecialCharacter}}" stepKey="assertInfo28"/>
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Customer;
 
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlAlreadyExistsException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
@@ -89,17 +90,20 @@ class UpdateCustomerAccount
      * @throws GraphQlAuthenticationException
      * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function execute(CustomerInterface $customer, array $data, StoreInterface $store): void
     {
         if (isset($data['email']) && $customer->getEmail() !== $data['email']) {
-            if (!isset($data['password']) || empty($data['password'])) {
+            if (empty($data['password'])) {
                 throw new GraphQlInputException(__('Provide the current "password" to change "email".'));
             }
 
             $this->checkCustomerPassword->execute($data['password'], (int)$customer->getId());
             $customer->setEmail($data['email']);
         }
+
         $this->validateCustomerData->execute($data);
         $filteredData = array_diff_key($data, array_flip($this->restrictedKeys));
         $this->dataObjectHelper->populateWithArray($customer, $filteredData, CustomerInterface::class);

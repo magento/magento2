@@ -9,6 +9,8 @@ namespace Magento\Quote\Model\Cart\Data;
 
 /**
  * DTO represents Cart Item data
+ *
+ * @api
  */
 class CartItem
 {

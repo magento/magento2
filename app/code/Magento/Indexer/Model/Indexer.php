@@ -6,20 +6,29 @@
 
 namespace Magento\Indexer\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\Indexer\ActionFactory;
 use Magento\Framework\Indexer\ActionInterface;
+use Magento\Framework\Indexer\Config\DependencyInfoProviderInterface;
 use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Indexer\StructureFactory;
+use Magento\Framework\Indexer\IndexerInterfaceFactory;
+use Magento\Framework\Indexer\SuspendableIndexerInterface;
+use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
+use Magento\Framework\Mview\ViewInterface;
+use Magento\Indexer\Model\Indexer\CollectionFactory;
+use Magento\Indexer\Model\Indexer\StateFactory;
 
 /**
  * Indexer model.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
+class Indexer extends DataObject implements IndexerInterface, SuspendableIndexerInterface
 {
     /**
      * @var string
@@ -62,13 +71,32 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
     protected $indexersFactory;
 
     /**
+     * @var WorkingStateProvider
+     */
+    private $workingStateProvider;
+
+    /**
+     * @var IndexerInterfaceFactory
+     */
+    private $indexerFactory;
+
+    /**
+     * @var DependencyInfoProviderInterface
+     */
+    private $dependencyInfoProvider;
+
+    /**
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
      * @param StructureFactory $structureFactory
-     * @param \Magento\Framework\Mview\ViewInterface $view
-     * @param Indexer\StateFactory $stateFactory
-     * @param Indexer\CollectionFactory $indexersFactory
+     * @param ViewInterface $view
+     * @param StateFactory $stateFactory
+     * @param CollectionFactory $indexersFactory
+     * @param WorkingStateProvider $workingStateProvider
+     * @param IndexerInterfaceFactory $indexerFactory
      * @param array $data
+     * @param DependencyInfoProviderInterface|null $dependencyInfoProvider
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ConfigInterface $config,
@@ -77,7 +105,10 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
         \Magento\Framework\Mview\ViewInterface $view,
         Indexer\StateFactory $stateFactory,
         Indexer\CollectionFactory $indexersFactory,
-        array $data = []
+        WorkingStateProvider $workingStateProvider,
+        IndexerInterfaceFactory $indexerFactory,
+        array $data = [],
+        ?DependencyInfoProviderInterface $dependencyInfoProvider = null
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;
@@ -85,6 +116,10 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
         $this->view = $view;
         $this->stateFactory = $stateFactory;
         $this->indexersFactory = $indexersFactory;
+        $this->workingStateProvider = $workingStateProvider;
+        $this->indexerFactory = $indexerFactory;
+        $this->dependencyInfoProvider = $dependencyInfoProvider
+            ?? ObjectManager::getInstance()->get(DependencyInfoProviderInterface::class);
         parent::__construct($data);
     }
 
@@ -291,6 +326,7 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
             $this->getView()->subscribe();
         } else {
             $this->getView()->unsubscribe();
+            $this->invalidate();
         }
         $this->getState()->save();
     }
@@ -313,6 +349,16 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
     public function isInvalid()
     {
         return $this->getState()->getStatus() == StateInterface::STATUS_INVALID;
+    }
+
+    /**
+     * Checks whether indexer is suspended.
+     *
+     * @return bool
+     */
+    public function isSuspended(): bool
+    {
+        return $this->getState()->getStatus() === StateInterface::STATUS_SUSPENDED;
     }
 
     /**
@@ -405,24 +451,100 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
      */
     public function reindexAll()
     {
-        if ($this->getState()->getStatus() != StateInterface::STATUS_WORKING) {
+        if (!$this->workingStateProvider->isWorking($this->getId())) {
             $state = $this->getState();
             $state->setStatus(StateInterface::STATUS_WORKING);
             $state->save();
-            if ($this->getView()->isEnabled()) {
-                $this->getView()->suspend();
+
+            $resetViewVersion = $this->shouldResetViewVersion();
+
+            $sharedIndexers = [];
+            $indexerConfig = $this->config->getIndexer($this->getId());
+            if ($indexerConfig['shared_index'] !== null) {
+                $sharedIndexers = $this->getSharedIndexers($indexerConfig['shared_index']);
             }
+
+            $this->suspendViews(array_merge($sharedIndexers, [$this]), $resetViewVersion);
+
             try {
                 $this->getActionInstance()->executeFull();
-                $state->setStatus(StateInterface::STATUS_VALID);
-                $state->save();
+                if ($this->workingStateProvider->isWorking($this->getId())) {
+                    $state->setStatus(StateInterface::STATUS_VALID);
+                    $state->save();
+                }
+                if (!empty($sharedIndexers)) {
+                    $this->resumeSharedViews($sharedIndexers);
+                }
                 $this->getView()->resume();
             } catch (\Throwable $exception) {
                 $state->setStatus(StateInterface::STATUS_INVALID);
                 $state->save();
+                if (!empty($sharedIndexers)) {
+                    $this->resumeSharedViews($sharedIndexers);
+                }
                 $this->getView()->resume();
                 throw $exception;
             }
+        }
+    }
+
+    /**
+     * Get indexer ids that uses same index
+     *
+     * @param string $sharedIndex
+     * @return array
+     */
+    private function getSharedIndexers(string $sharedIndex) : array
+    {
+        $result = [];
+        foreach (array_keys($this->config->getIndexers()) as $indexerId) {
+            if ($indexerId === $this->getId()) {
+                continue;
+            }
+            $indexerConfig = $this->config->getIndexer($indexerId);
+            if ($indexerConfig['shared_index'] === $sharedIndex) {
+                $indexer = $this->indexerFactory->create();
+                $indexer->load($indexerId);
+                $result[] = $indexer;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Suspend views
+     *
+     * @param IndexerInterface[] $indexers
+     * @param bool $reset
+     * @return void
+     * @throws \Exception
+     */
+    private function suspendViews(array $indexers, bool $reset = true) : void
+    {
+        foreach ($indexers as $indexer) {
+            if ($indexer->getView()->isEnabled()) {
+                if ($reset) {
+                    // this method also resets the mview version to the current one
+                    $indexer->getView()->suspend();
+                } else {
+                    $state = $indexer->getView()->getState();
+                    $state->setStatus(\Magento\Framework\Mview\View\StateInterface::STATUS_SUSPENDED);
+                    $state->save();
+                }
+            }
+        }
+    }
+
+    /**
+     * Suspend views of shared indexers
+     *
+     * @param array $sharedIndexers
+     * @return void
+     */
+    private function resumeSharedViews(array $sharedIndexers) : void
+    {
+        foreach ($sharedIndexers as $indexer) {
+            $indexer->getView()->resume();
         }
     }
 
@@ -448,5 +570,72 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
     {
         $this->getActionInstance()->executeList($ids);
         $this->getState()->save();
+    }
+
+    /**
+     * Return all indexer Ids on which the current indexer depends (directly or indirectly).
+     *
+     * @param string $indexerId
+     * @return array
+     */
+    private function getIndexerIdsToRunBefore(string $indexerId): array
+    {
+        $relatedIndexerIds = [];
+        foreach ($this->dependencyInfoProvider->getIndexerIdsToRunBefore($indexerId) as $relatedIndexerId) {
+            if ($relatedIndexerId !== $indexerId) {
+                $relatedIndexerIds[] = [$relatedIndexerId];
+                $relatedIndexerIds[] = $this->getIndexerIdsToRunBefore($relatedIndexerId);
+            }
+        }
+
+        return array_unique(array_merge([], ...$relatedIndexerIds));
+    }
+
+    /**
+     * Check whether view is up to date
+     *
+     * @param ViewInterface $view
+     * @return bool
+     */
+    private function isViewUpToDate(\Magento\Framework\Mview\ViewInterface $view): bool
+    {
+        if (!$view->isEnabled()) {
+            return true;
+        }
+
+        try {
+            $currentVersionId = $view->getChangelog()->getVersion();
+        } catch (ChangelogTableNotExistsException $e) {
+            return true;
+        }
+
+        $lastVersionId = (int)$view->getState()->getVersionId();
+        if ($lastVersionId >= $currentVersionId) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check whether indexer view version should be reset
+     *
+     * @return bool
+     */
+    private function shouldResetViewVersion(): bool
+    {
+        $resetViewVersion = true;
+        foreach ($this->getIndexerIdsToRunBefore($this->getId()) as $indexerId) {
+            if ($indexerId === $this->getId()) {
+                continue;
+            }
+            $indexer = $this->indexerFactory->create();
+            $indexer->load($indexerId);
+            if ($indexer->isValid() && !$this->isViewUpToDate($indexer->getView())) {
+                $resetViewVersion = false;
+                break;
+            }
+        }
+        return $resetViewVersion;
     }
 }

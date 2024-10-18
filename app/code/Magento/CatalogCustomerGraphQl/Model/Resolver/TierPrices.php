@@ -16,11 +16,12 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * @inheritdoc
  */
-class TierPrices implements ResolverInterface
+class TierPrices implements ResolverInterface, ResetAfterRequestInterface
 {
     /**
      * @var ValueFactory
@@ -83,7 +84,7 @@ class TierPrices implements ResolverInterface
 
         /** @var Product $product */
         $product = $value['model'];
-        $productId = $product->getId();
+        $productId = (int)$product->getId();
         $this->tiers->addProductFilter($productId);
 
         return $this->valueFactory->create(
@@ -93,5 +94,14 @@ class TierPrices implements ResolverInterface
                 return $tierPrices ?? [];
             }
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->customerGroupId = null;
+        $this->tiers = null;
     }
 }

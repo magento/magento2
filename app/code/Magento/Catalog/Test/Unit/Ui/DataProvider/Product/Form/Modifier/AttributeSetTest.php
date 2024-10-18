@@ -19,7 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * @method \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AttributeSet getModel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AttributeSetTest extends AbstractModifierTest
+class AttributeSetTest extends AbstractModifierTestCase
 {
     /**
      * @var CollectionFactory|MockObject
@@ -45,7 +45,7 @@ class AttributeSetTest extends AbstractModifierTest
     {
         parent::setUp();
         $this->attributeSetCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeSetCollectionMock = $this->getMockBuilder(Collection::class)
@@ -110,7 +110,7 @@ class AttributeSetTest extends AbstractModifierTest
     /**
      * @return array
      */
-    public function modifyMetaLockedDataProvider()
+    public static function modifyMetaLockedDataProvider()
     {
         return [[true], [false]];
     }

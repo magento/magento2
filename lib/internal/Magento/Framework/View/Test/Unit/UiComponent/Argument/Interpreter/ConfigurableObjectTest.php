@@ -65,6 +65,10 @@ class ConfigurableObjectTest extends TestCase
                 ],
                 'classReader' => $this->classReader,
                 'objectManagerConfig' => $this->objectManagerConfig,
+                'deniedClassList' => [
+                    \Foo\Bar\ClassC::class,
+                    \Foo\Bar\InterfaceC::class,
+                ],
             ]
         );
     }
@@ -151,7 +155,7 @@ class ConfigurableObjectTest extends TestCase
         self::assertSame('an object yay!', $actualResult);
     }
 
-    public function validDataProvider()
+    public static function validDataProvider()
     {
         return [
             // Test most basic syntax with no arguments
@@ -226,7 +230,7 @@ class ConfigurableObjectTest extends TestCase
         ];
     }
 
-    public function invalidDataProvider()
+    public static function invalidDataProvider()
     {
         return [
             [
@@ -267,6 +271,27 @@ class ConfigurableObjectTest extends TestCase
                 ],
                 \InvalidArgumentException::class,
                 'Class argument is invalid: MyFooClass'
+            ],
+            [
+                [
+                    'argument' => [
+                        'class' => ['value' => 'MyFooClass'],
+                        'myarg' => ['value' => 'bar'],
+                    ],
+                ],
+                'MyFooClass',
+                [
+                    ['MyFooClass', ['Something', 'skipme']],
+                    ['Something', ['dontcare', 'SomethingElse']],
+                    ['SomethingElse', [\Foo\Bar\ClassC::class, 'unrelated']],
+                    ['skipme', []],
+                    ['dontcare', []],
+                    ['unrelated', [\Foo\Bar\InterfaceC::class]],
+                    [\Foo\Bar\ClassC::class, []],
+                    [\Foo\Bar\InterfaceC::class, []],
+                ],
+                \InvalidArgumentException::class,
+                'Class argument is invalid: MyFooClass',
             ],
         ];
     }

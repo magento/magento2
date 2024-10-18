@@ -6,6 +6,8 @@
 namespace Magento\Config\Model\Config\Backend\Admin;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 
 /**
  * @magentoAppArea adminhtml
@@ -34,10 +36,7 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
         $this->model->setPath('design/search_engine_robots/custom_instructions');
         $this->model->afterLoad();
 
-        $documentRootPath = $objectManager->get(DocumentRoot::class)->getPath();
-        $this->rootDirectory = $objectManager->get(
-            \Magento\Framework\Filesystem::class
-        )->getDirectoryRead($documentRootPath);
+        $this->rootDirectory = $objectManager->get(Filesystem::class)->getDirectoryRead(DirectoryList::PUB);
     }
 
     /**
@@ -57,7 +56,8 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterLoadRobotsTxtExists()
     {
-        $this->assertEquals('Sitemap: http://store.com/sitemap.xml', $this->model->getValue());
+        $value = $this->model->getValue();
+        $this->assertEquals('Sitemap: http://store.com/sitemap.xml', $value);
     }
 
     /**
@@ -92,7 +92,8 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
     {
         $robotsTxt = "User-Agent: *\nDisallow: /checkout";
         $this->model->setValue($robotsTxt)->save();
-        $this->assertStringEqualsFile($this->rootDirectory->getAbsolutePath('robots.txt'), $robotsTxt);
+        $file = $this->rootDirectory->getAbsolutePath('robots.txt');
+        $this->assertStringEqualsFile($file, $robotsTxt);
     }
 
     /**

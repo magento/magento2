@@ -15,6 +15,7 @@
 
         <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+        <waitForPageLoad stepKey="waitForCheckout"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
     </actionGroup>
 </actionGroups>

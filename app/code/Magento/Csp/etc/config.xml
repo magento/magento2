@@ -92,6 +92,9 @@
                         <inline>1</inline>
                         <eval>0</eval>
                         <dynamic>0</dynamic>
+                        <schemes>
+                            <data>data</data>
+                        </schemes>
                     </images>
                     <frames>
                         <policy_id>frame-src</policy_id>
@@ -103,7 +106,7 @@
                     <frame-ancestors>
                         <policy_id>frame-ancestors</policy_id>
                         <self>1</self>
-                        <inline>1</inline>
+                        <inline>0</inline>
                         <eval>0</eval>
                         <dynamic>0</dynamic>
                     </frame-ancestors>
@@ -120,6 +123,9 @@
                         <inline>1</inline>
                         <eval>0</eval>
                         <dynamic>0</dynamic>
+                        <schemes>
+                            <data>data</data>
+                        </schemes>
                     </fonts>
                 </storefront>
                 <admin>
@@ -197,6 +203,9 @@
                         <inline>1</inline>
                         <eval>0</eval>
                         <dynamic>0</dynamic>
+                        <schemes>
+                            <data>data</data>
+                        </schemes>
                     </images>
                     <frames>
                         <policy_id>frame-src</policy_id>
@@ -208,7 +217,7 @@
                     <frame-ancestors>
                         <policy_id>frame-ancestors</policy_id>
                         <self>1</self>
-                        <inline>1</inline>
+                        <inline>0</inline>
                         <eval>0</eval>
                         <dynamic>0</dynamic>
                     </frame-ancestors>
@@ -225,6 +234,9 @@
                         <inline>1</inline>
                         <eval>0</eval>
                         <dynamic>0</dynamic>
+                        <schemes>
+                            <data>data</data>
+                        </schemes>
                     </fonts>
                 </admin>
             </policies>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminExportFilenameTimezoneTest">
+        <annotations>
+            <features value="CatalogImportExport"/>
+            <stories value="Export Products"/>
+            <title value="Date and time in export file name should be in user timezone"/>
+            <description value="Date and time in export file name should be in user timezone"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-42286"/>
+            <useCaseId value="MC-41672"/>
+            <group value="catalog_import_export"/>
+        </annotations>
+        <before>
+            <!-- Create simple product -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <!-- Log in to admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Log out from admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Set timezone for default config-->
+        <actionGroup ref="AdminOpenGeneralConfigurationPageActionGroup" stepKey="goToGeneralConfig"/>
+        <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}"
+                          dependentSelector="{{LocaleOptionsSection.timezone}}"
+                          visible="false"
+                          stepKey="openLocaleSection"/>
+        <grabValueFrom selector="{{LocaleOptionsSection.timezone}}" stepKey="originalTimezone"/>
+        <selectOption selector="{{LocaleOptionsSection.timezone}}" userInput="America/Chicago" stepKey="setTimezone"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
+
+        <!-- Navigate to export page -->
+        <actionGroup ref="AdminNavigateToExportPageActionGroup" stepKey="goToExportIndexPage"/>
+        <!-- Export all products -->
+        <actionGroup ref="ExportAllProductsActionGroup" stepKey="exportCreatedProducts"/>
+        <!-- Start queue consumer for export -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminExportMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <!-- Refresh export page -->
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <!-- Get file display name -->
+        <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}"
+                               stepKey="waitForFilename"/>
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="getFilename"/>
+        <!-- Get file name on server -->
+        <actionGroup ref="AdminGetExportFilenameOnServerActionGroup" stepKey="grabNameFile">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
+        <!-- Verify that the file exists on server -->
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions"
+                method="assertFileExists"
+                stepKey="assertExportFileExists">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+        </helper>
+        <executeJS function="var dt = '{$grabNameFile}'.replace(/[^\d]/g, ''),
+             dy = dt.substring(0, 4),
+             dm = dt.substring(4, 6),
+             dd = dt.substring(6, 8),
+             dh = dt.substring(8, 10),
+             dmn = dt.substring(10, 12),
+             ds = dt.substring(12);
+             return (Date.parse(dy + '-' + dm + '-' + dd + 'T' + dh + ':' + dmn + ':' + ds +  '.000Z')/1000);"
+            stepKey="timestamp"/>
+        <generateDate date="@{$timestamp}" format="Ymd_His" stepKey="expectedDate" timezone="America/Chicago"/>
+        <executeJS function="return 'catalog_product_' + '{$expectedDate}' + '.csv'"
+            stepKey="expectedFilename"/>
+        <!-- Verify that the date and time in export filename is in user timezone-->
+        <assertEquals stepKey="assertThatFilenameDisplayedToUserIsInAdminTimezone">
+            <actualResult type="variable">getFilename</actualResult>
+            <expectedResult type="variable">expectedFilename</expectedResult>
+        </assertEquals>
+        <!-- Verify that the date and time in download filename is in user timezone-->
+        <grabAttributeFrom userInput="href"
+                           selector="{{AdminExportAttributeSection.download('0')}}"
+                           stepKey="grabExportUrl"/>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers"
+                method="assertCurlResponseHeadersContainsString"
+                stepKey="assertDownloadFileContainsConfigurableProduct">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">Content-Disposition: attachment; filename="export/{$expectedFilename}"</argument>
+        </helper>
+        <!-- Delete export File -->
+        <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
+            <argument name="fileName" value="{$getFilename}"/>
+        </actionGroup>
+        <!--Reset timezone-->
+        <actionGroup ref="AdminOpenGeneralConfigurationPageActionGroup" stepKey="goToGeneralConfigReset"/>
+        <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}"
+                          dependentSelector="{{LocaleOptionsSection.timezone}}"
+                          visible="false" stepKey="openLocaleSectionReset"/>
+        <selectOption selector="{{LocaleOptionsSection.timezone}}"
+                      userInput="$originalTimezone"
+                      stepKey="resetTimezone"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfigReset"/>
+    </test>
+</tests>

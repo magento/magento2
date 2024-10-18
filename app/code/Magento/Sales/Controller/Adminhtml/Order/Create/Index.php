@@ -20,6 +20,12 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create implements 
     public function execute()
     {
         $this->_initSession();
+
+        // Clear existing order in session when creating a new order for a customer
+        if ($this->getRequest()->getParam('customer_id')) {
+            $this->_getSession()->setOrderId(null);
+        }
+
         $this->_getOrderCreateModel()->initRuleData();
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();

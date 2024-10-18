@@ -4,14 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Setup\Di\MagentoDiFactory;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
-use Laminas\Mvc\Service\DiAbstractServiceFactoryFactory;
-use Laminas\ServiceManager\Di\DiAbstractServiceFactory;
 
 return [
-    'modules' => [
-        'Magento\Setup',
-    ],
+    'modules' => require __DIR__ . '/modules.config.php',
     'module_listener_options' => [
         'module_paths' => [
             __DIR__ . '/../src',
@@ -25,12 +22,13 @@ return [
     ],
     'service_manager' => [
         'factories' => [
-            DiAbstractServiceFactory::class => DiAbstractServiceFactoryFactory::class,
             InitParamListener::BOOTSTRAP_PARAM => InitParamListener::class,
+            \Magento\Framework\App\MaintenanceMode::class => MagentoDiFactory::class,
+            \Magento\Setup\Model\ConfigGenerator::class => MagentoDiFactory::class,
+            \Magento\Indexer\Console\Command\IndexerReindexCommand::class => MagentoDiFactory::class,
+            \Symfony\Component\Console\Helper\TableFactory::class => MagentoDiFactory::class,
+            \Magento\Deploy\Console\InputValidator::class => MagentoDiFactory::class,
+            \Magento\Framework\App\State::class => MagentoDiFactory::class,
         ],
-    ],
-    // list of Magento specific required services, like default abstract factory
-    'required_services' => [
-        DiAbstractServiceFactory::class
     ]
 ];

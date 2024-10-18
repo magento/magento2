@@ -3,18 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * PHP Copy Paste Detector v1.4.0 tool wrapper
- */
 namespace Magento\TestFramework\CodingStandard\Tool;
 
 use Magento\TestFramework\CodingStandard\ToolInterface;
+use SebastianBergmann\FileIterator\Facade;
+use SebastianBergmann\PHPCPD\Detector\Detector;
+use SebastianBergmann\PHPCPD\Detector\Strategy\DefaultStrategy;
+use SebastianBergmann\PHPCPD\Log\PMD;
+use SebastianBergmann\PHPCPD\Log\Text;
+use Symfony\Component\Finder\Finder;
 
+/**
+ * PHP Copy Paste Detector tool wrapper
+ */
 class CopyPasteDetector implements ToolInterface, BlacklistInterface
 {
     /**
-     * Report file
+     * Minimum number of equal lines to identify a copy paste snippet
+     */
+    private const MIN_LINES = 13;
+
+    /**
+     * Destination file to write inspection report to
      *
      * @var string
      */
@@ -28,19 +40,17 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
     private $blacklist;
 
     /**
-     * Constructor
-     *
-     * @param string $reportFile Destination file to write inspection report to
+     * @param string $reportFile
      */
-    public function __construct($reportFile)
+    public function __construct(string $reportFile)
     {
         $this->reportFile = $reportFile;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function setBlackList(array $blackList)
+    public function setBlackList(array $blackList): void
     {
         $this->blacklist = $blackList;
     }
@@ -52,53 +62,113 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
      *
      * @return bool
      */
-    public function canRun()
+    public function canRun(): bool
     {
-        exec($this->getCommand() . ' --version', $output, $exitCode);
-        return $exitCode === 0;
+        return class_exists(Detector::class)
+            && class_exists(Facade::class)
+            && class_exists(Finder::class);
     }
 
     /**
      * Run tool for files specified
      *
      * @param array $whiteList Files/directories to be inspected
-     * @return int
-     *
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @return bool
      */
-    public function run(array $whiteList)
+    public function run(array $whiteList): bool
     {
-        $blacklistedDirs = [];
-        $blacklistedFileNames = [];
-        foreach ($this->blacklist as $file) {
-            $file = escapeshellarg(trim($file));
-            if (!$file) {
-                continue;
-            }
-            $ext = pathinfo($file, PATHINFO_EXTENSION);
-            if ($ext != '') {
-                $blacklistedFileNames[] = $file;
-            } else {
-                $blacklistedDirs[] = '--exclude ' . $file . ' ';
-            }
-        }
+        $clones = (new Detector(new DefaultStrategy()))->copyPasteDetection(
+            (new Facade())->getFilesAsArray(
+                $whiteList,
+                '',
+                '',
+                $this->getExclude()
+            ),
+            self::MIN_LINES
+        );
 
-        $command = $this->getCommand() . ' --log-pmd ' . escapeshellarg($this->reportFile)
-            . ' --names-exclude ' . join(',', $blacklistedFileNames) . ' --min-lines 13 ' . join(' ', $blacklistedDirs)
-            . ' ' . implode(' ', $whiteList);
-        exec($command, $output, $exitCode);
+        (new PMD($this->reportFile))->processClones($clones);
+        (new Text)->printResult($clones, false);
 
-        return !(bool)$exitCode;
+        return count($clones) === 0;
     }
 
     /**
-     * Get PHPCPD command
+     * Get exclude params from blacklist
      *
-     * @return string
+     * @return string[]
      */
-    private function getCommand()
+    private function getExclude(): array
     {
-        $vendorDir = require BP . '/app/etc/vendor_path.php';
-        return 'php ' . BP . '/' . $vendorDir . '/bin/phpcpd';
+        $exclude = [];
+        $blacklistedDirs = [];
+        $blacklistedFileNames = [];
+        $blacklistedPatterns = [];
+        foreach ($this->blacklist as $file) {
+            $file = trim($file);
+            if (!$file) {
+                continue;
+            }
+            $realPath = realpath(BP . '/' . $file);
+            if ($realPath === false) {
+                $ext = pathinfo($file, PATHINFO_EXTENSION);
+                if ($ext != '') {
+                    $blacklistedFileNames[] = $file;
+                } else {
+                    $blacklistedPatterns[] = $file;
+                }
+                continue;
+            }
+
+            $exclude[] = [$realPath];
+            $blacklistedDirs[] = $file;
+        }
+
+        foreach ($blacklistedPatterns as $pattern) {
+            $files = $this->find($pattern, false, $blacklistedDirs);
+            if (empty($files)) {
+                continue;
+            }
+            $exclude[] = $files;
+        }
+
+
+        foreach ($blacklistedFileNames as $fileName) {
+            $files = $this->find($fileName, true, $blacklistedDirs);
+            if (empty($files)) {
+                continue;
+            }
+            $exclude[] = $files;
+        }
+
+        return array_unique(array_merge(...$exclude));
+    }
+
+    /**
+     * Find all files by pattern
+     *
+     * @param string $pattern
+     * @param bool $searchFiles
+     * @param array $excludePaths
+     * @return array
+     */
+    private function find(string $pattern, bool $searchFiles, array $excludePaths): array
+    {
+        $finder = new Finder();
+        $finder->in(BP);
+        $finder->notPath($excludePaths);
+        if ($searchFiles) {
+            $finder->files();
+            $finder->name($pattern);
+        } else {
+            $finder->path($pattern);
+        }
+
+        $result = [];
+        foreach ($finder as $file) {
+            $result[] = $file->getRealPath();
+        }
+
+        return $result;
     }
 }

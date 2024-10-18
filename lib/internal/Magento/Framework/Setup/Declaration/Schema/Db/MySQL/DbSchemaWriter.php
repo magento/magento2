@@ -7,6 +7,9 @@
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\DB\Adapter\SqlVersionProvider;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\Statement;
 use Magento\Framework\Setup\Declaration\Schema\Db\StatementAggregator;
@@ -60,21 +63,29 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     private $dryRunLogger;
 
     /**
+     * @var SqlVersionProvider
+     */
+    private $sqlVersionProvider;
+
+    /**
      * @param ResourceConnection $resourceConnection
-     * @param StatementFactory   $statementFactory
-     * @param DryRunLogger       $dryRunLogger
-     * @param array              $tableOptions
+     * @param StatementFactory $statementFactory
+     * @param DryRunLogger $dryRunLogger
+     * @param SqlVersionProvider $sqlVersionProvider
+     * @param array $tableOptions
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         StatementFactory $statementFactory,
         DryRunLogger $dryRunLogger,
+        SqlVersionProvider $sqlVersionProvider,
         array $tableOptions = []
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->statementFactory = $statementFactory;
         $this->dryRunLogger = $dryRunLogger;
         $this->tableOptions = array_replace($this->tableOptions, $tableOptions);
+        $this->sqlVersionProvider = $sqlVersionProvider;
     }
 
     /**
@@ -250,7 +261,9 @@ class DbSchemaWriter implements DbSchemaWriterInterface
      */
     public function resetAutoIncrement($tableName, $resource)
     {
-        $sql = 'AUTO_INCREMENT = 1';
+        $autoIncrementValue = $this->getNextAutoIncrementValue($tableName, $resource);
+        $sql = "AUTO_INCREMENT = {$autoIncrementValue}";
+
         return $this->statementFactory->create(
             sprintf('RESET_AUTOINCREMENT_%s', $tableName),
             $tableName,
@@ -269,15 +282,14 @@ class DbSchemaWriter implements DbSchemaWriterInterface
             $statementsSql = [];
             $statement = null;
 
-            /**
-             * @var Statement $statement
-             */
-            foreach ($statementBank as $statement) {
-                $statementsSql[] = $statement->getStatement();
-            }
-            $adapter = $this->resourceConnection->getConnection($statement->getResource());
-
             if ($dryRun) {
+                /**
+                 * @var Statement $statement
+                 */
+                foreach ($statementBank as $statement) {
+                    $statementsSql[] = $statement->getStatement();
+                }
+                $adapter = $this->resourceConnection->getConnection($statement->getResource());
                 $this->dryRunLogger->log(
                     sprintf(
                         $this->statementDirectives[$statement->getType()],
@@ -286,18 +298,158 @@ class DbSchemaWriter implements DbSchemaWriterInterface
                     )
                 );
             } else {
-                $adapter->query(
-                    sprintf(
-                        $this->statementDirectives[$statement->getType()],
-                        $adapter->quoteIdentifier($statement->getTableName()),
-                        implode(", ", $statementsSql)
-                    )
-                );
+                $this->doQuery($statementBank);
+                $statement = end($statementBank);
                 //Do post update, like SQL DML operations or etc...
                 foreach ($statement->getTriggers() as $trigger) {
                     call_user_func($trigger);
                 }
             }
         }
+    }
+
+    /**
+     * Check if we can concatenate sql into one statement
+     *
+     * Due to issues with some versions of MariaBD such statements
+     * may produce errors, e.g. with foreign key definition with column modification
+     *
+     * @return bool
+     * @throws ConnectionException
+     */
+    private function isNeedToSplitSql() : bool
+    {
+        return str_contains($this->sqlVersionProvider->getSqlVersion(), SqlVersionProvider::MARIA_DB_10_4_VERSION) ||
+            str_contains($this->sqlVersionProvider->getSqlVersion(), SqlVersionProvider::MARIA_DB_10_6_VERSION);
+    }
+
+    /**
+     * Perform queries based on statements
+     *
+     * @param Statement[] $statementBank
+     * @return void
+     * @throws ConnectionException
+     */
+    private function doQuery(
+        array $statementBank
+    ) : void {
+        if (empty($statementBank)) {
+            return;
+        }
+
+        $statement = null;
+        $statementsSql = [];
+        foreach ($statementBank as $statement) {
+            $statementsSql[] = $statement->getStatement();
+        }
+        $adapter = $this->resourceConnection->getConnection($statement->getResource());
+
+        if ($this->isNeedToSplitSql()) {
+            $preparedStatements = $this->getPreparedStatements($statementBank);
+
+            if (!empty($preparedStatements['canBeCombinedStatements'])) {
+                $adapter->query(
+                    sprintf(
+                        $this->statementDirectives[$statement->getType()],
+                        $adapter->quoteIdentifier($statement->getTableName()),
+                        implode(", ", $preparedStatements['canBeCombinedStatements'])
+                    )
+                );
+            }
+            foreach ($preparedStatements['separatedStatements'] as $separatedStatement) {
+                $adapter->query(
+                    sprintf(
+                        $this->statementDirectives[$statement->getType()],
+                        $adapter->quoteIdentifier($statement->getTableName()),
+                        $separatedStatement
+                    )
+                );
+            }
+        } else {
+            $adapter->query(
+                sprintf(
+                    $this->statementDirectives[$statement->getType()],
+                    $adapter->quoteIdentifier($statement->getTableName()),
+                    implode(", ", $statementsSql)
+                )
+            );
+        }
+    }
+
+    /**
+     * Retrieve next value for AUTO_INCREMENT column.
+     *
+     * @param string $tableName
+     * @param string $resource
+     * @return int
+     * @throws \Zend_Db_Statement_Exception
+     */
+    private function getNextAutoIncrementValue(string $tableName, string $resource): int
+    {
+        $adapter = $this->resourceConnection->getConnection($resource);
+        $autoIncrementField = $adapter->getAutoIncrementField($tableName);
+        if ($autoIncrementField) {
+            $sql = sprintf('SELECT MAX(`%s`) + 1 FROM `%s`', $autoIncrementField, $tableName);
+            $adapter->resetDdlCache($tableName);
+            $stmt = $adapter->query($sql);
+
+            return (int)$stmt->fetchColumn();
+        } else {
+            return 1;
+        }
+    }
+
+    /**
+     * Prepare list of modified columns from statement
+     *
+     * @param array $statementBank
+     * @return array
+     */
+    private function getModifiedColumns(array $statementBank) : array
+    {
+        $columns = [];
+        foreach ($statementBank as $statement) {
+            if ($statement->getType() === 'alter'
+                && str_contains($statement->getStatement(), 'MODIFY COLUMN')) {
+                $columns[] = $statement->getName();
+            }
+        }
+        return $columns;
+    }
+
+    /**
+     * Separate statements that can't be executed as one statement
+     *
+     * @param array $statementBank
+     * @return array
+     */
+    private function getPreparedStatements(array $statementBank) : array
+    {
+        $statementsSql = [];
+        foreach ($statementBank as $statement) {
+            $statementsSql[] = $statement->getStatement();
+        }
+        $result = ['separatedStatements' => [], 'canBeCombinedStatements' => []];
+        $modifiedColumns = $this->getModifiedColumns($statementBank);
+
+        foreach ($statementsSql as $statementSql) {
+            if (str_contains($statementSql, 'FOREIGN KEY')) {
+                $isThisColumnModified = false;
+                foreach ($modifiedColumns as $modifiedColumn) {
+                    if (str_contains($statementSql, '`' . $modifiedColumn . '`')) {
+                        $isThisColumnModified = true;
+                        break;
+                    }
+                }
+                if ($isThisColumnModified) {
+                    $result['separatedStatements'][] = $statementSql;
+                } else {
+                    $result['canBeCombinedStatements'][] = $statementSql;
+                }
+            } else {
+                $result['canBeCombinedStatements'][] = $statementSql;
+            }
+        }
+        return $result;
     }
 }

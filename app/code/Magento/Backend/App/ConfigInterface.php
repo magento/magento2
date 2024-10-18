@@ -1,7 +1,5 @@
 <?php
 /**
- * Default application path for backend area
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -21,7 +19,6 @@ interface ConfigInterface
      *
      * @param string $path
      * @return mixed
-     * @api
      */
     public function getValue($path);
 
@@ -32,7 +29,6 @@ interface ConfigInterface
      * @param string $path
      * @param mixed $value
      * @return void
-     * @api
      */
     public function setValue($path, $value);
 
@@ -43,7 +39,6 @@ interface ConfigInterface
      *
      * @param string $path
      * @return bool
-     * @api
      */
     public function isSetFlag($path);
 }

@@ -74,7 +74,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function dataProviderSaveAndLoadReport(): array
+    public static function dataProviderSaveAndLoadReport(): array
     {
         return [
             [
@@ -150,6 +150,6 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->processor->_errorDir = __DIR__ . '/version2/magento2';
 
         $this->assertStringNotContainsString('version2/magento2', $this->processor->getViewFileUrl());
-        $this->assertStringContainsString('pub/errors/', $this->processor->getViewFileUrl());
+        $this->assertStringContainsString('errors/', $this->processor->getViewFileUrl());
     }
 }

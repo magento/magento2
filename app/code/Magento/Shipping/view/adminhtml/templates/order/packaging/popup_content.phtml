@@ -8,6 +8,10 @@
  * @var \Magento\Shipping\Block\Adminhtml\Order\Packaging $block
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
+
+use Magento\Framework\Measure\Length;
+use Magento\Framework\Measure\Weight;
+
 ?>
 <div id="packaging_window">
     <div class="message message-warning"></div>
@@ -30,7 +34,7 @@
             </div>
         </div>
         <div class="admin__control-table-wrapper admin__page-subsection">
-            <table class="data-table admin__control-table">
+            <table class="data-table admin__control-table admin__control-table">
                 <thead>
                     <tr>
                         <th class="col-type"><?= $block->escapeHtml(__('Type')) ?></th>
@@ -46,9 +50,9 @@
                             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display: none', 'th.col-custom') ?>
                         <?php endif ?>
                         <th class="col-total-weight"><?= $block->escapeHtml(__('Total Weight')) ?></th>
-                        <th class="col-length"><?= $block->escapeHtml(__('Length')) ?></th>
-                        <th class="col-width"><?= $block->escapeHtml(__('Width')) ?></th>
-                        <th class="col-height"><?= $block->escapeHtml(__('Height')) ?></th>
+                        <th class="col-length _required"><span><?= $block->escapeHtml(__('Length')) ?></span></th>
+                        <th class="col-width _required"><span><?= $block->escapeHtml(__('Width')) ?></span></th>
+                        <th class="col-height _required"><span><?= $block->escapeHtml(__('Height')) ?></span></th>
                         <th>&nbsp;</th>
                         <?php if ($block->getDeliveryConfirmationTypes()): ?>
                         <th class="col-signature"><?= $block->escapeHtml(__('Signature Confirmation')) ?></th>
@@ -96,10 +100,10 @@
                         <td>
                             <select name="container_girth_dimension_units"
                                     class="options-units-dimensions measures admin__control-select">
-                                <option value="<?= /* @noEscape */ Zend_Measure_Length::INCH ?>" selected="selected" >
+                                <option value="<?= /* @noEscape */ Length::INCH ?>" selected="selected" >
                                     <?= $block->escapeHtml(__('in')) ?>
                                 </option>
-                                <option value="<?= /* @noEscape */ Zend_Measure_Length::CENTIMETER ?>" >
+                                <option value="<?= /* @noEscape */ Length::CENTIMETER ?>" >
                                     <?= $block->escapeHtml(__('cm')) ?>
                                 </option>
                             </select>
@@ -136,10 +140,10 @@
                                    name="container_weight" />
                                     <select name="container_weight_units"
                                             class="options-units-weight measures admin__control-select">
-                                        <option value="<?= /* @noEscape */ Zend_Measure_Weight::POUND
+                                        <option value="<?= /* @noEscape */ Weight::POUND
                                         ?>" selected="selected"  ><?= $block->escapeHtml(__('lb')) ?>
                                         </option>
-                                        <option value="<?= /* @noEscape */ Zend_Measure_Weight::KILOGRAM ?>" >
+                                        <option value="<?= /* @noEscape */ Weight::KILOGRAM ?>" >
                                             <?= $block->escapeHtml(__('kg')) ?>
                                         </option>
                                     </select>
@@ -164,10 +168,10 @@
                         <td class="col-measure">
                             <select name="container_dimension_units"
                                     class="options-units-dimensions measures admin__control-select">
-                                <option value="<?= /* @noEscape */ Zend_Measure_Length::INCH ?>" selected="selected" >
+                                <option value="<?= /* @noEscape */ Length::INCH ?>" selected="selected" >
                                     <?= $block->escapeHtml(__('in')) ?>
                                 </option>
-                                <option value="<?= /* @noEscape */ Zend_Measure_Length::CENTIMETER ?>" >
+                                <option value="<?= /* @noEscape */ Length::CENTIMETER ?>" >
                                     <?= $block->escapeHtml(__('cm')) ?>
                                 </option>
                             </select>
@@ -227,8 +231,8 @@
             <div class="grid_prepare admin__page-subsection"></div>
         </div>
     </section>
-    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', '#package_template') ?>
     <div id="packages_content"></div>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', '#package_template') ?>
     <?php $scriptString = <<<script
 require(['jquery'], function($){
     $("div#packages_content").on('click', "button[data-action='package-save-items']",

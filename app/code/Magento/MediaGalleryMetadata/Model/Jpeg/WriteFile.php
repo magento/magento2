@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\Jpeg;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadata\Model\SegmentNames;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
@@ -35,15 +38,23 @@ class WriteFile implements WriteFileInterface
     private $segmentNames;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @param DriverInterface $driver
      * @param SegmentNames $segmentNames
+     * @param Filesystem $filesystem
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         DriverInterface $driver,
-        SegmentNames $segmentNames
+        SegmentNames $segmentNames,
+        Filesystem $filesystem = null
     ) {
-        $this->driver = $driver;
         $this->segmentNames = $segmentNames;
+        $this->filesystem = $filesystem ?? ObjectManager::getInstance()->get(Filesystem::class);
     }
 
     /**
@@ -61,12 +72,12 @@ class WriteFile implements WriteFileInterface
             }
         }
 
-        $resource = $this->driver->fileOpen($file->getPath(), 'wb');
+        $resource = $this->getDriver()->fileOpen($file->getPath(), 'wb');
 
-        $this->driver->fileWrite($resource, self::MARKER_IMAGE_PREFIX . self::MARKER_IMAGE_FILE_START);
+        $this->getDriver()->fileWrite($resource, self::MARKER_IMAGE_PREFIX . self::MARKER_IMAGE_FILE_START);
         $this->writeSegments($resource, $file->getSegments());
-        $this->driver->fileWrite($resource, self::MARKER_IMAGE_PREFIX . self::MARKER_IMAGE_END);
-        $this->driver->fileClose($resource);
+        $this->getDriver()->fileWrite($resource, self::MARKER_IMAGE_PREFIX . self::MARKER_IMAGE_END);
+        $this->getDriver()->fileClose($resource);
     }
 
     /**
@@ -79,14 +90,29 @@ class WriteFile implements WriteFileInterface
     {
         foreach ($segments as $segment) {
             if ($segment->getName() !== 'CompressedImage') {
-                $this->driver->fileWrite(
+                $this->getDriver()->fileWrite(
                     $resource,
                     //phpcs:ignore Magento2.Functions.DiscouragedFunction
                     self::MARKER_IMAGE_PREFIX . chr($this->segmentNames->getSegmentType($segment->getName()))
                 );
-                $this->driver->fileWrite($resource, pack("n", strlen($segment->getData()) + 2));
+                $this->getDriver()->fileWrite($resource, pack("n", strlen($segment->getData()) + 2));
             }
-            $this->driver->fileWrite($resource, $segment->getData());
+            $this->getDriver()->fileWrite($resource, $segment->getData());
         }
+    }
+
+    /**
+     * Returns current driver for media directory
+     *
+     * @return DriverInterface
+     * @throws FileSystemException
+     */
+    private function getDriver(): DriverInterface
+    {
+        if ($this->driver === null) {
+            $this->driver = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver();
+        }
+
+        return $this->driver;
     }
 }

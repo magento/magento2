@@ -5,12 +5,16 @@
  */
 namespace Magento\Catalog\Model\Category;
 
+use Magento\Catalog\Model\Category\Media\PathResolverFactory;
+use Magento\Catalog\Model\Category\Media\PathResolverInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Filesystem\ExtendedDriverInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -18,22 +22,22 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * Provides information about requested file
  */
-class FileInfo
+class FileInfo implements ResetAfterRequestInterface
 {
     /**
      * Path in /pub/media directory
      */
-    const ENTITY_MEDIA_PATH = '/catalog/category';
+    public const ENTITY_MEDIA_PATH = '/catalog/category';
 
     /**
      * @var Filesystem
      */
-    private $filesystem;
+    private readonly Filesystem $filesystem;
 
     /**
      * @var Mime
      */
-    private $mime;
+    private readonly Mime $mime;
 
     /**
      * @var WriteInterface
@@ -51,11 +55,9 @@ class FileInfo
     private $pubDirectory;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    private $storeManager;
+    private readonly StoreManagerInterface $storeManager;
 
     /**
      * @param Filesystem $filesystem
@@ -70,6 +72,16 @@ class FileInfo
         $this->filesystem = $filesystem;
         $this->mime = $mime;
         $this->storeManager = $storeManager;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->mediaDirectory = null;
+        $this->baseDirectory = null;
+        $this->pubDirectory = null;
     }
 
     /**
@@ -121,11 +133,15 @@ class FileInfo
      */
     public function getMimeType($fileName)
     {
-        $filePath = $this->getFilePath($fileName);
-        $absoluteFilePath = $this->getMediaDirectory()->getAbsolutePath($filePath);
-
-        $result = $this->mime->getMimeType($absoluteFilePath);
-        return $result;
+        if ($this->getMediaDirectory()->getDriver() instanceof ExtendedDriverInterface) {
+            return $this->mediaDirectory->getDriver()->getMetadata($fileName)['mimetype'];
+        } else {
+            return $this->mime->getMimeType(
+                $this->getMediaDirectory()->getAbsolutePath(
+                    $this->getFilePath($fileName)
+                )
+            );
+        }
     }
 
     /**
@@ -209,7 +225,7 @@ class FileInfo
     {
         $result = $path;
         try {
-            $storeUrl = $this->storeManager->getStore()->getBaseUrl();
+            $storeUrl = $this->storeManager->getStore()->getBaseUrl() ?? '';
         } catch (NoSuchEntityException $e) {
             return $result;
         }
@@ -239,7 +255,8 @@ class FileInfo
         $mediaDirectoryRelativeSubpath = substr($mediaDirectoryPath, strlen($baseDirectoryPath));
         $pubDirectory = $baseDirectory->getRelativePath($pubDirectoryPath);
 
-        if (strpos($mediaDirectoryRelativeSubpath, $pubDirectory) === 0 && strpos($filePath, $pubDirectory) !== 0) {
+        if ($pubDirectory && strpos($mediaDirectoryRelativeSubpath, $pubDirectory) === 0
+            && strpos($filePath, $pubDirectory) !== 0) {
             $mediaDirectoryRelativeSubpath = substr($mediaDirectoryRelativeSubpath, strlen($pubDirectory));
         }
 

@@ -5,12 +5,12 @@
  */
 namespace Magento\Theme\Controller\Result;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
 use Magento\Framework\Translate\Inline\ParserInterface;
 use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\Session\Config\ConfigInterface;
 
 /**
  * Plugin for putting messages to cookies
@@ -22,7 +22,7 @@ class MessagePlugin
     /**
      * Cookies name for messages
      */
-    const MESSAGES_COOKIES_NAME = 'mage-messages';
+    public const MESSAGES_COOKIES_NAME = 'mage-messages';
 
     /**
      * @var \Magento\Framework\Stdlib\CookieManagerInterface
@@ -55,28 +55,35 @@ class MessagePlugin
     private $inlineTranslate;
 
     /**
+     * @var ConfigInterface
+     */
+    protected $sessionConfig;
+
+    /**
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @param InlineInterface|null $inlineTranslate
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param InlineInterface $inlineTranslate
+     * @param ConfigInterface $sessionConfig
      */
     public function __construct(
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        InlineInterface $inlineTranslate = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer,
+        InlineInterface $inlineTranslate,
+        ConfigInterface $sessionConfig
     ) {
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->messageManager = $messageManager;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer;
         $this->interpretationStrategy = $interpretationStrategy;
-        $this->inlineTranslate = $inlineTranslate ?: ObjectManager::getInstance()->get(InlineInterface::class);
+        $this->inlineTranslate = $inlineTranslate;
+        $this->sessionConfig = $sessionConfig;
     }
 
     /**
@@ -94,9 +101,42 @@ class MessagePlugin
         ResultInterface $result
     ) {
         if (!($subject instanceof Json)) {
-            $this->setCookie($this->getMessages());
+            $newMessages = [];
+            foreach ($this->messageManager->getMessages(true)->getItems() as $message) {
+                $newMessages[] = [
+                    'type' => $message->getType(),
+                    'text' => $this->interpretationStrategy->interpret($message),
+                ];
+            }
+            if (!empty($newMessages)) {
+                $this->setMessages($this->getCookiesMessages(), $newMessages);
+            }
         }
         return $result;
+    }
+
+    /**
+     * Add new messages to already existing ones.
+     *
+     * In case if there are too many messages clear old messages.
+     *
+     * @param array $oldMessages
+     * @param array $newMessages
+     * @throws CookieSizeLimitReachedException
+     */
+    private function setMessages(array $oldMessages, array $newMessages): void
+    {
+        $messages = array_merge($oldMessages, $newMessages);
+        try {
+            $this->setCookie($messages);
+        } catch (CookieSizeLimitReachedException $e) {
+            if (empty($oldMessages)) {
+                throw $e;
+            }
+
+            array_shift($oldMessages);
+            $this->setMessages($oldMessages, $newMessages);
+        }
     }
 
     /**
@@ -132,8 +172,9 @@ class MessagePlugin
 
             $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
             $publicCookieMetadata->setDurationOneYear();
-            $publicCookieMetadata->setPath('/');
+            $publicCookieMetadata->setPath($this->sessionConfig->getCookiePath());
             $publicCookieMetadata->setHttpOnly(false);
+            $publicCookieMetadata->setSameSite('Strict');
 
             $this->cookieManager->setPublicCookie(
                 self::MESSAGES_COOKIES_NAME,
@@ -156,24 +197,6 @@ class MessagePlugin
         }
 
         return $text;
-    }
-
-    /**
-     * Return messages array and clean message manager messages
-     *
-     * @return array
-     */
-    protected function getMessages()
-    {
-        $messages = $this->getCookiesMessages();
-        /** @var MessageInterface $message */
-        foreach ($this->messageManager->getMessages(true)->getItems() as $message) {
-            $messages[] = [
-                'type' => $message->getType(),
-                'text' => $this->interpretationStrategy->interpret($message),
-            ];
-        }
-        return $messages;
     }
 
     /**

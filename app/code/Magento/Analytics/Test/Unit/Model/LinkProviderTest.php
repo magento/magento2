@@ -68,7 +68,7 @@ class LinkProviderTest extends TestCase
     {
         $this->linkInterfaceFactoryMock = $this->getMockBuilder(LinkInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->fileInfoManagerMock = $this->createMock(FileInfoManager::class);
         $this->storeManagerInterfaceMock = $this->getMockBuilder(StoreManagerInterface::class)
@@ -90,7 +90,7 @@ class LinkProviderTest extends TestCase
 
     public function testGet()
     {
-        $baseUrl = 'http://magento.local/pub/media/';
+        $baseUrl = 'http://magento.local/media/';
         $fileInfoPath = 'analytics/data.tgz';
         $fileInitializationVector = 'er312esq23eqq';
         $this->fileInfoManagerMock->expects($this->once())
@@ -147,7 +147,7 @@ class LinkProviderTest extends TestCase
     /**
      * @return array
      */
-    public function fileNotReadyDataProvider()
+    public static function fileNotReadyDataProvider()
     {
         return [
             [null, 'initVector'],

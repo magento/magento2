@@ -11,6 +11,7 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\SalesRule\Model\Coupon\Usage\Processor as CouponUsageProcessor;
 use Magento\SalesRule\Model\Coupon\Usage\UpdateInfo;
 use Magento\SalesRule\Model\Coupon\Usage\UpdateInfoFactory;
+use Magento\SalesRule\Model\Service\CouponUsagePublisher;
 
 /**
  * Updates the coupon usages from quote
@@ -18,25 +19,33 @@ use Magento\SalesRule\Model\Coupon\Usage\UpdateInfoFactory;
 class UpdateCouponUsages
 {
     /**
-     * @var CouponUsageProcessor
-     */
-    private $couponUsageProcessor;
-
-    /**
      * @var UpdateInfoFactory
      */
     private $updateInfoFactory;
 
     /**
-     * @param CouponUsageProcessor $couponUsageProcessor
+     * @var CouponUsagePublisher
+     */
+    private $couponUsagePublisher;
+
+    /**
+     * @var CouponUsageProcessor
+     */
+    private $processor;
+
+    /**
+     * @param CouponUsagePublisher $couponUsagePublisher
      * @param UpdateInfoFactory $updateInfoFactory
+     * @param CouponUsageProcessor $processor
      */
     public function __construct(
-        CouponUsageProcessor $couponUsageProcessor,
-        UpdateInfoFactory $updateInfoFactory
+        CouponUsagePublisher $couponUsagePublisher,
+        UpdateInfoFactory $updateInfoFactory,
+        CouponUsageProcessor $processor
     ) {
-        $this->couponUsageProcessor = $couponUsageProcessor;
+        $this->couponUsagePublisher = $couponUsagePublisher;
         $this->updateInfoFactory = $updateInfoFactory;
+        $this->processor = $processor;
     }
 
     /**
@@ -54,11 +63,15 @@ class UpdateCouponUsages
 
         /** @var UpdateInfo $updateInfo */
         $updateInfo = $this->updateInfoFactory->create();
-        $updateInfo->setAppliedRuleIds(explode(',', $quote->getAppliedRuleIds()));
+        $appliedRuleIds = explode(',', $quote->getAppliedRuleIds());
+        $appliedRuleIds = array_filter(array_map('intval', array_unique($appliedRuleIds)));
+        $updateInfo->setAppliedRuleIds($appliedRuleIds);
         $updateInfo->setCouponCode((string)$quote->getCouponCode());
         $updateInfo->setCustomerId((int)$quote->getCustomerId());
         $updateInfo->setIsIncrement($increment);
 
-        $this->couponUsageProcessor->process($updateInfo);
+        $this->couponUsagePublisher->publish($updateInfo);
+        $this->processor->updateCustomerRulesUsages($updateInfo);
+        $this->processor->updateCouponUsages($updateInfo);
     }
 }

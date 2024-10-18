@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddSimpleProductWithCustomizableFileOptionToWishlistTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="Add product to wishlist"/>
+            <title value="Add simple product with customizable file option to wishlist"/>
+            <description value="Add simple Product with customizable file option to Wishlist and verify customizable options are preserved"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-41040"/>
+            <useCaseId value="MC-40417"/>
+            <group value="wishlist"/>
+            <group value="cloud_smoke"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <updateData entity="productWithFileOption" createDataKey="createProduct" stepKey="updateProductWithOptions">
+                <requiredEntity createDataKey="createProduct"/>
+            </updateData>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct1"/>
+        </after>
+
+        <!-- Login as a customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+
+        <!-- Open Product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <attachFile userInput="adobe-base.jpg" selector="{{StorefrontProductInfoMainSection.addLinkFileUploadFile(ProductOptionFile.title)}}" stepKey="fillUploadFile"/>
+
+        <!-- Add product to the wishlist -->
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addProductWithOptionToWishlist">
+            <argument name="productVar" value="$createProduct$"/>
+        </actionGroup>
+
+        <!-- Assert product is present in wishlist -->
+        <actionGroup ref="AssertProductIsPresentInWishListActionGroup" stepKey="assertProductPresent">
+            <argument name="productName" value="$createProduct.name$"/>
+            <argument name="productPrice" value="$109.99"/>
+        </actionGroup>
+
+        <!-- Edit wishlist product -->
+        <actionGroup ref="StorefrontCustomerUpdateWishlistItemActionGroup" stepKey="clickEditWishlistItem">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+
+        <!-- Update product in wishlist from product page -->
+        <actionGroup ref="StorefrontCustomerUpdateProductInWishlistActionGroup" stepKey="updateProductWithOptionInWishlist">
+            <argument name="productVar" value="$createProduct$"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertProductIsPresentInWishListActionGroup" stepKey="assertProductPresent2">
+            <argument name="productName" value="$createProduct.name$"/>
+            <argument name="productPrice" value="$109.99"/>
+        </actionGroup>
+    </test>
+</tests>

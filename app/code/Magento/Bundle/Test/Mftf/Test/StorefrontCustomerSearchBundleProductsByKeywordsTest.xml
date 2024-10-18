@@ -39,6 +39,7 @@
                 <requiredEntity createDataKey="fixedBundleOption"/>
                 <requiredEntity createDataKey="createSimpleProductTwo"/>
             </createData>
+
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>

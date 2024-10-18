@@ -5,27 +5,29 @@
  */
 namespace Magento\TestFramework;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Interception\PluginListInterface;
+use Magento\Framework\ObjectManager\ConfigLoaderInterface;
+use Magento\TestFramework\App\EnvironmentFactory;
+use Magento\TestFramework\Db\ConnectionAdapter;
 
 /**
- * Class ObjectManagerFactory
+ * Configure ObjectManagerFactory for testing purpose
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
 {
     /**
-     * Locator class name
-     *
      * @var string
      */
-    protected $_locatorClassName = \Magento\TestFramework\ObjectManager::class;
+    protected $_locatorClassName = ObjectManager::class;
 
     /**
-     * Config class name
-     *
      * @var string
      */
     protected $_configClassName = \Magento\TestFramework\ObjectManager\Config::class;
@@ -33,7 +35,7 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
     /**
      * @var string
      */
-    protected $envFactoryClassName = \Magento\TestFramework\App\EnvironmentFactory::class;
+    protected $envFactoryClassName = EnvironmentFactory::class;
 
     /**
      * @var array
@@ -50,30 +52,58 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
      */
     public function restore(ObjectManager $objectManager, $directoryList, array $arguments)
     {
-        \Magento\TestFramework\ObjectManager::setInstance($objectManager);
+        ObjectManager::setInstance($objectManager);
         $this->directoryList = $directoryList;
         $objectManager->configure($this->_primaryConfigData);
-        $objectManager->addSharedInstance($this->directoryList, \Magento\Framework\App\Filesystem\DirectoryList::class);
-        $objectManager->addSharedInstance($this->directoryList, \Magento\Framework\Filesystem\DirectoryList::class);
+        $objectManager->addSharedInstance($this->directoryList, DirectoryList::class);
+        $objectManager->addSharedInstance(
+            $this->directoryList,
+            \Magento\Framework\Filesystem\DirectoryList::class
+        );
         $deploymentConfig = $this->createDeploymentConfig($directoryList, $this->configFilePool, $arguments);
         $this->factory->setArguments($arguments);
-        $objectManager->addSharedInstance($deploymentConfig, \Magento\Framework\App\DeploymentConfig::class);
+        $objectManager->addSharedInstance($deploymentConfig, DeploymentConfig::class);
         $objectManager->addSharedInstance(
-            $objectManager->get(\Magento\Framework\App\ObjectManager\ConfigLoader::class),
-            \Magento\Framework\ObjectManager\ConfigLoaderInterface::class
+            $objectManager->get(ConfigLoader::class),
+            ConfigLoaderInterface::class,
+            true
         );
-        $objectManager->get(\Magento\Framework\Interception\PluginListInterface::class)->reset();
+        $objectManager->get(PluginListInterface::class)->reset();
         $objectManager->configure(
-            $objectManager->get(\Magento\Framework\App\ObjectManager\ConfigLoader::class)->load('global')
+            $objectManager->get(ConfigLoader::class)->load('global')
         );
 
         return $objectManager;
     }
 
     /**
+     * Read config from provided directory
+     *
+     * @param string $directory
+     * @return array
+     * @throws LocalizedException
+     */
+    private function readCustomConfig(string $directory): array
+    {
+        $path = __DIR__ . '/../../../etc/di/' . $directory . '/';
+        $files = glob($path . '*.php');
+
+        $data = [];
+        foreach ($files as $file) {
+            if (!is_readable($file)) {
+                throw new LocalizedException(__("'%1' is not readable file.", $file));
+            }
+            $data[] = include $file;
+        }
+        $data = array_merge([], ...$data);
+
+        return $data;
+    }
+
+    /**
      * Load primary config
      *
-     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
+     * @param DirectoryList $directoryList
      * @param DriverPool $driverPool
      * @param mixed $argumentMapper
      * @param string $appMode
@@ -85,26 +115,28 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
             $this->_primaryConfigData = array_replace(
                 parent::_loadPrimaryConfig($directoryList, $driverPool, $argumentMapper, $appMode),
                 [
-                    'default_setup' => ['type' => \Magento\TestFramework\Db\ConnectionAdapter::class]
+                    'default_setup' => ['type' => ConnectionAdapter::class]
                 ]
             );
-            $diPreferences = [];
-            $diPreferencesPath = __DIR__ . '/../../../etc/di/preferences/';
-
-            $preferenceFiles = glob($diPreferencesPath . '*.php');
-
-            foreach ($preferenceFiles as $file) {
-                if (!is_readable($file)) {
-                    throw new LocalizedException(__("'%1' is not readable file.", $file));
-                }
-                $diPreferences = array_replace($diPreferences, include $file);
-            }
-
+            $diPreferences = $this->readCustomConfig('preferences');
             $this->_primaryConfigData['preferences'] = array_replace(
                 $this->_primaryConfigData['preferences'],
                 $diPreferences
             );
         }
         return $this->_primaryConfigData;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function create(array $arguments)
+    {
+        /** @var \Magento\TestFramework\ObjectManager $objectManager */
+        $objectManager = parent::create($arguments);
+        $persistedInstances = $this->readCustomConfig('persistedInstances');
+        $objectManager->setPersistedInstances($persistedInstances);
+
+        return $objectManager;
     }
 }

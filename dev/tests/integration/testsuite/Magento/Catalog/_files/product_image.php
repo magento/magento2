@@ -24,12 +24,11 @@ $mediaDirectory->create($targetTmpDirPath);
 $images = ['magento_image.jpg', 'magento_small_image.jpg', 'magento_thumbnail.jpg'];
 
 foreach ($images as $image) {
-    $targetTmpFilePath = $mediaDirectory->getAbsolutePath() . DIRECTORY_SEPARATOR . $targetTmpDirPath
-        . DIRECTORY_SEPARATOR . $image;
+    $targetTmpFilePath = $mediaDirectory->getAbsolutePath() . $targetTmpDirPath . $image;
 
     $sourceFilePath = __DIR__ . DIRECTORY_SEPARATOR . $image;
+    $mediaDirectory->getDriver()->filePutContents($targetTmpFilePath, file_get_contents($sourceFilePath));
 
-    copy($sourceFilePath, $targetTmpFilePath);
     // Copying the image to target dir is not necessary because during product save, it will be moved there from tmp dir
     $database->saveFile($targetTmpFilePath);
 }

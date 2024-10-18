@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\RemoteStorage\Model\Config\Source\FileStorage">
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item name="aws-s3" xsi:type="array">
+                    <item name="value" xsi:type="string">aws-s3</item>
+                    <item name="label" xsi:type="string" translate="true">AWS S3</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

@@ -105,7 +105,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
             $this->getSecurityCookie()->setLogoutReasonCookie(
                 \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
             );
-            $this->_redirect('adminhtml/*/');
+            $this->_redirect('*');
         } catch (NotificationExceptionInterface $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
         } catch (\Magento\Framework\Exception\AuthenticationException $e) {

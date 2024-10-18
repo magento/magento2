@@ -11,16 +11,22 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Escaper;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Result\Layout;
 use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
 use Magento\ImportExport\Controller\Adminhtml\Import\Validate;
 use Magento\ImportExport\Helper\Report;
 use Magento\ImportExport\Model\History;
+use Magento\ImportExport\Model\Import\RenderErrorMessages;
 use Magento\ImportExport\Model\Report\ReportProcessorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\AbstractSource;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -53,6 +59,11 @@ class ValidateTest extends TestCase
     private $validate;
 
     /**
+     * @var Import
+     */
+    private $importMock;
+
+    /**
      * @var Http|MockObject
      */
     private $requestMock;
@@ -67,11 +78,29 @@ class ValidateTest extends TestCase
      */
     private $messageManagerMock;
 
+    /**
+     * @var AbstractSourceMock|MockObject
+     */
+    private $abstractSourceMock;
+
     protected function setUp(): void
     {
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $objects = [
+            [
+                Escaper::class,
+                $this->createMock(Escaper::class)
+            ],
+            [
+                RenderErrorMessages::class,
+                $this->createMock(RenderErrorMessages::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
+
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getPostValue',
                 'isPost',
             ])
@@ -110,12 +139,24 @@ class ValidateTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->importMock = $this->getMockBuilder(import::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->abstractSourceMock = $this->getMockBuilder(AbstractSource::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->validate = new Validate(
             $this->contextMock,
             $this->reportProcessorMock,
             $this->historyMock,
             $this->reportHelperMock
         );
+        $reflection = new \ReflectionClass($this->validate);
+        $importProperty = $reflection->getProperty('import');
+        $importProperty->setAccessible(true);
+        $importProperty->setValue($this->validate, $this->importMock);
     }
 
     /**
@@ -212,6 +253,88 @@ class ValidateTest extends TestCase
             ->with(ResultFactory::TYPE_LAYOUT)
             ->willReturn($resultLayoutMock);
 
+        $this->assertEquals($resultLayoutMock, $this->validate->execute());
+    }
+
+    /**
+     * Test execute() method
+     *
+     * Check the case in which the import file was not uploaded.
+     */
+    public function testFileVerifiedWithImport()
+    {
+        $data = ['key' => 'value'];
+
+        $this->requestMock->expects($this->once())
+            ->method('getPostValue')
+            ->willReturn($data);
+
+        $resultBlock = $this->getMockBuilder(Result::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resultBlock->expects($this->once())
+            ->method('addSuccess')
+            ->with(__('File is valid! To start import process press "Import" button'));
+
+        $layoutMock = $this->getMockBuilder(LayoutInterface::class)
+            ->getMockForAbstractClass();
+        $layoutMock->expects($this->once())
+            ->method('getBlock')
+            ->with('import.frame.result')
+            ->willReturn($resultBlock);
+
+        $resultLayoutMock = $this->getMockBuilder(Layout::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resultLayoutMock->expects($this->once())
+            ->method('getLayout')
+            ->willReturn($layoutMock);
+        $this->importMock->expects($this->once())
+            ->method('setData')
+            ->with($data)
+            ->willReturn($this->importMock);
+        $this->importMock->expects($this->once())
+            ->method('uploadFileAndGetSource')
+            ->willReturn($this->abstractSourceMock);
+        $this->importMock->expects($this->once())
+            ->method('validateSource')
+            ->with($this->abstractSourceMock)
+            ->willReturn(true);
+
+        $resultBlock->expects($this->once())
+            ->method('addAction')
+            ->willReturn(
+                ['show', 'import_validation_container'],
+                ['value', Import::FIELD_IMPORT_IDS, [1, 2, 3]]
+            );
+        $this->importMock->expects($this->exactly(3))
+            ->method('getProcessedRowsCount')
+            ->willReturn(2);
+        $this->importMock->expects($this->once())
+            ->method('isImportAllowed')
+            ->willReturn(true);
+
+        $this->importMock->expects($this->once())
+            ->method('getProcessedEntitiesCount')
+            ->willReturn(10);
+
+        $errorAggregatorMock = $this->createMock(ProcessingErrorAggregatorInterface::class);
+        $this->importMock->expects($this->any())
+            ->method('getErrorAggregator')
+            ->willReturn($errorAggregatorMock);
+
+        $errorAggregatorMock->expects($this->exactly(3))
+            ->method('getErrorsCount')
+            ->willReturn(2);
+
+        $errorAggregatorMock->expects($this->once())
+            ->method('getAllErrors')
+            ->willReturn($errorAggregatorMock);
+
+        $this->resultFactoryMock->expects($this->any())
+            ->method('create')
+            ->with(ResultFactory::TYPE_LAYOUT)
+            ->willReturn($resultLayoutMock);
         $this->assertEquals($resultLayoutMock, $this->validate->execute());
     }
 }

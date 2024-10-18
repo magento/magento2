@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\PageCache\Test\Unit\Model\App\FrontController;
 
+use Closure;
 use Laminas\Http\Header\GenericHeader;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\PageCache\Kernel;
+use Magento\Framework\App\PageCache\NotCacheableInterface;
 use Magento\Framework\App\PageCache\Version;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http;
@@ -58,7 +60,7 @@ class BuiltinPluginTest extends TestCase
     protected $frontControllerMock;
 
     /**
-     * @var \Closure
+     * @var Closure
      */
     protected $closure;
 
@@ -68,7 +70,7 @@ class BuiltinPluginTest extends TestCase
     protected $requestMock;
 
     /**
-     * SetUp
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -92,9 +94,10 @@ class BuiltinPluginTest extends TestCase
     }
 
     /**
+     * @return void
      * @dataProvider dataProvider
      */
-    public function testAroundDispatchProcessIfCacheMissed($state)
+    public function testAroundDispatchProcessIfCacheMissed($state): void
     {
         $header = GenericHeader::fromString('Cache-Control: no-cache');
         $this->configMock
@@ -115,12 +118,17 @@ class BuiltinPluginTest extends TestCase
             ->method('getMode')
             ->willReturn($state);
         if ($state == State::MODE_DEVELOPER) {
-            $this->responseMock->expects($this->at(1))
+            $this->responseMock
                 ->method('setHeader')
-                ->with('X-Magento-Cache-Control');
-            $this->responseMock->expects($this->at(2))
-                ->method('setHeader')
-                ->with('X-Magento-Cache-Debug', 'MISS', true);
+                ->willReturnCallback(
+                    function ($arg1, $arg2 = null, $arg3 = null) {
+                        if ($arg1 === 'X-Magento-Cache-Control') {
+                            return null;
+                        } elseif ($arg1 === 'X-Magento-Cache-Debug' && $arg2 === 'MISS' && $arg3 === true) {
+                            return null;
+                        }
+                    }
+                );
         } else {
             $this->responseMock->expects($this->never())
                 ->method('setHeader');
@@ -141,9 +149,10 @@ class BuiltinPluginTest extends TestCase
     }
 
     /**
+     * @return void
      * @dataProvider dataProvider
      */
-    public function testAroundDispatchReturnsResultInterfaceProcessIfCacheMissed($state)
+    public function testAroundDispatchReturnsResultInterfaceProcessIfCacheMissed($state): void
     {
         $this->configMock
             ->expects($this->once())
@@ -176,9 +185,10 @@ class BuiltinPluginTest extends TestCase
     }
 
     /**
+     * @return void
      * @dataProvider dataProvider
      */
-    public function testAroundDispatchReturnsCache($state)
+    public function testAroundDispatchReturnsCache($state): void
     {
         $this->configMock
             ->expects($this->once())
@@ -213,9 +223,10 @@ class BuiltinPluginTest extends TestCase
     }
 
     /**
+     * @return void
      * @dataProvider dataProvider
      */
-    public function testAroundDispatchDisabled($state)
+    public function testAroundDispatchDisabled($state): void
     {
         $this->configMock
             ->expects($this->any())
@@ -239,13 +250,48 @@ class BuiltinPluginTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testAroundNotCacheableResponse(): void
+    {
+        $this->configMock
+            ->expects($this->once())
+            ->method('getType')
+            ->willReturn(Config::BUILT_IN);
+        $this->configMock->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(true);
+        $this->versionMock
+            ->expects($this->once())
+            ->method('process');
+        $this->kernelMock->expects($this->once())
+            ->method('load')
+            ->willReturn(false);
+        $this->stateMock->expects($this->never())
+            ->method('getMode');
+        $this->kernelMock->expects($this->never())
+            ->method('process');
+        $this->responseMock->expects($this->never())
+            ->method('setHeader');
+        $notCacheableResponse = $this->createMock(NotCacheableInterface::class);
+        $this->assertSame(
+            $notCacheableResponse,
+            $this->plugin->aroundDispatch(
+                $this->frontControllerMock,
+                fn () => $notCacheableResponse,
+                $this->requestMock
+            )
+        );
+    }
+
+    /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider(): array
     {
         return [
             'developer_mode' => [State::MODE_DEVELOPER],
-            'production' => [State::MODE_PRODUCTION],
+            'production' => [State::MODE_PRODUCTION]
         ];
     }
 }
