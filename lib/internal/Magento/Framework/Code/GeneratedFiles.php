@@ -21,17 +21,17 @@ class GeneratedFiles
     /**
      * Regenerate flag file name
      */
-    const REGENERATE_FLAG = '/var/.regenerate';
+    public const REGENERATE_FLAG = 'var/.regenerate';
 
     /**
      * Regenerate lock file name
      */
-    const REGENERATE_LOCK = self::REGENERATE_FLAG . '.lock';
+    public const REGENERATE_LOCK = self::REGENERATE_FLAG . '.lock';
 
     /**
      * Acquire regenerate lock timeout
      */
-    const REGENERATE_LOCK_TIMEOUT = 5;
+    public const REGENERATE_LOCK_TIMEOUT = 5;
 
     /**
      * @var DirectoryList
