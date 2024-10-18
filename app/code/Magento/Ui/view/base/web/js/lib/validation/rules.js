@@ -6,6 +6,8 @@
 /**
  * @api
  */
+
+/* eslint-disable no-useless-escape */
 define([
     'jquery',
     'underscore',
