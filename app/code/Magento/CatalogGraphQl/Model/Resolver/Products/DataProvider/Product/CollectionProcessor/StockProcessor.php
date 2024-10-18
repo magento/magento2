@@ -57,8 +57,10 @@ class StockProcessor implements CollectionProcessorInterface
         array $attributeNames,
         ContextInterface $context = null
     ): Collection {
-        if (!$this->stockConfig->isShowOutOfStock()) {
-            $this->stockStatusResource->addIsInStockFilterToCollection($collection);
+        $stockFlag = 'has_stock_status_filter';
+        if (!$collection->hasFlag($stockFlag)) {
+            $this->stockStatusResource->addStockDataToCollection($collection, !$this->stockConfig->isShowOutOfStock());
+            $collection->setFlag($stockFlag, true);
         }
 
         return $collection;

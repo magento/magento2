@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
@@ -40,18 +43,30 @@ class AddIptcMetadata
     private $fileFactory;
 
     /**
+     * @var IptcEmbed
+     */
+    private $iptcEmbed;
+
+    /**
      * @param FileInterfaceFactory $fileFactory
      * @param DriverInterface $driver
      * @param ReadFile $fileReader
+     * @param Filesystem|null $filesystem
+     * @param IptcEmbed|null $iptcEmbed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
         DriverInterface $driver,
-        ReadFile $fileReader
+        ReadFile $fileReader,
+        Filesystem $filesystem = null,
+        IptcEmbed $iptcEmbed = null
     ) {
         $this->fileFactory = $fileFactory;
-        $this->driver = $driver;
         $this->fileReader = $fileReader;
+        $filesystem = $filesystem ?? ObjectManager::getInstance()->get(Filesystem::class);
+        $this->driver = $filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver();
+        $this->iptcEmbed = $iptcEmbed ?? ObjectManager::getInstance()->get(IptcEmbed::class);
     }
 
     /**
@@ -89,7 +104,7 @@ class AddIptcMetadata
             }
         }
 
-        $this->writeFile($file->getPath(), iptcembed($newData, $file->getPath()));
+        $this->writeFile($file->getPath(), $this->iptcEmbed->get($newData, $file->getPath()));
 
         $fileWithIptc = $this->fileReader->execute($file->getPath());
 

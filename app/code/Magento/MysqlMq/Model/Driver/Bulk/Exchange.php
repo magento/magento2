@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\MysqlMq\Model\Driver\Bulk;
 
 use Magento\Framework\MessageQueue\Bulk\ExchangeInterface;
+use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingInterface;
 use Magento\Framework\MessageQueue\Topology\ConfigInterface as MessageQueueConfig;
 use Magento\MysqlMq\Model\ConnectionTypeResolver;
 use Magento\MysqlMq\Model\QueueManagement;
@@ -59,8 +61,7 @@ class Exchange implements ExchangeInterface
             $connection = $exchange->getConnection();
             if ($this->connectionTypeResolver->getConnectionType($connection)) {
                 foreach ($exchange->getBindings() as $binding) {
-                    // This only supports exact matching of topics.
-                    if ($binding->getTopic() === $topic) {
+                    if ($this->isMatchedBinding($binding, $topic)) {
                         $queueNames[] = $binding->getDestination();
                     }
                 }
@@ -76,5 +77,18 @@ class Exchange implements ExchangeInterface
         $this->queueManagement->addMessagesToQueues($topic, $messages, $queueNames);
 
         return null;
+    }
+
+    /**
+     * Check if the binding is matched by the topic
+     *
+     * @param BindingInterface $binding
+     * @param string $topic
+     * @return bool
+     */
+    private function isMatchedBinding(BindingInterface $binding, string $topic): bool
+    {
+        $pattern = '/^' . str_replace(['.', '*', '#'], ['\.', '[^.]+?', '(.*?)'], $binding->getTopic() ?? '') . '$/';
+        return preg_match($pattern, $topic) ? true : false;
     }
 }

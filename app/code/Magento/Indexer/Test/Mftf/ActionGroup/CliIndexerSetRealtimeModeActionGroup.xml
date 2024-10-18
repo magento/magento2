@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CliIndexerSetRealtimeModeActionGroup">
+        <annotations>
+            <description>Set indexers to realtime mode.</description>
+        </annotations>
+        <arguments>
+            <argument name="indices" type="string"/>
+        </arguments>
+
+        <magentoCLI command="indexer:set-mode" arguments="realtime {{indices}}" stepKey="setRealtimeIndexerMode"/>
+    </actionGroup>
+</actionGroups>

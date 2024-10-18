@@ -51,7 +51,7 @@ class CartItemProcessor implements CartItemProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function convertToBuyRequest(CartItemInterface $cartItem)
     {
@@ -73,7 +73,7 @@ class CartItemProcessor implements CartItemProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function processOptions(CartItemInterface $cartItem)
@@ -84,19 +84,21 @@ class CartItemProcessor implements CartItemProcessorInterface
         $productOptions = [];
         $bundleOptions = $cartItem->getBuyRequest()->getBundleOption();
         $bundleOptionsQty = $cartItem->getBuyRequest()->getBundleOptionQty();
+        $bundleOptionsQty = is_array($bundleOptionsQty) ? $bundleOptionsQty : [];
         if (is_array($bundleOptions)) {
             foreach ($bundleOptions as $optionId => $optionSelections) {
                 if (empty($optionSelections)) {
                     continue;
                 }
                 $optionSelections = is_array($optionSelections) ? $optionSelections : [$optionSelections];
-                $optionQty = isset($bundleOptionsQty[$optionId]) ? $bundleOptionsQty[$optionId] : 1;
 
                 /** @var \Magento\Bundle\Api\Data\BundleOptionInterface $productOption */
                 $productOption = $this->bundleOptionFactory->create();
                 $productOption->setOptionId($optionId);
                 $productOption->setOptionSelections($optionSelections);
-                $productOption->setOptionQty($optionQty);
+                if (isset($bundleOptionsQty[$optionId])) {
+                    $productOption->setOptionQty($bundleOptionsQty[$optionId]);
+                }
                 $productOptions[] = $productOption;
             }
 

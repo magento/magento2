@@ -87,7 +87,7 @@ define([
                         linkText: $.mage.__('Go to Details Page')
                     }
                 ),
-                previewPopup = $('<div/>').html(modalHtml);
+                previewPopup = $('<div></div>').html(modalHtml);
 
             previewPopup.modal({
                 title: this.getAlt(row),

@@ -18,6 +18,10 @@ use Magento\Sales\Model\Order;
  */
 class ReturnUrl extends Payflow implements CsrfAwareActionInterface, HttpGetActionInterface
 {
+    private const ORDER_INCREMENT_ID = 'INVNUM';
+
+    private const SILENT_POST_HASH = 'secure_silent_post_hash';
+
     /**
      * @var array of allowed order states on frontend
      */
@@ -63,28 +67,46 @@ class ReturnUrl extends Payflow implements CsrfAwareActionInterface, HttpGetActi
         $this->_view->loadLayout(false);
         /** @var \Magento\Checkout\Block\Onepage\Success $redirectBlock */
         $redirectBlock = $this->_view->getLayout()->getBlock($this->_redirectBlockName);
-
-        if ($this->_checkoutSession->getLastRealOrderId()) {
-            /** @var \Magento\Sales\Model\Order $order */
-            $order = $this->_orderFactory->create()->loadByIncrementId($this->_checkoutSession->getLastRealOrderId());
-
-            if ($order->getIncrementId()) {
-                if ($this->checkOrderState($order)) {
-                    $redirectBlock->setData('goto_success_page', true);
+        $order = $this->getOrderFromRequest();
+        if ($order) {
+            if ($this->checkOrderState($order)) {
+                $redirectBlock->setData('goto_success_page', true);
+            } else {
+                if ($this->checkPaymentMethod($order)) {
+                    $gotoSection = $this->_cancelPayment((string)$this->getRequest()->getParam('RESPMSG'));
+                    $redirectBlock->setData('goto_section', $gotoSection);
+                    $redirectBlock->setData('error_msg', __('Your payment has been declined. Please try again.'));
                 } else {
-                    if ($this->checkPaymentMethod($order)) {
-                        $gotoSection = $this->_cancelPayment((string)$this->getRequest()->getParam('RESPMSG'));
-                        $redirectBlock->setData('goto_section', $gotoSection);
-                        $redirectBlock->setData('error_msg', __('Your payment has been declined. Please try again.'));
-                    } else {
-                        $redirectBlock->setData('goto_section', false);
-                        $redirectBlock->setData('error_msg', __('Requested payment method does not match with order.'));
-                    }
+                    $redirectBlock->setData('goto_section', false);
+                    $redirectBlock->setData('error_msg', __('Requested payment method does not match with order.'));
                 }
             }
         }
 
         $this->_view->renderLayout();
+    }
+
+    /**
+     * Returns an order from request.
+     *
+     * @return Order|null
+     */
+    private function getOrderFromRequest(): ?Order
+    {
+        $orderId = $this->getRequest()->getParam(self::ORDER_INCREMENT_ID);
+        if (!$orderId) {
+            return null;
+        }
+
+        $order = $this->_orderFactory->create()->loadByIncrementId($orderId);
+        $storedHash = (string)$order->getPayment()->getAdditionalInformation(self::SILENT_POST_HASH);
+        $requestHash = (string)$this->getRequest()->getParam('USER2');
+        if (empty($storedHash) || empty($requestHash) || !hash_equals($storedHash, $requestHash)) {
+            return null;
+        }
+        $this->_checkoutSession->setLastRealOrderId($orderId);
+
+        return $order;
     }
 
     /**

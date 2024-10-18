@@ -6,16 +6,18 @@
 
 namespace Magento\Directory\Model\ResourceModel;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Currency Resource Model
  *
  * @api
  * @since 100.0.2
  */
-class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements ResetAfterRequestInterface
 {
     /**
-     * Currency rate table
+     * Currency rate table name
      *
      * @var string
      */
@@ -143,7 +145,7 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $data = [];
             foreach ($rates as $currencyCode => $rate) {
                 foreach ($rate as $currencyTo => $value) {
-                    $value = abs($value);
+                    $value = abs((float) $value);
                     if ($value == 0) {
                         continue;
                     }
@@ -232,5 +234,13 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        self::$_rateCache = null;
     }
 }

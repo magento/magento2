@@ -7,7 +7,8 @@
 namespace Magento\Bundle\Pricing\Price;
 
 use Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface;
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Bundle\Model\Product\Price;
@@ -15,7 +16,7 @@ use Magento\Bundle\Model\Product\Price;
 /**
  * Bundle product regular price model
  */
-class BundleRegularPrice extends \Magento\Catalog\Pricing\Price\RegularPrice implements RegularPriceInterface
+class BundleRegularPrice extends RegularPrice implements RegularPriceInterface, ResetAfterRequestInterface
 {
     /**
      * @var BundleCalculatorInterface
@@ -28,35 +29,21 @@ class BundleRegularPrice extends \Magento\Catalog\Pricing\Price\RegularPrice imp
     protected $maximalPrice;
 
     /**
-     * @param Product $saleableItem
-     * @param float $quantity
-     * @param BundleCalculatorInterface $calculator
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     */
-    public function __construct(
-        Product $saleableItem,
-        $quantity,
-        BundleCalculatorInterface $calculator,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-    ) {
-        parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
-    }
-
-    /**
      * @inheritdoc
      */
     public function getAmount()
     {
-        if (!isset($this->amount[$this->getValue()])) {
-            $price = $this->getValue();
+        $price = $this->getValue();
+        $valueIndex = (string) $price;
+        if (!isset($this->amount[$valueIndex])) {
             if ($this->product->getPriceType() == Price::PRICE_TYPE_FIXED) {
                 /** @var \Magento\Catalog\Pricing\Price\CustomOptionPrice $customOptionPrice */
                 $customOptionPrice = $this->priceInfo->getPrice(CustomOptionPrice::PRICE_CODE);
                 $price += $customOptionPrice->getCustomOptionRange(true, $this->getPriceCode());
             }
-            $this->amount[$this->getValue()] = $this->calculator->getMinRegularAmount($price, $this->product);
+            $this->amount[$valueIndex] = $this->calculator->getMinRegularAmount($price, $this->product);
         }
-        return $this->amount[$this->getValue()];
+        return $this->amount[$valueIndex];
     }
 
     /**
@@ -86,5 +73,14 @@ class BundleRegularPrice extends \Magento\Catalog\Pricing\Price\RegularPrice imp
     public function getMinimalPrice()
     {
         return $this->getAmount();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->maximalPrice = null;
+        $this->amount = [];
     }
 }

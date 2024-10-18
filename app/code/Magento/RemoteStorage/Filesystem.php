@@ -95,7 +95,9 @@ class Filesystem extends BaseFilesystem implements FilesystemInterface
                 $uri = $this->getUri($directoryCode) ?: '';
                 $this->writeInstances[$code] = $this->writeFactory->create(
                     $this->driverPool->getDriver()->getAbsolutePath('', $uri),
-                    $driverCode
+                    $driverCode,
+                    null,
+                    $directoryCode
                 );
             }
 
@@ -126,5 +128,16 @@ class Filesystem extends BaseFilesystem implements FilesystemInterface
     public function getDirectoryCodes(): array
     {
         return $this->directoryCodes;
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

@@ -12,9 +12,14 @@
             <description>Clicks the Edit action from the Media Gallery Category Grid</description>
         </annotations>
 
-         <arguments>
+        <arguments>
             <argument name="categoryName" type="string"/>
         </arguments>
+
+        <fillField selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.mediaGalleryCategorySearchField}}" userInput="{{categoryName}}" stepKey="fillSearchFiled"/>
+        <click selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.mediaGalleryCategorySearchButton}}" stepKey="clickOnSearchButton"/>
+        <comment userInput="Comment is added to search category first" stepKey="commentStepKey"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryDetailsPageLoad1"/>
 
         <click selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.edit(categoryName, 'Edit')}}" stepKey="clickOnCategoryRow"/>
         <waitForPageLoad time="30" stepKey="waitForCategoryDetailsPageLoad"/>

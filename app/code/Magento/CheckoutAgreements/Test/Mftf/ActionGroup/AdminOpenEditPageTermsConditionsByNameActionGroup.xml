@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenEditPageTermsConditionsByNameActionGroup">
+        <annotations>
+            <description>Opens Edit Page of Terms and Conditions By Provided Name</description>
+        </annotations>
+        <arguments>
+            <argument name="termName" type="string"/>
+        </arguments>
+
+        <fillField selector="{{AdminTermGridSection.filterByTermName}}" userInput="{{termName}}" stepKey="fillTermNameFilter"/>
+        <click selector="{{AdminTermGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad" />
+        <grabAttributeFrom selector="{{AdminTermGridSection.firstRow}}" userInput="title" stepKey="termsEditUrl" />
+        <amOnUrl url="{$termsEditUrl}" stepKey="openTermsEditPage" />
+        <waitForPageLoad stepKey="waitForEditTermPageLoad"/>
+    </actionGroup>
+</actionGroups>

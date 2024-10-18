@@ -126,7 +126,7 @@ class BundleOptionsTest extends TestCase
                     $this->selectionPriceListProviderMock
                 ]
             )
-            ->setMethods(['getOptionsAmount'])
+            ->onlyMethods(['getOptionsAmount'])
             ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->bundleOptions = $this->objectManagerHelper->getObject(
@@ -196,7 +196,7 @@ class BundleOptionsTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionsDataProvider() : array
+    public static function getOptionsDataProvider() : array
     {
         return [
             [
@@ -250,7 +250,7 @@ class BundleOptionsTest extends TestCase
     /**
      * @return array
      */
-    public function selectionAmountDataProvider(): array
+    public static function selectionAmountDataProvider(): array
     {
         return [
             [1., 50.5, false],
@@ -310,7 +310,8 @@ class BundleOptionsTest extends TestCase
     private function createSelectionMock(array $selectionData)
     {
         $selection = $this->getMockBuilder(Product::class)
-            ->setMethods(['isSalable', 'getAmount', 'getQuantity', 'getProduct', '__wakeup'])
+            ->addMethods(['getAmount', 'getQuantity', 'getProduct'])
+            ->onlyMethods(['isSalable', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -324,7 +325,8 @@ class BundleOptionsTest extends TestCase
         $selection->expects($this->any())->method('getQuantity')->willReturn(1);
 
         $innerProduct = $this->getMockBuilder(Product::class)
-            ->setMethods(['getSelectionCanChangeQty', '__wakeup'])
+            ->addMethods(['getSelectionCanChangeQty'])
+            ->onlyMethods(['__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $innerProduct->expects($this->any())->method('getSelectionCanChangeQty')->willReturn(true);
@@ -377,7 +379,7 @@ class BundleOptionsTest extends TestCase
     /**
      * @return array
      */
-    public function getTestDataForCalculation(): array
+    public static function getTestDataForCalculation(): array
     {
         return [
             'first case' => [

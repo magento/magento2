@@ -21,9 +21,13 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\TestFramework\Bootstrap as TestFrameworkBootstrap;
 use Magento\TestFramework\Entity;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\User\Model\User as UserModel;
+use Magento\User\Test\Fixture\User as UserDataFixture;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -63,6 +67,11 @@ class UserTest extends TestCase
     private $objectManager;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -72,6 +81,7 @@ class UserTest extends TestCase
         $this->_dateTime = $this->objectManager->get(DateTime::class);
         $this->encryptor = $this->objectManager->get(Encryptor::class);
         $this->cache = $this->objectManager->get(CacheInterface::class);
+        $this->fixtures = DataFixtureStorageManager::getStorage();
     }
 
     /**
@@ -373,9 +383,6 @@ class UserTest extends TestCase
      */
     public function testBeforeSavePasswordHash()
     {
-        $pattern = $this->encryptor->getLatestHashVersion() === Encryptor::HASH_VERSION_ARGON2ID13 ?
-            '/^[0-9a-f]+:[0-9a-zA-Z]{16}:[0-9]+$/' :
-            '/^[0-9a-f]+:[0-9a-zA-Z]{32}:[0-9]+$/';
         $this->_model->setUsername(
             'john.doe'
         )->setFirstname(
@@ -394,7 +401,7 @@ class UserTest extends TestCase
             'Password is expected to be hashed'
         );
         $this->assertMatchesRegularExpression(
-            $pattern,
+            '/^[^\:]+\:[^\:]+\:/i',
             $this->_model->getPassword(),
             'Salt is expected to be saved along with the password'
         );
@@ -448,7 +455,7 @@ class UserTest extends TestCase
         $this->_model->save();
     }
 
-    public function beforeSavePasswordInsecureDataProvider()
+    public static function beforeSavePasswordInsecureDataProvider()
     {
         return ['alpha chars only' => ['aaaaaaaa'], 'digits only' => ['1234567']];
     }
@@ -492,11 +499,12 @@ class UserTest extends TestCase
     public function testChangeResetPasswordLinkToken()
     {
         $this->_model->loadByUsername(TestFrameworkBootstrap::ADMIN_NAME);
+        $userId = $this->_model->getId();
         $this->_model->changeResetPasswordLinkToken('test');
         $date = $this->_model->getRpTokenCreatedAt();
         $this->assertNotNull($date);
         $this->_model->save();
-        $this->_model->loadByUsername(TestFrameworkBootstrap::ADMIN_NAME);
+        $this->_model->load($userId);
         $this->assertEquals('test', $this->_model->getRpToken());
         $this->assertEquals(strtotime($date), strtotime($this->_model->getRpTokenCreatedAt()));
     }
@@ -591,7 +599,9 @@ class UserTest extends TestCase
             ->get(MutableScopeConfigInterface::class);
         $config->setValue(
             'admin/emails/new_user_notification_template',
-            $this->getCustomEmailTemplateIdForNewUserNotification()
+            $this->getCustomEmailTemplateId(
+                'admin_emails_new_user_notification_template'
+            )
         );
         $userModel = Bootstrap::getObjectManager()
             ->create(User::class);
@@ -619,17 +629,52 @@ class UserTest extends TestCase
     }
 
     /**
-     * Return email template id for new user notification
+     * Test admin email notification after password change
      *
+     * @throws LocalizedException
+     * @return void
+     */
+    #[
+        DataFixture(UserDataFixture::class, ['role_id' => 1], 'user')
+    ]
+    public function testAdminUserEmailNotificationAfterPasswordChange(): void
+    {
+        // Load admin user
+        $user = $this->fixtures->get('user');
+        $username = $user->getDataByKey('username');
+        $adminEmail = $user->getDataByKey('email');
+
+        // Login with old credentials
+        $this->_model->login($username, TestFrameworkBootstrap::ADMIN_PASSWORD);
+
+        // Change password
+        $this->_model->setPassword('newPassword123');
+        $this->_model->save();
+
+        $this->_model->sendNotificationEmailsIfRequired();
+
+        /** @var TransportBuilderMock $transportBuilderMock */
+        $transportBuilderMock = $this->objectManager->get(TransportBuilderMock::class);
+        $message = $transportBuilderMock->getSentMessage();
+
+        // Verify an email was dispatched to the correct user with correct subject
+        $this->assertNotNull($transportBuilderMock->getSentMessage());
+        $this->assertEquals($adminEmail, $message->getTo()[0]->getEmail());
+        $this->assertEquals($message->getSubject(), 'New password for '.$username);
+    }
+
+    /**
+     * Return email template id by origin template code
+     *
+     * @param string $origTemplateCode
      * @return int|null
      * @throws NotFoundException
      */
-    private function getCustomEmailTemplateIdForNewUserNotification(): ?int
+    private function getCustomEmailTemplateId(string $origTemplateCode): ?int
     {
         $templateId = null;
         $templateCollection = Bootstrap::getObjectManager()
-            ->get(TemplateCollection::class);
-        $origTemplateCode = 'admin_emails_new_user_notification_template';
+            ->create(TemplateCollection::class);
         foreach ($templateCollection as $template) {
             if ($template->getOrigTemplateCode() == $origTemplateCode) {
                 $templateId = (int) $template->getId();
@@ -642,5 +687,34 @@ class UserTest extends TestCase
             ));
         }
         return $templateId;
+    }
+
+    /**
+     * Verify custom notification is correctly when reset admin password
+     *
+     * @magentoDataFixture Magento/Email/Model/_files/email_template_reset_password_user_notification.php
+     * @magentoDataFixture Magento/User/_files/user_with_role.php
+     */
+    public function testNotificationEmailsIfResetPassword()
+    {
+        /** @var MutableScopeConfigInterface $config */
+        $config = Bootstrap::getObjectManager()
+            ->get(MutableScopeConfigInterface::class);
+        $config->setValue(
+            'admin/emails/forgot_email_template',
+            $this->getCustomEmailTemplateId(
+                'admin_emails_forgot_email_template'
+            )
+        );
+        $userModel = $this->_model->loadByUsername('adminUser');
+        $notificator = $this->objectManager->get(\Magento\User\Model\Spi\NotificatorInterface::class);
+        $notificator->sendForgotPassword($userModel);
+        /** @var TransportBuilderMock $transportBuilderMock */
+        $transportBuilderMock = $this->objectManager->get(TransportBuilderMock::class);
+        $sentMessage = $transportBuilderMock->getSentMessage();
+        $this->assertStringContainsString(
+            'id='.$userModel->getId(),
+            quoted_printable_decode($sentMessage->getBodyText())
+        );
     }
 }

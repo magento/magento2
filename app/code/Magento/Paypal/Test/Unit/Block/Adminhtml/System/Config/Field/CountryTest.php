@@ -52,6 +52,9 @@ class CountryTest extends TestCase
      */
     private $helper;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
@@ -103,14 +106,21 @@ class CountryTest extends TestCase
     }
 
     /**
-     * @param null|string $requestCountry
-     * @param null|string $requestDefaultCountry
+     * @param string|null $requestCountry
+     * @param string|null $requestDefaultCountry
      * @param bool $canUseDefault
      * @param bool $inherit
+     *
+     * @return void
      * @dataProvider renderDataProvider
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function testRender($requestCountry, $requestDefaultCountry, $canUseDefault, $inherit)
-    {
+    public function testRender(
+        ?string $requestCountry,
+        ?string $requestDefaultCountry,
+        bool $canUseDefault,
+        bool $inherit
+    ): void {
         $this->_request->expects($this->any())
             ->method('getParam')
             ->willReturnCallback(function ($param) use ($requestCountry, $requestDefaultCountry) {
@@ -130,33 +140,28 @@ class CountryTest extends TestCase
                 '$("' . $this->_element->getHtmlId() . '").observe("change", function () {'
             ),
         ];
-        $this->_url->expects($this->at(0))
-            ->method('getUrl')
-            ->with(
-                '*/*/*',
-                [
-                    'section' => 'section',
-                    'website' => 'website',
-                    'store' => 'store',
-                    StructurePlugin::REQUEST_PARAM_COUNTRY => '__country__'
-                ]
-            );
         if ($canUseDefault && ($requestCountry == 'US') && $requestDefaultCountry) {
             $this->helper->method('getDefaultCountry')->willReturn($requestDefaultCountry);
             $constraints[] = new StringContains(
                 '$("' . $this->_element->getHtmlId() . '_inherit").observe("click", function () {'
             );
-            $this->_url->expects($this->at(1))
+            $this->_url
                 ->method('getUrl')
-                ->with(
-                    '*/*/*',
-                    [
-                        'section' => 'section',
-                        'website' => 'website',
-                        'store' => 'store',
-                        StructurePlugin::REQUEST_PARAM_COUNTRY => '__country__',
-                        Country::REQUEST_PARAM_DEFAULT_COUNTRY => '__default__'
-                    ]
+                ->willReturnCallback(
+                    function ($arg1, $arg2) {
+                        if ($arg1 === '*/*/*' && is_array($arg2) &&
+                            $arg2['section'] === 'section' &&
+                            $arg2['website'] === 'website' && $arg2['store'] === 'store' &&
+                            $arg2[StructurePlugin::REQUEST_PARAM_COUNTRY] === '__country__') {
+                            return 'first_url';
+                        } elseif ($arg1 === '*/*/*' &&
+                            is_array($arg2) && $arg2['section'] === 'section' &&
+                            $arg2['website'] === 'website' && $arg2['store'] === 'store' &&
+                            $arg2[StructurePlugin::REQUEST_PARAM_COUNTRY] === '__country__' &&
+                            $arg2[Country::REQUEST_PARAM_DEFAULT_COUNTRY] === '__default__') {
+                            return 'second_url';
+                        }
+                    }
                 );
         }
         $this->_jsHelper->expects($this->once())
@@ -168,7 +173,7 @@ class CountryTest extends TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider(): array
     {
         return [
             [null, null, false, false],
@@ -179,7 +184,7 @@ class CountryTest extends TestCase
             ['IT', 'GB', true, false],
             ['US', 'GB', true, true],
             ['US', 'GB', true, false],
-            ['US', null, true, false],
+            ['US', null, true, false]
         ];
     }
 }

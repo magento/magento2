@@ -17,6 +17,7 @@
         <scrollToTopOfPage stepKey="scrollToTopOfTheCategoryPage"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCategory"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessageAppears"/>
+        <dontSee selector="{{AdminCategoryMessagesSection.saveCategoryWarningMessage}}" stepKey="dontSeeWarningMessage"/>
         <see userInput="You saved the category." selector="{{AdminMessagesSection.success}}" stepKey="assertSuccessMessage"/>
     </actionGroup>
 </actionGroups>

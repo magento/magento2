@@ -7,13 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
+use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\AST\Node;
 use GraphQL\Language\AST\NodeKind;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * This class holds a list of all queried fields and is used to enable performance optimization for schema loading.
  */
-class Fields
+class Fields implements ResetAfterRequestInterface
 {
     /**
      * @var string[]
@@ -21,20 +24,35 @@ class Fields
     private $fieldsUsedInQuery = [];
 
     /**
+     * @var QueryParser
+     */
+    private $queryParser;
+
+    /**
+     * @param QueryParser|null $queryParser
+     */
+    public function __construct(QueryParser $queryParser = null)
+    {
+        $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
+    }
+
+    /**
      * Set Query for extracting list of fields.
      *
-     * @param string $query
+     * @param DocumentNode|string $query
      * @param array|null $variables
      *
      * @return void
      */
-    public function setQuery($query, array $variables = null)
+    public function setQuery(DocumentNode|string $query, array $variables = null)
     {
         $queryFields = [];
         try {
-            $queryAst = \GraphQL\Language\Parser::parse(new \GraphQL\Language\Source($query ?: '', 'GraphQL'));
+            if (is_string($query)) {
+                $query = $this->queryParser->parse($query);
+            }
             \GraphQL\Language\Visitor::visit(
-                $queryAst,
+                $query,
                 [
                     'leave' => [
                         NodeKind::NAME => function (Node $node) use (&$queryFields) {
@@ -44,7 +62,7 @@ class Fields
                 ]
             );
             if (isset($variables)) {
-                $queryFields = array_merge($queryFields, $this->extractVariables($variables));
+                $this->extractVariables($queryFields, $variables);
             }
             // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (\Exception $e) {
@@ -73,21 +91,29 @@ class Fields
     /**
      * Extract and return list of all used fields in GraphQL query's variables
      *
+     * @param array $fields
      * @param array $variables
      *
-     * @return string[]
+     * @return void
      */
-    private function extractVariables(array $variables): array
+    private function extractVariables(array &$fields, array $variables): void
     {
-        $fields = [];
         foreach ($variables as $key => $value) {
             if (is_array($value)) {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $fields = array_merge($fields, $this->extractVariables($value));
+                $this->extractVariables($fields, $value);
+            } else {
+                if (is_string($key)) {
+                    $fields[$key] = $key;
+                }
             }
-            $fields[$key] = $key;
         }
+    }
 
-        return $fields;
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        $this->fieldsUsedInQuery = [];
     }
 }

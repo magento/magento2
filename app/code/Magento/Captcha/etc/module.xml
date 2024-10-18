@@ -10,6 +10,7 @@
         <sequence>
             <module name="Magento_Customer"/>
             <module name="Magento_Checkout"/>
+            <module name="Magento_Sales"/>
         </sequence>
     </module>
 </config>

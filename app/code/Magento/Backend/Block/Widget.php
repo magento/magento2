@@ -15,6 +15,8 @@ namespace Magento\Backend\Block;
 class Widget extends \Magento\Backend\Block\Template
 {
     /**
+     * Get ID
+     *
      * @return string
      */
     public function getId()
@@ -37,6 +39,8 @@ class Widget extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Get HTML ID
+     *
      * @return string
      */
     public function getHtmlId()
@@ -59,6 +63,8 @@ class Widget extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Prepare Breadcrumbs
+     *
      * @param string $label
      * @param string|null $title
      * @param string|null $link
@@ -84,7 +90,13 @@ class Widget extends \Magento\Backend\Block\Template
         return $this->getLayout()->createBlock(
             \Magento\Backend\Block\Widget\Button::class
         )->setData(
-            ['label' => $label, 'onclick' => $onclick, 'class' => $class, 'type' => 'button', 'id' => $buttonId]
+            [
+                'label' => $label,
+                'onclick' => $onclick,
+                'class' => $class,
+                'type' => 'button',
+                'id' => $buttonId
+            ]
         )->setDataAttribute(
             $dataAttr
         )->toHtml();

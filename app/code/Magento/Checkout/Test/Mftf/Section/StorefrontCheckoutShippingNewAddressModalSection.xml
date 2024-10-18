@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCheckoutShippingNewAddressModalSection">
+        <element name="firstName" type="input" selector="//div[@id='shipping-new-address-form']//input[@name='firstname']"/>
+        <element name="lastName" type="input" selector="//div[@id='shipping-new-address-form']//input[@name='lastname']"/>
+        <element name="company" type="input" selector="//div[@id='shipping-new-address-form']//input[@name='company']"/>
+        <element name="street" type="input" parameterized="true" selector="//div[@id='shipping-new-address-form']//input[@name='street[{{index}}]']"/>
+        <element name="city" type="input" selector="//div[@id='shipping-new-address-form']//input[@name='city']"/>
+        <element name="region" type="select" selector="//div[@id='shipping-new-address-form']//select[@name='region_id']"/>
+        <element name="postcode" type="input" selector="//div[@id='shipping-new-address-form']//input[@name='postcode']"/>
+        <element name="country" type="select" selector="//div[@id='shipping-new-address-form']//select[@name='country_id']"/>
+        <element name="telephone" type="input" selector="//div[@id='shipping-new-address-form']//input[@name='telephone']"/>
+        <element name="saveAddress" type="button" selector="//div[@id='shipping-new-address-form']//button[contains(@class, 'action-save-address')]"/>
+        <element name="cancelChangeAddress" type="button" selector="//div[@id='shipping-new-address-form']//button[contains(@class, 'action-hide-popup')]"/>
+    </section>
+</sections>

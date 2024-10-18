@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminClickAddProductToOptionByOptionIndexActionGroup">
+        <annotations>
+            <description>Clicks "Add Product To Option" button for Option by index for Bundle</description>
+        </annotations>
+        <arguments>
+            <argument name="optionIndex" type="string" defaultValue="1"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.nthAddProductsToOption(optionIndex)}}" stepKey="waitForAddProductsToOptionButton"/>
+        <click selector="{{AdminProductFormBundleSection.nthAddProductsToOption(optionIndex)}}" stepKey="clickAddProductsToOptionButton"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterAddingPorductsToBundle"/>
+    </actionGroup>
+</actionGroups>

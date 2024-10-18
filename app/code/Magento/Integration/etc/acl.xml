@@ -14,6 +14,14 @@
                         <resource id="Magento_Integration::integrations" title="System Integrations" translate="title" sortOrder="40" />
                     </resource>
                 </resource>
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="Magento_Integration::config_oauth" title="OAuth Configuration" translate="title"
+                                      sortOrder="20"/>
+                        </resource>
+                    </resource>
+                </resource>
             </resource>
         </resources>
     </acl>

@@ -8,8 +8,8 @@ namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
-use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 
 /**
  * Configured price model
@@ -19,7 +19,7 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
     /**
      * Price type configured
      */
-    const PRICE_CODE = self::CONFIGURED_PRICE_CODE;
+    public const PRICE_CODE = self::CONFIGURED_PRICE_CODE;
 
     /**
      * @var null|ItemInterface
@@ -53,6 +53,8 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
     }
 
     /**
+     * Method to set items.
+     *
      * @param ItemInterface $item
      * @return $this
      */
@@ -75,7 +77,7 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
         $basePrice = parent::getValue();
         $optionIds = $this->item->getOptionByCode('option_ids');
         if ($optionIds) {
-            foreach (explode(',', $optionIds->getValue()) as $optionId) {
+            foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
                 $option = $product->getOptionById($optionId);
                 if ($option) {
                     $itemOption = $this->item->getOptionByCode('option_' . $option->getId());

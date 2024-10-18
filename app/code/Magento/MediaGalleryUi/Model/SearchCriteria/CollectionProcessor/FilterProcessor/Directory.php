@@ -18,7 +18,7 @@ class Directory implements CustomFilterInterface
      */
     public function apply(Filter $filter, AbstractDb $collection): bool
     {
-        $value = str_replace('%', '', $filter->getValue());
+        $value = $filter->getValue() !== null ? str_replace('%', '', $filter->getValue()) : '';
         $collection->getSelect()->where('path REGEXP ? ', '^' . $value . '/[^\/]*$');
 
         return true;

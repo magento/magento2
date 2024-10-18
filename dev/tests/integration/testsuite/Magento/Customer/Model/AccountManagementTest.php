@@ -9,6 +9,7 @@ namespace Magento\Customer\Model;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
@@ -16,6 +17,7 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Url as UrlBuilder;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -106,15 +108,12 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown(): void
     {
-        /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
         $customerRegistry = $this->objectManager->get(\Magento\Customer\Model\CustomerRegistry::class);
-        /** @var \Magento\Customer\Model\CustomerRegistry $addressRegistry */
         $addressRegistry = $this->objectManager->get(\Magento\Customer\Model\AddressRegistry::class);
         //Cleanup customer from registry
         $customerRegistry->remove(1);
         $addressRegistry->remove(1);
         $addressRegistry->remove(2);
-        /** @var \Magento\Customer\Model\ResourceModel\Visitor $resourceModel */
         $resourceModel = $this->objectManager->get(\Magento\Customer\Model\ResourceModel\Visitor::class);
         $resourceModel->getConnection()->delete($resourceModel->getMainTable());
         parent::tearDown();
@@ -145,6 +144,8 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test attempt to login with wrong user name.
+     *
      */
     public function testLoginWrongUsername()
     {
@@ -163,25 +164,24 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     {
         /** @var SessionManagerInterface $session */
         $session = $this->objectManager->get(SessionManagerInterface::class);
+        $customerId = 1;
         $time = time();
 
         $session->start();
-        $guessSessionId = $session->getSessionId();
-        $this->createVisitorSession($guessSessionId);
-        $session->setTestData('guest_session_data');
 
         // open new session
         $activeSessionId = uniqid("active-$time-");
         $this->startNewSession($activeSessionId);
-        $this->createVisitorSession($activeSessionId, 1);
-        $session->setTestData('customer_session_data_1');
+        $activeVisitor = $this->createVisitorSession($activeSessionId, $customerId);
+        $session->setVisitorData($activeVisitor->getData());
 
         // open new session
         $currentSessionId = uniqid("current-$time-");
         $this->startNewSession($currentSessionId);
-        $this->createVisitorSession($currentSessionId, 1);
-        $session->setTestData('customer_session_data_current');
+        $currentVisitor = $this->createVisitorSession($currentSessionId, $customerId);
+        $session->setVisitorData($currentVisitor->getData());
 
+        $this->assertNull($this->getCustomerCutoff($customerId), 'Customer cutoff session should not be set.');
         // change password
         $this->accountManagement->changePassword('customer@example.com', 'password', 'new_Password123');
         $this->assertEquals(
@@ -192,22 +192,15 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         // open customer active session
         $this->startNewSession($activeSessionId);
-        $this->assertNull($session->getTestData(), 'Customer active session data wasn\'t cleaned up');
-
-        // open customer current session
-        $this->startNewSession($currentSessionId);
-        $this->assertEquals(
-            'customer_session_data_current',
-            $session->getTestData(),
-            'Customer current session data was cleaned up'
+        $this->assertNotNull($this->getCustomerCutoff($customerId), 'Customer cutoff session should be set.');
+        // Make sure current visitor session is updated.
+        $this->assertLessThanOrEqual(
+            $this->getCustomerCutoff($customerId),
+            $this->getVisitorCreatedAt($activeVisitor->getId())
         );
-
-        // open guess session
-        $this->startNewSession($guessSessionId);
-        $this->assertEquals(
-            'guest_session_data',
-            $session->getTestData(),
-            'Guest session data was cleaned up'
+        $this->assertGreaterThan(
+            $this->getCustomerCutoff($customerId),
+            $this->getVisitorCreatedAt($currentVisitor->getId())
         );
 
         $this->accountManagement->authenticate('customer@example.com', 'new_Password123');
@@ -226,6 +219,8 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test change password on the wrong user
+     *
      */
     public function testChangePasswordWrongUser()
     {
@@ -328,7 +323,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\Magento\Framework\Exception\State\ExpiredException::class);
 
         $resetToken = 'lsdj579slkj5987slkj595lkj';
-        $this->setResetPasswordData($resetToken, '1970-01-01');
+        $this->setResetPasswordData($resetToken, '1970-01-01 00:00:00');
         $this->accountManagement->validateResetPasswordLinkToken(1, $resetToken);
     }
 
@@ -338,7 +333,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     public function testValidateResetPasswordLinkTokenInvalid()
     {
         $resetToken = 'lsdj579slkj5987slkj595lkj';
-        $invalidToken = 0;
+        $invalidToken = '0';
         $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s');
         try {
             $this->accountManagement->validateResetPasswordLinkToken(1, $invalidToken);
@@ -379,7 +374,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $resetToken = 'lsdj579slkj5987slkj595lkj';
         $password = 'new_Password123';
         $email = 'customer@example.com';
-        $this->setResetPasswordData($resetToken, 'Y-m-d H:i');
+        $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s');
         $this->assertTrue($this->accountManagement->resetPassword($email, $resetToken, $password));
         $this->accountManagement->resetPassword($email, $resetToken, $password);
     }
@@ -388,10 +383,10 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      *
      */
-    public function testValidateResetPasswordLinkTokenNull()
+    public function testValidateResetPasswordLinkTokenEmpty()
     {
         try {
-            $this->accountManagement->validateResetPasswordLinkToken(1, null);
+            $this->accountManagement->validateResetPasswordLinkToken(1, '');
             $this->fail('Expected exception not thrown.');
         } catch (InputException $ie) {
             $this->assertEquals('"%fieldName" is required. Enter and try again.', $ie->getRawMessage());
@@ -404,25 +399,12 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
-    public function testValidateResetPasswordLinkTokenWithoutId()
+    public function testValidateResetPasswordLinkTokenInvalidId()
     {
         $token = 'randomStr123';
         $this->setResetPasswordData($token, 'Y-m-d H:i:s');
-        $this->assertTrue(
-            $this->accountManagement->validateResetPasswordLinkToken(null, $token)
-        );
-    }
-    /**
-     * @magentoDataFixture Magento/Customer/_files/two_customers.php
-     */
-    public function testValidateResetPasswordLinkTokenAmbiguous()
-    {
-        $this->expectException(\Magento\Framework\Exception\State\ExpiredException::class);
-
-        $token = 'randomStr123';
-        $this->setResetPasswordData($token, 'Y-m-d H:i:s', 1);
-        $this->setResetPasswordData($token, 'Y-m-d H:i:s', 2);
-        $this->accountManagement->validateResetPasswordLinkToken(null, $token);
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->accountManagement->validateResetPasswordLinkToken(0, $token);
     }
 
     /**
@@ -433,26 +415,26 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         /** @var SessionManagerInterface $session */
         $session = $this->objectManager->get(SessionManagerInterface::class);
         $time = time();
+        $customerId = 1;
 
         $session->start();
-        $guessSessionId = $session->getSessionId();
-        $this->createVisitorSession($guessSessionId);
-        $session->setTestData('guest_session_data');
 
         // open new session
         $activeSessionId = uniqid("active-$time-");
         $this->startNewSession($activeSessionId);
-        $this->createVisitorSession($activeSessionId, 1);
-        $session->setTestData('customer_session_data_1');
+        $activeVisitor = $this->createVisitorSession($activeSessionId, $customerId);
+        $session->setVisitorData($activeVisitor->getData());
 
         // open new session
         $currentSessionId = uniqid("current-$time-");
         $this->startNewSession($currentSessionId);
-        $this->createVisitorSession($currentSessionId, 1);
-        $session->setTestData('customer_session_data_current');
+        $currentVisitor = $this->createVisitorSession($currentSessionId, $customerId);
+        $session->setVisitorData($currentVisitor->getData());
 
         $resetToken = 'lsdj579slkj5987slkj595lkj';
         $password = 'new_Password123';
+
+        $this->assertNull($this->getCustomerCutoff($customerId), 'Customer cutoff session should not be set.');
 
         $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s');
         $this->assertTrue($this->accountManagement->resetPassword('customer@example.com', $resetToken, $password));
@@ -465,22 +447,15 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         // open customer active session
         $this->startNewSession($activeSessionId);
-        $this->assertNull($session->getTestData(), 'Customer active session data wasn\'t cleaned up');
-
-        // open customer current session
-        $this->startNewSession($currentSessionId);
-        $this->assertEquals(
-            'customer_session_data_current',
-            $session->getTestData(),
-            'Customer current session data was cleaned up'
+        $this->assertNotNull($this->getCustomerCutoff($customerId), 'Customer cutoff session should be set.');
+        // Make sure current visitor session is updated.
+        $this->assertLessThanOrEqual(
+            $this->getCustomerCutoff($customerId),
+            $this->getVisitorCreatedAt($activeVisitor->getId())
         );
-
-        // open guess session
-        $this->startNewSession($guessSessionId);
-        $this->assertEquals(
-            'guest_session_data',
-            $session->getTestData(),
-            'Guest session data was cleaned up'
+        $this->assertGreaterThan(
+            $this->getCustomerCutoff($customerId),
+            $this->getVisitorCreatedAt($currentVisitor->getId())
         );
     }
 
@@ -492,7 +467,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $resetToken = 'lsdj579slkj5987slkj595lkj';
         $password = 'new_Password123';
 
-        $this->setResetPasswordData($resetToken, '1970-01-01');
+        $this->setResetPasswordData($resetToken, '1970-01-01 00:00:00');
         try {
             $this->accountManagement->resetPassword('customer@example.com', $resetToken, $password);
             $this->fail('Expected exception not thrown.');
@@ -508,7 +483,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     public function testResetPasswordTokenInvalid()
     {
         $resetToken = 'lsdj579slkj5987slkj595lkj';
-        $invalidToken = 0;
+        $invalidToken = '0';
         $password = 'new_Password123';
 
         $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s');
@@ -568,21 +543,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $resetToken = 'lsdj579slkj5987slkj595lkj';
         $password = 'new_Password123';
         $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s');
-        $this->assertTrue(
-            $this->accountManagement->resetPassword(null, $resetToken, $password)
-        );
-    }
-    /**
-     * @magentoDataFixture Magento/Customer/_files/two_customers.php
-     */
-    public function testResetPasswordAmbiguousToken()
-    {
-        $this->expectException(\Magento\Framework\Exception\State\ExpiredException::class);
-
-        $resetToken = 'lsdj579slkj5987slkj595lkj';
-        $password = 'new_Password123';
-        $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s', 1);
-        $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s', 2);
+        $this->expectException(InputException::class);
         $this->accountManagement->resetPassword(null, $resetToken, $password);
     }
 
@@ -645,7 +606,18 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsEmailAvailable()
     {
-        $this->assertFalse($this->accountManagement->isEmailAvailable('customer@example.com', 1));
+        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
+        $guestLoginConfig = $scopeConfig->getValue(
+            AccountManagement::GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG,
+            ScopeInterface::SCOPE_WEBSITE,
+            1
+        );
+
+        if (!$guestLoginConfig) {
+            $this->assertTrue($this->accountManagement->isEmailAvailable('customer@example.com', 1));
+        } else {
+            $this->assertFalse($this->accountManagement->isEmailAvailable('customer@example.com', 1));
+        }
     }
 
     /**
@@ -653,7 +625,18 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsEmailAvailableNoWebsiteSpecified()
     {
-        $this->assertFalse($this->accountManagement->isEmailAvailable('customer@example.com'));
+        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
+        $guestLoginConfig = $scopeConfig->getValue(
+            AccountManagement::GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG,
+            ScopeInterface::SCOPE_WEBSITE,
+            1
+        );
+
+        if (!$guestLoginConfig) {
+            $this->assertTrue($this->accountManagement->isEmailAvailable('customer@example.com'));
+        } else {
+            $this->assertFalse($this->accountManagement->isEmailAvailable('customer@example.com'));
+        }
     }
 
     /**
@@ -814,6 +797,34 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Returns the customers cutoff value
+     *
+     * @param int $customerId
+     * @return mixed
+     */
+    private function getCustomerCutoff(
+        int $customerId
+    ) {
+        $customerModel = $this->objectManager->get(\Magento\Customer\Model\ResourceModel\Customer::class);
+        return $customerModel->findSessionCutOff($customerId);
+    }
+
+    /**
+     * Returns the visitors created at value
+     *
+     * @param int $visitorId
+     * @return mixed
+     */
+    private function getVisitorCreatedAt(
+        int $visitorId
+    ) {
+        $visitorModel = $this->objectManager->get(\Magento\Customer\Model\ResourceModel\Visitor::class);
+        return $visitorModel->fetchCreatedAt($visitorId);
+    }
+
+    /**
+     * Starts a new session
+     *
      * @param string $sessionId
      */
     private function startNewSession(string $sessionId): void
@@ -829,9 +840,12 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Creates a new visitor session
+     *
      * @param string $sessionId
      * @param int|null $customerId
      * @return Visitor
+     * @throws \Exception
      */
     private function createVisitorSession(string $sessionId, ?int $customerId = null): Visitor
     {

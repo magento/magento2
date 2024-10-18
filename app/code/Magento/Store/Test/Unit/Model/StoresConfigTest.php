@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 /**
- * Test class for \Magento\Store\Model\Store\StoresConfig
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -42,6 +40,9 @@ class StoresConfigTest extends TestCase
      */
     protected $_config;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->_storeOne = $this->createMock(Store::class);
@@ -55,27 +56,24 @@ class StoresConfigTest extends TestCase
         );
     }
 
-    public function testGetStoresConfigByPath()
+    /**
+     * @return void
+     */
+    public function testGetStoresConfigByPath(): void
     {
         $path = 'config/path';
 
         $this->_storeOne
-            ->expects($this->at(0))
             ->method('getCode')
             ->willReturn('code_0');
-
         $this->_storeOne
-            ->expects($this->at(1))
             ->method('getId')
             ->willReturn(0);
 
         $this->_storeTwo
-            ->expects($this->at(0))
             ->method('getCode')
             ->willReturn('code_1');
-
         $this->_storeTwo
-            ->expects($this->at(1))
             ->method('getId')
             ->willReturn(1);
 
@@ -86,16 +84,14 @@ class StoresConfigTest extends TestCase
             ->willReturn([0 => $this->_storeOne, 1 => $this->_storeTwo]);
 
         $this->_config
-            ->expects($this->at(0))
             ->method('getValue')
-            ->with($path, 'store', 'code_0')
-            ->willReturn(0);
-
-        $this->_config
-            ->expects($this->at(1))
-            ->method('getValue')
-            ->with($path, 'store', 'code_1')
-            ->willReturn(1);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($path) {
+                if ($arg1 == $path && $arg2 == 'store' && $arg3 == 'code_0') {
+                    return 0;
+                } elseif ($arg1 == $path && $arg2 == 'store' && $arg3 == 'code_1') {
+                    return 1;
+                }
+            });
 
         $this->assertEquals([0 => 0, 1 => 1], $this->_model->getStoresConfigByPath($path));
     }

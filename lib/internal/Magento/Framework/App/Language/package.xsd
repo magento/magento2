@@ -29,7 +29,7 @@
 
     <xs:simpleType name="codeType">
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-z]{2}_([a-zA-Z]{4}_)?[A-Z]{2}"/>
+            <xs:pattern value="[a-z]{2,3}_([a-zA-Z]{4}_)?[A-Z]{2}"/>
         </xs:restriction>
     </xs:simpleType>
 

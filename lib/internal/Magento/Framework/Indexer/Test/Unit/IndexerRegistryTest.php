@@ -14,7 +14,10 @@ use PHPUnit\Framework\TestCase;
 
 class IndexerRegistryTest extends TestCase
 {
-    public function testGetCreatesIndexerInstancesAndReusesExistingOnes()
+    /**
+     * @return void
+     */
+    public function testGetCreatesIndexerInstancesAndReusesExistingOnes(): void
     {
         $firstIndexer = $this->getMockForAbstractClass(IndexerInterface::class);
         $firstIndexer->expects($this->once())->method('load')->with('first-indexer')->willReturnSelf();
@@ -23,8 +26,9 @@ class IndexerRegistryTest extends TestCase
         $secondIndexer->expects($this->once())->method('load')->with('second-indexer')->willReturnSelf();
 
         $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $objectManager->expects($this->at(0))->method('create')->willReturn($firstIndexer);
-        $objectManager->expects($this->at(1))->method('create')->willReturn($secondIndexer);
+        $objectManager
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($firstIndexer, $secondIndexer);
 
         $unit = new IndexerRegistry($objectManager);
         $this->assertSame($firstIndexer, $unit->get('first-indexer'));

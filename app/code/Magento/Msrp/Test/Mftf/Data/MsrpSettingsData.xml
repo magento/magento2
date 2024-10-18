@@ -21,4 +21,11 @@
     <entity name="DisableMAP" type="msrp_settings_config">
         <data key="value">0</data>
     </entity>
+
+    <entity name="MsrpDisplayPriceOnGesture" type="msrp_settings_config">
+        <requiredEntity type="display_price_type">DisplayPriceOnGesture</requiredEntity>
+    </entity>
+    <entity name="DisplayPriceOnGesture" type="msrp_settings_config">
+        <data key="value">1</data>
+    </entity>
 </entities>

@@ -11,6 +11,7 @@ use Magento\Framework\Api\ArrayObjectSearch;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Io\File as IoFile;
@@ -22,6 +23,8 @@ use Magento\Framework\Filesystem\Io\File as IoFile;
  */
 class File extends AbstractData
 {
+    public const UPLOADED_FILE_SUFFIX = '_uploaded';
+
     /**
      * Validator for check not protected extensions
      *
@@ -58,7 +61,8 @@ class File extends AbstractData
 
     /**
      * @var FileProcessorFactory
-     * @deprecated 101.0.0
+     * @deprecated 101.0.0 Call fileProcessor directly from code
+     * @see $this->fileProcessor
      */
     protected $fileProcessorFactory;
 
@@ -97,7 +101,7 @@ class File extends AbstractData
         \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator,
         Filesystem $fileSystem,
         UploaderFactory $uploaderFactory,
-        FileProcessorFactory $fileProcessorFactory = null,
+        \Magento\Customer\Model\FileProcessorFactory $fileProcessorFactory = null,
         IoFile $ioFile = null
     ) {
         $value = $this->prepareFileValue($value);
@@ -125,21 +129,22 @@ class File extends AbstractData
         $attrCode = $this->getAttribute()->getAttributeCode();
 
         // phpcs:disable Magento2.Security.Superglobal
-        $uploadedFile = $request->getParam($attrCode . '_uploaded');
+        $uploadedFile = $request->getParam($attrCode . static::UPLOADED_FILE_SUFFIX);
         if ($uploadedFile) {
             $value = $uploadedFile;
         } elseif ($this->_requestScope || !isset($_FILES[$attrCode])) {
             $value = [];
-            if (strpos($this->_requestScope, DIRECTORY_SEPARATOR) !== false) {
+            if ($this->_requestScope !== null && strpos($this->_requestScope, DIRECTORY_SEPARATOR) !== false) {
                 $scopes = explode(DIRECTORY_SEPARATOR, $this->_requestScope);
                 $mainScope = array_shift($scopes);
             } else {
                 $mainScope = $this->_requestScope;
                 $scopes = [];
             }
-
+            // phpcs:disable Magento2.Security.Superglobal
             if (!empty($_FILES[$mainScope])) {
                 foreach ($_FILES[$mainScope] as $fileKey => $scopeData) {
+                    // phpcs:enable Magento2.Security.Superglobal
                     foreach ($scopes as $scopeName) {
                         if (isset($scopeData[$scopeName])) {
                             $scopeData = $scopeData[$scopeName];
@@ -164,8 +169,10 @@ class File extends AbstractData
                 $value = [];
             }
         } else {
+            // phpcs:disable Magento2.Security.Superglobal
             if (isset($_FILES[$attrCode])) {
                 $value = $_FILES[$attrCode];
+                // phpcs:enable Magento2.Security.Superglobal
             } else {
                 $value = [];
             }
@@ -189,9 +196,7 @@ class File extends AbstractData
     {
         $label = $value['name'];
         $rules = $this->getAttribute()->getValidationRules();
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $pathInfo = $this->ioFile->getPathInfo($label);
-        $extension = $pathInfo['extension'] ?? null;
+        $extension = $this->ioFile->getPathInfo($value['name'])['extension'];
         $fileExtensions = ArrayObjectSearch::getArrayElementByName(
             $rules,
             'file_extensions'
@@ -245,8 +250,7 @@ class File extends AbstractData
         }
 
         // This case is required for file uploader UI component
-        $temporaryFile = FileProcessor::TMP_DIR . DIRECTORY_SEPARATOR .
-            $this->ioFile->getPathInfo($filename)['basename'];
+        $temporaryFile = FileProcessor::TMP_DIR . '/' . $this->ioFile->getPathInfo($filename)['basename'];
         if ($this->fileProcessor->isExist($temporaryFile)) {
             return true;
         }
@@ -298,6 +302,7 @@ class File extends AbstractData
     /**
      * @inheritdoc
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @return ImageContentInterface|array|string|null
      */
     public function compactValue($value)
@@ -307,7 +312,10 @@ class File extends AbstractData
         }
 
         // Remove outdated file (in the case of file uploader UI component)
-        if (!empty($this->_value) && !empty($value['delete'])) {
+        if (!empty($this->_value)
+            && (!empty($value['delete'])
+                || ($this->_entityTypeCode == 'customer' && empty($value)))
+        ) {
             $this->fileProcessor->removeUploadedFile($this->_value);
             return $value;
         }
@@ -363,21 +371,25 @@ class File extends AbstractData
 
         if ($toDelete) {
             $mediaDir->delete($this->_entityTypeCode . DIRECTORY_SEPARATOR .
-                ltrim($this->_value, DIRECTORY_SEPARATOR));
+                ltrim($this->_value ?? '', DIRECTORY_SEPARATOR));
             $result = '';
         }
 
         if (!empty($value['tmp_name'])) {
+            $uploader = $this->uploaderFactory->create(['fileId' => $value]);
+            $fileExtension = $uploader->getFileExtension();
+            if (!$this->_fileValidator->isValid($fileExtension)) {
+                throw new LocalizedException($this->_fileValidator->getMessages()[$fileExtension]);
+            }
+            $uploader->setFilesDispersion(true);
+            $uploader->setFilenamesCaseSensitivity(false);
+            $uploader->setAllowRenameFiles(true);
             try {
-                $uploader = $this->uploaderFactory->create(['fileId' => $value]);
-                $uploader->setFilesDispersion(true);
-                $uploader->setFilenamesCaseSensitivity(false);
-                $uploader->setAllowRenameFiles(true);
                 $uploader->save($mediaDir->getAbsolutePath($this->_entityTypeCode), $value['name']);
-                $result = $uploader->getUploadedFileName();
             } catch (\Exception $e) {
                 $this->_logger->critical($e);
             }
+            $result = $uploader->getUploadedFileName();
         }
 
         return $result;
@@ -415,7 +427,8 @@ class File extends AbstractData
      * Get file processor
      *
      * @return FileProcessor
-     * @deprecated 100.1.3
+     * @deprecated 100.1.3 we don’t use such approach anymore. Call fileProcessor directly
+     * @see $this->fileProcessor
      */
     protected function getFileProcessor()
     {

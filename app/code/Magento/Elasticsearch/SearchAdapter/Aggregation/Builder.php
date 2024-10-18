@@ -79,11 +79,12 @@ class Builder
         $aggregations = [];
         $buckets = $request->getAggregation();
 
-        $dataProvider = $this->dataProviderFactory->create(
-            $this->dataProviderContainer[$request->getIndex()],
-            $this->query
-        );
         foreach ($buckets as $bucket) {
+            $dataProvider = $this->dataProviderFactory->create(
+                $this->dataProviderContainer[$request->getIndex()],
+                $this->query,
+                $bucket->getField()
+            );
             $bucketAggregationBuilder = $this->aggregationContainer[$bucket->getType()];
             $aggregations[$bucket->getName()] = $bucketAggregationBuilder->build(
                 $bucket,

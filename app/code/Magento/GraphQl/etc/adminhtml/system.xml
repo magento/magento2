@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Representation of Webapi module in System Configuration (Magento admin panel).
+ *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="webapi">
+            <group id="graphql_validation" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>GraphQl Input Limits</label>
+                <field id="input_limit_enabled" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Enable Input Limits</label>
+                    <config_path>graphql/validation/input_limit_enabled</config_path>
+                </field>
+                <field id="maximum_page_size" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Maximum Page Size</label>
+                    <comment>Maximum number of items allowed in a paginated search result.</comment>
+                    <config_path>graphql/validation/maximum_page_size</config_path>
+                    <depends>
+                        <field id="input_limit_enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="graphql_session" translate="label" type="text" sortOrder="20" showInDefault="0" showInWebsite="0" showInStore="0">
+                <label>GraphQl Session Management</label>
+                <field id="disabled" translate="label" type="select" sortOrder="20" showInDefault="0" showInWebsite="0" showInStore="0">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Disable session</label>
+                    <config_path>graphql/session/disable</config_path>
+                </field>
+            </group>
+        </section>
+        <section id="web_api">
+            <group id="graphql" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>GraphQl</label>
+                <field id="include_dynamic_attributes_as_entity_type_fields" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Include dynamic attributes as entity type fields</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>web_api/graphql/include_dynamic_attributes_as_entity_type_fields</config_path>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
+

@@ -1,0 +1,4 @@
+Code,Country,State,Zip/Post Code,Rate,Zip/Post is Range,Range From,Range To
+US-CA-*-Rate 1,US,CA,*,10.25,,,
+import-rate-1,US,TX,78758,5.25,,,
+import-rate-2,US,AK,12345-12346,7.75,1,12345,12346

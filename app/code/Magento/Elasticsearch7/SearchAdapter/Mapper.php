@@ -12,19 +12,21 @@ use Magento\Framework\Search\RequestInterface;
 
 /**
  * Elasticsearch7 mapper class
+ * @deprecated 100.3.0 because of EOL for Elasticsearch7
+ * @see this class will be responsible for ES7 only
  */
 class Mapper
 {
     /**
-     * @var \Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper
+     * @var \Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Mapper
      */
     private $mapper;
 
     /**
      * Mapper constructor.
-     * @param \Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper $mapper
+     * @param \Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Mapper $mapper
      */
-    public function __construct(\Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper $mapper)
+    public function __construct(\Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Mapper $mapper)
     {
         $this->mapper = $mapper;
     }

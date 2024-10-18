@@ -16,6 +16,11 @@ class Factory
     const TYPE_VIEWED = 'viewed';
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $_objectManager;
+
+    /**
      * @var array
      */
     protected $_typeClasses = [

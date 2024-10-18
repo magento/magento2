@@ -24,10 +24,13 @@
 
         <after>
             <deleteData createDataKey="createDatetimeAttribute" stepKey="deleteDatetimeAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -48,10 +51,7 @@
         </actionGroup>
         <!-- Save the product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-        <!-- Flush config cache to reset product attributes in attribute set -->
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushConfigCache">
-            <argument name="tags" value="config"/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushConfigCache"/>
         <reloadPage stepKey="reloadProductEditPage"/>
         <!-- Check default value -->
         <waitForElementVisible selector="{{AdminProductAttributesSection.sectionHeader}}" stepKey="waitAttributesSectionAppears"/>
@@ -65,7 +65,7 @@
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openProductFilters"/>
         <fillField selector="{{AdminProductGridFilterSection.inputByCodeRangeFrom($createDatetimeAttribute.attribute_code$)}}" userInput="{$generateDefaultValue}" stepKey="fillProductDatetimeFromFilter"/>
         <fillField selector="{{AdminProductGridFilterSection.inputByCodeRangeTo($createDatetimeAttribute.attribute_code$)}}" userInput="{$generateFilterToDate}" stepKey="fillProductDatetimeToFilter"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickApplyFilters"/>
         <see selector="{{AdminDataGridTableSection.gridCell('1', 'Name')}}" userInput="{{_defaultProduct.name}}" stepKey="checkAppliedDatetimeFilter"/>
         <see selector="{{AdminDataGridTableSection.rowTemplateStrict(_defaultProduct.name)}}" userInput="{$generateDefaultGridValue}" stepKey="checkDefaultValueInGrid"/>
     </test>

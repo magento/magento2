@@ -22,68 +22,68 @@ class TextSwatch extends AbstractSwatchAttributeData
     public function __construct()
     {
         parent::__construct();
-        $this->defaultAttributePostData['swatch_input_type'] = 'text';
+        static::$defaultAttributePostData['swatch_input_type'] = 'text';
     }
 
     /**
      * @inheritdoc
      */
-    public function getAttributeDataWithCheckArray(): array
+    public static function getAttributeDataWithCheckArray(): array
     {
         return array_replace_recursive(
             parent::getAttributeDataWithCheckArray(),
             [
-                "{$this->getFrontendInput()}_with_required_fields" => [
+                "{static::getFrontendInput()}_with_required_fields" => [
                     1 => [
                         'frontend_input' => 'select',
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_store_view_scope" => [
+                "{static::getFrontendInput()}_with_store_view_scope" => [
                     1 => [
                         'frontend_input' => 'select',
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_global_scope" => [
+                "{static::getFrontendInput()}_with_global_scope" => [
                     1 => [
                         'frontend_input' => 'select',
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_website_scope" => [
+                "{static::getFrontendInput()}_with_website_scope" => [
                     1 => [
                         'frontend_input' => 'select',
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_attribute_code" => [
+                "{static::getFrontendInput()}_with_attribute_code" => [
                     1 => [
                         'frontend_input' => 'select',
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_unique_value" => [
+                "{static::getFrontendInput()}_with_unique_value" => [
                     1 => [
                         'frontend_input' => 'select',
                     ],
                 ],
-                "{$this->getFrontendInput()}_without_unique_value" => [
+                "{static::getFrontendInput()}_without_unique_value" => [
                     1 => [
                         'frontend_input' => 'select',
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_enabled_add_to_column_options" => [
+                "{static::getFrontendInput()}_with_enabled_add_to_column_options" => [
                     1 => [
                         'frontend_input' => 'select',
                     ],
                 ],
-                "{$this->getFrontendInput()}_without_enabled_add_to_column_options" => [
+                "{static::getFrontendInput()}_without_enabled_add_to_column_options" => [
                     1 => [
                         'frontend_input' => 'select',
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_enabled_use_in_filter_options" => [
+                "{static::getFrontendInput()}_with_enabled_use_in_filter_options" => [
                     1 => [
                         'frontend_input' => 'select',
                     ],
                 ],
-                "{$this->getFrontendInput()}_without_enabled_use_in_filter_options" => [
+                "{static::getFrontendInput()}_without_enabled_use_in_filter_options" => [
                     1 => [
                         'frontend_input' => 'select',
                     ],
@@ -95,27 +95,27 @@ class TextSwatch extends AbstractSwatchAttributeData
     /**
      * @inheritdoc
      */
-    public function getUpdateProvider(): array
+    public static function getUpdateProvider(): array
     {
-        $frontendInput = $this->getFrontendInput();
+        $frontendInput = static::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
             [
                 "{$frontendInput}_other_attribute_code" => [
-                    'post_data' => [
+                    'postData' => [
                         'attribute_code' => 'text_attribute_update',
                     ],
-                    'expected_data' => [
+                    'expectedData' => [
                         'attribute_code' => 'text_swatch_attribute',
                     ],
                 ],
                 "{$frontendInput}_change_frontend_input_swatch_visual" => [
-                    'post_data' => [
+                    'postData' => [
                         'frontend_input' => Swatch::SWATCH_TYPE_VISUAL_ATTRIBUTE_FRONTEND_INPUT,
                         'update_product_preview_image' => '1',
                         'use_product_image_for_swatch' => '1',
                     ],
-                    'expected_data' => [
+                    'expectedData' => [
                         'frontend_input' => 'select',
                         'swatch_input_type' => Swatch::SWATCH_INPUT_TYPE_VISUAL,
                         'update_product_preview_image' => '1',
@@ -123,10 +123,10 @@ class TextSwatch extends AbstractSwatchAttributeData
                     ],
                 ],
                 "{$frontendInput}_change_frontend_input_dropdown" => [
-                    'post_data' => [
+                    'postData' => [
                         'frontend_input' => 'select',
                     ],
-                    'expected_data' => [
+                    'expectedData' => [
                         'frontend_input' => 'select',
                         'swatch_input_type' => null,
                         'update_product_preview_image' => null,
@@ -140,14 +140,14 @@ class TextSwatch extends AbstractSwatchAttributeData
     /**
      * @inheritdoc
      */
-    public function getUpdateOptionsProvider(): array
+    public static function getUpdateOptionsProvider(): array
     {
-        $frontendInput = $this->getFrontendInput();
+        $frontendInput = static::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateOptionsProvider(),
             [
                 "{$frontendInput}_update_options" => [
-                    'post_data' => [
+                    'postData' => [
                         'options_array' => [
                             'option_1' => [
                                 'order' => '4',
@@ -177,7 +177,7 @@ class TextSwatch extends AbstractSwatchAttributeData
     /**
      * @inheritdoc
      */
-    protected function getOptionsDataArr(): array
+    protected static function getOptionsDataArr(): array
     {
         return [
             [
@@ -237,7 +237,7 @@ class TextSwatch extends AbstractSwatchAttributeData
     /**
      * @inheritdoc
      */
-    protected function getFrontendInput(): string
+    protected static function getFrontendInput(): string
     {
         return Swatch::SWATCH_TYPE_TEXTUAL_ATTRIBUTE_FRONTEND_INPUT;
     }
@@ -245,7 +245,7 @@ class TextSwatch extends AbstractSwatchAttributeData
     /**
      * @inheritdoc
      */
-    protected function getUpdatePostData(): array
+    protected static function getUpdatePostData(): array
     {
         return [
             'frontend_label' => [
@@ -276,9 +276,9 @@ class TextSwatch extends AbstractSwatchAttributeData
     /**
      * @inheritdoc
      */
-    protected function getUpdateExpectedData(): array
+    protected static function getUpdateExpectedData(): array
     {
-        $updatePostData = $this->getUpdatePostData();
+        $updatePostData = static::getUpdatePostData();
         return array_merge(
             $updatePostData,
             [

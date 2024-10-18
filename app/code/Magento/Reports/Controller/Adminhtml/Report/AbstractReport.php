@@ -13,6 +13,7 @@
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
 use Magento\Backend\Helper\Data as BackendHelper;
+use Magento\Framework\Filter\FilterInput;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
@@ -30,7 +31,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Reports::report';
+    public const ADMIN_RESOURCE = 'Magento_Reports::report';
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
@@ -100,7 +101,9 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      */
     public function _initAction()
     {
+        // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $this->_view->loadLayout();
+        // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $this->_addBreadcrumb(__('Reports'), __('Reports'));
         return $this;
     }
@@ -176,13 +179,12 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      */
     private function initFilterData(): \Magento\Framework\DataObject
     {
-        $requestData = $this->backendHelper
-            ->prepareFilterString(
-                $this->getRequest()->getParam('filter')
-            );
+        $requestData = $this->backendHelper->prepareFilterString(
+            $this->getRequest()->getParam('filter', ''),
+        );
 
         $filterRules = ['from' => $this->_dateFilter, 'to' => $this->_dateFilter];
-        $inputFilter = new \Zend_Filter_Input($filterRules, [], $requestData);
+        $inputFilter = new FilterInput($filterRules, [], $requestData);
 
         $requestData = $inputFilter->getUnescaped();
         $requestData['store_ids'] = $this->getRequest()->getParam('store_ids');

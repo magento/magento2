@@ -18,6 +18,7 @@
             <testCaseId value="MAGETWO-29398"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
@@ -34,7 +35,9 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetSearch"/>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData stepKey="deleteAttribute" createDataKey="createConfigProductAttribute"/>
-            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCron">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Create configurable product from downloadable product page-->

@@ -100,7 +100,7 @@ class ReloadTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultMock = $this->getMockBuilder(ResultInterface::class)
-            ->setMethods(['forward', 'setJsonData', 'getLayout'])
+            ->addMethods(['forward', 'setJsonData', 'getLayout'])
             ->getMockForAbstractClass();
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
             ->getMockForAbstractClass();

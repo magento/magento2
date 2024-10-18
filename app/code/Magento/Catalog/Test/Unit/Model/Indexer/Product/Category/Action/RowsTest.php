@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Category\Action;
 
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\Config;
@@ -107,8 +109,20 @@ class RowsTest extends TestCase
      */
     private $rowsModel;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp() : void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Visibility::class,
+                $this->createMock(Visibility::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         $this->workingStateProvider = $this->getMockBuilder(WorkingStateProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -186,6 +200,9 @@ class RowsTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteWithIndexerWorking() : void
     {
         $categoryId = '1';
@@ -229,26 +246,12 @@ class RowsTest extends TestCase
         $this->connection->expects($this->any())
             ->method('fetchOne')
             ->willReturn($categoryId);
-        $this->indexerRegistry->expects($this->at(0))
+        $this->indexerRegistry
             ->method('get')
-            ->with(CategoryProductIndexer::INDEXER_ID)
-            ->willReturn($this->indexer);
-        $this->indexerRegistry->expects($this->at(1))
-            ->method('get')
-            ->with(CategoryProductIndexer::INDEXER_ID)
-            ->willReturn($this->indexer);
-        $this->indexerRegistry->expects($this->at(2))
-            ->method('get')
-            ->with(ProductCategoryIndexer::INDEXER_ID)
-            ->willReturn($this->indexer);
-        $this->indexerRegistry->expects($this->at(3))
-            ->method('get')
-            ->with(CategoryProductIndexer::INDEXER_ID)
-            ->willReturn($this->indexer);
-        $this->indexerRegistry->expects($this->at(4))
-            ->method('get')
-            ->with(ProductCategoryIndexer::INDEXER_ID)
-            ->willReturn($this->indexer);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [ProductCategoryIndexer::INDEXER_ID] => $this->indexer,
+                [CategoryProductIndexer::INDEXER_ID] => $this->indexer
+            });
         $this->indexer->expects($this->any())
             ->method('getId')
             ->willReturn(CategoryProductIndexer::INDEXER_ID);

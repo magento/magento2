@@ -301,7 +301,7 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function updateItemDataProvider(): array
+    public static function updateItemDataProvider(): array
     {
         return [
             [
@@ -337,7 +337,7 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
                     'use_config_backorders' => 0,
                     'backorders' => Stock::BACKORDERS_NO,
                 ],
-                'The requested qty is not available'
+                'Not enough items for sale'
             ]
         ];
     }
