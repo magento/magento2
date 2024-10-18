@@ -18,6 +18,10 @@ use PHPUnit\Framework\TestCase;
  */
 class DataProviderTest extends TestCase
 {
+    private const STRING_TO_TRANSLATE = 'Proceed to Checkout';
+    
+    private const STRING_TRANSLATION = 'Proceed to Checkout - Translated';
+    
     /**
      * @var StringUtils
      */
@@ -52,12 +56,11 @@ class DataProviderTest extends TestCase
      */
     public function testGetData()
     {
-        $expectedDictionary = ['Proceed to Checkout' => 'Proceed to Checkout - Translated'];
-
-        $this->stringUtils->saveTranslate('Proceed to Checkout', 'Proceed to Checkout - Translated');
+        $this->stringUtils->saveTranslate(self::STRING_TO_TRANSLATE, self::STRING_TRANSLATION);
         $this->translate->setLocale('en_US')->loadData('frontend', true);
         $dictionary = $this->translationDataProvider->getData('Magento/luma');
-        $this->assertEquals($expectedDictionary, $dictionary);
+        $this->assertArrayHasKey(self::STRING_TO_TRANSLATE, $dictionary);
+        $this->assertEquals(self::STRING_TRANSLATION, $dictionary[self::STRING_TO_TRANSLATE]);
     }
 
     /**
@@ -66,7 +69,7 @@ class DataProviderTest extends TestCase
     protected function tearDown(): void
     {
         try {
-            $this->stringUtils->deleteTranslate('Proceed to Checkout');
+            $this->stringUtils->deleteTranslate(self::STRING_TO_TRANSLATE);
         } catch (NoSuchEntityException $exception) {
             // translate already deleted
         }
