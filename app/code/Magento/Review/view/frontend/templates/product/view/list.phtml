@@ -49,17 +49,12 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                                              title="<?= $escaper->escapeHtmlAttr($_vote->getPercent()) ?>%">
                                             <meta itemprop="worstRating" content="1"/>
                                             <meta itemprop="bestRating" content="100"/>
-                                            <span>
+                                            <span style="width: <?= $escaper->escapeHtml($_vote->getPercent()) ?>%;">
                                                 <span itemprop="ratingValue">
                                                     <?= $escaper->escapeHtml($_vote->getPercent()) ?>%
                                                 </span>
                                             </span>
                                         </div>
-                                        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                                            'width:' . $_vote->getPercent() . '%',
-                                            'div#review_' . $_review->getReviewId()
-                                            . '_vote_' . $_vote->getVoteId() . ' span'
-                                        ) ?>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
