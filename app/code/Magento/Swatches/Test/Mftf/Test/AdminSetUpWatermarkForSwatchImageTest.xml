@@ -17,7 +17,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-17607"/>
             <useCaseId value="MC-15523"/>
-            <severity value="MAJOR"/>
             <group value="swatches"/>
             <group value="cloud"/>
         </annotations>
