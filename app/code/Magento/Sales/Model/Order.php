@@ -2142,7 +2142,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $format,
             $format,
             $this->localeResolver->getDefaultLocale(),
-            $this->timezone->getConfigTimezone('store', $this->getStore())
+            $this->timezone->getConfigTimezone(ScopeInterface::SCOPE_STORE, $this->getStore())
         );
     }
 
