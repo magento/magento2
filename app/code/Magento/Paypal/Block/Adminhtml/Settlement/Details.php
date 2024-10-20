@@ -7,14 +7,11 @@ namespace Magento\Paypal\Block\Adminhtml\Settlement;
 
 /**
  * Settlement reports transaction details
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Details extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Block construction
-     * Initialize titles, buttons
+     * Block construction Initialize titles, buttons
      *
      * @return void
      */

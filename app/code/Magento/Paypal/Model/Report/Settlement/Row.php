@@ -39,8 +39,6 @@ namespace Magento\Paypal\Model\Report\Settlement;
  * @method Row setCustomField(string $value)
  * @method string getConsumerId()
  * @method Row setConsumerId(string $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Row extends \Magento\Framework\Model\AbstractModel
 {
@@ -52,8 +50,6 @@ class Row extends \Magento\Framework\Model\AbstractModel
     private $eventLabelsList = [];
 
     /**
-     * Cast amount relation
-     *
      * @var array
      */
     private $castAmountRelation = [
@@ -72,8 +68,7 @@ class Row extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Return description of Reference ID Type
-     * If no code specified, return full list of codes with their description
+     * Return description of Reference ID Type If no code specified, return full list of codes with their description
      *
      * @param string $code
      * @return string
