@@ -24,7 +24,6 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * @method bool getIsUsedForPriceRules()
  * @method int setIsUsedForPriceRules(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -34,11 +33,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     \Magento\Catalog\Api\Data\ProductAttributeInterface,
     \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface
 {
-    const MODULE_NAME = 'Magento_Catalog';
-
-    const ENTITY = 'catalog_eav_attribute';
-
-    const KEY_IS_GLOBAL = 'is_global';
+    public const MODULE_NAME = 'Magento_Catalog';
+    public const ENTITY = 'catalog_eav_attribute';
+    public const KEY_IS_GLOBAL = 'is_global';
 
     private const ALLOWED_INPUT_TYPES = [
         'boolean'     => true,
@@ -72,8 +69,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     protected static $_labels = null;
 
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'catalog_entity_attribute';

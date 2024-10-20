@@ -26,7 +26,6 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Catalog Product Mass processing resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Action extends AbstractResource

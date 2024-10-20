@@ -1,6 +1,5 @@
 <?php
 /**
- * @author      Magento Core Team <core@magentocommerce.com>
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,14 +10,11 @@ use Magento\Framework\Api\AttributeValueFactory;
 class Group extends \Magento\Eav\Model\Entity\Attribute\Group
 {
     /**
-     * Attribute collection factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $_attributeCollectionFactory;
 
     /**
-     * Group constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory

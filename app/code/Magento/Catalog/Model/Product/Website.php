@@ -9,8 +9,6 @@
  *
  * @method int getWebsiteId()
  * @method \Magento\Catalog\Model\Product\Website setWebsiteId(int $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Product;
 
@@ -68,6 +66,7 @@ class Website extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Retrieve product websites
+     *
      * Return array with key as product ID and value array of websites
      *
      * @param int|array $productIds
