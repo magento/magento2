@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Indexer\Model\Indexer;
 
 use Magento\Framework\Indexer\StateInterface;
@@ -70,6 +72,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
         if (!isset($data['status'])) {
             $data['status'] = self::STATUS_INVALID;
         }
+
         $this->lockManager = $lockManager ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
             \Magento\Framework\Lock\LockManagerInterface::class
         );
@@ -86,18 +89,21 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      */
     public function getIndexerId()
     {
-        return parent::getIndexerId();
+        $id = parent::getIndexerId();
+        return $id;
     }
 
     /**
      * Set indexer id
      *
      * @param string $value
+     *
      * @return $this
      */
     public function setIndexerId($value)
     {
-        return parent::setIndexerId($value);
+        $self = parent::setIndexerId($value);
+        return $self;
     }
 
     /**
@@ -108,8 +114,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
     public function getStatus()
     {
         if ($this->isUseApplicationLock()) {
-            if (
-                parent::getStatus() == StateInterface::STATUS_WORKING &&
+            if (parent::getStatus() == StateInterface::STATUS_WORKING &&
                 !$this->lockManager->isLocked($this->lockPrefix . $this->getIndexerId())
             ) {
                 return StateInterface::STATUS_INVALID;
@@ -126,24 +131,28 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      */
     public function getUpdated()
     {
-        return parent::getUpdated();
+        $updated = parent::getUpdated();
+        return $updated;
     }
 
     /**
      * Set updated
      *
      * @param string $value
+     *
      * @return $this
      */
     public function setUpdated($value)
     {
-        return parent::setUpdated($value);
+        $self = parent::setUpdated($value);
+        return $self;
     }
 
     /**
      * Fill object with state data by view ID
      *
      * @param string $indexerId
+     *
      * @return $this
      */
     public function loadByIndexer($indexerId)
@@ -159,6 +168,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      * Status setter
      *
      * @param string $status
+     *
      * @return $this
      */
     public function setStatus($status)
@@ -170,6 +180,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
                 $this->lockManager->unlock($this->lockPrefix . $this->getIndexerId());
             }
         }
+
         return parent::setStatus($status);
     }
 
@@ -189,8 +200,8 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      *
      * @return bool
      */
-    private function isUseApplicationLock()
+    private function isUseApplicationLock(): bool
     {
-        return $this->configReader->get($this->useApplicationLockConfig) ?: false;
+        return (bool) ($this->configReader->get($this->useApplicationLockConfig) ?? true);
     }
 }
