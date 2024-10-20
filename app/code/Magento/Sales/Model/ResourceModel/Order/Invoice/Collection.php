@@ -12,28 +12,21 @@ use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
  * Flat sales order invoice collection
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Collection extends AbstractCollection implements InvoiceSearchResultInterface
 {
     /**
-     * Id field name
-     *
      * @var string
      */
     protected $_idFieldName = 'entity_id';
 
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_invoice_collection';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'order_invoice_collection';

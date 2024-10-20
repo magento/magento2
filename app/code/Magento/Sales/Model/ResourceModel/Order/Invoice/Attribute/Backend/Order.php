@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Order\Invoice\Attribute\Backend;
 
 /**
  * Invoice backend model for order attribute
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Order extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {

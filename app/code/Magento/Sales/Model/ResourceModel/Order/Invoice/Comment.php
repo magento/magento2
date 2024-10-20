@@ -11,31 +11,25 @@ use Magento\Sales\Model\Spi\InvoiceCommentResourceInterface;
 
 /**
  * Flat sales order invoice comment resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Comment extends EntityAbstract implements InvoiceCommentResourceInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_invoice_comment_resource';
 
     /**
-     * Validator
-     *
      * @var \Magento\Sales\Model\Order\Invoice\Comment\Validator
      */
     protected $validator;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Sales\Model\ResourceModel\Attribute $attribute
-     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param Snapshot $entitySnapshot
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
+     * @param \Magento\Sales\Model\ResourceModel\Attribute $attribute
+     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator
      * @param string $connectionName
      */

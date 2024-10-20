@@ -10,14 +10,10 @@ use Magento\Sales\Model\Spi\ShipmentItemResourceInterface;
 
 /**
  * Flat sales order shipment item resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Item extends SalesResource implements ShipmentItemResourceInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_shipment_item_resource';
