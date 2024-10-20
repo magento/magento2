@@ -1,6 +1,11 @@
 Options None
 <FilesMatch "\.(xml|phtml)$">
-    Deny from all
+    <IfVersion < 2.4> 
+         Deny from all
+     </IfVersion> 
+     <IfVersion >= 2.4> 
+         Require all denied 
+     </IfVersion> 
 </FilesMatch>
 <IfModule mod_rewrite.c>
     RewriteEngine Off
