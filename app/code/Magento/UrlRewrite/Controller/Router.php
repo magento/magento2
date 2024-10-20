@@ -31,31 +31,6 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 class Router implements RouterInterface
 {
     /**
-     * @var ActionFactory
-     */
-    protected $actionFactory;
-
-    /**
-     * @var UrlInterface
-     */
-    protected $url;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var HttpResponse
-     */
-    protected $response;
-
-    /**
-     * @var UrlFinderInterface
-     */
-    protected $urlFinder;
-
-    /**
      * @param ActionFactory $actionFactory
      * @param UrlInterface $url
      * @param StoreManagerInterface $storeManager
@@ -63,17 +38,12 @@ class Router implements RouterInterface
      * @param UrlFinderInterface $urlFinder
      */
     public function __construct(
-        ActionFactory $actionFactory,
-        UrlInterface $url,
-        StoreManagerInterface $storeManager,
-        ResponseInterface $response,
-        UrlFinderInterface $urlFinder
+        protected readonly ActionFactory $actionFactory,
+        protected readonly UrlInterface $url,
+        protected readonly StoreManagerInterface $storeManager,
+        protected readonly ResponseInterface $response,
+        protected readonly UrlFinderInterface $urlFinder
     ) {
-        $this->actionFactory = $actionFactory;
-        $this->url = $url;
-        $this->storeManager = $storeManager;
-        $this->response = $response;
-        $this->urlFinder = $urlFinder;
     }
 
     /**

@@ -6,15 +6,20 @@
 
 namespace Magento\UrlRewrite\Model\Storage;
 
+use Exception;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Zend_Db_Expr;
 
 /**
  * Url rewrites DB storage.
@@ -39,21 +44,6 @@ class DbStorage extends AbstractStorage
     protected $connection;
 
     /**
-     * @var Resource
-     */
-    protected $resource;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var int
-     */
-    private $maxRetryCount;
-
-    /**
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param ResourceConnection $resource
@@ -63,15 +53,13 @@ class DbStorage extends AbstractStorage
     public function __construct(
         UrlRewriteFactory $urlRewriteFactory,
         DataObjectHelper $dataObjectHelper,
-        ResourceConnection $resource,
-        LoggerInterface $logger = null,
-        int $maxRetryCount = 5
+        private readonly ResourceConnection $resource,
+        private ?LoggerInterface $logger = null,
+        private readonly int $maxRetryCount = 5
     ) {
         $this->connection = $resource->getConnection();
-        $this->resource = $resource;
         $this->logger = $logger ?: ObjectManager::getInstance()
             ->get(LoggerInterface::class);
-        $this->maxRetryCount = $maxRetryCount;
         parent::__construct($urlRewriteFactory, $dataObjectHelper);
     }
 
@@ -240,7 +228,7 @@ class DbStorage extends AbstractStorage
         // prevent query locking in a case when nothing to delete
         $checkOldUrlsSelect = clone $oldUrlsSelect;
         $checkOldUrlsSelect->reset(Select::COLUMNS);
-        $checkOldUrlsSelect->columns([new \Zend_Db_Expr('1')]);
+        $checkOldUrlsSelect->columns([new Zend_Db_Expr('1')]);
         $checkOldUrlsSelect->limit(1);
         $hasOldUrls = false !== $this->connection->fetchOne($checkOldUrlsSelect);
         if ($hasOldUrls) {
@@ -266,7 +254,7 @@ class DbStorage extends AbstractStorage
         $oldUrlsSelect = $this->connection->select();
         $oldUrlsSelect->from(
             $this->resource->getTableName(self::TABLE_NAME),
-            [new \Zend_Db_Expr('1')]
+            [new Zend_Db_Expr('1')]
         );
         $allEmpty = true;
         foreach ($uniqueEntities as $storeId => $entityTypes) {
@@ -290,7 +278,7 @@ class DbStorage extends AbstractStorage
                 );
                 foreach ($requestPaths as $requestPath) {
                     if (isset($newRequestPaths[$requestPath])) {
-                        throw new \Magento\Framework\Exception\AlreadyExistsException();
+                        throw new AlreadyExistsException();
                     }
                     $newRequestPaths[$requestPath] = true;
                 }
@@ -301,7 +289,7 @@ class DbStorage extends AbstractStorage
         }
         $oldUrlsSelect->limit(1);
         if (false !== $this->connection->fetchOne($oldUrlsSelect)) {
-            throw new \Magento\Framework\Exception\AlreadyExistsException();
+            throw new AlreadyExistsException();
         }
     }
 
@@ -346,17 +334,17 @@ class DbStorage extends AbstractStorage
                 $this->checkDuplicates($uniqueEntities);
                 $this->upsertMultiple($data);
                 $this->connection->commit();
-            } catch (\Magento\Framework\DB\Adapter\DeadlockException $deadlockException) {
+            } catch (DeadlockException $deadlockException) {
                 $this->connection->rollBack();
                 if ($tries >= $this->maxRetryCount) {
                     throw $deadlockException;
                 }
                 continue;
-            } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+            } catch (AlreadyExistsException $e) {
                 $this->connection->rollBack();
                 $urlConflicted = $this->findUrlConflicted($urls, $uniqueEntities);
                 if ($urlConflicted) {
-                    throw new \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException(
+                    throw new UrlAlreadyExistsException(
                         __('URL key for specified store already exists.'),
                         $e,
                         $e->getCode(),
@@ -365,7 +353,7 @@ class DbStorage extends AbstractStorage
                 } else {
                     throw $e->getPrevious() ?: $e;
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->connection->rollBack();
                 throw $e;
             }
@@ -410,8 +398,8 @@ class DbStorage extends AbstractStorage
      *
      * @param array $data
      * @return void
-     * @throws \Magento\Framework\Exception\AlreadyExistsException|\Exception
-     * @throws \Exception
+     * @throws AlreadyExistsException|Exception
+     * @throws Exception
      * @deprecated Not used anymore.
      * @see upsertMultiple
      */
@@ -419,11 +407,11 @@ class DbStorage extends AbstractStorage
     {
         try {
             $this->connection->insertMultiple($this->resource->getTableName(self::TABLE_NAME), $data);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if (($e->getCode() === self::ERROR_CODE_DUPLICATE_ENTRY)
                 && preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\d]#', $e->getMessage())
             ) {
-                throw new \Magento\Framework\Exception\AlreadyExistsException(
+                throw new AlreadyExistsException(
                     __('URL key for specified store already exists.'),
                     $e
                 );

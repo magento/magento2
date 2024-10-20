@@ -5,13 +5,20 @@
  */
 namespace Magento\UrlRewrite\Block;
 
+use Magento\Backend\Block\Widget\Container;
+use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Helper\Data;
+use Magento\UrlRewrite\Block\Edit\Form;
+use Magento\UrlRewrite\Model\UrlRewrite;
+use Magento\UrlRewrite\Model\UrlRewriteFactory;
+
 /**
  * Block for URL rewrites edit page
  */
-class Edit extends \Magento\Backend\Block\Widget\Container
+class Edit extends Container
 {
     /**
-     * @var \Magento\UrlRewrite\Block\Selector
+     * @var Selector
      */
     private $_selectorBlock;
 
@@ -32,25 +39,25 @@ class Edit extends \Magento\Backend\Block\Widget\Container
     /**
      * Adminhtml data
      *
-     * @var \Magento\Backend\Helper\Data
+     * @var Data
      */
     protected $_adminhtmlData = null;
 
     /**
-     * @var \Magento\UrlRewrite\Model\UrlRewriteFactory
+     * @var UrlRewriteFactory
      */
     protected $_rewriteFactory;
 
     /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory
-     * @param \Magento\Backend\Helper\Data $adminhtmlData
+     * @param Context $context
+     * @param UrlRewriteFactory $rewriteFactory
+     * @param Data $adminhtmlData
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory,
-        \Magento\Backend\Helper\Data $adminhtmlData,
+        Context $context,
+        UrlRewriteFactory $rewriteFactory,
+        Data $adminhtmlData,
         array $data = []
     ) {
         $this->_rewriteFactory = $rewriteFactory;
@@ -203,12 +210,12 @@ class Edit extends \Magento\Backend\Block\Widget\Container
     /**
      * Creates edit form block
      *
-     * @return \Magento\UrlRewrite\Block\Edit\Form
+     * @return Form
      */
     protected function _createEditFormBlock()
     {
         return $this->getLayout()->createBlock(
-            \Magento\UrlRewrite\Block\Edit\Form::class,
+            Form::class,
             '',
             ['data' => ['url_rewrite' => $this->_getUrlRewrite()]]
         );
@@ -227,12 +234,12 @@ class Edit extends \Magento\Backend\Block\Widget\Container
     /**
      * Get selector block
      *
-     * @return \Magento\UrlRewrite\Block\Selector
+     * @return Selector
      */
     private function _getSelectorBlock()
     {
         if (!$this->_selectorBlock) {
-            $this->_selectorBlock = $this->getLayout()->createBlock(\Magento\UrlRewrite\Block\Selector::class);
+            $this->_selectorBlock = $this->getLayout()->createBlock(Selector::class);
         }
         return $this->_selectorBlock;
     }
@@ -265,7 +272,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
     /**
      * Get or create new instance of URL rewrite
      *
-     * @return \Magento\UrlRewrite\Model\UrlRewrite
+     * @return UrlRewrite
      */
     protected function _getUrlRewrite()
     {

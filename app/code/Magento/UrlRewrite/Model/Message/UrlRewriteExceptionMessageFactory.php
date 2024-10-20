@@ -6,7 +6,9 @@
 
 namespace Magento\UrlRewrite\Model\Message;
 
+use Exception;
 use Magento\Framework\Message\ExceptionMessageFactoryInterface;
+use Magento\Framework\UrlInterface;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Message\Factory;
@@ -17,29 +19,19 @@ class UrlRewriteExceptionMessageFactory implements ExceptionMessageFactoryInterf
     const URL_DUPLICATE_MESSAGE_MAP_ID = 'urlDuplicateMessageMapId';
 
     /**
-     * @var \Magento\Framework\Message\Factory
-     */
-    private $messageFactory;
-
-    /**
-     * @var \Magento\Framework\UrlInterface
-     */
-    private $urlBuilder;
-
-    /**
      * @param Factory $messageFactory
-     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param UrlInterface $urlBuilder
      */
-    public function __construct(Factory $messageFactory, \Magento\Framework\UrlInterface $urlBuilder)
-    {
-        $this->messageFactory = $messageFactory;
-        $this->urlBuilder = $urlBuilder;
+    public function __construct(
+        private readonly Factory $messageFactory,
+        private readonly UrlInterface $urlBuilder
+    ) {
     }
 
     /**
      * @inheritdoc
      */
-    public function createMessage(\Exception $exception, $type = MessageInterface::TYPE_ERROR)
+    public function createMessage(Exception $exception, $type = MessageInterface::TYPE_ERROR)
     {
         if ($exception instanceof UrlAlreadyExistsException) {
             $generatedUrls = [];

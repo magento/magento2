@@ -17,41 +17,18 @@ use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 class CompositeUrlFinder implements UrlFinderInterface
 {
     /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * @var array
-     */
-    private $children = [];
-
-    /**
-     * @var MergeDataProviderFactory
-     */
-    private $mergeDataProviderFactory;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $config;
-
-    /**
      * @param array $children
      * @param ObjectManagerInterface $objectManager
      * @param MergeDataProviderFactory $mergeDataProviderFactory
      * @param ScopeConfigInterface $config
      */
     public function __construct(
-        array $children,
-        ObjectManagerInterface $objectManager,
-        MergeDataProviderFactory $mergeDataProviderFactory,
-        ScopeConfigInterface $config
+        private array $children,
+        private readonly ObjectManagerInterface $objectManager,
+        private readonly MergeDataProviderFactory $mergeDataProviderFactory,
+        private readonly ScopeConfigInterface $config
     ) {
-        $this->children = $children;
-        $this->objectManager = $objectManager;
-        $this->mergeDataProviderFactory = $mergeDataProviderFactory;
-        $this->config = $config;
+        $this->children = $children ?? [];
     }
 
     /**

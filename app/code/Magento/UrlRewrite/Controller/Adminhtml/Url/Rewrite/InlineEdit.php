@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
+use Exception;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Json;
@@ -15,6 +16,7 @@ use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteFactory as UrlRewriteFactoryAlias;
 use Magento\UrlRewrite\Model\UrlRewrite;
 use Magento\UrlRewrite\Model\UrlRewriteFactory;
+use RuntimeException;
 
 /**
  * Inline edit action class
@@ -24,21 +26,6 @@ use Magento\UrlRewrite\Model\UrlRewriteFactory;
 class InlineEdit extends Rewrite implements HttpPostActionInterface
 {
     /**
-     * @var JsonFactory
-     */
-    private $jsonFactory;
-
-    /**
-     * @var UrlRewriteFactory
-     */
-    private $urlRewriteFactory;
-
-    /**
-     * @var UrlRewriteFactoryAlias
-     */
-    private $urlRewriteResourceFactory;
-
-    /**
      * @param Context $context
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param UrlRewriteFactoryAlias $urlRewriteResourceFactory
@@ -46,14 +33,11 @@ class InlineEdit extends Rewrite implements HttpPostActionInterface
      */
     public function __construct(
         Context $context,
-        UrlRewriteFactory $urlRewriteFactory,
-        UrlRewriteFactoryAlias $urlRewriteResourceFactory,
-        JsonFactory $jsonFactory
+        private readonly UrlRewriteFactory $urlRewriteFactory,
+        private readonly UrlRewriteFactoryAlias $urlRewriteResourceFactory,
+        private readonly JsonFactory $jsonFactory
     ) {
         parent::__construct($context);
-        $this->urlRewriteFactory = $urlRewriteFactory;
-        $this->urlRewriteResourceFactory = $urlRewriteResourceFactory;
-        $this->jsonFactory = $jsonFactory;
     }
 
     /**
@@ -88,13 +72,13 @@ class InlineEdit extends Rewrite implements HttpPostActionInterface
             try {
                 $urlRewrite->addData($postItems[$urlRewriteId]);
                 $urlRewriteResource->save($urlRewrite);
-            } catch (\RuntimeException $e) {
+            } catch (RuntimeException $e) {
                 $messages[] = $this->getErrorWithUrlRewriteId(
                     $urlRewrite,
                     $e->getMessage()
                 );
                 $error = true;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $messages[] = $this->getErrorWithUrlRewriteId(
                     $urlRewrite,
                     __('Something went wrong while saving the url rewrite.')

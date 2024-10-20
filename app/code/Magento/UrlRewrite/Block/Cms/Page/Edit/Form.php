@@ -5,48 +5,59 @@
  */
 namespace Magento\UrlRewrite\Block\Cms\Page\Edit;
 
+use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Helper\Data as BackendHelper;
+use Magento\Cms\Model\Page;
+use Magento\Cms\Model\PageFactory;
+use Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator;
+use Magento\Framework\Data\Form as FormData;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Registry;
+use Magento\Store\Model\System\Store as SystemStore;
+use Magento\UrlRewrite\Block\Cms\Page\Edit\Form as CmsPageForm;
+use Magento\UrlRewrite\Block\Edit\Form as EditForm;
+use Magento\UrlRewrite\Model\OptionProvider;
+use Magento\UrlRewrite\Model\UrlRewriteFactory;
+
 /**
  * Edit form for CMS page URL rewrites
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Form extends \Magento\UrlRewrite\Block\Edit\Form
+class Form extends EditForm
 {
     /**
-     * @var \Magento\Cms\Model\PageFactory
+     * @var PageFactory
      */
     protected $_pageFactory;
 
     /**
-     * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator
-     */
-    protected $cmsPageUrlPathGenerator;
-
-    /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\UrlRewrite\Model\OptionProvider $optionProvider
-     * @param \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory
-     * @param \Magento\Store\Model\System\Store $systemStore
-     * @param \Magento\Backend\Helper\Data $adminhtmlData
-     * @param \Magento\Cms\Model\PageFactory $pageFactory
-     * @param \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator $cmsPageUrlPathGenerator
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param OptionProvider $optionProvider
+     * @param UrlRewriteFactory $rewriteFactory
+     * @param SystemStore $systemStore
+     * @param BackendHelper $adminhtmlData
+     * @param PageFactory $pageFactory
+     * @param CmsPageUrlPathGenerator $cmsPageUrlPathGenerator
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\UrlRewrite\Model\OptionProvider $optionProvider,
-        \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory,
-        \Magento\Store\Model\System\Store $systemStore,
-        \Magento\Backend\Helper\Data $adminhtmlData,
-        \Magento\Cms\Model\PageFactory $pageFactory,
-        \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator $cmsPageUrlPathGenerator,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        OptionProvider $optionProvider,
+        UrlRewriteFactory $rewriteFactory,
+        SystemStore $systemStore,
+        BackendHelper $adminhtmlData,
+        PageFactory $pageFactory,
+        protected readonly CmsPageUrlPathGenerator $cmsPageUrlPathGenerator,
         array $data = []
     ) {
         $this->_pageFactory = $pageFactory;
@@ -60,14 +71,13 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
             $adminhtmlData,
             $data
         );
-        $this->cmsPageUrlPathGenerator = $cmsPageUrlPathGenerator;
     }
 
     /**
      * Form post init
      *
-     * @param \Magento\Framework\Data\Form $form
-     * @return \Magento\UrlRewrite\Block\Cms\Page\Edit\Form
+     * @param FormData $form
+     * @return CmsPageForm
      */
     protected function _formPostInit($form)
     {
@@ -80,9 +90,9 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
         );
 
         // Fill request path and target path elements
-        /** @var $requestPath \Magento\Framework\Data\Form\Element\AbstractElement */
+        /** @var AbstractElement $requestPath */
         $requestPath = $this->getForm()->getElement('request_path');
-        /** @var $targetPath \Magento\Framework\Data\Form\Element\AbstractElement */
+        /** @var AbstractElement $targetPath */
         $targetPath = $this->getForm()->getElement('target_path');
 
         $model = $this->_getModel();
@@ -101,7 +111,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
      * Get catalog entity associated stores
      *
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _getEntityStores()
     {
@@ -114,7 +124,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
             $this->_requireStoresFilter = !in_array(0, $entityStores);
 
             if (!$entityStores) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('Please assign a website to the selected CMS page.')
                 );
             }
@@ -126,7 +136,7 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
     /**
      * Get CMS page model instance
      *
-     * @return \Magento\Cms\Model\Page
+     * @return Page
      */
     protected function _getCmsPage()
     {
