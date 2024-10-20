@@ -147,7 +147,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 'main_table.rating_id = store.rating_id AND ' . $condition
             );
         }
-        $connection->fetchAll($this->getSelect());
+
         return $this;
     }
 
