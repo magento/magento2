@@ -22,6 +22,9 @@ class GroupExcludedWebsiteRepository implements GroupExcludedWebsiteRepositoryIn
      */
     private $groupExcludedWebsiteResourceModel;
 
+    /** @var array[] */
+    private array $excludedWebsitesForGroups = [];
+
     /**
      * @param GroupExcludedWebsite $groupExcludedWebsiteResourceModel
      */
@@ -52,7 +55,7 @@ class GroupExcludedWebsiteRepository implements GroupExcludedWebsiteRepositoryIn
     public function getCustomerGroupExcludedWebsites(int $customerGroupId): array
     {
         try {
-            return $this->groupExcludedWebsiteResourceModel->loadCustomerGroupExcludedWebsites($customerGroupId);
+            return $this->excludedWebsitesForGroups[$customerGroupId] ??= $this->groupExcludedWebsiteResourceModel->loadCustomerGroupExcludedWebsites($customerGroupId);
         } catch (LocalizedException $e) {
             throw new LocalizedException(
                 __('Could not retrieve excluded customer group websites by customer group: "%1"', $e->getMessage())
