@@ -72,6 +72,8 @@ class JoinProcessor implements CollectionProcessorInterface
                 }
             }
         }
+
+        $this->appliedFields = [];
     }
 
     /**
