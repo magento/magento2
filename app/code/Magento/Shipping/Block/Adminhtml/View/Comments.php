@@ -6,8 +6,6 @@
 
 /**
  * Adminhtml sales shipment comment view block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Shipping\Block\Adminhtml\View;
 
@@ -18,8 +16,6 @@ namespace Magento\Shipping\Block\Adminhtml\View;
 class Comments extends \Magento\Backend\Block\Text\ListText
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
