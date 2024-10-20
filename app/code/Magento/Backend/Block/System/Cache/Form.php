@@ -7,8 +7,6 @@ namespace Magento\Backend\Block\System\Cache;
 
 /**
  * Cache management form page
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
