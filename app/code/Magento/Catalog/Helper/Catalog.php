@@ -7,8 +7,6 @@ namespace Magento\Catalog\Helper;
 
 /**
  * Adminhtml Catalog helper
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Catalog extends \Magento\Framework\App\Helper\AbstractHelper
 {

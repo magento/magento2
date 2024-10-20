@@ -6,8 +6,6 @@
 
 /**
  * Catalog product weight backend attribute model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 

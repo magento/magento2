@@ -6,23 +6,17 @@
 
 /**
  * Catalog Product List Sortable allowed sortable attributes source
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Config\Source;
 
 class ListSort implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * Catalog config
-     *
      * @var \Magento\Catalog\Model\Config
      */
     protected $_catalogConfig;
 
     /**
-     * Construct
-     *
      * @param \Magento\Catalog\Model\Config $catalogConfig
      */
     public function __construct(\Magento\Catalog\Model\Config $catalogConfig)
