@@ -29,6 +29,7 @@ define([
                 try {
                     error = JSON.parse(response.responseText);
                 } catch (exception) {
+                    console.error(exception);
                     error = {
                         message: $t('Something went wrong with your request. Please try again later.')
                     };
