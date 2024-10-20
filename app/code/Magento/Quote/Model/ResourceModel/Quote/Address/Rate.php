@@ -9,8 +9,6 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
 
 /**
  * Quote address shipping rate resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Rate extends AbstractDb
 {

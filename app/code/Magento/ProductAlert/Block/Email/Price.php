@@ -7,8 +7,6 @@ namespace Magento\ProductAlert\Block\Email;
 
 /**
  * ProductAlert email price changed grid
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Price extends \Magento\ProductAlert\Block\Email\AbstractEmail
 {

@@ -9,8 +9,6 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Product alert for back in abstract resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

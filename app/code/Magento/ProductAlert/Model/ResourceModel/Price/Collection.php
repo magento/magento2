@@ -8,7 +8,6 @@ namespace Magento\ProductAlert\Model\ResourceModel\Price;
 /**
  * Product alert for changed price collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */

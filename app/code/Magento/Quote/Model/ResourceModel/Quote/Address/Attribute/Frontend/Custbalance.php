@@ -7,8 +7,6 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Frontend;
 
 /**
  * Quote address attribute frontend custbalance resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Custbalance extends \Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Frontend
 {
