@@ -183,7 +183,7 @@ class AbstractConditionTest extends TestCase
             [1, '{}', 1, false, 'grid'],
             [1, '!{}', [1, 2, 3], false, 'grid'],
             [1, '!{}', [], false, 'grid'],
-            [[1], '!{}', [], false, 'grid'],
+            [[1], '!{}', [], true, 'grid'],
             [[1], '{}', null, false, 'grid'],
             [null, '{}', null, true, 'input'],
             [null, '!{}', null, false, 'input'],
