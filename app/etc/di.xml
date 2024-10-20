@@ -1986,7 +1986,7 @@
     </type>
     <type name="Magento\Framework\Webapi\ServiceInputProcessor">
         <arguments>
-            <argument name="defaultPageSize" xsi:type="number">999999</argument>
+            <argument name="defaultPageSize" xsi:type="number">20</argument>
         </arguments>
     </type>
     <preference for="Magento\Framework\App\BackpressureEnforcerInterface"
