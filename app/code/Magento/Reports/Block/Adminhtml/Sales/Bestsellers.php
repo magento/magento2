@@ -9,20 +9,17 @@ namespace Magento\Reports\Block\Adminhtml\Sales;
  * Adminhtml sales report page content block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Bestsellers extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
-     * Template
-     *
      * @var string
      */
     protected $_template = 'Magento_Reports::report/grid/container.phtml';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {

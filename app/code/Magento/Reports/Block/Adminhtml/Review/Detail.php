@@ -7,8 +7,6 @@ namespace Magento\Reports\Block\Adminhtml\Review;
 
 /**
  * Adminhtml report review product blocks content block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Detail extends \Magento\Backend\Block\Widget\Grid\Container
 {
@@ -18,6 +16,8 @@ class Detail extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_productFactory;
 
     /**
+     * Initialize
+     *
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param array $data
@@ -32,6 +32,8 @@ class Detail extends \Magento\Backend\Block\Widget\Grid\Container
     }
 
     /**
+     * Initialize
+     *
      * @return void
      */
     protected function _construct()

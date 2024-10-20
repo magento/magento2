@@ -7,8 +7,6 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Item;
 
 /**
  * Item option resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
