@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Plugin;
 
+use Magento\Webapi\Controller\Rest;
 use Magento\WebapiAsync\Model\ServiceConfig;
 use Magento\Webapi\Controller\PathProcessor;
 use Magento\Framework\App\RequestInterface;
@@ -16,37 +17,25 @@ use Magento\WebapiAsync\Model\ServiceConfig\Converter;
 class ControllerRest
 {
     /**
-     * @var ServiceConfig
-     */
-    private $serviceConfig;
-
-    /**
-     * @var PathProcessor
-     */
-    private $pathProcessor;
-
-    /**
      * ControllerRest constructor.
      *
      * @param ServiceConfig $serviceConfig
      * @param PathProcessor $pathProcessor
      */
     public function __construct(
-        ServiceConfig $serviceConfig,
-        PathProcessor $pathProcessor
+        private readonly ServiceConfig $serviceConfig,
+        private readonly PathProcessor $pathProcessor
     ) {
-        $this->serviceConfig = $serviceConfig;
-        $this->pathProcessor = $pathProcessor;
     }
 
     /**
      * Apply route customization.
-     * @param \Magento\Webapi\Controller\Rest $subject
+     * @param Rest $subject
      * @param RequestInterface $request
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(\Magento\Webapi\Controller\Rest $subject, RequestInterface $request)
+    public function beforeDispatch(Rest $subject, RequestInterface $request)
     {
         $routeCustomizations = $this->serviceConfig->getServices()[Converter::KEY_ROUTES] ?? [];
         if ($routeCustomizations) {

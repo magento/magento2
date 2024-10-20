@@ -24,24 +24,9 @@ class ServiceConfig
     const CACHE_ID = 'webapi_async_service_config';
 
     /**
-     * @var WebapiCache
-     */
-    private $cache;
-
-    /**
-     * @var Reader
-     */
-    private $configReader;
-
-    /**
      * @var array
      */
     private $services;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
 
     /**
      * Initialize dependencies.
@@ -51,13 +36,10 @@ class ServiceConfig
      * @param SerializerInterface $serializer
      */
     public function __construct(
-        WebapiCache $cache,
-        Reader $configReader,
-        SerializerInterface $serializer
+        private readonly WebapiCache $cache,
+        private readonly Reader $configReader,
+        private readonly SerializerInterface $serializer
     ) {
-        $this->cache = $cache;
-        $this->configReader = $configReader;
-        $this->serializer = $serializer;
     }
 
     /**

@@ -10,23 +10,14 @@ namespace Magento\WebapiAsync\Code\Generator\Config\RemoteServiceReader;
 
 use Magento\AsynchronousOperations\Model\ConfigInterface as WebApiAsyncConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\MessageQueue\DefaultValueProvider;
 
 /**
  * Remote service reader with auto generated configuration for queue_publisher.xml
  */
-class Publisher implements \Magento\Framework\Config\ReaderInterface
+class Publisher implements ReaderInterface
 {
-    /**
-     * @var WebApiAsyncConfig
-     */
-    private $webapiAsyncConfig;
-
-    /**
-     * @var DefaultValueProvider
-     */
-    private $defaultValueProvider;
-
     /**
      * Initialize dependencies.
      *
@@ -34,10 +25,9 @@ class Publisher implements \Magento\Framework\Config\ReaderInterface
      * @param DefaultValueProvider|null $defaultValueProvider
      */
     public function __construct(
-        WebApiAsyncConfig $webapiAsyncConfig,
-        DefaultValueProvider $defaultValueProvider = null
+        private readonly WebApiAsyncConfig $webapiAsyncConfig,
+        private ?DefaultValueProvider $defaultValueProvider = null
     ) {
-        $this->webapiAsyncConfig = $webapiAsyncConfig;
         $this->defaultValueProvider = $defaultValueProvider
             ?? ObjectManager::getInstance()->get(DefaultValueProvider::class);
     }
