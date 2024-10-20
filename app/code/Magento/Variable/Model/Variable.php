@@ -5,17 +5,23 @@
  */
 namespace Magento\Variable\Model;
 
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Escaper;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
 use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Variable\Model\ResourceModel\Variable\Collection;
 
 /**
  * Custom variable model
  *
  * @method string getCode()
- * @method \Magento\Variable\Model\Variable setCode(string $value)
+ * @method Variable setCode(string $value)
  * @method string getName()
- * @method \Magento\Variable\Model\Variable setName(string $value)
+ * @method Variable setName(string $value)
  *
  * @api
  * @since 100.0.2
@@ -34,32 +40,27 @@ class Variable extends AbstractModel
     protected $_storeId = 0;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     protected $_escaper = null;
 
     /**
-     * @var WYSIWYGValidatorInterface
-     */
-    private $wysiwygValidator;
-
-    /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Variable\Model\ResourceModel\Variable $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param Escaper $escaper
+     * @param ResourceModel\Variable $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
      * @param WYSIWYGValidatorInterface|null $wysiwygValidator
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Variable\Model\ResourceModel\Variable $resource,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        Escaper $escaper,
+        ResourceModel\Variable $resource,
+        AbstractDb $resourceCollection = null,
         array $data = [],
-        ?WYSIWYGValidatorInterface $wysiwygValidator = null
+        private ?WYSIWYGValidatorInterface $wysiwygValidator = null
     ) {
         $this->_escaper = $escaper;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -76,7 +77,7 @@ class Variable extends AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init(\Magento\Variable\Model\ResourceModel\Variable::class);
+        $this->_init(ResourceModel\Variable::class);
     }
 
     /**
@@ -156,7 +157,7 @@ class Variable extends AbstractModel
     /**
      * Validation of object data. Checking for unique variable code
      *
-     * @return \Magento\Framework\Phrase|bool
+     * @return Phrase|bool
      */
     public function validate()
     {
@@ -179,7 +180,7 @@ class Variable extends AbstractModel
      */
     public function getVariablesOptionArray($withGroup = false)
     {
-        /* @var $collection \Magento\Variable\Model\ResourceModel\Variable\Collection */
+        /* @var $collection Collection */
         $collection = $this->getCollection();
         $variables = [];
         foreach ($collection->toOptionArray() as $variable) {

@@ -6,19 +6,21 @@
  */
 namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
+use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Variable\Controller\Adminhtml\System\Variable;
 
 /**
  * Display Variables list page
  * @api
  * @since 100.0.2
  */
-class Index extends \Magento\Variable\Controller\Adminhtml\System\Variable implements HttpGetActionInterface
+class Index extends Variable implements HttpGetActionInterface
 {
     /**
      * Index Action
      *
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return Page
      */
     public function execute()
     {

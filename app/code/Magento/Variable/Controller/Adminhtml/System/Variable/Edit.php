@@ -6,18 +6,24 @@
  */
 namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\View\Element\Template;
+use Magento\Variable\Block\System\Variable\Edit as SystemVariableEdit;
+use Magento\Variable\Controller\Adminhtml\System\Variable;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
 /**
  * Display Variables edit form page
  *
  * @api
  * @since 100.0.2
  */
-class Edit extends \Magento\Variable\Controller\Adminhtml\System\Variable
+class Edit extends Variable implements HttpGetActionInterface
 {
     /**
      * Edit Action
      *
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return Page
      */
     public function execute()
     {
@@ -29,10 +35,10 @@ class Edit extends \Magento\Variable\Controller\Adminhtml\System\Variable
             $variable->getId() ? $variable->getCode() : __('New Custom Variable')
         );
         $resultPage->addContent($resultPage->getLayout()->createBlock(
-            \Magento\Variable\Block\System\Variable\Edit::class
+            SystemVariableEdit::class
         ))->addJs(
             $resultPage->getLayout()->createBlock(
-                \Magento\Framework\View\Element\Template::class,
+                Template::class,
                 '',
                 ['data' => ['template' => 'Magento_Variable::system/variable/js.phtml']]
             )

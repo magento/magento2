@@ -5,18 +5,22 @@
  */
 namespace Magento\Variable\Block\System\Variable\Edit;
 
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Framework\Data\Form as FormData;
+use Magento\Variable\Model\Variable;
+
 /**
  * Custom Variable Edit Form
  *
  * @api
  * @since 100.0.2
  */
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+class Form extends Generic
 {
     /**
      * Getter
      *
-     * @return \Magento\Variable\Model\Variable
+     * @return Variable
      */
     public function getVariable()
     {
@@ -26,11 +30,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Prepare form before rendering HTML
      *
-     * @return \Magento\Variable\Block\System\Variable\Edit\Form
+     * @return Form
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var FormData $form */
         $form = $this->_formFactory->create(
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
