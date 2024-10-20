@@ -6,8 +6,6 @@
 
 /**
  * Event cron observer object
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Event\Observer;
 

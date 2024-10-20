@@ -6,8 +6,6 @@
 
 /**
  * Core URL helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Url\Helper;
 

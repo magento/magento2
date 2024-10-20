@@ -6,8 +6,6 @@
 
 /**
  * Event observer collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Event\Observer;
 

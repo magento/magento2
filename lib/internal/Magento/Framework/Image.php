@@ -7,8 +7,6 @@ namespace Magento\Framework;
 
 /**
  * Image handler library
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Image
 {

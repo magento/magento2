@@ -6,8 +6,6 @@
 
 /**
  * Class to work with HTTP protocol using sockets
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\HTTP\Client;
 
