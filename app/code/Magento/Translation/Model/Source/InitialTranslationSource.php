@@ -18,24 +18,9 @@ use Magento\Framework\DataObject;
 class InitialTranslationSource implements ConfigSourceInterface
 {
     /**
-     * @var TranslateFactory
-     */
-    private $translateFactory;
-
-    /**
-     * @var StoreManager
-     */
-    private $storeManager;
-
-    /**
      * @var array
      */
     private $data;
-
-    /**
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
 
     /**
      * @param TranslateFactory $translateFactory
@@ -43,13 +28,10 @@ class InitialTranslationSource implements ConfigSourceInterface
      * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
-        TranslateFactory $translateFactory,
-        StoreManager $storeManager,
-        DeploymentConfig $deploymentConfig
+        private readonly TranslateFactory $translateFactory,
+        private readonly StoreManager $storeManager,
+        private readonly DeploymentConfig $deploymentConfig
     ) {
-        $this->translateFactory = $translateFactory;
-        $this->storeManager = $storeManager;
-        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**

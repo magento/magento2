@@ -22,18 +22,12 @@ class Translation implements ConfigTypeInterface
     private $data;
 
     /**
-     * @var ConfigSourceInterface
-     */
-    private $source;
-
-    /**
      * Translation constructor.
      * @param ConfigSourceInterface $source
      */
     public function __construct(
-        ConfigSourceInterface $source
+        private readonly ConfigSourceInterface $source
     ) {
-        $this->source = $source;
     }
 
     /**

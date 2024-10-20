@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Translate\ResourceInterface;
@@ -22,26 +23,6 @@ use Magento\Translation\App\Config\Type\Translation;
 class Translate extends AbstractDb implements ResourceInterface
 {
     /**
-     * @var ScopeResolverInterface
-     */
-    protected $scopeResolver;
-
-    /**
-     * @var Config
-     */
-    private $appConfig;
-
-    /**
-     * @var DeploymentConfig
-     */
-    private $deployedConfig;
-
-    /**
-     * @var null|string
-     */
-    protected $scope;
-
-    /**
      * @param Context $context
      * @param ScopeResolverInterface $scopeResolver
      * @param string $connectionName
@@ -51,14 +32,12 @@ class Translate extends AbstractDb implements ResourceInterface
      */
     public function __construct(
         Context $context,
-        ScopeResolverInterface $scopeResolver,
+        protected readonly ScopeResolverInterface $scopeResolver,
         $connectionName = null,
-        $scope = null,
-        ?Config $appConfig = null,
-        ?DeploymentConfig $deployedConfig = null
+        protected $scope = null,
+        private ?Config $appConfig = null,
+        private ?DeploymentConfig $deployedConfig = null
     ) {
-        $this->scopeResolver = $scopeResolver;
-        $this->scope = $scope;
         $this->appConfig = $appConfig ?? ObjectManager::getInstance()->get(Config::class);
         $this->deployedConfig = $deployedConfig ?? ObjectManager::getInstance()->get(DeploymentConfig::class);
         parent::__construct($context, $connectionName);
@@ -155,7 +134,7 @@ class Translate extends AbstractDb implements ResourceInterface
     /**
      * Get connection
      *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
+     * @return AdapterInterface|false
      */
     public function getConnection()
     {

@@ -7,6 +7,7 @@
 namespace Magento\Translation\Block;
 
 use Magento\Framework\View\Element\Template;
+use Magento\Translation\Model\FileManager;
 use Magento\Translation\Model\Js\Config;
 
 /**
@@ -22,30 +23,18 @@ use Magento\Translation\Model\Js\Config;
 class Js extends Template
 {
     /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * @var \Magento\Translation\Model\FileManager
-     */
-    private $fileManager;
-
-    /**
      * @param Template\Context $context
      * @param Config $config
-     * @param \Magento\Translation\Model\FileManager $fileManager
+     * @param FileManager $fileManager
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
-        Config $config,
-        \Magento\Translation\Model\FileManager $fileManager,
+        protected readonly Config $config,
+        private readonly FileManager $fileManager,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->config = $config;
-        $this->fileManager = $fileManager;
     }
 
     /**

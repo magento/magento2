@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Translation\Model\Inline;
 
+use InvalidArgumentException;
 use Laminas\Filter\FilterInterface;
 use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Framework\Translate\Inline\ParserInterface;
@@ -30,11 +31,6 @@ class Parser implements ParserInterface
      * data-translate html element attribute name
      */
     public const DATA_TRANSLATE = 'data-translate';
-
-    /**
-     * @var Escaper
-     */
-    private $escaper;
 
     /**
      * Response body or JSON content string
@@ -139,16 +135,6 @@ class Parser implements ParserInterface
     protected $_appCache;
 
     /**
-     * @var CacheManager
-     */
-    private $cacheManager;
-
-    /**
-     * @var array
-     */
-    private $relatedCacheTypes;
-
-    /**
      * Initialize base inline translation model
      *
      * @param StringUtilsFactory $resource
@@ -168,9 +154,9 @@ class Parser implements ParserInterface
         State $appState,
         TypeListInterface $appCache,
         InlineInterface $translateInline,
-        Escaper $escaper,
-        CacheManager $cacheManager,
-        array $relatedCacheTypes = []
+        private readonly Escaper $escaper,
+        private readonly CacheManager $cacheManager,
+        private readonly array $relatedCacheTypes = []
     ) {
         $this->_resourceFactory = $resource;
         $this->_storeManager = $storeManager;
@@ -178,9 +164,6 @@ class Parser implements ParserInterface
         $this->_appState = $appState;
         $this->_appCache = $appCache;
         $this->_translateInline = $translateInline;
-        $this->escaper = $escaper;
-        $this->cacheManager = $cacheManager;
-        $this->relatedCacheTypes = $relatedCacheTypes;
     }
 
     /**
@@ -203,10 +186,10 @@ class Parser implements ParserInterface
         $this->_validateTranslationParams($translateParams);
         $this->_filterTranslationParams($translateParams, ['custom']);
 
-        /** @var $validStoreId int */
+        /** @var int $validStoreId */
         $validStoreId = $this->_storeManager->getStore()->getId();
 
-        /** @var $resource StringUtils */
+        /** @var StringUtils $resource */
         $resource = $this->_resourceFactory->create();
         foreach ($translateParams as $param) {
             if ($this->_appState->getAreaCode() == FrontNameResolver::AREA_CODE) {
@@ -234,13 +217,13 @@ class Parser implements ParserInterface
      * @param array $translateParams
      *
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function _validateTranslationParams(array $translateParams)
     {
         foreach ($translateParams as $param) {
             if (!is_array($param) || !isset($param['original']) || !isset($param['custom'])) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'Both original and custom phrases are required for inline translation.'
                 );
             }

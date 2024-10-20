@@ -10,7 +10,9 @@ namespace Magento\Translation\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Asset\File as AssetFile;
 use Magento\Framework\View\Asset\Repository;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * A service for handling Translation config files.
@@ -23,47 +25,23 @@ class FileManager
     const TRANSLATION_CONFIG_FILE_NAME = 'Magento_Translation/js/i18n-config.js';
 
     /**
-     * @var Repository
-     */
-    private $assetRepo;
-
-    /**
-     * @var DirectoryList
-     */
-    private $directoryList;
-
-    /**
-     * @var File
-     */
-    private $driverFile;
-
-    /**
-     * @var Json
-     */
-    private $serializer;
-
-    /**
      * @param Repository $assetRepo
      * @param DirectoryList $directoryList
      * @param File $driverFile
      * @param Json $serializer
      */
     public function __construct(
-        Repository $assetRepo,
-        DirectoryList $directoryList,
-        File $driverFile,
-        Json $serializer
+        private readonly Repository $assetRepo,
+        private readonly DirectoryList $directoryList,
+        private readonly File $driverFile,
+        private readonly Json $serializer
     ) {
-        $this->assetRepo = $assetRepo;
-        $this->directoryList = $directoryList;
-        $this->driverFile = $driverFile;
-        $this->serializer = $serializer;
     }
 
     /**
      * Create a view asset representing the RequireJS config.config property for inline translation.
      *
-     * @return \Magento\Framework\View\Asset\File
+     * @return AssetFile
      */
     public function createTranslateConfigAsset()
     {
@@ -97,9 +75,9 @@ class FileManager
     protected function getTranslationFileFullPath()
     {
         return $this->directoryList->getPath(DirectoryList::STATIC_VIEW) .
-            \DIRECTORY_SEPARATOR .
+            DIRECTORY_SEPARATOR .
             $this->assetRepo->getStaticViewFileContext()->getPath() .
-            \DIRECTORY_SEPARATOR .
+            DIRECTORY_SEPARATOR .
             Js\Config::DICTIONARY_FILE_NAME;
     }
 
@@ -122,7 +100,7 @@ class FileManager
     public function updateTranslationFileContent($content)
     {
         $translationDir = $this->directoryList->getPath(DirectoryList::STATIC_VIEW) .
-            \DIRECTORY_SEPARATOR .
+            DIRECTORY_SEPARATOR .
             $this->assetRepo->getStaticViewFileContext()->getPath();
 
         if (!$this->driverFile->isExists($this->getTranslationFileFullPath())) {

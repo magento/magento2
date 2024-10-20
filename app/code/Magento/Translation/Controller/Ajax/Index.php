@@ -6,24 +6,22 @@
  */
 namespace Magento\Translation\Controller\Ajax;
 
-class Index extends \Magento\Framework\App\Action\Action
+use Exception;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Translate\Inline\ParserInterface;
+
+class Index extends Action
 {
     /**
-     * @var \Magento\Framework\Translate\Inline\ParserInterface
-     */
-    protected $inlineParser;
-
-    /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\Translate\Inline\ParserInterface $inlineParser
+     * @param Context $context
+     * @param ParserInterface $inlineParser
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\Translate\Inline\ParserInterface $inlineParser
+        Context $context,
+        protected readonly ParserInterface $inlineParser
     ) {
         parent::__construct($context);
-
-        $this->inlineParser = $inlineParser;
     }
 
     /**
@@ -37,7 +35,7 @@ class Index extends \Magento\Framework\App\Action\Action
 
         try {
             $response = $this->inlineParser->processAjaxPost($translate);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $response = "{error:true,message:'" . $e->getMessage() . "'}";
         }
         $this->getResponse()->representJson(json_encode($response));

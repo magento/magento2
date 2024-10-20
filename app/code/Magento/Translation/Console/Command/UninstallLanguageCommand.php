@@ -36,31 +36,6 @@ class UninstallLanguageCommand extends Command
     public const BACKUP_CODE_OPTION = 'backup-code';
 
     /**
-     * @var DependencyChecker
-     */
-    private $dependencyChecker;
-
-    /**
-     * @var Remove
-     */
-    private $remove;
-
-    /**
-     * @var ComposerInformation
-     */
-    private $composerInfo;
-
-    /**
-     * @var Cache
-     */
-    private $cache;
-
-    /**
-     * @var BackupRollbackFactory
-     */
-    private $backupRollbackFactory;
-
-    /**
      * Inject dependencies
      *
      * @param DependencyChecker $dependencyChecker
@@ -70,18 +45,12 @@ class UninstallLanguageCommand extends Command
      * @param BackupRollbackFactory $backupRollbackFactory
      */
     public function __construct(
-        DependencyChecker $dependencyChecker,
-        Remove $remove,
-        ComposerInformation $composerInfo,
-        Cache $cache,
-        BackupRollbackFactory $backupRollbackFactory
+        private readonly DependencyChecker $dependencyChecker,
+        private readonly Remove $remove,
+        private readonly ComposerInformation $composerInfo,
+        private readonly Cache $cache,
+        private readonly BackupRollbackFactory $backupRollbackFactory
     ) {
-        $this->dependencyChecker = $dependencyChecker;
-        $this->remove = $remove;
-        $this->composerInfo = $composerInfo;
-        $this->cache = $cache;
-        $this->backupRollbackFactory = $backupRollbackFactory;
-
         parent::__construct();
     }
 

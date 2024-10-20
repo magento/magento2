@@ -5,32 +5,29 @@
  */
 namespace Magento\Translation\Model\Inline;
 
+use Magento\Developer\Helper\Data as DeveloperHelper;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Translate\Inline\ConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * Inline Translation config
  */
-class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
+class Config implements ConfigInterface
 {
     /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var \Magento\Developer\Helper\Data
+     * @var DeveloperHelper
      */
     protected $devHelper;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Developer\Helper\Data $helper
+     * @param ScopeConfigInterface $scopeConfig
+     * @param DeveloperHelper $helper
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Developer\Helper\Data $helper
+        protected readonly ScopeConfigInterface $scopeConfig,
+        DeveloperHelper $helper
     ) {
-        $this->scopeConfig = $scopeConfig;
         $this->devHelper = $helper;
     }
 
@@ -41,7 +38,7 @@ class Config implements \Magento\Framework\Translate\Inline\ConfigInterface
     {
         return $this->scopeConfig->isSetFlag(
             'dev/translate_inline/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $scope
         );
     }

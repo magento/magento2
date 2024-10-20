@@ -8,22 +8,25 @@
  * String translation model
  *
  * @method int getStoreId()
- * @method \Magento\Translation\Model\StringUtils setStoreId(int $value)
+ * @method StringUtils setStoreId(int $value)
  * @method string getTranslate()
- * @method \Magento\Translation\Model\StringUtils setTranslate(string $value)
+ * @method StringUtils setTranslate(string $value)
  * @method string getLocale()
- * @method \Magento\Translation\Model\StringUtils setLocale(string $value)
+ * @method StringUtils setLocale(string $value)
  */
 namespace Magento\Translation\Model;
 
-class StringUtils extends \Magento\Framework\Model\AbstractModel
+use Magento\Framework\Model\AbstractModel;
+use Magento\Translation\Model\ResourceModel\StringUtils as ResourceStringUtils;
+
+class StringUtils extends AbstractModel
 {
     /**
      * @return void
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Translation\Model\ResourceModel\StringUtils::class);
+        $this->_init(ResourceStringUtils::class);
     }
 
     /**
