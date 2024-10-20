@@ -6,8 +6,6 @@
 
 /**
  * Product Low Stock Report Collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Lowstock;
 
@@ -229,6 +227,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
         }
 
         if (!is_array($fields)) {
+            // phpstan:ignore
             if (empty($fields)) {
                 $fields = [];
             } else {

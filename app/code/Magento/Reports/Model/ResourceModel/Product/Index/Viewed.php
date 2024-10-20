@@ -6,8 +6,6 @@
 
 /**
  * Reports Viewed Product Index Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Index;
 

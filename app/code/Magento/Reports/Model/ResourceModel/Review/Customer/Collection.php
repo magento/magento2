@@ -6,8 +6,6 @@
 
 /**
  * Report Customers Review collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Review\Customer;
 
