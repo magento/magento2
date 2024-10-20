@@ -12,52 +12,53 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * @api
  * @since 100.0.2
  *
- * @deprecated 100.3.0 Replaced with Multi Source Inventory
+ * @deprecated 100.3.0
+ * @see Replaced with Multi Source Inventory
  * @link https://developer.adobe.com/commerce/webapi/rest/inventory/index.html
  * @link https://developer.adobe.com/commerce/webapi/rest/inventory/inventory-api-reference.html
  */
 interface StockItemInterface extends ExtensibleDataInterface
 {
-    const BACKORDERS_NO = 0;
+    public const BACKORDERS_NO = 0;
 
-    const ITEM_ID = 'item_id';
-    const PRODUCT_ID = 'product_id';
-    const STOCK_ID = 'stock_id';
-    const QTY = 'qty';
-    const IS_QTY_DECIMAL = 'is_qty_decimal';
-    const SHOW_DEFAULT_NOTIFICATION_MESSAGE = 'show_default_notification_message';
+    public const ITEM_ID = 'item_id';
+    public const PRODUCT_ID = 'product_id';
+    public const STOCK_ID = 'stock_id';
+    public const QTY = 'qty';
+    public const IS_QTY_DECIMAL = 'is_qty_decimal';
+    public const SHOW_DEFAULT_NOTIFICATION_MESSAGE = 'show_default_notification_message';
 
-    const USE_CONFIG_MIN_QTY = 'use_config_min_qty';
-    const MIN_QTY = 'min_qty';
+    public const USE_CONFIG_MIN_QTY = 'use_config_min_qty';
+    public const MIN_QTY = 'min_qty';
 
-    const USE_CONFIG_MIN_SALE_QTY = 'use_config_min_sale_qty';
-    const MIN_SALE_QTY = 'min_sale_qty';
+    public const USE_CONFIG_MIN_SALE_QTY = 'use_config_min_sale_qty';
+    public const MIN_SALE_QTY = 'min_sale_qty';
 
-    const USE_CONFIG_MAX_SALE_QTY = 'use_config_max_sale_qty';
-    const MAX_SALE_QTY = 'max_sale_qty';
+    public const USE_CONFIG_MAX_SALE_QTY = 'use_config_max_sale_qty';
+    public const MAX_SALE_QTY = 'max_sale_qty';
 
-    const USE_CONFIG_BACKORDERS = 'use_config_backorders';
-    const BACKORDERS = 'backorders';
+    public const USE_CONFIG_BACKORDERS = 'use_config_backorders';
+    public const BACKORDERS = 'backorders';
 
-    const USE_CONFIG_NOTIFY_STOCK_QTY = 'use_config_notify_stock_qty';
-    const NOTIFY_STOCK_QTY = 'notify_stock_qty';
+    public const USE_CONFIG_NOTIFY_STOCK_QTY = 'use_config_notify_stock_qty';
+    public const NOTIFY_STOCK_QTY = 'notify_stock_qty';
 
-    const USE_CONFIG_QTY_INCREMENTS = 'use_config_qty_increments';
-    const QTY_INCREMENTS = 'qty_increments';
+    public const USE_CONFIG_QTY_INCREMENTS = 'use_config_qty_increments';
+    public const QTY_INCREMENTS = 'qty_increments';
 
-    const USE_CONFIG_ENABLE_QTY_INC = 'use_config_enable_qty_inc';
-    const ENABLE_QTY_INCREMENTS = 'enable_qty_increments';
+    public const USE_CONFIG_ENABLE_QTY_INC = 'use_config_enable_qty_inc';
+    public const ENABLE_QTY_INCREMENTS = 'enable_qty_increments';
 
-    const USE_CONFIG_MANAGE_STOCK = 'use_config_manage_stock';
-    const MANAGE_STOCK = 'manage_stock';
+    public const USE_CONFIG_MANAGE_STOCK = 'use_config_manage_stock';
+    public const MANAGE_STOCK = 'manage_stock';
 
-    const IS_IN_STOCK = 'is_in_stock';
-    const LOW_STOCK_DATE = 'low_stock_date';
-    const IS_DECIMAL_DIVIDED = 'is_decimal_divided';
-    const STOCK_STATUS_CHANGED_AUTO = 'stock_status_changed_auto';
+    public const IS_IN_STOCK = 'is_in_stock';
+    public const LOW_STOCK_DATE = 'low_stock_date';
+    public const IS_DECIMAL_DIVIDED = 'is_decimal_divided';
+    public const STOCK_STATUS_CHANGED_AUTO = 'stock_status_changed_auto';
 
-    const STORE_ID = 'store_id';
-    const CUSTOMER_GROUP_ID = 'customer_group_id';
+    public const STORE_ID = 'store_id';
+    public const CUSTOMER_GROUP_ID = 'customer_group_id';
 
     /**
      * @return int|null
@@ -173,7 +174,7 @@ interface StockItemInterface extends ExtensibleDataInterface
     public function getUseConfigMinSaleQty();
 
     /**
-     * @param int $useConfigMinSaleQty
+     * @param bool $useConfigMinSaleQty
      * @return $this
      */
     public function setUseConfigMinSaleQty($useConfigMinSaleQty);

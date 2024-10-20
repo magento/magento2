@@ -25,7 +25,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * Stock item entity code
      */
-    const ENTITY = 'cataloginventory_stock_item';
+    public const ENTITY = 'cataloginventory_stock_item';
 
     /**
      * Prefix of model events names
@@ -34,7 +34,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      */
     protected $_eventPrefix = 'cataloginventory_stock_item';
 
-    const WEBSITE_ID = 'website_id';
+    public const WEBSITE_ID = 'website_id';
 
     /**
      * Parameter name in event
@@ -73,15 +73,11 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     protected $qtyIncrements;
 
     /**
-     * Store id
-     *
      * @var int|null
      */
     protected $storeId;
 
     /**
-     * Customer group id
-     *
      * @var int|null
      */
     protected $customerGroupId;
@@ -654,7 +650,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     }
 
     /**
-     * @param int $useConfigMinSaleQty
+     * @param bool $useConfigMinSaleQty
      * @return $this
      */
     public function setUseConfigMinSaleQty($useConfigMinSaleQty)
@@ -819,7 +815,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface|null
      */
@@ -829,7 +825,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface $extensionAttributes
      * @return $this
