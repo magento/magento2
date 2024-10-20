@@ -4,24 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * New attribute panel on product edit page
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 
 /**
- * Admin product attribute search block
+ * New attribute panel on product edit page
  */
 class Search extends \Magento\Backend\Block\Widget
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

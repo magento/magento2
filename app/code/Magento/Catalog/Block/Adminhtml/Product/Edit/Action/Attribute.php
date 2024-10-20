@@ -4,17 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Adminhtml catalog product action attribute update
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action;
 
 use Magento\Catalog\Helper\Product\Edit\Action\Attribute as ActionAttribute;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
 /**
+ * Adminhtml catalog product action attribute update
+ *
  * @api
  * @since 100.0.2
  */
@@ -42,6 +39,8 @@ class Attribute extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Prepare the layout
+     *
      * @return void
      */
     protected function _prepareLayout()

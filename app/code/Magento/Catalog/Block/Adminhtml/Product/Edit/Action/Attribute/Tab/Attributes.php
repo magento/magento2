@@ -6,8 +6,6 @@
 
 /**
  * Adminhtml catalog product edit action attributes update tab block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 declare(strict_types=1);
 
