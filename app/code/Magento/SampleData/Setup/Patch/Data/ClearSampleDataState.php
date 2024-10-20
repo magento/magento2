@@ -7,8 +7,10 @@
 namespace Magento\SampleData\Setup\Patch\Data;
 
 use Magento\Framework\Setup;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
+use Magento\Framework\Setup\SampleData\State;
 
 /**
  * Class ClearSampleDataState
@@ -17,26 +19,14 @@ use Magento\Framework\Setup\Patch\PatchVersionInterface;
 class ClearSampleDataState implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
-     * @var Setup\SampleData\State
-     */
-    private $state;
-
-    /**
      * ClearSampleDataState constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
-     * @param Setup\SampleData\State $state
+     * @param ModuleDataSetupInterface $moduleDataSetup
+     * @param State $state
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
-        \Magento\Framework\Setup\SampleData\State $state
+        private readonly ModuleDataSetupInterface $moduleDataSetup,
+        private readonly State $state
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->state = $state;
     }
 
     /**

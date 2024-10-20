@@ -20,33 +20,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SampleDataResetCommand extends Command
 {
     /**
-     * @var Dependency
-     */
-    private $sampleDataDependency;
-
-    /**
-     * @var ModuleResource
-     */
-    private $moduleResource;
-
-    /**
-     * @var PackageInfo
-     */
-    private $packageInfo;
-
-    /**
      * @param Dependency $sampleDataDependency
      * @param ModuleResource $moduleResource
      * @param PackageInfo $packageInfo
      */
     public function __construct(
-        Dependency $sampleDataDependency,
-        ModuleResource $moduleResource,
-        PackageInfo $packageInfo
+        private readonly Dependency $sampleDataDependency,
+        private readonly ModuleResource $moduleResource,
+        private readonly PackageInfo $packageInfo
     ) {
-        $this->sampleDataDependency = $sampleDataDependency;
-        $this->moduleResource = $moduleResource;
-        $this->packageInfo = $packageInfo;
         parent::__construct();
     }
 
