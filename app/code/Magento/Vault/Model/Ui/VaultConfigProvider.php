@@ -27,16 +27,6 @@ class VaultConfigProvider implements ConfigProviderInterface
     private static $vaultCode = 'vault';
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var SessionManagerInterface
-     */
-    private $session;
-
-    /**
      * @var PaymentMethodListInterface
      */
     private $vaultPaymentList;
@@ -47,11 +37,9 @@ class VaultConfigProvider implements ConfigProviderInterface
      * @param SessionManagerInterface $session
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        SessionManagerInterface $session
+        private readonly StoreManagerInterface $storeManager,
+        private readonly SessionManagerInterface $session
     ) {
-        $this->storeManager = $storeManager;
-        $this->session = $session;
     }
 
     /**

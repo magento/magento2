@@ -16,18 +16,12 @@ use Magento\Vault\Model\Method\Vault;
 class PaymentTokenAssigner extends AbstractDataAssignObserver
 {
     /**
-     * @var PaymentTokenManagementInterface
-     */
-    private $paymentTokenManagement;
-
-    /**
      * PaymentTokenAssigner constructor.
      * @param PaymentTokenManagementInterface $paymentTokenManagement
      */
     public function __construct(
-        PaymentTokenManagementInterface $paymentTokenManagement
+        private readonly PaymentTokenManagementInterface $paymentTokenManagement
     ) {
-        $this->paymentTokenManagement = $paymentTokenManagement;
     }
 
     /**

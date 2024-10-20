@@ -19,25 +19,13 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 class PaymentVaultAttributesLoad
 {
     /**
-     * @var OrderPaymentExtensionFactory
-     */
-    protected $paymentExtensionFactory;
-
-    /**
-     * @var PaymentTokenManagementInterface
-     */
-    protected $paymentTokenManagement;
-
-    /**
      * @param OrderPaymentExtensionFactory $paymentExtensionFactory
      * @param PaymentTokenManagement|PaymentTokenManagementInterface $paymentTokenManagement
      */
     public function __construct(
-        OrderPaymentExtensionFactory $paymentExtensionFactory,
-        PaymentTokenManagementInterface $paymentTokenManagement
+        protected readonly OrderPaymentExtensionFactory $paymentExtensionFactory,
+        protected readonly PaymentTokenManagementInterface $paymentTokenManagement
     ) {
-        $this->paymentExtensionFactory = $paymentExtensionFactory;
-        $this->paymentTokenManagement = $paymentTokenManagement;
     }
 
     /**

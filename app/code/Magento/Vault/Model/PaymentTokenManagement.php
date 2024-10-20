@@ -13,6 +13,7 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface;
 use Magento\Vault\Api\Data\PaymentTokenSearchResultsInterfaceFactory;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
@@ -32,42 +33,7 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
     /**
      * @var PaymentTokenResourceModel
      */
-    protected $paymentTokenResourceModel;
-
-    /**
-     * @var PaymentTokenResourceModel
-     */
     protected $resourceModel;
-
-    /**
-     * @var PaymentTokenFactory
-     */
-    protected $paymentTokenFactory;
-
-    /**
-     * @var PaymentTokenSearchResultsInterfaceFactory
-     */
-    protected $searchResultsFactory;
-
-    /**
-     * @var \Magento\Framework\Api\FilterBuilder
-     */
-    protected $filterBuilder;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
-
-    /**
-     * @var EncryptorInterface
-     */
-    private $encryptor;
-
-    /**
-     * @var DateTimeFactory
-     */
-    private $dateTimeFactory;
 
     /**
      * @param PaymentTokenRepositoryInterface $repository
@@ -81,29 +47,22 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      */
     public function __construct(
         PaymentTokenRepositoryInterface $repository,
-        PaymentTokenResourceModel $paymentTokenResourceModel,
-        PaymentTokenFactory $paymentTokenFactory,
-        FilterBuilder $filterBuilder,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        PaymentTokenSearchResultsInterfaceFactory $searchResultsFactory,
-        EncryptorInterface $encryptor,
-        DateTimeFactory $dateTimeFactory
+        protected readonly PaymentTokenResourceModel $paymentTokenResourceModel,
+        protected readonly PaymentTokenFactory $paymentTokenFactory,
+        protected readonly FilterBuilder $filterBuilder,
+        protected readonly SearchCriteriaBuilder $searchCriteriaBuilder,
+        protected readonly PaymentTokenSearchResultsInterfaceFactory $searchResultsFactory,
+        private readonly EncryptorInterface $encryptor,
+        private readonly DateTimeFactory $dateTimeFactory
     ) {
         $this->paymentTokenRepository = $repository;
-        $this->paymentTokenResourceModel = $paymentTokenResourceModel;
-        $this->paymentTokenFactory = $paymentTokenFactory;
-        $this->filterBuilder = $filterBuilder;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->searchResultsFactory = $searchResultsFactory;
-        $this->encryptor = $encryptor;
-        $this->dateTimeFactory = $dateTimeFactory;
     }
 
     /**
      * Lists payment tokens that match specified search criteria.
      *
      * @param int $customerId Customer ID.
-     * @return \Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface[] Payment tokens search result interface.
+     * @return PaymentTokenSearchResultsInterface[] Payment tokens search result interface.
      */
     public function getListByCustomerId($customerId)
     {

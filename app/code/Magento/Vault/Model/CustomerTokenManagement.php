@@ -11,26 +11,14 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 class CustomerTokenManagement
 {
     /**
-     * @var PaymentTokenManagement
-     */
-    private $tokenManagement;
-
-    /**
-     * @var Session
-     */
-    private $session;
-
-    /**
      * CustomerTokenManagement constructor.
      * @param PaymentTokenManagement $tokenManagement
      * @param Session $session
      */
     public function __construct(
-        PaymentTokenManagement $tokenManagement,
-        Session $session
+        private readonly PaymentTokenManagement $tokenManagement,
+        private readonly Session $session
     ) {
-        $this->tokenManagement = $tokenManagement;
-        $this->session = $session;
     }
 
     /**

@@ -18,29 +18,18 @@ use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 abstract class AbstractPaymentTokenFactory implements PaymentTokenInterfaceFactory
 {
     /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * @var PaymentTokenFactoryInterface
-     */
-    private $paymentTokenFactory;
-
-    /**
      * AccountPaymentTokenFactory constructor.
      * @param ObjectManagerInterface $objectManager
      * @param PaymentTokenFactoryInterface $paymentTokenFactory
      */
     public function __construct(
-        ObjectManagerInterface $objectManager,
-        PaymentTokenFactoryInterface $paymentTokenFactory = null
+        private readonly ObjectManagerInterface $objectManager,
+        private ?PaymentTokenFactoryInterface $paymentTokenFactory = null
     ) {
         if ($paymentTokenFactory === null) {
             $paymentTokenFactory = $objectManager->get(PaymentTokenFactoryInterface::class);
         }
 
-        $this->objectManager = $objectManager;
         $this->paymentTokenFactory = $paymentTokenFactory;
     }
 
