@@ -1809,7 +1809,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     private function updateShippingAddressWithShipToName(DataObject $shippingAddress, array $data)
     {
         if (isset($data['SHIPTONAME'])) {
-            $nameParts = explode(' ', $data['SHIPTONAME'], 2);
+            $nameParts = explode(' ', trim($data['SHIPTONAME']), 2);
             $shippingAddress->addData(['firstname' => $nameParts[0]]);
 
             if (isset($nameParts[1])) {
