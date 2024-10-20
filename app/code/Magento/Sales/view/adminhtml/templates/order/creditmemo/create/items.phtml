@@ -151,6 +151,8 @@ require(['jquery'], function(jQuery){
 var submitButtons = jQuery('.submit-button');
 var updateButtons = jQuery('.update-button, .update-totals-button');
 var fields = jQuery('.qty-input, .order-subtotal-table input[type="text"]');
+var extraFields = jQuery('#edit_form input, #edit_form select, #edit_form textarea').not(fields);
+var hasValidationErrors = false;
 function enableButtons(buttons) {
     buttons.removeClass('disabled').prop('disabled', false);
 }
@@ -161,6 +163,8 @@ function disableButtons(buttons) {
 
 disableButtons(updateButtons);
 
+
+extraFields.on('change', checkExtraFields);
 fields.on('change', checkButtonsRelation);
 fields.each(function (i, elem) {
     elem.baseValue = elem.value;
@@ -183,6 +187,13 @@ function checkButtonsRelation() {
     }
 }
 
+function checkExtraFields() {
+    if(hasValidationErrors && jQuery('#edit_form').valid()) {
+        enableButtons(submitButtons);
+        hasValidationErrors = false;
+    }
+}
+
 submitCreditMemo = function() {
     var creditMemoOffline = jQuery('#creditmemo_do_offline');
     if (creditMemoOffline.length) {
@@ -190,6 +201,9 @@ submitCreditMemo = function() {
     }
     // Temporary solution will be replaced after refactoring order functionality
     jQuery('#edit_form').triggerHandler('save');
+    if(!jQuery('#edit_form').valid()) {
+        hasValidationErrors = true;
+    }
 };
 
 submitCreditMemoOffline = function() {
@@ -199,6 +213,9 @@ submitCreditMemoOffline = function() {
     }
     // Temporary solution will be replaced after refactoring order functionality
     jQuery('#edit_form').triggerHandler('save');
+    if(!jQuery('#edit_form').valid()) {
+        hasValidationErrors = true;
+    }
 };
 
 var sendEmailCheckbox = jQuery('#send_email');
