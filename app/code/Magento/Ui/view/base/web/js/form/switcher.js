@@ -115,6 +115,13 @@ define([
          */
         onValueChange: function (rule, value) {
             this.applyRule(rule, value);
+        },
+
+        /**
+         * Destroys current instance.
+         */
+        destroy: function () {
+            registry.remove(this.name);
         }
     });
 });
