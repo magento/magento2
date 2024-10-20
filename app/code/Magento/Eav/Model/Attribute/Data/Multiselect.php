@@ -9,8 +9,6 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * EAV Entity Attribute Multiply select Data Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Multiselect extends AbstractData
 {

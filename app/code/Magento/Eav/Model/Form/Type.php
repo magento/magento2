@@ -18,8 +18,6 @@ namespace Magento\Eav\Model\Form;
  * @method \Magento\Eav\Model\Form\Type setTheme(string $value)
  * @method int getStoreId()
  * @method \Magento\Eav\Model\Form\Type setStoreId(int $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Type extends \Magento\Framework\Model\AbstractModel
 {
