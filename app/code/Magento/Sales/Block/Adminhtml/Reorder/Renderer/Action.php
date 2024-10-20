@@ -7,8 +7,6 @@ namespace Magento\Sales\Block\Adminhtml\Reorder\Renderer;
 
 /**
  * Adminhtml alert queue grid block action item renderer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
@@ -20,8 +18,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     protected $_actions = [];
 
     /**
-     * Sales reorder
-     *
      * @var \Magento\Sales\Helper\Reorder
      */
     protected $_salesReorder = null;

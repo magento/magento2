@@ -7,8 +7,6 @@ namespace Magento\Sales\Block\Adminhtml;
 
 /**
  * Adminhtml sales shipments block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Shipment extends \Magento\Backend\Block\Widget\Grid\Container
 {

@@ -11,14 +11,11 @@ use Magento\Payment\Model\Info;
  * Adminhtml sales order payment information
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Payment extends \Magento\Backend\Block\Template
 {
     /**
-     * Payment data
-     *
      * @var \Magento\Payment\Helper\Data
      */
     protected $_paymentData = null;

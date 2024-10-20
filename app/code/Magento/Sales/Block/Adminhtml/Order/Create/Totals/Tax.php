@@ -12,7 +12,6 @@ use Magento\Tax\Helper\Data as TaxHelper;
 /**
  * Tax Total Row Renderer
  *
- * @author Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Tax extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals
@@ -42,8 +41,6 @@ class Tax extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTota
     }
 
     /**
-     * Template
-     *
      * @var string
      */
     protected $_template = 'Magento_Sales::order/create/totals/tax.phtml';

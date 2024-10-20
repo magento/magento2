@@ -9,14 +9,10 @@ use Magento\Store\Model\ResourceModel\Website\Collection;
 
 /**
  * Adminhtml sales order create totals table block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Table extends \Magento\Backend\Block\Template
 {
     /**
-     * Website collection
-     *
      * @var Collection|null
      */
     protected $_websiteCollection = null;
