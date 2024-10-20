@@ -223,18 +223,20 @@ class FixerIoApiLayer implements ImportInterface
      */
     private function validateResponse(array $response, string $baseCurrency): bool
     {
-        if ($response['success']) {
+        if (isset($response['success'])) {
+
             return true;
+
+        }elseif (isset($response['message']))
+        {
+            $message = $response['message'];
+            $this->messages[] = __($message);
+
+        }else
+        {
+            $this->messages[] = __('Something was wrong with your request.Currency rates can\'t be retrieved.
+            try again later.');
         }
-
-        $errorCodes = [
-            101 => __('No API Key was specified or an invalid API Key was specified.'),
-            102 => __('The account this API request is coming from is inactive.'),
-            105 => __('The "%1" is not allowed as base currency for your subscription plan.', $baseCurrency),
-            201 => __('An invalid base currency has been entered.'),
-        ];
-
-        $this->messages[] = $errorCodes[$response['error']['code']] ?? __('Currency rates can\'t be retrieved.');
 
         return false;
     }
