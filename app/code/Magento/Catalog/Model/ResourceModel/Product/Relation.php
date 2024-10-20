@@ -13,8 +13,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Catalog Product Relations Resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Relation extends AbstractDb
 {

@@ -9,8 +9,6 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Catalog product link resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -22,14 +20,11 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_attributesTable;
 
     /**
-     * Catalog product relation
-     *
      * @var Relation
      */
     protected $_catalogProductRelation;
 
     /**
-     * Link constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param Relation $catalogProductRelation
      * @param string|null $connectionName

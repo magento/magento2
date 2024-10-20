@@ -4,16 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Adminhtml sales order create search products block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser;
 
 use Magento\Backend\Block\Widget\Grid;
 use Magento\Backend\Block\Widget\Grid\Column;
 
+/**
+ * Adminhtml sales order create search products block
+ */
 class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -59,6 +57,8 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()
@@ -83,6 +83,8 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Add a column filter to the collection
+     *
      * @param Column $column
      * @return $this
      */
@@ -202,6 +204,8 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Return grid URL
+     *
      * @return string
      */
     public function getGridUrl()
@@ -213,6 +217,8 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Return selected products
+     *
      * @return mixed
      */
     protected function _getSelectedProducts()
