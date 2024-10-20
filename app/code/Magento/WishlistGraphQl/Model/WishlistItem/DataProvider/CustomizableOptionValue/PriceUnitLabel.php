@@ -19,17 +19,11 @@ use Magento\Store\Model\StoreManagerInterface;
 class PriceUnitLabel
 {
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        StoreManagerInterface $storeManager
+        private readonly StoreManagerInterface $storeManager
     ) {
-        $this->storeManager = $storeManager;
     }
 
     /**

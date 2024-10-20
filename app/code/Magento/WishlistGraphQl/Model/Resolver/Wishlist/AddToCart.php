@@ -32,49 +32,9 @@ use Magento\Wishlist\Model\Wishlist\Config as WishlistConfig;
 class AddToCart implements ResolverInterface
 {
     /**
-     * @var AddProductsToWishlistModel
-     */
-    private $addProductsToWishlist;
-
-    /**
-     * @var WishlistDataMapper
-     */
-    private $wishlistDataMapper;
-
-    /**
-     * @var WishlistConfig
-     */
-    private $wishlistConfig;
-
-    /**
-     * @var WishlistResourceModel
-     */
-    private $wishlistResource;
-
-    /**
-     * @var WishlistFactory
-     */
-    private $wishlistFactory;
-
-    /**
-     * @var LocaleQuantityProcessor
-     */
-    private $quantityProcessor;
-
-    /**
-     * @var CreateEmptyCartForCustomer
-     */
-    private $createEmptyCartForCustomer;
-
-    /**
      * @var AddProductsToCartService
      */
     private $addProductsToCartService;
-
-    /**
-     * @var CartItemsRequestBuilder
-     */
-    private $cartItemsRequestBuilder;
 
     /**
      * @param WishlistResourceModel $wishlistResource
@@ -88,25 +48,17 @@ class AddToCart implements ResolverInterface
      * @param CartItemsRequestBuilder $cartItemsRequestBuilder
      */
     public function __construct(
-        WishlistResourceModel $wishlistResource,
-        WishlistFactory $wishlistFactory,
-        WishlistConfig $wishlistConfig,
-        AddProductsToWishlistModel $addProductsToWishlist,
-        WishlistDataMapper $wishlistDataMapper,
-        LocaleQuantityProcessor $quantityProcessor,
-        CreateEmptyCartForCustomer $createEmptyCartForCustomer,
+        private readonly WishlistResourceModel $wishlistResource,
+        private readonly WishlistFactory $wishlistFactory,
+        private readonly WishlistConfig $wishlistConfig,
+        private readonly AddProductsToWishlistModel $addProductsToWishlist,
+        private readonly WishlistDataMapper $wishlistDataMapper,
+        private readonly LocaleQuantityProcessor $quantityProcessor,
+        private readonly CreateEmptyCartForCustomer $createEmptyCartForCustomer,
         AddProductsToCartService $addProductsToCart,
-        CartItemsRequestBuilder $cartItemsRequestBuilder
+        private readonly CartItemsRequestBuilder $cartItemsRequestBuilder
     ) {
-        $this->wishlistResource = $wishlistResource;
-        $this->wishlistFactory = $wishlistFactory;
-        $this->wishlistConfig = $wishlistConfig;
-        $this->addProductsToWishlist = $addProductsToWishlist;
-        $this->wishlistDataMapper = $wishlistDataMapper;
-        $this->quantityProcessor = $quantityProcessor;
-        $this->createEmptyCartForCustomer = $createEmptyCartForCustomer;
         $this->addProductsToCartService = $addProductsToCart;
-        $this->cartItemsRequestBuilder = $cartItemsRequestBuilder;
     }
 
     /**

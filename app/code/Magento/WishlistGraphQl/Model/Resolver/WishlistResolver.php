@@ -23,33 +23,15 @@ use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 class WishlistResolver implements ResolverInterface
 {
     /**
-     * @var WishlistResourceModel
-     */
-    private $wishlistResource;
-
-    /**
-     * @var WishlistFactory
-     */
-    private $wishlistFactory;
-
-    /**
-     * @var WishlistConfig
-     */
-    private $wishlistConfig;
-
-    /**
      * @param WishlistResourceModel $wishlistResource
      * @param WishlistFactory $wishlistFactory
      * @param WishlistConfig $wishlistConfig
      */
     public function __construct(
-        WishlistResourceModel $wishlistResource,
-        WishlistFactory $wishlistFactory,
-        WishlistConfig $wishlistConfig
+        private readonly WishlistResourceModel $wishlistResource,
+        private readonly WishlistFactory $wishlistFactory,
+        private readonly WishlistConfig $wishlistConfig
     ) {
-        $this->wishlistResource = $wishlistResource;
-        $this->wishlistFactory = $wishlistFactory;
-        $this->wishlistConfig = $wishlistConfig;
     }
 
     /**

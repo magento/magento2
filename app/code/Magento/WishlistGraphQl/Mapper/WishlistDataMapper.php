@@ -16,17 +16,11 @@ use Magento\Wishlist\Model\Wishlist;
 class WishlistDataMapper
 {
     /**
-     * @var DataMapperInterface
-     */
-    private $enumDataMapper;
-
-    /**
      * @param DataMapperInterface $enumDataMapper
      */
     public function __construct(
-        DataMapperInterface $enumDataMapper
+        private readonly DataMapperInterface $enumDataMapper
     ) {
-        $this->enumDataMapper = $enumDataMapper;
     }
 
     /**

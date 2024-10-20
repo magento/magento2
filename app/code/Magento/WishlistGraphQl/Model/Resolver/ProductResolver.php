@@ -20,16 +20,11 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 class ProductResolver implements ResolverInterface
 {
     /**
-     * @var ProductDataProvider
-     */
-    private $productDataProvider;
-
-    /**
      * @param ProductDataProvider $productDataProvider
      */
-    public function __construct(ProductDataProvider $productDataProvider)
-    {
-        $this->productDataProvider = $productDataProvider;
+    public function __construct(
+        private readonly ProductDataProvider $productDataProvider
+    ) {
     }
 
     /**

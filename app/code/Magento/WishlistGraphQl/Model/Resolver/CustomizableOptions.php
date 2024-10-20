@@ -20,17 +20,11 @@ use Magento\WishlistGraphQl\Model\WishlistItem\DataProvider\CustomizableOption;
 class CustomizableOptions implements ResolverInterface
 {
     /**
-     * @var CustomizableOption
-     */
-    private $customizableOption;
-
-    /**
      * @param CustomizableOption $customizableOption
      */
     public function __construct(
-        CustomizableOption $customizableOption
+        private readonly CustomizableOption $customizableOption
     ) {
-        $this->customizableOption = $customizableOption;
     }
 
     /**
