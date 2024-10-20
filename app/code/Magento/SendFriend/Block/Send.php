@@ -6,7 +6,16 @@
 namespace Magento\SendFriend\Block;
 
 use Magento\Captcha\Block\Captcha;
+use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Customer\Model\Context;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\DataObject;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\SendFriend\Helper\Data as SendFriendHelper;
+use Magento\SendFriend\Model\SendFriend;
 
 /**
  * Email to a Friend Block
@@ -15,69 +24,57 @@ use Magento\Customer\Model\Context;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
-class Send extends \Magento\Framework\View\Element\Template
+class Send extends Template
 {
     /**
      * SendFriend data
      *
-     * @var \Magento\SendFriend\Helper\Data
+     * @var SendFriendHelper
      */
     protected $_sendfriendData = null;
 
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var CustomerSession
      */
     protected $_customerSession;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
-     */
-    protected $httpContext;
-
-    /**
-     * @var \Magento\Customer\Helper\View
+     * @var CustomerViewHelper
      */
     protected $_customerViewHelper;
 
     /**
-     * @var \Magento\SendFriend\Model\SendFriend
-     */
-    protected $sendfriend;
-
-    /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\SendFriend\Helper\Data $sendfriendData
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Customer\Helper\View $customerViewHelper
-     * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\SendFriend\Model\SendFriend $sendfriend
+     * @param TemplateContext $context
+     * @param CustomerSession $customerSession
+     * @param SendFriendHelper $sendfriendData
+     * @param Registry $registry
+     * @param CustomerViewHelper $customerViewHelper
+     * @param HttpContext $httpContext
+     * @param SendFriend $sendfriend
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\SendFriend\Helper\Data $sendfriendData,
-        \Magento\Framework\Registry $registry,
-        \Magento\Customer\Helper\View $customerViewHelper,
-        \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\SendFriend\Model\SendFriend $sendfriend,
+        TemplateContext $context,
+        CustomerSession $customerSession,
+        SendFriendHelper $sendfriendData,
+        Registry $registry,
+        CustomerViewHelper $customerViewHelper,
+        protected readonly HttpContext $httpContext,
+        protected readonly SendFriend $sendfriend,
         array $data = []
     ) {
         $this->_customerSession = $customerSession;
         $this->_coreRegistry = $registry;
         $this->_sendfriendData = $sendfriendData;
-        $this->sendfriend = $sendfriend;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
-        $this->httpContext = $httpContext;
         $this->_customerViewHelper = $customerViewHelper;
     }
 
@@ -93,7 +90,7 @@ class Send extends \Magento\Framework\View\Element\Template
             return trim($name);
         }
 
-        /* @var $session \Magento\Customer\Model\Session */
+        /* @var CustomerSession $session */
         $session = $this->_customerSession;
 
         if ($this->httpContext->getValue(Context::CONTEXT_AUTH)) {
@@ -117,7 +114,7 @@ class Send extends \Magento\Framework\View\Element\Template
             return trim($email);
         }
 
-        /* @var $session \Magento\Customer\Model\Session */
+        /* @var CustomerSession $session */
         $session = $this->_customerSession;
 
         if ($this->httpContext->getValue(Context::CONTEXT_AUTH)) {
@@ -140,13 +137,13 @@ class Send extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve Form data or empty \Magento\Framework\DataObject
      *
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function getFormData()
     {
         $data = $this->getData('form_data');
-        if (!$data instanceof \Magento\Framework\DataObject) {
-            $data = new \Magento\Framework\DataObject();
+        if (!$data instanceof DataObject) {
+            $data = new DataObject();
             $this->setData('form_data', $data);
         }
 
@@ -162,7 +159,7 @@ class Send extends \Magento\Framework\View\Element\Template
     public function setFormData($data)
     {
         if (is_array($data)) {
-            $this->setData('form_data', new \Magento\Framework\DataObject($data));
+            $this->setData('form_data', new DataObject($data));
         }
 
         return $this;

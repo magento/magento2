@@ -11,7 +11,10 @@
  */
 namespace Magento\SendFriend\Model\Source;
 
-class Checktype implements \Magento\Framework\Option\ArrayInterface
+use Magento\Framework\Option\ArrayInterface;
+use Magento\SendFriend\Helper\Data as SendFriendHelper;
+
+class Checktype implements ArrayInterface
 {
     /**
      * Retrieve Check Type Option array
@@ -21,8 +24,8 @@ class Checktype implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         return [
-            ['value' => \Magento\SendFriend\Helper\Data::CHECK_IP, 'label' => __('IP Address')],
-            ['value' => \Magento\SendFriend\Helper\Data::CHECK_COOKIE, 'label' => __('Cookie (unsafe)')]
+            ['value' => SendFriendHelper::CHECK_IP, 'label' => __('IP Address')],
+            ['value' => SendFriendHelper::CHECK_COOKIE, 'label' => __('Cookie (unsafe)')]
         ];
     }
 }
