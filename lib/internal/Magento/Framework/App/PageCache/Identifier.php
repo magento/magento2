@@ -14,6 +14,23 @@ use Magento\Framework\Serialize\Serializer\Json;
 class Identifier implements IdentifierInterface
 {
     /**
+     * Pattern detect marketing parameters
+     */
+    public const PATTERN_MARKETING_PARAMETERS = [
+        '/&?gclid\=[^&]+/',
+        '/&?cx\=[^&]+/',
+        '/&?ie\=[^&]+/',
+        '/&?cof\=[^&]+/',
+        '/&?siteurl\=[^&]+/',
+        '/&?zanpid\=[^&]+/',
+        '/&?origin\=[^&]+/',
+        '/&?fbclid\=[^&]+/',
+        '/&?mc_(.*?)\=[^&]+/',
+        '/&?utm_(.*?)\=[^&]+/',
+        '/&?_bta_(.*?)\=[^&]+/',
+    ];
+
+    /**
      * @var \Magento\Framework\App\Request\Http
      */
     protected $request;
@@ -50,9 +67,11 @@ class Identifier implements IdentifierInterface
      */
     public function getValue()
     {
+        $pattern = self::PATTERN_MARKETING_PARAMETERS;
+        $replace = array_fill(0, count(self::PATTERN_MARKETING_PARAMETERS), '');
         $data = [
             $this->request->isSecure(),
-            $this->request->getUriString(),
+            preg_replace($pattern, $replace, (string)$this->request->getUriString()),
             $this->request->get(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING)
                 ?: $this->context->getVaryString()
         ];
