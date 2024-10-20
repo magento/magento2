@@ -68,7 +68,7 @@
             "value": true
         },
         "index": {
-            "CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID_ENTITY_ID": true,
             "CATALOG_PRODUCT_ENTITY_INT_STORE_ID": true,
             "CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID_STORE_ID_VALUE": true
         },
