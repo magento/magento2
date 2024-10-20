@@ -20,17 +20,11 @@ use Magento\Vault\Model\PaymentTokenManagement;
 class PaymentTokens implements ResolverInterface
 {
     /**
-     * @var PaymentTokenManagement
-     */
-    private $paymentTokenManagement;
-
-    /**
      * @param PaymentTokenManagement $paymentTokenManagement
      */
     public function __construct(
-        PaymentTokenManagement $paymentTokenManagement
+        private readonly PaymentTokenManagement $paymentTokenManagement
     ) {
-        $this->paymentTokenManagement = $paymentTokenManagement;
     }
 
     /**
