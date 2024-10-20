@@ -8,8 +8,6 @@ namespace Magento\Downloadable\Helper\Catalog\Product;
 
 /**
  * Helper for fetching properties by product configurational item
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Configuration extends \Magento\Framework\App\Helper\AbstractHelper implements
     \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface

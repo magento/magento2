@@ -8,8 +8,6 @@ namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Download
 /**
  * Adminhtml catalog product downloadable items tab links section
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  * @deprecated 100.3.1 because of new class which adds grids samples
  * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Samples
  */
@@ -28,8 +26,6 @@ class Samples extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_Downloadable::product/edit/downloadable/samples.phtml';
 
     /**
-     * Downloadable file
-     *
      * @var \Magento\Downloadable\Helper\File
      */
     protected $_downloadableFile = null;
@@ -42,8 +38,6 @@ class Samples extends \Magento\Backend\Block\Widget
     protected $_coreFileStorageDb = null;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
