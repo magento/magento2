@@ -22,23 +22,13 @@ use Magento\Tax\Model\Config;
 class FixedProductTax implements ResolverInterface
 {
     /**
-     * @var Data
-     */
-    private $weeeHelper;
-
-    /**
-     * @var TaxHelper
-     */
-    private $taxHelper;
-
-    /**
      * @param Data $weeeHelper
      * @param TaxHelper $taxHelper
      */
-    public function __construct(Data $weeeHelper, TaxHelper $taxHelper)
-    {
-        $this->weeeHelper = $weeeHelper;
-        $this->taxHelper = $taxHelper;
+    public function __construct(
+        private readonly Data $weeeHelper,
+        private readonly TaxHelper $taxHelper
+    ) {
     }
 
     /**
