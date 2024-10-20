@@ -6,8 +6,6 @@
 
 /**
  * File config field renderer
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 declare(strict_types=1);
 

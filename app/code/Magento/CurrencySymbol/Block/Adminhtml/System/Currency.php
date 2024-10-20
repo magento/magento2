@@ -6,8 +6,6 @@
 
 /**
  * Manage currency block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CurrencySymbol\Block\Adminhtml\System;
 

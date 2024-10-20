@@ -6,8 +6,6 @@
 
 /**
  * Admin Reset Password Link Expiration period backend model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Model\Config\Backend\Admin\Password\Link;
 
