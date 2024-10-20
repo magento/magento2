@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -19,8 +20,6 @@ use Magento\Framework\Phrase;
 
 /**
  * Class to work with filesystem backups
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Filesystem extends AbstractBackup
 {
@@ -39,15 +38,11 @@ class Filesystem extends AbstractBackup
     protected $_useFtp = false;
 
     /**
-     * Ftp host
-     *
      * @var string
      */
     protected $_ftpHost;
 
     /**
-     * Ftp username
-     *
      * @var string
      */
     protected $_ftpUser;
@@ -125,6 +120,7 @@ class Filesystem extends AbstractBackup
                 new Phrase('Not enough permissions to read files for backup')
             );
         }
+
         $this->validateAvailableDiscSpace($this->getBackupsDir(), $filesInfo['size']);
 
         $tarTmpPath = $this->_getTarTmpPath();
@@ -160,8 +156,9 @@ class Filesystem extends AbstractBackup
      *
      * @param string $backupDir
      * @param int $size
+     *
      * @return void
-     * @throws LocalizedException
+     * @throws NotEnoughFreeSpace
      */
     public function validateAvailableDiscSpace($backupDir, $size)
     {
@@ -184,6 +181,7 @@ class Filesystem extends AbstractBackup
      * @param string $username
      * @param string $password
      * @param string $path
+     *
      * @return $this
      */
     public function setUseFtp($host, $username, $password, $path)
@@ -212,6 +210,7 @@ class Filesystem extends AbstractBackup
      * Add path that should be ignoring when creating or rolling back backup
      *
      * @param string|array $paths
+     *
      * @return $this
      */
     public function addIgnorePaths($paths)
@@ -243,6 +242,7 @@ class Filesystem extends AbstractBackup
      * Set directory where backups saved and add it to ignore paths
      *
      * @param string $backupsDir
+     *
      * @return $this
      *
      * @see AbstractBackup::setBackupsDir()
@@ -279,7 +279,7 @@ class Filesystem extends AbstractBackup
      * Check backups directory existence and whether it's writeable
      *
      * @return void
-     * @throws LocalizedException
+     * @throws NotEnoughPermissions
      */
     protected function _checkBackupsDir()
     {
@@ -321,6 +321,7 @@ class Filesystem extends AbstractBackup
      *
      * @return Ftp
      * @deprecated 101.0.0
+     * @see Nothing
      */
     protected function getRollBackFtp()
     {
@@ -339,6 +340,7 @@ class Filesystem extends AbstractBackup
      *
      * @return Fs
      * @deprecated 101.0.0
+     * @see Nothing
      */
     protected function getRollBackFs()
     {
