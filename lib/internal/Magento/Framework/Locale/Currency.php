@@ -22,6 +22,8 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
     const CURRENCY_OPTION_NAME = 'name';
 
     const CURRENCY_OPTION_DISPLAY = 'display';
+    
+    const CURRENCY_OPTION_PRECISION = 'precision';
 
     /**
      * @var array
@@ -88,6 +90,9 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
                 $options[self::CURRENCY_OPTION_CURRENCY] = $currency;
                 $options[self::CURRENCY_OPTION_SYMBOL] = $currency;
             }
+            
+            $numberFormatter = new NumberFormatter('@currency=' . $currency, NumberFormatter::CURRENCY);
+            $options[self::CURRENCY_OPTION_PRECISION] = $numberFormatter->getAttribute(NumberFormatter::MAX_FRACTION_DIGITS);
 
             $options = new \Magento\Framework\DataObject($options);
             $this->_eventManager->dispatch(
