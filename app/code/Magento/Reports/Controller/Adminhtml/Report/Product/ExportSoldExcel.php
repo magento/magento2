@@ -9,12 +9,12 @@ declare(strict_types=1);
 namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
 use Magento\Backend\Block\Widget\Grid\ExportInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Reports\Controller\Adminhtml\Report\Product;
 
-class ExportSoldExcel extends Product implements HttpPostActionInterface
+class ExportSoldExcel extends Product implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
