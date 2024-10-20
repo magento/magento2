@@ -52,6 +52,7 @@ class AccessListTest extends TestCase
             [null, 'localhost'],
             ['127.0.0.1', '127.0.0.1'],
             ['127.0.0.1, localhost, ::2', '127.0.0.1, localhost, ::2'],
+            ['172.16.0.1/24, 2001:0db8:/32', '172.16.0.1/24, 2001:0db8:/32'],
         ];
     }
 
