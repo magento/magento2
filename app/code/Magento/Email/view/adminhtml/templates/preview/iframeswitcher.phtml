@@ -13,7 +13,7 @@
             frameborder="0"
             title="<?= $block->escapeHtmlAttr(__('Preview')) ?>"
             width="100%"
-            sandbox="allow-same-origin allow-pointer-lock"
+            sandbox="allow-scripts allow-same-origin allow-pointer-lock"
     ></iframe>
     <form id="preview_form"
           action="<?= $block->escapeUrl($block->getUrl('*/*/popup')) ?>"
