@@ -7,21 +7,15 @@ namespace Magento\Sales\Model\ResourceModel\Report\Shipping\Collection;
 
 /**
  * Sales report shipping collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Order extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
 {
     /**
-     * Period format
-     *
      * @var string
      */
     protected $_periodFormat;
 
     /**
-     * Selected columns
-     *
      * @var array
      */
     protected $_selectedColumns = [];
