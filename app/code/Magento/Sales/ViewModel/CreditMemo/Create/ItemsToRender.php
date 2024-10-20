@@ -61,6 +61,10 @@ class ItemsToRender implements ArgumentInterface
             }
         }
         foreach ($this->items->getCreditmemo()->getAllItems() as $item) {
+            $orderItem = $item->getOrderItem();
+            if ($orderItem->getQtyInvoiced() <= $orderItem->getQtyRefunded()) {
+                continue;
+            }
             $orderItemParent = $item->getOrderItem()->getParentItem();
             if ($orderItemParent && !in_array($orderItemParent->getItemId(), $parents)) {
                 $itemParent = $this->converter->itemToCreditmemoItem($orderItemParent);

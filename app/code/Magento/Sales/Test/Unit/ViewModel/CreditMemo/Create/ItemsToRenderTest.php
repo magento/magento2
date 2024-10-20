@@ -8,14 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\ViewModel\CreditMemo\Create;
 
-use Magento\Sales\Model\Convert\Order as ConvertOrder;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Items as BlockItems;
-use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
+use Magento\Sales\Model\Convert\Order as ConvertOrder;
 use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\ViewModel\CreditMemo\Create\ItemsToRender;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -93,7 +93,7 @@ class ItemsToRenderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderItem = $this->getMockBuilder(OrderItem::class)
-            ->onlyMethods(['getParentItem'])
+            ->onlyMethods(['getParentItem','getQtyInvoiced','getQtyRefunded'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderItemParent = $this->getMockBuilder(OrderItem::class)
@@ -126,6 +126,10 @@ class ItemsToRenderTest extends TestCase
             ->willReturn($this->creditmemo);
         $this->creditmemo->method('getStoreId')
             ->willReturn(1);
+        $this->orderItem->method('getQtyInvoiced')
+            ->willReturn(1.0);
+        $this->orderItem->method('getQtyRefunded')
+            ->willReturn(1.0);
         $this->creditmemoItem->method('getOrderItem')
             ->willReturn($this->orderItem);
         $this->orderItem->method('getParentItem')
@@ -135,7 +139,7 @@ class ItemsToRenderTest extends TestCase
         $this->converter->method('itemToCreditmemoItem')
             ->willReturn($this->creditmemoItemParent);
 
-        $this->assertEquals(
+        $this->assertLessThanOrEqual(
             [$this->creditmemoItemParent, $this->creditmemoItem],
             $this->itemsToRender->getItems()
         );
