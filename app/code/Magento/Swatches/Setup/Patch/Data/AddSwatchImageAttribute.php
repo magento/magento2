@@ -11,40 +11,25 @@ use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
-/**
- * Class AddSwatchImageAttribute
- * @package Magento\Swatches\Setup\Patch
- */
 class AddSwatchImageAttribute implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
-     * @var EavSetupFactory
-     */
-    private $eavSetupFactory;
-
-    /**
      * AddSwatchImageAttribute constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
      * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
-        EavSetupFactory $eavSetupFactory
+        private readonly ModuleDataSetupInterface $moduleDataSetup,
+        private readonly EavSetupFactory $eavSetupFactory
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->eavSetupFactory = $eavSetupFactory;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -68,10 +53,12 @@ class AddSwatchImageAttribute implements DataPatchInterface, PatchVersionInterfa
                 'used_in_product_listing' => true
             ]
         );
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -79,7 +66,7 @@ class AddSwatchImageAttribute implements DataPatchInterface, PatchVersionInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -87,7 +74,7 @@ class AddSwatchImageAttribute implements DataPatchInterface, PatchVersionInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

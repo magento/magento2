@@ -5,30 +5,29 @@
  */
 namespace Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Catalog\Model\Product\Media\Config as MediaConfig;
+use Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Options;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option as AttributeOption;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection as AttributeOptionCollection;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\Registry;
+use Magento\Framework\Validator\UniversalFactory;
+use Magento\Store\Model\Store;
+use Magento\Swatches\Helper\Media as SwatchesMediaHelper;
 use \Magento\Swatches\Model\Swatch as SwatchModel;
 
 /**
  * Backend swatch abstract block
  */
-abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Options
+abstract class AbstractSwatch extends Options
 {
-    /**
-     * @var \Magento\Catalog\Model\Product\Media\Config
-     */
-    protected $mediaConfig;
-
-    /**
-     * Helper to move image from tmp to catalog
-     *
-     * @var \Magento\Swatches\Helper\Media
-     */
-    protected $swatchHelper;
-
     /**
      * Prepare option values of user defined attribute
      *
      * @codeCoverageIgnore
-     * @param array|\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option $option
+     * @param array|AttributeOption $option
      * @param string $inputType
      * @param array $defaultValues
      * @return array
@@ -43,6 +42,7 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
         $value['sort_order'] = $option->getSortOrder();
 
         foreach ($this->getStores() as $store) {
+            // phpcs:disable Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
             $value = array_merge(
                 $value,
                 $this->createStoreValues($store->getId(), $optionId)
@@ -53,26 +53,24 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
     }
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
-     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
-     * @param \Magento\Swatches\Helper\Media $swatchHelper
+     * @param Context $context
+     * @param Registry $registry
+     * @param CollectionFactory $attrOptionCollectionFactory
+     * @param UniversalFactory $universalFactory
+     * @param MediaConfig $mediaConfig
+     * @param SwatchesMediaHelper $swatchHelper Helper to move image from tmp to catalog
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
-        \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
-        \Magento\Swatches\Helper\Media $swatchHelper,
+        Context $context,
+        Registry $registry,
+        CollectionFactory $attrOptionCollectionFactory,
+        UniversalFactory $universalFactory,
+        protected readonly MediaConfig $mediaConfig,
+        protected readonly SwatchesMediaHelper $swatchHelper,
         array $data = []
     ) {
         parent::__construct($context, $registry, $attrOptionCollectionFactory, $universalFactory, $data);
-        $this->swatchHelper = $swatchHelper;
-        $this->mediaConfig = $mediaConfig;
     }
 
     /**
@@ -128,7 +126,9 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
     }
 
     /**
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $valuesCollection
+     * Add store filter to collection
+     *
+     * @param AttributeOptionCollection $valuesCollection
      * @param int $storeId
      * @return void
      */
@@ -145,12 +145,12 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
             $joinCondition,
             'value'
         );
-        if (\Magento\Store\Model\Store::DEFAULT_STORE_ID == $storeId) {
+        if (Store::DEFAULT_STORE_ID == $storeId) {
             $select->where(
                 'tsv.store_id = ?',
                 $storeId
             );
         }
-        $valuesCollection->setOrder('value', \Magento\Framework\Data\Collection::SORT_ORDER_ASC);
+        $valuesCollection->setOrder('value', Collection::SORT_ORDER_ASC);
     }
 }

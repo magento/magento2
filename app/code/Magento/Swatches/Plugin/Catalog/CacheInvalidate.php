@@ -5,41 +5,34 @@
  */
 namespace Magento\Swatches\Plugin\Catalog;
 
-use \Magento\Framework\App\Cache\Type\Block;
-use \Magento\Framework\App\Cache\Type\Collection;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Framework\App\Cache\Type\Block;
+use Magento\Framework\App\Cache\Type\Collection;
+use Magento\Framework\App\Cache\TypeListInterface as CacheTypeListInterface;
+use Magento\Swatches\Helper\Data as SwatchHelper;
 
 class CacheInvalidate
 {
     /**
-     * @var \Magento\Framework\App\Cache\TypeListInterface
-     */
-    private $typeList;
-
-    /**
-     * @var \Magento\Swatches\Helper\Data
-     */
-    private $swatchHelper;
-
-    /**
-     * @param \Magento\Framework\App\Cache\TypeListInterface $typeList
-     * @param \Magento\Swatches\Helper\Data $swatchHelper
+     * @param CacheTypeListInterface $typeList
+     * @param SwatchHelper $swatchHelper
      */
     public function __construct(
-        \Magento\Framework\App\Cache\TypeListInterface $typeList,
-        \Magento\Swatches\Helper\Data $swatchHelper
+        private readonly CacheTypeListInterface $typeList,
+        private readonly SwatchHelper $swatchHelper
     ) {
-        $this->typeList = $typeList;
-        $this->swatchHelper = $swatchHelper;
     }
 
     /**
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $subject
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $result
-     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
+     * Invalidates block / collection cache when attribute is a swatch.
+     *
+     * @param Attribute $subject
+     * @param Attribute $result
+     * @return Attribute
      */
     public function afterSave(
-        \Magento\Catalog\Model\ResourceModel\Eav\Attribute $subject,
-        \Magento\Catalog\Model\ResourceModel\Eav\Attribute $result
+        Attribute $subject,
+        Attribute $result
     ) {
         if ($this->swatchHelper->isSwatchAttribute($subject)) {
             $this->typeList->invalidate(Block::TYPE_IDENTIFIER);
