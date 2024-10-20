@@ -6,23 +6,24 @@
 
 /**
  * @var $block \Magento\Theme\Block\Html\Title
+ * @var $escaper \Magento\Framework\Escaper
  */
 $cssClass = $block->getCssClass() ? ' ' . $block->getCssClass() : '';
 $titleHtml = '';
 if (trim($block->getPageHeading())) {
     $titleHtml = '<span class="base" data-ui-id="page-title-wrapper" '
-        . $block->getAddBaseAttribute()
+        . $escaper->getAddBaseAttribute()
         . '>'
-        . $block->escapeHtml($block->getPageHeading())
+        . $escaper->escapeHtml($block->getPageHeading())
         . '</span>';
 }
 ?>
 <?php if ($titleHtml) : ?>
-<div class="page-title-wrapper<?= $block->escapeHtmlAttr($cssClass) ?>">
+<div class="page-title-wrapper<?= $escaper->escapeHtmlAttr($cssClass) ?>">
     <h1 class="page-title"
-        <?php if ($block->getId()) : ?> id="<?= $block->escapeHtmlAttr($block->getId()) ?>" <?php endif; ?>
+        <?php if ($block->getId()) : ?> id="<?= $escaper->escapeHtmlAttr($block->getId()) ?>" <?php endif; ?>
         <?php if ($block->getAddBaseAttributeAria()) : ?>
-            aria-labelledby="<?= $block->escapeHtmlAttr($block->getAddBaseAttributeAria()) ?>"
+            aria-labelledby="<?= $escaper->escapeHtml($block->getAddBaseAttributeAria()) ?>"
         <?php endif; ?>>
         <?= /* @noEscape */ $titleHtml ?>
     </h1>
