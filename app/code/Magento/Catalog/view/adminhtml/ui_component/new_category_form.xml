@@ -52,7 +52,6 @@
         </container>
         <field name="name" sortOrder="10" formElement="input">
             <settings>
-                <required>true</required>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>
