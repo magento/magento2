@@ -576,9 +576,9 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             foreach ($images->getCollection() as $image) {
                 $row .= '<image:image>';
                 $row .= '<image:loc>' . $this->_escaper->escapeUrl($image->getUrl()) . '</image:loc>';
-                $row .= '<image:title>' . $this->escapeXmlText($images->getTitle()) . '</image:title>';
+                $row .= '<image:title>' . $this->escapeXmlText((string)$images->getTitle()) . '</image:title>';
                 if ($image->getCaption()) {
-                    $row .= '<image:caption>' . $this->escapeXmlText($image->getCaption()) . '</image:caption>';
+                    $row .= '<image:caption>' . $this->escapeXmlText((string)$image->getCaption()) . '</image:caption>';
                 }
                 $row .= '</image:image>';
             }
