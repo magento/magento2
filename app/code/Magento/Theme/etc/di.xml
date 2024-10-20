@@ -334,5 +334,21 @@
     <type name="Magento\Config\Console\Command\LocaleEmulator">
         <plugin name="themeForLocaleEmulator" type="Magento\Theme\Plugin\LocaleEmulator"/>
     </type>
-
+    <virtualType name="Magento\Store\App\Config\Type\Scopes\Modular" type="Magento\Store\App\Config\Type\Scopes">
+        <arguments>
+            <argument name="source" xsi:type="object">Magento\Config\App\Config\Source\ModularConfigSource</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Framework\App\Config\Modular" type="Magento\Framework\App\Config">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="scopes" xsi:type="object">Magento\Store\App\Config\Type\Scopes\Modular</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Theme\Model\Design\Config\ValueChecker">
+        <arguments>
+            <argument name="modularConfig" xsi:type="object">Magento\Framework\App\Config\Modular</argument>
+        </arguments>
+    </type>
 </config>
