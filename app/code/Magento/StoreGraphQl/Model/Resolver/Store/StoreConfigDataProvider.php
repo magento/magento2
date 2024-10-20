@@ -20,41 +20,17 @@ use Magento\Store\Api\Data\StoreInterface;
 class StoreConfigDataProvider
 {
     /**
-     * @var StoreConfigManagerInterface
-     */
-    private $storeConfigManager;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var array
-     */
-    private $extendedConfigData;
-
-    /**
-     * @var StoreWebsiteRelation
-     */
-    private $storeWebsiteRelation;
-
-    /**
      * @param StoreConfigManagerInterface $storeConfigManager
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreWebsiteRelation $storeWebsiteRelation
      * @param array $extendedConfigData
      */
     public function __construct(
-        StoreConfigManagerInterface $storeConfigManager,
-        ScopeConfigInterface $scopeConfig,
-        StoreWebsiteRelation $storeWebsiteRelation,
-        array $extendedConfigData = []
+        private readonly StoreConfigManagerInterface $storeConfigManager,
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly StoreWebsiteRelation $storeWebsiteRelation,
+        private readonly array $extendedConfigData = []
     ) {
-        $this->storeConfigManager = $storeConfigManager;
-        $this->scopeConfig = $scopeConfig;
-        $this->extendedConfigData = $extendedConfigData;
-        $this->storeWebsiteRelation = $storeWebsiteRelation;
     }
 
     /**

@@ -6,6 +6,7 @@
 
 namespace Magento\StoreGraphQl\Plugin;
 
+use Closure;
 use Magento\Framework\App\AreaInterface;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\App\State;
@@ -21,53 +22,29 @@ use Magento\Store\Model\StoreManagerInterface;
 class LocalizeEmail
 {
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var Emulation
-     */
-    private $emulation;
-
-    /**
-     * @var AreaList
-     */
-    private $areaList;
-
-    /**
-     * @var State
-     */
-    private $appState;
-
-    /**
      * @param StoreManagerInterface $storeManager
      * @param Emulation $emulation
      * @param AreaList $areaList
      * @param State $appState
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        Emulation $emulation,
-        AreaList $areaList,
-        State $appState
+        private readonly StoreManagerInterface $storeManager,
+        private readonly Emulation $emulation,
+        private readonly AreaList $areaList,
+        private readonly State $appState
     ) {
-        $this->storeManager = $storeManager;
-        $this->emulation = $emulation;
-        $this->areaList = $areaList;
-        $this->appState = $appState;
     }
 
     /**
      * Emulate the correct store during email preparation
      *
      * @param TransportBuilder $subject
-     * @param \Closure $proceed
+     * @param Closure $proceed
      * @return mixed
      * @throws NoSuchEntityException|LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGetTransport(TransportBuilder $subject, \Closure $proceed)
+    public function aroundGetTransport(TransportBuilder $subject, Closure $proceed)
     {
         // Load translations for the app
         $area = $this->areaList->getArea($this->appState->getAreaCode());

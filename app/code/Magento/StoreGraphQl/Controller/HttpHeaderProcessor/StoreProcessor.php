@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Magento\StoreGraphQl\Controller\HttpHeaderProcessor;
 
+use Exception;
 use Magento\GraphQl\Controller\HttpHeaderProcessorInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
@@ -23,47 +24,19 @@ use Psr\Log\LoggerInterface;
 class StoreProcessor implements HttpHeaderProcessorInterface
 {
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var HttpContext
-     */
-    private $httpContext;
-
-    /**
-     * @var StoreCookieManagerInterface
-     */
-    private $storeCookieManager;
-
-    /**
-     * @var ResolverInterface
-     */
-    private $localeResolver;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @param StoreManagerInterface $storeManager
      * @param HttpContext $httpContext
      * @param StoreCookieManagerInterface $storeCookieManager
-     * @param ResolverInterface $localeResolver
-     * @param LoggerInterface $logger
+     * @param ResolverInterface|null $localeResolver
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        HttpContext $httpContext,
-        StoreCookieManagerInterface $storeCookieManager,
-        ResolverInterface $localeResolver = null,
-        LoggerInterface $logger = null
+        private readonly StoreManagerInterface $storeManager,
+        private readonly HttpContext $httpContext,
+        private readonly StoreCookieManagerInterface $storeCookieManager,
+        private ?ResolverInterface $localeResolver = null,
+        private ?LoggerInterface $logger = null
     ) {
-        $this->storeManager = $storeManager;
-        $this->httpContext = $httpContext;
-        $this->storeCookieManager = $storeCookieManager;
         $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(ResolverInterface::class);
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
@@ -86,7 +59,7 @@ class StoreProcessor implements HttpHeaderProcessorInterface
                 // and logged in the catch
                 $this->storeManager->setCurrentStore($storeCode);
                 $this->updateContext($storeCode);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->error($e->getMessage());
             }
         } elseif (!$this->isAlreadySet()) {

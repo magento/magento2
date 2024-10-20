@@ -18,17 +18,11 @@ use Magento\Store\Model\StoreManagerInterface;
 class StoreValidator implements HttpRequestValidatorInterface
 {
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        StoreManagerInterface $storeManager
+        private readonly StoreManagerInterface $storeManager
     ) {
-        $this->storeManager = $storeManager;
     }
 
     /**

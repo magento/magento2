@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\StoreGraphQl\Plugin;
 
+use Magento\Store\Model\Store as ModelStore;
 use Magento\StoreGraphQl\Model\Resolver\Store\ConfigIdentity;
 
 /**
@@ -17,11 +18,11 @@ class Store
     /**
      * Add graphql store config tag to the store cache identities.
      *
-     * @param \Magento\Store\Model\Store $subject
+     * @param ModelStore $subject
      * @param array $result
      * @return array
      */
-    public function afterGetIdentities(\Magento\Store\Model\Store $subject, array $result): array
+    public function afterGetIdentities(ModelStore $subject, array $result): array
     {
         $result[] = sprintf('%s_%s', ConfigIdentity::CACHE_TAG, $subject->getId());
 
