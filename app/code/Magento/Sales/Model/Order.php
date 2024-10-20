@@ -1601,7 +1601,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Gets order item by given ID.
      *
      * @param int $itemId
-     * @return \Magento\Framework\DataObject|null
+     * @return \Magento\Sales\Api\Data\OrderItemInterface|null
      */
     public function getItemById($itemId)
     {
@@ -1618,7 +1618,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Get item by quote item id
      *
      * @param mixed $quoteItemId
-     * @return \Magento\Framework\DataObject|null
+     * @return \Magento\Sales\Api\Data\OrderItemInterface|null
      */
     public function getItemByQuoteItemId($quoteItemId)
     {
