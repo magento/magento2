@@ -98,7 +98,7 @@ class Collection extends SearchResult
     public function addFieldToFilter($field, $condition = null): Collection
     {
         if ($field == 'visitor_type') {
-            $field = 'customer_id';
+            $field = 'main_table.customer_id';
             if (is_array($condition) && isset($condition['eq'])) {
                 $condition = $condition['eq'] == Visitor::VISITOR_TYPE_CUSTOMER ? ['gt' => 0] : ['null' => true];
             }
