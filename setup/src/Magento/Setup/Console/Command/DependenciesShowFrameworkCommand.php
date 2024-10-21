@@ -16,6 +16,7 @@ use Magento\Setup\Module\Dependency\ServiceLocator;
  */
 class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
 {
+    public const NAME = 'info:dependencies:show-framework';
     /**
      * @var ComponentRegistrarInterface
      */
@@ -34,12 +35,12 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
         $this->setDescription('Shows number of dependencies on Magento framework')
-            ->setName('info:dependencies:show-framework');
+            ->setName(self::NAME);
         parent::configure();
     }
 

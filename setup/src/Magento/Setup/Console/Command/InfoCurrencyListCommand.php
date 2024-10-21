@@ -18,6 +18,7 @@ use Magento\Framework\App\ObjectManager;
  */
 class InfoCurrencyListCommand extends Command
 {
+    public const NAME = 'info:currency:list';
     /**
      * List model provides lists of available options for currency, language locales, timezones
      *
@@ -42,18 +43,18 @@ class InfoCurrencyListCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
-        $this->setName('info:currency:list')
+        $this->setName(self::NAME)
             ->setDescription('Displays the list of available currencies');
 
         parent::configure();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
