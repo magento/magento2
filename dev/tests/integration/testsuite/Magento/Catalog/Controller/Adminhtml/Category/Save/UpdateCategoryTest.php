@@ -51,7 +51,13 @@ class UpdateCategoryTest extends AbstractSaveCategoryTest
         $postData = array_merge($postData, ['store_id' => $storeId]);
         $responseData = $this->performSaveCategoryRequest($postData);
         $this->assertRequestIsSuccessfullyPerformed($responseData);
-        $category = $this->categoryRepository->get($postData['entity_id'], $postData['store_id']);
+        /**
+         * The problem is that
+         * @see \Magento\Catalog\Controller\Adminhtml\Category\Save::execute
+         * saves the category via resource model, so the cache in the repository is not cleaned
+         */
+        $newCategoryRepository = $this->_objectManager->create(CategoryRepositoryInterface::class);
+        $category = $newCategoryRepository->get($postData['entity_id'], $postData['store_id']);
         unset($postData['use_default']);
         unset($postData['use_config']);
         foreach ($postData as $key => $value) {

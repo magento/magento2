@@ -177,7 +177,13 @@ class CategoryTest extends AbstractBackendController
             $this->equalTo([(string)__('You saved the category.')]),
             MessageInterface::TYPE_SUCCESS
         );
-        $category = $this->categoryRepository->get($categoryId);
+        /**
+         * The problem is that
+         * @see \Magento\Catalog\Controller\Adminhtml\Category\Save::execute
+         * saves the category via resource model, so the cache in the repository is not cleaned
+         */
+        $newCategoryRepository = $this->_objectManager->create(CategoryRepositoryInterface::class);
+        $category = $newCategoryRepository->get($categoryId);
         $this->assertEquals($defaultUrlPath, $category->getData('url_key'));
     }
 
