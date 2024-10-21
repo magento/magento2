@@ -34,7 +34,7 @@
     </table>
     <table name="catalog_product_entity_datetime" resource="default" engine="innodb"
            comment="Catalog Product Datetime Attribute Backend Table">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Attribute ID"/>
@@ -69,7 +69,7 @@
     </table>
     <table name="catalog_product_entity_decimal" resource="default" engine="innodb"
            comment="Catalog Product Decimal Attribute Backend Table">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Attribute ID"/>
@@ -105,7 +105,7 @@
     </table>
     <table name="catalog_product_entity_int" resource="default" engine="innodb"
            comment="Catalog Product Integer Attribute Backend Table">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Attribute ID"/>
@@ -146,7 +146,7 @@
     </table>
     <table name="catalog_product_entity_text" resource="default" engine="innodb"
            comment="Catalog Product Text Attribute Backend Table">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Attribute ID"/>
@@ -181,7 +181,7 @@
     </table>
     <table name="catalog_product_entity_varchar" resource="default" engine="innodb"
            comment="Catalog Product Varchar Attribute Backend Table">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Attribute ID"/>
@@ -216,7 +216,7 @@
     </table>
     <table name="catalog_product_entity_gallery" resource="default" engine="innodb"
            comment="Catalog Product Gallery Attribute Backend Table">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Attribute ID"/>
@@ -284,7 +284,7 @@
     </table>
     <table name="catalog_category_entity_datetime" resource="default" engine="innodb"
            comment="Catalog Category Datetime Attribute Backend Table">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Attribute ID"/>
@@ -322,7 +322,7 @@
     </table>
     <table name="catalog_category_entity_decimal" resource="default" engine="innodb"
            comment="Catalog Category Decimal Attribute Backend Table">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Attribute ID"/>
@@ -361,7 +361,7 @@
     </table>
     <table name="catalog_category_entity_int" resource="default" engine="innodb"
            comment="Catalog Category Integer Attribute Backend Table">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Attribute ID"/>
@@ -400,7 +400,7 @@
     </table>
     <table name="catalog_category_entity_text" resource="default" engine="innodb"
            comment="Catalog Category Text Attribute Backend Table">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Attribute ID"/>
@@ -438,7 +438,7 @@
     </table>
     <table name="catalog_category_entity_varchar" resource="default" engine="innodb"
            comment="Catalog Category Varchar Attribute Backend Table">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Attribute ID"/>
@@ -476,7 +476,7 @@
     </table>
     <table name="catalog_category_product" resource="default" engine="innodb"
            comment="Catalog Product To Category Linkage Table">
-        <column xsi:type="int" name="entity_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
         <column xsi:type="int" name="category_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Category ID"/>
@@ -763,7 +763,7 @@
     </table>
     <table name="catalog_product_entity_tier_price" resource="default" engine="innodb"
            comment="Catalog Product Tier Price Attribute Backend Table">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity ID"/>

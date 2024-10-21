@@ -74,7 +74,7 @@
         </index>
     </table>
     <table name="eav_entity_datetime" resource="default" engine="innodb" comment="Eav Entity Value Prefix">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="entity_type_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity Type ID"/>
@@ -114,7 +114,7 @@
         </index>
     </table>
     <table name="eav_entity_decimal" resource="default" engine="innodb" comment="Eav Entity Value Prefix">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="entity_type_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity Type ID"/>
@@ -155,7 +155,7 @@
         </index>
     </table>
     <table name="eav_entity_int" resource="default" engine="innodb" comment="Eav Entity Value Prefix">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="entity_type_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity Type ID"/>
@@ -195,7 +195,7 @@
         </index>
     </table>
     <table name="eav_entity_text" resource="default" engine="innodb" comment="Eav Entity Value Prefix">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="entity_type_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity Type ID"/>
@@ -232,7 +232,7 @@
         </index>
     </table>
     <table name="eav_entity_varchar" resource="default" engine="innodb" comment="Eav Entity Value Prefix">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="entity_type_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity Type ID"/>
