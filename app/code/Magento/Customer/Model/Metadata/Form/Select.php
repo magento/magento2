@@ -1,7 +1,5 @@
 <?php
 /**
- * Form Element Select Data Model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,10 +8,13 @@ namespace Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\ElementFactory;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * Form Element Select Data Model
+ */
 class Select extends AbstractData
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function extractValue(RequestInterface $request)
     {
@@ -21,13 +22,13 @@ class Select extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validateValue($value)
     {
         $errors = [];
         $attribute = $this->getAttribute();
-        $label = __($attribute->getStoreLabel());
 
         if ($value === false) {
             // try to load original value and validate it
@@ -35,6 +36,9 @@ class Select extends AbstractData
         }
 
         if ($attribute->isRequired() && empty($value) && $value !== '0') {
+            if ($label = $attribute->getStoreLabel()) {
+                $label = __($label);
+            }
             $errors[] = __('"%1" is a required value.', $label);
         }
 
@@ -50,7 +54,7 @@ class Select extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function compactValue($value)
     {
@@ -58,7 +62,7 @@ class Select extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function restoreValue($value)
     {

@@ -234,7 +234,12 @@ class Name extends AbstractWidget
     public function getStoreLabel($attributeCode)
     {
         $attribute = $this->_getAttribute($attributeCode);
-        return $attribute ? __($attribute->getStoreLabel()) : '';
+
+        if ($attribute && $label = $attribute->getStoreLabel()) {
+            return __($label);
+        }
+
+        return '';
     }
 
     /**

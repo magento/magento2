@@ -98,10 +98,12 @@ class WebsitesTest extends AbstractModifierTestCase
             ->onlyMethods(['getId', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->websiteMock->method('getName')->willReturn('Unit test');
         $this->secondWebsiteMock = $this->getMockBuilder(Website::class)
             ->onlyMethods(['getId', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->secondWebsiteMock->method('getName')->willReturn('Unit test');
         $this->websitesList = [$this->websiteMock, $this->secondWebsiteMock];
         $this->websiteRepositoryMock = $this->getMockBuilder(WebsiteRepositoryInterface::class)
             ->onlyMethods(['getList'])
