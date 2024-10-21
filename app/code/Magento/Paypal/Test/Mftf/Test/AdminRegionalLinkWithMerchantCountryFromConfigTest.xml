@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRegionalLinkWithMerchantCountryFromConfigTest">
+        <annotations>
+            <features value="Paypal"/>
+            <stories value="PayLater Comment Regional Link With Merchant Country From Config"/>
+            <title value="Check Comment Regional Link With Merchant Country From Config For PayPal PayLater"/>
+            <description value="Default link country for Paypal Pay Later and for all unsupported countries is US"/>
+            <severity value="AVERAGE"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <magentoCLI command="config:set {{MerchantFrance.path}} {{MerchantFrance.value}}" stepKey="setMerchantCountryDefault"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountry4"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminPayPalRegionalLinkOtherActionGroup" stepKey="verifyPayPalCommentCommentLink">
+            <argument name="payPalConfigType" value="PayPalExpressCheckoutOtherCountryConfigSection"/>
+            <argument name="enabledOption" value="Yes"/>
+            <argument name="countryCode" value="fr"/>
+        </actionGroup>
+        <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="United Kingdom" stepKey="setMerchantCountry2"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <actionGroup ref="AdminPayPalRegionalLinkActionGroup" stepKey="verifyPayPalCommentCommentLink2">
+            <argument name="payPalConfigType" value="PayPalExpressCheckoutConfigSection"/>
+            <argument name="enabledOption" value="Yes"/>
+            <argument name="countryCode" value="gb"/>
+        </actionGroup>
+        <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="United States" stepKey="setMerchantCountry3"/>
+        <waitForPageLoad stepKey="waitForPageLoa3"/>
+        <actionGroup ref="AdminPayPalRegionalLinkActionGroup" stepKey="verifyPayPalCommentCommentLink3">
+            <argument name="payPalConfigType" value="PayPalExpressCheckoutConfigSection"/>
+            <argument name="enabledOption" value="Yes"/>
+            <argument name="countryCode" value="us"/>
+        </actionGroup>
+    </test>
+</tests>

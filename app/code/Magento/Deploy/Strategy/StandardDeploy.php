@@ -5,8 +5,9 @@
  */
 namespace Magento\Deploy\Strategy;
 
-use Magento\Deploy\Package\PackagePool;
+use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Deploy\Package\Package;
+use Magento\Deploy\Package\PackagePool;
 use Magento\Deploy\Process\Queue;
 
 /**
@@ -60,12 +61,43 @@ class StandardDeploy implements StrategyInterface
             $deployedPackages[] = $package;
         }
 
+        $parentCompilationRequested = $options[Options::NO_PARENT] !== true;
+        $includeThemesMap = array_flip($options[Options::THEME] ?? []);
+        $excludeThemesMap = array_flip($options[Options::EXCLUDE_THEME] ?? []);
+
         foreach ($deployedPackages as $package) {
-            $this->queue->add($package);
+            if ($parentCompilationRequested
+                || $this->canDeployTheme($package->getTheme(), $includeThemesMap, $excludeThemesMap)) {
+                $this->queue->add($package);
+            }
         }
 
         $this->queue->process();
 
         return $deployedPackages;
+    }
+
+    /**
+     * Verify if specified theme should be deployed
+     *
+     * @param string $theme
+     * @param array $includedThemesMap
+     * @param array $excludedEntitiesMap
+     * @return bool
+     */
+    private function canDeployTheme(string $theme, array $includedThemesMap, array $excludedEntitiesMap): bool
+    {
+        $includesAllThemes = array_key_exists('all', $includedThemesMap);
+        $excludesNoneThemes = array_key_exists('none', $excludedEntitiesMap);
+
+        if ($includesAllThemes && $excludesNoneThemes) {
+            return true;
+        } elseif (!$excludesNoneThemes) {
+            return !array_key_exists($theme, $excludedEntitiesMap);
+        } elseif (!$includesAllThemes) {
+            return array_key_exists($theme, $includedThemesMap);
+        }
+
+        return true;
     }
 }

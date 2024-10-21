@@ -8,6 +8,11 @@ namespace Magento\Webapi\Model\Authorization;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Integration\Api\Exception\UserTokenException;
+use Magento\Integration\Api\UserTokenReaderInterface;
+use Magento\Integration\Api\UserTokenValidatorInterface;
 use Magento\Integration\Model\Oauth\Token;
 use Magento\Integration\Model\Oauth\TokenFactory;
 use Magento\Integration\Api\IntegrationServiceInterface;
@@ -18,8 +23,11 @@ use Magento\Integration\Helper\Oauth\Data as OauthHelper;
 
 /**
  * A user context determined by tokens in a HTTP request Authorization header.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
-class TokenUserContext implements UserContextInterface
+class TokenUserContext implements UserContextInterface, ResetAfterRequestInterface
 {
     /**
      * @var Request
@@ -52,19 +60,18 @@ class TokenUserContext implements UserContextInterface
     protected $integrationService;
 
     /**
-     * @var DateTime
+     * @var UserTokenReaderInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $dateTime;
+    private readonly UserTokenReaderInterface $userTokenReader;
 
     /**
-     * @var Date
+     * @var UserTokenValidatorInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $date;
-
-    /**
-     * @var OauthHelper
-     */
-    private $oauthHelper;
+    private readonly UserTokenValidatorInterface $userTokenValidator;
 
     /**
      * Initialize dependencies.
@@ -75,27 +82,25 @@ class TokenUserContext implements UserContextInterface
      * @param DateTime|null $dateTime
      * @param Date|null $date
      * @param OauthHelper|null $oauthHelper
+     * @param UserTokenReaderInterface|null $tokenReader
+     * @param UserTokenValidatorInterface|null $tokenValidator
      */
     public function __construct(
-        Request $request,
+        \Magento\Framework\App\RequestInterface $request,
         TokenFactory $tokenFactory,
         IntegrationServiceInterface $integrationService,
         DateTime $dateTime = null,
         Date $date = null,
-        OauthHelper $oauthHelper = null
+        OauthHelper $oauthHelper = null,
+        ?UserTokenReaderInterface $tokenReader = null,
+        ?UserTokenValidatorInterface $tokenValidator = null
     ) {
         $this->request = $request;
         $this->tokenFactory = $tokenFactory;
         $this->integrationService = $integrationService;
-        $this->dateTime = $dateTime ?: ObjectManager::getInstance()->get(
-            DateTime::class
-        );
-        $this->date = $date ?: ObjectManager::getInstance()->get(
-            Date::class
-        );
-        $this->oauthHelper = $oauthHelper ?: ObjectManager::getInstance()->get(
-            OauthHelper::class
-        );
+        $this->userTokenReader = $tokenReader ?? ObjectManager::getInstance()->get(UserTokenReaderInterface::class);
+        $this->userTokenValidator = $tokenValidator
+            ?? ObjectManager::getInstance()->get(UserTokenValidatorInterface::class);
     }
 
     /**
@@ -114,34 +119,6 @@ class TokenUserContext implements UserContextInterface
     {
         $this->processRequest();
         return $this->userType;
-    }
-
-    /**
-     * Check if token is expired.
-     *
-     * @param Token $token
-     * @return bool
-     */
-    private function isTokenExpired(Token $token): bool
-    {
-        if ($token->getUserType() == UserContextInterface::USER_TYPE_ADMIN) {
-            $tokenTtl = $this->oauthHelper->getAdminTokenLifetime();
-        } elseif ($token->getUserType() == UserContextInterface::USER_TYPE_CUSTOMER) {
-            $tokenTtl = $this->oauthHelper->getCustomerTokenLifetime();
-        } else {
-            // other user-type tokens are considered always valid
-            return false;
-        }
-
-        if (empty($tokenTtl)) {
-            return false;
-        }
-
-        if ($this->dateTime->strToTime($token->getCreatedAt()) < ($this->date->gmtTimestamp() - $tokenTtl * 3600)) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -174,15 +151,21 @@ class TokenUserContext implements UserContextInterface
         }
 
         $bearerToken = $headerPieces[1];
-        $token = $this->tokenFactory->create()->loadByToken($bearerToken);
-
-        if (!$token->getId() || $token->getRevoked() || $this->isTokenExpired($token)) {
+        try {
+            $token = $this->userTokenReader->read($bearerToken);
+        } catch (UserTokenException $exception) {
             $this->isRequestProcessed = true;
-
+            return;
+        }
+        try {
+            $this->userTokenValidator->validate($token);
+        } catch (AuthorizationException $exception) {
+            $this->isRequestProcessed = true;
             return;
         }
 
-        $this->setUserDataViaToken($token);
+        $this->userType = $token->getUserContext()->getUserType();
+        $this->userId = $token->getUserContext()->getUserId();
         $this->isRequestProcessed = true;
     }
 
@@ -191,6 +174,8 @@ class TokenUserContext implements UserContextInterface
      *
      * @param Token $token
      * @return void
+     * @deprecated Since tokens are handled with UserTokenReader now.
+     * @see TokenUserContext::processRequest()
      */
     protected function setUserDataViaToken(Token $token)
     {
@@ -212,5 +197,15 @@ class TokenUserContext implements UserContextInterface
                 /* this is an unknown user type so reset the cached user type */
                 $this->userType = null;
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->isRequestProcessed = null;
+        $this->userId = null;
+        $this->userType = null;
     }
 }

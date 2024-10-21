@@ -17,6 +17,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\QuoteGraphQl\Model\CartItem\DataProvider\UpdateCartItems as  UpdateCartItemsProvider;
+use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 
 /**
  * @inheritdoc
@@ -24,33 +25,24 @@ use Magento\QuoteGraphQl\Model\CartItem\DataProvider\UpdateCartItems as  UpdateC
 class UpdateCartItems implements ResolverInterface
 {
     /**
-     * @var GetCartForUser
+     * Undefined error code
      */
-    private $getCartForUser;
+    private const CODE_UNDEFINED = 'UNDEFINED';
 
     /**
-     * @var CartRepositoryInterface
-     */
-    private $cartRepository;
-
-    /**
-     * @var UpdateCartItemsProvider
-     */
-    private $updateCartItems;
-
-    /**
-     * @param GetCartForUser          $getCartForUser
+     * @param GetCartForUser $getCartForUser
      * @param CartRepositoryInterface $cartRepository
      * @param UpdateCartItemsProvider $updateCartItems
+     * @param ArgumentsProcessorInterface $argsSelection
+     * @param array $messageCodesMapper
      */
     public function __construct(
-        GetCartForUser $getCartForUser,
-        CartRepositoryInterface $cartRepository,
-        UpdateCartItemsProvider  $updateCartItems
+        private readonly GetCartForUser $getCartForUser,
+        private readonly CartRepositoryInterface $cartRepository,
+        private readonly UpdateCartItemsProvider $updateCartItems,
+        private readonly ArgumentsProcessorInterface $argsSelection,
+        private readonly array $messageCodesMapper,
     ) {
-        $this->getCartForUser = $getCartForUser;
-        $this->cartRepository = $cartRepository;
-        $this->updateCartItems = $updateCartItems;
     }
 
     /**
@@ -58,35 +50,66 @@ class UpdateCartItems implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (empty($args['input']['cart_id'])) {
+        $processedArgs = $this->argsSelection->process($info->fieldName, $args);
+
+        if (empty($processedArgs['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing.'));
         }
 
-        $maskedCartId = $args['input']['cart_id'];
+        $maskedCartId = $processedArgs['input']['cart_id'];
 
-        if (empty($args['input']['cart_items'])
-            || !is_array($args['input']['cart_items'])
+        $errors = [];
+        if (empty($processedArgs['input']['cart_items'])
+            || !is_array($processedArgs['input']['cart_items'])
         ) {
-            throw new GraphQlInputException(__('Required parameter "cart_items" is missing.'));
+            $message = 'Required parameter "cart_items" is missing.';
+            $errors[] = [
+                'message' => __($message),
+                'code' => $this->getErrorCode($message)
+            ];
         }
 
-        $cartItems = $args['input']['cart_items'];
+        $cartItems = $processedArgs['input']['cart_items'];
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
 
         try {
             $this->updateCartItems->processCartItems($cart, $cartItems);
-            $this->cartRepository->save($cart);
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
-        } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()), $e);
+            $this->cartRepository->save(
+                $this->cartRepository->get((int)$cart->getId())
+            );
+        } catch (NoSuchEntityException | LocalizedException $e) {
+            $message = (str_contains($e->getMessage(), 'The requested qty is not available'))
+                ? 'The requested qty. is not available'
+                : $e->getMessage();
+            $errors[] = [
+                'message' => __($message),
+                'code' => $this->getErrorCode($e->getMessage())
+            ];
         }
 
         return [
             'cart' => [
                 'model' => $cart,
             ],
+            'errors' => $errors,
         ];
+    }
+
+    /**
+     * Returns error code based on error message
+     *
+     * @param string $message
+     * @return string
+     */
+    private function getErrorCode(string $message): string
+    {
+        $message = preg_replace('/\d+/', '%s', $message);
+        foreach ($this->messageCodesMapper as $key => $code) {
+            if (str_contains($message, $key)) {
+                return $code;
+            }
+        }
+        return self::CODE_UNDEFINED;
     }
 }

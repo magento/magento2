@@ -16,6 +16,7 @@
             <description value="Check 'Store View' sort order values no frontend store-switcher"/>
             <severity value="MINOR"/>
             <group value="store"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -41,9 +42,7 @@
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
         <actionGroup ref="AdminCreateStoreViewFillSortOrderActionGroup" stepKey="createFirstStoreView">
             <argument name="StoreGroup" value="customStoreGroup"/>
@@ -54,6 +53,9 @@
             <argument name="StoreGroup" value="SecondStoreGroupUnique"/>
             <argument name="customStore" value="SecondStoreGroupUnique"/>
             <argument name="sortOrder" value="20"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
         </actionGroup>
 
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>

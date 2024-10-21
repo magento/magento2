@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontNewsletterSubscriptionWithEnabledNeedToConfirmConfigTest">
+        <annotations>
+            <features value="Newsletter Subscription"/>
+            <stories value="Subscribe To Newsletter Subscription on Storefront With Enabled Need To Confirm Config"/>
+            <title value="Storefront Newsletter Subscription with enabled Need To Confirm Config"/>
+            <description value="Customers and guests should receive correct notification if Need To Confirm Config is enabled for newsletter subscription"/>
+            <severity value="MINOR"/>
+            <group value="newsletter"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{SetNeedToConfirmEnabledConfigData.path}} {{SetNeedToConfirmEnabledConfigData.value}}" stepKey="enableNeedToConfirmConfig"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCreatedCustomer"/>
+            <magentoCLI command="config:set {{SetNeedToConfirmDisabledConfigData.path}} {{SetNeedToConfirmDisabledConfigData.value}}" stepKey="disableNeedToConfirmConfig"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleaInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontPage"/>
+        <actionGroup ref="StorefrontCreateNewsletterSubscriberActionGroup" stepKey="createSubscription">
+            <argument name="email" value="{{_defaultNewsletter.senderEmail}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontCustomerMessagesActionGroup" stepKey="assertTheMessage">
+            <argument name="message" value="The confirmation request has been sent."/>
+        </actionGroup>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerNavigateToNewsletterPageActionGroup" stepKey="navigateToNewsletterPage"/>
+        <actionGroup ref="StorefrontCustomerUpdateGeneralSubscriptionActionGroup" stepKey="subscribeToNewsletter"/>
+        <actionGroup ref="AssertStorefrontCustomerMessagesActionGroup" stepKey="assertMessage">
+            <argument name="message" value="A confirmation request has been sent."/>
+        </actionGroup>
+    </test>
+</tests>

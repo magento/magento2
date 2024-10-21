@@ -33,6 +33,7 @@ class Multiline extends \Magento\Eav\Model\Attribute\Data\Text
 
     /**
      * Validate data
+     *
      * Return true or array of errors
      *
      * @param array|string $value
@@ -60,6 +61,7 @@ class Multiline extends \Magento\Eav\Model\Attribute\Data\Text
             if ($lineIndex == 0 || !empty($line)) {
                 $result = parent::validateValue($line);
                 if ($result !== true) {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $errors = array_merge($errors, $result);
                 }
             }
@@ -83,7 +85,7 @@ class Multiline extends \Magento\Eav\Model\Attribute\Data\Text
             $value = $entity->getDataUsingMethod($attribute->getAttributeCode());
         }
         if (!is_array($value)) {
-            $value = explode("\n", $value);
+            $value = $value !== null ? explode("\n", $value) : [];
         }
         return $value;
     }
@@ -123,7 +125,7 @@ class Multiline extends \Magento\Eav\Model\Attribute\Data\Text
     public function outputValue($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT)
     {
         $values = $this->getEntity()->getData($this->getAttribute()->getAttributeCode());
-        if (!is_array($values)) {
+        if ($values && !is_array($values)) {
             $values = explode("\n", $values);
         }
         $values = array_map([$this, '_applyOutputFilter'], $values);

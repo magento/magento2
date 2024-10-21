@@ -33,16 +33,14 @@
                 <argument name="price" value="Fixed"/>
                 <argument name="amount" value="24.00"/>
             </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <magentoCLI command="config:set {{DisablePaymentBankTransferConfigData.path}} {{DisablePaymentBankTransferConfigData.value}}" stepKey="enableGuestCheckout"/>
 
             <!-- Sign out Customer from storefront -->
             <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
-            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="UKCustomer.email"/>
@@ -65,8 +63,8 @@
 
         <!-- Fill the Estimate Shipping and Tax section -->
         <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
 
         <!-- Fill the guest form -->
         <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryActionGroup" stepKey="fillGuestForm">
@@ -76,11 +74,13 @@
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.bankTransfer}}" stepKey="waitForPlaceOrderButton"/>
         <checkOption selector="{{CheckoutPaymentSection.bankTransfer}}" stepKey="selectBankTransfer"/>
+        <waitForPageLoad stepKey="waitForBankTransferLoad"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddressNotSameBankTransferCheckbox}}" stepKey="waitForElementToBeVisible"/>
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameBankTransferCheckbox}}" stepKey="uncheckSameBillingAndShippingAddress"/>
-        <waitForElementVisible selector="{{CheckoutShippingSection.editActiveAddressButton}}" stepKey="waitForEditButtonToBeVisible"/>
+        <comment userInput="BIC workaround" stepKey="waitForEditButtonToBeVisible"/>
+        <waitForPageLoad stepKey="waitForAddressUnchecked"/>
         <conditionalClick selector="{{CheckoutShippingSection.editActiveAddressButton}}" dependentSelector="{{CheckoutShippingSection.editActiveAddressButton}}" visible="true" stepKey="clickEditButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForPageLoad stepKey="waitForLoadingMask"/>
 
         <!-- Fill Billing Address -->
         <actionGroup ref="StorefrontFillBillingAddressActionGroup" stepKey="fillBillingAddress"/>

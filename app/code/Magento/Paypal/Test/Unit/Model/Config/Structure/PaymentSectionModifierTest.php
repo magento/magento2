@@ -162,14 +162,14 @@ class PaymentSectionModifierTest extends TestCase
      */
     private function fetchAllAvailableGroups($structure)
     {
-        $availableGroups = [[]];
+        $availableGroups = [];
         foreach ($structure as $group => $data) {
             $availableGroups[] = [$group];
             if (isset($data['children'])) {
                 $availableGroups[] = $this->fetchAllAvailableGroups($data['children']);
             }
         }
-        $availableGroups = array_merge(...$availableGroups);
+        $availableGroups = array_merge([], ...$availableGroups);
         $availableGroups = array_values(array_unique($availableGroups));
         sort($availableGroups);
         return $availableGroups;
@@ -178,7 +178,7 @@ class PaymentSectionModifierTest extends TestCase
     /**
      * @return mixed
      */
-    public function caseProvider()
+    public static function caseProvider()
     {
         return include __DIR__ . '/_files/payment_section_structure_variations.php';
     }

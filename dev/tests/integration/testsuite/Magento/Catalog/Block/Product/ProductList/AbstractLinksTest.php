@@ -89,7 +89,7 @@ abstract class AbstractLinksTest extends TestCase
      *
      * @return array
      */
-    public function displayLinkedProductsProvider(): array
+    public static function displayLinkedProductsProvider(): array
     {
         return [
             'product_all_displayed' => [
@@ -161,7 +161,7 @@ abstract class AbstractLinksTest extends TestCase
      *
      * @return array
      */
-    public function multipleWebsitesLinkedProductsProvider(): array
+    public static function multipleWebsitesLinkedProductsProvider(): array
     {
         return [
             'first_website' => [

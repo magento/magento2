@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCustomerUpdateWishlistItemActionGroup">
+        <annotations>
+            <description>Navigates to the 'Update Wishlist Item' page by the provided Product name.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string" defaultValue="{{_defaultProduct.name}}"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productName)}}" stepKey="waitForProductInfo"/>
+        <scrollTo selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productName)}}" stepKey="scrollToProduct"/>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productName)}}" stepKey="mouseOverOnProduct"/>
+        <click selector="{{StorefrontCustomerWishlistProductSection.editProduct}}" stepKey="clickEditButton"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="waitForProductPageLoad"/>
+    </actionGroup>
+</actionGroups>

@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Captcha\Observer;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Captcha\Helper\Data as CaptchaHelper;
 
 /**
  * Extract given captcha word.
@@ -22,12 +26,13 @@ class CaptchaStringResolver
      */
     public function resolve(RequestInterface $request, $formId)
     {
-        $captchaParams = $request->getPost(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE);
+        $value = '';
+        $captchaParams = $request->getPost(CaptchaHelper::INPUT_NAME_FIELD_VALUE);
         if (!empty($captchaParams) && !empty($captchaParams[$formId])) {
             $value = $captchaParams[$formId];
-        } else {
-            //For Web APIs
-            $value = $request->getHeader('X-Captcha');
+        } elseif ($headerValue = $request->getHeader('X-Captcha')) {
+            //CAPTCHA was provided via header for this XHR/web API request.
+            $value = $headerValue;
         }
 
         return $value;

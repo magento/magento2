@@ -12,4 +12,9 @@
     <type name="Magento\AdminNotification\Ui\Component\DataProvider\DataProvider">
         <plugin name="afterGetMeta" type="Magento\AsynchronousOperations\Ui\Component\AdminNotification\Plugin" />
     </type>
+    <type name="Magento\AsynchronousOperations\Controller\Adminhtml\Bulk\Retry">
+        <arguments>
+            <argument name="bulkManagement" xsi:type="object">Magento\AsynchronousOperations\Model\VirtualType\BulkManagement</argument>
+        </arguments>
+    </type>
 </config>

@@ -5,11 +5,18 @@
  */
 namespace Magento\Integration\Model\Oauth\Consumer\Validator;
 
+use Laminas\Validator\StringLength;
+
 /**
  * Validate OAuth keys
  */
-class KeyLength extends \Zend_Validate_StringLength
+class KeyLength extends StringLength
 {
+    /**
+     * @var array
+     */
+    public $messages = [];
+
     /**
      * Default key name
      *
@@ -20,7 +27,7 @@ class KeyLength extends \Zend_Validate_StringLength
     /**
      * @var array
      */
-    protected $_messageTemplates = [
+    protected $messageTemplates = [
         self::INVALID   => "Invalid type given for %name%. String expected",
         self::TOO_SHORT => "%name% '%value%' is less than %min% characters long",
         self::TOO_LONG  => "%name% '%value%' is more than %max% characters long",
@@ -31,7 +38,10 @@ class KeyLength extends \Zend_Validate_StringLength
      *
      * @var array
      */
-    protected $_messageVariables = ['min' => '_min', 'max' => '_max', 'name' => '_name'];
+    protected $messageVariables = [
+        'min'  => ['options' => 'min'],
+        'max'  => ['options' => 'max'],
+    ];
 
     /**
      * Sets KeyLength validator options
@@ -44,6 +54,7 @@ class KeyLength extends \Zend_Validate_StringLength
     public function __construct($options = [])
     {
         if (!is_array($options)) {
+            // phpcs:ignore
             $options = func_get_args();
             if (!isset($options[1])) {
                 $options[1] = 'utf-8';
@@ -85,7 +96,7 @@ class KeyLength extends \Zend_Validate_StringLength
     }
 
     /**
-     * Defined by \Zend_Validate_Interface
+     * Defined by \Laminas\Validator\ValidatorInterface
      *
      * Returns true if and only if the string length of $value is at least the min option and
      * no greater than the max option (when the max option is not null).
@@ -97,8 +108,17 @@ class KeyLength extends \Zend_Validate_StringLength
     public function isValid($value)
     {
         $result = parent::isValid($value);
-        if (!$result && isset($this->_messages[self::INVALID])) {
-            throw new \Exception($this->_messages[self::INVALID]);
+        $messages = $this->getMessages();
+        $newMessages = [];
+
+        foreach ($messages as $key => $message) {
+            $newMessages[$key] = str_replace('%name%', $this->getName(), $message);
+        }
+        $this->abstractOptions['messages'] = $newMessages;
+
+        if (!$result && isset($newMessages[self::INVALID])) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
+            throw new \Exception($newMessages[self::INVALID]);
         }
         return $result;
     }

@@ -45,7 +45,7 @@ class CanViewNotificationTest extends TestCase
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUser', 'getId'])
+            ->addMethods(['getUser', 'getId'])
             ->getMock();
         $this->viewerLoggerMock = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
@@ -98,7 +98,7 @@ class CanViewNotificationTest extends TestCase
         $this->sessionMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
-        $this->productMetadataMock->expects($this->once())
+        $this->productMetadataMock->expects($this->any())
             ->method('getVersion')
             ->willReturn($version);
         $this->logMock->expects($this->once())
@@ -117,7 +117,7 @@ class CanViewNotificationTest extends TestCase
     /**
      * @return array
      */
-    public function isVisibleProvider()
+    public static function isVisibleProvider()
     {
         return [
             [false, '2.2.1-dev', '999.999.999-alpha'],

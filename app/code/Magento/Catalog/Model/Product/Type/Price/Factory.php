@@ -4,11 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Product type price factory
- */
 namespace Magento\Catalog\Model\Product\Type\Price;
 
+/**
+ * Product type price factory
+ *
+ * @api
+ */
 class Factory
 {
     /**

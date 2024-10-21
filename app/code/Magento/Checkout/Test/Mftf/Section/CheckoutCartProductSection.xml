@@ -54,5 +54,6 @@
         <!-- Required attention section -->
         <element name="removeProductBySku" type="button" selector="//div[contains(., '{{sku}}')]/ancestor::tbody//button" parameterized="true" timeout="30"/>
         <element name="failedItemBySku" type="block" selector="//div[contains(.,'{{sku}}')]/ancestor::tbody" parameterized="true" timeout="30"/>
+        <element name="attributeText" selector="//tbody[@class='cart item']//a[text()='{{product_name}}']/../..//dl//dt[text()='{{attribute_name}}']/..//dd[contains(text(),'{{attribute_option}}')]" type="text" parameterized="true"/>
     </section>
 </sections>

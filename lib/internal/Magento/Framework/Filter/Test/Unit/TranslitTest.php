@@ -44,11 +44,12 @@ class TranslitTest extends TestCase
     /**
      * @return array
      */
-    public function filterDataProvider()
+    public static function filterDataProvider()
     {
         $isIconv = '"libiconv"' == ICONV_IMPL;
         return [
             ['test', 'test', 'test', $isIconv],
+            [null, '', '', $isIconv],
             ['привет мир', 'privet mir', 'privet mir', $isIconv],
             [
                 'Weiß, Goldmann, Göbel, Weiss, Göthe, Goethe und Götz',
@@ -62,7 +63,8 @@ class TranslitTest extends TestCase
                 '         EUR ->         ',
                 $isIconv
             ],
-            ['™', 'tm', 'tm', $isIconv]
+            ['™', 'tm', 'tm', $isIconv],
+            ['লক্ষ্য এনালগ ওয়াচ টি ২০', 'laksoa enaalaga oyaoaca tai 20', 'laksoa enaalaga oyaoaca tai 20', $isIconv]
         ];
     }
 
@@ -71,8 +73,9 @@ class TranslitTest extends TestCase
         $config = $this->getMockBuilder(
             ScopeConfigInterface::class
         )->disableOriginalConstructor()
-            ->setMethods(
-                ['getValue', 'setValue', 'isSetFlag']
+            ->addMethods(['setValue'])
+            ->onlyMethods(
+                ['getValue', 'isSetFlag']
             )->getMock();
 
         $config->expects(

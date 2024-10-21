@@ -4,21 +4,26 @@
  * See COPYING.txt for license details.
  */
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
+use Magento\TestFramework\Helper\Bootstrap;
 
-/** @var \Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+/** @var ObjectManagerInterface $objectManager */
+$objectManager = Bootstrap::getObjectManager();
+/** @var Registry $registry */
+$registry = $objectManager->get(Registry::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 
 try {
-    $firstProduct = $productRepository->get('simple', false, null, true);
-    $productRepository->delete($firstProduct);
-} catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
+    $productRepository->deleteById('simple');
+} catch (NoSuchEntityException $exception) {
     //Product already removed
 }
 

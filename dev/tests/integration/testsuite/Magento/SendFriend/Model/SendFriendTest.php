@@ -13,7 +13,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\SendFriend\Helper\Data as SendFriendHelper;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 
 /**
  * Class checks send friend model behavior
@@ -27,6 +27,9 @@ class SendFriendTest extends TestCase
 
     /** @var SendFriend */
     private $sendFriend;
+
+    /** @var ResourceModel\SendFriend */
+    private $sendFriendResource;
 
     /** @var CookieManagerInterface */
     private $cookieManager;
@@ -43,6 +46,7 @@ class SendFriendTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->sendFriend = $this->objectManager->get(SendFriendFactory::class)->create();
+        $this->sendFriendResource = $this->objectManager->get(ResourceModel\SendFriend::class);
         $this->cookieManager = $this->objectManager->get(CookieManagerInterface::class);
         $this->request = $this->objectManager->get(RequestInterface::class);
     }
@@ -55,6 +59,7 @@ class SendFriendTest extends TestCase
      * @param array $sender
      * @param array $recipients
      * @param string|bool $expectedResult
+     *
      * @return void
      */
     public function testValidate(array $sender, array $recipients, $expectedResult): void
@@ -66,7 +71,7 @@ class SendFriendTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider(): array
+    public static function validateDataProvider(): array
     {
         return [
             'valid_data' => [
@@ -83,7 +88,7 @@ class SendFriendTest extends TestCase
                         'recipient_email@example.com',
                     ],
                 ],
-                'expected_result' => true,
+                'expectedResult' => true,
             ],
             'empty_message' => [
                 'sender' => [
@@ -99,7 +104,7 @@ class SendFriendTest extends TestCase
                         'recipient_email@example.com',
                     ],
                 ],
-                'expected_result' => 'Please enter a message.',
+                'expectedResult' => 'Please enter a message.',
             ],
             'empty_sender_name' => [
                 'sender' => [
@@ -115,7 +120,7 @@ class SendFriendTest extends TestCase
                         'recipient_email@example.com',
                     ],
                 ],
-                'expected_result' => 'Please enter a sender name.',
+                'expectedResult' => 'Please enter a sender name.',
             ],
             'empty_recipients' => [
                 'sender' => [
@@ -127,7 +132,7 @@ class SendFriendTest extends TestCase
                     'name' => [],
                     'email' => [],
                 ],
-                'expected_result' => 'Please specify at least one recipient.',
+                'expectedResult' => 'Please specify at least one recipient.',
             ],
             'wrong_recipient_email' => [
                 'sender' => [
@@ -143,7 +148,7 @@ class SendFriendTest extends TestCase
                         '123123',
                     ],
                 ],
-                'expected_result' => 'Please enter a correct recipient email address.',
+                'expectedResult' => 'Please enter a correct recipient email address.',
             ],
             'to_much_recipients' => [
                 'sender' => [
@@ -161,7 +166,7 @@ class SendFriendTest extends TestCase
                         'recipient2_email@example.com',
                     ],
                 ],
-                'expected_result' => 'No more than 1 emails can be sent at a time.',
+                'expectedResult' => 'No more than 1 emails can be sent at a time.',
             ],
         ];
     }
@@ -185,22 +190,34 @@ class SendFriendTest extends TestCase
      * @magentoDataFixture Magento/SendFriend/_files/sendfriend_log_record_half_hour_before.php
      *
      * @magentoDbIsolation disabled
+     *
      * @return void
      */
     public function testisExceedLimitByIp(): void
     {
-        $this->markTestSkipped('Blocked by MC-31968');
+        $remoteAddr = '127.0.0.1';
         $parameters = $this->objectManager->create(Parameters::class);
-        $parameters->set('REMOTE_ADDR', '127.0.0.1');
+        $parameters->set('REMOTE_ADDR', $remoteAddr);
         $this->request->setServer($parameters);
         $this->assertTrue($this->sendFriend->isExceedLimit());
+        // Verify that ip is saved correctly as integer value
+        $this->assertEquals(
+            1,
+            (int)$this->sendFriendResource->getSendCount(
+                null,
+                ip2long($remoteAddr),
+                time() - (60 * 60 * 24 * 365),
+                1
+            )
+        );
     }
 
     /**
-     * Check result
+     * Check test result
      *
      * @param array|bool $expectedResult
      * @param array|bool $result
+     *
      * @return void
      */
     private function checkResult($expectedResult, $result): void
@@ -217,6 +234,7 @@ class SendFriendTest extends TestCase
      *
      * @param array $sender
      * @param array $recipients
+     *
      * @return void
      */
     private function prepareData(array $sender, array $recipients): void

@@ -65,25 +65,24 @@ class DirectoryResolverTest extends TestCase
         $rootPath = '/path/root';
         $directoryConfig = 'directory_config';
         $directory = $this->getMockBuilder(WriteInterface::class)
-            ->setMethods(['getDriver'])
+            ->onlyMethods(['getDriver'])
             ->getMockForAbstractClass();
         $driver = $this->getMockBuilder(DriverInterface::class)
-            ->setMethods(['getRealPathSafety'])
+            ->onlyMethods(['getRealPathSafety'])
             ->getMockForAbstractClass();
         $directory->expects($this->atLeastOnce())->method('getDriver')->willReturn($driver);
         $driver->expects($this->atLeastOnce())->method('getRealPathSafety')->with($path)
             ->willReturnArgument(0);
         $this->filesystem->expects($this->atLeastOnce())->method('getDirectoryWrite')->with($directoryConfig)
             ->willReturn($directory);
-        $this->directoryList->expects($this->atLeastOnce())->method('getPath')->with($directoryConfig)
-            ->willReturn($rootPath);
+        $directory->expects($this->atLeastOnce())->method('getAbsolutePath')->willReturn($rootPath);
         $this->assertEquals($expectedResult, $this->directoryResolver->validatePath($path, $directoryConfig));
     }
 
     /**
      * @return array
      */
-    public function validatePathDataProvider()
+    public static function validatePathDataProvider()
     {
         return [
             ['/path/root/for/validation', true],

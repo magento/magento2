@@ -22,6 +22,9 @@ class ConfigSourceAggregated implements ConfigSourceInterface
     public function __construct(array $sources = [])
     {
         $this->sources = $sources;
+        uasort($this->sources, function ($firstItem, $secondItem) {
+            return $firstItem['sortOrder'] <=> $secondItem['sortOrder'];
+        });
     }
 
     /**
@@ -32,7 +35,6 @@ class ConfigSourceAggregated implements ConfigSourceInterface
      */
     public function get($path = '')
     {
-        $this->sortSources();
         $data = [];
         foreach ($this->sources as $sourceConfig) {
             /** @var ConfigSourceInterface $source */
@@ -45,17 +47,5 @@ class ConfigSourceAggregated implements ConfigSourceInterface
             }
         }
         return $data;
-    }
-
-    /**
-     * Sort sources
-     *
-     * @return void
-     */
-    private function sortSources()
-    {
-        uasort($this->sources, function ($firstItem, $secondItem) {
-            return $firstItem['sortOrder'] > $secondItem['sortOrder'];
-        });
     }
 }

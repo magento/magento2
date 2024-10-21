@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateGroupedProductNonDefaultAttributeSetTest">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="Create product"/>
+            <title value="Create Grouped Product when non-default attribute set is chosen"/>
+            <description value="Create Grouped Product with simple when non-default attribute set is chosen"/>
+            <testCaseId value="MC-39950"/>
+            <severity value="MAJOR"/>
+            <group value="groupedProduct"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="ApiProductWithDescription" stepKey="createSimpleProduct"/>
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+        </after>
+
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createGroupedProduct">
+            <argument name="productType" value="grouped"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectAttributeSet">
+            <argument name="attributeSetName" value="$createAttributeSet.attribute_set_name$"/>
+        </actionGroup>
+        <actionGroup ref="FillGroupedProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssignProductToGroupActionGroup" stepKey="addSimpleToGroup">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductOnGroupedOptionGridActionGroup" stepKey="assertProductOptionGrid">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+    </test>
+</tests>

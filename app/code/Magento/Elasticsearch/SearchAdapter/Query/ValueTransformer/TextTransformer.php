@@ -12,6 +12,8 @@ use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
 /**
  * Value transformer for fields with text types.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class TextTransformer implements ValueTransformerInterface
 {
@@ -41,25 +43,10 @@ class TextTransformer implements ValueTransformerInterface
      */
     public function transform(string $value): string
     {
-        $value = $this->escape($value);
         foreach ($this->preprocessors as $preprocessor) {
             $value = $preprocessor->process($value);
         }
 
         return $value;
-    }
-
-    /**
-     * Escape a value for special query characters such as ':', '(', ')', '*', '?', etc.
-     *
-     * @param string $value
-     * @return string
-     */
-    private function escape(string $value): string
-    {
-        $pattern = '/(\+|-|&&|\|\||!|\(|\)|\{|}|\[|]|\^|"|~|\/|\*|\?|:|\\\)/';
-        $replace = '\\\$1';
-
-        return preg_replace($pattern, $replace, $value);
     }
 }

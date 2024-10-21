@@ -46,7 +46,7 @@ class RepositoryTest extends EntityChildTestAbstract
 
     protected function mockDefinedClassesCall()
     {
-        $this->definedClassesMock->expects($this->at(0))
+        $this->definedClassesMock
             ->method('isClassLoadable')
             ->with($this->getSourceClassName() . 'Interface')
             ->willReturn(true);

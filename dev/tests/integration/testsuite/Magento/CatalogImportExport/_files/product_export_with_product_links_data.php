@@ -18,7 +18,26 @@ Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/products_wit
 $objectManager = Bootstrap::getObjectManager();
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
-$product = $productRepository->get('simple_ms_1');
+/** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
+$productCrosssellLink = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(\Magento\Catalog\Api\Data\ProductLinkInterface::class);
+$productCrosssellLink->setSku('simple');
+$productCrosssellLink->setLinkedProductSku('simple_ms_1');
+$productCrosssellLink->setPosition(2);
+$productCrosssellLink->setLinkType('crosssell');
+$productUpsellLink = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(\Magento\Catalog\Api\Data\ProductLinkInterface::class);
+$productUpsellLink->setSku('simple');
+$productUpsellLink->setLinkedProductSku('simple_ms_1');
+$productUpsellLink->setPosition(1);
+$productUpsellLink->setLinkType('upsell');
+$productRelatedLink = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(\Magento\Catalog\Api\Data\ProductLinkInterface::class);
+$productRelatedLink->setSku('simple');
+$productRelatedLink->setLinkedProductSku('simple_ms_1');
+$productRelatedLink->setPosition(3);
+$productRelatedLink->setLinkType('related');
+
 $productModel = $objectManager->create(
     \Magento\Catalog\Model\Product::class
 );
@@ -51,10 +70,6 @@ $productModel->setTypeId(
     true
 )->setCategoryIds(
     [333]
-)->setUpSellLinkData(
-    [$product->getId() => ['position' => 1]]
-)->setCrossSellLinkData(
-    [$product->getId() => ['position' => 2]]
-)->setRelatedLinkData(
-    [$product->getId() => ['position' => 3]]
+)->setProductLinks(
+    [$productCrosssellLink, $productUpsellLink, $productRelatedLink]
 )->save();

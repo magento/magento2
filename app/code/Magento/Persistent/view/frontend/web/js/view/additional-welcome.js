@@ -41,6 +41,7 @@ define([
                         $(this).attr('data-bind', html);
                         $(this).html(html);
                     });
+                    $(welcomeElems).append(' <span><a ' + window.notYouLink + '>' + $t('Not you?') + '</a>');
                 }
             }
         },

@@ -7,7 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Model;
 
+use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
+use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
+use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
 use Magento\Checkout\Model\PaymentInformationManagement;
+use Magento\Customer\Api\Data\AddressInterface as CustomerAddressInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -59,6 +64,21 @@ class PaymentInformationManagementTest extends TestCase
      */
     private $cartRepositoryMock;
 
+    /**
+     * @var PaymentProcessingRateLimiterInterface|MockObject
+     */
+    private $rateLimiterMock;
+
+    /**
+     * @var PaymentSavingRateLimiterInterface|MockObject
+     */
+    private $saveLimiterMock;
+
+    /**
+     * @var Address|MockObject
+     */
+    private $quoteShippingAddress;
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -73,33 +93,66 @@ class PaymentInformationManagementTest extends TestCase
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->cartRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)
             ->getMock();
+        $this->rateLimiterMock = $this->getMockForAbstractClass(PaymentProcessingRateLimiterInterface::class);
+        $this->saveLimiterMock = $this->getMockForAbstractClass(PaymentSavingRateLimiterInterface::class);
         $this->model = $objectManager->getObject(
             PaymentInformationManagement::class,
             [
                 'billingAddressManagement' => $this->billingAddressManagementMock,
                 'paymentMethodManagement' => $this->paymentMethodManagementMock,
-                'cartManagement' => $this->cartManagementMock
+                'cartManagement' => $this->cartManagementMock,
+                'paymentRateLimiter' => $this->rateLimiterMock,
+                'saveRateLimiter' => $this->saveLimiterMock
             ]
         );
         $objectManager->setBackwardCompatibleProperty($this->model, 'logger', $this->loggerMock);
         $objectManager->setBackwardCompatibleProperty($this->model, 'cartRepository', $this->cartRepositoryMock);
+
+        $this->quoteShippingAddress = $this->getMockBuilder(Address::class)
+            ->addMethods(['setLimitCarrier'])
+            ->onlyMethods([
+                'getShippingMethod',
+                'getShippingRateByCode',
+                'getSameAsBilling',
+                'getSaveInAddressBook',
+                'setSaveInAddressBook',
+                'exportCustomerAddress'])
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testSavePaymentInformationAndPlaceOrder()
     {
-        $cartId = 100;
+        $shippingAddressMock = $this->createMock(CustomerAddressInterface::class);
+        $this->quoteShippingAddress->expects($this->once())
+            ->method('getSaveInAddressBook')
+            ->willReturn(true);
+        $this->quoteShippingAddress->expects($this->once())
+            ->method('getSameAsBilling')
+            ->willReturn(true);
+        $this->quoteShippingAddress->expects($this->once())
+            ->method('exportCustomerAddress')
+            ->willReturn($shippingAddressMock);
+
         $orderId = 200;
-        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
-        $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
-
-        $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
-        $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
-        $this->cartManagementMock->expects($this->once())->method('placeOrder')->with($cartId)->willReturn($orderId);
-
         $this->assertEquals(
             $orderId,
-            $this->model->savePaymentInformationAndPlaceOrder($cartId, $paymentMock, $billingAddressMock)
+            $this->placeOrder($orderId)
         );
+    }
+
+    /**
+     * Valdiate that the method is rate-limited.
+     *
+     * @return void
+     */
+    public function testSavePaymentInformationAndPlaceOrderLimited(): void
+    {
+        $this->rateLimiterMock->method('limit')
+            ->willThrowException(new PaymentProcessingRateLimitExceededException(__('Error')));
+        $this->expectException(PaymentProcessingRateLimitExceededException::class);
+
+        $this->placeOrder();
     }
 
     public function testSavePaymentInformationAndPlaceOrderException()
@@ -110,10 +163,10 @@ class PaymentInformationManagementTest extends TestCase
         $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
 
         $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
-        $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
+        $this->paymentMethodManagementMock->expects($this->any())->method('set')->with($cartId, $paymentMock);
         $exception = new \Exception('DB exception');
-        $this->loggerMock->expects($this->once())->method('critical');
-        $this->cartManagementMock->expects($this->once())->method('placeOrder')->willThrowException($exception);
+        $this->loggerMock->expects($this->any())->method('critical');
+        $this->cartManagementMock->expects($this->any())->method('placeOrder')->willThrowException($exception);
 
         $this->model->savePaymentInformationAndPlaceOrder($cartId, $paymentMock, $billingAddressMock);
 
@@ -128,8 +181,8 @@ class PaymentInformationManagementTest extends TestCase
         $orderId = 200;
         $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
 
-        $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
-        $this->cartManagementMock->expects($this->once())->method('placeOrder')->with($cartId)->willReturn($orderId);
+        $this->paymentMethodManagementMock->expects($this->any())->method('set')->with($cartId, $paymentMock);
+        $this->cartManagementMock->expects($this->any())->method('placeOrder')->with($cartId)->willReturn($orderId);
 
         $this->assertEquals(
             $orderId,
@@ -139,14 +192,20 @@ class PaymentInformationManagementTest extends TestCase
 
     public function testSavePaymentInformation()
     {
-        $cartId = 100;
-        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
-        $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
+        $this->assertTrue($this->savePayment());
+    }
 
-        $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
-        $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
+    /**
+     * Validate that the method is rate-limited.
+     *
+     * @return void
+     */
+    public function testSavePaymentInformationLimited(): void
+    {
+        $this->saveLimiterMock->method('limit')
+            ->willThrowException(new PaymentProcessingRateLimitExceededException(__('Error')));
 
-        $this->assertTrue($this->model->savePaymentInformation($cartId, $paymentMock, $billingAddressMock));
+        $this->assertFalse($this->savePayment());
     }
 
     public function testSavePaymentInformationWithoutBillingAddress()
@@ -154,7 +213,7 @@ class PaymentInformationManagementTest extends TestCase
         $cartId = 100;
         $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
 
-        $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
+        $this->paymentMethodManagementMock->expects($this->any())->method('set')->with($cartId, $paymentMock);
 
         $this->assertTrue($this->model->savePaymentInformation($cartId, $paymentMock));
     }
@@ -169,10 +228,10 @@ class PaymentInformationManagementTest extends TestCase
 
         $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
 
-        $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
+        $this->paymentMethodManagementMock->expects($this->any())->method('set')->with($cartId, $paymentMock);
         $phrase = new Phrase(__('DB exception'));
         $exception = new LocalizedException($phrase);
-        $this->cartManagementMock->expects($this->once())->method('placeOrder')->willThrowException($exception);
+        $this->cartManagementMock->expects($this->any())->method('placeOrder')->willThrowException($exception);
 
         $this->model->savePaymentInformationAndPlaceOrder($cartId, $paymentMock, $billingAddressMock);
     }
@@ -197,8 +256,8 @@ class PaymentInformationManagementTest extends TestCase
         $quoteBillingAddress->method('getId')->willReturn($quoteBillingAddressId);
         $this->cartRepositoryMock->method('getActive')->with($cartId)->willReturn($quoteMock);
 
-        $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
-        $billingAddressMock->expects($this->once())->method('setCustomerId')->with($customerId);
+        $this->paymentMethodManagementMock->expects($this->any())->method('set')->with($cartId, $paymentMock);
+        $billingAddressMock->expects($this->any())->method('setCustomerId')->with($customerId);
         $this->assertTrue($this->model->savePaymentInformation($cartId, $paymentMock, $billingAddressMock));
     }
 
@@ -210,24 +269,64 @@ class PaymentInformationManagementTest extends TestCase
     {
         $billingAddressId = 1;
         $quoteMock = $this->createMock(Quote::class);
+        $customerMock = $this->createMock(CustomerInterface::class);
         $quoteBillingAddress = $this->createMock(Address::class);
         $shippingRate = $this->createPartialMock(Rate::class, []);
         $shippingRate->setCarrier('flatrate');
-        $quoteShippingAddress = $this->getMockBuilder(Address::class)
-            ->addMethods(['setLimitCarrier'])
-            ->onlyMethods(['getShippingMethod', 'getShippingRateByCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->cartRepositoryMock->expects($this->any())->method('getActive')->with($cartId)->willReturn($quoteMock);
         $quoteMock->method('getBillingAddress')->willReturn($quoteBillingAddress);
-        $quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($quoteShippingAddress);
-        $quoteBillingAddress->expects($this->once())->method('getId')->willReturn($billingAddressId);
-        $quoteBillingAddress->expects($this->once())->method('getId')->willReturn($billingAddressId);
-        $quoteMock->expects($this->once())->method('removeAddress')->with($billingAddressId);
-        $quoteMock->expects($this->once())->method('setBillingAddress')->with($billingAddressMock);
-        $quoteMock->expects($this->once())->method('setDataChanges')->willReturnSelf();
-        $quoteShippingAddress->expects($this->any())->method('getShippingRateByCode')->willReturn($shippingRate);
-        $quoteShippingAddress->expects($this->any())->method('getShippingMethod')->willReturn('flatrate_flatrate');
-        $quoteShippingAddress->expects($this->once())->method('setLimitCarrier')->with('flatrate')->willReturnSelf();
+        $quoteMock->method('getCustomer')->willReturn($customerMock);
+        $quoteMock->expects($this->any())->method('getShippingAddress')->willReturn($this->quoteShippingAddress);
+        $quoteBillingAddress->expects($this->any())->method('getId')->willReturn($billingAddressId);
+        $quoteBillingAddress->expects($this->any())->method('getId')->willReturn($billingAddressId);
+        $quoteMock->expects($this->any())->method('removeAddress')->with($billingAddressId);
+        $quoteMock->expects($this->any())->method('setBillingAddress')->with($billingAddressMock);
+        $quoteMock->expects($this->any())->method('setDataChanges')->willReturnSelf();
+        $this->quoteShippingAddress->expects($this->any())
+            ->method('getShippingRateByCode')
+            ->willReturn($shippingRate);
+        $this->quoteShippingAddress->expects($this->any())
+            ->method('getShippingMethod')
+            ->willReturn('flatrate_flatrate');
+        $this->quoteShippingAddress->expects($this->any())
+            ->method('setLimitCarrier')
+            ->with('flatrate')
+            ->willReturnSelf();
+    }
+
+    /**
+     * Save payment information.
+     *
+     * @return mixed
+     */
+    private function savePayment()
+    {
+        $cartId = 100;
+        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
+
+        $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
+        $this->paymentMethodManagementMock->expects($this->any())->method('set')->with($cartId, $paymentMock);
+
+        return $this->model->savePaymentInformation($cartId, $paymentMock, $billingAddressMock);
+    }
+
+    /**
+     * Call `place order`.
+     *
+     * @param int|null $orderId
+     * @return mixed
+     */
+    private function placeOrder(?int $orderId = 200)
+    {
+        $cartId = 100;
+        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
+
+        $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
+        $this->paymentMethodManagementMock->expects($this->any())->method('set')->with($cartId, $paymentMock);
+        $this->cartManagementMock->expects($this->any())->method('placeOrder')->with($cartId)->willReturn($orderId);
+
+        return $this->model->savePaymentInformationAndPlaceOrder($cartId, $paymentMock, $billingAddressMock);
     }
 }

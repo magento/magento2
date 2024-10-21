@@ -83,6 +83,11 @@
         .fieldset.password {
             display: none;
         }
+        fieldset {
+            &.additional_info {
+                clear: both;
+            }
+        }
     }
 
     .form-create-account {
@@ -349,9 +354,9 @@
         }
     }
 
-    .additional-addresses { 
+    .additional-addresses {
         table > thead > tr > th {
-            white-space: nowrap;  
+            white-space: nowrap;
         }
     }
 }

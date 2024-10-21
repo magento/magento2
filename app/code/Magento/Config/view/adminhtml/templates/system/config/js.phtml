@@ -6,6 +6,7 @@
 
 /**
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Config\ViewModel\CountryFilter $countryFilter
  */
 ?>
 
@@ -76,9 +77,81 @@ originModel.prototype = {
 script;
 
 $scriptString .= 'this.regionsUrl = "' . $block->escapeJs($block->getUrl('directory/json/countryRegion')) . '";';
+$countryFilter = $block->getData('countryFilter');
+$euCountries = $countryFilter->getEuCountryList();
+$scriptString .= 'this.euCountryList =  Object.values(' . json_encode($euCountries) . ');';
+
 $scriptString .= <<<script
 
+        this.bindCountryVatNumberRelation();
         this.bindCountryRegionRelation();
+    },
+    bindCountryVatNumberRelation : function(parentId)
+    {
+        if (parentId) {
+            // todo: fix bug in IE
+            var countryElements = $$('#'+parentId+' .countries');
+        } else {
+            var countryElements = $$('.countries');
+        }
+        for(var i=0; i<countryElements.size(); i++) {
+            Event.observe(countryElements[i], 'change', this.reloadVatNumberField.bind(this));
+            this.initVatNumberField(countryElements[i]);
+        }
+    },
+    reloadVatNumberField : function(event)
+    {
+        var countryElement = Event.element(event);
+        if (countryElement && countryElement.id) {
+            this.refreshVatNumberField(countryElement);
+            this.refreshValidateVatNumberButton(countryElement);
+        }
+    },
+    initVatNumberField : function(element)
+    {
+        var countryElement = element;
+        if (countryElement && countryElement.id) {
+            this.refreshValidateVatNumberButton(countryElement);
+        }
+    },
+    refreshVatNumberField : function(countryElement)
+    {
+        var vatNumberElement  = $(countryElement.id.replace(/country_id/, 'merchant_vat_number'));
+        if (vatNumberElement) {
+            this.vatNumberElement = vatNumberElement;
+            if (vatNumberElement.value.length) {
+                vatNumberElement.value = '';
+            }
+        }
+    },
+    refreshValidateVatNumberButton : function(countryElement)
+    {
+        var btnVatNumberElement  = $(countryElement.id.replace(/country_id/, 'validate_vat_number'));
+        if (btnVatNumberElement) {
+            this.btnVatNumberElement = btnVatNumberElement;
+            if (countryElement.value.length) {
+                this.renderValidateVatNumberButton(countryElement.value);
+            }
+        }
+    },
+    renderValidateVatNumberButton: function(countryCode)
+    {
+        var resultElement = document.getElementById("validation_result");
+        if (this.euCountryList.includes(countryCode)) {
+            this.btnVatNumberElement.style.display = "block";
+            if (resultElement) {
+                resultElement.style.display = "block";
+                resultElement.innerHTML = '';
+                if (resultElement.classList.contains('admin__field-error')) {
+                    resultElement.classList.remove('admin__field-error');
+                }
+            }
+        } else {
+            this.btnVatNumberElement.style.display = "none";
+            if (resultElement) {
+                resultElement.style.display = "none";
+            }
+        }
     },
     bindCountryRegionRelation : function(parentId)
     {

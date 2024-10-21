@@ -182,7 +182,7 @@ define([
                 this.element.on('addToCart', $.proxy(function (event, context) {
                     this.element.find('input:checkbox').attr('checked', false);
                     $(context).closest('tr').find('input:checkbox').attr('checked', true);
-                    this.element.submit();
+                    this.element.trigger('submit');
                 }, this));
                 this._checkBoxValidate();
             }
@@ -231,7 +231,7 @@ define([
                     });
 
                 $(html).appendTo('body');
-                $(_this.options.formTmplId).submit();
+                $(_this.options.formTmplId).trigger('submit');
             });
         }
     });

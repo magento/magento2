@@ -61,7 +61,7 @@ class LoginAsCustomerButton extends GenericButton implements ButtonProviderInter
     {
         $customerId = (int)$this->getCustomerId();
         $data = [];
-        $isAllowed = $customerId && $this->authorization->isAllowed('Magento_LoginAsCustomer::login_button');
+        $isAllowed = $customerId && $this->authorization->isAllowed('Magento_LoginAsCustomer::login');
         $isEnabled = $this->config->isEnabled();
         if ($isAllowed && $isEnabled) {
             $data = $this->dataProvider->getData($customerId);

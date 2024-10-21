@@ -16,4 +16,11 @@
     <type name="Magento\Quote\Api\GuestCartItemRepositoryInterface">
         <plugin name="updateCartIdFromRequest" type="Magento\Quote\Plugin\UpdateCartId" />
     </type>
+    <type name="Magento\Quote\Model\Quote">
+        <plugin name="updateQuoteStoreId" type="Magento\Quote\Model\Quote\Plugin\UpdateQuoteStoreId" />
+        <plugin name="validateQuoteAddress" type="Magento\Quote\Plugin\QuoteAddress" />
+    </type>
+    <type name="Magento\Quote\Api\CartRepositoryInterface">
+        <plugin name="quoteValidateOrderId" type="Magento\Quote\Plugin\ValidateQuoteOrigOrder"/>
+    </type>
 </config>

@@ -6,8 +6,10 @@
 
 namespace Magento\Framework\Oauth;
 
+use Magento\Framework\Oauth\Helper\Utility;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Phrase;
+use Magento\Framework\Oauth\Exception as AuthException;
 
 /**
  * Authorization service.
@@ -20,11 +22,6 @@ class Oauth implements OauthInterface
     protected $_oauthHelper;
 
     /**
-     * @var  \Zend_Oauth_Http_Utility
-     */
-    protected $_httpUtility;
-
-    /**
      * @var \Magento\Framework\Oauth\NonceGeneratorInterface
      */
     protected $_nonceGenerator;
@@ -35,32 +32,36 @@ class Oauth implements OauthInterface
     protected $_tokenProvider;
 
     /**
+     * @var Utility
+     */
+    private Utility $httpUtility;
+
+    /**
      * @param Helper\Oauth $oauthHelper
      * @param NonceGeneratorInterface $nonceGenerator
      * @param TokenProviderInterface $tokenProvider
-     * @param \Zend_Oauth_Http_Utility $httpUtility
+     * @param Utility $utility
      */
     public function __construct(
         Helper\Oauth $oauthHelper,
         NonceGeneratorInterface $nonceGenerator,
         TokenProviderInterface $tokenProvider,
-        \Zend_Oauth_Http_Utility $httpUtility = null
+        Utility $utility
     ) {
         $this->_oauthHelper = $oauthHelper;
         $this->_nonceGenerator = $nonceGenerator;
         $this->_tokenProvider = $tokenProvider;
-        // null default to prevent ObjectManagerFactory from injecting, see MAGETWO-30809
-        $this->_httpUtility = $httpUtility ?: new \Zend_Oauth_Http_Utility();
+        $this->httpUtility = $utility;
     }
 
     /**
      * Retrieve array of supported signature methods.
      *
-     * @return string[] - Supported HMAC-SHA1 and HMAC-SHA256 signature methods.
+     * @return string[]
      */
     public static function getSupportedSignatureMethods()
     {
-        return [self::SIGNATURE_SHA1, self::SIGNATURE_SHA256];
+        return [self::SIGNATURE_SHA256];
     }
 
     /**
@@ -141,7 +142,7 @@ class Oauth implements OauthInterface
     public function buildAuthorizationHeader(
         $params,
         $requestUrl,
-        $signatureMethod = self::SIGNATURE_SHA1,
+        $signatureMethod = self::SIGNATURE_SHA256,
         $httpMethod = 'POST'
     ) {
         $required = ["oauth_consumer_key", "oauth_consumer_secret", "oauth_token", "oauth_token_secret"];
@@ -153,7 +154,7 @@ class Oauth implements OauthInterface
             'oauth_version' => '1.0',
         ];
         $headerParameters = array_merge($headerParameters, $params);
-        $headerParameters['oauth_signature'] = $this->_httpUtility->sign(
+        $headerParameters['oauth_signature'] = $this->httpUtility->sign(
             $params,
             $signatureMethod,
             $headerParameters['oauth_consumer_secret'],
@@ -161,10 +162,8 @@ class Oauth implements OauthInterface
             $httpMethod,
             $requestUrl
         );
-        $authorizationHeader = $this->_httpUtility->toAuthorizationHeader($headerParameters);
-        // toAuthorizationHeader adds an optional realm="" which is not required for now.
-        // http://tools.ietf.org/html/rfc2617#section-1.2
-        return str_replace('realm="",', '', $authorizationHeader);
+
+        return $this->httpUtility->toAuthorizationHeader($headerParameters);
     }
 
     /**
@@ -189,11 +188,8 @@ class Oauth implements OauthInterface
             );
         }
 
-        $allowedSignParams = $params;
-        unset($allowedSignParams['oauth_signature']);
-
-        $calculatedSign = $this->_httpUtility->sign(
-            $allowedSignParams,
+        $calculatedSign = $this->httpUtility->sign(
+            $params,
             $params['oauth_signature_method'],
             $consumerSecret,
             $tokenSecret,
@@ -202,7 +198,7 @@ class Oauth implements OauthInterface
         );
 
         if (!Security::compareStrings($calculatedSign, $params['oauth_signature'])) {
-            throw new Exception(new Phrase('The signature is invalid. Verify and try again.'));
+            throw new AuthException(new Phrase('The signature is invalid. Verify and try again.'));
         }
     }
 
@@ -248,12 +244,8 @@ class Oauth implements OauthInterface
         }
         $this->_checkRequiredParams($protocolParams, $requiredParams);
 
-        if (isset(
-            $protocolParams['oauth_token']
-        ) && !$this->_tokenProvider->validateOauthToken(
-            $protocolParams['oauth_token']
-        )
-        ) {
+        if (isset($protocolParams['oauth_token'])
+            && !$this->_tokenProvider->validateOauthToken($protocolParams['oauth_token'])) {
             throw new OauthInputException(new Phrase('The token length is invalid. Check the length and try again.'));
         }
 

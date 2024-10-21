@@ -6,6 +6,7 @@
 
 /**
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 
@@ -19,12 +20,28 @@
     false
 ) ?>
 
-<?php $scriptString = '
+<?php
+/** @var \Magento\AdminAnalytics\ViewModel\Metadata $metadata */
+$metadata = $block->getMetadata();
+$nonce = $escaper->escapeJs($metadata->getNonce());
+$scriptString = '
     var adminAnalyticsMetadata = {
-        "version": "' . $block->escapeJs($block->getMetadata()->getMagentoVersion()) . '",
-        "user": "' . $block->escapeJs($block->getMetadata()->getCurrentUser()) . '",
-        "mode": "' . $block->escapeJs($block->getMetadata()->getMode()) . '"
+        "secure_base_url": "' . $escaper->escapeJs($metadata->getSecureBaseUrlForScope()) . '",
+        "version": "' . $escaper->escapeJs($metadata->getMagentoVersion()) . '",
+        "product_edition": "' . $escaper->escapeJs($metadata->getProductEdition()) . '",
+        "user": "' . $escaper->escapeJs($metadata->getCurrentUser()) . '",
+        "mode": "' . $escaper->escapeJs($metadata->getMode()) . '",
+        "store_name_default": "' . $escaper->escapeJs($metadata->getStoreNameForScope()) . '",
+        "admin_user_created": "' . $escaper->escapeJs($metadata->getCurrentUserCreatedDate()) . '",
+        "admin_user_logdate": "' . $escaper->escapeJs($metadata->getCurrentUserLogDate()) . '",
+        "admin_user_role_name": "' . $escaper->escapeJs($metadata->getCurrentUserRoleName()) . '"
     };
+
+    var digitalData = {
+        "nonce": "' . $nonce . '"
+    };
+
+    var cspNonce = "' . $nonce . '";
 ';
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>

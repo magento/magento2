@@ -38,7 +38,7 @@ if (!function_exists('rcopy')) {
         foreach ($iterator as $file) {
             if ($file->isFile()) {
                 copy($file->getRealPath(), $destination . '/' . $file->getFilename());
-            } else if (!$file->isDot() && $file->isDir()) {
+            } elseif (!$file->isDot() && $file->isDir()) {
                 rcopy($file->getRealPath(), $destination . '/' . $file);
             }
         }
@@ -48,10 +48,6 @@ if (!function_exists('rcopy')) {
 /** @var ComponentRegistrar $registrar */
 $registrar = $objectManager->get(ComponentRegistrar::class);
 
-//rcopy(
-//    __DIR__ . '/zoom1',
-//    $appDir->getAbsolutePath() . 'design/frontend/Magento/zoom1'
-//);
 if (!$registrar->getPath(ComponentRegistrar::THEME, 'frontend/Magento/zoom1')) {
     ComponentRegistrar::register(
         ComponentRegistrar::THEME,
@@ -60,10 +56,6 @@ if (!$registrar->getPath(ComponentRegistrar::THEME, 'frontend/Magento/zoom1')) {
     );
 }
 
-//rcopy(
-//    __DIR__ . '/zoom2',
-//    $appDir->getAbsolutePath() . 'design/frontend/Magento/zoom2'
-//);
 if (!$registrar->getPath(ComponentRegistrar::THEME, 'frontend/Magento/zoom2')) {
     ComponentRegistrar::register(
         ComponentRegistrar::THEME,
@@ -72,15 +64,27 @@ if (!$registrar->getPath(ComponentRegistrar::THEME, 'frontend/Magento/zoom2')) {
     );
 }
 
-//rcopy(
-//    __DIR__ . '/zoom3',
-//    $appDir->getAbsolutePath() . 'design/frontend/Magento/zoom3'
-//);
 if (!$registrar->getPath(ComponentRegistrar::THEME, 'frontend/Magento/zoom3')) {
     ComponentRegistrar::register(
         ComponentRegistrar::THEME,
         'frontend/Magento/zoom3',
         __DIR__ . '/zoom3'
+    );
+}
+
+if (!$registrar->getPath(ComponentRegistrar::THEME, 'frontend/Vendor/parent')) {
+    ComponentRegistrar::register(
+        ComponentRegistrar::THEME,
+        'frontend/Vendor/parent',
+        __DIR__ . '/Vendor/parent'
+    );
+}
+
+if (!$registrar->getPath(ComponentRegistrar::THEME, 'frontend/Vendor/child')) {
+    ComponentRegistrar::register(
+        ComponentRegistrar::THEME,
+        'frontend/Vendor/child',
+        __DIR__ . '/Vendor/child'
     );
 }
 

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontMultishippingUpdateProductQtyTest">
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Checkout with multiple addresses."/>
+            <title value="Update Product Quantity on Ship to Multiple Addresses Page."/>
+            <description value="Verify customer will see correct product quantity after return to Ship to Multiple Addresses from Shipping information page."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-41697"/>
+            <useCaseId value="MC-40021"/>
+            <group value="multishipping"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleProduct2" stepKey="product"/>
+            <createData entity="Simple_US_CA_Customer" stepKey="customer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$customer$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="navigateToSimpleProductDetailsPage">
+            <argument name="product" value="$product$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="productQty" value="2"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <actionGroup ref="StorefrontChangeMultishippingItemQtyActionGroup" stepKey="setProductQuantity">
+            <argument name="quantity" value="2"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontNavigateToShippingInformationPageActionGroup" stepKey="navigateToShippingInformation"/>
+        <moveBack stepKey="moveBackToShippingInformation"/>
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemActionGroup" stepKey="verifyLine1Qty">
+            <argument name="productName" value="$product.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemActionGroup" stepKey="verifyLine2Qty">
+            <argument name="sequenceNumber" value="2"/>
+            <argument name="productName" value="$product.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemActionGroup" stepKey="verifyLine3Qty">
+            <argument name="sequenceNumber" value="3"/>
+            <argument name="productName" value="$product.name$"/>
+        </actionGroup>
+    </test>
+</tests>

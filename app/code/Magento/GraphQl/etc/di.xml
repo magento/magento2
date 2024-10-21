@@ -14,6 +14,8 @@
     <preference for="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface" type="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeReaderComposite"/>
     <preference for="Magento\GraphQl\Model\Query\ContextFactoryInterface" type="Magento\GraphQl\Model\Query\ContextFactory"/>
     <preference for="Magento\GraphQl\Model\Query\ContextParametersInterface" type="Magento\GraphQl\Model\Query\ContextParameters"/>
+    <preference for="Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface" type="Magento\Framework\GraphQl\Query\Resolver\ArgumentsCompositeProcessor"/>
+    <preference for="Magento\GraphQl\Model\Query\Logger\LoggerInterface" type="Magento\GraphQl\Model\Query\Logger\LoggerPool"/>
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
@@ -33,6 +35,7 @@
                 <item name="graphql_type" xsi:type="object">Magento\Framework\GraphQl\Config\Element\TypeFactory</item>
                 <item name="graphql_input" xsi:type="object">Magento\Framework\GraphQl\Config\Element\InputFactory</item>
                 <item name="graphql_enum" xsi:type="object">Magento\Framework\GraphQl\Config\Element\EnumFactory</item>
+                <item name="graphql_scalar" xsi:type="object">Magento\Framework\GraphQl\Config\Element\ScalarFactory</item>
             </argument>
         </arguments>
     </type>
@@ -67,6 +70,7 @@
                 <item name="Magento\Framework\GraphQl\Config\Element\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Output\OutputInterfaceObject</item>
                 <item name="Magento\Framework\GraphQl\Config\Element\UnionType" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Output\OutputUnionObject</item>
                 <item name="Magento\Framework\GraphQl\Config\Element\Enum" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Enum\Enum</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\Scalar" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Scalar\Scalar</item>
             </argument>
         </arguments>
     </type>
@@ -93,6 +97,7 @@
                 <item name="object_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\ObjectType</item>
                 <item name="input_object_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\InputObjectType</item>
                 <item name="interface_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\InterfaceType</item>
+                <item name="scalar_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\ScalarType</item>
             </argument>
         </arguments>
     </type>
@@ -102,31 +107,15 @@
             <argument name="queryComplexity" xsi:type="number">300</argument>
         </arguments>
     </type>
-
-    <preference for="Magento\GraphQl\Model\Cors\ConfigurationInterface" type="Magento\GraphQl\Model\Cors\Configuration" />
-    <type name="Magento\GraphQl\Controller\HttpResponse\Cors\CorsMaxAgeHeaderProvider">
+    <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator">
         <arguments>
-            <argument name="headerName" xsi:type="string">Access-Control-Max-Age</argument>
+            <argument name="validators" xsi:type="array">
+                <item name="backpressureValidator" xsi:type="object">
+                    Magento\GraphQl\Model\Backpressure\BackpressureFieldValidator
+                </item>
+            </argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQl\Controller\HttpResponse\Cors\CorsAllowCredentialsHeaderProvider">
-        <arguments>
-            <argument name="headerName" xsi:type="string">Access-Control-Allow-Credentials</argument>
-        </arguments>
-    </type>
-    <type name="Magento\GraphQl\Controller\HttpResponse\Cors\CorsAllowHeadersHeaderProvider">
-        <arguments>
-            <argument name="headerName" xsi:type="string">Access-Control-Allow-Headers</argument>
-        </arguments>
-    </type>
-    <type name="Magento\GraphQl\Controller\HttpResponse\Cors\CorsAllowMethodsHeaderProvider">
-        <arguments>
-            <argument name="headerName" xsi:type="string">Access-Control-Allow-Methods</argument>
-        </arguments>
-    </type>
-    <type name="Magento\GraphQl\Controller\HttpResponse\Cors\CorsAllowOriginHeaderProvider">
-        <arguments>
-            <argument name="headerName" xsi:type="string">Access-Control-Allow-Origin</argument>
-        </arguments>
-    </type>
+    <preference for="Magento\GraphQl\Model\Backpressure\RequestTypeExtractorInterface"
+                type="Magento\GraphQl\Model\Backpressure\CompositeRequestTypeExtractor"/>
 </config>

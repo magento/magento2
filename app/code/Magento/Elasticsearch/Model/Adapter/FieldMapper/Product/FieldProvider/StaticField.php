@@ -24,6 +24,8 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 
 /**
  * Provide static fields for mapping of product.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class StaticField implements FieldProviderInterface
 {
@@ -103,6 +105,7 @@ class StaticField implements FieldProviderInterface
      * @param array $context
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getFields(array $context = []): array
     {
@@ -126,6 +129,9 @@ class StaticField implements FieldProviderInterface
      *
      * @param AbstractAttribute $attribute
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getField(AbstractAttribute $attribute): array
     {
@@ -140,13 +146,16 @@ class StaticField implements FieldProviderInterface
         $fieldMapping[$fieldName] = [
             'type' => $this->fieldTypeResolver->getFieldType($attributeAdapter),
         ];
+        if ($this->isNeedToAddCustomAnalyzer($fieldName) && $this->getCustomAnalyzer($fieldName)) {
+            $fieldMapping[$fieldName]['analyzer'] = $this->getCustomAnalyzer($fieldName);
+        }
 
         $index = $this->fieldIndexResolver->getFieldIndex($attributeAdapter);
         if (null !== $index) {
             $fieldMapping[$fieldName]['index'] = $index;
         }
 
-        if ($attributeAdapter->isSortable()) {
+        if ($attributeAdapter->isSortable() && !$attributeAdapter->isComplexType()) {
             $sortFieldName = $this->fieldNameResolver->getFieldName(
                 $attributeAdapter,
                 ['type' => FieldMapperInterface::TYPE_SORT]
@@ -157,7 +166,8 @@ class StaticField implements FieldProviderInterface
                 ),
                 'index' => $this->indexTypeConverter->convert(
                     IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
-                )
+                ),
+                'normalizer' => 'folding',
             ];
         }
 
@@ -184,8 +194,45 @@ class StaticField implements FieldProviderInterface
             $fieldMapping[$childFieldName] = [
                 'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_STRING)
             ];
+            if ($attributeAdapter->isSortable()) {
+                $sortFieldName = $this->fieldNameResolver->getFieldName(
+                    $attributeAdapter,
+                    ['type' => FieldMapperInterface::TYPE_SORT]
+                );
+                $fieldMapping[$childFieldName]['fields'][$sortFieldName] = [
+                    'type' => $this->fieldTypeConverter->convert(
+                        FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD
+                    ),
+                    'index' => $this->indexTypeConverter->convert(
+                        IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
+                    ),
+                    'normalizer' => 'folding',
+                ];
+            }
         }
 
         return $fieldMapping;
+    }
+
+    /**
+     * Check is the custom analyzer exists for the field
+     *
+     * @param string $fieldName
+     * @return bool
+     */
+    private function isNeedToAddCustomAnalyzer(string $fieldName): bool
+    {
+        return $fieldName === 'sku';
+    }
+
+    /**
+     * Getter for the field custom analyzer if it's exists
+     *
+     * @param string $fieldName
+     * @return string|null
+     */
+    private function getCustomAnalyzer(string $fieldName): ?string
+    {
+        return $fieldName === 'sku' ? 'sku' : null;
     }
 }

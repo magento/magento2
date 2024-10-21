@@ -23,9 +23,10 @@ use Magento\Store\Model\WebsiteFactory;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  *
- * @deprecated 100.3.0 Replaced with Multi Source Inventory
- * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
- * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
+ * @deprecated 100.3.0
+ * @see Replaced with Multi Source Inventory
+ * @link https://developer.adobe.com/commerce/webapi/rest/inventory/index.html
+ * @link https://developer.adobe.com/commerce/webapi/rest/inventory/inventory-api-reference.html
  * @since 100.0.2
  */
 class Status extends AbstractDb
@@ -35,6 +36,7 @@ class Status extends AbstractDb
      *
      * @var StoreManagerInterface
      * @deprecated 100.1.0
+     * @see Not used anymore
      */
     protected $_storeManager;
 
@@ -153,7 +155,7 @@ class Status extends AbstractDb
 
         $select = $this->getConnection()->select()
             ->from($this->getMainTable(), ['product_id', 'stock_status'])
-            ->where('product_id IN(?)', $productIds)
+            ->where('product_id IN(?)', $productIds, \Zend_Db::INT_TYPE)
             ->where('stock_id=?', (int) $stockId)
             ->where('website_id=?', (int) $websiteId);
         return $this->getConnection()->fetchPairs($select);
@@ -190,7 +192,8 @@ class Status extends AbstractDb
             ['entity_id', 'type_id']
         )->where(
             'entity_id IN(?)',
-            $productIds
+            $productIds,
+            \Zend_Db::INT_TYPE
         );
         return $this->getConnection()->fetchPairs($select);
     }
@@ -226,7 +229,7 @@ class Status extends AbstractDb
      */
     public function addStockStatusToSelect(Select $select, Website $website)
     {
-        $websiteId = $this->getWebsiteId($website->getId());
+        $websiteId = $this->getWebsiteId();
         $select->joinLeft(
             ['stock_status' => $this->getMainTable()],
             'e.entity_id = stock_status.product_id AND stock_status.website_id=' . $websiteId,
@@ -360,7 +363,8 @@ class Status extends AbstractDb
                 $attribute->getAttributeId()
             )->where(
                 "t1.{$linkField} IN(?)",
-                $productIds
+                $productIds,
+                \Zend_Db::INT_TYPE
             );
 
             $rows = $connection->fetchPairs($select);

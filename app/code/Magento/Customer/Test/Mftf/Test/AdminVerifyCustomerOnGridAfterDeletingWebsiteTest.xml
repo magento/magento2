@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyCustomerOnGridAfterDeletingWebsiteTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Customer grid"/>
+            <title value="The customer's grid is not available after deleting the website"/>
+            <description value="Verify grid after deleting website associated with customer"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-39783"/>
+            <group value="customer"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminGoCreatedWebsitePageActionGroup" stepKey="openWebsiteToGetId">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <grabFromCurrentUrl regex="~/website_id/(\d+)/~" stepKey="grabWebsiteIdFromURL"/>
+            <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer">
+                <field key="website_id">$grabWebsiteIdFromURL</field>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
+            <argument name="websiteName" value="{{customWebsite.name}}"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="goToCustomersGridPage"/>
+        <actionGroup stepKey="resetFilter" ref="AdminResetFilterInCustomerGrid"/>
+        <actionGroup stepKey="filterByEamil" ref="AdminFilterCustomerGridByEmail">
+            <argument name="email" value="$$createCustomer.email$$"/>
+        </actionGroup>
+        <actionGroup stepKey="checkCustomerInGrid" ref="AdminAssertCustomerInCustomersGrid">
+            <argument name="text" value="$$createCustomer.email$$"/>
+            <argument name="row" value="1"/>
+        </actionGroup>
+    </test>
+</tests>

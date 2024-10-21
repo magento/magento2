@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\CategoryRepository;
+use Magento\Catalog\Model\CategoryRepository\PopulateWithValues;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityMetadata;
@@ -63,6 +64,14 @@ class CategoryRepositoryTest extends TestCase
      */
     protected $metadataPoolMock;
 
+    /**
+     * @var PopulateWithValues|MockObject
+     */
+    private $populateWithValuesMock;
+
+    /**
+     * @inheridoc
+     */
     protected function setUp(): void
     {
         $this->categoryFactoryMock = $this->createPartialMock(
@@ -74,12 +83,12 @@ class CategoryRepositoryTest extends TestCase
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
         $this->extensibleDataObjectConverterMock = $this
             ->getMockBuilder(ExtensibleDataObjectConverter::class)
-            ->setMethods(['toNestedArray'])
+            ->onlyMethods(['toNestedArray'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -94,6 +103,21 @@ class CategoryRepositoryTest extends TestCase
             ->with(CategoryInterface::class)
             ->willReturn($metadataMock);
 
+        $this->populateWithValuesMock = $this
+            ->getMockBuilder(PopulateWithValues::class)
+            ->onlyMethods(['execute'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $objectHelper = new ObjectManager($this);
+        $objects = [
+            [
+                PopulateWithValues::class,
+                $this->createMock(PopulateWithValues::class)
+            ]
+        ];
+        $objectHelper->prepareObjectManager($objects);
+
         $this->model = (new ObjectManager($this))->getObject(
             CategoryRepository::class,
             [
@@ -102,6 +126,7 @@ class CategoryRepositoryTest extends TestCase
                 'storeManager' => $this->storeManagerMock,
                 'metadataPool' => $this->metadataPoolMock,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
+                'populateWithValues' => $this->populateWithValuesMock,
             ]
         );
     }
@@ -155,7 +180,7 @@ class CategoryRepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function filterExtraFieldsOnUpdateCategoryDataProvider()
+    public static function filterExtraFieldsOnUpdateCategoryDataProvider()
     {
         return [
             [
@@ -202,7 +227,7 @@ class CategoryRepositoryTest extends TestCase
             ->method('toNestedArray')
             ->willReturn($categoryData);
         $categoryMock->expects($this->once())->method('validate')->willReturn(true);
-        $categoryMock->expects($this->once())->method('addData')->with($dataForSave);
+        $this->populateWithValuesMock->expects($this->once())->method('execute')->with($categoryMock, $dataForSave);
         $this->categoryResourceMock->expects($this->once())
             ->method('save')
             ->willReturn(DataObject::class);
@@ -223,18 +248,21 @@ class CategoryRepositoryTest extends TestCase
             ->willReturn($categoryData);
         $categoryMock = $this->createMock(CategoryModel::class);
         $parentCategoryMock = $this->createMock(CategoryModel::class);
+        $callCount = 0;
         $categoryMock->expects($this->any())->method('getId')
-            ->will($this->onConsecutiveCalls($categoryId, $newCategoryId));
+            ->willReturnCallback(function () use (&$callCount, $categoryId, $newCategoryId) {
+                return $callCount++ === 0 ? $categoryId : $newCategoryId;
+            });
         $this->categoryFactoryMock->expects($this->exactly(2))->method('create')->willReturn($parentCategoryMock);
         $parentCategoryMock->expects($this->atLeastOnce())->method('getId')->willReturn($parentCategoryId);
 
         $categoryMock->expects($this->once())->method('getParentId')->willReturn($parentCategoryId);
         $parentCategoryMock->expects($this->once())->method('getPath')->willReturn('path');
-        $categoryMock->expects($this->once())->method('addData')->with($dataForSave);
         $categoryMock->expects($this->once())->method('validate')->willReturn(true);
         $this->categoryResourceMock->expects($this->once())
             ->method('save')
             ->willReturn(DataObject::class);
+        $this->populateWithValuesMock->expects($this->once())->method('execute')->with($categoryMock, $dataForSave);
         $this->assertEquals($categoryMock, $this->model->save($categoryMock));
     }
 
@@ -296,7 +324,7 @@ class CategoryRepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function saveWithValidateCategoryExceptionDataProvider()
+    public static function saveWithValidateCategoryExceptionDataProvider()
     {
         return [
             [

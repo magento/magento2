@@ -1,0 +1,41 @@
+name: Feature request
+description: Report to https://github.com/magento/community-features
+labels: ['feature request']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Important: This repository is intended only for Magento 2 Technical Issues.
+        Enter Feature Requests at https://github.com/magento/community-features.
+        Project stakeholders monitor and manage requests.
+        Feature requests entered using this form may be moved to the forum.
+  - type: textarea
+    attributes:
+      label: Description
+      description: |
+        Describe the feature you would like to add.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: |
+        What is the expected behavior of this feature?
+        How is it going to work?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Benefits
+      description: |
+        How do you think this feature would improve Magento?
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: |
+        What other information can you provide about the desired feature?
+  - type: textarea
+    attributes:
+      label: Release note
+      description: |
+        Help us to provide meaningful release notes to the community.

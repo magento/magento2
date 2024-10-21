@@ -31,12 +31,12 @@ class XmlCatalogGenerateCommand extends Command
     /**
      * Option for the type of IDE
      */
-    const IDE_OPTION = 'ide';
+    public const IDE_OPTION = 'ide';
 
     /**
      * Argument for the path to IDE config file
      */
-    const IDE_FILE_PATH_ARGUMENT = 'path';
+    public const IDE_FILE_PATH_ARGUMENT = 'path';
 
     /**
      * @var Files
@@ -116,7 +116,7 @@ class XmlCatalogGenerateCommand extends Command
         $files = $this->filesUtility->getXmlCatalogFiles('*.xml');
         $files = array_merge($files, $this->filesUtility->getXmlCatalogFiles('*.xsd'));
 
-        $urns = [[]];
+        $urns = [];
         foreach ($files as $file) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $fileDir = dirname($file[0]);
@@ -130,7 +130,7 @@ class XmlCatalogGenerateCommand extends Command
                 $urns[] = $matches[1];
             }
         }
-        $urns = array_unique(array_merge(...$urns));
+        $urns = array_unique(array_merge([], ...$urns));
         $paths = [];
         foreach ($urns as $urn) {
             try {
@@ -175,7 +175,7 @@ class XmlCatalogGenerateCommand extends Command
      */
     private function getFormatters($format)
     {
-        $format = strtolower($format);
+        $format = $format === null ? '' : strtolower($format);
         if (!isset($this->formats[$format])) {
             return false;
         }

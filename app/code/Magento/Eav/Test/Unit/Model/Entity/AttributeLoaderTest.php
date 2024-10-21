@@ -48,13 +48,13 @@ class AttributeLoaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configMock = $this->createMock(Config::class, [], [], '', false);
+        $this->configMock = $this->createMock(Config::class);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->entityMock = $this->createMock(AbstractEntity::class, [], [], '', false);
-        $this->entityTypeMock = $this->createMock(Type::class, [], [], '', false);
+        $this->entityMock = $this->createMock(AbstractEntity::class);
+        $this->entityTypeMock = $this->createMock(Type::class);
         $this->attributeLoader = new AttributeLoader(
             $this->configMock,
             $this->objectManagerMock
@@ -74,7 +74,8 @@ class AttributeLoaderTest extends TestCase
         $this->entityTypeMock->expects($this->once())
             ->method('getAttributeModel')->willReturn(Entity::DEFAULT_ATTRIBUTE_MODEL);
         $attributeMock = $this->getMockBuilder(EntityAttribute::class)
-            ->setMethods(['setAttributeCode', 'setBackendType', 'setIsGlobal', 'setEntityType', 'setEntityTypeId'])
+            ->addMethods(['setIsGlobal'])
+            ->onlyMethods(['setAttributeCode', 'setBackendType', 'setEntityType', 'setEntityTypeId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManagerMock->expects($this->once())

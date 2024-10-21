@@ -1,7 +1,5 @@
 <?php
 /**
- * Standard profiler driver that uses outputs for displaying profiling results.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -12,6 +10,9 @@ use Magento\Framework\Profiler\Driver\Standard\OutputInterface;
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 use Magento\Framework\Profiler\DriverInterface;
 
+/**
+ * Standard profiler driver that uses outputs for displaying profiling results.
+ */
 class Standard implements DriverInterface
 {
     /**
@@ -37,7 +38,14 @@ class Standard implements DriverInterface
     {
         $this->_initOutputs($config);
         $this->_initStat($config);
-        register_shutdown_function([$this, 'display']);
+    }
+
+    /**
+     * Destructor
+     */
+    public function __destruct()
+    {
+        $this->display();
     }
 
     /**
@@ -125,7 +133,7 @@ class Standard implements DriverInterface
     /**
      * Init timers statistics object from configuration or create new one
      *
-     * @param array $config|null
+     * @param array|null $config
      * @return void
      */
     protected function _initStat(array $config = null)

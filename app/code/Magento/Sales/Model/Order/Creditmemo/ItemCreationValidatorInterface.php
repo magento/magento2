@@ -11,6 +11,7 @@ use Magento\Sales\Model\ValidatorResultInterface;
 
 /**
  * Interface ItemCreationValidatorInterface
+ * @api
  */
 interface ItemCreationValidatorInterface
 {

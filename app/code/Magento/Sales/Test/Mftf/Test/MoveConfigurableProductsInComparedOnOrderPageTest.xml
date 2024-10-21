@@ -18,6 +18,7 @@
             <testCaseId value="MC-16104"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create customer -->
@@ -83,13 +84,16 @@
                 <requiredEntity createDataKey="createSecondConfigProduct"/>
                 <requiredEntity createDataKey="createSecondConfigChildProduct"/>
             </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
-            <!-- Admin logout -->
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-
             <!-- Logout customer -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+
+            <!-- Clear customers filters -->
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomersFilter"/>
 
             <!-- Delete configurable products data -->
             <deleteData createDataKey="createFirstConfigChildProduct" stepKey="deleteFirstConfigChildProduct"/>
@@ -102,8 +106,16 @@
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Login as customer -->
@@ -132,9 +144,7 @@
         <!-- Login as admin -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
-        <!-- Open Customers -> All Customers -->
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
-        <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPage">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
@@ -155,12 +165,28 @@
         <waitForPageLoad stepKey="waitForConfigureForSecondProductLoad"/>
 
         <!-- Click 'Update Changes' -->
-        <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickUpdateChangesBtn"/>
+        <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesBtn"/>
 
         <!-- Assert products in items ordered grid -->
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Product')}}" userInput="$$createFirstConfigProduct.name$$" stepKey="seeFirstProductName"/>
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Price')}}" userInput="$123.00" stepKey="seeFirstProductPrice"/>
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('2', 'Product')}}" userInput="$$createSecondConfigProduct.name$$" stepKey="seeSecondProductName"/>
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('2', 'Price')}}" userInput="$123.00" stepKey="seeSecondProductPrice"/>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeFirstProductName">
+            <argument name="index" value="1"/>
+            <argument name="attribute" value="Product"/>
+            <argument name="value" value="$$createFirstConfigProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeFirstProductPrice">
+            <argument name="index" value="1"/>
+            <argument name="attribute" value="Price"/>
+            <argument name="value" value="$123.00"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeSecondProductName">
+            <argument name="index" value="2"/>
+            <argument name="attribute" value="Product"/>
+            <argument name="value" value="$$createSecondConfigProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeSecondProductPrice">
+            <argument name="index" value="2"/>
+            <argument name="attribute" value="Price"/>
+            <argument name="value" value="$123.00"/>
+        </actionGroup>
     </test>
 </tests>

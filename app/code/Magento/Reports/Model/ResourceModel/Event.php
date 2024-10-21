@@ -93,6 +93,9 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $skipIds = []
     ) {
         $idFieldName = $collection->getResource()->getIdFieldName();
+        $predefinedStoreIds = ($collection->getStoreId() === null)
+            ? null
+            : [$collection->getStoreId()];
 
         $derivedSelect = $this->getConnection()
             ->select()
@@ -103,7 +106,7 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->where('event_type_id = ?', (int) $eventTypeId)
             ->where('subject_id = ?', (int) $eventSubjectId)
             ->where('subtype = ?', (int) $subtype)
-            ->where('store_id IN(?)', $this->getCurrentStoreIds())
+            ->where('store_id IN(?)', $this->getCurrentStoreIds($predefinedStoreIds))
             ->group('object_id');
 
         if ($skipIds) {
@@ -132,13 +135,11 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $stores = [];
         // get all or specified stores
-        if ($this->_storeManager->getStore()->getId() == 0) {
-            if (null !== $predefinedStoreIds) {
-                $stores = $predefinedStoreIds;
-            } else {
-                foreach ($this->_storeManager->getStores() as $store) {
-                    $stores[] = $store->getId();
-                }
+        if ($predefinedStoreIds !== null) {
+            $stores = $predefinedStoreIds;
+        } elseif ($this->_storeManager->getStore()->getId() == 0) {
+            foreach ($this->_storeManager->getStores() as $store) {
+                $stores[] = $store->getId();
             }
         } else {
             // get all stores, required by configuration in current store scope

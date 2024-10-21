@@ -4,28 +4,26 @@
  * See COPYING.txt for license details.
  */
 -->
-<if args="isSalable($row())">
     <if args="getRegularPrice($row())">
         <span css="'old-price': hasSpecialPrice($row()), 'regular-price': !hasSpecialPrice($row())">
             <span class="price-container"
                   css="getAdjustmentCssClasses($row())">
                 <span if="label && hasSpecialPrice($row())"
                       class="price-label"
-                      text="label"/>
+                      text="label"></span>
 
                 <span class="price-wrapper"
                       css="priceWrapperCssClasses"
                       attr="priceWrapperAttr"
                       data-price-amount=""
                       data-price-type=""
-                      html="getRegularPrice($row())"/>
+                      html="getRegularPriceUnsanitizedHtml($row())"></span>
 
                 <if args="!hasSpecialPrice($row())">
                     <each args="data: getAdjustments(), as: '$adj'">
-                        <render args="$adj.getBody()"/>
+                        <render args="$adj.getBody()"></render>
                     </each>
                 </if>
             </span>
         </span>
     </if>
-</if>

@@ -3,40 +3,52 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Library for working with client ip address.
+ *
+ * @api
  */
-class RemoteAddress
+class RemoteAddress implements ResetAfterRequestInterface
 {
     /**
      * Request object.
      *
      * @var RequestInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    protected $request;
+    protected readonly RequestInterface $request;
 
     /**
      * Remote address cache.
      *
-     * @var string
+     * @var string|null|bool|number
      */
     protected $remoteAddress;
 
     /**
      * @var array
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    protected $alternativeHeaders;
+    protected readonly array $alternativeHeaders;
 
     /**
      * @var string[]|null
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $trustedProxies;
+    private readonly ?array $trustedProxies;
 
     /**
+     * Constructor
+     *
      * @param RequestInterface $httpRequest
      * @param array $alternativeHeaders
      * @param string[]|null $trustedProxies
@@ -49,6 +61,14 @@ class RemoteAddress
         $this->request = $httpRequest;
         $this->alternativeHeaders = $alternativeHeaders;
         $this->trustedProxies = $trustedProxies;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->remoteAddress = null;
     }
 
     /**
@@ -99,7 +119,7 @@ class RemoteAddress
                     return !in_array(trim($ip), $this->trustedProxies, true);
                 }
             );
-            $remoteAddress = trim(array_pop($ipList));
+            $remoteAddress = empty($ipList) ? '' : trim(array_pop($ipList));
         } else {
             $remoteAddress = trim(reset($ipList));
         }
@@ -120,7 +140,7 @@ class RemoteAddress
     public function getRemoteAddress(bool $ipToLong = false)
     {
         if ($this->remoteAddress !== null) {
-            return $this->remoteAddress;
+            return $ipToLong ? ip2long($this->remoteAddress) : $this->remoteAddress;
         }
 
         $remoteAddress = $this->readAddress();
@@ -135,11 +155,11 @@ class RemoteAddress
             $this->remoteAddress = false;
 
             return false;
-        } else {
-            $this->remoteAddress = $remoteAddress;
-
-            return $ipToLong ? ip2long($this->remoteAddress) : $this->remoteAddress;
         }
+
+        $this->remoteAddress = $remoteAddress;
+
+        return $ipToLong ? ip2long($this->remoteAddress) : $this->remoteAddress;
     }
 
     /**

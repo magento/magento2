@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart\BuyRequest;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\Stdlib\ArrayManagerFactory;
 
 /**
  * Extract buy request elements require for custom options
@@ -15,17 +17,23 @@ use Magento\Framework\Stdlib\ArrayManager;
 class CustomizableOptionsDataProvider implements BuyRequestDataProviderInterface
 {
     /**
-     * @var ArrayManager
+     * @var ArrayManagerFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $arrayManager;
+    private readonly ArrayManagerFactory $arrayManagerFactory;
 
     /**
-     * @param ArrayManager $arrayManager
+     * @param ArrayManager $arrayManager @deprecated @see $arrayManagerFactory
+     * @param ArrayManagerFactory|null $arrayManagerFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        ArrayManagerFactory $arrayManagerFactory = null
     ) {
-        $this->arrayManager = $arrayManager;
+        $this->arrayManagerFactory = $arrayManagerFactory
+            ?? ObjectManager::getInstance()->get(ArrayManagerFactory::class);
     }
 
     /**
@@ -33,8 +41,7 @@ class CustomizableOptionsDataProvider implements BuyRequestDataProviderInterface
      */
     public function execute(array $cartItemData): array
     {
-        $customizableOptions = $this->arrayManager->get('customizable_options', $cartItemData, []);
-
+        $customizableOptions = $this->arrayManagerFactory->create()->get('customizable_options', $cartItemData, []);
         $customizableOptionsData = [];
         foreach ($customizableOptions as $customizableOption) {
             if (isset($customizableOption['value_string'])) {
@@ -43,7 +50,6 @@ class CustomizableOptionsDataProvider implements BuyRequestDataProviderInterface
                 );
             }
         }
-
         return ['options' => $customizableOptionsData];
     }
 

@@ -21,8 +21,18 @@ define([
         setDifferedFromDefault: function (value) {
             this._super();
 
-            if (parseFloat(value)) {
-                this.source.set(this.regionScope, this.indexedOptions[value].label);
+            const indexedOptionsArray = Object.values(this.indexedOptions),
+                countryId = this.source.data.country_id,
+                hasRegionList = indexedOptionsArray.some(option => option.country_id === countryId);
+
+            // Clear the region field when the country changes
+            this.source.set(this.regionScope, '');
+
+            if (hasRegionList) {
+                this.source.set(
+                    this.regionScope,
+                    parseFloat(value) ? this.indexedOptions?.[value]?.label || '' : ''
+                );
             }
         }
     });

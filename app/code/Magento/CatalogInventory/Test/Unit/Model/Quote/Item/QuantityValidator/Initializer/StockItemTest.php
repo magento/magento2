@@ -104,25 +104,23 @@ class StockItemTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $quoteItem = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->setMethods(
+            ->addMethods(['setIsQtyDecimal', 'setUseOldQty', 'setBackorders', 'setStockStateResult'])
+            ->onlyMethods(
                 [
                     'getParentItem',
                     'getProduct',
                     'getId',
                     'getQuoteId',
-                    'setIsQtyDecimal',
                     'setData',
-                    'setUseOldQty',
                     'setMessage',
-                    'setBackorders',
-                    '__wakeup',
-                    'setStockStateResult'
+                    '__wakeup'
                 ]
             )
             ->disableOriginalConstructor()
             ->getMock();
         $parentItem = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->setMethods(['getQty', 'setIsQtyDecimal', 'getProduct', '__wakeup'])
+            ->addMethods(['setIsQtyDecimal'])
+            ->onlyMethods(['getQty', 'getProduct', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $product = $this->getMockBuilder(Product::class)
@@ -146,7 +144,7 @@ class StockItemTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $result = $this->getMockBuilder(DataObject::class)
-            ->setMethods(
+            ->addMethods(
                 [
                     'getItemIsQtyDecimal',
                     'getHasQtyOptionUpdate',
@@ -173,10 +171,7 @@ class StockItemTest extends TestCase
             ->method('checkQuoteItemQty')
             ->withAnyParameters()
             ->willReturn($result);
-        $this->stockStateProviderMock->expects($this->once())
-            ->method('checkQuoteItemQty')
-            ->withAnyParameters()
-            ->willReturn($result);
+        $this->stockStateProviderMock->expects($this->never())->method('checkQuoteItemQty');
         $product->expects($this->once())
             ->method('getCustomOption')
             ->with('product_type')
@@ -213,7 +208,7 @@ class StockItemTest extends TestCase
         $quoteItem->expects($this->once())->method('setUseOldQty')->with('item')->willReturnSelf();
         $result->expects($this->exactly(2))->method('getMessage')->willReturn('message');
         $quoteItem->expects($this->once())->method('setMessage')->with('message')->willReturnSelf();
-        $result->expects($this->exactly(3))->method('getItemBackorders')->willReturn('backorders');
+        $result->expects($this->exactly(2))->method('getItemBackorders')->willReturn('backorders');
         $quoteItem->expects($this->once())->method('setBackorders')->with('backorders')->willReturnSelf();
         $quoteItem->expects($this->once())->method('setStockStateResult')->with($result)->willReturnSelf();
 
@@ -230,7 +225,8 @@ class StockItemTest extends TestCase
         $productId = 1;
 
         $stockItem = $this->getMockBuilder(Item::class)
-            ->setMethods(['checkQuoteItemQty', 'setProductName', 'setIsChildItem', 'hasIsChildItem', '__wakeup'])
+            ->addMethods(['checkQuoteItemQty', 'setProductName', 'setIsChildItem', 'hasIsChildItem'])
+            ->onlyMethods(['__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $storeMock = $this->getMockBuilder(Store::class)
@@ -240,7 +236,8 @@ class StockItemTest extends TestCase
             ->method('getWebsiteId')
             ->willReturn($websiteId);
         $quoteItem = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->setMethods(['getProduct', 'getParentItem', 'getQtyToAdd', 'getId', 'getQuoteId', '__wakeup'])
+            ->addMethods(['getQtyToAdd'])
+            ->onlyMethods(['getProduct', 'getParentItem', 'getId', 'getQuoteId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $product = $this->getMockBuilder(Product::class)
@@ -252,7 +249,7 @@ class StockItemTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $result = $this->getMockBuilder(DataObject::class)
-            ->setMethods(
+            ->addMethods(
                 ['getItemIsQtyDecimal', 'getHasQtyOptionUpdate', 'getItemUseOldQty', 'getMessage', 'getItemBackorders']
             )
             ->disableOriginalConstructor()
@@ -276,10 +273,7 @@ class StockItemTest extends TestCase
             ->method('checkQuoteItemQty')
             ->withAnyParameters()
             ->willReturn($result);
-        $this->stockStateProviderMock->expects($this->once())
-            ->method('checkQuoteItemQty')
-            ->withAnyParameters()
-            ->willReturn($result);
+        $this->stockStateProviderMock->expects($this->never())->method('checkQuoteItemQty');
         $product->expects($this->once())
             ->method('getCustomOption')
             ->with('product_type')
@@ -299,7 +293,7 @@ class StockItemTest extends TestCase
         $result->expects($this->once())->method('getHasQtyOptionUpdate')->willReturn(false);
         $result->expects($this->once())->method('getItemUseOldQty')->willReturn(null);
         $result->expects($this->once())->method('getMessage')->willReturn(null);
-        $result->expects($this->exactly(2))->method('getItemBackorders')->willReturn(null);
+        $result->expects($this->exactly(1))->method('getItemBackorders')->willReturn(null);
 
         $this->model->initialize($stockItem, $quoteItem, $qty);
     }

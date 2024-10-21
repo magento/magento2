@@ -12,12 +12,12 @@ use Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory;
-use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
-
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for \Magento\Catalog\Model\Product\Option\Value class.
@@ -30,10 +30,13 @@ class ValueTest extends TestCase
     private $model;
 
     /**
-     * @var CustomOptionPriceCalculator
+     * @var CustomOptionPriceCalculator|MockObject
      */
     private $customOptionPriceCalculatorMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $mockedResource = $this->getMockedResource();
@@ -49,7 +52,7 @@ class ValueTest extends TestCase
             [
                 'resource' => $mockedResource,
                 'valueCollectionFactory' => $mockedCollectionFactory,
-                'customOptionPriceCalculator' => $this->customOptionPriceCalculatorMock,
+                'customOptionPriceCalculator' => $this->customOptionPriceCalculatorMock
             ]
         );
         $this->model->setOption($this->getMockedOption());
@@ -128,7 +131,7 @@ class ValueTest extends TestCase
 
         $mockBuilder =
             $this->getMockBuilder(CollectionFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
 
@@ -146,7 +149,7 @@ class ValueTest extends TestCase
     {
         $mockBuilder = $this->getMockBuilder(
             Collection::class
-        )->setMethods(['addFieldToFilter', 'getValuesByOption', 'getValues'])->disableOriginalConstructor();
+        )->onlyMethods(['addFieldToFilter', 'getValuesByOption', 'getValues'])->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
 
         $mock->expects($this->any())
@@ -188,7 +191,7 @@ class ValueTest extends TestCase
     private function getMockedProduct()
     {
         $mockBuilder = $this->getMockBuilder(Product::class)
-            ->setMethods(['getPriceInfo'])
+            ->onlyMethods(['getPriceInfo'])
             ->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
 
@@ -219,7 +222,7 @@ class ValueTest extends TestCase
     private function getMockedResource()
     {
         $mockBuilder = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Option\Value::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'duplicate',
                     'getIdFieldName',

@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-101"/>
             <group value="ConfigurableProduct"/>
+            <group value="cloud"/>
+            <!-- Excluded from PR builds due to AC-12124 -->
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -91,7 +94,9 @@
             <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="productIndexPage"/>
@@ -108,7 +113,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!-- Assert product image in admin product form -->
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>
 
         <!-- Assert product in storefront product page -->
         <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="AssertProductInStorefrontProductPage">

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMassOrdersCancelClosedAndCompleteTest">
+        <annotations>
+            <stories value="Mass Update Orders"/>
+            <title value="Mass cancel orders in status  Complete, Closed"/>
+            <description value="Try to cancel orders in status Complete, Closed"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-39905"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        
+        <before>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+
+            <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <createData entity="GuestCart" stepKey="createGuestCartOne"/>
+                <createData entity="SimpleCartItem" stepKey="addCartItemOne">
+                <requiredEntity createDataKey="createGuestCartOne"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddressOne">
+                <requiredEntity createDataKey="createGuestCartOne"/>
+            </createData>
+            <updateData createDataKey="createGuestCartOne" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformationOne">
+                <requiredEntity createDataKey="createGuestCartOne"/>
+            </updateData>
+
+            <createData entity="Invoice" stepKey="invoiceOrderOne">
+              <requiredEntity createDataKey="createGuestCartOne"/>
+            </createData>
+
+            <createData entity="Shipment" stepKey="shipOrderOne">
+              <requiredEntity createDataKey="createGuestCartOne"/>
+            </createData>
+
+            <createData entity="GuestCart" stepKey="createGuestCartTwo"/>
+                <createData entity="SimpleCartItem" stepKey="addCartItemTwo">
+                <requiredEntity createDataKey="createGuestCartTwo"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddressTwo">
+                <requiredEntity createDataKey="createGuestCartTwo"/>
+            </createData>
+            <updateData createDataKey="createGuestCartTwo" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformationTwo">
+                <requiredEntity createDataKey="createGuestCartTwo"/>
+            </updateData>
+
+            <createData entity="Invoice" stepKey="invoiceOrderTwo">
+              <requiredEntity createDataKey="createGuestCartTwo"/>
+            </createData>
+
+            <createData entity="CreditMemo" stepKey="refundOrderTwo">
+              <requiredEntity createDataKey="createGuestCartTwo"/>
+            </createData>
+
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
+
+        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createGuestCartOne.return$)}}" stepKey="getOrderOneId"/>
+        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createGuestCartTwo.return$)}}" stepKey="getOrderTwoId"/>
+
+        <actionGroup ref="AdminTwoOrderActionOnGridActionGroup" stepKey="massActionCancel">
+            <argument name="action" value="Cancel"/>
+            <argument name="orderId" value="$getOrderOneId"/>
+            <argument name="secondOrderId" value="$getOrderTwoId"/>
+        </actionGroup>
+        <see userInput="You cannot cancel the order(s)." stepKey="assertOrderCancelMassActionFailMessage"/>
+
+        <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeFirstOrder">
+            <argument name="orderId" value="$getOrderOneId"/>
+            <argument name="orderStatus" value="Complete"/>
+        </actionGroup>
+        <see userInput="$getOrderOneId" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertFirstOrderID"/>
+        <see userInput="Complete" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertFirstOrderStatus"/>
+
+        <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeSecondOrder">
+            <argument name="orderId" value="$getOrderTwoId"/>
+            <argument name="orderStatus" value="Closed"/>
+        </actionGroup>
+        <see userInput="$getOrderTwoId" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertSecondOrderID"/>
+        <see userInput="Closed" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertSecondStatus"/>
+    </test>
+</tests>

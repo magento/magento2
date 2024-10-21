@@ -62,11 +62,11 @@ class AllowedCountries
         switch ($scope) {
             case ScopeInterface::SCOPE_WEBSITES:
             case ScopeInterface::SCOPE_STORES:
-                $allowedCountries = [[]];
+                $allowedCountries = [];
                 foreach ($scopeCode as $singleFilter) {
                     $allowedCountries[] = $this->getCountriesFromConfig($this->getSingleScope($scope), $singleFilter);
                 }
-                $allowedCountries = array_merge(...$allowedCountries);
+                $allowedCountries = array_merge([], ...$allowedCountries);
                 break;
             default:
                 $allowedCountries = $this->getCountriesFromConfig($scope, $scopeCode);

@@ -8,52 +8,57 @@ namespace Magento\User\Observer\Backend;
 
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\User\Model\User;
+use Magento\User\Model\Backend\Config\ObserverConfig;
+use Magento\User\Model\ResourceModel\User as UserResource;
+use Magento\Backend\Model\Auth\Session as AuthSession;
 
 /**
  * User backend observer model for passwords
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class TrackAdminNewPasswordObserver implements ObserverInterface
 {
     /**
      * Backend configuration interface
      *
-     * @var \Magento\User\Model\Backend\Config\ObserverConfig
+     * @var ObserverConfig
      */
     protected $observerConfig;
 
     /**
      * Admin user resource model
      *
-     * @var \Magento\User\Model\ResourceModel\User
+     * @var UserResource
      */
     protected $userResource;
 
     /**
      * Backend authorization session
      *
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var AuthSession
      */
     protected $authSession;
 
     /**
      * Message manager interface
      *
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var ManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @param \Magento\User\Model\Backend\Config\ObserverConfig $observerConfig
-     * @param \Magento\User\Model\ResourceModel\User $userResource
-     * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param ObserverConfig $observerConfig
+     * @param UserResource $userResource
+     * @param AuthSession $authSession
+     * @param ManagerInterface $messageManager
      */
     public function __construct(
-        \Magento\User\Model\Backend\Config\ObserverConfig $observerConfig,
-        \Magento\User\Model\ResourceModel\User $userResource,
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Framework\Message\ManagerInterface $messageManager
+        ObserverConfig $observerConfig,
+        UserResource $userResource,
+        AuthSession $authSession,
+        ManagerInterface $messageManager
     ) {
         $this->observerConfig = $observerConfig;
         $this->userResource = $userResource;
@@ -69,11 +74,11 @@ class TrackAdminNewPasswordObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        /* @var $user \Magento\User\Model\User */
+        /* @var $user User */
         $user = $observer->getEvent()->getObject();
         if ($user->getId()) {
             $passwordHash = $user->getPassword();
-            if ($passwordHash && !$user->getForceNewPassword()) {
+            if ($passwordHash && $user->dataHasChangedFor('password')) {
                 $this->userResource->trackPassword($user, $passwordHash);
                 $this->messageManager->getMessages()->deleteMessageByIdentifier(User::MESSAGE_ID_PASSWORD_EXPIRED);
                 $this->authSession->unsPciAdminUserIsPasswordExpired();

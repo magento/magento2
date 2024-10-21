@@ -8,14 +8,17 @@ namespace Magento\Bundle\Controller\Adminhtml\Bundle\Selection;
 
 use Magento\Catalog\Controller\Adminhtml\Product;
 
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class Grid extends Product
 {
     /**
-     * @return mixed
+     * @inheritdoc
      */
     public function execute()
     {
-        $index = $this->getRequest()->getParam('index');
+        $index = $this->getRequest()->getParam('index', '');
         if (!preg_match('/^[a-z0-9_.]*$/i', $index)) {
             throw new \InvalidArgumentException('Invalid parameter "index"');
         }

@@ -65,7 +65,7 @@ class VarnishPlugin
     {
         $usePlugin = $this->registry->registry('use_page_cache_plugin');
 
-        if ($this->config->getType() == Config::VARNISH && $this->config->isEnabled() && $usePlugin) {
+        if ($this->config->getType() === Config::VARNISH && $this->config->isEnabled() && $usePlugin) {
             $this->version->process();
 
             if ($this->state->getMode() == AppState::MODE_DEVELOPER) {

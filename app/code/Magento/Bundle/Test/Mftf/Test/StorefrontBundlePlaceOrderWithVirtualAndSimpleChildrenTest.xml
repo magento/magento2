@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontBundlePlaceOrderWithVirtualAndSimpleChildrenTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Bundle product placing order"/>
+            <title value="Admin should be able to invoice order for the bundle product with virtual and simple products in options"/>
+            <description value="Place order for bundle product and create invoice"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-38683"/>
+            <useCaseId value="MC-37663"/>
+            <group value="Bundle"/>
+            <group value="cloud_smoke"/>
+        </annotations>
+        <before>
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+            <!--Create bundle product with fixed price with simple and virtual products in options-->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct">
+                <field key="price">50.00</field>
+            </createData>
+            <createData entity="ApiFixedBundleProduct" stepKey="createFixedBundleProduct"/>
+            <createData entity="DropDownBundleOption" stepKey="createFirstBundleOption">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createSecondBundleOption">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="firstLinkOptionToFixedProduct">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createFirstBundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="secondLinkOptionToFixedProduct">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createSecondBundleOption"/>
+                <requiredEntity createDataKey="createVirtualProduct"/>
+            </createData>
+            <actionGroup stepKey="loginToAdminPanel" ref="AdminLoginActionGroup"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+                <argument name="productId" value="$createFixedBundleProduct.id$"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+            <comment userInput="Adding the comment to replace AdminReindexAndFlushCache action group ('indexer:reindex', 'cache:flush' commands) for preserving Backward Compatibility" stepKey="reindexAndFlushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProductForBundleItem"/>
+            <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProductForBundleItem"/>
+            <deleteData createDataKey="createFixedBundleProduct" stepKey="deleteBundleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilters"/>
+            <waitForPageLoad stepKey="waitForClearProductsGridFilters"/>
+        </after>
+        <!--Login customer on storefront-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+        <!--Open Product Page-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="product" value="$createFixedBundleProduct$"/>
+        </actionGroup>
+        <!--Add bundle to cart-->
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickAddToCart">
+            <argument name="productUrl" value="$createFixedBundleProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart">
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <!--Navigate to checkout-->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
+        <!--Click next button to open payment section-->
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectDefaultPaymentMethod"/>
+        <!--Click place order-->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <!--Order review page has address that was created during checkout-->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="entityId" value="{$orderId}"/>
+        </actionGroup>
+        <!--Create Invoice for this Order-->
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="createInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+    </test>
+</tests>

@@ -67,7 +67,7 @@ class SensitiveCookieMetadataTest extends TestCase
     /**
      * @return array
      */
-    public function constructorAndGetHttpOnlyTestDataProvider()
+    public static function constructorAndGetHttpOnlyTestDataProvider()
     {
         return [
             'with httpOnly' => [
@@ -115,7 +115,7 @@ class SensitiveCookieMetadataTest extends TestCase
     /**
      * @return array
      */
-    public function getSecureDataProvider()
+    public static function getSecureDataProvider()
     {
         return [
             'with secure' => [
@@ -174,7 +174,7 @@ class SensitiveCookieMetadataTest extends TestCase
     /**
      * @return array
      */
-    public function toArrayDataProvider()
+    public static function toArrayDataProvider()
     {
         return [
             'with secure' => [
@@ -189,6 +189,7 @@ class SensitiveCookieMetadataTest extends TestCase
                     SensitiveCookieMetadata::KEY_DOMAIN => 'domain',
                     SensitiveCookieMetadata::KEY_PATH => 'path',
                     SensitiveCookieMetadata::KEY_HTTP_ONLY => 1,
+                    SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax',
                 ],
                 0,
             ],
@@ -203,6 +204,7 @@ class SensitiveCookieMetadataTest extends TestCase
                     SensitiveCookieMetadata::KEY_DOMAIN => 'domain',
                     SensitiveCookieMetadata::KEY_PATH => 'path',
                     SensitiveCookieMetadata::KEY_HTTP_ONLY => 1,
+                    SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax',
                 ],
             ],
             'without secure 2' => [
@@ -216,6 +218,7 @@ class SensitiveCookieMetadataTest extends TestCase
                     SensitiveCookieMetadata::KEY_DOMAIN => 'domain',
                     SensitiveCookieMetadata::KEY_PATH => 'path',
                     SensitiveCookieMetadata::KEY_HTTP_ONLY => 1,
+                    SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax',
                 ],
             ],
         ];
@@ -236,11 +239,12 @@ class SensitiveCookieMetadataTest extends TestCase
     /**
      * @return array
      */
-    public function getMethodData()
+    public static function getMethodData()
     {
         return [
             "getDomain" => ["setDomain", 'getDomain', "example.com"],
-            "getPath" => ["setPath", 'getPath', "path"]
+            "getPath" => ["setPath", 'getPath', "path"],
+            "getSameSite" => ["setSameSite", 'getSameSite', 'Lax']
         ];
     }
 }

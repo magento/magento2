@@ -17,23 +17,27 @@
             <testCaseId value="MC-16335"/>
             <useCaseId value="MAGETWO-99605"/>
             <group value="customer"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createFirstCustomer"/>
             <createData entity="Simple_US_Customer" stepKey="createSecondCustomer">
-                <field key="firstname">&quot;Jane Doe&quot;</field>
+                <field key="firstname">Jane Doe</field>
             </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="customer_grid"/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="createFirstCustomer" stepKey="deleteFirstCustomer"/>
             <deleteData createDataKey="createSecondCustomer" stepKey="deleteSecondCustomer"/>
-            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
+            <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
             <actionGroup ref="AdminResetFilterInCustomerAddressGrid" stepKey="clearCustomerGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Step 1: Go to Customers > All Customers-->
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
         <!--Step 2: On Customers grid page search customer by keyword with quotes-->
         <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchCustomer">
             <argument name="keyword" value="$$createSecondCustomer.firstname$$"/>

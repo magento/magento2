@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertCaptchaVisibleOnSignInModalOnCheckoutActionGroup">
+
+        <waitForElementVisible selector="{{StorefrontCheckoutSignInModalSection.captchaField}}" stepKey="waitToSeeCaptchaField"/>
+        <waitForElementVisible selector="{{StorefrontCheckoutSignInModalSection.captchaImg}}" stepKey="waitToSeeCaptchaImage"/>
+        <waitForElementVisible selector="{{StorefrontCheckoutSignInModalSection.captchaReload}}" stepKey="waitToSeeCaptchaReloadButton"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForPageReloaded"/>
+        <click selector="{{StorefrontCustomerSignInLinkSection.signInLink}}" stepKey="clickOnSignInLink"/>
+        <waitForElementVisible selector="{{StorefrontCheckoutSignInModalSection.captchaField}}" stepKey="waitToSeeCaptchaFieldAfterPageReload"/>
+        <waitForElementVisible selector="{{StorefrontCheckoutSignInModalSection.captchaImg}}" stepKey="waitToSeeCaptchaImageAfterPageReload"/>
+        <waitForElementVisible selector="{{StorefrontCheckoutSignInModalSection.captchaReload}}" stepKey="waitToSeeCaptchaReloadButtonAfterPageReload"/>
+    </actionGroup>
+</actionGroups>

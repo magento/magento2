@@ -150,7 +150,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getImgDir($website = null)
     {
-        $mediaDir = $this->_filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        // Captcha images are not re-used and should be stored only locally.
+        $mediaDir = $this->_filesystem->getDirectoryWrite(DirectoryList::MEDIA, Filesystem\DriverPool::FILE);
         $captchaDir = '/captcha/' . $this->_getWebsiteCode($website);
         $mediaDir->create($captchaDir);
         return $mediaDir->getAbsolutePath($captchaDir) . '/';

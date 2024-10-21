@@ -19,6 +19,7 @@
             <group value="customer"/>
             <group value="security"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaDisableConfigData.path}} {{StorefrontCustomerCaptchaDisableConfigData.value}}" stepKey="disableCaptcha"/>
@@ -28,6 +29,7 @@
         <after>
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaEnableConfigData.path}} {{StorefrontCustomerCaptchaEnableConfigData.value}}" stepKey="enableCaptcha"/>
             <magentoCLI command="config:set {{StorefrontCustomerLockoutFailuresDefaultConfigData.path}} {{StorefrontCustomerLockoutFailuresDefaultConfigData.value}}" stepKey="revertInvalidAttemptsCountConfig"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
         </after>
 

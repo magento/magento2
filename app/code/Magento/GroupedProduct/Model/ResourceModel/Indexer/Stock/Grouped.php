@@ -6,8 +6,6 @@
 
 /**
  * Grouped Products Stock Status Indexer Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Indexer\Stock;
 
@@ -32,7 +30,7 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param null $connectionName
+     * @param null|string $connectionName
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
      */
     public function __construct(
@@ -94,7 +92,7 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
         $select->columns(['status' => $stockStatusExpr]);
 
         if ($entityIds !== null) {
-            $select->where('e.entity_id IN(?)', $entityIds);
+            $select->where('e.entity_id IN(?)', $entityIds, \Zend_Db::INT_TYPE);
         }
 
         return $select;
