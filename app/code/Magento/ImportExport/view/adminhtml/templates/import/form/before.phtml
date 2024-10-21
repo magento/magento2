@@ -218,7 +218,7 @@ require([
 
             if (!jQuery('[name="' + this.ifrElemName + '"]').length) {
                 jQuery('body').append('<iframe name="' + this.ifrElemName + '" id="' + this.ifrElemName + '"/>');
-                jQuery('iframe#' + this.ifrElemName).attr('display', 'none');
+                jQuery('iframe#' + this.ifrElemName).addClass('no-display');
             }
             jQuery('body')
                 .loader({
