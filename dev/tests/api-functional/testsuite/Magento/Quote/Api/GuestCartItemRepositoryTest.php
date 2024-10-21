@@ -337,7 +337,7 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
                     'use_config_backorders' => 0,
                     'backorders' => Stock::BACKORDERS_NO,
                 ],
-                'The requested qty is not available'
+                'Not enough items for sale'
             ]
         ];
     }

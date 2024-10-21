@@ -92,7 +92,16 @@ class IndexTest extends TestCase
         $rssModel->expects($this->once())->method('setDataProvider')->willReturnSelf();
         $rssModel->expects($this->once())->method('createRssXml')->willReturn('');
 
-        $this->response->expects($this->once())->method('setHeader')->willReturnSelf();
+        $matcher = $this->exactly(2);
+        $this->response->expects($matcher)
+            ->method('setHeader')
+            ->willReturnCallback(function (string $param) use ($matcher) {
+                match ($matcher->numberOfInvocations()) {
+                    1 => $this->assertEquals($param, 'Content-type'),
+                    2 => $this->assertEquals($param, 'X-Magento-Tags'),
+                };
+            })
+            ->willReturnSelf();
         $this->response->expects($this->once())->method('setBody')->willReturnSelf();
 
         $this->rssFactory->expects($this->once())->method('create')->willReturn($rssModel);
@@ -118,7 +127,16 @@ class IndexTest extends TestCase
             $exceptionMock
         );
 
-        $this->response->expects($this->once())->method('setHeader')->willReturnSelf();
+        $matcher = $this->exactly(2);
+        $this->response->expects($matcher)
+            ->method('setHeader')
+            ->willReturnCallback(function (string $param) use ($matcher) {
+                match ($matcher->numberOfInvocations()) {
+                    1 => $this->assertEquals($param, 'Content-type'),
+                    2 => $this->assertEquals($param, 'X-Magento-Tags'),
+                };
+            })
+            ->willReturnSelf();
         $this->rssFactory->expects($this->once())->method('create')->willReturn($rssModel);
         $this->rssManager->expects($this->once())->method('getProvider')->willReturn($dataProvider);
 

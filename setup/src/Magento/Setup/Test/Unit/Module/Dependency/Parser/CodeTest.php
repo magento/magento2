@@ -38,7 +38,7 @@ class CodeTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderWrongOptionFilesForParse()
+    public static function dataProviderWrongOptionFilesForParse()
     {
         return [
             [['files_for_parse' => [], 'declared_namespaces' => [1, 2]]],
@@ -61,7 +61,7 @@ class CodeTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderWrongOptionDeclaredNamespace()
+    public static function dataProviderWrongOptionDeclaredNamespace()
     {
         return [
             [['declared_namespaces' => [], 'files_for_parse' => [1, 2]]],

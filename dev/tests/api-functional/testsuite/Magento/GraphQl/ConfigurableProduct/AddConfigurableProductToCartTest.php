@@ -206,7 +206,7 @@ QUERY;
     public function testAddProductIfQuantityIsNotAvailable()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The requested qty is not available');
+        $this->expectExceptionMessage('Not enough items for sale');
 
         $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable'));
         $product = current($searchResponse['products']['items']);

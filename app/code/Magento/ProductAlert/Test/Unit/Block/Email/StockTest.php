@@ -69,7 +69,7 @@ class StockTest extends TestCase
     /**
      * @return array
      */
-    public function getFilteredContentDataProvider()
+    public static function getFilteredContentDataProvider()
     {
         return [
             'normal desc' => ['<b>Howdy!</b>', '<b>Howdy!</b>'],

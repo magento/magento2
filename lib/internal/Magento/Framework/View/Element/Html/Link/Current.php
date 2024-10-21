@@ -30,7 +30,7 @@ class Current extends Template
     private const REGEX_INDEX_URL_PATTERN = '/(\/index|(\/))+($|\/$)/';
 
     /**
-     * Default path
+     * This property specifies the default path.
      *
      * @var DefaultPathInterface
      */
@@ -139,9 +139,10 @@ class Current extends Template
 
         if ($this->isCurrent()) {
             $html = '<li class="nav item current">';
-            $html .= '<strong>'
-                . $this->escapeHtml(__($this->getLabel()))
-                . '</strong>';
+            $html .= '<strong';
+            $html .= $this->getAttributesHtml() . '>'
+                     . $this->escapeHtml(__($this->getLabel()))
+                     . '</strong>';
             $html .= '</li>';
         } else {
             $html = '<li class="nav item' . $highlight . '"><a href="' . $this->escapeHtml($this->getHref()) . '"';
