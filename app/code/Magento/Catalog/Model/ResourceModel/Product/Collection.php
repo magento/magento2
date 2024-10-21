@@ -1673,12 +1673,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     {
         $productsByLinkId = [];
 
+        $storeId = "";
+
         foreach ($this as $product) {
             $productId = $product->getData(
                 $product->getResource()->getLinkField()
             );
 
             $productsByLinkId[$productId] = $product;
+            
+            $storeId = $product->getStoreId();
         }
 
         if (!empty($productsByLinkId)) {
@@ -1688,7 +1692,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 $this->_storeManager->getStore()->getId()
             )->addProductToFilter(
                 array_keys($productsByLinkId)
-            )->addValuesToResult();
+            )->addValuesToResult($storeId);
 
             foreach ($options as $option) {
                 if (isset($productsByLinkId[$option->getProductId()])) {
