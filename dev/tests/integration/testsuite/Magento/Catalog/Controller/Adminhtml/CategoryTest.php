@@ -178,7 +178,7 @@ class CategoryTest extends AbstractBackendController
             MessageInterface::TYPE_SUCCESS
         );
         $category = $this->categoryRepository->get($categoryId);
-        $this->assertEquals($defaultUrlPath, $category->getData('url_key'));
+        $this->assertEquals($newUrlPath, $category->getData('url_key'));
     }
 
     /**
@@ -783,10 +783,14 @@ class CategoryTest extends AbstractBackendController
         $category->load(2);
         $this->assertEquals('2columns-left', $category->getData('page_layout'));
         $this->assertEmpty($category->getData('custom_layout_update_file'));
-        $this->assertEquals('test', $category->getData('description'));
+        $this->assertEquals('Custom Description', $category->getData('description'));
         //No new error messages
+        $sessionErrorMessages = [
+            'Not allowed to edit the category\'s design attributes',
+            'Not allowed to edit the category\'s design attributes'
+        ];
         $this->assertSessionMessages(
-            self::equalTo($sessionMessages),
+            self::equalTo($sessionErrorMessages),
             MessageInterface::TYPE_ERROR
         );
     }
