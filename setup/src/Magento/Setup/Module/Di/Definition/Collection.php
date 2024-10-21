@@ -91,6 +91,6 @@ class Collection
      */
     public function hasInstance($instanceName)
     {
-        return isset($this->definitions[$instanceName]);
+        return array_key_exists($instanceName, $this->definitions);
     }
 }
