@@ -18,7 +18,7 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class AllowedCountries
 {
-    const ALLOWED_COUNTRIES_PATH = 'general/country/allow';
+    public const ALLOWED_COUNTRIES_PATH = 'general/country/allow';
 
     /**
      * @var ScopeConfigInterface
