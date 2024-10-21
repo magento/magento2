@@ -640,8 +640,11 @@ class CreateAccountTest extends TestCase
         );
         $storeId = $this->storeManager->getStore('fixture_second_store')->getStoreId();
         $customerEntity->setStoreId($storeId);
-        $message = 'A customer with the same email address already exists in an associated website.';
-        $this->expectExceptionObject(new InputMismatchException(__($message)));
+        $message = __(
+            'A customer with the same email address (%1) already exists in an associated website.',
+            $this->defaultCustomerData['email']
+        );
+        $this->expectExceptionObject(new InputMismatchException($message));
         $this->accountManagement->createAccount($customerEntity, '_aPassword1');
     }
 
