@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\TestFramework;
@@ -15,7 +15,7 @@ class Bootstrap
      * Predefined admin user credentials
      */
     public const ADMIN_NAME = 'user';
-    public const ADMIN_PASSWORD = 'password1';
+    public const ADMIN_PASSWORD = 'password1234';
     public const ADMIN_EMAIL = 'admin@example.com';
     public const ADMIN_FIRSTNAME = 'firstname';
     public const ADMIN_LASTNAME = 'lastname';

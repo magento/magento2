@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\User\Model;
@@ -24,7 +24,7 @@ class UserValidationRules
     /**
      * Minimum length of admin password
      */
-    public const MIN_PASSWORD_LENGTH = 7;
+    public const MIN_PASSWORD_LENGTH = 12;
 
     /**
      * Adds validation rule for user first name, last name, username and email

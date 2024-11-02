@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,14 +62,14 @@ class AdminUserCreateCommandTest extends TestCase
     {
         $options = [
             '--' . AdminAccount::KEY_USER => 'user',
-            '--' . AdminAccount::KEY_PASSWORD => '123123q',
+            '--' . AdminAccount::KEY_PASSWORD => '1234512345q!',
             '--' . AdminAccount::KEY_EMAIL => 'test@test.com',
             '--' . AdminAccount::KEY_FIRST_NAME => 'John',
             '--' . AdminAccount::KEY_LAST_NAME => 'Doe'
         ];
         $data = [
             AdminAccount::KEY_USER => 'user',
-            AdminAccount::KEY_PASSWORD => '123123q',
+            AdminAccount::KEY_PASSWORD => '1234512345q!',
             AdminAccount::KEY_EMAIL => 'test@test.com',
             AdminAccount::KEY_FIRST_NAME => 'John',
             AdminAccount::KEY_LAST_NAME => 'Doe',
@@ -93,7 +93,7 @@ class AdminUserCreateCommandTest extends TestCase
 
         $this->questionHelperMock
             ->method('ask')
-            ->willReturnOnConsecutiveCalls('admin', 'Password123', 'john.doe@example.com', 'John', 'Doe');
+            ->willReturnOnConsecutiveCalls('admin', 'Password1234', 'john.doe@example.com', 'John', 'Doe');
 
         // We override the standard helper with our mock
         $this->command->getHelperSet()->set($this->questionHelperMock, 'question');
@@ -102,7 +102,7 @@ class AdminUserCreateCommandTest extends TestCase
 
         $expectedData = [
             'admin-user' => 'admin',
-            'admin-password' => 'Password123',
+            'admin-password' => 'Password1234',
             'admin-email' => 'john.doe@example.com',
             'admin-firstname' => 'John',
             'admin-lastname' => 'Doe',
@@ -189,38 +189,38 @@ class AdminUserCreateCommandTest extends TestCase
     {
         return [
             [
-                [null, 'Doe', 'admin', 'test@test.com', '123123q', '123123q'],
+                [null, 'Doe', 'admin', 'test@test.com', '1234512345q!', '1234512345q!'],
                 ['"First Name" is required. Enter and try again.']
             ],
             [
-                ['John', null, null, 'test@test.com', '123123q', '123123q'],
+                ['John', null, null, 'test@test.com', '1234512345q!', '1234512345q!'],
                 ['"User Name" is required. Enter and try again.', '"Last Name" is required. Enter and try again.'],
             ],
-            [['John', 'Doe', 'admin', null, '123123q', '123123q'], ['Please enter a valid email.']],
+            [['John', 'Doe', 'admin', null, '1234512345q!', '1234512345q!'], ['Please enter a valid email.']],
             [
-                ['John', 'Doe', 'admin', 'test', '123123q', '123123q'],
+                ['John', 'Doe', 'admin', 'test', '1234512345q!', '1234512345q!'],
                 ["'test' is not a valid email address in the basic format local-part@hostname"]
             ],
             [
                 ['John', 'Doe', 'admin', 'test@test.com', '', ''],
                 [
                     'Password is required field.',
-                    'Your password must be at least 7 characters.',
+                    'Your password must be at least 12 characters.',
                     'Your password must include both numeric and alphabetic characters.'
                 ]
             ],
             [
                 ['John', 'Doe', 'admin', 'test@test.com', '123123', '123123'],
                 [
-                    'Your password must be at least 7 characters.',
+                    'Your password must be at least 12 characters.',
                     'Your password must include both numeric and alphabetic characters.'
                 ]
             ],
             [
-                ['John', 'Doe', 'admin', 'test@test.com', '1231231', '1231231'],
+                ['John', 'Doe', 'admin', 'test@test.com', '123123123123', '123123123123'],
                 ['Your password must include both numeric and alphabetic characters.']
             ],
-            [['John', 'Doe', 'admin', 'test@test.com', '123123q', '123123q'], []],
+            [['John', 'Doe', 'admin', 'test@test.com', '1234512345q!', '1234512345q!'], []],
         ];
     }
 }

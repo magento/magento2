@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Fixtures;
@@ -98,7 +98,7 @@ class AdminUsersFixture extends Fixture
                 ->setFirstName('Firstname')
                 ->setLastName('Lastname')
                 ->setUserName('admin' . $i)
-                ->setPassword('123123q')
+                ->setPassword('1234512345q!')
                 ->setIsActive(1);
             $adminUser->save();
         }
