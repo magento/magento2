@@ -10,12 +10,10 @@ use Magento\Config\App\Config\Type\System\Reader;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Config\ConfigPathResolver;
-use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
-use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeInterface;
@@ -24,9 +22,7 @@ use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\RuntimeException;
-use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Store\Model\Config\Processor\Fallback;
 use Magento\Store\Model\ScopeInterface as StoreScope;
 use Psr\Log\LoggerInterface;
 
@@ -144,17 +140,12 @@ class System implements ConfigTypeInterface
 
     /**
      * System constructor.
-     * @param ConfigSourceInterface $source
      * @param PostProcessorInterface $postProcessor
-     * @param Fallback $fallback
      * @param FrontendInterface $cache
      * @param SerializerInterface $serializer
-     * @param PreProcessorInterface $preProcessor
-     * @param int $cachingNestedLevel
      * @param string $configType
      * @param Reader|null $reader
      * @param Encryptor|null $encryptor
-     * @param LockManagerInterface|null $locker
      * @param LockGuardedCacheLoader|null $lockQuery
      * @param StateInterface|null $cacheState
      * @param LoggerInterface|null $logger
@@ -165,17 +156,12 @@ class System implements ConfigTypeInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        ConfigSourceInterface $source,
         PostProcessorInterface $postProcessor,
-        Fallback $fallback,
         FrontendInterface $cache,
         SerializerInterface $serializer,
-        PreProcessorInterface $preProcessor,
-        $cachingNestedLevel = 1,
-        $configType = self::CONFIG_TYPE,
+                               $configType = self::CONFIG_TYPE,
         Reader $reader = null,
         Encryptor $encryptor = null,
-        LockManagerInterface $locker = null,
         LockGuardedCacheLoader $lockQuery = null,
         StateInterface $cacheState = null,
         LoggerInterface $logger = null,
