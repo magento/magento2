@@ -64,7 +64,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         if ($label === '') {
             throw new InputException(
                 __(
-                    'The attribute option label for attribute \'%1\' is empty. Enter the value and try again.', 
+                    'The attribute option label for attribute \'%1\' is empty. Enter the value and try again.',
                     $attribute->getAttributeCode()
                 )
             );
