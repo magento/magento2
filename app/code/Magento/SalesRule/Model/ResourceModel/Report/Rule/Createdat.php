@@ -1,18 +1,55 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\SalesRule\Model\ResourceModel\Report\Rule;
 
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\Timezone\Validator;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Reports\Model\FlagFactory;
+use Magento\Tax\Model\Config;
+use Psr\Log\LoggerInterface;
+
 /**
  * Rule report resource model with aggregation by created at
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
 {
+    /**
+     * @param Context $context
+     * @param LoggerInterface $logger
+     * @param TimezoneInterface $localeDate
+     * @param FlagFactory $reportsFlagFactory
+     * @param Validator $timezoneValidator
+     * @param DateTime $dateTime
+     * @param Config $taxConfig
+     * @param string|null $connectionName
+     */
+    public function __construct(
+        private readonly Context $context,
+        private readonly LoggerInterface $logger,
+        private readonly TimezoneInterface $localeDate,
+        private readonly FlagFactory $reportsFlagFactory,
+        private readonly Validator $timezoneValidator,
+        DateTime $dateTime,
+        private Config $taxConfig,
+        string $connectionName = null
+    ) {
+        parent::__construct(
+            $context,
+            $logger,
+            $localeDate,
+            $reportsFlagFactory,
+            $timezoneValidator,
+            $dateTime,
+            $connectionName
+        );
+    }
+
     /**
      * Resource Report Rule constructor
      *
@@ -67,6 +104,13 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
                 $this->getStoreTZOffsetQuery($sourceTable, $aggregationField, $from, $to, null, $salesAdapter)
             );
 
+            $subtotalAmountFiled = 'base_subtotal';
+            $subtotalAmountActualFiled = 'base_subtotal_invoiced';
+            if ($this->taxConfig->displaySalesSubtotalInclTax()) {
+                $subtotalAmountFiled = 'base_subtotal_incl_tax';
+                $subtotalAmountActualFiled = 'base_subtotal_incl_tax';
+            }
+
             $columns = [
                 'period' => $periodExpr,
                 'store_id' => 'store_id',
@@ -75,7 +119,7 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
                 'rule_name' => 'coupon_rule_name',
                 'coupon_uses' => 'COUNT(entity_id)',
                 'subtotal_amount' => $connection->getIfNullSql(
-                    'SUM((base_subtotal - ' . $connection->getIfNullSql(
+                    'SUM((' . $subtotalAmountFiled . ' - ' . $connection->getIfNullSql(
                         'base_subtotal_canceled',
                         0
                     ) . ') * base_to_global_rate)',
@@ -102,12 +146,17 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
                     ) . ' + ' . $connection->getIfNullSql(
                         'base_tax_amount - ' . $connection->getIfNullSql('base_tax_canceled', 0),
                         0
-                    ) . ')
+                    ) . ' + ' . $connection->getIfNullSql(
+                        'base_discount_tax_compensation_amount - '
+                        . $connection->getIfNullSql('base_discount_tax_compensation_refunded', 0),
+                        0
+                    ) . ' - ' . $connection->getIfNullSql('ABS(base_shipping_discount_tax_compensation_amnt)', 0)
+                    . ')
                         * base_to_global_rate)',
                     0
                 ),
                 'subtotal_amount_actual' => $connection->getIfNullSql(
-                    'SUM((base_subtotal_invoiced - ' . $connection->getIfNullSql(
+                    'SUM((' . $subtotalAmountActualFiled . ' - ' . $connection->getIfNullSql(
                         'base_subtotal_refunded',
                         0
                     ) . ') * base_to_global_rate)',
@@ -135,7 +184,13 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
                     ) . ' + ' . $connection->getIfNullSql(
                         'base_tax_invoiced - ' . $connection->getIfNullSql('base_tax_refunded', 0),
                         0
-                    ) . ') * base_to_global_rate)',
+                    ) . ' + ' . $connection->getIfNullSql(
+                        'base_discount_tax_compensation_invoiced - '
+                        . $connection->getIfNullSql('base_discount_tax_compensation_refunded', 0),
+                        0
+                    ) . ' - ' . $connection->getIfNullSql('ABS(base_shipping_discount_tax_compensation_amnt)', 0)
+                    . ')
+                    * base_to_global_rate)',
                     0
                 ),
             ];

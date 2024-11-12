@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -45,6 +45,17 @@
         <data key="urlKey" unique="suffix">api-configurable-product</data>
         <data key="status">1</data>
         <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+    </entity>
+    <entity name="ApiConfigurableProductWithOutCategory1" type="product">
+        <data key="sku" unique="suffix">api-configurable-product-with-out-category</data>
+        <data key="type_id">configurable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">API Configurable Product</data>
+        <data key="urlKey" unique="suffix">api-configurable-product</data>
+        <data key="status">1</data>
+        <data key="quantity">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
     </entity>
     <entity name="ApiConfigurableProductWithDescription" type="product">

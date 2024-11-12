@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -325,6 +325,19 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
+    <entity name="ApiSimpleOne1" type="product2">
+        <data key="name" unique="suffix">Api Simple Product</data>
+        <data key="sku" unique="suffix">api-simple-product</data>
+        <data key="urlKey" unique="suffix">api-simple-product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="price">1</data>
+        <data key="status">1</data>
+        <data key="quantity">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
     <entity name="ApiSimpleProductWithCategory" type="product2" extends="ApiSimpleOne">
         <requiredEntity type="custom_attribute">CustomAttributeCategoryIds</requiredEntity>
     </entity>
@@ -354,6 +367,19 @@
         <data key="price">234.00</data>
         <data key="status">1</data>
         <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleTwo1" type="product2">
+        <data key="name" unique="suffix">Api Simple Product Two</data>
+        <data key="sku" unique="suffix">api-simple-product-two</data>
+        <data key="urlKey" unique="suffix">api-simple-product-two</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="price">1</data>
+        <data key="status">1</data>
+        <data key="quantity">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>

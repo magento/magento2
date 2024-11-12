@@ -28,7 +28,8 @@
         "magento/module-checkout": "*",
         "magento/module-authorization": "*",
         "magento/module-asynchronous-operations": "*",
-        "magento/module-multishipping": "*"
+        "magento/module-multishipping": "*",
+        "magento/module-tax": "*"
     },
     "suggest": {
         "magento/module-sales-rule-sample-data": "*"
