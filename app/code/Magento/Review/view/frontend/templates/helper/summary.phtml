@@ -7,6 +7,7 @@
 /**
  * @var \Magento\Review\Block\Product\ReviewRenderer $block
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
  */
 
 $url = $block->getReviewsUrl() . '#reviews';
@@ -18,43 +19,37 @@ $urlForm = $block->getReviewsUrl() . '#review-form';
          itemtype="http://schema.org/AggregateRating">
         <?php if ($rating):?>
         <div class="rating-summary">
-             <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
+             <span class="label"><span><?= $escaper->escapeHtml(__('Rating')) ?>:</span></span>
              <div class="rating-result"
-                  id="rating-result_<?= $block->escapeHtmlAttr($block->getProduct()->getId()) ?>"
-                  title="<?= $block->escapeHtmlAttr($rating) ?>%"
-             >
-                 <span>
+                  id="rating-result_<?= $escaper->escapeHtmlAttr($block->getProduct()->getId()) ?>"
+                  title="<?= $escaper->escapeHtmlAttr($rating); ?>%">
+                 <span style="width: <?= $escaper->escapeHtmlAttr($rating); ?>%;">
                      <span>
-                         <span itemprop="ratingValue"><?= $block->escapeHtml($rating); ?>
+                         <span itemprop="ratingValue"><?= $escaper->escapeHtml($rating); ?>
                          </span>% of <span itemprop="bestRating">100</span>
                      </span>
                  </span>
              </div>
          </div>
-            <?= /* @noEscape */
-            $secureRenderer->renderStyleAsTag(
-                'width:' . $block->escapeHtmlAttr($rating) . '%',
-                '#rating-result_' . $block->getProduct()->getId() . ' span'
-            ) ?>
         <?php endif;?>
         <div class="reviews-actions">
             <a class="action view"
-               href="<?= $block->escapeUrl($url) ?>">
-                <span itemprop="reviewCount"><?= $block->escapeHtml($block->getReviewsCount()) ?></span>&nbsp;
-                <span><?= ($block->getReviewsCount() == 1) ? $block->escapeHtml(__('Review')) :
-                        $block->escapeHtml(__('Reviews')) ?>
+               href="<?= $escaper->escapeUrl($url) ?>">
+                <span itemprop="reviewCount"><?= $escaper->escapeHtml($block->getReviewsCount()) ?></span>&nbsp;
+                <span><?= ($block->getReviewsCount() == 1) ? $escaper->escapeHtml(__('Review')) :
+                        $escaper->escapeHtml(__('Reviews')) ?>
                 </span>
             </a>
-            <a class="action add" href="<?= $block->escapeUrl($urlForm) ?>">
-                <?= $block->escapeHtml(__('Add Your Review')) ?>
+            <a class="action add" href="<?= $escaper->escapeUrl($urlForm) ?>">
+                <?= $escaper->escapeHtml(__('Add Your Review')) ?>
             </a>
         </div>
     </div>
 <?php elseif ($block->isReviewEnabled() && $block->getDisplayIfEmpty()): ?>
     <div class="product-reviews-summary empty">
         <div class="reviews-actions">
-            <a class="action add" href="<?= $block->escapeUrl($urlForm) ?>">
-                <?= $block->escapeHtml(__('Be the first to review this product')) ?>
+            <a class="action add" href="<?= $escaper->escapeUrl($urlForm) ?>">
+                <?= $escaper->escapeHtml(__('Be the first to review this product')) ?>
             </a>
         </div>
     </div>

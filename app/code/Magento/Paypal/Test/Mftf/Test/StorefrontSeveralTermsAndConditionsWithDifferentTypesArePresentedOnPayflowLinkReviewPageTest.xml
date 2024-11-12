@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSeveralTermsAndConditionsWithDifferentTypesArePresentedOnPayflowLinkReviewPageTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Paypal payflow link"/>
+            <title value="Several Terms and Conditions with different types are presented on Payflow Link review page"/>
+            <description value="Admin creates several terms and conditions with different types and assert them on the payment type payflow link in the storefront's review and payments page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5204"/>
+            <group value="paypalPayflowLink"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <!-- Checkout select Credit Card (Payflow link)-->
+        <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Link)')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Link)')}}" visible="true" after="clickNextOnShippingStep" stepKey="selectCreditCardPaymentMethod"/>
+    </test>
+</tests>
