@@ -929,10 +929,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @return string|null
      */
-    protected function _getAccessToken(): string|null
+    protected function _getAccessToken($forTracking = false): string|null
     {
-        $apiKey = $this->getConfigData('api_key') ?? null;
-        $secretKey = $this->getConfigData('secret_key') ?? null;
+        $credentials = $this->getApiCredentials($forTracking);
+        $apiKey = $credentials['api_key'];
+        $secretKey = $credentials['secret_key'];
 
         if (!$apiKey || !$secretKey) {
             $this->_debug(__('Authentication keys are missing.'));
@@ -956,6 +957,28 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $accessToken = $response['access_token'];
         }
         return $accessToken;
+    }
+
+    /**
+     * To get the api credentials
+     *
+     * @param $forTracking
+     * @return array
+     */
+    private function getApiCredentials($forTracking = false): array
+    {
+        $apiKey = 'api_key';
+        $secretKey = 'secret_key';
+
+        if ($forTracking) {
+            $apiKey = 'tracking_api_key';
+            $secretKey = 'tracking_secret_key';
+        }
+
+        return [
+            'api_key' => $this->getConfigData($apiKey) ?? null,
+            'secret_key' => $this->getConfigData($secretKey) ?? null
+        ];
     }
 
     /**
@@ -1007,7 +1030,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     protected function _getTrackingInformation($tracking): void
     {
-        $accessToken = $this->_getAccessToken();
+        $accessToken = $this->_getAccessToken(true);
         if (!empty($accessToken)) {
 
             $trackRequest = [

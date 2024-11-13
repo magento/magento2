@@ -11,6 +11,8 @@
             <fedex>
                 <account backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <tracking_api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <tracking_secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <sandbox_mode>0</sandbox_mode>
                 <production_webservices_url><![CDATA[https://apis.fedex.com/]]></production_webservices_url>

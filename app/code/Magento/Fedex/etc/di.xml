@@ -12,6 +12,8 @@
                 <item name="carriers/fedex/account" xsi:type="string">1</item>
                 <item name="carriers/fedex/api_key" xsi:type="string">1</item>
                 <item name="carriers/fedex/secret_key" xsi:type="string">1</item>
+                <item name="carriers/fedex/tracking_api_key" xsi:type="string">1</item>
+                <item name="carriers/fedex/tracking_secret_key" xsi:type="string">1</item>
                 <item name="carriers/fedex/production_webservices_url" xsi:type="string">1</item>
                 <item name="carriers/fedex/sandbox_webservices_url" xsi:type="string">1</item>
                 <item name="carriers/fedex/smartpost_hubid" xsi:type="string">1</item>
