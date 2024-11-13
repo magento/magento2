@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCustomConditionInActionTabInCartPriceRuleActionGroup">
+        <annotations>
+            <description>Create custom condition in action tab in cart price rule page.</description>
+        </annotations>
+        <arguments>
+            <argument name="productAttribute" type="string" defaultValue="Category"/>
+            <argument name="categoryId" type="string" defaultValue="$$createSecondCategory.id$$"/>
+        </arguments>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.actionsHeaderOpen}}" visible="false" stepKey="clickToExpandActions"/>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="scrollToActionsFieldset"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.apply}}" stepKey="waitActionsFieldsetFullyOpened"/>
+        <click selector="{{AdminCartPriceRulesFormSection.conditions}}" stepKey="clickAdd"/>
+        <waitForPageLoad stepKey="waitForDropDownOpened"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.childAttribute}}" userInput="{{productAttribute}}" stepKey="selectConditionAttributeIsCategory"/>
+        <waitForPageLoad after="selectConditionAttributeIsCategory" stepKey="waitForOperatorOpened"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition('...')}}" stepKey="clickToChooserIcon"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.actionValue}}" userInput="{{categoryId}}" stepKey="choseNeededCategoryFromCategoryGrid"/>
+        <click selector="{{AdminCartPriceRulesFormSection.applyAction}}" stepKey="applyAction"/>
+    </actionGroup>
+</actionGroups>

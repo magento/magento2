@@ -151,7 +151,9 @@ MUTATION;
                 reason: "Sample reason"
               }
             ){
-                error
+                errorV2 {
+                    message
+                }
                 order {
                     status
                 }
@@ -161,7 +163,9 @@ MUTATION;
         $this->assertEquals(
             [
                 'cancelOrder' => [
-                    'error' => 'Order cancellation is not enabled for requested store.',
+                    'errorV2' => [
+                        'message' => 'Order cancellation is not enabled for requested store.'
+                    ],
                     'order' => null
                 ]
             ],
@@ -199,7 +203,9 @@ MUTATION;
             [
                 'cancelOrder' =>
                     [
-                        'error' => 'Order already closed, complete, cancelled or on hold',
+                        'errorV2' => [
+                            'message' => 'Order already closed, complete, cancelled or on hold'
+                        ],
                         'order' => [
                             'status' => $expectedStatus
                         ]
@@ -240,7 +246,9 @@ MUTATION;
             [
                 'cancelOrder' =>
                     [
-                        'error' => 'Order already closed, complete, cancelled or on hold',
+                        'errorV2' => [
+                            'message' => 'Order already closed, complete, cancelled or on hold'
+                        ],
                         'order' => [
                             'status' => 'Complete'
                         ]
@@ -294,7 +302,9 @@ MUTATION;
             [
                 'cancelOrder' =>
                     [
-                        'error' => 'Order with one or more items shipped cannot be cancelled',
+                        'errorV2' => [
+                            'message' => 'Order with one or more items shipped cannot be cancelled'
+                        ],
                         'order' => [
                             'status' => 'Processing'
                         ]
@@ -335,7 +345,9 @@ MUTATION;
             [
                 'cancelOrder' =>
                     [
-                        'error' => 'Order already closed, complete, cancelled or on hold',
+                        'errorV2' => [
+                            'message' => 'Order already closed, complete, cancelled or on hold'
+                        ],
                         'order' => [
                             'status' => 'Closed'
                         ]
@@ -369,7 +381,7 @@ MUTATION;
             [
                 'cancelOrder' =>
                     [
-                        'error' => null,
+                        'errorV2' => null,
                         'order' => [
                             'status' => 'Pending'
                         ]
@@ -399,7 +411,9 @@ MUTATION;
                 reason: "Cancel sample reason"
               }
             ){
-                error
+                errorV2 {
+                    message
+                }
                 order {
                     status
                 }

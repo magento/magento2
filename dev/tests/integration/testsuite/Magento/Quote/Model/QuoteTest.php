@@ -564,7 +564,7 @@ class QuoteTest extends TestCase
     {
         $quote = $this->quoteFactory->create();
         $product = $this->productRepository->get('simple-1');
-        $this->expectExceptionObject(new LocalizedException(__('The requested qty is not available')));
+        $this->expectExceptionObject(new LocalizedException(__('Not enough items for sale')));
         $quote->addProduct($product, 1500);
     }
 

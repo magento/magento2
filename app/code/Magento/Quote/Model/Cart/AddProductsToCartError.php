@@ -33,6 +33,8 @@ class AddProductsToCartError
         'The fewest you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
         'The most you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
         'The requested qty is not available' => self::ERROR_INSUFFICIENT_STOCK,
+        'Not enough items for sale' => self::ERROR_INSUFFICIENT_STOCK,
+        'Only %s of %s available' => self::ERROR_INSUFFICIENT_STOCK,
     ];
 
     /**
@@ -59,6 +61,7 @@ class AddProductsToCartError
      */
     private function getErrorCode(string $message): string
     {
+        $message = preg_replace('/\d+/', '%s', $message);
         foreach (self::MESSAGE_CODES as $codeMessage => $code) {
             if (false !== stripos($message, $codeMessage)) {
                 return $code;

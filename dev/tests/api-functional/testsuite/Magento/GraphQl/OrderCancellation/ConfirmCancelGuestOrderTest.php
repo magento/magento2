@@ -173,25 +173,13 @@ MUTATION;
          */
         $order = DataFixtureStorageManager::getStorage()->get('order');
 
-        $query = <<<MUTATION
-        mutation {
-            confirmCancelOrder(
-              input: {
-                order_id: {$order->getEntityId()},
-                confirmation_key: "4f8d1e2a6c7e5b4f9a2d3e0f1c5a747d"
-              }
-            ){
-                error
-                order {
-                    status
-                }
-            }
-          }
-MUTATION;
+        $query = $this->getConfirmCancelOrderMutation($order);
         $this->assertEquals(
             [
                 'confirmCancelOrder' => [
-                    'error' => 'Order cancellation is not enabled for requested store.',
+                    'errorV2' => [
+                        'message' => 'Order cancellation is not enabled for requested store.',
+                    ],
                     'order' => null
                 ]
             ],
@@ -230,7 +218,9 @@ MUTATION;
             [
                 'confirmCancelOrder' =>
                     [
-                        'error' => 'Order already closed, complete, cancelled or on hold',
+                        'errorV2' => [
+                            'message' => 'Order already closed, complete, cancelled or on hold'
+                        ],
                         'order' => [
                             'status' => 'Complete'
                         ]
@@ -284,7 +274,9 @@ MUTATION;
             [
                 'confirmCancelOrder' =>
                     [
-                        'error' => 'Order with one or more items shipped cannot be cancelled',
+                        'errorV2' => [
+                            'message' => 'Order with one or more items shipped cannot be cancelled'
+                        ],
                         'order' => [
                             'status' => 'Processing'
                         ]
@@ -325,7 +317,9 @@ MUTATION;
             [
                 'confirmCancelOrder' =>
                     [
-                        'error' => 'Order already closed, complete, cancelled or on hold',
+                        'errorV2' => [
+                            'message' => 'Order already closed, complete, cancelled or on hold'
+                        ],
                         'order' => [
                             'status' => 'Closed'
                         ]
@@ -384,7 +378,9 @@ MUTATION;
             [
                 'confirmCancelOrder' =>
                     [
-                        'error' => 'Current user is not authorized to cancel this order',
+                        'errorV2' => [
+                            'message' => 'Current user is not authorized to cancel this order'
+                        ],
                         'order' => null
                     ]
             ],
@@ -448,7 +444,9 @@ MUTATION;
                 confirmation_key: "{$confirmationKey}"
               }
             ){
-                error
+                errorV2 {
+                    message
+                }
                 order {
                     status
                 }
@@ -459,7 +457,7 @@ MUTATION;
             [
                 'confirmCancelOrder' =>
                     [
-                        'error' => null,
+                        'errorV2' => null,
                         'order' => [
                             'status' => 'Canceled'
                         ]
@@ -499,7 +497,9 @@ MUTATION;
             [
                 'confirmCancelOrder' =>
                     [
-                        'error' => 'Order already closed, complete, cancelled or on hold',
+                        'errorV2' => [
+                            'message' => 'Order already closed, complete, cancelled or on hold',
+                        ],
                         'order' => [
                             'status' => $expectedStatus
                         ]
@@ -525,7 +525,9 @@ MUTATION;
                 confirmation_key: "4f8d1e2a6c7e5b4f9a2d3e0f1c5a747d"
               }
             ){
-                error
+                errorV2 {
+                    message
+                }
                 order {
                     status
                 }

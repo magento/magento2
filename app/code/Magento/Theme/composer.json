@@ -10,6 +10,7 @@
         "magento/module-backend": "*",
         "magento/module-cms": "*",
         "magento/module-config": "*",
+        "magento/module-csp": "*",
         "magento/module-customer": "*",
         "magento/module-eav": "*",
         "magento/module-media-storage": "*",
