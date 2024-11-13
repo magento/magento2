@@ -927,6 +927,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Get Access Token for Rest API
      *
+     * @param $forTracking
      * @return string|null
      */
     protected function _getAccessToken($forTracking = false): string|null
